@@ -13,15 +13,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _isInChannel = false;
+  String infoString = 'hello';
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initAgoraRtcEngine();
+    addAgoraEventHandlers();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  Future<void> initAgoraRtcEngine() async {
     try {
       await AgoraRtcEngine.createEngine('YOUR APP ID');
     } on PlatformException {
@@ -29,7 +31,24 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void addAgoraEventHandlers() {
+    AgoraRtcEngine.didJoinChannelHandler =
+        (String channel, int uid, int elapsed) {
+      setState(() {
+        infoString = 'didJoinChannel: ' + channel + ', uid: ' + uid.toString();
+      });
+    };
+
+    AgoraRtcEngine.didLeaveChannelHandler = () {
+      setState(() {
+        infoString = 'didLeaveChannel';
+      });
+    };
+  }
+
   void _toggleChannel() {
+    print('_toggleChannel');
+
     setState(() {
       if (_isInChannel) {
         _isInChannel = false;
@@ -48,12 +67,15 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Agora Flutter SDK'),
         ),
-        body: Center(
-          child: OutlineButton(
-            child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
-                style: textStyle),
-            onPressed: _toggleChannel,
-          ),
+        body: ListView(
+          children: [
+            Text(infoString),
+            OutlineButton(
+              child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
+                  style: textStyle),
+              onPressed: _toggleChannel,
+            ),
+          ],
         ),
       ),
     );

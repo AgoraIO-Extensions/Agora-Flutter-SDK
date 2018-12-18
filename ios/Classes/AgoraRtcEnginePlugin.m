@@ -3,6 +3,7 @@
 
 @interface AgoraRtcEnginePlugin()<AgoraRtcEngineDelegate>
 @property (strong, nonatomic) AgoraRtcEngineKit *agoraRtcEngine;
+@property (strong, nonatomic) FlutterMethodChannel *channel;
 @end
 
 @implementation AgoraRtcEnginePlugin
@@ -11,6 +12,7 @@
       methodChannelWithName:@"agora_rtc_engine"
             binaryMessenger:[registrar messenger]];
   AgoraRtcEnginePlugin* instance = [[AgoraRtcEnginePlugin alloc] init];
+  instance.channel = channel;
   [registrar addMethodCallDelegate:instance channel:channel];
 }
 
@@ -39,6 +41,20 @@
   }
 }
 
+- (void)dealloc {
+  [self.channel setMethodCallHandler:nil];
+}
+
+#pragma mark - delegate
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinChannel:(NSString *)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
+  [self.channel invokeMethod:@"didJoinChannel" arguments:@{@"channel": channel, @"uid": @(uid), @"elapsed": @(elapsed)}];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didLeaveChannelWithStats:(AgoraChannelStats *)stats {
+  [self.channel invokeMethod:@"didLeaveChannel" arguments:nil];
+}
+
+#pragma mark - helper
 - (NSString *)stringFromArguments:(NSArray *)arguments index:(int)index {
   if (![arguments isKindOfClass:[NSArray class]]) {
     return nil;
