@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  bool _isInChannel = false;
 
   @override
   void initState() {
@@ -22,21 +22,22 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await AgoraRtcEngine.platformVersion;
+      await AgoraRtcEngine.createEngine('YOUR APP ID');
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      print('Failed to create Agora engine.');
     }
+  }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
+  void _toggleChannel() {
     setState(() {
-      _platformVersion = platformVersion;
+      if (_isInChannel) {
+        _isInChannel = false;
+        AgoraRtcEngine.leaveChannel();
+      } else {
+        _isInChannel = true;
+        AgoraRtcEngine.joinChannel(null, 'flutter', null, 0);
+      }
     });
   }
 
@@ -45,12 +46,19 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Agora Flutter SDK'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: OutlineButton(
+            child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
+                style: textStyle),
+            onPressed: _toggleChannel,
+          ),
         ),
       ),
     );
   }
+
+  static TextStyle textStyle =
+      TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 255, 1));
 }
