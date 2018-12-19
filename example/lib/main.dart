@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> {
   );
 
   static TextStyle textStyle =
-      TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 255, 1));
+      TextStyle(fontSize: 18, color: Colors.blue);
 
   Widget _buildInfoList() {
     return ListView.builder(
