@@ -14,13 +14,13 @@ class AgoraRtcEngine {
 
   static Future<void> createEngine(String appid) async {
     addMethodCallHandler();
-    return await _channel.invokeMethod('createEngine', [appid]);
+    return await _channel.invokeMethod('createEngine', {'appId': appid});
   }
 
   static Future<bool> joinChannel(
       String token, String channelId, String info, int uid) async {
-    final bool success = await _channel
-        .invokeMethod('joinChannel', [token, channelId, info, uid]);
+    final bool success = await _channel.invokeMethod('joinChannel',
+        {'token': token, 'channelId': channelId, 'info': info, 'uid': uid});
     return success;
   }
 
@@ -29,16 +29,48 @@ class AgoraRtcEngine {
     return success;
   }
 
+  static Future<void> enableVideo() async {
+    await _channel.invokeMethod('enableVideo');
+  }
+
+  static Future<void> disableVideo() async {
+    await _channel.invokeMethod('disableVideo');
+  }
+
+  static Future<void> startPreview() async {
+    await _channel.invokeMethod('startPreview');
+  }
+
+  static Future<void> stopPreview() async {
+    await _channel.invokeMethod('stopPreview');
+  }
+
+  static Future<void> setupLocalVideo(int viewId, int renderMode) async {
+    await _channel.invokeMethod(
+        'setupLocalVideo', {'viewId': viewId, 'renderMode': renderMode});
+  }
+
+  static Future<void> setupRemoteVideo(
+      int viewId, int renderMode, int uid) async {
+    await _channel.invokeMethod('setupRemoteVideo', {
+      'viewId': viewId,
+      'renderMode': renderMode,
+      'uid': uid,
+    });
+  }
+
   static void addMethodCallHandler() {
     _channel.setMethodCallHandler((MethodCall call) {
-      String method = call.method;
-
-      if (method == 'didJoinChannel') {
-        Map values = call.arguments;
-        didJoinChannelHandler(
-            values['channel'], values['uid'], values['elapsed']);
-      } else if (method == 'didLeaveChannel') {
-        didLeaveChannelHandler();
+      switch (call.method) {
+        case 'didJoinChannel':
+          Map values = call.arguments;
+          didJoinChannelHandler(
+              values['channel'], values['uid'], values['elapsed']);
+          break;
+        case 'didLeaveChannel':
+          didLeaveChannelHandler();
+          break;
+        default:
       }
     });
   }

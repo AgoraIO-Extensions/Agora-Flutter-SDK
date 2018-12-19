@@ -24,11 +24,8 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initAgoraRtcEngine() async {
-    try {
-      await AgoraRtcEngine.createEngine('YOUR APP ID');
-    } on PlatformException {
-      print('Failed to create Agora engine.');
-    }
+    AgoraRtcEngine.createEngine('YOUR APP ID');
+    AgoraRtcEngine.enableVideo();
   }
 
   void addAgoraEventHandlers() {
@@ -47,15 +44,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _toggleChannel() {
-    print('_toggleChannel');
-
     setState(() {
       if (_isInChannel) {
         _isInChannel = false;
         AgoraRtcEngine.leaveChannel();
+        AgoraRtcEngine.stopPreview();
       } else {
         _isInChannel = true;
-        AgoraRtcEngine.joinChannel(null, 'flutter', null, 0);
+        AgoraRtcEngine.startPreview();
+        AgoraRtcEngine.joinChannel(null, 'flutter', null, 122);
       }
     });
   }
@@ -75,11 +72,33 @@ class _MyAppState extends State<MyApp> {
                   style: textStyle),
               onPressed: _toggleChannel,
             ),
+            SizedBox(width: 100, height: 100, child: localView),
+            SizedBox(width: 100, height: 200, child: remoteView),
           ],
         ),
       ),
     );
   }
+
+  UiKitView localView = UiKitView(
+    key: new ObjectKey('localView'),
+    viewType: 'AgoraRendererView',
+    onPlatformViewCreated: (viewId) {
+      AgoraRtcEngine.setupLocalVideo(viewId, 1);
+    },
+    creationParams: 'local',
+    creationParamsCodec: const StandardMessageCodec(),
+  );
+
+  UiKitView remoteView = UiKitView(
+    key: new ObjectKey('remoteView'),
+    viewType: 'AgoraRendererView',
+    onPlatformViewCreated: (viewId) {
+      AgoraRtcEngine.setupRemoteVideo(viewId, 1, 12);
+    },
+    creationParams: 'remote',
+    creationParamsCodec: const StandardMessageCodec(),
+  );
 
   static TextStyle textStyle =
       TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 255, 1));
