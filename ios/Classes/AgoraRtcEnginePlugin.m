@@ -153,6 +153,14 @@
   [self.channel invokeMethod:@"didLeaveChannel" arguments:nil];
 }
 
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
+  [self.channel invokeMethod:@"didJoinedOfUid" arguments:@{@"uid": @(uid), @"elapsed": @(elapsed)}];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
+  [self.channel invokeMethod:@"didOfflineOfUid" arguments:@{@"uid": @(uid), @"reason": @(reason)}];
+}
+
 #pragma mark - helper
 - (NSString *)stringFromArguments:(NSDictionary *)arguments key:(NSString *)key {
   if (![arguments isKindOfClass:[NSDictionary class]]) {

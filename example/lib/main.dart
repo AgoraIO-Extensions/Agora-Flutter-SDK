@@ -18,17 +18,17 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initAgoraRtcEngine();
-    addAgoraEventHandlers();
+    _initAgoraRtcEngine();
+    _addAgoraEventHandlers();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initAgoraRtcEngine() async {
+  Future<void> _initAgoraRtcEngine() async {
     AgoraRtcEngine.createEngine('YOUR APP ID');
     AgoraRtcEngine.enableVideo();
   }
 
-  void addAgoraEventHandlers() {
+  void _addAgoraEventHandlers() {
     AgoraRtcEngine.didJoinChannelHandler =
         (String channel, int uid, int elapsed) {
       setState(() {
@@ -42,6 +42,23 @@ class _MyAppState extends State<MyApp> {
         _infoStrings.add('didLeaveChannel');
       });
     };
+
+    AgoraRtcEngine.didJoinedOfUidHandler = (int uid, int elapsed) {
+      setState(() {
+        String info = 'didJoinedOfUid: ' + uid.toString();
+        _infoStrings.add(info);
+      });
+    };
+
+    AgoraRtcEngine.didOfflineOfUidHandler = (int uid, int reason) {
+      setState(() {
+        String info = 'didOfflineOfUid: ' +
+            uid.toString() +
+            ' reason: ' +
+            reason.toString();
+        _infoStrings.add(info);
+      });
+    };
   }
 
   void _toggleChannel() {
@@ -53,7 +70,7 @@ class _MyAppState extends State<MyApp> {
       } else {
         _isInChannel = true;
         AgoraRtcEngine.startPreview();
-        AgoraRtcEngine.joinChannel(null, 'flutter', null, 122);
+        AgoraRtcEngine.joinChannel(null, 'flutter', null, 0);
       }
     });
   }
@@ -71,9 +88,9 @@ class _MyAppState extends State<MyApp> {
               Container(
                   height: 300,
                   child: Row(children: [
-                    Expanded(child: Container(child: localView)),
+                    Expanded(child: Container(child: _localView)),
                     SizedBox(width: 5, height: 5),
-                    Expanded(child: Container(child: remoteView)),
+                    Expanded(child: Container(child: _remoteView)),
                   ])),
               OutlineButton(
                 child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
@@ -88,24 +105,20 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  UiKitView localView = UiKitView(
+  final UiKitView _localView = UiKitView(
     key: new ObjectKey('localView'),
     viewType: 'AgoraRendererView',
     onPlatformViewCreated: (viewId) {
       AgoraRtcEngine.setupLocalVideo(viewId, 1);
     },
-    creationParams: 'local',
-    creationParamsCodec: const StandardMessageCodec(),
   );
 
-  UiKitView remoteView = UiKitView(
+  final UiKitView _remoteView = UiKitView(
     key: new ObjectKey('remoteView'),
     viewType: 'AgoraRendererView',
     onPlatformViewCreated: (viewId) {
-      AgoraRtcEngine.setupRemoteVideo(viewId, 1, 12);
+      AgoraRtcEngine.setupRemoteVideo(viewId, 2, 12);
     },
-    creationParams: 'remote',
-    creationParamsCodec: const StandardMessageCodec(),
   );
 
   static TextStyle textStyle =
