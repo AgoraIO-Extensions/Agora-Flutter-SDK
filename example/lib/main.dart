@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _isInChannel = false;
-  String infoString = 'hello';
+  final _infoStrings = <String>[];
 
   @override
   void initState() {
@@ -32,13 +32,14 @@ class _MyAppState extends State<MyApp> {
     AgoraRtcEngine.didJoinChannelHandler =
         (String channel, int uid, int elapsed) {
       setState(() {
-        infoString = 'didJoinChannel: ' + channel + ', uid: ' + uid.toString();
+        String info = 'didJoinChannel: ' + channel + ', uid: ' + uid.toString();
+        _infoStrings.add(info);
       });
     };
 
     AgoraRtcEngine.didLeaveChannelHandler = () {
       setState(() {
-        infoString = 'didLeaveChannel';
+        _infoStrings.add('didLeaveChannel');
       });
     };
   }
@@ -64,17 +65,24 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Agora Flutter SDK'),
         ),
-        body: ListView(
-          children: [
-            Text(infoString),
-            OutlineButton(
-              child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
-                  style: textStyle),
-              onPressed: _toggleChannel,
-            ),
-            SizedBox(width: 100, height: 100, child: localView),
-            SizedBox(width: 100, height: 200, child: remoteView),
-          ],
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                  height: 300,
+                  child: Row(children: [
+                    Expanded(child: Container(child: localView)),
+                    SizedBox(width: 5, height: 5),
+                    Expanded(child: Container(child: remoteView)),
+                  ])),
+              OutlineButton(
+                child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
+                    style: textStyle),
+                onPressed: _toggleChannel,
+              ),
+              Expanded(child: Container(child: _buildInfoList())),
+            ],
+          ),
         ),
       ),
     );
@@ -102,4 +110,17 @@ class _MyAppState extends State<MyApp> {
 
   static TextStyle textStyle =
       TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 255, 1));
+
+  Widget _buildInfoList() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(8.0),
+      itemExtent: 24,
+      itemBuilder: (context, i) {
+        return ListTile(
+          title: Text(_infoStrings[i]),
+        );
+      },
+      itemCount: _infoStrings.length,
+    );
+  }
 }
