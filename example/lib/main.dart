@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 
 void main() => runApp(MyApp());
@@ -15,21 +15,50 @@ class _MyAppState extends State<MyApp> {
   bool _isInChannel = false;
   final _infoStrings = <String>[];
 
+  static final _sessions = List<VideoSession>();
+
   @override
   void initState() {
     super.initState();
+
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
+    _addRenderView(0, (viewId) {
+      AgoraRtcEngine.setupLocalVideo(viewId, 1);
+    });
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Agora Flutter SDK'),
+        ),
+        body: Container(
+          child: Column(
+            children: [
+              Container(height: 320, child: _viewRows()),
+              OutlineButton(
+                child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
+                    style: textStyle),
+                onPressed: _toggleChannel,
+              ),
+              Expanded(child: Container(child: _buildInfoList())),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _initAgoraRtcEngine() async {
     AgoraRtcEngine.createEngine('YOUR APP ID');
     AgoraRtcEngine.enableVideo();
   }
 
   void _addAgoraEventHandlers() {
-    AgoraRtcEngine.didJoinChannelHandler =
+    AgoraRtcEngine.onJoinChannelSuccess =
         (String channel, int uid, int elapsed) {
       setState(() {
         String info = 'didJoinChannel: ' + channel + ', uid: ' + uid.toString();
@@ -37,26 +66,30 @@ class _MyAppState extends State<MyApp> {
       });
     };
 
-    AgoraRtcEngine.didLeaveChannelHandler = () {
+    AgoraRtcEngine.onLeaveChannel = () {
       setState(() {
         _infoStrings.add('didLeaveChannel');
       });
     };
 
-    AgoraRtcEngine.didJoinedOfUidHandler = (int uid, int elapsed) {
+    AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
       setState(() {
         String info = 'didJoinedOfUid: ' + uid.toString();
         _infoStrings.add(info);
+        _addRenderView(uid, (viewId) {
+          AgoraRtcEngine.setupRemoteVideo(viewId, 1, uid);
+        });
       });
     };
 
-    AgoraRtcEngine.didOfflineOfUidHandler = (int uid, int reason) {
+    AgoraRtcEngine.onUserOffline = (int uid, int reason) {
       setState(() {
         String info = 'didOfflineOfUid: ' +
             uid.toString() +
             ' reason: ' +
             reason.toString();
         _infoStrings.add(info);
+        _removeRenderView(uid);
       });
     };
   }
@@ -75,54 +108,71 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Agora Flutter SDK'),
-        ),
-        body: Container(
-          child: Column(
-            children: [
-              Container(
-                  height: 300,
-                  child: Row(children: [
-                    Expanded(child: Container(child: _localView)),
-                    SizedBox(width: 5, height: 5),
-                    Expanded(child: Container(child: _remoteView)),
-                  ])),
-              OutlineButton(
-                child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
-                    style: textStyle),
-                onPressed: _toggleChannel,
-              ),
-              Expanded(child: Container(child: _buildInfoList())),
-            ],
-          ),
-        ),
-      ),
-    );
+  Widget _viewRows() {
+    List<Widget> views = _getRenderViews();
+    if (views.length > 0) {
+      List<Widget> expandeViews = views
+          .map((widget) => Expanded(child: Container(child: widget)))
+          .toList();
+      return Row(children: expandeViews);
+    } else {
+      return null;
+    }
   }
 
-  final UiKitView _localView = UiKitView(
-    key: new ObjectKey('localView'),
-    viewType: 'AgoraRendererView',
-    onPlatformViewCreated: (viewId) {
-      AgoraRtcEngine.setupLocalVideo(viewId, 1);
-    },
-  );
+  void _addRenderView(int uid, Function(int viewId) finished) {
+    Widget view = _createNativeView(uid.toString(), (viewId) {
+      _getVideoSession(uid).viewId = viewId;
+      if (finished != null) {
+        finished(viewId);
+      }
+    });
+    VideoSession session = VideoSession(uid, view);
+    _sessions.add(session);
+  }
 
-  final UiKitView _remoteView = UiKitView(
-    key: new ObjectKey('remoteView'),
-    viewType: 'AgoraRendererView',
-    onPlatformViewCreated: (viewId) {
-      AgoraRtcEngine.setupRemoteVideo(viewId, 2, 12);
-    },
-  );
+  void _removeRenderView(int uid) {
+    VideoSession session = _getVideoSession(uid);
+    if (session != null) {
+      _sessions.remove(session);
+    }
+  }
 
-  static TextStyle textStyle =
-      TextStyle(fontSize: 18, color: Colors.blue);
+  VideoSession _getVideoSession(int uid) {
+    return _sessions.firstWhere((session) {
+      return session.uid == uid;
+    });
+  }
+
+  Widget _createNativeView(String key, Function(int viewId) created) {
+    if (Platform.isIOS) {
+      return UiKitView(
+        key: new ObjectKey(key),
+        viewType: 'AgoraRendererView',
+        onPlatformViewCreated: (viewId) {
+          if (created != null) {
+            created(viewId);
+          }
+        },
+      );
+    } else {
+      return AndroidView(
+        key: new ObjectKey(key),
+        viewType: 'AgoraRendererView',
+        onPlatformViewCreated: (viewId) {
+          if (created != null) {
+            created(viewId);
+          }
+        },
+      );
+    }
+  }
+
+  List<Widget> _getRenderViews() {
+    return _sessions.map((session) => session.view).toList();
+  }
+
+  static TextStyle textStyle = TextStyle(fontSize: 18, color: Colors.blue);
 
   Widget _buildInfoList() {
     return ListView.builder(
@@ -135,5 +185,16 @@ class _MyAppState extends State<MyApp> {
       },
       itemCount: _infoStrings.length,
     );
+  }
+}
+
+class VideoSession {
+  int uid;
+  Widget view;
+  int viewId;
+
+  VideoSession(int uid, Widget view) {
+    this.uid = uid;
+    this.view = view;
   }
 }

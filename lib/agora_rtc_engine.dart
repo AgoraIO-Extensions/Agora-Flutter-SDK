@@ -1,20 +1,17 @@
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-typedef void DidJoinChannelHandler(String channel, int uid, int elapsed);
-typedef void DidLeaveChannelHandler();
-typedef void DidJoinedOfUidHandler(int uid, int elapsed);
 
 class AgoraRtcEngine {
   static const MethodChannel _channel = const MethodChannel('agora_rtc_engine');
 
-  static DidJoinChannelHandler didJoinChannelHandler =
-      (String channel, int uid, int elapsed) {};
-  static DidLeaveChannelHandler didLeaveChannelHandler = () {};
-  static DidJoinedOfUidHandler didJoinedOfUidHandler =
-      (int uid, int elapsed) {};
-  static DidJoinedOfUidHandler didOfflineOfUidHandler = (int uid, int reason) {};
+
+  static void Function(String channel, int uid, int elapsed)
+      onJoinChannelSuccess;
+  static VoidCallback onLeaveChannel;
+  static void Function(int uid, int elapsed) onUserJoined;
+  static void Function(int uid, int elapsed) onUserOffline;
 
   static Future<void> createEngine(String appid) async {
     addMethodCallHandler();
@@ -68,18 +65,18 @@ class AgoraRtcEngine {
       Map values = call.arguments;
 
       switch (call.method) {
-        case 'didJoinChannel':
-          didJoinChannelHandler(
+        case 'onJoinChannelSuccess':
+          onJoinChannelSuccess(
               values['channel'], values['uid'], values['elapsed']);
           break;
-        case 'didLeaveChannel':
-          didLeaveChannelHandler();
+        case 'onLeaveChannel':
+          onLeaveChannel();
           break;
-        case 'didJoinedOfUid':
-          didJoinedOfUidHandler(values['uid'], values['elapsed']);
+        case 'onUserJoined':
+          onUserJoined(values['uid'], values['elapsed']);
           break;
-        case 'didOfflineOfUid':
-          didOfflineOfUidHandler(values['uid'], values['reason']);
+        case 'onUserOffline':
+          onUserOffline(values['uid'], values['reason']);
           break;
         default:
       }
