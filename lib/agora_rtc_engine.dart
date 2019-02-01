@@ -5,11 +5,69 @@ import 'package:flutter/services.dart';
 class AgoraRtcEngine {
   static const MethodChannel _channel = const MethodChannel('agora_rtc_engine');
 
+  // Core Events
+  static void Function(int warn) onWarning;
+  static void Function(int err) onError;
   static void Function(String channel, int uid, int elapsed)
       onJoinChannelSuccess;
+  static void Function(String channel, int uid, int elapsed)
+      onRejoinChannelSuccess;
   static VoidCallback onLeaveChannel;
+  static void Function(int oldRole, int newRole) onClientRoleChanged;
   static void Function(int uid, int elapsed) onUserJoined;
   static void Function(int uid, int elapsed) onUserOffline;
+  static void Function(int state, int reason) onConnectionStateChanged;
+  static VoidCallback onConnectionLost;
+  static void Function(int error, String api, String result) onApiCallExecuted;
+  static void Function(String token) onTokenPrivilegeWillExpire;
+  static VoidCallback onRequestToken;
+
+  // Media Events
+  static void Function(bool enabled) onMicrophoneEnabled;
+  static void Function(int totalVolume, List<AudioVolumeInfo> speakers)
+      onAudioVolumeIndication;
+  static void Function(int uid) onActiveSpeaker;
+  static void Function(int elapsed) onFirstLocalAudioFrame;
+  static void Function(int uid, int elapsed) onFirstRemoteAudioFrame;
+  static VoidCallback onVideoStopped;
+  static void Function(double width, double height, int elapsed)
+      onFirstLocalVideoFrame;
+  static void Function(int uid, double width, double height, int elapsed)
+      onFirstRemoteVideoDecoded;
+  static void Function(int uid, double width, double height, int elapsed)
+      onFirstRemoteVideoFrame;
+  static void Function(int uid, bool muted) onUserMuteAudio;
+  static void Function(int uid, bool muted) onUserMuteVideo;
+  static void Function(int uid, bool enabled) onUserEnableVideo;
+  static void Function(int uid, bool enabled) onUserEnableLocalVideo;
+  static void Function(int uid, double width, double height, int rotation)
+      onVideoSizeChanged;
+  static void Function(int uid, int state) onRemoteVideoStateChanged;
+
+  // Fallback Events
+  static void Function(bool isFallbackOrRecover)
+      onLocalPublishFallbackToAudioOnly;
+  static void Function(int uid, bool isFallbackOrRecover)
+      onRemoteSubscribeFallbackToAudioOnly;
+
+  // Device Events
+  static void Function(int routing) onAudioRouteChanged;
+  static VoidCallback onCameraReady;
+
+  // Statistics Events
+  static void Function(RemoteAudioStats stats) onRemoteAudioStats;
+  static void Function(RtcStats stats) onRtcStats;
+  static void Function(int uid, int txQuality, int rxQuality) onNetworkQuality;
+  static void Function(LocalVideoStats stats) onLocalVideoStats;
+  static void Function(RemoteVideoStats stats) onRemoteVideoStats;
+  static void Function(int uid, int delay, int lost, int rxKBitRate)
+      onRemoteAudioTransportStats;
+  static void Function(int uid, int delay, int lost, int rxKBitRate)
+      onRemoteVideoTransportStats;
+
+  // Miscellaneous Events
+  static VoidCallback onMediaEngineLoadSuccess;
+  static VoidCallback onMediaEngineStartCallSuccess;
 
   // Core Methods
   static Future<void> create(String appid) async {
@@ -242,18 +300,274 @@ class AgoraRtcEngine {
 
       switch (call.method) {
         // Core Events
+        case 'onWarning':
+          if (onWarning != null) {
+            onWarning(
+                values['warn']);
+          }
+          break;
+        case 'onError':
+          if (onError != null) {
+            onError(values['err']);
+          }
+          break;
         case 'onJoinChannelSuccess':
-          onJoinChannelSuccess(
-              values['channel'], values['uid'], values['elapsed']);
+          if (onJoinChannelSuccess != null) {
+            onJoinChannelSuccess(
+                values['channel'], values['uid'], values['elapsed']);
+          }
+          break;
+        case 'onRejoinChannelSuccess':
+          if (onRejoinChannelSuccess != null) {
+            onRejoinChannelSuccess(
+                values['channel'], values['uid'], values['elapsed']);
+          }
           break;
         case 'onLeaveChannel':
-          onLeaveChannel();
+          if (onLeaveChannel != null) {
+            onLeaveChannel();
+          }
+          break;
+        case 'onClientRoleChanged':
+          if (onClientRoleChanged != null) {
+            onClientRoleChanged(values['oldRole'], values['newRole']);
+          }
           break;
         case 'onUserJoined':
-          onUserJoined(values['uid'], values['elapsed']);
+          if (onUserJoined != null) {
+            onUserJoined(values['uid'], values['elapsed']);
+          }
           break;
         case 'onUserOffline':
-          onUserOffline(values['uid'], values['reason']);
+          if (onUserOffline != null) {
+            onUserOffline(values['uid'], values['reason']);
+          }
+          break;
+        case 'onConnectionStateChanged':
+          if (onConnectionStateChanged != null) {
+            onConnectionStateChanged(values['state'], values['reason']);
+          }
+          break;
+        case 'onConnectionLost':
+          if (onConnectionLost != null) {
+            onConnectionLost();
+          }
+          break;
+        case 'onApiCallExecuted':
+          if (onApiCallExecuted != null) {
+            onApiCallExecuted(values['error'], values['api'], values['result']);
+          }
+          break;
+        case 'onTokenPrivilegeWillExpire':
+          if (onTokenPrivilegeWillExpire != null) {
+            onTokenPrivilegeWillExpire(values['token']);
+          }
+          break;
+        case 'onRequestToken':
+          if (onRequestToken != null) {
+            onRequestToken();
+          }
+          break;
+        // Media Events
+        case 'onMicrophoneEnabled':
+          if (onMicrophoneEnabled != null) {
+            onMicrophoneEnabled(values['enabled']);
+          }
+          break;
+        case 'onAudioVolumeIndication':
+          if (onAudioVolumeIndication != null) {
+            List<Map> speakerValues = values['speakers'];
+            List<AudioVolumeInfo> speakers = List<AudioVolumeInfo>();
+            for (Map speakerValue in speakerValues) {
+              AudioVolumeInfo info =
+                  AudioVolumeInfo(speakerValue['uid'], speakerValue['volume']);
+              speakers.add(info);
+            }
+            onAudioVolumeIndication(values['totalVolume'], speakers);
+          }
+          break;
+        case 'onActiveSpeaker':
+          if (onActiveSpeaker != null) {
+            onActiveSpeaker(values['uid']);
+          }
+          break;
+        case 'onFirstLocalAudioFrame':
+          if (onFirstLocalAudioFrame != null) {
+            onFirstLocalAudioFrame(values['elapsed']);
+          }
+          break;
+        case 'onFirstRemoteAudioFrame':
+          if (onFirstRemoteAudioFrame != null) {
+            onFirstRemoteAudioFrame(values['uid'], values['elapsed']);
+          }
+          break;
+        case 'onVideoStopped':
+          if (onVideoStopped != null) {
+            onVideoStopped();
+          }
+          break;
+        case 'onFirstLocalVideoFrame':
+          if (onFirstLocalVideoFrame != null) {
+            onFirstLocalVideoFrame(
+                values['width'], values['height'], values['elapsed']);
+          }
+          break;
+        case 'onFirstRemoteVideoDecoded':
+          if (onFirstRemoteVideoDecoded != null) {
+            onFirstRemoteVideoDecoded(values['uid'], values['width'],
+                values['height'], values['elapsed']);
+          }
+          break;
+        case 'onFirstRemoteVideoFrame':
+          if (onFirstRemoteVideoFrame != null) {
+            onFirstRemoteVideoFrame(values['uid'], values['width'],
+                values['height'], values['elapsed']);
+          }
+          break;
+        case 'onUserMuteAudio':
+          if (onUserMuteAudio != null) {
+            onUserMuteAudio(values['uid'], values['muted']);
+          }
+          break;
+
+        case 'onUserMuteVideo':
+          if (onUserMuteVideo != null) {
+            onUserMuteVideo(values['uid'], values['muted']);
+          }
+          break;
+        case 'onUserEnableVideo':
+          if (onUserEnableVideo != null) {
+            onUserEnableVideo(values['uid'], values['enabled']);
+          }
+          break;
+        case 'onUserEnableLocalVideo':
+          if (onUserEnableLocalVideo != null) {
+            onUserEnableLocalVideo(values['uid'], values['enabled']);
+          }
+          break;
+        case 'onVideoSizeChanged':
+          if (onVideoSizeChanged != null) {
+            onVideoSizeChanged(values['uid'], values['width'], values['height'],
+                values['rotation']);
+          }
+          break;
+        case 'onRemoteVideoStateChanged':
+          if (onRemoteVideoStateChanged != null) {
+            onRemoteVideoStateChanged(values['uid'], values['state']);
+          }
+          break;
+        // Fallback Events
+        case 'onLocalPublishFallbackToAudioOnly':
+          if (onLocalPublishFallbackToAudioOnly != null) {
+            onLocalPublishFallbackToAudioOnly(values['isFallbackOrRecover']);
+          }
+          break;
+        case 'onRemoteSubscribeFallbackToAudioOnly':
+          if (onRemoteSubscribeFallbackToAudioOnly != null) {
+            onRemoteSubscribeFallbackToAudioOnly(
+                values['uid'], values['isFallbackOrRecover']);
+          }
+          break;
+
+        // Device Events
+        case 'onAudioRouteChanged':
+          if (onAudioRouteChanged != null) {
+            onAudioRouteChanged(values['routing']);
+          }
+          break;
+        case 'onCameraReady':
+          if (onCameraReady != null) {
+            onCameraReady();
+          }
+          break;
+
+        // Statistics Events
+        case 'onRemoteAudioStats':
+          if (onRemoteAudioStats != null) {
+            Map statsValue = values['stats'];
+            RemoteAudioStats stats = RemoteAudioStats();
+            stats.uid = statsValue['uid'];
+            stats.quality = statsValue['quality'];
+            stats.networkTransportDelay = statsValue['networkTransportDelay'];
+            stats.jitterBufferDelay = statsValue['jitterBufferDelay'];
+            stats.audioLossRate = statsValue['audioLossRate'];
+            onRemoteAudioStats(stats);
+          }
+          break;
+        case 'onRtcStats':
+          if (onRtcStats != null) {
+            Map statsValue = values['stats'];
+            RtcStats stats = RtcStats();
+            stats.totalDuration = statsValue['totalDuration'];
+            stats.txBytes = statsValue['txBytes'];
+            stats.rxBytes = statsValue['rxBytes'];
+            stats.txKBitRate = statsValue['txKBitRate'];
+            stats.rxKBitRate = statsValue['rxKBitRate'];
+
+            stats.txAudioKBitRate = statsValue['txAudioKBitRate'];
+            stats.rxAudioKBitRate = statsValue['rxAudioKBitRate'];
+            stats.txVideoKBitRate = statsValue['txVideoKBitRate'];
+            stats.rxVideoKBitRate = statsValue['rxVideoKBitRate'];
+            stats.users = statsValue['users'];
+            stats.lastmileDelay = statsValue['lastmileDelay'];
+            stats.cpuTotalUsage = statsValue['cpuTotalUsage'];
+            stats.cpuAppUsage = statsValue['cpuAppUsage'];
+            onRtcStats(stats);
+          }
+          break;
+        case 'onNetworkQuality':
+          if (onNetworkQuality != null) {
+            onNetworkQuality(
+                values['uid'], values['txQuality'], values['rxQuality']);
+          }
+          break;
+        case 'onLocalVideoStats':
+          if (onLocalVideoStats != null) {
+            Map statsValue = values['stats'];
+            LocalVideoStats stats = LocalVideoStats();
+            stats.sentBitrate = statsValue['sentBitrate'];
+            stats.sentFrameRate = statsValue['sentFrameRate'];
+            onLocalVideoStats(stats);
+          }
+          break;
+        case 'onRemoteVideoStats':
+          if (onRemoteVideoStats != null) {
+            Map statsValue = values['stats'];
+            RemoteVideoStats stats = RemoteVideoStats();
+            stats.uid = statsValue['uid'];
+            stats.delay = statsValue['delay'];
+            stats.width = statsValue['width'];
+            stats.height = statsValue['height'];
+            stats.receivedBitrate = statsValue['receivedBitrate'];
+            stats.receivedFrameRate = statsValue['receivedFrameRate'];
+            stats.rxStreamType = statsValue['rxStreamType'];
+            onRemoteVideoStats(stats);
+          }
+          break;
+        case 'onRemoteAudioTransportStats':
+          if (onRemoteAudioTransportStats != null) {
+            Map statsValue = values['stats'];
+            onRemoteAudioTransportStats(values['uid'], values['delay'],
+                values['lost'], values['rxKBitRate']);
+          }
+          break;
+        case 'onRemoteVideoTransportStats':
+          if (onRemoteVideoTransportStats != null) {
+            onRemoteVideoTransportStats(values['uid'], values['delay'],
+                values['lost'], values['rxKBitRate']);
+          }
+          break;
+        // Miscellaneous Events
+        case 'onMediaEngineLoadSuccess':
+          if (onMediaEngineLoadSuccess != null) {
+            Map statsValue = values['stats'];
+            onMediaEngineLoadSuccess();
+          }
+          break;
+        case 'onMediaEngineStartCallSuccess':
+          if (onMediaEngineStartCallSuccess != null) {
+            onMediaEngineStartCallSuccess();
+          }
           break;
         default:
       }
@@ -263,4 +577,53 @@ class AgoraRtcEngine {
   static void removeMethodCallHandler() {
     _channel.setMethodCallHandler(null);
   }
+}
+
+class AudioVolumeInfo {
+  int uid;
+  int volume;
+
+  AudioVolumeInfo(int uid, int volume) {
+    this.uid = uid;
+    this.volume = volume;
+  }
+}
+
+class RtcStats {
+  int totalDuration;
+  int txBytes;
+  int rxBytes;
+  int txKBitRate;
+  int rxKBitRate;
+  int txAudioKBitRate;
+  int rxAudioKBitRate;
+  int txVideoKBitRate;
+  int rxVideoKBitRate;
+  int users;
+  int lastmileDelay;
+  double cpuTotalUsage;
+  double cpuAppUsage;
+}
+
+class LocalVideoStats {
+  int sentBitrate;
+  int sentFrameRate;
+}
+
+class RemoteVideoStats {
+  int uid;
+  int delay;
+  int width;
+  int height;
+  int receivedBitrate;
+  int receivedFrameRate;
+  int rxStreamType;
+}
+
+class RemoteAudioStats {
+  int uid;
+  int quality;
+  int networkTransportDelay;
+  int jitterBufferDelay;
+  int audioLossRate;
 }

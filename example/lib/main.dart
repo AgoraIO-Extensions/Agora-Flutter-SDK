@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initAgoraRtcEngine() async {
-    AgoraRtcEngine.createEngine('YOUR APP ID');
+    AgoraRtcEngine.create('YOUR APP ID');
     AgoraRtcEngine.enableVideo();
   }
 
@@ -61,20 +61,21 @@ class _MyAppState extends State<MyApp> {
     AgoraRtcEngine.onJoinChannelSuccess =
         (String channel, int uid, int elapsed) {
       setState(() {
-        String info = 'didJoinChannel: ' + channel + ', uid: ' + uid.toString();
+        String info =
+            'onJoinChannelSuccess: ' + channel + ', uid: ' + uid.toString();
         _infoStrings.add(info);
       });
     };
 
     AgoraRtcEngine.onLeaveChannel = () {
       setState(() {
-        _infoStrings.add('didLeaveChannel');
+        _infoStrings.add('onLeaveChannel');
       });
     };
 
     AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
       setState(() {
-        String info = 'didJoinedOfUid: ' + uid.toString();
+        String info = 'onUserJoined: ' + uid.toString();
         _infoStrings.add(info);
         _addRenderView(uid, (viewId) {
           AgoraRtcEngine.setupRemoteVideo(viewId, 1, uid);
@@ -84,12 +85,25 @@ class _MyAppState extends State<MyApp> {
 
     AgoraRtcEngine.onUserOffline = (int uid, int reason) {
       setState(() {
-        String info = 'didOfflineOfUid: ' +
+        String info = 'onUserOffline: ' +
             uid.toString() +
             ' reason: ' +
             reason.toString();
         _infoStrings.add(info);
         _removeRenderView(uid);
+      });
+    };
+
+    AgoraRtcEngine.onFirstRemoteVideoFrame =
+        (int uid, double width, double height, int elapsed) {
+      setState(() {
+        String info = 'onFirstRemoteVideoFrame: ' +
+            uid.toString() +
+            ' width: ' +
+            width.toString() +
+            ' height: ' +
+            height.toString();
+        _infoStrings.add(info);
       });
     };
   }

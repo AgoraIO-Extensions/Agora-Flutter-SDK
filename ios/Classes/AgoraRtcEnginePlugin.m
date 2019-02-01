@@ -361,7 +361,7 @@
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine reportAudioVolumeIndicationOfSpeakers:(NSArray<AgoraRtcAudioVolumeInfo *> * _Nonnull)speakers totalVolume:(NSInteger)totalVolume {
-  [self.methodChannel invokeMethod:@"onAudioVolumeIndication" arguments:@{@"speakers": [self dicFromSpeakers:speakers], @"totalVolume": @(totalVolume)}];
+  [self.methodChannel invokeMethod:@"onAudioVolumeIndication" arguments:@{@"speakers": [self arrayFromSpeakers:speakers], @"totalVolume": @(totalVolume)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine activeSpeaker:(NSUInteger)speakerUid {
@@ -465,7 +465,7 @@
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine remoteAudioStats:(AgoraRtcRemoteAudioStats * _Nonnull)stats {
-  [self.methodChannel invokeMethod:@"onRemoteAudioStats" arguments:@{@"stats": stats}];
+  [self.methodChannel invokeMethod:@"onRemoteAudioStats" arguments:@{@"stats": [self dicFromRemoteAudioStats:stats]}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine audioTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
@@ -595,7 +595,7 @@
            };
 }
 
-- (NSArray * _Nonnull)dicFromSpeakers:(NSArray<AgoraRtcAudioVolumeInfo *> * _Nonnull)speakers {
+- (NSArray * _Nonnull)arrayFromSpeakers:(NSArray<AgoraRtcAudioVolumeInfo *> * _Nonnull)speakers {
   NSMutableArray *array = [[NSMutableArray alloc] init];
   for (AgoraRtcAudioVolumeInfo *speaker in speakers) {
     [array addObject:@{@"uid": @(speaker.uid),
@@ -630,6 +630,14 @@
            };
 }
 
+- (NSDictionary * _Nonnull)dicFromRemoteAudioStats:(AgoraRtcRemoteAudioStats * _Nonnull)stats {
+  return @{@"uid": @(stats.uid),
+           @"quality": @(stats.quality),
+           @"networkTransportDelay": @(stats.networkTransportDelay),
+           @"jitterBufferDelay": @(stats.jitterBufferDelay),
+           @"audioLossRate": @(stats.audioLossRate),
+           };
+}
 @end
 
 @implementation AgoraRenderViewFactory
