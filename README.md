@@ -1,14 +1,14 @@
-# agora_rtc_engine
+# AgoraRtcEngine
 
-A new flutter plugin project.
+This Flutter plugin is a wapper for [Agora Video SDK](https://docs.agora.io/en).
+
+Agora.io provides building blocks for you to add real-time voice and video communications through a simple and powerful SDK. You can integrate the Agora SDK to enable real-time communications in your own application quickly.
+
+*Note*: This plugin is still under development, and some APIs might not be available yet.
+
+## Usage
+To use this plugin, add `agora_rtc_engine` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.io/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+See the `example` directory for a sample app using AgoraRtcEngine.

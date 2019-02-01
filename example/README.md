@@ -1,16 +1,24 @@
-# agora_rtc_engine_example
+# AgoraRtcEngine Example
 
-Demonstrates how to use the agora_rtc_engine plugin.
+Demonstrates how to use the `agora_rtc_engine` plugin.
 
-## Getting Started
+### Create an Account and Obtain an App ID
 
-This project is a starting point for a Flutter application.
+1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/).
+2. In the Agora.io Dashboard that appears, click **Projects** > **Project List** in the left navigation.
+3. Copy the **App ID** from the Dashboard to a text file. You will use this ID later when you launch the app.
 
-A few resources to get you started if this is your first Flutter project:
+### Update and Run the Sample Application
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+Open the `main.dart` file. In the `_initAgoraRtcEngine()` method, update `YOUR APP ID` with your App ID.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```
+Future<void> _initAgoraRtcEngine() async {
+  AgoraRtcEngine.create('YOUR APP ID');
+  AgoraRtcEngine.enableVideo();
+}
+```
+
+### Run example
+
+Connect device and run.

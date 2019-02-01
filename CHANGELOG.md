@@ -1,3 +1,3 @@
-## 0.0.1
+## 0.9.0 beta
 
-* TODO: Describe initial release.
+* Flutter for Agora Video SDK beta release
