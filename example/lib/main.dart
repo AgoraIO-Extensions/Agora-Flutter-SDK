@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 
@@ -61,8 +60,7 @@ class _MyAppState extends State<MyApp> {
     AgoraRtcEngine.onJoinChannelSuccess =
         (String channel, int uid, int elapsed) {
       setState(() {
-        String info =
-            'onJoinChannelSuccess: ' + channel + ', uid: ' + uid.toString();
+        String info = 'onJoinChannel: ' + channel + ', uid: ' + uid.toString();
         _infoStrings.add(info);
       });
     };
@@ -75,7 +73,7 @@ class _MyAppState extends State<MyApp> {
 
     AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
       setState(() {
-        String info = 'onUserJoined: ' + uid.toString();
+        String info = 'userJoined: ' + uid.toString();
         _infoStrings.add(info);
         _addRenderView(uid, (viewId) {
           AgoraRtcEngine.setupRemoteVideo(viewId, 1, uid);
@@ -85,23 +83,20 @@ class _MyAppState extends State<MyApp> {
 
     AgoraRtcEngine.onUserOffline = (int uid, int reason) {
       setState(() {
-        String info = 'onUserOffline: ' +
-            uid.toString() +
-            ' reason: ' +
-            reason.toString();
+        String info = 'userOffline: ' + uid.toString();
         _infoStrings.add(info);
         _removeRenderView(uid);
       });
     };
 
     AgoraRtcEngine.onFirstRemoteVideoFrame =
-        (int uid, double width, double height, int elapsed) {
+        (int uid, int width, int height, int elapsed) {
       setState(() {
-        String info = 'onFirstRemoteVideoFrame: ' +
+        String info = 'firstRemoteVideo: ' +
             uid.toString() +
-            ' width: ' +
+            ' ' +
             width.toString() +
-            ' height: ' +
+            'x' +
             height.toString();
         _infoStrings.add(info);
       });
@@ -135,7 +130,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _addRenderView(int uid, Function(int viewId) finished) {
-    Widget view = _createNativeView(uid.toString(), (viewId) {
+    Widget view = AgoraRtcEngine.createNativeView(uid, (viewId) {
       _getVideoSession(uid).viewId = viewId;
       if (finished != null) {
         finished(viewId);
@@ -150,36 +145,13 @@ class _MyAppState extends State<MyApp> {
     if (session != null) {
       _sessions.remove(session);
     }
+    AgoraRtcEngine.removeNativeView(session.viewId);
   }
 
   VideoSession _getVideoSession(int uid) {
     return _sessions.firstWhere((session) {
       return session.uid == uid;
     });
-  }
-
-  Widget _createNativeView(String key, Function(int viewId) created) {
-    if (Platform.isIOS) {
-      return UiKitView(
-        key: new ObjectKey(key),
-        viewType: 'AgoraRendererView',
-        onPlatformViewCreated: (viewId) {
-          if (created != null) {
-            created(viewId);
-          }
-        },
-      );
-    } else {
-      return AndroidView(
-        key: new ObjectKey(key),
-        viewType: 'AgoraRendererView',
-        onPlatformViewCreated: (viewId) {
-          if (created != null) {
-            created(viewId);
-          }
-        },
-      );
-    }
   }
 
   List<Widget> _getRenderViews() {

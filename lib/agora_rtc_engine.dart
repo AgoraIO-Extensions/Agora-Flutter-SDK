@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,11 +31,11 @@ class AgoraRtcEngine {
   static void Function(int elapsed) onFirstLocalAudioFrame;
   static void Function(int uid, int elapsed) onFirstRemoteAudioFrame;
   static VoidCallback onVideoStopped;
-  static void Function(double width, double height, int elapsed)
+  static void Function(int width, int height, int elapsed)
       onFirstLocalVideoFrame;
-  static void Function(int uid, double width, double height, int elapsed)
+  static void Function(int uid, int width, int height, int elapsed)
       onFirstRemoteVideoDecoded;
-  static void Function(int uid, double width, double height, int elapsed)
+  static void Function(int uid, int width, int height, int elapsed)
       onFirstRemoteVideoFrame;
   static void Function(int uid, bool muted) onUserMuteAudio;
   static void Function(int uid, bool muted) onUserMuteVideo;
@@ -179,12 +180,40 @@ class AgoraRtcEngine {
   static Future<void> setVideoEncoderConfiguration(Size dimensions,
       int frameRate, int bitrate, int minBitrate, int orientationMode) async {
     await _channel.invokeMethod('setVideoEncoderConfiguration', {
-      'width': dimensions.width,
-      'height': dimensions.height,
+      'width': dimensions.width.toInt(),
+      'height': dimensions.height.toInt(),
       'frameRate': frameRate,
       'minBitrate': minBitrate,
       'orientationMode': orientationMode
     });
+  }
+
+  static Widget createNativeView(int uid, Function(int viewId) created) {
+    if (Platform.isIOS) {
+      return UiKitView(
+        key: new ObjectKey(uid.toString()),
+        viewType: 'AgoraRendererView',
+        onPlatformViewCreated: (viewId) {
+          if (created != null) {
+            created(viewId);
+          }
+        },
+      );
+    } else {
+      return AndroidView(
+        key: new ObjectKey(uid.toString()),
+        viewType: 'AgoraRendererView',
+        onPlatformViewCreated: (viewId) {
+          if (created != null) {
+            created(viewId);
+          }
+        },
+      );
+    }
+  }
+
+  static Future<void> removeNativeView(int viewId) async {
+    await _channel.invokeMethod('removeNativeView', {'viewId': viewId});
   }
 
   static Future<void> setupLocalVideo(int viewId, int renderMode) async {
@@ -302,8 +331,7 @@ class AgoraRtcEngine {
         // Core Events
         case 'onWarning':
           if (onWarning != null) {
-            onWarning(
-                values['warn']);
+            onWarning(values['warn']);
           }
           break;
         case 'onError':
@@ -535,7 +563,6 @@ class AgoraRtcEngine {
             Map statsValue = values['stats'];
             RemoteVideoStats stats = RemoteVideoStats();
             stats.uid = statsValue['uid'];
-            stats.delay = statsValue['delay'];
             stats.width = statsValue['width'];
             stats.height = statsValue['height'];
             stats.receivedBitrate = statsValue['receivedBitrate'];

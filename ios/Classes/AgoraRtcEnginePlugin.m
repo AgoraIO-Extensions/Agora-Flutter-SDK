@@ -177,8 +177,8 @@
   } else if ([@"disableVideo" isEqualToString:method]) {
     [self.agoraRtcEngine disableVideo];
   } else if ([@"setVideoEncoderConfiguration" isEqualToString:method]) {
-    double width = [self doubleFromArguments:arguments key:@"width"];
-    double height = [self doubleFromArguments:arguments key:@"height"];
+    NSInteger width = [self doubleFromArguments:arguments key:@"width"];
+    NSInteger height = [self doubleFromArguments:arguments key:@"height"];
     NSInteger frameRate = [self intFromArguments:arguments key:@"frameRate"];
     NSInteger bitrate = [self intFromArguments:arguments key:@"bitrate"];
     NSInteger minBitrate = [self intFromArguments:arguments key:@"minBitrate"];
@@ -191,6 +191,11 @@
     configuration.minBitrate = minBitrate;
     configuration.orientationMode = orientationMode;
     [self.agoraRtcEngine setVideoEncoderConfiguration:configuration];
+  } else if ([@"removeNativeView" isEqualToString:method]) {
+    NSString *viewId = [self stringFromArguments:arguments key:@"viewId"];
+    if (viewId.length) {
+      [self.rendererViews removeObjectForKey:viewId];
+    }
   } else if ([@"setupLocalVideo" isEqualToString:method]) {
     NSInteger viewId = [self intFromArguments:arguments key:@"viewId"];
     UIView *view = [AgoraRtcEnginePlugin viewForId:@(viewId)];
@@ -381,15 +386,15 @@
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine firstLocalVideoFrameWithSize:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self.methodChannel invokeMethod:@"onFirstLocalVideoFrame" arguments:@{@"width": @(size.width), @"height": @(size.height), @"elapsed": @(elapsed)}];
+  [self.methodChannel invokeMethod:@"onFirstLocalVideoFrame" arguments:@{@"width": @((int)size.width), @"height": @((int)size.height), @"elapsed": @(elapsed)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self.methodChannel invokeMethod:@"onFirstRemoteVideoDecoded" arguments:@{@"uid": @(uid), @"width": @(size.width), @"height": @(size.height), @"elapsed": @(elapsed)}];
+  [self.methodChannel invokeMethod:@"onFirstRemoteVideoDecoded" arguments:@{@"uid": @(uid), @"width": @((int)size.width), @"height": @((int)size.height), @"elapsed": @(elapsed)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine firstRemoteVideoFrameOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self.methodChannel invokeMethod:@"onFirstRemoteVideoFrame" arguments:@{@"uid": @(uid), @"width": @(size.width), @"height": @(size.height), @"elapsed": @(elapsed)}];
+  [self.methodChannel invokeMethod:@"onFirstRemoteVideoFrame" arguments:@{@"uid": @(uid), @"width": @((int)size.width), @"height": @((int)size.height), @"elapsed": @(elapsed)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didAudioMuted:(BOOL)muted byUid:(NSUInteger)uid {
@@ -409,7 +414,7 @@
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine videoSizeChangedOfUid:(NSUInteger)uid size:(CGSize)size rotation:(NSInteger)rotation {
-  [self.methodChannel invokeMethod:@"onVideoSizeChanged" arguments:@{@"uid": @(uid), @"width": @(size.width), @"height": @(size.height), @"rotation": @(rotation)}];
+  [self.methodChannel invokeMethod:@"onVideoSizeChanged" arguments:@{@"uid": @(uid), @"width": @((int)size.width), @"height": @((int)size.height), @"rotation": @(rotation)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine remoteVideoStateChangedOfUid:(NSUInteger)uid state:(AgoraVideoRemoteState)state {
