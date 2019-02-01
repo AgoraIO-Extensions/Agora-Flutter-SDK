@@ -91,9 +91,19 @@
   NSDictionary *arguments = call.arguments;
   NSLog(@"plugin handleMethodCall: %@, argus: %@", method, arguments);
   
-  if ([@"createEngine" isEqualToString:method]) {
+  // Core Methods
+  if ([@"create" isEqualToString:method]) {
     NSString *appId = [self stringFromArguments:arguments key:@"appId"];
     self.agoraRtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:appId delegate:self];
+  } else if ([@"destroy" isEqualToString:method]) {
+    self.agoraRtcEngine = nil;
+    [AgoraRtcEngineKit destroy];
+  } else if ([@"setChannelProfile" isEqualToString:method]) {
+    NSInteger profile = [self intFromArguments:arguments key:@"profile"];
+    [self.agoraRtcEngine setChannelProfile:profile];
+  } else if ([@"setClientRole" isEqualToString:method]) {
+    NSInteger role = [self intFromArguments:arguments key:@"role"];
+    [self.agoraRtcEngine setClientRole:role];
   } else if ([@"joinChannel" isEqualToString:method]) {
     NSString *token = [self stringFromArguments:arguments key:@"token"];
     NSString *channel = [self stringFromArguments:arguments key:@"channelId"];
@@ -109,6 +119,78 @@
     if (result) {
       result([NSNumber numberWithBool:success]);
     }
+  } else if ([@"renewToken" isEqualToString:method]) {
+    NSString *token = [self stringFromArguments:arguments key:@"token"];
+    [self.agoraRtcEngine renewToken:token];
+  } else if ([@"enableWebSdkInteroperability" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:arguments key:@"enabled"];
+    [self.agoraRtcEngine enableWebSdkInteroperability:enabled];
+  } else if ([@"getConnectionState" isEqualToString:method]) {
+    AgoraConnectionStateType state = [self.agoraRtcEngine getConnectionState];
+    if (result) {
+      result([NSNumber numberWithInteger:state]);
+    }
+  }
+  // Core Audio
+  else if ([@"enableAudio" isEqualToString:method]) {
+    [self.agoraRtcEngine enableAudio];
+  } else if ([@"disableAudio" isEqualToString:method]) {
+    [self.agoraRtcEngine disableAudio];
+  } else if ([@"setAudioProfile" isEqualToString:method]) {
+    NSInteger profile = [self intFromArguments:arguments key:@"profile"];
+    NSInteger scenario = [self intFromArguments:arguments key:@"scenario"];
+    [self.agoraRtcEngine setAudioProfile:profile scenario:scenario];
+  } else if ([@"setAudioProfile" isEqualToString:method]) {
+    NSInteger profile = [self intFromArguments:arguments key:@"profile"];
+    NSInteger scenario = [self intFromArguments:arguments key:@"scenario"];
+    [self.agoraRtcEngine setAudioProfile:profile scenario:scenario];
+  } else if ([@"adjustRecordingSignalVolume" isEqualToString:method]) {
+    NSInteger volume = [self intFromArguments:arguments key:@"volume"];
+    [self.agoraRtcEngine adjustRecordingSignalVolume:volume];
+  } else if ([@"adjustPlaybackSignalVolume" isEqualToString:method]) {
+    NSInteger volume = [self intFromArguments:arguments key:@"volume"];
+    [self.agoraRtcEngine adjustPlaybackSignalVolume:volume];
+  } else if ([@"enableAudioVolumeIndication" isEqualToString:method]) {
+    NSInteger interval = [self intFromArguments:arguments key:@"interval"];
+    NSInteger smooth = [self intFromArguments:arguments key:@"smooth"];
+    [self.agoraRtcEngine enableAudioVolumeIndication:interval smooth:smooth];
+  } else if ([@"enableLocalAudio" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:arguments key:@"enabled"];
+    [self.agoraRtcEngine enableLocalAudio:enabled];
+  } else if ([@"muteLocalAudioStream" isEqualToString:method]) {
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine muteLocalAudioStream:muted];
+  } else if ([@"muteRemoteAudioStream" isEqualToString:method]) {
+    NSInteger uid = [self intFromArguments:arguments key:@"uid"];
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine muteRemoteAudioStream:uid mute:muted];
+  } else if ([@"muteAllRemoteAudioStreams" isEqualToString:method]) {
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine muteAllRemoteAudioStreams:muted];
+  } else if ([@"setDefaultMuteAllRemoteAudioStreams" isEqualToString:method]) {
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine setDefaultMuteAllRemoteAudioStreams:muted];
+  }
+  // Core Video
+  else if ([@"enableVideo" isEqualToString:method]) {
+    [self.agoraRtcEngine enableVideo];
+  } else if ([@"disableVideo" isEqualToString:method]) {
+    [self.agoraRtcEngine disableVideo];
+  } else if ([@"setVideoEncoderConfiguration" isEqualToString:method]) {
+    double width = [self doubleFromArguments:arguments key:@"width"];
+    double height = [self doubleFromArguments:arguments key:@"height"];
+    NSInteger frameRate = [self intFromArguments:arguments key:@"frameRate"];
+    NSInteger bitrate = [self intFromArguments:arguments key:@"bitrate"];
+    NSInteger minBitrate = [self intFromArguments:arguments key:@"minBitrate"];
+    NSInteger orientationMode = [self intFromArguments:arguments key:@"orientationMode"];
+    
+    AgoraVideoEncoderConfiguration *configuration = [[AgoraVideoEncoderConfiguration alloc] init];
+    configuration.dimensions = CGSizeMake(width, height);
+    configuration.frameRate = frameRate;
+    configuration.bitrate = bitrate;
+    configuration.minBitrate = minBitrate;
+    configuration.orientationMode = orientationMode;
+    [self.agoraRtcEngine setVideoEncoderConfiguration:configuration];
   } else if ([@"setupLocalVideo" isEqualToString:method]) {
     NSInteger viewId = [self intFromArguments:arguments key:@"viewId"];
     UIView *view = [AgoraRtcEnginePlugin viewForId:@(viewId)];
@@ -129,14 +211,77 @@
     canvas.renderMode = renderType;
     canvas.uid = uid;
     [self.agoraRtcEngine setupRemoteVideo:canvas];
-  } else if ([@"enableVideo" isEqualToString:method]) {
-    [self.agoraRtcEngine enableVideo];
-  } else if ([@"disableVideo" isEqualToString:method]) {
-    [self.agoraRtcEngine disableVideo];
+  } else if ([@"setLocalRenderMode" isEqualToString:method]) {
+    NSInteger mode = [self intFromArguments:arguments key:@"mode"];
+    [self.agoraRtcEngine setLocalRenderMode:mode];
+  } else if ([@"setRemoteRenderMode" isEqualToString:method]) {
+    NSInteger uid = [self intFromArguments:arguments key:@"uid"];
+    NSInteger mode = [self intFromArguments:arguments key:@"mode"];
+    [self.agoraRtcEngine setRemoteRenderMode:uid mode:mode];
   } else if ([@"startPreview" isEqualToString:method]) {
     [self.agoraRtcEngine startPreview];
   } else if ([@"stopPreview" isEqualToString:method]) {
     [self.agoraRtcEngine stopPreview];
+  } else if ([@"enableLocalVideo" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:arguments key:@"enabled"];
+    [self.agoraRtcEngine enableLocalVideo:enabled];
+  } else if ([@"muteLocalVideoStream" isEqualToString:method]) {
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine muteLocalVideoStream:muted];
+  } else if ([@"muteRemoteVideoStream" isEqualToString:method]) {
+    NSInteger uid = [self intFromArguments:arguments key:@"uid"];
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine muteRemoteVideoStream:uid mute:muted];
+  } else if ([@"muteAllRemoteVideoStreams" isEqualToString:method]) {
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine muteAllRemoteVideoStreams:muted];
+  } else if ([@"setDefaultMuteAllRemoteVideoStreams" isEqualToString:method]) {
+    BOOL muted = [self boolFromArguments:arguments key:@"muted"];
+    [self.agoraRtcEngine setDefaultMuteAllRemoteVideoStreams:muted];
+  }
+  // Audio Routing Controller
+  else if ([@"setDefaultAudioRouteToSpeaker" isEqualToString:method]) {
+    BOOL defaultToSpeaker = [self boolFromArguments:arguments key:@"defaultToSpeaker"];
+    [self.agoraRtcEngine setDefaultAudioRouteToSpeakerphone:defaultToSpeaker];
+  } else if ([@"setEnableSpeakerphone" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:arguments key:@"enabled"];
+    [self.agoraRtcEngine setEnableSpeakerphone:enabled];
+  } else if ([@"isSpeakerphoneEnabled" isEqualToString:method]) {
+    BOOL enable = [self.agoraRtcEngine isSpeakerphoneEnabled];
+    if (result) {
+      result([NSNumber numberWithBool:enable]);
+    }
+  }
+  // Stream Fallback
+  else if ([@"setLocalPublishFallbackOption" isEqualToString:method]) {
+    NSInteger option = [self intFromArguments:arguments key:@"option"];
+    [self.agoraRtcEngine setLocalPublishFallbackOption:option];
+  } else if ([@"setRemoteSubscribeFallbackOption" isEqualToString:method]) {
+    NSInteger option = [self intFromArguments:arguments key:@"option"];
+    [self.agoraRtcEngine setRemoteSubscribeFallbackOption:option];
+  }
+  // Dual-stream Mode
+  else if ([@"enableDualStreamMode" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:arguments key:@"enabled"];
+    [self.agoraRtcEngine enableDualStreamMode:enabled];
+  } else if ([@"setRemoteVideoStreamType" isEqualToString:method]) {
+    NSInteger uid = [self intFromArguments:arguments key:@"uid"];
+    NSInteger streamType = [self intFromArguments:arguments key:@"streamType"];
+    [self.agoraRtcEngine setRemoteVideoStream:uid type:streamType];
+  } else if ([@"setRemoteDefaultVideoStreamType" isEqualToString:method]) {
+    NSInteger streamType = [self intFromArguments:arguments key:@"streamType"];
+    [self.agoraRtcEngine setRemoteDefaultVideoStreamType:streamType];
+  }
+  // Camera Control
+  else if ([@"switchCamera" isEqualToString:method]) {
+    [self.agoraRtcEngine switchCamera];
+  }
+  // Miscellaneous Methods
+  else if ([@"getSdkVersion" isEqualToString:method]) {
+    NSString *version = [AgoraRtcEngineKit getSdkVersion];
+    if (result) {
+      result(version);
+    }
   }
   
   else {
@@ -406,6 +551,32 @@
     return 0;
   } else {
     return [value integerValue];
+  }
+}
+
+- (double)doubleFromArguments:(NSDictionary *)arguments key:(NSString *)key {
+  if (![arguments isKindOfClass:[NSDictionary class]]) {
+    return 0;
+  }
+  
+  NSNumber *value = [arguments valueForKey:key];
+  if (![value isKindOfClass:[NSNumber class]]) {
+    return 0;
+  } else {
+    return [value doubleValue];
+  }
+}
+
+- (NSInteger)boolFromArguments:(NSDictionary *)arguments key:(NSString *)key {
+  if (![arguments isKindOfClass:[NSDictionary class]]) {
+    return NO;
+  }
+  
+  NSNumber *value = [arguments valueForKey:key];
+  if (![value isKindOfClass:[NSNumber class]]) {
+    return NO;
+  } else {
+    return [value boolValue];
   }
 }
 
