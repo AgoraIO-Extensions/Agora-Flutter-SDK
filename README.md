@@ -11,4 +11,4 @@ To use this plugin, add `agora_rtc_engine` as a [dependency in your pubspec.yaml
 
 ## Getting Started
 
-See the `example` directory for a sample app using AgoraRtcEngine.
+See the [example](example) directory for a sample app using AgoraRtcEngine.
