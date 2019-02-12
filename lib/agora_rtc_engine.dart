@@ -678,7 +678,7 @@ class AgoraRtcEngine {
           break;
         case 'onAudioVolumeIndication':
           if (onAudioVolumeIndication != null) {
-            List<Map> speakerValues = values['speakers'];
+            List<dynamic> speakerValues = values['speakers'];
             List<AudioVolumeInfo> speakers = List<AudioVolumeInfo>();
             for (Map speakerValue in speakerValues) {
               AudioVolumeInfo info =
