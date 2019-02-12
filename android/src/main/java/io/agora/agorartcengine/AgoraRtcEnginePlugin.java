@@ -14,10 +14,8 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import io.agora.rtc.Constants;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.IRtcEngineEventHandler;
-//import io.agora.rtc.RtcEngine
 
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
@@ -41,15 +39,15 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
   private RtcEngine mRtcEngine;
   private HashMap<String, SurfaceView> mRendererViews;
 
-  public void addView(SurfaceView view, int id) {
+  void addView(SurfaceView view, int id) {
     mRendererViews.put("" + id, view);
   }
 
-  public void removeView(int id) {
+  private void removeView(int id) {
     mRendererViews.remove("" + id);
   }
 
-  public SurfaceView getView(int id) {
+  private SurfaceView getView(int id) {
     return mRendererViews.get("" + id);
   }
 
@@ -104,7 +102,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       }
       break;
       case "joinChannel": {
-        String appId = call.argument("appId");
         String token = call.argument("token");
         String channel = call.argument("channelId");
         String info = call.argument("info");
@@ -380,11 +377,11 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
   }
 
-  final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
+  private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
     @Override
     public void onWarning(int warn) {
       super.onWarning(warn);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("warn", warn);
       mMethodChannel.invokeMethod("onWarning", map);
     }
@@ -392,7 +389,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onError(int err) {
       super.onError(err);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("err", err);
       mMethodChannel.invokeMethod("onError", map);
     }
@@ -400,7 +397,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
       super.onJoinChannelSuccess(channel, uid, elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("channel", channel);
       map.put("uid", uid);
       map.put("elapsed", elapsed);
@@ -410,7 +407,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
       super.onRejoinChannelSuccess(channel, uid, elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("channel", channel);
       map.put("uid", uid);
       map.put("elapsed", elapsed);
@@ -420,7 +417,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onLeaveChannel(RtcStats stats) {
       super.onLeaveChannel(stats);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("stats", mapFromStats(stats));
       mMethodChannel.invokeMethod("onLeaveChannel", map);
     }
@@ -428,7 +425,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onClientRoleChanged(int oldRole, int newRole) {
       super.onClientRoleChanged(oldRole, newRole);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("oldRole", oldRole);
       map.put("newRole", newRole);
       mMethodChannel.invokeMethod("onClientRoleChanged", map);
@@ -437,7 +434,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onUserJoined(int uid, int elapsed) {
       super.onUserJoined(uid, elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("elapsed", elapsed);
       mMethodChannel.invokeMethod("onUserJoined", map);
@@ -446,7 +443,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onUserOffline(int uid, int reason) {
       super.onUserOffline(uid, reason);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("reason", reason);
       mMethodChannel.invokeMethod("onUserOffline", map);
@@ -455,7 +452,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onConnectionStateChanged(int state, int reason) {
       super.onConnectionStateChanged(state, reason);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("state", state);
       map.put("reason", reason);
       mMethodChannel.invokeMethod("onConnectionStateChanged", map);
@@ -470,7 +467,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onApiCallExecuted(int error, String api, String result) {
       super.onApiCallExecuted(error, api, result);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("error", error);
       map.put("api", api);
       map.put("result", result);
@@ -480,7 +477,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onTokenPrivilegeWillExpire(String token) {
       super.onTokenPrivilegeWillExpire(token);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("token", token);
       mMethodChannel.invokeMethod("onTokenPrivilegeWillExpire", map);
     }
@@ -494,7 +491,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onMicrophoneEnabled(boolean enabled) {
       super.onMicrophoneEnabled(enabled);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("enabled", enabled);
       mMethodChannel.invokeMethod("onMicrophoneEnabled", map);
     }
@@ -502,7 +499,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onAudioVolumeIndication(AudioVolumeInfo[] speakers, int totalVolume) {
       super.onAudioVolumeIndication(speakers, totalVolume);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("totalVolume", totalVolume);
       map.put("speakers", arrayFromSpeakers(speakers));
       mMethodChannel.invokeMethod("onAudioVolumeIndication", map);
@@ -511,7 +508,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onActiveSpeaker(int uid) {
       super.onActiveSpeaker(uid);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       mMethodChannel.invokeMethod("onActiveSpeaker", map);
     }
@@ -519,7 +516,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onFirstLocalAudioFrame(int elapsed) {
       super.onFirstLocalAudioFrame(elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("elapsed", elapsed);
       mMethodChannel.invokeMethod("onFirstLocalAudioFrame", map);
     }
@@ -527,7 +524,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onFirstRemoteAudioFrame(int uid, int elapsed) {
       super.onFirstRemoteAudioFrame(uid, elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("elapsed", elapsed);
       mMethodChannel.invokeMethod("onFirstRemoteAudioFrame", map);
@@ -542,7 +539,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onFirstLocalVideoFrame(int width, int height, int elapsed) {
       super.onFirstLocalVideoFrame(width, height, elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("width", width);
       map.put("height", height);
       map.put("elapsed", elapsed);
@@ -552,7 +549,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
       super.onFirstRemoteVideoDecoded(uid, width, height, elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("width", width);
       map.put("height", height);
@@ -563,7 +560,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onFirstRemoteVideoFrame(int uid, int width, int height, int elapsed) {
       super.onFirstRemoteVideoFrame(uid, width, height, elapsed);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("width", width);
       map.put("height", height);
@@ -574,7 +571,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onUserMuteAudio(int uid, boolean muted) {
       super.onUserMuteAudio(uid, muted);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("muted", muted);
       mMethodChannel.invokeMethod("onUserMuteAudio", map);
@@ -583,7 +580,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onUserMuteVideo(int uid, boolean muted) {
       super.onUserMuteVideo(uid, muted);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("muted", muted);
       mMethodChannel.invokeMethod("onUserMuteVideo", map);
@@ -592,7 +589,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onUserEnableVideo(int uid, boolean enabled) {
       super.onUserEnableVideo(uid, enabled);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("enabled", enabled);
       mMethodChannel.invokeMethod("onUserEnableVideo", map);
@@ -601,7 +598,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onUserEnableLocalVideo(int uid, boolean enabled) {
       super.onUserEnableLocalVideo(uid, enabled);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("enabled", enabled);
       mMethodChannel.invokeMethod("onUserEnableLocalVideo", map);
@@ -610,7 +607,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onVideoSizeChanged(int uid, int width, int height, int rotation) {
       super.onVideoSizeChanged(uid, width, height, rotation);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("enabled", width);
       map.put("enabled", height);
@@ -621,7 +618,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRemoteVideoStateChanged(int uid, int state) {
       super.onRemoteVideoStateChanged(uid, state);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("state", state);
       mMethodChannel.invokeMethod("onRemoteVideoStateChanged", map);
@@ -630,7 +627,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onLocalPublishFallbackToAudioOnly(boolean isFallbackOrRecover) {
       super.onLocalPublishFallbackToAudioOnly(isFallbackOrRecover);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("isFallbackOrRecover", isFallbackOrRecover);
       mMethodChannel.invokeMethod("onLocalPublishFallbackToAudioOnly", map);
     }
@@ -638,7 +635,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRemoteSubscribeFallbackToAudioOnly(int uid, boolean isFallbackOrRecover) {
       super.onRemoteSubscribeFallbackToAudioOnly(uid, isFallbackOrRecover);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("isFallbackOrRecover", isFallbackOrRecover);
       mMethodChannel.invokeMethod("onRemoteSubscribeFallbackToAudioOnly", map);
@@ -647,7 +644,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onAudioRouteChanged(int routing) {
       super.onAudioRouteChanged(routing);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("routing", routing);
       mMethodChannel.invokeMethod("onAudioRouteChanged", map);
     }
@@ -661,7 +658,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onCameraFocusAreaChanged(Rect rect) {
       super.onCameraFocusAreaChanged(rect);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("rect", mapFromRect(rect));
       mMethodChannel.invokeMethod("onCameraFocusAreaChanged", map);
     }
@@ -669,7 +666,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onCameraExposureAreaChanged(Rect rect) {
       super.onCameraExposureAreaChanged(rect);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("rect", mapFromRect(rect));
       mMethodChannel.invokeMethod("onCameraExposureAreaChanged", map);
     }
@@ -677,7 +674,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRtcStats(RtcStats stats) {
       super.onRtcStats(stats);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("stats", mapFromStats(stats));
       mMethodChannel.invokeMethod("onRtcStats", map);
     }
@@ -685,7 +682,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onLastmileQuality(int quality) {
       super.onLastmileQuality(quality);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("quality", quality);
       mMethodChannel.invokeMethod("onLastmileQuality", map);
     }
@@ -693,7 +690,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onNetworkQuality(int uid, int txQuality, int rxQuality) {
       super.onNetworkQuality(uid, txQuality, rxQuality);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("txQuality", txQuality);
       map.put("rxQuality", rxQuality);
@@ -703,7 +700,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onLocalVideoStats(LocalVideoStats stats) {
       super.onLocalVideoStats(stats);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("stats", mapFromLocalVideoStats(stats));
       mMethodChannel.invokeMethod("onLocalVideoStats", map);
     }
@@ -711,7 +708,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRemoteVideoStats(RemoteVideoStats stats) {
       super.onRemoteVideoStats(stats);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("stats", mapFromRemoteVideoStats(stats));
       mMethodChannel.invokeMethod("onRemoteVideoStats", map);
     }
@@ -719,7 +716,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRemoteAudioStats(RemoteAudioStats stats) {
       super.onRemoteAudioStats(stats);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("stats", mapFromRemoteAudioStats(stats));
       mMethodChannel.invokeMethod("onRemoteAudioStats", map);
     }
@@ -727,7 +724,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRemoteAudioTransportStats(int uid, int delay, int lost, int rxKBitRate) {
       super.onRemoteAudioTransportStats(uid, delay, lost, rxKBitRate);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("delay", delay);
       map.put("lost", lost);
@@ -738,7 +735,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onRemoteVideoTransportStats(int uid, int delay, int lost, int rxKBitRate) {
       super.onRemoteVideoTransportStats(uid, delay, lost, rxKBitRate);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("delay", delay);
       map.put("lost", lost);
@@ -755,7 +752,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onAudioEffectFinished(int soundId) {
       super.onAudioEffectFinished(soundId);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("soundId", soundId);
       mMethodChannel.invokeMethod("onAudioEffectFinished", map);
     }
@@ -763,7 +760,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onStreamPublished(String url, int error) {
       super.onStreamPublished(url, error);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("url", url);
       map.put("error", error);
       mMethodChannel.invokeMethod("onStreamPublished", map);
@@ -772,7 +769,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onStreamUnpublished(String url) {
       super.onStreamUnpublished(url);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("url", url);
       mMethodChannel.invokeMethod("onStreamUnpublished", map);
     }
@@ -786,7 +783,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onStreamInjectedStatus(String url, int uid, int status) {
       super.onStreamInjectedStatus(url, uid, status);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("url", url);
       map.put("uid", uid);
       map.put("status", status);
@@ -798,7 +795,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       super.onStreamMessage(uid, streamId, data);
       try {
         String message = new String(data, "UTF-8");
-        HashMap map = new HashMap<String, Object>();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("streamId", streamId);
         map.put("uid", uid);
         map.put("message", message);
@@ -809,7 +806,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onStreamMessageError(int uid, int streamId, int error, int missed, int cached) {
       super.onStreamMessageError(uid, streamId, error, missed, cached);
-      HashMap map = new HashMap<String, Object>();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
       map.put("streamId", streamId);
       map.put("error", error);
@@ -831,7 +828,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     private HashMap mapFromStats(RtcStats stats) {
-      HashMap map = new HashMap();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("duration", stats.totalDuration);
       map.put("txBytes", stats.txBytes);
       map.put("rxBytes", stats.rxBytes);
@@ -847,7 +844,8 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     private HashMap mapFromRect(Rect rect) {
-      HashMap map = new HashMap();
+      HashMap<String, Object> map = new HashMap<>();
+      
       map.put("x", rect.left);
       map.put("y", rect.top);
       map.put("width", rect.width());
@@ -856,14 +854,14 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     private HashMap mapFromLocalVideoStats(LocalVideoStats stats) {
-      HashMap map = new HashMap();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("sentBitrate", stats.sentBitrate);
       map.put("sentFrameRate", stats.sentFrameRate);
       return map;
     }
 
     private HashMap mapFromRemoteVideoStats(RemoteVideoStats stats) {
-      HashMap map = new HashMap();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", stats.uid);
       map.put("width", stats.width);
       map.put("height", stats.height);
@@ -874,7 +872,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     private HashMap mapFromRemoteAudioStats(RemoteAudioStats stats) {
-      HashMap map = new HashMap();
+      HashMap<String, Object> map = new HashMap<>();
       map.put("uid", stats.uid);
       map.put("quality", stats.quality);
       map.put("networkTransportDelay", stats.networkTransportDelay);
@@ -884,18 +882,18 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     private HashMap[] arrayFromSpeakers(AudioVolumeInfo[] speakers) {
-      ArrayList<HashMap> list = new ArrayList<HashMap>();
+      ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
       for (int i = 0; i < speakers.length; ++i) {
         AudioVolumeInfo info = speakers[i];
-        HashMap map = new HashMap();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("uid", info.uid);
         map.put("volume", info.volume);
 
         list.add(map);
       }
 
-      HashMap[] array = new HashMap[list.size()];
+      HashMap<String, Object>[] array = new HashMap[list.size()];
       return list.toArray(array);
     }
   };
