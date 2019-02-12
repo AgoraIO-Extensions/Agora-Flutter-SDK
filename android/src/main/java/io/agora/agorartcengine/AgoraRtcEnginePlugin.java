@@ -6,7 +6,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.view.SurfaceView;
@@ -16,20 +15,10 @@ import java.util.HashMap;
 
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.IRtcEngineEventHandler;
-
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-import io.flutter.plugin.common.StandardMessageCodec;
 
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_1;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_10;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_24;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_7;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+import io.flutter.plugin.common.StandardMessageCodec;
 
 /** AgoraRtcEnginePlugin */
 public class AgoraRtcEnginePlugin implements MethodCallHandler {
@@ -65,7 +54,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
   private AgoraRtcEnginePlugin(Registrar registrar, MethodChannel channel) {
     this.mRegistrar = registrar;
     this.mMethodChannel = channel;
-    this.mRendererViews = new HashMap<String, SurfaceView>();
+    this.mRendererViews = new HashMap<>();
   }
 
   private Context getActiveContext() {
@@ -348,32 +337,32 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
   private VideoEncoderConfiguration.ORIENTATION_MODE orientationFromValue(int value) {
     switch (value) {
       case 0:
-        return ORIENTATION_MODE_ADAPTIVE;
+        return VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
       case 1:
-        return ORIENTATION_MODE_FIXED_LANDSCAPE;
+        return VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE;
       case 2:
-        return ORIENTATION_MODE_FIXED_PORTRAIT;
+        return VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
       default:
-        return ORIENTATION_MODE_ADAPTIVE;
+        return VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
     }
   }
 
   private VideoEncoderConfiguration.FRAME_RATE frameRateFromValue(int value) {
     switch (value) {
       case 1:
-        return FRAME_RATE_FPS_1;
+        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_1;
       case 7:
-        return FRAME_RATE_FPS_7;
+        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_7;
       case 10:
-        return FRAME_RATE_FPS_10;
+        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_10;
       case 15:
-        return FRAME_RATE_FPS_15;
+        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
       case 24:
-        return FRAME_RATE_FPS_24;
+        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_24;
       case 30:
-        return FRAME_RATE_FPS_30;
+        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30;
       default:
-        return FRAME_RATE_FPS_15;
+        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
     }
   }
 
@@ -609,9 +598,9 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       super.onVideoSizeChanged(uid, width, height, rotation);
       HashMap<String, Object> map = new HashMap<>();
       map.put("uid", uid);
-      map.put("enabled", width);
-      map.put("enabled", height);
-      map.put("enabled", rotation);
+      map.put("width", width);
+      map.put("height", height);
+      map.put("rotation", rotation);
       mMethodChannel.invokeMethod("onVideoSizeChanged", map);
     }
 
@@ -800,7 +789,9 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
         map.put("uid", uid);
         map.put("message", message);
         mMethodChannel.invokeMethod("onStreamMessage", map);
-      } catch (Exception e) {}
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
     }
 
     @Override
@@ -827,7 +818,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       mMethodChannel.invokeMethod("onMediaEngineStartCallSuccess", null);
     }
 
-    private HashMap mapFromStats(RtcStats stats) {
+    private HashMap<String, Object> mapFromStats(RtcStats stats) {
       HashMap<String, Object> map = new HashMap<>();
       map.put("duration", stats.totalDuration);
       map.put("txBytes", stats.txBytes);
@@ -843,9 +834,9 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       return map;
     }
 
-    private HashMap mapFromRect(Rect rect) {
+    private HashMap<String, Object> mapFromRect(Rect rect) {
       HashMap<String, Object> map = new HashMap<>();
-      
+
       map.put("x", rect.left);
       map.put("y", rect.top);
       map.put("width", rect.width());
@@ -853,14 +844,14 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       return map;
     }
 
-    private HashMap mapFromLocalVideoStats(LocalVideoStats stats) {
+    private HashMap<String, Object> mapFromLocalVideoStats(LocalVideoStats stats) {
       HashMap<String, Object> map = new HashMap<>();
       map.put("sentBitrate", stats.sentBitrate);
       map.put("sentFrameRate", stats.sentFrameRate);
       return map;
     }
 
-    private HashMap mapFromRemoteVideoStats(RemoteVideoStats stats) {
+    private HashMap<String, Object> mapFromRemoteVideoStats(RemoteVideoStats stats) {
       HashMap<String, Object> map = new HashMap<>();
       map.put("uid", stats.uid);
       map.put("width", stats.width);
@@ -871,7 +862,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       return map;
     }
 
-    private HashMap mapFromRemoteAudioStats(RemoteAudioStats stats) {
+    private HashMap<String, Object> mapFromRemoteAudioStats(RemoteAudioStats stats) {
       HashMap<String, Object> map = new HashMap<>();
       map.put("uid", stats.uid);
       map.put("quality", stats.quality);
@@ -881,20 +872,18 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       return map;
     }
 
-    private HashMap[] arrayFromSpeakers(AudioVolumeInfo[] speakers) {
+    private ArrayList<HashMap<String, Object>> arrayFromSpeakers(AudioVolumeInfo[] speakers) {
       ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
-      for (int i = 0; i < speakers.length; ++i) {
-        AudioVolumeInfo info = speakers[i];
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("uid", info.uid);
-        map.put("volume", info.volume);
+        for (AudioVolumeInfo info: speakers) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid", info.uid);
+            map.put("volume", info.volume);
 
-        list.add(map);
-      }
+            list.add(map);
+        }
 
-      HashMap<String, Object>[] array = new HashMap[list.size()];
-      return list.toArray(array);
+      return list;
     }
   };
 }
