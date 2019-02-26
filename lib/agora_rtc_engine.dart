@@ -36,7 +36,8 @@ class AgoraRtcEngine {
   static VoidCallback onLeaveChannel;
 
   /// Occurs when the user role switches in a live broadcast.
-  static void Function(int oldRole, int newRole) onClientRoleChanged;
+  static void Function(ClientRole oldRole, ClientRole newRole)
+      onClientRoleChanged;
 
   /// Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
   ///
@@ -227,17 +228,18 @@ class AgoraRtcEngine {
   /// Users in the same channel must use the same channel profile.
   /// Before calling this method to set a new channel profile, [destroy] the current RtcEngine and [create] a new RtcEngine first.
   /// Call this method before [joinChannel], you cannot configure the channel profile when the channel is in use.
-  static Future<void> setChannelProfile(int profile) async {
+  static Future<void> setChannelProfile(ChannelProfile profile) async {
     return await _channel
-        .invokeMethod('setChannelProfile', {'profile': profile});
+        .invokeMethod('setChannelProfile', {'profile': profile.index});
   }
 
   /// Sets the role of a user (Live Broadcast only).
   ///
   /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
   /// This method can be used to switch the user role after a user joins a channel.
-  static Future<void> setClientRole(int role) async {
-    return await _channel.invokeMethod('setClientRole', {'role': role});
+  static Future<void> setClientRole(ClientRole role) async {
+    int roleValue = _intFromClientRole(role);
+    return await _channel.invokeMethod('setClientRole', {'role': roleValue});
   }
 
   /// Allows a user to join a channel.
@@ -305,9 +307,9 @@ class AgoraRtcEngine {
   /// Sets the audio parameters and application scenarios.
   ///
   /// You must call this method before calling the [joinChannel] method.
-  static Future<void> setAudioProfile(int profile, int scenario) async {
+  static Future<void> setAudioProfile(AudioProfile profile, AudioScenario scenario) async {
     await _channel.invokeMethod(
-        'setAudioProfile', {'profile': profile, 'scenario': scenario});
+        'setAudioProfile', {'profile': profile.index, 'scenario': scenario.index});
   }
 
   /// Adjusts the recording volume.
@@ -444,19 +446,20 @@ class AgoraRtcEngine {
   /// Sets the local video view and configures the video display settings on the local device.
   ///
   /// You can call this method to bind local video streams to Widget created by [createNativeView] of the  and configure the video display settings.
-  static Future<void> setupLocalVideo(int viewId, int renderMode) async {
-    await _channel.invokeMethod(
-        'setupLocalVideo', {'viewId': viewId, 'renderMode': renderMode});
+  static Future<void> setupLocalVideo(
+      int viewId, VideoRenderMode renderMode) async {
+    await _channel.invokeMethod('setupLocalVideo',
+        {'viewId': viewId, 'renderMode': _intFromVideoRenderMode(renderMode)});
   }
 
   /// Sets the remote user's video view.
   ///
   /// This method binds the remote user to the Widget created by [createNativeView].
   static Future<void> setupRemoteVideo(
-      int viewId, int renderMode, int uid) async {
+      int viewId, VideoRenderMode renderMode, int uid) async {
     await _channel.invokeMethod('setupRemoteVideo', {
       'viewId': viewId,
-      'renderMode': renderMode,
+      'renderMode': _intFromVideoRenderMode(renderMode),
       'uid': uid,
     });
   }
@@ -464,16 +467,18 @@ class AgoraRtcEngine {
   /// Sets the local video display mode.
   ///
   /// This method may be invoked multiple times during a call to change the display mode.
-  static Future<void> setLocalRenderMode(int mode) async {
-    await _channel.invokeMethod('setLocalRenderMode', {'mode': mode});
+  static Future<void> setLocalRenderMode(VideoRenderMode renderMode) async {
+    await _channel.invokeMethod(
+        'setLocalRenderMode', {'mode': _intFromVideoRenderMode(renderMode)});
   }
 
   /// Sets the remote video display mode.
   ///
   /// This method can be invoked multiple times during a call to change the display mode.
-  static Future<void> setRemoteRenderMode(int uid, int mode) async {
-    await _channel
-        .invokeMethod('setRemoteRenderMode', {'uid': uid, 'mode': mode});
+  static Future<void> setRemoteRenderMode(
+      int uid, VideoRenderMode renderMode) async {
+    await _channel.invokeMethod('setRemoteRenderMode',
+        {'uid': uid, 'mode': _intFromVideoRenderMode(renderMode)});
   }
 
   /// Starts the local video preview before joining a channel.
@@ -550,15 +555,17 @@ class AgoraRtcEngine {
 
   // Stream Fallback
   /// Sets the fallback option for the locally published video stream based on the network conditions.
-  static Future<void> setLocalPublishFallbackOption(int option) async {
-    await _channel
-        .invokeMethod('setLocalPublishFallbackOption', {'option': option});
+  static Future<void> setLocalPublishFallbackOption(
+      StreamFallbackOptions options) async {
+    await _channel.invokeMethod(
+        'setLocalPublishFallbackOption', {'option': options.index});
   }
 
   /// Sets the fallback option for the remotely subscribed video stream based on the network conditions.
-  static Future<void> setRemoteSubscribeFallbackOption(int option) async {
-    await _channel
-        .invokeMethod('setRemoteSubscribeFallbackOption', {'option': option});
+  static Future<void> setRemoteSubscribeFallbackOption(
+      StreamFallbackOptions options) async {
+    await _channel.invokeMethod(
+        'setRemoteSubscribeFallbackOption', {'option': options.index});
   }
 
   // Dual-stream Mode
@@ -632,7 +639,9 @@ class AgoraRtcEngine {
           break;
         case 'onClientRoleChanged':
           if (onClientRoleChanged != null) {
-            onClientRoleChanged(values['oldRole'], values['newRole']);
+            ClientRole oldRole = _clientRoleFromInt(values['oldRole']);
+            ClientRole newRole = _clientRoleFromInt(values['newRole']);
+            onClientRoleChanged(oldRole, newRole);
           }
           break;
         case 'onUserJoined':
@@ -876,6 +885,58 @@ class AgoraRtcEngine {
   static void _removeMethodCallHandler() {
     _channel.setMethodCallHandler(null);
   }
+
+  static ClientRole _clientRoleFromInt(int value) {
+    switch (value) {
+      case 1:
+        return ClientRole.Broadcaster;
+        break;
+      case 2:
+        return ClientRole.Audience;
+        break;
+      default:
+        return ClientRole.Audience;
+    }
+  }
+
+  static int _intFromClientRole(ClientRole role) {
+    switch (role) {
+      case ClientRole.Broadcaster:
+        return 1;
+        break;
+      case ClientRole.Audience:
+        return 2;
+        break;
+      default:
+        return 2;
+    }
+  }
+
+  static VideoRenderMode _videoRenderModeFromInt(int value) {
+    switch (value) {
+      case 1:
+        return VideoRenderMode.Hidden;
+        break;
+      case 2:
+        return VideoRenderMode.Fit;
+        break;
+      default:
+        return VideoRenderMode.Hidden;
+    }
+  }
+
+  static int _intFromVideoRenderMode(VideoRenderMode mode) {
+    switch (mode) {
+      case VideoRenderMode.Hidden:
+        return 1;
+        break;
+      case VideoRenderMode.Fit:
+        return 2;
+        break;
+      default:
+        return 1;
+    }
+  }
 }
 
 class AudioVolumeInfo {
@@ -925,4 +986,75 @@ class RemoteAudioStats {
   int networkTransportDelay;
   int jitterBufferDelay;
   int audioLossRate;
+}
+
+enum ChannelProfile {
+  /// This is used in one-on-one or group calls, where all users in the channel can talk freely.
+  Communication,
+
+  /// Host and audience roles that can be set by calling the [AgoraRtcEngine.setClientRole] method. The host sends and receives voice/video, while the audience can only receive voice/video.
+  LiveBroadcasting
+}
+
+enum ClientRole { Broadcaster, Audience }
+
+enum VideoRenderMode {
+  /// Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
+  Hidden,
+
+  /// Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to the disparity in the aspect ratio are filled with black.
+  Fit
+}
+
+enum StreamFallbackOptions {
+  /// No fallback behavior for the local/remote stream when the uplink/downlink network condition is unreliable. The quality of the stream is not guaranteed.
+  Disabled,
+
+  /// Under unreliable downlink network conditions, the remote stream falls back to the low-video stream (low resolution and low bitrate). You can only set this option in [AgoraRtcEngine.setRemoteSubscribeFallbackOption].
+  /// Nothing happens when you set this in [AgoraRtcEngine.setLocalPublishFallbackOption].
+  VideoStreamLow,
+
+  /// Under unreliable uplink network conditions, the published stream falls back audio only.
+  /// Under unreliable downlink network conditions, the remote stream first falls back to the low-video stream (low resolution and low bitrate); and then to an audio-only stream if the network condition deteriorates.
+  AudioOnly
+}
+
+enum AudioProfile {
+  /// Default audio profile. In the communication profile, the default value is [SpeechStandard]; in the live-broadcast profile, the default value is [MusicStandard].
+  Default,
+
+  /// Sampling rate of 32 kHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  SpeechStandard,
+
+  /// Sampling rate of 48 kHz, music encoding, mono, and a bitrate of up to 48 Kbps.
+  MusicStandard,
+
+  /// Sampling rate of 48 kHz, music encoding, stereo, and a bitrate of up to 56 Kbps.
+  MusicStandardStereo,
+
+  /// Sampling rate of 48 kHz, music encoding, mono, and a bitrate of up to 128 Kbps.
+  MusicHighQuality,
+
+  /// Sampling rate of 48 kHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
+  MusicHighQualityStereo
+}
+
+enum AudioScenario {
+  /// Default.
+  Default,
+
+  /// Entertainment scenario, supporting voice during gameplay.
+  ChatRoomEntertainment,
+
+  /// Education scenario, prioritizing fluency and stability.
+  Education,
+
+  /// Live gaming scenario, enabling the gaming audio effects in the speaker mode in a live broadcast scenario. Choose this scenario for high-fidelity music playback.
+  GameStreaming,
+
+  /// Showroom scenario, optimizing the audio quality with external professional equipment.
+  ShowRoom,
+
+  /// Gaming scenario.
+  ChatRoomGaming
 }

@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
     _addRenderView(0, (viewId) {
-      AgoraRtcEngine.setupLocalVideo(viewId, 1);
+      AgoraRtcEngine.setupLocalVideo(viewId, VideoRenderMode.Hidden);
     });
   }
 
@@ -54,6 +54,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> _initAgoraRtcEngine() async {
     AgoraRtcEngine.create('YOUR APP ID');
     AgoraRtcEngine.enableVideo();
+    AgoraRtcEngine.setChannelProfile(ChannelProfile.Communication);
   }
 
   void _addAgoraEventHandlers() {
@@ -76,7 +77,7 @@ class _MyAppState extends State<MyApp> {
         String info = 'userJoined: ' + uid.toString();
         _infoStrings.add(info);
         _addRenderView(uid, (viewId) {
-          AgoraRtcEngine.setupRemoteVideo(viewId, 1, uid);
+          AgoraRtcEngine.setupRemoteVideo(viewId, VideoRenderMode.Hidden, uid);
         });
       });
     };
