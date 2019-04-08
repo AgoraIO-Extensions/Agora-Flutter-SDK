@@ -1,5 +1,5 @@
 group 'io.agora.agorartcengine'
-version '1.0-SNAPSHOT'
+version '2.4.0'
 
 buildscript {
     repositories {
@@ -35,5 +35,5 @@ android {
 }
 
 dependencies {
-    implementation 'io.agora.rtc:full-sdk:2.3.3'
+    implementation 'io.agora.rtc:full-sdk:2.4.0'
 }

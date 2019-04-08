@@ -12,11 +12,14 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc.video.BeautyOptions;
 
 import io.flutter.plugin.common.StandardMessageCodec;
 
@@ -174,6 +177,14 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
         mRtcEngine.setDefaultMuteAllRemoteAudioStreams(muted);
       }
       break;
+      // Video Pre-process and Post-process
+      case "setBeautyEffectOptions": {
+        boolean enabled = call.argument("enabled");
+        HashMap<String, Object> optionsMap = call.argument("options");
+        BeautyOptions options = beautyOptionsFromMap(optionsMap);
+        mRtcEngine.setBeautyEffectOptions(enabled, options);
+      }
+      break;
       // Core Video
       case "enableVideo": {
         mRtcEngine.enableVideo();
@@ -184,20 +195,9 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       }
       break;
       case "setVideoEncoderConfiguration": {
-        int width = call.argument("width");
-        int height = call.argument("height");
-        int frameRate = call.argument("frameRate");
-        int bitrate = call.argument("bitrate");
-        int minBitrate = call.argument("minBitrate");
-        int orientationMode = call.argument("orientationMode");
-
-        VideoEncoderConfiguration configuration = new VideoEncoderConfiguration();
-        configuration.dimensions = new VideoEncoderConfiguration.VideoDimensions(width, height);
-        configuration.frameRate = frameRateFromValue(frameRate);
-        configuration.bitrate = bitrate;
-        configuration.minBitrate = minBitrate;
-        configuration.orientationMode = orientationFromValue(orientationMode);
-        mRtcEngine.setVideoEncoderConfiguration(configuration);
+        HashMap<String, Object> configDic = call.argument("config");
+        VideoEncoderConfiguration config = videoEncoderConfigurationFromMap(configDic);
+        mRtcEngine.setVideoEncoderConfiguration(config);
       }
       break;
       case "removeNativeView": {
@@ -286,6 +286,11 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       break;
 
       // Stream Fallback
+      case "setRemoteUserPriority": {
+        int uid = call.argument("uid");
+        int userPriority = call.argument("userPriority");
+        mRtcEngine.setRemoteUserPriority(uid, userPriority);
+      }
       case "setLocalPublishFallbackOption": {
         int option = call.argument("option");
         mRtcEngine.setLocalPublishFallbackOption(option);
@@ -328,7 +333,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       }
       break;
 
-
       default:
         result.notImplemented();
     }
@@ -344,25 +348,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
         return VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
       default:
         return VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-    }
-  }
-
-  private VideoEncoderConfiguration.FRAME_RATE frameRateFromValue(int value) {
-    switch (value) {
-      case 1:
-        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_1;
-      case 7:
-        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_7;
-      case 10:
-        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_10;
-      case 15:
-        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-      case 24:
-        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_24;
-      case 30:
-        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30;
-      default:
-        return VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
     }
   }
 
@@ -886,6 +871,33 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       return list;
     }
   };
+
+  private BeautyOptions beautyOptionsFromMap(HashMap<String, Object> map) {
+    BeautyOptions options = new BeautyOptions();
+    options.lighteningContrastLevel = ((Double)(map.get("lighteningContrastLevel"))).intValue();
+    options.lighteningLevel = ((Double)(map.get("lighteningLevel"))).floatValue();
+    options.smoothnessLevel = ((Double)(map.get("smoothnessLevel"))).floatValue();
+    options.rednessLevel = ((Double)(map.get("rednessLevel"))).floatValue();
+    return options;
+  }
+
+  private VideoEncoderConfiguration videoEncoderConfigurationFromMap(HashMap<String, Object> map) {
+    int width = (int)(map.get("width"));
+    int height = (int)(map.get("height"));
+    int frameRate = (int)(map.get("frameRate"));
+    int bitrate = (int)(map.get("bitrate"));
+    int minBitrate = (int)(map.get("minBitrate"));
+    int orientationMode = (int)(map.get("orientationMode"));
+
+    VideoEncoderConfiguration configuration = new VideoEncoderConfiguration();
+    configuration.dimensions = new VideoEncoderConfiguration.VideoDimensions(width, height);
+    configuration.frameRate = frameRate;
+    configuration.bitrate = bitrate;
+    configuration.minBitrate = minBitrate;
+    configuration.orientationMode = orientationFromValue(orientationMode);
+
+    return configuration;
+  }
 }
 
 
