@@ -177,20 +177,9 @@
   } else if ([@"disableVideo" isEqualToString:method]) {
     [self.agoraRtcEngine disableVideo];
   } else if ([@"setVideoEncoderConfiguration" isEqualToString:method]) {
-    NSInteger width = [self doubleFromArguments:arguments key:@"width"];
-    NSInteger height = [self doubleFromArguments:arguments key:@"height"];
-    NSInteger frameRate = [self intFromArguments:arguments key:@"frameRate"];
-    NSInteger bitrate = [self intFromArguments:arguments key:@"bitrate"];
-    NSInteger minBitrate = [self intFromArguments:arguments key:@"minBitrate"];
-    NSInteger orientationMode = [self intFromArguments:arguments key:@"orientationMode"];
-    
-    AgoraVideoEncoderConfiguration *configuration = [[AgoraVideoEncoderConfiguration alloc] init];
-    configuration.dimensions = CGSizeMake(width, height);
-    configuration.frameRate = frameRate;
-    configuration.bitrate = bitrate;
-    configuration.minBitrate = minBitrate;
-    configuration.orientationMode = orientationMode;
-    [self.agoraRtcEngine setVideoEncoderConfiguration:configuration];
+    NSDictionary *configDic = [self dictionaryFromArguments:arguments key:@"config"];
+    AgoraVideoEncoderConfiguration *config = [self videoEncoderConfigurationFromDic:configDic];
+    [self.agoraRtcEngine setVideoEncoderConfiguration:config];
   } else if ([@"removeNativeView" isEqualToString:method]) {
     NSString *viewId = [self stringFromArguments:arguments key:@"viewId"];
     if (viewId.length) {
@@ -244,6 +233,15 @@
     BOOL muted = [self boolFromArguments:arguments key:@"muted"];
     [self.agoraRtcEngine setDefaultMuteAllRemoteVideoStreams:muted];
   }
+  
+  // Video Pre-process and Post-process
+  else if ([@"setBeautyEffectOptions" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:arguments key:@"enabled"];
+    NSDictionary *optionsDic = [self dictionaryFromArguments:arguments key:@"options"];
+    AgoraBeautyOptions *options = [self beautyOptionsFromDic:optionsDic];
+    [self.agoraRtcEngine setBeautyEffectOptions:enabled options:options];
+  }
+
   // Audio Routing Controller
   else if ([@"setDefaultAudioRouteToSpeaker" isEqualToString:method]) {
     BOOL defaultToSpeaker = [self boolFromArguments:arguments key:@"defaultToSpeaker"];
@@ -258,7 +256,11 @@
     }
   }
   // Stream Fallback
-  else if ([@"setLocalPublishFallbackOption" isEqualToString:method]) {
+  else if ([@"setRemoteUserPriority" isEqualToString:method]) {
+    NSInteger uid = [self intFromArguments:arguments key:@"uid"];
+    AgoraUserPriority priority = [self intFromArguments:arguments key:@"userPriority"];
+    [self.agoraRtcEngine setRemoteUserPriority:uid type:priority];
+  } else if ([@"setLocalPublishFallbackOption" isEqualToString:method]) {
     NSInteger option = [self intFromArguments:arguments key:@"option"];
     [self.agoraRtcEngine setLocalPublishFallbackOption:option];
   } else if ([@"setRemoteSubscribeFallbackOption" isEqualToString:method]) {
@@ -572,7 +574,7 @@
   }
 }
 
-- (NSInteger)boolFromArguments:(NSDictionary *)arguments key:(NSString *)key {
+- (BOOL)boolFromArguments:(NSDictionary *)arguments key:(NSString *)key {
   if (![arguments isKindOfClass:[NSDictionary class]]) {
     return NO;
   }
@@ -582,6 +584,19 @@
     return NO;
   } else {
     return [value boolValue];
+  }
+}
+
+- (NSDictionary *)dictionaryFromArguments:(NSDictionary *)arguments key:(NSString *)key {
+  if (![arguments isKindOfClass:[NSDictionary class]]) {
+    return nil;
+  }
+  
+  NSDictionary *value = [arguments valueForKey:key];
+  if (![value isKindOfClass:[NSDictionary class]]) {
+    return nil;
+  } else {
+    return value;
   }
 }
 
@@ -642,6 +657,40 @@
            @"jitterBufferDelay": @(stats.jitterBufferDelay),
            @"audioLossRate": @(stats.audioLossRate),
            };
+}
+
+- (AgoraBeautyOptions *)beautyOptionsFromDic:(NSDictionary *)dictionary {
+  AgoraBeautyOptions *options = [[AgoraBeautyOptions alloc] init];
+  if (dictionary) {
+    options.lighteningContrastLevel = [self intFromArguments:dictionary key:@"lighteningContrastLevel"];
+    options.lighteningLevel = [self doubleFromArguments:dictionary key:@"lighteningLevel"];
+    options.smoothnessLevel = [self doubleFromArguments:dictionary key:@"smoothnessLevel"];
+    options.rednessLevel = [self doubleFromArguments:dictionary key:@"rednessLevel"];
+  }
+  return options;
+}
+
+- (AgoraVideoEncoderConfiguration *)videoEncoderConfigurationFromDic:(NSDictionary *)dictionary {
+  AgoraVideoEncoderConfiguration *configuration = [[AgoraVideoEncoderConfiguration alloc] init];
+  if (dictionary) {
+    NSInteger width = [self doubleFromArguments:dictionary key:@"width"];
+    NSInteger height = [self doubleFromArguments:dictionary key:@"height"];
+    NSInteger frameRate = [self intFromArguments:dictionary key:@"frameRate"];
+    NSInteger minFrameRate = [self intFromArguments:dictionary key:@"minFrameRate"];
+    NSInteger bitrate = [self intFromArguments:dictionary key:@"bitrate"];
+    NSInteger minBitrate = [self intFromArguments:dictionary key:@"minBitrate"];
+    NSInteger orientationMode = [self intFromArguments:dictionary key:@"orientationMode"];
+    NSInteger degradationPreference = [self intFromArguments:dictionary key:@"degradationPreference"];
+    
+    configuration.dimensions = CGSizeMake(width, height);
+    configuration.frameRate = frameRate;
+    configuration.minFrameRate = minFrameRate;
+    configuration.bitrate = bitrate;
+    configuration.minBitrate = minBitrate;
+    configuration.orientationMode = orientationMode;
+    configuration.degradationPreference = degradationPreference;
+  }
+  return configuration;
 }
 @end
 

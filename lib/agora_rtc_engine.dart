@@ -372,6 +372,12 @@ class AgoraRtcEngine {
         .invokeMethod('setDefaultMuteAllRemoteAudioStreams', {'muted': muted});
   }
 
+  // Video Pre-process and Post-process
+  /// Enables/Disables image enhancement and sets the options.
+  static Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options) async {
+    await _channel.invokeListMethod('setBeautyEffectOptions', {'enabled': enabled, 'options': options._jsonMap()});
+  }
+
   // Core Video
   /// Enables the video module.
   ///
@@ -400,15 +406,8 @@ class AgoraRtcEngine {
   /// Each video encoder configuration corresponds to a set of video parameters, including the resolution, frame rate, bitrate, and video orientation.
   /// If you do not set the video encoder configuration after joining the channel, you can call this method before calling the [enableVideo] method to reduce the render time of the first video frame.
   /// The parameters specified in this method are the maximum values under ideal network conditions. If the video engine cannot render the video using the specified parameters due to poor network conditions, the parameters further down the list are considered until a successful configuration is found.
-  static Future<void> setVideoEncoderConfiguration(Size dimensions,
-      int frameRate, int bitrate, int minBitrate, int orientationMode) async {
-    await _channel.invokeMethod('setVideoEncoderConfiguration', {
-      'width': dimensions.width.toInt(),
-      'height': dimensions.height.toInt(),
-      'frameRate': frameRate,
-      'minBitrate': minBitrate,
-      'orientationMode': orientationMode
-    });
+  static Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config) async {
+    await _channel.invokeMethod('setVideoEncoderConfiguration', {'config': config._jsonMap()});
   }
 
   /// Creates the video renderer Widget.
@@ -554,6 +553,27 @@ class AgoraRtcEngine {
   }
 
   // Stream Fallback
+  /// Sets the priority of a remote user. 
+  /// 
+  /// Use this method with the [setRemoteSubscribeFallbackOption] method.
+  /// If the fallback function is enabled for a remote stream, the SDK ensures the high-priority user gets the best possible stream quality.
+  /// The Agora SDK supports setting userPriority as high for one user only.
+  static Future<void> setRemoteUserPriority(int uid, UserPriority userPriority) async {
+    int priorityValue = 100;
+    switch (userPriority) {
+      case UserPriority.Normal:
+        priorityValue = 100;
+        break;
+      case UserPriority.High:
+        priorityValue = 50;
+        break;
+      default:
+        break;
+    }
+    await _channel.invokeMethod(
+        'setRemoteUserPriority', {'uid': uid, 'userPriority': priorityValue});
+  }
+
   /// Sets the fallback option for the locally published video stream based on the network conditions.
   static Future<void> setLocalPublishFallbackOption(
       StreamFallbackOptions options) async {
@@ -988,22 +1008,150 @@ class RemoteAudioStats {
   int audioLossRate;
 }
 
+/// The image enhancement options in [AgoraRtcEngine.setBeautyEffectOptions].
+class BeautyOptions {
+  /// The lightening contrast level.
+  ///
+  /// 0: low contrast level.
+  /// 1: (default) normal contrast level.
+  /// 2: high contrast level.
+  LighteningContrastLevel lighteningContrastLevel = LighteningContrastLevel.Normal;
+
+  /// The brightness level. 
+  ///
+  /// The value ranges from 0.0 (original) to 1.0.
+  double lighteningLevel = 0;
+
+  /// The sharpness level. 
+  /// 
+  ///The value ranges from 0.0 (original) to 1.0. This parameter is usually used to remove blemishes.
+  double smoothnessLevel = 0;
+
+  /// The redness level. 
+  /// 
+  /// The value ranges from 0.0 (original) to 1.0. This parameter adjusts the red saturation level.
+  double rednessLevel = 0;
+
+  Map<String, double> _jsonMap() {
+    return {
+      "lighteningContrastLevel": lighteningContrastLevel.index.toDouble(), 
+      "lighteningLevel": lighteningLevel, 
+      "smoothnessLevel": smoothnessLevel, 
+      "rednessLevel": rednessLevel,
+      };
+  }
+}
+
+/// Properties of the video encoder configuration.
+class VideoEncoderConfiguration {
+  /// The video frame dimension used to specify the video quality in the total number of pixels along a frame's width and height.
+  ///
+  /// The dimension does not specify the orientation mode of the output ratio. For how to set the video orientation, see [VideoOutputOrientationMode].
+  /// Whether 720p can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table. Agora optimizes the video in lower-end devices.
+  Size dimensions = Size(640, 360);
+
+  /// The frame rate of the video (fps).
+  /// 
+  /// We do not recommend setting this to a value greater than 30.
+  int frameRate = 15;
+
+  /// The minimum video encoder frame rate (fps). 
+  /// 
+  /// The default value (-1) means the SDK uses the lowest encoder frame rate.
+  int minFrameRate = -1;
+
+  /// The bitrate of the video.
+  /// 
+  /// Sets the video bitrate (Kbps). If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
+  ///  - Standard: (recommended) In this mode, the bitrates differ between the Live-broadcast and Communication profiles:
+  ///   - Communication profile: the video bitrate is the same as the base bitrate.
+  ///   - Live-broadcast profile: the video bitrate is twice the base bitrate.
+  ///  - Compatible: In this mode, the bitrate stays the same regardless of the profile. In the Live-broadcast profile, if you choose this mode, the video frame rate may be lower than the set value.
+  /// Agora uses different video codecs for different profiles to optimize the user experience. For example, the Communication profile prioritizes the smoothness while the Live-broadcast profile prioritizes the video quality (a higher bitrate). Therefore, Agora recommends setting this parameter as AgoraVideoBitrateStandard.
+  int bitrate = AgoraVideoBitrateStandard;
+
+  /// The minimum encoding bitrate.
+  /// 
+  /// The Agora SDK automatically adjusts the encoding bitrate to adapt to network conditions.
+  /// Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and hence sacrifice the smoothness of the video transmission.
+  /// Unless you have special requirements for image quality, Agora does not recommend changing this value.
+  int minBitrate = -1;
+
+  /// The video orientation mode of the video.
+  VideoOutputOrientationMode orientationMode = VideoOutputOrientationMode.Adaptative;
+
+  /// The video encoding degradation preference under limited bandwidth.
+  DegradationPreference degradationPreference = DegradationPreference.MaintainQuality;
+
+  Map<String, dynamic> _jsonMap() {
+    return {
+      'width': dimensions.width.toInt(),
+      'height': dimensions.height.toInt(),
+      'frameRate': frameRate,
+      'minFrameRate': minFrameRate,
+      'bitrate': bitrate,
+      'minBitrate': minBitrate,
+      'orientationMode': orientationMode.index,
+      'degradationPreference': degradationPreference.index,
+      };
+  }
+}
+
+const int AgoraVideoBitrateStandard = 0;
+const int AgoraVideoBitrateCompatible = -1;
+
 enum ChannelProfile {
   /// This is used in one-on-one or group calls, where all users in the channel can talk freely.
   Communication,
 
   /// Host and audience roles that can be set by calling the [AgoraRtcEngine.setClientRole] method. The host sends and receives voice/video, while the audience can only receive voice/video.
-  LiveBroadcasting
+  LiveBroadcasting,
 }
 
-enum ClientRole { Broadcaster, Audience }
+enum ClientRole { Broadcaster, Audience, }
+
+enum VideoOutputOrientationMode {
+  /// Adaptive mode.
+  /// 
+  /// The video encoder adapts to the orientation mode of the video input device. When you use a custom video source, the output video from the encoder inherits the orientation of the original video.
+  /// If the width of the captured video from the SDK is greater than the height, the encoder sends the video in landscape mode. The encoder also sends the rotational information of the video, and the receiver uses the rotational information to rotate the received video.
+  /// If the original video is in portrait mode, the output video from the encoder is also in portrait mode. The encoder also sends the rotational information of the video to the receiver.
+  Adaptative,
+
+  /// Landscape mode.
+  /// 
+  /// The video encoder always sends the video in landscape mode. The video encoder rotates the original video before sending it and the rotational information is 0. This mode applies to scenarios involving CDN live streaming.
+  FixedLandscape,
+
+  /// Portrait mode.
+  /// 
+  /// The video encoder always sends the video in portrait mode. The video encoder rotates the original video before sending it and the rotational information is 0. This mode applies to scenarios involving CDN live streaming.
+  FixedPortrait,
+}
+
+/// The video encoding degradation preference under limited bandwidth.
+enum DegradationPreference {
+  /// Degrades the frame rate to guarantee the video quality.
+  MaintainQuality,
+
+  /// Degrades the video quality to guarantee the frame rate.
+  MaintainFramerate,
+
+  /// Reserved for future use.
+  Balanced,
+}
 
 enum VideoRenderMode {
   /// Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
   Hidden,
 
   /// Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to the disparity in the aspect ratio are filled with black.
-  Fit
+  Fit,
+}
+
+enum UserPriority {
+  High,
+  Normal,
 }
 
 enum StreamFallbackOptions {
@@ -1016,7 +1164,7 @@ enum StreamFallbackOptions {
 
   /// Under unreliable uplink network conditions, the published stream falls back audio only.
   /// Under unreliable downlink network conditions, the remote stream first falls back to the low-video stream (low resolution and low bitrate); and then to an audio-only stream if the network condition deteriorates.
-  AudioOnly
+  AudioOnly,
 }
 
 enum AudioProfile {
@@ -1036,7 +1184,7 @@ enum AudioProfile {
   MusicHighQuality,
 
   /// Sampling rate of 48 kHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
-  MusicHighQualityStereo
+  MusicHighQualityStereo,
 }
 
 enum AudioScenario {
@@ -1056,5 +1204,16 @@ enum AudioScenario {
   ShowRoom,
 
   /// Gaming scenario.
-  ChatRoomGaming
+  ChatRoomGaming,
+}
+
+enum LighteningContrastLevel {
+  /// Low contrast level.
+  Low,
+
+  /// Normal contrast level.
+  Normal,
+
+  ///High contrast level.
+  High,
 }

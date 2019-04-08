@@ -1,3 +1,11 @@
+# Change log
+
+## 0.9.4
+
+* Update to Agora Rtc SDK 2.4.0 version
+* Refact setVideoEncoderConfiguration
+* Add setBeautyEffectOptions and setRemoteUserPriority
+
 ## 0.9.3
 
 * Added basic enumerations
