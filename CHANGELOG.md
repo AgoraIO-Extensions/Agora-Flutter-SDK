@@ -1,5 +1,9 @@
 # Change log
 
+## 0.9.5
+
+* Fix onRtcStats
+
 ## 0.9.4
 
 * Update to Agora Rtc SDK 2.4.0 version
