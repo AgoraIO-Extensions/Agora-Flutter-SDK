@@ -829,17 +829,15 @@ class AgoraRtcEngine {
           if (onRtcStats != null) {
             Map statsValue = values['stats'];
             RtcStats stats = RtcStats();
-            stats.totalDuration = statsValue['totalDuration'];
+            stats.totalDuration = statsValue['duration'];
             stats.txBytes = statsValue['txBytes'];
             stats.rxBytes = statsValue['rxBytes'];
-            stats.txKBitRate = statsValue['txKBitRate'];
-            stats.rxKBitRate = statsValue['rxKBitRate'];
 
-            stats.txAudioKBitRate = statsValue['txAudioKBitRate'];
-            stats.rxAudioKBitRate = statsValue['rxAudioKBitRate'];
-            stats.txVideoKBitRate = statsValue['txVideoKBitRate'];
-            stats.rxVideoKBitRate = statsValue['rxVideoKBitRate'];
-            stats.users = statsValue['users'];
+            stats.txAudioKBitRate = statsValue['txAudioKBitrate'];
+            stats.rxAudioKBitRate = statsValue['rxAudioKBitrate'];
+            stats.txVideoKBitRate = statsValue['txVideoKBitrate'];
+            stats.rxVideoKBitRate = statsValue['rxVideoKBitrate'];
+            stats.users = statsValue['userCount'];
             stats.lastmileDelay = statsValue['lastmileDelay'];
             stats.cpuTotalUsage = statsValue['cpuTotalUsage'];
             stats.cpuAppUsage = statsValue['cpuAppUsage'];
@@ -973,8 +971,6 @@ class RtcStats {
   int totalDuration;
   int txBytes;
   int rxBytes;
-  int txKBitRate;
-  int rxKBitRate;
   int txAudioKBitRate;
   int rxAudioKBitRate;
   int txVideoKBitRate;
