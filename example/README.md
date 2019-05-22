@@ -2,6 +2,8 @@
 
 Demonstrates how to use the `agora_rtc_engine` plugin.
 
+## Getting Started
+
 ### Create an Account and Obtain an App ID
 
 1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/).
@@ -12,7 +14,7 @@ Demonstrates how to use the `agora_rtc_engine` plugin.
 
 Open the `main.dart` file. In the `_initAgoraRtcEngine()` method, update `YOUR APP ID` with your App ID.
 
-```
+```Dart
 Future<void> _initAgoraRtcEngine() async {
   AgoraRtcEngine.create('YOUR APP ID');
   AgoraRtcEngine.enableVideo();
