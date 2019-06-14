@@ -439,6 +439,14 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     @Override
+    public void onNetworkTypeChanged (int type) {
+      super.onNetworkTypeChanged(type);
+      HashMap<String, Object> map = new HashMap<>();
+      map.put("type", type);
+      mMethodChannel.invokeMethod("onNetworkTypeChanged", map);
+    }
+
+    @Override
     public void onApiCallExecuted(int error, String api, String result) {
       super.onApiCallExecuted(error, api, result);
       HashMap<String, Object> map = new HashMap<>();
@@ -505,9 +513,12 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     @Override
-    public void onVideoStopped() {
-      super.onVideoStopped();
-      mMethodChannel.invokeMethod("onVideoStopped", null);
+    public void onFirstRemoteAudioDecoded(int uid, int elapsed) {
+      super.onFirstRemoteAudioDecoded(uid, elapsed);
+      HashMap<String, Object> map = new HashMap<>();
+      map.put("uid", uid);
+      map.put("elapsed", elapsed);
+      mMethodChannel.invokeMethod("onFirstRemoteAudioDecoded", map);
     }
 
     @Override
@@ -624,12 +635,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     @Override
-    public void onCameraReady() {
-      super.onCameraReady();
-      mMethodChannel.invokeMethod("onCameraReady", null);
-    }
-
-    @Override
     public void onCameraFocusAreaChanged(Rect rect) {
       super.onCameraFocusAreaChanged(rect);
       HashMap<String, Object> map = new HashMap<>();
@@ -718,9 +723,12 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     }
 
     @Override
-    public void onAudioMixingFinished() {
-      super.onAudioMixingFinished();
-      mMethodChannel.invokeMethod("onAudioMixingFinished", null);
+    public void onLocalVideoStateChanged(int localVideoState, int error) {
+      super.onLocalVideoStateChanged(localVideoState, error);
+      HashMap<String, Object> map = new HashMap<>();
+      map.put("localVideoState", localVideoState);
+      map.put("error", error);
+      mMethodChannel.invokeMethod("onLocalVideoStateChanged", map);
     }
 
     @Override
@@ -812,6 +820,8 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       map.put("rxAudioKBitrate", stats.rxAudioKBitRate);
       map.put("txVideoKBitrate", stats.txVideoKBitRate);
       map.put("rxVideoKBitrate", stats.rxVideoKBitRate);
+      map.put("txPacketLossRate", stats.txPacketLossRate);
+      map.put("rxPacketLossRate", stats.rxPacketLossRate);
       map.put("lastmileDelay", stats.lastmileDelay);
       map.put("userCount", stats.users);
       map.put("cpuAppUsage", stats.cpuAppUsage);
@@ -833,6 +843,8 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       HashMap<String, Object> map = new HashMap<>();
       map.put("sentBitrate", stats.sentBitrate);
       map.put("sentFrameRate", stats.sentFrameRate);
+      map.put("encoderOutputFrameRate", stats.encoderOutputFrameRate);
+      map.put("rendererOutputFrameRate", stats.rendererOutputFrameRate);
       return map;
     }
 
@@ -842,7 +854,8 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       map.put("width", stats.width);
       map.put("height", stats.height);
       map.put("receivedBitrate", stats.receivedBitrate);
-      map.put("receivedFrameRate", stats.receivedFrameRate);
+      map.put("decoderOutputFrameRate", stats.decoderOutputFrameRate);
+      map.put("rendererOutputFrameRate", stats.rendererOutputFrameRate);
       map.put("rxStreamType", stats.rxStreamType);
       return map;
     }
