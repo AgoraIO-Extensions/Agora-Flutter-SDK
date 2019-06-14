@@ -53,8 +53,13 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _initAgoraRtcEngine() async {
     AgoraRtcEngine.create('YOUR APP ID');
+    
     AgoraRtcEngine.enableVideo();
     AgoraRtcEngine.setChannelProfile(ChannelProfile.Communication);
+
+    VideoEncoderConfiguration config = VideoEncoderConfiguration();
+    config.orientationMode = VideoOutputOrientationMode.FixedPortrait;
+    AgoraRtcEngine.setVideoEncoderConfiguration(config);
   }
 
   void _addAgoraEventHandlers() {
