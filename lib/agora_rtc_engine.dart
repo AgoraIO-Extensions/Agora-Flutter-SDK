@@ -55,6 +55,11 @@ class AgoraRtcEngine {
   /// Occurs when the network connection state changes.
   static void Function(int state, int reason) onConnectionStateChanged;
 
+  /// Occurs when the local network type changes.
+  ///
+  /// When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.
+  static void Function(int type) onNetworkTypeChanged;
+
   /// Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
   ///
   /// The SDK triggers this callback when it cannot connect to the server 10 seconds after calling [joinChannel], regardless of whether it is in the channel or not.
@@ -90,10 +95,8 @@ class AgoraRtcEngine {
   /// Occurs when the first remote audio frame is received.
   static void Function(int uid, int elapsed) onFirstRemoteAudioFrame;
 
-  /// Occurs when the video stops playing.
-  ///
-  /// The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
-  static VoidCallback onVideoStopped;
+  /// Occurs when the SDK decodes the first remote audio frame for playback.
+  static void Function(int uid, int elapsed) onFirstRemoteAudioDecoded;
 
   /// Occurs when the first local video frame is sent.
   ///
@@ -155,10 +158,12 @@ class AgoraRtcEngine {
   /// This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.
   static void Function(int routing) onAudioRouteChanged;
 
-  /// Occurs when the camera is turned on and ready to capture video.
+  /// Occurs when the local video stream state changes.
   ///
-  /// If the camera fails to turn on, fix the error reported in the onError callback.
-  static VoidCallback onCameraReady;
+  /// The SDK returns the current video state in this callback.
+  static void Function(
+          LocalVideoStreamState localVideoState, LocalVideoStreamError error)
+      onLocalVideoStateChanged;
 
   // Statistics Events
   /// Reports the statistics of the audio stream from each remote user/host.
@@ -307,9 +312,10 @@ class AgoraRtcEngine {
   /// Sets the audio parameters and application scenarios.
   ///
   /// You must call this method before calling the [joinChannel] method.
-  static Future<void> setAudioProfile(AudioProfile profile, AudioScenario scenario) async {
-    await _channel.invokeMethod(
-        'setAudioProfile', {'profile': profile.index, 'scenario': scenario.index});
+  static Future<void> setAudioProfile(
+      AudioProfile profile, AudioScenario scenario) async {
+    await _channel.invokeMethod('setAudioProfile',
+        {'profile': profile.index, 'scenario': scenario.index});
   }
 
   /// Adjusts the recording volume.
@@ -374,8 +380,10 @@ class AgoraRtcEngine {
 
   // Video Pre-process and Post-process
   /// Enables/Disables image enhancement and sets the options.
-  static Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options) async {
-    await _channel.invokeListMethod('setBeautyEffectOptions', {'enabled': enabled, 'options': options._jsonMap()});
+  static Future<void> setBeautyEffectOptions(
+      bool enabled, BeautyOptions options) async {
+    await _channel.invokeListMethod('setBeautyEffectOptions',
+        {'enabled': enabled, 'options': options._jsonMap()});
   }
 
   // Core Video
@@ -406,8 +414,10 @@ class AgoraRtcEngine {
   /// Each video encoder configuration corresponds to a set of video parameters, including the resolution, frame rate, bitrate, and video orientation.
   /// If you do not set the video encoder configuration after joining the channel, you can call this method before calling the [enableVideo] method to reduce the render time of the first video frame.
   /// The parameters specified in this method are the maximum values under ideal network conditions. If the video engine cannot render the video using the specified parameters due to poor network conditions, the parameters further down the list are considered until a successful configuration is found.
-  static Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config) async {
-    await _channel.invokeMethod('setVideoEncoderConfiguration', {'config': config._jsonMap()});
+  static Future<void> setVideoEncoderConfiguration(
+      VideoEncoderConfiguration config) async {
+    await _channel.invokeMethod(
+        'setVideoEncoderConfiguration', {'config': config._jsonMap()});
   }
 
   /// Creates the video renderer Widget.
@@ -553,12 +563,13 @@ class AgoraRtcEngine {
   }
 
   // Stream Fallback
-  /// Sets the priority of a remote user. 
-  /// 
+  /// Sets the priority of a remote user.
+  ///
   /// Use this method with the [setRemoteSubscribeFallbackOption] method.
   /// If the fallback function is enabled for a remote stream, the SDK ensures the high-priority user gets the best possible stream quality.
   /// The Agora SDK supports setting userPriority as high for one user only.
-  static Future<void> setRemoteUserPriority(int uid, UserPriority userPriority) async {
+  static Future<void> setRemoteUserPriority(
+      int uid, UserPriority userPriority) async {
     int priorityValue = 100;
     switch (userPriority) {
       case UserPriority.Normal:
@@ -679,6 +690,11 @@ class AgoraRtcEngine {
             onConnectionStateChanged(values['state'], values['reason']);
           }
           break;
+        case 'onNetworkTypeChanged':
+          if (onNetworkTypeChanged != null) {
+            onNetworkTypeChanged(values['type']);
+          }
+          break;
         case 'onConnectionLost':
           if (onConnectionLost != null) {
             onConnectionLost();
@@ -732,9 +748,9 @@ class AgoraRtcEngine {
             onFirstRemoteAudioFrame(values['uid'], values['elapsed']);
           }
           break;
-        case 'onVideoStopped':
-          if (onVideoStopped != null) {
-            onVideoStopped();
+        case 'onFirstRemoteAudioDecoded':
+          if (onFirstRemoteAudioDecoded != null) {
+            onFirstRemoteAudioDecoded(values['uid'], values['elapsed']);
           }
           break;
         case 'onFirstLocalVideoFrame':
@@ -806,9 +822,10 @@ class AgoraRtcEngine {
             onAudioRouteChanged(values['routing']);
           }
           break;
-        case 'onCameraReady':
-          if (onCameraReady != null) {
-            onCameraReady();
+        case 'onLocalVideoStateChanged':
+          if (onLocalVideoStateChanged != null) {
+            onLocalVideoStateChanged(
+                values['localVideoState'], values['error']);
           }
           break;
 
@@ -837,6 +854,9 @@ class AgoraRtcEngine {
             stats.rxAudioKBitRate = statsValue['rxAudioKBitrate'];
             stats.txVideoKBitRate = statsValue['txVideoKBitrate'];
             stats.rxVideoKBitRate = statsValue['rxVideoKBitrate'];
+            stats.txPacketLossRate = statsValue['txPacketLossRate'];
+            stats.rxPacketLossRate = statsValue['rxPacketLossRate'];
+
             stats.users = statsValue['userCount'];
             stats.lastmileDelay = statsValue['lastmileDelay'];
             stats.cpuTotalUsage = statsValue['cpuTotalUsage'];
@@ -856,6 +876,9 @@ class AgoraRtcEngine {
             LocalVideoStats stats = LocalVideoStats();
             stats.sentBitrate = statsValue['sentBitrate'];
             stats.sentFrameRate = statsValue['sentFrameRate'];
+            stats.encoderOutputFrameRate = statsValue['encoderOutputFrameRate'];
+            stats.rendererOutputFrameRate =
+                statsValue['rendererOutputFrameRate'];
             onLocalVideoStats(stats);
           }
           break;
@@ -867,7 +890,9 @@ class AgoraRtcEngine {
             stats.width = statsValue['width'];
             stats.height = statsValue['height'];
             stats.receivedBitrate = statsValue['receivedBitrate'];
-            stats.receivedFrameRate = statsValue['receivedFrameRate'];
+            stats.decoderOutputFrameRate = statsValue['decoderOutputFrameRate'];
+            stats.rendererOutputFrameRate =
+                statsValue['rendererOutputFrameRate'];
             stats.rxStreamType = statsValue['rxStreamType'];
             onRemoteVideoStats(stats);
           }
@@ -977,6 +1002,8 @@ class RtcStats {
   int rxVideoKBitRate;
   int users;
   int lastmileDelay;
+  int txPacketLossRate;
+  int rxPacketLossRate;
   double cpuTotalUsage;
   double cpuAppUsage;
 }
@@ -984,15 +1011,17 @@ class RtcStats {
 class LocalVideoStats {
   int sentBitrate;
   int sentFrameRate;
+  int encoderOutputFrameRate;
+  int rendererOutputFrameRate;
 }
 
 class RemoteVideoStats {
   int uid;
-  int delay;
   int width;
   int height;
   int receivedBitrate;
-  int receivedFrameRate;
+  int decoderOutputFrameRate;
+  int rendererOutputFrameRate;
   int rxStreamType;
 }
 
@@ -1011,30 +1040,31 @@ class BeautyOptions {
   /// 0: low contrast level.
   /// 1: (default) normal contrast level.
   /// 2: high contrast level.
-  LighteningContrastLevel lighteningContrastLevel = LighteningContrastLevel.Normal;
+  LighteningContrastLevel lighteningContrastLevel =
+      LighteningContrastLevel.Normal;
 
-  /// The brightness level. 
+  /// The brightness level.
   ///
   /// The value ranges from 0.0 (original) to 1.0.
   double lighteningLevel = 0;
 
-  /// The sharpness level. 
-  /// 
+  /// The sharpness level.
+  ///
   ///The value ranges from 0.0 (original) to 1.0. This parameter is usually used to remove blemishes.
   double smoothnessLevel = 0;
 
-  /// The redness level. 
-  /// 
+  /// The redness level.
+  ///
   /// The value ranges from 0.0 (original) to 1.0. This parameter adjusts the red saturation level.
   double rednessLevel = 0;
 
   Map<String, double> _jsonMap() {
     return {
-      "lighteningContrastLevel": lighteningContrastLevel.index.toDouble(), 
-      "lighteningLevel": lighteningLevel, 
-      "smoothnessLevel": smoothnessLevel, 
+      "lighteningContrastLevel": lighteningContrastLevel.index.toDouble(),
+      "lighteningLevel": lighteningLevel,
+      "smoothnessLevel": smoothnessLevel,
       "rednessLevel": rednessLevel,
-      };
+    };
   }
 }
 
@@ -1047,17 +1077,17 @@ class VideoEncoderConfiguration {
   Size dimensions = Size(640, 360);
 
   /// The frame rate of the video (fps).
-  /// 
+  ///
   /// We do not recommend setting this to a value greater than 30.
   int frameRate = 15;
 
-  /// The minimum video encoder frame rate (fps). 
-  /// 
+  /// The minimum video encoder frame rate (fps).
+  ///
   /// The default value (-1) means the SDK uses the lowest encoder frame rate.
   int minFrameRate = -1;
 
   /// The bitrate of the video.
-  /// 
+  ///
   /// Sets the video bitrate (Kbps). If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
   ///  - Standard: (recommended) In this mode, the bitrates differ between the Live-broadcast and Communication profiles:
   ///   - Communication profile: the video bitrate is the same as the base bitrate.
@@ -1067,17 +1097,19 @@ class VideoEncoderConfiguration {
   int bitrate = AgoraVideoBitrateStandard;
 
   /// The minimum encoding bitrate.
-  /// 
+  ///
   /// The Agora SDK automatically adjusts the encoding bitrate to adapt to network conditions.
   /// Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and hence sacrifice the smoothness of the video transmission.
   /// Unless you have special requirements for image quality, Agora does not recommend changing this value.
   int minBitrate = -1;
 
   /// The video orientation mode of the video.
-  VideoOutputOrientationMode orientationMode = VideoOutputOrientationMode.Adaptative;
+  VideoOutputOrientationMode orientationMode =
+      VideoOutputOrientationMode.Adaptative;
 
   /// The video encoding degradation preference under limited bandwidth.
-  DegradationPreference degradationPreference = DegradationPreference.MaintainQuality;
+  DegradationPreference degradationPreference =
+      DegradationPreference.MaintainQuality;
 
   Map<String, dynamic> _jsonMap() {
     return {
@@ -1089,7 +1121,7 @@ class VideoEncoderConfiguration {
       'minBitrate': minBitrate,
       'orientationMode': orientationMode.index,
       'degradationPreference': degradationPreference.index,
-      };
+    };
   }
 }
 
@@ -1104,23 +1136,26 @@ enum ChannelProfile {
   LiveBroadcasting,
 }
 
-enum ClientRole { Broadcaster, Audience, }
+enum ClientRole {
+  Broadcaster,
+  Audience,
+}
 
 enum VideoOutputOrientationMode {
   /// Adaptive mode.
-  /// 
+  ///
   /// The video encoder adapts to the orientation mode of the video input device. When you use a custom video source, the output video from the encoder inherits the orientation of the original video.
   /// If the width of the captured video from the SDK is greater than the height, the encoder sends the video in landscape mode. The encoder also sends the rotational information of the video, and the receiver uses the rotational information to rotate the received video.
   /// If the original video is in portrait mode, the output video from the encoder is also in portrait mode. The encoder also sends the rotational information of the video to the receiver.
   Adaptative,
 
   /// Landscape mode.
-  /// 
+  ///
   /// The video encoder always sends the video in landscape mode. The video encoder rotates the original video before sending it and the rotational information is 0. This mode applies to scenarios involving CDN live streaming.
   FixedLandscape,
 
   /// Portrait mode.
-  /// 
+  ///
   /// The video encoder always sends the video in portrait mode. The video encoder rotates the original video before sending it and the rotational information is 0. This mode applies to scenarios involving CDN live streaming.
   FixedPortrait,
 }
@@ -1212,4 +1247,38 @@ enum LighteningContrastLevel {
 
   ///High contrast level.
   High,
+}
+
+enum LocalVideoStreamState {
+  /// The local video is in the initial state.
+  Stopped,
+
+  /// The local video capturer starts successfully.
+  Capturing,
+
+  /// The first local video frame encodes successfully.
+  Encoding,
+
+  /// The local video fails to start.
+  Failed,
+}
+
+enum LocalVideoStreamError {
+  /// The local video is normal.
+  OK,
+
+  /// No specified reason for the local video failure.
+  Failure,
+
+  /// No permission to use the local video device.
+  DeviceNoPermission,
+
+  /// The local video capturer is in use.
+  DeviceBusy,
+
+  /// The local video capture fails. Check whether the capturer is working properly.
+  CaptureFailure,
+
+  /// The local video encoding fails.
+  EncodeFailure,
 }

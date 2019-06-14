@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'agora_rtc_engine'
-  s.version          = '2.4.0'
+  s.version          = '2.4.1'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -13,7 +13,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
 
-  s.dependency 'AgoraRtcEngine_iOS', '2.4.0.1'
+  s.dependency 'AgoraRtcEngine_iOS', '2.4.1'
   s.static_framework = true
 
   s.ios.deployment_target = '8.0'

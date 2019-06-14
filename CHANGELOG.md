@@ -1,5 +1,12 @@
 # Change log
 
+## 0.9.6
+
+* Update to Agora Rtc SDK 2.4.1 version
+* Adds the onLocalVideoStateChanged callback to indicate the local video state. This replaces the onCameraReady and onVideoStopped callbacks.
+* Adds the onNetworkTypeChanged callback to indicate the local network type.
+* Adds the onFirstRemoteAudioDecoded callback to report to the app that the SDK decodes first remote audio.
+
 ## 0.9.5
 
 * Fix onRtcStats

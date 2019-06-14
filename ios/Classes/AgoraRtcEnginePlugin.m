@@ -339,6 +339,10 @@
   [self.methodChannel invokeMethod:@"onConnectionStateChanged" arguments:@{@"state": @(state), @"reason": @(reason)}];
 }
 
+- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine networkTypeChangedToType:(AgoraNetworkType)type {
+  [self.methodChannel invokeMethod:@"onNetworkTypeChanged" arguments:@{@"type": @(type)}];
+}
+
 - (void)rtcEngineConnectionDidInterrupted:(AgoraRtcEngineKit * _Nonnull)engine {
   [self.methodChannel invokeMethod:@"onConnectionInterrupted" arguments:nil];
 }
@@ -383,8 +387,8 @@
   [self.methodChannel invokeMethod:@"onFirstRemoteAudioFrame" arguments:@{@"uid": @(uid), @"elapsed": @(elapsed)}];
 }
 
-- (void)rtcEngineVideoDidStop:(AgoraRtcEngineKit * _Nonnull)engine {
-  [self.methodChannel invokeMethod:@"onVideoStopped" arguments:nil];
+- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine firstRemoteAudioFrameDecodedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
+  [self.methodChannel invokeMethod:@"onFirstRemoteAudioDecoded" arguments:@{@"uid": @(uid), @"elapsed": @(elapsed)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine firstLocalVideoFrameWithSize:(CGSize)size elapsed:(NSInteger)elapsed {
@@ -423,6 +427,10 @@
   [self.methodChannel invokeMethod:@"onRemoteVideoStateChanged" arguments:@{@"uid": @(uid), @"state": @(state)}];
 }
 
+- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine localVideoStateChange:(AgoraLocalVideoStreamState)state error:(AgoraLocalVideoStreamError)error {
+  [self.methodChannel invokeMethod:@"onLocalVideoStateChanged" arguments:@{@"error": @(error), @"localVideoState": @(state)}];
+}
+
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didLocalPublishFallbackToAudioOnly:(BOOL)isFallbackOrRecover {
   [self.methodChannel invokeMethod:@"onLocalPublishFallbackToAudioOnly" arguments:@{@"isFallbackOrRecover": @(isFallbackOrRecover)}];
 }
@@ -433,10 +441,6 @@
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didAudioRouteChanged:(AgoraAudioOutputRouting)routing {
   [self.methodChannel invokeMethod:@"onAudioRouteChanged" arguments:@{@"routing": @(routing)}];
-}
-
-- (void)rtcEngineCameraDidReady:(AgoraRtcEngineKit * _Nonnull)engine {
-  [self.methodChannel invokeMethod:@"onCameraReady" arguments:nil];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine cameraFocusDidChangedToRect:(CGRect)rect {
@@ -481,10 +485,6 @@
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine videoTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
   [self.methodChannel invokeMethod:@"onRemoteVideoTransportStats" arguments:@{@"uid": @(uid), @"delay": @(delay), @"lost": @(lost), @"rxKBitRate": @(rxKBitRate)}];
-}
-
-- (void)rtcEngineLocalAudioMixingDidFinish:(AgoraRtcEngineKit * _Nonnull)engine {
-  [self.methodChannel invokeMethod:@"onAudioMixingFinished" arguments:nil];
 }
 
 - (void)rtcEngineRemoteAudioMixingDidStart:(AgoraRtcEngineKit * _Nonnull)engine {
@@ -612,6 +612,8 @@
            @"userCount": @(stats.userCount),
            @"cpuAppUsage": @(stats.cpuAppUsage),
            @"cpuTotalUsage": @(stats.cpuTotalUsage),
+           @"txPacketLossRate": @(stats.txPacketLossRate),
+           @"rxPacketLossRate": @(stats.rxPacketLossRate),
            };
 }
 
@@ -637,6 +639,8 @@
 - (NSDictionary * _Nonnull)dicFromLocalVideoStats:(AgoraRtcLocalVideoStats * _Nonnull)stats {
   return @{@"sentBitrate": @(stats.sentBitrate),
            @"sentFrameRate": @(stats.sentFrameRate),
+           @"encoderOutputFrameRate": @(stats.encoderOutputFrameRate),
+           @"rendererOutputFrameRate": @(stats.rendererOutputFrameRate)
            };
 }
 
@@ -645,8 +649,9 @@
            @"width": @(stats.width),
            @"height": @(stats.height),
            @"receivedBitrate": @(stats.receivedBitrate),
-           @"receivedFrameRate": @(stats.receivedFrameRate),
+           @"rendererOutputFrameRate": @(stats.rendererOutputFrameRate),
            @"rxStreamType": @(stats.rxStreamType),
+           @"decoderOutputFrameRate": @(stats.decoderOutputFrameRate)
            };
 }
 
