@@ -320,6 +320,18 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
       }
       break;
 
+      // Encryption
+      case "setEncryptionSecret": {
+        String secret = call.argument("secret");
+        mRtcEngine.setEncryptionSecret(secret);
+      }
+      break;
+      case "setEncryptionMode": {
+        String encryptionMode = call.argument("encryptionMode");
+        mRtcEngine.setEncryptionMode(encryptionMode);
+      }
+      break;
+
       // Camera Control
       case "switchCamera": {
         mRtcEngine.switchCamera();

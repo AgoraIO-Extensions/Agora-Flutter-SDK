@@ -13,7 +13,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
 
-  s.dependency 'AgoraRtcEngine_iOS', '2.4.1'
+  s.dependency 'AgoraRtcEngine_iOS_Crypto', '2.4.1'
   s.static_framework = true
 
   s.ios.deployment_target = '8.0'
