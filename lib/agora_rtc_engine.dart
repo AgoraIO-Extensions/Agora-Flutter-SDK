@@ -621,6 +621,30 @@ class AgoraRtcEngine {
         'setRemoteDefaultVideoStreamType', {'streamType': streamType});
   }
 
+  // Encryption
+  /// Enables built-in encryption with an encryption password before joining a channel.
+  ///
+  /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel.
+  /// If the encryption password is not specified or set to empty, the encryption functionality is disabled.
+  static Future<void> setEncryptionSecret(String secret) async {
+    await _channel.invokeMethod('setEncryptionSecret', {'secret': secret});
+  }
+
+  /// Sets the built-in encryption mode.
+  ///
+  /// The SDK supports built-in encryption, which is set to the `"aes-128-xts" mode by default. Call this method to use other encryption modes.
+  /// - "aes-128-xts": 128-bit AES encryption, XTS mode.
+  /// - "aes-256-xts": 256-bit AES encryption, XTS mode.
+  /// - "aes-128-ecb": 128-bit AES encryption, ECB mode.
+  ///
+  /// All users in the same channel must use the same encryption mode and password.
+  /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
+  /// When encryptionMode is set as NULL, the encryption mode is set as "aes-128-xts" by default.
+  static Future<void> setEncryptionMode(String encryptionMode) async {
+    await _channel
+        .invokeMethod('setEncryptionMode', {'encryptionMode': encryptionMode});
+  }
+
   // Camera Control
   /// Switches between front and rear cameras.
   static Future<void> switchCamera() async {

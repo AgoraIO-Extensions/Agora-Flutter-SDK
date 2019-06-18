@@ -279,6 +279,14 @@
     NSInteger streamType = [self intFromArguments:arguments key:@"streamType"];
     [self.agoraRtcEngine setRemoteDefaultVideoStreamType:streamType];
   }
+  // Encryption
+  else if ([@"setEncryptionSecret" isEqualToString:method]) {
+    NSString *secret = [self stringFromArguments:arguments key:@"secret"];
+    [self.agoraRtcEngine setEncryptionSecret:secret];
+  } else if ([@"setEncryptionMode" isEqualToString:method]) {
+    NSString *encryptionMode = [self stringFromArguments:arguments key:@"encryptionMode"];
+    [self.agoraRtcEngine setEncryptionMode:encryptionMode];
+  }
   // Camera Control
   else if ([@"switchCamera" isEqualToString:method]) {
     [self.agoraRtcEngine switchCamera];
