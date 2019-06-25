@@ -1,5 +1,9 @@
 # Change log
 
+## 0.9.7
+
+* Move callback to main thread.
+
 ## 0.9.6
 
 * Update to Agora Rtc SDK 2.4.1 version.
