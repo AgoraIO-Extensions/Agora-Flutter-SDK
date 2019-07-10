@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+export 'src/agora_render_widget.dart';
+
 class AgoraRtcEngine {
   static const MethodChannel _channel = const MethodChannel('agora_rtc_engine');
 
@@ -215,7 +217,7 @@ class AgoraRtcEngine {
   /// Only users with the same App ID can join the same channel and call each other.
   static Future<void> create(String appid) async {
     _addMethodCallHandler();
-    return await _channel.invokeMethod('create', {'appId': appid});
+    await _channel.invokeMethod('create', {'appId': appid});
   }
 
   /// Destroys the RtcEngine instance and releases all resources used by the Agora SDK.
@@ -224,7 +226,7 @@ class AgoraRtcEngine {
   /// Once the app calls destroy to destroy the created RtcEngine instance, you cannot use any method or callback in the SDK.
   static Future<void> destroy() async {
     _removeMethodCallHandler();
-    return await _channel.invokeMethod('destroy');
+    await _channel.invokeMethod('destroy');
   }
 
   /// Sets the channel profile.
@@ -234,8 +236,7 @@ class AgoraRtcEngine {
   /// Before calling this method to set a new channel profile, [destroy] the current RtcEngine and [create] a new RtcEngine first.
   /// Call this method before [joinChannel], you cannot configure the channel profile when the channel is in use.
   static Future<void> setChannelProfile(ChannelProfile profile) async {
-    return await _channel
-        .invokeMethod('setChannelProfile', {'profile': profile.index});
+     await _channel.invokeMethod('setChannelProfile', {'profile': profile.index});
   }
 
   /// Sets the role of a user (Live Broadcast only).
@@ -244,7 +245,7 @@ class AgoraRtcEngine {
   /// This method can be used to switch the user role after a user joins a channel.
   static Future<void> setClientRole(ClientRole role) async {
     int roleValue = _intFromClientRole(role);
-    return await _channel.invokeMethod('setClientRole', {'role': roleValue});
+    await _channel.invokeMethod('setClientRole', {'role': roleValue});
   }
 
   /// Allows a user to join a channel.
@@ -271,15 +272,14 @@ class AgoraRtcEngine {
   ///
   /// The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
   static Future<void> renewToken(String token) async {
-    return await _channel.invokeMethod('renewToken', {'token': token});
+    await _channel.invokeMethod('renewToken', {'token': token});
   }
 
   /// Enables interoperability with the Agora Web SDK (Live Broadcast only).
   ///
   /// Use this method when the channel profile is Live Broadcast. Interoperability with the Agora Web SDK is enabled by default when the channel profile is Communication.
   static Future<void> enableWebSdkInteroperability(bool enabled) async {
-    return await _channel
-        .invokeMethod('enableWebSdkInteroperability', {'enabled': enabled});
+    await _channel.invokeMethod('enableWebSdkInteroperability', {'enabled': enabled});
   }
 
   /// Gets the connection state of the SDK.
@@ -423,10 +423,10 @@ class AgoraRtcEngine {
   /// Creates the video renderer Widget.
   ///
   /// The Widget is identified by viewId, the operation and layout of the Widget are managed by the app.
-  static Widget createNativeView(int uid, Function(int viewId) created) {
+  static Widget createNativeView(Function(int viewId) created, {Key key}) {
     if (Platform.isIOS) {
       return UiKitView(
-        key: new ObjectKey(uid.toString()),
+        key: key,
         viewType: 'AgoraRendererView',
         onPlatformViewCreated: (viewId) {
           if (created != null) {
@@ -436,7 +436,7 @@ class AgoraRtcEngine {
       );
     } else {
       return AndroidView(
-        key: new ObjectKey(uid.toString()),
+        key: key,
         viewType: 'AgoraRendererView',
         onPlatformViewCreated: (viewId) {
           if (created != null) {
