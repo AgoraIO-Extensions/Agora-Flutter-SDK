@@ -1,5 +1,9 @@
 # Change log
 
+## 0.9.8
+* Add native result call.
+* Update to Agora Rtc SDK 2.8.0 version.
+
 ## 0.9.7
 
 * Move callback to main thread.
