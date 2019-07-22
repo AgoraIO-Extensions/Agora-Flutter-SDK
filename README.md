@@ -46,24 +46,6 @@ Open the *info.plist* and add:
 
 Your application can still run the voice call when it is switched to the background if the background mode is enabled. Select the app target in Xcode, click the **Capabilities** tab, enable **Background Modes**, and check **Audio, AirPlay, and Picture in Picture**.
 
-## Note
-
-Agora video sdk contain arm64 architecture, but Flutter is not shipping “libflutter.so” in arm64 currently. You need add "abiFilters" in *build.gradle* if you need build release apk.
-
-```
-android {
-    ..
-    defaultConfig {
-        ..
-         ndk {
-             abiFilters 'armeabi-v7a'
-        }
-        ..
-    }
-    ..
-}
-```
-
 ## How to contribute
 
 To help work on this sdk, see our [contributor guide](CONTRIBUTING.md).
