@@ -25,7 +25,7 @@ Open the *AndroidManifest.xml* file and add the required device permissions to t
 
 ```xml
 ..
-<uses-permission android:name="android.permission.READ_PHONE_STATE” />
+<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 <uses-permission android:name="android.permission.CAMERA" />
