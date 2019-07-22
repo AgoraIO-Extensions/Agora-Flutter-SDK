@@ -71,8 +71,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     @Override
     public void onMethodCall(MethodCall call , Result result) {
         Context context = getActiveContext();
-        // MethodChannel.Result result = new MethodResultWrapper(rawResult, mEventHandler);
-        // 本方法执行在主线程，result调用没有跨线程，无需再次发送
 
         switch (call.method) {
             // Core Methods
