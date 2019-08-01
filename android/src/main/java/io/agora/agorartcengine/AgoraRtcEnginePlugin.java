@@ -28,7 +28,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
 
     private final Registrar mRegistrar;
     private final MethodChannel mMethodChannel;
-    private RtcEngine mRtcEngine;
+    private static RtcEngine mRtcEngine;
     private HashMap<String, SurfaceView> mRendererViews;
     private Handler mEventHandler = new Handler(Looper.getMainLooper());
 
@@ -42,6 +42,10 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
 
     private SurfaceView getView(int id) {
         return mRendererViews.get("" + id);
+    }
+
+    public static RtcEngine getRtcEngine() {
+        return mRtcEngine;
     }
 
     /**
