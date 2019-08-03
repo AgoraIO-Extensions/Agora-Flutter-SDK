@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp> {
 
   static final _sessions = List<VideoSession>();
 
-  /// 远程用户列表
+  /// remote user list
   final _remoteUsers = List<int>();
 
   @override
@@ -25,9 +25,6 @@ class _MyAppState extends State<MyApp> {
 
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
-//    _addRenderView(0, (viewId) {
-//      AgoraRtcEngine.setupLocalVideo(viewId, VideoRenderMode.Hidden);
-//    });
   }
 
   @override
@@ -84,9 +81,6 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         String info = 'userJoined: ' + uid.toString();
         _infoStrings.add(info);
-//        _addRenderView(uid, (viewId) {
-//          AgoraRtcEngine.setupRemoteVideo(viewId, VideoRenderMode.Hidden, uid);
-//        });
         _remoteUsers.add(uid);
       });
     };
@@ -95,7 +89,6 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         String info = 'userOffline: ' + uid.toString();
         _infoStrings.add(info);
-//        _removeRenderView(uid);
         _remoteUsers.remove(uid);
       });
     };
@@ -129,16 +122,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _viewRows() {
-// List<Widget> views = _getRenderViews();
-//    if (views.length > 0) {
-//      List<Widget> expandeViews = views
-//          .map((widget) => Expanded(child: Container(child: widget)))
-//          .toList();
-//      return Row(children: expandeViews);
-//    } else {
-//      return null;
-//    }
-
     return Row(
       children: <Widget>[
         for (final widget in _renderWidget)
@@ -158,17 +141,6 @@ class _MyAppState extends State<MyApp> {
     for (final uid in _remoteUsers) {
       yield AgoraRenderWidget(uid);
     }
-  }
-
-  void _addRenderView(int uid, Function(int viewId) finished) {
-//    Widget view = AgoraRtcEngine.createNativeView(uid, (viewId) {
-//      _getVideoSession(uid).viewId = viewId;
-//      if (finished != null) {
-//        finished(viewId);
-//      }
-//    });
-//    VideoSession session = VideoSession(uid, view);
-//    _sessions.add(session);
   }
 
   void _removeRenderView(int uid) {
