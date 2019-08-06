@@ -236,7 +236,7 @@ class AgoraRtcEngine {
   /// Before calling this method to set a new channel profile, [destroy] the current RtcEngine and [create] a new RtcEngine first.
   /// Call this method before [joinChannel], you cannot configure the channel profile when the channel is in use.
   static Future<void> setChannelProfile(ChannelProfile profile) async {
-     await _channel.invokeMethod('setChannelProfile', {'profile': profile.index});
+    await _channel.invokeMethod('setChannelProfile', {'profile': profile.index});
   }
 
   /// Sets the role of a user (Live Broadcast only).
@@ -479,6 +479,12 @@ class AgoraRtcEngine {
   static Future<void> setLocalRenderMode(VideoRenderMode renderMode) async {
     await _channel.invokeMethod(
         'setLocalRenderMode', {'mode': _intFromVideoRenderMode(renderMode)});
+  }
+
+  /// Sets the local voice changer option.
+  static Future<void> setLocalVoiceChanger(VoiceChanger changer) async {
+    await _channel.invokeMethod(
+        'setLocalVoiceChanger', {'changer': _intLocalVoiceChangere(changer)});
   }
 
   /// Sets the remote video display mode.
@@ -1004,6 +1010,31 @@ class AgoraRtcEngine {
         return 1;
     }
   }
+
+  static int _intLocalVoiceChangere(VoiceChanger changer) {
+    switch (changer) {
+      case VoiceChanger.VOICE_CHANGER_OLDMAN:
+        return 1;
+        break;
+      case VoiceChanger.VOICE_CHANGER_BABYBOY:
+        return 2;
+        break;
+      case VoiceChanger.VOICE_CHANGER_BABYGILR:
+        return 3;
+        break;
+      case VoiceChanger.VOICE_CHANGER_ZHUBAJIE:
+        return 4;
+        break;
+      case VoiceChanger.VOICE_CHANGER_ETHEREAL:
+        return 5;
+        break;
+      case VoiceChanger.VOICE_CHANGER_HULK:
+        return 6;
+        break;
+      default:
+        return 0;
+    }
+  }
 }
 
 class AudioVolumeInfo {
@@ -1202,6 +1233,29 @@ enum VideoRenderMode {
 
   /// Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to the disparity in the aspect ratio are filled with black.
   Fit,
+}
+
+enum VoiceChanger {
+  /// The original voice (no local voice change).
+  VOICE_CHANGER_OFF,
+
+  /// An old man's voice.
+  VOICE_CHANGER_OLDMAN,
+
+  /// A little boy's voice.
+  VOICE_CHANGER_BABYBOY,
+
+  ///A little girl's voice.
+  VOICE_CHANGER_BABYGILR,
+
+  /// Zhu Bajie's voice (Zhu Bajie is a character from Journey to the West who has a voice like a growling bear).
+  VOICE_CHANGER_ZHUBAJIE,
+
+  /// Ethereal vocal effects.
+  VOICE_CHANGER_ETHEREAL,
+
+  /// Hulk's voice.
+  VOICE_CHANGER_HULK
 }
 
 enum UserPriority {
