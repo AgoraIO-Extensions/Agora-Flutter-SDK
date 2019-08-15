@@ -1,5 +1,7 @@
 # AgoraRtcEngine
 
+![pub package](https://img.shields.io/pub/v/agora_rtc_engine.svg)
+
 This Flutter plugin is a wapper for [Agora Video SDK](https://docs.agora.io/en).
 
 Agora.io provides building blocks for you to add real-time voice and video communications through a simple and powerful SDK. You can integrate the Agora SDK to enable real-time communications in your own application quickly.
