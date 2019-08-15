@@ -164,7 +164,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  /// 获取渲染窗口列表
   Iterable<Widget> get _renderWidget sync* {
     yield AgoraRenderWidget(0, local: true);
 

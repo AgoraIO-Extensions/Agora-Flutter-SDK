@@ -64,7 +64,6 @@ class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
     }
   }
 
-  /// 绑定用户和原生控件
   void _bindView() {
     if (widget.local) {
       AgoraRtcEngine.setupLocalVideo(_viewId, widget.mode);
@@ -73,7 +72,6 @@ class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
     }
   }
 
-  /// 改变缩放模式
   void _changeRenderMode() {
     if (widget.local) {
       AgoraRtcEngine.setLocalRenderMode(widget.mode);
