@@ -227,6 +227,10 @@
     NSInteger mode = [self intFromArguments:arguments key:@"mode"];
     [self.agoraRtcEngine setLocalRenderMode:mode];
     result(nil);
+  } else if ([@"setLocalVoiceChanger" isEqualToString:method]) {
+    NSInteger changer = [self intFromArguments:arguments key:@"changer"];
+    [self.agoraRtcEngine setLocalVoiceChanger:changer];
+    result(nil);
   } else if ([@"setRemoteRenderMode" isEqualToString:method]) {
     NSInteger uid = [self intFromArguments:arguments key:@"uid"];
     NSInteger mode = [self intFromArguments:arguments key:@"mode"];
