@@ -15,6 +15,9 @@ class _MyAppState extends State<MyApp> {
   final _infoStrings = <String>[];
 
   static final _sessions = List<VideoSession>();
+  String dropdownValue = 'Off';
+
+  final List<String> voices = ['Off', 'Oldman', 'BabyBoy', 'BabyGirl', 'Zhubajie', 'Ethereal', 'Hulk'];
 
   /// remote user list
   final _remoteUsers = List<int>();
@@ -43,9 +46,34 @@ class _MyAppState extends State<MyApp> {
                     style: textStyle),
                 onPressed: _toggleChannel,
               ),
+              Container(height: 100,child: _voiceDropdown()),
               Expanded(child: Container(child: _buildInfoList())),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _voiceDropdown() {
+    return Scaffold(
+      body: Center(
+        child: DropdownButton<String>(
+          value: dropdownValue,
+          onChanged: (String newValue) {
+            setState(() {
+              dropdownValue = newValue;
+              VoiceChanger voice = VoiceChanger.values[(voices.indexOf(dropdownValue))];
+              AgoraRtcEngine.setLocalVoiceChanger(voice);
+            });
+          },
+          items: voices
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -55,6 +83,7 @@ class _MyAppState extends State<MyApp> {
     AgoraRtcEngine.create('YOUR APP ID');
 
     AgoraRtcEngine.enableVideo();
+    AgoraRtcEngine.enableAudio();
     AgoraRtcEngine.setChannelProfile(ChannelProfile.Communication);
 
     VideoEncoderConfiguration config = VideoEncoderConfiguration();
@@ -74,6 +103,7 @@ class _MyAppState extends State<MyApp> {
     AgoraRtcEngine.onLeaveChannel = () {
       setState(() {
         _infoStrings.add('onLeaveChannel');
+        _remoteUsers.clear();
       });
     };
 
@@ -108,15 +138,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _toggleChannel() {
-    setState(() {
+    setState(() async {
       if (_isInChannel) {
         _isInChannel = false;
-        AgoraRtcEngine.leaveChannel();
-        AgoraRtcEngine.stopPreview();
+        await AgoraRtcEngine.leaveChannel();
+        await AgoraRtcEngine.stopPreview();
       } else {
         _isInChannel = true;
-        AgoraRtcEngine.startPreview();
-        AgoraRtcEngine.joinChannel(null, 'flutter', null, 0);
+        await AgoraRtcEngine.startPreview();
+        await AgoraRtcEngine.joinChannel(null, 'flutter', null, 0);
       }
     });
   }
@@ -136,19 +166,11 @@ class _MyAppState extends State<MyApp> {
 
   /// 获取渲染窗口列表
   Iterable<Widget> get _renderWidget sync* {
-    yield AgoraRenderWidget(0, self: true);
+    yield AgoraRenderWidget(0, local: true);
 
     for (final uid in _remoteUsers) {
       yield AgoraRenderWidget(uid);
     }
-  }
-
-  void _removeRenderView(int uid) {
-    VideoSession session = _getVideoSession(uid);
-    if (session != null) {
-      _sessions.remove(session);
-    }
-    AgoraRtcEngine.removeNativeView(session.viewId);
   }
 
   VideoSession _getVideoSession(int uid) {
