@@ -1,43 +1,36 @@
-// Created by 超悟空 on 2019/7/10.
-// Version 1.0 2019/7/10
-// Since 1.0 2019/7/10
-
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
-/// 简单渲染窗口控件
-///
-/// 自动创建和销毁内部原生控件，自动绑定用户
+/// AgoraRenderWidget - This widget will automatically manage the native view.
+/// 
+/// Enables create native view with `uid` `mode` `local` and destroy native view automatically.
+/// 
 class AgoraRenderWidget extends StatefulWidget {
-  /// 绑定的uid
+  // uid
   final int uid;
 
-  /// 是否是自己
-  ///
-  /// 当为true时使用[AgoraRtcEngine.setupLocalVideo]绑定视频窗口，
-  /// 否则使用[AgoraRtcEngine.setupRemoteVideo]绑定视频窗口
-  final bool self;
+  // local flag
+  final bool local;
 
-  /// 窗口填充模式
+  /// render mode
   final VideoRenderMode mode;
 
   AgoraRenderWidget(
     this.uid, {
     this.mode = VideoRenderMode.Hidden,
-    this.self = false,
+    this.local = false,
   })  : assert(uid != null),
         assert(mode != null),
-        assert(self != null);
+        assert(local != null);
 
   @override
   State<StatefulWidget> createState() => _AgoraRenderWidgetState();
 }
 
 class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
-  /// 原生组件
+
   Widget _nativeView;
 
-  /// 原生组件id
   int _viewId;
 
   @override
@@ -59,21 +52,21 @@ class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
   void didUpdateWidget(AgoraRenderWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if ((widget.uid != oldWidget.uid || widget.self != oldWidget.self) &&
+    if ((widget.uid != oldWidget.uid || widget.local != oldWidget.local) &&
         _viewId != null) {
       _bindView();
       return;
     }
 
     if (widget.mode != oldWidget.mode) {
-      _changeMode();
+      _changeRenderMode();
       return;
     }
   }
 
   /// 绑定用户和原生控件
   void _bindView() {
-    if (widget.self) {
+    if (widget.local) {
       AgoraRtcEngine.setupLocalVideo(_viewId, widget.mode);
     } else {
       AgoraRtcEngine.setupRemoteVideo(_viewId, widget.mode, widget.uid);
@@ -81,8 +74,8 @@ class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
   }
 
   /// 改变缩放模式
-  void _changeMode() {
-    if (widget.self) {
+  void _changeRenderMode() {
+    if (widget.local) {
       AgoraRtcEngine.setLocalRenderMode(widget.mode);
     } else {
       AgoraRtcEngine.setRemoteRenderMode(widget.uid, widget.mode);
