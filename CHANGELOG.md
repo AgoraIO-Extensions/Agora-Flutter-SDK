@@ -1,5 +1,9 @@
 # Change log
 
+## 0.9.9
+* Support voice changer
+* Add [AgoraRenderWidget](./lib/src/agora_render_widget.dart)
+
 ## 0.9.8
 * Add native result call.
 * Update to Agora Rtc SDK 2.8.0 version.
