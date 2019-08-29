@@ -1,8 +1,14 @@
 .DS_Store
 .dart_tool/
+.idea
+.vscode
+*.iml
 
 .packages
 .pub/
-pubspec.lock
 
 build/
+*.lock
+*.*~
+example/*.lock
+example/ios/Podfile.lock
