@@ -108,12 +108,6 @@ class AgoraRtcEngine {
   static void Function(int width, int height, int elapsed)
       onFirstLocalVideoFrame;
 
-  /// Occurs when the first remote video frame is decoded.
-  ///
-  /// This callback is triggered after the first frame of the remote video is received and decoded. The app can configure the user view settings with this callback.
-  static void Function(int uid, int width, int height, int elapsed)
-      onFirstRemoteVideoDecoded;
-
   /// Occurs when the first remote video frame is rendered.
   ///
   /// This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
@@ -123,25 +117,12 @@ class AgoraRtcEngine {
   /// Occurs when a remote user's audio stream is muted/unmuted.
   static void Function(int uid, bool muted) onUserMuteAudio;
 
-  /// Occurs when a remote user's video stream playback pauses/resumes.
-  static void Function(int uid, bool muted) onUserMuteVideo;
-
-  /// Occurs when a remote user enables/disables the video module.
-  ///
-  /// Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.
-  static void Function(int uid, bool enabled) onUserEnableVideo;
-
-  /// Occurs when a remote user enables/disables the local video capture function.
-  ///
-  /// This callback is only applicable to the scenario when the remote user only wants to watch the remote video without sending any video stream to the other user.
-  static void Function(int uid, bool enabled) onUserEnableLocalVideo;
-
   /// Occurs when the video size or rotation information of a specified remote user changes.
   static void Function(int uid, double width, double height, int rotation)
       onVideoSizeChanged;
 
   /// Occurs when the remote video stream state changes.
-  static void Function(int uid, int state) onRemoteVideoStateChanged;
+  static void Function(int uid, int state, int reason, int elapsed) onRemoteVideoStateChanged;
 
   // Fallback Events
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
@@ -157,7 +138,7 @@ class AgoraRtcEngine {
       onRemoteSubscribeFallbackToAudioOnly;
 
   /// Occurs when the state of the RTMP streaming changes.
-  static void Function(int error)
+  static void Function(String url, int error, int state)
       onRtmpStreamingStateChanged;
     
   /// Occurs when the CDN live streaming settings are updated.
@@ -176,6 +157,20 @@ class AgoraRtcEngine {
   static void Function(
           LocalVideoStreamState localVideoState, LocalVideoStreamError error)
       onLocalVideoStateChanged;
+
+  /// Occurs when the remote audio stream state changes.
+  ///
+  /// The SDK returns the current remote audio state in this callback.
+  static void Function(
+          int uid, int state, int reason, int elapsed)
+      onRemoteAudioStateChanged;
+
+  /// Occurs when the local audio stream state changes.
+  ///
+  /// The SDK returns the current local audio state in this callback.
+  static void Function(
+          int error, int state)
+      onLocalAudioStateChanged;
 
   // Statistics Events
   /// Reports the statistics of the audio stream from each remote user/host.
@@ -196,16 +191,15 @@ class AgoraRtcEngine {
   /// This callback is triggered once every two seconds for each individual user/host. If there are multiple users/hosts in the channel, this callback is triggered multiple times every 2 seconds.
   static void Function(LocalVideoStats stats) onLocalVideoStats;
 
+  /// Reports the statistics of the uploading local audio streams.
+  ///
+  /// This callback is triggered once every two seconds for each individual user/host. If there are multiple users/hosts in the channel, this callback is triggered multiple times every 2 seconds.
+  static void Function(LocalAudioStats stats) onLocalAudioStats;
+
   /// Reports the statistics of the video stream from each remote user/host.
   ///
   /// The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
   static void Function(RemoteVideoStats stats) onRemoteVideoStats;
-
-  /// Reports the transport-layer statistics of each remote audio stream.
-  ///
-  /// This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user.
-  static void Function(int uid, int delay, int lost, int rxKBitRate)
-      onRemoteAudioTransportStats;
 
   /// Reports the transport-layer statistics of each remote video stream.
   ///
@@ -852,12 +846,6 @@ class AgoraRtcEngine {
                 values['width'], values['height'], values['elapsed']);
           }
           break;
-        case 'onFirstRemoteVideoDecoded':
-          if (onFirstRemoteVideoDecoded != null) {
-            onFirstRemoteVideoDecoded(values['uid'], values['width'],
-                values['height'], values['elapsed']);
-          }
-          break;
         case 'onFirstRemoteVideoFrame':
           if (onFirstRemoteVideoFrame != null) {
             onFirstRemoteVideoFrame(values['uid'], values['width'],
@@ -869,22 +857,6 @@ class AgoraRtcEngine {
             onUserMuteAudio(values['uid'], values['muted']);
           }
           break;
-
-        case 'onUserMuteVideo':
-          if (onUserMuteVideo != null) {
-            onUserMuteVideo(values['uid'], values['muted']);
-          }
-          break;
-        case 'onUserEnableVideo':
-          if (onUserEnableVideo != null) {
-            onUserEnableVideo(values['uid'], values['enabled']);
-          }
-          break;
-        case 'onUserEnableLocalVideo':
-          if (onUserEnableLocalVideo != null) {
-            onUserEnableLocalVideo(values['uid'], values['enabled']);
-          }
-          break;
         case 'onVideoSizeChanged':
           if (onVideoSizeChanged != null) {
             onVideoSizeChanged(values['uid'], values['width'], values['height'],
@@ -893,7 +865,7 @@ class AgoraRtcEngine {
           break;
         case 'onRemoteVideoStateChanged':
           if (onRemoteVideoStateChanged != null) {
-            onRemoteVideoStateChanged(values['uid'], values['state']);
+            onRemoteVideoStateChanged(values['uid'], values['state'], values['reason'], values['elapsed']);
           }
           break;
         // Fallback Events
@@ -910,7 +882,7 @@ class AgoraRtcEngine {
           break;
         case 'onRtmpStreamingStateChanged':
           if (onRtmpStreamingStateChanged != null) {
-            onRtmpStreamingStateChanged(values['error']);
+            onRtmpStreamingStateChanged(values['url'], values['error'], values['state']);
           }
           break;
         case 'onStreamInjectedStatus':
@@ -930,7 +902,20 @@ class AgoraRtcEngine {
                 values['localVideoState'], values['error']);
           }
           break;
-
+        case 'onRemoteAudioStateChanged':
+          if (onRemoteAudioStateChanged != null) {
+            onRemoteAudioStateChanged(
+              values['uid'], values['state'], values['reason'], values['elapsed']
+            );
+          }
+          break;
+        case 'onLocalAudioStateChanged':
+          if (onLocalAudioStateChanged != null) {
+            onLocalAudioStateChanged(
+              values['error'], values['state']
+            );
+          }
+          break;
         // Statistics Events
         case 'onRemoteAudioStats':
           if (onRemoteAudioStats != null) {
@@ -947,22 +932,7 @@ class AgoraRtcEngine {
         case 'onRtcStats':
           if (onRtcStats != null) {
             Map statsValue = values['stats'];
-            RtcStats stats = RtcStats();
-            stats.totalDuration = statsValue['duration'];
-            stats.txBytes = statsValue['txBytes'];
-            stats.rxBytes = statsValue['rxBytes'];
-
-            stats.txAudioKBitRate = statsValue['txAudioKBitrate'];
-            stats.rxAudioKBitRate = statsValue['rxAudioKBitrate'];
-            stats.txVideoKBitRate = statsValue['txVideoKBitrate'];
-            stats.rxVideoKBitRate = statsValue['rxVideoKBitrate'];
-            stats.txPacketLossRate = statsValue['txPacketLossRate'];
-            stats.rxPacketLossRate = statsValue['rxPacketLossRate'];
-
-            stats.users = statsValue['userCount'];
-            stats.lastmileDelay = statsValue['lastmileDelay'];
-            stats.cpuTotalUsage = statsValue['cpuTotalUsage'];
-            stats.cpuAppUsage = statsValue['cpuAppUsage'];
+            RtcStats stats = RtcStats.fromJson(statsValue);
             onRtcStats(stats);
           }
           break;
@@ -975,7 +945,7 @@ class AgoraRtcEngine {
         case 'onLocalVideoStats':
           if (onLocalVideoStats != null) {
             Map statsValue = values['stats'];
-            LocalVideoStats stats = LocalVideoStats();
+            LocalVideoStats stats = LocalVideoStats.fromJson(statsValue);
             stats.sentBitrate = statsValue['sentBitrate'];
             stats.sentFrameRate = statsValue['sentFrameRate'];
             stats.encoderOutputFrameRate = statsValue['encoderOutputFrameRate'];
@@ -984,25 +954,21 @@ class AgoraRtcEngine {
             onLocalVideoStats(stats);
           }
           break;
+        case 'onLocalAudioStats':
+          if (onLocalAudioStats != null) {
+            Map statsValue = values['stats'];
+            LocalAudioStats stats = LocalAudioStats();
+            stats.numChannels = statsValue['numChannels'];
+            stats.sentSampleRate = statsValue['sentSampleRate'];
+            stats.sentBitrate = statsValue['sentBitrate'];
+            onLocalAudioStats(stats);
+          }
+          break;
         case 'onRemoteVideoStats':
           if (onRemoteVideoStats != null) {
             Map statsValue = values['stats'];
-            RemoteVideoStats stats = RemoteVideoStats();
-            stats.uid = statsValue['uid'];
-            stats.width = statsValue['width'];
-            stats.height = statsValue['height'];
-            stats.receivedBitrate = statsValue['receivedBitrate'];
-            stats.decoderOutputFrameRate = statsValue['decoderOutputFrameRate'];
-            stats.rendererOutputFrameRate =
-                statsValue['rendererOutputFrameRate'];
-            stats.rxStreamType = statsValue['rxStreamType'];
+            RemoteVideoStats stats = RemoteVideoStats.fromJson(statsValue);
             onRemoteVideoStats(stats);
-          }
-          break;
-        case 'onRemoteAudioTransportStats':
-          if (onRemoteAudioTransportStats != null) {
-            onRemoteAudioTransportStats(values['uid'], values['delay'],
-                values['lost'], values['rxKBitRate']);
           }
           break;
         case 'onRemoteVideoTransportStats':

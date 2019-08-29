@@ -92,14 +92,13 @@ class AgoraLiveTranscoding {
   int height;
   int videoBitrate;
   int videoFramerate;
-  bool lowLatency;
   int videoGop;
   AgoraVideoCodecProfileType videoCodecProfile;
   List<AgoraLiveTranscodingUser> transcodingUsers;
   String transcodingExtraInfo;
   AgoraImage watermark;
   AgoraImage backgroundImage;
-  String backgroundColor;
+  int backgroundColor;
   AgoraAudioSampleRateType audioSampleRate;
   int audioBitrate;
   int audioChannels;
@@ -110,7 +109,6 @@ class AgoraLiveTranscoding {
       height = json['height'],
       videoBitrate = json['videoBitrate'],
       videoFramerate = json['videoFramerate'],
-      lowLatency = json['lowLatency'],
       videoGop = json['videoGop'],
       videoCodecProfile = json['videoCodecProfile'],
       transcodingUsers = json['transcodingUsers'],
@@ -129,7 +127,6 @@ class AgoraLiveTranscoding {
     'height': height,
     'videoBitrate': videoBitrate,
     'videoFramerate': videoFramerate,
-    'lowLatency': lowLatency,
     'videoGop': videoGop,
     'videoCodecProfile': _resolveVideoCodecProfileType[videoCodecProfile],
     'transcodingUsers': transcodingUsers.map((item) => item.toJson()).toList(),
@@ -139,6 +136,7 @@ class AgoraLiveTranscoding {
     'audioSampleRate': _resolveAudioCodecProfileType[audioSampleRate],
     'audioBitrate': audioBitrate,
     'audioChannels': audioChannels,
+    'backgroundColor': backgroundColor,
     'audioCodecProfile': _resolveAudioCodecProfileType[audioCodecProfile],
   };
 }
@@ -191,16 +189,66 @@ class RtcStats {
   int totalDuration;
   int txBytes;
   int rxBytes;
-  int txAudioKBitRate;
-  int rxAudioKBitRate;
-  int txVideoKBitRate;
-  int rxVideoKBitRate;
-  int users;
+  int txAudioBytes;
+  int txVideoBytes;
+  int rxAudioBytes;
+  int rxVideoBytes;
+  int txKBitrate;
+  int rxKBitrate;
+  int txAudioKBitrate;
+  int rxAudioKBitrate;
+  int txVideoKBitrate;
+  int rxVideoKBitrate;
   int lastmileDelay;
   int txPacketLossRate;
   int rxPacketLossRate;
+  int users;
   double cpuTotalUsage;
   double cpuAppUsage;
+
+  RtcStats(
+    this.totalDuration,
+    this.txBytes,
+    this.rxBytes,
+    this.txAudioBytes,
+    this.txVideoBytes,
+    this.rxAudioBytes,
+    this.rxVideoBytes,
+    this.txKBitrate,
+    this.rxKBitrate,
+    this.txAudioKBitrate,
+    this.rxAudioKBitrate,
+    this.txVideoKBitrate,
+    this.rxVideoKBitrate,
+    this.lastmileDelay,
+    this.txPacketLossRate,
+    this.rxPacketLossRate,
+    this.users,
+    this.cpuTotalUsage,
+    this.cpuAppUsage,
+  );
+
+  RtcStats.fromJson(Map<dynamic, dynamic> json)
+    :
+    totalDuration = json['totalDuration'],
+    txBytes = json['txBytes'],
+    rxBytes = json['rxBytes'],
+    txAudioBytes = json['txAudioBytes'],
+    txVideoBytes = json['txVideoBytes'],
+    rxAudioBytes = json['rxAudioBytes'],
+    rxVideoBytes = json['rxVideoBytes'],
+    txKBitrate = json['txKBitrate'],
+    rxKBitrate = json['rxKBitrate'],
+    txAudioKBitrate = json['txAudioKBitrate'],
+    rxAudioKBitrate = json['rxAudioKBitrate'],
+    txVideoKBitrate = json['txVideoKBitrate'],
+    rxVideoKBitrate = json['rxVideoKBitrate'],
+    lastmileDelay = json['lastmileDelay'],
+    txPacketLossRate = json['txPacketLossRate'],
+    rxPacketLossRate = json['rxPacketLossRate'],
+    users = json['users'],
+    cpuTotalUsage = json['cpuTotalUsage'],
+    cpuAppUsage = json['cpuAppUsage'];
 }
 
 class LocalVideoStats {
@@ -208,6 +256,49 @@ class LocalVideoStats {
   int sentFrameRate;
   int encoderOutputFrameRate;
   int rendererOutputFrameRate;
+  int sentTargetBitrate;
+  int sentTargetFrameRate;
+  int qualityAdaptIndication;
+  int encodedBitrate;
+  int encodedFrameWidth;
+  int encodedFrameHeight;
+  int encodedFrameCount;
+  int codecType;
+
+  LocalVideoStats(
+    this.sentBitrate,
+    this.sentFrameRate,
+    this.encoderOutputFrameRate,
+    this.rendererOutputFrameRate,
+    this.sentTargetBitrate,
+    this.sentTargetFrameRate,
+    this.qualityAdaptIndication,
+    this.encodedBitrate,
+    this.encodedFrameWidth,
+    this.encodedFrameHeight,
+    this.encodedFrameCount,
+    this.codecType
+  );
+
+  LocalVideoStats.fromJson(Map<dynamic, dynamic> json)
+    : sentBitrate = json["sentBitrate"],
+      sentFrameRate = json["sentFrameRate"],
+      encoderOutputFrameRate = json["encoderOutputFrameRate"],
+      rendererOutputFrameRate = json["rendererOutputFrameRate"],
+      sentTargetBitrate = json["sentTargetBitrate"],
+      sentTargetFrameRate = json["sentTargetFrameRate"],
+      qualityAdaptIndication = json["qualityAdaptIndication"],
+      encodedBitrate = json["encodedBitrate"],
+      encodedFrameWidth = json["encodedFrameWidth"],
+      encodedFrameHeight = json["encodedFrameHeight"],
+      encodedFrameCount = json["encodedFrameCount"],
+      codecType = json["codecType"];
+}
+
+class LocalAudioStats {
+  int numChannels;
+  int sentSampleRate;
+  int sentBitrate;
 }
 
 class RemoteVideoStats {
@@ -217,7 +308,35 @@ class RemoteVideoStats {
   int receivedBitrate;
   int decoderOutputFrameRate;
   int rendererOutputFrameRate;
+  int packetLostRate;
   int rxStreamType;
+  int totalFrozenTime;
+  int frozenRate;
+
+  RemoteVideoStats(
+    this.uid,
+    this.width,
+    this.height,
+    this.receivedBitrate,
+    this.decoderOutputFrameRate,
+    this.rendererOutputFrameRate,
+    this.packetLostRate,
+    this.rxStreamType,
+    this.totalFrozenTime,
+    this.frozenRate
+  );
+
+  RemoteVideoStats.fromJson(Map<dynamic, dynamic> json)
+    : uid = json['uid'],
+      width = json['width'],
+      height = json['height'],
+      receivedBitrate = json['receivedBitrate'],
+      decoderOutputFrameRate = json['decoderOutputFrameRate'],
+      rendererOutputFrameRate = json['rendererOutputFrameRate'],
+      packetLostRate = json['packetLostRate'],
+      rxStreamType = json['rxStreamType'],
+      totalFrozenTime = json['totalFrozenTime'],
+      frozenRate = json['frozenRate'];
 }
 
 class RemoteAudioStats {
