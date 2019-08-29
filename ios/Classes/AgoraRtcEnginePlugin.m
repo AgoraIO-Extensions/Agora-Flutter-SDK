@@ -86,6 +86,21 @@
   [registrar registerViewFactory:fac withId:@"AgoraRendererView"];
 }
 
+- (UIColor *) UIColorFromRGB:(NSUInteger)rgbValue {
+  return [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0];
+}
+
+- (AgoraImage *) makeAgoraImage:(NSDictionary *)options {
+  AgoraImage *img = [AgoraImage new];
+  img.url = [NSURL URLWithString:options[@"url"]];
+  
+  img.rect = CGRectMake((CGFloat)[options[@"x"] floatValue],
+                        (CGFloat)[options[@"y"] floatValue],
+                        (CGFloat)[options[@"width"] floatValue],
+                        (CGFloat)[options[@"height"] floatValue]);
+  return img;
+}
+
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   NSString *method = call.method;
   NSDictionary *arguments = call.arguments;
@@ -108,13 +123,22 @@
     NSInteger role = [self intFromArguments:arguments key:@"role"];
     [self.agoraRtcEngine setClientRole:role];
     result(nil);
+  } else if([@"switchChannel" isEqualToString:method]) {
+    NSString *token = [self stringFromArguments:arguments key:@"token"];
+    NSString *channel = [self stringFromArguments:arguments key:@"channelId"];
+    NSInteger res = [self.agoraRtcEngine switchChannelByToken:token channelId:channel joinSuccess:nil];
+    if (res == 0) {
+      result(@{@"result": @(YES)});
+    } else {
+      result(@{@"result": @(NO), @"error": @(res)});
+    }
   } else if ([@"joinChannel" isEqualToString:method]) {
     NSString *token = [self stringFromArguments:arguments key:@"token"];
     NSString *channel = [self stringFromArguments:arguments key:@"channelId"];
     NSString *info = [self stringFromArguments:arguments key:@"info"];
     NSInteger uid = [self intFromArguments:arguments key:@"uid"];
     
-    [self.agoraRtcEngine joinChannelByToken:token channelId:channel info:info uid:uid  joinSuccess:nil];
+    [self.agoraRtcEngine joinChannelByToken:token channelId:channel info:info uid:uid joinSuccess:nil];
     result([NSNumber numberWithBool:YES]);
   } else if ([@"leaveChannel" isEqualToString:method]) {
     BOOL success = (0 == [self.agoraRtcEngine leaveChannel:nil]);
@@ -316,6 +340,136 @@
     NSInteger streamType = [self intFromArguments:arguments key:@"streamType"];
     [self.agoraRtcEngine setRemoteDefaultVideoStreamType:streamType];
     result(nil);
+  }
+  // CDN push & pull
+  else if ([@"setLiveTranscoding" isEqualToString:method]) {
+    NSDictionary *params = [self dictionaryFromArguments:arguments key:@"transcoding"];
+    AgoraLiveTranscoding *transcoding = [AgoraLiveTranscoding defaultTranscoding];
+    if (params[@"width"] != [NSNull null] && params[@"height"] != [NSNull null]) {
+      transcoding.size = CGSizeMake([params[@"width"] doubleValue], [params[@"height"] doubleValue]);
+    }
+    if (params[@"videoBitrate"] != [NSNull null]) {
+      transcoding.videoBitrate = [params[@"videoBitrate"] integerValue];
+    }
+    if (params[@"videoFramerate"] != [NSNull null]) {
+      transcoding.videoFramerate = [params[@"videoFramerate"] integerValue];
+    }
+    if (params[@"videoGop"] != [NSNull null]) {
+      transcoding.videoGop = [params[@"videoGop"] integerValue];
+    }
+    if (params[@"videoCodecProfile"] != [NSNull null]) {
+      transcoding.videoCodecProfile = (AgoraVideoCodecProfileType)[params[@"videoCodecProfile"] integerValue];
+    }
+    if (params[@"audioCodecProfile"] != [NSNull null]) {
+      transcoding.audioCodecProfile = (AgoraAudioCodecProfileType)[params[@"audioCodecProfile"] integerValue];
+    }
+    if (params[@"audioSampleRate"] != [NSNull null]) {
+      transcoding.audioSampleRate = (AgoraAudioSampleRateType)[params[@"audioSampleRate"] integerValue];
+    }
+    if (params[@"watermark"] != [NSNull null]) {
+      transcoding.watermark = [self makeAgoraImage:@{
+                                                     @"url": params[@"watermark"][@"url"],
+                                                     @"x": params[@"watermark"][@"x"],
+                                                     @"y": params[@"watermark"][@"y"],
+                                                     @"width": params[@"watermark"][@"width"],
+                                                     @"height": params[@"watermark"][@"height"]
+                                                     }];
+    }
+    if (params[@"backgroundImage"] != [NSNull null]) {
+      transcoding.backgroundImage = [self makeAgoraImage:@{
+                                                           @"url": params[@"backgroundImage"][@"url"],
+                                                           @"x": params[@"backgroundImage"][@"x"],
+                                                           @"y": params[@"backgroundImage"][@"y"],
+                                                           @"width": params[@"backgroundImage"][@"width"],
+                                                           @"height": params[@"backgroundImage"][@"height"]
+                                                           }];
+    }
+    
+    if (params[@"backgroundColor"] != [NSNull null]) {
+      transcoding.backgroundColor = [self UIColorFromRGB:(NSUInteger)[params[@"backgroundColor"] integerValue]];
+    }
+    
+    if (params[@"audioBitrate"] != [NSNull null]) {
+      transcoding.audioBitrate = [params[@"audioBitrate"] integerValue];
+    }
+    
+    if (params[@"audioChannels"] != [NSNull null]) {
+      transcoding.audioChannels = [params[@"audioChannels"] integerValue];
+    }
+    
+    if (params[@"transcodingUsers"] != [NSNull null]) {
+      NSMutableArray<AgoraLiveTranscodingUser*> *transcodingUsers = [NSMutableArray new];
+      for (NSDictionary *optionUser in params[@"transcodingUsers"]) {
+        AgoraLiveTranscodingUser *liveUser = [AgoraLiveTranscodingUser new];
+        liveUser.uid = (NSUInteger)[optionUser[@"uid"] integerValue];
+        liveUser.rect = CGRectMake((CGFloat)[optionUser[@"x"] floatValue],
+                                   (CGFloat)[optionUser[@"y"] floatValue],
+                                   (CGFloat)[optionUser[@"width"] floatValue],
+                                   (CGFloat)[optionUser[@"height"] floatValue]);
+        liveUser.zOrder = [optionUser[@"zOrder"] integerValue];
+        liveUser.alpha = [optionUser[@"alpha"] doubleValue];
+        liveUser.audioChannel = [optionUser[@"audioChannel"] integerValue];
+        [transcodingUsers addObject:liveUser];
+      }
+      transcoding.transcodingUsers = transcodingUsers;
+    }
+    if (params[@"transcodingExtraInfo"] != [NSNull null]) {
+      transcoding.transcodingExtraInfo = [params[@"transcodingExtraInfo"] stringValue];
+    }
+    NSInteger res = [self.agoraRtcEngine setLiveTranscoding:transcoding];
+    result(@(res));
+  }
+  else if ([@"addPublishStreamUrl" isEqualToString:method]) {
+    NSString *url = [self stringFromArguments:arguments key:@"url"];
+    Boolean enabled = [self boolFromArguments:arguments key:@"enable"];
+    NSInteger res = [self.agoraRtcEngine addPublishStreamUrl:url transcodingEnabled:enabled];
+    result(@(res));
+  }
+  else if ([@"removePublishStreamUrl" isEqualToString:method]) {
+    NSString *url = [self stringFromArguments:arguments key:@"url"];
+    NSInteger res = [self.agoraRtcEngine removePublishStreamUrl:url];
+    result(@(res));
+  }
+  else if ([@"addInjectStreamUrl" isEqualToString:method]) {
+    NSString *url = [self stringFromArguments:arguments key:@"url"];
+    NSDictionary *config = [self dictionaryFromArguments:arguments key:@"config"];
+    AgoraLiveInjectStreamConfig *streamConfig = [AgoraLiveInjectStreamConfig defaultConfig];
+    
+    if (config[@"width"] != [NSNull null] && config[@"height"] != [NSNull null]) {
+      streamConfig.size = CGSizeMake([config[@"width"] doubleValue], [config[@"height"] doubleValue]);
+    }
+    
+    if (config[@"videoGop"] != [NSNull null]) {
+      streamConfig.videoGop = [config[@"videoGop"] integerValue];
+    }
+    
+    if (config[@"videoFramerate"] != [NSNull null]) {
+      streamConfig.videoFramerate = [config[@"videoFramerate"] integerValue];
+    }
+    
+    if (config[@"videoBitrate"] != [NSNull null]) {
+      streamConfig.videoBitrate = [config[@"videoBitrate"] integerValue];
+    }
+    
+    if (config[@"audioBitrate"] != [NSNull null]) {
+      streamConfig.audioBitrate = [config[@"audioBitrate"] integerValue];
+    }
+    
+    if (config[@"audioChannels"] != [NSNull null]) {
+      streamConfig.audioChannels = [config[@"audioChannels"] integerValue];
+    }
+    
+    if (config[@"audioSampleRate"] != [NSNull null]) {
+      streamConfig.audioSampleRate = (AgoraAudioSampleRateType)[config[@"audioSampleRate"] integerValue];
+    }
+    
+    NSInteger res = [self.agoraRtcEngine addInjectStreamUrl:url config:streamConfig];
+    result(@(res));
+  }
+  else if ([@"removeInjectStreamUrl" isEqualToString:method]) {
+    NSString *url = [self stringFromArguments:arguments key:@"url"];
+    NSInteger res = [self.agoraRtcEngine removeInjectStreamUrl:url];
+    result(@(res));
   }
   // Encryption
   else if ([@"setEncryptionSecret" isEqualToString:method]) {
@@ -556,6 +710,10 @@
   [self.methodChannel invokeMethod:@"onTranscodingUpdated" arguments:nil];
 }
 
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine rtmpStreamingChangedToState:(NSString *_Nonnull)url state:(AgoraRtmpStreamingState)state errorCode:(AgoraRtmpStreamingErrorCode)errorCode {
+  [self.methodChannel invokeMethod:@"onRtmpStreamingStateChanged" arguments:@{@"error": @(errorCode)}];
+}
+
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine streamInjectedStatusOfUrl:(NSString * _Nonnull)url uid:(NSUInteger)uid status:(AgoraInjectStreamStatus)status {
   [self.methodChannel invokeMethod:@"onStreamInjectedStatus" arguments:@{@"url": url, @"uid": @(uid), @"status": @(status)}];
 }
@@ -751,4 +909,3 @@
   return rendererView;
 }
 @end
-
