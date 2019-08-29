@@ -1,5 +1,27 @@
 # Change log
 
+## 1.0.0
+* Support CDN Publish
+* Support Switch Channel
+* Update to Agora Rtc SDK 2.9.0 version.
+* deprecated methods:
+  `onUserMuteVideo`
+  `onUserEnableVideo`
+  `onUserEnableLocalVideo`
+  `onFirstRemoteVideoDecoded`
+  `onRemoteAudioTransportStats`
+* add methods:
+  `switchChannel`
+  `onLocalAudioStateChanged`
+  `onRemoteAudioStateChanged`
+  `onLocalAudioStats`
+  `setLiveTranscoding`
+  `addPublishStreamUrl`
+  `removePublishStreamUrl`
+  `addInjectStreamUrl`
+  `removeInjectStreamUrl`
+* enhancement `RemoteVideoStats`  & `LocalVideoStats` & `RtcStats`
+
 ## 0.9.9
 * Support voice changer
 * Add [AgoraRenderWidget](./lib/src/agora_render_widget.dart)

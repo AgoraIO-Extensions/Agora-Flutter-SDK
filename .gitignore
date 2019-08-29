@@ -11,4 +11,7 @@ build/
 *.lock
 *.*~
 example/*.lock
-example/ios/Podfile.lock
+example/ios/Podfile.lock.classpath
+.project
+.settings
+**/*.classpath

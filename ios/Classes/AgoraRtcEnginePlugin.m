@@ -594,10 +594,6 @@
   [self.methodChannel invokeMethod:@"onFirstLocalVideoFrame" arguments:@{@"width": @((int)size.width), @"height": @((int)size.height), @"elapsed": @(elapsed)}];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self.methodChannel invokeMethod:@"onFirstRemoteVideoDecoded" arguments:@{@"uid": @(uid), @"width": @((int)size.width), @"height": @((int)size.height), @"elapsed": @(elapsed)}];
-}
-
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine firstRemoteVideoFrameOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
   [self.methodChannel invokeMethod:@"onFirstRemoteVideoFrame" arguments:@{@"uid": @(uid), @"width": @((int)size.width), @"height": @((int)size.height), @"elapsed": @(elapsed)}];
 }
@@ -606,28 +602,24 @@
   [self.methodChannel invokeMethod:@"onUserMuteAudio" arguments:@{@"muted": @(muted), @"uid": @(uid)}];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didVideoMuted:(BOOL)muted byUid:(NSUInteger)uid {
-  [self.methodChannel invokeMethod:@"onUserMuteVideo" arguments:@{@"muted": @(muted), @"uid": @(uid)}];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didVideoEnabled:(BOOL)enabled byUid:(NSUInteger)uid {
-  [self.methodChannel invokeMethod:@"onUserEnableVideo" arguments:@{@"enabled": @(enabled), @"uid": @(uid)}];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didLocalVideoEnabled:(BOOL)enabled byUid:(NSUInteger)uid {
-  [self.methodChannel invokeMethod:@"onUserEnableLocalVideo" arguments:@{@"enabled": @(enabled), @"uid": @(uid)}];
-}
-
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine videoSizeChangedOfUid:(NSUInteger)uid size:(CGSize)size rotation:(NSInteger)rotation {
   [self.methodChannel invokeMethod:@"onVideoSizeChanged" arguments:@{@"uid": @(uid), @"width": @((int)size.width), @"height": @((int)size.height), @"rotation": @(rotation)}];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine remoteVideoStateChangedOfUid:(NSUInteger)uid state:(AgoraVideoRemoteState)state {
-  [self.methodChannel invokeMethod:@"onRemoteVideoStateChanged" arguments:@{@"uid": @(uid), @"state": @(state)}];
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteVideoStateChangedOfUid:(NSUInteger)uid state:(AgoraVideoRemoteState)state reason:(AgoraVideoRemoteStateReason)reason elapsed:(NSInteger)elapsed {
+  [self.methodChannel invokeMethod:@"onRemoteVideoStateChanged" arguments:@{@"uid": @(uid), @"state": @(state), @"reason": @(reason), @"elapsed": @(elapsed)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine localVideoStateChange:(AgoraLocalVideoStreamState)state error:(AgoraLocalVideoStreamError)error {
   [self.methodChannel invokeMethod:@"onLocalVideoStateChanged" arguments:@{@"error": @(error), @"localVideoState": @(state)}];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteAudioStateChangedOfUid:(NSUInteger)uid state:(AgoraAudioRemoteState)state reason:(AgoraAudioRemoteStateReason)reason elapsed:(NSInteger)elapsed {
+  [self.methodChannel invokeMethod:@"onRemoteAudioStateChanged" arguments:@{@"uid": @(uid), @"state": @(state), @"reason": @(reason), @"elapsed": @(elapsed)}];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine localAudioStateChange:(AgoraAudioLocalState)state error:(AgoraAudioLocalError)error {
+  [self.methodChannel invokeMethod:@"onLocalAudioStateChanged" arguments:@{@"error": @(error), @"state": @(state)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didLocalPublishFallbackToAudioOnly:(BOOL)isFallbackOrRecover {
@@ -670,16 +662,16 @@
   [self.methodChannel invokeMethod:@"onLocalVideoStats" arguments:@{@"stats": [self dicFromLocalVideoStats:stats]}];
 }
 
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine localAudioStats:(AgoraRtcLocalAudioStats *_Nonnull)stats {
+  [self.methodChannel invokeMethod:@"onLocalAudioStats" arguments:@{@"stats": [self dicFromLocalAudioStats:stats]}];
+}
+
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine remoteVideoStats:(AgoraRtcRemoteVideoStats * _Nonnull)stats {
   [self.methodChannel invokeMethod:@"onRemoteVideoStats" arguments:@{@"stats": [self dicFromRemoteVideoStats:stats]}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine remoteAudioStats:(AgoraRtcRemoteAudioStats * _Nonnull)stats {
   [self.methodChannel invokeMethod:@"onRemoteAudioStats" arguments:@{@"stats": [self dicFromRemoteAudioStats:stats]}];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine audioTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
-  [self.methodChannel invokeMethod:@"onRemoteAudioTransportStats" arguments:@{@"uid": @(uid), @"delay": @(delay), @"lost": @(lost), @"rxKBitRate": @(rxKBitRate)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine videoTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
@@ -711,7 +703,7 @@
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine rtmpStreamingChangedToState:(NSString *_Nonnull)url state:(AgoraRtmpStreamingState)state errorCode:(AgoraRtmpStreamingErrorCode)errorCode {
-  [self.methodChannel invokeMethod:@"onRtmpStreamingStateChanged" arguments:@{@"error": @(errorCode)}];
+  [self.methodChannel invokeMethod:@"onRtmpStreamingStateChanged" arguments:@{@"url": url, @"error": @(errorCode), @"state": @(state)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine streamInjectedStatusOfUrl:(NSString * _Nonnull)url uid:(NSUInteger)uid status:(AgoraInjectStreamStatus)status {
@@ -804,19 +796,25 @@
 }
 
 - (NSDictionary * _Nonnull)dicFromChannelStats:(AgoraChannelStats * _Nonnull)stats {
-  return @{@"duration": @(stats.duration),
+  return @{@"totalDuration": @(stats.duration),
            @"txBytes": @(stats.txBytes),
            @"rxBytes": @(stats.rxBytes),
+           @"txAudioBytes": @(stats.txAudioBytes),
+           @"txVideoBytes": @(stats.txVideoBytes),
+           @"rxAudioBytes": @(stats.rxAudioBytes),
+           @"rxVideoBytes": @(stats.rxVideoBytes),
+           @"txKBitrate": @(stats.txKBitrate),
+           @"rxKBitrate": @(stats.rxKBitrate),
            @"txAudioKBitrate": @(stats.txAudioKBitrate),
            @"rxAudioKBitrate": @(stats.rxAudioKBitrate),
            @"txVideoKBitrate": @(stats.txVideoKBitrate),
            @"rxVideoKBitrate": @(stats.rxVideoKBitrate),
            @"lastmileDelay": @(stats.lastmileDelay),
-           @"userCount": @(stats.userCount),
-           @"cpuAppUsage": @(stats.cpuAppUsage),
-           @"cpuTotalUsage": @(stats.cpuTotalUsage),
            @"txPacketLossRate": @(stats.txPacketLossRate),
            @"rxPacketLossRate": @(stats.rxPacketLossRate),
+           @"users": @(stats.userCount),
+           @"cpuAppUsage": @(stats.cpuAppUsage),
+           @"cpuTotalUsage": @(stats.cpuTotalUsage)
            };
 }
 
@@ -843,7 +841,22 @@
   return @{@"sentBitrate": @(stats.sentBitrate),
            @"sentFrameRate": @(stats.sentFrameRate),
            @"encoderOutputFrameRate": @(stats.encoderOutputFrameRate),
-           @"rendererOutputFrameRate": @(stats.rendererOutputFrameRate)
+           @"rendererOutputFrameRate": @(stats.rendererOutputFrameRate),
+           @"sentTargetBitrate": @(stats.sentTargetBitrate),
+           @"sentTargetFrameRate": @(stats.sentTargetFrameRate),
+           @"qualityAdaptIndication": @(stats.qualityAdaptIndication),
+           @"encodedBitrate": @(stats.encodedBitrate),
+           @"encodedFrameWidth": @(stats.encodedFrameWidth),
+           @"encodedFrameHeight": @(stats.encodedFrameHeight),
+           @"encodedFrameCount": @(stats.encodedFrameCount),
+           @"codecType": @(stats.codecType)
+           };
+}
+
+- (NSDictionary * _Nonnull)dicFromLocalAudioStats:(AgoraRtcLocalAudioStats * _Nonnull)stats {
+  return @{@"numChannels": @(stats.numChannels),
+           @"sentSampleRate": @(stats.sentSampleRate),
+           @"sentBitrate": @(stats.sentBitrate),
            };
 }
 
@@ -852,9 +865,12 @@
            @"width": @(stats.width),
            @"height": @(stats.height),
            @"receivedBitrate": @(stats.receivedBitrate),
+           @"decoderOutputFrameRate": @(stats.decoderOutputFrameRate),
            @"rendererOutputFrameRate": @(stats.rendererOutputFrameRate),
+           @"packetLossRate": @(stats.packetLossRate),
            @"rxStreamType": @(stats.rxStreamType),
-           @"decoderOutputFrameRate": @(stats.decoderOutputFrameRate)
+           @"totalFrozenTime": @(stats.totalFrozenTime),
+           @"frozenRate": @(stats.frozenRate),
            };
 }
 
