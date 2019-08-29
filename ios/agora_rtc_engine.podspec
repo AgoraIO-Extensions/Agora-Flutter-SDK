@@ -1,11 +1,13 @@
+require "yaml"
+require "ostruct"
+project = OpenStruct.new YAML.load_file("../pubspec.yaml")
+
 Pod::Spec.new do |s|
-  s.name             = 'agora_rtc_engine'
-  s.version          = '2.4.1'
-  s.summary          = 'A new flutter plugin project.'
-  s.description      = <<-DESC
-A new flutter plugin project.
-                       DESC
-  s.homepage         = 'https://docs.agora.io'
+  s.name             = project.name
+  s.version          = project.version
+  s.summary          = 'Agora.io offical flutter sdk plugin.'
+  s.description      = project.description
+  s.homepage         = 'https://github.com/agoraio/flutter-sdk'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Agora' => 'developer@agora.io' }
   s.source           = { :path => '.' }
@@ -13,7 +15,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
 
-  s.dependency 'AgoraRtcEngine_iOS_Crypto', '2.8.0'
+  s.dependency 'AgoraRtcEngine_iOS', '2.9'
   s.static_framework = true
 
   s.ios.deployment_target = '8.0'
