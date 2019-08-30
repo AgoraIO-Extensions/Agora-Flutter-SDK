@@ -346,8 +346,37 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             break;
             case "addInjectStreamUrl": {
                 String url = call.argument("url");
-                LiveInjectStreamConfig config = new LiveInjectStreamConfig();
-                result.success(mRtcEngine.addInjectStreamUrl(url, config));
+                Map config = call.argument("config");
+                LiveInjectStreamConfig streamConfig = new LiveInjectStreamConfig();
+                if (config.get("width") != null && config.get("height") != null) {
+                    streamConfig.width = (int) config.get("width");
+                    streamConfig.height = (int) config.get("height");
+                }
+
+                if (config.get("videoGop") != null) {
+                    streamConfig.videoGop = (int) config.get("videoGop");
+                }
+
+                if (config.get("videoFramerate") != null) {
+                    streamConfig.videoFramerate = (int) config.get("videoFramerate");
+                }
+
+                if (config.get("videoBitrate") != null) {
+                    streamConfig.videoBitrate = (int) config.get("videoBitrate");
+                }
+
+                if (config.get("audioBitrate") != null) {
+                    streamConfig.audioBitrate = (int) config.get("audioBitrate");
+                }
+
+                if (config.get("audioChannels") != null) {
+                    streamConfig.audioChannels =  (int) config.get("audioChannels");
+                }
+
+                if (config.get("audioSampleRate") != null) {
+                    streamConfig.audioSampleRate = LiveInjectStreamConfig.AudioSampleRateType.values()[(int) config.get("audioSampleRate")];
+                }
+                result.success(mRtcEngine.addInjectStreamUrl(url, streamConfig));
             }
             break;
             case "removeInjectStreamUrl": {
@@ -981,17 +1010,23 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
 
         private HashMap<String, Object> mapFromStats(RtcStats stats) {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("duration" , stats.totalDuration);
+            map.put("totalDuration" , stats.totalDuration);
             map.put("txBytes" , stats.txBytes);
             map.put("rxBytes" , stats.rxBytes);
+            map.put("txAudioBytes", stats.txAudioBytes);
+            map.put("txVideoBytes", stats.txVideoBytes);
+            map.put("rxAudioBytes", stats.rxAudioBytes);
+            map.put("rxVideoBytes", stats.rxVideoBytes);
+            map.put("txKBitrate", stats.txKBitRate);
+            map.put("rxKBitrate", stats.rxKBitRate);
             map.put("txAudioKBitrate" , stats.txAudioKBitRate);
             map.put("rxAudioKBitrate" , stats.rxAudioKBitRate);
             map.put("txVideoKBitrate" , stats.txVideoKBitRate);
             map.put("rxVideoKBitrate" , stats.rxVideoKBitRate);
+            map.put("lastmileDelay" , stats.lastmileDelay);
             map.put("txPacketLossRate" , stats.txPacketLossRate);
             map.put("rxPacketLossRate" , stats.rxPacketLossRate);
-            map.put("lastmileDelay" , stats.lastmileDelay);
-            map.put("userCount" , stats.users);
+            map.put("users" , stats.users);
             map.put("cpuAppUsage" , stats.cpuAppUsage);
             map.put("cpuTotalUsage" , stats.cpuTotalUsage);
             return map;
@@ -1035,7 +1070,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
         private HashMap<String, Object> mapFromRemoteVideoStats(RemoteVideoStats stats) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid" , stats.uid);
-            map.put("delay" , stats.delay);
             map.put("width" , stats.width);
             map.put("height" , stats.height);
             map.put("receivedBitrate" , stats.receivedBitrate);
