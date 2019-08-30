@@ -1,7 +1,7 @@
 # Change log
 
 ## 1.0.0
-* Support CDN Publish
+* Support CDN Publish & Pull
 * Support Switch Channel
 * Update to Agora Rtc SDK 2.9.0 version.
 * deprecated methods:
