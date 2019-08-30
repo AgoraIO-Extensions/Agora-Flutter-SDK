@@ -643,7 +643,7 @@ class AgoraRtcEngine {
   static Future<int> setLiveTranscoding(AgoraLiveTranscoding config) async {
     return _channel.invokeMethod(
       'setLiveTranscoding',
-      {"transcoding": config}
+      {"transcoding": config.toJson()}
     );
   }
 
@@ -669,7 +669,7 @@ class AgoraRtcEngine {
       'addInjectStreamUrl',
       {
         'url': url,
-        'config': config
+        'config': config.toJson()
       }
     );
   }
