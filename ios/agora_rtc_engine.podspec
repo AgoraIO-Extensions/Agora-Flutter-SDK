@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
 
-  s.dependency 'AgoraRtcEngine_iOS_Crypto', '2.9.0'
+  s.dependency 'AgoraRtcEngine_iOS', '2.9.1'
   s.static_framework = true
 
   s.ios.deployment_target = '8.0'
