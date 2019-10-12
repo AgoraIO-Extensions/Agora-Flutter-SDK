@@ -186,25 +186,25 @@ class AudioVolumeInfo {
 }
 
 class RtcStats {
-  int totalDuration;
-  int txBytes;
-  int rxBytes;
-  int txAudioBytes;
-  int txVideoBytes;
-  int rxAudioBytes;
-  int rxVideoBytes;
-  int txKBitrate;
-  int rxKBitrate;
-  int txAudioKBitrate;
-  int rxAudioKBitrate;
-  int txVideoKBitrate;
-  int rxVideoKBitrate;
-  int lastmileDelay;
-  int txPacketLossRate;
-  int rxPacketLossRate;
-  int users;
-  double cpuTotalUsage;
-  double cpuAppUsage;
+  final int totalDuration;
+  final int txBytes;
+  final int rxBytes;
+  final int txAudioBytes;
+  final int txVideoBytes;
+  final int rxAudioBytes;
+  final int rxVideoBytes;
+  final int txKBitrate;
+  final int rxKBitrate;
+  final int txAudioKBitrate;
+  final int rxAudioKBitrate;
+  final int txVideoKBitrate;
+  final int rxVideoKBitrate;
+  final int lastmileDelay;
+  final int txPacketLossRate;
+  final int rxPacketLossRate;
+  final int users;
+  final double cpuTotalUsage;
+  final double cpuAppUsage;
 
   RtcStats(
     this.totalDuration,
@@ -249,21 +249,45 @@ class RtcStats {
     users = json['users'],
     cpuTotalUsage = json['cpuTotalUsage'],
     cpuAppUsage = json['cpuAppUsage'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "totalDuration": totalDuration,
+      "txBytes": txBytes,
+      "rxBytes": rxBytes,
+      "txAudioBytes": txAudioBytes,
+      "txVideoBytes": txVideoBytes,
+      "rxAudioBytes": rxAudioBytes,
+      "rxVideoBytes": rxVideoBytes,
+      "txKBitrate": txKBitrate,
+      "rxKBitrate": rxKBitrate,
+      "txAudioKBitrate": txAudioKBitrate,
+      "rxAudioKBitrate": rxAudioKBitrate,
+      "txVideoKBitrate": txVideoKBitrate,
+      "rxVideoKBitrate": rxVideoKBitrate,
+      "lastmileDelay": lastmileDelay,
+      "txPacketLossRate": txPacketLossRate,
+      "rxPacketLossRate": rxPacketLossRate,
+      "users": users,
+      "cpuTotalUsage": cpuTotalUsage,
+      "cpuAppUsage": cpuAppUsage,
+    };
+  }
 }
 
 class LocalVideoStats {
-  int sentBitrate;
-  int sentFrameRate;
-  int encoderOutputFrameRate;
-  int rendererOutputFrameRate;
-  int sentTargetBitrate;
-  int sentTargetFrameRate;
-  int qualityAdaptIndication;
-  int encodedBitrate;
-  int encodedFrameWidth;
-  int encodedFrameHeight;
-  int encodedFrameCount;
-  int codecType;
+  final int sentBitrate;
+  final int sentFrameRate;
+  final int encoderOutputFrameRate;
+  final int rendererOutputFrameRate;
+  final int sentTargetBitrate;
+  final int sentTargetFrameRate;
+  final int qualityAdaptIndication;
+  final int encodedBitrate;
+  final int encodedFrameWidth;
+  final int encodedFrameHeight;
+  final int encodedFrameCount;
+  final int codecType;
 
   LocalVideoStats(
     this.sentBitrate,
@@ -293,25 +317,52 @@ class LocalVideoStats {
       encodedFrameHeight = json["encodedFrameHeight"],
       encodedFrameCount = json["encodedFrameCount"],
       codecType = json["codecType"];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "sentBitrate": sentBitrate,
+      "sentFrameRate": sentFrameRate,
+      "encoderOutputFrameRate": encoderOutputFrameRate,
+      "rendererOutputFrameRate": rendererOutputFrameRate,
+      "sentTargetBitrate": sentTargetBitrate,
+      "sentTargetFrameRate": sentTargetFrameRate,
+      "qualityAdaptIndication": qualityAdaptIndication,
+      "encodedBitrate": encodedBitrate,
+      "encodedFrameWidth": encodedFrameWidth,
+      "encodedFrameHeight": encodedFrameHeight,
+      "encodedFrameCount": encodedFrameCount,
+      "codecType": codecType,
+    };
+  }
 }
 
 class LocalAudioStats {
-  int numChannels;
-  int sentSampleRate;
-  int sentBitrate;
+  final int numChannels;
+  final int sentSampleRate;
+  final int sentBitrate;
+
+  LocalAudioStats(
+    this.numChannels,
+    this.sentSampleRate,
+    this.sentBitrate);
+
+  LocalAudioStats.fromJson(Map<dynamic, dynamic> json)
+    : numChannels = json['numChannels'],
+      sentSampleRate = json['sentSampleRate'],
+      sentBitrate = json['sentBitrate'];
 }
 
 class RemoteVideoStats {
-  int uid;
-  int width;
-  int height;
-  int receivedBitrate;
-  int decoderOutputFrameRate;
-  int rendererOutputFrameRate;
-  int packetLostRate;
-  int rxStreamType;
-  int totalFrozenTime;
-  int frozenRate;
+  final int uid;
+  final int width;
+  final int height;
+  final int receivedBitrate;
+  final int decoderOutputFrameRate;
+  final int rendererOutputFrameRate;
+  final int packetLostRate;
+  final int rxStreamType;
+  final int totalFrozenTime;
+  final int frozenRate;
 
   RemoteVideoStats(
     this.uid,
@@ -337,6 +388,21 @@ class RemoteVideoStats {
       rxStreamType = json['rxStreamType'],
       totalFrozenTime = json['totalFrozenTime'],
       frozenRate = json['frozenRate'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "uid": uid,
+      "width": width,
+      "height": height,
+      "receivedBitrate": receivedBitrate,
+      "decoderOutputFrameRate": decoderOutputFrameRate,
+      "rendererOutputFrameRate": rendererOutputFrameRate,
+      "packetLostRate": packetLostRate,
+      "rxStreamType": rxStreamType,
+      "totalFrozenTime": totalFrozenTime,
+      "frozenRate": frozenRate,
+    };
+  }
 }
 
 class RemoteAudioStats {
@@ -345,6 +411,52 @@ class RemoteAudioStats {
   int networkTransportDelay;
   int jitterBufferDelay;
   int audioLossRate;
+  int numChannels;
+  int receivedSampleRate;
+  int receivedBitrate;
+  int totalFrozenTime;
+  int frozenRate;
+
+  RemoteAudioStats(
+    this.uid,
+    this.quality,
+    this.networkTransportDelay,
+    this.jitterBufferDelay,
+    this.audioLossRate,
+    this.numChannels,
+    this.receivedSampleRate,
+    this.receivedBitrate,
+    this.totalFrozenTime,
+    this.frozenRate,
+  );
+
+  RemoteAudioStats.fromJson(Map<dynamic, dynamic> json)
+    : uid = json['uid'],
+      quality = json['quality'],
+      networkTransportDelay = json['networkTransportDelay'],
+      jitterBufferDelay = json['jitterBufferDelay'],
+      audioLossRate = json['audioLossRate'],
+      numChannels = json['numChannels'],
+      receivedSampleRate = json['receivedSampleRate'],
+      receivedBitrate = json['receivedBitrate'],
+      totalFrozenTime = json['totalFrozenTime'],
+      frozenRate = json['frozenRate'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "uid": uid,
+      "quality": quality,
+      "networkTransportDelay": networkTransportDelay,
+      "jitterBufferDelay": jitterBufferDelay,
+      "audioLossRate": audioLossRate,
+      "numChannels": numChannels,
+      "receivedSampleRate": receivedSampleRate,
+      "receivedBitrate": receivedBitrate,
+      "totalFrozenTime": totalFrozenTime,
+      "frozenRate": frozenRate
+    };
+  }
+
 }
 
 /// The image enhancement options in [AgoraRtcEngine.setBeautyEffectOptions].
@@ -372,7 +484,7 @@ class BeautyOptions {
   /// The value ranges from 0.0 (original) to 1.0. This parameter adjusts the red saturation level.
   double rednessLevel = 0;
 
-  Map<String, double> jsonMap() {
+  Map<String, double> toJson() {
     return {
       "lighteningContrastLevel": lighteningContrastLevel.index.toDouble(),
       "lighteningLevel": lighteningLevel,
@@ -425,7 +537,7 @@ class VideoEncoderConfiguration {
   DegradationPreference degradationPreference =
       DegradationPreference.MaintainQuality;
 
-  Map<String, dynamic> jsonMap() {
+  Map<String, dynamic> toJson() {
     return {
       'width': dimensions.width.toInt(),
       'height': dimensions.height.toInt(),

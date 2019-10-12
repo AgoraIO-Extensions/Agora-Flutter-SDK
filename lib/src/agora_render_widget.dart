@@ -12,6 +12,9 @@ class AgoraRenderWidget extends StatefulWidget {
   // local flag
   final bool local;
 
+  // local preview flag;
+  final bool preview;
+
   /// render mode
   final VideoRenderMode mode;
 
@@ -19,9 +22,11 @@ class AgoraRenderWidget extends StatefulWidget {
     this.uid, {
     this.mode = VideoRenderMode.Hidden,
     this.local = false,
+    this.preview = false,
   })  : assert(uid != null),
         assert(mode != null),
-        assert(local != null);
+        assert(local != null),
+        assert(preview != null);
 
   @override
   State<StatefulWidget> createState() => _AgoraRenderWidgetState();
@@ -45,6 +50,7 @@ class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
   @override
   void dispose() {
     AgoraRtcEngine.removeNativeView(_viewId);
+    if (widget.preview) AgoraRtcEngine.stopPreview();
     super.dispose();
   }
 
@@ -67,6 +73,7 @@ class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
   void _bindView() {
     if (widget.local) {
       AgoraRtcEngine.setupLocalVideo(_viewId, widget.mode);
+      if (widget.preview) AgoraRtcEngine.startPreview();
     } else {
       AgoraRtcEngine.setupRemoteVideo(_viewId, widget.mode, widget.uid);
     }

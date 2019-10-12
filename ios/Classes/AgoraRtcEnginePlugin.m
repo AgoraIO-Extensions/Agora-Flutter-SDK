@@ -337,6 +337,54 @@
     result(nil);
   }
   
+  // Voice
+  else if ([@"setLocalVoicePitch" isEqualToString:method]) {
+    
+  }
+  else if ([@"setLocalVoiceEqualizationOfBandFrequency" isEqualToString:method]) {
+    
+  }
+  else if ([@"setLocalVoiceReverbOfType" isEqualToString:method]) {
+    
+  }
+  else if ([@"setLocalVoiceReverbPreset" isEqualToString:method]) {
+    
+  }
+  else if ([@"enableSoundPositionIndication" isEqualToString:method]) {
+    
+  }
+  else if ([@"setRemoteVoicePosition" isEqualToString:method]) {
+    
+  }
+  
+  else if ([@"startEchoTestWithInterval" isEqualToString:method]) {
+    
+  }
+  else if ([@"stopEchoTest" isEqualToString:method]) {
+    
+  }
+  else if ([@"enableLastmileTest" isEqualToString:method]) {
+    
+  }
+  else if ([@"disableLastmileTest" isEqualToString:method]) {
+    
+  }
+  else if ([@"startLastmileProbeTest" isEqualToString:method]) {
+    
+  }
+  else if ([@"stopLastmileProbeTest" isEqualToString:method]) {
+    
+  }
+  
+  else if ([@"addVideoWatermark" isEqualToString:method]) {
+    
+  }
+  
+  else if ([@"clearVideoWatermarks" isEqualToString:method]) {
+    
+  }
+  
+  
   // Video Pre-process and Post-process
   else if ([@"setBeautyEffectOptions" isEqualToString:method]) {
     BOOL enabled = [self boolFromArguments:params key:@"enabled"];
@@ -529,6 +577,100 @@
     [self.agoraRtcEngine setEncryptionMode:encryptionMode];
     result(nil);
   }
+  // Audio Mixing
+  else if ([@"startAudioMixing" isEqualToString:method]) {
+    
+  }
+  else if ([@"stopAudioMixing" isEqualToString:method]) {
+    
+  }
+  else if ([@"pauseAudioMixing" isEqualToString:method]) {
+    
+  }
+  else if ([@"resumeAudioMixing" isEqualToString:method]) {
+    
+  }
+  else if ([@"adjustAudioMixingVolume" isEqualToString:method]) {
+    
+  }
+  else if ([@"adjustAudioMixingPlayoutVolume" isEqualToString:method]) {
+    
+  }
+  else if ([@"adjustAudioMixingPublishVolume" isEqualToString:method]) {
+    
+  }
+  else if ([@"getAudioMixingPlayoutVolume" isEqualToString:method]) {
+    
+  }
+  else if ([@"getAudioMixingPublishVolume" isEqualToString:method]) {
+    
+  }
+  else if ([@"getAudioMixingDuration" isEqualToString:method]) {
+    
+  }
+  else if ([@"getAudioMixingCurrentPosition" isEqualToString:method]) {
+    
+  }
+  else if ([@"setAudioMixingPosition" isEqualToString:method]) {
+    
+  }
+  // AudioEffect
+  else if ([@"getEffectsVolume" isEqualToString:method]) {
+    
+  }
+  else if ([@"setEffectsVolume" isEqualToString:method]) {
+    
+  }
+  else if ([@"setVolumeOfEffect" isEqualToString:method]) {
+    
+  }
+  else if ([@"playEffect" isEqualToString:method]) {
+    
+  }
+  else if ([@"stopEffect" isEqualToString:method]) {
+    
+  }
+  else if ([@"stopAllEffects" isEqualToString:method]) {
+    
+  }
+  else if ([@"preloadEffect" isEqualToString:method]) {
+    
+  }
+  else if ([@"unloadEffect" isEqualToString:method]) {
+    
+  }
+  else if ([@"pauseEffect" isEqualToString:method]) {
+    
+  }
+  else if ([@"pauseAllEffects" isEqualToString:method]) {
+    
+  }
+  else if ([@"resumeEffect" isEqualToString:method]) {
+    
+  }
+  else if ([@"resumeAllEffects" isEqualToString:method]) {
+    
+  }
+  
+  // Channel Media Relay
+  else if ([@"startChannelMediaRelay" isEqualToString:method]) {
+    
+  }
+  else if ([@"updateChannelMediaRelay" isEqualToString:method]) {
+    
+  }
+  else if ([@"stopChannelMediaRelay" isEqualToString:method]) {
+    
+  }
+  
+  else if ([@"enableInEarMonitoring" isEqualToString:method]) {
+    
+  }
+  
+  else if ([@"setInEarMonitoringVolume" isEqualToString:method]) {
+    
+  }
+  
   // Camera Control
   else if ([@"switchCamera" isEqualToString:method]) {
     [self.agoraRtcEngine switchCamera];
@@ -795,17 +937,6 @@
   [self sendEvent:@"onStreamInjectedStatus" params:@{@"url": url, @"uid": @(uid), @"status": @(status)}];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData * _Nonnull)data {
-  NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-  if (message) {
-    [self sendEvent:@"onStreamMessage" params:@{@"uid": @(uid), @"streamId": @(streamId), @"message": message}];
-  }
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached {
-  [self sendEvent:@"onStreamMessageError" params:@{@"uid": @(uid), @"streamId": @(streamId), @"errorCode": @(error), @"missed": @(missed), @"cached": @(cached)}];
-}
-
 - (void)rtcEngineMediaEngineDidLoaded:(AgoraRtcEngineKit * _Nonnull)engine {
   [self sendEvent:@"onMediaEngineLoadSuccess" params:nil];
 }
@@ -1030,9 +1161,10 @@
 @end
 
 @implementation AgoraRenderViewFactory
-- (nonnull NSObject<FlutterPlatformView> *)createWithFrame:(CGRect)frame viewIdentifier:(int64_t)viewId params:(id _Nullable)args {
+- (nonnull NSObject<FlutterPlatformView> *)createWithFrame:(CGRect)frame viewIdentifier:(int64_t)viewId arguments:(id _Nullable)args {
   AgoraRendererView *rendererView = [[AgoraRendererView alloc] initWithFrame:frame viewIdentifier:viewId];
   [AgoraRtcEnginePlugin addView:rendererView.view id:@(viewId)];
   return rendererView;
 }
+
 @end

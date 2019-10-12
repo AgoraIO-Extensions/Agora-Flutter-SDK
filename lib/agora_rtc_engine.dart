@@ -7,8 +7,99 @@ import 'src/base.dart';
 export 'src/agora_render_widget.dart';
 export 'src/base.dart';
 
+class AgoraUserInfo {
+  int uid;
+  String userAccount;
+
+  AgoraUserInfo(this.uid, this.userAccount);
+
+  AgoraUserInfo.fromJson(Map<dynamic, dynamic> json)
+    : uid = json['uid'],
+      userAccount = json['userAccount'];
+
+  Map<String, dynamic> toJson() => {
+    'uid': uid,
+    'userAccount': userAccount
+  };
+
+  @override
+  String toString() {
+    return "{uid: $uid, userAccount: $userAccount}";
+  }
+}
+
+class AgoraCameraRect {
+  int width;
+  int height;
+  int x;
+  int y;
+
+  AgoraCameraRect(this.width, this.height, this.x, this.y);
+
+  AgoraCameraRect.fromJson(json)
+    : width = json['width'],
+      height = json['height'],
+      x = json['x'],
+      y = json['y'];
+
+  Map<String, dynamic> toJson() => {
+      "width": width,
+      "height": height,
+      "x": x,
+      "y": y,
+  };
+}
+
+class NetworkLinkReport {
+  final int availableBandwidth;
+  final int jitter;
+  final int packetLossRate;
+
+  NetworkLinkReport(this.availableBandwidth, this.jitter, this.packetLossRate);
+
+  NetworkLinkReport.fromJson(json):
+    availableBandwidth = json['availableBandwidth'],
+    jitter = json['jitter'],
+    packetLossRate = json['packetLossRate'];
+
+  Map<String, dynamic> toJson() => {
+    "availableBandwidth": availableBandwidth,
+    "jitter": jitter,
+    "packetLossRate": packetLossRate,
+  };
+}
+
+class AgoraLastmileProbeResult {
+  final int state;
+  final int rtt;
+  final NetworkLinkReport uplinkReport;
+  final NetworkLinkReport downlinkReport;
+
+  AgoraLastmileProbeResult(
+    this.state,
+    this.rtt,
+    this.uplinkReport,
+    this.downlinkReport);
+  
+  AgoraLastmileProbeResult.fromJson(json):
+    state = json['state'],
+    rtt = json['rtt'],
+    uplinkReport = NetworkLinkReport.fromJson(json['uplinkReport']),
+    downlinkReport = NetworkLinkReport.fromJson(json['downlinkReport']);
+
+  Map<String, dynamic> toJson () => {
+    'state': state,
+    'rtt': state,
+    'uplinkReport': uplinkReport.toJson(),
+    'downlinkReport': downlinkReport.toJson(),
+  };
+}
+
 class AgoraRtcEngine {
   static const MethodChannel _channel = const MethodChannel('agora_rtc_engine');
+  static const EventChannel _eventChannel = const EventChannel('agora_rtc_engine_event_channel');
+
+  static StreamSubscription<dynamic> _sink;
 
   // Core Events
   /// Reports a warning during SDK runtime.
@@ -19,7 +110,7 @@ class AgoraRtcEngine {
   /// Reports an error during SDK runtime.
   ///
   /// In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.
-  static void Function(int err) onError;
+  static void Function(dynamic err) onError;
 
   /// Occurs when a user joins a specified channel.
   ///
@@ -34,6 +125,14 @@ class AgoraRtcEngine {
   static void Function(String channel, int uid, int elapsed)
       onRejoinChannelSuccess;
 
+  /// Occurs when the local user successfully registers a user account by calling the registerLocalUserAccount or joinChannelByUserAccount method.
+  static void Function(String userAccount, int uid)
+      onRegisteredLocalUser;
+
+  /// Occurs when the SDK gets the user ID and user account of the remote user.
+  static void Function(AgoraUserInfo userInfo, int uid)
+      onUpdatedUserInfo;
+      
   /// Occurs when a user leaves the channel.
   ///
   /// When the app calls the [leaveChannel] method, the SDK uses this callback to notify the app when the user leaves the channel.
@@ -79,9 +178,6 @@ class AgoraRtcEngine {
   static VoidCallback onRequestToken;
 
   // Media Events
-  /// Occurs when the microphone is enabled/disabled.
-  static void Function(bool enabled) onMicrophoneEnabled;
-
   /// Reports which users are speaking and the speakers' volume.
   ///
   /// This callback reports the ID and volume of the loudest speakers at the moment in the channel. This callback is disabled by default and can be enabled by the [enableAudioVolumeIndication] method.
@@ -117,6 +213,9 @@ class AgoraRtcEngine {
   /// Occurs when a remote user's audio stream is muted/unmuted.
   static void Function(int uid, bool muted) onUserMuteAudio;
 
+  /// Occurs when a remote user's video stream is muted/unmuted.
+  static void Function(int uid, bool muted) onUserMuteVideo;
+
   /// Occurs when the video size or rotation information of a specified remote user changes.
   static void Function(int uid, double width, double height, int rotation)
       onVideoSizeChanged;
@@ -151,6 +250,17 @@ class AgoraRtcEngine {
   /// This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.
   static void Function(int routing) onAudioRouteChanged;
 
+
+  /// Occurs when a camera focus area changes.
+  /// 
+  /// This callback returns rect of camera focus area changed.
+  static void Function(AgoraCameraRect rect) onCameraFocusAreaChanged;
+
+  /// Occurs when the camera exposure area changes.
+  /// 
+  /// This callback returns rect of camera exposure area changed.
+  static void Function(AgoraCameraRect rect) onCameraExposureAreaChanged;
+
   /// Occurs when the local video stream state changes.
   ///
   /// The SDK returns the current video state in this callback.
@@ -178,13 +288,38 @@ class AgoraRtcEngine {
   /// The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
   static void Function(RemoteAudioStats stats) onRemoteAudioStats;
 
+
+  /// Occurs when a remote user starts audio mixing.
+  static void Function() onRemoteAudioMixingStarted;
+
+  /// Occurs when a remote user finishes audio mixing.
+  static void Function() onRemoteAudioMixingFinished;
+
+  /// Occurs when the local audio effect playback finishes.
+  static void Function(int soundId) onAudioEffectFinished;
+
+  /// Occurs when the stream published
+  static void Function(String url, int errorCode) onStreamPublished;
+
+  /// Occurs when the stream unpublished
+  static void Function(String url) onStreamUnpublished;
+
+  /// Occurs when the transcoding updated
+  static void Function() onTranscodingUpdated;
+
   /// Reports the statistics of the RtcEngine once every two seconds.
   static void Function(RtcStats stats) onRtcStats;
+
+  /// Reports the last mile network quality of the local user once every two seconds before the user joins a channel.
+  static void Function(int quality) onLastmileQuality;
 
   /// Reports the last mile network quality of each user in the channel once every two seconds.
   ///
   /// Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the uplink last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
   static void Function(int uid, int txQuality, int rxQuality) onNetworkQuality;
+
+  /// Reports the last-mile network probe result.
+  static void Function(AgoraLastmileProbeResult result) onLastmileProbeTestResult;
 
   /// Reports the statistics of the uploading local video streams.
   ///
@@ -201,12 +336,6 @@ class AgoraRtcEngine {
   /// The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
   static void Function(RemoteVideoStats stats) onRemoteVideoStats;
 
-  /// Reports the transport-layer statistics of each remote video stream.
-  ///
-  /// This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user.
-  static void Function(int uid, int delay, int lost, int rxKBitRate)
-      onRemoteVideoTransportStats;
-
   // Miscellaneous Events
   /// Occurs when the media engine is loaded.
   static VoidCallback onMediaEngineLoadSuccess;
@@ -220,8 +349,8 @@ class AgoraRtcEngine {
   /// The Agora SDK only supports one RtcEngine instance at a time, therefore the app should create one RtcEngine object only.
   /// Only users with the same App ID can join the same channel and call each other.
   static Future<void> create(String appid) async {
-    _addMethodCallHandler();
     await _channel.invokeMethod('create', {'appId': appid});
+    _addEventChannelHandler();
   }
 
   /// Destroys the RtcEngine instance and releases all resources used by the Agora SDK.
@@ -229,7 +358,7 @@ class AgoraRtcEngine {
   /// This method is useful for apps that occasionally make voice or video calls, to free up resources for other operations when not making calls.
   /// Once the app calls destroy to destroy the created RtcEngine instance, you cannot use any method or callback in the SDK.
   static Future<void> destroy() async {
-    _removeMethodCallHandler();
+    await _removeEventChannelHandler();
     await _channel.invokeMethod('destroy');
   }
 
@@ -300,6 +429,48 @@ class AgoraRtcEngine {
     return state;
   }
 
+  /// stringuid userAccount
+  /// registerLocalUserAccount
+  static Future<bool> registerLocalUserAccount(Map<String, String> args) async {
+    final bool result = await _channel.invokeMethod('registerLocalUserAccount', {
+      "appId": args["appId"],
+      "userAccount": args["userAccount"]
+    });
+    return result;
+  }
+
+  /// joinChannelByUserAccount
+  /// 
+  /// Joins the channel with a user account.
+  static Future<bool> joinChannelByUserAccount(Map<String, String> args) async {
+    final bool result = await _channel.invokeMethod('joinChannelByUserAccount', {
+      "userAccount": args["userAccount"],
+      "token": args["token"],
+      "channelId": args["channelId"],
+    });
+    return result;
+  }
+
+  /// registerLocalUserAccount
+  /// 
+  /// Gets the user information by passing in the user account.
+  static Future<AgoraUserInfo> getUserInfoByUserAccount(String userAccount) async {
+    final AgoraUserInfo result = AgoraUserInfo.fromJson(await _channel.invokeMethod('getUserInfoByUserAccount',
+      {"userAccount": userAccount}
+    ));
+    return result;
+  }
+
+  /// registerLocalUserAccount
+  /// 
+  /// Gets the user information by passing in the uid.
+  static Future<AgoraUserInfo> getUserInfoByUid(int uid) async {
+    final AgoraUserInfo result = AgoraUserInfo.fromJson(await _channel.invokeMethod('getUserInfoByUserAccount',
+      {"uid": uid}
+    ));
+    return result;
+  }
+
   // Core Audio
   /// Enables the audio module.
   ///
@@ -355,7 +526,7 @@ class AgoraRtcEngine {
   ///
   /// The audio function is enabled by default. This method disables/re-enables the local audio function, that is, to stop or restart local audio capture and processing.
   /// This method does not affect receiving or playing the remote audio streams, and is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
-  /// The SDK triggers the [onMicrophoneEnabled] callback once the local audio function is disabled or re-enabled.
+  /// The SDK triggers the [onLocalAudioStateChange] callback once the local audio function is disabled or re-enabled.
   /// Call this method after calling the [joinChannelmethod].
   static Future<void> enableLocalAudio(bool enabled) async {
     await _channel.invokeMethod('enableLocalAudio', {'enabled': enabled});
@@ -395,7 +566,7 @@ class AgoraRtcEngine {
   static Future<void> setBeautyEffectOptions(
       bool enabled, BeautyOptions options) async {
     await _channel.invokeListMethod('setBeautyEffectOptions',
-        {'enabled': enabled, 'options': options.jsonMap()});
+        {'enabled': enabled, 'options': options.toJson()});
   }
 
   // Core Video
@@ -429,7 +600,7 @@ class AgoraRtcEngine {
   static Future<void> setVideoEncoderConfiguration(
       VideoEncoderConfiguration config) async {
     await _channel.invokeMethod(
-        'setVideoEncoderConfiguration', {'config': config.jsonMap()});
+        'setVideoEncoderConfiguration', {'config': config.toJson()});
   }
 
   /// Creates the video renderer Widget.
@@ -721,280 +892,316 @@ class AgoraRtcEngine {
     return version;
   }
 
-  // CallHandler
-  static void _addMethodCallHandler() {
-    _channel.setMethodCallHandler((MethodCall call) {
-      Map values = call.arguments;
-
-      switch (call.method) {
-        // Core Events
-        case 'onWarning':
-          if (onWarning != null) {
-            onWarning(values['warn']);
-          }
-          break;
-        case 'onError':
-          if (onError != null) {
-            onError(values['err']);
-          }
-          break;
-        case 'onJoinChannelSuccess':
-          if (onJoinChannelSuccess != null) {
-            onJoinChannelSuccess(
-                values['channel'], values['uid'], values['elapsed']);
-          }
-          break;
-        case 'onRejoinChannelSuccess':
-          if (onRejoinChannelSuccess != null) {
-            onRejoinChannelSuccess(
-                values['channel'], values['uid'], values['elapsed']);
-          }
-          break;
-        case 'onLeaveChannel':
-          if (onLeaveChannel != null) {
-            onLeaveChannel();
-          }
-          break;
-        case 'onClientRoleChanged':
-          if (onClientRoleChanged != null) {
-            ClientRole oldRole = _clientRoleFromInt(values['oldRole']);
-            ClientRole newRole = _clientRoleFromInt(values['newRole']);
-            onClientRoleChanged(oldRole, newRole);
-          }
-          break;
-        case 'onUserJoined':
-          if (onUserJoined != null) {
-            onUserJoined(values['uid'], values['elapsed']);
-          }
-          break;
-        case 'onUserOffline':
-          if (onUserOffline != null) {
-            onUserOffline(values['uid'], values['reason']);
-          }
-          break;
-        case 'onConnectionStateChanged':
-          if (onConnectionStateChanged != null) {
-            onConnectionStateChanged(values['state'], values['reason']);
-          }
-          break;
-        case 'onNetworkTypeChanged':
-          if (onNetworkTypeChanged != null) {
-            onNetworkTypeChanged(values['type']);
-          }
-          break;
-        case 'onConnectionLost':
-          if (onConnectionLost != null) {
-            onConnectionLost();
-          }
-          break;
-        case 'onApiCallExecuted':
-          if (onApiCallExecuted != null) {
-            onApiCallExecuted(values['error'], values['api'], values['result']);
-          }
-          break;
-        case 'onTokenPrivilegeWillExpire':
-          if (onTokenPrivilegeWillExpire != null) {
-            onTokenPrivilegeWillExpire(values['token']);
-          }
-          break;
-        case 'onRequestToken':
-          if (onRequestToken != null) {
-            onRequestToken();
-          }
-          break;
-        // Media Events
-        case 'onMicrophoneEnabled':
-          if (onMicrophoneEnabled != null) {
-            onMicrophoneEnabled(values['enabled']);
-          }
-          break;
-        case 'onAudioVolumeIndication':
-          if (onAudioVolumeIndication != null) {
-            List<dynamic> speakerValues = values['speakers'];
-            List<AudioVolumeInfo> speakers = List<AudioVolumeInfo>();
-            for (Map speakerValue in speakerValues) {
-              AudioVolumeInfo info =
-                  AudioVolumeInfo(speakerValue['uid'], speakerValue['volume']);
-              speakers.add(info);
-            }
-            onAudioVolumeIndication(values['totalVolume'], speakers);
-          }
-          break;
-        case 'onActiveSpeaker':
-          if (onActiveSpeaker != null) {
-            onActiveSpeaker(values['uid']);
-          }
-          break;
-        case 'onFirstLocalAudioFrame':
-          if (onFirstLocalAudioFrame != null) {
-            onFirstLocalAudioFrame(values['elapsed']);
-          }
-          break;
-        case 'onFirstRemoteAudioFrame':
-          if (onFirstRemoteAudioFrame != null) {
-            onFirstRemoteAudioFrame(values['uid'], values['elapsed']);
-          }
-          break;
-        case 'onFirstRemoteAudioDecoded':
-          if (onFirstRemoteAudioDecoded != null) {
-            onFirstRemoteAudioDecoded(values['uid'], values['elapsed']);
-          }
-          break;
-        case 'onFirstLocalVideoFrame':
-          if (onFirstLocalVideoFrame != null) {
-            onFirstLocalVideoFrame(
-                values['width'], values['height'], values['elapsed']);
-          }
-          break;
-        case 'onFirstRemoteVideoFrame':
-          if (onFirstRemoteVideoFrame != null) {
-            onFirstRemoteVideoFrame(values['uid'], values['width'],
-                values['height'], values['elapsed']);
-          }
-          break;
-        case 'onUserMuteAudio':
-          if (onUserMuteAudio != null) {
-            onUserMuteAudio(values['uid'], values['muted']);
-          }
-          break;
-        case 'onVideoSizeChanged':
-          if (onVideoSizeChanged != null) {
-            onVideoSizeChanged(values['uid'], values['width'], values['height'],
-                values['rotation']);
-          }
-          break;
-        case 'onRemoteVideoStateChanged':
-          if (onRemoteVideoStateChanged != null) {
-            onRemoteVideoStateChanged(values['uid'], values['state'], values['reason'], values['elapsed']);
-          }
-          break;
-        // Fallback Events
-        case 'onLocalPublishFallbackToAudioOnly':
-          if (onLocalPublishFallbackToAudioOnly != null) {
-            onLocalPublishFallbackToAudioOnly(values['isFallbackOrRecover']);
-          }
-          break;
-        case 'onRemoteSubscribeFallbackToAudioOnly':
-          if (onRemoteSubscribeFallbackToAudioOnly != null) {
-            onRemoteSubscribeFallbackToAudioOnly(
-                values['uid'], values['isFallbackOrRecover']);
-          }
-          break;
-        case 'onRtmpStreamingStateChanged':
-          if (onRtmpStreamingStateChanged != null) {
-            onRtmpStreamingStateChanged(values['url'], values['error'], values['state']);
-          }
-          break;
-        case 'onStreamInjectedStatus':
-          if (onStreamInjectedStatus != null) {
-            onStreamInjectedStatus({'url': values['url'], 'uid': values['uid'], 'status': values['status']});
-          }
-          break;
-        // Device Events
-        case 'onAudioRouteChanged':
-          if (onAudioRouteChanged != null) {
-            onAudioRouteChanged(values['routing']);
-          }
-          break;
-        case 'onLocalVideoStateChanged':
-          if (onLocalVideoStateChanged != null) {
-            onLocalVideoStateChanged(
-                values['localVideoState'], values['error']);
-          }
-          break;
-        case 'onRemoteAudioStateChanged':
-          if (onRemoteAudioStateChanged != null) {
-            onRemoteAudioStateChanged(
-              values['uid'], values['state'], values['reason'], values['elapsed']
-            );
-          }
-          break;
-        case 'onLocalAudioStateChanged':
-          if (onLocalAudioStateChanged != null) {
-            onLocalAudioStateChanged(
-              values['error'], values['state']
-            );
-          }
-          break;
-        // Statistics Events
-        case 'onRemoteAudioStats':
-          if (onRemoteAudioStats != null) {
-            Map statsValue = values['stats'];
-            RemoteAudioStats stats = RemoteAudioStats();
-            stats.uid = statsValue['uid'];
-            stats.quality = statsValue['quality'];
-            stats.networkTransportDelay = statsValue['networkTransportDelay'];
-            stats.jitterBufferDelay = statsValue['jitterBufferDelay'];
-            stats.audioLossRate = statsValue['audioLossRate'];
-            onRemoteAudioStats(stats);
-          }
-          break;
-        case 'onRtcStats':
-          if (onRtcStats != null) {
-            Map statsValue = values['stats'];
-            RtcStats stats = RtcStats.fromJson(statsValue);
-            onRtcStats(stats);
-          }
-          break;
-        case 'onNetworkQuality':
-          if (onNetworkQuality != null) {
-            onNetworkQuality(
-                values['uid'], values['txQuality'], values['rxQuality']);
-          }
-          break;
-        case 'onLocalVideoStats':
-          if (onLocalVideoStats != null) {
-            Map statsValue = values['stats'];
-            LocalVideoStats stats = LocalVideoStats.fromJson(statsValue);
-            stats.sentBitrate = statsValue['sentBitrate'];
-            stats.sentFrameRate = statsValue['sentFrameRate'];
-            stats.encoderOutputFrameRate = statsValue['encoderOutputFrameRate'];
-            stats.rendererOutputFrameRate =
-                statsValue['rendererOutputFrameRate'];
-            onLocalVideoStats(stats);
-          }
-          break;
-        case 'onLocalAudioStats':
-          if (onLocalAudioStats != null) {
-            Map statsValue = values['stats'];
-            LocalAudioStats stats = LocalAudioStats();
-            stats.numChannels = statsValue['numChannels'];
-            stats.sentSampleRate = statsValue['sentSampleRate'];
-            stats.sentBitrate = statsValue['sentBitrate'];
-            onLocalAudioStats(stats);
-          }
-          break;
-        case 'onRemoteVideoStats':
-          if (onRemoteVideoStats != null) {
-            Map statsValue = values['stats'];
-            RemoteVideoStats stats = RemoteVideoStats.fromJson(statsValue);
-            onRemoteVideoStats(stats);
-          }
-          break;
-        case 'onRemoteVideoTransportStats':
-          if (onRemoteVideoTransportStats != null) {
-            onRemoteVideoTransportStats(values['uid'], values['delay'],
-                values['lost'], values['rxKBitRate']);
-          }
-          break;
-        // Miscellaneous Events
-        case 'onMediaEngineLoadSuccess':
-          if (onMediaEngineLoadSuccess != null) {
-            onMediaEngineLoadSuccess();
-          }
-          break;
-        case 'onMediaEngineStartCallSuccess':
-          if (onMediaEngineStartCallSuccess != null) {
-            onMediaEngineStartCallSuccess();
-          }
-          break;
-        default:
-      }
-    });
+  static void _addEventChannelHandler () async {
+    _sink = _eventChannel.receiveBroadcastStream().listen(_eventListener, onError: onError);
   }
 
-  static void _removeMethodCallHandler() {
-    _channel.setMethodCallHandler(null);
+  static void _removeEventChannelHandler () async {
+    await _sink.cancel();
+  }
+
+  // CallHandler
+  static void _eventListener(dynamic event) {
+    final Map<dynamic, dynamic> map = event;
+    switch (map['event']) {
+      // Core Events
+      case 'onWarning':
+        if (onWarning != null) {
+          onWarning(map['errorCode']);
+        }
+        break;
+      case 'onError':
+        if (onError != null) {
+          onError(map['errorCode']);
+        }
+        break;
+      case 'onJoinChannelSuccess':
+        if (onJoinChannelSuccess != null) {
+          onJoinChannelSuccess(
+              map['channel'], map['uid'], map['elapsed']);
+        }
+        break;
+      case 'onRejoinChannelSuccess':
+        if (onRejoinChannelSuccess != null) {
+          onRejoinChannelSuccess(
+              map['channel'], map['uid'], map['elapsed']);
+        }
+        break;
+      case 'onLeaveChannel':
+        if (onLeaveChannel != null) {
+          onLeaveChannel();
+        }
+        break;
+      case 'onClientRoleChanged':
+        if (onClientRoleChanged != null) {
+          ClientRole oldRole = _clientRoleFromInt(map['oldRole']);
+          ClientRole newRole = _clientRoleFromInt(map['newRole']);
+          onClientRoleChanged(oldRole, newRole);
+        }
+        break;
+      case 'onUserJoined':
+        if (onUserJoined != null) {
+          onUserJoined(map['uid'], map['elapsed']);
+        }
+        break;
+      case 'onUserOffline':
+        if (onUserOffline != null) {
+          onUserOffline(map['uid'], map['reason']);
+        }
+        break;
+      case 'onRegisteredLocalUser':
+        if (onRegisteredLocalUser != null) {
+          onRegisteredLocalUser(map['userAccount'], map['uid']);
+        }
+        break;
+      case 'onUpdatedUserInfo':
+        if (onUpdatedUserInfo != null) {
+          onUpdatedUserInfo(AgoraUserInfo.fromJson(map['userInfo']), map['uid']);
+        }
+        break;
+      case 'onConnectionStateChanged':
+        if (onConnectionStateChanged != null) {
+          onConnectionStateChanged(map['state'], map['reason']);
+        }
+        break;
+      case 'onNetworkTypeChanged':
+        if (onNetworkTypeChanged != null) {
+          onNetworkTypeChanged(map['type']);
+        }
+        break;
+      case 'onConnectionLost':
+        if (onConnectionLost != null) {
+          onConnectionLost();
+        }
+        break;
+      case 'onApiCallExecuted':
+        if (onApiCallExecuted != null) {
+          onApiCallExecuted(map['errorCode'], map['api'], map['result']);
+        }
+        break;
+      case 'onTokenPrivilegeWillExpire':
+        if (onTokenPrivilegeWillExpire != null) {
+          onTokenPrivilegeWillExpire(map['token']);
+        }
+        break;
+      case 'onRequestToken':
+        if (onRequestToken != null) {
+          onRequestToken();
+        }
+        break;
+      // Media Events
+      case 'onAudioVolumeIndication':
+        if (onAudioVolumeIndication != null) {
+          List<dynamic> speakerValues = map['speakers'];
+          List<AudioVolumeInfo> speakers = List<AudioVolumeInfo>();
+          for (Map speakerValue in speakerValues) {
+            AudioVolumeInfo info =
+                AudioVolumeInfo(speakerValue['uid'], speakerValue['volume']);
+            speakers.add(info);
+          }
+          onAudioVolumeIndication(map['totalVolume'], speakers);
+        }
+        break;
+      case 'onActiveSpeaker':
+        if (onActiveSpeaker != null) {
+          onActiveSpeaker(map['uid']);
+        }
+        break;
+      case 'onFirstLocalAudioFrame':
+        if (onFirstLocalAudioFrame != null) {
+          onFirstLocalAudioFrame(map['elapsed']);
+        }
+        break;
+      case 'onFirstRemoteAudioFrame':
+        if (onFirstRemoteAudioFrame != null) {
+          onFirstRemoteAudioFrame(map['uid'], map['elapsed']);
+        }
+        break;
+      case 'onFirstRemoteAudioDecoded':
+        if (onFirstRemoteAudioDecoded != null) {
+          onFirstRemoteAudioDecoded(map['uid'], map['elapsed']);
+        }
+        break;
+      case 'onFirstLocalVideoFrame':
+        if (onFirstLocalVideoFrame != null) {
+          onFirstLocalVideoFrame(
+              map['width'], map['height'], map['elapsed']);
+        }
+        break;
+      case 'onFirstRemoteVideoFrame':
+        if (onFirstRemoteVideoFrame != null) {
+          onFirstRemoteVideoFrame(map['uid'], map['width'],
+              map['height'], map['elapsed']);
+        }
+        break;
+      case 'onUserMuteAudio':
+        if (onUserMuteAudio != null) {
+          onUserMuteAudio(map['uid'], map['muted']);
+        }
+        break;
+      case 'onUserMuteVideo':
+        if (onUserMuteVideo != null) {
+          onUserMuteVideo(map['uid'], map['muted']);
+        }
+        break;
+      case 'onVideoSizeChanged':
+        if (onVideoSizeChanged != null) {
+          onVideoSizeChanged(map['uid'], map['width'], map['height'],
+              map['rotation']);
+        }
+        break;
+      case 'onRemoteVideoStateChanged':
+        if (onRemoteVideoStateChanged != null) {
+          onRemoteVideoStateChanged(map['uid'], map['state'], map['reason'], map['elapsed']);
+        }
+        break;
+      // Fallback Events
+      case 'onLocalPublishFallbackToAudioOnly':
+        if (onLocalPublishFallbackToAudioOnly != null) {
+          onLocalPublishFallbackToAudioOnly(map['isFallbackOrRecover']);
+        }
+        break;
+      case 'onRemoteSubscribeFallbackToAudioOnly':
+        if (onRemoteSubscribeFallbackToAudioOnly != null) {
+          onRemoteSubscribeFallbackToAudioOnly(
+              map['uid'], map['isFallbackOrRecover']);
+        }
+        break;
+      // Device Events
+      case 'onAudioRouteChanged':
+        if (onAudioRouteChanged != null) {
+          onAudioRouteChanged(map['routing']);
+        }
+        break;
+      case 'onCameraFocusAreaChanged':
+        if (onCameraFocusAreaChanged != null) {
+          onCameraFocusAreaChanged(AgoraCameraRect.fromJson(map["rect"]));
+        }
+        break;
+      case 'onCameraExposureAreaChanged':
+        if (onCameraExposureAreaChanged != null) {
+          onCameraExposureAreaChanged(AgoraCameraRect.fromJson(map["rect"]));
+        }
+        break;
+      case 'onLocalVideoStateChanged':
+        if (onLocalVideoStateChanged != null) {
+          onLocalVideoStateChanged(
+              map['localVideoState'], map['errorCode']);
+        }
+        break;
+      case 'onRemoteAudioStateChanged':
+        if (onRemoteAudioStateChanged != null) {
+          onRemoteAudioStateChanged(
+            map['uid'], map['state'], map['reason'], map['elapsed']
+          );
+        }
+        break;
+      case 'onLocalAudioStateChanged':
+        if (onLocalAudioStateChanged != null) {
+          onLocalAudioStateChanged(
+            map['errorCode'], map['state']
+          );
+        }
+        break;
+      case 'onRtcStats':
+        if (onRtcStats != null) {
+          RtcStats stats = RtcStats.fromJson(map['stats']);
+          onRtcStats(stats);
+        }
+        break;
+      case 'onLastmileQuality':
+        if (onLastmileQuality != null) {
+          onLastmileQuality(map['quality']);
+        }
+        break;
+      case 'onNetworkQuality':
+        if (onNetworkQuality != null) {
+          onNetworkQuality(
+              map['uid'], map['txQuality'], map['rxQuality']);
+        }
+        break;
+      case 'onLastmileProbeTestResult':
+        if (onLastmileProbeTestResult != null) {
+          onLastmileProbeTestResult(AgoraLastmileProbeResult.fromJson(map));
+        }
+        break;
+      case 'onLocalVideoStats':
+        if (onLocalVideoStats != null) {
+          onLocalVideoStats(LocalVideoStats.fromJson(map['stats']));
+        }
+        break;
+      case 'onLocalAudioStats':
+        if (onLocalAudioStats != null) {
+          onLocalAudioStats(LocalAudioStats.fromJson(map['stats']));
+        }
+        break;
+      case 'onRemoteVideoStats':
+        if (onRemoteVideoStats != null) {
+          RemoteVideoStats stats = RemoteVideoStats.fromJson(map['stats']);
+          onRemoteVideoStats(stats);
+        }
+        break;
+      case 'onRemoteAudioStats':
+        if (onRemoteAudioStats != null) {
+          RemoteAudioStats stats = RemoteAudioStats.fromJson(map['stats']);
+          onRemoteAudioStats(stats);
+        }
+        break;
+        // Statistics Events
+      case 'onRemoteAudioMixingStarted':
+        if (onRemoteAudioMixingStarted != null) {
+          onRemoteAudioMixingStarted();
+        }
+        break;
+      case 'onRemoteAudioMixingFinished':
+        if (onRemoteAudioMixingFinished != null) {
+          onRemoteAudioMixingFinished();
+        }
+        break;
+      case 'onAudioEffectFinished':
+        if (onAudioEffectFinished != null) {
+          onAudioEffectFinished(map["soundId"]);
+        }
+        break;
+      case 'onStreamPublished':
+        if (onStreamPublished != null) {
+          onStreamPublished(map["url"], map["errorCode"]);
+        }
+        break;
+      case 'onStreamUnpublished':
+        if (onStreamUnpublished != null) {
+          onStreamUnpublished(map["url"]);
+        }
+        break;
+      case 'onTranscodingUpdated':
+        if (onTranscodingUpdated != null) {
+          onTranscodingUpdated();
+        }
+        break;
+      case 'onRtmpStreamingStateChanged':
+        if (onRtmpStreamingStateChanged != null) {
+          onRtmpStreamingStateChanged(map['url'], map['errorCode'], map['state']);
+        }
+        break;
+      case 'onStreamInjectedStatus':
+        if (onStreamInjectedStatus != null) {
+          onStreamInjectedStatus({'url': map['url'], 'uid': map['uid'], 'status': map['status']});
+        }
+        break;
+      // Miscellaneous Events
+      case 'onMediaEngineLoadSuccess':
+        if (onMediaEngineLoadSuccess != null) {
+          onMediaEngineLoadSuccess();
+        }
+        break;
+      case 'onMediaEngineStartCallSuccess':
+        if (onMediaEngineStartCallSuccess != null) {
+          onMediaEngineStartCallSuccess();
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   static ClientRole _clientRoleFromInt(int value) {

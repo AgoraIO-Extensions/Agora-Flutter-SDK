@@ -165,7 +165,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Iterable<Widget> get _renderWidget sync* {
-    yield AgoraRenderWidget(0, local: true);
+    yield AgoraRenderWidget(0, local: true, preview: false);
 
     for (final uid in _remoteUsers) {
       yield AgoraRenderWidget(uid);
