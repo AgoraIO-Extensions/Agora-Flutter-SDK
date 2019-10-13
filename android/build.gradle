@@ -35,5 +35,5 @@ android {
 }
 
 dependencies {
-    implementation 'io.agora.rtc:full-sdk:2.9.0'
+    implementation 'io.agora.rtc:full-sdk:2.9.1'
 }
