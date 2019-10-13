@@ -7,6 +7,74 @@ import 'src/base.dart';
 export 'src/agora_render_widget.dart';
 export 'src/base.dart';
 
+class AgoraChannelMediaRelayConfiguration {
+
+  final String srcChannelName;
+  final int srcUid;
+  final String srcToken;
+  final List<Map<String, dynamic>> channels; // e.g. [{"channelName": channelName, "uid": uid, "token": token}]
+
+  AgoraChannelMediaRelayConfiguration(json):
+    srcChannelName = json["srcChannelName"],
+    srcUid = json["srcUid"],
+    srcToken = json["srcToken"],
+    channels = json["channels"];
+
+  toJson() => {
+    "src": {
+      "channelName": srcChannelName,
+      "uid": srcUid,
+      "token": srcToken,
+    },
+    "channels": channels, 
+  };
+}
+
+class WatermarkOptions {
+  final bool visibleInPreview;
+  final Map<String, int> positionInLandscapeMode;
+  final Map<String, int> positionInPortraitMode;
+  WatermarkOptions(json):
+    visibleInPreview = json['visibleInPreview'],
+    positionInLandscapeMode = json['positionInLandscapeMode'],
+    positionInPortraitMode = json['positionInPortraitMode'];
+
+  toJson() => {
+    "visibleInPreview": visibleInPreview,
+    "positionInLandscapeMode": positionInLandscapeMode,
+    "positionInPortraitMode": positionInPortraitMode,
+  };
+}
+
+class AgoraLastmileProbeConfig {
+  final bool probeDownlink;
+  final bool probeUplink;
+  final int expectedUplinkBitrate;
+  final int expectedDownlinkBitrate;
+  AgoraLastmileProbeConfig(
+    this.expectedDownlinkBitrate,
+    this.expectedUplinkBitrate,
+    this.probeDownlink,
+    this.probeUplink
+  ): assert(expectedDownlinkBitrate != null),
+    assert(expectedUplinkBitrate != null),
+    assert(probeDownlink != null),
+    assert(probeUplink != null);
+
+  AgoraLastmileProbeConfig.fromJson(json): 
+    probeDownlink = json["probeDownlink"],
+    probeUplink = json["probeUplink"],
+    expectedUplinkBitrate = json["expectedUplinkBitrate"],
+    expectedDownlinkBitrate = json["expectedDownlinkBitrate"];
+
+  toJson() => {
+    "probeDownlink": probeDownlink,
+    "probeUplink": probeUplink,
+    "expectedUplinkBitrate": expectedUplinkBitrate,
+    "expectedDownlinkBitrate": expectedDownlinkBitrate,
+  };
+}
+
 class AgoraUserInfo {
   int uid;
   String userAccount;
@@ -517,9 +585,9 @@ class AgoraRtcEngine {
   ///
   /// Once this method is enabled, the SDK returns the volume indication in the [onAudioVolumeIndication] callback at the set time interval, regardless of whether any user is speaking in the channel.
   static Future<void> enableAudioVolumeIndication(
-      int interval, int smooth) async {
+      int interval, int smooth, int vad) async {
     await _channel.invokeMethod('enableAudioVolumeIndication',
-        {'interval': interval, 'smooth': smooth});
+        {'interval': interval, 'smooth': smooth, 'vad': vad});
   }
 
   /// Enables/Disables the local audio capture.
@@ -664,12 +732,6 @@ class AgoraRtcEngine {
         'setLocalRenderMode', {'mode': _intFromVideoRenderMode(renderMode)});
   }
 
-  /// Sets the local voice changer option.
-  static Future<void> setLocalVoiceChanger(VoiceChanger changer) async {
-    await _channel.invokeMethod(
-        'setLocalVoiceChanger', {'changer': _intLocalVoiceChangere(changer)});
-  }
-
   /// Sets the remote video display mode.
   ///
   /// This method can be invoked multiple times during a call to change the display mode.
@@ -728,6 +790,45 @@ class AgoraRtcEngine {
   static Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) async {
     await _channel
         .invokeMethod('setDefaultMuteAllRemoteVideoStreams', {'muted': muted});
+  }
+
+  /// Sets the local voice changer option.
+  static Future<void> setLocalVoiceChanger(VoiceChanger changer) async {
+    await _channel.invokeMethod(
+        'setLocalVoiceChanger', {'changer': _intLocalVoiceChangere(changer)});
+  }
+
+  /// Changes the voice pitch of the local speaker
+  static Future<void> setLocalVoicePitch(double pitch) async {
+    await _channel.invokeMethod(
+        'setLocalVoicePitch', {'pitch': pitch});
+  }
+
+  // Sets the local voice equalization effect.
+  static Future<void> setLocalVoiceEqualizationOfBandFrequency(AgoraAudioEqualizationBandFrequency bandFrequency, int gain) async {
+    await _channel.invokeMethod(
+        'setLocalVoiceEqualizationOfBandFrequency', {'bandFrequency': bandFrequency.index, 'gain': gain});
+  }
+
+  // Sets the local voice reverberation.
+  // Sets the effect of the reverberation type. See [AgoraAudioReverbType](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/Constants/AgoraAudioReverbType.html) for the value range.
+  static Future<void> setLocalVoiceReverbOfType(AgoraAudioReverbType reverbType, int value) async {
+    await _channel.invokeMethod('setLocalVoiceReverbOfType', {'reverbType': reverbType.index, 'value': value});
+  }
+
+  // Sets the preset local voice reverberation effect.
+  static Future<void> setLocalVoiceReverbPreset(AgoraAudioReverbType reverbType) async {
+    await _channel.invokeMethod('setLocalVoiceReverbPreset', {'reverbType': reverbType.index});
+  }
+
+  /// Enables/Disables stereo panning for remote users.
+  static Future<void> enableSoundPositionIndication(bool enabled) async {
+    await _channel.invokeMethod('enableSoundPositionIndication', {'enabled': enabled});
+  }
+
+  /// Sets the sound position and gain of a remote user.
+  static Future<void> setRemoteVoicePosition(int uid, double pan, int gain) async {
+    await _channel.invokeMethod('setRemoteVoicePosition', {'uid': uid, 'pan': pan, 'gain': gain});
   }
 
   // Audio Routing Controller
@@ -877,6 +978,198 @@ class AgoraRtcEngine {
   static Future<void> setEncryptionMode(String encryptionMode) async {
     await _channel
         .invokeMethod('setEncryptionMode', {'encryptionMode': encryptionMode});
+  }
+
+  /// Starts an audio call test.
+  static Future<dynamic> startEchoTestWithInterval(int interval) async {
+    dynamic res = await _channel
+        .invokeMethod('startEchoTestWithInterval', {'interval': interval});
+    return res;
+  }
+
+  /// Stops the audio call test.
+  static Future<void> stopEchoTest() async {
+    await _channel
+        .invokeMethod('stopEchoTest');
+  }
+
+  /// Enables the network connection quality test.
+  static Future<void> enableLastmileTest() async {
+    await _channel
+        .invokeMethod('enableLastmileTest');
+  }
+
+  /// Disables the network connection quality test.
+  static Future<void> disableLastmileTest() async {
+    await _channel
+        .invokeMethod('disableLastmileTest');
+  }
+
+  /// Starts the last-mile network probe test.
+  static Future<void> startLastmileProbeTest(AgoraLastmileProbeConfig config) async {
+    await _channel
+        .invokeMethod('startLastmileProbeTest', {"config": config.toJson()});
+  }
+
+  /// Stops the last-mile network probe test.
+  static Future<void> stopLastmileProbeTest() async {
+    await _channel
+        .invokeMethod('stopLastmileProbeTest');
+  }
+  
+  /// Adds a watermark image to the local video.
+  /// 
+  /// [WatermarkOptions](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/Classes/WatermarkOptions.html)
+  static Future<void> addVideoWatermark(String url, WatermarkOptions options) async {
+    await _channel.invokeMethod('addVideoWatermark', {"url": url, "options": options.toJson()});
+  }
+
+  /// Removes the watermark image from the video stream added by addVideoWatermark.
+  static Future<void> clearVideoWatermarks() async {
+    await _channel.invokeMethod('clearVideoWatermarks');
+  }
+
+  /// startAudioMixing
+  static Future<void> startAudioMixing(String filepath, bool loopback, bool replace, int cycle) async {
+    await _channel.invokeMethod('startAudioMixing', {
+      "filepath": filepath,
+      "loopback": loopback,
+      "replace": replace,
+      "cycle": cycle,
+    });
+  }
+  
+  /// stopAudioMixing
+  static Future<void> stopAudioMixing() async {
+    await _channel.invokeMethod('stopAudioMixing');
+  }
+
+  /// pauseAudioMixing
+  static Future<void> pauseAudioMixing() async {
+    await _channel.invokeMethod('pauseAudioMixing');
+  }
+
+  /// resumeAudioMixing
+  static Future<void> resumeAudioMixing() async {
+    await _channel.invokeMethod('resumeAudioMixing');
+  }
+
+  /// adjustAudioMixingVolume
+  static Future<void> adjustAudioMixingVolume(int volume) async {
+    await _channel.invokeMethod('adjustAudioMixingVolume', {"volume": volume});
+  }
+  /// adjustAudioMixingPlayoutVolume
+  static Future<void> adjustAudioMixingPlayoutVolume(int volume) async {
+    await _channel.invokeMethod('adjustAudioMixingPlayoutVolume', {"volume": volume});
+  }
+  /// adjustAudioMixingPublishVolume
+  static Future<void> adjustAudioMixingPublishVolume(int volume) async {
+    await _channel.invokeMethod('adjustAudioMixingPublishVolume', {"volume": volume});
+  }
+  /// getAudioMixingPlayoutVolume
+  static Future<int> getAudioMixingPlayoutVolume() {
+    return _channel.invokeMethod('getAudioMixingPlayoutVolume');
+  }
+    /// getAudioMixingPublishVolume
+  static Future<void> getAudioMixingPublishVolume() {
+    return _channel.invokeMethod('getAudioMixingPublishVolume');
+  }
+    /// startAudioMixing
+  static Future<void> getAudioMixingDuration() {
+    return _channel.invokeMethod('getAudioMixingDuration');
+  }
+    /// startAudioMixing
+  static Future<void> getAudioMixingCurrentPosition() {
+    return _channel.invokeMethod('getAudioMixingCurrentPosition');
+  }
+    /// setAudioMixingPosition
+  static Future<void> setAudioMixingPosition(int pos) async {
+    await _channel.invokeMethod('setAudioMixingPosition', {"pos": pos});
+  }
+  /// getEffectsVolume
+  static Future<void> getEffectsVolume() async {
+    await _channel.invokeMethod('getEffectsVolume');
+  }
+    /// setEffectsVolume
+  static Future<void> setEffectsVolume(double volume) async {
+    await _channel.invokeMethod('setEffectsVolume', {"volume": volume});
+  }
+  /// setVolumeOfEffect
+  static Future<void> setVolumeOfEffect() async {
+    await _channel.invokeMethod('setVolumeOfEffect');
+  }
+  /// playEffect
+  static Future<void> playEffect(int soundId, String filepath, int loopcount, double pitch, double pan, double gain, bool publish) async {
+    await _channel.invokeMethod('playEffect', {
+      "soundId": soundId,
+      "filepath": filepath,
+      "loopcount": loopcount,
+      "pitch": pitch,
+      "pan": pan,
+      "gain": gain,
+      "publish": publish,
+    });
+  }
+    /// stopEffect
+  static Future<void> stopEffect(int soundId) async {
+    await _channel.invokeMethod('stopEffect', {"soundId": soundId});
+  }
+    /// stopAllEffects
+  static Future<void> stopAllEffects() async {
+    await _channel.invokeMethod('stopAllEffects');
+  }
+
+    /// preloadEffect
+  static Future<void> preloadEffect(int soundId, String filepath) async {
+    await _channel.invokeMethod('preloadEffect', {
+      "soundId": soundId,
+      "filepath": filepath,
+    });
+  }
+    /// unloadEffect
+  static Future<void> unloadEffect(int soundId) async {
+    await _channel.invokeMethod('unloadEffect', {"soundId": soundId});
+  }
+    /// pauseEffect
+  static Future<void> pauseEffect(int soundId) async {
+    await _channel.invokeMethod('pauseEffect', {"soundId": soundId});
+  }
+    /// pauseAllEffects
+  static Future<void> pauseAllEffects() async {
+    await _channel.invokeMethod('pauseAllEffects');
+  }
+    /// resumeEffect
+  static Future<void> resumeEffect(int soundId) async {
+    await _channel.invokeMethod('resumeEffect', {"soundId": soundId});
+  }
+    /// resumeAllEffects
+  static Future<void> resumeAllEffects() async {
+    await _channel.invokeMethod('resumeAllEffects');
+  }
+
+  /// startChannelMediaRelay
+  static Future<void> startChannelMediaRelay(AgoraChannelMediaRelayConfiguration config) async {
+    await _channel.invokeMethod('startChannelMediaRelay', {"config": config.toJson()});
+  }
+
+      /// updateChannelMediaRelay
+  static Future<void> updateChannelMediaRelay(AgoraChannelMediaRelayConfiguration config) async {
+    await _channel.invokeMethod('updateChannelMediaRelay', {"config": config.toJson()});
+  }
+
+  /// stopChannelMediaRelay
+  static Future<void> stopChannelMediaRelay() async {
+    await _channel.invokeMethod('stopChannelMediaRelay');
+  }
+
+  /// enableInEarMonitoring
+  static Future<void> enableInEarMonitoring(bool enabled) async {
+    await _channel.invokeMethod('enableInEarMonitoring', {"enabled": enabled});
+  }
+
+  /// setInEarMonitoringVolume
+  static Future<void> setInEarMonitoringVolume(int volume) async {
+    await _channel.invokeMethod('setInEarMonitoringVolume', {"volume": volume});
   }
 
   // Camera Control

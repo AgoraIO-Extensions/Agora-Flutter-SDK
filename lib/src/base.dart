@@ -81,6 +81,7 @@ enum AgoraAudioSampleRateType {
   HighRateType
 }
 
+
 Map<AgoraAudioSampleRateType, int> _resolveAudioSampleRate = {
   AgoraAudioSampleRateType.LowRateType: 32000,
   AgoraAudioSampleRateType.MidRateType: 44100,
@@ -632,6 +633,27 @@ enum VoiceChanger {
 enum UserPriority {
   High,
   Normal,
+}
+
+enum AgoraAudioEqualizationBandFrequency {
+  AgoraAudioEqualizationBand31,
+  AgoraAudioEqualizationBand62,
+  AgoraAudioEqualizationBand125,
+  AgoraAudioEqualizationBand250,
+  AgoraAudioEqualizationBand500,
+  AgoraAudioEqualizationBand1K,
+  AgoraAudioEqualizationBand2K,
+  AgoraAudioEqualizationBand4K,
+  AgoraAudioEqualizationBand8K,
+  AgoraAudioEqualizationBand16K,
+}
+
+enum AgoraAudioReverbType {
+   AgoraAudioReverbDryLevel,
+   AgoraAudioReverbWetLevel,
+   AgoraAudioReverbRoomSize,
+   AgoraAudioReverbWetDelay,
+   AgoraAudioReverbStrength,
 }
 
 enum StreamFallbackOptions {

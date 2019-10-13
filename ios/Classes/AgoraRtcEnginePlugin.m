@@ -130,15 +130,6 @@
     NSInteger role = [self intFromArguments:params key:@"role"];
     [self.agoraRtcEngine setClientRole:role];
     result(nil);
-  } else if([@"switchChannel" isEqualToString:method]) {
-    NSString *token = [self stringFromArguments:params key:@"token"];
-    NSString *channel = [self stringFromArguments:params key:@"channelId"];
-    NSInteger res = [self.agoraRtcEngine switchChannelByToken:token channelId:channel joinSuccess:nil];
-    if (res == 0) {
-      result(@{@"result": @(YES)});
-    } else {
-      result(@{@"result": @(NO), @"errorCode": @(res)});
-    }
   } else if ([@"joinChannel" isEqualToString:method]) {
     NSString *token = [self stringFromArguments:params key:@"token"];
     NSString *channel = [self stringFromArguments:params key:@"channelId"];
@@ -150,6 +141,15 @@
   } else if ([@"leaveChannel" isEqualToString:method]) {
     BOOL success = (0 == [self.agoraRtcEngine leaveChannel:nil]);
     result([NSNumber numberWithBool:success]);
+  } else if([@"switchChannel" isEqualToString:method]) {
+     NSString *token = [self stringFromArguments:params key:@"token"];
+     NSString *channel = [self stringFromArguments:params key:@"channelId"];
+     NSInteger res = [self.agoraRtcEngine switchChannelByToken:token channelId:channel joinSuccess:nil];
+     if (res == 0) {
+       result(@{@"result": @(YES)});
+     } else {
+       result(@{@"result": @(NO), @"errorCode": @(res)});
+     }
   } else if ([@"renewToken" isEqualToString:method]) {
     NSString *token = [self stringFromArguments:params key:@"token"];
     [self.agoraRtcEngine renewToken:token];
@@ -185,7 +185,7 @@
     if (errorCode == 0) {
       result(@{@"uid": @(res.uid), @"userAccount": res.userAccount});
     } else {
-      result([FlutterError errorWithCode:@"UgetUserInfoByUserAccountError"
+      result([FlutterError errorWithCode:@"getUserInfoByUserAccountError"
       message:@"get user info failed"
       details:@(errorCode)]);
     }
@@ -197,7 +197,7 @@
     if (errorCode == 0) {
       result(@{@"uid": @(res.uid), @"userAccount": res.userAccount});
     } else {
-      result([FlutterError errorWithCode:@"UgetUserInfoByUserAccountError"
+      result([FlutterError errorWithCode:@"getUserInfoByUid"
       message:@"get user info failed"
       details:@(errorCode)]);
     }
@@ -255,6 +255,16 @@
     [self.agoraRtcEngine setDefaultMuteAllRemoteAudioStreams:muted];
     result(nil);
   }
+  
+  // Video Pre-process and Post-process
+  else if ([@"setBeautyEffectOptions" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:params key:@"enabled"];
+    NSDictionary *optionsDic = [self dictionaryFromArguments:params key:@"options"];
+    AgoraBeautyOptions *options = [self beautyOptionsFromDic:optionsDic];
+    [self.agoraRtcEngine setBeautyEffectOptions:enabled options:options];
+    result(nil);
+  }
+  
   // Core Video
   else if ([@"enableVideo" isEqualToString:method]) {
     [self.agoraRtcEngine enableVideo];
@@ -299,10 +309,6 @@
     NSInteger mode = [self intFromArguments:params key:@"mode"];
     [self.agoraRtcEngine setLocalRenderMode:mode];
     result(nil);
-  } else if ([@"setLocalVoiceChanger" isEqualToString:method]) {
-    NSInteger changer = [self intFromArguments:params key:@"changer"];
-    [self.agoraRtcEngine setLocalVoiceChanger:changer];
-    result(nil);
   } else if ([@"setRemoteRenderMode" isEqualToString:method]) {
     NSInteger uid = [self intFromArguments:params key:@"uid"];
     NSInteger mode = [self intFromArguments:params key:@"mode"];
@@ -338,62 +344,46 @@
   }
   
   // Voice
+  else if ([@"setLocalVoiceChanger" isEqualToString:method]) {
+     NSInteger changer = [self intFromArguments:params key:@"changer"];
+     [self.agoraRtcEngine setLocalVoiceChanger:changer];
+     result(nil);
+  }
   else if ([@"setLocalVoicePitch" isEqualToString:method]) {
-    
-  }
-  else if ([@"setLocalVoiceEqualizationOfBandFrequency" isEqualToString:method]) {
-    
-  }
-  else if ([@"setLocalVoiceReverbOfType" isEqualToString:method]) {
-    
-  }
-  else if ([@"setLocalVoiceReverbPreset" isEqualToString:method]) {
-    
-  }
-  else if ([@"enableSoundPositionIndication" isEqualToString:method]) {
-    
-  }
-  else if ([@"setRemoteVoicePosition" isEqualToString:method]) {
-    
-  }
-  
-  else if ([@"startEchoTestWithInterval" isEqualToString:method]) {
-    
-  }
-  else if ([@"stopEchoTest" isEqualToString:method]) {
-    
-  }
-  else if ([@"enableLastmileTest" isEqualToString:method]) {
-    
-  }
-  else if ([@"disableLastmileTest" isEqualToString:method]) {
-    
-  }
-  else if ([@"startLastmileProbeTest" isEqualToString:method]) {
-    
-  }
-  else if ([@"stopLastmileProbeTest" isEqualToString:method]) {
-    
-  }
-  
-  else if ([@"addVideoWatermark" isEqualToString:method]) {
-    
-  }
-  
-  else if ([@"clearVideoWatermarks" isEqualToString:method]) {
-    
-  }
-  
-  
-  // Video Pre-process and Post-process
-  else if ([@"setBeautyEffectOptions" isEqualToString:method]) {
-    BOOL enabled = [self boolFromArguments:params key:@"enabled"];
-    NSDictionary *optionsDic = [self dictionaryFromArguments:params key:@"options"];
-    AgoraBeautyOptions *options = [self beautyOptionsFromDic:optionsDic];
-    [self.agoraRtcEngine setBeautyEffectOptions:enabled options:options];
+    double pitch = [self doubleFromArguments:params key:@"pitch"];
+    [self.agoraRtcEngine setLocalVoicePitch:pitch];
     result(nil);
   }
-
+  else if ([@"setLocalVoiceEqualizationOfBandFrequency" isEqualToString:method]) {
+    NSInteger bandFrequency = [self intFromArguments:params key:@"bandFrequency"];
+    NSInteger gain = [self intFromArguments:params key:@"gain"];
+    [self.agoraRtcEngine setLocalVoiceEqualizationOfBandFrequency:bandFrequency withGain:gain];
+    result(nil);
+  }
+  else if ([@"setLocalVoiceReverbOfType" isEqualToString:method]) {
+    NSInteger reverbType = [self intFromArguments:params key:@"reverbType"];
+    NSInteger value = [self intFromArguments:params key:@"value"];
+    [self.agoraRtcEngine setLocalVoiceReverbOfType:reverbType withValue:value];
+    result(nil);
+  }
+  else if ([@"setLocalVoiceReverbPreset" isEqualToString:method]) {
+    NSInteger reverbType = [self intFromArguments:params key:@"reverbType"];
+    [self.agoraRtcEngine setLocalVoiceReverbPreset:reverbType];
+    result(nil);
+  }
+  else if ([@"enableSoundPositionIndication" isEqualToString:method]) {
+    BOOL enabled = [self boolFromArguments:params key:@"enabled"];
+    [self.agoraRtcEngine enableSoundPositionIndication:enabled];
+    result(nil);
+  }
+  else if ([@"setRemoteVoicePosition" isEqualToString:method]) {
+    NSInteger uid = [self intFromArguments:params key:@"uid"];
+    double pan = [self doubleFromArguments:params key:@"pan"];
+    NSInteger gain = [self intFromArguments:params key:@"gain"];
+    [self.agoraRtcEngine setRemoteVoicePosition:uid pan:pan gain:gain];
+    result(nil);
+  }
+  
   // Audio Routing Controller
   else if ([@"setDefaultAudioRouteToSpeaker" isEqualToString:method]) {
     BOOL defaultToSpeaker = [self boolFromArguments:params key:@"defaultToSpeaker"];
@@ -407,6 +397,7 @@
     BOOL enable = [self.agoraRtcEngine isSpeakerphoneEnabled];
     result([NSNumber numberWithBool:enable]);
   }
+  
   // Stream Fallback
   else if ([@"setRemoteUserPriority" isEqualToString:method]) {
     NSInteger uid = [self intFromArguments:params key:@"uid"];
@@ -577,98 +568,256 @@
     [self.agoraRtcEngine setEncryptionMode:encryptionMode];
     result(nil);
   }
+  else if ([@"startEchoTestWithInterval" isEqualToString:method]) {
+    NSInteger interval = [self intFromArguments:params key:@"interval"];
+    int res = [self.agoraRtcEngine startEchoTestWithInterval:interval successBlock:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
+      result(@{@"uid": @(uid), @"channel": channel, @"elapsed": @(elapsed)});
+    }];
+    if (res < 0) {
+      result(nil);
+    }
+  }
+  else if ([@"stopEchoTest" isEqualToString:method]) {
+    [self.agoraRtcEngine stopEchoTest];
+    result(nil);
+  }
+  else if ([@"enableLastmileTest" isEqualToString:method]) {
+    [self.agoraRtcEngine enableLastmileTest];
+    result(nil);
+  }
+  else if ([@"disableLastmileTest" isEqualToString:method]) {
+    [self.agoraRtcEngine disableLastmileTest];
+    result(nil);
+  }
+  else if ([@"startLastmileProbeTest" isEqualToString:method]) {
+    NSDictionary *probeConfig = [self dictionaryFromArguments:params key:@"config"];
+    AgoraLastmileProbeConfig *config = [AgoraLastmileProbeConfig new];
+    config.probeDownlink = probeConfig[@"probeDownlink"];
+    config.probeUplink = probeConfig[@"probeUplink"];
+    config.expectedUplinkBitrate = [probeConfig[@"expectedUplinkBitrate"] integerValue];
+    config.expectedDownlinkBitrate = [probeConfig[@"expectedDownlinkBitrate"] integerValue];
+    [self.agoraRtcEngine startLastmileProbeTest:config];
+    result(nil);
+  }
+  else if ([@"stopLastmileProbeTest" isEqualToString:method]) {
+    [self.agoraRtcEngine stopLastmileProbeTest];
+    result(nil);
+  }
+  
+  else if ([@"addVideoWatermark" isEqualToString:method]) {
+    NSString *urlStr = [self stringFromArguments:params key:@"url"];
+    NSDictionary *watermarkOptions = [self dictionaryFromArguments:params key:@"options"];
+    WatermarkOptions *options = [WatermarkOptions new];
+    options.visibleInPreview = watermarkOptions[@"visibleInPreview"];
+    NSDictionary *optionPortrait = watermarkOptions[@"positionInPortraitMode"];
+    options.positionInPortraitMode = CGRectMake((CGFloat)[optionPortrait[@"x"] floatValue],
+                               (CGFloat)[optionPortrait[@"y"] floatValue],
+                               (CGFloat)[optionPortrait[@"width"] floatValue],
+                               (CGFloat)[optionPortrait[@"height"] floatValue]);
+    NSDictionary *optionLandscape = watermarkOptions[@"positionInLandscapeMode"];
+    options.positionInLandscapeMode = CGRectMake((CGFloat)[optionLandscape[@"x"] floatValue],
+                               (CGFloat)[optionLandscape[@"y"] floatValue],
+                               (CGFloat)[optionLandscape[@"width"] floatValue],
+                               (CGFloat)[optionLandscape[@"height"] floatValue]);
+    NSURL *url = [NSURL URLWithString:urlStr];
+    [self.agoraRtcEngine addVideoWatermark:url options:options];
+    result(nil);
+  }
+  
+  else if ([@"clearVideoWatermarks" isEqualToString:method]) {
+    [self.agoraRtcEngine clearVideoWatermarks];
+    result(nil);
+  }
   // Audio Mixing
   else if ([@"startAudioMixing" isEqualToString:method]) {
-    
+    NSString *filepath = [self stringFromArguments:params key:@"filepath"];
+    BOOL loopback = [self stringFromArguments:params key:@"loopback"];
+    BOOL replace = [self stringFromArguments:params key:@"replace"];
+    int cycle = [self stringFromArguments:params key:@"cycle"];
+    [self.agoraRtcEngine startAudioMixing:filepath loopback:loopback replace:replace cycle:cycle];
+    result(nil);
   }
   else if ([@"stopAudioMixing" isEqualToString:method]) {
-    
+    [self.agoraRtcEngine stopAudioMixing];
+    result(nil);
   }
   else if ([@"pauseAudioMixing" isEqualToString:method]) {
-    
+    [self.agoraRtcEngine pauseAudioMixing];
+    result(nil);
   }
   else if ([@"resumeAudioMixing" isEqualToString:method]) {
-    
+    [self.agoraRtcEngine resumeAudioMixing];
+    result(nil);
   }
   else if ([@"adjustAudioMixingVolume" isEqualToString:method]) {
-    
+    NSInteger volume = [self intFromArguments:params key:@"volume"];
+    [self.agoraRtcEngine adjustAudioMixingVolume:volume];
+    result(nil);
   }
   else if ([@"adjustAudioMixingPlayoutVolume" isEqualToString:method]) {
-    
+    NSInteger volume = [self intFromArguments:params key:@"volume"];
+    [self.agoraRtcEngine adjustAudioMixingPlayoutVolume:volume];
+    result(nil);
   }
   else if ([@"adjustAudioMixingPublishVolume" isEqualToString:method]) {
-    
+    NSInteger volume = [self intFromArguments:params key:@"volume"];
+    [self.agoraRtcEngine adjustAudioMixingPublishVolume:volume];
+    result(nil);
   }
   else if ([@"getAudioMixingPlayoutVolume" isEqualToString:method]) {
-    
+    int res = [self.agoraRtcEngine getAudioMixingPlayoutVolume];
+    result(@(res));
   }
   else if ([@"getAudioMixingPublishVolume" isEqualToString:method]) {
-    
+    int res = [self.agoraRtcEngine getAudioMixingPublishVolume];
+    result(@(res));
   }
   else if ([@"getAudioMixingDuration" isEqualToString:method]) {
-    
+    int res = [self.agoraRtcEngine getAudioMixingPublishVolume];
+    result(@(res));
   }
   else if ([@"getAudioMixingCurrentPosition" isEqualToString:method]) {
-    
+    int res = [self.agoraRtcEngine getAudioMixingPublishVolume];
+    result(@(res));
   }
   else if ([@"setAudioMixingPosition" isEqualToString:method]) {
-    
+    NSInteger pos = [self intFromArguments:params key:@"pos"];
+    [self.agoraRtcEngine setAudioMixingPosition:pos];
+    result(nil);
   }
   // AudioEffect
   else if ([@"getEffectsVolume" isEqualToString:method]) {
-    
+    double volume = [self.agoraRtcEngine getEffectsVolume];
+    result(@(volume));
   }
   else if ([@"setEffectsVolume" isEqualToString:method]) {
-    
+    double volume = [self doubleFromArguments:params key:@"volume"];
+    [self.agoraRtcEngine setEffectsVolume:volume];
+    result(nil);
   }
   else if ([@"setVolumeOfEffect" isEqualToString:method]) {
-    
+    NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+    double volume = [self doubleFromArguments:params key:@"volume"];
+    [self.agoraRtcEngine setVolumeOfEffect:(int)soundId withVolume:volume];
+    result(nil);
   }
   else if ([@"playEffect" isEqualToString:method]) {
+    NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+    NSString *filepath = [self stringFromArguments:params key:@"filepath"];
+    NSInteger loopCount = [self intFromArguments:params key:@"loopcount"];
+    double pitch = [self doubleFromArguments:params key:@"pitch"];
+    double pan = [self doubleFromArguments:params key:@"pan"];
+    double gain = [self doubleFromArguments:params key:@"gain"];
+    BOOL publish = [self boolFromArguments:params key:@"publish"];
     
+    [self.agoraRtcEngine playEffect:(int)soundId filePath:filepath loopCount:loopCount pitch:pitch pan:pan gain:gain publish:publish];
+    result(nil);
   }
   else if ([@"stopEffect" isEqualToString:method]) {
-    
+    NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+    [self.agoraRtcEngine stopEffect:(int)soundId];
+    result(nil);
   }
   else if ([@"stopAllEffects" isEqualToString:method]) {
-    
+    [self.agoraRtcEngine stopAllEffects];
+    result(nil);
   }
   else if ([@"preloadEffect" isEqualToString:method]) {
-    
+    NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+    NSString *filepath = [self stringFromArguments:params key:@"filepath"];
+    [self.agoraRtcEngine preloadEffect:(int)soundId filePath:filepath];
+    result(nil);
   }
   else if ([@"unloadEffect" isEqualToString:method]) {
-    
+    NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+    [self.agoraRtcEngine unloadEffect:(int)soundId];
+    result(nil);
   }
   else if ([@"pauseEffect" isEqualToString:method]) {
-    
+    NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+    [self.agoraRtcEngine pauseEffect:(int)soundId];
+    result(nil);
   }
   else if ([@"pauseAllEffects" isEqualToString:method]) {
-    
+    [self.agoraRtcEngine pauseAllEffects];
+    result(nil);
   }
   else if ([@"resumeEffect" isEqualToString:method]) {
-    
+    NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+    [self.agoraRtcEngine resumeEffect:(int)soundId];
+    result(nil);
   }
   else if ([@"resumeAllEffects" isEqualToString:method]) {
-    
+    [self.agoraRtcEngine resumeAllEffects];
+    result(nil);
   }
   
   // Channel Media Relay
   else if ([@"startChannelMediaRelay" isEqualToString:method]) {
-    
+    NSDictionary *options = [self dictionaryFromArguments:params key:@"config"];
+    AgoraChannelMediaRelayConfiguration *config = [[AgoraChannelMediaRelayConfiguration alloc] init];
+    AgoraChannelMediaRelayInfo *src = [config sourceInfo];
+    NSDictionary *srcOption = options[@"src"];
+    if (srcOption != nil) {
+      src.channelName = srcOption[@"channelName"];
+      src.uid = [srcOption[@"uid"] integerValue];
+      if (srcOption[@"token"] && srcOption[@"token"] != [NSNull null]) {
+        src.token = srcOption[@"token"];
+      }
+    }
+    NSArray *channels = options[@"channels"];
+    for (NSDictionary *channel in channels) {
+      AgoraChannelMediaRelayInfo *dst = [[AgoraChannelMediaRelayInfo alloc] init];
+      dst.channelName = channel[@"channelName"];
+      dst.uid = [channel[@"uid"] integerValue];
+      if (channel[@"token"] && channel[@"token"] != [NSNull null]) {
+        dst.token = channel[@"token"];
+      }
+      [config setDestinationInfo:dst forChannelName:dst.channelName];
+    }
+    [self.agoraRtcEngine startChannelMediaRelay:config];
+    result(nil);
   }
   else if ([@"updateChannelMediaRelay" isEqualToString:method]) {
-    
+    NSDictionary *options = [self dictionaryFromArguments:params key:@"config"];
+    AgoraChannelMediaRelayConfiguration *config = [[AgoraChannelMediaRelayConfiguration alloc] init];
+    AgoraChannelMediaRelayInfo *src = [config sourceInfo];
+    NSDictionary *srcOption = options[@"src"];
+    if (srcOption != nil) {
+      src.channelName = srcOption[@"channelName"];
+      src.uid = [srcOption[@"uid"] integerValue];
+      if (srcOption[@"token"] && srcOption[@"token"] != [NSNull null]) {
+        src.token = srcOption[@"token"];
+      }
+    }
+    NSArray *channels = options[@"channels"];
+    for (NSDictionary *channel in channels) {
+      AgoraChannelMediaRelayInfo *dst = [[AgoraChannelMediaRelayInfo alloc] init];
+      dst.channelName = channel[@"channelName"];
+      dst.uid = [channel[@"uid"] integerValue];
+      if (channel[@"token"] && channel[@"token"] != [NSNull null]) {
+        dst.token = channel[@"token"];
+      }
+      [config setDestinationInfo:dst forChannelName:dst.channelName];
+    }
+    [self.agoraRtcEngine updateChannelMediaRelay:config];
+    result(nil);
   }
   else if ([@"stopChannelMediaRelay" isEqualToString:method]) {
-    
+    [self.agoraRtcEngine stopChannelMediaRelay];
+    result(nil);
   }
   
   else if ([@"enableInEarMonitoring" isEqualToString:method]) {
-    
+    BOOL enabled = [self boolFromArguments:params key:@"enabled"];
+    [self.agoraRtcEngine enableInEarMonitoring:enabled];
+    result(nil);
   }
   
   else if ([@"setInEarMonitoringVolume" isEqualToString:method]) {
-    
+    NSInteger volume = [self intFromArguments:params key:@"volume"];
+    [self.agoraRtcEngine setInEarMonitoringVolume:volume];
+    result(nil);
   }
   
   // Camera Control
