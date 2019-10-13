@@ -8,16 +8,23 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.internal.LastmileProbeConfig;
 import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.live.LiveTranscoding;
+import io.agora.rtc.models.UserInfo;
 import io.agora.rtc.video.AgoraImage;
 import io.agora.rtc.video.BeautyOptions;
+import io.agora.rtc.video.ChannelMediaInfo;
+import io.agora.rtc.video.ChannelMediaRelayConfiguration;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc.video.WatermarkOptions;
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -28,13 +35,13 @@ import io.flutter.plugin.common.StandardMessageCodec;
 /**
  * AgoraRtcEnginePlugin
  */
-public class AgoraRtcEnginePlugin implements MethodCallHandler {
+public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.StreamHandler {
 
     private final Registrar mRegistrar;
-    private final MethodChannel mMethodChannel;
     private static RtcEngine mRtcEngine;
     private HashMap<String, SurfaceView> mRendererViews;
     private Handler mEventHandler = new Handler(Looper.getMainLooper());
+    private EventChannel.EventSink sink;
 
     void addView(SurfaceView view , int id) {
         mRendererViews.put("" + id , view);
@@ -58,17 +65,20 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
     public static void registerWith(Registrar registrar) {
         final MethodChannel channel = new MethodChannel(registrar.messenger() , "agora_rtc_engine");
 
-        AgoraRtcEnginePlugin plugin = new AgoraRtcEnginePlugin(registrar , channel);
+        final EventChannel eventChannel = new EventChannel(registrar.messenger(), "agora_rtc_engine_event_channel");
+
+        AgoraRtcEnginePlugin plugin = new AgoraRtcEnginePlugin(registrar);
         channel.setMethodCallHandler(plugin);
+        eventChannel.setStreamHandler(plugin);
 
         AgoraRenderViewFactory fac = new AgoraRenderViewFactory(StandardMessageCodec.INSTANCE ,
                 plugin);
         registrar.platformViewRegistry().registerViewFactory("AgoraRendererView" , fac);
     }
 
-    private AgoraRtcEnginePlugin(Registrar registrar , MethodChannel channel) {
+    private AgoraRtcEnginePlugin(Registrar registrar) {
         this.mRegistrar = registrar;
-        this.mMethodChannel = channel;
+        this.sink = null;
         this.mRendererViews = new HashMap<>();
     }
 
@@ -127,14 +137,14 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
                 result.success(mRtcEngine.joinChannel(token , channel , info , uid) >= 0);
             }
             break;
+            case "leaveChannel": {
+                result.success(mRtcEngine.leaveChannel() >= 0);
+            }
+            break;
             case "switchChannel": {
                 String token = call.argument("token");
                 String channel = call.argument("channelId");
                 result.success(mRtcEngine.switchChannel(token, channel) >= 0);
-            }
-            break;
-            case "leaveChannel": {
-                result.success(mRtcEngine.leaveChannel() >= 0);
             }
             break;
             case "renewToken": {
@@ -152,6 +162,49 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             case "getConnectionState": {
                 int state = mRtcEngine.getConnectionState();
                 result.success(state);
+            }
+            break;
+            case "registerLocalUserAccount": {
+                String appId = call.argument("appId");
+                String userAccount = call.argument("userAccount");
+                int state = mRtcEngine.registerLocalUserAccount(appId, userAccount);
+                result.success(state == 0 ? true : false);
+            }
+            break;
+            case "joinChannelByUserAccount": {
+                String token = call.argument("token");
+                String userAccount = call.argument("userAccount");
+                String channelId = call.argument("channelId");
+                int state = mRtcEngine.joinChannelWithUserAccount(token, channelId, userAccount);
+                result.success(state == 0 ? true : false);
+            }
+            break;
+            case "getUserInfoByUserAccount": {
+                String userAccount = call.argument("userAccount");
+                UserInfo info = new UserInfo();
+                int code = mRtcEngine.getUserInfoByUserAccount(userAccount, info);
+                if (code == 0) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("uid", info.uid);
+                    map.put("userAccount", info.userAccount);
+                    result.success(map);
+                } else {
+                    result.error("getUserInfoByUserAccountError", "get user info failed", code);
+                }
+            }
+            break;
+            case "getUserInfoByUid": {
+                int uid = call.argument("uid");
+                UserInfo info = new UserInfo();
+                int code = mRtcEngine.getUserInfoByUid(uid, info);
+                if (code == 0) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("uid", info.uid);
+                    map.put("userAccount", info.userAccount);
+                    result.success(map);
+                } else {
+                    result.error("getUserInfoByUid", "get user info failed", code);
+                }
             }
             break;
             // Core Audio
@@ -187,7 +240,8 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             case "enableAudioVolumeIndication": {
                 int interval = call.argument("interval");
                 int smooth = call.argument("smooth");
-                mRtcEngine.enableAudioVolumeIndication(interval , smooth);
+                boolean vad = call.argument("vad");
+                mRtcEngine.enableAudioVolumeIndication(interval, smooth, vad);
                 result.success(null);
             }
             break;
@@ -255,6 +309,189 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
                 result.success(null);
             }
             break;
+            case "setupLocalVideo": {
+                int localViewId = call.argument("viewId");
+                SurfaceView localView = getView(localViewId);
+                int localRenderMode = call.argument("renderMode");
+                VideoCanvas localCanvas = new VideoCanvas(localView);
+                localCanvas.renderMode = localRenderMode;
+                mRtcEngine.setupLocalVideo(localCanvas);
+                result.success(null);
+            }
+            break;
+            case "setupRemoteVideo": {
+                int remoteViewId = call.argument("viewId");
+                SurfaceView view = getView(remoteViewId);
+                int remoteRenderMode = call.argument("renderMode");
+                int remoteUid = call.argument("uid");
+                mRtcEngine.setupRemoteVideo(new VideoCanvas(view , remoteRenderMode , remoteUid));
+                result.success(null);
+            }
+            break;
+            case "setLocalRenderMode": {
+                int mode = call.argument("mode");
+                mRtcEngine.setLocalRenderMode(mode);
+                result.success(null);
+            }
+            break;
+            case "setRemoteRenderMode": {
+                int uid = call.argument("uid");
+                int mode = call.argument("mode");
+                mRtcEngine.setRemoteRenderMode(uid , mode);
+                result.success(null);
+            }
+            break;
+            case "startPreview": {
+                mRtcEngine.startPreview();
+                result.success(null);
+            }
+            break;
+            case "stopPreview": {
+                mRtcEngine.stopPreview();
+                result.success(null);
+            }
+            break;
+            case "enableLocalVideo": {
+                boolean enabled = call.argument("enabled");
+                mRtcEngine.enableLocalVideo(enabled);
+                result.success(null);
+            }
+            break;
+            case "muteLocalVideoStream": {
+                boolean muted = call.argument("muted");
+                mRtcEngine.muteLocalVideoStream(muted);
+                result.success(null);
+            }
+            break;
+            case "muteRemoteVideoStream": {
+                int uid = call.argument("uid");
+                boolean muted = call.argument("muted");
+                mRtcEngine.muteRemoteVideoStream(uid , muted);
+                result.success(null);
+            }
+            break;
+            case "muteAllRemoteVideoStreams": {
+                boolean muted = call.argument("muted");
+                mRtcEngine.muteAllRemoteVideoStreams(muted);
+                result.success(null);
+            }
+            break;
+            case "setDefaultMuteAllRemoteVideoStreams": {
+                boolean muted = call.argument("muted");
+                mRtcEngine.setDefaultMuteAllRemoteVideoStreams(muted);
+                result.success(null);
+            }
+            break;
+
+            // Voice
+            case "setLocalVoiceChanger": {
+                int changer = call.argument("changer");
+                mRtcEngine.setLocalVoiceChanger(changer);
+                result.success(null);
+            }
+            break;
+
+            case "setLocalVoicePitch": {
+                double pitch = call.argument("pitch");
+                mRtcEngine.setLocalVoicePitch(pitch);
+                result.success(null);
+            }
+            break;
+            case "setLocalVoiceEqualizationOfBandFrequency": {
+                int bandFrequency = call.argument("bandFrequency");
+                int gain = call.argument("gain");
+                mRtcEngine.setLocalVoiceEqualization(bandFrequency, gain);
+                result.success(null);
+            }
+            break;
+            case "setLocalVoiceReverbOfType": {
+                int reverbType = call.argument("reverbType");
+                int value = call.argument("value");
+                mRtcEngine.setLocalVoiceReverb(reverbType, value);
+                result.success(null);
+            }
+            break;
+            case "setLocalVoiceReverbPreset": {
+                int reverbType = call.argument("reverbType");
+                mRtcEngine.setLocalVoiceReverbPreset(reverbType);
+                result.success(null);
+            }
+            break;
+            case "enableSoundPositionIndication": {
+                boolean enabled = call.argument("enabled");
+                mRtcEngine.enableSoundPositionIndication(enabled);
+                result.success(null);
+            }
+            break;
+            case "setRemoteVoicePosition": {
+                int uid = call.argument("uid");
+                double pan = call.argument("pan");
+                int gain = call.argument("gain");
+                mRtcEngine.setRemoteVoicePosition(uid, pan, gain);
+                result.success(null);
+            }
+            break;
+
+            // Audio Routing Controller
+            case "setDefaultAudioRouteToSpeaker": {
+                boolean defaultToSpeaker = call.argument("defaultToSpeaker");
+                mRtcEngine.setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker);
+                result.success(null);
+            }
+            break;
+            case "setEnableSpeakerphone": {
+                boolean enabled = call.argument("enabled");
+                mRtcEngine.setEnableSpeakerphone(enabled);
+                result.success(null);
+            }
+            break;
+            case "isSpeakerphoneEnabled": {
+                boolean enabled = mRtcEngine.isSpeakerphoneEnabled();
+                result.success(enabled);
+            }
+            break;
+
+            // Stream Fallback
+            case "setRemoteUserPriority": {
+                int uid = call.argument("uid");
+                int userPriority = call.argument("userPriority");
+                mRtcEngine.setRemoteUserPriority(uid , userPriority);
+                result.success(null);
+            }
+            case "setLocalPublishFallbackOption": {
+                int option = call.argument("option");
+                mRtcEngine.setLocalPublishFallbackOption(option);
+                result.success(null);
+            }
+            break;
+            case "setRemoteSubscribeFallbackOption": {
+                int option = call.argument("option");
+                mRtcEngine.setRemoteSubscribeFallbackOption(option);
+                result.success(null);
+            }
+            break;
+
+            // Dual-stream Mode
+            case "enableDualStreamMode": {
+                boolean enabled = call.argument("enabled");
+                mRtcEngine.enableDualStreamMode(enabled);
+                result.success(null);
+            }
+            break;
+            case "setRemoteVideoStreamType": {
+                int uid = call.argument("uid");
+                int streamType = call.argument("streamType");
+                mRtcEngine.setRemoteVideoStreamType(uid , streamType);
+                result.success(null);
+            }
+            break;
+            case "setRemoteDefaultVideoStreamType": {
+                int streamType = call.argument("streamType");
+                mRtcEngine.setRemoteDefaultVideoStreamType(streamType);
+                result.success(null);
+            }
+            break;
+
             case "setLiveTranscoding": {
                 LiveTranscoding transcoding = new LiveTranscoding();
                 Map params = call.argument("transcoding");
@@ -384,145 +621,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
                 result.success(mRtcEngine.removeInjectStreamUrl(url));
             }
             break;
-            case "setupLocalVideo": {
-                int localViewId = call.argument("viewId");
-                SurfaceView localView = getView(localViewId);
-                int localRenderMode = call.argument("renderMode");
-                VideoCanvas localCanvas = new VideoCanvas(localView);
-                localCanvas.renderMode = localRenderMode;
-                mRtcEngine.setupLocalVideo(localCanvas);
-                result.success(null);
-            }
-            break;
-            case "setupRemoteVideo": {
-                int remoteViewId = call.argument("viewId");
-                SurfaceView view = getView(remoteViewId);
-                int remoteRenderMode = call.argument("renderMode");
-                int remoteUid = call.argument("uid");
-                mRtcEngine.setupRemoteVideo(new VideoCanvas(view , remoteRenderMode , remoteUid));
-                result.success(null);
-            }
-            break;
-            case "setLocalRenderMode": {
-                int mode = call.argument("mode");
-                mRtcEngine.setLocalRenderMode(mode);
-                result.success(null);
-            }
-            break;
-            case "setLocalVoiceChanger": {
-                int changer = call.argument("changer");
-                mRtcEngine.setLocalVoiceChanger(changer);
-                result.success(null);
-            }
-            break;
-            case "setRemoteRenderMode": {
-                int uid = call.argument("uid");
-                int mode = call.argument("mode");
-                mRtcEngine.setRemoteRenderMode(uid , mode);
-                result.success(null);
-            }
-            break;
-            case "startPreview": {
-                mRtcEngine.startPreview();
-                result.success(null);
-            }
-            break;
-            case "stopPreview": {
-                mRtcEngine.stopPreview();
-                result.success(null);
-            }
-            break;
-            case "enableLocalVideo": {
-                boolean enabled = call.argument("enabled");
-                mRtcEngine.enableLocalVideo(enabled);
-                result.success(null);
-            }
-            break;
-            case "muteLocalVideoStream": {
-                boolean muted = call.argument("muted");
-                mRtcEngine.muteLocalVideoStream(muted);
-                result.success(null);
-            }
-            break;
-            case "muteRemoteVideoStream": {
-                int uid = call.argument("uid");
-                boolean muted = call.argument("muted");
-                mRtcEngine.muteRemoteVideoStream(uid , muted);
-                result.success(null);
-            }
-            break;
-            case "muteAllRemoteVideoStreams": {
-                boolean muted = call.argument("muted");
-                mRtcEngine.muteAllRemoteVideoStreams(muted);
-                result.success(null);
-            }
-            break;
-            case "setDefaultMuteAllRemoteVideoStreams": {
-                boolean muted = call.argument("muted");
-                mRtcEngine.setDefaultMuteAllRemoteVideoStreams(muted);
-                result.success(null);
-            }
-            break;
-
-            // Audio Routing Controller
-            case "setDefaultAudioRouteToSpeaker": {
-                boolean defaultToSpeaker = call.argument("defaultToSpeaker");
-                mRtcEngine.setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker);
-                result.success(null);
-            }
-            break;
-            case "setEnableSpeakerphone": {
-                boolean enabled = call.argument("enabled");
-                mRtcEngine.setEnableSpeakerphone(enabled);
-                result.success(null);
-            }
-            break;
-            case "isSpeakerphoneEnabled": {
-                boolean enabled = mRtcEngine.isSpeakerphoneEnabled();
-                result.success(enabled);
-            }
-            break;
-
-            // Stream Fallback
-            case "setRemoteUserPriority": {
-                int uid = call.argument("uid");
-                int userPriority = call.argument("userPriority");
-                mRtcEngine.setRemoteUserPriority(uid , userPriority);
-                result.success(null);
-            }
-            case "setLocalPublishFallbackOption": {
-                int option = call.argument("option");
-                mRtcEngine.setLocalPublishFallbackOption(option);
-                result.success(null);
-            }
-            break;
-            case "setRemoteSubscribeFallbackOption": {
-                int option = call.argument("option");
-                mRtcEngine.setRemoteSubscribeFallbackOption(option);
-                result.success(null);
-            }
-            break;
-
-            // Dual-stream Mode
-            case "enableDualStreamMode": {
-                boolean enabled = call.argument("enabled");
-                mRtcEngine.enableDualStreamMode(enabled);
-                result.success(null);
-            }
-            break;
-            case "setRemoteVideoStreamType": {
-                int uid = call.argument("uid");
-                int streamType = call.argument("streamType");
-                mRtcEngine.setRemoteVideoStreamType(uid , streamType);
-                result.success(null);
-            }
-            break;
-            case "setRemoteDefaultVideoStreamType": {
-                int streamType = call.argument("streamType");
-                mRtcEngine.setRemoteDefaultVideoStreamType(streamType);
-                result.success(null);
-            }
-            break;
 
             // Encryption
             case "setEncryptionSecret": {
@@ -538,6 +636,368 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             }
             break;
 
+            case "startEchoTestWithInterval": {
+                int interval = call.argument("interval");
+                mRtcEngine.startEchoTest(interval);
+                result.success(null);
+            }
+            break;
+
+            case "stopEchoTest": {
+                mRtcEngine.stopEchoTest();
+                result.success(null);
+            }
+            break;
+
+            case "enableLastmileTest": {
+                mRtcEngine.enableLastmileTest();
+                result.success(null);
+            }
+            break;
+
+            case "disableLastmileTest": {
+                mRtcEngine.disableLastmileTest();
+                result.success(null);
+            }
+            break;
+
+            case "startLastmileProbeTest": {
+                HashMap<String, Object> probeConfig = call.argument("config");
+                LastmileProbeConfig config = new LastmileProbeConfig();
+                config.expectedDownlinkBitrate = (int)probeConfig.get("expectedDownlinkBitrate");
+                config.expectedUplinkBitrate = (int)probeConfig.get("expectedUplinkBitrate");
+                config.probeDownlink = (boolean)probeConfig.get("probeDownlink");
+                config.probeUplink = (boolean)probeConfig.get("probeUplink");
+
+                mRtcEngine.startLastmileProbeTest(config);
+                result.success(null);
+            }
+            break;
+
+            case "stopLastmileProbeTest": {
+                mRtcEngine.stopLastmileProbeTest();
+                result.success(null);
+            }
+            break;
+
+            case "addVideoWatermark": {
+                String encryptionMode = call.argument("encryptionMode");
+                String url = call.argument("url");
+                HashMap<String, Object> watermarkOptions = call.argument("options");
+                HashMap<String, Object> positionLandscapeOptions = (HashMap<String, Object>) watermarkOptions.get("positionInPortraitMode");
+                WatermarkOptions options = new WatermarkOptions();
+                WatermarkOptions.Rectangle landscapePosition = new WatermarkOptions.Rectangle();
+                landscapePosition.height = (int)positionLandscapeOptions.get("height");
+                landscapePosition.width = (int)positionLandscapeOptions.get("width");
+                landscapePosition.x = (int)positionLandscapeOptions.get("x");
+                landscapePosition.y = (int)positionLandscapeOptions.get("y");
+
+                HashMap<String, Object> positionPortraitOptions = (HashMap<String, Object>) watermarkOptions.get("positionInPortraitMode");
+                WatermarkOptions.Rectangle portraitPosition = new WatermarkOptions.Rectangle();
+                portraitPosition.height = (int)positionPortraitOptions.get("height");
+                portraitPosition.width = (int)positionPortraitOptions.get("width");
+                portraitPosition.x = (int)positionPortraitOptions.get("x");
+                portraitPosition.y = (int)positionPortraitOptions.get("y");
+
+                options.positionInLandscapeMode = landscapePosition;
+                options.visibleInPreview = (boolean) watermarkOptions.get("visibleInPreview");
+                options.positionInPortraitMode = portraitPosition;
+                mRtcEngine.addVideoWatermark(url, options);
+                result.success(null);
+            }
+            break;
+
+            case "clearVideoWatermarks": {
+                mRtcEngine.clearVideoWatermarks();
+                result.success(null);
+            }
+            break;
+
+            case "startAudioMixing": {
+                String filepath = call.argument("filepath");
+                boolean loopback = call.argument("loopback");
+                boolean replace = call.argument("replace");
+                int cycle = call.argument("cycle");
+                mRtcEngine.startAudioMixing(filepath, loopback, replace, cycle);
+                result.success(null);
+            }
+            break;
+
+            case "stopAudioMixing": {
+                mRtcEngine.stopAudioMixing();
+                result.success(null);
+            }
+            break;
+
+            case "pauseAudioMixing": {
+                mRtcEngine.pauseAudioMixing();
+                result.success(null);
+            }
+            break;
+
+            case "resumeAudioMixing": {
+                mRtcEngine.resumeAudioMixing();
+                result.success(null);
+            }
+            break;
+
+            case "adjustAudioMixingVolume": {
+                int volume = call.argument("volume");
+                mRtcEngine.adjustAudioMixingVolume(volume);
+                result.success(null);
+            }
+            break;
+
+            case "adjustAudioMixingPlayoutVolume": {
+                int volume = call.argument("volume");
+                mRtcEngine.adjustAudioMixingPlayoutVolume(volume);
+                result.success(null);
+            }
+            break;
+
+            case "adjustAudioMixingPublishVolume": {
+                int volume = call.argument("volume");
+                mRtcEngine.adjustAudioMixingPublishVolume(volume);
+                result.success(null);
+            }
+            break;
+
+            case "getAudioMixingPlayoutVolume": {
+                int res = mRtcEngine.getAudioMixingPlayoutVolume();
+                result.success(res);
+            }
+            break;
+
+            case "getAudioMixingPublishVolume": {
+                int res = mRtcEngine.getAudioMixingPublishVolume();
+                result.success(res);
+            }
+            break;
+
+            case "getAudioMixingDuration": {
+                int res = mRtcEngine.getAudioMixingDuration();
+                result.success(res);
+            }
+            break;
+
+            case "getAudioMixingCurrentPosition": {
+                int res = mRtcEngine.getAudioMixingCurrentPosition();
+                result.success(res);
+            }
+            break;
+
+            case "setAudioMixingPosition": {
+                int pos = call.argument("pos");
+                mRtcEngine.setAudioMixingPosition(pos);
+                result.success(null);
+            }
+            break;
+
+            case "getEffectsVolume": {
+                double volume = mRtcEngine.getAudioEffectManager().getEffectsVolume();
+                result.success(null);
+            }
+            break;
+
+            case "setEffectsVolume": {
+                double volume = call.argument("volume");
+                mRtcEngine.getAudioEffectManager().setEffectsVolume(volume);
+                result.success(null);
+            }
+            break;
+
+            case "setVolumeOfEffect": {
+                double volume = call.argument("volume");
+                int soundId = call.argument("soundId");
+                mRtcEngine.getAudioEffectManager().setVolumeOfEffect(soundId, volume);
+                result.success(null);
+            }
+            break;
+
+            case "playEffect": {
+                int soundId = call.argument("soundId");
+                String filepath = call.argument("filepath");
+                int loopback = call.argument("loopback");
+                double pitch = call.argument("pitch");
+                double pan = call.argument("pan");
+                double gain = call.argument("gain");
+                boolean publish = call.argument("publish");
+                mRtcEngine.getAudioEffectManager().playEffect(soundId, filepath, loopback, pitch, pan, gain, publish);
+                result.success(null);
+            }
+            break;
+
+            case "stopEffect": {
+                int soundId = call.argument("soundId");
+                mRtcEngine.getAudioEffectManager().stopEffect(soundId);
+                result.success(null);
+            }
+            break;
+
+            case "stopAllEffects": {
+                mRtcEngine.getAudioEffectManager().stopAllEffects();
+                result.success(null);
+            }
+            break;
+
+            case "preloadEffect": {
+                int soundId = call.argument("soundId");
+                String filepath = call.argument("filepath");
+                mRtcEngine.getAudioEffectManager().preloadEffect(soundId, filepath);
+                result.success(null);
+            }
+            break;
+
+            case "unloadEffect": {
+                int soundId = call.argument("soundId");
+                mRtcEngine.getAudioEffectManager().unloadEffect(soundId);
+                result.success(null);
+            }
+            break;
+
+            case "pauseEffect": {
+                int soundId = call.argument("soundId");
+                mRtcEngine.getAudioEffectManager().pauseEffect(soundId);
+                result.success(null);
+            }
+            break;
+
+            case "pauseAllEffects": {
+                mRtcEngine.getAudioEffectManager().pauseAllEffects();
+                result.success(null);
+            }
+            break;
+
+            case "resumeEffect": {
+                int soundId = call.argument("soundId");
+                mRtcEngine.getAudioEffectManager().resumeEffect(soundId);
+                result.success(null);
+            }
+            break;
+
+            case "resumeAllEffects": {
+                mRtcEngine.getAudioEffectManager().resumeAllEffects();
+                result.success(null);
+            }
+            break;
+
+            case "startChannelMediaRelay": {
+                ChannelMediaRelayConfiguration config = new ChannelMediaRelayConfiguration();
+                ChannelMediaInfo src = config.getSrcChannelMediaInfo();
+                HashMap<String, Object> options = call.argument("config");
+                if (options.get("src") != null) {
+                    HashMap<String, Object> srcOption = (HashMap<String, Object>) options.get("src");
+                    if (srcOption.get("token") != null) {
+                        src.token = (String) srcOption.get("token");
+                    }
+                    if (srcOption.get("channelName") != null) {
+                        src.channelName = (String) srcOption.get("channelName");
+                    }
+                }
+                List<HashMap<String, Object>> dstMediaInfo = (List) options.get("channels");
+                for (int i = 0; i < dstMediaInfo.size(); i++) {
+                    HashMap<String, Object> dst = dstMediaInfo.get(i);
+                    String channelName = null;
+                    String token = null;
+                    Integer uid = 0;
+                    if (dst.get("token") != null) {
+                        token = token;
+                    }
+                    if (dst.get("channelName") != null) {
+                        channelName = (String) dst.get("channelName");
+                    }
+                    if (dst.get("uid") != null) {
+                        uid = (int)dst.get("uid");
+                    }
+                    config.setDestChannelInfo(channelName, new ChannelMediaInfo(channelName, token, uid));
+                }
+                mRtcEngine.startChannelMediaRelay(config);
+                result.success(null);
+            }
+            break;
+
+            case "removeChannelMediaRelay": {
+                ChannelMediaRelayConfiguration config = new ChannelMediaRelayConfiguration();
+                ChannelMediaInfo src = config.getSrcChannelMediaInfo();
+                HashMap<String, Object> options = call.argument("config");
+                if (options.get("src") != null) {
+                    HashMap<String, Object> srcOption = (HashMap<String, Object>) options.get("src");
+                    if (srcOption.get("token") != null) {
+                        src.token = (String) srcOption.get("token");
+                    }
+                    if (srcOption.get("channelName") != null) {
+                        src.channelName = (String) srcOption.get("channelName");
+                    }
+                }
+                List<HashMap<String, Object>> dstMediaInfo = (List) options.get("channels");
+                for (int i = 0; i < dstMediaInfo.size(); i++) {
+                    HashMap<String, Object> dst = dstMediaInfo.get(i);
+                    String channelName = null;
+                    if (dst.get("channelName") != null) {
+                        channelName = (String) dst.get("channelName");
+                    }
+                    config.removeDestChannelInfo(channelName);
+                }
+                mRtcEngine.updateChannelMediaRelay(config);
+                result.success(null);
+            }
+            break;
+
+            case "updateChannelMediaRelay": {
+                ChannelMediaRelayConfiguration config = new ChannelMediaRelayConfiguration();
+                ChannelMediaInfo src = config.getSrcChannelMediaInfo();
+                HashMap<String, Object> options = call.argument("config");
+                if (options.get("src") != null) {
+                    HashMap<String, Object> srcOption = (HashMap<String, Object>) options.get("src");
+                    if (srcOption.get("token") != null) {
+                        src.token = (String) srcOption.get("token");
+                    }
+                    if (srcOption.get("channelName") != null) {
+                        src.channelName = (String) srcOption.get("channelName");
+                    }
+                }
+                List<HashMap<String, Object>> dstMediaInfo = (List) options.get("channels");
+                for (int i = 0; i < dstMediaInfo.size(); i++) {
+                    HashMap<String, Object> dst = dstMediaInfo.get(i);
+                    String channelName = null;
+                    String token = null;
+                    Integer uid = 0;
+                    if (dst.get("token") != null) {
+                        token = token;
+                    }
+                    if (dst.get("channelName") != null) {
+                        channelName = (String) dst.get("channelName");
+                    }
+                    if (dst.get("uid") != null) {
+                        uid = (int)dst.get("uid");
+                    }
+                    config.setDestChannelInfo(channelName, new ChannelMediaInfo(channelName, token, uid));
+                }
+                mRtcEngine.updateChannelMediaRelay(config);
+                result.success(null);
+            }
+            break;
+
+            case "stopChannelMediaRelay": {
+                mRtcEngine.stopChannelMediaRelay();
+                result.success(null);
+            }
+            break;
+
+            case "enableInEarMonitoring": {
+                boolean enabled = call.argument("enabled");
+                mRtcEngine.enableInEarMonitoring(enabled);
+                result.success(null);
+            }
+            break;
+
+            case "setInEarMonitoringVolume": {
+                int volume = call.argument("volume");
+                mRtcEngine.setInEarMonitoringVolume(volume);
+                result.success(null);
+            }
+            break;
+
             // Camera Control
             case "switchCamera": {
                 mRtcEngine.switchCamera();
@@ -549,6 +1009,21 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             case "getSdkVersion": {
                 String version = RtcEngine.getSdkVersion();
                 result.success(version);
+            }
+            break;
+
+            case "setParameters": {
+                String params = call.argument("params");
+                int res = mRtcEngine.setParameters(params);
+                result.success(res);
+            }
+            break;
+
+            case "getParameters": {
+                String params = call.argument("params");
+                String args = call.argument("args");
+                String res = mRtcEngine.getParameter(params, args);
+                result.success(res);
             }
             break;
 
@@ -576,15 +1051,15 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             super.onWarning(warn);
             HashMap<String, Object> map = new HashMap<>();
             map.put("warn" , warn);
-            invokeMethod("onWarning" , map);
+            sendEvent("onWarning" , map);
         }
 
         @Override
         public void onError(int err) {
             super.onError(err);
             HashMap<String, Object> map = new HashMap<>();
-            map.put("err" , err);
-            invokeMethod("onError" , map);
+            map.put("errorCode" , err);
+            sendEvent("onError" , map);
         }
 
         @Override
@@ -594,7 +1069,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("channel" , channel);
             map.put("uid" , uid);
             map.put("elapsed" , elapsed);
-            invokeMethod("onJoinChannelSuccess" , map);
+            sendEvent("onJoinChannelSuccess" , map);
         }
 
         @Override
@@ -604,7 +1079,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("channel" , channel);
             map.put("uid" , uid);
             map.put("elapsed" , elapsed);
-            invokeMethod("onRejoinChannelSuccess" , map);
+            sendEvent("onRejoinChannelSuccess" , map);
         }
 
         @Override
@@ -612,7 +1087,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             super.onLeaveChannel(stats);
             HashMap<String, Object> map = new HashMap<>();
             map.put("stats" , mapFromStats(stats));
-            invokeMethod("onLeaveChannel" , map);
+            sendEvent("onLeaveChannel" , map);
         }
 
         @Override
@@ -621,7 +1096,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("oldRole" , oldRole);
             map.put("newRole" , newRole);
-            invokeMethod("onClientRoleChanged" , map);
+            sendEvent("onClientRoleChanged" , map);
         }
 
         @Override
@@ -630,7 +1105,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid" , uid);
             map.put("elapsed" , elapsed);
-            invokeMethod("onUserJoined" , map);
+            sendEvent("onUserJoined" , map);
         }
 
         @Override
@@ -639,7 +1114,28 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid" , uid);
             map.put("reason" , reason);
-            invokeMethod("onUserOffline" , map);
+            sendEvent("onUserOffline" , map);
+        }
+
+        @Override
+        public void onLocalUserRegistered(int uid, String userAccount) {
+            super.onLocalUserRegistered(uid, userAccount);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid", uid);
+            map.put("userAccount", userAccount);
+            sendEvent("onRegisteredLocalUser", map);
+        }
+
+        @Override
+        public void onUserInfoUpdated(int uid, UserInfo userInfo) {
+            super.onUserInfoUpdated(uid, userInfo);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid", uid);
+            HashMap<String, Object> userInfoMap = new HashMap<>();
+            userInfoMap.put("uid", userInfo.uid);
+            userInfoMap.put("userAccount", userInfo.userAccount);
+            map.put("userAccount", userInfoMap);
+            sendEvent("onUpdatedUserInfo", map);
         }
 
         @Override
@@ -648,31 +1144,31 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("state" , state);
             map.put("reason" , reason);
-            invokeMethod("onConnectionStateChanged" , map);
-        }
-
-        @Override
-        public void onConnectionLost() {
-            super.onConnectionLost();
-            invokeMethod("onConnectionLost" , null);
+            sendEvent("onConnectionStateChanged", map);
         }
 
         @Override
         public void onNetworkTypeChanged(int type) {
             super.onNetworkTypeChanged(type);
             HashMap<String, Object> map = new HashMap<>();
-            map.put("type" , type);
-            invokeMethod("onNetworkTypeChanged" , map);
+            map.put("type", type);
+            sendEvent("onNetworkTypeChanged", map);
+        }
+
+        @Override
+        public void onConnectionLost() {
+            super.onConnectionLost();
+            sendEvent("onConnectionLost" , null);
         }
 
         @Override
         public void onApiCallExecuted(int error , String api , String result) {
             super.onApiCallExecuted(error , api , result);
             HashMap<String, Object> map = new HashMap<>();
-            map.put("error" , error);
+            map.put("errorCode" , error);
             map.put("api" , api);
             map.put("result" , result);
-            invokeMethod("onApiCallExecuted" , map);
+            sendEvent("onApiCallExecuted" , map);
         }
 
         @Override
@@ -680,13 +1176,13 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             super.onTokenPrivilegeWillExpire(token);
             HashMap<String, Object> map = new HashMap<>();
             map.put("token" , token);
-            invokeMethod("onTokenPrivilegeWillExpire" , map);
+            sendEvent("onTokenPrivilegeWillExpire" , map);
         }
 
         @Override
         public void onRequestToken() {
             super.onRequestToken();
-            invokeMethod("onRequestToken" , null);
+            sendEvent("onRequestToken" , null);
         }
 
         @Override
@@ -695,7 +1191,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("totalVolume" , totalVolume);
             map.put("speakers" , arrayFromSpeakers(speakers));
-            invokeMethod("onAudioVolumeIndication" , map);
+            sendEvent("onAudioVolumeIndication" , map);
         }
 
         @Override
@@ -703,7 +1199,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             super.onActiveSpeaker(uid);
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid" , uid);
-            invokeMethod("onActiveSpeaker" , map);
+            sendEvent("onActiveSpeaker" , map);
         }
 
         @Override
@@ -711,7 +1207,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             super.onFirstLocalAudioFrame(elapsed);
             HashMap<String, Object> map = new HashMap<>();
             map.put("elapsed" , elapsed);
-            invokeMethod("onFirstLocalAudioFrame" , map);
+            sendEvent("onFirstLocalAudioFrame" , map);
         }
 
         @Override
@@ -720,7 +1216,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid" , uid);
             map.put("elapsed" , elapsed);
-            invokeMethod("onFirstRemoteAudioFrame" , map);
+            sendEvent("onFirstRemoteAudioFrame" , map);
         }
 
         @Override
@@ -729,7 +1225,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid" , uid);
             map.put("elapsed" , elapsed);
-            invokeMethod("onFirstRemoteAudioDecoded" , map);
+            sendEvent("onFirstRemoteAudioDecoded" , map);
         }
 
         @Override
@@ -739,7 +1235,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("width" , width);
             map.put("height" , height);
             map.put("elapsed" , elapsed);
-            invokeMethod("onFirstLocalVideoFrame" , map);
+            sendEvent("onFirstLocalVideoFrame" , map);
         }
 
         @Override
@@ -750,7 +1246,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("width" , width);
             map.put("height" , height);
             map.put("elapsed" , elapsed);
-            invokeMethod("onFirstRemoteVideoFrame" , map);
+            sendEvent("onFirstRemoteVideoFrame" , map);
         }
 
         @Override
@@ -759,8 +1255,17 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid" , uid);
             map.put("muted" , muted);
-            invokeMethod("onUserMuteAudio" , map);
+            sendEvent("onUserMuteAudio" , map);
         }
+
+//        @Override
+//        public void onUserMuteVideo(int uid , boolean muted) {
+//            super.onUserMuteAudio(uid , muted);
+//            HashMap<String, Object> map = new HashMap<>();
+//            map.put("uid" , uid);
+//            map.put("muted" , muted);
+//            sendEvent("onUserMuteVideo" , map);
+//        }
 
         @Override
         public void onVideoSizeChanged(int uid , int width , int height , int rotation) {
@@ -770,7 +1275,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("width" , width);
             map.put("height" , height);
             map.put("rotation" , rotation);
-            invokeMethod("onVideoSizeChanged" , map);
+            sendEvent("onVideoSizeChanged" , map);
         }
 
         @Override
@@ -784,57 +1289,16 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("state" , state);
             map.put("reason", reason);
             map.put("elapsed", elapsed);
-            invokeMethod("onRemoteVideoStateChanged" , map);
+            sendEvent("onRemoteVideoStateChanged" , map);
         }
 
         @Override
-        public void onLocalPublishFallbackToAudioOnly(boolean isFallbackOrRecover) {
-            super.onLocalPublishFallbackToAudioOnly(isFallbackOrRecover);
+        public void onLocalVideoStateChanged(int state, int error) {
+            super.onLocalVideoStateChanged(state, error);
             HashMap<String, Object> map = new HashMap<>();
-            map.put("isFallbackOrRecover" , isFallbackOrRecover);
-            invokeMethod("onLocalPublishFallbackToAudioOnly" , map);
-        }
-
-        @Override
-        public void onRemoteSubscribeFallbackToAudioOnly(int uid , boolean isFallbackOrRecover) {
-            super.onRemoteSubscribeFallbackToAudioOnly(uid , isFallbackOrRecover);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("uid" , uid);
-            map.put("isFallbackOrRecover" , isFallbackOrRecover);
-            invokeMethod("onRemoteSubscribeFallbackToAudioOnly" , map);
-        }
-
-        @Override
-        public void onAudioRouteChanged(int routing) {
-            super.onAudioRouteChanged(routing);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("routing" , routing);
-            invokeMethod("onAudioRouteChanged" , map);
-        }
-
-        @Override
-        public void onCameraFocusAreaChanged(Rect rect) {
-            super.onCameraFocusAreaChanged(rect);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("rect" , mapFromRect(rect));
-            invokeMethod("onCameraFocusAreaChanged" , map);
-        }
-
-        @Override
-        public void onCameraExposureAreaChanged(Rect rect) {
-            super.onCameraExposureAreaChanged(rect);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("rect" , mapFromRect(rect));
-            invokeMethod("onCameraExposureAreaChanged" , map);
-        }
-
-        @Override
-        public void onLocalAudioStateChanged(int state, int error) {
-            super.onLocalAudioStateChanged(state, error);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("state" , state);
-            map.put("error" , error);
-            invokeMethod("onLocalAudioStateChanged", map);
+            map.put("localVideoState", state);
+            map.put("errorCode", error);
+            sendEvent("onLocalVideoStateChanged" , map);
         }
 
         @Override
@@ -845,7 +1309,174 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("state" , state);
             map.put("reason" , reason);
             map.put("elapsed" , elapsed);
-            invokeMethod("onRemoteAudioStateChanged", map);
+            sendEvent("onRemoteAudioStateChanged", map);
+        }
+
+        @Override
+        public void onLocalAudioStateChanged(int state, int error) {
+            super.onLocalAudioStateChanged(state, error);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("state" , state);
+            map.put("errorCode" , error);
+            sendEvent("onLocalAudioStateChanged", map);
+        }
+
+        @Override
+        public void onLocalPublishFallbackToAudioOnly(boolean isFallbackOrRecover) {
+            super.onLocalPublishFallbackToAudioOnly(isFallbackOrRecover);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("isFallbackOrRecover" , isFallbackOrRecover);
+            sendEvent("onLocalPublishFallbackToAudioOnly" , map);
+        }
+
+        @Override
+        public void onRemoteSubscribeFallbackToAudioOnly(int uid , boolean isFallbackOrRecover) {
+            super.onRemoteSubscribeFallbackToAudioOnly(uid , isFallbackOrRecover);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid" , uid);
+            map.put("isFallbackOrRecover" , isFallbackOrRecover);
+            sendEvent("onRemoteSubscribeFallbackToAudioOnly" , map);
+        }
+
+        @Override
+        public void onAudioRouteChanged(int routing) {
+            super.onAudioRouteChanged(routing);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("routing" , routing);
+            sendEvent("onAudioRouteChanged" , map);
+        }
+
+        @Override
+        public void onCameraFocusAreaChanged(Rect rect) {
+            super.onCameraFocusAreaChanged(rect);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("rect" , mapFromRect(rect));
+            sendEvent("onCameraFocusAreaChanged" , map);
+        }
+
+        @Override
+        public void onCameraExposureAreaChanged(Rect rect) {
+            super.onCameraExposureAreaChanged(rect);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("rect" , mapFromRect(rect));
+            sendEvent("onCameraExposureAreaChanged" , map);
+        }
+
+        @Override
+        public void onRtcStats(RtcStats stats) {
+            super.onRtcStats(stats);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("stats" , mapFromStats(stats));
+            sendEvent("onRtcStats" , map);
+        }
+
+        @Override
+        public void onLastmileQuality(int quality) {
+            super.onLastmileQuality(quality);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("quality" , quality);
+            sendEvent("onLastmileQuality" , map);
+        }
+
+        @Override
+        public void onNetworkQuality(int uid , int txQuality , int rxQuality) {
+            super.onNetworkQuality(uid , txQuality , rxQuality);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid" , uid);
+            map.put("txQuality" , txQuality);
+            map.put("rxQuality" , rxQuality);
+            sendEvent("onNetworkQuality" , map);
+        }
+
+        @Override
+        public void onLastmileProbeResult(LastmileProbeResult result) {
+            super.onLastmileProbeResult(result);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("state", result.state);
+            map.put("rtt", result.rtt);
+            HashMap<String, Object> uplinkReport = new HashMap<>();
+            map.put("uplinkReport", uplinkReport);
+            uplinkReport.put("availableBandwidth", result.uplinkReport.availableBandwidth);
+            uplinkReport.put("jitter", result.uplinkReport.jitter);
+            uplinkReport.put("packetLossRate", result.uplinkReport.packetLossRate);
+            HashMap<String, Object> downlinkReport = new HashMap<>();
+            map.put("downlinkReport", downlinkReport);
+            uplinkReport.put("availableBandwidth", result.downlinkReport.availableBandwidth);
+            uplinkReport.put("jitter", result.downlinkReport.jitter);
+            uplinkReport.put("packetLossRate", result.downlinkReport.packetLossRate);
+            sendEvent("onLastmileProbeTestResult", map);
+        }
+
+        @Override
+        public void onLocalVideoStats(LocalVideoStats stats) {
+            super.onLocalVideoStats(stats);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("stats" , mapFromLocalVideoStats(stats));
+            sendEvent("onLocalVideoStats" , map);
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("stats" , mapFromLocalAudioStats(stats));
+            sendEvent("onLocalAudioStats" , map);
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("stats" , mapFromRemoteVideoStats(stats));
+            sendEvent("onRemoteVideoStats" , map);
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("stats" , mapFromRemoteAudioStats(stats));
+            sendEvent("onRemoteAudioStats" , map);
+        }
+
+        @Override
+        public void onAudioMixingStateChanged(int state, int errorCode) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("state", state);
+            map.put("errorCode", errorCode);
+
+            sendEvent("onLocalAudioMixingStateChanged" , map);
+        }
+
+        @Override
+        public void onAudioEffectFinished(int soundId) {
+            super.onAudioEffectFinished(soundId);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("soundId" , soundId);
+            sendEvent("onAudioEffectFinished" , map);
+        }
+
+        @Override
+        public void onStreamPublished(String url , int error) {
+            super.onStreamPublished(url , error);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("url" , url);
+            map.put("errorCode" , error);
+            sendEvent("onStreamPublished" , map);
+        }
+
+        @Override
+        public void onStreamUnpublished(String url) {
+            super.onStreamUnpublished(url);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("url" , url);
+            sendEvent("onStreamUnpublished" , map);
+        }
+
+        @Override
+        public void onTranscodingUpdated() {
+            super.onTranscodingUpdated();
+            sendEvent("onTranscodingUpdated" , null);
         }
 
         @Override
@@ -856,107 +1487,10 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             HashMap<String, Object> map = new HashMap<>();
             map.put("url", url);
             map.put("state", state);
-            map.put("error", errCode);
-            invokeMethod("onRtmpStreamingStateChanged", map);
+            map.put("errorCode", errCode);
+            sendEvent("onRtmpStreamingStateChanged", map);
         }
 
-        @Override
-        public void onRtcStats(RtcStats stats) {
-            super.onRtcStats(stats);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("stats" , mapFromStats(stats));
-            invokeMethod("onRtcStats" , map);
-        }
-
-        @Override
-        public void onLastmileQuality(int quality) {
-            super.onLastmileQuality(quality);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("quality" , quality);
-            invokeMethod("onLastmileQuality" , map);
-        }
-
-        @Override
-        public void onNetworkQuality(int uid , int txQuality , int rxQuality) {
-            super.onNetworkQuality(uid , txQuality , rxQuality);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("uid" , uid);
-            map.put("txQuality" , txQuality);
-            map.put("rxQuality" , rxQuality);
-            invokeMethod("onNetworkQuality" , map);
-        }
-
-        @Override
-        public void onLocalVideoStats(LocalVideoStats stats) {
-            super.onLocalVideoStats(stats);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("stats" , mapFromLocalVideoStats(stats));
-            invokeMethod("onLocalVideoStats" , map);
-        }
-
-        @Override
-        public void onLocalAudioStats(LocalAudioStats stats) {
-            super.onLocalAudioStats(stats);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("stats" , mapFromLocalAudioStats(stats));
-            invokeMethod("onLocalAudioStats" , map);
-        }
-
-        @Override
-        public void onRemoteVideoStats(RemoteVideoStats stats) {
-            super.onRemoteVideoStats(stats);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("stats" , mapFromRemoteVideoStats(stats));
-            invokeMethod("onRemoteVideoStats" , map);
-        }
-
-        @Override
-        public void onRemoteAudioStats(RemoteAudioStats stats) {
-            super.onRemoteAudioStats(stats);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("stats" , mapFromRemoteAudioStats(stats));
-            invokeMethod("onRemoteAudioStats" , map);
-        }
-
-        @Override
-        public void onLocalVideoStateChanged(int localVideoState , int error) {
-            super.onLocalVideoStateChanged(localVideoState , error);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("localVideoState" , localVideoState);
-            map.put("error" , error);
-            invokeMethod("onLocalVideoStateChanged" , map);
-        }
-
-        @Override
-        public void onAudioEffectFinished(int soundId) {
-            super.onAudioEffectFinished(soundId);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("soundId" , soundId);
-            invokeMethod("onAudioEffectFinished" , map);
-        }
-
-        @Override
-        public void onStreamPublished(String url , int error) {
-            super.onStreamPublished(url , error);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("url" , url);
-            map.put("error" , error);
-            invokeMethod("onStreamPublished" , map);
-        }
-
-        @Override
-        public void onStreamUnpublished(String url) {
-            super.onStreamUnpublished(url);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("url" , url);
-            invokeMethod("onStreamUnpublished" , map);
-        }
-
-        @Override
-        public void onTranscodingUpdated() {
-            super.onTranscodingUpdated();
-            invokeMethod("onTranscodingUpdated" , null);
-        }
 
         @Override
         public void onStreamInjectedStatus(String url , int uid , int status) {
@@ -965,48 +1499,43 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("url" , url);
             map.put("uid" , uid);
             map.put("status" , status);
-            invokeMethod("onStreamInjectedStatus" , map);
-        }
-
-        @Override
-        public void onStreamMessage(int uid , int streamId , byte[] data) {
-            super.onStreamMessage(uid , streamId , data);
-            try {
-                String message = new String(data , "UTF-8");
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("streamId" , streamId);
-                map.put("uid" , uid);
-                map.put("message" , message);
-                invokeMethod("onStreamMessage" , map);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onStreamMessageError(int uid , int streamId , int error , int missed ,
-                                         int cached) {
-            super.onStreamMessageError(uid , streamId , error , missed , cached);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("uid" , uid);
-            map.put("streamId" , streamId);
-            map.put("error" , error);
-            map.put("missed" , missed);
-            map.put("cached" , cached);
-            invokeMethod("onStreamMessageError" , map);
+            sendEvent("onStreamInjectedStatus" , map);
         }
 
         @Override
         public void onMediaEngineLoadSuccess() {
             super.onMediaEngineLoadSuccess();
-            invokeMethod("onMediaEngineLoadSuccess" , null);
+            sendEvent("onMediaEngineLoadSuccess" , null);
         }
 
         @Override
         public void onMediaEngineStartCallSuccess() {
             super.onMediaEngineStartCallSuccess();
-            invokeMethod("onMediaEngineStartCallSuccess" , null);
+            sendEvent("onMediaEngineStartCallSuccess" , null);
         }
+
+        @Override
+        public void onChannelMediaRelayStateChanged (int state, int code) {
+            super.onChannelMediaRelayStateChanged(state, code);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("state", state);
+            map.put("errorCode", code);
+            sendEvent("onChannelMediaRelayChanged", map);
+        }
+
+        @Override
+        public void onChannelMediaRelayEvent (int code) {
+            super.onChannelMediaRelayEvent(code);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("event", code);
+            sendEvent("onReceivedChannelMediaRelayEvent", map);
+        }
+
+//        @Override
+//        public void onAudioMixingFinished() {
+//            super.onAudioMixingFinished();
+//            sendEvent("onAudioMixingFinished", null);
+//        }
 
         private HashMap<String, Object> mapFromStats(RtcStats stats) {
             HashMap<String, Object> map = new HashMap<>();
@@ -1079,7 +1608,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("rxStreamType", stats.rxStreamType);
             map.put("totalFrozenTime", stats.totalFrozenTime);
             map.put("frozenRate", stats.frozenRate);
-            map.put("rxStreamType", stats.rxStreamType);
             return map;
         }
 
@@ -1090,6 +1618,11 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
             map.put("networkTransportDelay" , stats.networkTransportDelay);
             map.put("jitterBufferDelay" , stats.jitterBufferDelay);
             map.put("audioLossRate" , stats.audioLossRate);
+            map.put("numChannels" , stats.numChannels);
+            map.put("receivedSampleRate" , stats.receivedSampleRate);
+            map.put("receivedBitrate" , stats.receivedBitrate);
+            map.put("totalFrozenTime" , stats.totalFrozenTime);
+            map.put("frozenRate" , stats.frozenRate);
             return map;
         }
 
@@ -1136,13 +1669,26 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler {
         return configuration;
     }
 
-    private void invokeMethod(final String method , final HashMap map) {
+    private void sendEvent(final String eventName, final HashMap map) {
+        map.put("event", eventName);
         mEventHandler.post(new Runnable() {
             @Override
             public void run() {
-                mMethodChannel.invokeMethod(method , map);
+                if (sink != null) {
+                    sink.success(map);
+                }
             }
         });
+    }
+
+    @Override
+    public void onListen(Object o, EventChannel.EventSink eventSink) {
+        this.sink = eventSink;
+    }
+
+    @Override
+    public void onCancel(Object o) {
+        this.sink = null;
     }
 
     private static class MethodResultWrapper implements MethodChannel.Result {

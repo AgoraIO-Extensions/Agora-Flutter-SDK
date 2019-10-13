@@ -8,42 +8,42 @@ export 'src/agora_render_widget.dart';
 export 'src/base.dart';
 
 class AgoraChannelMediaRelayConfiguration {
-
   final String srcChannelName;
   final int srcUid;
   final String srcToken;
-  final List<Map<String, dynamic>> channels; // e.g. [{"channelName": channelName, "uid": uid, "token": token}]
+  final List<Map<String, dynamic>>
+      channels; // e.g. [{"channelName": channelName, "uid": uid, "token": token}]
 
-  AgoraChannelMediaRelayConfiguration(json):
-    srcChannelName = json["srcChannelName"],
-    srcUid = json["srcUid"],
-    srcToken = json["srcToken"],
-    channels = json["channels"];
+  AgoraChannelMediaRelayConfiguration(json)
+      : srcChannelName = json["srcChannelName"],
+        srcUid = json["srcUid"],
+        srcToken = json["srcToken"],
+        channels = json["channels"];
 
   toJson() => {
-    "src": {
-      "channelName": srcChannelName,
-      "uid": srcUid,
-      "token": srcToken,
-    },
-    "channels": channels, 
-  };
+        "src": {
+          "channelName": srcChannelName,
+          "uid": srcUid,
+          "token": srcToken,
+        },
+        "channels": channels,
+      };
 }
 
 class WatermarkOptions {
   final bool visibleInPreview;
   final Map<String, int> positionInLandscapeMode;
   final Map<String, int> positionInPortraitMode;
-  WatermarkOptions(json):
-    visibleInPreview = json['visibleInPreview'],
-    positionInLandscapeMode = json['positionInLandscapeMode'],
-    positionInPortraitMode = json['positionInPortraitMode'];
+  WatermarkOptions(json)
+      : visibleInPreview = json['visibleInPreview'],
+        positionInLandscapeMode = json['positionInLandscapeMode'],
+        positionInPortraitMode = json['positionInPortraitMode'];
 
   toJson() => {
-    "visibleInPreview": visibleInPreview,
-    "positionInLandscapeMode": positionInLandscapeMode,
-    "positionInPortraitMode": positionInPortraitMode,
-  };
+        "visibleInPreview": visibleInPreview,
+        "positionInLandscapeMode": positionInLandscapeMode,
+        "positionInPortraitMode": positionInPortraitMode,
+      };
 }
 
 class AgoraLastmileProbeConfig {
@@ -51,28 +51,25 @@ class AgoraLastmileProbeConfig {
   final bool probeUplink;
   final int expectedUplinkBitrate;
   final int expectedDownlinkBitrate;
-  AgoraLastmileProbeConfig(
-    this.expectedDownlinkBitrate,
-    this.expectedUplinkBitrate,
-    this.probeDownlink,
-    this.probeUplink
-  ): assert(expectedDownlinkBitrate != null),
-    assert(expectedUplinkBitrate != null),
-    assert(probeDownlink != null),
-    assert(probeUplink != null);
+  AgoraLastmileProbeConfig(this.expectedDownlinkBitrate,
+      this.expectedUplinkBitrate, this.probeDownlink, this.probeUplink)
+      : assert(expectedDownlinkBitrate != null),
+        assert(expectedUplinkBitrate != null),
+        assert(probeDownlink != null),
+        assert(probeUplink != null);
 
-  AgoraLastmileProbeConfig.fromJson(json): 
-    probeDownlink = json["probeDownlink"],
-    probeUplink = json["probeUplink"],
-    expectedUplinkBitrate = json["expectedUplinkBitrate"],
-    expectedDownlinkBitrate = json["expectedDownlinkBitrate"];
+  AgoraLastmileProbeConfig.fromJson(json)
+      : probeDownlink = json["probeDownlink"],
+        probeUplink = json["probeUplink"],
+        expectedUplinkBitrate = json["expectedUplinkBitrate"],
+        expectedDownlinkBitrate = json["expectedDownlinkBitrate"];
 
   toJson() => {
-    "probeDownlink": probeDownlink,
-    "probeUplink": probeUplink,
-    "expectedUplinkBitrate": expectedUplinkBitrate,
-    "expectedDownlinkBitrate": expectedDownlinkBitrate,
-  };
+        "probeDownlink": probeDownlink,
+        "probeUplink": probeUplink,
+        "expectedUplinkBitrate": expectedUplinkBitrate,
+        "expectedDownlinkBitrate": expectedDownlinkBitrate,
+      };
 }
 
 class AgoraUserInfo {
@@ -82,13 +79,10 @@ class AgoraUserInfo {
   AgoraUserInfo(this.uid, this.userAccount);
 
   AgoraUserInfo.fromJson(Map<dynamic, dynamic> json)
-    : uid = json['uid'],
-      userAccount = json['userAccount'];
+      : uid = json['uid'],
+        userAccount = json['userAccount'];
 
-  Map<String, dynamic> toJson() => {
-    'uid': uid,
-    'userAccount': userAccount
-  };
+  Map<String, dynamic> toJson() => {'uid': uid, 'userAccount': userAccount};
 
   @override
   String toString() {
@@ -105,17 +99,17 @@ class AgoraCameraRect {
   AgoraCameraRect(this.width, this.height, this.x, this.y);
 
   AgoraCameraRect.fromJson(json)
-    : width = json['width'],
-      height = json['height'],
-      x = json['x'],
-      y = json['y'];
+      : width = json['width'],
+        height = json['height'],
+        x = json['x'],
+        y = json['y'];
 
   Map<String, dynamic> toJson() => {
-      "width": width,
-      "height": height,
-      "x": x,
-      "y": y,
-  };
+        "width": width,
+        "height": height,
+        "x": x,
+        "y": y,
+      };
 }
 
 class NetworkLinkReport {
@@ -125,16 +119,16 @@ class NetworkLinkReport {
 
   NetworkLinkReport(this.availableBandwidth, this.jitter, this.packetLossRate);
 
-  NetworkLinkReport.fromJson(json):
-    availableBandwidth = json['availableBandwidth'],
-    jitter = json['jitter'],
-    packetLossRate = json['packetLossRate'];
+  NetworkLinkReport.fromJson(json)
+      : availableBandwidth = json['availableBandwidth'],
+        jitter = json['jitter'],
+        packetLossRate = json['packetLossRate'];
 
   Map<String, dynamic> toJson() => {
-    "availableBandwidth": availableBandwidth,
-    "jitter": jitter,
-    "packetLossRate": packetLossRate,
-  };
+        "availableBandwidth": availableBandwidth,
+        "jitter": jitter,
+        "packetLossRate": packetLossRate,
+      };
 }
 
 class AgoraLastmileProbeResult {
@@ -144,28 +138,26 @@ class AgoraLastmileProbeResult {
   final NetworkLinkReport downlinkReport;
 
   AgoraLastmileProbeResult(
-    this.state,
-    this.rtt,
-    this.uplinkReport,
-    this.downlinkReport);
-  
-  AgoraLastmileProbeResult.fromJson(json):
-    state = json['state'],
-    rtt = json['rtt'],
-    uplinkReport = NetworkLinkReport.fromJson(json['uplinkReport']),
-    downlinkReport = NetworkLinkReport.fromJson(json['downlinkReport']);
+      this.state, this.rtt, this.uplinkReport, this.downlinkReport);
 
-  Map<String, dynamic> toJson () => {
-    'state': state,
-    'rtt': state,
-    'uplinkReport': uplinkReport.toJson(),
-    'downlinkReport': downlinkReport.toJson(),
-  };
+  AgoraLastmileProbeResult.fromJson(json)
+      : state = json['state'],
+        rtt = json['rtt'],
+        uplinkReport = NetworkLinkReport.fromJson(json['uplinkReport']),
+        downlinkReport = NetworkLinkReport.fromJson(json['downlinkReport']);
+
+  Map<String, dynamic> toJson() => {
+        'state': state,
+        'rtt': state,
+        'uplinkReport': uplinkReport.toJson(),
+        'downlinkReport': downlinkReport.toJson(),
+      };
 }
 
 class AgoraRtcEngine {
   static const MethodChannel _channel = const MethodChannel('agora_rtc_engine');
-  static const EventChannel _eventChannel = const EventChannel('agora_rtc_engine_event_channel');
+  static const EventChannel _eventChannel =
+      const EventChannel('agora_rtc_engine_event_channel');
 
   static StreamSubscription<dynamic> _sink;
 
@@ -194,13 +186,11 @@ class AgoraRtcEngine {
       onRejoinChannelSuccess;
 
   /// Occurs when the local user successfully registers a user account by calling the registerLocalUserAccount or joinChannelByUserAccount method.
-  static void Function(String userAccount, int uid)
-      onRegisteredLocalUser;
+  static void Function(String userAccount, int uid) onRegisteredLocalUser;
 
   /// Occurs when the SDK gets the user ID and user account of the remote user.
-  static void Function(AgoraUserInfo userInfo, int uid)
-      onUpdatedUserInfo;
-      
+  static void Function(AgoraUserInfo userInfo, int uid) onUpdatedUserInfo;
+
   /// Occurs when a user leaves the channel.
   ///
   /// When the app calls the [leaveChannel] method, the SDK uses this callback to notify the app when the user leaves the channel.
@@ -282,14 +272,15 @@ class AgoraRtcEngine {
   static void Function(int uid, bool muted) onUserMuteAudio;
 
   /// Occurs when a remote user's video stream is muted/unmuted.
-  static void Function(int uid, bool muted) onUserMuteVideo;
+  // static void Function(int uid, bool muted) onUserMuteVideo;
 
   /// Occurs when the video size or rotation information of a specified remote user changes.
   static void Function(int uid, double width, double height, int rotation)
       onVideoSizeChanged;
 
   /// Occurs when the remote video stream state changes.
-  static void Function(int uid, int state, int reason, int elapsed) onRemoteVideoStateChanged;
+  static void Function(int uid, int state, int reason, int elapsed)
+      onRemoteVideoStateChanged;
 
   // Fallback Events
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
@@ -307,10 +298,9 @@ class AgoraRtcEngine {
   /// Occurs when the state of the RTMP streaming changes.
   static void Function(String url, int error, int state)
       onRtmpStreamingStateChanged;
-    
+
   /// Occurs when the CDN live streaming settings are updated.
-  static void Function(Map<String, dynamic> json)
-      onStreamInjectedStatus;
+  static void Function(Map<String, dynamic> json) onStreamInjectedStatus;
 
   // Device Events
   /// Occurs when the local audio pkayout route changes.
@@ -318,14 +308,13 @@ class AgoraRtcEngine {
   /// This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.
   static void Function(int routing) onAudioRouteChanged;
 
-
   /// Occurs when a camera focus area changes.
-  /// 
+  ///
   /// This callback returns rect of camera focus area changed.
   static void Function(AgoraCameraRect rect) onCameraFocusAreaChanged;
 
   /// Occurs when the camera exposure area changes.
-  /// 
+  ///
   /// This callback returns rect of camera exposure area changed.
   static void Function(AgoraCameraRect rect) onCameraExposureAreaChanged;
 
@@ -339,16 +328,13 @@ class AgoraRtcEngine {
   /// Occurs when the remote audio stream state changes.
   ///
   /// The SDK returns the current remote audio state in this callback.
-  static void Function(
-          int uid, int state, int reason, int elapsed)
+  static void Function(int uid, int state, int reason, int elapsed)
       onRemoteAudioStateChanged;
 
   /// Occurs when the local audio stream state changes.
   ///
   /// The SDK returns the current local audio state in this callback.
-  static void Function(
-          int error, int state)
-      onLocalAudioStateChanged;
+  static void Function(int error, int state) onLocalAudioStateChanged;
 
   // Statistics Events
   /// Reports the statistics of the audio stream from each remote user/host.
@@ -356,12 +342,14 @@ class AgoraRtcEngine {
   /// The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
   static void Function(RemoteAudioStats stats) onRemoteAudioStats;
 
+  /// Occurs when a local audio mixing state changed.
+  static void Function(int state, int errorCode) onLocalAudioMixingStateChanged;
 
   /// Occurs when a remote user starts audio mixing.
-  static void Function() onRemoteAudioMixingStarted;
+  // static void Function() onRemoteAudioMixingStarted;
 
   /// Occurs when a remote user finishes audio mixing.
-  static void Function() onRemoteAudioMixingFinished;
+  // static void Function() onRemoteAudioMixingFinished;
 
   /// Occurs when the local audio effect playback finishes.
   static void Function(int soundId) onAudioEffectFinished;
@@ -387,7 +375,8 @@ class AgoraRtcEngine {
   static void Function(int uid, int txQuality, int rxQuality) onNetworkQuality;
 
   /// Reports the last-mile network probe result.
-  static void Function(AgoraLastmileProbeResult result) onLastmileProbeTestResult;
+  static void Function(AgoraLastmileProbeResult result)
+      onLastmileProbeTestResult;
 
   /// Reports the statistics of the uploading local video streams.
   ///
@@ -410,6 +399,12 @@ class AgoraRtcEngine {
 
   /// Occurs when the media engine starts.
   static VoidCallback onMediaEngineStartCallSuccess;
+
+  /// Occurs when received channel media relay changed
+  static void Function(int state, int errorCode) onChannelMediaRelayChanged;
+
+  /// Occurs when received channel media relay event
+  static void Function(int event) onReceivedChannelMediaRelayEvent;
 
   // Core Methods
   /// Creates an RtcEngine instance.
@@ -437,7 +432,8 @@ class AgoraRtcEngine {
   /// Before calling this method to set a new channel profile, [destroy] the current RtcEngine and [create] a new RtcEngine first.
   /// Call this method before [joinChannel], you cannot configure the channel profile when the channel is in use.
   static Future<void> setChannelProfile(ChannelProfile profile) async {
-    await _channel.invokeMethod('setChannelProfile', {'profile': profile.index});
+    await _channel
+        .invokeMethod('setChannelProfile', {'profile': profile.index});
   }
 
   /// Sets the role of a user (Live Broadcast only).
@@ -472,7 +468,8 @@ class AgoraRtcEngine {
   /// Switches to a different channel.
   /// This method allows the audience of a Live-broadcast channel to switch to a different channel.
   static Future<bool> switchChannel(String token, String channelId) async {
-    final Map res = await _channel.invokeMethod("switchChannel", {"token": token, "channelId": channelId});
+    final Map res = await _channel.invokeMethod(
+        "switchChannel", {"token": token, "channelId": channelId});
     bool result = res["result"];
     return result;
   }
@@ -488,7 +485,8 @@ class AgoraRtcEngine {
   ///
   /// Use this method when the channel profile is Live Broadcast. Interoperability with the Agora Web SDK is enabled by default when the channel profile is Communication.
   static Future<void> enableWebSdkInteroperability(bool enabled) async {
-    await _channel.invokeMethod('enableWebSdkInteroperability', {'enabled': enabled});
+    await _channel
+        .invokeMethod('enableWebSdkInteroperability', {'enabled': enabled});
   }
 
   /// Gets the connection state of the SDK.
@@ -500,18 +498,17 @@ class AgoraRtcEngine {
   /// stringuid userAccount
   /// registerLocalUserAccount
   static Future<bool> registerLocalUserAccount(Map<String, String> args) async {
-    final bool result = await _channel.invokeMethod('registerLocalUserAccount', {
-      "appId": args["appId"],
-      "userAccount": args["userAccount"]
-    });
+    final bool result = await _channel.invokeMethod('registerLocalUserAccount',
+        {"appId": args["appId"], "userAccount": args["userAccount"]});
     return result;
   }
 
   /// joinChannelByUserAccount
-  /// 
+  ///
   /// Joins the channel with a user account.
   static Future<bool> joinChannelByUserAccount(Map<String, String> args) async {
-    final bool result = await _channel.invokeMethod('joinChannelByUserAccount', {
+    final bool result =
+        await _channel.invokeMethod('joinChannelByUserAccount', {
       "userAccount": args["userAccount"],
       "token": args["token"],
       "channelId": args["channelId"],
@@ -520,22 +517,22 @@ class AgoraRtcEngine {
   }
 
   /// registerLocalUserAccount
-  /// 
+  ///
   /// Gets the user information by passing in the user account.
-  static Future<AgoraUserInfo> getUserInfoByUserAccount(String userAccount) async {
-    final AgoraUserInfo result = AgoraUserInfo.fromJson(await _channel.invokeMethod('getUserInfoByUserAccount',
-      {"userAccount": userAccount}
-    ));
+  static Future<AgoraUserInfo> getUserInfoByUserAccount(
+      String userAccount) async {
+    final AgoraUserInfo result = AgoraUserInfo.fromJson(await _channel
+        .invokeMethod(
+            'getUserInfoByUserAccount', {"userAccount": userAccount}));
     return result;
   }
 
   /// registerLocalUserAccount
-  /// 
+  ///
   /// Gets the user information by passing in the uid.
   static Future<AgoraUserInfo> getUserInfoByUid(int uid) async {
-    final AgoraUserInfo result = AgoraUserInfo.fromJson(await _channel.invokeMethod('getUserInfoByUserAccount',
-      {"uid": uid}
-    ));
+    final AgoraUserInfo result = AgoraUserInfo.fromJson(
+        await _channel.invokeMethod('getUserInfoByUserAccount', {"uid": uid}));
     return result;
   }
 
@@ -585,7 +582,7 @@ class AgoraRtcEngine {
   ///
   /// Once this method is enabled, the SDK returns the volume indication in the [onAudioVolumeIndication] callback at the set time interval, regardless of whether any user is speaking in the channel.
   static Future<void> enableAudioVolumeIndication(
-      int interval, int smooth, int vad) async {
+      int interval, int smooth, bool vad) async {
     await _channel.invokeMethod('enableAudioVolumeIndication',
         {'interval': interval, 'smooth': smooth, 'vad': vad});
   }
@@ -800,35 +797,42 @@ class AgoraRtcEngine {
 
   /// Changes the voice pitch of the local speaker
   static Future<void> setLocalVoicePitch(double pitch) async {
-    await _channel.invokeMethod(
-        'setLocalVoicePitch', {'pitch': pitch});
+    await _channel.invokeMethod('setLocalVoicePitch', {'pitch': pitch});
   }
 
   // Sets the local voice equalization effect.
-  static Future<void> setLocalVoiceEqualizationOfBandFrequency(AgoraAudioEqualizationBandFrequency bandFrequency, int gain) async {
-    await _channel.invokeMethod(
-        'setLocalVoiceEqualizationOfBandFrequency', {'bandFrequency': bandFrequency.index, 'gain': gain});
+  static Future<void> setLocalVoiceEqualizationOfBandFrequency(
+      AgoraAudioEqualizationBandFrequency bandFrequency, int gain) async {
+    await _channel.invokeMethod('setLocalVoiceEqualizationOfBandFrequency',
+        {'bandFrequency': bandFrequency.index, 'gain': gain});
   }
 
   // Sets the local voice reverberation.
   // Sets the effect of the reverberation type. See [AgoraAudioReverbType](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/Constants/AgoraAudioReverbType.html) for the value range.
-  static Future<void> setLocalVoiceReverbOfType(AgoraAudioReverbType reverbType, int value) async {
-    await _channel.invokeMethod('setLocalVoiceReverbOfType', {'reverbType': reverbType.index, 'value': value});
+  static Future<void> setLocalVoiceReverbOfType(
+      AgoraAudioReverbType reverbType, int value) async {
+    await _channel.invokeMethod('setLocalVoiceReverbOfType',
+        {'reverbType': reverbType.index, 'value': value});
   }
 
   // Sets the preset local voice reverberation effect.
-  static Future<void> setLocalVoiceReverbPreset(AgoraAudioReverbType reverbType) async {
-    await _channel.invokeMethod('setLocalVoiceReverbPreset', {'reverbType': reverbType.index});
+  static Future<void> setLocalVoiceReverbPreset(
+      AgoraAudioReverbType reverbType) async {
+    await _channel.invokeMethod(
+        'setLocalVoiceReverbPreset', {'reverbType': reverbType.index});
   }
 
   /// Enables/Disables stereo panning for remote users.
   static Future<void> enableSoundPositionIndication(bool enabled) async {
-    await _channel.invokeMethod('enableSoundPositionIndication', {'enabled': enabled});
+    await _channel
+        .invokeMethod('enableSoundPositionIndication', {'enabled': enabled});
   }
 
   /// Sets the sound position and gain of a remote user.
-  static Future<void> setRemoteVoicePosition(int uid, double pan, int gain) async {
-    await _channel.invokeMethod('setRemoteVoicePosition', {'uid': uid, 'pan': pan, 'gain': gain});
+  static Future<void> setRemoteVoicePosition(
+      int uid, double pan, int gain) async {
+    await _channel.invokeMethod(
+        'setRemoteVoicePosition', {'uid': uid, 'pan': pan, 'gain': gain});
   }
 
   // Audio Routing Controller
@@ -913,47 +917,33 @@ class AgoraRtcEngine {
 
   /// Sets the video layout and audio settings for CDN live. (CDN live only.)
   static Future<int> setLiveTranscoding(AgoraLiveTranscoding config) async {
-    return _channel.invokeMethod(
-      'setLiveTranscoding',
-      {"transcoding": config.toJson()}
-    );
+    return _channel
+        .invokeMethod('setLiveTranscoding', {"transcoding": config.toJson()});
   }
 
   /// Publishes the local stream to the CDN.
   static Future<int> addPublishStreamUrl(String url, bool enable) async {
-    return _channel.invokeMethod(
-      'addPublishStreamUrl',
-      {"url": url, "enable": enable}
-    );
+    return _channel
+        .invokeMethod('addPublishStreamUrl', {"url": url, "enable": enable});
   }
 
   /// Removes an RTMP stream from the CDN.
   static Future<int> removePublishStreamUrl(String url) async {
-    return _channel.invokeMethod(
-      'removePublishStreamUrl',
-      {"url": url}
-    ); 
+    return _channel.invokeMethod('removePublishStreamUrl', {"url": url});
   }
 
   /// Adds a voice or video stream RTMP URL address to a live broadcast.
-  static Future<int> addInjectStreamUrl(String url, AgoraLiveInjectStreamConfig config) async {
+  static Future<int> addInjectStreamUrl(
+      String url, AgoraLiveInjectStreamConfig config) async {
     return _channel.invokeMethod(
-      'addInjectStreamUrl',
-      {
-        'url': url,
-        'config': config.toJson()
-      }
-    );
+        'addInjectStreamUrl', {'url': url, 'config': config.toJson()});
   }
 
   /// Removes the voice or video stream RTMP URL address from a live broadcast.
   static Future<int> removeInjectStreamUrl(String url) async {
-    return _channel.invokeMethod(
-      'removeInjectStreamUrl',
-      {
-        'url': url,
-      }
-    );
+    return _channel.invokeMethod('removeInjectStreamUrl', {
+      'url': url,
+    });
   }
 
   // Encryption
@@ -989,39 +979,38 @@ class AgoraRtcEngine {
 
   /// Stops the audio call test.
   static Future<void> stopEchoTest() async {
-    await _channel
-        .invokeMethod('stopEchoTest');
+    await _channel.invokeMethod('stopEchoTest');
   }
 
   /// Enables the network connection quality test.
   static Future<void> enableLastmileTest() async {
-    await _channel
-        .invokeMethod('enableLastmileTest');
+    await _channel.invokeMethod('enableLastmileTest');
   }
 
   /// Disables the network connection quality test.
   static Future<void> disableLastmileTest() async {
-    await _channel
-        .invokeMethod('disableLastmileTest');
+    await _channel.invokeMethod('disableLastmileTest');
   }
 
   /// Starts the last-mile network probe test.
-  static Future<void> startLastmileProbeTest(AgoraLastmileProbeConfig config) async {
+  static Future<void> startLastmileProbeTest(
+      AgoraLastmileProbeConfig config) async {
     await _channel
         .invokeMethod('startLastmileProbeTest', {"config": config.toJson()});
   }
 
   /// Stops the last-mile network probe test.
   static Future<void> stopLastmileProbeTest() async {
-    await _channel
-        .invokeMethod('stopLastmileProbeTest');
+    await _channel.invokeMethod('stopLastmileProbeTest');
   }
-  
+
   /// Adds a watermark image to the local video.
-  /// 
+  ///
   /// [WatermarkOptions](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/Classes/WatermarkOptions.html)
-  static Future<void> addVideoWatermark(String url, WatermarkOptions options) async {
-    await _channel.invokeMethod('addVideoWatermark', {"url": url, "options": options.toJson()});
+  static Future<void> addVideoWatermark(
+      String url, WatermarkOptions options) async {
+    await _channel.invokeMethod(
+        'addVideoWatermark', {"url": url, "options": options.toJson()});
   }
 
   /// Removes the watermark image from the video stream added by addVideoWatermark.
@@ -1030,7 +1019,8 @@ class AgoraRtcEngine {
   }
 
   /// startAudioMixing
-  static Future<void> startAudioMixing(String filepath, bool loopback, bool replace, int cycle) async {
+  static Future<void> startAudioMixing(
+      String filepath, bool loopback, bool replace, int cycle) async {
     await _channel.invokeMethod('startAudioMixing', {
       "filepath": filepath,
       "loopback": loopback,
@@ -1038,7 +1028,7 @@ class AgoraRtcEngine {
       "cycle": cycle,
     });
   }
-  
+
   /// stopAudioMixing
   static Future<void> stopAudioMixing() async {
     await _channel.invokeMethod('stopAudioMixing');
@@ -1058,48 +1048,62 @@ class AgoraRtcEngine {
   static Future<void> adjustAudioMixingVolume(int volume) async {
     await _channel.invokeMethod('adjustAudioMixingVolume', {"volume": volume});
   }
+
   /// adjustAudioMixingPlayoutVolume
   static Future<void> adjustAudioMixingPlayoutVolume(int volume) async {
-    await _channel.invokeMethod('adjustAudioMixingPlayoutVolume', {"volume": volume});
+    await _channel
+        .invokeMethod('adjustAudioMixingPlayoutVolume', {"volume": volume});
   }
+
   /// adjustAudioMixingPublishVolume
   static Future<void> adjustAudioMixingPublishVolume(int volume) async {
-    await _channel.invokeMethod('adjustAudioMixingPublishVolume', {"volume": volume});
+    await _channel
+        .invokeMethod('adjustAudioMixingPublishVolume', {"volume": volume});
   }
+
   /// getAudioMixingPlayoutVolume
   static Future<int> getAudioMixingPlayoutVolume() {
     return _channel.invokeMethod('getAudioMixingPlayoutVolume');
   }
-    /// getAudioMixingPublishVolume
+
+  /// getAudioMixingPublishVolume
   static Future<void> getAudioMixingPublishVolume() {
     return _channel.invokeMethod('getAudioMixingPublishVolume');
   }
-    /// startAudioMixing
+
+  /// startAudioMixing
   static Future<void> getAudioMixingDuration() {
     return _channel.invokeMethod('getAudioMixingDuration');
   }
-    /// startAudioMixing
+
+  /// startAudioMixing
   static Future<void> getAudioMixingCurrentPosition() {
     return _channel.invokeMethod('getAudioMixingCurrentPosition');
   }
-    /// setAudioMixingPosition
+
+  /// setAudioMixingPosition
   static Future<void> setAudioMixingPosition(int pos) async {
     await _channel.invokeMethod('setAudioMixingPosition', {"pos": pos});
   }
+
   /// getEffectsVolume
   static Future<void> getEffectsVolume() async {
     await _channel.invokeMethod('getEffectsVolume');
   }
-    /// setEffectsVolume
+
+  /// setEffectsVolume
   static Future<void> setEffectsVolume(double volume) async {
     await _channel.invokeMethod('setEffectsVolume', {"volume": volume});
   }
+
   /// setVolumeOfEffect
   static Future<void> setVolumeOfEffect() async {
     await _channel.invokeMethod('setVolumeOfEffect');
   }
+
   /// playEffect
-  static Future<void> playEffect(int soundId, String filepath, int loopcount, double pitch, double pan, double gain, bool publish) async {
+  static Future<void> playEffect(int soundId, String filepath, int loopcount,
+      double pitch, double pan, double gain, bool publish) async {
     await _channel.invokeMethod('playEffect', {
       "soundId": soundId,
       "filepath": filepath,
@@ -1110,51 +1114,69 @@ class AgoraRtcEngine {
       "publish": publish,
     });
   }
-    /// stopEffect
+
+  /// stopEffect
   static Future<void> stopEffect(int soundId) async {
     await _channel.invokeMethod('stopEffect', {"soundId": soundId});
   }
-    /// stopAllEffects
+
+  /// stopAllEffects
   static Future<void> stopAllEffects() async {
     await _channel.invokeMethod('stopAllEffects');
   }
 
-    /// preloadEffect
+  /// preloadEffect
   static Future<void> preloadEffect(int soundId, String filepath) async {
     await _channel.invokeMethod('preloadEffect', {
       "soundId": soundId,
       "filepath": filepath,
     });
   }
-    /// unloadEffect
+
+  /// unloadEffect
   static Future<void> unloadEffect(int soundId) async {
     await _channel.invokeMethod('unloadEffect', {"soundId": soundId});
   }
-    /// pauseEffect
+
+  /// pauseEffect
   static Future<void> pauseEffect(int soundId) async {
     await _channel.invokeMethod('pauseEffect', {"soundId": soundId});
   }
-    /// pauseAllEffects
+
+  /// pauseAllEffects
   static Future<void> pauseAllEffects() async {
     await _channel.invokeMethod('pauseAllEffects');
   }
-    /// resumeEffect
+
+  /// resumeEffect
   static Future<void> resumeEffect(int soundId) async {
     await _channel.invokeMethod('resumeEffect', {"soundId": soundId});
   }
-    /// resumeAllEffects
+
+  /// resumeAllEffects
   static Future<void> resumeAllEffects() async {
     await _channel.invokeMethod('resumeAllEffects');
   }
 
   /// startChannelMediaRelay
-  static Future<void> startChannelMediaRelay(AgoraChannelMediaRelayConfiguration config) async {
-    await _channel.invokeMethod('startChannelMediaRelay', {"config": config.toJson()});
+  static Future<void> startChannelMediaRelay(
+      AgoraChannelMediaRelayConfiguration config) async {
+    await _channel
+        .invokeMethod('startChannelMediaRelay', {"config": config.toJson()});
   }
 
-      /// updateChannelMediaRelay
-  static Future<void> updateChannelMediaRelay(AgoraChannelMediaRelayConfiguration config) async {
-    await _channel.invokeMethod('updateChannelMediaRelay', {"config": config.toJson()});
+  /// removeChannelMediaRelay
+  static Future<void> removeChannelMediaRelay(
+      AgoraChannelMediaRelayConfiguration config) async {
+    await _channel
+        .invokeMethod('removeChannelMediaRelay', {"config": config.toJson()});
+  }
+
+  /// updateChannelMediaRelay
+  static Future<void> updateChannelMediaRelay(
+      AgoraChannelMediaRelayConfiguration config) async {
+    await _channel
+        .invokeMethod('updateChannelMediaRelay', {"config": config.toJson()});
   }
 
   /// stopChannelMediaRelay
@@ -1185,11 +1207,27 @@ class AgoraRtcEngine {
     return version;
   }
 
-  static void _addEventChannelHandler () async {
-    _sink = _eventChannel.receiveBroadcastStream().listen(_eventListener, onError: onError);
+  // setParameters
+  static Future<int> setParameters(String params) async {
+    final int res =
+        await _channel.invokeMethod('setParameters', {"params": params});
+    return res;
   }
 
-  static void _removeEventChannelHandler () async {
+  // getParameters
+  static Future<String> getParameters(String params, String args) async {
+    final String res = await _channel
+        .invokeMethod('getParameters', {"params": params, "args": args});
+    return res;
+  }
+
+  static void _addEventChannelHandler() async {
+    _sink = _eventChannel
+        .receiveBroadcastStream()
+        .listen(_eventListener, onError: onError);
+  }
+
+  static void _removeEventChannelHandler() async {
     await _sink.cancel();
   }
 
@@ -1210,14 +1248,12 @@ class AgoraRtcEngine {
         break;
       case 'onJoinChannelSuccess':
         if (onJoinChannelSuccess != null) {
-          onJoinChannelSuccess(
-              map['channel'], map['uid'], map['elapsed']);
+          onJoinChannelSuccess(map['channel'], map['uid'], map['elapsed']);
         }
         break;
       case 'onRejoinChannelSuccess':
         if (onRejoinChannelSuccess != null) {
-          onRejoinChannelSuccess(
-              map['channel'], map['uid'], map['elapsed']);
+          onRejoinChannelSuccess(map['channel'], map['uid'], map['elapsed']);
         }
         break;
       case 'onLeaveChannel':
@@ -1249,7 +1285,8 @@ class AgoraRtcEngine {
         break;
       case 'onUpdatedUserInfo':
         if (onUpdatedUserInfo != null) {
-          onUpdatedUserInfo(AgoraUserInfo.fromJson(map['userInfo']), map['uid']);
+          onUpdatedUserInfo(
+              AgoraUserInfo.fromJson(map['userInfo']), map['uid']);
         }
         break;
       case 'onConnectionStateChanged':
@@ -1317,14 +1354,13 @@ class AgoraRtcEngine {
         break;
       case 'onFirstLocalVideoFrame':
         if (onFirstLocalVideoFrame != null) {
-          onFirstLocalVideoFrame(
-              map['width'], map['height'], map['elapsed']);
+          onFirstLocalVideoFrame(map['width'], map['height'], map['elapsed']);
         }
         break;
       case 'onFirstRemoteVideoFrame':
         if (onFirstRemoteVideoFrame != null) {
-          onFirstRemoteVideoFrame(map['uid'], map['width'],
-              map['height'], map['elapsed']);
+          onFirstRemoteVideoFrame(
+              map['uid'], map['width'], map['height'], map['elapsed']);
         }
         break;
       case 'onUserMuteAudio':
@@ -1332,20 +1368,21 @@ class AgoraRtcEngine {
           onUserMuteAudio(map['uid'], map['muted']);
         }
         break;
-      case 'onUserMuteVideo':
-        if (onUserMuteVideo != null) {
-          onUserMuteVideo(map['uid'], map['muted']);
-        }
-        break;
+      // case 'onUserMuteVideo':
+      //   if (onUserMuteVideo != null) {
+      //     onUserMuteVideo(map['uid'], map['muted']);
+      //   }
+      //   break;
       case 'onVideoSizeChanged':
         if (onVideoSizeChanged != null) {
-          onVideoSizeChanged(map['uid'], map['width'], map['height'],
-              map['rotation']);
+          onVideoSizeChanged(
+              map['uid'], map['width'], map['height'], map['rotation']);
         }
         break;
       case 'onRemoteVideoStateChanged':
         if (onRemoteVideoStateChanged != null) {
-          onRemoteVideoStateChanged(map['uid'], map['state'], map['reason'], map['elapsed']);
+          onRemoteVideoStateChanged(
+              map['uid'], map['state'], map['reason'], map['elapsed']);
         }
         break;
       // Fallback Events
@@ -1378,22 +1415,18 @@ class AgoraRtcEngine {
         break;
       case 'onLocalVideoStateChanged':
         if (onLocalVideoStateChanged != null) {
-          onLocalVideoStateChanged(
-              map['localVideoState'], map['errorCode']);
+          onLocalVideoStateChanged(map['localVideoState'], map['errorCode']);
         }
         break;
       case 'onRemoteAudioStateChanged':
         if (onRemoteAudioStateChanged != null) {
           onRemoteAudioStateChanged(
-            map['uid'], map['state'], map['reason'], map['elapsed']
-          );
+              map['uid'], map['state'], map['reason'], map['elapsed']);
         }
         break;
       case 'onLocalAudioStateChanged':
         if (onLocalAudioStateChanged != null) {
-          onLocalAudioStateChanged(
-            map['errorCode'], map['state']
-          );
+          onLocalAudioStateChanged(map['errorCode'], map['state']);
         }
         break;
       case 'onRtcStats':
@@ -1409,8 +1442,7 @@ class AgoraRtcEngine {
         break;
       case 'onNetworkQuality':
         if (onNetworkQuality != null) {
-          onNetworkQuality(
-              map['uid'], map['txQuality'], map['rxQuality']);
+          onNetworkQuality(map['uid'], map['txQuality'], map['rxQuality']);
         }
         break;
       case 'onLastmileProbeTestResult':
@@ -1440,17 +1472,22 @@ class AgoraRtcEngine {
           onRemoteAudioStats(stats);
         }
         break;
-        // Statistics Events
-      case 'onRemoteAudioMixingStarted':
-        if (onRemoteAudioMixingStarted != null) {
-          onRemoteAudioMixingStarted();
+      // Statistics Events
+      case 'onLocalAudioMixingStateChanged':
+        if (onLocalAudioMixingStateChanged != null) {
+          onLocalAudioMixingStateChanged(map["state"], map["errorCode"]);
         }
         break;
-      case 'onRemoteAudioMixingFinished':
-        if (onRemoteAudioMixingFinished != null) {
-          onRemoteAudioMixingFinished();
-        }
-        break;
+      // case 'onRemoteAudioMixingStarted':
+      //   if (onRemoteAudioMixingStarted != null) {
+      //     onRemoteAudioMixingStarted();
+      //   }
+      //   break;
+      // case 'onRemoteAudioMixingFinished':
+      //   if (onRemoteAudioMixingFinished != null) {
+      //     onRemoteAudioMixingFinished();
+      //   }
+      //   break;
       case 'onAudioEffectFinished':
         if (onAudioEffectFinished != null) {
           onAudioEffectFinished(map["soundId"]);
@@ -1473,12 +1510,14 @@ class AgoraRtcEngine {
         break;
       case 'onRtmpStreamingStateChanged':
         if (onRtmpStreamingStateChanged != null) {
-          onRtmpStreamingStateChanged(map['url'], map['errorCode'], map['state']);
+          onRtmpStreamingStateChanged(
+              map['url'], map['errorCode'], map['state']);
         }
         break;
       case 'onStreamInjectedStatus':
         if (onStreamInjectedStatus != null) {
-          onStreamInjectedStatus({'url': map['url'], 'uid': map['uid'], 'status': map['status']});
+          onStreamInjectedStatus(
+              {'url': map['url'], 'uid': map['uid'], 'status': map['status']});
         }
         break;
       // Miscellaneous Events
@@ -1492,8 +1531,18 @@ class AgoraRtcEngine {
           onMediaEngineStartCallSuccess();
         }
         break;
-      default:
+      case 'onChannelMediaRelayChanged':
+        if (onChannelMediaRelayChanged != null) {
+          onChannelMediaRelayChanged(map["state"], map["errorCode"]);
+        }
         break;
+      case 'onReceivedChannelMediaRelayEvent':
+        if (onReceivedChannelMediaRelayEvent != null) {
+          onReceivedChannelMediaRelayEvent(map["event"]);
+        }
+        break;
+
+      default:
     }
   }
 
