@@ -84,6 +84,7 @@ class _MyAppState extends State<MyApp> {
 
     AgoraRtcEngine.enableVideo();
     AgoraRtcEngine.enableAudio();
+    // AgoraRtcEngine.setParameters('{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
     AgoraRtcEngine.setChannelProfile(ChannelProfile.Communication);
 
     VideoEncoderConfiguration config = VideoEncoderConfiguration();
