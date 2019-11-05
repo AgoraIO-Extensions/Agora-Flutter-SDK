@@ -28,7 +28,7 @@ class AgoraLiveTranscodingUser {
   int x;
   int y;
   int zOrder;
-  int alpha;
+  double alpha;
   int audioChannel;
 
   AgoraLiveTranscodingUser.fromJson(Map<dynamic, dynamic> json)
@@ -134,7 +134,7 @@ class AgoraLiveTranscoding {
     'transcodingExtraInfo': transcodingExtraInfo,
     'watermark': watermark.toJson(),
     'backgroundImage': backgroundImage.toJson(),
-    'audioSampleRate': _resolveAudioCodecProfileType[audioSampleRate],
+    'audioSampleRate': _resolveAudioSampleRate[audioSampleRate],
     'audioBitrate': audioBitrate,
     'audioChannels': audioChannels,
     'backgroundColor': backgroundColor,

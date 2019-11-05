@@ -2,6 +2,7 @@ package io.agora.agorartcengine;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.net.rtp.AudioCodec;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.SurfaceView;
@@ -94,6 +95,46 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
         image.x = (int) options.get("x");
         image.y = (int) options.get("y");
         return image;
+    }
+
+    private LiveTranscoding.VideoCodecProfileType resolveVideoCodecProfile(Integer value) {
+        LiveTranscoding.VideoCodecProfileType resolveType = LiveTranscoding.VideoCodecProfileType.BASELINE;
+        for (LiveTranscoding.VideoCodecProfileType t:  LiveTranscoding.VideoCodecProfileType.values()) {
+            if (LiveTranscoding.VideoCodecProfileType.getValue(t) == value) {
+                resolveType = t;
+            }
+        }
+        return resolveType;
+    }
+
+    private LiveTranscoding.AudioCodecProfileType resolveAudioCodecProfile(Integer value) {
+        LiveTranscoding.AudioCodecProfileType resolveType = LiveTranscoding.AudioCodecProfileType.HE_AAC;
+        for (LiveTranscoding.AudioCodecProfileType t:  LiveTranscoding.AudioCodecProfileType.values()) {
+            if (LiveTranscoding.AudioCodecProfileType.getValue(t) == value) {
+                resolveType = t;
+            }
+        }
+        return resolveType;
+    }
+
+    private LiveTranscoding.AudioSampleRateType resolveAudioSampleRate(Integer value) {
+        LiveTranscoding.AudioSampleRateType resolveType = LiveTranscoding.AudioSampleRateType.TYPE_32000;
+        for (LiveTranscoding.AudioSampleRateType t:  LiveTranscoding.AudioSampleRateType.values()) {
+            if (LiveTranscoding.AudioSampleRateType.getValue(t) == value) {
+                resolveType = t;
+            }
+        }
+        return resolveType;
+    }
+
+    private LiveInjectStreamConfig.AudioSampleRateType resolveLiveInjectStreamAudioSampleRate(Integer value) {
+        LiveInjectStreamConfig.AudioSampleRateType resolveType = LiveInjectStreamConfig.AudioSampleRateType.TYPE_32000;
+        for (LiveInjectStreamConfig.AudioSampleRateType t:  LiveInjectStreamConfig.AudioSampleRateType.values()) {
+            if (LiveInjectStreamConfig.AudioSampleRateType.getValue(t) == value) {
+                resolveType = t;
+            }
+        }
+        return resolveType;
     }
 
     @Override
@@ -509,13 +550,13 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
                     transcoding.videoGop = (int) params.get("videoGop");
                 }
                 if (params.get("videoCodecProfile") != null) {
-                    transcoding.videoCodecProfile = LiveTranscoding.VideoCodecProfileType.values()[(int) params.get("videoCodecProfile")];
+                    transcoding.videoCodecProfile = resolveVideoCodecProfile((int) params.get("videoCodecProfile"));
                 }
                 if (params.get("audioCodecProfile") != null) {
-                    transcoding.audioCodecProfile = LiveTranscoding.AudioCodecProfileType.values()[(int) params.get("audioCodecProfile")];
+                    transcoding.audioCodecProfile = resolveAudioCodecProfile((int) params.get("audioCodecProfile"));
                 }
                 if (params.get("audioSampleRate") != null) {
-                    transcoding.audioSampleRate = LiveTranscoding.AudioSampleRateType.values()[(int) params.get("audioSampleRate")];
+                    transcoding.audioSampleRate = resolveAudioSampleRate((int) params.get("audioSampleRate"));
                 }
                 if (params.get("watermark") != null) {
                     Map image = (Map) params.get("watermark");
@@ -611,7 +652,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
                 }
 
                 if (config.get("audioSampleRate") != null) {
-                    streamConfig.audioSampleRate = LiveInjectStreamConfig.AudioSampleRateType.values()[(int) config.get("audioSampleRate")];
+                    streamConfig.audioSampleRate = resolveLiveInjectStreamAudioSampleRate((int) config.get("audioSampleRate"));
                 }
                 result.success(mRtcEngine.addInjectStreamUrl(url, streamConfig));
             }
@@ -681,7 +722,6 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
             break;
 
             case "addVideoWatermark": {
-                String encryptionMode = call.argument("encryptionMode");
                 String url = call.argument("url");
                 HashMap<String, Object> watermarkOptions = call.argument("options");
                 HashMap<String, Object> positionLandscapeOptions = (HashMap<String, Object>) watermarkOptions.get("positionInPortraitMode");
