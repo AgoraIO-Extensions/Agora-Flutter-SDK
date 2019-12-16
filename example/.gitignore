@@ -28,6 +28,10 @@
 .pub/
 build/
 
+# Flutter v1.12 will create these files
+.flutter-plugins-dependencies
+**/flutter_export_environment.sh
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
