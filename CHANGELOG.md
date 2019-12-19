@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.2
+* fix Android orientation bug
+
 ## 1.0.1
 * support 2.9.1 native sdk, [more details](https://github.com/AgoraIO/Flutter-SDK/pull/36/files)
 
