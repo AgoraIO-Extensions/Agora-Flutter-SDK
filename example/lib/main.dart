@@ -88,8 +88,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initAgoraRtcEngine() async {
-    AgoraRtcEngine.create('***REMOVED***');
-    AgoraRtcEngine.setLogFile("/sdcard/123.log");
+    AgoraRtcEngine.create('YOUR APP ID');
+
     AgoraRtcEngine.enableVideo();
     AgoraRtcEngine.enableAudio();
     // AgoraRtcEngine.setParameters('{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
