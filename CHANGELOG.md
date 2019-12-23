@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.3
+* add log functions
+
 ## 1.0.2
 * fix Android orientation bug
 
