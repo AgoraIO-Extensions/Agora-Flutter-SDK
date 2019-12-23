@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'src/base.dart';
 
 export 'src/agora_render_widget.dart';
@@ -34,6 +36,7 @@ class WatermarkOptions {
   final bool visibleInPreview;
   final Map<String, int> positionInLandscapeMode;
   final Map<String, int> positionInPortraitMode;
+
   WatermarkOptions(json)
       : visibleInPreview = json['visibleInPreview'],
         positionInLandscapeMode = json['positionInLandscapeMode'],
@@ -51,6 +54,7 @@ class AgoraLastmileProbeConfig {
   final bool probeUplink;
   final int expectedUplinkBitrate;
   final int expectedDownlinkBitrate;
+
   AgoraLastmileProbeConfig(this.expectedDownlinkBitrate,
       this.expectedUplinkBitrate, this.probeDownlink, this.probeUplink)
       : assert(expectedDownlinkBitrate != null),
@@ -1205,6 +1209,19 @@ class AgoraRtcEngine {
   static Future<String> getSdkVersion() async {
     final String version = await _channel.invokeMethod('getSdkVersion');
     return version;
+  }
+
+  static Future<void> setLogFile(String filePath) async {
+    await _channel.invokeMethod('setLogFile', {"filePath": filePath});
+  }
+
+  static Future<void> setLogFilter(int filter) async {
+    await _channel.invokeMethod('setLogFilter', {"filter": filter});
+  }
+
+  static Future<void> setLogFileSize(int fileSizeInKBytes) async {
+    await _channel
+        .invokeMethod('setLogFileSize', {"fileSizeInKBytes": fileSizeInKBytes});
   }
 
   // setParameters
