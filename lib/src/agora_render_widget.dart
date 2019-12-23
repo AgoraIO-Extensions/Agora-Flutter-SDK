@@ -2,9 +2,9 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
 /// AgoraRenderWidget - This widget will automatically manage the native view.
-/// 
+///
 /// Enables create native view with `uid` `mode` `local` and destroy native view automatically.
-/// 
+///
 class AgoraRenderWidget extends StatefulWidget {
   // uid
   final int uid;
@@ -33,7 +33,6 @@ class AgoraRenderWidget extends StatefulWidget {
 }
 
 class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
-
   Widget _nativeView;
 
   int _viewId;

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,7 +17,15 @@ class _MyAppState extends State<MyApp> {
   static final _sessions = List<VideoSession>();
   String dropdownValue = 'Off';
 
-  final List<String> voices = ['Off', 'Oldman', 'BabyBoy', 'BabyGirl', 'Zhubajie', 'Ethereal', 'Hulk'];
+  final List<String> voices = [
+    'Off',
+    'Oldman',
+    'BabyBoy',
+    'BabyGirl',
+    'Zhubajie',
+    'Ethereal',
+    'Hulk'
+  ];
 
   /// remote user list
   final _remoteUsers = List<int>();
@@ -46,7 +54,7 @@ class _MyAppState extends State<MyApp> {
                     style: textStyle),
                 onPressed: _toggleChannel,
               ),
-              Container(height: 100,child: _voiceDropdown()),
+              Container(height: 100, child: _voiceDropdown()),
               Expanded(child: Container(child: _buildInfoList())),
             ],
           ),
@@ -63,12 +71,12 @@ class _MyAppState extends State<MyApp> {
           onChanged: (String newValue) {
             setState(() {
               dropdownValue = newValue;
-              VoiceChanger voice = VoiceChanger.values[(voices.indexOf(dropdownValue))];
+              VoiceChanger voice =
+                  VoiceChanger.values[(voices.indexOf(dropdownValue))];
               AgoraRtcEngine.setLocalVoiceChanger(voice);
             });
           },
-          items: voices
-              .map<DropdownMenuItem<String>>((String value) {
+          items: voices.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -80,8 +88,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initAgoraRtcEngine() async {
-    AgoraRtcEngine.create('YOUR APP ID');
-
+    AgoraRtcEngine.create('2b4b76e458cf439aa7cd313b9504f0a4');
+    AgoraRtcEngine.setLogFile("/sdcard/123.log");
     AgoraRtcEngine.enableVideo();
     AgoraRtcEngine.enableAudio();
     // AgoraRtcEngine.setParameters('{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
