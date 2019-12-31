@@ -48,6 +48,28 @@ Open the *info.plist* and add:
 
 Your application can still run the voice call when it is switched to the background if the background mode is enabled. Select the app target in Xcode, click the **Capabilities** tab, enable **Background Modes**, and check **Audio, AirPlay, and Picture in Picture**.
 
+## Error handling
+
+### Black screen
+
+if your MainActivity extends `io.flutter.embedding.android.FlutterActivity`
+
+please remove this line
+```
+GeneratedPluginRegistrant.registerWith(this)
+```
+
+[you can refer to official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
+
+### Release crash
+
+it causes by code obfuscation because of flutter set `android.enableR8=true` by the default
+
+Add the following line in the **app/proguard-rules.pro** file to prevent code obfuscation:
+```
+-keep class io.agora.**{*;}
+```
+
 ## How to contribute
 
 To help work on this sdk, see our [contributor guide](CONTRIBUTING.md).
