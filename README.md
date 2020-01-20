@@ -50,16 +50,22 @@ Your application can still run the voice call when it is switched to the backgro
 
 ## Error handling
 
+### iOS memory leak
+
+if your flutter channel is stable, `PlatformView` will cause memory leak, you can run `flutter channel beta`
+
+[you can refer to this pull request](https://github.com/flutter/engine/pull/14326)
+
 ### Black screen
 
 if your MainActivity extends `io.flutter.embedding.android.FlutterActivity`
 
-please remove this line
+please remove this line of code
 ```
 GeneratedPluginRegistrant.registerWith(this)
 ```
 
-[you can refer to official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
+[you can refer to the official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
 
 ### Release crash
 

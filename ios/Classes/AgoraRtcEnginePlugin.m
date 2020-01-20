@@ -273,10 +273,8 @@
         [self.agoraRtcEngine setVideoEncoderConfiguration:config];
         result(nil);
     } else if ([@"removeNativeView" isEqualToString:method]) {
-        NSString *viewId = [self stringFromArguments:params key:@"viewId"];
-        if (viewId.length) {
-            [self.rendererViews removeObjectForKey:viewId];
-        }
+        NSInteger viewId = [self intFromArguments:params key:@"viewId"];
+        [AgoraRtcEnginePlugin removeViewForId:@(viewId)];
         result(nil);
     } else if ([@"setupLocalVideo" isEqualToString:method]) {
         NSInteger viewId = [self intFromArguments:params key:@"viewId"];
