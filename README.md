@@ -56,7 +56,7 @@ if your flutter channel is stable, `PlatformView` will cause memory leak, you ca
 
 [you can refer to this pull request](https://github.com/flutter/engine/pull/14326)
 
-### Black screen
+### Android Black screen
 
 if your MainActivity extends `io.flutter.embedding.android.FlutterActivity`
 
@@ -67,7 +67,7 @@ GeneratedPluginRegistrant.registerWith(this)
 
 [you can refer to the official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
 
-### Release crash
+### Android Release crash
 
 it causes by code obfuscation because of flutter set `android.enableR8=true` by the default
 
