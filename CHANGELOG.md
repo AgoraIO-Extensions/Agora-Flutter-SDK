@@ -1,5 +1,11 @@
 # Change log
 
+## 1.0.5
+* fix iOS memory leak
+
+## 1.0.4
+* AgoraRenderWidget use key now
+
 ## 1.0.3
 * add log functions
 
