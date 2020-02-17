@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.6
+* upgrade Agora SDK to 2.9.4, not use IMEI now
+
 ## 1.0.5
 * fix iOS memory leak
 
