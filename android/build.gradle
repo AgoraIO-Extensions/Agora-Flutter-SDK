@@ -1,5 +1,5 @@
 group 'io.agora.agorartcengine'
-version '1.0.5'
+version '1.0.6'
 
 buildscript {
     repositories {
@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.5.3'
     }
 }
 
@@ -29,11 +29,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     lintOptions {
         disable 'InvalidPackage'
     }
 }
 
 dependencies {
-    implementation 'io.agora.rtc:full-sdk:2.9.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'io.agora.rtc:full-sdk:2.9.4'
 }
