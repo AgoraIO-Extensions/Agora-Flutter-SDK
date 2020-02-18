@@ -488,7 +488,7 @@
             transcoding.transcodingUsers = transcodingUsers;
         }
         if (options[@"transcodingExtraInfo"] != [NSNull null]) {
-            transcoding.transcodingExtraInfo = [options[@"transcodingExtraInfo"] stringValue];
+            transcoding.transcodingExtraInfo = options[@"transcodingExtraInfo"];
         }
         NSInteger res = [self.agoraRtcEngine setLiveTranscoding:transcoding];
         result(@(res));
