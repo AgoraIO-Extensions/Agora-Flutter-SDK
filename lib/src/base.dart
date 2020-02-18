@@ -10,6 +10,7 @@ class AgoraImage {
   AgoraImage(this.url, this.x, this.y, this.width, this.height);
 
   Map<String, dynamic> toJson() => {
+        'url': url,
         'x': x,
         'y': y,
         'width': width,
@@ -123,7 +124,7 @@ class AgoraLiveTranscoding {
         'transcodingExtraInfo': transcodingExtraInfo,
         'watermark': watermark.toJson(),
         'backgroundImage': backgroundImage.toJson(),
-        'audioSampleRate': _resolveAudioCodecProfileType[audioSampleRate],
+        'audioSampleRate': _resolveAudioSampleRate[audioSampleRate],
         'audioBitrate': audioBitrate,
         'audioChannels': audioChannels,
         'backgroundColor': backgroundColor,
