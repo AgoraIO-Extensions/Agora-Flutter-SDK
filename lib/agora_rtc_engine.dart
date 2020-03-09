@@ -1392,8 +1392,8 @@ class AgoraRtcEngine {
       //   break;
       case 'onVideoSizeChanged':
         if (onVideoSizeChanged != null) {
-          onVideoSizeChanged(
-              map['uid'], map['width'], map['height'], map['rotation']);
+          onVideoSizeChanged(map['uid'], map['width'].toDouble(),
+              map['height'].toDouble(), map['rotation']);
         }
         break;
       case 'onRemoteVideoStateChanged':
