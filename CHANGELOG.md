@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.8
+* fix onVideoSizeChanged bug
+
 ## 1.0.7
 * fix iOS setLiveTranscoding crash
 
