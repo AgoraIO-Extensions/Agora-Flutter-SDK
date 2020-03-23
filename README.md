@@ -58,6 +58,8 @@ if your flutter channel is stable, `PlatformView` will cause memory leak, you ca
 
 ### Android Black screen
 
+`Tips: please make sure your all configurations are correct, but still black screen`
+
 if your MainActivity extends `io.flutter.embedding.android.FlutterActivity` and override the `configureFlutterEngine` function
 
 please don't forget add `super.configureFlutterEngine(flutterEngine)`
