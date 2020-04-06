@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.9
+* fix android onUserInfoUpdated bug
+
 ## 1.0.8
 * fix onVideoSizeChanged bug
 

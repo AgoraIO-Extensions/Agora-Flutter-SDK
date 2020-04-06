@@ -1155,7 +1155,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
             HashMap<String, Object> userInfoMap = new HashMap<>();
             userInfoMap.put("uid", userInfo.uid);
             userInfoMap.put("userAccount", userInfo.userAccount);
-            map.put("userAccount", userInfoMap);
+            map.put("userInfo", userInfoMap);
             sendEvent("onUpdatedUserInfo", map);
         }
 
