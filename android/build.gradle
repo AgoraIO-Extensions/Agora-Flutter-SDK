@@ -1,5 +1,4 @@
 group 'io.agora.agorartcengine'
-version '1.0.8'
 
 buildscript {
     repositories {
