@@ -50,29 +50,46 @@ Your application can still run the voice call when it is switched to the backgro
 
 ## Error handling
 
+### iOS black screen
+
+Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *info.plist*
+
 ### iOS memory leak
 
-if your flutter channel is stable, `PlatformView` will cause memory leak, you can run `flutter channel beta`
+If your flutter channel is stable, `PlatformView` will cause memory leak, you can run `flutter channel beta`
 
-[you can refer to this pull request](https://github.com/flutter/engine/pull/14326)
+[You can refer to this pull request](https://github.com/flutter/engine/pull/14326)
 
-### Android Black screen
+### Android black screen
 
-`Tips: please make sure your all configurations are correct, but still black screen`
+**Tips: please make sure your all configurations are correct, but still black screen**
 
-if your MainActivity extends `io.flutter.embedding.android.FlutterActivity` and override the `configureFlutterEngine` function
+If your MainActivity extends `io.flutter.embedding.android.FlutterActivity` and override the `configureFlutterEngine` method
 
-please don't forget add `super.configureFlutterEngine(flutterEngine)`
+#### stable flutter channel
 
-please don't add `GeneratedPluginRegistrant.registerWith(flutterEngine)`, plugins will be registered auto now
+The `FlutterEngine` class will register all plugins auto
 
-[you can refer to the official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
+The `GeneratedPluginRegistrant.registerWith(flutterEngine)` method has been added by default, so it causes the plugin register twice, our SDK may not work
+
+If you remove the `GeneratedPluginRegistrant.registerWith(flutterEngine)` method, so some other plugins may not work because the plugin can't get the activity instance when register by `FlutterEngine`, 
+
+***We suggest you don't use the stable channel, because the iOS platform also has memory leak bug***
+
+#### others flutter channel
+
+The `io.flutter.embedding.android.FlutterActivity` will register all plugins auto by the `configureFlutterEngine` method
+
+* Don't forget add `super.configureFlutterEngine(flutterEngine)`
+* Don't add `GeneratedPluginRegistrant.registerWith(flutterEngine)`
+
+[You can refer to the official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
 
 ### Android Release crash
 
-it causes by code obfuscation because of flutter set `android.enableR8=true` by the default
+It causes by code obfuscation because of flutter set `android.enableR8=true` by the default
 
-Add the following line in the **app/proguard-rules.pro** file to prevent code obfuscation:
+Add the following line in the *app/proguard-rules.pro* file to prevent code obfuscation:
 ```
 -keep class io.agora.**{*;}
 ```
