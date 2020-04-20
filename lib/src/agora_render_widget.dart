@@ -23,11 +23,12 @@ class AgoraRenderWidget extends StatefulWidget {
     this.mode = VideoRenderMode.Hidden,
     this.local = false,
     this.preview = false,
+    Key key,
   })  : assert(uid != null),
         assert(mode != null),
         assert(local != null),
         assert(preview != null),
-        super(key: Key(uid.toString()));
+        super(key: key ?? Key(uid.toString()));
 
   @override
   State<StatefulWidget> createState() => _AgoraRenderWidgetState();
