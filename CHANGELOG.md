@@ -1,5 +1,9 @@
 # Change log
 
+## 1.0.11
+* fix Android bugs of setLiveTranscoding and addInjectStreamUrl
+* support custom key when init AgoraRenderWidget
+
 ## 1.0.10
 * fix iOS encryption bug
 
