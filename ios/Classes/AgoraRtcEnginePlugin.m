@@ -606,7 +606,7 @@
         NSString *filepath = [self stringFromArguments:params key:@"filepath"];
         BOOL loopback = [self boolFromArguments:params key:@"loopback"];
         BOOL replace = [self boolFromArguments:params key:@"replace"];
-        int cycle = [self intFromArguments:params key:@"cycle"];
+        NSInteger cycle = [self intFromArguments:params key:@"cycle"];
         [self.agoraRtcEngine startAudioMixing:filepath loopback:loopback replace:replace cycle:cycle];
         result(nil);
     } else if ([@"stopAudioMixing" isEqualToString:method]) {
@@ -669,34 +669,34 @@
         double gain = [self doubleFromArguments:params key:@"gain"];
         BOOL publish = [self boolFromArguments:params key:@"publish"];
 
-        [self.agoraRtcEngine playEffect:(int) soundId filePath:filepath loopCount:loopCount pitch:pitch pan:pan gain:gain publish:publish];
+        [self.agoraRtcEngine playEffect:(int) soundId filePath:filepath loopCount:(int) loopCount pitch:pitch pan:pan gain:gain publish:publish];
         result(nil);
     } else if ([@"stopEffect" isEqualToString:method]) {
-        int soundId = [self intFromArguments:params key:@"soundId"];
-        [self.agoraRtcEngine stopEffect:soundId];
+        NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+        [self.agoraRtcEngine stopEffect:(int) soundId];
         result(nil);
     } else if ([@"stopAllEffects" isEqualToString:method]) {
         [self.agoraRtcEngine stopAllEffects];
         result(nil);
     } else if ([@"preloadEffect" isEqualToString:method]) {
-        int soundId = [self intFromArguments:params key:@"soundId"];
+        NSInteger soundId = [self intFromArguments:params key:@"soundId"];
         NSString *filepath = [self stringFromArguments:params key:@"filepath"];
-        [self.agoraRtcEngine preloadEffect:soundId filePath:filepath];
+        [self.agoraRtcEngine preloadEffect:(int) soundId filePath:filepath];
         result(nil);
     } else if ([@"unloadEffect" isEqualToString:method]) {
-        int soundId = [self intFromArguments:params key:@"soundId"];
-        [self.agoraRtcEngine unloadEffect:soundId];
+        NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+        [self.agoraRtcEngine unloadEffect:(int) soundId];
         result(nil);
     } else if ([@"pauseEffect" isEqualToString:method]) {
-        int soundId = [self intFromArguments:params key:@"soundId"];
-        [self.agoraRtcEngine pauseEffect:soundId];
+        NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+        [self.agoraRtcEngine pauseEffect:(int) soundId];
         result(nil);
     } else if ([@"pauseAllEffects" isEqualToString:method]) {
         [self.agoraRtcEngine pauseAllEffects];
         result(nil);
     } else if ([@"resumeEffect" isEqualToString:method]) {
-        int soundId = [self intFromArguments:params key:@"soundId"];
-        [self.agoraRtcEngine resumeEffect:soundId];
+        NSInteger soundId = [self intFromArguments:params key:@"soundId"];
+        [self.agoraRtcEngine resumeEffect:(int) soundId];
         result(nil);
     } else if ([@"resumeAllEffects" isEqualToString:method]) {
         [self.agoraRtcEngine resumeAllEffects];
