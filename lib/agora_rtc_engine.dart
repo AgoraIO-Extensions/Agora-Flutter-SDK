@@ -1071,17 +1071,17 @@ class AgoraRtcEngine {
   }
 
   /// getAudioMixingPublishVolume
-  static Future<void> getAudioMixingPublishVolume() {
+  static Future<int> getAudioMixingPublishVolume() {
     return _channel.invokeMethod('getAudioMixingPublishVolume');
   }
 
   /// startAudioMixing
-  static Future<void> getAudioMixingDuration() {
+  static Future<int> getAudioMixingDuration() {
     return _channel.invokeMethod('getAudioMixingDuration');
   }
 
   /// startAudioMixing
-  static Future<void> getAudioMixingCurrentPosition() {
+  static Future<int> getAudioMixingCurrentPosition() {
     return _channel.invokeMethod('getAudioMixingCurrentPosition');
   }
 
@@ -1091,8 +1091,8 @@ class AgoraRtcEngine {
   }
 
   /// getEffectsVolume
-  static Future<void> getEffectsVolume() async {
-    await _channel.invokeMethod('getEffectsVolume');
+  static Future<double> getEffectsVolume() async {
+    return _channel.invokeMethod('getEffectsVolume');
   }
 
   /// setEffectsVolume

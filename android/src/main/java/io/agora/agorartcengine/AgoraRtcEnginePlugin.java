@@ -509,13 +509,31 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
                     transcoding.videoGop = (int) params.get("videoGop");
                 }
                 if (params.get("videoCodecProfile") != null) {
-                    transcoding.videoCodecProfile = LiveTranscoding.VideoCodecProfileType.values()[(int) params.get("videoCodecProfile")];
+                    int videoCodecProfile = (int) params.get("videoCodecProfile");
+                    for (LiveTranscoding.VideoCodecProfileType profileType : LiveTranscoding.VideoCodecProfileType.values()) {
+                        if (LiveTranscoding.VideoCodecProfileType.getValue(profileType) == videoCodecProfile) {
+                            transcoding.videoCodecProfile = profileType;
+                            break;
+                        }
+                    }
                 }
                 if (params.get("audioCodecProfile") != null) {
-                    transcoding.audioCodecProfile = LiveTranscoding.AudioCodecProfileType.values()[(int) params.get("audioCodecProfile")];
+                    int audioCodecProfile = (int) params.get("audioCodecProfile");
+                    for (LiveTranscoding.AudioCodecProfileType profileType : LiveTranscoding.AudioCodecProfileType.values()) {
+                        if (LiveTranscoding.AudioCodecProfileType.getValue(profileType) == audioCodecProfile) {
+                            transcoding.audioCodecProfile = profileType;
+                            break;
+                        }
+                    }
                 }
                 if (params.get("audioSampleRate") != null) {
-                    transcoding.audioSampleRate = LiveTranscoding.AudioSampleRateType.values()[(int) params.get("audioSampleRate")];
+                    int audioSampleRate = (int) params.get("audioSampleRate");
+                    for (LiveTranscoding.AudioSampleRateType rateType : LiveTranscoding.AudioSampleRateType.values()) {
+                        if (LiveTranscoding.AudioSampleRateType.getValue(rateType) == audioSampleRate) {
+                            transcoding.audioSampleRate = rateType;
+                            break;
+                        }
+                    }
                 }
                 if (params.get("watermark") != null) {
                     Map image = (Map) params.get("watermark");
@@ -558,7 +576,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
                         user.width = (int) optionUser.get("width");
                         user.height = (int) optionUser.get("height");
                         user.zOrder = (int) optionUser.get("zOrder");
-                        user.alpha = (float) optionUser.get("alpha");
+                        user.alpha = ((Double) optionUser.get("alpha")).floatValue();
                         user.audioChannel = (int) optionUser.get("audioChannel");
                         users.add(user);
                     }
@@ -611,7 +629,13 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
                 }
 
                 if (config.get("audioSampleRate") != null) {
-                    streamConfig.audioSampleRate = LiveInjectStreamConfig.AudioSampleRateType.values()[(int) config.get("audioSampleRate")];
+                    int audioSampleRate = (int) config.get("audioSampleRate");
+                    for (LiveInjectStreamConfig.AudioSampleRateType rateType : LiveInjectStreamConfig.AudioSampleRateType.values()) {
+                        if (LiveInjectStreamConfig.AudioSampleRateType.getValue(rateType) == audioSampleRate) {
+                            streamConfig.audioSampleRate = rateType;
+                            break;
+                        }
+                    }
                 }
                 result.success(mRtcEngine.addInjectStreamUrl(url, streamConfig));
             }
@@ -795,7 +819,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
 
             case "getEffectsVolume": {
                 double volume = mRtcEngine.getAudioEffectManager().getEffectsVolume();
-                result.success(null);
+                result.success(volume);
             }
             break;
 
