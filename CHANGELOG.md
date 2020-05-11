@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.12
+* fix AgoraLiveTranscodingUser.alpha type bug
+
 ## 1.0.11
 * fix Android bugs of setLiveTranscoding and addInjectStreamUrl
 * support custom key when init AgoraRenderWidget
