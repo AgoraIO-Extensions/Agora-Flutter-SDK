@@ -728,18 +728,24 @@ class AgoraRtcEngine {
   /// Sets the local video display mode.
   ///
   /// This method may be invoked multiple times during a call to change the display mode.
-  static Future<void> setLocalRenderMode(VideoRenderMode renderMode) async {
-    await _channel.invokeMethod(
-        'setLocalRenderMode', {'mode': _intFromVideoRenderMode(renderMode)});
+  static Future<void> setLocalRenderMode(
+      VideoRenderMode renderMode, VideoMirrorMode mirrorMode) async {
+    await _channel.invokeMethod('setLocalRenderMode', {
+      'renderMode': _intFromVideoRenderMode(renderMode),
+      'mirrorMode': mirrorMode.index
+    });
   }
 
   /// Sets the remote video display mode.
   ///
   /// This method can be invoked multiple times during a call to change the display mode.
   static Future<void> setRemoteRenderMode(
-      int uid, VideoRenderMode renderMode) async {
-    await _channel.invokeMethod('setRemoteRenderMode',
-        {'uid': uid, 'mode': _intFromVideoRenderMode(renderMode)});
+      int uid, VideoRenderMode renderMode, VideoMirrorMode mirrorMode) async {
+    await _channel.invokeMethod('setRemoteRenderMode', {
+      'uid': uid,
+      'renderMode': _intFromVideoRenderMode(renderMode),
+      'mirrorMode': mirrorMode.index
+    });
   }
 
   /// Starts the local video preview before joining a channel.
@@ -1202,6 +1208,10 @@ class AgoraRtcEngine {
   /// Switches between front and rear cameras.
   static Future<void> switchCamera() async {
     await _channel.invokeMethod('switchCamera');
+  }
+
+  static Future<void> setCameraZoomFactor(double factor) async {
+    await _channel.invokeMethod('setCameraZoomFactor', {'factor': factor});
   }
 
   // Miscellaneous Methods

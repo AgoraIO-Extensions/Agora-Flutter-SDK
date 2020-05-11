@@ -590,6 +590,17 @@ enum VideoRenderMode {
   Fit,
 }
 
+enum VideoMirrorMode {
+  /// (Default) The mirror mode determined by the SDK. If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
+  AUTO,
+
+  /// Enable the mirror mode.
+  ENABLE,
+
+  /// Disable the mirror mode.
+  DISABLE,
+}
+
 enum VoiceChanger {
   /// The original voice (no local voice change).
   VOICE_CHANGER_OFF,

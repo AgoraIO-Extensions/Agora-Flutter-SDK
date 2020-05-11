@@ -331,15 +331,17 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
             }
             break;
             case "setLocalRenderMode": {
-                int mode = call.argument("mode");
-                mRtcEngine.setLocalRenderMode(mode);
+                int renderMode = call.argument("renderMode");
+                int mirrorMode = call.argument("mirrorMode");
+                mRtcEngine.setLocalRenderMode(renderMode, mirrorMode);
                 result.success(null);
             }
             break;
             case "setRemoteRenderMode": {
                 int uid = call.argument("uid");
-                int mode = call.argument("mode");
-                mRtcEngine.setRemoteRenderMode(uid, mode);
+                int renderMode = call.argument("renderMode");
+                int mirrorMode = call.argument("mirrorMode");
+                mRtcEngine.setRemoteRenderMode(uid, renderMode, mirrorMode);
                 result.success(null);
             }
             break;
@@ -1030,6 +1032,12 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
                 result.success(null);
             }
             break;
+
+            case "setCameraZoomFactor": {
+                float factor = ((Double) call.argument("factor")).floatValue();
+                mRtcEngine.setCameraZoomFactor(factor);
+                result.success(null);
+            }
 
             // Miscellaneous Methods
             case "getSdkVersion": {

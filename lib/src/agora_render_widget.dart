@@ -82,9 +82,10 @@ class _AgoraRenderWidgetState extends State<AgoraRenderWidget> {
 
   void _changeRenderMode() {
     if (widget.local) {
-      AgoraRtcEngine.setLocalRenderMode(widget.mode);
+      AgoraRtcEngine.setLocalRenderMode(widget.mode, VideoMirrorMode.AUTO);
     } else {
-      AgoraRtcEngine.setRemoteRenderMode(widget.uid, widget.mode);
+      AgoraRtcEngine.setRemoteRenderMode(
+          widget.uid, widget.mode, VideoMirrorMode.AUTO);
     }
   }
 
