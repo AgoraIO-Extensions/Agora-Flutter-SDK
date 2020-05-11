@@ -30,7 +30,7 @@ class AgoraLiveTranscodingUser {
   int x;
   int y;
   int zOrder;
-  int alpha;
+  double alpha;
   int audioChannel;
 
   AgoraLiveTranscodingUser.fromJson(Map<dynamic, dynamic> json)
