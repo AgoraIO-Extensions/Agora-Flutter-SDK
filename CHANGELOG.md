@@ -1,6 +1,6 @@
 # Change log
 
-## 1.0.11
+## 1.0.12
 * fix AgoraLiveTranscodingUser.alpha type bug
 
 ## 1.0.11
