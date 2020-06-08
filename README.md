@@ -1,4 +1,4 @@
-# AgoraRtcEngine
+# agora_rtc_engine
 
 ![pub package](https://img.shields.io/pub/v/agora_rtc_engine.svg)
 
