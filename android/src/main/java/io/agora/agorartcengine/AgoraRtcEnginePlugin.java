@@ -39,6 +39,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
 
     private final Registrar mRegistrar;
     private static RtcEngine mRtcEngine;
+
     private HashMap<String, SurfaceView> mRendererViews;
     private Handler mEventHandler = new Handler(Looper.getMainLooper());
     private EventChannel.EventSink sink;
@@ -106,6 +107,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
                 try {
                     String appId = call.argument("appId");
                     mRtcEngine = RtcEngine.create(context, appId, mRtcEventHandler);
+                    enableExternalAudioSource();
                     result.success(null);
                 } catch (Exception e) {
                     throw new RuntimeException("NEED TO check rtc sdk init fatal error\n");
@@ -130,6 +132,7 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
             }
             break;
             case "joinChannel": {
+                enableExternalAudioSource();
                 String token = call.argument("token");
                 String channel = call.argument("channelId");
                 String info = call.argument("info");
@@ -1075,6 +1078,13 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
             default:
                 result.notImplemented();
         }
+    }
+
+    private void enableExternalAudioSource() {
+        CustomRecorderConfig config = CustomRecorderConfig.getDefaultConfig();
+        mRtcEngine.setExternalAudioSource(true,
+                config.getSampleRate(),
+                config.getChannelCount());
     }
 
     private VideoEncoderConfiguration.ORIENTATION_MODE orientationFromValue(int value) {
