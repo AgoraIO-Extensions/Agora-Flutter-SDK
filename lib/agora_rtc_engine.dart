@@ -536,7 +536,7 @@ class AgoraRtcEngine {
   /// Gets the user information by passing in the uid.
   static Future<AgoraUserInfo> getUserInfoByUid(int uid) async {
     final AgoraUserInfo result = AgoraUserInfo.fromJson(
-        await _channel.invokeMethod('getUserInfoByUserAccount', {"uid": uid}));
+        await _channel.invokeMethod('getUserInfoByUid', {"uid": uid}));
     return result;
   }
 
