@@ -92,10 +92,10 @@ class RtcChannelManager {
 
     func registerMediaMetadataObserver(_ channelId: String, _ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) -> Int32 {
         if let rtcChannel = self[channelId] {
-            let mediaObserver = MediaObserver() { methodName, data in
+            let mediaObserver = MediaObserver() { data in
                 if var `data` = data {
                     data["channelId"] = channelId
-                    emit(methodName, data)
+                    emit(RtcChannelEvents.MetadataReceived, data)
                 }
             }
             let res = rtcChannel.setMediaMetadataDelegate(mediaObserver, with: .video)
