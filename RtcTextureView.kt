@@ -39,12 +39,15 @@ class RtcTextureView(
 
     private fun setupVideoRenderer(engine: RtcEngine) {
         if (uid == 0) {
+            engine.setLocalVideoRenderer(null)
             engine.setLocalVideoRenderer(texture)
         } else {
             channel?.get()?.let {
+                it.setRemoteVideoRenderer(uid, null)
                 it.setRemoteVideoRenderer(uid, texture)
                 return@setupVideoRenderer
             }
+            engine.setRemoteVideoRenderer(uid, null)
             engine.setRemoteVideoRenderer(uid, texture)
         }
     }

@@ -69,7 +69,7 @@ class RtcEngineManager {
     private var mediaObserver: MediaObserver? = null
 
     fun create(context: Context, appId: String, areaCode: Int, @Annotations.AgoraRtcAppType appType: Int, emit: (methodName: String, data: Map<String, Any?>?) -> Unit) {
-        RtcEngineEx.create(RtcEngineConfig().apply {
+        engine = RtcEngineEx.create(RtcEngineConfig().apply {
             mContext = context
             mAppId = appId
             mAreaCode = areaCode
