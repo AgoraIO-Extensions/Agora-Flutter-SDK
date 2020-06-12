@@ -67,7 +67,8 @@ fun RemoteAudioStats.toMap(): Map<String, Any?> {
             "receivedSampleRate" to receivedSampleRate,
             "receivedBitrate" to receivedBitrate,
             "totalFrozenTime" to totalFrozenTime,
-            "frozenRate" to frozenRate
+            "frozenRate" to frozenRate,
+            "totalActiveTime" to totalActiveTime
     )
 }
 
@@ -100,7 +101,8 @@ fun RemoteVideoStats.toMap(): Map<String, Any?> {
             "packetLossRate" to packetLossRate,
             "rxStreamType" to rxStreamType,
             "totalFrozenTime" to totalFrozenTime,
-            "frozenRate" to frozenRate
+            "frozenRate" to frozenRate,
+            "totalActiveTime" to totalActiveTime
     )
 }
 
@@ -132,4 +134,18 @@ fun LastmileProbeResult.toMap(): Map<String, Any?> {
             "uplinkReport" to uplinkReport.toMap(),
             "downlinkReport" to downlinkReport.toMap()
     )
+}
+
+fun AgoraFacePositionInfo.toMap(): Map<String, Any?> {
+    return hashMapOf(
+            "x" to x,
+            "y" to y,
+            "width" to width,
+            "height" to height,
+            "distance" to distance
+    )
+}
+
+fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
+    return List(size) { this[it].toMap() }
 }

@@ -75,8 +75,8 @@ class RtcChannelManager {
 
     fun registerMediaMetadataObserver(channelId: String, emit: (methodName: String, data: Map<String, Any?>?) -> Unit): Int {
         this[channelId]?.let {
-            val mediaObserver = MediaObserver { methodName, data ->
-                emit(methodName, data?.toMutableMap()?.apply { put("channelId", channelId) })
+            val mediaObserver = MediaObserver { data ->
+                emit(RtcChannelEvents.MetadataReceived, data?.toMutableMap()?.apply { put("channelId", channelId) })
             }
             val res = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
             if (res == 0) mediaObserverMap[channelId] = mediaObserver

@@ -3,10 +3,7 @@ package io.agora.rtc.base
 import android.content.Context
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import io.agora.rtc.Constants
-import io.agora.rtc.IMetadataObserver
-import io.agora.rtc.RtcEngine
-import io.agora.rtc.RtcEngineEx
+import io.agora.rtc.*
 import io.agora.rtc.models.UserInfo
 
 interface RtcEngineInterface<Map, Callback> :
@@ -31,7 +28,7 @@ interface RtcEngineInterface<Map, Callback> :
         RtcEngineManager.RtcInjectStreamInterface<Map, Callback>,
         RtcEngineManager.RtcCameraInterface<Map, Callback>,
         RtcEngineManager.RtcStreamMessageInterface<Callback> {
-    fun create(appId: String, callback: Callback?)
+    fun create(appId: String, areaCode: Int, callback: Callback?)
 
     fun destroy(callback: Callback?)
 
@@ -71,11 +68,16 @@ class RtcEngineManager {
     private var engine: RtcEngine? = null
     private var mediaObserver: MediaObserver? = null
 
-    fun create(context: Context, appId: String, emit: (methodName: String, data: Map<String, Any?>?) -> Unit) {
-        engine = RtcEngineEx.create(context, appId, RtcEngineEventHandler { methodName, data ->
-            emit(methodName, data)
+    fun create(context: Context, appId: String, areaCode: Int, @Annotations.AgoraRtcAppType appType: Int, emit: (methodName: String, data: Map<String, Any?>?) -> Unit) {
+        RtcEngineEx.create(RtcEngineConfig().apply {
+            mContext = context
+            mAppId = appId
+            mAreaCode = areaCode
+            mEventHandler = RtcEngineEventHandler { methodName, data ->
+                emit(methodName, data)
+            }
         })
-        (engine as? RtcEngineEx)?.setAppType(8)
+        (engine as? RtcEngineEx)?.setAppType(appType)
     }
 
     fun destroy() {
@@ -112,8 +114,8 @@ class RtcEngineManager {
 
     fun registerMediaMetadataObserver(emit: (methodName: String, data: Map<String, Any?>?) -> Unit): Int {
         engine?.let {
-            val mediaObserver = MediaObserver { methodName, data ->
-                emit(methodName, data)
+            val mediaObserver = MediaObserver { data ->
+                emit(RtcEngineEvents.MetadataReceived, data)
             }
             val res = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
             if (res == 0) this.mediaObserver = mediaObserver
@@ -241,6 +243,8 @@ class RtcEngineManager {
         fun getAudioMixingCurrentPosition(callback: Callback?)
 
         fun setAudioMixingPosition(pos: Int, callback: Callback?)
+
+        fun setAudioMixingPitch(@IntRange(from = -12, to = 12) pitch: Int, callback: Callback?)
     }
 
     interface RtcAudioEffectInterface<Callback> {
@@ -401,6 +405,8 @@ class RtcEngineManager {
         fun setCameraFocusPositionInPreview(positionX: Float, positionY: Float, callback: Callback?)
 
         fun setCameraExposurePosition(positionXinView: Float, positionYinView: Float, callback: Callback?)
+
+        fun enableFaceDetection(enable: Boolean, callback: Callback?)
 
         fun setCameraTorchOn(isOn: Boolean, callback: Callback?)
 

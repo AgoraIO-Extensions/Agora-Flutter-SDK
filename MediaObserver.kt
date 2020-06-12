@@ -6,7 +6,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 class MediaObserver(
-        private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit
+        private val emit: (data: Map<String, Any?>?) -> Unit
 ) : IMetadataObserver {
     private var maxMetadataSize = AtomicInteger(0)
     private var metadataList = Collections.synchronizedList<String>(mutableListOf())
@@ -31,7 +31,7 @@ class MediaObserver(
     }
 
     override fun onMetadataReceived(buffer: ByteArray, uid: Int, timeStampMs: Long) {
-        emit("MetadataReceived", hashMapOf(
+        emit(hashMapOf(
                 "buffer" to String(buffer),
                 "uid" to uid,
                 "timeStampMs" to timeStampMs
