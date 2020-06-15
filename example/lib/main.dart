@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,12 +24,14 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
+    AgoraRtcEngine platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await AgoraRtcEngine.platformVersion;
+      platformVersion =
+          await AgoraRtcEngine.create('2b4b76e458cf439aa7cd313b9504f0a4');
+      platformVersion.joinChannel(null, '123', null, 0);
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+//      platformVersion = 'Failed to get platform version.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -38,7 +40,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+//      _platformVersion = platformVersion;
     });
   }
 
