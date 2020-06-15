@@ -81,7 +81,8 @@ extension AgoraRtcRemoteAudioStats {
             "receivedSampleRate": receivedSampleRate,
             "receivedBitrate": receivedBitrate,
             "totalFrozenTime": totalFrozenTime,
-            "frozenRate": frozenRate
+            "frozenRate": frozenRate,
+            "totalActiveTime": totalActiveTime
         ]
     }
 }
@@ -118,7 +119,8 @@ extension AgoraRtcRemoteVideoStats {
             "packetLossRate": packetLossRate,
             "rxStreamType": rxStreamType.rawValue,
             "totalFrozenTime": totalFrozenTime,
-            "frozenRate": frozenRate
+            "frozenRate": frozenRate,
+            "totalActiveTime": totalActiveTime
         ]
     }
 }
@@ -164,5 +166,29 @@ extension AgoraLastmileProbeResult {
             "uplinkReport": uplinkReport.toMap(),
             "downlinkReport": downlinkReport.toMap()
         ]
+    }
+}
+
+extension AgoraFacePositionInfo {
+    func toMap() -> Dictionary<String, Any?> {
+        [
+            "x": x,
+            "y": y,
+            "width": width,
+            "height": height,
+            "distance": distance
+        ]
+    }
+}
+
+typealias FacePositionInfoArray = Array<AgoraFacePositionInfo>
+
+extension FacePositionInfoArray {
+    func toMapList() -> Array<Dictionary<String, Any?>> {
+        var list = [Dictionary<String, Any?>]()
+        forEach { (item) in
+            list.append(item.toMap())
+        }
+        return list
     }
 }

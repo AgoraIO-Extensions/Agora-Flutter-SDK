@@ -16,18 +16,16 @@ class RtcSurfaceView: UIView {
         canvas.view = self
         return canvas
     }()
+    private weak var channel: AgoraRtcChannel?
 
     func setRenderMode(_ engine: AgoraRtcEngineKit, _ renderMode: Int) {
         canvas.renderMode = AgoraVideoRenderMode(rawValue: UInt(renderMode))!
-        if canvas.uid == 0 {
-            engine.setLocalRenderMode(canvas.renderMode, mirrorMode: canvas.mirrorMode)
-        } else {
-            engine.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
-        }
+        setupRenderMode(engine)
     }
 
-    func setChannelId(_ engine: AgoraRtcEngineKit, _ channelId: String) {
-        canvas.channelId = channelId
+    func setChannel(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?) {
+        self.channel = channel
+        canvas.channelId = channel?.getId()
         if canvas.uid == 0 {
             engine.setupLocalVideo(canvas)
         } else {
@@ -37,11 +35,7 @@ class RtcSurfaceView: UIView {
 
     func setMirroMode(_ engine: AgoraRtcEngineKit, _ mirrorMode: Int) {
         canvas.mirrorMode = AgoraVideoMirrorMode(rawValue: UInt(mirrorMode))!
-        if canvas.uid == 0 {
-            engine.setLocalRenderMode(canvas.renderMode, mirrorMode: canvas.mirrorMode)
-        } else {
-            engine.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
-        }
+        setupRenderMode(engine)
     }
 
     func setUid(_ engine: AgoraRtcEngineKit, _ uid: Int) {
@@ -50,6 +44,18 @@ class RtcSurfaceView: UIView {
             engine.setupLocalVideo(canvas)
         } else {
             engine.setupRemoteVideo(canvas)
+        }
+    }
+    
+    private func setupRenderMode(_ engine: AgoraRtcEngineKit) {
+        if canvas.uid == 0 {
+            engine.setLocalRenderMode(canvas.renderMode, mirrorMode: canvas.mirrorMode)
+        } else {
+            if let `channel` = channel {
+                channel.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
+            } else {
+                engine.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
+            }
         }
     }
 }

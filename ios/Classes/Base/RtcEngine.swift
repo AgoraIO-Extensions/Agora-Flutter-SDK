@@ -34,7 +34,7 @@ protocol RtcEngineInterface:
     associatedtype Map
     associatedtype Callback
 
-    func create(_ appId: String, _ callback: Callback?)
+    func create(_ appId: String, _ areaCode: Int, _ callback: Callback?)
 
     func destroy(_ callback: Callback?)
 
@@ -75,12 +75,15 @@ class RtcEngineManager {
     private var delegate: RtcEngineEventHandler?
     private var mediaObserver: MediaObserver?
 
-    func create(_ appId: String, _ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+    func create(_ appId: String, _ areaCode: Int32, _ appType: AgoraRtcAppType, _ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
         delegate = RtcEngineEventHandler() { methodName, data in
             emit(methodName, data)
         }
-        _engine = AgoraRtcEngineKit.sharedEngine(withAppId: appId, delegate: delegate)
-        _engine?.setAppType(.APP_TYPE_REACTNATIVE)
+        let config = AgoraRtcEngineConfig()
+        config.appId = appId
+        config.areaCode = areaCode
+        _engine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: delegate)
+        _engine?.setAppType(appType)
     }
 
     func destroy() {
@@ -116,8 +119,8 @@ class RtcEngineManager {
 
     func registerMediaMetadataObserver(_ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) -> Int32 {
         if let engine = _engine {
-            let mediaObserver = MediaObserver() { methodName, data in
-                emit(methodName, data)
+            let mediaObserver = MediaObserver() { data in
+                emit(RtcEngineEvents.MetadataReceived, data)
             }
             let res = engine.setMediaMetadataDelegate(mediaObserver, with: .video)
             if res {
@@ -271,6 +274,8 @@ protocol RtcEngineAudioMixingInterface {
     func getAudioMixingCurrentPosition(_ callback: Callback?)
 
     func setAudioMixingPosition(_ pos: Int, _ callback: Callback?)
+    
+    func setAudioMixingPitch(_ pitch: Int, _ callback: Callback?)
 }
 
 protocol RtcEngineAudioEffectInterface {
@@ -469,6 +474,8 @@ protocol RtcEngineCameraInterface {
     func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: Callback?)
 
     func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: Callback?)
+    
+    func enableFaceDetection(_ enable: Bool, _ callback: Callback?)
 
     func setCameraTorchOn(_ isOn: Bool, _ callback: Callback?)
 
