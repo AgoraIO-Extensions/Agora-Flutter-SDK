@@ -3,14 +3,17 @@ package io.agora.rtc.base
 import android.content.Context
 import android.view.SurfaceView
 import android.widget.FrameLayout
+import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
+import java.lang.ref.WeakReference
 
 class RtcSurfaceView(
         context: Context
 ) : FrameLayout(context) {
     private var surface: SurfaceView = RtcEngine.CreateRendererView(context)
     private var canvas: VideoCanvas
+    private var channel: WeakReference<RtcChannel>? = null
 
     init {
         canvas = VideoCanvas(surface)
@@ -39,15 +42,12 @@ class RtcSurfaceView(
 
     fun setRenderMode(engine: RtcEngine, @Annotations.AgoraVideoRenderMode renderMode: Int) {
         canvas.renderMode = renderMode
-        if (canvas.uid == 0) {
-            engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
-        } else {
-            engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
-        }
+        setupRenderMode(engine)
     }
 
-    fun setChannelId(engine: RtcEngine, channelId: String) {
-        canvas.channelId = channelId
+    fun setChannel(engine: RtcEngine, channel: RtcChannel?) {
+        this.channel = if (channel != null) WeakReference(channel) else null
+        canvas.channelId = channel?.channelId()
         if (canvas.uid == 0) {
             engine.setupLocalVideo(canvas)
         } else {
@@ -57,11 +57,7 @@ class RtcSurfaceView(
 
     fun setMirrorMode(engine: RtcEngine, @Annotations.AgoraVideoMirrorMode mirrorMode: Int) {
         canvas.mirrorMode = mirrorMode
-        if (canvas.uid == 0) {
-            engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
-        } else {
-            engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
-        }
+        setupRenderMode(engine)
     }
 
     fun setUid(engine: RtcEngine, uid: Int) {
@@ -70,6 +66,18 @@ class RtcSurfaceView(
             engine.setupLocalVideo(canvas)
         } else {
             engine.setupRemoteVideo(canvas)
+        }
+    }
+
+    private fun setupRenderMode(engine: RtcEngine) {
+        if (canvas.uid == 0) {
+            engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
+        } else {
+            channel?.get()?.let {
+                it.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
+                return@setupRenderMode
+            }
+            engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
         }
     }
 

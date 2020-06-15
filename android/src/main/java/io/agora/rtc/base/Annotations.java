@@ -9,12 +9,36 @@ import java.lang.annotation.RetentionPolicy;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.video.BeautyOptions;
+import io.agora.rtc.video.VideoCanvas;
 
 public class Annotations {
 
     @IntDef({
+            AgoraRtcAppType.NATIVE,
+            AgoraRtcAppType.COCOS,
+            AgoraRtcAppType.UNITY,
+            AgoraRtcAppType.ELECTRON,
+            AgoraRtcAppType.FLUTTER,
+            AgoraRtcAppType.UNREAL,
+            AgoraRtcAppType.XAMARIN,
+            AgoraRtcAppType.APICLOUD,
+            AgoraRtcAppType.REACTNATIVE,
+    })
+    public @interface AgoraRtcAppType {
+        int NATIVE = 0;
+        int COCOS = 1;
+        int UNITY = 2;
+        int ELECTRON = 3;
+        int FLUTTER = 4;
+        int UNREAL = 5;
+        int XAMARIN = 6;
+        int APICLOUD = 7;
+        int REACTNATIVE = 8;
+    }
+
+    @IntDef({
             AgoraAudioCodecProfileType.LC_AAC,
-            AgoraAudioCodecProfileType.HE_AAC
+            AgoraAudioCodecProfileType.HE_AAC,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioCodecProfileType {
@@ -32,7 +56,7 @@ public class Annotations {
             Constants.AUDIO_EQUALIZATION_BAND_2K,
             Constants.AUDIO_EQUALIZATION_BAND_4K,
             Constants.AUDIO_EQUALIZATION_BAND_8K,
-            Constants.AUDIO_EQUALIZATION_BAND_16K
+            Constants.AUDIO_EQUALIZATION_BAND_16K,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioEqualizationBandFrequency {
@@ -44,7 +68,7 @@ public class Annotations {
             Constants.LOCAL_AUDIO_STREAM_ERROR_DEVICE_NO_PERMISSION,
             Constants.LOCAL_AUDIO_STREAM_ERROR_DEVICE_BUSY,
             Constants.LOCAL_AUDIO_STREAM_ERROR_CAPTURE_FAILURE,
-            Constants.LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE
+            Constants.LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioLocalError {
@@ -54,7 +78,7 @@ public class Annotations {
             Constants.LOCAL_AUDIO_STREAM_STATE_STOPPED,
             Constants.LOCAL_AUDIO_STREAM_STATE_CAPTURING,
             Constants.LOCAL_AUDIO_STREAM_STATE_ENCODING,
-            Constants.LOCAL_AUDIO_STREAM_STATE_FAILED
+            Constants.LOCAL_AUDIO_STREAM_STATE_FAILED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioLocalState {
@@ -64,7 +88,7 @@ public class Annotations {
             Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_OPEN,
             Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_TOO_FREQUENT,
             Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_INTERRUPTED_EOF,
-            AgoraAudioMixingErrorCode.MEDIA_ENGINE_AUDIO_ERROR_OK
+            AgoraAudioMixingErrorCode.MEDIA_ENGINE_AUDIO_ERROR_OK,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioMixingErrorCode {
@@ -75,7 +99,7 @@ public class Annotations {
             Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_PLAY,
             Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_PAUSED,
             Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_STOPPED,
-            Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_ERROR
+            Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_ERROR,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioMixingStateCode {
@@ -88,7 +112,7 @@ public class Annotations {
             Constants.AUDIO_ROUTE_HEADSETNOMIC,
             Constants.AUDIO_ROUTE_SPEAKERPHONE,
             Constants.AUDIO_ROUTE_LOUDSPEAKER,
-            Constants.AUDIO_ROUTE_HEADSETBLUETOOTH
+            Constants.AUDIO_ROUTE_HEADSETBLUETOOTH,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioOutputRouting {
@@ -100,7 +124,7 @@ public class Annotations {
             Constants.AUDIO_PROFILE_MUSIC_STANDARD,
             Constants.AUDIO_PROFILE_MUSIC_STANDARD_STEREO,
             Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY,
-            Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO
+            Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioProfile {
@@ -109,7 +133,7 @@ public class Annotations {
     @IntDef({
             Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY,
             Constants.RAW_AUDIO_FRAME_OP_MODE_WRITE_ONLY,
-            Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE
+            Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioRawFrameOperationMode {
@@ -118,7 +142,7 @@ public class Annotations {
     @IntDef({
             Constants.AUDIO_RECORDING_QUALITY_LOW,
             Constants.AUDIO_RECORDING_QUALITY_MEDIUM,
-            Constants.AUDIO_RECORDING_QUALITY_HIGH
+            Constants.AUDIO_RECORDING_QUALITY_HIGH,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioRecordingQuality {
@@ -129,7 +153,7 @@ public class Annotations {
             Constants.REMOTE_AUDIO_STATE_STARTING,
             Constants.REMOTE_AUDIO_STATE_DECODING,
             Constants.REMOTE_AUDIO_STATE_FROZEN,
-            Constants.REMOTE_AUDIO_STATE_FAILED
+            Constants.REMOTE_AUDIO_STATE_FAILED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioRemoteState {
@@ -143,7 +167,7 @@ public class Annotations {
             Constants.REMOTE_AUDIO_REASON_LOCAL_UNMUTED,
             Constants.REMOTE_AUDIO_REASON_REMOTE_MUTED,
             Constants.REMOTE_AUDIO_REASON_REMOTE_UNMUTED,
-            Constants.REMOTE_AUDIO_REASON_REMOTE_OFFLINE
+            Constants.REMOTE_AUDIO_REASON_REMOTE_OFFLINE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioRemoteStateReason {
@@ -157,7 +181,16 @@ public class Annotations {
             Constants.AUDIO_REVERB_HIPHOP,
             Constants.AUDIO_REVERB_VOCAL_CONCERT,
             Constants.AUDIO_REVERB_KTV,
-            Constants.AUDIO_REVERB_STUDIO
+            Constants.AUDIO_REVERB_STUDIO,
+            Constants.AUDIO_REVERB_FX_KTV,
+            Constants.AUDIO_REVERB_FX_VOCAL_CONCERT,
+            Constants.AUDIO_REVERB_FX_UNCLE,
+            Constants.AUDIO_REVERB_FX_SISTER,
+            Constants.AUDIO_REVERB_FX_STUDIO,
+            Constants.AUDIO_REVERB_FX_POPULAR,
+            Constants.AUDIO_REVERB_FX_RNB,
+            Constants.AUDIO_REVERB_FX_PHONOGRAPH,
+            Constants.AUDIO_VIRTUAL_STEREO,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioReverbPreset {
@@ -177,7 +210,7 @@ public class Annotations {
     @IntDef({
             AgoraAudioSampleRateType.TYPE_32000,
             AgoraAudioSampleRateType.TYPE_44100,
-            AgoraAudioSampleRateType.TYPE_48000
+            AgoraAudioSampleRateType.TYPE_48000,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioSampleRateType {
@@ -192,7 +225,7 @@ public class Annotations {
             Constants.AUDIO_SCENARIO_EDUCATION,
             Constants.AUDIO_SCENARIO_GAME_STREAMING,
             Constants.AUDIO_SCENARIO_SHOWROOM,
-            Constants.AUDIO_SCENARIO_CHATROOM_GAMING
+            Constants.AUDIO_SCENARIO_CHATROOM_GAMING,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioScenario {
@@ -205,7 +238,19 @@ public class Annotations {
             Constants.VOICE_CHANGER_BABYGIRL,
             Constants.VOICE_CHANGER_ZHUBAJIE,
             Constants.VOICE_CHANGER_ETHEREAL,
-            Constants.VOICE_CHANGER_HULK
+            Constants.VOICE_CHANGER_HULK,
+            Constants.VOICE_BEAUTY_VIGOROUS,
+            Constants.VOICE_BEAUTY_DEEP,
+            Constants.VOICE_BEAUTY_MELLOW,
+            Constants.VOICE_BEAUTY_FALSETTO,
+            Constants.VOICE_BEAUTY_FULL,
+            Constants.VOICE_BEAUTY_CLEAR,
+            Constants.VOICE_BEAUTY_RESOUNDING,
+            Constants.VOICE_BEAUTY_RINGING,
+            Constants.VOICE_BEAUTY_SPACIAL,
+            Constants.GENERAL_BEAUTY_VOICE_MALE_MAGNETIC,
+            Constants.GENERAL_BEAUTY_VOICE_FEMALE_FRESH,
+            Constants.GENERAL_BEAUTY_VOICE_FEMALE_VITALITY,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioVoiceChanger {
@@ -214,7 +259,7 @@ public class Annotations {
     @IntDef({
             AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_AUTO,
             AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE,
-            AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_PREVIEW
+            AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_PREVIEW,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraCameraCaptureOutputPreference {
@@ -225,7 +270,7 @@ public class Annotations {
 
     @IntDef({
             AgoraCameraDirection.CAMERA_REAR,
-            AgoraCameraDirection.CAMERA_FRONT
+            AgoraCameraDirection.CAMERA_FRONT,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraCameraDirection {
@@ -245,7 +290,7 @@ public class Annotations {
             Constants.RELAY_ERROR_SERVER_CONNECTION_LOST,
             Constants.RELAY_ERROR_INTERNAL_ERROR,
             Constants.RELAY_ERROR_SRC_TOKEN_EXPIRED,
-            Constants.RELAY_ERROR_DEST_TOKEN_EXPIRED
+            Constants.RELAY_ERROR_DEST_TOKEN_EXPIRED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraChannelMediaRelayError {
@@ -263,7 +308,7 @@ public class Annotations {
             Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_REFUSED,
             Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE,
             Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL,
-            Constants.RELAY_EVENT_VIDEO_PROFILE_UPDATE
+            Constants.RELAY_EVENT_VIDEO_PROFILE_UPDATE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraChannelMediaRelayEvent {
@@ -282,7 +327,7 @@ public class Annotations {
     @IntDef({
             Constants.CHANNEL_PROFILE_COMMUNICATION,
             Constants.CHANNEL_PROFILE_LIVE_BROADCASTING,
-            Constants.CHANNEL_PROFILE_GAME
+            Constants.CHANNEL_PROFILE_GAME,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraChannelProfile {
@@ -290,7 +335,7 @@ public class Annotations {
 
     @IntDef({
             Constants.CLIENT_ROLE_BROADCASTER,
-            Constants.CLIENT_ROLE_AUDIENCE
+            Constants.CLIENT_ROLE_AUDIENCE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraClientRole {
@@ -311,7 +356,7 @@ public class Annotations {
             Constants.CONNECTION_CHANGED_SETTING_PROXY_SERVER,
             Constants.CONNECTION_CHANGED_RENEW_TOKEN,
             Constants.CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED,
-            Constants.CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT
+            Constants.CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraConnectionChangedReason {
@@ -322,7 +367,7 @@ public class Annotations {
             Constants.CONNECTION_STATE_CONNECTING,
             Constants.CONNECTION_STATE_CONNECTED,
             Constants.CONNECTION_STATE_RECONNECTING,
-            Constants.CONNECTION_STATE_FAILED
+            Constants.CONNECTION_STATE_FAILED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraConnectionStateType {
@@ -331,7 +376,7 @@ public class Annotations {
     @IntDef({
             AgoraDegradationPreference.MAINTAIN_QUALITY,
             AgoraDegradationPreference.MAINTAIN_FRAMERATE,
-            AgoraDegradationPreference.MAINTAIN_BALANCED
+            AgoraDegradationPreference.MAINTAIN_BALANCED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraDegradationPreference {
@@ -343,7 +388,7 @@ public class Annotations {
     @StringDef({
             AgoraEncryptionMode.AES128XTS,
             AgoraEncryptionMode.AES256XTS,
-            AgoraEncryptionMode.AES128ECB
+            AgoraEncryptionMode.AES128ECB,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraEncryptionMode {
@@ -422,7 +467,7 @@ public class Annotations {
             Constants.ERR_VCM_UNKNOWN_ERROR,
             Constants.ERR_VCM_ENCODER_INIT_ERROR,
             Constants.ERR_VCM_ENCODER_ENCODE_ERROR,
-            Constants.ERR_VCM_ENCODER_SET_ERROR
+            Constants.ERR_VCM_ENCODER_SET_ERROR,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraErrorCode {
@@ -439,7 +484,7 @@ public class Annotations {
             Constants.INJECT_STREAM_STATUS_STOP_UNAUTHORIZED,
             Constants.INJECT_STREAM_STATUS_STOP_TIMEDOUT,
             Constants.INJECT_STREAM_STATUS_STOP_FAILED,
-            Constants.INJECT_STREAM_STATUS_BROKEN
+            Constants.INJECT_STREAM_STATUS_BROKEN,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraInjectStreamStatus {
@@ -448,7 +493,7 @@ public class Annotations {
     @IntDef({
             Constants.LASTMILE_PROBE_RESULT_COMPLETE,
             Constants.LASTMILE_PROBE_RESULT_INCOMPLETE_NO_BWE,
-            Constants.LASTMILE_PROBE_RESULT_UNAVAILABLE
+            Constants.LASTMILE_PROBE_RESULT_UNAVAILABLE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraLastmileProbeResultState {
@@ -457,7 +502,7 @@ public class Annotations {
     @IntDef({
             BeautyOptions.LIGHTENING_CONTRAST_LOW,
             BeautyOptions.LIGHTENING_CONTRAST_NORMAL,
-            BeautyOptions.LIGHTENING_CONTRAST_HIGH
+            BeautyOptions.LIGHTENING_CONTRAST_HIGH,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraLighteningContrastLevel {
@@ -469,7 +514,7 @@ public class Annotations {
             Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_NO_PERMISSION,
             Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY,
             Constants.LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE,
-            Constants.LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE
+            Constants.LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraLocalVideoStreamError {
@@ -479,7 +524,7 @@ public class Annotations {
             Constants.LOCAL_VIDEO_STREAM_STATE_STOPPED,
             Constants.LOCAL_VIDEO_STREAM_STATE_CAPTURING,
             Constants.LOCAL_VIDEO_STREAM_STATE_ENCODING,
-            Constants.LOCAL_VIDEO_STREAM_STATE_FAILED
+            Constants.LOCAL_VIDEO_STREAM_STATE_FAILED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraLocalVideoStreamState {
@@ -491,7 +536,7 @@ public class Annotations {
             Constants.LOG_FILTER_INFO,
             Constants.LOG_FILTER_WARNING,
             Constants.LOG_FILTER_ERROR,
-            Constants.LOG_FILTER_CRITICAL
+            Constants.LOG_FILTER_CRITICAL,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraLogFilter {
@@ -501,7 +546,7 @@ public class Annotations {
             Constants.MEDIA_TYPE_NONE,
             Constants.MEDIA_TYPE_AUDIO_ONLY,
             Constants.MEDIA_TYPE_VIDEO_ONLY,
-            Constants.MEDIA_TYPE_AUDIO_AND_VIDEO
+            Constants.MEDIA_TYPE_AUDIO_AND_VIDEO,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraMediaType {
@@ -509,7 +554,7 @@ public class Annotations {
 
     @IntDef({
             IMetadataObserver.UNKNOWN_METADATA,
-            IMetadataObserver.VIDEO_METADATA
+            IMetadataObserver.VIDEO_METADATA,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraMetadataType {
@@ -524,7 +569,7 @@ public class Annotations {
             Constants.QUALITY_VBAD,
             Constants.QUALITY_DOWN,
             Constants.QUALITY_UNSUPPORTED,
-            Constants.QUALITY_DETECTING
+            Constants.QUALITY_DETECTING,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraNetworkQuality {
@@ -537,7 +582,7 @@ public class Annotations {
             Constants.NETWORK_TYPE_WIFI,
             Constants.NETWORK_TYPE_MOBILE_2G,
             Constants.NETWORK_TYPE_MOBILE_3G,
-            Constants.NETWORK_TYPE_MOBILE_4G
+            Constants.NETWORK_TYPE_MOBILE_4G,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraNetworkType {
@@ -554,7 +599,7 @@ public class Annotations {
             Constants.RTMP_STREAM_PUBLISH_ERROR_REACH_LIMIT,
             Constants.RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED,
             Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND,
-            Constants.RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED
+            Constants.RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraRtmpStreamingErrorCode {
@@ -565,7 +610,7 @@ public class Annotations {
             Constants.RTMP_STREAM_PUBLISH_STATE_CONNECTING,
             Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING,
             Constants.RTMP_STREAM_PUBLISH_STATE_RECOVERING,
-            Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE
+            Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraRtmpStreamingState {
@@ -574,7 +619,7 @@ public class Annotations {
     @IntDef({
             Constants.STREAM_FALLBACK_OPTION_DISABLED,
             Constants.STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW,
-            Constants.STREAM_FALLBACK_OPTION_AUDIO_ONLY
+            Constants.STREAM_FALLBACK_OPTION_AUDIO_ONLY,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraStreamFallbackOptions {
@@ -583,7 +628,7 @@ public class Annotations {
     @IntDef({
             Constants.USER_OFFLINE_QUIT,
             Constants.USER_OFFLINE_DROPPED,
-            Constants.USER_OFFLINE_BECOME_AUDIENCE
+            Constants.USER_OFFLINE_BECOME_AUDIENCE,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraUserOfflineReason {
@@ -591,7 +636,7 @@ public class Annotations {
 
     @IntDef({
             Constants.USER_PRIORITY_HIGH,
-            Constants.USER_PRIORITY_NORANL
+            Constants.USER_PRIORITY_NORANL,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraUserPriority {
@@ -600,7 +645,7 @@ public class Annotations {
     @IntDef({
             AgoraVideoCodecProfileType.BASELINE,
             AgoraVideoCodecProfileType.MAIN,
-            AgoraVideoCodecProfileType.HIGH
+            AgoraVideoCodecProfileType.HIGH,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoCodecProfileType {
@@ -615,7 +660,7 @@ public class Annotations {
             AgoraVideoFrameRate.FRAME_RATE_FPS_10,
             AgoraVideoFrameRate.FRAME_RATE_FPS_15,
             AgoraVideoFrameRate.FRAME_RATE_FPS_24,
-            AgoraVideoFrameRate.FRAME_RATE_FPS_30
+            AgoraVideoFrameRate.FRAME_RATE_FPS_30,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoFrameRate {
@@ -630,7 +675,7 @@ public class Annotations {
     @IntDef({
             Constants.VIDEO_MIRROR_MODE_AUTO,
             Constants.VIDEO_MIRROR_MODE_ENABLED,
-            Constants.VIDEO_MIRROR_MODE_DISABLED
+            Constants.VIDEO_MIRROR_MODE_DISABLED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoMirrorMode {
@@ -639,7 +684,7 @@ public class Annotations {
     @IntDef({
             AgoraVideoOutputOrientationMode.ORIENTATION_MODE_ADAPTIVE,
             AgoraVideoOutputOrientationMode.ORIENTATION_MODE_FIXED_LANDSCAPE,
-            AgoraVideoOutputOrientationMode.ORIENTATION_MODE_FIXED_PORTRAIT
+            AgoraVideoOutputOrientationMode.ORIENTATION_MODE_FIXED_PORTRAIT,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoOutputOrientationMode {
@@ -651,13 +696,10 @@ public class Annotations {
     @IntDef({
             Constants.ADAPT_NONE,
             Constants.ADAPT_UP_BANDWIDTH,
-            Constants.ADAPT_DOWN_BANDWIDTH
+            Constants.ADAPT_DOWN_BANDWIDTH,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoQualityAdaptIndication {
-        int ORIENTATION_MODE_ADAPTIVE = 0;
-        int ORIENTATION_MODE_FIXED_LANDSCAPE = 1;
-        int ORIENTATION_MODE_FIXED_PORTRAIT = 2;
     }
 
     @IntDef({
@@ -665,7 +707,7 @@ public class Annotations {
             Constants.REMOTE_VIDEO_STATE_STARTING,
             Constants.REMOTE_VIDEO_STATE_DECODING,
             Constants.REMOTE_VIDEO_STATE_FROZEN,
-            Constants.REMOTE_VIDEO_STATE_FAILED
+            Constants.REMOTE_VIDEO_STATE_FAILED,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoRemoteState {
@@ -681,16 +723,17 @@ public class Annotations {
             Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED,
             Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE,
             Constants.REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK,
-            Constants.REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY
+            Constants.REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoRemoteStateReason {
     }
 
     @IntDef({
-            Constants.RENDER_MODE_HIDDEN,
-            Constants.RENDER_MODE_FIT,
-            Constants.RENDER_MODE_ADAPTIVE
+            VideoCanvas.RENDER_MODE_HIDDEN,
+            VideoCanvas.RENDER_MODE_FIT,
+            VideoCanvas.RENDER_MODE_ADAPTIVE,
+            VideoCanvas.RENDER_MODE_FILL,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoRenderMode {
@@ -698,7 +741,7 @@ public class Annotations {
 
     @IntDef({
             Constants.VIDEO_STREAM_HIGH,
-            Constants.VIDEO_STREAM_LOW
+            Constants.VIDEO_STREAM_LOW,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraVideoStreamType {
@@ -728,7 +771,7 @@ public class Annotations {
             Constants.WARN_ADM_RECORD_IS_OCCUPIED,
             Constants.WARN_APM_HOWLING,
             Constants.WARN_ADM_GLITCH_STATE,
-            Constants.WARN_ADM_IMPROPER_SETTINGS
+            Constants.WARN_ADM_IMPROPER_SETTINGS,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraWarningCode {
