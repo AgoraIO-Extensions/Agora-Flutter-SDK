@@ -158,8 +158,8 @@ fun mapToLiveInjectStreamConfig(map: Map<*, *>): LiveInjectStreamConfig {
 
 fun mapToCameraCapturerConfiguration(map: Map<*, *>): CameraCapturerConfiguration {
     return CameraCapturerConfiguration(
-            intToCapturerOutputPreference(map["preference"] as Int),
-            intToCameraDirection(map["cameraDirection"] as Int)
+            intToCapturerOutputPreference((map["preference"] as Double).toInt()),
+            intToCameraDirection((map["cameraDirection"] as Double).toInt())
     )
 }
 
