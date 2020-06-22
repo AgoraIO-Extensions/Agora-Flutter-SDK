@@ -1,30 +1,37 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.NonNull
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.plugin.platform.PlatformViewRegistry
 import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.jvm.javaMethod
 
 /** AgoraRtcEnginePlugin */
-public class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler,
+class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler,
         RtcEngineInterface<Map<*, *>, Result> {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
-    private lateinit var channel: MethodChannel
+    private lateinit var methodChannel: MethodChannel
+    private lateinit var eventChannel: EventChannel
     private lateinit var applicationContext: Context
     private var eventSink: EventChannel.EventSink? = null
     private val manager = RtcEngineManager()
+    private val handler = Handler(Looper.getMainLooper())
+    private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
     // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -38,22 +45,33 @@ public class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChann
     companion object {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-            val plugin = AgoraRtcEnginePlugin()
-            val methodChannel = MethodChannel(registrar.messenger(), "agora_rtc_engine")
-            val eventChannel = EventChannel(registrar.messenger(), "agora_rtc_engine")
-            methodChannel.setMethodCallHandler(plugin)
-            eventChannel.setStreamHandler(plugin)
+            AgoraRtcEnginePlugin().apply {
+                init(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
+                rtcChannelPlugin.init(registrar.messenger())
+            }
         }
     }
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        applicationContext = flutterPluginBinding.applicationContext
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "agora_rtc_engine")
-        channel.setMethodCallHandler(this)
+    private fun init(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
+        applicationContext = context.applicationContext
+        methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
+        methodChannel.setMethodCallHandler(this)
+        eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
+        eventChannel.setStreamHandler(this)
+
+        platformViewRegistry.registerViewFactory("AgoraSurfaceView", AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin))
+        platformViewRegistry.registerViewFactory("AgoraTextureView", AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin))
+    }
+
+    override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        rtcChannelPlugin.onAttachedToEngine(binding)
+        init(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
+        rtcChannelPlugin.onDetachedFromEngine(binding)
+        methodChannel.setMethodCallHandler(null)
+        eventChannel.setStreamHandler(null)
         manager.release()
     }
 
@@ -66,10 +84,11 @@ public class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChann
     }
 
     private fun emit(methodName: String, data: Map<String, Any?>?) {
-        eventSink?.success(hashMapOf(
-                "methodName" to "${RtcEngineEventHandler.PREFIX}$methodName",
-                "data" to data
-        ))
+        handler.post {
+            val event: MutableMap<String, Any?> = mutableMapOf("methodName" to methodName)
+            data?.let { event.putAll(it) }
+            eventSink?.success(event)
+        }
     }
 
     fun engine(): RtcEngine? {
@@ -81,9 +100,10 @@ public class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChann
             function.javaMethod?.let { method ->
                 val parameters = mutableListOf<Any?>()
                 function.parameters.forEach { parameter ->
-                    val map = call.arguments<Map<*, *>>()
-                    if (map.containsKey(parameter.name)) {
-                        parameters.add(map[parameter.name])
+                    call.arguments<Map<*, *>>()?.let {
+                        if (it.containsKey(parameter.name)) {
+                            parameters.add(it[parameter.name])
+                        }
                     }
                 }
                 try {
@@ -97,8 +117,8 @@ public class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChann
         result.notImplemented()
     }
 
-    override fun create(appId: String, callback: Result?) {
-        manager.create(applicationContext, appId) { methodName, data ->
+    override fun create(appId: String, areaCode: Int, callback: Result?) {
+        manager.create(applicationContext, appId, areaCode, Annotations.AgoraRtcAppType.FLUTTER) { methodName, data ->
             emit(methodName, data)
         }
         ResultCallback(callback).resolve(engine()) {}
@@ -595,5 +615,13 @@ public class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChann
 
     override fun sendStreamMessage(streamId: Int, message: String, callback: Result?) {
         ResultCallback(callback).code(manager.sendStreamMessage(streamId, message))
+    }
+
+    override fun setAudioMixingPitch(pitch: Int, callback: Result?) {
+        ResultCallback(callback).code(engine()?.setAudioMixingPitch(pitch))
+    }
+
+    override fun enableFaceDetection(enable: Boolean, callback: Result?) {
+        ResultCallback(callback).code(engine()?.enableFaceDetection(enable))
     }
 }
