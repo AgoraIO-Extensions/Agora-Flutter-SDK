@@ -1,5 +1,32 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'events.dart';
+import 'rtc_engine.dart';
+
+/// IP areas
+/// @enum {number}
+enum IPAreaCode {
+  /// Mainland China
+  @JsonValue(1 << 0)
+  AREA_CN,
+
+  /// North America
+  @JsonValue(1 << 1)
+  AREA_NA,
+
+  /// AREA_EUR
+  @JsonValue(1 << 2)
+  AREA_EUR,
+
+  /// Asia, excluding Mainland China
+  @JsonValue(1 << 3)
+  AREA_AS,
+
+  /// (Default) Global
+  @JsonValue(-1)
+  AREA_GLOBAL,
+}
+
 /// Audio codec profile.
 /// @enum {number}
 enum AudioCodecProfileType {
@@ -242,9 +269,9 @@ enum AudioRecordingQuality {
 /// @enum {number}
 enum AudioRemoteState {
   /// The remote audio is in the default state, probably due to:
-  /// @see AudioRemoteStateReason.LocalMuted
-  /// @see AudioRemoteStateReason.RemoteMuted
-  /// @see AudioRemoteStateReason.RemoteOffline
+  /// See [AudioRemoteStateReason.LocalMuted]
+  /// See [AudioRemoteStateReason.RemoteMuted]
+  /// See [AudioRemoteStateReason.RemoteOffline]
   @JsonValue(0)
   Stopped,
 
@@ -253,19 +280,19 @@ enum AudioRemoteState {
   Starting,
 
   /// The remote audio stream is decoded and plays normally, probably due to:
-  /// @see AudioRemoteStateReason.NetworkRecovery
-  /// @see AudioRemoteStateReason.LocalUnmuted
-  /// @see AudioRemoteStateReason.RemoteUnmuted
+  /// See [AudioRemoteStateReason.NetworkRecovery]
+  /// See [AudioRemoteStateReason.LocalUnmuted]
+  /// See [AudioRemoteStateReason.RemoteUnmuted]
   @JsonValue(2)
   Decoding,
 
   /// The remote audio is frozen, probably due to:
-  /// @see AudioRemoteStateReason.NetworkCongestion
+  /// See [AudioRemoteStateReason.NetworkCongestion]
   @JsonValue(3)
   Frozen,
 
   /// The remote audio fails to start, probably due to:
-  /// @see AudioRemoteStateReason.Internal
+  /// See [AudioRemoteStateReason.Internal]
   @JsonValue(4)
   Failed,
 }
@@ -310,36 +337,74 @@ enum AudioRemoteStateReason {
 /// @enum {number}
 enum AudioReverbPreset {
   /// The original voice (no local voice reverberation).
-  @JsonValue(0)
+  @JsonValue(0x00000000)
   Off,
 
   /// Pop music
-  @JsonValue(1)
+  @JsonValue(0x00000001)
   Popular,
 
   /// R&B
-  @JsonValue(2)
+  @JsonValue(0x00000002)
   RnB,
 
   /// Rock music
-  @JsonValue(3)
+  @JsonValue(0x00000003)
   Rock,
 
   /// Hip-hop music
-  @JsonValue(4)
+  @JsonValue(0x00000004)
   HipHop,
 
   /// Pop concert
-  @JsonValue(5)
+  @JsonValue(0x00000005)
   VocalConcert,
 
   /// Karaoke
-  @JsonValue(6)
+  @JsonValue(0x00000006)
   KTV,
 
   /// Recording studio
-  @JsonValue(7)
+  @JsonValue(0x00000007)
   Studio,
+
+  /// The reverberation style typical of a KTV venue (enhanced).
+  @JsonValue(0x00100001)
+  FX_KTV,
+
+  /// The reverberation style typical of a concert hall (enhanced).
+  @JsonValue(0x00100002)
+  FX_VOCAL_CONCERT,
+
+  /// The reverberation style typical of an uncle’s voice.
+  @JsonValue(0x00100003)
+  FX_UNCLE,
+
+  /// The reverberation style typical of a sister’s voice.
+  @JsonValue(0x00100004)
+  FX_SISTER,
+
+  /// The reverberation style typical of a recording studio (enhanced).
+  @JsonValue(0x00100005)
+  FX_STUDIO,
+
+  /// The reverberation style typical of popular music (enhanced).
+  @JsonValue(0x00100006)
+  FX_POPULAR,
+
+  /// The reverberation style typical of R&B music (enhanced).
+  @JsonValue(0x00100007)
+  FX_RNB,
+
+  /// The reverberation style typical of the vintage phonograph.
+  @JsonValue(0x00100008)
+  FX_PHONOGRAPH,
+
+  /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the profile parameter in setAudioProfile as MusicHighQualityStereo(5).
+  /// See [RtcEngine.setAudioProfile]
+  /// See [AudioProfile.MusicHighQualityStereo]
+  @JsonValue(0x00200001)
+  VIRTUAL_STEREO,
 }
 
 /// Audio reverberation type.
@@ -443,32 +508,80 @@ enum AudioSessionOperationRestriction {
 /// @enum {number}
 enum AudioVoiceChanger {
   /// The original voice (no local voice change).
-  @JsonValue(0)
+  @JsonValue(0x00000000)
   Off,
 
   /// An old man’s voice.
-  @JsonValue(1)
+  @JsonValue(0x00000001)
   OldMan,
 
   /// A little boy’s voice.
-  @JsonValue(2)
+  @JsonValue(0x00000002)
   BabyBoy,
 
   /// A little girl’s voice.
-  @JsonValue(3)
+  @JsonValue(0x00000003)
   BabyGirl,
 
   /// TBD
-  @JsonValue(4)
+  @JsonValue(0x00000004)
   ZhuBaJie,
 
   /// Ethereal vocal effects.
-  @JsonValue(5)
+  @JsonValue(0x00000005)
   Ethereal,
 
   /// Hulk’s voice.
-  @JsonValue(6)
+  @JsonValue(0x00000006)
   Hulk,
+
+  /// A more vigorous voice.
+  @JsonValue(0x00100001)
+  BEAUTY_VIGOROUS,
+
+  /// A deeper voice.
+  @JsonValue(0x00100002)
+  BEAUTY_DEEP,
+
+  /// A mellower voice.
+  @JsonValue(0x00100003)
+  BEAUTY_MELLOW,
+
+  /// Falsetto.
+  @JsonValue(0x00100004)
+  BEAUTY_FALSETTO,
+
+  /// A fuller voice.
+  @JsonValue(0x00100005)
+  BEAUTY_FULL,
+
+  /// A clearer voice.
+  @JsonValue(0x00100006)
+  BEAUTY_CLEAR,
+
+  /// A more resounding voice.
+  @JsonValue(0x00100007)
+  BEAUTY_RESOUNDING,
+
+  /// A more ringing voice.
+  @JsonValue(0x00100008)
+  BEAUTY_RINGING,
+
+  /// A more spatially resonant voice.
+  @JsonValue(0x00100009)
+  BEAUTY_SPACIAL,
+
+  /// (For male only) A more magnetic voice. Do not use it when the speaker is a female; otherwise, voice distortion occurs.
+  @JsonValue(0x00200001)
+  GENERAL_BEAUTY_VOICE_MALE_MAGNETIC,
+
+  /// (For female only) A fresher voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
+  @JsonValue(0x00200002)
+  GENERAL_BEAUTY_VOICE_FEMALE_FRESH,
+
+  /// (For female only) A more vital voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
+  @JsonValue(0x00200003)
+  GENERAL_BEAUTY_VOICE_FEMALE_VITALITY,
 }
 
 /// The camera capturer configuration.
@@ -479,7 +592,7 @@ enum CameraCaptureOutputPreference {
   Auto,
 
   /// Prioritizes the system performance. The SDK chooses the dimension and frame rate of the local camera capture closest to those set by setVideoEncoderConfiguration.
-  /// @see RtcEngine.setVideoEncoderConfiguration
+  /// See [RtcEngine.setVideoEncoderConfiguration]
   @JsonValue(1)
   Performance,
 
@@ -516,7 +629,7 @@ enum ChannelMediaRelayError {
   ServerErrorResponse,
 
   /// No server response. You can call the leaveChannel method to leave the channel.
-  /// @see RtcEngine.leaveChannel
+  /// See [RtcEngine.leaveChannel]
   @JsonValue(2)
   ServerNoResponse,
 
@@ -541,7 +654,7 @@ enum ChannelMediaRelayError {
   FailedPacketSentToDestination,
 
   /// The SDK disconnects from the server due to poor network connections. You can call the leaveChannel method to leave the channel.
-  /// @see RtcEngine.leaveChannel
+  /// See [RtcEngine.leaveChannel]
   @JsonValue(8)
   ServerConnectionLost,
 
@@ -699,7 +812,7 @@ enum ConnectionChangedReason {
   /// The generated token is invalid probably due to the following reasons:
   /// - The App Certificate for the project is enabled in Console, but you do not use Token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
   /// - The uid that you specify in the joinChannel method is different from the uid that you pass for generating the token.
-  /// @see RtcEngine.joinChannel
+  /// See [RtcEngine.joinChannel]
   @JsonValue(8)
   InvalidToken,
 
@@ -724,7 +837,7 @@ enum ConnectionChangedReason {
   ClientIpAddressChanged,
 
   /// Timeout for the keep-alive of the connection between the SDK and Agora’s edge server. The connection state changes to:
-  /// @see ConnectionStateType.Reconnecting
+  /// See [ConnectionStateType.Reconnecting]
   @JsonValue(14)
   KeepAliveTimeout,
 }
@@ -734,48 +847,48 @@ enum ConnectionChangedReason {
 enum ConnectionStateType {
   /// The SDK is disconnected from Agora's edge server.
   /// - This is the initial state before joinChannel.
-  /// @see RtcEngine.joinChannel
+  /// See [RtcEngine.joinChannel]
   /// - The SDK also enters this state when the app calls leaveChannel.
-  /// @see RtcEngine.leaveChannel
+  /// See [RtcEngine.leaveChannel]
   @JsonValue(1)
   Disconnected,
 
   /// The SDK is connecting to Agora's edge server.
   /// - When the app calls joinChannel, the SDK starts to establish a connection to the specified channel, triggers the onConnectionStateChanged callback, and switches to the Connecting state.
-  /// @see RtcEngine.joinChannel
-  /// @see RtcEngineEvents.onConnectionStateChanged
-  /// @see ConnectionStateType.Connecting
+  /// See [RtcEngine.joinChannel]
+  /// See [RtcEngineEventHandler.connectionStateChanged]
+  /// See [ConnectionStateType.Connecting]
   /// - When the SDK successfully joins the channel, the SDK triggers the onConnectionStateChanged callback and switches to the Connected state.
-  /// @see RtcEngineEvents.onConnectionStateChanged
-  /// @see ConnectionStateType.Connected
+  /// See [RtcEngineEventHandler.connectionStateChanged]
+  /// See [ConnectionStateType.Connected]
   /// - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the onJoinChannelSuccess callback.
-  /// @see RtcEngineEvents.onJoinChannelSuccess
+  /// See [RtcEngineEvents.onJoinChannelSuccess]
   @JsonValue(2)
   Connecting,
 
   /// The SDK is connected to Agora's edge server and joins a channel. You can now publish or subscribe to a media stream in the channel.
   /// If the connection to the channel is lost because, for example, the network is down or switched, the SDK automatically tries to reconnect and triggers:
   /// - The onConnectionStateChanged callback, and switches to the Reconnecting state.
-  /// @see RtcEngineEvents.onConnectionStateChanged
-  /// @see ConnectionStateType.Reconnecting
+  /// See [RtcEngineEventHandler.connectionStateChanged]
+  /// See [ConnectionStateType.Reconnecting]
   @JsonValue(3)
   Connected,
 
   /// The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
   /// - If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora’s edge server, the SDK triggers the onConnectionLost callback, stays in the Reconnecting state, and keeps rejoining the channel.
-  /// @see RtcEngineEvents.onConnectionLost
+  /// See [RtcEngineEventHandler.connectionLost]
   /// - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the onConnectionStateChanged callback, switches to the Failed state, and stops rejoining the channel.
-  /// @see RtcEngineEvents.onConnectionStateChanged
-  /// @see ConnectionStateType.Failed
+  /// See [RtcEngineEventHandler.connectionStateChanged]
+  /// See [ConnectionStateType.Failed]
   @JsonValue(4)
   Reconnecting,
 
   /// The SDK fails to connect to Agora's edge server or join the channel.
   /// You must call leaveChannel to leave this state, and call joinChannel again to rejoin the channel.
-  /// @see RtcEngine.leaveChannel
-  /// @see RtcEngine.joinChannel
+  /// See [RtcEngine.leaveChannel]
+  /// See [RtcEngine.joinChannel]
   /// If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the onConnectionStateChanged callbacks.
-  /// @see RtcEngineEvents.onConnectionStateChanged
+  /// See [RtcEngineEventHandler.connectionStateChanged]
   @JsonValue(5)
   Failed,
 }
@@ -800,15 +913,15 @@ enum DegradationPreference {
 /// @enum {string}
 enum EncryptionMode {
   /// (Default) 128-bit AES encryption, XTS mode.
-  @JsonValue("aes-128-xts")
+  @JsonValue('aes-128-xts')
   AES128XTS,
 
   /// 256-bit AES encryption, XTS mode.
-  @JsonValue("aes-256-xts")
+  @JsonValue('aes-256-xts')
   AES256XTS,
 
   /// 128-bit AES encryption, ECB mode.
-  @JsonValue("aes-128-ecb")
+  @JsonValue('aes-128-ecb')
   AES128ECB,
 }
 
@@ -882,7 +995,7 @@ enum ErrorCode {
   /// The request to join the channel is rejected.
   /// Possible reasons are:
   /// - The user is already in the channel, and still calls the API method to join the channel, for example, joinChannel
-  /// @see RtcEngine.joinChannel
+  /// See [RtcEngine.joinChannel]
   /// - The user tries joining the channel during the echo test. Please join the channel after the echo test ends.
   @JsonValue(17)
   JoinChannelRejected,
@@ -890,7 +1003,7 @@ enum ErrorCode {
   /// The request to leave the channel is rejected.
   /// Possible reasons are:
   /// - The user left the channel and still calls the API method to leave the channel, for example, leaveChannel.
-  /// @see RtcEngine.leaveChannel
+  /// See [RtcEngine.leaveChannel]
   /// - The user has not joined the channel and calls the API method to leave the channel.
   @JsonValue(18)
   LeaveChannelRejected,
@@ -920,8 +1033,8 @@ enum ErrorCode {
   InvalidChannelId,
 
   /// The token expired. DEPRECATED as of v2.4.1. Use TokenExpired(9) in the reason parameter of onConnectionStateChanged.
-  /// @see ConnectionChangedReason.TokenExpired
-  /// @see RtcEngineEvents.onConnectionStateChanged
+  /// See [ConnectionChangedReason.TokenExpired]
+  /// See [RtcEngineEventHandler.connectionStateChanged]
   /// Possible reasons are:
   /// - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the token to access the Agora service within five minutes after the token is generated. If the user does not access the Agora service after five minutes, this token is no longer valid.
   /// - Call Expiration Timestamp expired: The timestamp is the exact time when a user can no longer use the Agora service (for example, when a user is forced to leave an ongoing call). When a value is set for the Call Expiration Timestamp, it does not mean that the token will expire, but that the user will be banned from the channel.
@@ -930,12 +1043,12 @@ enum ErrorCode {
   TokenExpired,
 
   /// The token is invalid. DEPRECATED as of v2.4.1. Use InvalidToken(8) in the reason parameter of onConnectionStateChanged.
-  /// @see ConnectionChangedReason.InvalidToken
-  /// @see RtcEngineEvents.onConnectionStateChanged
+  /// See [ConnectionChangedReason.InvalidToken]
+  /// See [RtcEngineEventHandler.connectionStateChanged]
   /// Possible reasons are:
   /// - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
   /// - The uid is mandatory, and users must set the same uid as the one set in the joinChannel method.
-  /// @see RtcEngine.joinChannel
+  /// See [RtcEngine.joinChannel]
   @deprecated
   @JsonValue(110)
   InvalidToken,
@@ -949,23 +1062,23 @@ enum ErrorCode {
   ConnectionLost,
 
   /// The user is not in the channel when calling the sendStreamMessage or getUserInfoByUserAccount method.
-  /// @see RtcEngine.sendStreamMessage
-  /// @see RtcEngine.getUserInfoByUserAccount
+  /// See [RtcEngine.sendStreamMessage]
+  /// See [RtcEngine.getUserInfoByUserAccount]
   @JsonValue(113)
   NotInChannel,
 
   /// The size of the sent data is over 1024 bytes when the user calls the sendStreamMessage method.
-  /// @see RtcEngine.sendStreamMessage
+  /// See [RtcEngine.sendStreamMessage]
   @JsonValue(114)
   SizeTooLarge,
 
   /// The bitrate of the sent data exceeds the limit of 6 Kbps when the user calls the sendStreamMessage method.
-  /// @see RtcEngine.sendStreamMessage
+  /// See [RtcEngine.sendStreamMessage]
   @JsonValue(115)
   BitrateLimit,
 
   /// Too many data streams (over five streams) are created when the user calls the createDataStream method.
-  /// @see RtcEngine.createDataStream
+  /// See [RtcEngine.createDataStream]
   @JsonValue(116)
   TooManyDataStreams,
 
@@ -1010,8 +1123,8 @@ enum ErrorCode {
   InvalidUserAccount,
 
   /// CDN related errors. Remove the original URL address and add a new one by calling the removePublishStreamUrl and addPublishStreamUrl methods.
-  /// @see RtcEngine.removePublishStreamUrl
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtcEngine.removePublishStreamUrl]
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(151)
   PublishStreamCDNError,
 
@@ -1024,7 +1137,7 @@ enum ErrorCode {
   PublishStreamNotAuthorized,
 
   /// An error occurs in Agora’s streaming server. Call the addPublishStreamUrl method to publish the stream again.
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(154)
   PublishStreamInternalServerError,
 
@@ -1045,8 +1158,8 @@ enum ErrorCode {
   StartCall,
 
   /// Fails to start the camera. DEPRECATED as of v2.4.1. Use CaptureFailure(4) in the error parameter of onLocalVideoStateChanged.
-  /// @see LocalVideoStreamError.CaptureFailure
-  /// @see RtcEngineEvents.onLocalVideoStateChanged
+  /// See [LocalVideoStreamError.CaptureFailure]
+  /// See [RtcEngineEventHandler.localVideoStateChanged]
   @deprecated
   @JsonValue(1003)
   StartCamera,
@@ -1478,8 +1591,8 @@ enum RtmpStreamingErrorCode {
   OK,
 
   /// Invalid argument used. If, for example, you do not call the setLiveTranscoding method to configure the LiveTranscoding parameters before calling the addPublishStreamUrl method, the SDK returns this error. Check whether you set the parameters in the setLiveTranscoding method properly.
-  /// @see RtcEngine.setLiveTranscoding
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtcEngine.setLiveTranscoding]
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(1)
   InvalidParameters,
 
@@ -1488,12 +1601,12 @@ enum RtmpStreamingErrorCode {
   EncryptedStreamNotAllowed,
 
   /// Timeout for the RTMP streaming. Call the addPublishStreamUrl method to publish the streaming again.
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(3)
   ConnectionTimeout,
 
   /// An error occurs in Agora’s streaming server. Call the addPublishStreamUrl method to publish the streaming again.
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(4)
   InternalServerError,
 
@@ -1526,12 +1639,12 @@ enum RtmpStreamingErrorCode {
 /// @enum {number}
 enum RtmpStreamingState {
   /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling removePublishStreamUrl.
-  /// @see RtcEngine.removePublishStreamUrl
+  /// See [RtcEngine.removePublishStreamUrl]
   @JsonValue(0)
   Idle,
 
   /// The SDK is connecting to Agora’s streaming server and the RTMP server. This state is triggered after you call the addPublishStreamUrl method.
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(1)
   Connecting,
 
@@ -1541,16 +1654,16 @@ enum RtmpStreamingState {
 
   /// The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP streaming and returns this state.
   /// - If the SDK successfully resumes the streaming, Running(2) returns.
-  /// @see RtmpStreamingState.Running
+  /// See [RtmpStreamingState.Running]
   /// - If the streaming does not resume within 60 seconds or server errors occur, Failure(4) returns. You can also reconnect to the server by calling the removePublishStreamUrl and addPublishStreamUrl methods.
-  /// @see RtmpStreamingState.Failure
-  /// @see RtcEngine.removePublishStreamUrl
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtmpStreamingState.Failure]
+  /// See [RtcEngine.removePublishStreamUrl]
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(3)
   Recovering,
 
   /// The RTMP streaming fails. See the errorCode parameter for the detailed error information. You can also call the addPublishStreamUrl method to publish the RTMP streaming again.
-  /// @see RtcEngine.addPublishStreamUrl
+  /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(4)
   Failure,
 }
@@ -1563,8 +1676,8 @@ enum StreamFallbackOptions {
   Disabled,
 
   /// Under unreliable downlink network conditions, the remote video stream falls back to the low-stream (low resolution and low bitrate) video. You can only set this option in the setRemoteSubscribeFallbackOption method. Nothing happens when you set this in the setLocalPublishFallbackOption method.
-  /// @see RtcEngine.setRemoteSubscribeFallbackOption
-  /// @see RtcEngine.setLocalPublishFallbackOption
+  /// See [RtcEngine.setRemoteSubscribeFallbackOption]
+  /// See [RtcEngine.setLocalPublishFallbackOption]
   @JsonValue(1)
   VideoStreamLow,
 
@@ -1650,6 +1763,7 @@ enum VideoContentHint {
 /// Video frame rate
 /// @enum {number}
 enum VideoFrameRate {
+  /// Min
   @JsonValue(-1)
   Min,
 
@@ -1770,9 +1884,9 @@ enum VideoQualityAdaptIndication {
 /// @enum {number}
 enum VideoRemoteState {
   /// The remote video is in the default state, probably due to:
-  /// @see VideoRemoteStateReason.LocalMuted
-  /// @see VideoRemoteStateReason.RemoteMuted
-  /// @see VideoRemoteStateReason.RemoteOffline
+  /// See [VideoRemoteStateReason.LocalMuted]
+  /// See [VideoRemoteStateReason.RemoteMuted]
+  /// See [VideoRemoteStateReason.RemoteOffline]
   @JsonValue(0)
   Stopped,
 
@@ -1781,21 +1895,21 @@ enum VideoRemoteState {
   Starting,
 
   /// The remote video stream is decoded and plays normally, probably due to:
-  /// @see VideoRemoteStateReason.NetworkRecovery
-  /// @see VideoRemoteStateReason.LocalUnmuted
-  /// @see VideoRemoteStateReason.RemoteUnmuted
-  /// @see VideoRemoteStateReason.AudioFallbackRecovery
+  /// See [VideoRemoteStateReason.NetworkRecovery]
+  /// See [VideoRemoteStateReason.LocalUnmuted]
+  /// See [VideoRemoteStateReason.RemoteUnmuted]
+  /// See [VideoRemoteStateReason.AudioFallbackRecovery]
   @JsonValue(2)
   Decoding,
 
   /// The remote video is frozen, probably due to:
-  /// @see VideoRemoteStateReason.NetworkCongestion
-  /// @see VideoRemoteStateReason.AudioFallback
+  /// See [VideoRemoteStateReason.NetworkCongestion]
+  /// See [VideoRemoteStateReason.AudioFallback]
   @JsonValue(3)
   Frozen,
 
   /// The remote video fails to start, probably due to:
-  /// @see VideoRemoteStateReason.Internal
+  /// See [VideoRemoteStateReason.Internal]
   @JsonValue(4)
   Failed,
 }
@@ -1859,6 +1973,10 @@ enum VideoRenderMode {
   @deprecated
   @JsonValue(3)
   Adaptive,
+
+  /// The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
+  @JsonValue(4)
+  FILL,
 }
 
 /// Video rotation.
@@ -1895,7 +2013,7 @@ enum VideoStreamType {
 }
 
 /// Warning codes occur when the SDK encounters an error that may be recovered automatically. These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server, the SDK reports the OpenChannelTimeout(106) warning and tries to reconnect automatically.
-/// @see WarningCode.OpenChannelTimeout
+/// See [WarningCode.OpenChannelTimeout]
 /// @enum {number}
 enum WarningCode {
   /// The specified view is invalid. Specify a view when using the video call function.
@@ -1919,8 +2037,8 @@ enum WarningCode {
   LookupChannelTimeout,
 
   /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal. DEPRECATED as of v2.4.1. Use RejectedByServer(10) in the reason parameter of onConnectionStateChanged.
-  /// @see ConnectionChangedReason.RejectedByServer
-  /// @see RtcEngineEvents.onConnectionStateChanged
+  /// See [ConnectionChangedReason.RejectedByServer]
+  /// See [RtcEngineEventHandler.connectionStateChanged]
   @deprecated
   @JsonValue(105)
   LookupChannelRejected,
