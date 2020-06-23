@@ -24,6 +24,7 @@ public class Annotations {
             AgoraRtcAppType.APICLOUD,
             AgoraRtcAppType.REACTNATIVE,
     })
+    @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraRtcAppType {
         int NATIVE = 0;
         int COCOS = 1;
