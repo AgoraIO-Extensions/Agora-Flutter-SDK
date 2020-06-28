@@ -18,9 +18,11 @@ class RtcSurfaceView extends StatefulWidget {
   final int uid;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
+  /// [TargetPlatform.android]
   final bool zOrderMediaOverlay;
 
   /// Control whether the surface view's surface is placed on top of its window.
+  /// [TargetPlatform.android]
   final bool zOrderOnTop;
 
   /// The rendering mode of the video view.
@@ -130,8 +132,10 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   @override
   void didUpdateWidget(RtcSurfaceView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setZOrderMediaOverlay();
-    setZOrderOnTop();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      setZOrderMediaOverlay();
+      setZOrderOnTop();
+    }
     setRenderMode();
     setChannelId();
     setMirrorMode();
@@ -190,6 +194,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
 
 /// Use TextureView in Android.
 /// Not support for iOS.
+/// [TargetPlatform.android]
 class RtcTextureView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -256,18 +261,6 @@ class _RtcTextureViewState extends State<RtcTextureView> {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: AndroidView(
-          viewType: 'AgoraTextureView',
-          onPlatformViewCreated: onPlatformViewCreated,
-          hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-          creationParams: creationParams,
-          creationParamsCodec: const StandardMessageCodec(),
-          gestureRecognizers: widget.gestureRecognizers,
-        ),
-      );
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: UiKitView(
           viewType: 'AgoraTextureView',
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,

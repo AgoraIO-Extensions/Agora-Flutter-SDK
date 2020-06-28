@@ -41,5 +41,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>MIC</string>
+	<key>NSCameraUsageDescription</key>
+	<string>CAMERA</string>
 </dict>
 </plist>
