@@ -86,14 +86,6 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
 
   @override
   Widget build(BuildContext context) {
-    final creationParams = {
-      'uid': widget.uid,
-      'zOrderMediaOverlay': widget.zOrderMediaOverlay,
-      'zOrderOnTop': widget.zOrderOnTop,
-      'renderMode': _renderMode,
-      'channelId': widget.channelId,
-      'mirrorMode': _mirrorMode,
-    };
     if (defaultTargetPlatform == TargetPlatform.android) {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -101,7 +93,14 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           viewType: 'AgoraSurfaceView',
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-          creationParams: creationParams,
+          creationParams: {
+            'uid': widget.uid,
+            'zOrderMediaOverlay': widget.zOrderMediaOverlay,
+            'zOrderOnTop': widget.zOrderOnTop,
+            'renderMode': _renderMode,
+            'channelId': widget.channelId,
+            'mirrorMode': _mirrorMode,
+          },
           creationParamsCodec: const StandardMessageCodec(),
           gestureRecognizers: widget.gestureRecognizers,
         ),
@@ -113,7 +112,12 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           viewType: 'AgoraSurfaceView',
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-          creationParams: creationParams,
+          creationParams: {
+            'uid': widget.uid,
+            'renderMode': _renderMode,
+            'channelId': widget.channelId,
+            'mirrorMode': _mirrorMode,
+          },
           creationParamsCodec: const StandardMessageCodec(),
           gestureRecognizers: widget.gestureRecognizers,
         ),

@@ -46,13 +46,13 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             AgoraRtcEnginePlugin().apply {
-                init(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
-                rtcChannelPlugin.init(registrar.messenger())
+                initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
+                rtcChannelPlugin.initPlugin(registrar.messenger())
             }
         }
     }
 
-    private fun init(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
+    private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
         applicationContext = context.applicationContext
         methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
         methodChannel.setMethodCallHandler(this)
@@ -65,7 +65,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
     override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         rtcChannelPlugin.onAttachedToEngine(binding)
-        init(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
+        initPlugin(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -336,6 +336,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
         ResultCallback(callback).code(engine()?.setAudioMixingPosition(pos))
     }
 
+    override fun setAudioMixingPitch(pitch: Int, callback: Result?) {
+        ResultCallback(callback).code(engine()?.setAudioMixingPitch(pitch))
+    }
+
     override fun getEffectsVolume(callback: Result?) {
         ResultCallback(callback).resolve(engine()) { it.audioEffectManager.effectsVolume }
     }
@@ -592,6 +596,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
         ResultCallback(callback).code(engine()?.setCameraExposurePosition(positionXinView, positionYinView))
     }
 
+    override fun enableFaceDetection(enable: Boolean, callback: Result?) {
+        ResultCallback(callback).code(engine()?.enableFaceDetection(enable))
+    }
+
     override fun setCameraTorchOn(isOn: Boolean, callback: Result?) {
         ResultCallback(callback).code(engine()?.setCameraTorchOn(isOn))
     }
@@ -615,13 +623,5 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
     override fun sendStreamMessage(streamId: Int, message: String, callback: Result?) {
         ResultCallback(callback).code(manager.sendStreamMessage(streamId, message))
-    }
-
-    override fun setAudioMixingPitch(pitch: Int, callback: Result?) {
-        ResultCallback(callback).code(engine()?.setAudioMixingPitch(pitch))
-    }
-
-    override fun enableFaceDetection(enable: Boolean, callback: Result?) {
-        ResultCallback(callback).code(engine()?.enableFaceDetection(enable))
     }
 }

@@ -14,9 +14,9 @@ class SurfaceView extends RtcSurfaceView {
     Key key,
     bool zOrderMediaOverlay = false,
     bool zOrderOnTop = false,
-    VideoRenderMode renderMode,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     String channelId,
-    VideoMirrorMode mirrorMode,
+    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(

@@ -31,7 +31,7 @@ class AgoraRtcChannelPlugin(
     private val manager = RtcChannelManager()
     private val handler = Handler(Looper.getMainLooper())
 
-    fun init(binaryMessenger: BinaryMessenger) {
+    fun initPlugin(binaryMessenger: BinaryMessenger) {
         methodChannel = MethodChannel(binaryMessenger, "agora_rtc_channel")
         methodChannel.setMethodCallHandler(this)
         eventChannel = EventChannel(binaryMessenger, "agora_rtc_channel/events")
@@ -39,7 +39,7 @@ class AgoraRtcChannelPlugin(
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        init(binding.binaryMessenger)
+        initPlugin(binding.binaryMessenger)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

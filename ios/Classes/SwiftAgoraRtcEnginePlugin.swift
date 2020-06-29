@@ -2,37 +2,43 @@ import Flutter
 import UIKit
 
 public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
-    private var methodChannel: FlutterMethodChannel
-    private var eventChannel: FlutterEventChannel
+    private var methodChannel: FlutterMethodChannel?
+    private var eventChannel: FlutterEventChannel?
     private var eventSink: FlutterEventSink? = nil
-    private let manager: RtcEngineManager = RtcEngineManager()
-
-    init(_ registrar: FlutterPluginRegistrar) {
+    private let manager = RtcEngineManager()
+    private lazy var rtcChannelPlugin: AgoraRtcChannelPlugin = {
+        return AgoraRtcChannelPlugin(self)
+    }()
+    
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let rtcEnginePlugin = SwiftAgoraRtcEnginePlugin()
+        rtcEnginePlugin.rtcChannelPlugin.initPlugin(registrar)
+        rtcEnginePlugin.initPlugin(registrar)
+    }
+    
+    private func initPlugin(_ registrar: FlutterPluginRegistrar) {
         methodChannel = FlutterMethodChannel(name: "agora_rtc_engine", binaryMessenger: registrar.messenger())
         eventChannel = FlutterEventChannel(name: "agora_rtc_engine/events", binaryMessenger: registrar.messenger())
-        super.init()
-        registrar.addMethodCallDelegate(self, channel: methodChannel)
-        eventChannel.setStreamHandler(self)
+        registrar.addMethodCallDelegate(self, channel: methodChannel!)
+        eventChannel?.setStreamHandler(self)
         
-        registrar.register(AgoraSurfaceViewFactory(registrar.messenger(), self), withId: "AgoraSurfaceView")
-    }
-
-    public static func register(with registrar: FlutterPluginRegistrar) {
-        SwiftAgoraRtcEnginePlugin(registrar)
+        registrar.register(AgoraSurfaceViewFactory(registrar.messenger(), self, rtcChannelPlugin), withId: "AgoraSurfaceView")
     }
 
     public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
-        eventChannel.setStreamHandler(nil)
+        rtcChannelPlugin.detachFromEngine(for: registrar)
+        methodChannel?.setMethodCallHandler(nil)
+        eventChannel?.setStreamHandler(nil)
         manager.release()
     }
 
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        self.eventSink = events
+        eventSink = events
         return nil
     }
 
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        self.eventSink = nil
+        eventSink = nil
         return nil
     }
 
@@ -44,7 +50,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         eventSink?(event)
     }
 
-    var engine: AgoraRtcEngineKit? {
+    weak var engine: AgoraRtcEngineKit? {
         return manager.engine
     }
 
@@ -53,260 +59,259 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         if let arguments = call.arguments {
             args = arguments as! Dictionary<String, Any?>
         }
-        let callback = ResultCallback(result)
         switch call.method {
         case "create":
-            self.create(args["appId"] as! String, args["areaCode"] as! Int, callback)
+            self.create(args["appId"] as! String, args["areaCode"] as! Int, result)
         case "destroy":
-            destroy(callback)
+            destroy(result)
         case "setChannelProfile":
-            setChannelProfile(args["profile"] as! Int, callback)
+            setChannelProfile(args["profile"] as! Int, result)
         case "setClientRole":
-            setClientRole(args["role"] as! Int, callback)
+            setClientRole(args["role"] as! Int, result)
         case "joinChannel":
-            joinChannel(args["token"] as? String, args["channelName"] as! String, args["optionalInfo"] as? String, args["optionalUid"] as! Int, callback)
+            joinChannel(args["token"] as? String, args["channelName"] as! String, args["optionalInfo"] as? String, args["optionalUid"] as! Int, result)
         case "switchChannel":
-            switchChannel(args["token"] as? String, args["channelName"] as! String, callback)
+            switchChannel(args["token"] as? String, args["channelName"] as! String, result)
         case "leaveChannel":
-            leaveChannel(callback)
+            leaveChannel(result)
         case "renewToken":
-            renewToken(args["token"] as! String, callback)
+            renewToken(args["token"] as! String, result)
         case "enableWebSdkInteroperability":
-            enableWebSdkInteroperability(args["enabled"] as! Bool, callback)
+            enableWebSdkInteroperability(args["enabled"] as! Bool, result)
         case "getConnectionState":
-            getConnectionState(callback)
+            getConnectionState(result)
         case "getCallId":
-            getCallId(callback)
+            getCallId(result)
         case "rate":
-            rate(args["callId"] as! String, args["rating"] as! Int, args["description"] as? String, callback)
+            rate(args["callId"] as! String, args["rating"] as! Int, args["description"] as? String, result)
         case "complain":
-            complain(args["callId"] as! String, description, callback)
+            complain(args["callId"] as! String, description, result)
         case "setLogFile":
-            setLogFile(args["filePath"] as! String, callback)
+            setLogFile(args["filePath"] as! String, result)
         case "setLogFilter":
-            setLogFilter(args["filter"] as! Int, callback)
+            setLogFilter(args["filter"] as! Int, result)
         case "setLogFileSize":
-            setLogFileSize(args["fileSizeInKBytes"] as! Int, callback)
+            setLogFileSize(args["fileSizeInKBytes"] as! Int, result)
         case "setParameters":
-            setParameters(args["parameters"] as! String, callback)
+            setParameters(args["parameters"] as! String, result)
         case "registerLocalUserAccount":
-            registerLocalUserAccount(args["appId"] as! String, args["userAccount"] as! String, callback)
+            registerLocalUserAccount(args["appId"] as! String, args["userAccount"] as! String, result)
         case "joinChannelWithUserAccount":
-            joinChannelWithUserAccount(args["token"] as? String, args["channelName"] as! String, args["userAccount"] as! String, callback)
+            joinChannelWithUserAccount(args["token"] as? String, args["channelName"] as! String, args["userAccount"] as! String, result)
         case "getUserInfoByUserAccount":
-            getUserInfoByUserAccount(args["userAccount"] as! String, callback)
+            getUserInfoByUserAccount(args["userAccount"] as! String, result)
         case "getUserInfoByUid":
-            getUserInfoByUid(args["uid"] as! Int, callback)
+            getUserInfoByUid(args["uid"] as! Int, result)
         case "enableAudio":
-            enableAudio(callback)
+            enableAudio(result)
         case "disableAudio":
-            disableAudio(callback)
+            disableAudio(result)
         case "setAudioProfile":
-            setAudioProfile(args["profile"] as! Int, args["scenario"] as! Int, callback)
+            setAudioProfile(args["profile"] as! Int, args["scenario"] as! Int, result)
         case "adjustRecordingSignalVolume":
-            adjustRecordingSignalVolume(args["volume"] as! Int, callback)
+            adjustRecordingSignalVolume(args["volume"] as! Int, result)
         case "adjustUserPlaybackSignalVolume":
-            adjustUserPlaybackSignalVolume(args["uid"] as! Int, args["volume"] as! Int, callback)
+            adjustUserPlaybackSignalVolume(args["uid"] as! Int, args["volume"] as! Int, result)
         case "adjustPlaybackSignalVolume":
-            adjustPlaybackSignalVolume(args["volume"] as! Int, callback)
+            adjustPlaybackSignalVolume(args["volume"] as! Int, result)
         case "enableLocalAudio":
-            enableLocalAudio(args["enabled"] as! Bool, callback)
+            enableLocalAudio(args["enabled"] as! Bool, result)
         case "muteLocalAudioStream":
-            muteLocalAudioStream(args["muted"] as! Bool, callback)
+            muteLocalAudioStream(args["muted"] as! Bool, result)
         case "muteRemoteAudioStream":
-            muteRemoteAudioStream(args["uid"] as! Int, args["muted"] as! Bool, callback)
+            muteRemoteAudioStream(args["uid"] as! Int, args["muted"] as! Bool, result)
         case "muteAllRemoteAudioStreams":
-            muteAllRemoteAudioStreams(args["muted"] as! Bool, callback)
+            muteAllRemoteAudioStreams(args["muted"] as! Bool, result)
         case "setDefaultMuteAllRemoteAudioStreams":
-            setDefaultMuteAllRemoteAudioStreams(args["muted"] as! Bool, callback)
+            setDefaultMuteAllRemoteAudioStreams(args["muted"] as! Bool, result)
         case "enableAudioVolumeIndication":
-            enableAudioVolumeIndication(args["interval"] as! Int, args["smooth"] as! Int, args["report_vad"] as! Bool, callback)
+            enableAudioVolumeIndication(args["interval"] as! Int, args["smooth"] as! Int, args["report_vad"] as! Bool, result)
         case "enableVideo":
-            enableVideo(callback)
+            enableVideo(result)
         case "disableVideo":
-            disableVideo(callback)
+            disableVideo(result)
         case "setVideoEncoderConfiguration":
-            setVideoEncoderConfiguration(args["config"] as! NSDictionary, callback)
+            setVideoEncoderConfiguration(args["config"] as! NSDictionary, result)
         case "enableLocalVideo":
-            enableLocalVideo(args["enabled"] as! Bool, callback)
+            enableLocalVideo(args["enabled"] as! Bool, result)
         case "muteLocalVideoStream":
-            muteLocalVideoStream(args["muted"] as! Bool, callback)
+            muteLocalVideoStream(args["muted"] as! Bool, result)
         case "muteRemoteVideoStream":
-            muteRemoteVideoStream(args["uid"] as! Int, args["muted"] as! Bool, callback)
+            muteRemoteVideoStream(args["uid"] as! Int, args["muted"] as! Bool, result)
         case "muteAllRemoteVideoStreams":
-            muteAllRemoteVideoStreams(args["muted"] as! Bool, callback)
+            muteAllRemoteVideoStreams(args["muted"] as! Bool, result)
         case "setDefaultMuteAllRemoteVideoStreams":
-            setDefaultMuteAllRemoteVideoStreams(args["muted"] as! Bool, callback)
+            setDefaultMuteAllRemoteVideoStreams(args["muted"] as! Bool, result)
         case "setBeautyEffectOptions":
-            setBeautyEffectOptions(args["enabled"] as! Bool, args["options"] as! NSDictionary, callback)
+            setBeautyEffectOptions(args["enabled"] as! Bool, args["options"] as! NSDictionary, result)
         case "startAudioMixing":
-            startAudioMixing(args["filePath"] as! String, args["loopback"] as! Bool, args["replace"] as! Bool, args["cycle"] as! Int, callback)
+            startAudioMixing(args["filePath"] as! String, args["loopback"] as! Bool, args["replace"] as! Bool, args["cycle"] as! Int, result)
         case "stopAudioMixing":
-            stopAudioMixing(callback)
+            stopAudioMixing(result)
         case "pauseAudioMixing":
-            pauseAudioMixing(callback)
+            pauseAudioMixing(result)
         case "resumeAudioMixing":
-            resumeAudioMixing(callback)
+            resumeAudioMixing(result)
         case "adjustAudioMixingVolume":
-            adjustAudioMixingVolume(args["volume"] as! Int, callback)
+            adjustAudioMixingVolume(args["volume"] as! Int, result)
         case "adjustAudioMixingPlayoutVolume":
-            adjustAudioMixingPlayoutVolume(args["volume"] as! Int, callback)
+            adjustAudioMixingPlayoutVolume(args["volume"] as! Int, result)
         case "adjustAudioMixingPublishVolume":
-            adjustAudioMixingPublishVolume(args["volume"] as! Int, callback)
+            adjustAudioMixingPublishVolume(args["volume"] as! Int, result)
         case "getAudioMixingPlayoutVolume":
-            getAudioMixingPlayoutVolume(callback)
+            getAudioMixingPlayoutVolume(result)
         case "getAudioMixingPublishVolume":
-            getAudioMixingPublishVolume(callback)
+            getAudioMixingPublishVolume(result)
         case "getAudioMixingDuration":
-            getAudioMixingDuration(callback)
+            getAudioMixingDuration(result)
         case "getAudioMixingCurrentPosition":
-            getAudioMixingCurrentPosition(callback)
+            getAudioMixingCurrentPosition(result)
         case "setAudioMixingPosition":
-            setAudioMixingPosition(args["pos"] as! Int, callback)
+            setAudioMixingPosition(args["pos"] as! Int, result)
         case "setAudioMixingPitch":
-            setAudioMixingPitch(args["pitch"] as! Int, callback)
+            setAudioMixingPitch(args["pitch"] as! Int, result)
         case "getEffectsVolume":
-            getEffectsVolume(callback)
+            getEffectsVolume(result)
         case "setEffectsVolume":
-            setEffectsVolume(args["volume"] as! Double, callback)
+            setEffectsVolume(args["volume"] as! Double, result)
         case "setVolumeOfEffect":
-            setVolumeOfEffect(args["soundId"] as! Int, args["volume"] as! Double, callback)
+            setVolumeOfEffect(args["soundId"] as! Int, args["volume"] as! Double, result)
         case "playEffect":
-            playEffect(args["soundId"] as! Int, args["filePath"] as! String, args["loopCount"] as! Int, args["pitch"] as! Double, args["pan"] as! Double, args["gain"] as! Double, args["publish"] as! Bool, callback)
+            playEffect(args["soundId"] as! Int, args["filePath"] as! String, args["loopCount"] as! Int, args["pitch"] as! Double, args["pan"] as! Double, args["gain"] as! Double, args["publish"] as! Bool, result)
         case "stopEffect":
-            stopEffect(args["soundId"] as! Int, callback)
+            stopEffect(args["soundId"] as! Int, result)
         case "stopAllEffects":
-            stopAllEffects(callback)
+            stopAllEffects(result)
         case "preloadEffect":
-            preloadEffect(args["soundId"] as! Int, args["filePath"] as! String, callback)
+            preloadEffect(args["soundId"] as! Int, args["filePath"] as! String, result)
         case "unloadEffect":
-            unloadEffect(args["soundId"] as! Int, callback)
+            unloadEffect(args["soundId"] as! Int, result)
         case "pauseEffect":
-            pauseEffect(args["soundId"] as! Int, callback)
+            pauseEffect(args["soundId"] as! Int, result)
         case "pauseAllEffects":
-            pauseAllEffects(callback)
+            pauseAllEffects(result)
         case "resumeEffect":
-            resumeEffect(args["soundId"] as! Int, callback)
+            resumeEffect(args["soundId"] as! Int, result)
         case "resumeAllEffects":
-            resumeAllEffects(callback)
+            resumeAllEffects(result)
         case "setLocalVoiceChanger":
-            setLocalVoiceChanger(args["voiceChanger"] as! Int, callback)
+            setLocalVoiceChanger(args["voiceChanger"] as! Int, result)
         case "setLocalVoiceReverbPreset":
-            setLocalVoiceReverbPreset(args["preset"] as! Int, callback)
+            setLocalVoiceReverbPreset(args["preset"] as! Int, result)
         case "setLocalVoicePitch":
-            setLocalVoicePitch(args["pitch"] as! Double, callback)
+            setLocalVoicePitch(args["pitch"] as! Double, result)
         case "setLocalVoiceEqualization":
-            setLocalVoiceEqualization(args["bandFrequency"] as! Int, args["bandGain"] as! Int, callback)
+            setLocalVoiceEqualization(args["bandFrequency"] as! Int, args["bandGain"] as! Int, result)
         case "setLocalVoiceReverb":
-            setLocalVoiceReverb(args["reverbKey"] as! Int, args["value"] as! Int, callback)
+            setLocalVoiceReverb(args["reverbKey"] as! Int, args["value"] as! Int, result)
         case "enableSoundPositionIndication":
-            enableSoundPositionIndication(args["enabled"] as! Bool, callback)
+            enableSoundPositionIndication(args["enabled"] as! Bool, result)
         case "setRemoteVoicePosition":
-            setRemoteVoicePosition(args["uid"] as! Int, args["pan"] as! Double, args["gain"] as! Double, callback)
+            setRemoteVoicePosition(args["uid"] as! Int, args["pan"] as! Double, args["gain"] as! Double, result)
         case "setLiveTranscoding":
-            setLiveTranscoding(args["transcoding"] as! NSDictionary, callback)
+            setLiveTranscoding(args["transcoding"] as! NSDictionary, result)
         case "addPublishStreamUrl":
-            addPublishStreamUrl(args["url"] as! String, args["transcodingEnabled"] as! Bool, callback)
+            addPublishStreamUrl(args["url"] as! String, args["transcodingEnabled"] as! Bool, result)
         case "removePublishStreamUrl":
-            removePublishStreamUrl(args["url"] as! String, callback)
+            removePublishStreamUrl(args["url"] as! String, result)
         case "startChannelMediaRelay":
-            startChannelMediaRelay(args["channelMediaRelayConfiguration"] as! NSDictionary, callback)
+            startChannelMediaRelay(args["channelMediaRelayConfiguration"] as! NSDictionary, result)
         case "updateChannelMediaRelay":
-            updateChannelMediaRelay(args["channelMediaRelayConfiguration"] as! NSDictionary, callback)
+            updateChannelMediaRelay(args["channelMediaRelayConfiguration"] as! NSDictionary, result)
         case "stopChannelMediaRelay":
-            stopChannelMediaRelay(callback)
+            stopChannelMediaRelay(result)
         case "setDefaultAudioRoutetoSpeakerphone":
-            setDefaultAudioRoutetoSpeakerphone(args["defaultToSpeaker"] as! Bool, callback)
+            setDefaultAudioRoutetoSpeakerphone(args["defaultToSpeaker"] as! Bool, result)
         case "setEnableSpeakerphone":
-            setEnableSpeakerphone(args["enabled"] as! Bool, callback)
+            setEnableSpeakerphone(args["enabled"] as! Bool, result)
         case "isSpeakerphoneEnabled":
-            isSpeakerphoneEnabled(callback)
+            isSpeakerphoneEnabled(result)
         case "enableInEarMonitoring":
-            enableInEarMonitoring(args["enabled"] as! Bool, callback)
+            enableInEarMonitoring(args["enabled"] as! Bool, result)
         case "setInEarMonitoringVolume":
-            setInEarMonitoringVolume(args["volume"] as! Int, callback)
+            setInEarMonitoringVolume(args["volume"] as! Int, result)
         case "enableDualStreamMode":
-            enableDualStreamMode(args["enabled"] as! Bool, callback)
+            enableDualStreamMode(args["enabled"] as! Bool, result)
         case "setRemoteVideoStreamType":
-            setRemoteVideoStreamType(args["uid"] as! Int, args["streamType"] as! Int, callback)
+            setRemoteVideoStreamType(args["uid"] as! Int, args["streamType"] as! Int, result)
         case "setRemoteDefaultVideoStreamType":
-            setRemoteDefaultVideoStreamType(args["streamType"] as! Int, callback)
+            setRemoteDefaultVideoStreamType(args["streamType"] as! Int, result)
         case "setLocalPublishFallbackOption":
-            setLocalPublishFallbackOption(args["option"] as! Int, callback)
+            setLocalPublishFallbackOption(args["option"] as! Int, result)
         case "setRemoteSubscribeFallbackOption":
-            setRemoteSubscribeFallbackOption(args["option"] as! Int, callback)
+            setRemoteSubscribeFallbackOption(args["option"] as! Int, result)
         case "setRemoteUserPriority":
-            setRemoteUserPriority(args["uid"] as! Int, args["userPriority"] as! Int, callback)
+            setRemoteUserPriority(args["uid"] as! Int, args["userPriority"] as! Int, result)
         case "startEchoTest":
-            startEchoTest(args["intervalInSeconds"] as! Int, callback)
+            startEchoTest(args["intervalInSeconds"] as! Int, result)
         case "stopEchoTest":
-            stopEchoTest(callback)
+            stopEchoTest(result)
         case "enableLastmileTest":
-            enableLastmileTest(callback)
+            enableLastmileTest(result)
         case "disableLastmileTest":
-            disableLastmileTest(callback)
+            disableLastmileTest(result)
         case "startLastmileProbeTest":
-            startLastmileProbeTest(args["config"] as! NSDictionary, callback)
+            startLastmileProbeTest(args["config"] as! NSDictionary, result)
         case "stopLastmileProbeTest":
-            stopLastmileProbeTest(callback)
+            stopLastmileProbeTest(result)
         case "registerMediaMetadataObserver":
-            registerMediaMetadataObserver(callback)
+            registerMediaMetadataObserver(result)
         case "unregisterMediaMetadataObserver":
-            unregisterMediaMetadataObserver(callback)
+            unregisterMediaMetadataObserver(result)
         case "setMaxMetadataSize":
-            setMaxMetadataSize(args["size"] as! Int, callback)
+            setMaxMetadataSize(args["size"] as! Int, result)
         case "sendMetadata":
-            sendMetadata(args["metadata"] as! String, callback)
+            sendMetadata(args["metadata"] as! String, result)
         case "addVideoWatermark":
-            addVideoWatermark(args["watermarkUrl"] as! String, args["options"] as! NSDictionary, callback)
+            addVideoWatermark(args["watermarkUrl"] as! String, args["options"] as! NSDictionary, result)
         case "clearVideoWatermarks":
-            clearVideoWatermarks(callback)
+            clearVideoWatermarks(result)
         case "setEncryptionSecret":
-            setEncryptionSecret(args["secret"] as! String, callback)
+            setEncryptionSecret(args["secret"] as! String, result)
         case "setEncryptionMode":
-            setEncryptionMode(args["encryptionMode"] as! String, callback)
+            setEncryptionMode(args["encryptionMode"] as! String, result)
         case "startAudioRecording":
-            startAudioRecording(args["filePath"] as! String, args["sampleRate"] as! Int, args["quality"] as! Int, callback)
+            startAudioRecording(args["filePath"] as! String, args["sampleRate"] as! Int, args["quality"] as! Int, result)
         case "stopAudioRecording":
-            stopAudioRecording(callback)
+            stopAudioRecording(result)
         case "addInjectStreamUrl":
-            addInjectStreamUrl(args["url"] as! String, args["config"] as! NSDictionary, callback)
+            addInjectStreamUrl(args["url"] as! String, args["config"] as! NSDictionary, result)
         case "removeInjectStreamUrl":
-            removeInjectStreamUrl(args["url"] as! String, callback)
+            removeInjectStreamUrl(args["url"] as! String, result)
         case "switchCamera":
-            switchCamera(callback)
+            switchCamera(result)
         case "isCameraZoomSupported":
-            isCameraZoomSupported(callback)
+            isCameraZoomSupported(result)
         case "isCameraTorchSupported":
-            isCameraTorchSupported(callback)
+            isCameraTorchSupported(result)
         case "isCameraFocusSupported":
             // TODO Not in iOS
             break
         case "isCameraExposurePositionSupported":
-            isCameraExposurePositionSupported(callback)
+            isCameraExposurePositionSupported(result)
         case "isCameraAutoFocusFaceModeSupported":
-            isCameraAutoFocusFaceModeSupported(callback)
+            isCameraAutoFocusFaceModeSupported(result)
         case "setCameraZoomFactor":
-            setCameraZoomFactor(args["factor"] as! Float, callback)
+            setCameraZoomFactor(args["factor"] as! Float, result)
         case "getCameraMaxZoomFactor":
             // TODO Not in iOS
             break
         case "setCameraFocusPositionInPreview":
-            setCameraFocusPositionInPreview(args["positionX"] as! Float, args["positionY"] as! Float, callback)
+            setCameraFocusPositionInPreview(args["positionX"] as! Float, args["positionY"] as! Float, result)
         case "setCameraExposurePosition":
-            setCameraExposurePosition(args["positionXinView"] as! Float, args["positionYinView"] as! Float, callback)
+            setCameraExposurePosition(args["positionXinView"] as! Float, args["positionYinView"] as! Float, result)
         case "enableFaceDetection":
-            enableFaceDetection(args["enable"] as! Bool, callback)
+            enableFaceDetection(args["enable"] as! Bool, result)
         case "setCameraTorchOn":
-            setCameraTorchOn(args["isOn"] as! Bool, callback)
+            setCameraTorchOn(args["isOn"] as! Bool, result)
         case "setCameraAutoFocusFaceModeEnabled":
-            setCameraAutoFocusFaceModeEnabled(args["enabled"] as! Bool, callback)
+            setCameraAutoFocusFaceModeEnabled(args["enabled"] as! Bool, result)
         case "setCameraCapturerConfiguration":
-            setCameraCapturerConfiguration(args["config"] as! NSDictionary, callback)
+            setCameraCapturerConfiguration(args["config"] as! NSDictionary, result)
         case "createDataStream":
-            createDataStream(args["reliable"] as! Bool, args["ordered"] as! Bool, callback)
+            createDataStream(args["reliable"] as! Bool, args["ordered"] as! Bool, result)
         case "sendStreamMessage":
-            sendStreamMessage(args["streamId"] as! Int, args["message"] as! String, callback)
+            sendStreamMessage(args["streamId"] as! Int, args["message"] as! String, result)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -315,555 +320,555 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
 
 extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     typealias Map = NSDictionary
-    typealias Callback = ResultCallback
+    typealias Callback = FlutterResult
 
-    func create(_ appId: String, _ areaCode: Int, _ callback: ResultCallback?) {
+    func create(_ appId: String, _ areaCode: Int, _ callback: FlutterResult?) {
         manager.create(appId, Int32(areaCode), .APP_TYPE_FLUTTER) { [weak self] (methodName, data) in
             self?.emit(methodName, data)
         }
-        callback?.resolve(engine, { e in nil })
+        ResultCallback(callback).resolve(engine, { e in nil })
     }
 
-    func destroy(_ callback: ResultCallback?) {
-        callback?.resolve(engine, { e in manager.destroy() })
+    func destroy(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine, { e in manager.destroy() })
     }
 
-    func setChannelProfile(_ profile: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setChannelProfile(AgoraChannelProfile(rawValue: profile)!))
+    func setChannelProfile(_ profile: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setChannelProfile(AgoraChannelProfile(rawValue: profile)!))
     }
 
-    func setClientRole(_ role: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setClientRole(AgoraClientRole(rawValue: role)!))
+    func setClientRole(_ role: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setClientRole(AgoraClientRole(rawValue: role)!))
     }
 
-    func joinChannel(_ token: String?, _ channelName: String, _ optionalInfo: String?, _ optionalUid: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: UInt(optionalUid)))
+    func joinChannel(_ token: String?, _ channelName: String, _ optionalInfo: String?, _ optionalUid: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: UInt(optionalUid)))
     }
 
-    func switchChannel(_ token: String?, _ channelName: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.switchChannel(byToken: token, channelId: channelName))
+    func switchChannel(_ token: String?, _ channelName: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.switchChannel(byToken: token, channelId: channelName))
     }
 
-    func leaveChannel(_ callback: ResultCallback?) {
-        callback?.code(engine?.leaveChannel())
+    func leaveChannel(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.leaveChannel())
     }
 
-    func renewToken(_ token: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.renewToken(token))
+    func renewToken(_ token: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.renewToken(token))
     }
 
-    func enableWebSdkInteroperability(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.enableWebSdkInteroperability(enabled))
+    func enableWebSdkInteroperability(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableWebSdkInteroperability(enabled))
     }
 
-    func getConnectionState(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getConnectionState(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.getConnectionState()
         }
     }
 
-    func getCallId(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getCallId(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.getCallId()
         }
     }
 
-    func rate(_ callId: String, _ rating: Int, _ description: String?, _ callback: ResultCallback?) {
-        callback?.code(engine?.rate(callId, rating: rating, description: description))
+    func rate(_ callId: String, _ rating: Int, _ description: String?, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.rate(callId, rating: rating, description: description))
     }
 
-    func complain(_ callId: String, _ description: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.complain(callId, description: description))
+    func complain(_ callId: String, _ description: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.complain(callId, description: description))
     }
 
-    func setLogFile(_ filePath: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLogFile(filePath))
+    func setLogFile(_ filePath: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLogFile(filePath))
     }
 
-    func setLogFilter(_ filter: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLogFilter(UInt(filter)))
+    func setLogFilter(_ filter: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLogFilter(UInt(filter)))
     }
 
-    func setLogFileSize(_ fileSizeInKBytes: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLogFileSize(UInt(fileSizeInKBytes)))
+    func setLogFileSize(_ fileSizeInKBytes: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLogFileSize(UInt(fileSizeInKBytes)))
     }
 
-    func setParameters(_ parameters: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.setParameters(parameters))
+    func setParameters(_ parameters: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setParameters(parameters))
     }
 
-    func registerLocalUserAccount(_ appId: String, _ userAccount: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.registerLocalUserAccount(userAccount, appId: appId))
+    func registerLocalUserAccount(_ appId: String, _ userAccount: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.registerLocalUserAccount(userAccount, appId: appId))
     }
 
-    func joinChannelWithUserAccount(_ token: String?, _ channelName: String, _ userAccount: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName, joinSuccess: nil))
+    func joinChannelWithUserAccount(_ token: String?, _ channelName: String, _ userAccount: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName, joinSuccess: nil))
     }
 
-    func getUserInfoByUserAccount(_ userAccount: String, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getUserInfoByUserAccount(_ userAccount: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             manager.getUserInfoByUserAccount(userAccount)
         }
     }
 
-    func getUserInfoByUid(_ uid: Int, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getUserInfoByUid(_ uid: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             manager.getUserInfoByUid(uid)
         }
     }
 
-    func enableAudio(_ callback: ResultCallback?) {
-        callback?.code(engine?.enableAudio())
+    func enableAudio(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableAudio())
     }
 
-    func disableAudio(_ callback: ResultCallback?) {
-        callback?.code(engine?.disableAudio())
+    func disableAudio(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.disableAudio())
     }
 
-    func setAudioProfile(_ profile: Int, _ scenario: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setAudioProfile(AgoraAudioProfile(rawValue: profile)!, scenario: AgoraAudioScenario(rawValue: scenario)!))
+    func setAudioProfile(_ profile: Int, _ scenario: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setAudioProfile(AgoraAudioProfile(rawValue: profile)!, scenario: AgoraAudioScenario(rawValue: scenario)!))
     }
 
-    func adjustRecordingSignalVolume(_ volume: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.adjustRecordingSignalVolume(volume))
+    func adjustRecordingSignalVolume(_ volume: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.adjustRecordingSignalVolume(volume))
     }
 
-    func adjustUserPlaybackSignalVolume(_ uid: Int, _ volume: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.adjustUserPlaybackSignalVolume(UInt(uid), volume: Int32(volume)))
+    func adjustUserPlaybackSignalVolume(_ uid: Int, _ volume: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.adjustUserPlaybackSignalVolume(UInt(uid), volume: Int32(volume)))
     }
 
-    func adjustPlaybackSignalVolume(_ volume: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.adjustPlaybackSignalVolume(volume))
+    func adjustPlaybackSignalVolume(_ volume: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.adjustPlaybackSignalVolume(volume))
     }
 
-    func enableLocalAudio(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.enableLocalAudio(enabled))
+    func enableLocalAudio(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableLocalAudio(enabled))
     }
 
-    func muteLocalAudioStream(_ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.muteLocalAudioStream(muted))
+    func muteLocalAudioStream(_ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.muteLocalAudioStream(muted))
     }
 
-    func muteRemoteAudioStream(_ uid: Int, _ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.muteRemoteAudioStream(UInt(uid), mute: muted))
+    func muteRemoteAudioStream(_ uid: Int, _ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.muteRemoteAudioStream(UInt(uid), mute: muted))
     }
 
-    func muteAllRemoteAudioStreams(_ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.muteAllRemoteAudioStreams(muted))
+    func muteAllRemoteAudioStreams(_ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.muteAllRemoteAudioStreams(muted))
     }
 
-    func setDefaultMuteAllRemoteAudioStreams(_ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.setDefaultMuteAllRemoteAudioStreams(muted))
+    func setDefaultMuteAllRemoteAudioStreams(_ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setDefaultMuteAllRemoteAudioStreams(muted))
     }
 
-    func enableAudioVolumeIndication(_ interval: Int, _ smooth: Int, _ report_vad: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.enableAudioVolumeIndication(interval, smooth: smooth, report_vad: report_vad))
+    func enableAudioVolumeIndication(_ interval: Int, _ smooth: Int, _ report_vad: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableAudioVolumeIndication(interval, smooth: smooth, report_vad: report_vad))
     }
 
-    func enableVideo(_ callback: ResultCallback?) {
-        callback?.code(engine?.enableVideo())
+    func enableVideo(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableVideo())
     }
 
-    func disableVideo(_ callback: ResultCallback?) {
-        callback?.code(engine?.disableVideo())
+    func disableVideo(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.disableVideo())
     }
 
-    func setVideoEncoderConfiguration(_ config: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(map: config as! Dictionary<String, Any>)))
+    func setVideoEncoderConfiguration(_ config: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(map: config as! Dictionary<String, Any>)))
     }
 
-    func enableLocalVideo(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.enableLocalVideo(enabled))
+    func enableLocalVideo(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableLocalVideo(enabled))
     }
 
-    func muteLocalVideoStream(_ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.muteLocalVideoStream(muted))
+    func muteLocalVideoStream(_ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.muteLocalVideoStream(muted))
     }
 
-    func muteRemoteVideoStream(_ uid: Int, _ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.muteRemoteVideoStream(UInt(uid), mute: muted))
+    func muteRemoteVideoStream(_ uid: Int, _ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.muteRemoteVideoStream(UInt(uid), mute: muted))
     }
 
-    func muteAllRemoteVideoStreams(_ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.muteAllRemoteVideoStreams(muted))
+    func muteAllRemoteVideoStreams(_ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.muteAllRemoteVideoStreams(muted))
     }
 
-    func setDefaultMuteAllRemoteVideoStreams(_ muted: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.setDefaultMuteAllRemoteVideoStreams(muted))
+    func setDefaultMuteAllRemoteVideoStreams(_ muted: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setDefaultMuteAllRemoteVideoStreams(muted))
     }
 
-    func setBeautyEffectOptions(_ enabled: Bool, _ options: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.setBeautyEffectOptions(enabled, options: mapToBeautyOptions(map: options as! Dictionary<String, Any>)))
+    func setBeautyEffectOptions(_ enabled: Bool, _ options: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setBeautyEffectOptions(enabled, options: mapToBeautyOptions(map: options as! Dictionary<String, Any>)))
     }
 
-    func startAudioMixing(_ filePath: String, _ loopback: Bool, _ replace: Bool, _ cycle: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.startAudioMixing(filePath, loopback: loopback, replace: replace, cycle: cycle))
+    func startAudioMixing(_ filePath: String, _ loopback: Bool, _ replace: Bool, _ cycle: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.startAudioMixing(filePath, loopback: loopback, replace: replace, cycle: cycle))
     }
 
-    func stopAudioMixing(_ callback: ResultCallback?) {
-        callback?.code(engine?.stopAudioMixing())
+    func stopAudioMixing(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopAudioMixing())
     }
 
-    func pauseAudioMixing(_ callback: ResultCallback?) {
-        callback?.code(engine?.pauseAudioMixing())
+    func pauseAudioMixing(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.pauseAudioMixing())
     }
 
-    func resumeAudioMixing(_ callback: ResultCallback?) {
-        callback?.code(engine?.resumeAudioMixing())
+    func resumeAudioMixing(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.resumeAudioMixing())
     }
 
-    func adjustAudioMixingVolume(_ volume: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.adjustAudioMixingVolume(volume))
+    func adjustAudioMixingVolume(_ volume: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.adjustAudioMixingVolume(volume))
     }
 
-    func adjustAudioMixingPlayoutVolume(_ volume: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.adjustAudioMixingPlayoutVolume(volume))
+    func adjustAudioMixingPlayoutVolume(_ volume: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.adjustAudioMixingPlayoutVolume(volume))
     }
 
-    func adjustAudioMixingPublishVolume(_ volume: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.adjustAudioMixingPublishVolume(volume))
+    func adjustAudioMixingPublishVolume(_ volume: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.adjustAudioMixingPublishVolume(volume))
     }
 
-    func getAudioMixingPlayoutVolume(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getAudioMixingPlayoutVolume(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.getAudioMixingPlayoutVolume()
         }
     }
 
-    func getAudioMixingPublishVolume(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getAudioMixingPublishVolume(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.getAudioMixingPublishVolume()
         }
     }
 
-    func getAudioMixingDuration(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getAudioMixingDuration(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.getAudioMixingDuration()
         }
     }
 
-    func getAudioMixingCurrentPosition(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getAudioMixingCurrentPosition(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.getAudioMixingCurrentPosition()
         }
     }
 
-    func setAudioMixingPosition(_ pos: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setAudioMixingPosition(pos))
+    func setAudioMixingPosition(_ pos: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setAudioMixingPosition(pos))
     }
 
-    func setAudioMixingPitch(_ pitch: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setAudioMixingPitch(pitch))
+    func setAudioMixingPitch(_ pitch: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setAudioMixingPitch(pitch))
     }
 
-    func getEffectsVolume(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func getEffectsVolume(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.getEffectsVolume()
         }
     }
 
-    func setEffectsVolume(_ volume: Double, _ callback: ResultCallback?) {
-        callback?.code(engine?.setEffectsVolume(volume))
+    func setEffectsVolume(_ volume: Double, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setEffectsVolume(volume))
     }
 
-    func setVolumeOfEffect(_ soundId: Int, _ volume: Double, _ callback: ResultCallback?) {
-        callback?.code(engine?.setVolumeOfEffect(Int32(soundId), withVolume: volume))
+    func setVolumeOfEffect(_ soundId: Int, _ volume: Double, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setVolumeOfEffect(Int32(soundId), withVolume: volume))
     }
 
-    func playEffect(_ soundId: Int, _ filePath: String, _ loopCount: Int, _ pitch: Double, _ pan: Double, _ gain: Double, _ publish: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.playEffect(Int32(soundId), filePath: filePath, loopCount: Int32(loopCount), pitch: pitch, pan: pan, gain: gain, publish: publish))
+    func playEffect(_ soundId: Int, _ filePath: String, _ loopCount: Int, _ pitch: Double, _ pan: Double, _ gain: Double, _ publish: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.playEffect(Int32(soundId), filePath: filePath, loopCount: Int32(loopCount), pitch: pitch, pan: pan, gain: gain, publish: publish))
     }
 
-    func stopEffect(_ soundId: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.stopEffect(Int32(soundId)))
+    func stopEffect(_ soundId: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopEffect(Int32(soundId)))
     }
 
-    func stopAllEffects(_ callback: ResultCallback?) {
-        callback?.code(engine?.stopAllEffects())
+    func stopAllEffects(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopAllEffects())
     }
 
-    func preloadEffect(_ soundId: Int, _ filePath: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.preloadEffect(Int32(soundId), filePath: filePath))
+    func preloadEffect(_ soundId: Int, _ filePath: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.preloadEffect(Int32(soundId), filePath: filePath))
     }
 
-    func unloadEffect(_ soundId: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.unloadEffect(Int32(soundId)))
+    func unloadEffect(_ soundId: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.unloadEffect(Int32(soundId)))
     }
 
-    func pauseEffect(_ soundId: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.pauseEffect(Int32(soundId)))
+    func pauseEffect(_ soundId: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.pauseEffect(Int32(soundId)))
     }
 
-    func pauseAllEffects(_ callback: ResultCallback?) {
-        callback?.code(engine?.pauseAllEffects())
+    func pauseAllEffects(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.pauseAllEffects())
     }
 
-    func resumeEffect(_ soundId: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.resumeEffect(Int32(soundId)))
+    func resumeEffect(_ soundId: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.resumeEffect(Int32(soundId)))
     }
 
-    func resumeAllEffects(_ callback: ResultCallback?) {
-        callback?.code(engine?.resumeAllEffects())
+    func resumeAllEffects(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.resumeAllEffects())
     }
 
-    func setLocalVoiceChanger(_ voiceChanger: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLocalVoiceChanger(AgoraAudioVoiceChanger(rawValue: voiceChanger)!))
+    func setLocalVoiceChanger(_ voiceChanger: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLocalVoiceChanger(AgoraAudioVoiceChanger(rawValue: voiceChanger)!))
     }
 
-    func setLocalVoiceReverbPreset(_ preset: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLocalVoiceReverbPreset(AgoraAudioReverbPreset(rawValue: preset)!))
+    func setLocalVoiceReverbPreset(_ preset: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLocalVoiceReverbPreset(AgoraAudioReverbPreset(rawValue: preset)!))
     }
 
-    func setLocalVoicePitch(_ pitch: Double, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLocalVoicePitch(pitch))
+    func setLocalVoicePitch(_ pitch: Double, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLocalVoicePitch(pitch))
     }
 
-    func setLocalVoiceEqualization(_ bandFrequency: Int, _ bandGain: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLocalVoiceEqualizationOf(AgoraAudioEqualizationBandFrequency(rawValue: bandFrequency)!, withGain: bandGain))
+    func setLocalVoiceEqualization(_ bandFrequency: Int, _ bandGain: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLocalVoiceEqualizationOf(AgoraAudioEqualizationBandFrequency(rawValue: bandFrequency)!, withGain: bandGain))
     }
 
-    func setLocalVoiceReverb(_ reverbKey: Int, _ value: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLocalVoiceReverbOf(AgoraAudioReverbType(rawValue: reverbKey)!, withValue: value))
+    func setLocalVoiceReverb(_ reverbKey: Int, _ value: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLocalVoiceReverbOf(AgoraAudioReverbType(rawValue: reverbKey)!, withValue: value))
     }
 
-    func enableSoundPositionIndication(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.enableSoundPositionIndication(enabled))
+    func enableSoundPositionIndication(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableSoundPositionIndication(enabled))
     }
 
-    func setRemoteVoicePosition(_ uid: Int, _ pan: Double, _ gain: Double, _ callback: ResultCallback?) {
-        callback?.code(engine?.setRemoteVoicePosition(UInt(uid), pan: pan, gain: gain))
+    func setRemoteVoicePosition(_ uid: Int, _ pan: Double, _ gain: Double, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setRemoteVoicePosition(UInt(uid), pan: pan, gain: gain))
     }
 
-    func setLiveTranscoding(_ transcoding: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
+    func setLiveTranscoding(_ transcoding: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
     }
 
-    func addPublishStreamUrl(_ url: String, _ transcodingEnabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.addPublishStreamUrl(url, transcodingEnabled: transcodingEnabled))
+    func addPublishStreamUrl(_ url: String, _ transcodingEnabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.addPublishStreamUrl(url, transcodingEnabled: transcodingEnabled))
     }
 
-    func removePublishStreamUrl(_ url: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.removePublishStreamUrl(url))
+    func removePublishStreamUrl(_ url: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.removePublishStreamUrl(url))
     }
 
-    func startChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+    func startChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
-    func updateChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+    func updateChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
-    func stopChannelMediaRelay(_ callback: ResultCallback?) {
-        callback?.code(engine?.stopChannelMediaRelay())
+    func stopChannelMediaRelay(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopChannelMediaRelay())
     }
 
-    func setDefaultAudioRoutetoSpeakerphone(_ defaultToSpeaker: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.setDefaultAudioRouteToSpeakerphone(defaultToSpeaker))
+    func setDefaultAudioRoutetoSpeakerphone(_ defaultToSpeaker: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setDefaultAudioRouteToSpeakerphone(defaultToSpeaker))
     }
 
-    func setEnableSpeakerphone(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.setEnableSpeakerphone(enabled))
+    func setEnableSpeakerphone(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setEnableSpeakerphone(enabled))
     }
 
-    func isSpeakerphoneEnabled(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func isSpeakerphoneEnabled(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.isSpeakerphoneEnabled()
         }
     }
 
-    func enableInEarMonitoring(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.enable(inEarMonitoring: enabled))
+    func enableInEarMonitoring(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enable(inEarMonitoring: enabled))
     }
 
-    func setInEarMonitoringVolume(_ volume: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setInEarMonitoringVolume(volume))
+    func setInEarMonitoringVolume(_ volume: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setInEarMonitoringVolume(volume))
     }
 
-    func enableDualStreamMode(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.code(engine?.enableDualStreamMode(enabled))
+    func enableDualStreamMode(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableDualStreamMode(enabled))
     }
 
-    func setRemoteVideoStreamType(_ uid: Int, _ streamType: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setRemoteVideoStream(UInt(uid), type: AgoraVideoStreamType(rawValue: streamType)!))
+    func setRemoteVideoStreamType(_ uid: Int, _ streamType: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setRemoteVideoStream(UInt(uid), type: AgoraVideoStreamType(rawValue: streamType)!))
     }
 
-    func setRemoteDefaultVideoStreamType(_ streamType: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setRemoteDefaultVideoStreamType(AgoraVideoStreamType(rawValue: streamType)!))
+    func setRemoteDefaultVideoStreamType(_ streamType: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setRemoteDefaultVideoStreamType(AgoraVideoStreamType(rawValue: streamType)!))
     }
 
-    func setLocalPublishFallbackOption(_ option: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setLocalPublishFallbackOption(AgoraStreamFallbackOptions(rawValue: option)!))
+    func setLocalPublishFallbackOption(_ option: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setLocalPublishFallbackOption(AgoraStreamFallbackOptions(rawValue: option)!))
     }
 
-    func setRemoteSubscribeFallbackOption(_ option: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setRemoteSubscribeFallbackOption(AgoraStreamFallbackOptions(rawValue: option)!))
+    func setRemoteSubscribeFallbackOption(_ option: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setRemoteSubscribeFallbackOption(AgoraStreamFallbackOptions(rawValue: option)!))
     }
 
-    func setRemoteUserPriority(_ uid: Int, _ userPriority: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.setRemoteUserPriority(UInt(uid), type: AgoraUserPriority(rawValue: userPriority)!))
+    func setRemoteUserPriority(_ uid: Int, _ userPriority: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setRemoteUserPriority(UInt(uid), type: AgoraUserPriority(rawValue: userPriority)!))
     }
 
-    func startEchoTest(_ intervalInSeconds: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.startEchoTest(withInterval: intervalInSeconds))
+    func startEchoTest(_ intervalInSeconds: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.startEchoTest(withInterval: intervalInSeconds))
     }
 
-    func stopEchoTest(_ callback: ResultCallback?) {
-        callback?.code(engine?.stopEchoTest())
+    func stopEchoTest(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopEchoTest())
     }
 
-    func enableLastmileTest(_ callback: ResultCallback?) {
-        callback?.code(engine?.enableLastmileTest())
+    func enableLastmileTest(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.enableLastmileTest())
     }
 
-    func disableLastmileTest(_ callback: ResultCallback?) {
-        callback?.code(engine?.disableLastmileTest())
+    func disableLastmileTest(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.disableLastmileTest())
     }
 
-    func startLastmileProbeTest(_ config: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(map: config as! Dictionary<String, Any>)))
+    func startLastmileProbeTest(_ config: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(map: config as! Dictionary<String, Any>)))
     }
 
-    func stopLastmileProbeTest(_ callback: ResultCallback?) {
-        callback?.code(engine?.stopLastmileProbeTest())
+    func stopLastmileProbeTest(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopLastmileProbeTest())
     }
 
-    func registerMediaMetadataObserver(_ callback: ResultCallback?) {
-        callback?.code(manager.registerMediaMetadataObserver() { [weak self] (methodName, data) in
+    func registerMediaMetadataObserver(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(manager.registerMediaMetadataObserver() { [weak self] (methodName, data) in
             self?.emit(methodName, data)
         })
     }
 
-    func unregisterMediaMetadataObserver(_ callback: ResultCallback?) {
-        callback?.code(manager.unregisterMediaMetadataObserver())
+    func unregisterMediaMetadataObserver(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(manager.unregisterMediaMetadataObserver())
     }
 
-    func setMaxMetadataSize(_ size: Int, _ callback: ResultCallback?) {
-        callback?.code(manager.setMaxMetadataSize(size))
+    func setMaxMetadataSize(_ size: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(manager.setMaxMetadataSize(size))
     }
 
-    func sendMetadata(_ metadata: String, _ callback: ResultCallback?) {
-        callback?.code(manager.addMetadata(metadata))
+    func sendMetadata(_ metadata: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(manager.addMetadata(metadata))
     }
 
-    func addVideoWatermark(_ watermarkUrl: String, _ options: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.addVideoWatermark(URL(string: watermarkUrl)!, options: mapToWatermarkOptions(map: options as! Dictionary<String, Any>)))
+    func addVideoWatermark(_ watermarkUrl: String, _ options: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.addVideoWatermark(URL(string: watermarkUrl)!, options: mapToWatermarkOptions(map: options as! Dictionary<String, Any>)))
     }
 
-    func clearVideoWatermarks(_ callback: ResultCallback?) {
-        callback?.code(engine?.clearVideoWatermarks())
+    func clearVideoWatermarks(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.clearVideoWatermarks())
     }
 
-    func setEncryptionSecret(_ secret: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.setEncryptionSecret(secret))
+    func setEncryptionSecret(_ secret: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setEncryptionSecret(secret))
     }
 
-    func setEncryptionMode(_ encryptionMode: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.setEncryptionMode(encryptionMode))
+    func setEncryptionMode(_ encryptionMode: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setEncryptionMode(encryptionMode))
     }
 
-    func startAudioRecording(_ filePath: String, _ sampleRate: Int, _ quality: Int, _ callback: ResultCallback?) {
-        callback?.code(engine?.startAudioRecording(filePath, sampleRate: sampleRate, quality: AgoraAudioRecordingQuality(rawValue: quality)!))
+    func startAudioRecording(_ filePath: String, _ sampleRate: Int, _ quality: Int, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.startAudioRecording(filePath, sampleRate: sampleRate, quality: AgoraAudioRecordingQuality(rawValue: quality)!))
     }
 
-    func stopAudioRecording(_ callback: ResultCallback?) {
-        callback?.code(engine?.stopAudioRecording())
+    func stopAudioRecording(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopAudioRecording())
     }
 
-    func addInjectStreamUrl(_ url: String, _ config: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
+    func addInjectStreamUrl(_ url: String, _ config: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
     }
 
-    func removeInjectStreamUrl(_ url: String, _ callback: ResultCallback?) {
-        callback?.code(engine?.removeInjectStreamUrl(url))
+    func removeInjectStreamUrl(_ url: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.removeInjectStreamUrl(url))
     }
 
-    func switchCamera(_ callback: ResultCallback?) {
-        callback?.code(engine?.switchCamera())
+    func switchCamera(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.switchCamera())
     }
 
-    func isCameraZoomSupported(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func isCameraZoomSupported(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.isCameraZoomSupported()
         }
     }
 
-    func isCameraTorchSupported(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func isCameraTorchSupported(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.isCameraTorchSupported()
         }
     }
 
-    func isCameraFocusSupported(_ callback: ResultCallback?) {
+    func isCameraFocusSupported(_ callback: FlutterResult?) {
         // TODO Not in iOS
     }
 
-    func isCameraExposurePositionSupported(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func isCameraExposurePositionSupported(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.isCameraExposurePositionSupported()
         }
     }
 
-    func isCameraAutoFocusFaceModeSupported(_ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func isCameraAutoFocusFaceModeSupported(_ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.isCameraAutoFocusFaceModeSupported()
         }
     }
 
-    func setCameraZoomFactor(_ factor: Float, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func setCameraZoomFactor(_ factor: Float, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraZoomFactor(CGFloat(factor))
         }
     }
 
-    func getCameraMaxZoomFactor(_ callback: ResultCallback?) {
+    func getCameraMaxZoomFactor(_ callback: FlutterResult?) {
         // TODO Not in iOS
     }
 
-    func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraFocusPositionInPreview(CGPoint(x: CGFloat(positionX), y: CGFloat(positionY)))
         }
     }
 
-    func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraExposurePosition(CGPoint(x: CGFloat(positionXinView), y: CGFloat(positionYinView)))
         }
     }
 
-    func enableFaceDetection(_ enable: Bool, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func enableFaceDetection(_ enable: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.enableFaceDetection(enable)
         }
     }
 
-    func setCameraTorchOn(_ isOn: Bool, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func setCameraTorchOn(_ isOn: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraTorchOn(isOn)
         }
     }
 
-    func setCameraAutoFocusFaceModeEnabled(_ enabled: Bool, _ callback: ResultCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+    func setCameraAutoFocusFaceModeEnabled(_ enabled: Bool, _ callback: FlutterResult?) {
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraAutoFocusFaceModeEnabled(enabled)
         }
     }
 
-    func setCameraCapturerConfiguration(_ config: NSDictionary, _ callback: ResultCallback?) {
-        callback?.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(map: config as! Dictionary<String, Any>)))
+    func setCameraCapturerConfiguration(_ config: NSDictionary, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(map: config as! Dictionary<String, Any>)))
     }
 
-    func createDataStream(_ reliable: Bool, _ ordered: Bool, _ callback: ResultCallback?) {
+    func createDataStream(_ reliable: Bool, _ ordered: Bool, _ callback: FlutterResult?) {
         let streamId = manager.createDataStream(reliable, ordered)
         if streamId <= 0 {
-            callback?.code(streamId)
+            ResultCallback(callback).code(streamId)
         } else {
-            callback?.resolve(engine, { e in streamId})
+            ResultCallback(callback).resolve(engine, { e in streamId })
         }
     }
 
-    func sendStreamMessage(_ streamId: Int, _ message: String, _ callback: ResultCallback?) {
-        callback?.code(manager.sendStreamMessage(streamId, message))
+    func sendStreamMessage(_ streamId: Int, _ message: String, _ callback: FlutterResult?) {
+        ResultCallback(callback).code(manager.sendStreamMessage(streamId, message))
     }
 }

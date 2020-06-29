@@ -20,7 +20,7 @@ class AgoraSurfaceViewFactory(
         private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-        return AgoraSurfaceView(context, messenger, viewId, rtcEnginePlugin, rtcChannelPlugin)
+        return AgoraSurfaceView(context, messenger, viewId, args as? Map<*, *>, rtcEnginePlugin, rtcChannelPlugin)
     }
 }
 
@@ -28,6 +28,7 @@ class AgoraSurfaceView(
         context: Context,
         messenger: BinaryMessenger,
         viewId: Int,
+        args: Map<*, *>?,
         private val rtcEnginePlugin: AgoraRtcEnginePlugin,
         private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformView, MethodChannel.MethodCallHandler {
@@ -35,6 +36,14 @@ class AgoraSurfaceView(
     private val channel = MethodChannel(messenger, "agora_rtc_engine/surface_view_$viewId")
 
     init {
+        args?.let { map ->
+            (map["zOrderMediaOverlay"] as? Boolean)?.let { setZOrderMediaOverlay(it) }
+            (map["zOrderOnTop"] as? Boolean)?.let { setZOrderOnTop(it) }
+            (map["renderMode"] as? Number)?.let { setRenderMode(it.toInt()) }
+            (map["channelId"] as? String)?.let { setChannelId(it) }
+            (map["mirrorMode"] as? Number)?.let { setMirrorMode(it.toInt()) }
+            (map["uid"] as? Number)?.let { setUid(it.toInt()) }
+        }
         channel.setMethodCallHandler(this)
     }
 
@@ -67,27 +76,27 @@ class AgoraSurfaceView(
         result.notImplemented()
     }
 
-    fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
+    private fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
         view.setZOrderMediaOverlay(isMediaOverlay)
     }
 
-    fun setZOrderOnTop(onTop: Boolean) {
+    private fun setZOrderOnTop(onTop: Boolean) {
         view.setZOrderOnTop(onTop)
     }
 
-    fun setRenderMode(renderMode: Int) {
+    private fun setRenderMode(renderMode: Int) {
         getEngine()?.let { view.setRenderMode(it, renderMode) }
     }
 
-    fun setChannelId(channelId: String) {
+    private fun setChannelId(channelId: String) {
         getEngine()?.let { view.setChannel(it, getChannel(channelId)) }
     }
 
-    fun setMirrorMode(mirrorMode: Int) {
+    private fun setMirrorMode(mirrorMode: Int) {
         getEngine()?.let { view.setMirrorMode(it, mirrorMode) }
     }
 
-    fun setUid(uid: Int) {
+    private fun setUid(uid: Int) {
         getEngine()?.let { view.setUid(it, uid) }
     }
 

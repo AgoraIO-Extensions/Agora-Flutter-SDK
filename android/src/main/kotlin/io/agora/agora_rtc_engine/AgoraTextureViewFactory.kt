@@ -20,7 +20,7 @@ class AgoraTextureViewFactory(
         private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-        return AgoraTextureView(context, messenger, viewId, rtcEnginePlugin, rtcChannelPlugin)
+        return AgoraTextureView(context, messenger, viewId, args as? Map<*, *>, rtcEnginePlugin, rtcChannelPlugin)
     }
 }
 
@@ -28,6 +28,7 @@ class AgoraTextureView(
         context: Context,
         messenger: BinaryMessenger,
         viewId: Int,
+        args: Map<*, *>?,
         private val rtcEnginePlugin: AgoraRtcEnginePlugin,
         private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformView, MethodChannel.MethodCallHandler {
@@ -35,6 +36,11 @@ class AgoraTextureView(
     private val channel = MethodChannel(messenger, "agora_rtc_engine/texture_view_$viewId")
 
     init {
+        args?.let { map ->
+            (map["channelId"] as? String)?.let { setChannelId(it) }
+            (map["mirror"] as? Boolean)?.let { setMirror(it) }
+            (map["uid"] as? Number)?.let { setUid(it.toInt()) }
+        }
         channel.setMethodCallHandler(this)
     }
 
