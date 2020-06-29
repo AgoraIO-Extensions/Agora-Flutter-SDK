@@ -274,7 +274,7 @@ protocol RtcEngineAudioMixingInterface {
     func getAudioMixingCurrentPosition(_ callback: Callback?)
 
     func setAudioMixingPosition(_ pos: Int, _ callback: Callback?)
-    
+
     func setAudioMixingPitch(_ pitch: Int, _ callback: Callback?)
 }
 
@@ -474,7 +474,7 @@ protocol RtcEngineCameraInterface {
     func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: Callback?)
 
     func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: Callback?)
-    
+
     func enableFaceDetection(_ enable: Bool, _ callback: Callback?)
 
     func setCameraTorchOn(_ isOn: Bool, _ callback: Callback?)
