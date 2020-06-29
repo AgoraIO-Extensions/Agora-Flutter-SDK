@@ -40,7 +40,7 @@ class RtcChannelEvents {
     static let ChannelMediaRelayStateChanged = "ChannelMediaRelayStateChanged"
     static let ChannelMediaRelayEvent = "ChannelMediaRelayEvent"
     static let MetadataReceived = "MetadataReceived"
-    
+
     static func toMap() -> Dictionary<String, String> {
         return [
             "Warning": Warning,
@@ -172,7 +172,7 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
     }
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, networkQuality uid: UInt, txQuality: AgoraNetworkQuality, rxQuality: AgoraNetworkQuality) {
-        callback(RtcChannelEvents.NetworkQuality, rtcChannel, uid, txQuality, rxQuality)
+        callback(RtcChannelEvents.NetworkQuality, rtcChannel, uid, txQuality.rawValue, rxQuality.rawValue)
     }
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
