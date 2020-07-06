@@ -17,17 +17,6 @@ class RtcSurfaceView extends StatefulWidget {
   /// User ID.
   final int uid;
 
-  /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
-  /// [TargetPlatform.android]
-  final bool zOrderMediaOverlay;
-
-  /// Control whether the surface view's surface is placed on top of its window.
-  /// [TargetPlatform.android]
-  final bool zOrderOnTop;
-
-  /// The rendering mode of the video view.
-  final VideoRenderMode renderMode;
-
   /// The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
@@ -41,8 +30,19 @@ class RtcSurfaceView extends StatefulWidget {
   /// See [RtcChannel.joinChannel]
   final String channelId;
 
+  /// The rendering mode of the video view.
+  final VideoRenderMode renderMode;
+
   /// The video mirror mode.
   final VideoMirrorMode mirrorMode;
+
+  /// Control whether the surface view's surface is placed on top of its window.
+  /// [TargetPlatform.android]
+  final bool zOrderOnTop;
+
+  /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
+  /// [TargetPlatform.android]
+  final bool zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
   ///
@@ -64,11 +64,11 @@ class RtcSurfaceView extends StatefulWidget {
   const RtcSurfaceView({
     Key key,
     @required this.uid,
-    this.zOrderMediaOverlay = false,
-    this.zOrderOnTop = false,
-    this.renderMode = VideoRenderMode.Hidden,
     this.channelId,
+    this.renderMode = VideoRenderMode.Hidden,
     this.mirrorMode = VideoMirrorMode.Auto,
+    this.zOrderOnTop = false,
+    this.zOrderMediaOverlay = false,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
   }) : super(key: key);
@@ -95,11 +95,11 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
           creationParams: {
             'uid': widget.uid,
-            'zOrderMediaOverlay': widget.zOrderMediaOverlay,
-            'zOrderOnTop': widget.zOrderOnTop,
-            'renderMode': _renderMode,
             'channelId': widget.channelId,
+            'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
+            'zOrderOnTop': widget.zOrderOnTop,
+            'zOrderMediaOverlay': widget.zOrderMediaOverlay,
           },
           creationParamsCodec: const StandardMessageCodec(),
           gestureRecognizers: widget.gestureRecognizers,
@@ -114,8 +114,8 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
           creationParams: {
             'uid': widget.uid,
-            'renderMode': _renderMode,
             'channelId': widget.channelId,
+            'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
           },
           creationParamsCodec: const StandardMessageCodec(),
@@ -136,14 +136,14 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   @override
   void didUpdateWidget(RtcSurfaceView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      setZOrderMediaOverlay();
-      setZOrderOnTop();
-    }
-    setRenderMode();
-    setChannelId();
-    setMirrorMode();
     setUid();
+    setChannelId();
+    setRenderMode();
+    setMirrorMode();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      setZOrderOnTop();
+      setZOrderMediaOverlay();
+    }
   }
 
   @override
@@ -152,22 +152,9 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
     _channels.remove(_id);
   }
 
-  void setZOrderMediaOverlay() {
-    if (widget.zOrderMediaOverlay == null) return;
-    _channels[_id]?.invokeMethod(
-        'setZOrderMediaOverlay', {'isMediaOverlay': widget.zOrderMediaOverlay});
-  }
-
-  void setZOrderOnTop() {
-    if (widget.zOrderOnTop == null) return;
-    _channels[_id]
-        ?.invokeMethod('setZOrderOnTop', {'onTop': widget.zOrderOnTop});
-  }
-
-  void setRenderMode() {
-    if (widget.renderMode == null) return;
-    _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
+  void setUid() {
+    if (widget.uid == null) return;
+    _channels[_id]?.invokeMethod('setUid', {'uid': widget.uid});
   }
 
   void setChannelId() {
@@ -176,15 +163,28 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
         ?.invokeMethod('setChannelId', {'channelId': widget.channelId});
   }
 
+  void setRenderMode() {
+    if (widget.renderMode == null) return;
+    _renderMode = VideoRenderModeConverter(widget.renderMode).value();
+    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
+  }
+
   void setMirrorMode() {
     if (widget.mirrorMode == null) return;
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
     _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
   }
 
-  void setUid() {
-    if (widget.uid == null) return;
-    _channels[_id]?.invokeMethod('setUid', {'uid': widget.uid});
+  void setZOrderOnTop() {
+    if (widget.zOrderOnTop == null) return;
+    _channels[_id]
+        ?.invokeMethod('setZOrderOnTop', {'onTop': widget.zOrderOnTop});
+  }
+
+  void setZOrderMediaOverlay() {
+    if (widget.zOrderMediaOverlay == null) return;
+    _channels[_id]?.invokeMethod(
+        'setZOrderMediaOverlay', {'isMediaOverlay': widget.zOrderMediaOverlay});
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -285,15 +285,20 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   @override
   void didUpdateWidget(RtcTextureView oldWidget) {
     super.didUpdateWidget(oldWidget);
+    setUid();
     setChannelId();
     setMirror();
-    setUid();
   }
 
   @override
   void dispose() {
     super.dispose();
     _channels.remove(_id);
+  }
+
+  void setUid() {
+    if (widget.uid == null) return;
+    _channels[_id]?.invokeMethod('setUid', {'uid': widget.uid});
   }
 
   void setChannelId() {
@@ -305,11 +310,6 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   void setMirror() {
     if (widget.mirror == null) return;
     _channels[_id]?.invokeMethod('setMirror', {'mirror': widget.mirror});
-  }
-
-  void setUid() {
-    if (widget.uid == null) return;
-    _channels[_id]?.invokeMethod('setUid', {'uid': widget.uid});
   }
 
   Future<void> onPlatformViewCreated(int id) async {

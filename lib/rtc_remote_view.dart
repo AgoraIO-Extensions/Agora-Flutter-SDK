@@ -19,7 +19,8 @@ class SurfaceView extends RtcSurfaceView {
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
-  }) : super(
+  })  : assert(uid != 0),
+        super(
           key: key,
           uid: uid,
           zOrderMediaOverlay: zOrderMediaOverlay,
@@ -43,7 +44,8 @@ class TextureView extends RtcTextureView {
     bool mirror = false,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
-  }) : super(
+  })  : assert(uid != 0),
+        super(
           key: key,
           uid: uid,
           channelId: channelId,
