@@ -34,11 +34,11 @@ class _MyAppState extends State<MyApp> {
     var engine = await RtcEngine.create('YOUR APP ID');
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
-      print('joinChannelSuccess ${channel} ${uid}');
-      setState(() {
-        _joined = true;
-      });
-    }, userJoined: (int uid, int elapsed) {
+          print('joinChannelSuccess ${channel} ${uid}');
+          setState(() {
+            _joined = true;
+          });
+        }, userJoined: (int uid, int elapsed) {
       print('userJoined ${uid}');
       setState(() {
         _remoteUid = uid;
@@ -88,10 +88,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget _renderLocalPreview() {
     if (_joined) {
-      return RtcLocalView.SurfaceView(
-        key: Key('0'),
-        channelId: '456',
-      );
+      return RtcLocalView.SurfaceView();
     } else {
       return Text(
         'Please join channel first',
@@ -102,11 +99,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget _renderRemoteVideo() {
     if (_remoteUid != null) {
-      return RtcRemoteView.SurfaceView(
-        key: Key(_remoteUid.toString()),
-        uid: _remoteUid,
-        channelId: '456',
-      );
+      return RtcRemoteView.SurfaceView(uid: _remoteUid);
     } else {
       return Text(
         'Please wait remote user join',
