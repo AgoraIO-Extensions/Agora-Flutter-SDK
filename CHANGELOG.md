@@ -1,5 +1,9 @@
 # Change log
 
+## 3.0.1-dev.1
+* upgrade Agora SDK to 3.0.1
+* support TextureView on Android
+
 ## 1.0.12
 * fix AgoraLiveTranscodingUser.alpha type bug
 
