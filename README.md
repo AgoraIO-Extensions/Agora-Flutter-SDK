@@ -1,3 +1,6 @@
+## [for 3.0.1 dev version](https://github.com/AgoraIO/Flutter-SDK/tree/dev/3.0.0)
+### We suggest you use the dev version and welcome to communicate with us by creating issues.
+
 # AgoraRtcEngine
 
 ![pub package](https://img.shields.io/pub/v/agora_rtc_engine.svg)
