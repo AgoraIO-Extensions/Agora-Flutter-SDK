@@ -96,6 +96,12 @@ Add the following line in the *app/proguard-rules.pro* file to prevent code obfu
 -keep class io.agora.**{*;}
 ```
 
+## API
+
+* [Flutter API](https://agoraio.github.io/Flutter-SDK/index.html)
+* [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
+* [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
+
 ## How to contribute
 
 To help work on this sdk, see our [contributor guide](CONTRIBUTING.md).
