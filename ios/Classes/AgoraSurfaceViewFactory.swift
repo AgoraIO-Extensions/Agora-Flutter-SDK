@@ -40,10 +40,10 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
         self.channel = FlutterMethodChannel(name: "agora_rtc_engine/surface_view_\(viewId)", binaryMessenger: messager)
         super.init()
         if let map = args {
-            setRenderMode(map["renderMode"] as! Int)
-            setChannelId(map["channelId"] as? String)
-            setMirrorMode(map["mirrorMode"] as! Int)
             setUid(map["uid"] as! Int)
+            setChannelId(map["channelId"] as? String)
+            setRenderMode(map["renderMode"] as! Int)
+            setMirrorMode(map["mirrorMode"] as! Int)
         }
         channel.setMethodCallHandler { [weak self] (call, result) in
             var args = [String: Any?]()
@@ -51,14 +51,14 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
                 args = arguments as! Dictionary<String, Any?>
             }
             switch call.method {
-            case "setRenderMode":
-                self?.setRenderMode(args["renderMode"] as! Int)
-            case "setChannelId":
-                self?.setChannelId(args["channelId"] as? String)
-            case "setMirrorMode":
-                self?.setMirrorMode(args["mirrorMode"] as! Int)
             case "setUid":
                 self?.setUid(args["uid"] as! Int)
+            case "setChannelId":
+                self?.setChannelId(args["channelId"] as? String)
+            case "setRenderMode":
+                self?.setRenderMode(args["renderMode"] as! Int)
+            case "setMirrorMode":
+                self?.setMirrorMode(args["mirrorMode"] as! Int)
             default:
                 result(FlutterMethodNotImplemented)
             }
@@ -72,10 +72,10 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
     deinit {
         channel.setMethodCallHandler(nil)
     }
-
-    func setRenderMode(_ renderMode: Int) {
+    
+    func setUid(_ uid: Int) {
         if let `engine` = engine {
-            _view.setRenderMode(engine, renderMode)
+            _view.setUid(engine, uid)
         }
     }
 
@@ -85,15 +85,15 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
         }
     }
 
-    func setMirrorMode(_ mirrorMode: Int) {
+    func setRenderMode(_ renderMode: Int) {
         if let `engine` = engine {
-            _view.setMirrorMode(engine, mirrorMode)
+            _view.setRenderMode(engine, renderMode)
         }
     }
 
-    func setUid(_ uid: Int) {
+    func setMirrorMode(_ mirrorMode: Int) {
         if let `engine` = engine {
-            _view.setUid(engine, uid)
+            _view.setMirrorMode(engine, mirrorMode)
         }
     }
     

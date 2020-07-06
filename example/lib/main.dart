@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/rtc_channel.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
@@ -18,7 +17,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _joined = false;
-  int _remoteUid = -1;
+  int _remoteUid = null;
+  bool _switch = false;
 
   @override
   void initState() {
@@ -28,7 +28,8 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    await [Permission.camera, Permission.microphone].request();
+    await [Permission.camera, Permission.microphone, Permission.storage]
+        .request();
 
     var engine = await RtcEngine.create('2b4b76e458cf439aa7cd313b9504f0a4');
     engine.setEventHandler(RtcEngineEventHandler(
@@ -42,36 +43,14 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _remoteUid = uid;
       });
+    }, userOffline: (int uid, UserOfflineReason reason) {
+      print('userOffline ${uid}');
+      setState(() {
+        _remoteUid = null;
+      });
     }));
     await engine.enableVideo();
-//    await engine.joinChannel(null, '123', null, 0);
-
-    RtcChannel channel0 = await RtcChannel.create('456');
-    channel0.setEventHandler(RtcChannelEventHandler(warning: (warn) {
-      print('channel 456 warn $warn');
-    }, rtcStats: (stats) {
-      print('channel 456 rtcStats ${stats.toJson()}');
-    }, joinChannelSuccess: (int uid, int elapsed) {
-      print('channel 456 joinChannelSuccess ${uid}');
-      setState(() {
-        _joined = true;
-      });
-    }, userJoined: (int uid, int elapsed) {
-      print('channel 456 userJoined ${uid}');
-      setState(() {
-        _remoteUid = uid;
-      });
-    }));
-    await channel0.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
-    await channel0.publish();
-
-    RtcChannel channel1 = await RtcChannel.create('789');
-    channel1.setEventHandler(RtcChannelEventHandler(warning: (warn) {
-      print('channel 789 warn $warn');
-    }, rtcStats: (stats) {
-      print('channel 789 rtcStats ${stats.toJson()}');
-    }));
-    await channel1.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await engine.joinChannel(null, '123', null, 0);
   }
 
   @override
@@ -81,8 +60,27 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Column(
-          children: [_renderLocalPreview(), _renderRemoteVideo()],
+        body: Stack(
+          children: [
+            _switch ? _renderRemoteVideo() : _renderLocalPreview(),
+            Positioned(
+              top: 0,
+              right: 0,
+              width: 100,
+              height: 100,
+              child: Container(
+                color: Colors.blue,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _switch = !_switch;
+                    });
+                  },
+                  child: _switch ? _renderLocalPreview() : _renderRemoteVideo(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -90,42 +88,30 @@ class _MyAppState extends State<MyApp> {
 
   Widget _renderLocalPreview() {
     if (_joined) {
-      return Expanded(
-        child: GestureDetector(
-          onTap: () {
-            print('----------------------------------- onTap');
-          },
-          child: RtcLocalView.SurfaceView(
-            channelId: '456',
-            onPlatformViewCreated: (id) {
-              print('----------------------------------- $id');
-            },
-          ),
-        ),
+      return RtcLocalView.SurfaceView(
+        key: Key('0'),
+        channelId: '456',
       );
     } else {
-      return Text('Please join channel first');
+      return Text(
+        'Please join channel first',
+        textAlign: TextAlign.center,
+      );
     }
   }
 
   Widget _renderRemoteVideo() {
-    if (_remoteUid != -1) {
-      return Expanded(
-        child: GestureDetector(
-          onTap: () {
-            print('----------------------------------- onTap');
-          },
-          child: RtcRemoteView.SurfaceView(
-            uid: _remoteUid,
-            channelId: '456',
-            onPlatformViewCreated: (id) {
-              print('----------------------------------- $id');
-            },
-          ),
-        ),
+    if (_remoteUid != null) {
+      return RtcRemoteView.SurfaceView(
+        key: Key(_remoteUid.toString()),
+        uid: _remoteUid,
+        channelId: '456',
       );
     } else {
-      return Text('Please wait remote user join');
+      return Text(
+        'Please wait remote user join',
+        textAlign: TextAlign.center,
+      );
     }
   }
 }

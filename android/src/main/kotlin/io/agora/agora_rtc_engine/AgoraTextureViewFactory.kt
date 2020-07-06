@@ -37,9 +37,9 @@ class AgoraTextureView(
 
     init {
         args?.let { map ->
+            (map["uid"] as? Number)?.let { setUid(it.toInt()) }
             (map["channelId"] as? String)?.let { setChannelId(it) }
             (map["mirror"] as? Boolean)?.let { setMirror(it) }
-            (map["uid"] as? Number)?.let { setUid(it.toInt()) }
         }
         channel.setMethodCallHandler(this)
     }
@@ -73,16 +73,16 @@ class AgoraTextureView(
         result.notImplemented()
     }
 
+    fun setUid(uid: Int) {
+        getEngine()?.let { view.setUid(it, uid) }
+    }
+
     fun setChannelId(channelId: String) {
         getEngine()?.let { view.setChannel(it, getChannel(channelId)) }
     }
 
     fun setMirror(mirror: Boolean) {
         getEngine()?.let { view.setMirror(it, mirror) }
-    }
-
-    fun setUid(uid: Int) {
-        getEngine()?.let { view.setUid(it, uid) }
     }
 
     private fun getEngine(): RtcEngine? {

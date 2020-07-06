@@ -37,12 +37,12 @@ class AgoraSurfaceView(
 
     init {
         args?.let { map ->
-            (map["zOrderMediaOverlay"] as? Boolean)?.let { setZOrderMediaOverlay(it) }
-            (map["zOrderOnTop"] as? Boolean)?.let { setZOrderOnTop(it) }
-            (map["renderMode"] as? Number)?.let { setRenderMode(it.toInt()) }
-            (map["channelId"] as? String)?.let { setChannelId(it) }
-            (map["mirrorMode"] as? Number)?.let { setMirrorMode(it.toInt()) }
             (map["uid"] as? Number)?.let { setUid(it.toInt()) }
+            (map["channelId"] as? String)?.let { setChannelId(it) }
+            (map["renderMode"] as? Number)?.let { setRenderMode(it.toInt()) }
+            (map["mirrorMode"] as? Number)?.let { setMirrorMode(it.toInt()) }
+            (map["zOrderOnTop"] as? Boolean)?.let { setZOrderOnTop(it) }
+            (map["zOrderMediaOverlay"] as? Boolean)?.let { setZOrderMediaOverlay(it) }
         }
         channel.setMethodCallHandler(this)
     }
@@ -76,28 +76,28 @@ class AgoraSurfaceView(
         result.notImplemented()
     }
 
-    private fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
-        view.setZOrderMediaOverlay(isMediaOverlay)
-    }
-
-    private fun setZOrderOnTop(onTop: Boolean) {
-        view.setZOrderOnTop(onTop)
-    }
-
-    private fun setRenderMode(renderMode: Int) {
-        getEngine()?.let { view.setRenderMode(it, renderMode) }
+    private fun setUid(uid: Int) {
+        getEngine()?.let { view.setUid(it, uid) }
     }
 
     private fun setChannelId(channelId: String) {
         getEngine()?.let { view.setChannel(it, getChannel(channelId)) }
     }
 
+    private fun setRenderMode(renderMode: Int) {
+        getEngine()?.let { view.setRenderMode(it, renderMode) }
+    }
+
     private fun setMirrorMode(mirrorMode: Int) {
         getEngine()?.let { view.setMirrorMode(it, mirrorMode) }
     }
 
-    private fun setUid(uid: Int) {
-        getEngine()?.let { view.setUid(it, uid) }
+    private fun setZOrderOnTop(onTop: Boolean) {
+        view.setZOrderOnTop(onTop)
+    }
+
+    private fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
+        view.setZOrderMediaOverlay(isMediaOverlay)
     }
 
     private fun getEngine(): RtcEngine? {
