@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     await [Permission.camera, Permission.microphone, Permission.storage]
         .request();
 
-    var engine = await RtcEngine.create('***REMOVED***');
+    var engine = await RtcEngine.create('YOUR APP ID');
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
       print('joinChannelSuccess ${channel} ${uid}');
