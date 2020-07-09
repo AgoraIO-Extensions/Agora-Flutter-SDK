@@ -120,7 +120,7 @@ class RtcChannelManager {
 
     func setMaxMetadataSize(_ channelId: String, _ size: Int) -> Int32 {
         if let observer = mediaObserverMap[channelId] {
-            observer.setMaxMetadataSize(size: size)
+            observer.setMaxMetadataSize(size)
             return 0
         }
         return Int32(AgoraErrorCode.notInitialized.rawValue)
@@ -128,8 +128,30 @@ class RtcChannelManager {
 
     func addMetadata(_ channelId: String, _ metadata: String) -> Int32 {
         if let observer = mediaObserverMap[channelId] {
-            observer.addMetadata(metadata: metadata)
+            observer.addMetadata(metadata)
             return 0
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+
+    func createDataStream(_ channelId: String, _ reliable: Bool, _ ordered: Bool) -> Int32 {
+        if let rtcChannel = self[channelId] {
+            var streamId = 0
+            let res = rtcChannel.createDataStream(&streamId, reliable: reliable, ordered: ordered)
+            if res == 0 {
+                return Int32(streamId)
+            }
+            return res
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+
+    func sendStreamMessage(_ channelId: String, _ streamId: Int, _ message: String) -> Int32 {
+        if let rtcChannel = self[channelId] {
+            if let data = message.data(using: .utf8) {
+                return rtcChannel.sendStreamMessage(streamId, data: data)
+            }
+            return Int32(AgoraErrorCode.invalidArgument.rawValue)
         }
         return Int32(AgoraErrorCode.notInitialized.rawValue)
     }

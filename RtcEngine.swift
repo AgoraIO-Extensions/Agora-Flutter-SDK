@@ -148,7 +148,7 @@ class RtcEngineManager {
 
     func setMaxMetadataSize(_ size: Int) -> Int32 {
         if let observer = mediaObserver {
-            observer.setMaxMetadataSize(size: size)
+            observer.setMaxMetadataSize(size)
             return 0
         }
         return Int32(AgoraErrorCode.notInitialized.rawValue)
@@ -156,7 +156,7 @@ class RtcEngineManager {
 
     func addMetadata(_ metadata: String) -> Int32 {
         if let observer = mediaObserver {
-            observer.addMetadata(metadata: metadata)
+            observer.addMetadata(metadata)
             return 0
         }
         return Int32(AgoraErrorCode.notInitialized.rawValue)

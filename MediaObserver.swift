@@ -14,15 +14,15 @@ class MediaObserver: NSObject {
     private var maxMetadataSize = 0
     private var metadataList = [String]()
 
-    init(emitter: @escaping (_ data: Dictionary<String, Any?>?) -> Void) {
+    init(_ emitter: @escaping (_ data: Dictionary<String, Any?>?) -> Void) {
         self.emitter = emitter
     }
 
-    func addMetadata(metadata: String) {
+    func addMetadata(_ metadata: String) {
         metadataList.append(metadata)
     }
 
-    func setMaxMetadataSize(size: Int) {
+    func setMaxMetadataSize(_ size: Int) {
         maxMetadataSize = size
     }
 }
