@@ -97,8 +97,8 @@ fun mapToLiveTranscoding(map: Map<*, *>): LiveTranscoding {
 
 fun mapToChannelMediaInfo(map: Map<*, *>): ChannelMediaInfo {
     return ChannelMediaInfo(
-            map["channelName"] as String,
-            map["token"] as String,
+            map["channelName"] as? String,
+            map["token"] as? String,
             (map["uid"] as Number).toInt()
     )
 }
