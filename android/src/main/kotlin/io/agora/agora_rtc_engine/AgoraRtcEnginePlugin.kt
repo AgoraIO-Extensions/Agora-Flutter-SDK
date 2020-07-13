@@ -317,19 +317,19 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     }
 
     override fun getAudioMixingPlayoutVolume(callback: Result?) {
-        ResultCallback(callback).resolve(engine()) { it.audioMixingPlayoutVolume }
+        ResultCallback(callback).code(engine()?.audioMixingPlayoutVolume) { it }
     }
 
     override fun getAudioMixingPublishVolume(callback: Result?) {
-        ResultCallback(callback).resolve(engine()) { it.audioMixingPublishVolume }
+        ResultCallback(callback).code(engine()?.audioMixingPublishVolume) { it }
     }
 
     override fun getAudioMixingDuration(callback: Result?) {
-        ResultCallback(callback).resolve(engine()) { it.audioMixingDuration }
+        ResultCallback(callback).code(engine()?.audioMixingDuration) { it }
     }
 
     override fun getAudioMixingCurrentPosition(callback: Result?) {
-        ResultCallback(callback).resolve(engine()) { it.audioMixingCurrentPosition }
+        ResultCallback(callback).code(engine()?.audioMixingCurrentPosition) { it }
     }
 
     override fun setAudioMixingPosition(pos: Int, callback: Result?) {
@@ -613,12 +613,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     }
 
     override fun createDataStream(reliable: Boolean, ordered: Boolean, callback: Result?) {
-        val streamId = manager.createDataStream(reliable, ordered)
-        if (streamId <= 0) {
-            ResultCallback(callback).code(streamId)
-        } else {
-            ResultCallback(callback).resolve(engine()) { streamId }
-        }
+        ResultCallback(callback).code(manager.createDataStream(reliable, ordered)) { it }
     }
 
     override fun sendStreamMessage(streamId: Int, message: String, callback: Result?) {

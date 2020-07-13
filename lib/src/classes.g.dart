@@ -267,7 +267,8 @@ LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) {
     audioSampleRate: _$enumDecodeNullable(
         _$AudioSampleRateTypeEnumMap, json['audioSampleRate']),
     audioBitrate: json['audioBitrate'] as int,
-    audioChannels: json['audioChannels'] as int,
+    audioChannels:
+        _$enumDecodeNullable(_$AudioChannelEnumMap, json['audioChannels']),
     audioCodecProfile: _$enumDecodeNullable(
         _$AudioCodecProfileTypeEnumMap, json['audioCodecProfile']),
     videoCodecProfile: _$enumDecodeNullable(
@@ -300,7 +301,7 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
   writeNotNull('audioSampleRate',
       _$AudioSampleRateTypeEnumMap[instance.audioSampleRate]);
   writeNotNull('audioBitrate', instance.audioBitrate);
-  writeNotNull('audioChannels', instance.audioChannels);
+  writeNotNull('audioChannels', _$AudioChannelEnumMap[instance.audioChannels]);
   writeNotNull('audioCodecProfile',
       _$AudioCodecProfileTypeEnumMap[instance.audioCodecProfile]);
   writeNotNull('videoCodecProfile',
@@ -312,7 +313,6 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
 }
 
 const _$AudioSampleRateTypeEnumMap = {
-  AudioSampleRateType.Type16000: 16000,
   AudioSampleRateType.Type32000: 32000,
   AudioSampleRateType.Type44100: 44100,
   AudioSampleRateType.Type48000: 48000,
@@ -448,7 +448,8 @@ LiveInjectStreamConfig _$LiveInjectStreamConfigFromJson(
     audioSampleRate: _$enumDecodeNullable(
         _$AudioSampleRateTypeEnumMap, json['audioSampleRate']),
     audioBitrate: json['audioBitrate'] as int,
-    audioChannels: json['audioChannels'] as int,
+    audioChannels:
+        _$enumDecodeNullable(_$AudioChannelEnumMap, json['audioChannels']),
   );
 }
 
@@ -472,7 +473,7 @@ Map<String, dynamic> _$LiveInjectStreamConfigToJson(
   writeNotNull('audioSampleRate',
       _$AudioSampleRateTypeEnumMap[instance.audioSampleRate]);
   writeNotNull('audioBitrate', instance.audioBitrate);
-  writeNotNull('audioChannels', instance.audioChannels);
+  writeNotNull('audioChannels', _$AudioChannelEnumMap[instance.audioChannels]);
   return val;
 }
 

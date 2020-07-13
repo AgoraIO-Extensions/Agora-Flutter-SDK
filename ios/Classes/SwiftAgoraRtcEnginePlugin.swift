@@ -474,7 +474,7 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func setVideoEncoderConfiguration(_ config: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(map: config as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(config as! Dictionary<String, Any>)))
     }
 
     func enableLocalVideo(_ enabled: Bool, _ callback: FlutterResult?) {
@@ -498,7 +498,7 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func setBeautyEffectOptions(_ enabled: Bool, _ options: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.setBeautyEffectOptions(enabled, options: mapToBeautyOptions(map: options as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.setBeautyEffectOptions(enabled, options: mapToBeautyOptions(options as! Dictionary<String, Any>)))
     }
 
     func startAudioMixing(_ filePath: String, _ loopback: Bool, _ replace: Bool, _ cycle: Int, _ callback: FlutterResult?) {
@@ -530,27 +530,19 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func getAudioMixingPlayoutVolume(_ callback: FlutterResult?) {
-        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingPlayoutVolume()
-        }
+        ResultCallback(callback).code(engine?.getAudioMixingPlayoutVolume()){ it in it}
     }
 
     func getAudioMixingPublishVolume(_ callback: FlutterResult?) {
-        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingPublishVolume()
-        }
+        ResultCallback(callback).code(engine?.getAudioMixingPublishVolume()) { it in it}
     }
 
     func getAudioMixingDuration(_ callback: FlutterResult?) {
-        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingDuration()
-        }
+        ResultCallback(callback).code(engine?.getAudioMixingDuration()) { it in it }
     }
 
     func getAudioMixingCurrentPosition(_ callback: FlutterResult?) {
-        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingCurrentPosition()
-        }
+        ResultCallback(callback).code(engine?.getAudioMixingCurrentPosition()) { it in it }
     }
 
     func setAudioMixingPosition(_ pos: Int, _ callback: FlutterResult?) {
@@ -640,7 +632,7 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func setLiveTranscoding(_ transcoding: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.setLiveTranscoding(mapToLiveTranscoding(transcoding as! Dictionary<String, Any>)))
     }
 
     func addPublishStreamUrl(_ url: String, _ transcodingEnabled: Bool, _ callback: FlutterResult?) {
@@ -652,11 +644,11 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func startChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func updateChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func stopChannelMediaRelay(_ callback: FlutterResult?) {
@@ -726,7 +718,7 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func startLastmileProbeTest(_ config: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(map: config as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(config as! Dictionary<String, Any>)))
     }
 
     func stopLastmileProbeTest(_ callback: FlutterResult?) {
@@ -752,7 +744,7 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func addVideoWatermark(_ watermarkUrl: String, _ options: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.addVideoWatermark(URL(string: watermarkUrl)!, options: mapToWatermarkOptions(map: options as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.addVideoWatermark(URL(string: watermarkUrl)!, options: mapToWatermarkOptions(options as! Dictionary<String, Any>)))
     }
 
     func clearVideoWatermarks(_ callback: FlutterResult?) {
@@ -776,7 +768,7 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     }
 
     func addInjectStreamUrl(_ url: String, _ config: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(config as! Dictionary<String, Any>)))
     }
 
     func removeInjectStreamUrl(_ url: String, _ callback: FlutterResult?) {
@@ -801,6 +793,7 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
 
     func isCameraFocusSupported(_ callback: FlutterResult?) {
         // TODO Not in iOS
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in nil }
     }
 
     func isCameraExposurePositionSupported(_ callback: FlutterResult?) {
@@ -818,54 +811,56 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
     func setCameraZoomFactor(_ factor: Float, _ callback: FlutterResult?) {
         ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraZoomFactor(CGFloat(factor))
+            return nil
         }
     }
 
     func getCameraMaxZoomFactor(_ callback: FlutterResult?) {
         // TODO Not in iOS
+        ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in nil }
     }
 
     func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: FlutterResult?) {
         ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraFocusPositionInPreview(CGPoint(x: CGFloat(positionX), y: CGFloat(positionY)))
+            return nil
         }
     }
 
     func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: FlutterResult?) {
         ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraExposurePosition(CGPoint(x: CGFloat(positionXinView), y: CGFloat(positionYinView)))
+            return nil
         }
     }
 
     func enableFaceDetection(_ enable: Bool, _ callback: FlutterResult?) {
         ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.enableFaceDetection(enable)
+            return nil
         }
     }
 
     func setCameraTorchOn(_ isOn: Bool, _ callback: FlutterResult?) {
         ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraTorchOn(isOn)
+            return nil
         }
     }
 
     func setCameraAutoFocusFaceModeEnabled(_ enabled: Bool, _ callback: FlutterResult?) {
         ResultCallback(callback).resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraAutoFocusFaceModeEnabled(enabled)
+            return nil
         }
     }
 
     func setCameraCapturerConfiguration(_ config: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(map: config as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(config as! Dictionary<String, Any>)))
     }
 
     func createDataStream(_ reliable: Bool, _ ordered: Bool, _ callback: FlutterResult?) {
-        let streamId = manager.createDataStream(reliable, ordered)
-        if streamId <= 0 {
-            ResultCallback(callback).code(streamId)
-        } else {
-            ResultCallback(callback).resolve(engine, { e in streamId })
-        }
+        ResultCallback(callback).code(manager.createDataStream(reliable, ordered)) { it in it }
     }
 
     func sendStreamMessage(_ streamId: Int, _ message: String, _ callback: FlutterResult?) {
