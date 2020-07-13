@@ -110,6 +110,20 @@ class RtcChannelManager {
         return Constants.ERR_NOT_INITIALIZED
     }
 
+    fun createDataStream(channelId: String, reliable: Boolean, ordered: Boolean): Int {
+        this[channelId]?.let {
+            return@createDataStream it.createDataStream(reliable, ordered)
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
+    fun sendStreamMessage(channelId: String, streamId: Int, message: String): Int {
+        this[channelId]?.let {
+            return@sendStreamMessage it.sendStreamMessage(streamId, message.toByteArray())
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
     interface RtcAudioInterface<Callback> {
         fun adjustUserPlaybackSignalVolume(channelId: String, uid: Int, @IntRange(from = 0, to = 100) volume: Int, callback: Callback?)
 

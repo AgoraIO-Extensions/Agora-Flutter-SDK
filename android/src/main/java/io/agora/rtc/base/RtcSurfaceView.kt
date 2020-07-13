@@ -11,11 +11,17 @@ import java.lang.ref.WeakReference
 class RtcSurfaceView(
         context: Context
 ) : FrameLayout(context) {
-    private var surface: SurfaceView = RtcEngine.CreateRendererView(context)
+    private var surface: SurfaceView
     private var canvas: VideoCanvas
     private var channel: WeakReference<RtcChannel>? = null
 
     init {
+        try {
+            surface = RtcEngine.CreateRendererView(context)
+        } catch (e: UnsatisfiedLinkError) {
+            surface = SurfaceView(context)
+            e.printStackTrace()
+        }
         canvas = VideoCanvas(surface)
         addView(surface)
     }
