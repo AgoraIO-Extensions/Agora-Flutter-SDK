@@ -97,8 +97,8 @@ fun mapToLiveTranscoding(map: Map<*, *>): LiveTranscoding {
 
 fun mapToChannelMediaInfo(map: Map<*, *>): ChannelMediaInfo {
     return ChannelMediaInfo(
-            map["channelName"] as String,
-            map["token"] as String,
+            map["channelName"] as? String,
+            map["token"] as? String,
             (map["uid"] as Number).toInt()
     )
 }
@@ -158,8 +158,8 @@ fun mapToLiveInjectStreamConfig(map: Map<*, *>): LiveInjectStreamConfig {
 
 fun mapToCameraCapturerConfiguration(map: Map<*, *>): CameraCapturerConfiguration {
     return CameraCapturerConfiguration(
-            intToCapturerOutputPreference(map["preference"] as Int),
-            intToCameraDirection(map["cameraDirection"] as Int)
+            intToCapturerOutputPreference((map["preference"] as Number).toInt()),
+            intToCameraDirection((map["cameraDirection"] as Number).toInt())
     )
 }
 
