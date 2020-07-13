@@ -277,7 +277,7 @@ class LiveTranscoding {
 
   /// Agora’s self-defined audio channel type. We recommend choosing 1 or 2. Special players are required if you choose 3, 4 or 5.
   @JsonKey(includeIfNull: false)
-  int audioChannels;
+  AudioChannel audioChannels;
 
   /// Audio codec profile type: AudioCodecProfileType. Set it as LC-AAC or HE-AAC. The default value is LC-AAC.
   @JsonKey(includeIfNull: false)
@@ -480,7 +480,7 @@ class LiveInjectStreamConfig {
 
   /// Audio channels to add into the broadcast. The value ranges between 1 and 2. The default value is 1.
   @JsonKey(includeIfNull: false)
-  int audioChannels;
+  AudioChannel audioChannels;
 
   /// Constructs a [LiveInjectStreamConfig]
   LiveInjectStreamConfig(

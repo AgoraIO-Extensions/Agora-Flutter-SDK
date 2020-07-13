@@ -434,10 +434,6 @@ enum AudioReverbType {
 /// Audio sample rate.
 /// @enum {number}
 enum AudioSampleRateType {
-  /// 16 kHz.
-  @JsonValue(16000)
-  Type16000,
-
   /// 32 kHz.
   @JsonValue(32000)
   Type32000,

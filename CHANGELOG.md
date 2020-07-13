@@ -1,5 +1,9 @@
 # Change log
 
+## 3.0.1-dev.2
+* remove `AudioSampleRateType.Type16000`
+* fix Android `mapToChannelMediaInfo` crash
+
 ## 3.0.1-dev.1
 * upgrade Agora SDK to 3.0.1
 * support TextureView on Android

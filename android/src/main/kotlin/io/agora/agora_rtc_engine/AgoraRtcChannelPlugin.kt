@@ -198,11 +198,11 @@ class AgoraRtcChannelPlugin(
     }
 
     override fun createDataStream(channelId: String, reliable: Boolean, ordered: Boolean, callback: Result?) {
-        ResultCallback(callback).code(channel(channelId)?.createDataStream(reliable, ordered))
+        ResultCallback(callback).code(manager.createDataStream(channelId, reliable, ordered)) { it }
     }
 
     override fun sendStreamMessage(channelId: String, streamId: Int, message: String, callback: Result?) {
-        ResultCallback(callback).code(channel(channelId)?.sendStreamMessage(streamId, message.toByteArray()))
+        ResultCallback(callback).code(manager.sendStreamMessage(channelId, streamId, message))
     }
 
     override fun adjustUserPlaybackSignalVolume(channelId: String, uid: Int, volume: Int, callback: Result?) {

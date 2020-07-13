@@ -381,7 +381,6 @@ Map<String, dynamic> _$AudioSampleRateTypeConverterToJson(
     };
 
 const _$AudioSampleRateTypeEnumMap = {
-  AudioSampleRateType.Type16000: 16000,
   AudioSampleRateType.Type32000: 32000,
   AudioSampleRateType.Type44100: 44100,
   AudioSampleRateType.Type48000: 48000,

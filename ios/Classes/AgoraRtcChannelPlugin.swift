@@ -170,11 +170,11 @@ extension AgoraRtcChannelPlugin: RtcChannelInterface {
     }
 
     func joinChannel(_ channelId: String, _ token: String?, _ optionalInfo: String?, _ optionalUid: Int, _ options: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(channel(channelId)?.join(byToken: token, info: optionalInfo, uid: UInt(optionalUid), options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(channel(channelId)?.join(byToken: token, info: optionalInfo, uid: UInt(optionalUid), options: mapToChannelMediaOptions(options as! Dictionary<String, Any>)))
     }
 
     func joinChannelWithUserAccount(_ channelId: String, _ token: String?, _ userAccount: String, _ options: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(channel(channelId)?.join(byUserAccount: userAccount, token: token, options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(channel(channelId)?.join(byUserAccount: userAccount, token: token, options: mapToChannelMediaOptions(options as! Dictionary<String, Any>)))
     }
 
     func leaveChannel(_ channelId: String, _ callback: FlutterResult?) {
@@ -238,7 +238,7 @@ extension AgoraRtcChannelPlugin: RtcChannelInterface {
     }
 
     func setLiveTranscoding(_ channelId: String, _ transcoding: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(channel(channelId)?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(channel(channelId)?.setLiveTranscoding(mapToLiveTranscoding(transcoding as! Dictionary<String, Any>)))
     }
 
     func addPublishStreamUrl(_ channelId: String, _ url: String, _ transcodingEnabled: Bool, _ callback: FlutterResult?) {
@@ -250,11 +250,11 @@ extension AgoraRtcChannelPlugin: RtcChannelInterface {
     }
 
     func startChannelMediaRelay(_ channelId: String, _ channelMediaRelayConfiguration: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(channel(channelId)?.startMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(channel(channelId)?.startMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func updateChannelMediaRelay(_ channelId: String, _ channelMediaRelayConfiguration: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(channel(channelId)?.updateMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(channel(channelId)?.updateMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func stopChannelMediaRelay(_ channelId: String, _ callback: FlutterResult?) {
@@ -300,7 +300,7 @@ extension AgoraRtcChannelPlugin: RtcChannelInterface {
     }
 
     func addInjectStreamUrl(_ channelId: String, _ url: String, _ config: NSDictionary, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(channel(channelId)?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
+        ResultCallback(callback).code(channel(channelId)?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(config as! Dictionary<String, Any>)))
     }
 
     func removeInjectStreamUrl(_ channelId: String, _ url: String, _ callback: FlutterResult?) {
@@ -308,14 +308,10 @@ extension AgoraRtcChannelPlugin: RtcChannelInterface {
     }
 
     func createDataStream(_ channelId: String, _ reliable: Bool, _ ordered: Bool, _ callback: FlutterResult?) {
-        var streamId = 0
-        ResultCallback(callback).resolve(channel(channelId)) { (channel: AgoraRtcChannel) in
-            channel.createDataStream(&streamId, reliable: reliable, ordered: ordered)
-            return streamId
-        }
+        ResultCallback(callback).code(manager.createDataStream(channelId, reliable, ordered)) { it in it }
     }
 
     func sendStreamMessage(_ channelId: String, _ streamId: Int, _ message: String, _ callback: FlutterResult?) {
-        ResultCallback(callback).code(channel(channelId)?.sendStreamMessage(streamId, data: message.data(using: .utf8)!))
+        ResultCallback(callback).code(manager.sendStreamMessage(channelId, streamId, message))
     }
 }
