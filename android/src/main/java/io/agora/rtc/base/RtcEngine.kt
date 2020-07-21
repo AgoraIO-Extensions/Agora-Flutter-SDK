@@ -206,6 +206,10 @@ class RtcEngineManager {
 
         fun setVideoEncoderConfiguration(config: Map, callback: Callback?)
 
+        fun startPreview(callback: Callback?)
+
+        fun stopPreview(callback: Callback?)
+
         fun enableLocalVideo(enabled: Boolean, callback: Callback?)
 
         fun muteLocalVideoStream(muted: Boolean, callback: Callback?)
