@@ -234,6 +234,10 @@ protocol RtcEngineVideoInterface {
     func disableVideo(_ callback: Callback?)
 
     func setVideoEncoderConfiguration(_ config: Map, _ callback: Callback?)
+    
+    func startPreview(_ callback: Callback?)
+
+    func stopPreview(_ callback: Callback?)
 
     func enableLocalVideo(_ enabled: Bool, _ callback: Callback?)
 
