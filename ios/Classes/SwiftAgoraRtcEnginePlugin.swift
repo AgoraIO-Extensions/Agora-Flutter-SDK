@@ -132,6 +132,10 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
             disableVideo(result)
         case "setVideoEncoderConfiguration":
             setVideoEncoderConfiguration(args["config"] as! NSDictionary, result)
+        case "startPreview":
+            startPreview(result)
+        case "stopPreview":
+            stopPreview(result)
         case "enableLocalVideo":
             enableLocalVideo(args["enabled"] as! Bool, result)
         case "muteLocalVideoStream":
@@ -475,6 +479,14 @@ extension SwiftAgoraRtcEnginePlugin: RtcEngineInterface {
 
     func setVideoEncoderConfiguration(_ config: NSDictionary, _ callback: FlutterResult?) {
         ResultCallback(callback).code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(config as! Dictionary<String, Any>)))
+    }
+    
+    func startPreview(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.startPreview())
+    }
+    
+    func stopPreview(_ callback: FlutterResult?) {
+        ResultCallback(callback).code(engine?.stopPreview())
     }
 
     func enableLocalVideo(_ enabled: Bool, _ callback: FlutterResult?) {

@@ -1,5 +1,8 @@
 # Change log
 
+## 3.0.1-dev.4
+* fix `startPreview` `stopPreview` bug 
+
 ## 3.0.1-dev.3
 * fix `toJson` bug 
 * add `startPreview` `stopPreview`
