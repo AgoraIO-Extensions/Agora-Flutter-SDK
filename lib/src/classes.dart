@@ -5,7 +5,7 @@ import 'enums.dart';
 part 'classes.g.dart';
 
 /// The user information, including the user ID and user account.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserInfo {
   /// The user ID of a user.
   int uid;
@@ -25,7 +25,7 @@ class UserInfo {
 }
 
 /// The video resolution.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class VideoDimensions {
   /// The video resolution on the horizontal axis.
   final int width;
@@ -45,7 +45,7 @@ class VideoDimensions {
 }
 
 /// Definition of VideoEncoderConfiguration.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class VideoEncoderConfiguration {
   /// The video frame dimensions (px), which is used to specify the video quality and measured by the total number of pixels along a frame's width and height. The default value is 640 × 360.
   @JsonKey(includeIfNull: false)
@@ -99,7 +99,7 @@ class VideoEncoderConfiguration {
 }
 
 /// Sets the image enhancement options.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class BeautyOptions {
   /// The lightening contrast level.
   @JsonKey(includeIfNull: false)
@@ -133,7 +133,7 @@ class BeautyOptions {
 }
 
 /// Agora image properties. A class for setting the properties of the watermark and background images.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AgoraImage {
   /// HTTP/HTTPS URL address of the image on the broadcasting video. The maximum length of this parameter is 1024 bytes.
   final String url;
@@ -162,7 +162,7 @@ class AgoraImage {
 }
 
 /// The transcodingUser class, which defines the audio and video properties in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TranscodingUser {
   /// ID of the user in the CDN live streaming.
   final int uid;
@@ -210,7 +210,7 @@ class TranscodingUser {
 }
 
 /// Color.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Color {
   /// Red.
   final int red;
@@ -232,7 +232,7 @@ class Color {
 }
 
 /// A class for managing user-specific CDN live audio/video transcoding settings.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LiveTranscoding {
   /// Width (pixel) of the video. The default value is 360. If you push video streams to the CDN, set the value of width × height to at least 64 × 64, or the SDK adjusts it to 64 x 64. If you push audio streams to the CDN, set the value of width × height to 0 × 0.
   @JsonKey(includeIfNull: false)
@@ -327,7 +327,7 @@ class LiveTranscoding {
 }
 
 /// The ChannelMediaInfo class.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ChannelMediaInfo {
   /// The channel name.
   @JsonKey(includeIfNull: false)
@@ -352,7 +352,7 @@ class ChannelMediaInfo {
 }
 
 /// The ChannelMediaRelayConfiguration class.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ChannelMediaRelayConfiguration {
   /// Sets the information of the source channel.
   final ChannelMediaInfo srcInfo;
@@ -372,7 +372,7 @@ class ChannelMediaRelayConfiguration {
 }
 
 /// Lastmile probe configuration.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LastmileProbeConfig {
   /// Whether to probe uplink of lastmile. i.e., audience don't need probe uplink bandwidth.
   final bool probeUplink;
@@ -399,7 +399,7 @@ class LastmileProbeConfig {
 }
 
 /// The position and size of the watermark image.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Rectangle {
   /// The horizontal offset from the top-left corner.
   final int x;
@@ -425,7 +425,7 @@ class Rectangle {
 }
 
 /// Agora watermark options. A class for setting the properties of watermark.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class WatermarkOptions {
   /// Sets whether or not the watermark image is visible in the local video preview: true: (Default) The watermark image is visible in preview. false: The watermark image is not visible in preview.
   @JsonKey(includeIfNull: false)
@@ -450,7 +450,7 @@ class WatermarkOptions {
 }
 
 /// Configuration of the imported live broadcast voice or video stream.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LiveInjectStreamConfig {
   /// Width of the added stream to the broadcast. The default value is 0, which is the same width as the original stream.
   int width;
@@ -502,7 +502,7 @@ class LiveInjectStreamConfig {
 }
 
 /// The definition of CameraCapturerConfiguration.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class CameraCapturerConfiguration {
   /// The camera capturer configuration.
   final CameraCaptureOutputPreference preference;
@@ -522,7 +522,7 @@ class CameraCapturerConfiguration {
 }
 
 /// The channel media options.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ChannelMediaOptions {
   /// Determines whether to subscribe to audio streams when the user joins the channel.
   final bool autoSubscribeAudio;
@@ -542,7 +542,7 @@ class ChannelMediaOptions {
 }
 
 /// Statistics of RTCEngine.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class RtcStats {
   /// Call duration in seconds, represented by an aggregate value.
   int totalDuration;
@@ -625,7 +625,7 @@ class RtcStats {
 }
 
 /// Properties of the audio volume information. An array containing the user ID and volume information for each speaker.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AudioVolumeInfo {
   /// The user ID of the speaker. The uid of the local user is 0.
   int uid;
@@ -651,7 +651,7 @@ class AudioVolumeInfo {
 }
 
 /// Rect.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Rect {
   /// Left.
   int left;
@@ -676,7 +676,7 @@ class Rect {
 }
 
 /// The one-way last-mile probe result.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LastmileProbeOneWayResult {
   /// The packet loss rate (%).
   int packetLossRate;
@@ -699,7 +699,7 @@ class LastmileProbeOneWayResult {
 }
 
 /// Statistics of the lastmile probe.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LastmileProbeResult {
   /// The state of the probe test.
   LastmileProbeResultState state;
@@ -725,7 +725,7 @@ class LastmileProbeResult {
 }
 
 /// Statistics of the local audio stream.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LocalAudioStats {
   /// The number of channels.
   int numChannels;
@@ -748,7 +748,7 @@ class LocalAudioStats {
 }
 
 /// Statistics of the local video.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LocalVideoStats {
   /// Bitrate (Kbps) sent in the reported interval, which does not include the bitrate of the re-transmission video after the packet loss.
   int sentBitrate;
@@ -798,7 +798,7 @@ class LocalVideoStats {
 }
 
 /// Statistics of the remote audio.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class RemoteAudioStats {
   /// User ID of the user sending the audio streams.
   int uid;
@@ -845,7 +845,7 @@ class RemoteAudioStats {
 }
 
 /// Statistics of the remote video.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class RemoteVideoStats {
   /// User ID of the user sending the video streams.
   int uid;
@@ -896,7 +896,7 @@ class RemoteVideoStats {
 }
 
 /// The information of the detected human face.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class FacePositionInfo {
   /// The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
   int x;

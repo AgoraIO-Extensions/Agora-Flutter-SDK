@@ -60,7 +60,7 @@ Map<String, dynamic> _$VideoEncoderConfigurationToJson(
     }
   }
 
-  writeNotNull('dimensions', instance.dimensions);
+  writeNotNull('dimensions', instance.dimensions?.toJson());
   writeNotNull('frameRate', _$VideoFrameRateEnumMap[instance.frameRate]);
   writeNotNull('minFrameRate', _$VideoFrameRateEnumMap[instance.minFrameRate]);
   writeNotNull('bitrate', instance.bitrate);
@@ -296,8 +296,8 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
       'videoFramerate', _$VideoFrameRateEnumMap[instance.videoFramerate]);
   writeNotNull('lowLatency', instance.lowLatency);
   writeNotNull('videoGop', instance.videoGop);
-  writeNotNull('watermark', instance.watermark);
-  writeNotNull('backgroundImage', instance.backgroundImage);
+  writeNotNull('watermark', instance.watermark?.toJson());
+  writeNotNull('backgroundImage', instance.backgroundImage?.toJson());
   writeNotNull('audioSampleRate',
       _$AudioSampleRateTypeEnumMap[instance.audioSampleRate]);
   writeNotNull('audioBitrate', instance.audioBitrate);
@@ -306,9 +306,10 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
       _$AudioCodecProfileTypeEnumMap[instance.audioCodecProfile]);
   writeNotNull('videoCodecProfile',
       _$VideoCodecProfileTypeEnumMap[instance.videoCodecProfile]);
-  writeNotNull('backgroundColor', instance.backgroundColor);
+  writeNotNull('backgroundColor', instance.backgroundColor?.toJson());
   writeNotNull('userConfigExtraInfo', instance.userConfigExtraInfo);
-  val['transcodingUsers'] = instance.transcodingUsers;
+  val['transcodingUsers'] =
+      instance.transcodingUsers?.map((e) => e?.toJson())?.toList();
   return val;
 }
 
@@ -369,8 +370,8 @@ ChannelMediaRelayConfiguration _$ChannelMediaRelayConfigurationFromJson(
 Map<String, dynamic> _$ChannelMediaRelayConfigurationToJson(
         ChannelMediaRelayConfiguration instance) =>
     <String, dynamic>{
-      'srcInfo': instance.srcInfo,
-      'destInfos': instance.destInfos,
+      'srcInfo': instance.srcInfo?.toJson(),
+      'destInfos': instance.destInfos?.map((e) => e?.toJson())?.toList(),
     };
 
 LastmileProbeConfig _$LastmileProbeConfigFromJson(Map<String, dynamic> json) {
@@ -431,8 +432,8 @@ Map<String, dynamic> _$WatermarkOptionsToJson(WatermarkOptions instance) {
   }
 
   writeNotNull('visibleInPreview', instance.visibleInPreview);
-  val['positionInLandscapeMode'] = instance.positionInLandscapeMode;
-  val['positionInPortraitMode'] = instance.positionInPortraitMode;
+  val['positionInLandscapeMode'] = instance.positionInLandscapeMode?.toJson();
+  val['positionInPortraitMode'] = instance.positionInPortraitMode?.toJson();
   return val;
 }
 
@@ -639,8 +640,8 @@ Map<String, dynamic> _$LastmileProbeResultToJson(
     <String, dynamic>{
       'state': _$LastmileProbeResultStateEnumMap[instance.state],
       'rtt': instance.rtt,
-      'uplinkReport': instance.uplinkReport,
-      'downlinkReport': instance.downlinkReport,
+      'uplinkReport': instance.uplinkReport?.toJson(),
+      'downlinkReport': instance.downlinkReport?.toJson(),
     };
 
 const _$LastmileProbeResultStateEnumMap = {
