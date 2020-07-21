@@ -264,6 +264,14 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
         ResultCallback(callback).code(engine()?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(config)))
     }
 
+    override fun startPreview(callback: Result?) {
+        ResultCallback(callback).code(engine()?.startPreview())
+    }
+
+    override fun stopPreview(callback: Result?) {
+        ResultCallback(callback).code(engine()?.stopPreview())
+    }
+
     override fun enableLocalVideo(enabled: Boolean, callback: Result?) {
         ResultCallback(callback).code(engine()?.enableLocalVideo(enabled))
     }
