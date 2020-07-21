@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import '../rtc_local_view.dart';
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
@@ -456,6 +457,16 @@ class RtcEngine
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config) {
     return _invokeMethod(
         'setVideoEncoderConfiguration', {'config': config.toJson()});
+  }
+
+  @override
+  Future<void> startPreview() {
+    return _invokeMethod('startPreview');
+  }
+
+  @override
+  Future<void> stopPreview() {
+    return _invokeMethod('stopPreview');
   }
 
   @override
@@ -1205,6 +1216,23 @@ mixin RtcVideoInterface {
   /// Param [config] The local video encoder configuration.
   /// See [VideoEncoderConfiguration]
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
+
+  /// Starts the local video preview before joining a channel.
+  /// Before calling this method, you must:
+  /// - Create the RtcLocalView.
+  /// See [SurfaceView]
+  /// See [TextureView]
+  /// - Call the enableVideo method to enable the video.
+  /// See [RtcEngine.enableVideo]
+  /// Note
+  /// - By default, the local preview enables the mirror mode.
+  /// - Once you call this method to start the local video preview, if you leave the channel by calling the leaveChannel method, the local video preview remains until you call the stopPreview method to disable it.
+  /// See [RtcEngine.leaveChannel]
+  /// See [RtcEngine.stopPreview]
+  Future<void> startPreview();
+
+  /// Stops the local video preview and the video.
+  Future<void> stopPreview();
 
   /// Disables/Re-enables the local video capture.
   /// This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.

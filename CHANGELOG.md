@@ -1,5 +1,9 @@
 # Change log
 
+## 3.0.1-dev.3
+* fix `toJson` bug 
+* add `startPreview` `stopPreview`
+
 ## 3.0.1-dev.2
 * remove `AudioSampleRateType.Type16000`
 * fix Android `mapToChannelMediaInfo` crash
