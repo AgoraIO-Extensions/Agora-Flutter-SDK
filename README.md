@@ -15,7 +15,7 @@ To use this plugin, add `agora_rtc_engine` as a [dependency in your pubspec.yaml
 ## Getting Started
 
 * See the [example](example) directory for a sample app using AgoraRtcEngine.
-* Or checkout this [tutorial](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart) for a simple video call app using Agora Flutter SDK.
+* Or checkout this [tutorial](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/tree/dev/3.0.1) for a simple video call app using Agora Flutter SDK.
 
 ## Device Permission
 
