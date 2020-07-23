@@ -736,9 +736,9 @@ class RtcEngine
   }
 
   @override
-  Future<void> setDefaultAudioRoutetoSpeakerphone(booldefaultToSpeaker) {
+  Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker) {
     return _invokeMethod('setDefaultAudioRoutetoSpeakerphone',
-        {'booldefaultToSpeaker': booldefaultToSpeaker});
+        {'booldefaultToSpeaker': defaultToSpeaker});
   }
 
   @override
@@ -1653,7 +1653,7 @@ mixin RtcAudioRouteInterface {
   /// Param [defaultToSpeaker] Sets the default audio route:
   /// - true: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
   /// - false: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
-  Future<void> setDefaultAudioRoutetoSpeakerphone(booldefaultToSpeaker);
+  Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio playback route to the speakerphone.
   /// This method sets whether the audio is routed to the speakerphone or earpiece. After calling this method, the SDK returns the onAudioRouteChanged callback to indicate the changes.
