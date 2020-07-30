@@ -18,33 +18,46 @@ class RtcSurfaceView: UIView {
     }()
     private weak var channel: AgoraRtcChannel?
 
+    func setData(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?, _ uid: Int) {
+        resetVideoCanvas(engine)
+        
+        self.channel = channel
+        canvas.channelId = channel?.getId()
+        canvas.uid = UInt(uid)
+        setupVideoCanvas(engine)
+    }
+    
+    private func resetVideoCanvas(_ engine: AgoraRtcEngineKit) {
+        let canvas = AgoraRtcVideoCanvas()
+        canvas.view = nil
+        canvas.renderMode = self.canvas.renderMode
+        canvas.channelId = self.canvas.channelId
+        canvas.uid = self.canvas.uid
+        canvas.mirrorMode = self.canvas.mirrorMode
+        
+        if canvas.uid == 0 {
+            engine.setupLocalVideo(canvas)
+        } else {
+            engine.setupRemoteVideo(canvas)
+        }
+    }
+    
+    private func setupVideoCanvas(_ engine: AgoraRtcEngineKit) {
+        if canvas.uid == 0 {
+            engine.setupLocalVideo(canvas)
+        } else {
+            engine.setupRemoteVideo(canvas)
+        }
+    }
+    
     func setRenderMode(_ engine: AgoraRtcEngineKit, _ renderMode: Int) {
         canvas.renderMode = AgoraVideoRenderMode(rawValue: UInt(renderMode))!
         setupRenderMode(engine)
     }
 
-    func setChannel(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?) {
-        self.channel = channel
-        canvas.channelId = channel?.getId()
-        if canvas.uid == 0 {
-            engine.setupLocalVideo(canvas)
-        } else {
-            engine.setupRemoteVideo(canvas)
-        }
-    }
-
     func setMirrorMode(_ engine: AgoraRtcEngineKit, _ mirrorMode: Int) {
         canvas.mirrorMode = AgoraVideoMirrorMode(rawValue: UInt(mirrorMode))!
         setupRenderMode(engine)
-    }
-
-    func setUid(_ engine: AgoraRtcEngineKit, _ uid: Int) {
-        canvas.uid = UInt(uid)
-        if canvas.uid == 0 {
-            engine.setupLocalVideo(canvas)
-        } else {
-            engine.setupRemoteVideo(canvas)
-        }
     }
 
     private func setupRenderMode(_ engine: AgoraRtcEngineKit) {
