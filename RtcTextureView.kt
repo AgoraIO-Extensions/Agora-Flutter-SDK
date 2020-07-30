@@ -22,8 +22,11 @@ class RtcTextureView(
         addView(texture)
     }
 
-    fun setChannel(engine: RtcEngine, channel: RtcChannel?) {
+    fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Int) {
+        resetVideoRender(engine)
+
         this.channel = if (channel != null) WeakReference(channel) else null
+        this.uid = uid
         setupVideoRenderer(engine)
     }
 
@@ -32,22 +35,26 @@ class RtcTextureView(
         setupVideoRenderer(engine)
     }
 
-    fun setUid(engine: RtcEngine, uid: Int) {
-        this.uid = uid
-        setupVideoRenderer(engine)
+    private fun resetVideoRender(engine: RtcEngine) {
+        if (uid == 0) {
+            engine.setLocalVideoRenderer(null)
+        } else {
+            channel?.get()?.let {
+                it.setRemoteVideoRenderer(uid, null)
+                return@resetVideoRender
+            }
+            engine.setRemoteVideoRenderer(uid, null)
+        }
     }
 
     private fun setupVideoRenderer(engine: RtcEngine) {
         if (uid == 0) {
-            engine.setLocalVideoRenderer(null)
             engine.setLocalVideoRenderer(texture)
         } else {
             channel?.get()?.let {
-                it.setRemoteVideoRenderer(uid, null)
                 it.setRemoteVideoRenderer(uid, texture)
                 return@setupVideoRenderer
             }
-            engine.setRemoteVideoRenderer(uid, null)
             engine.setRemoteVideoRenderer(uid, texture)
         }
     }
