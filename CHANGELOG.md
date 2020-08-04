@@ -1,7 +1,10 @@
 # Change log
 
+## 3.0.1-dev.5
+* fix multiple channel render bug 
+
 ## 3.0.1-dev.4
-* fix `startPreview` `stopPreview` bug 
+* fix `startPreview` `stopPreview` bug
 
 ## 3.0.1-dev.3
 * fix `toJson` bug 

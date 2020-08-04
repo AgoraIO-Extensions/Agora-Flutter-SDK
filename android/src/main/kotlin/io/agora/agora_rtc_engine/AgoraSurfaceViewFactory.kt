@@ -37,8 +37,7 @@ class AgoraSurfaceView(
 
     init {
         args?.let { map ->
-            (map["uid"] as? Number)?.let { setUid(it.toInt()) }
-            (map["channelId"] as? String)?.let { setChannelId(it) }
+            (map["data"] as? Map<*, *>)?.let { setData(it) }
             (map["renderMode"] as? Number)?.let { setRenderMode(it.toInt()) }
             (map["mirrorMode"] as? Number)?.let { setMirrorMode(it.toInt()) }
             (map["zOrderOnTop"] as? Boolean)?.let { setZOrderOnTop(it) }
@@ -76,12 +75,9 @@ class AgoraSurfaceView(
         result.notImplemented()
     }
 
-    private fun setUid(uid: Int) {
-        getEngine()?.let { view.setUid(it, uid) }
-    }
-
-    private fun setChannelId(channelId: String) {
-        getEngine()?.let { view.setChannel(it, getChannel(channelId)) }
+    private fun setData(data: Map<*, *>) {
+        val channel = (data["channelId"] as? String)?.let { getChannel(it) }
+        getEngine()?.let { view.setData(it, channel, data["uid"] as Int) }
     }
 
     private fun setRenderMode(renderMode: Int) {

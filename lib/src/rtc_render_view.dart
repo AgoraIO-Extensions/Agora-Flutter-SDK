@@ -61,7 +61,7 @@ class RtcSurfaceView extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   /// Constructs a [RtcSurfaceView]
-  const RtcSurfaceView({
+  RtcSurfaceView({
     Key key,
     @required this.uid,
     this.channelId,
@@ -71,7 +71,7 @@ class RtcSurfaceView extends StatefulWidget {
     this.zOrderMediaOverlay = false,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
-  }) : super(key: key);
+  }) : super(key: key ?? Key('surface-${channelId}-${uid}'));
 
   @override
   State<StatefulWidget> createState() {
@@ -94,8 +94,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
           creationParams: {
-            'uid': widget.uid,
-            'channelId': widget.channelId,
+            'data': {'uid': widget.uid, 'channelId': widget.channelId},
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
             'zOrderOnTop': widget.zOrderOnTop,
@@ -113,8 +112,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
           creationParams: {
-            'uid': widget.uid,
-            'channelId': widget.channelId,
+            'data': {'uid': widget.uid, 'channelId': widget.channelId},
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
           },
@@ -136,8 +134,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   @override
   void didUpdateWidget(RtcSurfaceView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setUid();
-    setChannelId();
+    setData();
     setRenderMode();
     setMirrorMode();
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -152,15 +149,11 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
     _channels.remove(_id);
   }
 
-  void setUid() {
+  void setData() {
     if (widget.uid == null) return;
-    _channels[_id]?.invokeMethod('setUid', {'uid': widget.uid});
-  }
-
-  void setChannelId() {
-    if (widget.channelId == null) return;
-    _channels[_id]
-        ?.invokeMethod('setChannelId', {'channelId': widget.channelId});
+    _channels[_id]?.invokeMethod('setData', {
+      'data': {'uid': widget.uid, 'channelId': widget.channelId}
+    });
   }
 
   void setRenderMode() {
@@ -236,14 +229,14 @@ class RtcTextureView extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   /// Constructs a [RtcTextureView]
-  const RtcTextureView({
+  RtcTextureView({
     Key key,
     @required this.uid,
     this.channelId,
     this.mirror = false,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
-  }) : super(key: key);
+  }) : super(key: key ?? Key('texture-${channelId}-${uid}'));
 
   @override
   State<StatefulWidget> createState() {
@@ -257,8 +250,7 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   @override
   Widget build(BuildContext context) {
     final creationParams = {
-      'uid': widget.uid,
-      'channelId': widget.channelId,
+      'data': {'uid': widget.uid, 'channelId': widget.channelId},
       'mirror': widget.mirror,
     };
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -285,8 +277,7 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   @override
   void didUpdateWidget(RtcTextureView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setUid();
-    setChannelId();
+    setData();
     setMirror();
   }
 
@@ -296,15 +287,11 @@ class _RtcTextureViewState extends State<RtcTextureView> {
     _channels.remove(_id);
   }
 
-  void setUid() {
+  void setData() {
     if (widget.uid == null) return;
-    _channels[_id]?.invokeMethod('setUid', {'uid': widget.uid});
-  }
-
-  void setChannelId() {
-    if (widget.channelId == null) return;
-    _channels[_id]
-        ?.invokeMethod('setChannelId', {'channelId': widget.channelId});
+    _channels[_id]?.invokeMethod('setData', {
+      'data': {'uid': widget.uid, 'channelId': widget.channelId}
+    });
   }
 
   void setMirror() {
