@@ -19,15 +19,13 @@ class RtcSurfaceView: UIView {
     private weak var channel: AgoraRtcChannel?
 
     func setData(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?, _ uid: Int) {
-        resetVideoCanvas(engine)
-        
         self.channel = channel
         canvas.channelId = channel?.getId()
         canvas.uid = UInt(uid)
         setupVideoCanvas(engine)
     }
     
-    private func resetVideoCanvas(_ engine: AgoraRtcEngineKit) {
+    func resetVideoCanvas(_ engine: AgoraRtcEngineKit) {
         let canvas = AgoraRtcVideoCanvas()
         canvas.view = nil
         canvas.renderMode = self.canvas.renderMode
