@@ -47,15 +47,13 @@ class RtcSurfaceView(
     }
 
     fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Int) {
-        resetVideoCanvas(engine)
-
         this.channel = if (channel != null) WeakReference(channel) else null
         canvas.channelId = this.channel?.get()?.channelId()
         canvas.uid = uid
         setupVideoCanvas(engine)
     }
 
-    private fun resetVideoCanvas(engine: RtcEngine) {
+    fun resetVideoCanvas(engine: RtcEngine) {
         val canvas = VideoCanvas(null, canvas.renderMode, canvas.channelId, canvas.uid, canvas.mirrorMode)
         if (canvas.uid == 0) {
             engine.setupLocalVideo(canvas)

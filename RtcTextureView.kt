@@ -23,8 +23,6 @@ class RtcTextureView(
     }
 
     fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Int) {
-        resetVideoRender(engine)
-
         this.channel = if (channel != null) WeakReference(channel) else null
         this.uid = uid
         setupVideoRenderer(engine)
@@ -35,7 +33,7 @@ class RtcTextureView(
         setupVideoRenderer(engine)
     }
 
-    private fun resetVideoRender(engine: RtcEngine) {
+    fun resetVideoRender(engine: RtcEngine) {
         if (uid == 0) {
             engine.setLocalVideoRenderer(null)
         } else {
