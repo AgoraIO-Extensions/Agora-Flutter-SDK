@@ -40,8 +40,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
         self.channel = FlutterMethodChannel(name: "agora_rtc_engine/surface_view_\(viewId)", binaryMessenger: messager)
         super.init()
         if let map = args {
-            setUid(map["uid"] as! Int)
-            setChannelId(map["channelId"] as? String)
+            setData(map["data"] as! NSDictionary)
             setRenderMode(map["renderMode"] as! Int)
             setMirrorMode(map["mirrorMode"] as! Int)
         }
@@ -51,10 +50,8 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
                 args = arguments as! Dictionary<String, Any?>
             }
             switch call.method {
-            case "setUid":
-                self?.setUid(args["uid"] as! Int)
-            case "setChannelId":
-                self?.setChannelId(args["channelId"] as? String)
+            case "setData":
+                self?.setData(args["data"] as! NSDictionary)
             case "setRenderMode":
                 self?.setRenderMode(args["renderMode"] as! Int)
             case "setMirrorMode":
@@ -73,15 +70,13 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
         channel.setMethodCallHandler(nil)
     }
     
-    func setUid(_ uid: Int) {
-        if let `engine` = engine {
-            _view.setUid(engine, uid)
+    func setData(_ data: NSDictionary) {
+        var channel: AgoraRtcChannel? = nil
+        if let channelId = data["channelId"] as? String {
+            channel = getChannel(channelId)
         }
-    }
-
-    func setChannelId(_ channelId: String?) {
         if let `engine` = engine {
-            _view.setChannel(engine, getChannel(channelId))
+            _view.setData(engine, channel, data["uid"] as! Int)
         }
     }
 
