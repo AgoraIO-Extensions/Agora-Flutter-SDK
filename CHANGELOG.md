@@ -1,7 +1,8 @@
 # Change log
 
 ## 3.0.1-dev.5
-* fix multiple channel render bug 
+* fix multiple channel render bug
+* fix android release bug
 
 ## 3.0.1-dev.4
 * fix `startPreview` `stopPreview` bug

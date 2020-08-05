@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     await [Permission.camera, Permission.microphone, Permission.storage]
         .request();
 
-    var engine = await RtcEngine.create('YOUR APP ID');
+    var engine = await RtcEngine.create(YOUR_APP_ID);
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
           print('joinChannelSuccess ${channel} ${uid}');
@@ -62,13 +62,14 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Stack(
           children: [
-            _switch ? _renderRemoteVideo() : _renderLocalPreview(),
-            Positioned(
-              top: 0,
-              right: 0,
-              width: 100,
-              height: 100,
+            Center(
+              child: _switch ? _renderRemoteVideo() : _renderLocalPreview(),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
               child: Container(
+                width: 100,
+                height: 100,
                 color: Colors.blue,
                 child: GestureDetector(
                   onTap: () {
@@ -76,7 +77,10 @@ class _MyAppState extends State<MyApp> {
                       _switch = !_switch;
                     });
                   },
-                  child: _switch ? _renderLocalPreview() : _renderRemoteVideo(),
+                  child: Center(
+                    child:
+                    _switch ? _renderLocalPreview() : _renderRemoteVideo(),
+                  ),
                 ),
               ),
             ),
