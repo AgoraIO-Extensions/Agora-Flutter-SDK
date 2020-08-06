@@ -22,10 +22,10 @@ class RtcChannel
         RtcEncryptionInterface,
         RtcInjectStreamInterface,
         RtcStreamMessageInterface {
-  static const MethodChannel _methodChannel =
-      MethodChannel('agora_rtc_channel');
-  static const EventChannel _eventChannel =
-      EventChannel('agora_rtc_channel/events');
+  static const MethodChannel _methodChannel = MethodChannel(
+      'agora_rtc_channel');
+  static const EventChannel _eventChannel = EventChannel(
+      'agora_rtc_channel/events');
 
   static StreamSubscription _subscription;
 
@@ -153,8 +153,8 @@ class RtcChannel
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
   /// Param [options] The channel media options.
   /// See [ChannelMediaOptions]
-  Future<void> joinChannelWithUserAccount(
-      String token, String userAccount, ChannelMediaOptions options) {
+  Future<void> joinChannelWithUserAccount(String token, String userAccount,
+      ChannelMediaOptions options) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'userAccount': userAccount,
@@ -188,7 +188,9 @@ class RtcChannel
   /// Gets the connection state of the SDK.
   Future<ConnectionStateType> getConnectionState() {
     return _invokeMethod('getConnectionState').then((value) {
-      return ConnectionStateTypeConverter.fromValue(value).e;
+      return ConnectionStateTypeConverter
+          .fromValue(value)
+          .e;
     });
   }
 

@@ -34,8 +34,8 @@ class RtcEngine
         RtcCameraInterface,
         RtcStreamMessageInterface {
   static const MethodChannel _methodChannel = MethodChannel('agora_rtc_engine');
-  static const EventChannel _eventChannel =
-      EventChannel('agora_rtc_engine/events');
+  static const EventChannel _eventChannel = EventChannel(
+      'agora_rtc_engine/events');
 
   static RtcEngine _engine;
 
@@ -82,8 +82,8 @@ class RtcEngine
   /// After specifying the area of connection:
   /// - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
   /// - When the app that integrates the Agora SDK is used out of the specified area, it connects to the Agora servers either in the specified area or in the area where the app is located.
-  static Future<RtcEngine> createWithAreaCode(
-      String appId, IPAreaCode areaCode) async {
+  static Future<RtcEngine> createWithAreaCode(String appId,
+      IPAreaCode areaCode) async {
     if (_engine != null) return _engine;
     await _methodChannel.invokeMethod('create',
         {'appId': appId, 'areaCode': IPAreaCodeConverter(areaCode).value()});
@@ -166,8 +166,8 @@ class RtcEngine
   /// Param [optionalInfo] Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
   /// Param [optionalUid] (Optional) User ID. A 32-bit unsigned integer with a value ranging from 1 to (2^32-1). optionalUid must be unique. If optionalUid is not assigned (or set to 0), the SDK assigns and returns uid in the onJoinChannelSuccess callback. Your app must record and maintain the returned uid since the SDK does not do so.
   /// See [RtcEngineEventHandler.joinChannelSuccess]
-  Future<void> joinChannel(
-      String token, String channelName, String optionalInfo, int optionalUid) {
+  Future<void> joinChannel(String token, String channelName,
+      String optionalInfo, int optionalUid) {
     return _invokeMethod('joinChannel', {
       'token': token,
       'channelName': channelName,
@@ -246,7 +246,9 @@ class RtcEngine
   /// Gets the connection state of the SDK.
   Future<ConnectionStateType> getConnectionState() {
     return _invokeMethod('getConnectionState').then((value) {
-      return ConnectionStateTypeConverter.fromValue(value).e;
+      return ConnectionStateTypeConverter
+          .fromValue(value)
+          .e;
     });
   }
 
@@ -329,8 +331,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> joinChannelWithUserAccount(
-      String token, String channelName, String userAccount) {
+  Future<void> joinChannelWithUserAccount(String token, String channelName,
+      String userAccount) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'channelName': channelName,
@@ -371,8 +373,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> enableAudioVolumeIndication(
-      int interval, int smooth, bool report_vad) {
+  Future<void> enableAudioVolumeIndication(int interval, int smooth,
+      bool report_vad) {
     return _invokeMethod('enableAudioVolumeIndication',
         {'interval': interval, 'smooth': smooth, 'report_vad': report_vad});
   }
@@ -520,8 +522,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle) {
+  Future<void> startAudioMixing(String filePath, bool loopback, bool replace,
+      int cycle) {
     return _invokeMethod('startAudioMixing', {
       'filePath': filePath,
       'loopback': loopback,
@@ -548,8 +550,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> addVideoWatermark(
-      String watermarkUrl, WatermarkOptions options) {
+  Future<void> addVideoWatermark(String watermarkUrl,
+      WatermarkOptions options) {
     return _invokeMethod('addVideoWatermark',
         {'watermarkUrl': watermarkUrl, 'options': options.toJson()});
   }
@@ -710,8 +712,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> setCameraExposurePosition(
-      double positionXinView, double positionYinView) {
+  Future<void> setCameraExposurePosition(double positionXinView,
+      double positionYinView) {
     return _invokeMethod('setCameraExposurePosition', {
       'positionXinView': positionXinView,
       'positionYinView': positionYinView
@@ -719,8 +721,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> setCameraFocusPositionInPreview(
-      double positionX, double positionY) {
+  Future<void> setCameraFocusPositionInPreview(double positionX,
+      double positionY) {
     return _invokeMethod('setCameraFocusPositionInPreview',
         {'positionX': positionX, 'positionY': positionY});
   }
@@ -790,7 +792,7 @@ class RtcEngine
       AudioEqualizationBandFrequency bandFrequency, int bandGain) {
     return _invokeMethod('setLocalVoiceEqualization', {
       'bandFrequency':
-          AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
+      AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
       'bandGain': bandGain
     });
   }
@@ -1000,8 +1002,8 @@ mixin RtcUserInfoInterface {
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  Future<void> joinChannelWithUserAccount(
-      String token, String channelName, String userAccount);
+  Future<void> joinChannelWithUserAccount(String token, String channelName,
+      String userAccount);
 
   /// Gets the user information by passing in the user account.
   /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object (UserInfo), and triggers the onUserInfoUpdated callback on the local client.
@@ -1164,8 +1166,8 @@ mixin RtcAudioInterface {
   /// Param [report_vad]
   /// - true: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user.
   /// - false: (Default) Disable the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
-  Future<void> enableAudioVolumeIndication(
-      int interval, int smooth, bool report_vad);
+  Future<void> enableAudioVolumeIndication(int interval, int smooth,
+      bool report_vad);
 }
 
 mixin RtcVideoInterface {
@@ -1329,8 +1331,8 @@ mixin RtcAudioMixingInterface {
   /// Param [cycle] Sets the number of playback loops:
   /// - Positive integer: Number of playback loops
   /// - -1: Infinite playback loops
-  Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle);
+  Future<void> startAudioMixing(String filePath, bool loopback, bool replace,
+      int cycle);
 
   /// Stops playing or mixing the music file.
   /// Call this method when you are in a channel.
@@ -1962,16 +1964,16 @@ mixin RtcCameraInterface {
   /// See [RtcEngineEventHandler.cameraFocusAreaChanged]
   /// Param [positionX] The horizontal coordinate of the touch point in the view.
   /// Param [positionY] The vertical coordinate of the touch point in the view.
-  Future<void> setCameraFocusPositionInPreview(
-      double positionX, double positionY);
+  Future<void> setCameraFocusPositionInPreview(double positionX,
+      double positionY);
 
   /// Sets the camera exposure position.
   /// A successful setCameraExposurePosition method call triggers the onCameraExposureAreaChanged callback on the local client.
   /// See [RtcEngineEventHandler.cameraExposureAreaChanged]
   /// Param [positionXinView] The horizontal coordinate of the touch point in the view.
   /// Param [positionYinView] The vertical coordinate of the touch point in the view.
-  Future<void> setCameraExposurePosition(
-      double positionXinView, double positionYinView);
+  Future<void> setCameraExposurePosition(double positionXinView,
+      double positionYinView);
 
   /// Enables/Disables face detection for the local user.
   /// Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following aspects:

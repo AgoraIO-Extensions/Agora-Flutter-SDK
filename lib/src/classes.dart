@@ -80,15 +80,14 @@ class VideoEncoderConfiguration {
   VideoMirrorMode mirrorMode;
 
   /// Constructs a [VideoEncoderConfiguration]
-  VideoEncoderConfiguration(
-      {this.dimensions,
-      this.frameRate,
-      this.minFrameRate,
-      this.bitrate,
-      this.minBitrate,
-      this.orientationMode,
-      this.degradationPrefer,
-      this.mirrorMode});
+  VideoEncoderConfiguration({this.dimensions,
+    this.frameRate,
+    this.minFrameRate,
+    this.bitrate,
+    this.minBitrate,
+    this.orientationMode,
+    this.degradationPrefer,
+    this.mirrorMode});
 
   // ignore: public_member_api_docs
   factory VideoEncoderConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -118,11 +117,10 @@ class BeautyOptions {
   double rednessLevel;
 
   /// Constructs a [BeautyOptions]
-  BeautyOptions(
-      {this.lighteningContrastLevel,
-      this.lighteningLevel,
-      this.smoothnessLevel,
-      this.rednessLevel});
+  BeautyOptions({this.lighteningContrastLevel,
+    this.lighteningLevel,
+    this.smoothnessLevel,
+    this.rednessLevel});
 
   // ignore: public_member_api_docs
   factory BeautyOptions.fromJson(Map<String, dynamic> json) =>
@@ -190,16 +188,15 @@ class TranscodingUser {
   AudioChannel audioChannel;
 
   /// Constructs a [TranscodingUser]
-  TranscodingUser(
-    this.uid,
-    this.x,
-    this.y, {
-    this.width,
-    this.height,
-    this.zOrder,
-    this.alpha,
-    this.audioChannel,
-  });
+  TranscodingUser(this.uid,
+      this.x,
+      this.y, {
+        this.width,
+        this.height,
+        this.zOrder,
+        this.alpha,
+        this.audioChannel,
+      });
 
   // ignore: public_member_api_docs
   factory TranscodingUser.fromJson(Map<String, dynamic> json) =>
@@ -299,8 +296,7 @@ class LiveTranscoding {
   final List<TranscodingUser> transcodingUsers;
 
   /// Constructs a [LiveTranscoding]
-  LiveTranscoding(
-    this.transcodingUsers, {
+  LiveTranscoding(this.transcodingUsers, {
     this.width,
     this.height,
     this.videoBitrate,
@@ -483,15 +479,14 @@ class LiveInjectStreamConfig {
   AudioChannel audioChannels;
 
   /// Constructs a [LiveInjectStreamConfig]
-  LiveInjectStreamConfig(
-      {this.width,
-      this.height,
-      this.videoGop,
-      this.videoFramerate,
-      this.videoBitrate,
-      this.audioSampleRate,
-      this.audioBitrate,
-      this.audioChannels});
+  LiveInjectStreamConfig({this.width,
+    this.height,
+    this.videoGop,
+    this.videoFramerate,
+    this.videoBitrate,
+    this.audioSampleRate,
+    this.audioBitrate,
+    this.audioChannels});
 
   // ignore: public_member_api_docs
   factory LiveInjectStreamConfig.fromJson(Map<String, dynamic> json) =>
