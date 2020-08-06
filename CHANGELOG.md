@@ -1,5 +1,8 @@
 # Change log
 
+## 3.0.1-dev.6
+* fix iOS `FirstLocalVideoFrame` `VideoSizeChanged` `FirstRemoteVideoFrame` `FirstRemoteVideoDecoded` bug
+
 ## 3.0.1-dev.5
 * fix multiple channel render bug
 * fix android release bug

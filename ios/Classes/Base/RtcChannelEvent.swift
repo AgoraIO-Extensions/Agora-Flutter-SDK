@@ -148,7 +148,7 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
     }
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, videoSizeChangedOfUid uid: UInt, size: CGSize, rotation: Int) {
-        callback(RtcChannelEvents.VideoSizeChanged, rtcChannel, uid, size.width, size.height, rotation)
+        callback(RtcChannelEvents.VideoSizeChanged, rtcChannel, uid, Int(size.width), Int(size.height), rotation)
     }
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteStateReason, elapsed: Int) {
