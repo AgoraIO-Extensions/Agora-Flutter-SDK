@@ -22,33 +22,36 @@
 * upgrade Agora SDK to 3.0.1
 * support TextureView on Android
 
+## 1.0.13
+* fix `getUserInfoByUid` bug
+
 ## 1.0.12
-* fix AgoraLiveTranscodingUser.alpha type bug
+* fix `AgoraLiveTranscodingUser.alpha` type bug
 
 ## 1.0.11
-* fix Android bugs of setLiveTranscoding and addInjectStreamUrl
-* support custom key when init AgoraRenderWidget
+* fix Android bugs of `setLiveTranscoding` and `addInjectStreamUrl`
+* support custom key when init `AgoraRenderWidget`
 
 ## 1.0.10
-* fix iOS encryption bug
+* fix iOS `encryption` bug
 
 ## 1.0.9
-* fix android onUserInfoUpdated bug
+* fix android `onUserInfoUpdated` bug
 
 ## 1.0.8
-* fix onVideoSizeChanged bug
+* fix `onVideoSizeChanged` bug
 
 ## 1.0.7
-* fix iOS setLiveTranscoding crash
+* fix iOS `setLiveTranscoding` crash
 
 ## 1.0.6
-* upgrade Agora SDK to 2.9.4, not use IMEI now
+* upgrade Agora SDK to 2.9.4, not use `IMEI` now
 
 ## 1.0.5
 * fix iOS memory leak
 
 ## 1.0.4
-* AgoraRenderWidget use key now
+* `AgoraRenderWidget` use key now
 
 ## 1.0.3
 * add log functions
