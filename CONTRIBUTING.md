@@ -9,12 +9,12 @@ to this repository.
 
 ## Source code structures
 
-1. **[lib/agora\_rtc\_engine.dart](lib/agora_rtc_engine.dart)**: Dart APIs wrapper, api message channels to native modules.
+1. **[lib/rtc_engine.dart](lib/rtc_engine.dart)**: Dart APIs wrapper, api message channels to native modules.
 2. **[example](example)**: Example demo for quick start/showcase.
-3. **[ios/Classes/AgoraRtcEnginePlugin.m](https://github.com/AgoraIO/Flutter-SDK/blob/master/ios/Classes/AgoraRtcEnginePlugin.m)**: iOS native implementation to handle dart message channel api calls.
-4. **[android/src/main/java/io/agora/agorartcengine/AgoraRtcEnginePlugin.java](android/src/main/java/io/agora/agorartcengine/AgoraRtcEnginePlugin.java)**: Android native implementation to handle dart message channel api calls.
+3. **[ios/Classes/AgoraRtcEnginePlugin.m](ios/Classes/AgoraRtcEnginePlugin.m)**: iOS native implementation to handle dart message channel api calls.
+4. **[android/src/main/kotlin/io/agora/agora_rtc_engine/AgoraRtcEnginePlugin.kt](android/src/main/kotlin/io/agora/agora_rtc_engine/AgoraRtcEnginePlugin.kt)**: Android native implementation to handle dart message channel api calls.
 
-While creating PR, below materials could be helful:
+While creating PR, below materials could be helpful:
 
 * [Effective Dart](https://www.dartlang.org/guides/language/effective-dart)
 * [Style guide for flutter](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo)

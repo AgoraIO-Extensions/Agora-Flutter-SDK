@@ -1,6 +1,6 @@
-# AgoraRtcEngine Example
+# agora_rtc_engine_example
 
-Demonstrates how to use the `agora_rtc_engine` plugin.
+Demonstrates how to use the agora_rtc_engine plugin.
 
 ## Getting Started
 

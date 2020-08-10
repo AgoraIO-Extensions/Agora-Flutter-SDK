@@ -1,5 +1,27 @@
 # Change log
 
+## 3.0.1-dev.6
+* fix iOS `FirstLocalVideoFrame` `VideoSizeChanged` `FirstRemoteVideoFrame` `FirstRemoteVideoDecoded` bug
+
+## 3.0.1-dev.5
+* fix multiple channel render bug
+* fix android release bug
+
+## 3.0.1-dev.4
+* fix `startPreview` `stopPreview` bug
+
+## 3.0.1-dev.3
+* fix `toJson` bug 
+* add `startPreview` `stopPreview`
+
+## 3.0.1-dev.2
+* remove `AudioSampleRateType.Type16000`
+* fix Android `mapToChannelMediaInfo` crash
+
+## 3.0.1-dev.1
+* upgrade Agora SDK to 3.0.1
+* support TextureView on Android
+
 ## 1.0.13
 * fix `getUserInfoByUid` bug
 
