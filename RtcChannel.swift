@@ -86,7 +86,7 @@ class RtcChannelManager {
 
     subscript(channelId: String) -> AgoraRtcChannel? {
         get {
-            rtcChannelMap[channelId]
+            return rtcChannelMap[channelId]
         }
     }
 
