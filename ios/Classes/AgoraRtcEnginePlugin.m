@@ -663,7 +663,7 @@
     } else if ([@"playEffect" isEqualToString:method]) {
         NSInteger soundId = [self intFromArguments:params key:@"soundId"];
         NSString *filepath = [self stringFromArguments:params key:@"filepath"];
-        NSInteger loopCount = [self intFromArguments:params key:@"loopcount"];
+        NSInteger loopCount = [self intFromArguments:params key:@"loopCount"];
         double pitch = [self doubleFromArguments:params key:@"pitch"];
         double pan = [self doubleFromArguments:params key:@"pan"];
         double gain = [self doubleFromArguments:params key:@"gain"];

@@ -1106,12 +1106,12 @@ class AgoraRtcEngine {
   }
 
   /// playEffect
-  static Future<void> playEffect(int soundId, String filepath, int loopcount,
+  static Future<void> playEffect(int soundId, String filepath, int loopCount,
       double pitch, double pan, double gain, bool publish) async {
     await _channel.invokeMethod('playEffect', {
       "soundId": soundId,
       "filepath": filepath,
-      "loopcount": loopcount,
+      "loopCount": loopCount,
       "pitch": pitch,
       "pan": pan,
       "gain": gain,

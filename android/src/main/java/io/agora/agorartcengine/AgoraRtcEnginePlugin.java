@@ -841,12 +841,12 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
             case "playEffect": {
                 int soundId = call.argument("soundId");
                 String filepath = call.argument("filepath");
-                int loopback = call.argument("loopback");
+                int loopCount = call.argument("loopCount");
                 double pitch = call.argument("pitch");
                 double pan = call.argument("pan");
                 double gain = call.argument("gain");
                 boolean publish = call.argument("publish");
-                mRtcEngine.getAudioEffectManager().playEffect(soundId, filepath, loopback, pitch, pan, gain, publish);
+                mRtcEngine.getAudioEffectManager().playEffect(soundId, filepath, loopCount, pitch, pan, gain, publish);
                 result.success(null);
             }
             break;
