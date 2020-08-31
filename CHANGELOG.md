@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.14
+* fix `playEffect` bug
+
 ## 1.0.13
 * fix `getUserInfoByUid` bug
 
