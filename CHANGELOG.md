@@ -1,5 +1,8 @@
 # Change log
 
+## 3.0.1-dev.7
+* fix android `VideoSizeChanged` bug
+
 ## 3.0.1-dev.6
 * fix iOS `FirstLocalVideoFrame` `VideoSizeChanged` `FirstRemoteVideoFrame` `FirstRemoteVideoDecoded` bug
 

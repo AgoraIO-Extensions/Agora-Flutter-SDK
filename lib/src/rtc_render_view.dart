@@ -134,12 +134,23 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   @override
   void didUpdateWidget(RtcSurfaceView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setData();
-    setRenderMode();
-    setMirrorMode();
+    if (oldWidget.uid != widget.uid ||
+        oldWidget.channelId != widget.channelId) {
+      setData();
+    }
+    if (oldWidget.renderMode != widget.renderMode) {
+      setRenderMode();
+    }
+    if (oldWidget.mirrorMode != widget.mirrorMode) {
+      setMirrorMode();
+    }
     if (defaultTargetPlatform == TargetPlatform.android) {
-      setZOrderOnTop();
-      setZOrderMediaOverlay();
+      if (oldWidget.zOrderOnTop != widget.zOrderOnTop) {
+        setZOrderOnTop();
+      }
+      if (oldWidget.zOrderMediaOverlay != widget.zOrderMediaOverlay) {
+        setZOrderMediaOverlay();
+      }
     }
   }
 
@@ -277,8 +288,13 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   @override
   void didUpdateWidget(RtcTextureView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setData();
-    setMirror();
+    if (oldWidget.uid != widget.uid ||
+        oldWidget.channelId != widget.channelId) {
+      setData();
+    }
+    if (oldWidget.mirror != widget.mirror) {
+      setMirror();
+    }
   }
 
   @override
