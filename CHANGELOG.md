@@ -1,5 +1,8 @@
 # Change log
 
+## 1.0.15
+* upgrade iOS SDK to `2.9.3`
+
 ## 1.0.14
 * fix `playEffect` bug
 

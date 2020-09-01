@@ -13,6 +13,7 @@ import java.util.Map;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.RtcEngineEx;
 import io.agora.rtc.internal.LastmileProbeConfig;
 import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.live.LiveTranscoding;
@@ -105,7 +106,8 @@ public class AgoraRtcEnginePlugin implements MethodCallHandler, EventChannel.Str
             case "create": {
                 try {
                     String appId = call.argument("appId");
-                    mRtcEngine = RtcEngine.create(context, appId, mRtcEventHandler);
+                    mRtcEngine = RtcEngineEx.create(context, appId, mRtcEventHandler);
+                    ((RtcEngineEx) mRtcEngine).setAppType(4);
                     result.success(null);
                 } catch (Exception e) {
                     throw new RuntimeException("NEED TO check rtc sdk init fatal error\n");

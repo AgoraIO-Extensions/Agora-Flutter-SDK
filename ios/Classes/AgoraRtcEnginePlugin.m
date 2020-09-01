@@ -1,5 +1,6 @@
 #import "AgoraRtcEnginePlugin.h"
 #import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
+#import "AgoraRtcEngineKit.h"
 
 @interface AgoraRendererView ()
 @property(nonatomic, strong) UIView *renderView;
@@ -119,6 +120,7 @@
     if ([@"create" isEqualToString:method]) {
         NSString *appId = [self stringFromArguments:params key:@"appId"];
         self.agoraRtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:appId delegate:self];
+        [self.agoraRtcEngine setAppType:AgoraRtc_APP_TYPE_FLUTTER];
         [_eventChannel setStreamHandler:self];
         result(nil);
     } else if ([@"destroy" isEqualToString:method]) {
