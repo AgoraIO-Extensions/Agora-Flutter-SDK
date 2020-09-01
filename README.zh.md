@@ -15,7 +15,7 @@ Agora.io 通过一个简单而强大的 SDK 为您提供了添加实时语音和
 ## 快速开始
 
 * 参阅 [example](example) 目录，这是一个一对一视频聊天的示例。
-* 或者检出 [Tutorial](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/tree/dev/3.0.1) ，这是一个直播场景的示例.
+* 或者检出 [Tutorial](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart) ，这是一个直播场景的示例.
 
 ## 设备权限
 
