@@ -15,7 +15,7 @@ To use this plugin, add `agora_rtc_engine` as a dependency in your [pubspec.yaml
 ## Getting Started
 
 * See the [example](example) directory for a sample about one to one video chat app which using `agora_rtc_engine`.
-* Or checkout this [Tutorial](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/tree/dev/3.0.1) for a sample about live broadcasting app which using `agora_rtc_engine`.
+* Or checkout this [Tutorial](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart) for a sample about live broadcasting app which using `agora_rtc_engine`.
 
 ## Device Permission
 
