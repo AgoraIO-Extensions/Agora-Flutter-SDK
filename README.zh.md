@@ -70,4 +70,4 @@ Agora 视频 SDK 需要 `摄像头` 和 `麦克风` 权限来开始视频通话�
 
 ## 参与贡献
 
-为了提升 SDK 的质量和易用性, 请参考我们的 [贡献说明](CONTRIBUTING.md).
+为了提升 SDK 的质量和易用性, 请参考我们的 [贡献说明](https://github.com/AgoraIO/Flutter-SDK/blob/master/CONTRIBUTING.md).
