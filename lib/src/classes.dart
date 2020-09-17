@@ -16,11 +16,11 @@ class UserInfo {
   /// Constructs a [UserInfo]
   UserInfo();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
 
@@ -36,11 +36,11 @@ class VideoDimensions {
   /// Constructs a [VideoDimensions]
   VideoDimensions(this.width, this.height);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory VideoDimensions.fromJson(Map<String, dynamic> json) =>
       _$VideoDimensionsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$VideoDimensionsToJson(this);
 }
 
@@ -153,11 +153,11 @@ class VideoEncoderConfiguration {
     this.degradationPrefer,
     this.mirrorMode});
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory VideoEncoderConfiguration.fromJson(Map<String, dynamic> json) =>
       _$VideoEncoderConfigurationFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$VideoEncoderConfigurationToJson(this);
 }
 
@@ -186,11 +186,11 @@ class BeautyOptions {
     this.smoothnessLevel,
     this.rednessLevel});
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory BeautyOptions.fromJson(Map<String, dynamic> json) =>
       _$BeautyOptionsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$BeautyOptionsToJson(this);
 }
 
@@ -215,11 +215,11 @@ class AgoraImage {
   /// Constructs a [AgoraImage]
   AgoraImage(this.url, this.x, this.y, this.width, this.height);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory AgoraImage.fromJson(Map<String, dynamic> json) =>
       _$AgoraImageFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$AgoraImageToJson(this);
 }
 
@@ -270,11 +270,11 @@ class TranscodingUser {
         this.audioChannel,
       });
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory TranscodingUser.fromJson(Map<String, dynamic> json) =>
       _$TranscodingUserFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$TranscodingUserToJson(this);
 }
 
@@ -293,10 +293,10 @@ class Color {
   /// Constructs a [Color]
   Color(this.red, this.green, this.blue);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$ColorToJson(this);
 }
 
@@ -396,11 +396,11 @@ class LiveTranscoding {
     this.userConfigExtraInfo,
   });
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory LiveTranscoding.fromJson(Map<String, dynamic> json) =>
       _$LiveTranscodingFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 }
 
@@ -421,11 +421,11 @@ class ChannelMediaInfo {
   /// Constructs a [ChannelMediaInfo]
   ChannelMediaInfo(this.uid, {this.channelName, this.token});
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory ChannelMediaInfo.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaInfoFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$ChannelMediaInfoToJson(this);
 }
 
@@ -452,11 +452,11 @@ class ChannelMediaRelayConfiguration {
   /// Constructs a [ChannelMediaRelayConfiguration]
   ChannelMediaRelayConfiguration(this.srcInfo, this.destInfos);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory ChannelMediaRelayConfiguration.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaRelayConfigurationFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$ChannelMediaRelayConfigurationToJson(this);
 }
 
@@ -479,11 +479,11 @@ class LastmileProbeConfig {
   LastmileProbeConfig(this.probeUplink, this.probeDownlink,
       this.expectedUplinkBitrate, this.expectedDownlinkBitrate);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory LastmileProbeConfig.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeConfigFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$LastmileProbeConfigToJson(this);
 }
 
@@ -505,11 +505,11 @@ class Rectangle {
   /// Constructs a [Rectangle]
   Rectangle(this.x, this.y, this.width, this.height);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory Rectangle.fromJson(Map<String, dynamic> json) =>
       _$RectangleFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$RectangleToJson(this);
 }
 
@@ -534,11 +534,11 @@ class WatermarkOptions {
   WatermarkOptions(this.positionInLandscapeMode, this.positionInPortraitMode,
       {this.visibleInPreview});
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory WatermarkOptions.fromJson(Map<String, dynamic> json) =>
       _$WatermarkOptionsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
 }
 
@@ -588,11 +588,11 @@ class LiveInjectStreamConfig {
     this.audioBitrate,
     this.audioChannels});
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory LiveInjectStreamConfig.fromJson(Map<String, dynamic> json) =>
       _$LiveInjectStreamConfigFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$LiveInjectStreamConfigToJson(this);
 }
 
@@ -610,11 +610,11 @@ class CameraCapturerConfiguration {
   /// Constructs a [CameraCapturerConfiguration]
   CameraCapturerConfiguration(this.preference, this.cameraDirection);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory CameraCapturerConfiguration.fromJson(Map<String, dynamic> json) =>
       _$CameraCapturerConfigurationFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$CameraCapturerConfigurationToJson(this);
 }
 
@@ -640,11 +640,11 @@ class ChannelMediaOptions {
   /// Constructs a [ChannelMediaOptions]
   ChannelMediaOptions(this.autoSubscribeAudio, this.autoSubscribeVideo);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaOptionsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$ChannelMediaOptionsToJson(this);
 }
 
@@ -730,11 +730,11 @@ class RtcStats {
   /// Constructs a [RtcStats]
   RtcStats();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory RtcStats.fromJson(Map<String, dynamic> json) =>
       _$RtcStatsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$RtcStatsToJson(this);
 }
 
@@ -764,11 +764,11 @@ class AudioVolumeInfo {
   /// Constructs a [AudioVolumeInfo]
   AudioVolumeInfo();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory AudioVolumeInfo.fromJson(Map<String, dynamic> json) =>
       _$AudioVolumeInfoFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$AudioVolumeInfoToJson(this);
 }
 
@@ -790,10 +790,10 @@ class Rect {
   /// Constructs a [Rect]
   Rect();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory Rect.fromJson(Map<String, dynamic> json) => _$RectFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$RectToJson(this);
 }
 
@@ -812,11 +812,11 @@ class LastmileProbeOneWayResult {
   /// Constructs a [LastmileProbeOneWayResult]
   LastmileProbeOneWayResult();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory LastmileProbeOneWayResult.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeOneWayResultFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$LastmileProbeOneWayResultToJson(this);
 }
 
@@ -841,11 +841,11 @@ class LastmileProbeResult {
   /// Constructs a [LastmileProbeResult]
   LastmileProbeResult();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory LastmileProbeResult.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeResultFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$LastmileProbeResultToJson(this);
 }
 
@@ -864,11 +864,11 @@ class LocalAudioStats {
   /// Constructs a [LocalAudioStats]
   LocalAudioStats();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
       _$LocalAudioStatsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$LocalAudioStatsToJson(this);
 }
 
@@ -916,11 +916,11 @@ class LocalVideoStats {
   /// Constructs a [LocalVideoStats]
   LocalVideoStats();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
       _$LocalVideoStatsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$LocalVideoStatsToJson(this);
 }
 
@@ -964,11 +964,11 @@ class RemoteAudioStats {
   /// Constructs a [RemoteAudioStats]
   RemoteAudioStats();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
       _$RemoteAudioStatsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$RemoteAudioStatsToJson(this);
 }
 
@@ -1017,11 +1017,11 @@ class RemoteVideoStats {
   /// Constructs a [RemoteVideoStats]
   RemoteVideoStats();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory RemoteVideoStats.fromJson(Map<String, dynamic> json) =>
       _$RemoteVideoStatsFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$RemoteVideoStatsToJson(this);
 }
 
@@ -1046,10 +1046,10 @@ class FacePositionInfo {
   /// Constructs a [FacePositionInfo]
   FacePositionInfo();
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   factory FacePositionInfo.fromJson(Map<String, dynamic> json) =>
       _$FacePositionInfoFromJson(json);
 
-  // ignore: public_member_api_docs
+  // @nodoc ignore: public_member_api_docs
   Map<String, dynamic> toJson() => _$FacePositionInfoToJson(this);
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs
+// ignore_for_file: public_member_api_docs @nodoc
 
 import 'package:json_annotation/json_annotation.dart';
 

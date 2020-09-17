@@ -235,7 +235,7 @@ enum AudioProfile {
 
 /// Use mode of the onRecordAudioFrame callback.
 /// @enum {number}
-/// TODO setPlaybackAudioFrameParameters
+/// TODO @nodoc setPlaybackAudioFrameParameters
 enum AudioRawFrameOperationMode {
   /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
   @JsonValue(0)
@@ -477,7 +477,7 @@ enum AudioScenario {
 
 /// (iOS only) Audio session restriction.
 /// @enum {number}
-/// TODO iOS setAudioSessionOperationRestriction
+/// TODO @nodoc iOS setAudioSessionOperationRestriction
 enum AudioSessionOperationRestriction {
   /// No restriction, the SDK has full control of the audio session operations.
   @JsonValue(0)
@@ -1424,7 +1424,7 @@ enum LogFilter {
 
 /// (iOS only) Media device type.
 /// @enum {number}
-/// TODO MacOS AgoraMediaDeviceType
+/// TODO @nodoc MacOS AgoraMediaDeviceType
 enum MediaDeviceType {
   /// Unknown device.
   @JsonValue(-1)
@@ -1449,7 +1449,7 @@ enum MediaDeviceType {
 
 /// Media type.
 /// @enum {number}
-/// TODO LiveEngine
+/// TODO @nodoc LiveEngine
 enum MediaType {
   /// No audio and video.
   @JsonValue(0)
@@ -1470,7 +1470,7 @@ enum MediaType {
 
 /// (Android only) The metadata type.
 /// @enum {number}
-/// TODO registerMediaMetadataObserver
+/// TODO @nodoc registerMediaMetadataObserver
 enum MetadataType {
   /// The metadata type is unknown.
   @JsonValue(-1)
@@ -1555,7 +1555,7 @@ enum NetworkType {
 
 /// (Android only) Default camera position
 /// @enum {number}
-/// TODO AgoraRtcDefaultCamera
+/// TODO @nodoc AgoraRtcDefaultCamera
 enum RtcDefaultCameraPosition {
   /// Front camera
   @JsonValue(0)
@@ -1568,7 +1568,7 @@ enum RtcDefaultCameraPosition {
 
 /// Lifecycle of the CDN live video stream.
 /// @enum {number}
-/// TODO AgoraPublisherConfiguration
+/// TODO @nodoc AgoraPublisherConfiguration
 enum RtmpStreamLifeCycle {
   /// Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
   @JsonValue(1)
@@ -1712,7 +1712,7 @@ enum UserPriority {
 
 /// (iOS only) Video buffer type.
 /// @enum {number}
-/// TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
+/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoBufferType {
   /// Use a pixel buffer to transmit the video data.
   @JsonValue(1)
@@ -1741,7 +1741,7 @@ enum VideoCodecProfileType {
 
 /// (iOS only) The content hint for screen sharing.
 /// @enum {number}
-/// TODO MacOS setScreenCaptureContentHint
+/// TODO @nodoc MacOS setScreenCaptureContentHint
 enum VideoContentHint {
   /// (Default) No content hint.
   @JsonValue(0)
@@ -1845,7 +1845,7 @@ enum VideoOutputOrientationMode {
 
 /// (iOS only) Video pixel format.
 /// @enum {number}
-/// TODO iOS AgoraVideoSinkProtocol
+/// TODO @nodoc iOS AgoraVideoSinkProtocol
 enum VideoPixelFormat {
   /// The video pixel format is I420.
   @JsonValue(1)
@@ -1976,7 +1976,7 @@ enum VideoRenderMode {
 
 /// (iOS only) Video rotation.
 /// @enum {number}
-/// TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
+/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoRotation {
   /// No rotation
   @JsonValue(0)
