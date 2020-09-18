@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'events.dart';
 import 'rtc_engine.dart';
 
-/// IP areas
+/// The area of connection.
 /// @enum {number}
 enum IPAreaCode {
   /// Mainland China
@@ -14,7 +14,7 @@ enum IPAreaCode {
   @JsonValue(1 << 1)
   AREA_NA,
 
-  /// AREA_EUR
+  /// Europe
   @JsonValue(1 << 2)
   AREA_EUR,
 
@@ -27,14 +27,14 @@ enum IPAreaCode {
   AREA_GLOBAL,
 }
 
-/// Audio codec profile.
+/// Self-defined audio codec profile.
 /// @enum {number}
 enum AudioCodecProfileType {
-  /// (Default) LC-AAC, the low-complexity audio codec profile.
+  /// (Default) LC-AAC, which is the low-complexity audio codec profile.
   @JsonValue(0)
   LCAAC,
 
-  /// HE-AAC, the high-efficiency audio codec profile.
+  /// HE-AAC, which is the high-efficiency audio codec profile.
   @JsonValue(1)
   HEAAC,
 }
@@ -207,8 +207,8 @@ enum AudioOutputRouting {
 /// @enum {number}
 enum AudioProfile {
   /// Default audio profile.
-  /// - In the Communication profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-  /// - In the Live-broadcast profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
+  /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
   @JsonValue(0)
   Default,
 
@@ -235,32 +235,32 @@ enum AudioProfile {
 
 /// Use mode of the onRecordAudioFrame callback.
 /// @enum {number}
-/// TODO setPlaybackAudioFrameParameters
+/// TODO @nodoc setPlaybackAudioFrameParameters
 enum AudioRawFrameOperationMode {
-  /// Users only read the AudioFrame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
+  /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
   @JsonValue(0)
   ReadOnly,
 
-  /// Users replace the AudioFrame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
+  /// Users replace the Agora Audio Frame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
   @JsonValue(1)
   WriteOnly,
 
-  /// Users read the data from AudioFrame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
+  /// Users read the data from Agora Audio Frame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
   @JsonValue(2)
   ReadWrite,
 }
 
 /// Audio recording quality.
 enum AudioRecordingQuality {
-  ///The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
   @JsonValue(0)
   Low,
 
-  /// The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
   @JsonValue(1)
   Medium,
 
-  /// The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
   @JsonValue(2)
   High,
 }
@@ -269,9 +269,9 @@ enum AudioRecordingQuality {
 /// @enum {number}
 enum AudioRemoteState {
   /// The remote audio is in the default state, probably due to:
-  /// See [AudioRemoteStateReason.LocalMuted]
-  /// See [AudioRemoteStateReason.RemoteMuted]
-  /// See [AudioRemoteStateReason.RemoteOffline]
+  /// - [AudioRemoteStateReason.LocalMuted]
+  /// - [AudioRemoteStateReason.RemoteMuted]
+  /// - [AudioRemoteStateReason.RemoteOffline]
   @JsonValue(0)
   Stopped,
 
@@ -280,19 +280,19 @@ enum AudioRemoteState {
   Starting,
 
   /// The remote audio stream is decoded and plays normally, probably due to:
-  /// See [AudioRemoteStateReason.NetworkRecovery]
-  /// See [AudioRemoteStateReason.LocalUnmuted]
-  /// See [AudioRemoteStateReason.RemoteUnmuted]
+  /// - [AudioRemoteStateReason.NetworkRecovery]
+  /// - [AudioRemoteStateReason.LocalUnmuted]
+  /// - [AudioRemoteStateReason.RemoteUnmuted]
   @JsonValue(2)
   Decoding,
 
   /// The remote audio is frozen, probably due to:
-  /// See [AudioRemoteStateReason.NetworkCongestion]
+  /// - [AudioRemoteStateReason.NetworkCongestion]
   @JsonValue(3)
   Frozen,
 
   /// The remote audio fails to start, probably due to:
-  /// See [AudioRemoteStateReason.Internal]
+  /// - [AudioRemoteStateReason.Internal]
   @JsonValue(4)
   Failed,
 }
@@ -336,35 +336,35 @@ enum AudioRemoteStateReason {
 /// The preset local voice reverberation option.
 /// @enum {number}
 enum AudioReverbPreset {
-  /// The original voice (no local voice reverberation).
+  /// Turn off local voice reverberation, that is, to use the original voice.
   @JsonValue(0x00000000)
   Off,
 
-  /// Pop music
+  /// The reverberation style typical of popular music (enhanced).
   @JsonValue(0x00000001)
   Popular,
 
-  /// R&B
+  /// The reverberation style typical of R&B music (enhanced).
   @JsonValue(0x00000002)
   RnB,
 
-  /// Rock music
+  /// The reverberation style typical of rock music.
   @JsonValue(0x00000003)
   Rock,
 
-  /// Hip-hop music
+  /// The reverberation style typical of hip-hop music.
   @JsonValue(0x00000004)
   HipHop,
 
-  /// Pop concert
+  /// The reverberation style typical of a concert hall.
   @JsonValue(0x00000005)
   VocalConcert,
 
-  /// Karaoke
+  /// The reverberation style typical of a KTV venue (enhanced).
   @JsonValue(0x00000006)
   KTV,
 
-  /// Recording studio
+  /// The reverberation style typical of a recording studio (enhanced).
   @JsonValue(0x00000007)
   Studio,
 
@@ -400,7 +400,7 @@ enum AudioReverbPreset {
   @JsonValue(0x00100008)
   FX_PHONOGRAPH,
 
-  /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the profile parameter in setAudioProfile as MusicHighQualityStereo(5).
+  /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the `profile` parameter in `setAudioProfile` as `MusicHighQualityStereo`(5).
   /// See [RtcEngine.setAudioProfile]
   /// See [AudioProfile.MusicHighQualityStereo]
   @JsonValue(0x00200001)
@@ -410,23 +410,23 @@ enum AudioReverbPreset {
 /// Audio reverberation type.
 /// @enum {number}
 enum AudioReverbType {
-  /// The level of the dry signal (dB). The value ranges between -20 and 10.
+  /// Level of the dry signal (-20 to 10 dB).
   @JsonValue(0)
   DryLevel,
 
-  /// The level of the early reflection signal (wet signal) in dB. The value ranges between -20 and 10.
+  /// Level of the early reflection signal (wet signal) (-20 to 10 dB).
   @JsonValue(1)
   WetLevel,
 
-  /// The room size of the reverberation. A larger room size means a stronger reverberation. The value ranges between 0 and 100.
+  /// Room size of the reflection (0 to 100 dB). A larger room size means stronger reverberation.
   @JsonValue(2)
   RoomSize,
 
-  /// The length of the initial delay of the wet signal (ms). The value ranges between 0 and 200.
+  /// Length of the initial delay of the wet signal (0 to 200 ms).
   @JsonValue(3)
   WetDelay,
 
-  /// The reverberation strength. The value ranges between 0 and 100.
+  /// Strength of the late reverberation (0 to 100).
   @JsonValue(4)
   Strength,
 }
@@ -450,15 +450,15 @@ enum AudioSampleRateType {
 /// Audio scenario.
 /// @enum {number}
 enum AudioScenario {
-  /// Default.
+  /// Default audio application scenario.
   @JsonValue(0)
   Default,
 
-  /// Entertainment scenario, supporting voice during gameplay.
+  /// Entertainment scenario supporting voice during gameplay.
   @JsonValue(1)
   ChatRoomEntertainment,
 
-  /// Education scenario, prioritizing fluency and stability.
+  /// Education scenario prioritizing smoothness and stability.
   @JsonValue(2)
   Education,
 
@@ -475,9 +475,9 @@ enum AudioScenario {
   ChatRoomGaming,
 }
 
-/// Audio session restriction.
+/// (iOS only) Audio session restriction.
 /// @enum {number}
-/// TODO iOS setAudioSessionOperationRestriction
+/// TODO @nodoc iOS setAudioSessionOperationRestriction
 enum AudioSessionOperationRestriction {
   /// No restriction, the SDK has full control of the audio session operations.
   @JsonValue(0)
@@ -503,31 +503,31 @@ enum AudioSessionOperationRestriction {
 /// The preset audio voice configuration used to change the voice effect.
 /// @enum {number}
 enum AudioVoiceChanger {
-  /// The original voice (no local voice change).
+  /// Turn off the local voice changer, that is, to use the original voice.
   @JsonValue(0x00000000)
   Off,
 
-  /// An old man’s voice.
+  /// The voice of an old man.
   @JsonValue(0x00000001)
   OldMan,
 
-  /// A little boy’s voice.
+  /// The voice of a little boy.
   @JsonValue(0x00000002)
   BabyBoy,
 
-  /// A little girl’s voice.
+  /// The voice of a little girl.
   @JsonValue(0x00000003)
   BabyGirl,
 
-  /// TBD
+  /// The voice of Zhu Bajie, a character in Journey to the West who has a voice like that of a growling bear.
   @JsonValue(0x00000004)
   ZhuBaJie,
 
-  /// Ethereal vocal effects.
+  /// The ethereal voice.
   @JsonValue(0x00000005)
   Ethereal,
 
-  /// Hulk’s voice.
+  /// The voice of Hulk.
   @JsonValue(0x00000006)
   Hulk,
 
@@ -596,7 +596,7 @@ enum CameraCaptureOutputPreference {
   @JsonValue(2)
   Preview,
 
-  /// Internal use only
+  /// Internal use only.
   @JsonValue(3)
   Unkown,
 }
@@ -649,7 +649,7 @@ enum ChannelMediaRelayError {
   @JsonValue(7)
   FailedPacketSentToDestination,
 
-  /// The SDK disconnects from the server due to poor network connections. You can call the leaveChannel method to leave the channel.
+  /// The SDK disconnects from the server due to poor network connections. You can call the `leaveChannel` method to leave the channel.
   /// See [RtcEngine.leaveChannel]
   @JsonValue(8)
   ServerConnectionLost,
@@ -734,7 +734,7 @@ enum ChannelMediaRelayState {
   @JsonValue(2)
   Running,
 
-  /// A failure occurs. See the details in error.
+  /// A failure occurs.
   @JsonValue(3)
   Failure,
 }
@@ -747,7 +747,7 @@ enum ChannelProfile {
   @JsonValue(0)
   Communication,
 
-  /// The Live-Broadcast profile.
+  /// The LiveBroadcasting profile.
   /// Users in a live-broadcast channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams; an audience can only receive streams.
   @JsonValue(1)
   LiveBroadcasting,
@@ -807,7 +807,7 @@ enum ConnectionChangedReason {
 
   /// The generated token is invalid probably due to the following reasons:
   /// - The App Certificate for the project is enabled in Console, but you do not use Token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
-  /// - The uid that you specify in the joinChannel method is different from the uid that you pass for generating the token.
+  /// - The uid that you specify in the `joinChannel` method is different from the uid that you pass for generating the token.
   /// See [RtcEngine.joinChannel]
   @JsonValue(8)
   InvalidToken,
@@ -842,48 +842,48 @@ enum ConnectionChangedReason {
 /// @enum {number}
 enum ConnectionStateType {
   /// The SDK is disconnected from Agora's edge server.
-  /// - This is the initial state before joinChannel.
+  /// - This is the initial state before `joinChannel`.
   /// See [RtcEngine.joinChannel]
-  /// - The SDK also enters this state when the app calls leaveChannel.
+  /// - The SDK also enters this state when the app calls `leaveChannel`.
   /// See [RtcEngine.leaveChannel]
   @JsonValue(1)
   Disconnected,
 
   /// The SDK is connecting to Agora's edge server.
-  /// - When the app calls joinChannel, the SDK starts to establish a connection to the specified channel, triggers the onConnectionStateChanged callback, and switches to the Connecting state.
+  /// - When the app calls `joinChannel`, the SDK starts to establish a connection to the specified channel, triggers the `connectionStateChanged` callback, and switches to the Connecting state.
   /// See [RtcEngine.joinChannel]
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// See [ConnectionStateType.Connecting]
-  /// - When the SDK successfully joins the channel, the SDK triggers the onConnectionStateChanged callback and switches to the Connected state.
+  /// - When the SDK successfully joins the channel, the SDK triggers the `connectionStateChanged` callback and switches to the Connected state.
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// See [ConnectionStateType.Connected]
-  /// - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the onJoinChannelSuccess callback.
-  /// See [RtcEngineEvents.onJoinChannelSuccess]
+  /// - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the `joinChannelSuccess` callback.
+  /// See [RtcEngineEventHandler.joinChannelSuccess]
   @JsonValue(2)
   Connecting,
 
   /// The SDK is connected to Agora's edge server and joins a channel. You can now publish or subscribe to a media stream in the channel.
   /// If the connection to the channel is lost because, for example, the network is down or switched, the SDK automatically tries to reconnect and triggers:
-  /// - The onConnectionStateChanged callback, and switches to the Reconnecting state.
+  /// - The `connectionStateChanged` callback, and switches to the Reconnecting state.
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// See [ConnectionStateType.Reconnecting]
   @JsonValue(3)
   Connected,
 
   /// The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
-  /// - If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora’s edge server, the SDK triggers the onConnectionLost callback, stays in the Reconnecting state, and keeps rejoining the channel.
+  /// - If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora’s edge server, the SDK triggers the `connectionLost` callback, stays in the Reconnecting state, and keeps rejoining the channel.
   /// See [RtcEngineEventHandler.connectionLost]
-  /// - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the onConnectionStateChanged callback, switches to the Failed state, and stops rejoining the channel.
+  /// - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the `connectionStateChanged` callback, switches to the Failed state, and stops rejoining the channel.
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// See [ConnectionStateType.Failed]
   @JsonValue(4)
   Reconnecting,
 
   /// The SDK fails to connect to Agora's edge server or join the channel.
-  /// You must call leaveChannel to leave this state, and call joinChannel again to rejoin the channel.
+  /// You must call `leaveChannel` to leave this state, and call `joinChannel` again to rejoin the channel.
   /// See [RtcEngine.leaveChannel]
   /// See [RtcEngine.joinChannel]
-  /// If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the onConnectionStateChanged callbacks.
+  /// If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the `connectionStateChanged` callbacks.
   /// See [RtcEngineEventHandler.connectionStateChanged]
   @JsonValue(5)
   Failed,
@@ -960,7 +960,7 @@ enum ErrorCode {
   @JsonValue(7)
   NotInitialized,
 
-  /// No permission exists. Check if the user has granted access to the audio or video device.
+  /// No permission exists. Check whether the user has granted access to the audio or video device.
   @JsonValue(9)
   NoPermission,
 
@@ -990,7 +990,7 @@ enum ErrorCode {
 
   /// The request to join the channel is rejected.
   /// Possible reasons are:
-  /// - The user is already in the channel, and still calls the API method to join the channel, for example, joinChannel
+  /// - The user is already in the channel, and still calls the API method to join the channel, for example, `joinChannel`.
   /// See [RtcEngine.joinChannel]
   /// - The user tries joining the channel during the echo test. Please join the channel after the echo test ends.
   @JsonValue(17)
@@ -998,7 +998,7 @@ enum ErrorCode {
 
   /// The request to leave the channel is rejected.
   /// Possible reasons are:
-  /// - The user left the channel and still calls the API method to leave the channel, for example, leaveChannel.
+  /// - The user left the channel and still calls the API method to leave the channel, for example, `leaveChannel`.
   /// See [RtcEngine.leaveChannel]
   /// - The user has not joined the channel and calls the API method to leave the channel.
   @JsonValue(18)
@@ -1028,7 +1028,7 @@ enum ErrorCode {
   @JsonValue(102)
   InvalidChannelId,
 
-  /// The token expired. DEPRECATED as of v2.4.1. Use TokenExpired(9) in the reason parameter of onConnectionStateChanged.
+  /// The token expired. Agora recommends that you use `TokenExpired`(9) in the reason parameter of `connectionStateChanged` instead.
   /// See [ConnectionChangedReason.TokenExpired]
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// Possible reasons are:
@@ -1038,12 +1038,12 @@ enum ErrorCode {
   @JsonValue(109)
   TokenExpired,
 
-  /// The token is invalid. DEPRECATED as of v2.4.1. Use InvalidToken(8) in the reason parameter of onConnectionStateChanged.
+  /// The token is invalid. Agora recommends that you use `InvalidToken`(8) in the reason parameter of `connectionStateChanged` instead.
   /// See [ConnectionChangedReason.InvalidToken]
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// Possible reasons are:
   /// - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
-  /// - The uid is mandatory, and users must set the same uid as the one set in the joinChannel method.
+  /// - The uid is mandatory, and users must set the same uid as the one set in the `joinChannel` method.
   /// See [RtcEngine.joinChannel]
   @deprecated
   @JsonValue(110)
@@ -1057,23 +1057,23 @@ enum ErrorCode {
   @JsonValue(112)
   ConnectionLost,
 
-  /// The user is not in the channel when calling the sendStreamMessage or getUserInfoByUserAccount method.
+  /// The user is not in the channel when calling the `sendStreamMessage` or `getUserInfoByUserAccount` method.
   /// See [RtcEngine.sendStreamMessage]
   /// See [RtcEngine.getUserInfoByUserAccount]
   @JsonValue(113)
   NotInChannel,
 
-  /// The size of the sent data is over 1024 bytes when the user calls the sendStreamMessage method.
+  /// The size of the sent data is over 1024 bytes when the user calls the `sendStreamMessage` method.
   /// See [RtcEngine.sendStreamMessage]
   @JsonValue(114)
   SizeTooLarge,
 
-  /// The bitrate of the sent data exceeds the limit of 6 Kbps when the user calls the sendStreamMessage method.
+  /// The bitrate of the sent data exceeds the limit of 6 Kbps when the user calls the `sendStreamMessage` method.
   /// See [RtcEngine.sendStreamMessage]
   @JsonValue(115)
   BitrateLimit,
 
-  /// Too many data streams (over five streams) are created when the user calls the createDataStream method.
+  /// Too many data streams (over five streams) are created when the user calls the `createDataStream` method.
   /// See [RtcEngine.createDataStream]
   @JsonValue(116)
   TooManyDataStreams,
@@ -1118,7 +1118,7 @@ enum ErrorCode {
   @JsonValue(134)
   InvalidUserAccount,
 
-  /// CDN related errors. Remove the original URL address and add a new one by calling the removePublishStreamUrl and addPublishStreamUrl methods.
+  /// CDN related errors. Remove the original URL address and add a new one by calling the `removePublishStreamUrl` and `addPublishStreamUrl` methods.
   /// See [RtcEngine.removePublishStreamUrl]
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(151)
@@ -1132,7 +1132,7 @@ enum ErrorCode {
   @JsonValue(153)
   PublishStreamNotAuthorized,
 
-  /// An error occurs in Agora’s streaming server. Call the addPublishStreamUrl method to publish the stream again.
+  /// An error occurs in Agora’s streaming server. Call the `addPublishStreamUrl` method to publish the stream again.
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(154)
   PublishStreamInternalServerError,
@@ -1153,7 +1153,7 @@ enum ErrorCode {
   @JsonValue(1002)
   StartCall,
 
-  /// Fails to start the camera. DEPRECATED as of v2.4.1. Use CaptureFailure(4) in the error parameter of onLocalVideoStateChanged.
+  /// Fails to start the camera. Agora recommends that you use `CaptureFailure`(4) in the error parameter of `localVideoStateChanged` instead.
   /// See [LocalVideoStreamError.CaptureFailure]
   /// See [RtcEngineEventHandler.localVideoStateChanged]
   @deprecated
@@ -1317,15 +1317,15 @@ enum InjectStreamStatus {
 /// The state of the probe test result.
 /// @enum {number}
 enum LastmileProbeResultState {
-  /// the last-mile network probe test is complete.
+  /// The last-mile network probe test is complete.
   @JsonValue(1)
   Complete,
 
-  /// the last-mile network probe test is incomplete and the bandwidth estimation is not available, probably due to limited test resources.
+  /// The last-mile network probe test is incomplete and the bandwidth estimation is not available, probably due to limited test resources.
   @JsonValue(2)
   IncompleteNoBwe,
 
-  /// the last-mile network probe test is not carried out, probably due to poor network conditions.
+  /// The last-mile network probe test is not carried out, probably due to poor network conditions.
   @JsonValue(3)
   Unavailable,
 }
@@ -1422,9 +1422,9 @@ enum LogFilter {
   Critical,
 }
 
-/// Media device type.
+/// (iOS only) Media device type.
 /// @enum {number}
-/// TODO MacOS AgoraMediaDeviceType
+/// TODO @nodoc MacOS AgoraMediaDeviceType
 enum MediaDeviceType {
   /// Unknown device.
   @JsonValue(-1)
@@ -1449,7 +1449,7 @@ enum MediaDeviceType {
 
 /// Media type.
 /// @enum {number}
-/// TODO LiveEngine
+/// TODO @nodoc LiveEngine
 enum MediaType {
   /// No audio and video.
   @JsonValue(0)
@@ -1468,15 +1468,15 @@ enum MediaType {
   AudioAndVideo,
 }
 
-/// The metadata type.
+/// (Android only) The metadata type.
 /// @enum {number}
-/// TODO registerMediaMetadataObserver
+/// TODO @nodoc registerMediaMetadataObserver
 enum MetadataType {
-  /// the metadata type is unknown.
+  /// The metadata type is unknown.
   @JsonValue(-1)
   Unknown,
 
-  /// the metadata type is video.
+  /// The metadata type is video.
   @JsonValue(0)
   Video,
 }
@@ -1553,9 +1553,9 @@ enum NetworkType {
   Mobile4G,
 }
 
-/// Default camera position
+/// (Android only) Default camera position
 /// @enum {number}
-/// TODO AgoraRtcDefaultCamera
+/// TODO @nodoc AgoraRtcDefaultCamera
 enum RtcDefaultCameraPosition {
   /// Front camera
   @JsonValue(0)
@@ -1568,7 +1568,7 @@ enum RtcDefaultCameraPosition {
 
 /// Lifecycle of the CDN live video stream.
 /// @enum {number}
-/// TODO AgoraPublisherConfiguration
+/// TODO @nodoc AgoraPublisherConfiguration
 enum RtmpStreamLifeCycle {
   /// Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
   @JsonValue(1)
@@ -1586,7 +1586,7 @@ enum RtmpStreamingErrorCode {
   @JsonValue(0)
   OK,
 
-  /// Invalid argument used. If, for example, you do not call the setLiveTranscoding method to configure the LiveTranscoding parameters before calling the addPublishStreamUrl method, the SDK returns this error. Check whether you set the parameters in the setLiveTranscoding method properly.
+  /// Invalid argument used. If, for example, you do not call the `setLiveTranscoding` method to configure the LiveTranscoding parameters before calling the `addPublishStreamUrl` method, the SDK returns this error. Check whether you set the parameters in the `setLiveTranscoding` method properly.
   /// See [RtcEngine.setLiveTranscoding]
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(1)
@@ -1596,12 +1596,12 @@ enum RtmpStreamingErrorCode {
   @JsonValue(2)
   EncryptedStreamNotAllowed,
 
-  /// Timeout for the RTMP streaming. Call the addPublishStreamUrl method to publish the streaming again.
+  /// Timeout for the RTMP streaming. Call the `addPublishStreamUrl` method to publish the streaming again.
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(3)
   ConnectionTimeout,
 
-  /// An error occurs in Agora’s streaming server. Call the addPublishStreamUrl method to publish the streaming again.
+  /// An error occurs in Agora’s streaming server. Call the `addPublishStreamUrl` method to publish the streaming again.
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(4)
   InternalServerError,
@@ -1634,12 +1634,12 @@ enum RtmpStreamingErrorCode {
 /// The RTMP streaming state.
 /// @enum {number}
 enum RtmpStreamingState {
-  /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling removePublishStreamUrl.
+  /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling `removePublishStreamUrl`.
   /// See [RtcEngine.removePublishStreamUrl]
   @JsonValue(0)
   Idle,
 
-  /// The SDK is connecting to Agora’s streaming server and the RTMP server. This state is triggered after you call the addPublishStreamUrl method.
+  /// The SDK is connecting to Agora’s streaming server and the RTMP server. This state is triggered after you call the `addPublishStreamUrl` method.
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(1)
   Connecting,
@@ -1649,16 +1649,16 @@ enum RtmpStreamingState {
   Running,
 
   /// The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP streaming and returns this state.
-  /// - If the SDK successfully resumes the streaming, Running(2) returns.
+  /// - If the SDK successfully resumes the streaming, `Running`(2) returns.
   /// See [RtmpStreamingState.Running]
-  /// - If the streaming does not resume within 60 seconds or server errors occur, Failure(4) returns. You can also reconnect to the server by calling the removePublishStreamUrl and addPublishStreamUrl methods.
+  /// - If the streaming does not resume within 60 seconds or server errors occur, `Failure`(4) returns. You can also reconnect to the server by calling the `removePublishStreamUrl` and `addPublishStreamUrl` methods.
   /// See [RtmpStreamingState.Failure]
   /// See [RtcEngine.removePublishStreamUrl]
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(3)
   Recovering,
 
-  /// The RTMP streaming fails. See the errorCode parameter for the detailed error information. You can also call the addPublishStreamUrl method to publish the RTMP streaming again.
+  /// The RTMP streaming fails. See the `errorCode` parameter for the detailed error information. You can also call the `addPublishStreamUrl` method to publish the RTMP streaming again.
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(4)
   Failure,
@@ -1671,7 +1671,7 @@ enum StreamFallbackOptions {
   @JsonValue(0)
   Disabled,
 
-  /// Under unreliable downlink network conditions, the remote video stream falls back to the low-stream (low resolution and low bitrate) video. You can only set this option in the setRemoteSubscribeFallbackOption method. Nothing happens when you set this in the setLocalPublishFallbackOption method.
+  /// Under unreliable downlink network conditions, the remote video stream falls back to the low-stream (low resolution and low bitrate) video. You can only set this option in the `setRemoteSubscribeFallbackOption` method. Nothing happens when you set this in the `setLocalPublishFallbackOption` method.
   /// See [RtcEngine.setRemoteSubscribeFallbackOption]
   /// See [RtcEngine.setLocalPublishFallbackOption]
   @JsonValue(1)
@@ -1693,7 +1693,7 @@ enum UserOfflineReason {
   @JsonValue(1)
   Dropped,
 
-  /// (Live broadcast only.) The client role switched from the host to the audience.
+  /// (LiveBroadcasting only) The client role switched from the host to the audience.
   @JsonValue(2)
   BecomeAudience,
 }
@@ -1710,9 +1710,9 @@ enum UserPriority {
   Normal,
 }
 
-/// Video buffer type
+/// (iOS only) Video buffer type.
 /// @enum {number}
-/// TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
+/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoBufferType {
   /// Use a pixel buffer to transmit the video data.
   @JsonValue(1)
@@ -1739,9 +1739,9 @@ enum VideoCodecProfileType {
   High,
 }
 
-/// The content hint for screen sharing.
+/// (iOS only) The content hint for screen sharing.
 /// @enum {number}
-/// TODO MacOS setScreenCaptureContentHint
+/// TODO @nodoc MacOS setScreenCaptureContentHint
 enum VideoContentHint {
   /// (Default) No content hint.
   @JsonValue(0)
@@ -1756,7 +1756,7 @@ enum VideoContentHint {
   Details,
 }
 
-/// Video frame rate
+/// Video frame rate.
 /// @enum {number}
 enum VideoFrameRate {
   /// Min
@@ -1795,13 +1795,13 @@ enum VideoFrameRate {
 /// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
 /// @enum {number}
 enum BitRate {
-  /// (recommended) the standard bitrate mode. In this mode, the bitrates differ between the Live-broadcast and Communication profiles:
+  /// (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
   /// - Communication profile: the video bitrate is the same as the base bitrate.
-  /// - Live-broadcast profile: the video bitrate is twice the base bitrate.
+  /// - LiveBroadcasting profile: the video bitrate is twice the base bitrate.
   @JsonValue(0)
   Standard,
 
-  /// the compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. In the Live-broadcast profile, if you choose this mode, the video frame rate may be lower than the set value.
+  /// The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. In the LiveBroadcasting profile, if you choose this mode, the video frame rate may be lower than the set value.
   @JsonValue(-1)
   Compatible,
 }
@@ -1843,19 +1843,19 @@ enum VideoOutputOrientationMode {
   FixedPortrait,
 }
 
-/// Video pixel format.
+/// (iOS only) Video pixel format.
 /// @enum {number}
-/// TODO iOS AgoraVideoSinkProtocol
+/// TODO @nodoc iOS AgoraVideoSinkProtocol
 enum VideoPixelFormat {
-  /// I420
+  /// The video pixel format is I420.
   @JsonValue(1)
   I420,
 
-  /// BGRA
+  /// The video pixel format is BGRA.
   @JsonValue(2)
   BGRA,
 
-  /// NV12
+  /// The video pixel format is NV21.
   @JsonValue(8)
   NV12,
 }
@@ -1891,21 +1891,20 @@ enum VideoRemoteState {
   Starting,
 
   /// The remote video stream is decoded and plays normally, probably due to:
-  /// See [VideoRemoteStateReason.NetworkRecovery]
-  /// See [VideoRemoteStateReason.LocalUnmuted]
-  /// See [VideoRemoteStateReason.RemoteUnmuted]
-  /// See [VideoRemoteStateReason.AudioFallbackRecovery]
+  /// - [VideoRemoteStateReason.NetworkRecovery]
+  /// - [VideoRemoteStateReason.LocalUnmuted]
+  /// - [VideoRemoteStateReason.RemoteUnmuted]
+  /// - [VideoRemoteStateReason.AudioFallbackRecovery]
   @JsonValue(2)
   Decoding,
 
   /// The remote video is frozen, probably due to:
-  /// See [VideoRemoteStateReason.NetworkCongestion]
-  /// See [VideoRemoteStateReason.AudioFallback]
+  /// - [VideoRemoteStateReason.NetworkCongestion]
+  /// - [VideoRemoteStateReason.AudioFallback]
   @JsonValue(3)
   Frozen,
 
-  /// The remote video fails to start, probably due to:
-  /// See [VideoRemoteStateReason.Internal]
+  /// The remote video fails to start, probably due to [VideoRemoteStateReason.Internal].
   @JsonValue(4)
   Failed,
 }
@@ -1975,9 +1974,9 @@ enum VideoRenderMode {
   FILL,
 }
 
-/// Video rotation.
+/// (iOS only) Video rotation.
 /// @enum {number}
-/// TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
+/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoRotation {
   /// No rotation
   @JsonValue(0)
@@ -2008,7 +2007,7 @@ enum VideoStreamType {
   Low,
 }
 
-/// Warning codes occur when the SDK encounters an error that may be recovered automatically. These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server, the SDK reports the OpenChannelTimeout(106) warning and tries to reconnect automatically.
+/// Warning codes occur when the SDK encounters an error that may be recovered automatically. These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server, the SDK reports the `OpenChannelTimeout`(106) warning and tries to reconnect automatically.
 /// See [WarningCode.OpenChannelTimeout]
 /// @enum {number}
 enum WarningCode {
@@ -2032,7 +2031,7 @@ enum WarningCode {
   @JsonValue(104)
   LookupChannelTimeout,
 
-  /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal. DEPRECATED as of v2.4.1. Use RejectedByServer(10) in the reason parameter of onConnectionStateChanged.
+  /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal. Agora recommends that you use `RejectedByServer`(10) in the reason parameter of `connectionStateChanged` instead.
   /// See [ConnectionChangedReason.RejectedByServer]
   /// See [RtcEngineEventHandler.connectionStateChanged]
   @deprecated
@@ -2051,7 +2050,7 @@ enum WarningCode {
   @JsonValue(111)
   SwitchLiveVideoTimeout,
 
-  /// A timeout occurs when setting the client role in the live broadcast profile.
+  /// A timeout occurs when setting the client role in the LiveBroadcasting profile.
   @JsonValue(118)
   SetClientRoleTimeout,
 
