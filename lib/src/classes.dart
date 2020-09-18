@@ -247,6 +247,7 @@ class TranscodingUser {
   /// The layer index of the video frame. An integer. The value range is [0,100].
   /// - 0: (Default) Bottom layer.
   /// - 100: Top layer.
+  ///
   /// **Note**: If the value is set lower than 0 or higher than 100, the [ErrorCode.InvalidArgument] error is reported.
   int zOrder;
 
@@ -256,6 +257,7 @@ class TranscodingUser {
 
   /// The audio channel ranging between 0 and 5. The default value is 0.
   /// See [AudioChannel].
+  ///
   /// **Note** Special players are needed if `audioChannel` is not set as 0.
   AudioChannel audioChannel;
 
@@ -564,16 +566,19 @@ class LiveInjectStreamConfig {
   int videoBitrate;
 
   /// Audio sample rate of the added stream to the broadcast: [AudioSampleRateType]. The default value is 44100 Hz.
+  ///
   /// **Note** We recommend you use the default value and not reset it.
   @JsonKey(includeIfNull: false)
   AudioSampleRateType audioSampleRate;
 
   /// Audio bitrate of the added stream to the broadcast. The default value is 48.
+  ///
   /// **Note** We recommend you use the default value and not reset it.
   @JsonKey(includeIfNull: false)
   int audioBitrate;
 
   /// Audio channels to add into the broadcast. The value ranges between 1 and 2. The default value is 1.
+  ///
   /// **Note** We recommend you use the default value and not reset it.
   @JsonKey(includeIfNull: false)
   AudioChannel audioChannels;
@@ -716,14 +721,17 @@ class RtcStats {
   int gatewayRtt;
 
   /// The memory usage ratio of the app (%).
+  ///
   /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
   double memoryAppUsageRatio;
 
   /// The memory usage ratio of the system (%).
+  ///
   /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
   double memoryTotalUsageRatio;
 
   /// The memory usage of the app (KB).
+  ///
   /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
   int memoryAppUsageInKbytes;
 
@@ -751,6 +759,7 @@ class AudioVolumeInfo {
   /// Voice activity status of the local user.
   /// - 0: The local user is not speaking.
   /// - 1: The local user is speaking.
+  ///
   ///
   /// **Note**
   /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.

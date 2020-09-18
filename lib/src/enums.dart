@@ -207,8 +207,8 @@ enum AudioOutputRouting {
 /// @enum {number}
 enum AudioProfile {
   /// Default audio profile.
-  /// - In the Communication profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-  /// - In the LiveBroadcasting profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
+  /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
   @JsonValue(0)
   Default,
 
@@ -858,7 +858,7 @@ enum ConnectionStateType {
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// See [ConnectionStateType.Connected]
   /// - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the `joinChannelSuccess` callback.
-  /// See [RtcEngineEvents.joinChannelSuccess]
+  /// See [RtcEngineEventHandler.joinChannelSuccess]
   @JsonValue(2)
   Connecting,
 
