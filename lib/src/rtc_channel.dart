@@ -101,6 +101,7 @@ class RtcChannel
   }
 
   /// Joins the channel with a user ID.
+  ///
   /// **Note**
   /// - If you are already in a channel, you cannot rejoin it with the same uid.
   /// - We recommend using different UIDs for different channels.
@@ -123,6 +124,7 @@ class RtcChannel
   }
 
   /// Joins a channel with the user account.
+  ///
   /// **Note**
   /// - If you are already in a channel, you cannot rejoin it with the same uid.
   /// - We recommend using different user accounts for different channels.
@@ -357,6 +359,7 @@ class RtcChannel
 mixin RtcAudioInterface {
   /// Adjusts the playback volume of a specified remote user.
   /// You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
+  ///
   /// **Note**
   /// - Call this method after joining a channel.
   /// - The playback volume here refers to the mixed volume of a specified remote user.
@@ -412,6 +415,7 @@ mixin RtcVideoInterface {
 mixin RtcVoicePositionInterface {
   /// Sets the sound position of a remote user.
   /// When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
+  ///
   /// **Note**
   /// - For this method to work, enable stereo panning for remote users by calling the [RtcEngine.enableSoundPositionIndication] method before joining a channel.
   /// - This method requires hardware support. For the best sound positioning, we recommend using a stereo headset.
@@ -427,6 +431,7 @@ mixin RtcVoicePositionInterface {
 mixin RtcPublishStreamInterface {
   /// Sets the video layout and audio settings for CDN live.
   /// The SDK triggers the [RtcChannelEventHandler.transcodingUpdated] callback when you call this method to update the [LiveTranscoding] class. If you call this method to set the [LiveTranscoding] class for the first time, the SDK does not trigger the [RtcChannelEventHandler.transcodingUpdated] callback.
+  ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - Ensure that the user joins a channel before calling this method.
@@ -437,6 +442,7 @@ mixin RtcPublishStreamInterface {
 
   /// Publishes the local stream to the CDN.
   /// This method call triggers the [RtcChannelEventHandler.rtmpStreamingStateChanged] callback on the local client to report the state of adding a local stream to the CDN.
+  ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - Ensure that the user joins a channel before calling this method.
@@ -450,6 +456,7 @@ mixin RtcPublishStreamInterface {
 
   /// Removes an RTMP stream from the CDN.
   /// This method removes the RTMP URL address (added by [RtcChannel.addPublishStreamUrl]) from a CDN live stream. The SDK reports the result of this method call in the [RtcChannelEventHandler.rtmpStreamingStateChanged] callback.
+  ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
@@ -464,6 +471,7 @@ mixin RtcMediaRelayInterface {
   /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback reports [ChannelMediaRelayState.Running](2) and [ChannelMediaRelayError.None](0), and the [RtcChannelEventHandler.channelMediaRelayEvent] callback reports [ChannelMediaRelayEvent.SentToDestinationChannel](4), the SDK starts relaying media streams between the original and the destination channel.
   /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback returns Failure(3), an exception occurs during the media stream relay.
   /// See [ChannelMediaRelayState.Failure]
+  ///
   /// **Note**
   /// - Call this method after joining the channel.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
@@ -475,6 +483,7 @@ mixin RtcMediaRelayInterface {
   /// Updates the channels for media relay.
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.
   /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel](7) state code.
+  ///
   /// **Note**
   /// - Call this method after the startChannelMediaRelay method to update the destination channel.
   /// See [RtcChannel.startChannelMediaRelay]
@@ -487,6 +496,7 @@ mixin RtcMediaRelayInterface {
   /// Stops the media stream relay.
   /// Once the relay stops, the broadcaster quits all the destination channels.
   /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback. If the callback reports [ChannelMediaRelayState.Idle](0) and [ChannelMediaRelayError.None](0), the broadcaster successfully stops the relay.
+  ///
   /// **Note**
   /// - If the method call fails, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse](2) or [ChannelMediaRelayError.ServerConnectionLost](8) state code. You can leave the channel using [RtcChannel.leaveChannel], and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
@@ -510,6 +520,7 @@ mixin RtcDualStreamInterface {
 mixin RtcFallbackInterface {
   /// Sets the priority of a remote user's media stream.
   /// Use this method with the [RtcEngine.setRemoteSubscribeFallbackOption] method. If a remote video stream experiences the fallback, the SDK ensures the high-priority user gets the best possible stream quality.
+  ///
   /// **Note**
   /// - The Agora SDK supports setting `userPriority` as `High` for one user only.
   /// Param [uid] The ID of the remote user.
@@ -521,6 +532,7 @@ mixin RtcMediaMetadataInterface {
   /// Registers the metadata observer.
   /// A successful call of this method triggers the [RtcChannel.setMaxMetadataSize] callback.
   /// This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
+  ///
   /// **Note**
   /// - Call this method before the [RtcChannel.joinChannel] method.
   /// - This method applies to the [ChannelProfile.LiveBroadcasting] profile only.
@@ -541,6 +553,7 @@ mixin RtcMediaMetadataInterface {
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
+  ///
   /// **Note**
   /// - For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
   /// - Do not use this method for CDN live streaming.
@@ -550,6 +563,7 @@ mixin RtcEncryptionInterface {
   /// Sets the built-in encryption mode.
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
+  ///
   /// **Note**
   /// - Do not use this method for CDN streaming.
   /// - Before calling this method, ensure that you have called [RtcEngine.setEncryptionSecret] to enable encryption.
@@ -560,6 +574,7 @@ mixin RtcEncryptionInterface {
 mixin RtcInjectStreamInterface {
   /// Injects an online media stream to a [ChannelProfile.LiveBroadcasting] channel.
   /// If this method call succeeds, the server pulls the voice or video stream and injects it into a live channel. This applies to scenarios where all audience members in the channel can watch a live show and interact with each other.
+  ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
@@ -585,6 +600,7 @@ mixin RtcInjectStreamInterface {
 mixin RtcStreamMessageInterface {
   /// Creates a data stream.
   /// Each user can create up to five data streams during the life cycle of the [RtcChannel] instance.
+  ///
   /// **Note**
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
   /// Param [reliable] Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds.
