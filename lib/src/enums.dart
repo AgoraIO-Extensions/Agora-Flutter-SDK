@@ -3,22 +3,22 @@ import 'package:json_annotation/json_annotation.dart';
 import 'events.dart';
 import 'rtc_engine.dart';
 
-/// IP 区域。
-/// @enum {number} // TODO 该 tag 是否生效？
+/// The area of connection.
+
 enum IPAreaCode {
-  /// 中国大陆。
+  /// Mainland China
   @JsonValue(1 << 0)
   AREA_CN,
 
-  /// 北美区域。
+  /// North America
   @JsonValue(1 << 1)
   AREA_NA,
 
-  ///  欧洲区域。
+  /// Europe
   @JsonValue(1 << 2)
   AREA_EUR,
 
-  /// 除中国大陆以外的亚洲区域。
+  /// Asia, excluding Mainland China
   @JsonValue(1 << 3)
   AREA_AS,
 
@@ -27,391 +27,388 @@ enum IPAreaCode {
   AREA_GLOBAL,
 }
 
-/// 用于旁路直播的输出音频的编码规格。
-/// @enum {number}
+/// Self-defined audio codec profile.
+
 enum AudioCodecProfileType {
-  /// (默认) LCAAC 规格，表示基本音频编码规格。 // TODO 英文将 LC-AAC 改成 LCAAC。
+  /// (Default) LC-AAC, which is the low-complexity audio codec profile.
   @JsonValue(0)
   LCAAC,
 
-  /// HEAAC 规格，表示高效音频编码规格。
+  /// HE-AAC, which is the high-efficiency audio codec profile.
   @JsonValue(1)
   HEAAC,
 }
 
-/// 语音音效均衡波段的中心频率。
-/// @enum {number}
+/// Audio equalization band frequency.
+
 enum AudioEqualizationBandFrequency {
-  /// 31 Hz。
+  /// 31 Hz.
   @JsonValue(0)
   Band31,
 
-  /// 62 Hz。
+  /// 62 Hz.
   @JsonValue(1)
   Band62,
 
-  /// 125 Hz。
+  /// 125 Hz.
   @JsonValue(2)
   Band125,
 
-  /// 250 Hz。
+  /// 250 Hz.
   @JsonValue(3)
   Band250,
 
-  /// 500 Hz。
+  /// 500 Hz.
   @JsonValue(4)
   Band500,
 
-  /// 1 kHz。
+  /// 1 kHz.
   @JsonValue(5)
   Band1K,
 
-  /// 2 kHz。
+  /// 2 kHz.
   @JsonValue(6)
   Band2K,
 
-  /// 4 kHz。
+  /// 4 kHz.
   @JsonValue(7)
   Band4K,
 
-  /// 8 kHz。
+  /// 8 kHz.
   @JsonValue(8)
   Band8K,
 
-  /// 16 kHz。
+  /// 16 kHz.
   @JsonValue(9)
   Band16K,
 }
 
-/// 本地音频出错原因。
-/// @enum {number}
+/// The error information of the local audio.
+
 enum AudioLocalError {
-  /// 本地音频状态正常。
+  /// The local audio is normal.
   @JsonValue(0)
   Ok,
 
-  /// 本地音频出错原因不明确。
+  /// No specified reason for the local audio failure.
   @JsonValue(1)
   Failure,
 
-  /// 没有权限启动本地音频录制设备。
+  /// No permission to use the local audio device.
   @JsonValue(2)
   DeviceNoPermission,
 
-  /// 本地音频录制设备已经在使用中。
+  /// The microphone is in use.
   @JsonValue(3)
   DeviceBusy,
 
-  /// 本地音频录制失败，建议你检查录制设备是否正常工作。
+  /// The local audio recording fails. Check whether the recording device is working properly.
   @JsonValue(4)
   RecordFailure,
 
-  /// 本地音频编码失败。
+  /// The local audio encoding fails.
   @JsonValue(5)
   EncodeFailure,
 }
 
-/// 本地音频状态。
-/// @enum {number}
+/// The state of the local audio.
+
 enum AudioLocalState {
-  /// 本地音频默认初始状态。
+  /// The local audio is in the initial state.
   @JsonValue(0)
   Stopped,
 
-  /// 本地音频录制设备启动成功。
+  /// The recording device starts successfully.
   @JsonValue(1)
   Recording,
 
-  /// 本地音频首帧编码成功。
+  /// The first audio frame encodes successfully.
   @JsonValue(2)
   Encoding,
 
-  /// 本地音频启动失败。
+  /// The local audio fails to start.
   @JsonValue(3)
   Failed,
 }
 
-/// 混音音乐文件错误码。
-/// @enum {number}
+/// The error code of the audio mixing file.
+
 enum AudioMixingErrorCode {
-  /// 音乐文件打开出错。
+  /// The SDK cannot open the audio mixing file.
   @JsonValue(701)
   CanNotOpen,
 
-  /// 音乐文件打开太频繁。
+  /// The SDK opens the audio mixing file too frequently.
   @JsonValue(702)
   TooFrequentCall,
 
-  /// 音乐文件播放异常中断。
+  /// The opening of the audio mixing file is interrupted.
   @JsonValue(703)
   InterruptedEOF,
 
-  /// 无错误。
+  /// No error.
   @JsonValue(0)
   OK,
 }
 
-/// 混音音乐文件状态。
-/// @enum {number}
+/// The state of the audio mixing file.
+
 enum AudioMixingStateCode {
-  /// 音乐文件正常播放。
+  /// The audio mixing file is playing.
   @JsonValue(710)
   Playing,
 
-  /// 音乐文件暂停播放。
+  /// The audio mixing file pauses playing.
   @JsonValue(711)
   Paused,
 
-  /// 音乐文件停止播放。
+  /// The audio mixing file stops playing.
   @JsonValue(713)
   Stopped,
 
-  /// 音乐文件报错。
+  /// An exception occurs when playing the audio mixing file.
   @JsonValue(714)
   Failed,
 }
 
-/// 语音路由。
-/// @enum {number}
+/// Audio output routing.
+
 enum AudioOutputRouting {
-  /// 使用默认的音频路由。
+  /// Default.
   @JsonValue(-1)
   Default,
 
-  /// 使用耳机为语音路由。
+  /// Headset.
   @JsonValue(0)
   Headset,
 
-  /// 使用听筒为语音路由。
+  /// Earpiece.
   @JsonValue(1)
   Earpiece,
 
-  /// 使用不带麦的耳机为语音路由。
+  /// Headset with no microphone.
   @JsonValue(2)
   HeadsetNoMic,
 
-  /// 使用手机的扬声器为语音路由。
+  /// Speakerphone.
   @JsonValue(3)
   Speakerphone,
 
-  /// 使用外接的扬声器为语音路由。
+  /// Loudspeaker.
   @JsonValue(4)
   Loudspeaker,
 
-  /// 使用蓝牙耳机为语音路由。
+  /// Bluetooth headset.
   @JsonValue(5)
   HeadsetBluetooth,
 }
 
-/// 音频属性。
-/// @enum {number}
+/// Audio profile.
+
 enum AudioProfile {
-  ///默认设置。
-  /// - 通信场景下，该选项代表指定 32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
-  /// - 直播场景下，该选项代表指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 52 Kbps。
+  /// Default audio profile.
+  /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
   @JsonValue(0)
   Default,
 
-  /// 指定 32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
+  /// A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
   @JsonValue(1)
   SpeechStandard,
 
-  /// 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 64 Kbps。
+  /// A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 48 Kbps.
   @JsonValue(2)
   MusicStandard,
 
-  /// 指定 48 kHz采样率，音乐编码，双声道，编码码率最大值为 56 Kbps。
+  /// A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 56 Kbps.
   @JsonValue(3)
   MusicStandardStereo,
 
-  /// 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 128 Kbps。
+  /// A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 128 Kbps.
   @JsonValue(4)
   MusicHighQuality,
 
-  /// 指定 48 kHz 采样率，音乐编码，双声道，编码码率最大值为 192 Kbps。
+  /// A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
   @JsonValue(5)
   MusicHighQualityStereo,
 }
 
-/// `onRecordAudioFrame` 的使用模式。// TODO 将 on 去掉？
-/// @enum {number}
-/// TODO @nodoc setPlaybackAudioFrameParameters // TODO 这个枚举是用不到吗？
+/// Use mode of the onRecordAudioFrame callback.
+
+/// TODO @nodoc setPlaybackAudioFrameParameters
 enum AudioRawFrameOperationMode {
-  /// 只读模式，用户仅从 AudioFrame 获取原始音频数据，不作任何修改。
-  /// 例如，如果用户通过 Agora SDK 采集数据，自己进行 RTMP 推流，则可以选择该模式。
+  /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
   @JsonValue(0)
   ReadOnly,
 
-  /// 只写模式，用户替换 AudioFrame 中的数据。例如，如果用户自行采集数据，可选择该模式。
+  /// Users replace the Agora Audio Frame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
   @JsonValue(1)
   WriteOnly,
 
-  /// 读写模式，用户从 AudioFrame 获取数据、修改。
-  /// 例如，如果用户自己有音效处理模块，且想要根据实际需要对数据进行后处理 (例如变声)，则可以选择该模式。
+  /// Users read the data from Agora Audio Frame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
   @JsonValue(2)
   ReadWrite,
 }
 
-/// 录音质量。
+/// Audio recording quality.
 enum AudioRecordingQuality {
-  /// 低音质。采样率为 32 kHz，录制 10 分钟的文件大小为 1.2 M 左右。
+  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
   @JsonValue(0)
   Low,
 
-  /// 中音质。采样率为 32 kHz，录制 10 分钟的文件大小为 2 M 左右。
+  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
   @JsonValue(1)
   Medium,
 
-  /// 高音质。采样率为 32 kHz，录制 10 分钟的文件大小为 3.75 M 左右。
+  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
   @JsonValue(2)
   High,
 }
 
-/// 远端音频流状态。
-/// @enum {number}
+/// The state of the remote audio.
+
 enum AudioRemoteState {
-  /// 远端音频流默认初始状态。在以下情况下，会报告该状态：
+  /// The remote audio is in the default state, probably due to:
   /// - [AudioRemoteStateReason.LocalMuted]
   /// - [AudioRemoteStateReason.RemoteMuted]
   /// - [AudioRemoteStateReason.RemoteOffline]
   @JsonValue(0)
   Stopped,
 
-  /// 本地用户已接收远端音频首包。
+  /// The first remote audio packet is received.
   @JsonValue(1)
   Starting,
 
-  /// 远端音频流正在解码，正常播放。在以下情况下，会报告该状态：
+  /// The remote audio stream is decoded and plays normally, probably due to:
   /// - [AudioRemoteStateReason.NetworkRecovery]
   /// - [AudioRemoteStateReason.LocalUnmuted]
   /// - [AudioRemoteStateReason.RemoteUnmuted]
   @JsonValue(2)
   Decoding,
 
-  /// 远端音频流卡顿。在以下情况下，会报告该状态：
+  /// The remote audio is frozen, probably due to:
   /// - [AudioRemoteStateReason.NetworkCongestion]
   @JsonValue(3)
   Frozen,
 
-  /// 远端音频流播放失败。在以下情况下，会报告该状态：
+  /// The remote audio fails to start, probably due to:
   /// - [AudioRemoteStateReason.Internal]
   @JsonValue(4)
   Failed,
 }
 
-/// 远端音频流状态改变的原因。
-/// @enum {number}
+/// The reason of the remote audio state change.
+
 enum AudioRemoteStateReason {
-  /// 内部原因。
+  /// Internal reasons.
   @JsonValue(0)
   Internal,
 
-  /// 网络阻塞。
+  /// Network congestion.
   @JsonValue(1)
   NetworkCongestion,
 
-  /// 网络恢复正常。
+  /// Network recovery.
   @JsonValue(2)
   NetworkRecovery,
 
-  /// 本地用户停止接收远端音频流或本地用户禁用音频模块。
+  /// The local user stops receiving the remote audio stream or disables the audio module.
   @JsonValue(3)
   LocalMuted,
 
-  /// 本地用户恢复接收远端音频流或本地用户启用音频模块。
+  /// The local user resumes receiving the remote audio stream or enables the audio module.
   @JsonValue(4)
   LocalUnmuted,
 
-  /// 远端用户停止发送音频流或远端用户禁用音频模块。
+  /// The remote user stops sending the audio stream or disables the audio module.
   @JsonValue(5)
   RemoteMuted,
 
-  /// 远端用户恢复发送音频流或远端用户启用音频模块。
+  /// The remote user resumes sending the audio stream or enables the audio module.
   @JsonValue(6)
   RemoteUnmuted,
 
-  /// 远端用户离开频道。
+  /// The remote user leaves the channel.
   @JsonValue(7)
   RemoteOffline,
 }
 
-/// 预设的本地语音混响效果选项。
-/// @enum {number}
+/// The preset local voice reverberation option.
+
 enum AudioReverbPreset {
-  /// 原声，即关闭本地语音混响。
+  /// Turn off local voice reverberation, that is, to use the original voice.
   @JsonValue(0x00000000)
   Off,
 
-  /// 流行。
+  /// The reverberation style typical of popular music (enhanced).
   @JsonValue(0x00000001)
   Popular,
 
-  /// R&B。
+  /// The reverberation style typical of R&B music (enhanced).
   @JsonValue(0x00000002)
   RnB,
 
-  /// 摇滚。
+  /// The reverberation style typical of rock music.
   @JsonValue(0x00000003)
   Rock,
 
-  /// 嘻哈。
+  /// The reverberation style typical of hip-hop music.
   @JsonValue(0x00000004)
   HipHop,
 
-  /// 演唱会。
+  /// The reverberation style typical of a concert hall.
   @JsonValue(0x00000005)
   VocalConcert,
 
-  /// KTV。// 检查英文里的 enhanced 是否应该去掉？
+  /// The reverberation style typical of a KTV venue (enhanced).
   @JsonValue(0x00000006)
   KTV,
 
-  /// 录音棚。
+  /// The reverberation style typical of a recording studio (enhanced).
   @JsonValue(0x00000007)
   Studio,
 
-  /// KTV（增强版）。
+  /// The reverberation style typical of a KTV venue (enhanced).
   @JsonValue(0x00100001)
   FX_KTV,
 
-  /// 演唱会（增强版）。
+  /// The reverberation style typical of a concert hall (enhanced).
   @JsonValue(0x00100002)
   FX_VOCAL_CONCERT,
 
-  /// 大叔。
+  /// The reverberation style typical of an uncle’s voice.
   @JsonValue(0x00100003)
   FX_UNCLE,
 
-  /// 小姐姐。
+  /// The reverberation style typical of a sister’s voice.
   @JsonValue(0x00100004)
   FX_SISTER,
 
-  /// 录音棚（增强版）。
+  /// The reverberation style typical of a recording studio (enhanced).
   @JsonValue(0x00100005)
   FX_STUDIO,
 
-  /// 流行（增强版）。
+  /// The reverberation style typical of popular music (enhanced).
   @JsonValue(0x00100006)
   FX_POPULAR,
 
-  /// R&B（增强版）。
+  /// The reverberation style typical of R&B music (enhanced).
   @JsonValue(0x00100007)
   FX_RNB,
 
-  /// 留声机。
+  /// The reverberation style typical of the vintage phonograph.
   @JsonValue(0x00100008)
   FX_PHONOGRAPH,
 
-  /// 虚拟立体声。虚拟立体声是指将单声道的音轨渲染出立体声的效果，使频道内所有用户听到有空间感的声音效果。为达到更好的虚拟立体声效果，
-  /// Agora 推荐在调用该方法前将 `setAudioProfile` 的 `profile` 参数设置为 `MusicHighQualityStereo`(5)。
-  /// 详见 [RtcEngine.setAudioProfile]。
-  /// 详见 [AudioProfile.MusicHighQualityStereo]。
+  /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the `profile` parameter in `setAudioProfile` as `MusicHighQualityStereo`(5).
+  /// See [RtcEngine.setAudioProfile]
+  /// See [AudioProfile.MusicHighQualityStereo]
   @JsonValue(0x00200001)
   VIRTUAL_STEREO,
 }
 
 /// Audio reverberation type.
-/// @enum {number}
+
 enum AudioReverbType {
   /// Level of the dry signal (-20 to 10 dB).
   @JsonValue(0)
@@ -435,7 +432,7 @@ enum AudioReverbType {
 }
 
 /// Audio sample rate.
-/// @enum {number}
+
 enum AudioSampleRateType {
   /// 32 kHz.
   @JsonValue(32000)
@@ -451,7 +448,7 @@ enum AudioSampleRateType {
 }
 
 /// Audio scenario.
-/// @enum {number}
+
 enum AudioScenario {
   /// Default audio application scenario.
   @JsonValue(0)
@@ -479,7 +476,7 @@ enum AudioScenario {
 }
 
 /// (iOS only) Audio session restriction.
-/// @enum {number}
+
 /// TODO @nodoc iOS setAudioSessionOperationRestriction
 enum AudioSessionOperationRestriction {
   /// No restriction, the SDK has full control of the audio session operations.
@@ -504,7 +501,7 @@ enum AudioSessionOperationRestriction {
 }
 
 /// The preset audio voice configuration used to change the voice effect.
-/// @enum {number}
+
 enum AudioVoiceChanger {
   /// Turn off the local voice changer, that is, to use the original voice.
   @JsonValue(0x00000000)
@@ -584,7 +581,7 @@ enum AudioVoiceChanger {
 }
 
 /// The camera capturer configuration.
-/// @enum {number}
+
 enum CameraCaptureOutputPreference {
   /// (default) Self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
   @JsonValue(0)
@@ -605,7 +602,7 @@ enum CameraCaptureOutputPreference {
 }
 
 /// The camera direction.
-/// @enum {number}
+
 enum CameraDirection {
   /// The rear camera.
   @JsonValue(0)
@@ -617,7 +614,7 @@ enum CameraDirection {
 }
 
 /// The error code in AgoraChannelMediaRelayError.
-/// @enum {number}
+
 enum ChannelMediaRelayError {
   /// The state is normal.
   @JsonValue(0)
@@ -671,7 +668,7 @@ enum ChannelMediaRelayError {
 }
 
 /// The event code in AgoraChannelMediaRelayEvent.
-/// @enum {number}
+
 enum ChannelMediaRelayEvent {
   /// The user disconnects from the server due to poor network connections.
   @JsonValue(0)
@@ -723,7 +720,7 @@ enum ChannelMediaRelayEvent {
 }
 
 /// The state code in AgoraChannelMediaRelayState.
-/// @enum {number}
+
 enum ChannelMediaRelayState {
   /// The SDK is initializing.
   @JsonValue(0)
@@ -743,7 +740,7 @@ enum ChannelMediaRelayState {
 }
 
 /// Channel profile.
-/// @enum {number}
+
 enum ChannelProfile {
   /// (Default) The Communication profile.
   /// Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -762,7 +759,7 @@ enum ChannelProfile {
 }
 
 /// Client role in a live broadcast.
-/// @enum {number}
+
 enum ClientRole {
   /// A broadcaster can both send and receive streams.
   @JsonValue(1)
@@ -774,7 +771,7 @@ enum ClientRole {
 }
 
 /// Reasons for the connection state change.
-/// @enum {number}
+
 enum ConnectionChangedReason {
   /// The SDK is connecting to Agora’s edge server.
   @JsonValue(0)
@@ -842,7 +839,7 @@ enum ConnectionChangedReason {
 }
 
 /// Connection states.
-/// @enum {number}
+
 enum ConnectionStateType {
   /// The SDK is disconnected from Agora's edge server.
   /// - This is the initial state before `joinChannel`.
@@ -893,7 +890,7 @@ enum ConnectionStateType {
 }
 
 /// The video encoding degradation preference under limited bandwidth.
-/// @enum {number}
+
 enum DegradationPreference {
   /// (Default) Degrades the frame rate to guarantee the video quality.
   @JsonValue(0)
@@ -925,7 +922,7 @@ enum EncryptionMode {
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
-/// @enum {number}
+
 enum ErrorCode {
   /// No error occurs.
   @JsonValue(0)
@@ -1270,7 +1267,7 @@ enum ErrorCode {
 }
 
 /// State of importing an external video stream in a live broadcast.
-/// @enum {number}
+
 enum InjectStreamStatus {
   /// The external video stream imported successfully.
   @JsonValue(0)
@@ -1318,7 +1315,7 @@ enum InjectStreamStatus {
 }
 
 /// The state of the probe test result.
-/// @enum {number}
+
 enum LastmileProbeResultState {
   /// The last-mile network probe test is complete.
   @JsonValue(1)
@@ -1334,7 +1331,7 @@ enum LastmileProbeResultState {
 }
 
 /// The lightening contrast level.
-/// @enum {number}
+
 enum LighteningContrastLevel {
   /// Low contrast level.
   @JsonValue(0)
@@ -1350,7 +1347,7 @@ enum LighteningContrastLevel {
 }
 
 /// The detailed error information of the local video.
-/// @enum {number}
+
 enum LocalVideoStreamError {
   /// The local video is normal.
   @JsonValue(0)
@@ -1378,7 +1375,7 @@ enum LocalVideoStreamError {
 }
 
 /// The state of the local video stream.
-/// @enum {number}
+
 enum LocalVideoStreamState {
   /// The local video is in the initial state.
   @JsonValue(0)
@@ -1398,7 +1395,7 @@ enum LocalVideoStreamState {
 }
 
 /// Output log filter level.
-/// @enum {number}
+
 enum LogFilter {
   /// Do not output any log information.
   @JsonValue(0)
@@ -1426,7 +1423,7 @@ enum LogFilter {
 }
 
 /// (iOS only) Media device type.
-/// @enum {number}
+
 /// TODO @nodoc MacOS AgoraMediaDeviceType
 enum MediaDeviceType {
   /// Unknown device.
@@ -1451,7 +1448,7 @@ enum MediaDeviceType {
 }
 
 /// Media type.
-/// @enum {number}
+
 /// TODO @nodoc LiveEngine
 enum MediaType {
   /// No audio and video.
@@ -1472,7 +1469,7 @@ enum MediaType {
 }
 
 /// (Android only) The metadata type.
-/// @enum {number}
+
 /// TODO @nodoc registerMediaMetadataObserver
 enum MetadataType {
   /// The metadata type is unknown.
@@ -1485,7 +1482,7 @@ enum MetadataType {
 }
 
 /// Network quality.
-/// @enum {number}
+
 enum NetworkQuality {
   /// The network quality is unknown.
   @JsonValue(0)
@@ -1525,7 +1522,7 @@ enum NetworkQuality {
 }
 
 /// Network type.
-/// @enum {number}
+
 enum NetworkType {
   /// The network type is unknown.
   @JsonValue(-1)
@@ -1557,7 +1554,7 @@ enum NetworkType {
 }
 
 /// (Android only) Default camera position
-/// @enum {number}
+
 /// TODO @nodoc AgoraRtcDefaultCamera
 enum RtcDefaultCameraPosition {
   /// Front camera
@@ -1570,7 +1567,7 @@ enum RtcDefaultCameraPosition {
 }
 
 /// Lifecycle of the CDN live video stream.
-/// @enum {number}
+
 /// TODO @nodoc AgoraPublisherConfiguration
 enum RtmpStreamLifeCycle {
   /// Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
@@ -1583,7 +1580,7 @@ enum RtmpStreamLifeCycle {
 }
 
 /// The detailed error information for streaming.
-/// @enum {number}
+
 enum RtmpStreamingErrorCode {
   /// The RTMP streaming publishes successfully.
   @JsonValue(0)
@@ -1635,7 +1632,7 @@ enum RtmpStreamingErrorCode {
 }
 
 /// The RTMP streaming state.
-/// @enum {number}
+
 enum RtmpStreamingState {
   /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling `removePublishStreamUrl`.
   /// See [RtcEngine.removePublishStreamUrl]
@@ -1668,7 +1665,7 @@ enum RtmpStreamingState {
 }
 
 /// Stream fallback option.
-/// @enum {number}
+
 enum StreamFallbackOptions {
   /// No fallback behavior for the local/remote video stream when the uplink/downlink network condition is unreliable. The quality of the stream is not guaranteed.
   @JsonValue(0)
@@ -1686,7 +1683,7 @@ enum StreamFallbackOptions {
 }
 
 /// Reason for the user being offline.
-/// @enum {number}
+
 enum UserOfflineReason {
   /// The user left the current channel.
   @JsonValue(0)
@@ -1702,7 +1699,7 @@ enum UserOfflineReason {
 }
 
 /// The priority of the remote user.
-/// @enum {number}
+
 enum UserPriority {
   /// The user’s priority is high.
   @JsonValue(50)
@@ -1714,7 +1711,7 @@ enum UserPriority {
 }
 
 /// (iOS only) Video buffer type.
-/// @enum {number}
+
 /// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoBufferType {
   /// Use a pixel buffer to transmit the video data.
@@ -1727,7 +1724,7 @@ enum VideoBufferType {
 }
 
 /// Self-defined video codec profile.
-/// @enum {number}
+
 enum VideoCodecProfileType {
   /// Baseline video codec profile. Generally used in video calls on mobile phones.
   @JsonValue(66)
@@ -1743,7 +1740,7 @@ enum VideoCodecProfileType {
 }
 
 /// (iOS only) The content hint for screen sharing.
-/// @enum {number}
+
 /// TODO @nodoc MacOS setScreenCaptureContentHint
 enum VideoContentHint {
   /// (Default) No content hint.
@@ -1760,7 +1757,7 @@ enum VideoContentHint {
 }
 
 /// Video frame rate.
-/// @enum {number}
+
 enum VideoFrameRate {
   /// Min
   @JsonValue(-1)
@@ -1796,7 +1793,7 @@ enum VideoFrameRate {
 }
 
 /// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
-/// @enum {number}
+
 enum BitRate {
   /// (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
   /// - Communication profile: the video bitrate is the same as the base bitrate.
@@ -1810,7 +1807,7 @@ enum BitRate {
 }
 
 /// Video mirror mode.
-/// @enum {number}
+
 enum VideoMirrorMode {
   /// (Default) The SDK determines the mirror mode.
   @JsonValue(0)
@@ -1826,7 +1823,7 @@ enum VideoMirrorMode {
 }
 
 /// Video output orientation mode.
-/// @enum {number}
+
 enum VideoOutputOrientationMode {
   /// Adaptive mode (Default).
   /// The video encoder adapts to the orientation mode of the video input device. When you use a custom video source, the output video from the encoder inherits the orientation of the original video.
@@ -1847,7 +1844,7 @@ enum VideoOutputOrientationMode {
 }
 
 /// (iOS only) Video pixel format.
-/// @enum {number}
+
 /// TODO @nodoc iOS AgoraVideoSinkProtocol
 enum VideoPixelFormat {
   /// The video pixel format is I420.
@@ -1864,7 +1861,7 @@ enum VideoPixelFormat {
 }
 
 /// Quality change of the local video in terms of target frame rate and target bit rate since last count.
-/// @enum {number}
+
 enum VideoQualityAdaptIndication {
   /// The quality of the local video stays the same.
   @JsonValue(0)
@@ -1880,7 +1877,7 @@ enum VideoQualityAdaptIndication {
 }
 
 /// The state of the remote video.
-/// @enum {number}
+
 enum VideoRemoteState {
   /// The remote video is in the default state, probably due to:
   /// See [VideoRemoteStateReason.LocalMuted]
@@ -1913,7 +1910,7 @@ enum VideoRemoteState {
 }
 
 /// The reason of the remote video state change.
-/// @enum {number}
+
 enum VideoRemoteStateReason {
   /// Internal reasons.
   @JsonValue(0)
@@ -1957,7 +1954,7 @@ enum VideoRemoteStateReason {
 }
 
 /// Video display mode.
-/// @enum {number}
+
 enum VideoRenderMode {
   /// Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
   @JsonValue(1)
@@ -1978,7 +1975,7 @@ enum VideoRenderMode {
 }
 
 /// (iOS only) Video rotation.
-/// @enum {number}
+
 /// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoRotation {
   /// No rotation
@@ -1999,7 +1996,7 @@ enum VideoRotation {
 }
 
 /// Video stream type.
-/// @enum {number}
+
 enum VideoStreamType {
   /// High-bitrate, high-resolution video stream.
   @JsonValue(0)
@@ -2012,7 +2009,7 @@ enum VideoStreamType {
 
 /// Warning codes occur when the SDK encounters an error that may be recovered automatically. These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server, the SDK reports the `OpenChannelTimeout`(106) warning and tries to reconnect automatically.
 /// See [WarningCode.OpenChannelTimeout]
-/// @enum {number}
+
 enum WarningCode {
   /// The specified view is invalid. Specify a view when using the video call function.
   @JsonValue(8)
@@ -2123,7 +2120,7 @@ enum WarningCode {
 }
 
 /// The audio channel of the sound.
-/// @enum {number}
+
 enum AudioChannel {
   /// (Default) Supports dual channels. Depends on the upstream of the broadcaster.
   @JsonValue(0)
@@ -2151,7 +2148,7 @@ enum AudioChannel {
 }
 
 /// Video codec types.
-/// @enum {number}
+
 enum VideoCodecType {
   /// Standard VP8.
   @JsonValue(1)
