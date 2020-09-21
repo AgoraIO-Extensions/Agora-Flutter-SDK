@@ -4,7 +4,7 @@ import 'events.dart';
 import 'rtc_engine.dart';
 
 /// The area of connection.
-/// @enum {number}
+
 enum IPAreaCode {
   /// Mainland China
   @JsonValue(1 << 0)
@@ -28,7 +28,7 @@ enum IPAreaCode {
 }
 
 /// Self-defined audio codec profile.
-/// @enum {number}
+
 enum AudioCodecProfileType {
   /// (Default) LC-AAC, which is the low-complexity audio codec profile.
   @JsonValue(0)
@@ -40,7 +40,7 @@ enum AudioCodecProfileType {
 }
 
 /// Audio equalization band frequency.
-/// @enum {number}
+
 enum AudioEqualizationBandFrequency {
   /// 31 Hz.
   @JsonValue(0)
@@ -84,7 +84,7 @@ enum AudioEqualizationBandFrequency {
 }
 
 /// The error information of the local audio.
-/// @enum {number}
+
 enum AudioLocalError {
   /// The local audio is normal.
   @JsonValue(0)
@@ -112,7 +112,7 @@ enum AudioLocalError {
 }
 
 /// The state of the local audio.
-/// @enum {number}
+
 enum AudioLocalState {
   /// The local audio is in the initial state.
   @JsonValue(0)
@@ -132,7 +132,7 @@ enum AudioLocalState {
 }
 
 /// The error code of the audio mixing file.
-/// @enum {number}
+
 enum AudioMixingErrorCode {
   /// The SDK cannot open the audio mixing file.
   @JsonValue(701)
@@ -152,7 +152,7 @@ enum AudioMixingErrorCode {
 }
 
 /// The state of the audio mixing file.
-/// @enum {number}
+
 enum AudioMixingStateCode {
   /// The audio mixing file is playing.
   @JsonValue(710)
@@ -172,7 +172,7 @@ enum AudioMixingStateCode {
 }
 
 /// Audio output routing.
-/// @enum {number}
+
 enum AudioOutputRouting {
   /// Default.
   @JsonValue(-1)
@@ -204,7 +204,7 @@ enum AudioOutputRouting {
 }
 
 /// Audio profile.
-/// @enum {number}
+
 enum AudioProfile {
   /// Default audio profile.
   /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
@@ -234,7 +234,7 @@ enum AudioProfile {
 }
 
 /// Use mode of the onRecordAudioFrame callback.
-/// @enum {number}
+
 /// TODO @nodoc setPlaybackAudioFrameParameters
 enum AudioRawFrameOperationMode {
   /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
@@ -266,7 +266,7 @@ enum AudioRecordingQuality {
 }
 
 /// The state of the remote audio.
-/// @enum {number}
+
 enum AudioRemoteState {
   /// The remote audio is in the default state, probably due to:
   /// - [AudioRemoteStateReason.LocalMuted]
@@ -298,7 +298,7 @@ enum AudioRemoteState {
 }
 
 /// The reason of the remote audio state change.
-/// @enum {number}
+
 enum AudioRemoteStateReason {
   /// Internal reasons.
   @JsonValue(0)
@@ -334,7 +334,7 @@ enum AudioRemoteStateReason {
 }
 
 /// The preset local voice reverberation option.
-/// @enum {number}
+
 enum AudioReverbPreset {
   /// Turn off local voice reverberation, that is, to use the original voice.
   @JsonValue(0x00000000)
@@ -408,7 +408,7 @@ enum AudioReverbPreset {
 }
 
 /// Audio reverberation type.
-/// @enum {number}
+
 enum AudioReverbType {
   /// Level of the dry signal (-20 to 10 dB).
   @JsonValue(0)
@@ -432,7 +432,7 @@ enum AudioReverbType {
 }
 
 /// Audio sample rate.
-/// @enum {number}
+
 enum AudioSampleRateType {
   /// 32 kHz.
   @JsonValue(32000)
@@ -448,7 +448,7 @@ enum AudioSampleRateType {
 }
 
 /// Audio scenario.
-/// @enum {number}
+
 enum AudioScenario {
   /// Default audio application scenario.
   @JsonValue(0)
@@ -476,7 +476,7 @@ enum AudioScenario {
 }
 
 /// (iOS only) Audio session restriction.
-/// @enum {number}
+
 /// TODO @nodoc iOS setAudioSessionOperationRestriction
 enum AudioSessionOperationRestriction {
   /// No restriction, the SDK has full control of the audio session operations.
@@ -501,7 +501,7 @@ enum AudioSessionOperationRestriction {
 }
 
 /// The preset audio voice configuration used to change the voice effect.
-/// @enum {number}
+
 enum AudioVoiceChanger {
   /// Turn off the local voice changer, that is, to use the original voice.
   @JsonValue(0x00000000)
@@ -581,7 +581,7 @@ enum AudioVoiceChanger {
 }
 
 /// The camera capturer configuration.
-/// @enum {number}
+
 enum CameraCaptureOutputPreference {
   /// (default) Self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
   @JsonValue(0)
@@ -602,7 +602,7 @@ enum CameraCaptureOutputPreference {
 }
 
 /// The camera direction.
-/// @enum {number}
+
 enum CameraDirection {
   /// The rear camera.
   @JsonValue(0)
@@ -614,7 +614,7 @@ enum CameraDirection {
 }
 
 /// The error code in AgoraChannelMediaRelayError.
-/// @enum {number}
+
 enum ChannelMediaRelayError {
   /// The state is normal.
   @JsonValue(0)
@@ -668,7 +668,7 @@ enum ChannelMediaRelayError {
 }
 
 /// The event code in AgoraChannelMediaRelayEvent.
-/// @enum {number}
+
 enum ChannelMediaRelayEvent {
   /// The user disconnects from the server due to poor network connections.
   @JsonValue(0)
@@ -720,7 +720,7 @@ enum ChannelMediaRelayEvent {
 }
 
 /// The state code in AgoraChannelMediaRelayState.
-/// @enum {number}
+
 enum ChannelMediaRelayState {
   /// The SDK is initializing.
   @JsonValue(0)
@@ -740,7 +740,7 @@ enum ChannelMediaRelayState {
 }
 
 /// Channel profile.
-/// @enum {number}
+
 enum ChannelProfile {
   /// (Default) The Communication profile.
   /// Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -759,7 +759,7 @@ enum ChannelProfile {
 }
 
 /// Client role in a live broadcast.
-/// @enum {number}
+
 enum ClientRole {
   /// A broadcaster can both send and receive streams.
   @JsonValue(1)
@@ -771,7 +771,7 @@ enum ClientRole {
 }
 
 /// Reasons for the connection state change.
-/// @enum {number}
+
 enum ConnectionChangedReason {
   /// The SDK is connecting to Agora’s edge server.
   @JsonValue(0)
@@ -839,7 +839,7 @@ enum ConnectionChangedReason {
 }
 
 /// Connection states.
-/// @enum {number}
+
 enum ConnectionStateType {
   /// The SDK is disconnected from Agora's edge server.
   /// - This is the initial state before `joinChannel`.
@@ -890,7 +890,7 @@ enum ConnectionStateType {
 }
 
 /// The video encoding degradation preference under limited bandwidth.
-/// @enum {number}
+
 enum DegradationPreference {
   /// (Default) Degrades the frame rate to guarantee the video quality.
   @JsonValue(0)
@@ -922,7 +922,7 @@ enum EncryptionMode {
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
-/// @enum {number}
+
 enum ErrorCode {
   /// No error occurs.
   @JsonValue(0)
@@ -1267,7 +1267,7 @@ enum ErrorCode {
 }
 
 /// State of importing an external video stream in a live broadcast.
-/// @enum {number}
+
 enum InjectStreamStatus {
   /// The external video stream imported successfully.
   @JsonValue(0)
@@ -1315,7 +1315,7 @@ enum InjectStreamStatus {
 }
 
 /// The state of the probe test result.
-/// @enum {number}
+
 enum LastmileProbeResultState {
   /// The last-mile network probe test is complete.
   @JsonValue(1)
@@ -1331,7 +1331,7 @@ enum LastmileProbeResultState {
 }
 
 /// The lightening contrast level.
-/// @enum {number}
+
 enum LighteningContrastLevel {
   /// Low contrast level.
   @JsonValue(0)
@@ -1347,7 +1347,7 @@ enum LighteningContrastLevel {
 }
 
 /// The detailed error information of the local video.
-/// @enum {number}
+
 enum LocalVideoStreamError {
   /// The local video is normal.
   @JsonValue(0)
@@ -1375,7 +1375,7 @@ enum LocalVideoStreamError {
 }
 
 /// The state of the local video stream.
-/// @enum {number}
+
 enum LocalVideoStreamState {
   /// The local video is in the initial state.
   @JsonValue(0)
@@ -1395,7 +1395,7 @@ enum LocalVideoStreamState {
 }
 
 /// Output log filter level.
-/// @enum {number}
+
 enum LogFilter {
   /// Do not output any log information.
   @JsonValue(0)
@@ -1423,7 +1423,7 @@ enum LogFilter {
 }
 
 /// (iOS only) Media device type.
-/// @enum {number}
+
 /// TODO @nodoc MacOS AgoraMediaDeviceType
 enum MediaDeviceType {
   /// Unknown device.
@@ -1448,7 +1448,7 @@ enum MediaDeviceType {
 }
 
 /// Media type.
-/// @enum {number}
+
 /// TODO @nodoc LiveEngine
 enum MediaType {
   /// No audio and video.
@@ -1469,7 +1469,7 @@ enum MediaType {
 }
 
 /// (Android only) The metadata type.
-/// @enum {number}
+
 /// TODO @nodoc registerMediaMetadataObserver
 enum MetadataType {
   /// The metadata type is unknown.
@@ -1482,7 +1482,7 @@ enum MetadataType {
 }
 
 /// Network quality.
-/// @enum {number}
+
 enum NetworkQuality {
   /// The network quality is unknown.
   @JsonValue(0)
@@ -1522,7 +1522,7 @@ enum NetworkQuality {
 }
 
 /// Network type.
-/// @enum {number}
+
 enum NetworkType {
   /// The network type is unknown.
   @JsonValue(-1)
@@ -1554,7 +1554,7 @@ enum NetworkType {
 }
 
 /// (Android only) Default camera position
-/// @enum {number}
+
 /// TODO @nodoc AgoraRtcDefaultCamera
 enum RtcDefaultCameraPosition {
   /// Front camera
@@ -1567,7 +1567,7 @@ enum RtcDefaultCameraPosition {
 }
 
 /// Lifecycle of the CDN live video stream.
-/// @enum {number}
+
 /// TODO @nodoc AgoraPublisherConfiguration
 enum RtmpStreamLifeCycle {
   /// Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
@@ -1580,7 +1580,7 @@ enum RtmpStreamLifeCycle {
 }
 
 /// The detailed error information for streaming.
-/// @enum {number}
+
 enum RtmpStreamingErrorCode {
   /// The RTMP streaming publishes successfully.
   @JsonValue(0)
@@ -1632,7 +1632,7 @@ enum RtmpStreamingErrorCode {
 }
 
 /// The RTMP streaming state.
-/// @enum {number}
+
 enum RtmpStreamingState {
   /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling `removePublishStreamUrl`.
   /// See [RtcEngine.removePublishStreamUrl]
@@ -1665,7 +1665,7 @@ enum RtmpStreamingState {
 }
 
 /// Stream fallback option.
-/// @enum {number}
+
 enum StreamFallbackOptions {
   /// No fallback behavior for the local/remote video stream when the uplink/downlink network condition is unreliable. The quality of the stream is not guaranteed.
   @JsonValue(0)
@@ -1683,7 +1683,7 @@ enum StreamFallbackOptions {
 }
 
 /// Reason for the user being offline.
-/// @enum {number}
+
 enum UserOfflineReason {
   /// The user left the current channel.
   @JsonValue(0)
@@ -1699,7 +1699,7 @@ enum UserOfflineReason {
 }
 
 /// The priority of the remote user.
-/// @enum {number}
+
 enum UserPriority {
   /// The user’s priority is high.
   @JsonValue(50)
@@ -1711,7 +1711,7 @@ enum UserPriority {
 }
 
 /// (iOS only) Video buffer type.
-/// @enum {number}
+
 /// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoBufferType {
   /// Use a pixel buffer to transmit the video data.
@@ -1724,7 +1724,7 @@ enum VideoBufferType {
 }
 
 /// Self-defined video codec profile.
-/// @enum {number}
+
 enum VideoCodecProfileType {
   /// Baseline video codec profile. Generally used in video calls on mobile phones.
   @JsonValue(66)
@@ -1740,7 +1740,7 @@ enum VideoCodecProfileType {
 }
 
 /// (iOS only) The content hint for screen sharing.
-/// @enum {number}
+
 /// TODO @nodoc MacOS setScreenCaptureContentHint
 enum VideoContentHint {
   /// (Default) No content hint.
@@ -1757,7 +1757,7 @@ enum VideoContentHint {
 }
 
 /// Video frame rate.
-/// @enum {number}
+
 enum VideoFrameRate {
   /// Min
   @JsonValue(-1)
@@ -1793,7 +1793,7 @@ enum VideoFrameRate {
 }
 
 /// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
-/// @enum {number}
+
 enum BitRate {
   /// (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
   /// - Communication profile: the video bitrate is the same as the base bitrate.
@@ -1807,7 +1807,7 @@ enum BitRate {
 }
 
 /// Video mirror mode.
-/// @enum {number}
+
 enum VideoMirrorMode {
   /// (Default) The SDK determines the mirror mode.
   @JsonValue(0)
@@ -1823,7 +1823,7 @@ enum VideoMirrorMode {
 }
 
 /// Video output orientation mode.
-/// @enum {number}
+
 enum VideoOutputOrientationMode {
   /// Adaptive mode (Default).
   /// The video encoder adapts to the orientation mode of the video input device. When you use a custom video source, the output video from the encoder inherits the orientation of the original video.
@@ -1844,7 +1844,7 @@ enum VideoOutputOrientationMode {
 }
 
 /// (iOS only) Video pixel format.
-/// @enum {number}
+
 /// TODO @nodoc iOS AgoraVideoSinkProtocol
 enum VideoPixelFormat {
   /// The video pixel format is I420.
@@ -1861,7 +1861,7 @@ enum VideoPixelFormat {
 }
 
 /// Quality change of the local video in terms of target frame rate and target bit rate since last count.
-/// @enum {number}
+
 enum VideoQualityAdaptIndication {
   /// The quality of the local video stays the same.
   @JsonValue(0)
@@ -1877,7 +1877,7 @@ enum VideoQualityAdaptIndication {
 }
 
 /// The state of the remote video.
-/// @enum {number}
+
 enum VideoRemoteState {
   /// The remote video is in the default state, probably due to:
   /// See [VideoRemoteStateReason.LocalMuted]
@@ -1910,7 +1910,7 @@ enum VideoRemoteState {
 }
 
 /// The reason of the remote video state change.
-/// @enum {number}
+
 enum VideoRemoteStateReason {
   /// Internal reasons.
   @JsonValue(0)
@@ -1954,7 +1954,7 @@ enum VideoRemoteStateReason {
 }
 
 /// Video display mode.
-/// @enum {number}
+
 enum VideoRenderMode {
   /// Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
   @JsonValue(1)
@@ -1975,7 +1975,7 @@ enum VideoRenderMode {
 }
 
 /// (iOS only) Video rotation.
-/// @enum {number}
+
 /// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoRotation {
   /// No rotation
@@ -1996,7 +1996,7 @@ enum VideoRotation {
 }
 
 /// Video stream type.
-/// @enum {number}
+
 enum VideoStreamType {
   /// High-bitrate, high-resolution video stream.
   @JsonValue(0)
@@ -2009,7 +2009,7 @@ enum VideoStreamType {
 
 /// Warning codes occur when the SDK encounters an error that may be recovered automatically. These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server, the SDK reports the `OpenChannelTimeout`(106) warning and tries to reconnect automatically.
 /// See [WarningCode.OpenChannelTimeout]
-/// @enum {number}
+
 enum WarningCode {
   /// The specified view is invalid. Specify a view when using the video call function.
   @JsonValue(8)
@@ -2120,7 +2120,7 @@ enum WarningCode {
 }
 
 /// The audio channel of the sound.
-/// @enum {number}
+
 enum AudioChannel {
   /// (Default) Supports dual channels. Depends on the upstream of the broadcaster.
   @JsonValue(0)
@@ -2148,7 +2148,7 @@ enum AudioChannel {
 }
 
 /// Video codec types.
-/// @enum {number}
+
 enum VideoCodecType {
   /// Standard VP8.
   @JsonValue(1)
