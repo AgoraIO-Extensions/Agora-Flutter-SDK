@@ -3,22 +3,22 @@ import 'package:json_annotation/json_annotation.dart';
 import 'events.dart';
 import 'rtc_engine.dart';
 
-/// The area of connection.
-/// @enum {number}
+/// IP 区域。
+/// @enum {number} // TODO 该 tag 是否生效？
 enum IPAreaCode {
-  /// Mainland China
+  /// 中国大陆。
   @JsonValue(1 << 0)
   AREA_CN,
 
-  /// North America
+  /// 北美区域。
   @JsonValue(1 << 1)
   AREA_NA,
 
-  /// Europe
+  ///  欧洲区域。
   @JsonValue(1 << 2)
   AREA_EUR,
 
-  /// Asia, excluding Mainland China
+  /// 除中国大陆以外的亚洲区域。
   @JsonValue(1 << 3)
   AREA_AS,
 
@@ -27,382 +27,385 @@ enum IPAreaCode {
   AREA_GLOBAL,
 }
 
-/// Self-defined audio codec profile.
+/// 用于旁路直播的输出音频的编码规格。
 /// @enum {number}
 enum AudioCodecProfileType {
-  /// (Default) LC-AAC, which is the low-complexity audio codec profile.
+  /// (默认) LCAAC 规格，表示基本音频编码规格。 // TODO 英文将 LC-AAC 改成 LCAAC。
   @JsonValue(0)
   LCAAC,
 
-  /// HE-AAC, which is the high-efficiency audio codec profile.
+  /// HEAAC 规格，表示高效音频编码规格。
   @JsonValue(1)
   HEAAC,
 }
 
-/// Audio equalization band frequency.
+/// 语音音效均衡波段的中心频率。
 /// @enum {number}
 enum AudioEqualizationBandFrequency {
-  /// 31 Hz.
+  /// 31 Hz。
   @JsonValue(0)
   Band31,
 
-  /// 62 Hz.
+  /// 62 Hz。
   @JsonValue(1)
   Band62,
 
-  /// 125 Hz.
+  /// 125 Hz。
   @JsonValue(2)
   Band125,
 
-  /// 250 Hz.
+  /// 250 Hz。
   @JsonValue(3)
   Band250,
 
-  /// 500 Hz.
+  /// 500 Hz。
   @JsonValue(4)
   Band500,
 
-  /// 1 kHz.
+  /// 1 kHz。
   @JsonValue(5)
   Band1K,
 
-  /// 2 kHz.
+  /// 2 kHz。
   @JsonValue(6)
   Band2K,
 
-  /// 4 kHz.
+  /// 4 kHz。
   @JsonValue(7)
   Band4K,
 
-  /// 8 kHz.
+  /// 8 kHz。
   @JsonValue(8)
   Band8K,
 
-  /// 16 kHz.
+  /// 16 kHz。
   @JsonValue(9)
   Band16K,
 }
 
-/// The error information of the local audio.
+/// 本地音频出错原因。
 /// @enum {number}
 enum AudioLocalError {
-  /// The local audio is normal.
+  /// 本地音频状态正常。
   @JsonValue(0)
   Ok,
 
-  /// No specified reason for the local audio failure.
+  /// 本地音频出错原因不明确。
   @JsonValue(1)
   Failure,
 
-  /// No permission to use the local audio device.
+  /// 没有权限启动本地音频录制设备。
   @JsonValue(2)
   DeviceNoPermission,
 
-  /// The microphone is in use.
+  /// 本地音频录制设备已经在使用中。
   @JsonValue(3)
   DeviceBusy,
 
-  /// The local audio recording fails. Check whether the recording device is working properly.
+  /// 本地音频录制失败，建议你检查录制设备是否正常工作。
   @JsonValue(4)
   RecordFailure,
 
-  /// The local audio encoding fails.
+  /// 本地音频编码失败。
   @JsonValue(5)
   EncodeFailure,
 }
 
-/// The state of the local audio.
+/// 本地音频状态。
 /// @enum {number}
 enum AudioLocalState {
-  /// The local audio is in the initial state.
+  /// 本地音频默认初始状态。
   @JsonValue(0)
   Stopped,
 
-  /// The recording device starts successfully.
+  /// 本地音频录制设备启动成功。
   @JsonValue(1)
   Recording,
 
-  /// The first audio frame encodes successfully.
+  /// 本地音频首帧编码成功。
   @JsonValue(2)
   Encoding,
 
-  /// The local audio fails to start.
+  /// 本地音频启动失败。
   @JsonValue(3)
   Failed,
 }
 
-/// The error code of the audio mixing file.
+/// 混音音乐文件错误码。
 /// @enum {number}
 enum AudioMixingErrorCode {
-  /// The SDK cannot open the audio mixing file.
+  /// 音乐文件打开出错。
   @JsonValue(701)
   CanNotOpen,
 
-  /// The SDK opens the audio mixing file too frequently.
+  /// 音乐文件打开太频繁。
   @JsonValue(702)
   TooFrequentCall,
 
-  /// The opening of the audio mixing file is interrupted.
+  /// 音乐文件播放异常中断。
   @JsonValue(703)
   InterruptedEOF,
 
-  /// No error.
+  /// 无错误。
   @JsonValue(0)
   OK,
 }
 
-/// The state of the audio mixing file.
+/// 混音音乐文件状态。
 /// @enum {number}
 enum AudioMixingStateCode {
-  /// The audio mixing file is playing.
+  /// 音乐文件正常播放。
   @JsonValue(710)
   Playing,
 
-  /// The audio mixing file pauses playing.
+  /// 音乐文件暂停播放。
   @JsonValue(711)
   Paused,
 
-  /// The audio mixing file stops playing.
+  /// 音乐文件停止播放。
   @JsonValue(713)
   Stopped,
 
-  /// An exception occurs when playing the audio mixing file.
+  /// 音乐文件报错。
   @JsonValue(714)
   Failed,
 }
 
-/// Audio output routing.
+/// 语音路由。
 /// @enum {number}
 enum AudioOutputRouting {
-  /// Default.
+  /// 使用默认的音频路由。
   @JsonValue(-1)
   Default,
 
-  /// Headset.
+  /// 使用耳机为语音路由。
   @JsonValue(0)
   Headset,
 
-  /// Earpiece.
+  /// 使用听筒为语音路由。
   @JsonValue(1)
   Earpiece,
 
-  /// Headset with no microphone.
+  /// 使用不带麦的耳机为语音路由。
   @JsonValue(2)
   HeadsetNoMic,
 
-  /// Speakerphone.
+  /// 使用手机的扬声器为语音路由。
   @JsonValue(3)
   Speakerphone,
 
-  /// Loudspeaker.
+  /// 使用外接的扬声器为语音路由。
   @JsonValue(4)
   Loudspeaker,
 
-  /// Bluetooth headset.
+  /// 使用蓝牙耳机为语音路由。
   @JsonValue(5)
   HeadsetBluetooth,
 }
 
-/// Audio profile.
+/// 音频属性。
 /// @enum {number}
 enum AudioProfile {
-  /// Default audio profile.
-  /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
+  ///默认设置。
+  /// - 通信场景下，该选项代表指定 32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
+  /// - 直播场景下，该选项代表指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 52 Kbps。
   @JsonValue(0)
   Default,
 
-  /// A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  /// 指定 32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
   @JsonValue(1)
   SpeechStandard,
 
-  /// A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 48 Kbps.
+  /// 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 64 Kbps。
   @JsonValue(2)
   MusicStandard,
 
-  /// A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 56 Kbps.
+  /// 指定 48 kHz采样率，音乐编码，双声道，编码码率最大值为 56 Kbps。
   @JsonValue(3)
   MusicStandardStereo,
 
-  /// A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 128 Kbps.
+  /// 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 128 Kbps。
   @JsonValue(4)
   MusicHighQuality,
 
-  /// A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
+  /// 指定 48 kHz 采样率，音乐编码，双声道，编码码率最大值为 192 Kbps。
   @JsonValue(5)
   MusicHighQualityStereo,
 }
 
-/// Use mode of the onRecordAudioFrame callback.
+/// `onRecordAudioFrame` 的使用模式。// TODO 将 on 去掉？
 /// @enum {number}
-/// TODO @nodoc setPlaybackAudioFrameParameters
+/// TODO @nodoc setPlaybackAudioFrameParameters // TODO 这个枚举是用不到吗？
 enum AudioRawFrameOperationMode {
-  /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
+  /// 只读模式，用户仅从 AudioFrame 获取原始音频数据，不作任何修改。
+  /// 例如，如果用户通过 Agora SDK 采集数据，自己进行 RTMP 推流，则可以选择该模式。
   @JsonValue(0)
   ReadOnly,
 
-  /// Users replace the Agora Audio Frame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
+  /// 只写模式，用户替换 AudioFrame 中的数据。例如，如果用户自行采集数据，可选择该模式。
   @JsonValue(1)
   WriteOnly,
 
-  /// Users read the data from Agora Audio Frame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
+  /// 读写模式，用户从 AudioFrame 获取数据、修改。
+  /// 例如，如果用户自己有音效处理模块，且想要根据实际需要对数据进行后处理 (例如变声)，则可以选择该模式。
   @JsonValue(2)
   ReadWrite,
 }
 
-/// Audio recording quality.
+/// 录音质量。
 enum AudioRecordingQuality {
-  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  /// 低音质。采样率为 32 kHz，录制 10 分钟的文件大小为 1.2 M 左右。
   @JsonValue(0)
   Low,
 
-  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+  /// 中音质。采样率为 32 kHz，录制 10 分钟的文件大小为 2 M 左右。
   @JsonValue(1)
   Medium,
 
-  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  /// 高音质。采样率为 32 kHz，录制 10 分钟的文件大小为 3.75 M 左右。
   @JsonValue(2)
   High,
 }
 
-/// The state of the remote audio.
+/// 远端音频流状态。
 /// @enum {number}
 enum AudioRemoteState {
-  /// The remote audio is in the default state, probably due to:
+  /// 远端音频流默认初始状态。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.LocalMuted]
   /// - [AudioRemoteStateReason.RemoteMuted]
   /// - [AudioRemoteStateReason.RemoteOffline]
   @JsonValue(0)
   Stopped,
 
-  /// The first remote audio packet is received.
+  /// 本地用户已接收远端音频首包。
   @JsonValue(1)
   Starting,
 
-  /// The remote audio stream is decoded and plays normally, probably due to:
+  /// 远端音频流正在解码，正常播放。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.NetworkRecovery]
   /// - [AudioRemoteStateReason.LocalUnmuted]
   /// - [AudioRemoteStateReason.RemoteUnmuted]
   @JsonValue(2)
   Decoding,
 
-  /// The remote audio is frozen, probably due to:
+  /// 远端音频流卡顿。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.NetworkCongestion]
   @JsonValue(3)
   Frozen,
 
-  /// The remote audio fails to start, probably due to:
+  /// 远端音频流播放失败。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.Internal]
   @JsonValue(4)
   Failed,
 }
 
-/// The reason of the remote audio state change.
+/// 远端音频流状态改变的原因。
 /// @enum {number}
 enum AudioRemoteStateReason {
-  /// Internal reasons.
+  /// 内部原因。
   @JsonValue(0)
   Internal,
 
-  /// Network congestion.
+  /// 网络阻塞。
   @JsonValue(1)
   NetworkCongestion,
 
-  /// Network recovery.
+  /// 网络恢复正常。
   @JsonValue(2)
   NetworkRecovery,
 
-  /// The local user stops receiving the remote audio stream or disables the audio module.
+  /// 本地用户停止接收远端音频流或本地用户禁用音频模块。
   @JsonValue(3)
   LocalMuted,
 
-  /// The local user resumes receiving the remote audio stream or enables the audio module.
+  /// 本地用户恢复接收远端音频流或本地用户启用音频模块。
   @JsonValue(4)
   LocalUnmuted,
 
-  /// The remote user stops sending the audio stream or disables the audio module.
+  /// 远端用户停止发送音频流或远端用户禁用音频模块。
   @JsonValue(5)
   RemoteMuted,
 
-  /// The remote user resumes sending the audio stream or enables the audio module.
+  /// 远端用户恢复发送音频流或远端用户启用音频模块。
   @JsonValue(6)
   RemoteUnmuted,
 
-  /// The remote user leaves the channel.
+  /// 远端用户离开频道。
   @JsonValue(7)
   RemoteOffline,
 }
 
-/// The preset local voice reverberation option.
+/// 预设的本地语音混响效果选项。
 /// @enum {number}
 enum AudioReverbPreset {
-  /// Turn off local voice reverberation, that is, to use the original voice.
+  /// 原声，即关闭本地语音混响。
   @JsonValue(0x00000000)
   Off,
 
-  /// The reverberation style typical of popular music (enhanced).
+  /// 流行。
   @JsonValue(0x00000001)
   Popular,
 
-  /// The reverberation style typical of R&B music (enhanced).
+  /// R&B。
   @JsonValue(0x00000002)
   RnB,
 
-  /// The reverberation style typical of rock music.
+  /// 摇滚。
   @JsonValue(0x00000003)
   Rock,
 
-  /// The reverberation style typical of hip-hop music.
+  /// 嘻哈。
   @JsonValue(0x00000004)
   HipHop,
 
-  /// The reverberation style typical of a concert hall.
+  /// 演唱会。
   @JsonValue(0x00000005)
   VocalConcert,
 
-  /// The reverberation style typical of a KTV venue (enhanced).
+  /// KTV。// 检查英文里的 enhanced 是否应该去掉？
   @JsonValue(0x00000006)
   KTV,
 
-  /// The reverberation style typical of a recording studio (enhanced).
+  /// 录音棚。
   @JsonValue(0x00000007)
   Studio,
 
-  /// The reverberation style typical of a KTV venue (enhanced).
+  /// KTV（增强版）。
   @JsonValue(0x00100001)
   FX_KTV,
 
-  /// The reverberation style typical of a concert hall (enhanced).
+  /// 演唱会（增强版）。
   @JsonValue(0x00100002)
   FX_VOCAL_CONCERT,
 
-  /// The reverberation style typical of an uncle’s voice.
+  /// 大叔。
   @JsonValue(0x00100003)
   FX_UNCLE,
 
-  /// The reverberation style typical of a sister’s voice.
+  /// 小姐姐。
   @JsonValue(0x00100004)
   FX_SISTER,
 
-  /// The reverberation style typical of a recording studio (enhanced).
+  /// 录音棚（增强版）。
   @JsonValue(0x00100005)
   FX_STUDIO,
 
-  /// The reverberation style typical of popular music (enhanced).
+  /// 流行（增强版）。
   @JsonValue(0x00100006)
   FX_POPULAR,
 
-  /// The reverberation style typical of R&B music (enhanced).
+  /// R&B（增强版）。
   @JsonValue(0x00100007)
   FX_RNB,
 
-  /// The reverberation style typical of the vintage phonograph.
+  /// 留声机。
   @JsonValue(0x00100008)
   FX_PHONOGRAPH,
 
-  /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the `profile` parameter in `setAudioProfile` as `MusicHighQualityStereo`(5).
-  /// See [RtcEngine.setAudioProfile]
-  /// See [AudioProfile.MusicHighQualityStereo]
+  /// 虚拟立体声。虚拟立体声是指将单声道的音轨渲染出立体声的效果，使频道内所有用户听到有空间感的声音效果。为达到更好的虚拟立体声效果，
+  /// Agora 推荐在调用该方法前将 `setAudioProfile` 的 `profile` 参数设置为 `MusicHighQualityStereo`(5)。
+  /// 详见 [RtcEngine.setAudioProfile]。
+  /// 详见 [AudioProfile.MusicHighQualityStereo]。
   @JsonValue(0x00200001)
   VIRTUAL_STEREO,
 }
