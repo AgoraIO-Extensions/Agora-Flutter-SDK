@@ -3,22 +3,22 @@ import 'package:json_annotation/json_annotation.dart';
 import 'events.dart';
 import 'rtc_engine.dart';
 
-/// The area of connection.
-
+/// IP 区域。
+ // TODO 该 tag 是否生效？
 enum IPAreaCode {
-  /// Mainland China
+  /// 中国大陆。
   @JsonValue(1 << 0)
   AREA_CN,
 
-  /// North America
+  /// 北美区域。
   @JsonValue(1 << 1)
   AREA_NA,
 
-  /// Europe
+  ///  欧洲区域。
   @JsonValue(1 << 2)
   AREA_EUR,
 
-  /// Asia, excluding Mainland China
+  /// 除中国大陆以外的亚洲区域。
   @JsonValue(1 << 3)
   AREA_AS,
 
@@ -27,2142 +27,2257 @@ enum IPAreaCode {
   AREA_GLOBAL,
 }
 
-/// Self-defined audio codec profile.
-
+/// 用于旁路直播的输出音频的编码规格。
 enum AudioCodecProfileType {
-  /// (Default) LC-AAC, which is the low-complexity audio codec profile.
+  /// (默认) LCAAC 规格，表示基本音频编码规格。 // TODO 英文将 LC-AAC 改成 LCAAC。
   @JsonValue(0)
   LCAAC,
 
-  /// HE-AAC, which is the high-efficiency audio codec profile.
+  /// HEAAC 规格，表示高效音频编码规格。
   @JsonValue(1)
   HEAAC,
 }
 
-/// Audio equalization band frequency.
-
+/// 语音音效均衡波段的中心频率。
 enum AudioEqualizationBandFrequency {
-  /// 31 Hz.
+  /// 31 Hz。
   @JsonValue(0)
   Band31,
 
-  /// 62 Hz.
+  /// 62 Hz。
   @JsonValue(1)
   Band62,
 
-  /// 125 Hz.
+  /// 125 Hz。
   @JsonValue(2)
   Band125,
 
-  /// 250 Hz.
+  /// 250 Hz。
   @JsonValue(3)
   Band250,
 
-  /// 500 Hz.
+  /// 500 Hz。
   @JsonValue(4)
   Band500,
 
-  /// 1 kHz.
+  /// 1 kHz。
   @JsonValue(5)
   Band1K,
 
-  /// 2 kHz.
+  /// 2 kHz。
   @JsonValue(6)
   Band2K,
 
-  /// 4 kHz.
+  /// 4 kHz。
   @JsonValue(7)
   Band4K,
 
-  /// 8 kHz.
+  /// 8 kHz。
   @JsonValue(8)
   Band8K,
 
-  /// 16 kHz.
+  /// 16 kHz。
   @JsonValue(9)
   Band16K,
 }
 
-/// The error information of the local audio.
-
+/// 本地音频出错原因。
 enum AudioLocalError {
-  /// The local audio is normal.
+  /// 本地音频状态正常。
   @JsonValue(0)
   Ok,
 
-  /// No specified reason for the local audio failure.
+  /// 本地音频出错原因不明确。
   @JsonValue(1)
   Failure,
 
-  /// No permission to use the local audio device.
+  /// 没有权限启动本地音频录制设备。
   @JsonValue(2)
   DeviceNoPermission,
 
-  /// The microphone is in use.
+  /// 本地音频录制设备已经在使用中。
   @JsonValue(3)
   DeviceBusy,
 
-  /// The local audio recording fails. Check whether the recording device is working properly.
+  /// 本地音频录制失败，建议你检查录制设备是否正常工作。
   @JsonValue(4)
   RecordFailure,
 
-  /// The local audio encoding fails.
+  /// 本地音频编码失败。
   @JsonValue(5)
   EncodeFailure,
 }
 
-/// The state of the local audio.
-
+/// 本地音频状态。
 enum AudioLocalState {
-  /// The local audio is in the initial state.
+  /// 本地音频默认初始状态。
   @JsonValue(0)
   Stopped,
 
-  /// The recording device starts successfully.
+  /// 本地音频录制设备启动成功。
   @JsonValue(1)
   Recording,
 
-  /// The first audio frame encodes successfully.
+  /// 本地音频首帧编码成功。
   @JsonValue(2)
   Encoding,
 
-  /// The local audio fails to start.
+  /// 本地音频启动失败。
   @JsonValue(3)
   Failed,
 }
 
-/// The error code of the audio mixing file.
-
+/// 混音音乐文件错误码。
 enum AudioMixingErrorCode {
-  /// The SDK cannot open the audio mixing file.
+  /// 音乐文件打开出错。
   @JsonValue(701)
   CanNotOpen,
 
-  /// The SDK opens the audio mixing file too frequently.
+  /// 音乐文件打开太频繁。
   @JsonValue(702)
   TooFrequentCall,
 
-  /// The opening of the audio mixing file is interrupted.
+  /// 音乐文件播放异常中断。
   @JsonValue(703)
   InterruptedEOF,
 
-  /// No error.
+  /// 无错误。
   @JsonValue(0)
   OK,
 }
 
-/// The state of the audio mixing file.
-
+/// 混音音乐文件状态。
 enum AudioMixingStateCode {
-  /// The audio mixing file is playing.
+  /// 音乐文件正常播放。
   @JsonValue(710)
   Playing,
 
-  /// The audio mixing file pauses playing.
+  /// 音乐文件暂停播放。
   @JsonValue(711)
   Paused,
 
-  /// The audio mixing file stops playing.
+  /// 音乐文件停止播放。
   @JsonValue(713)
   Stopped,
 
-  /// An exception occurs when playing the audio mixing file.
+  /// 音乐文件报错。
   @JsonValue(714)
   Failed,
 }
 
-/// Audio output routing.
-
+/// 语音路由。
 enum AudioOutputRouting {
-  /// Default.
+  /// 使用默认的音频路由。
   @JsonValue(-1)
   Default,
 
-  /// Headset.
+  /// 使用耳机为语音路由。
   @JsonValue(0)
   Headset,
 
-  /// Earpiece.
+  /// 使用听筒为语音路由。
   @JsonValue(1)
   Earpiece,
 
-  /// Headset with no microphone.
+  /// 使用不带麦的耳机为语音路由。
   @JsonValue(2)
   HeadsetNoMic,
 
-  /// Speakerphone.
+  /// 使用手机的扬声器为语音路由。
   @JsonValue(3)
   Speakerphone,
 
-  /// Loudspeaker.
+  /// 使用外接的扬声器为语音路由。
   @JsonValue(4)
   Loudspeaker,
 
-  /// Bluetooth headset.
+  /// 使用蓝牙耳机为语音路由。
   @JsonValue(5)
   HeadsetBluetooth,
 }
 
-/// Audio profile.
-
+/// 音频属性。
 enum AudioProfile {
-  /// Default audio profile.
-  /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
+  ///默认设置。
+  /// - 通信场景下，该选项代表指定 32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
+  /// - 直播场景下，该选项代表指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 52 Kbps。
   @JsonValue(0)
   Default,
 
-  /// A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+  /// 指定 32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
   @JsonValue(1)
   SpeechStandard,
 
-  /// A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 48 Kbps.
+  /// 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 64 Kbps。
   @JsonValue(2)
   MusicStandard,
 
-  /// A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 56 Kbps.
+  /// 指定 48 kHz采样率，音乐编码，双声道，编码码率最大值为 56 Kbps。
   @JsonValue(3)
   MusicStandardStereo,
 
-  /// A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 128 Kbps.
+  /// 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 128 Kbps。
   @JsonValue(4)
   MusicHighQuality,
 
-  /// A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
+  /// 指定 48 kHz 采样率，音乐编码，双声道，编码码率最大值为 192 Kbps。
   @JsonValue(5)
   MusicHighQualityStereo,
 }
 
-/// Use mode of the onRecordAudioFrame callback.
-
-/// TODO @nodoc setPlaybackAudioFrameParameters
+/// `onRecordAudioFrame` 的使用模式。// TODO 将 on 去掉？
+/// TODO @nodoc setPlaybackAudioFrameParameters // TODO 这个枚举是用不到吗？
 enum AudioRawFrameOperationMode {
-  /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
+  /// 只读模式，用户仅从 AudioFrame 获取原始音频数据，不作任何修改。
+  /// 例如，如果用户通过 Agora SDK 采集数据，自己进行 RTMP 推流，则可以选择该模式。
   @JsonValue(0)
   ReadOnly,
 
-  /// Users replace the Agora Audio Frame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
+  /// 只写模式，用户替换 AudioFrame 中的数据。例如，如果用户自行采集数据，可选择该模式。
   @JsonValue(1)
   WriteOnly,
 
-  /// Users read the data from Agora Audio Frame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
+  /// 读写模式，用户从 AudioFrame 获取数据、修改。
+  /// 例如，如果用户自己有音效处理模块，且想要根据实际需要对数据进行后处理 (例如变声)，则可以选择该模式。
   @JsonValue(2)
   ReadWrite,
 }
 
-/// Audio recording quality.
+/// 录音质量。
 enum AudioRecordingQuality {
-  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  /// 低音质。采样率为 32 kHz，录制 10 分钟的文件大小为 1.2 M 左右。
   @JsonValue(0)
   Low,
 
-  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+  /// 中音质。采样率为 32 kHz，录制 10 分钟的文件大小为 2 M 左右。
   @JsonValue(1)
   Medium,
 
-  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  /// 高音质。采样率为 32 kHz，录制 10 分钟的文件大小为 3.75 M 左右。
   @JsonValue(2)
   High,
 }
 
-/// The state of the remote audio.
-
+/// 远端音频流状态。
 enum AudioRemoteState {
-  /// The remote audio is in the default state, probably due to:
+  /// 远端音频流默认初始状态。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.LocalMuted]
   /// - [AudioRemoteStateReason.RemoteMuted]
   /// - [AudioRemoteStateReason.RemoteOffline]
   @JsonValue(0)
   Stopped,
 
-  /// The first remote audio packet is received.
+  /// 本地用户已接收远端音频首包。
   @JsonValue(1)
   Starting,
 
-  /// The remote audio stream is decoded and plays normally, probably due to:
+  /// 远端音频流正在解码，正常播放。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.NetworkRecovery]
   /// - [AudioRemoteStateReason.LocalUnmuted]
   /// - [AudioRemoteStateReason.RemoteUnmuted]
   @JsonValue(2)
   Decoding,
 
-  /// The remote audio is frozen, probably due to:
+  /// 远端音频流卡顿。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.NetworkCongestion]
   @JsonValue(3)
   Frozen,
 
-  /// The remote audio fails to start, probably due to:
+  /// 远端音频流播放失败。在以下情况下，会报告该状态：
   /// - [AudioRemoteStateReason.Internal]
   @JsonValue(4)
   Failed,
 }
 
-/// The reason of the remote audio state change.
-
+/// 远端音频流状态改变的原因。
 enum AudioRemoteStateReason {
-  /// Internal reasons.
+  /// 内部原因。
   @JsonValue(0)
   Internal,
 
-  /// Network congestion.
+  /// 网络阻塞。
   @JsonValue(1)
   NetworkCongestion,
 
-  /// Network recovery.
+  /// 网络恢复正常。
   @JsonValue(2)
   NetworkRecovery,
 
-  /// The local user stops receiving the remote audio stream or disables the audio module.
+  /// 本地用户停止接收远端音频流或本地用户禁用音频模块。
   @JsonValue(3)
   LocalMuted,
 
-  /// The local user resumes receiving the remote audio stream or enables the audio module.
+  /// 本地用户恢复接收远端音频流或本地用户启用音频模块。
   @JsonValue(4)
   LocalUnmuted,
 
-  /// The remote user stops sending the audio stream or disables the audio module.
+  /// 远端用户停止发送音频流或远端用户禁用音频模块。
   @JsonValue(5)
   RemoteMuted,
 
-  /// The remote user resumes sending the audio stream or enables the audio module.
+  /// 远端用户恢复发送音频流或远端用户启用音频模块。
   @JsonValue(6)
   RemoteUnmuted,
 
-  /// The remote user leaves the channel.
+  /// 远端用户离开频道。
   @JsonValue(7)
   RemoteOffline,
 }
 
-/// The preset local voice reverberation option.
-
+/// 预设的本地语音混响效果选项。
 enum AudioReverbPreset {
-  /// Turn off local voice reverberation, that is, to use the original voice.
+  /// 原声，即关闭本地语音混响。
   @JsonValue(0x00000000)
   Off,
 
-  /// The reverberation style typical of popular music (enhanced).
+  /// 流行。
   @JsonValue(0x00000001)
   Popular,
 
-  /// The reverberation style typical of R&B music (enhanced).
+  /// R&B。
   @JsonValue(0x00000002)
   RnB,
 
-  /// The reverberation style typical of rock music.
+  /// 摇滚。
   @JsonValue(0x00000003)
   Rock,
 
-  /// The reverberation style typical of hip-hop music.
+  /// 嘻哈。
   @JsonValue(0x00000004)
   HipHop,
 
-  /// The reverberation style typical of a concert hall.
+  /// 演唱会。
   @JsonValue(0x00000005)
   VocalConcert,
 
-  /// The reverberation style typical of a KTV venue (enhanced).
+  /// KTV。// 检查英文里的 enhanced 是否应该去掉？
   @JsonValue(0x00000006)
   KTV,
 
-  /// The reverberation style typical of a recording studio (enhanced).
+  /// 录音棚。
   @JsonValue(0x00000007)
   Studio,
 
-  /// The reverberation style typical of a KTV venue (enhanced).
+  /// KTV（增强版）。
   @JsonValue(0x00100001)
   FX_KTV,
 
-  /// The reverberation style typical of a concert hall (enhanced).
+  /// 演唱会（增强版）。
   @JsonValue(0x00100002)
   FX_VOCAL_CONCERT,
 
-  /// The reverberation style typical of an uncle’s voice.
+  /// 大叔。
   @JsonValue(0x00100003)
   FX_UNCLE,
 
-  /// The reverberation style typical of a sister’s voice.
+  /// 小姐姐。
   @JsonValue(0x00100004)
   FX_SISTER,
 
-  /// The reverberation style typical of a recording studio (enhanced).
+  /// 录音棚（增强版）。
   @JsonValue(0x00100005)
   FX_STUDIO,
 
-  /// The reverberation style typical of popular music (enhanced).
+  /// 流行（增强版）。
   @JsonValue(0x00100006)
   FX_POPULAR,
 
-  /// The reverberation style typical of R&B music (enhanced).
+  /// R&B（增强版）。
   @JsonValue(0x00100007)
   FX_RNB,
 
-  /// The reverberation style typical of the vintage phonograph.
+  /// 留声机。
   @JsonValue(0x00100008)
   FX_PHONOGRAPH,
 
-  /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the `profile` parameter in `setAudioProfile` as `MusicHighQualityStereo`(5).
-  /// See [RtcEngine.setAudioProfile]
-  /// See [AudioProfile.MusicHighQualityStereo]
+  /// 虚拟立体声。虚拟立体声是指将单声道的音轨渲染出立体声的效果，使频道内所有用户听到有空间感的声音效果。为达到更好的虚拟立体声效果，
+  /// Agora 推荐在调用该方法前将 `setAudioProfile` 的 `profile` 参数设置为 `MusicHighQualityStereo`(5)。
+  /// 详见 [RtcEngine.setAudioProfile]。
+  /// 详见 [AudioProfile.MusicHighQualityStereo]。
   @JsonValue(0x00200001)
   VIRTUAL_STEREO,
 }
 
-/// Audio reverberation type.
-
+/// 音频混响类型。
 enum AudioReverbType {
-  /// Level of the dry signal (-20 to 10 dB).
+  /// 原始声音强度，即所谓的 dry signal，取值范围 [-20,10]，单位为 dB。
   @JsonValue(0)
   DryLevel,
 
-  /// Level of the early reflection signal (wet signal) (-20 to 10 dB).
+  /// 早期反射信号强度，即所谓的 wet signal，取值范围 [-20,10]，单位为 dB。
   @JsonValue(1)
   WetLevel,
 
-  /// Room size of the reflection (0 to 100 dB). A larger room size means stronger reverberation.
+  /// 所需混响效果的房间尺寸，一般房间越大，混响越强，取值范围 [0,100]，单位为 dB。
   @JsonValue(2)
   RoomSize,
 
-  /// Length of the initial delay of the wet signal (0 to 200 ms).
+  /// Wet signal 的初始延迟长度，取值范围 [0,200]，单位为毫秒。
   @JsonValue(3)
   WetDelay,
 
-  /// Strength of the late reverberation (0 to 100).
+  /// 混响持续的强度，取值范围为 [0,100]。
   @JsonValue(4)
   Strength,
 }
 
-/// Audio sample rate.
-
+/// 音频采样率。
 enum AudioSampleRateType {
-  /// 32 kHz.
+  /// 32 kHz。
   @JsonValue(32000)
   Type32000,
 
-  /// 44.1 kHz.
+  /// 44.1 kHz。
   @JsonValue(44100)
   Type44100,
 
-  /// 48 kHz.
+  /// 48 kHz。
   @JsonValue(48000)
   Type48000,
 }
 
-/// Audio scenario.
-
+/// 音频应用场景。
 enum AudioScenario {
-  /// Default audio application scenario.
+  /// 默认音频应用场景。
   @JsonValue(0)
   Default,
 
-  /// Entertainment scenario supporting voice during gameplay.
+  /// 娱乐应用，需要频繁上下麦的场景。
   @JsonValue(1)
   ChatRoomEntertainment,
 
-  /// Education scenario prioritizing smoothness and stability.
+  /// 教育应用，流畅度和稳定性优先。
   @JsonValue(2)
   Education,
 
-  /// Live gaming scenario, enabling the gaming audio effects in the speaker mode in a live broadcast scenario. Choose this scenario for high-fidelity music playback.
+  /// 游戏直播应用，需要外放游戏音效也直播出去的场景。
   @JsonValue(3)
   GameStreaming,
 
-  /// Showroom scenario, optimizing the audio quality with external professional equipment.
+  /// 秀场应用，音质优先和更好的专业外设支持。
   @JsonValue(4)
   ShowRoom,
 
-  /// Gaming scenario.
+  /// 游戏开黑。
   @JsonValue(5)
   ChatRoomGaming,
 }
 
-/// (iOS only) Audio session restriction.
-
-/// TODO @nodoc iOS setAudioSessionOperationRestriction
+/// 音频会话控制权限。（仅适用于 iOS）
 enum AudioSessionOperationRestriction {
-  /// No restriction, the SDK has full control of the audio session operations.
+  /// 没有限制，SDK 可以完全控制 Audio Session 操作。
   @JsonValue(0)
   None,
 
-  /// The SDK does not change the audio session category.
+  /// SDK 不能更改 Audio Session 的 category。
   @JsonValue(1)
   SetCategory,
 
-  /// The SDK does not change any setting of the audio session (category, mode, categoryOptions).
+  /// SDK 不能更改 Audio Session 的 category，mode，categoryOptions。
   @JsonValue(1 << 1)
   ConfigureSession,
 
-  /// The SDK keeps the audio session active when leaving a channel.
+  /// 离开某个频道时，SDK 会保持 Audio Session 处于活动状态。
   @JsonValue(1 << 2)
   DeactivateSession,
 
-  /// The SDK does not configure the audio session anymore.
+  /// 限制 SDK 对 Audio Session 进行任何操作，SDK 将不能再对 Audio Session 进行任何配置。
   @JsonValue(1 << 7)
   All,
 }
 
-/// The preset audio voice configuration used to change the voice effect.
-
+/// 本地语音变声、美音或语聊美声效果选项。
 enum AudioVoiceChanger {
-  /// Turn off the local voice changer, that is, to use the original voice.
+  /// 原声，即关闭本地语音的变声、美音或语聊美声效果。
   @JsonValue(0x00000000)
   Off,
 
-  /// The voice of an old man.
+  /// 变声：老年男性。
   @JsonValue(0x00000001)
   OldMan,
 
-  /// The voice of a little boy.
+  /// 变声：小男孩。
   @JsonValue(0x00000002)
   BabyBoy,
 
-  /// The voice of a little girl.
+  /// 变声：小女孩。
   @JsonValue(0x00000003)
   BabyGirl,
 
-  /// The voice of Zhu Bajie, a character in Journey to the West who has a voice like that of a growling bear.
+  /// 变声：猪八戒。
   @JsonValue(0x00000004)
   ZhuBaJie,
 
-  /// The ethereal voice.
+  /// 变声：空灵。
   @JsonValue(0x00000005)
   Ethereal,
 
-  /// The voice of Hulk.
+  /// 变声：绿巨人。
   @JsonValue(0x00000006)
   Hulk,
 
-  /// A more vigorous voice.
+  /// 美音：浑厚。
   @JsonValue(0x00100001)
   BEAUTY_VIGOROUS,
 
-  /// A deeper voice.
+  /// 美音：低沉。
   @JsonValue(0x00100002)
   BEAUTY_DEEP,
 
-  /// A mellower voice.
+  /// 美音：圆润。
   @JsonValue(0x00100003)
   BEAUTY_MELLOW,
 
-  /// Falsetto.
+  /// 美音：假音。
   @JsonValue(0x00100004)
   BEAUTY_FALSETTO,
 
-  /// A fuller voice.
+  /// 美音：饱满。
   @JsonValue(0x00100005)
   BEAUTY_FULL,
 
-  /// A clearer voice.
+  /// 美音：清澈。
   @JsonValue(0x00100006)
   BEAUTY_CLEAR,
 
-  /// A more resounding voice.
+  /// 美音：高亢。
   @JsonValue(0x00100007)
   BEAUTY_RESOUNDING,
 
-  /// A more ringing voice.
+  /// 美音：嘹亮。
   @JsonValue(0x00100008)
   BEAUTY_RINGING,
 
-  /// A more spatially resonant voice.
+  /// 美音：空旷。
   @JsonValue(0x00100009)
   BEAUTY_SPACIAL,
 
-  /// (For male only) A more magnetic voice. Do not use it when the speaker is a female; otherwise, voice distortion occurs.
+  /// 语聊美声：磁性（男）。此枚举为男声定制化效果，不适用于女声。若女声使用此音效设置，则音频可能会产生失真。
   @JsonValue(0x00200001)
   GENERAL_BEAUTY_VOICE_MALE_MAGNETIC,
 
-  /// (For female only) A fresher voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
+  /// 语聊美声：清新（女）。此枚举为女声定制化效果，不适用于男声。若男声使用此音效设置，则音频可能会产生失真。
   @JsonValue(0x00200002)
   GENERAL_BEAUTY_VOICE_FEMALE_FRESH,
 
-  /// (For female only) A more vital voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
+  /// 语聊美声：活力（女）。此枚举为女声定制化效果，不适用于男声。若男声使用此音效设置，则音频可能会产生失真。
   @JsonValue(0x00200003)
   GENERAL_BEAUTY_VOICE_FEMALE_VITALITY,
 }
 
-/// The camera capturer configuration.
-
+/// 设置摄像头采集偏好。
 enum CameraCaptureOutputPreference {
-  /// (default) Self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
+  /// （默认）自动调整采集参数。SDK 根据实际的采集设备性能及网络情况，选择合适的摄像头输出参数，从而保证设备性能。在这种情况下，预览质量接近于编码器的输出质量。
   @JsonValue(0)
   Auto,
 
-  /// Prioritizes the system performance. The SDK chooses the dimension and frame rate of the local camera capture closest to those set by setVideoEncoderConfiguration.
-  /// See [RtcEngine.setVideoEncoderConfiguration]
+  /// 优先保证设备性能。SDK 根据用户在 `setVideoEncoderConfiguration` 中设置编码器的分辨率和帧率，选择最接近的摄像头输出参数，从而保证设备性能。在这种情况下，预览质量接近于编码器的输出质量。
+  /// 详见 [RtcEngine.setVideoEncoderConfiguration]。
   @JsonValue(1)
   Performance,
 
-  /// Prioritizes the local preview quality. The SDK chooses higher camera output parameters to improve the local video preview quality. This option requires extra CPU and RAM usage for video pre-processing.
+  /// 优先保证视频预览质量。SDK选择较高的摄像头输出参数，从而提高预览视频的质量。在这种情况下，会消耗更多的 CPU 及内存做视频前处理。
   @JsonValue(2)
   Preview,
 
-  /// Internal use only.
+  /// 仅内部使用。
   @JsonValue(3)
   Unkown,
 }
 
-/// The camera direction.
-
+/// 设置摄像头方向。
 enum CameraDirection {
-  /// The rear camera.
+  /// 使用后置摄像头。
   @JsonValue(0)
   Rear,
 
-  /// The front camera.
+  /// 使用前置摄像头。
   @JsonValue(1)
   Front,
 }
 
-/// The error code in AgoraChannelMediaRelayError.
-
+/// 跨频道媒体流转发出错的错误码。
 enum ChannelMediaRelayError {
-  /// The state is normal.
+  /// 一切正常。
   @JsonValue(0)
   None,
 
-  /// An error occurs in the server response.
+  /// 服务器回应出错。
   @JsonValue(1)
   ServerErrorResponse,
 
-  /// No server response. You can call the leaveChannel method to leave the channel.
-  /// See [RtcEngine.leaveChannel]
+  /// 服务器无回应。你可以调用 `leaveChannel` 方法离开频道。
+  /// 详见 [RtcEngine.leaveChannel]。
   @JsonValue(2)
   ServerNoResponse,
 
-  /// The SDK fails to access the service, probably due to limited resources of the server.
+  /// SDK 无法获取服务，可能是因为服务器资源有限导致。
   @JsonValue(3)
   NoResourceAvailable,
 
-  /// Fails to send the relay request.
+  /// 发起跨频道转发媒体流请求失败。
   @JsonValue(4)
   FailedJoinSourceChannel,
 
-  /// Fails to accept the relay request.
+  /// 接受跨频道转发媒体流请求失败。
   @JsonValue(5)
   FailedJoinDestinationChannel,
 
-  /// The server fails to receive the media stream.
+  /// 服务器接收跨频道转发媒体流失败。
   @JsonValue(6)
   FailedPacketReceivedFromSource,
 
-  /// The server fails to send the media stream.
+  /// 服务器发送跨频道转发媒体流失败。
   @JsonValue(7)
   FailedPacketSentToDestination,
 
-  /// The SDK disconnects from the server due to poor network connections. You can call the `leaveChannel` method to leave the channel.
-  /// See [RtcEngine.leaveChannel]
+  /// SDK 因网络质量不佳与服务器断开。你可以调用 [`leaveChannel`]{@link RtcEngine.leaveChannel} 方法离开当前频道。
+  /// 详见 [RtcEngine.leaveChannel]。
   @JsonValue(8)
   ServerConnectionLost,
 
-  /// An internal error occurs in the server.
+  ///服务器内部出错。
   @JsonValue(9)
   InternalError,
 
-  /// The token of the source channel has expired.
+  /// 源频道的 Token 已过期。
   @JsonValue(10)
   SourceTokenExpired,
 
-  /// The token of the destination channel has expired.
+  /// 目标频道的 Token 已过期。
   @JsonValue(11)
   DestinationTokenExpired,
 }
 
-/// The event code in AgoraChannelMediaRelayEvent.
-
+/// 跨频道媒体流转发事件码。
 enum ChannelMediaRelayEvent {
-  /// The user disconnects from the server due to poor network connections.
+  /// 网络中断导致用户与服务器连接断开。
   @JsonValue(0)
   Disconnect,
 
-  /// The network reconnects.
+  /// 用户与服务器建立连接。//TODO 为什么英文是 reconnects?
   @JsonValue(1)
   Connected,
 
-  /// The user joins the source channel.
+  /// 用户已加入源频道。
   @JsonValue(2)
   JoinedSourceChannel,
 
-  /// The user joins the destination channel.
+  /// 用户已加入目标频道。
   @JsonValue(3)
   JoinedDestinationChannel,
 
-  /// The SDK starts relaying the media stream to the destination channel.
+  /// SDK 开始向目标频道发送数据包。
   @JsonValue(4)
   SentToDestinationChannel,
 
-  /// The server receives the video stream from the source channel.
+  /// 服务器收到了源标频道发送的视频流。
   @JsonValue(5)
   ReceivedVideoPacketFromSource,
 
-  /// The server receives the audio stream from the source channel.
+  /// 服务器收到了源标频道发送的音频流。
   @JsonValue(6)
   ReceivedAudioPacketFromSource,
 
-  /// The destination channel is updated.
+  /// 目标频道已更新。
   @JsonValue(7)
   UpdateDestinationChannel,
 
-  /// The destination channel update fails due to internal reasons.
+  /// 内部原因导致目标频道更新失败。
   @JsonValue(8)
   UpdateDestinationChannelRefused,
 
-  /// The destination channel does not change, which means that the destination channel fails to be updated.
+  /// 目标频道未发生改变，即目标频道更新失败。
   @JsonValue(9)
   UpdateDestinationChannelNotChange,
 
-  /// The destination channel name is NULL.
+  /// 目标频道名为 NULL。
   @JsonValue(10)
   UpdateDestinationChannelIsNil,
 
-  /// The video profile is sent to the server.
+  /// 视频属性已发送至服务器。
   @JsonValue(11)
   VideoProfileUpdate,
 }
 
-/// The state code in AgoraChannelMediaRelayState.
-
+/// 跨频道媒体流转发状态。
 enum ChannelMediaRelayState {
-  /// The SDK is initializing.
+  /// SDK 正在初始化。
   @JsonValue(0)
   Idle,
 
-  /// The SDK tries to relay the media stream to the destination channel.
+  /// SDK 尝试跨频道。
   @JsonValue(1)
   Connecting,
 
-  /// The SDK successfully relays the media stream to the destination channel.
+  /// 源频道主播成功加入目标频道。
   @JsonValue(2)
   Running,
 
-  /// A failure occurs.
+  /// 发生异常，详见 `code` 中提示的错误信息。
   @JsonValue(3)
   Failure,
 }
 
-/// Channel profile.
-
+/// 频道场景。
 enum ChannelProfile {
-  /// (Default) The Communication profile.
-  /// Use this profile in one-on-one calls or group calls, where all users can talk freely.
+  /// 通信场景（默认）。
+  /// 用于常见的一对一通话或群聊，频道中的任何用户可以自由说话。
   @JsonValue(0)
   Communication,
 
-  /// The LiveBroadcasting profile.
-  /// Users in a live-broadcast channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams; an audience can only receive streams.
+  /// 直播场景。
+  /// 直播场景有主播和观众两种用户角色，可以通过 `setClientRole` 方法设置主播和观众的角色。
+  /// 主播可以收发语音/视频流，而观众只能接收语音/视频，无法发送。
   @JsonValue(1)
   LiveBroadcasting,
 
-  /// The Gaming profile.
-  /// This profile uses a codec with a lower bitrate and consumes less power. Applies to the gaming scenario, where all game players can talk freely.
+  /// 游戏语音场景。
+  /// 频道内的任何一个可以自由对话。该模式默认采用低功耗低码率的编解码。
   @JsonValue(2)
   Game,
 }
 
-/// Client role in a live broadcast.
-
+/// 直播场景里的用户角色。
 enum ClientRole {
-  /// A broadcaster can both send and receive streams.
+  /// 直播主播。
   @JsonValue(1)
   Broadcaster,
 
-  /// The default role. An audience can only receive streams.
+  /// 直播观众（默认）。
   @JsonValue(2)
   Audience,
 }
 
-/// Reasons for the connection state change.
-
+/// 网络连接状态发生改变的原因。
 enum ConnectionChangedReason {
-  /// The SDK is connecting to Agora’s edge server.
+  /// 建立网络连接中。
   @JsonValue(0)
   Connecting,
 
-  /// The SDK has joined the channel successfully.
+  /// 成功加入频道。
   @JsonValue(1)
   JoinSuccess,
 
-  /// The connection between the SDK and Agora’s edge server is interrupted.
+  /// 网络连接中断。
   @JsonValue(2)
   Interrupted,
 
-  /// The connection between the SDK and Agora’s edge server is banned by Agora’s edge server.
+  /// 网络连接被服务器禁止。
   @JsonValue(3)
   BannedByServer,
 
   /// The SDK fails to join the channel for more than 20 minutes and stops reconnecting to the channel.
+  /// 加入频道失败。SDK 在尝试加入频道 20 分钟后还是没能加入频道，会返回该状态，并停止尝试重连。
   @JsonValue(4)
   JoinFailed,
 
-  /// The SDK has left the channel.
+  /// 离开频道。
   @JsonValue(5)
   LeaveChannel,
 
-  /// The specified App ID is invalid. Try to rejoin the channel with a valid App ID.
+  /// 不是有效的 APP ID。请更换有效的 APP ID 重新加入频道。
   @JsonValue(6)
   InvalidAppId,
 
-  /// The specified channel name is invalid. Try to rejoin the channel with a valid channel name.
+  /// 不是有效的频道名。请更换有效的频道名重新加入频道。
   @JsonValue(7)
   InvalidChannelName,
 
-  /// The generated token is invalid probably due to the following reasons:
-  /// - The App Certificate for the project is enabled in Console, but you do not use Token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
-  /// - The uid that you specify in the `joinChannel` method is different from the uid that you pass for generating the token.
-  /// See [RtcEngine.joinChannel]
+  /// 生成的 Token 无效。一般有以下原因：
+  /// - 在控制台上启用了 App Certificate，但加入频道未使用 Token。当启用了 App Certificate，必须使用 Token。
+  /// - 在调用 `joinChannel` 加入频道时指定的 uid 与生成 Token 时传入的 uid 不一致。
+  /// 详见 [RtcEngine.joinChannel]。
   @JsonValue(8)
   InvalidToken,
 
-  /// The token has expired. Generate a new token from your server.
+  /// 当前使用的 Token 过期，不再有效，需要重新在你的服务端申请生成 Token。
   @JsonValue(9)
   TokenExpired,
 
-  /// The user is banned by the server.
+  /// 此用户被服务器禁止。
   @JsonValue(10)
   RejectedByServer,
 
-  /// The SDK tries to reconnect after setting a proxy server.
+  ///  由于设置了代理服务器，SDK 尝试重连。
   @JsonValue(11)
   SettingProxyServer,
 
-  /// The token renews.
+  /// 更新 Token 引起网络连接状态改变。
   @JsonValue(12)
   RenewToken,
 
-  /// The client IP address has changed, probably due to a change of the network type, IP address, or network port.
+  /// 客户端 IP 地址变更，可能是由于网络类型，或网络运营商的 IP 或端口发生改变引起。
   @JsonValue(13)
   ClientIpAddressChanged,
 
-  /// Timeout for the keep-alive of the connection between the SDK and Agora’s edge server. The connection state changes to:
-  /// See [ConnectionStateType.Reconnecting]
+  /// SDK 和服务器连接保活超时，进入自动重连状态。
+  /// 详见 [ConnectionStateType.Reconnecting]。
   @JsonValue(14)
   KeepAliveTimeout,
 }
 
-/// Connection states.
-
+/// 网络连接状态。
 enum ConnectionStateType {
-  /// The SDK is disconnected from Agora's edge server.
-  /// - This is the initial state before `joinChannel`.
-  /// See [RtcEngine.joinChannel]
-  /// - The SDK also enters this state when the app calls `leaveChannel`.
-  /// See [RtcEngine.leaveChannel]
+  /// 网络连接断开。该状态表示 SDK 处于：
+  /// - 调用 `joinChannel` 加入频道前的初始化阶段。
+  ///  详见 [RtcEngine.joinChannel]。
+  /// - 调用 `leaveChannel` 后的离开频道阶段。
+  ///  详见 [RtcEngine.leaveChannel]。
   @JsonValue(1)
   Disconnected,
 
-  /// The SDK is connecting to Agora's edge server.
-  /// - When the app calls `joinChannel`, the SDK starts to establish a connection to the specified channel, triggers the `connectionStateChanged` callback, and switches to the Connecting state.
-  /// See [RtcEngine.joinChannel]
-  /// See [RtcEngineEventHandler.connectionStateChanged]
-  /// See [ConnectionStateType.Connecting]
-  /// - When the SDK successfully joins the channel, the SDK triggers the `connectionStateChanged` callback and switches to the Connected state.
-  /// See [RtcEngineEventHandler.connectionStateChanged]
-  /// See [ConnectionStateType.Connected]
-  /// - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the `joinChannelSuccess` callback.
-  /// See [RtcEngineEventHandler.joinChannelSuccess]
+  /// 建立网络连接中。
+  /// - 该状态表示 SDK 在调用 `joinChannel` 后正在与指定的频道建立连接。
+  /// 详见 [RtcEngine.joinChannel]。
+  /// - 如果成功加入频道，App 会收到 `connectionStateChanged` 回调，通知当前网络状态变成 `Connected`。
+  /// 详见 [RtcEngineEventHandler.connectionStateChanged] 和 [ConnectionStateType.Connected]。
+  /// - 建立连接后，SDK 还会处理媒体初始化，一切就绪后会回调 `joinChannelSuccess`。
+  /// 详见 [RtcEngineEventHandler.joinChannelSuccess]。
   @JsonValue(2)
   Connecting,
 
-  /// The SDK is connected to Agora's edge server and joins a channel. You can now publish or subscribe to a media stream in the channel.
-  /// If the connection to the channel is lost because, for example, the network is down or switched, the SDK automatically tries to reconnect and triggers:
-  /// - The `connectionStateChanged` callback, and switches to the Reconnecting state.
-  /// See [RtcEngineEventHandler.connectionStateChanged]
-  /// See [ConnectionStateType.Reconnecting]
+  /// 网络已连接。该状态表示用户已经加入频道，可以在频道内发布或订阅媒体流。如果因网络断开或切换而导致 SDK 与频道的连接中断，SDK 会自动重连，此时 App 会收到：
+  /// - `connectionStateChanged` 回调，通知当前网络状态变成 `Reconnecting`。
+  /// 详见 [RtcEngineEventHandler.connectionStateChanged]。
+  /// 详见 [ConnectionStateType.Reconnecting]。
   @JsonValue(3)
   Connected,
 
-  /// The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
-  /// - If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora’s edge server, the SDK triggers the `connectionLost` callback, stays in the Reconnecting state, and keeps rejoining the channel.
-  /// See [RtcEngineEventHandler.connectionLost]
-  /// - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the `connectionStateChanged` callback, switches to the Failed state, and stops rejoining the channel.
-  /// See [RtcEngineEventHandler.connectionStateChanged]
-  /// See [ConnectionStateType.Failed]
+  /// 重新建立网络连接中。// TODO 英文建议分段
+  ///
+  /// 该状态表示 SDK 之前曾加入过频道，但因网络等原因连接中断了，此时 SDK 会自动尝试重新接入频道。
+  /// - 如果 SDK 无法在 10 秒内重新加入频道，则 `connectionLost` 会被触发，SDK 会一直保持在 `Reconnecting` 的状态，并不断尝试重新加入频道。
+  /// 详见 [RtcEngineEventHandler.connectionLost]。
+  /// - 如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，App 会收到 `connectionStateChanged` 回调，通知当前网络状态进入 `Failed`，SDK 停止尝试重连。
+  /// 详见 [RtcEngineEventHandler.connectionStateChanged] 和 [ConnectionStateType.Failed]。
   @JsonValue(4)
   Reconnecting,
 
-  /// The SDK fails to connect to Agora's edge server or join the channel.
-  /// You must call `leaveChannel` to leave this state, and call `joinChannel` again to rejoin the channel.
-  /// See [RtcEngine.leaveChannel]
-  /// See [RtcEngine.joinChannel]
-  /// If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the `connectionStateChanged` callbacks.
-  /// See [RtcEngineEventHandler.connectionStateChanged]
+  /// 网络连接失败。
+  ///
+  /// 该状态表示 SDK 已不再尝试重新加入频道，用户必须要调用 `leaveChannel` 离开频道。
+  /// 详见 [RtcEngine.leaveChannel]。
+  ///
+  /// 如果 SDK 因服务器端使用 RESTful API 禁止加入频道，则 App 会收到 `connectionStateChanged` 回调。
+  /// 详见 [RtcEngineEventHandler.connectionStateChanged]。
   @JsonValue(5)
   Failed,
 }
 
-/// The video encoding degradation preference under limited bandwidth.
-
+/// 带宽受限时，视频编码降级偏好。
 enum DegradationPreference {
-  /// (Default) Degrades the frame rate to guarantee the video quality.
+  /// （默认）降低编码帧率以保证视频质量。
   @JsonValue(0)
   MaintainQuality,
 
-  /// Degrades the video quality to guarantee the frame rate.
+  /// 降低视频质量以保证编码帧率。
   @JsonValue(1)
   MaintainFramerate,
 
-  /// Reserved for future use.
+  /// 预留参数，暂不支持。
   @JsonValue(2)
   Balanced
 }
 
-/// Encryption mode
-/// @enum {string}
+/// 加密模式。// TODO 英文也删一下 @enume string
 enum EncryptionMode {
-  /// (Default) 128-bit AES encryption, XTS mode.
+  /// （默认）128 位 AES 加密，XTS 模式。
   @JsonValue('aes-128-xts')
   AES128XTS,
 
-  /// 256-bit AES encryption, XTS mode.
+  /// 256 位 AES 加密，XTS 模式。
   @JsonValue('aes-256-xts')
   AES256XTS,
 
-  /// 128-bit AES encryption, ECB mode.
+  /// 128 位 AES 加密，ECB 模式。
   @JsonValue('aes-128-ecb')
   AES128ECB,
 }
 
-/// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
-
+/// 错误代码。SDK 上报的错误意味着 SDK 无法自动恢复，需要 App 干预或提示用户。
 enum ErrorCode {
-  /// No error occurs.
+  /// 没有错误。
   @JsonValue(0)
   NoError,
 
-  /// A general error occurs (no specified reason).
+  /// 一般性的错误（没有明确归类的错误原因）。
   @JsonValue(1)
   Failed,
 
-  /// An invalid parameter is used. For example, the specific channel name includes illegal characters.
+  /// API 调用了无效的参数。例如指定的频道名含有非法字符。
   @JsonValue(2)
   InvalidArgument,
 
-  /// The SDK module is not ready.
-  /// Possible solutions:
-  /// - Check the audio device.
-  /// - Check the completeness of the app.
-  /// - Re-initialize the SDK.
+  /// SDK 初始化失败。Agora 建议尝试以下处理方法：
+  /// - 检查音频设备状态。
+  /// - 检查程序集完整性。
+  /// - 尝试重新初始化 SDK。
   @JsonValue(3)
   NotReady,
 
-  /// The current state of the SDK does not support this function.
+  /// SDK 当前状态不支持此操作。
   @JsonValue(4)
   NotSupported,
 
-  /// The request is rejected. This is for internal SDK use only, and is not returned to the app through any method or callback.
+  /// 调用被拒绝。仅供 SDK 内部使用，不通过 API 或者回调事件返回给 App。
   @JsonValue(5)
   Refused,
 
-  /// The buffer size is not big enough to store the returned data.
+  /// 传入的缓冲区大小不足以存放返回的数据。
   @JsonValue(6)
   BufferTooSmall,
 
-  /// The SDK is not initialized before calling this method.
+  /// SDK 尚未初始化，就调用其 API。请确认在调用 API 之前已创建 `RtcEngine` 对象并完成初始化。
   @JsonValue(7)
   NotInitialized,
 
-  /// No permission exists. Check whether the user has granted access to the audio or video device.
+  /// 没有操作权限。请检查用户是否授予 app 音视频设备使用权限。
   @JsonValue(9)
   NoPermission,
 
-  /// An API method timeout occurs. Some API methods require the SDK to return the execution result, and this error occurs if the request takes too long (over 10 seconds) for the SDK to process.
+  /// API 调用超时。有些 API 调用需要 SDK 返回结果，如果 SDK 处理时间过长，超过 10 秒没有返回，会出现此错误。
   @JsonValue(10)
   TimedOut,
 
-  /// The request is canceled. This is for internal SDK use only, and is not returned to the app through any method or callback.
+  /// 请求被取消。仅供 SDK 内部使用，不通过 API 或者回调事件返回给 App。
   @JsonValue(11)
   Canceled,
 
-  /// The method is called too often. This is for internal SDK use only, and is not returned to the app through any method or callback.
+  /// 调用频率太高。仅供 SDK 内部使用，不通过 API 或者回调事件返回给 App。
   @JsonValue(12)
   TooOften,
 
-  /// The SDK fails to bind to the network socket. This is for internal SDK use only, and is not returned to the app through any method or callback.
+  /// SDK 内部绑定到网络 Socket 失败。仅供 SDK 内部使用，不通过 API 或者回调事件返回给 App。
   @JsonValue(13)
   BindSocket,
 
-  /// The network is unavailable. This is for internal SDK use only, and is not returned to the app through any method or callback.
+  /// 网络不可用。仅供 SDK 内部使用，不通过 API 或者回调事件返回给 App。
   @JsonValue(14)
   NetDown,
 
-  /// No network buffers are available. This is for internal SDK use only, and is not returned to the app through any method or callback.
+  /// 没有网络缓冲区可用。仅供 SDK 内部使用，不通过 API 或者回调事件返回给 App。
   @JsonValue(15)
   NoBufs,
 
-  /// The request to join the channel is rejected.
-  /// Possible reasons are:
-  /// - The user is already in the channel, and still calls the API method to join the channel, for example, `joinChannel`.
-  /// See [RtcEngine.joinChannel]
-  /// - The user tries joining the channel during the echo test. Please join the channel after the echo test ends.
+  /// 加入频道被拒绝。一般有以下原因：
+  /// - 用户已进入频道，再次调用加入频道的 API，例如 `joinChannel`，会返回此错误。停止调用该方法即可。
+  /// 详见 [RtcEngine.joinChannel]。
+  /// - 用户在做 Echo 测试时尝试加入频道。等待 Echo test 结束后再加入频道即可。
   @JsonValue(17)
   JoinChannelRejected,
 
-  /// The request to leave the channel is rejected.
-  /// Possible reasons are:
-  /// - The user left the channel and still calls the API method to leave the channel, for example, `leaveChannel`.
-  /// See [RtcEngine.leaveChannel]
-  /// - The user has not joined the channel and calls the API method to leave the channel.
+  /// 离开频道失败。一般有以下原因：
+  /// - 用户已离开频道，再次调用退出频道的 API，例如 `leaveChannel`，会返回此错误。停止调用该方法即可。
+  /// 详见 [RtcEngine.leaveChannel]。
+  /// - 用户尚未加入频道，就调用退出频道的 API。这种情况下无需额外操作。
   @JsonValue(18)
   LeaveChannelRejected,
 
-  /// The resources are occupied and cannot be used.
+  /// 资源已被占用，不能重复使用。
   @JsonValue(19)
   AlreadyInUse,
 
-  /// The SDK gave up the request due to too many requests.
+  /// SDK 放弃请求，可能由于请求次数太多。
   @JsonValue(20)
   Abort,
 
-  /// In Windows, specific firewall settings cause the SDK to fail to initialize and crash.
+  /// Windows 下特定的防火墙设置导致 SDK 初始化失败然后崩溃。
   @JsonValue(21)
   InitNetEngine,
 
-  /// The app uses too much of the system resources and the SDK fails to allocate the resources.
+  /// App 占用系统资源过多，SDK 分配资源失败。
   @JsonValue(22)
   ResourceLimited,
 
-  /// The specified App ID is invalid. Please try to rejoin the channel with a valid App ID.
+  /// 不是有效的 APP ID。请更换有效的 APP ID 重新加入频道。
   @JsonValue(101)
   InvalidAppId,
 
-  /// The specified channel name is invalid. Please try to rejoin the channel with a valid channel name.
+  /// 不是有效的频道名。请更换有效的频道名重新加入频道。
   @JsonValue(102)
   InvalidChannelId,
 
-  /// The token expired. Agora recommends that you use `TokenExpired`(9) in the reason parameter of `connectionStateChanged` instead.
-  /// See [ConnectionChangedReason.TokenExpired]
-  /// See [RtcEngineEventHandler.connectionStateChanged]
-  /// Possible reasons are:
-  /// - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the token to access the Agora service within five minutes after the token is generated. If the user does not access the Agora service after five minutes, this token is no longer valid.
-  /// - Call Expiration Timestamp expired: The timestamp is the exact time when a user can no longer use the Agora service (for example, when a user is forced to leave an ongoing call). When a value is set for the Call Expiration Timestamp, it does not mean that the token will expire, but that the user will be banned from the channel.
+  /// 当前使用的 Token 过期，不再有效。
+  ///
+  /// @deprecated 已废弃。
+  ///
+  /// 请改用 [`connectionStateChanged`] 回调中的 `TokenExpired`。
+  /// 详见 [RtcEngineEventHandler.connectionStateChanged] 和 [ConnectionChangedReason.TokenExpired]。
+  ///
+  /// 一般有以下原因：
+  /// - Token 授权时间戳无效：Token 授权时间戳为 Token 生成时的时间戳，自 1970 年 1 月 1 日开始到当前时间的描述。
+  /// 授权该 Token 在生成后的 24 小时内可以访问 Agora 服务。如果 24 小时内没有访问，则该 Token 无法再使用。需要重新在服务端申请生成 Token。
+  /// - Token 服务到期时间戳已过期：用户设置的服务到期时间戳小于当前时间戳，无法继续使用 Agora 服务（比如正在进行的通话会被强制终止）；
+  /// 设置服务到期时间并不意味着 Token 失效，而仅仅用于限制用户使用当前服务的时间。需要重新在服务端申请生成 Token。
   @deprecated
   @JsonValue(109)
   TokenExpired,
 
-  /// The token is invalid. Agora recommends that you use `InvalidToken`(8) in the reason parameter of `connectionStateChanged` instead.
-  /// See [ConnectionChangedReason.InvalidToken]
-  /// See [RtcEngineEventHandler.connectionStateChanged]
-  /// Possible reasons are:
-  /// - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
-  /// - The uid is mandatory, and users must set the same uid as the one set in the `joinChannel` method.
-  /// See [RtcEngine.joinChannel]
+  /// 生成的 Token 无效。
+  ///
+  /// @deprecated 已废弃。请改用 `connectionStateChanged` 回调中的 `InvalidToken`。
+  /// 详见 [RtcEngineEventHandler.connectionStateChanged] 和 [ConnectionChangedReason.InvalidToken]。
+  ///
+  /// 一般有以下原因：
+  /// - 用户在控制台上启用了 App Certificate，但仍旧在代码里仅使用了 App ID。当启用了 App Certificate，必须使用 Token。
+  /// - 字段 `uid` 为生成 Token 的必须字段，用户在调用 `joinChannel` 加入频道时必须设置相同的 `uid`。
+  /// 详见 [RtcEngine.joinChannel]。
   @deprecated
   @JsonValue(110)
   InvalidToken,
 
-  /// The Internet connection is interrupted. This applies to the Agora Web SDK only.
+  /// 网络连接中断。仅适用于 Agora Web SDK。
   @JsonValue(111)
   ConnectionInterrupted,
 
-  /// The Internet connection is lost. This applies to the Agora Web SDK only.
+  /// 网络连接丢失。仅适用于 Agora Web SDK。
   @JsonValue(112)
   ConnectionLost,
 
-  /// The user is not in the channel when calling the `sendStreamMessage` or `getUserInfoByUserAccount` method.
-  /// See [RtcEngine.sendStreamMessage]
-  /// See [RtcEngine.getUserInfoByUserAccount]
+  /// 调用 `sendStreamMessage` 或 `getUserInfoByUserAccount` 方法时，用户不在频道内。
+  /// 详见 [RtcEngine.sendStreamMessage] 和 [RtcEngine.getUserInfoByUserAccount]。
   @JsonValue(113)
   NotInChannel,
 
-  /// The size of the sent data is over 1024 bytes when the user calls the `sendStreamMessage` method.
-  /// See [RtcEngine.sendStreamMessage]
+  /// 在调用 `sendStreamMessage` 时，当发送的数据长度大于 1024 个字节时，会发生该错误。
+  /// 详见 [RtcEngine.sendStreamMessage]。
   @JsonValue(114)
   SizeTooLarge,
 
-  /// The bitrate of the sent data exceeds the limit of 6 Kbps when the user calls the `sendStreamMessage` method.
-  /// See [RtcEngine.sendStreamMessage]
+  /// 在调用 `sendStreamMessage` 时，当发送的数据码率超过限制（6 KB/s）时，会发生该错误。
+  /// 详见 [RtcEngine.sendStreamMessage]。
   @JsonValue(115)
   BitrateLimit,
 
-  /// Too many data streams (over five streams) are created when the user calls the `createDataStream` method.
-  /// See [RtcEngine.createDataStream]
+  /// 在调用 `createDataStream` 时，如果创建的数据通道过多（超过 5 个通道），会发生该错误。
+  /// 详见 [RtcEngine.createDataStream]。
   @JsonValue(116)
   TooManyDataStreams,
 
-  /// Decryption fails. The user may have used a different encryption password to join the channel. Check your settings or try rejoining the channel.
+  /// 解密失败，可能是用户加入频道用了不同的密码。请检查加入频道时的设置，或尝试重新加入频道。
   @JsonValue(120)
   DecryptionFailed,
 
-  /// The client is banned by the server.
+  /// 此用户被服务器禁止。
   @JsonValue(123)
   ClientIsBannedByServer,
 
-  /// Incorrect watermark file parameter.
+  /// 水印文件参数错误。
   @JsonValue(124)
   WatermarkParam,
 
-  /// Incorrect watermark file path.
+  /// 水印文件路径错误。
   @JsonValue(125)
   WatermarkPath,
 
-  /// Incorrect watermark file format.
+  /// 水印文件格式错误。
   @JsonValue(126)
   WatermarkPng,
 
-  /// Incorrect watermark file information.
+  /// 水印文件信息错误。
   @JsonValue(127)
   WatermarkInfo,
 
-  /// Incorrect watermark file data format.
+  /// 水印文件数据格式错误。
   @JsonValue(128)
   WatermarkAGRB,
 
-  /// An error occurs in reading the watermark file.
+  /// 水印文件读取错误。
   @JsonValue(129)
   WatermarkRead,
 
-  /// The encrypted stream is not allowed to publish.
+  /// 不支持发送加密流。
   @JsonValue(130)
   EncryptedStreamNotAllowedPublish,
 
-  /// The user account is invalid.
+  /// 无效的 User account。
   @JsonValue(134)
   InvalidUserAccount,
 
-  /// CDN related errors. Remove the original URL address and add a new one by calling the `removePublishStreamUrl` and `addPublishStreamUrl` methods.
-  /// See [RtcEngine.removePublishStreamUrl]
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// CDN 相关错误。请调用 `removePublishStreamUrl` 方法删除原来的推流地址，然后调用 `addPublishStreamUrl` 方法重新推流到新地址。
+  /// 详见 [RtcEngine.removePublishStreamUrl] 和 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(151)
   PublishStreamCDNError,
 
-  /// The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
+  /// 单个主播的推流地址数目达到上限 10。请删掉一些不用的推流地址再增加推流地址。
   @JsonValue(152)
   PublishStreamNumReachLimit,
 
-  /// The host manipulates other hosts' URLs. Check your app logic.
+  /// 操作不属于主播自己的流，如更新其他主播的流参数、停止其他主播的流。请检查 App 逻辑。
   @JsonValue(153)
   PublishStreamNotAuthorized,
 
-  /// An error occurs in Agora’s streaming server. Call the `addPublishStreamUrl` method to publish the stream again.
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// 推流服务器出现错误。请调用 `addPublishStreamUrl` 重新推流。
+  /// 详见 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(154)
   PublishStreamInternalServerError,
 
-  /// The server fails to find the stream.
+  /// 服务器未找到这个流。
   @JsonValue(155)
   PublishStreamNotFound,
 
-  /// The format of the RTMP stream URL is not supported. Check whether the URL format is correct.
+  /// 推流地址格式有错误。请检查推流地址格式是否正确。
   @JsonValue(156)
   PublishStreamFormatNotSuppported,
 
-  /// Fails to load the media engine.
+  /// 加载媒体引擎失败。
   @JsonValue(1001)
   LoadMediaEngine,
 
-  /// Fails to start the call after enabling the media engine.
+  /// 启动媒体引擎开始通话失败。请尝试重新进入频道。
   @JsonValue(1002)
   StartCall,
 
-  /// Fails to start the camera. Agora recommends that you use `CaptureFailure`(4) in the error parameter of `localVideoStateChanged` instead.
-  /// See [LocalVideoStreamError.CaptureFailure]
-  /// See [RtcEngineEventHandler.localVideoStateChanged]
+  /// 启动摄像头失败，请检查摄像头是否被其他应用占用，或者尝试重新进入频道。
+  ///
+  /// @deprecated
+  /// 已废弃。请改用 `localVideoStateChanged` 回调中的 `CaptureFailure`(4)。
+  /// 详见 [LocalVideoStreamError.CaptureFailure] 和 [RtcEngineEventHandler.localVideoStateChanged]。
   @deprecated
   @JsonValue(1003)
   StartCamera,
 
-  /// Fails to start the video rendering module.
+  /// 启动视频渲染模块失败。
   @JsonValue(1004)
   StartVideoRender,
 
-  /// Audio Device Module: A general error occurs in the Audio Device Module (the reason is not classified specifically). Check if the audio device is used by another app, or try rejoining the channel.
+  /// 音频设备模块：音频设备出现错误（未明确指明为何种错误）。请检查音频设备是否被其他应用占用，或者尝试重新进入频道。
   @JsonValue(1005)
   AdmGeneralError,
 
-  /// Audio Device Module: An error occurs in using the Java resources.
+  /// 音频设备模块：使用 java 资源出现错误。
   @JsonValue(1006)
   AdmJavaResource,
 
-  /// Audio Device Module: An error occurs in setting the sampling frequency.
+  /// 音频设备模块：设置的采样频率出现错误。
   @JsonValue(1007)
   AdmSampleRate,
 
-  /// Audio Device Module: An error occurs in initializing the playback device.
+  /// 音频设备模块：初始化播放设备出现错误。请检查播放设备是否被其他应用占用，或者尝试重新进入频道。
   @JsonValue(1008)
   AdmInitPlayout,
 
-  /// Audio Device Module: An error occurs in starting the playback device.
+  /// 音频设备模块：启动播放设备出现错误。请检查播放设备是否正常，或者尝试重新进入频道。
   @JsonValue(1009)
   AdmStartPlayout,
 
-  /// Audio Device Module: An error occurs in stopping the playback device.
+  /// 音频设备模块：停止播放设备出现错误。
   @JsonValue(1010)
   AdmStopPlayout,
 
-  /// Audio Device Module: An error occurs in initializing the recording device.
+  /// 音频设备模块：初始化录音设备时出现错误。请检查录音设备是否正常，或者尝试重新进入频道。
   @JsonValue(1011)
   AdmInitRecording,
 
-  /// Audio Device Module: An error occurs in starting the recording device.
+  /// 音频设备模块：启动录音设备出现错误。请检查录音设备是否正常，或者尝试重新进入频道
   @JsonValue(1012)
   AdmStartRecording,
 
-  /// Audio Device Module: An error occurs in stopping the recording device.
+  /// 音频设备模块：停止录音设备出现错误。
   @JsonValue(1013)
   AdmStopRecording,
 
-  /// Audio Device Module: A playback error occurs. Check your playback device, or try rejoining the channel.
+  /// 音频设备模块：运行时播放出现错误。请检查播放设备是否正常，或者尝试重新进入频道。
   @JsonValue(1015)
   AdmRuntimePlayoutError,
 
-  /// Audio Device Module: A recording error occurs.
+  /// 音频设备模块：运行时录音错误。请检查录音设备是否正常，或者尝试重新进入频道。
   @JsonValue(1017)
   AdmRuntimeRecordingError,
 
-  /// Audio Device Module: Fails to record.
+  /// 音频设备模块：录音失败。
   @JsonValue(1018)
   AdmRecordAudioFailed,
 
-  /// Audio Device Module: Abnormal audio playback frequency.
+  /// 音频设备模块：播放频率异常。
   @JsonValue(1020)
   AdmPlayAbnormalFrequency,
 
-  /// Audio Device Module: Abnormal audio recording frequency.
+  /// 音频设备模块：录制频率异常。
   @JsonValue(1021)
   AdmRecordAbnormalFrequency,
 
-  /// Audio Device Module: An error occurs in initializing the loopback device.
+  /// 音频设备模块：初始化 Loopback 设备错误。
   @JsonValue(1022)
   AdmInitLoopback,
 
-  /// Audio Device Module: An error occurs in starting the loopback device.
+  /// 音频设备模块：启动 Loopback 设备错误。
   @JsonValue(1023)
   AdmStartLoopback,
 
-  /// Audio Device Module: An error occurs in no recording Permission.
+  /// 音频设备模块：没有录音权限。
   @JsonValue(1027)
   AdmNoPermission,
 
-  /// Audio Routing: Fails to route the audio to the connected Bluetooth device. The default route is used.
+  /// 音频路由：连接蓝牙通话失败，默认路由会被启用。
   @JsonValue(1030)
   AudioBtScoFailed,
 
-  /// Audio Device Module: No recording device exists.
+  /// 音频设备模块：无录制设备。
   @JsonValue(1359)
   AdmNoRecordingDevice,
 
-  /// No playback device exists.
+  /// 音频设备模块：无播放设备。
   @JsonValue(1360)
   AdmNoPlayoutDevice,
 
-  /// Video Device Module: The camera is unauthorized.
+  /// 视频设备模块：没有摄像头使用权限。
   @JsonValue(1501)
   VdmCameraNotAuthorized,
 
-  /// Video Device Module: An unknown error occurs.
+  /// 视频设备模块：未知错误。
   @JsonValue(1600)
   VcmUnknownError,
 
-  /// Video Device Module: An error occurs in initializing the video encoder.
+  /// 视频设备模块：视频 Codec 初始化错误。
   @JsonValue(1601)
   VcmEncoderInitError,
 
-  /// Video Device Module: An error occurs in video encoding.
+  /// 视频设备模块：视频 Codec 错误。
   @JsonValue(1602)
   VcmEncoderEncodeError,
 
-  /// Video Device Module: An error occurs in setting the video encoder.
+  /// 视频设备模块：视频 Codec 设置错误。
+  ///
+  /// @deprecated 该错误代码已废弃。
   @deprecated
   @JsonValue(1603)
   VcmEncoderSetError,
 }
 
-/// State of importing an external video stream in a live broadcast.
-
+/// 输入进直播的外部视频源状态。
 enum InjectStreamStatus {
-  /// The external video stream imported successfully.
+  /// 外部视频流输入成功。
   @JsonValue(0)
   StartSuccess,
 
-  /// The external video stream already exists.
+  /// 外部视频流已存在。
   @JsonValue(1)
   StartAlreadyExists,
 
-  /// The external video stream import is unauthorized.
+  /// 外部视频流输入未经授权。
   @JsonValue(2)
   StartUnauthorized,
 
-  /// Import external video stream timeout.
+  /// 输入外部视频流超时。
   @JsonValue(3)
   StartTimedout,
 
-  /// The external video stream failed to import.
+  /// 外部视频流输入失败。
   @JsonValue(4)
   StartFailed,
 
-  /// The external video stream imports successfully.
+  /// 外部视频流停止输入成功。
   @JsonValue(5)
   StopSuccess,
 
-  /// No external video stream is found.
+  /// 未找到要停止输入的外部视频流。
   @JsonValue(6)
   StopNotFound,
 
-  /// The external video stream is stopped from being unauthorized.
+  /// 要停止输入的外部视频流未经授权。
   @JsonValue(7)
   StopUnauthorized,
 
-  /// Importing the external video stream timeout.
+  /// 停止输入外部视频流超时。
   @JsonValue(8)
   StopTimedout,
 
-  /// Importing the external video stream failed.
+  /// 停止输入外部视频流失败。
   @JsonValue(9)
   StopFailed,
 
-  /// The external video stream import is interrupted.
+  /// 输入的外部视频流被中断。
   @JsonValue(10)
   Broken,
 }
 
-/// The state of the probe test result.
-
+/// Last-mile 质量探测结果的状态。
 enum LastmileProbeResultState {
-  /// The last-mile network probe test is complete.
+  /// 本次 Last-mile 质量探测是完整的。
   @JsonValue(1)
   Complete,
 
-  /// The last-mile network probe test is incomplete and the bandwidth estimation is not available, probably due to limited test resources.
+  /// 本次 Last-mile 质量探测未进行带宽预测，因此结果不完整。一个可能的原因是测试资源暂时受限。
   @JsonValue(2)
   IncompleteNoBwe,
 
-  /// The last-mile network probe test is not carried out, probably due to poor network conditions.
+  /// 未进行 Last-mile 质量探测。一个可能的原因是网络连接中断。
   @JsonValue(3)
   Unavailable,
 }
 
-/// The lightening contrast level.
+/// 亮度明暗对比度。
 
 enum LighteningContrastLevel {
-  /// Low contrast level.
+  /// 低对比度。
   @JsonValue(0)
   Low,
 
-  /// (Default) Normal contrast level.
+  ///（默认）正常对比度。
   @JsonValue(1)
   Normal,
 
-  /// High contrast level.
+  /// 高对比度。
   @JsonValue(2)
   High,
 }
 
-/// The detailed error information of the local video.
-
+/// 本地视频出错原因。
 enum LocalVideoStreamError {
-  /// The local video is normal.
+  /// 本地视频状态正常。
   @JsonValue(0)
   OK,
 
-  /// No specified reason for the local video failure.
+  /// 出错原因不明确。
   @JsonValue(1)
   Failure,
 
-  /// No permission to use the local video device.
+  /// 没有权限启动本地视频采集设备。
   @JsonValue(2)
   DeviceNoPermission,
 
-  /// The local video capturer is in use.
+  /// 本地视频采集设备正在使用中。
   @JsonValue(3)
   DeviceBusy,
 
-  /// The local video capture fails. Check whether the capturer is working properly.
+  /// 本地视频采集失败，建议检查采集设备是否正常工作。
   @JsonValue(4)
   CaptureFailure,
 
-  /// The local video encoding fails.
+  /// 本地视频编码失败。
   @JsonValue(5)
   EncodeFailure,
 }
 
-/// The state of the local video stream.
+/// 本地视频状态。
 
 enum LocalVideoStreamState {
-  /// The local video is in the initial state.
+  /// 本地视频默认初始状态。
   @JsonValue(0)
   Stopped,
 
-  /// The local video capturer starts successfully.
+  /// 本地视频采集设备启动成功。
   @JsonValue(1)
   Capturing,
 
-  /// The first local video frame encodes successfully.
+  /// 本地视频首帧编码成功。
   @JsonValue(2)
   Encoding,
 
-  /// The local video fails to start.
+  /// 本地视频启动失败。
   @JsonValue(3)
   Failed,
 }
 
-/// Output log filter level.
-
+/// 输出日志过滤分级。
 enum LogFilter {
-  /// Do not output any log information.
+  /// 不输出任何日志。
   @JsonValue(0)
   Off,
 
-  /// Output all log information. Set your log filter as debug if you want to get the most complete log file.
+  /// 输出所有的 API 日志。如果你想获取最完整的日志，可以将日志级别设为该等级。
   @JsonValue(0x080f)
   Debug,
 
-  /// Output CRITICAL, ERROR, WARNING, and INFO level log information. We recommend setting your log filter as this level.
+  /// 输出 CRITICAL、ERROR、WARNING、INFO 级别的日志。我们推荐你将日志级别设为该等级。
   @JsonValue(0x000f)
   Info,
 
-  /// Outputs CRITICAL, ERROR, and WARNING level log information.
+  /// 仅输出 CRITICAL、ERROR、WARNING 级别的日志。
   @JsonValue(0x000e)
   Warning,
 
-  /// Outputs CRITICAL and ERROR level log information.
+  /// 仅输出 CRITICAL、ERROR 级别的日志。
   @JsonValue(0x000c)
   Error,
 
-  /// Outputs CRITICAL level log information.
+  /// 仅输出 CRITICAL 级别的日志。
   @JsonValue(0x0008)
   Critical,
 }
 
-/// (iOS only) Media device type.
-
-/// TODO @nodoc MacOS AgoraMediaDeviceType
+/// 媒体设备类型。（仅适用于 iOS）
 enum MediaDeviceType {
-  /// Unknown device.
+  /// 未知的设备类型。
   @JsonValue(-1)
   AudioUnknown,
 
-  /// Audio playback device.
+  /// 音频播放设备。
   @JsonValue(0)
   AudioPlayout,
 
-  /// Audio recording device.
+  /// 音频录制设备。
   @JsonValue(1)
   AudioRecording,
 
-  /// Video render device.
+  /// 视频渲染设备。
   @JsonValue(2)
   VideoRender,
 
-  /// Video capture device.
+  /// 视频采集设备。
   @JsonValue(3)
   VideoCapture,
 }
 
-/// Media type.
-
+/// 媒体类型。
 /// TODO @nodoc LiveEngine
 enum MediaType {
-  /// No audio and video.
+  /// 无音视频。
   @JsonValue(0)
   None,
 
-  /// Audio only.
+  /// 仅有音频。
   @JsonValue(1)
   AudioOnly,
 
-  /// Video only.
+  /// 仅有视频。
   @JsonValue(2)
   VideoOnly,
 
-  /// Audio and video.
+  /// 有音视频。
   @JsonValue(3)
   AudioAndVideo,
 }
 
-/// (Android only) The metadata type.
-
+/// 观测器的 Metadata 类型。（仅适用于 Android)
 /// TODO @nodoc registerMediaMetadataObserver
 enum MetadataType {
-  /// The metadata type is unknown.
+  /// Metadata 类型未知。
   @JsonValue(-1)
   Unknown,
 
-  /// The metadata type is video.
+  /// Metadata 类型为视频。
   @JsonValue(0)
   Video,
 }
 
-/// Network quality.
-
+/// 网络质量。
 enum NetworkQuality {
-  /// The network quality is unknown.
+  /// 网络质量未知。
   @JsonValue(0)
   Unknown,
 
-  /// The network quality is excellent.
+  /// 网络质量极好。
   @JsonValue(1)
   Excellent,
 
-  /// The network quality is quite good, but the bitrate may be slightly lower than excellent.
+  /// 用户主观感觉和 `Excellent` 差不多，但码率可能略低于 `Excellent`。
   @JsonValue(2)
   Good,
 
-  /// Users can feel the communication slightly impaired.
+  /// 用户主观感受有瑕疵但不影响沟通。
   @JsonValue(3)
   Poor,
 
-  /// Users can communicate only not very smoothly.
+  /// 勉强能沟通但不顺畅。
   @JsonValue(4)
   Bad,
 
-  /// The network quality is so bad that users can hardly communicate.
+  /// 网络质量非常差，基本不能沟通。
   @JsonValue(5)
   VBad,
 
-  /// The network is disconnected and users cannot communicate at all.
+  /// 网络连接已断开，完全无法沟通。
   @JsonValue(6)
   Down,
 
-  /// Users cannot detect the network quality. (Not in use.)
+  /// 网络质量探测功能不可使用 (目前没有使用)。
   @JsonValue(7)
   Unsupported,
 
-  /// Detecting the network quality.
+  /// 网络质量探测中。
   @JsonValue(8)
   Detecting,
 }
 
-/// Network type.
-
+/// 网络类型。
 enum NetworkType {
-  /// The network type is unknown.
+  /// 网络连接类型未知。
   @JsonValue(-1)
   Unknown,
 
-  /// The SDK disconnects from the network.
+  /// 网络连接已断开。
   @JsonValue(0)
   Disconnected,
 
-  /// The network type is LAN.
+  /// 网络类型为 LAN。
   @JsonValue(1)
   LAN,
 
-  /// The network type is Wi-Fi (including hotspots).
+  /// 网络类型为 Wi-Fi（包含热点）。
   @JsonValue(2)
   WIFI,
 
-  /// The network type is mobile 2G.
+  /// 网络类型为 2G 移动网络。
   @JsonValue(3)
   Mobile2G,
 
-  /// The network type is mobile 3G.
+  /// 网络类型为 3G 移动网络。
   @JsonValue(4)
   Mobile3G,
 
-  /// The network type is mobile 4G.
+  /// 网络类型为 4G 移动网络。
   @JsonValue(5)
   Mobile4G,
 }
 
-/// (Android only) Default camera position
-
-/// TODO @nodoc AgoraRtcDefaultCamera
+/// 默认相机位置。（仅适用于 Android）
 enum RtcDefaultCameraPosition {
-  /// Front camera
+  /// 前置摄像头。
   @JsonValue(0)
   Front,
 
-  /// Rear camera
+  /// 后置摄像头。
   @JsonValue(1)
   Back
 }
 
-/// Lifecycle of the CDN live video stream.
-
-/// TODO @nodoc AgoraPublisherConfiguration
+/// 服务端转码推流的生命周期。
 enum RtmpStreamLifeCycle {
-  /// Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
+  /// 跟频道生命周期绑定，即频道内所有主播离开，服务端转码推流会在 30 秒之后停止。
   @JsonValue(1)
   BindToChannel,
 
-  /// Bound to the owner of the RTMP stream. If the owner leaves the channel, the CDN live streaming stops immediately.
+  /// 跟启动服务端转码推流的主播生命周期绑定，即该主播离开，服务端转码推流会立即停止。
   @JsonValue(2)
   BindToOwnner,
 }
 
-/// The detailed error information for streaming.
-
+/// 详细的推流错误信息。
 enum RtmpStreamingErrorCode {
-  /// The RTMP streaming publishes successfully.
+  /// 推流成功。
   @JsonValue(0)
   OK,
 
-  /// Invalid argument used. If, for example, you do not call the `setLiveTranscoding` method to configure the LiveTranscoding parameters before calling the `addPublishStreamUrl` method, the SDK returns this error. Check whether you set the parameters in the `setLiveTranscoding` method properly.
-  /// See [RtcEngine.setLiveTranscoding]
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// 参数无效。比如说如果你在调用 `addPublishStreamUrl` 前没有调用 `setLiveTranscoding` 设置转码参数，SDK 会返回该错误。
+  /// 请检查输入参数是否正确。
+  /// 详见 [RtcEngine.setLiveTranscoding] 和 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(1)
   InvalidParameters,
 
-  /// The RTMP streaming is encrypted and cannot be published.
+  /// 推流已加密不能推流。
   @JsonValue(2)
   EncryptedStreamNotAllowed,
 
-  /// Timeout for the RTMP streaming. Call the `addPublishStreamUrl` method to publish the streaming again.
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// 推流超时未成功。可调用 `addPublishStreamUrl` 重新推流。
+  /// 详见 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(3)
   ConnectionTimeout,
 
-  /// An error occurs in Agora’s streaming server. Call the `addPublishStreamUrl` method to publish the streaming again.
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// 推流服务器出现错误。请调用 `addPublishStreamUrl` 重新推流。
+  /// 详见 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(4)
   InternalServerError,
 
-  /// An error occurs in the RTMP server.
+  /// RTMP 服务器出现错误。
   @JsonValue(5)
   RtmpServerError,
 
-  /// The RTMP streaming publishes too frequently.
+  /// 推流请求过于频繁。
   @JsonValue(6)
   TooOften,
 
-  /// The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
+  /// 单个主播的推流地址数目达到上限 10。请删掉一些不用的推流地址再增加推流地址。
   @JsonValue(7)
   ReachLimit,
 
-  /// The host manipulates other hosts' URLs. Check your app logic.
+  /// 主播操作不主播自己的流，如更新其他主播的流参数、停止其他主播的流。请检查 app 逻辑。
   @JsonValue(8)
   NotAuthorized,
 
-  /// Agora’s server fails to find the RTMP streaming.
+  /// 服务器未找到这个流。
   @JsonValue(9)
   StreamNotFound,
 
-  /// The format of the RTMP streaming URL is not supported. Check whether the URL format is correct.
+  /// 推流地址格式有错误。请检查推流地址格式是否正确。
   @JsonValue(10)
   FormatNotSupported,
 }
 
-/// The RTMP streaming state.
-
+/// RTMP 推流状态。
 enum RtmpStreamingState {
-  /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling `removePublishStreamUrl`.
-  /// See [RtcEngine.removePublishStreamUrl]
+  /// 推流未开始或已结束。成功调用 `removePublishStreamUrl` 方法删除推流地址后，也会返回该状态。
+  /// 详见 [RtcEngine.removePublishStreamUrl]。
   @JsonValue(0)
   Idle,
 
-  /// The SDK is connecting to Agora’s streaming server and the RTMP server. This state is triggered after you call the `addPublishStreamUrl` method.
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// 正在连接 Agora 推流服务器和 RTMP 服务器。SDK 调用 `addPublishStreamUrl` 方法后，会返回该状态。
+  /// 详见 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(1)
   Connecting,
 
-  /// The RTMP streaming is being published. The SDK successfully publishes the RTMP streaming and returns this state.
+  /// 推流正在进行。SDK 成功推流后，会返回该状态。
   @JsonValue(2)
   Running,
 
-  /// The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP streaming and returns this state.
-  /// - If the SDK successfully resumes the streaming, `Running`(2) returns.
-  /// See [RtmpStreamingState.Running]
-  /// - If the streaming does not resume within 60 seconds or server errors occur, `Failure`(4) returns. You can also reconnect to the server by calling the `removePublishStreamUrl` and `addPublishStreamUrl` methods.
-  /// See [RtmpStreamingState.Failure]
-  /// See [RtcEngine.removePublishStreamUrl]
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// 正在恢复推流。当 CDN 出现异常，或推流短暂中断时，SDK 会自动尝试恢复推流，并返回该状态。
+  /// - 如成功恢复推流，则进入状态 `Running`。详见 [RtmpStreamingState.Running]。
+  /// - 如服务器出错或 60 秒内未成功恢复，则进入状态 `Failure`。详见 [RtmpStreamingState.Failure]。
+  /// - 如果觉得 60 秒太长，也可以主动调用 `removePublishStreamUrl` 和 `addPublishStreamUrl` 方法尝试重连。
+  /// 详见 [RtcEngine.removePublishStreamUrl] 和 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(3)
   Recovering,
 
-  /// The RTMP streaming fails. See the `errorCode` parameter for the detailed error information. You can also call the `addPublishStreamUrl` method to publish the RTMP streaming again.
-  /// See [RtcEngine.addPublishStreamUrl]
+  /// 推流失败。失败后，你可以通过返回的错误码排查出错原因；
+  /// 也可以再次调用 `addPublishStreamUrl` 重新尝试推流。
+  /// 详见 [RtcEngine.addPublishStreamUrl]。
   @JsonValue(4)
   Failure,
 }
 
-/// Stream fallback option.
-
+/// 流回退选项。
 enum StreamFallbackOptions {
-  /// No fallback behavior for the local/remote video stream when the uplink/downlink network condition is unreliable. The quality of the stream is not guaranteed.
+  /// 上/下行网络较弱时，不对音视频流作回退处理，但不能保证音视频流的质量。
   @JsonValue(0)
   Disabled,
 
-  /// Under unreliable downlink network conditions, the remote video stream falls back to the low-stream (low resolution and low bitrate) video. You can only set this option in the `setRemoteSubscribeFallbackOption` method. Nothing happens when you set this in the `setLocalPublishFallbackOption` method.
-  /// See [RtcEngine.setRemoteSubscribeFallbackOption]
-  /// See [RtcEngine.setLocalPublishFallbackOption]
+  /// 下行网络较弱时只接收视频小流。
+  ///
+  /// 该选项只对 `setRemoteSubscribeFallbackOption` 方法有效，对 `setLocalPublishFallbackOption` 方法无效。
+  /// 详见 [RtcEngine.setRemoteSubscribeFallbackOption] 和 [RtcEngine.setLocalPublishFallbackOption]。
   @JsonValue(1)
   VideoStreamLow,
 
-  /// Under unreliable uplink network conditions, the published video stream falls back to audio only. Under unreliable downlink network conditions, the remote video stream first falls back to the low-stream (low resolution and low bitrate) video; and then to an audio-only stream if the network condition deteriorates.
+  /// 上行网络较弱时，只发布音频流。下行网络较弱时，先尝试只接收视频小流；
+  /// 如果网络环境无法显示视频，则再回退到只接收远端订阅的音频流。
   @JsonValue(2)
   AudioOnly,
 }
 
-/// Reason for the user being offline.
-
+/// 用户离线原因。
 enum UserOfflineReason {
-  /// The user left the current channel.
+  /// 用户主动离开。
   @JsonValue(0)
   Quit,
 
-  /// The SDK timed out and the user dropped offline because no data packet is received within a certain period of time. If a user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
+  /// 因过长时间收不到对方数据包，超时掉线。注意：由于 SDK 使用的是不可靠通道，
+  /// 也有可能对方主动离开本方没收到对方离开消息而误判为超时掉线。
   @JsonValue(1)
   Dropped,
 
-  /// (LiveBroadcasting only) The client role switched from the host to the audience.
+  /// （直播场景中）用户身份从主播切换为观众时触发。
   @JsonValue(2)
   BecomeAudience,
 }
 
-/// The priority of the remote user.
-
+/// 远端用户的优先级。
 enum UserPriority {
-  /// The user’s priority is high.
+  /// 远端用户的优先级为高。
   @JsonValue(50)
   High,
 
-  /// (Default) The user’s priority is normal.
+  /// （默认） 远端用户的优先级为低。
   @JsonValue(100)
   Normal,
 }
 
-/// (iOS only) Video buffer type.
-
-/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
+/// 视频 buffer 类型。（仅适用于 iOS）
 enum VideoBufferType {
-  /// Use a pixel buffer to transmit the video data.
+  /// 使用 Pixel Buffer 类型的 Buffer。
   @JsonValue(1)
   PixelBuffer,
 
-  /// Use raw data to transmit the video data.
+  /// 使用 Raw Data 类型的 Buffer。
   @JsonValue(2)
   RawData,
 }
 
-/// Self-defined video codec profile.
-
+/// 用于旁路直播的输出视频的编码规格。
 enum VideoCodecProfileType {
-  /// Baseline video codec profile. Generally used in video calls on mobile phones.
+  /// Baseline 级别的视频编码规格，一般用于低阶或需要额外容错的应用，比如视频通话、手机视频等。
   @JsonValue(66)
   BaseLine,
 
-  /// Main video codec profile. Generally used in mainstream electronics, such as MP4 players, portable video players, PSP, and iPads.
+  /// Main 级别的视频编码规格，一般用于主流消费类电子产品，如 mp4、便携的视频播放器、PSP 和 iPad 等。
   @JsonValue(77)
   Main,
 
-  /// (Default) High video codec profile. Generally used in high-resolution broadcasts or television.
+  ///（默认）High 级别的视频编码规格，一般用于广播及视频碟片存储，高清电视。
   @JsonValue(100)
   High,
 }
 
-/// (iOS only) The content hint for screen sharing.
-
-/// TODO @nodoc MacOS setScreenCaptureContentHint
+/// 屏幕共享的内容类型。（仅适用于 iOS）
 enum VideoContentHint {
-  /// (Default) No content hint.
+  /// （默认）无指定的内容类型。
   @JsonValue(0)
   None,
 
-  /// Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
+  /// 内容类型为动画。当共享的内容是视频、电影或视频游戏时，推荐选择该内容类型。
   @JsonValue(1)
   Motion,
 
-  /// Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slide, or text.
+  /// 内容类型为细节。当共享的内容是图片或文字时，推荐选择该内容类型。
   @JsonValue(2)
   Details,
 }
 
-/// Video frame rate.
-
+/// 视频编码的帧率。
 enum VideoFrameRate {
-  /// Min
+  /// 最低视频编码帧率（fps）。
   @JsonValue(-1)
   Min,
 
-  /// 1 fps.
+  /// 每秒钟 1 帧。
   @JsonValue(1)
   Fps1,
 
-  /// 7 fps.
+  /// 每秒钟 7 帧。
   @JsonValue(7)
   Fps7,
 
-  /// 10 fps.
+  /// 每秒钟 10 帧。
   @JsonValue(10)
   Fps10,
 
-  /// 15 fps.
+  /// 每秒钟 15 帧。
   @JsonValue(15)
   Fps15,
 
-  /// 24 fps.
+  /// 每秒钟 24 帧。
   @JsonValue(24)
   Fps24,
 
-  /// 30 fps.
+  /// 每秒钟 30 帧。
   @JsonValue(30)
   Fps30,
 
-  /// 60 fps (macOS only).
+  /// 每秒钟 60 帧。（仅适用于 macOS）
   @JsonValue(60)
   Fps60,
 }
 
-/// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
+/// 视频编码的码率。单位为 Kbps。你可以根据场景需要，参考下面的视频基准码率参考表，手动设置你想要的码率。若设置的视频码率超出合理范围，SDK 会自动按照合理区间处理码率。// TODO 英文没有给出 table
+///
+/// **视频码率参考表**
+/// <table>
+///     <tr>
+///         <th>分辨率</th>
+///         <th>帧率 <p> (fps)</th>
+///         <th>基准码率 <p>（通信场景，Kbps）</th>
+///         <th>直播码率 <p>（直播场景，Kbps）</th>
+///     </tr>
+///     <tr>
+///         <td>160*120</td>
+///         <td>15</td>
+///         <td>65</td>
+///         <td>130</td>
+///     </tr>
+///     <tr>
+///         <td>120*120</td>
+///         <td>15</td>
+///         <td>50</td>
+///         <td>100</td>
+///     </tr>
+///     <tr>
+///         <td>320*180</td>
+///         <td>15</td>
+///         <td>140</td>
+///         <td>280</td>
+///     </tr>
+///     <tr>
+///         <td>180*180</td>
+///         <td>15</td>
+///         <td>100</td>
+///         <td>200</td>
+///     </tr>
+///     <tr>
+///         <td>240*180</td>
+///         <td>15</td>
+///         <td>120</td>
+///         <td>240</td>
+///     </tr>
+///     <tr>
+///         <td>320*240</td>
+///         <td>15</td>
+///         <td>200</td>
+///         <td>400</td>
+///     </tr>
+///     <tr>
+///         <td>240*240</td>
+///         <td>15</td>
+///         <td>140</td>
+///         <td>280</td>
+///     </tr>
+///     <tr>
+///         <td>424*240</td>
+///         <td>15</td>
+///         <td>220</td>
+///         <td>440</td>
+///     </tr>
+///     <tr>
+///         <td>640*360</td>
+///         <td>15</td>
+///         <td>400</td>
+///         <td>800</td>
+///     </tr>
+///     <tr>
+///         <td>360*360</td>
+///         <td>15</td>
+///         <td>260</td>
+///         <td>520</td>
+///     </tr>
+///     <tr>
+///         <td>640*360</td>
+///         <td>30</td>
+///         <td>600</td>
+///         <td>1200</td>
+///     </tr>
+///     <tr>
+///         <td>360*360</td>
+///         <td>30</td>
+///         <td>400</td>
+///         <td>800</td>
+///     </tr>
+///     <tr>
+///         <td>480*360</td>
+///         <td>15</td>
+///         <td>320</td>
+///         <td>640</td>
+///     </tr>
+///     <tr>
+///         <td>480*360</td>
+///         <td>30</td>
+///         <td>490</td>
+///         <td>980</td>
+///     </tr>
+///     <tr>
+///         <td>640*480</td>
+///         <td>15</td>
+///         <td>500</td>
+///         <td>1000</td>
+///     </tr>
+///     <tr>
+///         <td>480*480</td>
+///         <td>15</td>
+///         <td>400</td>
+///         <td>800</td>
+///     </tr>
+///     <tr>
+///         <td>640*480</td>
+///         <td>30</td>
+///         <td>750</td>
+///         <td>1500</td>
+///     </tr>
+///     <tr>
+///         <td>480*480</td>
+///         <td>30</td>
+///         <td>600</td>
+///         <td>1200</td>
+///     </tr>
+///     <tr>
+///         <td>848*480</td>
+///         <td>15</td>
+///         <td>610</td>
+///         <td>1220</td>
+///     </tr>
+///     <tr>
+///         <td>848*480</td>
+///         <td>30</td>
+///         <td>930</td>
+///         <td>1860</td>
+///     </tr>
+///     <tr>
+///         <td>640*480</td>
+///         <td>10</td>
+///         <td>400</td>
+///         <td>800</td>
+///     </tr>
+///     <tr>
+///         <td>1280*720</td>
+///         <td>15</td>
+///         <td>1130</td>
+///         <td>2260</td>
+///     </tr>
+///     <tr>
+///         <td>1280*720</td>
+///         <td>30</td>
+///         <td>1710</td>
+///         <td>3420</td>
+///     </tr>
+///     <tr>
+///         <td>960*720</td>
+///         <td>15</td>
+///         <td>910</td>
+///         <td>1820</td>
+///     </tr>
+///     <tr>
+///         <td>960*720</td>
+///         <td>30</td>
+///         <td>1380</td>
+///         <td>2760</td>
+///     </tr>
+/// </table>
+/// **Note**
+///
+/// 该表中的基准码率适用于通信场景。直播场景下通常需要较大码率来提升视频质量。
+/// Agora 推荐通过设置 `Standard` 来实现。你也可以直接将码率值设为基准码率值 x 2。
+///
+/// 你也可以直接选择如下任意一种模式进行设置：
 
 enum BitRate {
-  /// (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
-  /// - Communication profile: the video bitrate is the same as the base bitrate.
-  /// - LiveBroadcasting profile: the video bitrate is twice the base bitrate.
+  /// （推荐）标准码率模式。该模式下，视频在通信和直播场景下的码率有所不同：
+  /// - 通信场景下，码率与基准码率一致。
+  /// - 直播场景下，码率对照基准码率翻倍。
   @JsonValue(0)
   Standard,
 
-  /// The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. In the LiveBroadcasting profile, if you choose this mode, the video frame rate may be lower than the set value.
+  /// 适配码率模式。该模式下，视频在通信和直播场景下的码率均与基准码率一致。直播下如果选择该模式，视频帧率可能会低于设置的值。
   @JsonValue(-1)
   Compatible,
 }
 
-/// Video mirror mode.
-
+/// 视频镜像模式。
 enum VideoMirrorMode {
-  /// (Default) The SDK determines the mirror mode.
+  /// （默认） 由 SDK 决定镜像模式。
   @JsonValue(0)
   Auto,
 
-  /// Enables mirror mode.
+  /// 启用镜像模式。
   @JsonValue(1)
   Enabled,
 
-  /// Disables mirror mode.
+  /// 关闭镜像模式。
   @JsonValue(2)
   Disabled,
 }
 
-/// Video output orientation mode.
-
+/// 视频输出方向模式。
 enum VideoOutputOrientationMode {
-  /// Adaptive mode (Default).
-  /// The video encoder adapts to the orientation mode of the video input device. When you use a custom video source, the output video from the encoder inherits the orientation of the original video.
-  /// - If the width of the captured video from the SDK is greater than the height, the encoder sends the video in landscape mode. The encoder also sends the rotational information of the video, and the receiver uses the rotational information to rotate the received video.
-  /// - If the original video is in portrait mode, the output video from the encoder is also in portrait mode. The encoder also sends the rotational information of the video to the receiver.
+  /// 自适应布局（默认）
+  /// 该模式下 SDK 输出的视频方向与采集到的视频方向一致。
+  /// 接收端会根据收到的视频旋转信息对视频进行旋转。该模式适用于接收端可以调整视频方向的场景:
+  /// - 如果采集的视频是横屏模式，则输出的视频也是横屏模式。
+  /// - 如果采集的视频是竖屏模式，则输出的视频也是竖屏模式。
   @JsonValue(0)
   Adaptative,
 
-  /// Landscape mode.
-  /// The video encoder always sends the video in landscape mode. The video encoder rotates the original video before sending it and the rotational information is 0. This mode applies to scenarios involving CDN live streaming.
+  /// 横屏布局。
+  /// 该模式下 SDK 固定输出风景（横屏）模式的视频。如果采集到的视频是竖屏模式，
+  /// 则视频编码器会对其进行裁剪。该模式适用于当接收端无法调整视频方向时，如使用旁路推流场景下。
   @JsonValue(1)
   FixedLandscape,
 
-  /// Portrait mode.
-  /// The video encoder always sends the video in portrait mode. The video encoder rotates the original video before sending it and the rotational information is 0. This mode applies to scenarios involving CDN live streaming.
+  /// 竖屏布局。
+  /// 该模式下 SDK 固定输出人像（竖屏）模式的视频。如果采集到的视频是横屏模式，则视频编码器会对其进行裁剪。该模式适用于当接收端无法调整视频方向时，如使用旁路推流场景下。
   @JsonValue(2)
   FixedPortrait,
 }
 
-/// (iOS only) Video pixel format.
-
-/// TODO @nodoc iOS AgoraVideoSinkProtocol
+/// 视频像素格式。（仅适用于 iOS）
 enum VideoPixelFormat {
-  /// The video pixel format is I420.
+  /// I420。
   @JsonValue(1)
   I420,
 
-  /// The video pixel format is BGRA.
+  /// BGRA。
   @JsonValue(2)
   BGRA,
 
-  /// The video pixel format is NV21.
+  /// NV12。
   @JsonValue(8)
   NV12,
 }
 
-/// Quality change of the local video in terms of target frame rate and target bit rate since last count.
-
+/// 自上次统计后本地视频质量的自适应情况（基于目标帧率和目标码率）。
 enum VideoQualityAdaptIndication {
-  /// The quality of the local video stays the same.
+  /// 本地视频质量不变。
   @JsonValue(0)
   AdaptNone,
 
-  /// The quality improves because the network bandwidth increases.
+  /// 因网络带宽增加，本地视频质量改善。
   @JsonValue(1)
   AdaptUpBandwidth,
 
-  /// The quality worsens because the network bandwidth decreases.
+  /// 因网络带宽减少，本地视频质量变差。
   @JsonValue(2)
   AdaptDownBandwidth,
 }
 
-/// The state of the remote video.
-
+/// 远端视频流状态。
 enum VideoRemoteState {
-  /// The remote video is in the default state, probably due to:
-  /// See [VideoRemoteStateReason.LocalMuted]
-  /// See [VideoRemoteStateReason.RemoteMuted]
-  /// See [VideoRemoteStateReason.RemoteOffline]
+  /// 远端视频默认初始状态。在
+  /// - [VideoRemoteStateReason.LocalMuted]、
+  /// - [VideoRemoteStateReason.RemoteMuted] 或
+  /// - [VideoRemoteStateReason.RemoteOffline] 的情况下，会报告该状态。
   @JsonValue(0)
   Stopped,
 
-  /// The first remote video packet is received.
+  /// 本地用户已接收远端视频首包。
   @JsonValue(1)
   Starting,
 
-  /// The remote video stream is decoded and plays normally, probably due to:
-  /// - [VideoRemoteStateReason.NetworkRecovery]
-  /// - [VideoRemoteStateReason.LocalUnmuted]
-  /// - [VideoRemoteStateReason.RemoteUnmuted]
-  /// - [VideoRemoteStateReason.AudioFallbackRecovery]
+  /// 远端视频流正在解码，正常播放。在
+  /// - [VideoRemoteStateReason.NetworkRecovery]、
+  /// - [VideoRemoteStateReason.LocalUnmuted]、
+  /// - [VideoRemoteStateReason.RemoteUnmuted] 或
+  /// - [VideoRemoteStateReason.AudioFallbackRecovery] 的情况下，会报告该状态。
   @JsonValue(2)
   Decoding,
 
-  /// The remote video is frozen, probably due to:
-  /// - [VideoRemoteStateReason.NetworkCongestion]
-  /// - [VideoRemoteStateReason.AudioFallback]
+  /// 远端视频流卡顿。在
+  /// - [VideoRemoteStateReason.NetworkCongestion] 或
+  /// - [VideoRemoteStateReason.AudioFallback] 的情况下，会报告该状态。
   @JsonValue(3)
   Frozen,
 
-  /// The remote video fails to start, probably due to [VideoRemoteStateReason.Internal].
+  /// 远端视频流播放失败。在 [VideoRemoteStateReason.Internal] 的情况下，会报告该状态。
   @JsonValue(4)
   Failed,
 }
 
-/// The reason of the remote video state change.
-
+/// 远端视频流状态改变的具体原因。
 enum VideoRemoteStateReason {
-  /// Internal reasons.
+  /// 内部原因。
   @JsonValue(0)
   Internal,
 
-  /// Network congestion.
+  /// 网络阻塞。
   @JsonValue(1)
   NetworkCongestion,
 
-  /// Network recovery.
+  /// 网络恢复正常。
   @JsonValue(2)
   NetworkRecovery,
 
-  /// The local user stops receiving the remote video stream or disables the video module.
+  /// 本地用户停止接收远端视频流或本地用户禁用视频模块。
   @JsonValue(3)
   LocalMuted,
 
-  /// The local user stops receiving the remote video stream or disables the video module.
+  /// 本地用户恢复接收远端视频流或本地用户启动视频模块。
   @JsonValue(4)
   LocalUnmuted,
 
-  /// The remote user stops sending the video stream or disables the video module.
+  /// 远端用户停止发送视频流或远端用户禁用视频模块。
   @JsonValue(5)
   RemoteMuted,
 
-  /// The remote user resumes sending the video stream or enables the video module.
+  /// 远端用户恢复发送视频流或远端用户启用视频模块。
   @JsonValue(6)
   RemoteUnmuted,
 
-  /// The remote user leaves the channel.
+  /// 远端用户离开频道。
   @JsonValue(7)
   RemoteOffline,
 
-  /// The remote media stream falls back to the audio-only stream due to poor network conditions.
+  /// 远端视频流已回退为音频流。
   @JsonValue(8)
   AudioFallback,
 
-  /// The remote media stream switches back to the video stream after the network conditions improve.
+  /// 回退的远端音频流恢复为视频流。
   @JsonValue(9)
   AudioFallbackRecovery,
 }
 
-/// Video display mode.
-
+/// 视频显示模式。
 enum VideoRenderMode {
-  /// Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
+  /// 视频尺寸等比缩放。优先保证视窗被填满。因视频尺寸与显示视窗尺寸不一致而多出的视频将被截掉。
   @JsonValue(1)
   Hidden,
 
-  /// Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to the disparity in the aspect ratio are filled with black.
+  /// 视频尺寸等比缩放。优先保证视频内容全部显示。因视频尺寸与显示视窗尺寸不一致造成的视窗未被填满的区域填充黑色。
   @JsonValue(2)
   Fit,
 
-  /// This mode is deprecated.
+  /// @deprecated 该模式已废弃。
   @deprecated
   @JsonValue(3)
   Adaptive,
 
-  /// The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
+  /// 视频尺寸进行缩放和拉伸以充满显示视窗。
   @JsonValue(4)
   FILL,
 }
 
-/// (iOS only) Video rotation.
-
-/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
+/// 视频的顺时针旋转角度。（仅适用于 iOS）
 enum VideoRotation {
-  /// No rotation
+  /// 顺时针旋转 0 度。
   @JsonValue(0)
   RotationNone,
 
-  /// 90 degrees
+  /// 顺时针旋转 90 度。
   @JsonValue(1)
   Rotation90,
 
-  /// 180 degrees
+  /// 顺时针旋转 180 度。
   @JsonValue(2)
   Rotation180,
 
-  /// 270 degrees
+  /// 顺时针旋转 270 度。
   @JsonValue(3)
   Rotation270,
 }
 
-/// Video stream type.
-
+/// 视频流类型。
 enum VideoStreamType {
-  /// High-bitrate, high-resolution video stream.
+  /// 高码率、高分辨率视频。
   @JsonValue(0)
   High,
 
-  /// Low-bitrate, low-resolution video stream.
+  /// 低码率、低分辨率视频。
   @JsonValue(1)
   Low,
 }
 
-/// Warning codes occur when the SDK encounters an error that may be recovered automatically. These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server, the SDK reports the `OpenChannelTimeout`(106) warning and tries to reconnect automatically.
-/// See [WarningCode.OpenChannelTimeout]
+/// 警告回调表示 SDK 运行时出现了（网络或媒体相关的）警告。通常情况下，SDK 上报的警告信息 App 可以忽略，
+/// SDK 会自动恢复。比如和服务器失去连接时，SDK 可能会上报 `OpenChannelTimeout 警告，同时自动尝试重连。
+/// 详见 [WarningCode.OpenChannelTimeout]。
 
 enum WarningCode {
-  /// The specified view is invalid. Specify a view when using the video call function.
+  /// 指定的 view 无效，使用视频功能时需要指定 view，如果 view 尚未指定，则返回该警告。
   @JsonValue(8)
   InvalidView,
 
-  /// Failed to initialize the video function, possibly caused by a lack of resources. The users cannot see the video while the voice communication is not affected.
+  /// 初始化视频功能失败。有可能是因视频资源被占用导致的。用户无法看到视频画面，但不影响语音通信。
   @JsonValue(16)
   InitVideo,
 
-  /// The request is pending, usually due to some module not being ready, and the SDK postpones processing the request.
+  /// 请求处于待定状态。一般是由于某个模块还没准备好，请求被延迟处理。
   @JsonValue(20)
   Pending,
 
-  /// No channel resources are available. Maybe because the server cannot allocate any channel resource.
+  /// 没有可用的频道资源。可能是因为服务端没法分配频道资源。
   @JsonValue(103)
   NoAvailableChannel,
 
-  /// A timeout occurs when looking up the channel. When joining a channel, the SDK looks up the specified channel. The warning usually occurs when the network condition is too poor for the SDK to connect to the server.
+  /// 查找频道超时。在加入频道时 SDK 先要查找指定的频道，出现该警告一般是因为网络太差，连接不到服务器。
   @JsonValue(104)
   LookupChannelTimeout,
 
-  /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal. Agora recommends that you use `RejectedByServer`(10) in the reason parameter of `connectionStateChanged` instead.
-  /// See [ConnectionChangedReason.RejectedByServer]
-  /// See [RtcEngineEventHandler.connectionStateChanged]
+  /// 查找频道请求被服务器拒绝。服务器可能没有办法处理这个请求或请求是非法的。
+  ///
+  /// @deprecated 已废弃。请改用 `connectionStateChanged` 回调
+  /// 中的 `RejectedByServer`(10)。
+  /// 详见 [ConnectionChangedReason.RejectedByServer] 和 [RtcEngineEventHandler.connectionStateChanged]。
   @deprecated
   @JsonValue(105)
   LookupChannelRejected,
 
-  /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal.
+  /// 打开频道超时。查找到指定频道后，SDK 接着打开该频道，超时一般是因为网络太差，连接不到服务器。
   @JsonValue(106)
   OpenChannelTimeout,
 
-  /// The server rejects the request to open the channel. The server cannot process this request or the request is illegal.
+  /// 打开频道请求被服务器拒绝。服务器可能没有办法处理该请求或该请求是非法的。
   @JsonValue(107)
   OpenChannelRejected,
 
-  /// A timeout occurs when switching to the live video.
+  /// 切换直播视频超时。
   @JsonValue(111)
   SwitchLiveVideoTimeout,
 
-  /// A timeout occurs when setting the client role in the LiveBroadcasting profile.
+  /// 直播场景下设置用户角色超时。
   @JsonValue(118)
   SetClientRoleTimeout,
 
-  /// The client role is unauthorized.
+  /// 用户角色未授权。
   @JsonValue(119)
   SetClientRoleNotAuthorized,
 
-  /// The ticket to open the channel is invalid.
+  /// TICKET 非法，打开频道失败。
   @JsonValue(121)
   OpenChannelInvalidTicket,
 
-  /// Try connecting to another server.
+  /// 尝试打开另一个服务器。
   @JsonValue(122)
   OpenChannelTryNextVos,
 
-  /// An error occurs in opening the audio mixing file.
+  /// 打开伴奏出错。
   @JsonValue(701)
   AudioMixingOpenError,
 
-  /// Audio Device Module: a warning occurs in the playback device.
+  /// 音频设备模块：运行时播放设备出现警告。
   @JsonValue(1014)
   AdmRuntimePlayoutWarning,
 
-  /// Audio Device Module: a warning occurs in the recording device.
+  /// 音频设备模块：运行时录音设备出现警告。
   @JsonValue(1016)
   AdmRuntimeRecordingWarning,
 
-  /// Audio Device Module: no valid audio data is collected.
+  /// 音频设备模块：没有采集到有效的声音数据。
   @JsonValue(1019)
   AdmRecordAudioSilence,
 
-  /// Audio Device Module: a playback device fails.
+  /// 音频设备模块：播放设备异常。
   @JsonValue(1020)
   AdmPlaybackMalfunction,
 
-  /// Audio Device Module: a recording device fails.
+  /// 音频设备模块：录音设备异常。
   @JsonValue(1021)
   AdmRecordMalfunction,
 
-  /// Audio Device Module: call is interrupted by system events such as phone call or siri etc.
+  /// 播放或录制音频时被系统事件（如来电）干扰。
   @JsonValue(1025)
   AdmInterruption,
 
-  /// Audio Device Module: the recorded audio is too low.
+  /// 音频设备模块：录到的声音太低。
   @JsonValue(1031)
   AdmRecordAudioLowlevel,
 
-  /// Audio Device Module: the playback audio is too low.
+  /// 音频设备模块：播放的声音太低。
   @JsonValue(1032)
   AdmPlayoutAudioLowlevel,
 
-  /// Audio Device Module: The recording device is busy.
+  /// 音频设备模块：录制设备被占用。
   @JsonValue(1033)
   AdmRecordIsOccupied,
 
-  /// Audio Device Module: howling is detected.
+  /// （仅通信场景）音频信号处理模块：录制音频时监测到啸叫。
   @JsonValue(1051)
   ApmHowling,
 
-  /// Audio Device Module: the device is in the glitch state.
+  /// 音频设备模块：音频播放会卡顿。
   @JsonValue(1052)
   AdmGlitchState,
 
-  /// Audio Device Module: the underlying audio settings have changed.
+  /// 音频设备模块：音频底层设置被修改。
   @JsonValue(1053)
   AdmImproperSettings,
 }
 
-/// The audio channel of the sound.
-
+/// 直播音频所在声道。
 enum AudioChannel {
-  /// (Default) Supports dual channels. Depends on the upstream of the broadcaster.
+  /// 默认混音设置，最多支持双声道，与主播端上行音频相关。
   @JsonValue(0)
   Channel0,
 
-  /// The audio stream of the broadcaster uses the FL audio channel. If the upstream of the broadcaster uses multiple audio channels, these channels will be mixed into mono first.
+  /// 对应主播的音频，推流中位于 FL 声道。如果主播上行为双声道，会先把多声道混音成单声道。
   @JsonValue(1)
   Channel1,
 
-  /// The audio stream of the broadcaster uses the FC audio channel. If the upstream of the broadcaster uses multiple audio channels, these channels will be mixed into mono first.
+  /// 对应主播的音频，推流中位于 FC 声道。如果主播上行为双声道，会先把多声道混音成单声道。
   @JsonValue(2)
   Channel2,
 
-  /// The audio stream of the broadcaster uses the FR audio channel. If the upstream of the broadcaster uses multiple audio channels, these channels will be mixed into mono first.
+  /// 对应主播的音频，推流中位于 FR 声道。如果主播上行为双声道，会先把多声道混音成单声道。
   @JsonValue(3)
   Channel3,
 
-  /// The audio stream of the broadcaster uses the BL audio channel. If the upstream of the broadcaster uses multiple audio channels, these channels will be mixed into mono first.
+  /// 对应主播的音频，推流中位于 BL 声道。如果主播上行为双声道，会先把多声道混音成单声道。
   @JsonValue(4)
   Channel4,
 
-  /// The audio stream of the broadcaster uses the BR audio channel. If the upstream of the broadcaster uses multiple audio channels, these channels will be mixed into mono first.
+  /// 对应主播的音频，推流中位于 BR 声道。如果主播上行为双声道，会先把多声道混音成单声道。
   @JsonValue(5)
   Channel5,
 }
 
-/// Video codec types.
-
+/// 视频的编码类型。
 enum VideoCodecType {
-  /// Standard VP8.
+  /// 标准 VP8。
   @JsonValue(1)
   VP8,
 
-  /// Standard H264.
+  /// 标准 H264。
   @JsonValue(2)
   H264,
 
-  /// Enhanced VP8.
+  /// 增强 VP8。
   @JsonValue(3)
   EVP,
 
-  /// Enhanced H264.
+  /// 增强 H264。
   @JsonValue(4)
   E264,
 }
