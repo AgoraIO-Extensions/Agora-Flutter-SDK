@@ -46,6 +46,7 @@ class RtcChannel
   }
 
   /// Creates and gets an [RtcChannel] instance.
+  ///
   /// To join more than one channel, call this method multiple times to create as many [RtcChannel] instances as needed, and call the [RtcChannel.joinChannel] method of each created [RtcChannel] object.
   /// After joining multiple channels, you can simultaneously subscribe to streams of all the channels, but publish a stream in only one channel at one time.
   ///
@@ -77,6 +78,7 @@ class RtcChannel
   }
 
   /// Sets the channel event handler.
+  ///
   /// After setting the channel event handler, you can listen for channel events and receive the statistics of the corresponding [RtcChannel] instance.
   ///
   /// Param [handler] The event handler.
@@ -92,6 +94,7 @@ class RtcChannel
   }
 
   /// Sets the role of a user.
+  ///
   /// This method sets the role of a user, such as a host or an audience. In a LiveBroadcasting channel, only a broadcaster can call the [RtcChannel.publish] method in the [RtcChannel] class.
   /// A successful call of this method triggers the following callbacks:
   /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
@@ -161,6 +164,7 @@ class RtcChannel
   }
 
   /// Leaves the current channel.
+  ///
   /// A successful leaveChannel method call triggers the following callbacks:
   /// - The local client: [RtcChannelEventHandler.leaveChannel].
   /// - The remote client: [RtcChannelEventHandler.userOffline], if the user leaving the channel is in a Communication channel, or is a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
@@ -169,6 +173,7 @@ class RtcChannel
   }
 
   /// Renews the token when the current token expires.
+  ///
   /// In the following situations, the SDK decides that the current token has expired:
   /// - The SDK triggers the [RtcChannelEventHandler.tokenPrivilegeWillExpire] callback, or
   /// - The [RtcChannelEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
@@ -188,6 +193,7 @@ class RtcChannel
   }
 
   /// Publishes the local stream to the channel.
+  ///
   /// You must keep the following restrictions in mind when calling this method. Otherwise, the SDK returns the [ErrorCode.Refused](-5)：
   /// - This method publishes one stream only to the channel corresponding to the current [RtcChannel] instance.
   /// - In a LiveBroadcasting channel, only a broadcaster can call this method. To switch the client role, call [RtcChannel.setClientRole] of the current [RtcChannel] instance.
@@ -197,6 +203,7 @@ class RtcChannel
   }
 
   /// Stops publishing a stream to the channel.
+  ///
   /// If you call this method in a channel where you are not publishing streams, the SDK returns [ErrorCode.Refused](-5).
   Future<void> unpublish() {
     return _invokeMethod('unpublish');
@@ -368,6 +375,7 @@ class RtcChannel
 
 mixin RtcAudioInterface {
   /// Adjusts the playback volume of a specified remote user.
+  ///
   /// You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
   ///
   /// **Note**
@@ -434,6 +442,7 @@ mixin RtcVideoInterface {
 
 mixin RtcVoicePositionInterface {
   /// Sets the sound position of a remote user.
+  ///
   /// When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
   ///
   /// **Note**
@@ -453,6 +462,7 @@ mixin RtcVoicePositionInterface {
 
 mixin RtcPublishStreamInterface {
   /// Sets the video layout and audio settings for CDN live.
+  ///
   /// The SDK triggers the [RtcChannelEventHandler.transcodingUpdated] callback when you call this method to update the [LiveTranscoding] class. If you call this method to set the [LiveTranscoding] class for the first time, the SDK does not trigger the [RtcChannelEventHandler.transcodingUpdated] callback.
   ///
   /// **Note**
@@ -465,6 +475,7 @@ mixin RtcPublishStreamInterface {
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
   /// Publishes the local stream to the CDN.
+  ///
   /// This method call triggers the [RtcChannelEventHandler.rtmpStreamingStateChanged] callback on the local client to report the state of adding a local stream to the CDN.
   ///
   /// **Note**
@@ -481,6 +492,7 @@ mixin RtcPublishStreamInterface {
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   /// Removes an RTMP stream from the CDN.
+  ///
   /// This method removes the RTMP URL address (added by [RtcChannel.addPublishStreamUrl]) from a CDN live stream. The SDK reports the result of this method call in the [RtcChannelEventHandler.rtmpStreamingStateChanged] callback.
   ///
   /// **Note**
@@ -494,6 +506,7 @@ mixin RtcPublishStreamInterface {
 
 mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
+  ///
   /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] and [RtcChannelEventHandler.channelMediaRelayEvent] callbacks, and these callbacks report the state and events of the media stream relay.
   /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback reports [ChannelMediaRelayState.Running](2) and [ChannelMediaRelayError.None](0), and the [RtcChannelEventHandler.channelMediaRelayEvent] callback reports [ChannelMediaRelayEvent.SentToDestinationChannel](4), the SDK starts relaying media streams between the original and the destination channel.
   /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback returns Failure(3), an exception occurs during the media stream relay.
@@ -509,6 +522,7 @@ mixin RtcMediaRelayInterface {
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   /// Updates the channels for media relay.
+  ///
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.
   /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel](7) state code.
   ///
@@ -523,6 +537,7 @@ mixin RtcMediaRelayInterface {
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   /// Stops the media stream relay.
+  ///
   /// Once the relay stops, the broadcaster quits all the destination channels.
   /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback. If the callback reports [ChannelMediaRelayState.Idle](0) and [ChannelMediaRelayError.None](0), the broadcaster successfully stops the relay.
   ///
@@ -533,6 +548,7 @@ mixin RtcMediaRelayInterface {
 
 mixin RtcDualStreamInterface {
   /// Sets the video stream type of the remote video stream when the remote user sends dual streams.
+  ///
   /// This method allows the app to adjust the corresponding video-stream type based on the size of the video window to reduce the bandwidth and resources.
   /// - If the remote user enables the dual-stream mode by calling the [RtcEngine.enableDualStreamMode] method, the SDK receives the high-video stream by default. You can use this method to switch to the low-video stream.
   /// - If dual-stream mode is not enabled, the SDK receives the high-stream video by default.
@@ -550,6 +566,7 @@ mixin RtcDualStreamInterface {
 
 mixin RtcFallbackInterface {
   /// Sets the priority of a remote user's media stream.
+  ///
   /// Use this method with the [RtcEngine.setRemoteSubscribeFallbackOption] method. If a remote video stream experiences the fallback, the SDK ensures the high-priority user gets the best possible stream quality.
   ///
   /// **Note**
@@ -563,6 +580,7 @@ mixin RtcFallbackInterface {
 
 mixin RtcMediaMetadataInterface {
   /// Registers the metadata observer.
+  ///
   /// This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
   ///
   /// **Note**
@@ -588,6 +606,7 @@ mixin RtcMediaMetadataInterface {
 
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
+  ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
   /// **Note**
@@ -598,6 +617,7 @@ mixin RtcEncryptionInterface {
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
+  ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
   ///
@@ -611,6 +631,7 @@ mixin RtcEncryptionInterface {
 
 mixin RtcInjectStreamInterface {
   /// Injects an online media stream to a [ChannelProfile.LiveBroadcasting] channel.
+  ///
   /// If this method call succeeds, the server pulls the voice or video stream and injects it into a live channel. This applies to scenarios where all audience members in the channel can watch a live show and interact with each other.
   ///
   /// **Note**
@@ -631,6 +652,7 @@ mixin RtcInjectStreamInterface {
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config);
 
   /// Removes the injected online media stream from a [ChannelProfile.LiveBroadcasting] channel.
+  ///
   /// This method removes the URL address added by [RtcChannel.addInjectStreamUrl].
   /// If you successfully remove the URL address from the live broadcast, the SDK triggers the [RtcChannelEventHandler.userJoined] callback, with the stream uid of 666.
   ///
@@ -640,6 +662,7 @@ mixin RtcInjectStreamInterface {
 
 mixin RtcStreamMessageInterface {
   /// Creates a data stream.
+  ///
   /// Each user can create up to five data streams during the life cycle of the [RtcChannel] instance.
   ///
   /// **Note**
@@ -655,10 +678,12 @@ mixin RtcStreamMessageInterface {
   Future<int> createDataStream(bool reliable, bool ordered);
 
   /// Sends the data stream message.
+  ///
   /// The SDK has the following restrictions on this method:
   /// - Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
   /// - Each client can send up to 6 KB of data per second.
   /// - Each user can have up to five data channels simultaneously.
+  ///
   /// A successful method call triggers the [RtcChannelEventHandler.streamMessage] callback on the remote client, from which the remote user gets the stream message.
   /// A failed method call triggers the [RtcChannelEventHandler.streamMessageError] callback on the remote client.
   ///
