@@ -1009,7 +1009,10 @@ class RtcChannelEventHandler {
   /// Reports events during the media stream relay.
   MediaRelayEventCallback channelMediaRelayEvent;
 
-  /// Occurs when the local user receives the metadata.
+  /// Occurs when the local user receives the metadata, including the following parameters:
+  /// - `buffer`: The sent or received metadata.
+  /// - `uid`: ID of the user who sends the metadata.
+  /// - `timeStampMs`: The timestamp of the metadata.
   MetadataCallback metadataReceived;
 
   /// Constructs a [RtcChannelEventHandler]

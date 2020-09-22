@@ -530,7 +530,6 @@ mixin RtcFallbackInterface {
 
 mixin RtcMediaMetadataInterface {
   /// Registers the metadata observer.
-  /// A successful call of this method triggers the [RtcChannel.setMaxMetadataSize] callback.
   /// This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
   ///
   /// **Note**
@@ -538,15 +537,17 @@ mixin RtcMediaMetadataInterface {
   /// - This method applies to the [ChannelProfile.LiveBroadcasting] profile only.
   Future<void> registerMediaMetadataObserver();
 
-  /// TODO
+  /// Unregisters the metadata observer.
   Future<void> unregisterMediaMetadataObserver();
 
-  /// TODO
-  /// Param [size]
+  /// Sets the maximum size of the metadata.
+  /// Param [size] The maximum size (bytes) of the buffer of the metadata that you want to use. The highest value is 1024 bytes.
   Future<void> setMaxMetadataSize(int size);
 
-  /// TODO
-  /// Param [metadata]
+  /// Sends the metadata.
+  /// Param [metadata] The metadata to be sent in the form of String.
+  /// **Note**
+  /// Ensure that the size of the metadata does not exceed the value set in the [setMaxMetadataSize] method.
   Future<void> sendMetadata(String metadata);
 }
 

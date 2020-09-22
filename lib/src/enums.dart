@@ -234,7 +234,6 @@ enum AudioProfile {
 }
 
 /// Use mode of the onRecordAudioFrame callback.
-
 /// TODO @nodoc setPlaybackAudioFrameParameters
 enum AudioRawFrameOperationMode {
   /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
@@ -476,7 +475,6 @@ enum AudioScenario {
 }
 
 /// (iOS only) Audio session restriction.
-
 /// TODO @nodoc iOS setAudioSessionOperationRestriction
 enum AudioSessionOperationRestriction {
   /// No restriction, the SDK has full control of the audio session operations.
@@ -1423,7 +1421,6 @@ enum LogFilter {
 }
 
 /// (iOS only) Media device type.
-
 /// TODO @nodoc MacOS AgoraMediaDeviceType
 enum MediaDeviceType {
   /// Unknown device.
@@ -1448,7 +1445,6 @@ enum MediaDeviceType {
 }
 
 /// Media type.
-
 /// TODO @nodoc LiveEngine
 enum MediaType {
   /// No audio and video.
@@ -1469,7 +1465,6 @@ enum MediaType {
 }
 
 /// (Android only) The metadata type.
-
 /// TODO @nodoc registerMediaMetadataObserver
 enum MetadataType {
   /// The metadata type is unknown.
@@ -1554,7 +1549,6 @@ enum NetworkType {
 }
 
 /// (Android only) Default camera position
-
 /// TODO @nodoc AgoraRtcDefaultCamera
 enum RtcDefaultCameraPosition {
   /// Front camera
@@ -1567,7 +1561,6 @@ enum RtcDefaultCameraPosition {
 }
 
 /// Lifecycle of the CDN live video stream.
-
 /// TODO @nodoc AgoraPublisherConfiguration
 enum RtmpStreamLifeCycle {
   /// Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
@@ -1711,7 +1704,6 @@ enum UserPriority {
 }
 
 /// (iOS only) Video buffer type.
-
 /// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoBufferType {
   /// Use a pixel buffer to transmit the video data.
@@ -1740,7 +1732,6 @@ enum VideoCodecProfileType {
 }
 
 /// (iOS only) The content hint for screen sharing.
-
 /// TODO @nodoc MacOS setScreenCaptureContentHint
 enum VideoContentHint {
   /// (Default) No content hint.
@@ -1844,7 +1835,6 @@ enum VideoOutputOrientationMode {
 }
 
 /// (iOS only) Video pixel format.
-
 /// TODO @nodoc iOS AgoraVideoSinkProtocol
 enum VideoPixelFormat {
   /// The video pixel format is I420.
@@ -1975,7 +1965,6 @@ enum VideoRenderMode {
 }
 
 /// (iOS only) Video rotation.
-
 /// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 enum VideoRotation {
   /// No rotation
