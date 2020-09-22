@@ -55,6 +55,7 @@ class RtcEngine
   }
 
   /// Creates an [RtcEngine] instance.
+  ///
   /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
@@ -68,7 +69,7 @@ class RtcEngine
   }
 
   /// Creates an [RtcEngine] instance.
-  /// See [RtcEngine]
+  ///
   /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
@@ -94,6 +95,7 @@ class RtcEngine
   }
 
   /// Destroys the [RtcEngine] instance and releases all resources used by the Agora SDK.
+  ///
   /// This method is useful for apps that occasionally make voice or video calls, to free up resources for other operations when not making calls.
   ///
   /// **Note**
@@ -106,6 +108,7 @@ class RtcEngine
   }
 
   /// Sets the engine event handler.
+  ///
   /// After setting the engine event handler, you can listen for engine events and receive the statistics of the corresponding [RtcEngine] instance.
   ///
   /// Param [handler] The event handler.
@@ -114,6 +117,7 @@ class RtcEngine
   }
 
   /// Sets the channel profile of the Agora RtcEngine.
+  ///
   /// The Agora RtcEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
   ///
   /// Param [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
@@ -123,6 +127,7 @@ class RtcEngine
   }
 
   /// Sets the role of a user ([ChannelProfile.LiveBroadcasting] only).
+  ///
   /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
   /// This method can be used to switch the user role after a user joins a channel. In the [ChannelProfile.LiveBroadcasting] profile, when a user switches user roles after joining a channel, a successful `setClientRole` method call triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
@@ -135,15 +140,18 @@ class RtcEngine
   }
 
   /// Allows a user to join a channel.
+  ///
   /// Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other.
   /// You must call the [RtcEngine.leaveChannel] method to exit the current call before joining another channel.
   /// A successful joinChannel method call triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.joinChannelSuccess].
   /// - The remote client: [RtcEngineEventHandler.userJoined], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
+  ///
   /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [RtcEngineEventHandler.rejoinChannelSuccess] callback on the local client.
   ///
   /// **Note**
   /// - A channel does not accept duplicate uids, such as two users with the same uid. If you set uid as 0, the system automatically assigns a uid.
+  ///
   /// **Warning**
   /// - Ensure that the App ID used for creating the token is the same App ID used in the create method for creating an [RtcEngine] object. Otherwise, CDN live streaming may fail.
   ///
@@ -172,6 +180,7 @@ class RtcEngine
   }
 
   /// Switches to a different channel.
+  ///
   /// This method allows the audience of a [ChannelProfile.LiveBroadcasting] channel to switch to a different channel.
   /// After the user successfully switches to another channel, the [RtcEngineEventHandler.leaveChannel] and [RtcEngineEventHandler.joinChannelSuccess] callbacks are triggered to indicate that the user has left the original channel and joined a new one.
   ///
@@ -194,6 +203,7 @@ class RtcEngine
   }
 
   /// Allows a user to leave a channel.
+  ///
   /// After joining a channel, the user must call this method to end the call before joining another channel. This method returns 0 if the user leaves the channel and releases all resources related to the call. This method call is asynchronous, and the user has not exited the channel when the method call returns. Once the user leaves the channel, the SDK triggers the [RtcEngineEventHandler.leaveChannel] callback.
   /// A successful method call triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.leaveChannel].
@@ -207,6 +217,7 @@ class RtcEngine
   }
 
   /// Renews the token when the current token expires.
+  ///
   /// The token expires after a period of time once the token schema is enabled when:
   /// - The SDK triggers the [RtcEngineEventHandler.tokenPrivilegeWillExpire] callback
   /// - The [RtcEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
@@ -218,6 +229,7 @@ class RtcEngine
   }
 
   /// Enables interoperability with the Agora Web SDK (LiveBroadcasting only).
+  ///
   /// The SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.
   /// If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.
   /// Use this method when the channel profile is [ChannelProfile.LiveBroadcasting]. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [ChannelProfile.Communication].
@@ -240,6 +252,7 @@ class RtcEngine
   }
 
   /// Gets the current call ID.
+  ///
   /// When a user joins a channel on a client, a call ID is generated to identify the call from the client. Feedback methods, such as the [RtcEngine.rate] and [RtcEngine.complain] method, must be called after the call ends to submit feedback to the SDK.
   /// The `rate` and `complain` methods require the `callId` parameter retrieved from the [RtcEngine.getCallId] method during a call. `callId` is passed as an argument into the rate and complain methods after the call ends.
   Future<String> getCallId() {
@@ -269,6 +282,7 @@ class RtcEngine
   }
 
   /// Specifies an SDK output log file.
+  ///
   /// The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
   ///
   /// **Note**
@@ -280,6 +294,7 @@ class RtcEngine
   }
 
   /// Sets the output log level of the SDK.
+  ///
   /// You can use one or a combination of the filters. The log level follows the sequence of `OFF`, `CRITICAL`, `ERROR`, `WARNING`, `INFO`, and `DEBUG`. Choose a level to see the logs preceding that level. For example, if you set the log level to `WARNING`, you see the logs within levels `CRITICAL`, `ERROR`, and `WARNING`.
   ///
   /// Param [filter] Sets the log filter level. See [LogFilter].
@@ -289,6 +304,7 @@ class RtcEngine
   }
 
   /// Sets the log file size (KB).
+  ///
   /// The Agora SDK has two log files, each with a default size of 512 KB. If you set `fileSizeInKBytes` as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB. If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
   ///
   /// Param [fileSizeInKBytes] The SDK log file size (KB).
@@ -298,6 +314,7 @@ class RtcEngine
   }
 
   /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
+  ///
   /// The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
   ///
   /// Param [parameters] Sets the parameter as a JSON string in the specified format.
@@ -946,6 +963,7 @@ class RtcEngine
 
 mixin RtcUserInfoInterface {
   /// Registers a user account.
+  ///
   /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the [RtcEngineEventHandler.localUserRegistered] callback on the local client, reporting the user ID and user account of the local user.
   /// To join a channel with a user account, you can choose either of the following:
   /// - Call the [RtcEngine.registerLocalUserAccount] method to create a user account, and then the [RtcEngine.joinChannelWithUserAccount] method to join the channel.
@@ -968,6 +986,7 @@ mixin RtcUserInfoInterface {
   Future<void> registerLocalUserAccount(String appId, String userAccount);
 
   /// Joins the channel with a user account.
+  ///
   /// After the user successfully joins the channel, the SDK triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.localUserRegistered] and [RtcEngineEventHandler.joinChannelSuccess].
   /// - The remote client: [RtcEngineEventHandler.userJoined] and [RtcEngineEventHandler.userInfoUpdated], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
@@ -996,6 +1015,7 @@ mixin RtcUserInfoInterface {
       String userAccount);
 
   /// Gets the user information by passing in the user account.
+  ///
   /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcEngineEventHandler.userInfoUpdated] callback on the local client.
   /// After receiving the [RtcEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
   ///
@@ -1003,6 +1023,7 @@ mixin RtcUserInfoInterface {
   Future<UserInfo> getUserInfoByUserAccount(String userAccount);
 
   /// Gets the user information by passing in the user ID.
+  ///
   /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcEngineEventHandler.userInfoUpdated] callback on the local client.
   /// After receiving the [RtcEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
   ///
@@ -1012,6 +1033,7 @@ mixin RtcUserInfoInterface {
 
 mixin RtcAudioInterface {
   /// Enables the audio module.
+  ///
   /// The audio module is enabled by default.
   ///
   /// **Note**
@@ -1059,6 +1081,7 @@ mixin RtcAudioInterface {
   Future<void> adjustRecordingSignalVolume(int volume);
 
   /// Adjusts the playback volume of a specified remote user.
+  ///
   /// You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
   ///
   /// **Note**
@@ -1089,6 +1112,7 @@ mixin RtcAudioInterface {
   Future<void> adjustPlaybackSignalVolume(int volume);
 
   /// Enables/Disables the local audio capture.
+  ///
   /// The audio function is enabled by default. This method disables/re-enables the local audio function, that is, to stop or restart local audio capture and processing.
   /// This method does not affect receiving or playing the remote audio streams, and enableLocalAudio(false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
   /// The SDK triggers the [RtcEngineEventHandler.microphoneEnabled] callback once the local audio function is disabled or re-enabled.
@@ -1104,6 +1128,7 @@ mixin RtcAudioInterface {
   Future<void> enableLocalAudio(bool enabled);
 
   /// Stops/Resumes sending the local audio stream.
+  ///
   /// A successful [RtcEngine.muteLocalAudioStream] method call triggers the [RtcEngineEventHandler.userMuteAudio] callback on the remote client.
   ///
   /// **Note**
@@ -1135,6 +1160,7 @@ mixin RtcAudioInterface {
   Future<void> muteAllRemoteAudioStreams(bool muted);
 
   /// Sets whether to receive all remote audio streams by default.
+  ///
   /// You can call this method either before or after joining a channel. If you call [RtcEngine.setDefaultMuteAllRemoteAudioStreams](true) after joining a channel, you will not receive the audio streams of any subsequent user.
   ///
   /// **Note**
@@ -1146,6 +1172,7 @@ mixin RtcAudioInterface {
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 
   /// Enables the [RtcEngineEventHandler.audioVolumeIndication] callback at a set time interval to report on which users are speaking and the speakers' volume.
+  ///
   /// Once this method is enabled, the SDK returns the volume indication in the [RtcEngineEventHandler.audioVolumeIndication] callback at the set time interval, regardless of whether any user is speaking in the channel.
   ///
   /// Param [interval] Sets the time interval between two consecutive volume indications:
@@ -1163,6 +1190,7 @@ mixin RtcAudioInterface {
 
 mixin RtcVideoInterface {
   /// Enables the video module.
+  ///
   /// You can call this method either before joining a channel or during a call. If you call this method before joining a channel, the service starts in the video mode. If you call this method during an audio call, the audio mode switches to the video mode.
   /// A successful enableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo](true) callback on the remote client.
   /// To disable the video, call the [RtcEngine.disableVideo] method.
@@ -1177,6 +1205,7 @@ mixin RtcVideoInterface {
   Future<void> enableVideo();
 
   /// Disables the video module.
+  ///
   /// You can call this method before joining a channel or during a call. If you call this method before joining a channel, the service starts in audio mode. If you call this method during a video call, the video mode switches to the audio mode.
   /// - A successful disableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo](false) callback on the remote client.
   /// - To enable the video mode, call the [RtcEngine.enableVideo] method.
@@ -1191,6 +1220,7 @@ mixin RtcVideoInterface {
   Future<void> disableVideo();
 
   /// Sets the video encoder configuration.
+  ///
   /// Each video encoder configuration corresponds to a set of video parameters, including the resolution, frame rate, bitrate, and video orientation. The parameters specified in this method are the maximum values under ideal network conditions. If the video engine cannot render the video using the specified parameters due to poor network conditions, the parameters further down the list are considered until a successful configuration is found.
   /// If you do not set the video encoder configuration after joining the channel, you can call this method before calling the [RtcEngine.enableVideo] method to reduce the render time of the first video frame.
   ///
@@ -1198,6 +1228,7 @@ mixin RtcVideoInterface {
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
 
   /// Starts the local video preview before joining a channel.
+  ///
   /// Before calling this method, you must:
   /// - Create the RtcLocalView.
   ///   - (Android only) See [SurfaceView].
@@ -1213,6 +1244,7 @@ mixin RtcVideoInterface {
   Future<void> stopPreview();
 
   /// Disables/Re-enables the local video capture.
+  ///
   /// This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.
   /// After you call the [RtcEngine.enableVideo] method, the local video capturer is enabled by default. You can call [RtcEngine.enableVideo](false) to disable the local video capturer. If you want to re-enable it, call [RtcEngine.enableVideo](true).
   /// After the local video capturer is successfully disabled or re-enabled, the SDK triggers the [RtcEngineEventHandler.userEnableLocalVideo] callback on the remote client.
@@ -1226,6 +1258,7 @@ mixin RtcVideoInterface {
   Future<void> enableLocalVideo(bool enabled);
 
   /// Stops/Resumes sending the local video stream.
+  ///
   /// A successful `muteLocalVideoStream` method call triggers the [RtcEngineEventHandler.userMuteVideo] callback on the remote client.
   ///
   /// **Note**
@@ -1257,6 +1290,7 @@ mixin RtcVideoInterface {
   Future<void> muteAllRemoteVideoStreams(bool muted);
 
   /// Sets whether to receive all remote video streams by default.
+  ///
   /// You can call this method either before or after joining a channel. If you call `setDefaultMuteAllRemoteVideoStreams`(true) after joining a channel, you will not receive the video stream of any subsequent user.
   ///
   /// **Note**
@@ -1283,6 +1317,7 @@ mixin RtcVideoInterface {
 
 mixin RtcAudioMixingInterface {
   /// Starts playing and mixing the music file.
+  ///
   /// This method mixes the specified local or online audio file with the audio stream from the microphone, or replaces the microphone’s audio stream with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. When the audio mixing file playback finishes after calling this method, the SDK triggers the [RtcEngineEventHandler.audioMixingFinished] callback.
   /// A successful `startAudioMixing` method call triggers the [RtcEngineEventHandler.audioMixingStateChanged]([AudioMixingStateCode.Playing]) callback on the local client.
   /// When the audio mixing file playback finishes, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged]([AudioMixingStateCode.Stopped]) callback on the local client.
@@ -1314,18 +1349,22 @@ mixin RtcAudioMixingInterface {
       int cycle);
 
   /// Stops playing or mixing the music file.
+  ///
   /// Call this method when you are in a channel.
   Future<void> stopAudioMixing();
 
   /// Pauses playing and mixing the music file.
+  ///
   /// Call this method when you are in a channel.
   Future<void> pauseAudioMixing();
 
   /// Resumes playing and mixing the music file.
+  ///
   /// Call this method when you are in a channel.
   Future<void> resumeAudioMixing();
 
   /// Adjusts the volume of audio mixing.
+  ///
   /// Call this method when you are in a channel.
   ///
   /// **Note**
@@ -1335,30 +1374,36 @@ mixin RtcAudioMixingInterface {
   Future<void> adjustAudioMixingVolume(int volume);
 
   /// Adjusts the volume of audio mixing for local playback.
+  ///
   /// Call this method when you are in a channel.
   ///
   /// Param [volume] Audio mixing volume for local playback. The value ranges between 0 and 100 (default).
   Future<void> adjustAudioMixingPlayoutVolume(int volume);
 
   /// Adjusts the volume of audio mixing for publishing (sending to other users).
+  ///
   /// Call this method when you are in a channel.
   ///
   /// Param [volume] Audio mixing volume for publishing. The value ranges between 0 and 100 (default).
   Future<void> adjustAudioMixingPublishVolume(int volume);
 
   /// Gets the audio mixing volume for local playback.
+  ///
   /// This method helps troubleshoot audio volume related issues.
   Future<int> getAudioMixingPlayoutVolume();
 
   /// Gets the audio mixing volume for publishing.
+  ///
   /// This method helps troubleshoot audio volume related issues.
   Future<int> getAudioMixingPublishVolume();
 
   /// Gets the duration (ms) of the music file.
+  ///
   /// Call this method when you are in a channel.
   Future<int> getAudioMixingDuration();
 
   /// Gets the playback position (ms) of the music file.
+  ///
   /// Call this method when you are in a channel.
   Future<int> getAudioMixingCurrentPosition();
 
@@ -1368,6 +1413,7 @@ mixin RtcAudioMixingInterface {
   Future<void> setAudioMixingPosition(int pos);
 
   /// Sets the pitch of the local music file.
+  ///
   /// When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only.
   ///
   /// **Note**
@@ -1380,6 +1426,7 @@ mixin RtcAudioMixingInterface {
 
 mixin RtcAudioEffectInterface {
   /// Gets the volume of the audio effects.
+  ///
   /// The value ranges between 0.0 and 100.0.
   Future<double> getEffectsVolume();
 
@@ -1396,6 +1443,7 @@ mixin RtcAudioEffectInterface {
   Future<void> setVolumeOfEffect(int soundId, double volume);
 
   /// Plays a specified local or online audio effect file.
+  ///
   /// With this method, you can set the loop count, pitch, pan, and gain of the audio effect file and whether the remote user can hear the audio effect.
   /// To play multiple audio effect files simultaneously, call this method multiple times with different soundIds and filePaths. We recommend playing no more than three audio effect files at the same time.
   /// When the audio effect file playback is finished, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
@@ -1436,6 +1484,7 @@ mixin RtcAudioEffectInterface {
   Future<void> stopAllEffects();
 
   /// Preloads a specified audio effect file into the memory.
+  ///
   /// Supported audio formats: mp3, aac, m4a, 3gp, wav.
   ///
   /// **Note**
@@ -1516,6 +1565,7 @@ mixin RtcVoiceChangerInterface {
 
 mixin RtcVoicePositionInterface {
   /// Enables/Disables stereo panning for remote users.
+  ///
   /// Ensure that you call this method before [RtcEngine.joinChannel] to enable stereo panning for remote users so that the local user can track the position of a remote user by calling [RtcEngine.setRemoteVoicePosition].
   ///
   /// Param [enabled] Sets whether or not to enable stereo panning for remote users:
@@ -1543,6 +1593,7 @@ mixin RtcVoicePositionInterface {
 
 mixin RtcPublishStreamInterface {
   /// Sets the video layout and audio settings for CDN live.
+  ///
   /// The SDK triggers the [RtcEngineEventHandler.transcodingUpdated] callback when you call this method to update the [LiveTranscoding] class. If you call this method to set the [LiveTranscoding] class for the first time, the SDK does not trigger the [RtcEngineEventHandler.transcodingUpdated] callback.
   ///
   /// **Note**
@@ -1556,6 +1607,7 @@ mixin RtcPublishStreamInterface {
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
   /// Publishes the local stream to the CDN.
+  ///
   /// The addPublishStreamUrl method call triggers the onRtmpStreamingStateChanged callback on the local client to report the state of adding a local stream to the CDN.
   /// See [RtcEngineEventHandler.rtmpStreamingStateChanged]
   ///
@@ -1574,6 +1626,7 @@ mixin RtcPublishStreamInterface {
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   /// Removes an RTMP stream from the CDN.
+  ///
   /// This method removes the RTMP URL address (added by [RtcEngine.addPublishStreamUrl]) from a CDN live stream. The SDK reports the result of this method call in the [RtcEngineEventHandler.rtmpStreamingStateChanged] callback.
   ///
   /// **Note**
@@ -1588,6 +1641,7 @@ mixin RtcPublishStreamInterface {
 
 mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
+  ///
   /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] and [RtcEngineEventHandler.channelMediaRelayEvent] callbacks, and these callbacks return the state and events of the media stream relay.
   /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Running](2) and [ChannelMediaRelayError.None](0), and the [RtcEngineEventHandler.channelMediaRelayEvent] callback returns [ChannelMediaRelayEvent.SentToDestinationChannel](4), the SDK starts relaying media streams between the original and the destination channel.
   /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Failure](3), an exception occurs during the media stream relay.
@@ -1604,6 +1658,7 @@ mixin RtcMediaRelayInterface {
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   /// Updates the channels for media relay.
+  ///
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the `updateChannelMediaRelay` method.
   /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.updateDestinationChannel](7) state code.
   ///
@@ -1616,6 +1671,7 @@ mixin RtcMediaRelayInterface {
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   /// Stops the media stream relay.
+  ///
   /// Once the relay stops, the broadcaster quits all the destination channels.
   /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback. If the callback returns [ChannelMediaRelayState.Idle](0) and [ChannelMediaRelayError.None](0), the [ClientRole.Broadcaster] successfully stops the relay.
   ///
@@ -1626,6 +1682,7 @@ mixin RtcMediaRelayInterface {
 
 mixin RtcAudioRouteInterface {
   /// Sets the default audio playback route.
+  ///
   /// This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the setEnableSpeakerphone method.
   /// See [RtcEngine.setEnableSpeakerphone]
   /// The default audio route for each scenario:
@@ -1649,6 +1706,7 @@ mixin RtcAudioRouteInterface {
   Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio playback route to the speakerphone.
+  ///
   /// This method sets whether the audio is routed to the speakerphone or earpiece. After calling this method, the SDK returns the [RtcEngineEventHandler.audioRouteChanged] callback to indicate the changes.
   ///
   /// **Note**
@@ -1680,6 +1738,7 @@ mixin RtcEarMonitoringInterface {
 
 mixin RtcDualStreamInterface {
   /// Enables/Disables the dual video stream mode.
+  ///
   /// If dual-stream mode is enabled, the receiver can choose to receive the high stream (high-resolution high-bitrate video stream) or low stream (low-resolution low-bitrate video stream) video.
   ///
   /// Param [enabled] Sets the stream mode:
@@ -1688,6 +1747,7 @@ mixin RtcDualStreamInterface {
   Future<void> enableDualStreamMode(bool enabled);
 
   /// Sets the stream type of the remote video.
+  ///
   /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using [RtcEngine.enableDualStreamMode](false), the receiver can choose to receive either the high-video stream (the high resolution, and high bitrate video stream) or the low-video stream (the low resolution, and low bitrate video stream).
   /// By default, users receive the high-video stream. Call this method if you want to switch to the low-video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources.
   /// The aspect ratio of the low-video stream is the same as the high-video stream. Once the resolution of the high-video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-video stream.
@@ -1706,6 +1766,7 @@ mixin RtcDualStreamInterface {
 
 mixin RtcFallbackInterface {
   /// Sets the fallback option for the locally published video stream based on the network conditions.
+  ///
   /// If option is set as [StreamFallbackOptions.AudioOnly](2), the SDK will:
   /// - Disable the upstream video but enable audio only when the network conditions deteriorate and cannot support both video and audio.
   /// - Re-enable the video when the network conditions improve.
@@ -1719,12 +1780,14 @@ mixin RtcFallbackInterface {
   Future<void> setLocalPublishFallbackOption(StreamFallbackOptions option);
 
   /// Sets the fallback option for the remotely subscribed video stream based on the network conditions.
+  ///
   /// If option is set as [StreamFallbackOptions.AudioOnly](2), the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
   ///
   /// Param [option] Sets the fallback option for the remotely subscribed video stream. See [StreamFallbackOptions].
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
 
   /// Sets the priority of a remote user's media stream.
+  ///
   /// Use this method with the [RtcEngine.setRemoteSubscribeFallbackOption] method. If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
   ///
   /// **Note**
@@ -1738,6 +1801,7 @@ mixin RtcFallbackInterface {
 
 mixin RtcTestInterface {
   /// Starts an audio call test.
+  ///
   /// In the audio call test, you record your voice. If the recording plays back within the set time interval, the audio devices and the network connection are working properly.
   ///
   /// **Note**
@@ -1752,6 +1816,7 @@ mixin RtcTestInterface {
   Future<void> stopEchoTest();
 
   /// Enables the network connection quality test.
+  ///
   /// This method tests the quality of the users' network connections and is disabled by default.
   /// Before users join a channel or before an audience switches to a host, call this method to check the uplink network quality. This method consumes additional network traffic, which may affect the communication quality. Call the [RtcEngine.disableLastmileTest] method to disable this test after receiving the [RtcEngineEventHandler.lastmileQuality] callback, and before the user joins a channel or switches the user role.
   ///
@@ -1768,6 +1833,7 @@ mixin RtcTestInterface {
   Future<void> disableLastmileTest();
 
   /// Starts the last-mile network probe test before joining a channel to get the uplink and downlink last-mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).
+  ///
   /// Once this method is enabled, the SDK returns the following callbacks:
   /// - [RtcEngineEventHandler.lastmileQuality]: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
   /// - [RtcEngineEventHandler.lastmileProbeResult]: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
@@ -1787,6 +1853,7 @@ mixin RtcTestInterface {
 
 mixin RtcMediaMetadataInterface {
   /// Registers the metadata observer.
+  ///
   /// This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
   ///
   /// **Note**
@@ -1811,8 +1878,11 @@ mixin RtcMediaMetadataInterface {
 
 mixin RtcWatermarkInterface {
   /// Adds a watermark image to the local video.
+  ///
   /// This method adds a PNG watermark image to the local video stream in a live broadcast. Once the watermark image is added, all the audience in the channel (CDN audience included), and the recording device can see and capture it.
+  ///
   /// Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.
+  ///
   /// The watermark position depends on the settings in the [RtcEngine.setVideoEncoderConfiguration] method:
   /// - If the orientation mode of the encoding video is [VideoOutputOrientationMode.FixedLandscape], or the landscape mode in [VideoOutputOrientationMode.Adaptative], the watermark uses the landscape orientation.
   /// - If the orientation mode of the encoding video is [VideoOutputOrientationMode.FixedPortrait], or the portrait mode in [VideoOutputOrientationMode.Adaptative], the watermark uses the portrait orientation.
@@ -1837,6 +1907,7 @@ mixin RtcWatermarkInterface {
 
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
+  ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
   /// **Note**
@@ -1847,7 +1918,9 @@ mixin RtcEncryptionInterface {
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
+  ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
+  ///
   /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
   ///
   /// **Note**
@@ -1859,7 +1932,9 @@ mixin RtcEncryptionInterface {
 
 mixin RtcAudioRecorderInterface {
   /// Starts an audio recording on the client.
+  ///
   /// The SDK allows recording during a call. After successfully calling this method, you can record the audio of all the users in the channel and get an audio recording file.
+  ///
   /// Supported formats of the recording file are as follows:
   /// - .wav: Large file size with high fidelity.
   /// - .aac: Small file size with low fidelity.
@@ -1886,12 +1961,14 @@ mixin RtcAudioRecorderInterface {
 
 mixin RtcInjectStreamInterface {
   /// Injects an online media stream to a live broadcast.
+  ///
   /// If this method call is successful, the server pulls the voice or video stream and injects it into a live channel. This is applicable to scenarios where all audience members in the channel can watch a live show and interact with each other.
   ///
   /// **Note**
   /// - This method applies to the LiveBroadcasting profile only.
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - You can inject only one media stream into the channel at the same time.
+  ///
   /// This method call triggers the following callbacks:
   /// - The local client:
   /// -- [RtcEngineEventHandler.streamInjectedStatus], with the state of the injecting the online stream.
@@ -1907,6 +1984,7 @@ mixin RtcInjectStreamInterface {
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config);
 
   /// Removes the injected online media stream from a live broadcast.
+  ///
   /// This method removes the URL address (added by [RtcEngine.addInjectStreamUrl]) from a live broadcast.
   /// If this method call is successful, the SDK triggers the [RtcEngineEventHandler.userOffline] callback and returns a stream uid of 666.
   ///
@@ -1951,6 +2029,7 @@ mixin RtcCameraInterface {
       double positionY);
 
   /// Sets the camera exposure position.
+  ///
   /// A successful method call triggers the [RtcEngineEventHandler.cameraExposureAreaChanged] callback on the local client.
   /// See [RtcEngineEventHandler.cameraExposureAreaChanged]
   ///
@@ -1961,6 +2040,7 @@ mixin RtcCameraInterface {
       double positionYinView);
 
   /// Enables/Disables face detection for the local user.
+  ///
   /// Once face detection is enabled, the SDK triggers the [RtcEngineEventHandler.facePositionChanged] callback to report the face information of the local user, which includes the following aspects:
   /// - The width and height of the local video.
   /// - The position of the human face in the local video.
@@ -1986,6 +2066,7 @@ mixin RtcCameraInterface {
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled);
 
   /// Sets the camera capturer configuration.
+  ///
   /// For a video call or live broadcast, generally the SDK controls the camera output parameters. When the default camera capture settings do not meet special requirements or cause performance problems, we recommend using this method to set the camera capturer configuration:
   /// - If the resolution or frame rate of the captured raw video data are higher than those set by [RtcEngine.setVideoEncoderConfiguration], processing video frames requires extra CPU and RAM usage and degrades performance. We recommend setting config as [CameraCaptureOutputPreference.Performance](1) to avoid such problems.
   /// - If you do not need local video preview or are willing to sacrifice preview quality, we recommend setting config as [CameraCaptureOutputPreference.Performance](1) to optimize CPU and RAM usage.
@@ -2001,6 +2082,7 @@ mixin RtcCameraInterface {
 
 mixin RtcStreamMessageInterface {
   /// Creates a data stream.
+  ///
   /// Each user can create up to five data streams during the lifecycle of the [RtcEngine].
   ///
   /// **Note**
@@ -2016,11 +2098,14 @@ mixin RtcStreamMessageInterface {
   Future<int> createDataStream(bool reliable, bool ordered);
 
   /// Sends data stream messages.
+  ///
   /// The SDK has the following restrictions on this method:
   /// - Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 kB.
   /// - Each client can send up to 6 kB of data per second.
   /// - Each user can have up to five data channels simultaneously.
+  ///
   /// A successful method call triggers the [RtcEngineEventHandler.streamMessage] callback on the remote client, from which the remote user gets the stream message.
+  ///
   /// A failed method call triggers the [RtcEngineEventHandler.streamMessageError] callback on the remote client.
   ///
   /// **Note**
