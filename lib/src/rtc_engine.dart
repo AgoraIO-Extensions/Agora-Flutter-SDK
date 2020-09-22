@@ -61,6 +61,7 @@ class RtcEngine
   /// - You must create an [RtcEngine] instance before calling any other method.
   /// - You can create an [RtcEngine] instance either by calling this method or by calling [RtcEngine.createWithAreaCode]. The difference between [RtcEngine.createWithAreaCode] and this method is that [RtcEngine.createWithAreaCode] enables you to specify the connection area.
   /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
+  ///
   /// Param [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance, and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
   static Future<RtcEngine> create(String appId) async {
     return createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL);
@@ -76,7 +77,9 @@ class RtcEngine
   /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
   ///
   /// Param [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
+  ///
   /// Param [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions.
+  ///
   /// You can use the bitwise OR operator (|) to specify multiple areas. For details, see [IPAreaCode].
   /// After specifying the area of connection:
   /// - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
@@ -104,6 +107,7 @@ class RtcEngine
 
   /// Sets the engine event handler.
   /// After setting the engine event handler, you can listen for engine events and receive the statistics of the corresponding [RtcEngine] instance.
+  ///
   /// Param [handler] The event handler.
   void setEventHandler(RtcEngineEventHandler handler) {
     _handler = handler;
@@ -111,6 +115,7 @@ class RtcEngine
 
   /// Sets the channel profile of the Agora RtcEngine.
   /// The Agora RtcEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
+  ///
   /// Param [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
   Future<void> setChannelProfile(ChannelProfile profile) {
     return _invokeMethod('setChannelProfile',
@@ -122,6 +127,7 @@ class RtcEngine
   /// This method can be used to switch the user role after a user joins a channel. In the [ChannelProfile.LiveBroadcasting] profile, when a user switches user roles after joining a channel, a successful `setClientRole` method call triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
   /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline]( [UserOfflineReason.BecomeAudience]).
+  ///
   /// Param [role] Sets the role of a user. See [ClientRole].
   Future<void> setClientRole(ClientRole role) {
     return _invokeMethod(
@@ -140,16 +146,20 @@ class RtcEngine
   /// - A channel does not accept duplicate uids, such as two users with the same uid. If you set uid as 0, the system automatically assigns a uid.
   /// **Warning**
   /// - Ensure that the App ID used for creating the token is the same App ID used in the create method for creating an [RtcEngine] object. Otherwise, CDN live streaming may fail.
+  ///
   /// Param [token] The token for authentication:
   /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
   /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
   /// Param [channelName] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  ///
   /// Param [optionalInfo] Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
+  ///
   /// Param [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
   Future<void> joinChannel(String token, String channelName,
       String optionalInfo, int optionalUid) {
@@ -167,9 +177,11 @@ class RtcEngine
   ///
   /// **Note**
   /// - This method applies to the [ClientRole.Audience] role in a [ChannelProfile.LiveBroadcasting] channel only.
+  ///
   /// Param [token] The token for authentication:
   /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
   /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
   /// Param [channelName] Unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
@@ -199,6 +211,7 @@ class RtcEngine
   /// - The SDK triggers the [RtcEngineEventHandler.tokenPrivilegeWillExpire] callback
   /// - The [RtcEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
   /// The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
+  ///
   /// Param [token] The new token.
   Future<void> renewToken(String token) {
     return _invokeMethod('renewToken', {'token': token});
@@ -208,6 +221,7 @@ class RtcEngine
   /// The SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.
   /// If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.
   /// Use this method when the channel profile is [ChannelProfile.LiveBroadcasting]. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [ChannelProfile.Communication].
+  ///
   /// Param [enabled] Sets whether to enable/disable interoperability with the Agora Web SDK:
   /// - true: Enable.
   /// - false: (Default) Disable.
@@ -233,8 +247,11 @@ class RtcEngine
   }
 
   /// Allows the user to rate a call after the call ends.
+  ///
   /// Param [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
+  ///
   /// Param [rating] Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the [ErrorCode.InvalidArgument](-2) error occurs.
+  ///
   /// Param [description] (Optional) The description of the rating. The string length must be less than 800 bytes.
   Future<void> rate(String callId, int rating, {String description}) {
     return _invokeMethod('rate',
@@ -242,7 +259,9 @@ class RtcEngine
   }
 
   /// Allows a user to complain about the call quality after a call ends.
+  ///
   /// Param [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
+  ///
   /// Param [description] (Optional) The description of the complaint. The string length must be less than 800 bytes.
   Future<void> complain(String callId, String description) {
     return _invokeMethod(
@@ -254,6 +273,7 @@ class RtcEngine
   ///
   /// **Note**
   /// - Ensure that you call this method immediately after calling the [RtcEngine.create] method, otherwise the output log may not be complete.
+  ///
   /// Param [filePath] File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log`.
   Future<void> setLogFile(String filePath) {
     return _invokeMethod('setLogFile', {'filePath': filePath});
@@ -261,6 +281,7 @@ class RtcEngine
 
   /// Sets the output log level of the SDK.
   /// You can use one or a combination of the filters. The log level follows the sequence of `OFF`, `CRITICAL`, `ERROR`, `WARNING`, `INFO`, and `DEBUG`. Choose a level to see the logs preceding that level. For example, if you set the log level to `WARNING`, you see the logs within levels `CRITICAL`, `ERROR`, and `WARNING`.
+  ///
   /// Param [filter] Sets the log filter level. See [LogFilter].
   Future<void> setLogFilter(LogFilter filter) {
     return _invokeMethod(
@@ -269,6 +290,7 @@ class RtcEngine
 
   /// Sets the log file size (KB).
   /// The Agora SDK has two log files, each with a default size of 512 KB. If you set `fileSizeInKBytes` as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB. If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
+  ///
   /// Param [fileSizeInKBytes] The SDK log file size (KB).
   Future<void> setLogFileSize(int fileSizeInKBytes) {
     return _invokeMethod(
@@ -277,6 +299,7 @@ class RtcEngine
 
   /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
   /// The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
+  ///
   /// Param [parameters] Sets the parameter as a JSON string in the specified format.
   Future<void> setParameters(String parameters) {
     return _invokeMethod('setParameters', {'parameters': parameters});
@@ -933,7 +956,9 @@ mixin RtcUserInfoInterface {
   /// - Ensure that you set the [userAccount] parameter. Otherwise, this method does not take effect.
   /// - Ensure that the value of the userAccount parameter is unique in the channel.
   /// - To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
+  ///
   /// Param [appId] The App ID of your project.
+  ///
   /// Param [userAccount] The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
@@ -949,15 +974,18 @@ mixin RtcUserInfoInterface {
   ///
   /// **Note**
   /// - To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
+  ///
   /// Param [token] The token generated at your server:
   /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
   /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
   /// Param [channelName] The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  ///
   /// Param [userAccount] The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
@@ -970,12 +998,14 @@ mixin RtcUserInfoInterface {
   /// Gets the user information by passing in the user account.
   /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcEngineEventHandler.userInfoUpdated] callback on the local client.
   /// After receiving the [RtcEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
+  ///
   /// Param [userAccount] The user account of the user. Ensure that you set this parameter.
   Future<UserInfo> getUserInfoByUserAccount(String userAccount);
 
   /// Gets the user information by passing in the user ID.
   /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcEngineEventHandler.userInfoUpdated] callback on the local client.
   /// After receiving the [RtcEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
+  ///
   /// Param [uid] The user ID of the user. Ensure that you set this parameter.
   Future<UserInfo> getUserInfoByUid(int uid);
 }
@@ -1011,7 +1041,9 @@ mixin RtcAudioInterface {
   /// See [RtcEngine.joinChannel]
   /// - In the Communication and [ChannelProfile.LiveBroadcasting] profiles, the bitrates may be different from your settings due to network self-adaptation.
   /// - In scenarios requiring high-quality audio, we recommend setting profile as [AudioScenario.ShowRoom](4) and scenario as [AudioScenario.GameStreaming](3). For example, for music education scenarios.
+  ///
   /// Param [profile] Sets the sample rate, bitrate, encoding mode, and the number of channels. See [AudioProfile].
+  ///
   /// Param [scenario] Sets the audio application scenarios. Under different audio scenarios, the device uses different volume tracks, i.e. either the in-call volume or the media volume. See [AudioScenario].
   Future<void> setAudioProfile(AudioProfile profile, AudioScenario scenario);
 
@@ -1019,6 +1051,7 @@ mixin RtcAudioInterface {
   ///
   /// **Note**
   /// - To avoid echoes and improve call quality, Agora recommends setting the value of volume between 0 and 100. If you need to set the value higher than 100, contact support@agora.io first.
+  ///
   /// Param [volume] Recording volume. The value ranges between 0 and 400:
   /// - 0: Mute.
   /// - 100: Original volume.
@@ -1032,7 +1065,9 @@ mixin RtcAudioInterface {
   /// - Call this method after joining a channel.
   /// - The playback volume here refers to the mixed volume of a specified remote user.
   /// - This method can only adjust the playback volume of one specified remote user at a time. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.
+  ///
   /// Param [uid] ID of the remote user.
+  ///
   /// Param [volume] The playback volume of the specified remote user. The value ranges from 0 to 100:
   /// - 0: Mute.
   /// - 100: The original volume.
@@ -1046,6 +1081,7 @@ mixin RtcAudioInterface {
   /// See [RtcEngine.adjustPlaybackSignalVolume]
   /// See [RtcEngine.adjustAudioMixingVolume]
   /// - To avoid echoes and improve call quality, Agora recommends setting the value of volume between 0 and 100. If you need to set the value higher than 100, contact support@agora.io first.
+  ///
   /// Param [volume] The playback volume of all remote users. The value ranges from 0 to 400:
   /// - 0: Mute.
   /// - 100: The original volume.
@@ -1061,6 +1097,7 @@ mixin RtcAudioInterface {
   /// - This method is different from the [RtcEngine.muteLocalAudioStream] method:
   /// -- [RtcEngine.enableLocalAudio]: Disables/Re-enables the local audio capture and processing. If you disable or re-enable local audio recording using the [RtcEngine.enableLocalAudio] method, the local user may hear a pause in the remote audio playback.
   /// -- [RtcEngine.muteLocalAudioStream]: Stops/Continues sending the local audio streams.
+  ///
   /// Param [enabled] Sets whether to disable/re-enable the local audio function:
   /// - true: (Default) Re-enable the local audio function, that is, to start local audio capture and processing.
   /// - false: Disable the local audio function, that is, to stop local audio capture and processing.
@@ -1072,6 +1109,7 @@ mixin RtcAudioInterface {
   /// **Note**
   /// - When muted is set as true, this method does not disable the microphone and thus does not affect any ongoing recording.
   /// - If you call [RtcEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local audio according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcEngine.setChannelProfile] method.
+  ///
   /// Param [muted] Sets whether to send/stop sending the local audio stream:
   /// - true: Stop sending the local audio stream.
   /// - false: (Default) Send the local audio stream.
@@ -1081,13 +1119,16 @@ mixin RtcAudioInterface {
   ///
   /// **Note**
   /// - If you called the [RtcEngine.muteAllRemoteAudioStreams] method and set muted as true to stop receiving all remote video streams, ensure that the [RtcEngine.muteAllRemoteAudioStreams] method is called and set muted as false before calling this method. The [RtcEngine.muteAllRemoteAudioStreams] method sets all remote audio streams, while the [RtcEngine.muteAllRemoteAudioStreams] method sets a specified remote user's audio stream.
+  ///
   /// Param [uid] ID of the specified remote user.
+  ///
   /// Param [muted] Sets whether to receive/stop receiving the specified remote user's audio stream:
   /// - true: Stop receiving the specified remote user’s audio stream.
   /// - false: (Default) Receive the specified remote user’s audio stream.
   Future<void> muteRemoteAudioStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote audio streams.
+  ///
   /// Param [muted] Sets whether to receive/stop receiving all remote audio streams:
   /// - true: Stop receiving all remote audio streams.
   /// - false: (Default) Receive all remote audio streams.
@@ -1098,6 +1139,7 @@ mixin RtcAudioInterface {
   ///
   /// **Note**
   /// - If you want to resume receiving audio streams, call [RtcEngine.muteRemoteAudioStream](false), and specify the ID of the remote user that you want to subscribe to. To resume audio streams of multiple users, call [RtcEngine.muteRemoteAudioStream] as many times. Calling [RtcEngine.setDefaultMuteAllRemoteAudioStreams](false) resumes receiving audio streams of the subsequent users only.
+  ///
   /// Param [muted] Sets whether or not to receive/stop receiving the remote audio streams by default:
   /// - true: Stop receiving any audio stream by default.
   /// - false: (Default) Receive all remote audio streams by default.
@@ -1105,10 +1147,13 @@ mixin RtcAudioInterface {
 
   /// Enables the [RtcEngineEventHandler.audioVolumeIndication] callback at a set time interval to report on which users are speaking and the speakers' volume.
   /// Once this method is enabled, the SDK returns the volume indication in the [RtcEngineEventHandler.audioVolumeIndication] callback at the set time interval, regardless of whether any user is speaking in the channel.
+  ///
   /// Param [interval] Sets the time interval between two consecutive volume indications:
   /// - ≤ 0: Disables the volume indication.
   /// - > 0: Time interval (ms) between two consecutive volume indications. We recommend setting interval ≥ 200 ms.
+  ///
   /// Param [smooth] The smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The greater the value, the more sensitive the indicator. The recommended value is 3.
+  ///
   /// Param [report_vad]
   /// - true: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
   /// - false: (Default) Disable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
@@ -1148,6 +1193,7 @@ mixin RtcVideoInterface {
   /// Sets the video encoder configuration.
   /// Each video encoder configuration corresponds to a set of video parameters, including the resolution, frame rate, bitrate, and video orientation. The parameters specified in this method are the maximum values under ideal network conditions. If the video engine cannot render the video using the specified parameters due to poor network conditions, the parameters further down the list are considered until a successful configuration is found.
   /// If you do not set the video encoder configuration after joining the channel, you can call this method before calling the [RtcEngine.enableVideo] method to reduce the render time of the first video frame.
+  ///
   /// Param [config] The local video encoder configuration. See [VideoEncoderConfiguration].
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
 
@@ -1173,6 +1219,7 @@ mixin RtcVideoInterface {
   ///
   /// **Note**
   /// - This method affects the internal engine and can be called after calling  the [RtcEngine.leaveChannel] method.
+  ///
   /// Param [enabled] Sets whether to disable/re-enable the local video, including the capturer, renderer, and sender:
   /// - true: (Default) Re-enable the local video.
   /// - false: Disable the local video. Once the local video is disabled, the remote users can no longer receive the video stream of this user, while this user can still receive the video streams of other remote users. When you set enabled as false, this method does not require a local camera.
@@ -1184,6 +1231,7 @@ mixin RtcVideoInterface {
   /// **Note**
   /// - When you set muted as true, this method does not disable the camera and thus does not affect the retrieval of the local video streams. This method responds faster than calling the [RtcEngine.enableLocalVideo] method and set muted as false, which controls sending the local video stream.
   /// - If you call [RtcEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local video according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcEngine.setChannelProfile] method.
+  ///
   /// Param [muted] Sets whether to send/stop sending the local video stream:
   /// - true: Stop sending the local video stream.
   /// - false: (Default) Send the local video stream.
@@ -1193,13 +1241,16 @@ mixin RtcVideoInterface {
   ///
   /// **Note**
   /// - If you call the [RtcEngine.muteAllRemoteVideoStreams] method and set set muted as true to stop receiving all remote video streams, ensure that the [RtcEngine.muteAllRemoteVideoStreams] method is called and set muted as false before calling this method. The [RtcEngine.muteAllRemoteVideoStreams] method sets all remote streams, while this method sets a specified remote user's stream.
+  ///
   /// Param [uid] User ID of the specified remote user.
+  ///
   /// Param [muted] Sets whether to receive/stop receiving a specified remote user's video stream:
   /// - true: Stop receiving a specified remote user’s video stream.
   /// - false: (Default) Receive a specified remote user’s video stream.
   Future<void> muteRemoteVideoStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote video streams.
+  ///
   /// Param [muted] Sets whether to receive/stop receiving all remote video streams:
   /// - true: Stop receiving all remote video streams.
   /// - false: (Default) Receive all remote video streams.
@@ -1210,6 +1261,7 @@ mixin RtcVideoInterface {
   ///
   /// **Note**
   /// - If you want to resume receiving video streams, call [RtcEngine.muteRemoteVideoStream](false), and specify the ID of the remote user that you want to subscribe to. To resume receiving video streams of multiple users, call [RtcEngine.muteRemoteVideoStream] as many times. Calling `setDefaultMuteAllRemoteVideoStreams`(false) resumes receiving video streams of the subsequent users only.
+  ///
   /// Param [muted] Sets whether to receive/stop receiving all remote video streams by default:
   /// - true: Stop receiving any remote video stream by default.
   /// - false: (Default) Receive all remote video streams by default.
@@ -1220,9 +1272,11 @@ mixin RtcVideoInterface {
   /// **Note**
   /// - Call this method after calling [RtcEngine.enableVideo].
   /// - This method supports both Android and iOS. For Android, this method applies to Android 4.4 or later.
+  ///
   /// Param [enabled] Sets whether or not to enable image enhancement:
   /// - enables image enhancement.
   /// - disables image enhancement.
+  ///
   /// Param [options] The image enhancement options. See [BeautyOptions].
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 }
@@ -1240,15 +1294,19 @@ mixin RtcAudioMixingInterface {
   /// - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
   /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingErrorCode.CanNotOpen] = 701.
   /// - If you call this method on an emulator, only the MP3 file format is supported.
+  ///
   /// Param [filePath] Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
   /// - If the path begins with `/assets/`, the audio file is in the `/assets/` directory.
   /// - Otherwise, the audio file is in the absolute path.
+  ///
   /// Param [loopback] Sets which user can hear the audio mixing:
   /// - true: Only the local user can hear the audio mixing.
   /// - false: Both users can hear the audio mixing.
+  ///
   /// Param [replace] Sets the audio mixing content:
   /// - true: Only publish the specified audio file; the audio stream from the microphone is not published.
   /// - false: The local audio file is mixed with the audio stream from the microphone.
+  ///
   /// Param [cycle] Sets the number of playback loops:
   /// - Positive integer: Number of playback loops
   /// - -1: Infinite playback loops
@@ -1272,16 +1330,19 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Note**
   /// - Calling this method does not affect the volume of the audio effect file playback invoked by the [RtcEngine.playEffect] method.
+  ///
   /// Param [volume] Audio mixing volume. The value ranges between 0 and 100 (default).
   Future<void> adjustAudioMixingVolume(int volume);
 
   /// Adjusts the volume of audio mixing for local playback.
   /// Call this method when you are in a channel.
+  ///
   /// Param [volume] Audio mixing volume for local playback. The value ranges between 0 and 100 (default).
   Future<void> adjustAudioMixingPlayoutVolume(int volume);
 
   /// Adjusts the volume of audio mixing for publishing (sending to other users).
   /// Call this method when you are in a channel.
+  ///
   /// Param [volume] Audio mixing volume for publishing. The value ranges between 0 and 100 (default).
   Future<void> adjustAudioMixingPublishVolume(int volume);
 
@@ -1302,6 +1363,7 @@ mixin RtcAudioMixingInterface {
   Future<int> getAudioMixingCurrentPosition();
 
   /// Sets the playback position (ms) of the music file to a different starting position (the default plays from the beginning).
+  ///
   /// Param [pos] The playback starting position (ms) of the audio mixing file.
   Future<void> setAudioMixingPosition(int pos);
 
@@ -1311,6 +1373,7 @@ mixin RtcAudioMixingInterface {
   /// **Note**
   /// - Call this method after calling startAudioMixing.
   /// See [RtcEngine.startAudioMixing]
+  ///
   /// Param [pitch] Sets the pitch of the local music file by chromatic scale. The default value is 0, which means keep the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
   Future<void> setAudioMixingPitch(int pitch);
 }
@@ -1321,11 +1384,14 @@ mixin RtcAudioEffectInterface {
   Future<double> getEffectsVolume();
 
   /// Sets the volume of the audio effects.
+  ///
   /// Param [volume] Volume of the audio effects. The value ranges between 0.0 and 100.0 (default).
   Future<void> setEffectsVolume(double volume);
 
   /// Sets the volume of a specified audio effect.
+  ///
   /// Param [soundId] ID of the audio effect. Each audio effect has a unique ID.
+  ///
   /// Param [volume] Volume of the audio effect. The value ranges between 0.0 and 100.0 (default).
   Future<void> setVolumeOfEffect(int soundId, double volume);
 
@@ -1333,18 +1399,25 @@ mixin RtcAudioEffectInterface {
   /// With this method, you can set the loop count, pitch, pan, and gain of the audio effect file and whether the remote user can hear the audio effect.
   /// To play multiple audio effect files simultaneously, call this method multiple times with different soundIds and filePaths. We recommend playing no more than three audio effect files at the same time.
   /// When the audio effect file playback is finished, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
+  ///
   /// Param [soundId] ID of the specified audio effect. Each audio effect has a unique ID. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the soundID value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  ///
   /// Param [filePath] The absolute file path (including the suffixes of the filename) of the audio effect file or the URL of the online audio effect file. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac. 3gp, mkv, and wav.
+  ///
   /// Param [loopCount] Sets the number of times the audio effect loops:
   /// - 0: Plays the audio effect once.
   /// - 1: Plays the audio effect twice.
   /// - -1: Plays the audio effect in a loop indefinitely, until you call the [RtcEngine.stopEffect] or [RtcEngine.stopAllEffects] method.
+  ///
   /// Param [pitch] Sets the pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
+  ///
   /// Param [pan] Sets the spatial position of the audio effect. The value ranges between -1.0 and 1.0.
   /// - 0.0: The audio effect shows ahead.
   /// - 1.0: The audio effect shows on the right.
   /// - -1.0: The audio effect shows on the left.
+  ///
   /// Param [gain] Sets the volume of the audio effect. The value ranges between 0.0 and 100,0. The default value is 100.0. The lower the value, the lower the volume of the audio effect.
+  ///
   /// Param [publish] Set whether or not to publish the specified audio effect to the remote stream:
   /// - true: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
   /// - false: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
@@ -1355,6 +1428,7 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Note**
   /// - If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  ///
   /// Param [soundId] ID of the specified audio effect. Each audio effect has a unique ID.
   Future<void> stopEffect(int soundId);
 
@@ -1369,15 +1443,19 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Note**
   /// - To ensure smooth communication, limit the size of the audio effect file. We recommend using this method to preload the audio effect before calling the [RtcEngine.joinChannel] method.
+  ///
   /// Param [soundId] ID of the audio effect. Each audio effect has a unique ID.
+  ///
   /// Param [filePath] Absolute path of the audio effect file.
   Future<void> preloadEffect(int soundId, String filePath);
 
   /// Releases a specified preloaded audio effect from the memory.
+  ///
   /// Param [soundId] ID of the audio effect. Each audio effect has a unique ID.
   Future<void> unloadEffect(int soundId);
 
   /// Pauses a specified audio effect.
+  ///
   /// Param [soundId] ID of the audio effect. Each audio effect has a unique ID.
   Future<void> pauseEffect(int soundId);
 
@@ -1385,6 +1463,7 @@ mixin RtcAudioEffectInterface {
   Future<void> pauseAllEffects();
 
   /// Resumes playing a specified audio effect.
+  ///
   /// Param [soundId] ID of the audio effect. Each audio effect has a unique ID.
   Future<void> resumeEffect(int soundId);
 
@@ -1397,6 +1476,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
+  ///
   /// Param [voiceChanger] The local voice changer option. See [AudioVoiceChanger].
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger);
 
@@ -1405,16 +1485,20 @@ mixin RtcVoiceChangerInterface {
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverb].
   /// - Do not use this method together with [RtcEngine.setLocalVoiceChanger], or the method called eariler does not take effect.
+  ///
   /// Param [preset] The local voice reverberation preset. See See [AudioReverbPreset].
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset);
 
   /// Changes the voice pitch of the local speaker.
+  ///
   /// Param [pitch] Sets the voice pitch. The value ranges between 0.5 and 2.0. The lower the value, the lower the voice pitch. The default value is 1.0 (no change to the local voice pitch).
   Future<void> setLocalVoicePitch(double pitch);
 
   /// Sets the local voice equalization effect.
+  ///
   /// Param [bandFrequency] Sets the band frequency. The value ranges between 0 and 9; representing the respective 10-band center frequencies of the voice effects, including 31, 62, 125, 500, 1k, 2k, 4k, 8k, and 16k Hz.
   /// See [AudioEqualizationBandFrequency]
+  ///
   /// Param [bandGain] Sets the gain of each band (dB). The value ranges between -15 and 15. The default value is 0.
   Future<void> setLocalVoiceEqualization(
       AudioEqualizationBandFrequency bandFrequency, int bandGain);
@@ -1423,7 +1507,9 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Note**
   /// - Adds the [RtcEngine.setLocalVoiceReverbPreset] method, a more user-friendly method for setting the local voice reverberation. You can use this method to set the local reverberation effect, such as Popular, R&B, Rock, Hip-hop, and more.
+  ///
   /// Param [reverbKey] Sets the reverberation key. This method contains five reverberation keys. For details, see the description of each value in [AudioReverbType].
+  ///
   /// Param [value] Sets the local voice reverberation value.
   Future<void> setLocalVoiceReverb(AudioReverbType reverbKey, int value);
 }
@@ -1431,6 +1517,7 @@ mixin RtcVoiceChangerInterface {
 mixin RtcVoicePositionInterface {
   /// Enables/Disables stereo panning for remote users.
   /// Ensure that you call this method before [RtcEngine.joinChannel] to enable stereo panning for remote users so that the local user can track the position of a remote user by calling [RtcEngine.setRemoteVoicePosition].
+  ///
   /// Param [enabled] Sets whether or not to enable stereo panning for remote users:
   /// - true: enables stereo panning.
   /// - false: disables stereo panning.
@@ -1442,11 +1529,14 @@ mixin RtcVoicePositionInterface {
   /// **Note**
   /// - For this method to work, enable stereo panning for remote users by calling the [RtcEngine.enableSoundPositionIndication] method before joining a channel.
   /// - This method requires hardware support. For the best sound positioning, we recommend using a stereo headset.
+  ///
   /// Param [uid] The ID of the remote user.
+  ///
   /// Param [pan] The sound position of the remote user. The value ranges from -1.0 to 1.0:
   /// - 0.0: The remote sound comes from the front.
   /// - -1.0: The remote sound comes from the left.
   /// - 1.0: The remote sound comes from the right.
+  ///
   /// Param [gain] Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain);
 }
@@ -1461,6 +1551,7 @@ mixin RtcPublishStreamInterface {
   /// -- Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// -- Ensure that you call the [RtcEngine.setClientRole] method and set the user role as the host.
   /// -- Ensure that you call the `setLiveTranscoding` method before calling the [RtcEngine.addPublishStreamUrl] method.
+  ///
   /// Param [transcoding] Sets the CDN live audio/video transcoding settings. See [LiveTranscoding].
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
@@ -1473,7 +1564,9 @@ mixin RtcPublishStreamInterface {
   /// - This method applies to LiveBroadcasting only.
   /// - Ensure that the user joins a channel before calling this method.
   /// - This method adds only one stream HTTP/HTTPS URL address each time it is called.
+  ///
   /// Param [url] The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
+  ///
   /// Param [transcodingEnabled] Sets whether transcoding is enabled/disabled. If you set this parameter as true, ensure that you call the setLiveTranscoding method before this method.
   /// See [RtcEngine.setLiveTranscoding]
   /// - true: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
@@ -1488,6 +1581,7 @@ mixin RtcPublishStreamInterface {
   /// - Ensure that the user joins a channel before calling this method.
   /// - This method applies to LiveBroadcasting only.
   /// - This method removes only one stream RTMP URL address each time it is called.
+  ///
   /// Param [url] The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
   Future<void> removePublishStreamUrl(String url);
 }
@@ -1504,6 +1598,7 @@ mixin RtcMediaRelayInterface {
   /// - Call this method after the [RtcEngine.joinChannel] method.
   /// - This method takes effect only when you are a [ClientRole.Broadcaster] in a [ChannelProfile.LiveBroadcasting] channel.
   /// - After a successful method call, if you want to call this method again, ensure that you call the [RtcEngine.stopChannelMediaRelay] method to quit the current relay.
+  ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay.
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
@@ -1515,6 +1610,7 @@ mixin RtcMediaRelayInterface {
   /// **Note**
   /// - Call this method after the [RtcEngine.startChannelMediaRelay] method to update the destination channel.
   /// - This method supports adding at most four destination channels in the relay. If there are already four destination channels in the relay.
+  ///
   /// Param [channelMediaRelayConfiguration] The media stream relay configuration. See [ChannelMediaRelayConfiguration].
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
@@ -1546,6 +1642,7 @@ mixin RtcAudioRouteInterface {
   /// **Note**
   /// - This method applies to the [ChannelProfile.Communication] profile only.
   /// - Call this method before the user joins a channel.
+  ///
   /// Param [defaultToSpeaker] Sets the default audio route:
   /// - true: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
   /// - false: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
@@ -1557,6 +1654,7 @@ mixin RtcAudioRouteInterface {
   /// **Note**
   /// - Ensure that you have successfully called the [RtcEngine.joinChannel] method before calling this method.
   /// - This method is invalid for audience users in the [ChannelProfile.LiveBroadcasting] profile.
+  ///
   /// Param [enabled] Sets whether to route the audio to the speakerphone or earpiece:
   /// - true: Route the audio to the speakerphone.
   /// - false: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
@@ -1568,12 +1666,14 @@ mixin RtcAudioRouteInterface {
 
 mixin RtcEarMonitoringInterface {
   /// Enables in-ear monitoring.
+  ///
   /// Param [enabled] Sets whether to enable/disable in-ear monitoring:
   /// - true: Enable.
   /// - false: (Default) Disable.
   Future<void> enableInEarMonitoring(bool enabled);
 
   /// Sets the volume of the in-ear monitor.
+  ///
   /// Param [volume] Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
   Future<void> setInEarMonitoringVolume(int volume);
 }
@@ -1581,6 +1681,7 @@ mixin RtcEarMonitoringInterface {
 mixin RtcDualStreamInterface {
   /// Enables/Disables the dual video stream mode.
   /// If dual-stream mode is enabled, the receiver can choose to receive the high stream (high-resolution high-bitrate video stream) or low stream (low-resolution low-bitrate video stream) video.
+  ///
   /// Param [enabled] Sets the stream mode:
   /// - true: Dual-stream mode.
   /// - false: (Default) Single-stream mode.
@@ -1591,11 +1692,14 @@ mixin RtcDualStreamInterface {
   /// By default, users receive the high-video stream. Call this method if you want to switch to the low-video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources.
   /// The aspect ratio of the low-video stream is the same as the high-video stream. Once the resolution of the high-video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-video stream.
   /// The SDK reports the result of calling this method in the [RtcEngineEventHandler.apiCallExecuted] callback.
+  ///
   /// Param [uid] ID of the remote user sending the video stream.
+  ///
   /// Param [streamType] Sets the video-stream type. See [VideoStreamType].
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType);
 
   /// Sets the default video-stream type of the remotely subscribed video stream when the remote user sends dual streams.
+  ///
   /// Param [streamType] Sets the default video-stream type. See [VideoStreamType].
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 }
@@ -1609,12 +1713,14 @@ mixin RtcFallbackInterface {
   ///
   /// **Note**
   /// - Agora does not recommend using this method for CDN live streaming, because the remote CDN live user will have a noticeable lag when the locally published video stream falls back to audio only.
+  ///
   /// Param [option] Sets the fallback option for the locally published video stream. See [StreamFallbackOptions].
   ///
   Future<void> setLocalPublishFallbackOption(StreamFallbackOptions option);
 
   /// Sets the fallback option for the remotely subscribed video stream based on the network conditions.
   /// If option is set as [StreamFallbackOptions.AudioOnly](2), the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
+  ///
   /// Param [option] Sets the fallback option for the remotely subscribed video stream. See [StreamFallbackOptions].
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
 
@@ -1623,7 +1729,9 @@ mixin RtcFallbackInterface {
   ///
   /// **Note**
   /// The Agora SDK supports setting `userPriority` as `High` for one user only.
+  ///
   /// Param [uid] The ID of the remote user.
+  ///
   /// Param [userPriority] The priority of the remote user. See [UserPriority].
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority);
 }
@@ -1636,6 +1744,7 @@ mixin RtcTestInterface {
   /// - Call this method before joining a channel.
   /// - After calling this method, call the [RtcEngine.stopEchoTest] method to end the test. Otherwise, the app cannot run the next echo test, or call the [RtcEngine.joinChannel] method.
   /// - In the [ChannelProfile.LiveBroadcasting] profile, only a host can call this method.
+  ///
   /// Param [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back.
   Future<void> startEchoTest(int intervalInSeconds);
 
@@ -1668,6 +1777,7 @@ mixin RtcTestInterface {
   /// - This method consumes extra network traffic and may affect communication quality. We do not recommend calling this method together with [RtcEngine.enableLastmileTest].
   /// - Do not call other methods before receiving the [RtcEngineEventHandler.lastmileQuality] and [RtcEngineEventHandler.lastmileProbeResult] callbacks. Otherwise, the callbacks may be interrupted by other methods.
   /// - In the [ChannelProfile.LiveBroadcasting] profile, a host should not call this method after joining a channel.
+  ///
   /// Param [config] The configurations of the last-mile network probe test. See [LastmileProbeConfig].
   Future<void> startLastmileProbeTest(LastmileProbeConfig config);
 
@@ -1687,10 +1797,12 @@ mixin RtcMediaMetadataInterface {
   Future<void> unregisterMediaMetadataObserver();
 
   /// Sets the maximum size of the metadata.
+  ///
   /// Param [size] The maximum size of the buffer of the metadata that you want to use. The highest value is 1024 bytes.
   Future<void> setMaxMetadataSize(int size);
 
   /// Sends the metadata.
+  ///
   /// Param [metadata] The metadata to be sent in the form of String.
   /// **Note**
   /// Ensure that the size of the metadata does not exceed the value set in the [setMaxMetadataSize] method.
@@ -1713,7 +1825,9 @@ mixin RtcWatermarkInterface {
   /// - If the dimensions the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.
   /// - If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member in the WatermarkOptions class to set whether or not the watermark is visible in preview.
   /// - If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
+  ///
   /// Param [watermarkUrl] The local file path of the watermark image to be added. This method supports adding a watermark image from either the local file path or the assets file path. If you use the assets file path, you need to start with `/assets/` when filling in this parameter.
+  ///
   /// Param [options] The options of the watermark image to be added. See [WatermarkOptions].
   Future<void> addVideoWatermark(String watermarkUrl, WatermarkOptions options);
 
@@ -1728,6 +1842,7 @@ mixin RtcEncryptionInterface {
   /// **Note**
   /// - For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
   /// - Do not use this method for CDN live streaming.
+  ///
   /// Param [secret] The encryption password.
   Future<void> setEncryptionSecret(String secret);
 
@@ -1737,6 +1852,7 @@ mixin RtcEncryptionInterface {
   ///
   /// **Note**
   /// - Call the [RtcEngine.setEncryptionSecret] method before calling this method.
+  ///
   /// Param [encryptionMode] Sets the encryption mode. See [EncryptionMode].
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 }
@@ -1752,8 +1868,11 @@ mixin RtcAudioRecorderInterface {
   /// - Ensure that the directory to save the recording file exists and is writable.
   /// - This method is usually called after calling the [RtcEngine.joinChannel] method. The recording automatically stops when you call the [RtcEngine.leaveChannel] method.
   /// - For better recording effects, set quality as [AudioRecordingQuality.Medium] or [AudioRecordingQuality.High] when sampleRate is 44.1 kHz or 48 kHz.
+  ///
   /// Param [filePath] Absolute file path (including the suffixes of the filename) of the recording file. The string of the file name is in UTF-8. For example, `/sdcard/emulated/0/audio/aac`.
+  ///
   /// Param [sampleRate] Sample rate (Hz) of the recording file. See [AudioSampleRateType] for supported values.
+  ///
   /// Param [quality] The audio recording quality. See [AudioRecordingQuality].
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality);
@@ -1779,15 +1898,18 @@ mixin RtcInjectStreamInterface {
   /// -- [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
   /// - The remote client:
   /// -- [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
+  ///
   /// Param [url] The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and HTTP-FLV.
   /// - Supported audio codec type: AAC.
   /// - Supported video codec type: H264(AVC).
+  ///
   /// Param [config] The [LiveInjectStreamConfig] object which contains the configuration information for the added voice or video stream.
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config);
 
   /// Removes the injected online media stream from a live broadcast.
   /// This method removes the URL address (added by [RtcEngine.addInjectStreamUrl]) from a live broadcast.
   /// If this method call is successful, the SDK triggers the [RtcEngineEventHandler.userOffline] callback and returns a stream uid of 666.
+  ///
   /// Param [url] HTTP/HTTPS URL address of the added stream to be removed.
   Future<void> removeInjectStreamUrl(String url);
 }
@@ -1812,6 +1934,7 @@ mixin RtcCameraInterface {
   Future<bool> isCameraAutoFocusFaceModeSupported();
 
   /// Sets the camera zoom ratio.
+  ///
   /// Param [factor] Sets the camera zoom factor. The value ranges between 1.0 and the maximum zoom supported by the device.
   Future<void> setCameraZoomFactor(double factor);
 
@@ -1820,7 +1943,9 @@ mixin RtcCameraInterface {
 
   /// Sets the camera manual focus position.
   /// A successful method call triggers the [RtcEngineEventHandler.cameraFocusAreaChanged] callback on the local client.
+  ///
   /// Param [positionX] The horizontal coordinate of the touch point in the view.
+  ///
   /// Param [positionY] The vertical coordinate of the touch point in the view.
   Future<void> setCameraFocusPositionInPreview(double positionX,
       double positionY);
@@ -1828,7 +1953,9 @@ mixin RtcCameraInterface {
   /// Sets the camera exposure position.
   /// A successful method call triggers the [RtcEngineEventHandler.cameraExposureAreaChanged] callback on the local client.
   /// See [RtcEngineEventHandler.cameraExposureAreaChanged]
+  ///
   /// Param [positionXinView] The horizontal coordinate of the touch point in the view.
+  ///
   /// Param [positionYinView] The vertical coordinate of the touch point in the view.
   Future<void> setCameraExposurePosition(double positionXinView,
       double positionYinView);
@@ -1838,18 +1965,21 @@ mixin RtcCameraInterface {
   /// - The width and height of the local video.
   /// - The position of the human face in the local video.
   /// - The distance between the human face and the device screen.
+  ///
   /// Param [enable] Determines whether to enable the face detection function for the local user:
   /// - true: Enable face detection.
   /// - false: (Default) Disable face detection.
   Future<void> enableFaceDetection(bool enable);
 
   /// Enables the camera flash function.
+  ///
   /// Param [isOn] Sets whether to enable/disable the camera flash function:
   /// - true: Enable the camera flash function.
   /// - false: Disable the camera flash function.
   Future<void> setCameraTorchOn(bool isOn);
 
   /// Enables the camera auto-face focus function.
+  ///
   /// Param [enabled] Sets whether to enable/disable the camera auto-face focus function:
   /// - true: Enable the camera auto-face focus function.
   /// - false: (Default) Disable the camera auto-face focus function.
@@ -1863,6 +1993,7 @@ mixin RtcCameraInterface {
   ///
   /// **Note**
   /// - Call this method before enabling the local camera. That said, you can call this method before calling [RtcEngine.joinChannel], [RtcEngine.enableVideo], or [RtcEngine.enableLocalVideo], depending on which method you use to turn on your local camera.
+  ///
   /// Param [config] The camera capturer configuration. See [CameraCapturerConfiguration].
   Future<void> setCameraCapturerConfiguration(
       CameraCapturerConfiguration config);
@@ -1874,9 +2005,11 @@ mixin RtcStreamMessageInterface {
   ///
   /// **Note**
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
+  ///
   /// Param [reliable] Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds:
   /// - true: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the onStreamMessageError callback and returns an error code. See [RtcEngineEventHandler.streamMessageError].
   /// - false: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
+  ///
   /// Param [ordered] Sets whether or not the recipients receive the data stream in the sent order:
   /// - true: The recipients receive the data in the sent order.
   /// - false: The recipients do not receive the data in the sent order.
@@ -1893,7 +2026,9 @@ mixin RtcStreamMessageInterface {
   /// **Note**
   /// - Ensure that you have created the data stream using [RtcEngine.createDataStream] before calling this method.
   /// - This method applies only to the [ChannelProfile.Communication] profile or to hosts in the [ChannelProfile.LiveBroadcasting] profile.
+  ///
   /// Param [streamId] ID of the sent data stream returned by the [RtcEngine.createDataStream] method.
+  ///
   /// Param [message] Sent data.
   Future<void> sendStreamMessage(int streamId, String message);
 }

@@ -48,6 +48,7 @@ class RtcChannel
   /// Creates and gets an [RtcChannel] instance.
   /// To join more than one channel, call this method multiple times to create as many [RtcChannel] instances as needed, and call the [RtcChannel.joinChannel] method of each created [RtcChannel] object.
   /// After joining multiple channels, you can simultaneously subscribe to streams of all the channels, but publish a stream in only one channel at one time.
+  ///
   /// Param [channelId] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. This parameter does not have a default value. You must set it. Do not set it as the empty string "". Otherwise, the SDK returns [ErrorCode.Refused](-5). Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
@@ -77,6 +78,7 @@ class RtcChannel
 
   /// Sets the channel event handler.
   /// After setting the channel event handler, you can listen for channel events and receive the statistics of the corresponding [RtcChannel] instance.
+  ///
   /// Param [handler] The event handler.
   void setEventHandler(RtcChannelEventHandler handler) {
     _handler = handler;
@@ -94,6 +96,7 @@ class RtcChannel
   /// A successful call of this method triggers the following callbacks:
   /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
   /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
+  ///
   /// Param [role] The role of the user. See [ClientRole].
   Future<void> setClientRole(ClientRole role) {
     return _invokeMethod(
@@ -107,11 +110,15 @@ class RtcChannel
   /// - We recommend using different UIDs for different channels.
   /// - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
   /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
+  ///
   /// Param [token] The token generated at your server.
   /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
   /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
   /// Param [optionalInfo] Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
+  ///
   /// Param [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the onJoinChannelSuccess callback. The app must maintain this user ID.
+  ///
   /// Param [options] The channel media options. See [ChannelMediaOptions].
   Future<void> joinChannel(String token, String optionalInfo, int optionalUid,
       ChannelMediaOptions options) {
@@ -130,15 +137,18 @@ class RtcChannel
   /// - We recommend using different user accounts for different channels.
   /// - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
   /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
+  ///
   /// Param [token] The token generated at your server.
   /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
   /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
   /// Param [userAccount] The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  ///
   /// Param [options] The channel media options. See [ChannelMediaOptions].
   ///
   Future<void> joinChannelWithUserAccount(String token, String userAccount,
