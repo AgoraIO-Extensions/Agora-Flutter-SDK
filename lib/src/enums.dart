@@ -401,6 +401,7 @@ enum AudioReverbPreset {
 
   /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the `profile` parameter in `setAudioProfile` as `MusicHighQualityStereo`(5).
   /// See [RtcEngine.setAudioProfile]
+  ///
   /// See [AudioProfile.MusicHighQualityStereo]
   @JsonValue(0x00200001)
   VIRTUAL_STEREO,
@@ -849,13 +850,19 @@ enum ConnectionStateType {
 
   /// The SDK is connecting to Agora's edge server.
   /// - When the app calls `joinChannel`, the SDK starts to establish a connection to the specified channel, triggers the `connectionStateChanged` callback, and switches to the Connecting state.
+  ///
   /// See [RtcEngine.joinChannel]
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
+  ///
   /// See [ConnectionStateType.Connecting]
   /// - When the SDK successfully joins the channel, the SDK triggers the `connectionStateChanged` callback and switches to the Connected state.
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
+  ///
   /// See [ConnectionStateType.Connected]
   /// - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the `joinChannelSuccess` callback.
+  ///
   /// See [RtcEngineEventHandler.joinChannelSuccess]
   @JsonValue(2)
   Connecting,
@@ -863,25 +870,34 @@ enum ConnectionStateType {
   /// The SDK is connected to Agora's edge server and joins a channel. You can now publish or subscribe to a media stream in the channel.
   /// If the connection to the channel is lost because, for example, the network is down or switched, the SDK automatically tries to reconnect and triggers:
   /// - The `connectionStateChanged` callback, and switches to the Reconnecting state.
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
+  ///
   /// See [ConnectionStateType.Reconnecting]
   @JsonValue(3)
   Connected,
 
   /// The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
   /// - If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora’s edge server, the SDK triggers the `connectionLost` callback, stays in the Reconnecting state, and keeps rejoining the channel.
+  ///
   /// See [RtcEngineEventHandler.connectionLost]
   /// - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the `connectionStateChanged` callback, switches to the Failed state, and stops rejoining the channel.
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
+  ///
   /// See [ConnectionStateType.Failed]
   @JsonValue(4)
   Reconnecting,
 
   /// The SDK fails to connect to Agora's edge server or join the channel.
   /// You must call `leaveChannel` to leave this state, and call `joinChannel` again to rejoin the channel.
+  ///
   /// See [RtcEngine.leaveChannel]
+  ///
   /// See [RtcEngine.joinChannel]
+  ///
   /// If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the `connectionStateChanged` callbacks.
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
   @JsonValue(5)
   Failed,
@@ -1027,7 +1043,9 @@ enum ErrorCode {
   InvalidChannelId,
 
   /// The token expired. Agora recommends that you use `TokenExpired`(9) in the reason parameter of `connectionStateChanged` instead.
+  ///
   /// See [ConnectionChangedReason.TokenExpired]
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// Possible reasons are:
   /// - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the token to access the Agora service within five minutes after the token is generated. If the user does not access the Agora service after five minutes, this token is no longer valid.
@@ -1037,11 +1055,14 @@ enum ErrorCode {
   TokenExpired,
 
   /// The token is invalid. Agora recommends that you use `InvalidToken`(8) in the reason parameter of `connectionStateChanged` instead.
+  ///
   /// See [ConnectionChangedReason.InvalidToken]
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
   /// Possible reasons are:
   /// - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
   /// - The uid is mandatory, and users must set the same uid as the one set in the `joinChannel` method.
+  ///
   /// See [RtcEngine.joinChannel]
   @deprecated
   @JsonValue(110)
@@ -1117,7 +1138,9 @@ enum ErrorCode {
   InvalidUserAccount,
 
   /// CDN related errors. Remove the original URL address and add a new one by calling the `removePublishStreamUrl` and `addPublishStreamUrl` methods.
+  ///
   /// See [RtcEngine.removePublishStreamUrl]
+  ///
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(151)
   PublishStreamCDNError,
@@ -1131,6 +1154,7 @@ enum ErrorCode {
   PublishStreamNotAuthorized,
 
   /// An error occurs in Agora’s streaming server. Call the `addPublishStreamUrl` method to publish the stream again.
+  ///
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(154)
   PublishStreamInternalServerError,
@@ -1152,7 +1176,9 @@ enum ErrorCode {
   StartCall,
 
   /// Fails to start the camera. Agora recommends that you use `CaptureFailure`(4) in the error parameter of `localVideoStateChanged` instead.
+  ///
   /// See [LocalVideoStreamError.CaptureFailure]
+  ///
   /// See [RtcEngineEventHandler.localVideoStateChanged]
   @deprecated
   @JsonValue(1003)
@@ -1580,7 +1606,9 @@ enum RtmpStreamingErrorCode {
   OK,
 
   /// Invalid argument used. If, for example, you do not call the `setLiveTranscoding` method to configure the LiveTranscoding parameters before calling the `addPublishStreamUrl` method, the SDK returns this error. Check whether you set the parameters in the `setLiveTranscoding` method properly.
+  ///
   /// See [RtcEngine.setLiveTranscoding]
+  ///
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(1)
   InvalidParameters,
@@ -1644,9 +1672,13 @@ enum RtmpStreamingState {
   /// The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP streaming and returns this state.
   /// - If the SDK successfully resumes the streaming, `Running`(2) returns.
   /// See [RtmpStreamingState.Running]
+  ///
   /// - If the streaming does not resume within 60 seconds or server errors occur, `Failure`(4) returns. You can also reconnect to the server by calling the `removePublishStreamUrl` and `addPublishStreamUrl` methods.
+  ///
   /// See [RtmpStreamingState.Failure]
+  ///
   /// See [RtcEngine.removePublishStreamUrl]
+  ///
   /// See [RtcEngine.addPublishStreamUrl]
   @JsonValue(3)
   Recovering,
@@ -1665,7 +1697,9 @@ enum StreamFallbackOptions {
   Disabled,
 
   /// Under unreliable downlink network conditions, the remote video stream falls back to the low-stream (low resolution and low bitrate) video. You can only set this option in the `setRemoteSubscribeFallbackOption` method. Nothing happens when you set this in the `setLocalPublishFallbackOption` method.
+  ///
   /// See [RtcEngine.setRemoteSubscribeFallbackOption]
+  ///
   /// See [RtcEngine.setLocalPublishFallbackOption]
   @JsonValue(1)
   VideoStreamLow,
@@ -1870,8 +1904,11 @@ enum VideoQualityAdaptIndication {
 
 enum VideoRemoteState {
   /// The remote video is in the default state, probably due to:
+  ///
   /// See [VideoRemoteStateReason.LocalMuted]
+  ///
   /// See [VideoRemoteStateReason.RemoteMuted]
+  ///
   /// See [VideoRemoteStateReason.RemoteOffline]
   @JsonValue(0)
   Stopped,
@@ -2021,7 +2058,9 @@ enum WarningCode {
   LookupChannelTimeout,
 
   /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal. Agora recommends that you use `RejectedByServer`(10) in the reason parameter of `connectionStateChanged` instead.
+  ///
   /// See [ConnectionChangedReason.RejectedByServer]
+  ///
   /// See [RtcEngineEventHandler.connectionStateChanged]
   @deprecated
   @JsonValue(105)
