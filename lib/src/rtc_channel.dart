@@ -374,20 +374,25 @@ mixin RtcAudioInterface {
   /// - Call this method after joining a channel.
   /// - The playback volume here refers to the mixed volume of a specified remote user.
   /// - This method can only adjust the playback volume of one specified remote user at a time. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.
+  ///
   /// Param [uid] ID of the remote user.
+  ///
   /// Param [volume] The playback volume of the specified remote user. The value ranges from 0 to 100:
   /// - 0: Mute.
   /// - 100: The original volume.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
   /// Stops/Resumes receiving the audio stream of the specified user.
+  ///
   /// Param [uid] ID of the remote user whose audio stream you want to mute.
+  ///
   /// Param [muted] Determines whether to receive/stop receiving the audio stream of the specified user:
   /// - true: Stop receiving the audio stream of the user.
   /// - false: (Default) Receive the audio stream of the user.
   Future<void> muteRemoteAudioStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote audio streams.
+  ///
   /// Param [muted] Determines
   /// whether to receive/stop receiving all remote audio streams:
   /// - true: Stop receiving all remote audio streams.
@@ -395,6 +400,7 @@ mixin RtcAudioInterface {
   Future<void> muteAllRemoteAudioStreams(bool muted);
 
   /// Sets whether to receive all remote audio streams by default.
+  ///
   /// Param [muted] Determines whether to receive/stop receiving all remote audio streams by default:
   /// - true: Stop receiving all remote audio streams by default.
   /// - false: (Default) Receive all remote audio streams by default.
@@ -403,19 +409,23 @@ mixin RtcAudioInterface {
 
 mixin RtcVideoInterface {
   /// Stops/Resumes receiving the video stream of the specified user.
+  ///
   /// Param [uid] ID of the remote user whose video stream you want to mute.
+  ///
   /// Param [muted] Determines whether to receive/stop receiving the video stream of the specified user:
   /// - true: Stop receiving the video stream of the user.
   /// - false: (Default) Receive the video stream of the user.
   Future<void> muteRemoteVideoStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote video streams.
+  ///
   /// Param [muted] Determines whether to receive/stop receiving all remote video streams:
   /// - true: Stop receiving all remote video streams.
   /// - false: (Default) Receive all remote video streams.
   Future<void> muteAllRemoteVideoStreams(bool muted);
 
   /// Sets whether to receive all remote video streams by default.
+  ///
   /// Param [muted] Determines whether to receive/stop receiving all remote video streams by default:
   /// - true: Stop receiving all remote video streams by default.
   /// - false: (Default) Receive all remote video streams by default.
@@ -429,11 +439,14 @@ mixin RtcVoicePositionInterface {
   /// **Note**
   /// - For this method to work, enable stereo panning for remote users by calling the [RtcEngine.enableSoundPositionIndication] method before joining a channel.
   /// - This method requires hardware support. For the best sound positioning, we recommend using a stereo headset.
+  ///
   /// Param [uid] The ID of the remote user.
+  ///
   /// Param [pan] The sound position of the remote user. The value ranges from -1.0 to 1.0:
   /// - 0.0: The remote sound comes from the front.
   /// - -1.0: The remote sound comes from the left.
   /// - 1.0: The remote sound comes from the right.
+  ///
   /// Param [gain] Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain);
 }
@@ -447,6 +460,7 @@ mixin RtcPublishStreamInterface {
   /// - Ensure that the user joins a channel before calling this method.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
   /// - Ensure that you call this method before calling the [RtcChannel.addPublishStreamUrl] method.
+  ///
   /// Param [transcoding] Sets the CDN live audio/video transcoding settings. See [LiveTranscoding].
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
@@ -458,7 +472,9 @@ mixin RtcPublishStreamInterface {
   /// - Ensure that the user joins a channel before calling this method.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
   /// - This method adds only one stream HTTP/HTTPS URL address each time it is called.
+  ///
   /// Param [url] The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
+  ///
   /// Param [transcodingEnabled] Sets whether transcoding is enabled/disabled. If you set this parameter as true, ensure that you call the [RtcChannel.setLiveTranscoding] method before this method.
   /// - true: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple broadcasters in CDN live.
   /// - false: Disable transcoding.
@@ -471,6 +487,7 @@ mixin RtcPublishStreamInterface {
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
   /// - This method removes only one stream HTTP/HTTPS URL address each time it is called.
+  ///
   /// Param [url] The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
   Future<void> removePublishStreamUrl(String url);
 }
@@ -486,6 +503,7 @@ mixin RtcMediaRelayInterface {
   /// - Call this method after joining the channel.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
   /// - After a successful method call, if you want to call this method again, ensure that you call the [RtcChannel.stopChannelMediaRelay] method to quit the current relay.
+  ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay.
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
@@ -498,6 +516,7 @@ mixin RtcMediaRelayInterface {
   /// - Call this method after the startChannelMediaRelay method to update the destination channel.
   /// See [RtcChannel.startChannelMediaRelay]
   /// - This method supports adding at most four destination channels in the relay.
+  ///
   /// Param [channelMediaRelayConfiguration] The media stream relay configuration.
   /// See [ChannelMediaRelayConfiguration]
   Future<void> updateChannelMediaRelay(
@@ -518,7 +537,9 @@ mixin RtcDualStreamInterface {
   /// - If the remote user enables the dual-stream mode by calling the [RtcEngine.enableDualStreamMode] method, the SDK receives the high-video stream by default. You can use this method to switch to the low-video stream.
   /// - If dual-stream mode is not enabled, the SDK receives the high-stream video by default.
   /// By default, the aspect ratio of the low-video stream is the same as the high-video stream. Once the resolution of the high-video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-video stream.
+  ///
   /// Param [uid] ID of the remote user sending the video stream.
+  ///
   /// Param [streamType] Sets the video-stream type. See [VideoStreamType].
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType);
 
@@ -533,7 +554,9 @@ mixin RtcFallbackInterface {
   ///
   /// **Note**
   /// - The Agora SDK supports setting `userPriority` as `High` for one user only.
+  ///
   /// Param [uid] The ID of the remote user.
+  ///
   /// Param [userPriority] The priority of the remote user. See [UserPriority].
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority);
 }
@@ -551,10 +574,12 @@ mixin RtcMediaMetadataInterface {
   Future<void> unregisterMediaMetadataObserver();
 
   /// Sets the maximum size of the metadata.
+  ///
   /// Param [size] The maximum size (bytes) of the buffer of the metadata that you want to use. The highest value is 1024 bytes.
   Future<void> setMaxMetadataSize(int size);
 
   /// Sends the metadata.
+  ///
   /// Param [metadata] The metadata to be sent in the form of String.
   /// **Note**
   /// Ensure that the size of the metadata does not exceed the value set in the [setMaxMetadataSize] method.
@@ -568,6 +593,7 @@ mixin RtcEncryptionInterface {
   /// **Note**
   /// - For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
   /// - Do not use this method for CDN live streaming.
+  ///
   /// Param [secret] The encryption password.
   Future<void> setEncryptionSecret(String secret);
 
@@ -578,6 +604,7 @@ mixin RtcEncryptionInterface {
   /// **Note**
   /// - Do not use this method for CDN streaming.
   /// - Before calling this method, ensure that you have called [RtcEngine.setEncryptionSecret] to enable encryption.
+  ///
   /// Param [encryptionMode] Sets the encryption mode. See [EncryptionMode].
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 }
@@ -595,15 +622,18 @@ mixin RtcInjectStreamInterface {
   /// -- [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
   /// - The remote client:
   /// -- [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
+  ///
   /// Param [url] The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and FLV.
   /// - Supported FLV audio codec type: AAC.
   /// - Supported FLV video codec type: H264(AVC).
+  ///
   /// Param [config] The [LiveInjectStreamConfig] object, which contains the configuration information for the added voice or video stream.
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config);
 
   /// Removes the injected online media stream from a [ChannelProfile.LiveBroadcasting] channel.
   /// This method removes the URL address added by [RtcChannel.addInjectStreamUrl].
   /// If you successfully remove the URL address from the live broadcast, the SDK triggers the [RtcChannelEventHandler.userJoined] callback, with the stream uid of 666.
+  ///
   /// Param [url] The URL address to be removed.
   Future<void> removeInjectStreamUrl(String url);
 }
@@ -614,9 +644,11 @@ mixin RtcStreamMessageInterface {
   ///
   /// **Note**
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
+  ///
   /// Param [reliable] Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds.
   /// - true: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the [RtcChannelEventHandler.streamMessageError] callback and returns an error code.
   /// - false: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
+  ///
   /// Param [ordered] Determines whether or not the recipients receive the data stream in the sent order.
   /// - true: The recipients receive the data in the sent order.
   /// - false: The recipients do not receive the data in the sent order.
@@ -629,7 +661,9 @@ mixin RtcStreamMessageInterface {
   /// - Each user can have up to five data channels simultaneously.
   /// A successful method call triggers the [RtcChannelEventHandler.streamMessage] callback on the remote client, from which the remote user gets the stream message.
   /// A failed method call triggers the [RtcChannelEventHandler.streamMessageError] callback on the remote client.
+  ///
   /// Param [streamId] ID of the sent data stream returned by the [RtcChannel.createDataStream] method.
+  ///
   /// Param [message] The message data.
   Future<void> sendStreamMessage(int streamId, String message);
 }
