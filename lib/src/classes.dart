@@ -4,13 +4,13 @@ import 'enums.dart';
 
 part 'classes.g.dart';
 
-/// The UserInfo class.
+/// 标识用户信息的 `UserInfo` 对象。
 @JsonSerializable(explicitToJson: true)
 class UserInfo {
-  /// The user ID.
+  /// 用户 ID。
   int uid;
 
-  /// The user account.
+  /// 用户 Account。
   String userAccount;
 
   /// Constructs a [UserInfo]
@@ -24,13 +24,13 @@ class UserInfo {
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
 
-/// The video resolution.
+/// 视频编码像素。
 @JsonSerializable(explicitToJson: true)
 class VideoDimensions {
-  /// The video resolution on the horizontal axis.
+  /// 视频帧在横轴上的像素。
   final int width;
 
-  /// The video resolution on the vertical axis.
+  /// 视频帧在纵轴上的像素。
   final int height;
 
   /// Constructs a [VideoDimensions]
@@ -44,12 +44,12 @@ class VideoDimensions {
   Map<String, dynamic> toJson() => _$VideoDimensionsToJson(this);
 }
 
-/// Definition of VideoEncoderConfiguration.
+/// 视频编码属性的定义。
 @JsonSerializable(explicitToJson: true)
 class VideoEncoderConfiguration {
 
-  /// The video frame dimensions (px), which is used to specify the video quality and measured by the total number of pixels along a frame's width and height. The default value is 640 × 360.
-  /// You can customize the dimension, or select from the following list:
+  /// 视频编码的分辨率 (px)，用于衡量编码质量，以长 × 宽表示，默认值为 640 × 360。
+  /// 用户可以自行设置分辨率，也可以在如下列表中直接选择想要的分辨率：
   /// - 120x120
   /// - 160x120
   /// - 180x180
@@ -68,30 +68,30 @@ class VideoEncoderConfiguration {
   /// - 1280x720
   ///
   /// **Note**
-  /// - The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [VideoOutputOrientationMode].</li>
-  /// - Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
+  /// - 该值不代表最终视频输出的方向。请查阅 [VideoOutputOrientationMode] 了解设置视频方向。//TODO 英文注释有误。
+  /// - 视频能否达到 720P 的分辨率取决于设备的性能，在性能配备较低的设备上有可能无法实现。如果采用 720P 分辨率而设备性能跟不上，则有可能出现帧率过低的情况。
   @JsonKey(includeIfNull: false)
   VideoDimensions dimensions;
 
-  /// The video frame rate (fps). The default value is 15. You can either set the frame rate manually or choose from [VideoFrameRate]. We do not recommend setting this to a value greater than 30.
+  /// 视频编码的帧率（fps），默认值为 15。用户可以自行设置帧率，也可以在 [VideoFrameRate] 直接选择想要的帧率。建议不要超过 30 帧。
   @JsonKey(includeIfNull: false)
   VideoFrameRate frameRate;
 
-  /// The minimum video encoder frame rate (fps). The default value is [VideoFrameRate.Min] (the SDK uses the lowest encoder frame rate).
+  /// 最低视频编码帧率（fps）。默认值为 [VideoFrameRate.Min]，表示使用系统默认的最低编码帧率。// TODO 检查一下链接
   @JsonKey(includeIfNull: false)
   VideoFrameRate minFrameRate;
 
-  /// Bitrate of the video (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
-  ///  You can also choose from the following options:
-  ///     - [BitRate.Standard]: (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
-  ///              - In the Communication profile, the video bitrate is the same as the base bitrate.
-  ///              - In the LiveBroadcasting profile, the video bitrate is twice the base bitrate.
-  ///     - [BitRate.Compatible]: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. If you choose this mode for the Live Broadcast profile, the video frame rate may be lower than the set value.
-  /// Agora uses different video codecs for different profiles to optimize the user experience. For example, the Communication profile prioritizes the smoothness while the Live Broadcast profile prioritizes the video quality (a higher bitrate). Therefore, We recommend setting this parameter as `0`.
+  /// 视频编码的码率。单位为 Kbps。你可以根据场景需要，参考下面的视频基准码率参考表，手动设置你想要的码率。
+  /// 若设置的视频码率超出合理范围，SDK 会自动按照合理区间处理码率。
+  /// 你也可以直接选择如下任意一种模式进行设置：
+  ///     - [BitRate.Standard]：（推荐）标准码率模式。该模式下，视频在通信和直播场景下的码率有所不同：
+  ///        - 通信场景下，码率与基准码率一致。
+  ///        - 直播场景下，码率对照基准码率翻倍。
+  ///     - [BitRate.Compatible]: 适配码率模式。该模式下，视频在通信和直播场景下的码率均与基准码率一致。直播下如果选择该模式，视频帧率可能会低于设置的值。
+  /// Agora 在通信和直播场景下采用不同的编码方式，以提升不同场景下的用户体验。通信场景保证流畅，而直播场景则更注重画面质量，因此直播场景对码率的需求大于通信场景。所以 Agora 推荐将该参数设置为 `0` ([BitRate.Standard])。Therefore, We recommend setting this parameter as `0`. //TODO 这里是否要提一下 0 是 standard？
+  /// **视频码率参考表**
   ///
-  /// **Video Bitrate Table**
-  ///
-  /// | Resolution             | Frame Rate (fps) | Base Bitrate (Kbps)                    | Live Bitrate (Kbps)                    |
+  /// | 分辨率                  | 帧率 (fps)       | 基准码率 (通信场景，Kbps)                | 直播码率 (直播场景，Kbps)               |
   /// |------------------------|------------------|----------------------------------------|----------------------------------------|
   /// | 160 * 120              | 15               | 65                                     | 130                                    |
   /// | 120 * 120              | 15               | 50                                     | 100                                    |
@@ -119,27 +119,30 @@ class VideoEncoderConfiguration {
   /// | 960 * 720              | 15               | 910                                    | 1820                                   |
   /// | 960 * 720              | 30               | 1380                                   | 2760                                   |
   ///
-  ///  **Note** The base bitrate in this table applies to the Communication profile. The LiveBroadcasting profile generally requires a higher bitrate for better video quality. We recommend setting the bitrate mode as `0`. You can also set the bitrate as the base bitrate value x 2.
+  /// **Note**
+  /// 该表中的基准码率适用于通信场景。直播场景下通常需要较大码率来提升视频质量。
+  /// Agora 推荐通过设置 `0`来实现。你也可以直接将码率值设为基准码率值 x 2。
   @JsonKey(includeIfNull: false)
   int bitrate;
 
-  /// The minimum encoding bitrate (Kbps). The Agora SDK automatically adjusts the encoding bitrate to adapt to the network conditions. Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and hence sacrifice the smoothness of the video transmission. That said, unless you have special requirements for image quality, Agora does not recommend changing this value.
+  /// 最低视频编码码率。单位为 Kbps。
+  /// Agora SDK 会根据网络条件进行码率自适应。 该参数强制视频编码器输出高质量图片。如果将参数设为高于默认值，
+  /// 在网络状况不佳情况下可能会导致网络丢包，并影响视频播放的流畅度。因此如非对画质有特殊需求，Agora 建议不要修改该参数的值。
   @JsonKey(includeIfNull: false)
   int minBitrate;
 
-  /// The orientation mode.
-  /// See [VideoOutputOrientationMode].
+  /// 视频编码的方向模式。
+  /// 详见 [VideoOutputOrientationMode]。
   @JsonKey(includeIfNull: false)
   VideoOutputOrientationMode orientationMode;
 
-  /// The video encoding degradation preference under limited bandwidth:
-  /// See [DegradationPreference].
+  /// 带宽受限时，视频编码降级偏好。
+  /// 详见 [DegradationPreference]。
   @JsonKey(includeIfNull: false)
   DegradationPreference degradationPrefer;
 
-  /// Sets the mirror mode of the published local video stream.
-  /// This member only affects the video that the remote user sees.
-  /// See [VideoMirrorMode].
+  /// 本地发送视频的镜像模式，只影响远端用户看到的视频画面。
+  /// 详见 [VideoMirrorMode]。
   @JsonKey(includeIfNull: false)
   VideoMirrorMode mirrorMode;
 
@@ -161,22 +164,22 @@ class VideoEncoderConfiguration {
   Map<String, dynamic> toJson() => _$VideoEncoderConfigurationToJson(this);
 }
 
-/// Sets the image enhancement options.
+/// 美颜效果选项。
 @JsonSerializable(explicitToJson: true)
 class BeautyOptions {
-  /// The lightening contrast level, used with [lighteningLevel].
+  /// 亮度明暗对比度。与 [lighteningLevel] 参数搭配使用。// 检查一下 RN 为什么没有？
   @JsonKey(includeIfNull: false)
   LighteningContrastLevel lighteningContrastLevel;
 
-  /// The brightness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.7.
+  /// 亮度，取值范围为 [0.0,1.0]，其中 0.0 表示原始亮度，默认值为 0.7。可用来实现美白等视觉效果。
   @JsonKey(includeIfNull: false)
   double lighteningLevel;
 
-  /// The sharpness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.5. This parameter is usually used to remove blemishes.
+  /// 平滑度，取值范围为 [0.0,1.0]，其中 0.0 表示原始平滑等级，默认值为 0.5。可用来实现祛痘、磨皮等视觉效果。
   @JsonKey(includeIfNull: false)
   double smoothnessLevel;
 
-  /// The redness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.1. This parameter adjusts the red saturation level.
+  /// 红色度，取值范围为 [0.0,1.0]，其中 0.0 表示原始红色度，默认值为 0.1。可用来实现红润肤色等视觉效果。
   @JsonKey(includeIfNull: false)
   double rednessLevel;
 
@@ -194,22 +197,22 @@ class BeautyOptions {
   Map<String, dynamic> toJson() => _$BeautyOptionsToJson(this);
 }
 
-/// Agora image properties. A class for setting the properties of the watermark and background images.
+/// Agora 图像属性。用于设置直播视频的水印和背景图片的属性。
 @JsonSerializable(explicitToJson: true)
 class AgoraImage {
-  /// HTTP/HTTPS URL address of the image on the broadcasting video. The maximum length of this parameter is 1024 bytes.
+  /// 直播视频上图片的 HTTP/HTTPS 地址，字符长度不得超过 1024 字节。
   final String url;
 
-  /// Position of the image on the upper left of the broadcasting video on the horizontal axis.
+  /// 图片左上角在视频帧上的横轴坐标。
   final int x;
 
-  /// Position of the image on the upper left of the broadcasting video on the vertical axis.
+  /// 图片左上角在视频帧上的纵轴坐标。
   final int y;
 
-  /// Width of the image on the broadcasting video.
+  /// 图片在视频帧上的宽度。
   final int width;
 
-  /// Height of the image on the broadcasting video.
+  /// 图片在视频帧上的高度。
   final int height;
 
   /// Constructs a [AgoraImage]
@@ -226,39 +229,43 @@ class AgoraImage {
 class JsonSerializable {
 }
 
-/// The transcodingUser class, which defines the audio and video properties in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
+/// TranscodingUser 类用于管理参与旁路直播的音视频转码合图的用户。最多支持 17 人同时参与转码合图。//TODO 英文 TranscodingUser 大小写有误
 @JsonSerializable(explicitToJson: true)
 class TranscodingUser {
-  /// ID of the user in the CDN live streaming.
+  /// 旁路主播的用户 ID。
   final int uid;
 
-  /// Horizontal position of the video frame of the user from the top left corner of the CDN live streaming.
+  /// 屏幕里该区域相对左上角的横坐标绝对值 (pixel)。取值范围为转码配置参数定义中设置的 [0,width]。
   final int x;
 
-  /// Vertical position of the video frame of the user from the top left corner of the CDN live streaming.
+  /// 屏幕里该区域相对左上角的纵坐标绝对值 (pixel)。取值范围为转码配置参数定义中设置的 [0,height]。
   final int y;
 
-  /// Width of the video frame of the user on the CDN live streaming. The default value is 360.
+  /// 视频帧宽度 (pixel)。 默认值为 360。
   int width;
 
-  /// Height of the video frame of the user on the CDN live streaming. The default value is 640.
+  /// 视频帧高度 (pixel)。默认值为 640。
   int height;
 
-  /// The layer index of the video frame. An integer. The value range is [0,100].
-  /// - 0: (Default) Bottom layer.
-  /// - 100: Top layer.
+  /// 视频帧图层编号。取值范围为 [0,100] 中的整型。支持将 `zOrder` 设置为 `0`。
+  /// - 0: 默认）表示该区域图像位于最下层。// TODO RN 逗号改成句号。取值范围为 [0,100] 中的整型 （加整型）
+  /// - 100: 表示该区域图像位于最上层。
   ///
-  /// **Note**: If the value is set lower than 0 or higher than 100, the [ErrorCode.InvalidArgument] error is reported.
+  /// **Note**
+  /// 如果取值小于 0 或大于 100，会返回错误 [ErrorCode.InvalidArgument]。
   int zOrder;
 
-  /// The transparency of the video frame of the user in the CDN live stream that ranges between 0.0 and 1.0. 0.0 means that the video frame is completely transparent and 1.0 means opaque. The default value is 1.0.
+  /// 直播视频上用户视频的透明度。取值范围为 [0.0,100.0]:
+  /// - 0.0: 该区域图像完全透明。
+  /// - 1.0:（默认）该区域图像完全不透明。
   @JsonKey(includeIfNull: false)
   double alpha;
 
-  /// The audio channel ranging between 0 and 5. The default value is 0.
-  /// See [AudioChannel].
+  /// 直播音频所在声道。取值范围为 [0,5]，默认值为 0。
+  /// 详见 [AudioChannel]。
   ///
-  /// **Note** Special players are needed if `audioChannel` is not set as 0.
+  /// **Note**
+  /// 选项不为 0 时，需要特殊的播放器支持。
   AudioChannel audioChannel;
 
   /// Constructs a [TranscodingUser]
@@ -280,16 +287,16 @@ class TranscodingUser {
   Map<String, dynamic> toJson() => _$TranscodingUserToJson(this);
 }
 
-/// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
+/// 背景色，格式为 RGB 定义下的 Hex 值，不要带 # 号，如 0xFFB6C1 表示浅粉色。默认0x000000，黑色。// TODO 优化 RN
 @JsonSerializable(explicitToJson: true)
 class Color {
-  /// Red.
+  /// 红。
   final int red;
 
-  /// Green.
+  /// 绿。
   final int green;
 
-  /// Blue.
+  /// 蓝。
   final int blue;
 
   /// Constructs a [Color]
@@ -302,81 +309,87 @@ class Color {
   Map<String, dynamic> toJson() => _$ColorToJson(this);
 }
 
-/// A class for managing user-specific CDN live audio/video transcoding settings.
+/// 管理 CDN 直播推流转码的接口。
 @JsonSerializable(explicitToJson: true)
 class LiveTranscoding {
-  /// Width (pixel) of the video. The default value is 360.
-  /// - When pushing video streams to the CDN, ensure that `width` is at least 64; otherwise, the Agora server adjusts the value to 64.
-  /// - When pushing audio streams to the CDN, set `width` and `height` as 0.
+  /// 推流视频的总宽度，默认值 360，单位为像素。
+  /// - 如果推视频流，`width` 值不得低于 64，否则 Agora 会调整为 64。
+  /// - 如果推音频流，请将 `width` 和 `height` 设为 0。
   @JsonKey(includeIfNull: false)
   int width;
 
-  /// Height (pixel) of the video. The default value is 640.
-  /// - When pushing video streams to the CDN, ensure that `height` is at least 64; otherwise, the Agora server adjusts the value to 64.
-  /// - When pushing audio streams to the CDN, set `width` and `height` as 0.
+  /// 推流视频的总高度，默认值 640，单位为像素。
+  /// - 如果推视频流，`height` 值不得低于 64，否则 Agora 会调整为 64。
+  /// - 如果推音频流，请将 `width` 和 `height` 设为 0。
   @JsonKey(includeIfNull: false)
   int height;
 
-  /// Bitrate (Kbps) of the CDN live output video stream. The default value is 400. Set this parameter according to the [VideoEncoderConfiguration.bitrate](Video Bitrate Table). If you set a bitrate beyond the proper range, the SDK automatically adapts it to a value within the range.
+  /// 用于旁路推流的输出视频的码率。 单位为 Kbps。 400 Kbps 为默认值。用户可以根据 [VideoEncoderConfiguration.bitrate]（码率参考表）参考表中的码率值进行设置；
   @JsonKey(includeIfNull: false)
   int videoBitrate;
 
-  /// The frame rate (fps) of the video. The value range is [0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
+  /// 用于旁路推流的输出视频的帧率。取值范围是 (0,30]，单位为 fps。默认值为 15 fps。// TODO 帧率是否可以设为 0？
   @JsonKey(includeIfNull: false)
   VideoFrameRate videoFramerate;
 
-  /// Agora does not recommend using this parameter.
-  /// - true: Low latency with unassured quality.
-  /// - false: (Default) High latency with assured quality.
+  /// 已废弃。Agora 不推荐使用。
+  /// - true: 低延时，不保证画质。
+  /// - false:（默认值）高延时，保证画质。
   @deprecated
   @JsonKey(includeIfNull: false)
   bool lowLatency;
 
-  /// Gop of the video frames in the CDN live stream. The default value is 30 fps.
+  /// 用于旁路直播的输出视频的 GOP。单位为帧。默认值为 30 fps。
   @JsonKey(includeIfNull: false)
   int videoGop;
 
-  /// The watermark image added to the CDN live publishing stream. Ensure that the format of the image is PNG. Once a watermark image is added, the audience of the CDN live publishing stream can see it.
-  /// See [AgoraImage].
+  /// 用于旁路直播的输出视频上的水印图片。添加后所有旁路直播的观众都可以看到水印。必须为 PNG 格式。
+  /// 详见 [AgoraImage]。
   @JsonKey(includeIfNull: false)
   AgoraImage watermark;
 
-  /// The background image added to the CDN live publishing stream. Once a background image is added, the audience of the CDN live publishing stream can see it.
-  /// See [AgoraImage].
+  /// 用于旁路直播的输出视频上的背景图片。添加后所有旁路直播的观众都可以看到背景图片。
+  /// 详见 [AgoraImage]。
   @JsonKey(includeIfNull: false)
   AgoraImage backgroundImage;
 
-  /// Self-defined audio-sample rate: [AudioSampleRateType].
+  /// 自定义音频采样率。详见 [AudioSampleRateType]。
   @JsonKey(includeIfNull: false)
   AudioSampleRateType audioSampleRate;
 
-  /// Bitrate (Kbps) of the CDN live audio output stream. The default value is 48 and the highest value is 128.
+  /// 用于旁路推流的输出音频的码率。单位为 Kbps，默认值为 48，最大值为 128。
   @JsonKey(includeIfNull: false)
   int audioBitrate;
 
-  /// Agora’s self-defined audio channel type. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
-  /// See [AudioChannel].
+  /// 用于旁路推流的输出音频的声道数，取值范围为 [1,5] 中的整型，默认值为 1。建议取 1 或 2，如果取值为 3、4或5，需要特殊播放器支持：
+  /// - 1：单声道
+  /// - 2：双声道
+  /// - 3：三声道
+  /// - 4：四声道
+  /// - 5：五声道
+  // TODO 将 See [AudioChannel]. 删掉
   @JsonKey(includeIfNull: false)
   AudioChannel audioChannels;
 
-  /// Audio codec profile type: [AudioCodecProfileType]. Set it as `LCAAC` or `HEAAC`. The default value is `LCAAC`.
+  /// 用于旁路推流的输出音频的编码规格。详见 [AudioCodecProfileType]。 可以设置为 `LCAAC` 或 `HEAAC`。默认为 `LCAAC`。
   @JsonKey(includeIfNull: false)
   AudioCodecProfileType audioCodecProfile;
 
-  /// Video codec profile type: [VideoCodecProfileType]. Set it as `BASELINE`, `MAIN`, or `HIGH` (default). If you set this parameter to other values, Agora adjusts it to the default value `HIGH`.
+  /// 用于旁路直播的输出视频的编码规格。详见 [VideoCodecProfileType]。
+  /// 可以设置为 `BASELINE`、`MAIN` 或 `HIGH` （默认值）级别。如果设置其他值，Agora 服务器会统一设为默认值 `HIGH`。
   @JsonKey(includeIfNull: false)
   VideoCodecProfileType videoCodecProfile;
 
-  /// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
-  /// See [Color].
+  /// 背景色，格式为 RGB 定义下的 Hex 值，不要带 # 号，如 0xFFB6C1 表示浅粉色。默认0x000000，黑色。// RN 优化
+  /// 详见 [Color]。
   @JsonKey(includeIfNull: false)
   Color backgroundColor;
 
-  /// Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
+  /// 预留参数。 用户自定义的发送到旁路推流客户端的信息，用于填充 H264/H265 视频中 SEI 帧内容。长度限制：4096字节。
   @JsonKey(includeIfNull: false)
   String userConfigExtraInfo;
 
-  /// An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
+  /// 用于管理参与直播推流的视频转码合图的用户。最多支持 17 人同时参与转码合图。
   final List<TranscodingUser> transcodingUsers;
 
   /// Constructs a [LiveTranscoding]
@@ -406,18 +419,18 @@ class LiveTranscoding {
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 }
 
-/// The ChannelMediaInfo class.
+/// `ChannelMediaInfo` 类。
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaInfo {
-  /// The channel name.
+  /// 频道名。
   @JsonKey(includeIfNull: false)
   String channelName;
 
-  /// The token that enables the user to join the channel.
+  /// 能加入频道的 Token。
   @JsonKey(includeIfNull: false)
   String token;
 
-  /// The user ID.
+  /// 用户 ID。
   final int uid;
 
   /// Constructs a [ChannelMediaInfo]
@@ -431,24 +444,23 @@ class ChannelMediaInfo {
   Map<String, dynamic> toJson() => _$ChannelMediaInfoToJson(this);
 }
 
-/// The ChannelMediaRelayConfiguration class.
+/// 配置跨频道媒体流转发的 `ChannelMediaRelayConfiguration` 类。
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaRelayConfiguration {
-  /// The information of the source channel: [ChannelMediaInfo]. It contains the following members:
-  /// - `channelName`: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.
-  /// - `uid`: ID of the broadcaster whose media stream you want to relay. The default value is 0, which means the SDK generates a random UID. You must set it as 0.
-  /// - `token`: The token for joining the source channel. It is generated with the `channelName` and `uid` you set in `srcInfo`.
-  ///   - If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
-  ///   - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`.
+  /// 源频道信息： [ChannelMediaInfo]，包含如下成员：
+  /// - `channelName`：源频道名。默认值为 NULL，表示 SDK 填充当前的频道名。
+  /// - `uid`：标识源频道中想要转发流的主播 ID。默认值为 0，表示 SDK 随机分配一个 UID。请确保设为 0。
+  /// - `token`：能加入源频道的 Token。由你在 `srcInfo` 中设置的 `channelName` 和 `uid` 生成。
+  ///   - 如未启用 App Certificate，可直接将该参数设为默认值 NULL，表示 SDK 填充 App ID。
+  ///   - 如已启用 App Certificate，则务必填入使用 `channelName` 和 `uid` 生成的 Token，且其中的 `uid` 必须为 0。
   final ChannelMediaInfo srcInfo;
 
-  /// The information of the destination channel: [ChannelMediaInfo]. It contains the following members:
-  ///- `channelName`: The name of the destination channel.
-  ///- `uid`: ID of the broadcaster in the destination channel. The value ranges from 0 to (2<sup>32</sup>-1). To avoid UID conflicts,
-  /// this uid must be different from any other UIDs in the destination channel. The default value is 0, which means the SDK generates a random UID.
-  ///  - `token`: The token for joining the destination channel. It is generated with the `channelName` and `uid` you set in `destInfo`.
-  ///    - If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
-  ///    - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`.
+  /// 目标频道信息： [ChannelMediaInfo]，包含如下成员：
+  ///- `channelName`：目标频道的频道名。// TODO 英文 broadcaster 改成 host
+  ///- `uid`：标识转发流到目标频道的主播 ID。取值范围为 0 到（2<sup>32</sup>-1），请确保与目标频道中的所有 UID 不同。默认值为 0，表示 SDK 随机分配一个 UID。
+  ///  - `token`：能加入目标频道的 token。由你在 `destInfo` 中设置的 `channelName` 和 `uid` 生成。
+  ///    - 如未启用 App Certificate，可直接将该参数设为默认值 NULL，表示 SDK 填充 App ID。
+  ///    - 如已启用 App Certificate，则务必填入使用 `channelName` 和 `uid` 生成的 token，且其中的 `uid` 必须为 0。
   final List<ChannelMediaInfo> destInfos;
 
   /// Constructs a [ChannelMediaRelayConfiguration]
@@ -462,19 +474,21 @@ class ChannelMediaRelayConfiguration {
   Map<String, dynamic> toJson() => _$ChannelMediaRelayConfigurationToJson(this);
 }
 
-/// Lastmile probe configuration.
+/// Last-mile 网络探测配置。
 @JsonSerializable(explicitToJson: true)
 class LastmileProbeConfig {
-  /// Whether to probe uplink of lastmile. i.e., audience don't need probe uplink bandwidth.
+  /// 是否探测上行网络。有些用户，如直播频道中的普通观众，不需要进行网络探测。
   final bool probeUplink;
 
-  /// Whether to probe downlink of lastmile.
+  /// 是否探测下行网络。
   final bool probeDownlink;
 
-  /// The expected maximum sending bitrate in bps in range of [100000, 5000000]. It is recommended to set this value according to the required bitrate of selected video profile.
+  /// 用户期望的最高发送码率，单位为 bps，范围为 [100000,5000000]。
+  /// Agora 推荐参考 [RtcEngine.setVideoEncoderConfiguration] 中的码率值设置该参数的值。
+  ///  It is recommended to set this value according to the required bitrate of selected video profile.// TODO selected video profile?
   final int expectedUplinkBitrate;
 
-  /// The expected maximum receive bitrate in bps in range of [100000, 5000000].
+  /// 用户期望的最高接收码率，单位为 bps，范围为 [100000,5000000]。
   final int expectedDownlinkBitrate;
 
   /// Constructs a [LastmileProbeConfig]
@@ -489,19 +503,19 @@ class LastmileProbeConfig {
   Map<String, dynamic> toJson() => _$LastmileProbeConfigToJson(this);
 }
 
-/// The position and size of the watermark image.
+/// 水印图片的位置和大小。
 @JsonSerializable(explicitToJson: true)
 class Rectangle {
-  /// The horizontal offset from the top-left corner.
+  /// 左上角的横向偏移。
   final int x;
 
-  /// The vertical offset from the top-left corner.
+  /// 左上角的纵向偏移
   final int y;
 
-  /// The width (pixels) of the watermark image.
+  /// 水印图片的宽（px）。
   final int width;
 
-  /// The height (pixels) of the watermark image.
+  /// 水印图片的高（px)。
   final int height;
 
   /// Constructs a [Rectangle]
@@ -515,21 +529,21 @@ class Rectangle {
   Map<String, dynamic> toJson() => _$RectangleToJson(this);
 }
 
-/// Agora watermark options. A class for setting the properties of watermark.
+/// 待添加的水印图片的设置选项。
 @JsonSerializable(explicitToJson: true)
 class WatermarkOptions {
-  /// Whether the watermark image is visible in the local video preview.
-  /// - true: (Default) The watermark image is visible in preview.
-  /// - false: The watermark image is not visible in preview.
+  /// 是否将水印设为预览时本地可见：
+  /// - true：(默认) 预览时水印本地可见。
+  /// - false：预览时水印本地不可见。
   @JsonKey(includeIfNull: false)
   bool visibleInPreview;
 
-  /// The watermark position in the landscape mode.
-  /// See [Rectangle].
+  /// 视频编码模式为横屏时的水印坐标。
+  /// 详见 [Rectangle]。
   final Rectangle positionInLandscapeMode;
 
-  /// The watermark position in the portrait mode.
-  /// See [Rectangle].
+  /// 视频编码模式为竖屏时的水印坐标。
+  /// 详见 [Rectangle]。
   final Rectangle positionInPortraitMode;
 
   /// Constructs a [WatermarkOptions]
@@ -544,42 +558,44 @@ class WatermarkOptions {
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
 }
 
-/// Configuration of the imported live broadcast voice or video stream.
+/// 外部导入音视频流定义。
 @JsonSerializable(explicitToJson: true)
 class LiveInjectStreamConfig {
-  /// Width of the added stream to the broadcast. The default value is 0, which is the same width as the original stream.
+  /// 添加进入直播的外部视频源宽度，单位为像素。默认值为 0，即保留视频源原始宽度。// TODO 英文将 broadcast 改成 live streaming。
   int width;
 
-  /// Height of the added stream to the broadcast. The default value is 0, which is the same height as the original stream.
+  /// 添加进入直播的外部视频源高度，单位为像素。默认值为 0，即保留视频源原始高度。
   int height;
 
-  /// Video GOP of the added stream to the broadcast. The default value is 30 frames.
+  /// 添加进入直播的外部视频源 GOP。默认值为 30 帧。
   @JsonKey(includeIfNull: false)
   int videoGop;
 
-  /// Video frame rate of the added stream to the broadcast. The default value is 15 fps.
+  /// 添加进入直播的外部视频源帧率。默认值为 15 fps。
   @JsonKey(includeIfNull: false)
   VideoFrameRate videoFramerate;
 
-  /// Video bitrate of the added stream to the broadcast. The default value is 400 Kbps.
+  /// 添加进入直播的外部视频源码率。默认设置为 400 Kbps。
   @JsonKey(includeIfNull: false)
   int videoBitrate;
 
-  /// Audio sample rate of the added stream to the broadcast: [AudioSampleRateType]. The default value is 44100 Hz.
+  /// 添加进入直播的外部音频采样率。默认值为 44100，详见 [AudioSampleRateType]。
   ///
-  /// **Note** We recommend you use the default value and not reset it.
+  /// **Note**
+  /// 声网建议目前采用默认值，不要自行设置。
   @JsonKey(includeIfNull: false)
   AudioSampleRateType audioSampleRate;
 
-  /// Audio bitrate of the added stream to the broadcast. The default value is 48.
+  /// 添加进入直播的外部音频码率。单位为 Kbps，默认值为 48。
   ///
-  /// **Note** We recommend you use the default value and not reset it.
+  /// **Note**
+  /// 声网建议目前采用默认值，不要自行设置。
   @JsonKey(includeIfNull: false)
   int audioBitrate;
 
-  /// Audio channels to add into the broadcast. The value ranges between 1 and 2. The default value is 1.
+  /// 添加进入直播的外部音频频道数。取值范围为 1 或 2，默认值为 1。
   ///
-  /// **Note** We recommend you use the default value and not reset it.
+  /// **Note** 声网建议目前采用默认值，不要自行设置。
   @JsonKey(includeIfNull: false)
   AudioChannel audioChannels;
 
@@ -601,15 +617,15 @@ class LiveInjectStreamConfig {
   Map<String, dynamic> toJson() => _$LiveInjectStreamConfigToJson(this);
 }
 
-/// The definition of CameraCapturerConfiguration.
+/// CameraCapturerConfiguration 的定义。
 @JsonSerializable(explicitToJson: true)
 class CameraCapturerConfiguration {
-  /// The camera capturer configuration.
-  /// See [CameraCaptureOutputPreference].
+  /// 摄像头采集偏好。
+  /// 详见 [CameraCaptureOutputPreference]。
   final CameraCaptureOutputPreference preference;
 
-  /// The camera direction.
-  /// See [CameraDirection].
+  /// 摄像头方向。
+  /// 详见 [CameraDirection]。
   final CameraDirection cameraDirection;
 
   /// Constructs a [CameraCapturerConfiguration]
@@ -623,23 +639,23 @@ class CameraCapturerConfiguration {
   Map<String, dynamic> toJson() => _$CameraCapturerConfigurationToJson(this);
 }
 
-/// The channel media options.
+/// 频道媒体设置选项。
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaOptions {
-  /// Determines whether to subscribe to audio streams when the user joins the channel.
-  /// - true: (Default) Subscribe.
-  /// - false: Do not subscribe.
+  /// 设置加入频道时是否自动订阅音频流：
+  /// - true：（默认）订阅。
+  /// - false：不订阅。
   ///
-  /// This member serves a similar function to the [RtcEngine.muteAllRemoteAudioStreams] method.
-  /// After joining the channel, you can call `muteAllRemoteAudioStreams` to set whether to subscribe to audio streams in the channel.
+  /// 该成员功能与 [RtcEngine.muteAllRemoteAudioStreams] 相同。
+  /// 加入频道后，你可以通过 `muteAllRemoteAudioStreams` 方法重新设置是否订阅频道内的远端音频流。
   final bool autoSubscribeAudio;
 
-  /// Determines whether to subscribe to video streams when the user joins the channel.
-  /// - true: (Default) Subscribe.
-  /// - false: Do not subscribe.
+  /// 设置加入频道是是否自动订阅视频流：
+  /// - true：（默认）订阅。
+  /// - false：不订阅。
   ///
-  /// This member serves a similar function to the [RtcEngine.muteAllRemoteVideoStreams] method.
-  /// After joining the channel, you can call `muteAllRemoteVideoStreams` to set whether to subscribe to video streams in the channel.
+  /// 该成员功能与 [RtcEngine.muteAllRemoteVideoStreams] 相同。
+  /// 加入频道后，你可以通过 `muteAllRemoteVideoStreams` 方法重新设置是否订阅频道内的远端视频流。
   final bool autoSubscribeVideo;
 
   /// Constructs a [ChannelMediaOptions]
@@ -653,86 +669,86 @@ class ChannelMediaOptions {
   Map<String, dynamic> toJson() => _$ChannelMediaOptionsToJson(this);
 }
 
-/// Statistics of RTCEngine.
+/// 通话相关的统计信息。
 @JsonSerializable(explicitToJson: true)
 class RtcStats {
-  /// Call duration in seconds, represented by an aggregate value.
+  /// 通话时长，单位为秒，累计值。
   int totalDuration;
 
-  /// Total number of bytes transmitted, represented by an aggregate value.
+  /// 发送字节数（bytes），累计值。
   int txBytes;
 
-  /// Total number of bytes received, represented by an aggregate value.
+  /// 接收字节数（bytes），累计值。
   int rxBytes;
 
-  /// Total number of audio bytes sent (bytes), represented by an aggregate value.
+  /// 发送音频字节数（bytes），累计值。
   int txAudioBytes;
 
-  /// Total number of video bytes sent (bytes), represented by an aggregate value.
+  /// 发送视频字节数（bytes），累计值。
   int txVideoBytes;
 
-  /// Total number of audio bytes received (bytes), represented by an aggregate value.
+  /// 接收音频字节数（bytes），累计值。
   int rxAudioBytes;
 
-  /// Total number of video bytes received (bytes), represented by an aggregate value.
+  /// 接收视频字节数（bytes），累计值。
   int rxVideoBytes;
 
-  /// Transmission bitrate in Kbps, represented by an instantaneous value.
+  /// 发送码率（Kbps），瞬时值。
   int txKBitRate;
 
-  /// Receive bitrate (Kbps), represented by an instantaneous value.
+  /// 接收码率（Kbps），瞬时值。
   int rxKBitRate;
 
-  /// The transmission bitrate of the audio packet (Kbps), represented by an instantaneous value.
+  /// 音频包的发送码率（Kbps），瞬时值。
   int txAudioKBitRate;
 
-  /// Audio receive bitrate (Kbps), represented by an instantaneous value.
+  /// 音频接收码率（Kbps），瞬时值。
   int rxAudioKBitRate;
 
-  /// Video transmission bitrate (Kbps), represented by an instantaneous value.
+  /// 视频发送码率（Kbps），瞬时值。
   int txVideoKBitRate;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value.
+  /// 视频接收码率（Kbps），瞬时值。
   int rxVideoKBitRate;
 
-  /// The number of users in the channel.
-  /// - Communication profile: The number of users in the channel.
-  /// - Live Broadcast profile:
-  ///   - If the local user is an audience: The number of users in the channel = The number of hosts in the channel + 1.
-  ///   - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
+  /// 频道内的人数。
+  /// - 通信场景下，返回当前频道内的人数。
+  /// - 直播场景下：
+  ///   - 如果本地用户为观众，则返回频道内的主播数 + 1。
+  ///   - 如果本地用户为主播，则返回频道内的总主播数。
   int users;
 
-  /// Client-server latency.
+  /// 客户端到服务器的延迟（毫秒)。
   int lastmileDelay;
 
-  /// The packet loss rate (%) from the local client to Agora's edge server, before network countermeasures.
+  /// 网络对抗前，本地客户端到边缘服务器的丢包率 (%)。
   int txPacketLossRate;
 
-  /// The packet loss rate (%) from Agora's edge server to the local client, before network countermeasures.
+  /// 网络对抗前，边缘服务器到本地客户端的丢包率 (%)。
   int rxPacketLossRate;
 
-  /// System CPU usage (%).
+  /// 当前系统的 CPU 使用率 (%)。
   double cpuTotalUsage;
 
-  /// Application CPU usage (%).
+  /// 当前 App 的 CPU 使用率 (%)。
   double cpuAppUsage;
 
-  /// The round-trip time delay from the client to the local router.
+  /// 客户端到本地路由器的往返时延 (ms)。
   int gatewayRtt;
 
-  /// The memory usage ratio of the app (%).
+  /// 当前 App 的内存占比 (%)。
   ///
-  /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
+  /// **Note** 该值仅作参考。受系统限制可能无法获取。
   double memoryAppUsageRatio;
 
-  /// The memory usage ratio of the system (%).
+  /// 当前系统的内存占比 (%)。
   ///
-  /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
+  /// **Note** 该值仅作参考。受系统限制可能无法获取。
   double memoryTotalUsageRatio;
 
-  /// The memory usage of the app (KB).
+  /// 当前 App 的内存大小 (KB)。
   ///
-  /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
+  /// **Note** 该值仅作参考。受系统限制可能无法获取。
   int memoryAppUsageInKbytes;
 
   /// Constructs a [RtcStats]
@@ -746,28 +762,27 @@ class RtcStats {
   Map<String, dynamic> toJson() => _$RtcStatsToJson(this);
 }
 
-/// Properties of the audio volume information.
+/// 声音音量信息。 一个数组，包含每个说话者的用户 ID 和音量信息。
 /// Contains the user ID and volume information for each speaker.
 @JsonSerializable(explicitToJson: true)
 class AudioVolumeInfo {
-  /// The user ID of the speaker. The uid of the local user is 0.
+  /// 说话者的用户 ID。如果返回的 `uid` 为 0，则默认为本地用户。
   int uid;
 
-  /// The sum of the voice volume and audio-mixing volume of the speaker. The value ranges between 0 (lowest volume) and 255 (highest volume).
+  /// 说话者的音量，范围为 0（最低）- 255（最高）。
   int volume;
 
-  /// Voice activity status of the local user.
-  /// - 0: The local user is not speaking.
-  /// - 1: The local user is speaking.
+  /// 本地用户的人声状态。
+  /// - 0：本地用户不在说话。
+  /// - 1：本地用户在说话。
   ///
   ///
   /// **Note**
-  /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
-  /// - Ensure that you set `report_vad`(true) in the [RtcEngine.enableAudioVolumeIndication] method to enable the voice activity
-  /// detection of the local user.
+  /// - `vad` 无法报告远端用户的人声状态。对于远端用户，`vad` 的值始终为 0.
+  /// 若需使用此参数，请在 [RtcEngine.enableAudioVolumeIndication] 方法中设置 `report_vad` 为 `true`。
   int vad;
 
-  /// The channel ID, which indicates which channel the speaker is in.
+  /// 频道 ID，表明当前说话者在哪个频道。
   String channelId;
 
   /// Constructs a [AudioVolumeInfo]
@@ -781,19 +796,19 @@ class AudioVolumeInfo {
   Map<String, dynamic> toJson() => _$AudioVolumeInfoToJson(this);
 }
 
-/// Integer coordinates for a rectangle.
+/// 长方形区域。
 @JsonSerializable(explicitToJson: true)
 class Rect {
-  /// The X coordinate of the left side of the rectangle.
+  /// 长方形区域的左边所对应的横坐标。
   int left;
 
-  /// The Y coordinate of the top side of the rectangle.
+  /// 长方形区域的上边所对应的纵坐标。
   int top;
 
-  /// The X coordinate of the right side of the rectangle.
+  /// 长方形区域的右边所对应的横坐标。
   int right;
 
-  /// The Y coordinate of the bottom side of the rectangle.
+  /// 长方形区域的底边所对应的纵坐标。
   int bottom;
 
   /// Constructs a [Rect]
@@ -806,16 +821,16 @@ class Rect {
   Map<String, dynamic> toJson() => _$RectToJson(this);
 }
 
-/// The one-way last-mile probe result.
+/// The one-way last-mile probe result.单向 Last-mile 质量探测结果。
 @JsonSerializable(explicitToJson: true)
 class LastmileProbeOneWayResult {
-  /// The packet loss rate (%).
+  /// 丢包率。
   int packetLossRate;
 
-  /// The network jitter (ms).
+  /// 网络抖动，单位为毫秒。
   int jitter;
 
-  /// The estimated available bandwidth (bps).
+  /// 可用网络带宽预计，单位为 bps。
   int availableBandwidth;
 
   /// Constructs a [LastmileProbeOneWayResult]
@@ -829,22 +844,22 @@ class LastmileProbeOneWayResult {
   Map<String, dynamic> toJson() => _$LastmileProbeOneWayResultToJson(this);
 }
 
-/// Statistics of the lastmile probe.
+/// 上下行 Last-mile 质量探测结果。
 @JsonSerializable(explicitToJson: true)
 class LastmileProbeResult {
-  /// The state of the probe test.
-  /// See [LastmileProbeResultState].
+  /// Last-mile 质量探测结果的状态。
+  /// 详见 [LastmileProbeResultState]。
   LastmileProbeResultState state;
 
-  /// The round-trip delay time (ms).
+  /// 往返时延，单位为毫秒。
   int rtt;
 
-  /// The uplink last-mile network report.
-  /// See [LastmileProbeOneWayResult].
+  /// 上行网络质量报告。
+  /// 详见 [LastmileProbeOneWayResult]。
   LastmileProbeOneWayResult uplinkReport;
 
-  /// The downlink last-mile network report.
-  /// See [LastmileProbeOneWayResult].
+  /// 下行网络质量报告。
+  /// 详见 [LastmileProbeOneWayResult]。
   LastmileProbeOneWayResult downlinkReport;
 
   /// Constructs a [LastmileProbeResult]
@@ -858,16 +873,16 @@ class LastmileProbeResult {
   Map<String, dynamic> toJson() => _$LastmileProbeResultToJson(this);
 }
 
-/// Statistics of the local audio stream.
+/// 本地音频统计数据。
 @JsonSerializable(explicitToJson: true)
 class LocalAudioStats {
-  /// The number of channels.
+  /// 声道数。
   int numChannels;
 
-  /// The sample rate (Hz).
+  /// 发送的采样率，单位为 Hz。
   int sentSampleRate;
 
-  /// The average sending bitrate (Kbps).
+  /// 发送码率的平均值，单位为 Kbps。
   int sentBitrate;
 
   /// Constructs a [LocalAudioStats]
@@ -881,45 +896,46 @@ class LocalAudioStats {
   Map<String, dynamic> toJson() => _$LocalAudioStatsToJson(this);
 }
 
-/// Statistics of the local video.
+/// 本地视频相关的统计信息。
 @JsonSerializable(explicitToJson: true)
 class LocalVideoStats {
-  /// Bitrate (Kbps) sent in the reported interval, which does not include the bitrate of the re-transmission video after the packet loss.
+  /// 实际发送码率，单位为 Kbps，不包含丢包后重传视频等的发送码率。
   int sentBitrate;
 
-  /// Frame rate (fps) sent in the reported interval, which does not include the frame rate of the re-transmission video after the packet loss.
+  /// 实际发送帧率，单位为 fps，不包含丢包后重传视频等的发送帧率。
   int sentFrameRate;
 
-  /// The encoder output frame rate (fps) of the local video.
+  /// 本地编码器的输出帧率，单位为 fps。
   int encoderOutputFrameRate;
 
-  /// The renderer output frame rate (fps) of the local video.
+  /// 本地渲染器的输出帧率，单位为 fps。
   int rendererOutputFrameRate;
 
-  /// The target bitrate (Kbps) of the current encoder. This value is estimated by the SDK based on the current network conditions.
+  /// 当前编码器的目标编码码率，单位为 Kbps，该码率为 SDK 根据当前网络状况预估的一个值。
   int targetBitrate;
 
-  /// The target frame rate (fps) of the current encoder.
+  /// 当前编码器的目标编码帧率，单位为 fps。
   int targetFrameRate;
 
-  /// Quality change of the local video in terms of target frame rate and target bit rate since last count.
-  /// See [VideoQualityAdaptIndication].
+  /// 自上次统计后本地视频质量的自适应情况（基于目标帧率和目标码率）。
+  /// 详见 [VideoQualityAdaptIndication]。
   VideoQualityAdaptIndication qualityAdaptIndication;
 
-  /// The encoding bitrate (Kbps), which does not include the bitrate of the re-transmission video after packet loss.
+  /// 视频编码码率（Kbps）。该参数不包含丢包后重传视频等的编码码率。
   int encodedBitrate;
 
-  /// The width of the encoding frame (px).
+  /// 视频编码宽度（px）。
   int encodedFrameWidth;
 
-  /// The height of the encoding frame (px).
+  /// 视频编码高度（px）。
   int encodedFrameHeight;
 
-  /// The value of the sent frame rate, represented by an aggregate value.
+  /// 视频发送的帧数，累计值。
+  // TODO 英文是 frame rate, 还是 frames?
   int encodedFrameCount;
 
-  /// The codec type of the local video.
-  /// See [VideoCodecType].
+  /// 视频的编码类型。
+  /// 详见 [VideoCodecType]。
   VideoCodecType codecType;
 
   /// Constructs a [LocalVideoStats]
@@ -933,41 +949,43 @@ class LocalVideoStats {
   Map<String, dynamic> toJson() => _$LocalVideoStatsToJson(this);
 }
 
-/// Statistics of the remote audio.
+/// 远端音频统计信息。
 @JsonSerializable(explicitToJson: true)
 class RemoteAudioStats {
-  /// ID of the user sending the audio streams.
+  /// 用户 ID，指定是哪个用户/主播的音频流。
   int uid;
 
-  /// Audio quality received by the user.
-  /// See [NetworkQuality].
+  /// 远端用户发送的音频流质量。
+  /// 详见 [NetworkQuality]。
   NetworkQuality quality;
 
-  /// Network delay (ms) from the sender to the receiver.
+  /// 音频发送端到接收端的网络延迟（毫秒）。
   int networkTransportDelay;
 
-  /// Network delay (ms) from the receiver to the jitter buffer.
+  /// 接收端到网络抖动缓冲的网络延迟 (ms)。
   int jitterBufferDelay;
 
-  /// Packet loss rate in the reported interval.
+  ///  统计周期内的远端音频流的丢帧率 (%)。
   int audioLossRate;
 
-  /// The number of channels.
+  /// 声道数。
   int numChannels;
 
-  /// The sample rate (Hz) of the received audio stream in the reported interval.
+  /// 统计周期内接收到的远端音频采样率（Hz）。
   int receivedSampleRate;
 
-  /// The average bitrate (Kbps) of the received audio stream in the reported interval.
+  /// 接收流在统计周期内的平均码率（Kbps）。
   int receivedBitrate;
 
-  /// The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In the reported interval, audio freeze occurs when the audio frame loss rate reaches 4%. totalFrozenTime = The audio freeze time × 2 × 1000 (ms).
+  /// 远端用户在加入频道后发生音频卡顿的累计时长 (ms)。
+  /// 一个统计周期内，音频丢帧率达到 4% 即记为一次音频卡顿。
   int totalFrozenTime;
 
-  /// The total audio freeze time as a percentage (%) of the total time when the audio is available.
+  /// 远端用户在加入频道后发生音频卡顿的累计时长占音频总有效时长的百分比 (%)。
   int frozenRate;
 
-  /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the LiveBroadcasting profile neither stops sending the audio stream nor disables the audio module after joining the channel.
+  /// 远端用户在音频通话开始到本次回调之间的有效时长（ms）。
+  /// 有效时长是指去除了远端用户进入 mute 状态的总时长。
   int totalActiveTime;
 
   /// Constructs a [RemoteAudioStats]
@@ -981,46 +999,50 @@ class RemoteAudioStats {
   Map<String, dynamic> toJson() => _$RemoteAudioStatsToJson(this);
 }
 
-/// Statistics of the remote video.
+/// 远端视频相关的统计信息。
 @JsonSerializable(explicitToJson: true)
 class RemoteVideoStats {
-  /// ID of the user sending the video streams.
+  /// 用户 ID，指定是哪个用户的视频流。
   int uid;
 
-  /// Time delay (ms). In scenarios where audio and video is synchronized, you can use the value of `networkTransportDelay` and `jitterBufferDelay` in [RemoteAudioStats] to know the delay statistics of the remote video.
+  /// 延迟，单位为毫秒。
+  ///
+  /// 该参数已废弃。声网不建议你使用.
+  /// 在有音画同步机制的音视频场景中，你可以参考 [RemoteAudioStats] 里的 `networkTransportDelay` 和 `jitterBufferDelay`成员的值，了解视频的延迟数据。
   @deprecated
   int delay;
 
-  /// Width (pixels) of the remote video.
+  /// 远端视频流宽度，单位为像素。
   int width;
 
-  /// Height (pixels) of the remote video.
+  /// 远端视频流高度，单位为像素。
   int height;
 
-  /// Bitrate (Kbps) received in the reported interval.
+  /// 接收码率，单位为 Kbps。
   int receivedBitrate;
 
-  /// The decoder output frame rate (fps) of the remote video.
+  /// 远端视频解码器的输出帧率，单位为 fps。
   int decoderOutputFrameRate;
 
-  /// The renderer output frame rate (fps) of the remote video.
+  /// 远端视频渲染器的输出帧率，单位为 fps。
   int rendererOutputFrameRate;
 
-  /// Packet loss rate (%) of the remote video stream after network countermeasures.
+  /// 远端视频在网络对抗之后的丢包率 (%)。
   int packetLossRate;
 
-  /// Video stream type (high-stream or low-stream).
-  /// See [VideoStreamType].
+  /// 视频流类型，大流或小流。
+  /// 详见 [VideoStreamType]。
   VideoStreamType rxStreamType;
 
-  /// The total freeze time (ms) of the remote video stream after the remote user joins the channel.
-  /// In a video session where the frame rate is set to no less than 5 fps, video freeze occurs when the time interval between two adjacent renderable video frames is more than 500 ms.
+  /// 远端用户在加入频道后发生视频卡顿的累计时长（毫秒）。
+  /// 通话过程中，视频帧率设置不低于 5 fps 时，连续渲染的两帧视频之间间隔超过 500 ms，则记为一次视频卡顿。
   int totalFrozenTime;
 
-  /// The total video freeze time (`totalFrozenTime`) as a percentage (%) of the total time when the video is available (`totalActiveTime`).
+  /// 远端用户在加入频道后发生视频卡顿的累计时长占视频总有效时长的百分比 (%)。
   int frozenRate;
 
-  /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the Live-broadcast profile neither stops sending the video stream nor disables the video module after joining the channel.
+  /// 视频总有效时长（毫秒）。
+  /// 视频总有效时长是远端用户或主播加入频道后，既没有停止发送视频流，也没有禁用视频模块的通话时长。
   int totalActiveTime;
 
   /// Constructs a [RemoteVideoStats]
@@ -1034,22 +1056,22 @@ class RemoteVideoStats {
   Map<String, dynamic> toJson() => _$RemoteVideoStatsToJson(this);
 }
 
-/// The information of the detected human face.
+/// 检测到的人脸信息。
 @JsonSerializable(explicitToJson: true)
 class FacePositionInfo {
-  /// The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
+  /// 人脸在画面中的 x 坐标 (px)。以摄像头采集画面的左上角为原点，x 坐标为人脸左上角相对于原点的横向位移。
   int x;
 
-  /// The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
+  /// 人脸在画面中的 y 坐标 (px)。以摄像头采集画面的左上角为原点，y 坐标为人脸左上角相对原点的纵向位移。
   int y;
 
-  /// The width (px) of the human face in the captured video.
+  /// 人脸在画面中的宽度 (px)。
   int width;
 
-  /// The height (px) of the human face in the captured video.
+  /// 人脸在画面中的高度 (px)。
   int height;
 
-  /// The distance (cm) between the human face and the screen.
+  /// 人脸距设备屏幕的距离 (cm)。
   int distance;
 
   /// Constructs a [FacePositionInfo]
