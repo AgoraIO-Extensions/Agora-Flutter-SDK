@@ -64,6 +64,12 @@ class RtcEngine
   /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
   ///
   /// Param [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance, and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
+  ///
+  /// **Returns**
+  /// - An [RtcEngine] instance if the method call succeeds.
+  /// - The error code, if this method call fails:
+  ///
+  /// [ErrorCode.InvalidAppId]
   static Future<RtcEngine> create(String appId) async {
     return createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL);
   }
@@ -85,6 +91,12 @@ class RtcEngine
   /// After specifying the area of connection:
   /// - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
   /// - When the app that integrates the Agora SDK is used out of the specified area, it connects to the Agora servers either in the specified area or in the area where the app is located.
+  ///
+  /// **Returns**
+  /// - An [RtcEngine] instance if the method call succeeds.
+  /// - The error code, if this method call fails:
+  ///
+  /// [ErrorCode.InvalidAppId]
   static Future<RtcEngine> createWithAreaCode(String appId,
       IPAreaCode areaCode) async {
     if (_engine != null) return _engine;
