@@ -186,8 +186,18 @@ class RtcEngineEventHandler {
   /// -- When a web application joins the channel, the `userJoined` callback is triggered as long as the web application publishes streams.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
-  /// - [int] `uid`: ID of the user or host who joins the channel.
-  /// - [int] `elapsed`: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  /// - [int] `uid`: This parameter has the following definitions in different events:
+  ///   - [userJoined]: ID of the user or host who joins the channel.
+  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
+  ///   - [joinChannelSuccess]: User ID.
+  ///   - [rejoinChannelSuccess]: User ID.
+  /// - [int] `elapsed`:
+  ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
+  ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
+  ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   UidWithElapsedCallback userJoined;
 
   /// Occurs when a remote user ([ChannelProfile.Communication])/host ([ChannelProfile.LiveBroadcasting]) leaves the channel.
@@ -607,8 +617,18 @@ class RtcEngineEventHandler {
   /// @deprecated Use [AudioRemoteState.Starting](1) in [remoteAudioStateChanged] instead.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
-  /// - [int] `uid`: ID of the user or host who joins the channel.
-  /// - [int] `elapsed`: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  /// - [int] `uid`: This parameter has the following definitions in different events:
+  ///   - [userJoined]: ID of the user or host who joins the channel.
+  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
+  ///   - [joinChannelSuccess]: User ID.
+  ///   - [rejoinChannelSuccess]: User ID.
+  /// - [int] `elapsed`:
+  ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
+  ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
+  ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   @deprecated
   UidWithElapsedCallback firstRemoteAudioFrame;
 
@@ -625,8 +645,18 @@ class RtcEngineEventHandler {
   /// -- The remote user calls the [RtcEngine.disableAudio] method.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
-  /// - [int] `uid`: ID of the user or host who joins the channel.
-  /// - [int] `elapsed`: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  /// - [int] `uid`: This parameter has the following definitions in different events:
+  ///   - [userJoined]: ID of the user or host who joins the channel.
+  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
+  ///   - [joinChannelSuccess]: User ID.
+  ///   - [rejoinChannelSuccess]: User ID.
+  /// - [int] `elapsed`:
+  ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
+  ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
+  ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   @deprecated
   UidWithElapsedCallback firstRemoteAudioDecoded;
 
@@ -1246,8 +1276,18 @@ class RtcChannelEventHandler {
   /// If the uid is not specified when calling [RtcChannel.joinChannel], the server automatically assigns a uid.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
-  /// - [int] `uid`: ID of the user or host who joins the channel.
-  /// - [int] `elapsed`: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  /// - [int] `uid`: This parameter has the following definitions in different events:
+  ///   - [userJoined]: ID of the user or host who joins the channel.
+  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
+  ///   - [joinChannelSuccess]: User ID.
+  ///   - [rejoinChannelSuccess]: User ID.
+  /// - [int] `elapsed`:
+  ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
+  ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
+  ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   UidWithElapsedCallback joinChannelSuccess;
 
   /// Occurs when a user rejoins the channel after being disconnected due to network problems.
@@ -1255,8 +1295,18 @@ class RtcChannelEventHandler {
   /// When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
-  /// - [int] `uid`: ID of the user or host who joins the channel.
-  /// - [int] `elapsed`: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  /// - [int] `uid`: This parameter has the following definitions in different events:
+  ///   - [userJoined]: ID of the user or host who joins the channel.
+  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
+  ///   - [joinChannelSuccess]: User ID.
+  ///   - [rejoinChannelSuccess]: User ID.
+  /// - [int] `elapsed`:
+  ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
+  ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
+  ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   UidWithElapsedCallback rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
@@ -1289,8 +1339,18 @@ class RtcChannelEventHandler {
   /// -- When a web app joins the channel, this callback is triggered as long as the web app publishes streams.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
-  /// - [int] `uid`: ID of the user or host who joins the channel.
-  /// - [int] `elapsed`: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  /// - [int] `uid`: This parameter has the following definitions in different events:
+  ///   - [userJoined]: ID of the user or host who joins the channel.
+  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
+  ///   - [joinChannelSuccess]: User ID.
+  ///   - [rejoinChannelSuccess]: User ID.
+  /// - [int] `elapsed`:
+  ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
+  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
+  ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
+  ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   UidWithElapsedCallback userJoined;
 
   /// Occurs when a remote user ([ChannelProfile.Communication]) or a broadcaster ([ChannelProfile.LiveBroadcasting]) leaves the channel.
@@ -1369,7 +1429,7 @@ class RtcChannelEventHandler {
   /// This callback indicates the state change of the remote audio stream.
   ///
   /// This callback does not work properly when the number of users (in the `Communication` profile) or hosts (in the `LiveBroadcasting` profile) in the channel exceeds 17.
-  ///  
+  ///
   /// The `RemoteAudioStateCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the user whose audio state changes.
   /// - [AudioRemoteState] `state`: State of the remote audio.
