@@ -292,3 +292,16 @@ func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannel
     }
     return options
 }
+
+func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
+    let encryptionConfig = AgoraEncryptionConfig()
+    if let encryptionMode = map["encryptionMode"] as? Int {
+        if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode) {
+            encryptionConfig.encryptionMode = encryptionMode
+        }
+    }
+    if let encryptionKey = map["encryptionKey"] as? String {
+        encryptionConfig.encryptionKey = encryptionKey
+    }
+    return encryptionConfig
+}
