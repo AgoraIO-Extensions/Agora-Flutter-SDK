@@ -119,7 +119,9 @@ class VideoEncoderConfiguration {
   /// | 960 * 720              | 15               | 910                                    | 1820                                   |
   /// | 960 * 720              | 30               | 1380                                   | 2760                                   |
   ///
-  ///  **Note** The base bitrate in this table applies to the Communication profile. The LiveBroadcasting profile generally requires a higher bitrate for better video quality. We recommend setting the bitrate mode as `0`. You can also set the bitrate as the base bitrate value x 2.
+  ///  **Note** 
+  /// - The base bitrate in this table applies to the Communication profile. 
+  /// - The LiveBroadcasting profile generally requires a higher bitrate for better video quality. We recommend setting the bitrate mode as `0`. You can also set the bitrate as the base bitrate value x 2.
   @JsonKey(includeIfNull: false)
   int bitrate;
 
