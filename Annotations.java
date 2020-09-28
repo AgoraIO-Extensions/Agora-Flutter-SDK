@@ -789,4 +789,11 @@ public class Annotations {
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraStreamPublishState {
     }
+
+    @IntDef({
+            Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AgoraRtmpStreamingEvent {
+    }
 }

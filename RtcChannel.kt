@@ -7,7 +7,7 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.internal.EncryptionConfig
 import java.util.*
 
-class RtcChannelInterface {
+class IRtcChannel {
     interface RtcChannelInterface : RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
             RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface,
             RtcFallbackInterface, RtcMediaMetadataInterface, RtcEncryptionInterface,
@@ -116,7 +116,7 @@ class RtcChannelInterface {
 
 class RtcChannelManager(
         private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit
-) : RtcChannelInterface.RtcChannelInterface {
+) : IRtcChannel.RtcChannelInterface {
     private val rtcChannelMap = Collections.synchronizedMap(mutableMapOf<String, RtcChannel>())
     private val mediaObserverMap = Collections.synchronizedMap(mutableMapOf<String, MediaObserver>())
 
@@ -315,12 +315,16 @@ class RtcChannelManager(
     override fun createDataStream(params: Map<String, *>, callback: Callback) {
         var code = -Constants.ERR_NOT_INITIALIZED
         this[params["channelId"] as String]?.let {
-            code= it.createDataStream(reliable, ordered)
+            code = it.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)
         }
-        callback.code(manager.createDataStream(channelId, reliable, ordered)) { it }
+        callback.code(code) { it }
     }
 
     override fun sendStreamMessage(params: Map<String, *>, callback: Callback) {
-        callback.code(manager.sendStreamMessage(channelId, streamId, message))
+        var code = -Constants.ERR_NOT_INITIALIZED
+        this[params["channelId"] as String]?.let {
+            code = it.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray())
+        }
+        callback.code(code)
     }
 }

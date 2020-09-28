@@ -509,7 +509,7 @@ class RtcEngineEventHandler(
         callback(RtcEngineEvents.VideoSubscribeStateChanged, channel, uid, oldState, newState, elapseSinceLastState)
     }
 
-    override fun onRtmpStreamingEvent(url: String?, error: Int) {
+    override fun onRtmpStreamingEvent(url: String?, @Annotations.AgoraRtmpStreamingEvent error: Int) {
         callback(RtcEngineEvents.RtmpStreamingEvent, url, error)
     }
 }

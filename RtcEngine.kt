@@ -5,7 +5,7 @@ import io.agora.rtc.*
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.models.UserInfo
 
-class RtcEngineInterface {
+class IRtcEngine {
     interface RtcEngineInterface : RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface,
             RtcAudioMixingInterface, RtcAudioEffectInterface, RtcVoiceChangerInterface,
             RtcVoicePositionInterface, RtcPublishStreamInterface, RtcMediaRelayInterface,
@@ -316,7 +316,7 @@ class RtcEngineInterface {
 
 class RtcEngineManager(
         private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit
-) : RtcEngineInterface.RtcEngineInterface {
+) : IRtcEngine.RtcEngineInterface {
     var engine: RtcEngine? = null
         private set
     private var mediaObserver: MediaObserver? = null
