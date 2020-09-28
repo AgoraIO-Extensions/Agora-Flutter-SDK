@@ -245,8 +245,8 @@ class RtcEngine
   /// Use this method when the channel profile is [ChannelProfile.LiveBroadcasting]. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [ChannelProfile.Communication].
   ///
   /// **Parameter** [enabled] Sets whether to enable/disable interoperability with the Agora Web SDK:
-  /// - true: Enable.
-  /// - false: (Default) Disable.
+  /// - `true`: Enable.
+  /// - `false`: (Default) Disable.
   @deprecated
   Future<void> enableWebSdkInteroperability(bool enabled) {
     return _invokeMethod('enableWebSdkInteroperability', {'enabled': enabled});
@@ -1154,8 +1154,8 @@ mixin RtcAudioInterface {
   /// -- [RtcEngine.muteLocalAudioStream]: Stops/Continues sending the local audio streams.
   ///
   /// **Parameter** [enabled] Sets whether to disable/re-enable the local audio function:
-  /// - true: (Default) Re-enable the local audio function, that is, to start local audio capture and processing.
-  /// - false: Disable the local audio function, that is, to stop local audio capture and processing.
+  /// - `true`: (Default) Re-enable the local audio function, that is, to start local audio capture and processing.
+  /// - `false`: Disable the local audio function, that is, to stop local audio capture and processing.
   Future<void> enableLocalAudio(bool enabled);
 
   /// Stops/Resumes sending the local audio stream.
@@ -1167,8 +1167,8 @@ mixin RtcAudioInterface {
   /// - If you call [RtcEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local audio according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcEngine.setChannelProfile] method.
   ///
   /// **Parameter** [muted] Sets whether to send/stop sending the local audio stream:
-  /// - true: Stop sending the local audio stream.
-  /// - false: (Default) Send the local audio stream.
+  /// - `true`: Stop sending the local audio stream.
+  /// - `false`: (Default) Send the local audio stream.
   Future<void> muteLocalAudioStream(bool muted);
 
   /// Stops/Resumes receiving a specified audio stream.
@@ -1179,15 +1179,15 @@ mixin RtcAudioInterface {
   /// **Parameter** [uid] ID of the specified remote user.
   ///
   /// **Parameter** [muted] Sets whether to receive/stop receiving the specified remote user's audio stream:
-  /// - true: Stop receiving the specified remote user’s audio stream.
-  /// - false: (Default) Receive the specified remote user’s audio stream.
+  /// - `true`: Stop receiving the specified remote user’s audio stream.
+  /// - `false`: (Default) Receive the specified remote user’s audio stream.
   Future<void> muteRemoteAudioStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote audio streams.
   ///
   /// **Parameter** [muted] Sets whether to receive/stop receiving all remote audio streams:
-  /// - true: Stop receiving all remote audio streams.
-  /// - false: (Default) Receive all remote audio streams.
+  /// - `true`: Stop receiving all remote audio streams.
+  /// - `false`: (Default) Receive all remote audio streams.
   Future<void> muteAllRemoteAudioStreams(bool muted);
 
   /// Sets whether to receive all remote audio streams by default.
@@ -1198,8 +1198,8 @@ mixin RtcAudioInterface {
   /// - If you want to resume receiving audio streams, call [RtcEngine.muteRemoteAudioStream](false), and specify the ID of the remote user that you want to subscribe to. To resume audio streams of multiple users, call [RtcEngine.muteRemoteAudioStream] as many times. Calling [RtcEngine.setDefaultMuteAllRemoteAudioStreams](false) resumes receiving audio streams of the subsequent users only.
   ///
   /// **Parameter** [muted] Sets whether or not to receive/stop receiving the remote audio streams by default:
-  /// - true: Stop receiving any audio stream by default.
-  /// - false: (Default) Receive all remote audio streams by default.
+  /// - `true`: Stop receiving any audio stream by default.
+  /// - `false`: (Default) Receive all remote audio streams by default.
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 
   /// Enables the [RtcEngineEventHandler.audioVolumeIndication] callback at a set time interval to report on which users are speaking and the speakers' volume.
@@ -1213,8 +1213,8 @@ mixin RtcAudioInterface {
   /// **Parameter** [smooth] The smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The greater the value, the more sensitive the indicator. The recommended value is 3.
   ///
   /// **Parameter** [report_vad]
-  /// - true: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
-  /// - false: (Default) Disable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
+  /// - `true`: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
+  /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
   Future<void> enableAudioVolumeIndication(int interval, int smooth,
       bool report_vad);
 }
@@ -1284,8 +1284,8 @@ mixin RtcVideoInterface {
   /// - This method affects the internal engine and can be called after calling  the [RtcEngine.leaveChannel] method.
   ///
   /// **Parameter** [enabled] Sets whether to disable/re-enable the local video, including the capturer, renderer, and sender:
-  /// - true: (Default) Re-enable the local video.
-  /// - false: Disable the local video. Once the local video is disabled, the remote users can no longer receive the video stream of this user, while this user can still receive the video streams of other remote users. When you set enabled as false, this method does not require a local camera.
+  /// - `true`: (Default) Re-enable the local video.
+  /// - `false`: Disable the local video. Once the local video is disabled, the remote users can no longer receive the video stream of this user, while this user can still receive the video streams of other remote users. When you set enabled as false, this method does not require a local camera.
   Future<void> enableLocalVideo(bool enabled);
 
   /// Stops/Resumes sending the local video stream.
@@ -1297,8 +1297,8 @@ mixin RtcVideoInterface {
   /// - If you call [RtcEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local video according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcEngine.setChannelProfile] method.
   ///
   /// **Parameter** [muted] Sets whether to send/stop sending the local video stream:
-  /// - true: Stop sending the local video stream.
-  /// - false: (Default) Send the local video stream.
+  /// - `true`: Stop sending the local video stream.
+  /// - `false`: (Default) Send the local video stream.
   Future<void> muteLocalVideoStream(bool muted);
 
   /// Stops/Resumes receiving a specified remote user's video stream.
@@ -1309,15 +1309,15 @@ mixin RtcVideoInterface {
   /// **Parameter** [uid] User ID of the specified remote user.
   ///
   /// **Parameter** [muted] Sets whether to receive/stop receiving a specified remote user's video stream:
-  /// - true: Stop receiving a specified remote user’s video stream.
-  /// - false: (Default) Receive a specified remote user’s video stream.
+  /// - `true`: Stop receiving a specified remote user’s video stream.
+  /// - `false`: (Default) Receive a specified remote user’s video stream.
   Future<void> muteRemoteVideoStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote video streams.
   ///
   /// **Parameter** [muted] Sets whether to receive/stop receiving all remote video streams:
-  /// - true: Stop receiving all remote video streams.
-  /// - false: (Default) Receive all remote video streams.
+  /// - `true`: Stop receiving all remote video streams.
+  /// - `false`: (Default) Receive all remote video streams.
   Future<void> muteAllRemoteVideoStreams(bool muted);
 
   /// Sets whether to receive all remote video streams by default.
@@ -1328,8 +1328,8 @@ mixin RtcVideoInterface {
   /// - If you want to resume receiving video streams, call [RtcEngine.muteRemoteVideoStream](false), and specify the ID of the remote user that you want to subscribe to. To resume receiving video streams of multiple users, call [RtcEngine.muteRemoteVideoStream] as many times. Calling `setDefaultMuteAllRemoteVideoStreams`(false) resumes receiving video streams of the subsequent users only.
   ///
   /// **Parameter** [muted] Sets whether to receive/stop receiving all remote video streams by default:
-  /// - true: Stop receiving any remote video stream by default.
-  /// - false: (Default) Receive all remote video streams by default.
+  /// - `true`: Stop receiving any remote video stream by default.
+  /// - `false`: (Default) Receive all remote video streams by default.
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
   /// Enables/Disables image enhancement and sets the options.
@@ -1366,12 +1366,12 @@ mixin RtcAudioMixingInterface {
   /// - Otherwise, the audio file is in the absolute path.
   ///
   /// **Parameter** [loopback] Sets which user can hear the audio mixing:
-  /// - true: Only the local user can hear the audio mixing.
-  /// - false: Both users can hear the audio mixing.
+  /// - `true`: Only the local user can hear the audio mixing.
+  /// - `false`: Both users can hear the audio mixing.
   ///
   /// **Parameter** [replace] Sets the audio mixing content:
-  /// - true: Only publish the specified audio file; the audio stream from the microphone is not published.
-  /// - false: The local audio file is mixed with the audio stream from the microphone.
+  /// - `true`: Only publish the specified audio file; the audio stream from the microphone is not published.
+  /// - `false`: The local audio file is mixed with the audio stream from the microphone.
   ///
   /// **Parameter** [cycle] Sets the number of playback loops:
   /// - Positive integer: Number of playback loops
@@ -1514,8 +1514,8 @@ mixin RtcAudioEffectInterface {
   /// **Parameter** [gain] Sets the volume of the audio effect. The value ranges between 0.0 and 100,0. The default value is 100.0. The lower the value, the lower the volume of the audio effect.
   ///
   /// **Parameter** [publish] Set whether or not to publish the specified audio effect to the remote stream:
-  /// - true: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
-  /// - false: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
+  /// - `true`: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
+  /// - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
   Future<void> playEffect(int soundId, String filePath, int loopCount,
       double pitch, double pan, double gain, bool publish);
 
@@ -1616,8 +1616,8 @@ mixin RtcVoicePositionInterface {
   /// Ensure that you call this method before [RtcEngine.joinChannel] to enable stereo panning for remote users so that the local user can track the position of a remote user by calling [RtcEngine.setRemoteVoicePosition].
   ///
   /// **Parameter** [enabled] Sets whether or not to enable stereo panning for remote users:
-  /// - true: enables stereo panning.
-  /// - false: disables stereo panning.
+  /// - `true`: enables stereo panning.
+  /// - `false`: disables stereo panning.
   Future<void> enableSoundPositionIndication(bool enabled);
 
   /// Sets the sound position of a remote user.
@@ -1668,8 +1668,8 @@ mixin RtcPublishStreamInterface {
   ///
   /// **Parameter** [transcodingEnabled] Sets whether transcoding is enabled/disabled. If you set this parameter as true, ensure that you call the setLiveTranscoding method before this method.
   /// See [RtcEngine.setLiveTranscoding]
-  /// - true: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
-  /// - false: Disable transcoding.
+  /// - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
+  /// - `false`: Disable transcoding.
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   /// Removes an RTMP stream from the CDN.
@@ -1748,8 +1748,8 @@ mixin RtcAudioRouteInterface {
   /// - Call this method before the user joins a channel.
   ///
   /// **Parameter** [defaultToSpeaker] Sets the default audio route:
-  /// - true: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
-  /// - false: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
+  /// - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
+  /// - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
   Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio playback route to the speakerphone.
@@ -1761,8 +1761,8 @@ mixin RtcAudioRouteInterface {
   /// - This method is invalid for audience users in the [ChannelProfile.LiveBroadcasting] profile.
   ///
   /// **Parameter** [enabled] Sets whether to route the audio to the speakerphone or earpiece:
-  /// - true: Route the audio to the speakerphone.
-  /// - false: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
+  /// - `true`: Route the audio to the speakerphone.
+  /// - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
   Future<void> setEnableSpeakerphone(bool enabled);
 
   /// Checks whether the speakerphone is enabled.
@@ -1773,8 +1773,8 @@ mixin RtcEarMonitoringInterface {
   /// Enables in-ear monitoring.
   ///
   /// **Parameter** [enabled] Sets whether to enable/disable in-ear monitoring:
-  /// - true: Enable.
-  /// - false: (Default) Disable.
+  /// - `true`: Enable.
+  /// - `false`: (Default) Disable.
   Future<void> enableInEarMonitoring(bool enabled);
 
   /// Sets the volume of the in-ear monitor.
@@ -1789,8 +1789,8 @@ mixin RtcDualStreamInterface {
   /// If dual-stream mode is enabled, the receiver can choose to receive the high stream (high-resolution high-bitrate video stream) or low stream (low-resolution low-bitrate video stream) video.
   ///
   /// **Parameter** [enabled] Sets the stream mode:
-  /// - true: Dual-stream mode.
-  /// - false: (Default) Single-stream mode.
+  /// - `true`: Dual-stream mode.
+  /// - `false`: (Default) Single-stream mode.
   Future<void> enableDualStreamMode(bool enabled);
 
   /// Sets the stream type of the remote video.
@@ -2094,22 +2094,22 @@ mixin RtcCameraInterface {
   /// - The distance between the human face and the device screen.
   ///
   /// **Parameter** [enable] Determines whether to enable the face detection function for the local user:
-  /// - true: Enable face detection.
-  /// - false: (Default) Disable face detection.
+  /// - `true`: Enable face detection.
+  /// - `false`: (Default) Disable face detection.
   Future<void> enableFaceDetection(bool enable);
 
   /// Enables the camera flash function.
   ///
   /// **Parameter** [isOn] Sets whether to enable/disable the camera flash function:
-  /// - true: Enable the camera flash function.
-  /// - false: Disable the camera flash function.
+  /// - `true`: Enable the camera flash function.
+  /// - `false`: Disable the camera flash function.
   Future<void> setCameraTorchOn(bool isOn);
 
   /// Enables the camera auto-face focus function.
   ///
   /// **Parameter** [enabled] Sets whether to enable/disable the camera auto-face focus function:
-  /// - true: Enable the camera auto-face focus function.
-  /// - false: (Default) Disable the camera auto-face focus function.
+  /// - `true`: Enable the camera auto-face focus function.
+  /// - `false`: (Default) Disable the camera auto-face focus function.
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled);
 
   /// Sets the camera capturer configuration.
@@ -2136,12 +2136,12 @@ mixin RtcStreamMessageInterface {
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
   ///
   /// **Parameter** [reliable] Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds:
-  /// - true: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the onStreamMessageError callback and returns an error code. See [RtcEngineEventHandler.streamMessageError].
-  /// - false: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
+  /// - `true`: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the onStreamMessageError callback and returns an error code. See [RtcEngineEventHandler.streamMessageError].
+  /// - `false`: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
   ///
   /// **Parameter** [ordered] Sets whether or not the recipients receive the data stream in the sent order:
-  /// - true: The recipients receive the data in the sent order.
-  /// - false: The recipients do not receive the data in the sent order.
+  /// - `true`: The recipients receive the data in the sent order.
+  /// - `false`: The recipients do not receive the data in the sent order.
   ///
   ///
   /// **Returns**
