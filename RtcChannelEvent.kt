@@ -110,11 +110,11 @@ class RtcChannelEventHandler(
     }
 
     override fun onJoinChannelSuccess(rtcChannel: RtcChannel?, uid: Int, elapsed: Int) {
-        callback(RtcChannelEvents.JoinChannelSuccess, rtcChannel, uid, elapsed)
+        callback(RtcChannelEvents.JoinChannelSuccess, rtcChannel, rtcChannel.channelId(), uid, elapsed)
     }
 
     override fun onRejoinChannelSuccess(rtcChannel: RtcChannel?, uid: Int, elapsed: Int) {
-        callback(RtcChannelEvents.RejoinChannelSuccess, rtcChannel, uid, elapsed)
+        callback(RtcChannelEvents.RejoinChannelSuccess, rtcChannel, rtcChannel.channelId(), uid, elapsed)
     }
 
     override fun onLeaveChannel(rtcChannel: RtcChannel?, stats: IRtcEngineEventHandler.RtcStats?) {
@@ -218,19 +218,19 @@ class RtcChannelEventHandler(
     }
 
     override fun onAudioPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
-        callback(RtcChannelEvents.AudioPublishStateChanged, rtcChannel, oldState, newState, elapseSinceLastState)
+        callback(RtcChannelEvents.AudioPublishStateChanged, rtcChannel, rtcChannel.channelId(), oldState, newState, elapseSinceLastState)
     }
 
     override fun onVideoPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
-        callback(RtcChannelEvents.VideoPublishStateChanged, rtcChannel, oldState, newState, elapseSinceLastState)
+        callback(RtcChannelEvents.VideoPublishStateChanged, rtcChannel, rtcChannel.channelId(), oldState, newState, elapseSinceLastState)
     }
 
     override fun onAudioSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
-        callback(RtcChannelEvents.AudioSubscribeStateChanged, rtcChannel, uid, oldState, newState, elapseSinceLastState)
+        callback(RtcChannelEvents.AudioSubscribeStateChanged, rtcChannel, rtcChannel.channelId(), uid, oldState, newState, elapseSinceLastState)
     }
 
     override fun onVideoSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
-        callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, uid, oldState, newState, elapseSinceLastState)
+        callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, rtcChannel.channelId(), uid, oldState, newState, elapseSinceLastState)
     }
 
     override fun onRtmpStreamingEvent(rtcChannel: RtcChannel?, url: String?, errCode: Int) {
