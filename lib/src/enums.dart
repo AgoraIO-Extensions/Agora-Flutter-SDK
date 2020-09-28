@@ -4,7 +4,6 @@ import 'events.dart';
 import 'rtc_engine.dart';
 
 /// The area of connection.
-
 enum IPAreaCode {
   /// Mainland China
   @JsonValue(1 << 0)
@@ -28,19 +27,17 @@ enum IPAreaCode {
 }
 
 /// Self-defined audio codec profile.
-
 enum AudioCodecProfileType {
-  /// (Default) LC-AAC, which is the low-complexity audio codec profile.
+  /// (Default) LCAAC, which is the low-complexity audio codec profile.
   @JsonValue(0)
   LCAAC,
 
-  /// HE-AAC, which is the high-efficiency audio codec profile.
+  /// HEAAC, which is the high-efficiency audio codec profile.
   @JsonValue(1)
   HEAAC,
 }
 
 /// Audio equalization band frequency.
-
 enum AudioEqualizationBandFrequency {
   /// 31 Hz.
   @JsonValue(0)
@@ -84,7 +81,6 @@ enum AudioEqualizationBandFrequency {
 }
 
 /// The error information of the local audio.
-
 enum AudioLocalError {
   /// The local audio is normal.
   @JsonValue(0)
@@ -112,7 +108,6 @@ enum AudioLocalError {
 }
 
 /// The state of the local audio.
-
 enum AudioLocalState {
   /// The local audio is in the initial state.
   @JsonValue(0)
@@ -132,7 +127,6 @@ enum AudioLocalState {
 }
 
 /// The error code of the audio mixing file.
-
 enum AudioMixingErrorCode {
   /// The SDK cannot open the audio mixing file.
   @JsonValue(701)
@@ -152,7 +146,6 @@ enum AudioMixingErrorCode {
 }
 
 /// The state of the audio mixing file.
-
 enum AudioMixingStateCode {
   /// The audio mixing file is playing.
   @JsonValue(710)
@@ -172,7 +165,6 @@ enum AudioMixingStateCode {
 }
 
 /// Audio output routing.
-
 enum AudioOutputRouting {
   /// Default.
   @JsonValue(-1)
@@ -204,7 +196,6 @@ enum AudioOutputRouting {
 }
 
 /// Audio profile.
-
 enum AudioProfile {
   /// Default audio profile.
   /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
@@ -233,7 +224,7 @@ enum AudioProfile {
   MusicHighQualityStereo,
 }
 
-/// Use mode of the onRecordAudioFrame callback.
+/// Use mode of the RecordAudioFrame callback.
 /// TODO @nodoc setPlaybackAudioFrameParameters
 enum AudioRawFrameOperationMode {
   /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
@@ -265,7 +256,6 @@ enum AudioRecordingQuality {
 }
 
 /// The state of the remote audio.
-
 enum AudioRemoteState {
   /// The remote audio is in the default state, probably due to:
   /// - [AudioRemoteStateReason.LocalMuted]
@@ -297,7 +287,6 @@ enum AudioRemoteState {
 }
 
 /// The reason of the remote audio state change.
-
 enum AudioRemoteStateReason {
   /// Internal reasons.
   @JsonValue(0)
@@ -333,7 +322,6 @@ enum AudioRemoteStateReason {
 }
 
 /// The preset local voice reverberation option.
-
 enum AudioReverbPreset {
   /// Turn off local voice reverberation, that is, to use the original voice.
   @JsonValue(0x00000000)
@@ -408,7 +396,6 @@ enum AudioReverbPreset {
 }
 
 /// Audio reverberation type.
-
 enum AudioReverbType {
   /// Level of the dry signal (-20 to 10 dB).
   @JsonValue(0)
@@ -432,7 +419,6 @@ enum AudioReverbType {
 }
 
 /// Audio sample rate.
-
 enum AudioSampleRateType {
   /// 32 kHz.
   @JsonValue(32000)
@@ -448,7 +434,6 @@ enum AudioSampleRateType {
 }
 
 /// Audio scenario.
-
 enum AudioScenario {
   /// Default audio application scenario.
   @JsonValue(0)
@@ -500,7 +485,6 @@ enum AudioSessionOperationRestriction {
 }
 
 /// The preset audio voice configuration used to change the voice effect.
-
 enum AudioVoiceChanger {
   /// Turn off the local voice changer, that is, to use the original voice.
   @JsonValue(0x00000000)
@@ -580,7 +564,6 @@ enum AudioVoiceChanger {
 }
 
 /// The camera capturer configuration.
-
 enum CameraCaptureOutputPreference {
   /// (default) Self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
   @JsonValue(0)
@@ -601,7 +584,6 @@ enum CameraCaptureOutputPreference {
 }
 
 /// The camera direction.
-
 enum CameraDirection {
   /// The rear camera.
   @JsonValue(0)
@@ -613,7 +595,6 @@ enum CameraDirection {
 }
 
 /// The error code in AgoraChannelMediaRelayError.
-
 enum ChannelMediaRelayError {
   /// The state is normal.
   @JsonValue(0)
@@ -667,13 +648,12 @@ enum ChannelMediaRelayError {
 }
 
 /// The event code in AgoraChannelMediaRelayEvent.
-
 enum ChannelMediaRelayEvent {
   /// The user disconnects from the server due to poor network connections.
   @JsonValue(0)
   Disconnect,
 
-  /// The network reconnects.
+  /// The user connects to the server.
   @JsonValue(1)
   Connected,
 
@@ -719,7 +699,6 @@ enum ChannelMediaRelayEvent {
 }
 
 /// The state code in AgoraChannelMediaRelayState.
-
 enum ChannelMediaRelayState {
   /// The SDK is initializing.
   @JsonValue(0)
@@ -739,7 +718,6 @@ enum ChannelMediaRelayState {
 }
 
 /// Channel profile.
-
 enum ChannelProfile {
   /// (Default) The Communication profile.
   /// Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -758,7 +736,6 @@ enum ChannelProfile {
 }
 
 /// Client role in a live broadcast.
-
 enum ClientRole {
   /// A broadcaster can both send and receive streams.
   @JsonValue(1)
@@ -770,7 +747,6 @@ enum ClientRole {
 }
 
 /// Reasons for the connection state change.
-
 enum ConnectionChangedReason {
   /// The SDK is connecting to Agora’s edge server.
   @JsonValue(0)
@@ -838,7 +814,6 @@ enum ConnectionChangedReason {
 }
 
 /// Connection states.
-
 enum ConnectionStateType {
   /// The SDK is disconnected from Agora's edge server.
   /// - This is the initial state before `joinChannel`.
@@ -904,7 +879,6 @@ enum ConnectionStateType {
 }
 
 /// The video encoding degradation preference under limited bandwidth.
-
 enum DegradationPreference {
   /// (Default) Degrades the frame rate to guarantee the video quality.
   @JsonValue(0)
@@ -920,7 +894,6 @@ enum DegradationPreference {
 }
 
 /// Encryption mode
-/// @enum {string}
 enum EncryptionMode {
   /// (Default) 128-bit AES encryption, XTS mode.
   @JsonValue('aes-128-xts')
@@ -936,7 +909,6 @@ enum EncryptionMode {
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
-
 enum ErrorCode {
   /// No error occurs.
   @JsonValue(0)
@@ -1291,7 +1263,6 @@ enum ErrorCode {
 }
 
 /// State of importing an external video stream in a live broadcast.
-
 enum InjectStreamStatus {
   /// The external video stream imported successfully.
   @JsonValue(0)
@@ -1339,7 +1310,6 @@ enum InjectStreamStatus {
 }
 
 /// The state of the probe test result.
-
 enum LastmileProbeResultState {
   /// The last-mile network probe test is complete.
   @JsonValue(1)
@@ -1355,7 +1325,6 @@ enum LastmileProbeResultState {
 }
 
 /// The lightening contrast level.
-
 enum LighteningContrastLevel {
   /// Low contrast level.
   @JsonValue(0)
@@ -1371,7 +1340,6 @@ enum LighteningContrastLevel {
 }
 
 /// The detailed error information of the local video.
-
 enum LocalVideoStreamError {
   /// The local video is normal.
   @JsonValue(0)
@@ -1399,7 +1367,6 @@ enum LocalVideoStreamError {
 }
 
 /// The state of the local video stream.
-
 enum LocalVideoStreamState {
   /// The local video is in the initial state.
   @JsonValue(0)
@@ -1419,7 +1386,6 @@ enum LocalVideoStreamState {
 }
 
 /// Output log filter level.
-
 enum LogFilter {
   /// Do not output any log information.
   @JsonValue(0)
@@ -1503,7 +1469,6 @@ enum MetadataType {
 }
 
 /// Network quality.
-
 enum NetworkQuality {
   /// The network quality is unknown.
   @JsonValue(0)
@@ -1543,7 +1508,6 @@ enum NetworkQuality {
 }
 
 /// Network type.
-
 enum NetworkType {
   /// The network type is unknown.
   @JsonValue(-1)
@@ -1599,7 +1563,6 @@ enum RtmpStreamLifeCycle {
 }
 
 /// The detailed error information for streaming.
-
 enum RtmpStreamingErrorCode {
   /// The RTMP streaming publishes successfully.
   @JsonValue(0)
@@ -1653,7 +1616,6 @@ enum RtmpStreamingErrorCode {
 }
 
 /// The RTMP streaming state.
-
 enum RtmpStreamingState {
   /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling `removePublishStreamUrl`.
   /// See [RtcEngine.removePublishStreamUrl]
@@ -1690,7 +1652,6 @@ enum RtmpStreamingState {
 }
 
 /// Stream fallback option.
-
 enum StreamFallbackOptions {
   /// No fallback behavior for the local/remote video stream when the uplink/downlink network condition is unreliable. The quality of the stream is not guaranteed.
   @JsonValue(0)
@@ -1710,7 +1671,6 @@ enum StreamFallbackOptions {
 }
 
 /// Reason for the user being offline.
-
 enum UserOfflineReason {
   /// The user left the current channel.
   @JsonValue(0)
@@ -1726,7 +1686,6 @@ enum UserOfflineReason {
 }
 
 /// The priority of the remote user.
-
 enum UserPriority {
   /// The user’s priority is high.
   @JsonValue(50)
@@ -1750,7 +1709,6 @@ enum VideoBufferType {
 }
 
 /// Self-defined video codec profile.
-
 enum VideoCodecProfileType {
   /// Baseline video codec profile. Generally used in video calls on mobile phones.
   @JsonValue(66)
@@ -1782,7 +1740,6 @@ enum VideoContentHint {
 }
 
 /// Video frame rate.
-
 enum VideoFrameRate {
   /// Min
   @JsonValue(-1)
@@ -1817,8 +1774,42 @@ enum VideoFrameRate {
   Fps60,
 }
 
-/// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
-
+/// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. 
+/// **Video Bitrate Table**
+///
+/// | Resolution             | Frame Rate (fps) | Base Bitrate (Kbps)                    | Live Bitrate (Kbps)                    |
+/// |------------------------|------------------|----------------------------------------|----------------------------------------|
+/// | 160 * 120              | 15               | 65                                     | 130                                    |
+/// | 120 * 120              | 15               | 50                                     | 100                                    |
+/// | 320 * 180              | 15               | 140                                    | 280                                    |
+/// | 180 * 180              | 15               | 100                                    | 200                                    |
+/// | 240 * 180              | 15               | 120                                    | 240                                    |
+/// | 320 * 240              | 15               | 200                                    | 400                                    |
+/// | 240 * 240              | 15               | 140                                    | 280                                    |
+/// | 424 * 240              | 15               | 220                                    | 440                                    |
+/// | 640 * 360              | 15               | 400                                    | 800                                    |
+/// | 360 * 360              | 15               | 260                                    | 520                                    |
+/// | 640 * 360              | 30               | 600                                    | 1200                                   |
+/// | 360 * 360              | 30               | 400                                    | 800                                    |
+/// | 480 * 360              | 15               | 320                                    | 640                                    |
+/// | 480 * 360              | 30               | 490                                    | 980                                    |
+/// | 640 * 480              | 15               | 500                                    | 1000                                   |
+/// | 480 * 480              | 15               | 400                                    | 800                                    |
+/// | 640 * 480              | 30               | 750                                    | 1500                                   |
+/// | 480 * 480              | 30               | 600                                    | 1200                                   |
+/// | 848 * 480              | 15               | 610                                    | 1220                                   |
+/// | 848 * 480              | 30               | 930                                    | 1860                                   |
+/// | 640 * 480              | 10               | 400                                    | 800                                    |
+/// | 1280 * 720             | 15               | 1130                                   | 2260                                   |
+/// | 1280 * 720             | 30               | 1710                                   | 3420                                   |
+/// | 960 * 720              | 15               | 910                                    | 1820                                   |
+/// | 960 * 720              | 30               | 1380                                   | 2760                                   |
+///
+///  **Note**
+/// - The base bitrate in this table applies to the Communication profile. 
+/// - The LiveBroadcasting profile generally requires a higher bitrate for better video quality. We recommend setting the bitrate mode as `0`. You can also set the bitrate as the base bitrate value x 2.
+///
+/// If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
 enum BitRate {
   /// (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
   /// - Communication profile: the video bitrate is the same as the base bitrate.
@@ -1832,7 +1823,6 @@ enum BitRate {
 }
 
 /// Video mirror mode.
-
 enum VideoMirrorMode {
   /// (Default) The SDK determines the mirror mode.
   @JsonValue(0)
@@ -1848,7 +1838,6 @@ enum VideoMirrorMode {
 }
 
 /// Video output orientation mode.
-
 enum VideoOutputOrientationMode {
   /// Adaptive mode (Default).
   /// The video encoder adapts to the orientation mode of the video input device. When you use a custom video source, the output video from the encoder inherits the orientation of the original video.
@@ -1885,7 +1874,6 @@ enum VideoPixelFormat {
 }
 
 /// Quality change of the local video in terms of target frame rate and target bit rate since last count.
-
 enum VideoQualityAdaptIndication {
   /// The quality of the local video stays the same.
   @JsonValue(0)
@@ -1901,7 +1889,6 @@ enum VideoQualityAdaptIndication {
 }
 
 /// The state of the remote video.
-
 enum VideoRemoteState {
   /// The remote video is in the default state, probably due to:
   ///
@@ -1937,7 +1924,6 @@ enum VideoRemoteState {
 }
 
 /// The reason of the remote video state change.
-
 enum VideoRemoteStateReason {
   /// Internal reasons.
   @JsonValue(0)
@@ -1981,7 +1967,6 @@ enum VideoRemoteStateReason {
 }
 
 /// Video display mode.
-
 enum VideoRenderMode {
   /// Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
   @JsonValue(1)
@@ -2022,7 +2007,6 @@ enum VideoRotation {
 }
 
 /// Video stream type.
-
 enum VideoStreamType {
   /// High-bitrate, high-resolution video stream.
   @JsonValue(0)
@@ -2035,7 +2019,6 @@ enum VideoStreamType {
 
 /// Warning codes occur when the SDK encounters an error that may be recovered automatically. These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server, the SDK reports the `OpenChannelTimeout`(106) warning and tries to reconnect automatically.
 /// See [WarningCode.OpenChannelTimeout]
-
 enum WarningCode {
   /// The specified view is invalid. Specify a view when using the video call function.
   @JsonValue(8)
@@ -2148,7 +2131,6 @@ enum WarningCode {
 }
 
 /// The audio channel of the sound.
-
 enum AudioChannel {
   /// (Default) Supports dual channels. Depends on the upstream of the broadcaster.
   @JsonValue(0)
@@ -2176,7 +2158,6 @@ enum AudioChannel {
 }
 
 /// Video codec types.
-
 enum VideoCodecType {
   /// Standard VP8.
   @JsonValue(1)
