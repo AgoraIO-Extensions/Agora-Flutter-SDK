@@ -171,7 +171,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a remote user ([ChannelProfile.Communication])/host ([ChannelProfile.LiveBroadcasting]) joins the channel.
   /// - [ChannelProfile.Communication] profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
-  /// - [ChannelProfile.LiveBroadcasting] profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel
+  /// - [ChannelProfile.LiveBroadcasting] profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
   ///
   /// The SDK triggers this callback under one of the following circumstances:
   /// - A remote user/host joins the channel by calling the [RtcEngine.joinChannel] method.
@@ -295,7 +295,7 @@ class RtcEngineEventHandler {
   /// The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [RtcEngine.muteLocalVideoStream] method.
   ///
   /// **Note**
-  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
+  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 17.
   ///
   /// The `UidWithMutedCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the remote user.
@@ -328,7 +328,7 @@ class RtcEngineEventHandler {
   /// The SDK returns the current video state in this callback. When the state is [LocalVideoStreamState.Failed](3), see the error parameter for details.
   ///
   /// **Note**
-  /// - This callback reports the current state of the local video, which keeps changing throughout the RtcEngine life cycle. We recommend maintaining the states reported in this callback, and check the local video state before starting the local camera. If the SDK reports [LocalVideoStreamError.CaptureFailure](4), the local camera is occupied by either the system or a third-party app. To access the camera, call [RtcEngine.enableLocalVideo] (false) first, and then [RtcEngine.enableLocalVideo] (video).
+  /// - This callback reports the current state of the local video, which keeps changing throughout the RtcEngine life cycle. We recommend maintaining the states reported in this callback, and check the local video state before starting the local camera. If the SDK reports [LocalVideoStreamError.CaptureFailure](4), the local camera is occupied by either the system or a third-party app. To access the camera, call [RtcEngine.enableLocalVideo] (`false`) first, and then [RtcEngine.enableLocalVideo] (`true`).
   ///
   /// The `LocalVideoStateCallback` typedef includes the following parameters:
   /// - [LocalVideoStreamState] `localVideoState`: The local video state.
@@ -639,7 +639,7 @@ class RtcEngineEventHandler {
   /// The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the [RtcEngine.muteLocalAudioStream] method.
   ///
   /// **Note**
-  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
+  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 17.
   ///
   /// The `UidWithMutedCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the remote user.
@@ -711,7 +711,7 @@ class RtcEngineEventHandler {
   /// The SDK triggers this callback when the remote user enables or disables the video module by calling the [RtcEngine.enableVideo] or [RtcEngine.disableVideo] method.
   ///
   /// **Note**
-  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
+  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 17.
   ///
   /// The `UidWithEnabledCallback` typedef includes the followinh parameters:
   /// - [int] `uid`: User ID of the remote user.
@@ -1368,6 +1368,8 @@ class RtcChannelEventHandler {
   ///
   /// This callback indicates the state change of the remote audio stream.
   ///
+  /// This callback does not work properly when the number of users (in the `Communication` profile) or hosts (in the `LiveBroadcasting` profile) in the channel exceeds 17.
+  ///  
   /// The `RemoteAudioStateCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the user whose audio state changes.
   /// - [AudioRemoteState] `state`: State of the remote audio.
