@@ -61,7 +61,7 @@ class RtcEngine
   /// **Note**
   /// - You must create an [RtcEngine] instance before calling any other method.
   /// - You can create an [RtcEngine] instance either by calling this method or by calling [RtcEngine.createWithAreaCode]. The difference between [RtcEngine.createWithAreaCode] and this method is that [RtcEngine.createWithAreaCode] enables you to specify the connection area.
-  /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
+  /// - The RTC Flutter SDK supports creating only one [RtcEngine] instance for an app for now.
   ///
   /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance, and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
   ///
@@ -84,9 +84,10 @@ class RtcEngine
   ///
   /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
   ///
-  /// **Parameter** [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions.
-  ///
-  /// You can use the bitwise OR operator (|) to specify multiple areas. For details, see [IPAreaCode].
+  /// **Parameter** [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions. 
+  ///           
+  /// For details, see [IPAreaCode].
+  ///          
   /// After specifying the area of connection:
   /// - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
   /// - When the app that integrates the Agora SDK is used out of the specified area, it connects to the Agora servers either in the specified area or in the area where the app is located.
@@ -141,7 +142,7 @@ class RtcEngine
   /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
   /// This method can be used to switch the user role after a user joins a channel. In the [ChannelProfile.LiveBroadcasting] profile, when a user switches user roles after joining a channel, a successful `setClientRole` method call triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
-  /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline]( [UserOfflineReason.BecomeAudience]).
+  /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
   ///
   /// **Parameter** [role] Sets the role of a user. See [ClientRole].
   Future<void> setClientRole(ClientRole role) {
@@ -1174,7 +1175,7 @@ mixin RtcAudioInterface {
   /// Stops/Resumes receiving a specified audio stream.
   ///
   /// **Note**
-  /// - If you called the [RtcEngine.muteAllRemoteAudioStreams] method and set muted as true to stop receiving all remote video streams, ensure that the [RtcEngine.muteAllRemoteAudioStreams] method is called and set muted as false before calling this method. The [RtcEngine.muteAllRemoteAudioStreams] method sets all remote audio streams, while the [RtcEngine.muteAllRemoteAudioStreams] method sets a specified remote user's audio stream.
+  /// - If you called the [RtcEngine.muteAllRemoteAudioStreams] method and set muted as true to stop receiving all remote video streams, ensure that the [RtcEngine.muteAllRemoteAudioStreams] method is called and set muted as false before calling this method. The [RtcEngine.muteAllRemoteAudioStreams] method sets all remote audio streams, while the [RtcEngine.muteRemoteAudioStream] method sets a specified remote user's audio stream.
   ///
   /// **Parameter** [uid] ID of the specified remote user.
   ///
@@ -1828,7 +1829,7 @@ mixin RtcFallbackInterface {
 
   /// Sets the fallback option for the remotely subscribed video stream based on the network conditions.
   ///
-  /// If option is set as [StreamFallbackOptions.AudioOnly](2), the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
+  /// If option is set as [StreamFallbackOptions.VideoStreamLow](1) or [StreamFallbackOptions.AudioOnly](2), the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
   ///
   /// **Parameter** [option] Sets the fallback option for the remotely subscribed video stream. See [StreamFallbackOptions].
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
