@@ -395,23 +395,23 @@ mixin RtcAudioInterface {
   /// **Parameter** [uid] ID of the remote user whose audio stream you want to mute.
   ///
   /// **Parameter** [muted] Determines whether to receive/stop receiving the audio stream of the specified user:
-  /// - true: Stop receiving the audio stream of the user.
-  /// - false: (Default) Receive the audio stream of the user.
+  /// - `true`: Stop receiving the audio stream of the user.
+  /// - `false`: (Default) Receive the audio stream of the user.
   Future<void> muteRemoteAudioStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote audio streams.
   ///
   /// **Parameter** [muted] Determines
   /// whether to receive/stop receiving all remote audio streams:
-  /// - true: Stop receiving all remote audio streams.
-  /// - false: (Default) Receive all remote audio streams.
+  /// - `true`: Stop receiving all remote audio streams.
+  /// - `false`: (Default) Receive all remote audio streams.
   Future<void> muteAllRemoteAudioStreams(bool muted);
 
   /// Sets whether to receive all remote audio streams by default.
   ///
   /// **Parameter** [muted] Determines whether to receive/stop receiving all remote audio streams by default:
-  /// - true: Stop receiving all remote audio streams by default.
-  /// - false: (Default) Receive all remote audio streams by default.
+  /// - `true`: Stop receiving all remote audio streams by default.
+  /// - `false`: (Default) Receive all remote audio streams by default.
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 }
 
@@ -421,22 +421,22 @@ mixin RtcVideoInterface {
   /// **Parameter** [uid] ID of the remote user whose video stream you want to mute.
   ///
   /// **Parameter** [muted] Determines whether to receive/stop receiving the video stream of the specified user:
-  /// - true: Stop receiving the video stream of the user.
-  /// - false: (Default) Receive the video stream of the user.
+  /// - `true`: Stop receiving the video stream of the user.
+  /// - `false`: (Default) Receive the video stream of the user.
   Future<void> muteRemoteVideoStream(int uid, bool muted);
 
   /// Stops/Resumes receiving all remote video streams.
   ///
   /// **Parameter** [muted] Determines whether to receive/stop receiving all remote video streams:
-  /// - true: Stop receiving all remote video streams.
-  /// - false: (Default) Receive all remote video streams.
+  /// - `true`: Stop receiving all remote video streams.
+  /// - `false`: (Default) Receive all remote video streams.
   Future<void> muteAllRemoteVideoStreams(bool muted);
 
   /// Sets whether to receive all remote video streams by default.
   ///
   /// **Parameter** [muted] Determines whether to receive/stop receiving all remote video streams by default:
-  /// - true: Stop receiving all remote video streams by default.
-  /// - false: (Default) Receive all remote video streams by default.
+  /// - `true`: Stop receiving all remote video streams by default.
+  /// - `false`: (Default) Receive all remote video streams by default.
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 }
 
@@ -487,8 +487,8 @@ mixin RtcPublishStreamInterface {
   /// **Parameter** [url] The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
   ///
   /// **Parameter** [transcodingEnabled] Sets whether transcoding is enabled/disabled. If you set this parameter as true, ensure that you call the [RtcChannel.setLiveTranscoding] method before this method.
-  /// - true: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple broadcasters in CDN live.
-  /// - false: Disable transcoding.
+  /// - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple broadcasters in CDN live.
+  /// - `false`: Disable transcoding.
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   /// Removes an RTMP stream from the CDN.
@@ -669,12 +669,12 @@ mixin RtcStreamMessageInterface {
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
   ///
   /// **Parameter** [reliable] Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds.
-  /// - true: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the [RtcChannelEventHandler.streamMessageError] callback and returns an error code.
-  /// - false: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
+  /// - `true`: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the [RtcChannelEventHandler.streamMessageError] callback and returns an error code.
+  /// - `false`: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
   ///
   /// **Parameter** [ordered] Determines whether or not the recipients receive the data stream in the sent order.
-  /// - true: The recipients receive the data in the sent order.
-  /// - false: The recipients do not receive the data in the sent order.
+  /// - `true`: The recipients receive the data in the sent order.
+  /// - `false`: The recipients do not receive the data in the sent order.
   ///
   /// **Returns**
   /// - 0: Success.

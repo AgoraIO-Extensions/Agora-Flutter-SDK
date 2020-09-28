@@ -326,8 +326,8 @@ class LiveTranscoding {
   VideoFrameRate videoFramerate;
 
   /// Agora does not recommend using this parameter.
-  /// - true: Low latency with unassured quality.
-  /// - false: (Default) High latency with assured quality.
+  /// - `true`: Low latency with unassured quality.
+  /// - `false`: (Default) High latency with assured quality.
   @deprecated
   @JsonKey(includeIfNull: false)
   bool lowLatency;
@@ -519,8 +519,8 @@ class Rectangle {
 @JsonSerializable(explicitToJson: true)
 class WatermarkOptions {
   /// Whether the watermark image is visible in the local video preview.
-  /// - true: (Default) The watermark image is visible in preview.
-  /// - false: The watermark image is not visible in preview.
+  /// - `true`: (Default) The watermark image is visible in preview.
+  /// - `false`: The watermark image is not visible in preview.
   @JsonKey(includeIfNull: false)
   bool visibleInPreview;
 
@@ -627,16 +627,16 @@ class CameraCapturerConfiguration {
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaOptions {
   /// Determines whether to subscribe to audio streams when the user joins the channel.
-  /// - true: (Default) Subscribe.
-  /// - false: Do not subscribe.
+  /// - `true`: (Default) Subscribe.
+  /// - `false`: Do not subscribe.
   ///
   /// This member serves a similar function to the [RtcEngine.muteAllRemoteAudioStreams] method.
   /// After joining the channel, you can call `muteAllRemoteAudioStreams` to set whether to subscribe to audio streams in the channel.
   final bool autoSubscribeAudio;
 
   /// Determines whether to subscribe to video streams when the user joins the channel.
-  /// - true: (Default) Subscribe.
-  /// - false: Do not subscribe.
+  /// - `true`: (Default) Subscribe.
+  /// - `false`: Do not subscribe.
   ///
   /// This member serves a similar function to the [RtcEngine.muteAllRemoteVideoStreams] method.
   /// After joining the channel, you can call `muteAllRemoteVideoStreams` to set whether to subscribe to video streams in the channel.
