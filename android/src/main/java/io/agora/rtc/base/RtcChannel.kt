@@ -1,67 +1,124 @@
 package io.agora.rtc.base
 
-import androidx.annotation.FloatRange
-import androidx.annotation.IntRange
 import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
+import io.agora.rtc.internal.EncryptionConfig
 import java.util.*
 
-interface RtcChannelInterface<Map, Callback> :
-        RtcChannelManager.RtcAudioInterface<Callback>,
-        RtcChannelManager.RtcVideoInterface<Callback>,
-        RtcChannelManager.RtcVoicePositionInterface<Callback>,
-        RtcChannelManager.RtcPublishStreamInterface<Map, Callback>,
-        RtcChannelManager.RtcMediaRelayInterface<Map, Callback>,
-        RtcChannelManager.RtcDualStreamInterface<Callback>,
-        RtcChannelManager.RtcFallbackInterface<Callback>,
-        RtcChannelManager.RtcMediaMetadataInterface<Callback>,
-        RtcChannelManager.RtcEncryptionInterface<Callback>,
-        RtcChannelManager.RtcInjectStreamInterface<Map, Callback>,
-        RtcChannelManager.RtcStreamMessageInterface<Callback> {
-    fun create(channelId: String, callback: Callback?)
+class IRtcChannel {
+    interface RtcChannelInterface : RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
+            RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface,
+            RtcFallbackInterface, RtcMediaMetadataInterface, RtcEncryptionInterface,
+            RtcInjectStreamInterface, RtcStreamMessageInterface {
+        fun create(params: Map<String, *>, callback: Callback)
 
-    fun destroy(channelId: String, callback: Callback?)
+        fun destroy(params: Map<String, *>, callback: Callback)
 
-    fun setClientRole(channelId: String, @Annotations.AgoraClientRole role: Int, callback: Callback?)
+        fun setClientRole(params: Map<String, *>, callback: Callback)
 
-    fun joinChannel(channelId: String, token: String?, optionalInfo: String?, optionalUid: Int, options: Map, callback: Callback?)
+        fun joinChannel(params: Map<String, *>, callback: Callback)
 
-    fun joinChannelWithUserAccount(channelId: String, token: String?, userAccount: String, options: Map, callback: Callback?)
+        fun joinChannelWithUserAccount(params: Map<String, *>, callback: Callback)
 
-    fun leaveChannel(channelId: String, callback: Callback?)
+        fun leaveChannel(params: Map<String, *>, callback: Callback)
 
-    fun renewToken(channelId: String, token: String, callback: Callback?)
+        fun renewToken(params: Map<String, *>, callback: Callback)
 
-    fun getConnectionState(channelId: String, callback: Callback?)
+        fun getConnectionState(params: Map<String, *>, callback: Callback)
 
-    fun publish(channelId: String, callback: Callback?)
+        fun publish(params: Map<String, *>, callback: Callback)
 
-    fun unpublish(channelId: String, callback: Callback?)
+        fun unpublish(params: Map<String, *>, callback: Callback)
 
-    fun getCallId(channelId: String, callback: Callback?)
+        fun getCallId(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcAudioInterface {
+        fun adjustUserPlaybackSignalVolume(params: Map<String, *>, callback: Callback)
+
+        fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback)
+
+        fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
+
+        fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcVideoInterface {
+        fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback)
+
+        fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
+
+        fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcVoicePositionInterface {
+        fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcPublishStreamInterface {
+        fun setLiveTranscoding(params: Map<String, *>, callback: Callback)
+
+        fun addPublishStreamUrl(params: Map<String, *>, callback: Callback)
+
+        fun removePublishStreamUrl(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcMediaRelayInterface {
+        fun startChannelMediaRelay(params: Map<String, *>, callback: Callback)
+
+        fun updateChannelMediaRelay(params: Map<String, *>, callback: Callback)
+
+        fun stopChannelMediaRelay(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcDualStreamInterface {
+        fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback)
+
+        fun setRemoteDefaultVideoStreamType(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcFallbackInterface {
+        fun setRemoteUserPriority(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcMediaMetadataInterface {
+        fun registerMediaMetadataObserver(params: Map<String, *>, callback: Callback)
+
+        fun unregisterMediaMetadataObserver(params: Map<String, *>, callback: Callback)
+
+        fun setMaxMetadataSize(params: Map<String, *>, callback: Callback)
+
+        fun sendMetadata(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcEncryptionInterface {
+        fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
+
+        fun setEncryptionMode(params: Map<String, *>, callback: Callback)
+
+        fun enableEncryption(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcInjectStreamInterface {
+        fun addInjectStreamUrl(params: Map<String, *>, callback: Callback)
+
+        fun removeInjectStreamUrl(params: Map<String, *>, callback: Callback)
+    }
+
+    interface RtcStreamMessageInterface {
+        fun createDataStream(params: Map<String, *>, callback: Callback)
+
+        fun sendStreamMessage(params: Map<String, *>, callback: Callback)
+    }
 }
 
-class RtcChannelManager {
+class RtcChannelManager(
+        private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit
+) : IRtcChannel.RtcChannelInterface {
     private val rtcChannelMap = Collections.synchronizedMap(mutableMapOf<String, RtcChannel>())
     private val mediaObserverMap = Collections.synchronizedMap(mutableMapOf<String, MediaObserver>())
-
-    fun create(engine: RtcEngine, channelId: String, emit: (methodName: String, data: Map<String, Any?>?) -> Unit) {
-        engine.createRtcChannel(channelId)?.let {
-            it.setRtcChannelEventHandler(RtcChannelEventHandler { methodName, data -> emit(methodName, data) })
-            rtcChannelMap[channelId] = it
-        }
-    }
-
-    fun destroy(channelId: String): Int {
-        this[channelId]?.let {
-            val res = it.destroy()
-            if (res == 0) rtcChannelMap.remove(channelId)
-            return@destroy res
-        }
-        return Constants.ERR_NOT_INITIALIZED
-    }
 
     fun release() {
         rtcChannelMap.forEach { it.value.destroy() }
@@ -73,130 +130,201 @@ class RtcChannelManager {
         return rtcChannelMap[channelId]
     }
 
-    fun registerMediaMetadataObserver(channelId: String, emit: (methodName: String, data: Map<String, Any?>?) -> Unit): Int {
-        this[channelId]?.let {
-            val mediaObserver = MediaObserver { data ->
-                emit(RtcChannelEvents.MetadataReceived, data?.toMutableMap()?.apply { put("channelId", channelId) })
+    override fun create(params: Map<String, *>, callback: Callback) {
+        callback.resolve(params["engine"] as RtcEngine) { e ->
+            e.createRtcChannel(params["channelId"] as String)?.let {
+                it.setRtcChannelEventHandler(RtcChannelEventHandler { methodName, data -> emit(methodName, data) })
+                rtcChannelMap[it.channelId()] = it
             }
-            val res = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
-            if (res == 0) mediaObserverMap[channelId] = mediaObserver
-            return@registerMediaMetadataObserver res
+            Unit
         }
-        return Constants.ERR_NOT_INITIALIZED
     }
 
-    fun unregisterMediaMetadataObserver(channelId: String): Int {
-        this[channelId]?.let {
-            val res = it.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)
-            if (res == 0) mediaObserverMap.remove(channelId)
-            return@unregisterMediaMetadataObserver res
+    override fun destroy(params: Map<String, *>, callback: Callback) {
+        var code: Int? = -Constants.ERR_NOT_INITIALIZED
+        this[params["channelId"] as String]?.let {
+            code = rtcChannelMap.remove(it.channelId())?.destroy()
         }
-        return Constants.ERR_NOT_INITIALIZED
+        callback.code(code)
     }
 
-    fun setMaxMetadataSize(channelId: String, @IntRange(from = 0, to = 1024) size: Int): Int {
-        mediaObserverMap[channelId]?.let {
-            it.maxMetadataSize = size
-            return@setMaxMetadataSize 0
+    override fun setClientRole(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setClientRole((params["role"] as Number).toInt()))
+    }
+
+    override fun joinChannel(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.joinChannel(params["token"] as? String, params["optionalInfo"] as? String, (params["optionalUid"] as Number).toInt(), mapToChannelMediaOptions(params["options"] as Map<*, *>)))
+    }
+
+    override fun joinChannelWithUserAccount(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.joinChannelWithUserAccount(params["token"] as? String, params["userAccount"] as String, mapToChannelMediaOptions(params["options"] as Map<*, *>)))
+    }
+
+    override fun leaveChannel(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.leaveChannel())
+    }
+
+    override fun renewToken(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.renewToken(params["token"] as String))
+    }
+
+    override fun getConnectionState(params: Map<String, *>, callback: Callback) {
+        callback.resolve(this[params["channelId"] as String]) { it.connectionState }
+    }
+
+    override fun publish(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.publish())
+    }
+
+    override fun unpublish(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.unpublish())
+    }
+
+    override fun getCallId(params: Map<String, *>, callback: Callback) {
+        callback.resolve(this[params["channelId"] as String]) { it.callId }
+    }
+
+    override fun adjustUserPlaybackSignalVolume(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.adjustUserPlaybackSignalVolume((params["uid"] as Number).toInt(), (params["volume"] as Number).toInt()))
+    }
+
+    override fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.muteRemoteAudioStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+    }
+
+    override fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.muteAllRemoteAudioStreams(params["muted"] as Boolean))
+    }
+
+    override fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setDefaultMuteAllRemoteAudioStreams(params["muted"] as Boolean))
+    }
+
+    override fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.muteRemoteVideoStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+    }
+
+    override fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.muteAllRemoteVideoStreams(params["muted"] as Boolean))
+    }
+
+    override fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setDefaultMuteAllRemoteVideoStreams(params["muted"] as Boolean))
+    }
+
+    override fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setRemoteVoicePosition((params["uid"] as Number).toInt(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
+    }
+
+    override fun setLiveTranscoding(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setLiveTranscoding(mapToLiveTranscoding(params["transcoding"] as Map<*, *>)))
+    }
+
+    override fun addPublishStreamUrl(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.addPublishStreamUrl(params["url"] as String, params["transcodingEnabled"] as Boolean))
+    }
+
+    override fun removePublishStreamUrl(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.removePublishStreamUrl(params["url"] as String))
+    }
+
+    override fun startChannelMediaRelay(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as Map<*, *>)))
+    }
+
+    override fun updateChannelMediaRelay(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as Map<*, *>)))
+    }
+
+    override fun stopChannelMediaRelay(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.stopChannelMediaRelay())
+    }
+
+    override fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setRemoteVideoStreamType((params["uid"] as Number).toInt(), (params["streamType"] as Number).toInt()))
+    }
+
+    override fun setRemoteDefaultVideoStreamType(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setRemoteDefaultVideoStreamType((params["streamType"] as Number).toInt()))
+    }
+
+    override fun setRemoteUserPriority(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setRemoteUserPriority((params["uid"] as Number).toInt(), (params["userPriority"] as Number).toInt()))
+    }
+
+    override fun registerMediaMetadataObserver(params: Map<String, *>, callback: Callback) {
+        var code = -Constants.ERR_NOT_INITIALIZED
+        this[params["channelId"] as String]?.let {
+            val mediaObserver = MediaObserver { data ->
+                emit(RtcChannelEvents.MetadataReceived, data?.toMutableMap()?.apply { put("channelId", it.channelId()) })
+            }
+            code = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
+            if (code == 0) mediaObserverMap[it.channelId()] = mediaObserver
         }
-        return Constants.ERR_NOT_INITIALIZED
+        callback.code(code)
     }
 
-    fun addMetadata(channelId: String, metadata: String): Int {
-        mediaObserverMap[channelId]?.let {
-            it.addMetadata(metadata)
-            return@addMetadata 0
+    override fun unregisterMediaMetadataObserver(params: Map<String, *>, callback: Callback) {
+        var code = -Constants.ERR_NOT_INITIALIZED
+        this[params["channelId"] as String]?.let {
+            code = it.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)
+            if (code == 0) mediaObserverMap.remove(it.channelId())
         }
-        return Constants.ERR_NOT_INITIALIZED
+        callback.code(code)
     }
 
-    fun createDataStream(channelId: String, reliable: Boolean, ordered: Boolean): Int {
-        this[channelId]?.let {
-            return@createDataStream it.createDataStream(reliable, ordered)
+    override fun setMaxMetadataSize(params: Map<String, *>, callback: Callback) {
+        callback.resolve(mediaObserverMap[params["channelId"] as String]) {
+            it.maxMetadataSize = (params["size"] as Number).toInt()
+            Unit
         }
-        return Constants.ERR_NOT_INITIALIZED
     }
 
-    fun sendStreamMessage(channelId: String, streamId: Int, message: String): Int {
-        this[channelId]?.let {
-            return@sendStreamMessage it.sendStreamMessage(streamId, message.toByteArray())
+    override fun sendMetadata(params: Map<String, *>, callback: Callback) {
+        callback.resolve(mediaObserverMap[params["channelId"] as String]) {
+            it.addMetadata(params["metadata"] as String)
+            Unit
         }
-        return Constants.ERR_NOT_INITIALIZED
     }
 
-    interface RtcAudioInterface<Callback> {
-        fun adjustUserPlaybackSignalVolume(channelId: String, uid: Int, @IntRange(from = 0, to = 100) volume: Int, callback: Callback?)
-
-        fun muteRemoteAudioStream(channelId: String, uid: Int, muted: Boolean, callback: Callback?)
-
-        fun muteAllRemoteAudioStreams(channelId: String, muted: Boolean, callback: Callback?)
-
-        fun setDefaultMuteAllRemoteAudioStreams(channelId: String, muted: Boolean, callback: Callback?)
+    override fun setEncryptionSecret(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setEncryptionSecret(params["secret"] as String))
     }
 
-    interface RtcVideoInterface<Callback> {
-        fun muteRemoteVideoStream(channelId: String, uid: Int, muted: Boolean, callback: Callback?)
-
-        fun muteAllRemoteVideoStreams(channelId: String, muted: Boolean, callback: Callback?)
-
-        fun setDefaultMuteAllRemoteVideoStreams(channelId: String, muted: Boolean, callback: Callback?)
+    override fun setEncryptionMode(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.setEncryptionMode(when ((params["encryptionMode"] as Number).toInt()) {
+            EncryptionConfig.EncryptionMode.AES_128_XTS.value -> "aes-128-xts"
+            EncryptionConfig.EncryptionMode.AES_128_ECB.value -> "aes-128-ecb"
+            EncryptionConfig.EncryptionMode.AES_256_XTS.value -> "aes-256-xts"
+            else -> ""
+        }))
     }
 
-    interface RtcVoicePositionInterface<Callback> {
-        fun setRemoteVoicePosition(channelId: String, uid: Int, @FloatRange(from = -1.0, to = 1.0) pan: Double, @FloatRange(from = 0.0, to = 100.0) gain: Double, callback: Callback?)
+    override fun enableEncryption(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.enableEncryption(params["enabled"] as Boolean, mapToEncryptionConfig(params["config"] as Map<*, *>)))
     }
 
-    interface RtcPublishStreamInterface<Map, Callback> {
-        fun setLiveTranscoding(channelId: String, transcoding: Map, callback: Callback?)
-
-        fun addPublishStreamUrl(channelId: String, url: String, transcodingEnabled: Boolean, callback: Callback?)
-
-        fun removePublishStreamUrl(channelId: String, url: String, callback: Callback?)
+    override fun addInjectStreamUrl(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.addInjectStreamUrl(params["url"] as String, mapToLiveInjectStreamConfig(params["config"] as Map<*, *>)))
     }
 
-    interface RtcMediaRelayInterface<Map, Callback> {
-        fun startChannelMediaRelay(channelId: String, channelMediaRelayConfiguration: Map, callback: Callback?)
-
-        fun updateChannelMediaRelay(channelId: String, channelMediaRelayConfiguration: Map, callback: Callback?)
-
-        fun stopChannelMediaRelay(channelId: String, callback: Callback?)
+    override fun removeInjectStreamUrl(params: Map<String, *>, callback: Callback) {
+        callback.code(this[params["channelId"] as String]?.removeInjectStreamUrl(params["url"] as String))
     }
 
-    interface RtcDualStreamInterface<Callback> {
-        fun setRemoteVideoStreamType(channelId: String, uid: Int, @Annotations.AgoraVideoStreamType streamType: Int, callback: Callback?)
-
-        fun setRemoteDefaultVideoStreamType(channelId: String, @Annotations.AgoraVideoStreamType streamType: Int, callback: Callback?)
+    override fun createDataStream(params: Map<String, *>, callback: Callback) {
+        var code = -Constants.ERR_NOT_INITIALIZED
+        this[params["channelId"] as String]?.let {
+            code = it.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)
+        }
+        callback.code(code) { it }
     }
 
-    interface RtcFallbackInterface<Callback> {
-        fun setRemoteUserPriority(channelId: String, uid: Int, @Annotations.AgoraUserPriority userPriority: Int, callback: Callback?)
-    }
-
-    interface RtcMediaMetadataInterface<Callback> {
-        fun registerMediaMetadataObserver(channelId: String, callback: Callback?)
-
-        fun unregisterMediaMetadataObserver(channelId: String, callback: Callback?)
-
-        fun setMaxMetadataSize(channelId: String, @IntRange(from = 0, to = 1024) size: Int, callback: Callback?)
-
-        fun sendMetadata(channelId: String, metadata: String, callback: Callback?)
-    }
-
-    interface RtcEncryptionInterface<Callback> {
-        fun setEncryptionSecret(channelId: String, secret: String, callback: Callback?)
-
-        fun setEncryptionMode(channelId: String, @Annotations.AgoraEncryptionMode encryptionMode: String, callback: Callback?)
-    }
-
-    interface RtcInjectStreamInterface<Map, Callback> {
-        fun addInjectStreamUrl(channelId: String, url: String, config: Map, callback: Callback?)
-
-        fun removeInjectStreamUrl(channelId: String, url: String, callback: Callback?)
-    }
-
-    interface RtcStreamMessageInterface<Callback> {
-        fun createDataStream(channelId: String, reliable: Boolean, ordered: Boolean, callback: Callback?)
-
-        fun sendStreamMessage(channelId: String, streamId: Int, message: String, callback: Callback?)
+    override fun sendStreamMessage(params: Map<String, *>, callback: Callback) {
+        var code = -Constants.ERR_NOT_INITIALIZED
+        this[params["channelId"] as String]?.let {
+            code = it.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray())
+        }
+        callback.code(code)
     }
 }
