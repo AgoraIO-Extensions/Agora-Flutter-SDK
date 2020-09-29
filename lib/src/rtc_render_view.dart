@@ -23,11 +23,10 @@ class RtcSurfaceView extends StatefulWidget {
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  /// Note
-  /// - The default value is the empty string "". Use the default value if the user joins the channel using the joinChannel method in the RtcEngine class.
-  /// See [RtcEngine.joinChannel]
-  /// - If the user joins the channel using the joinChannel method in the RtcChannel class, set this parameter as the channelId of the RtcChannel object.
-  /// See [RtcChannel.joinChannel]
+  ///
+  /// **Note**
+  /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
+  /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
   final String channelId;
 
   /// The rendering mode of the video view.
@@ -214,10 +213,8 @@ class RtcTextureView extends StatefulWidget {
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
   /// Note
-  /// - The default value is the empty string "". Use the default value if the user joins the channel using the joinChannel method in the RtcEngine class.
-  /// See [RtcEngine.joinChannel]
-  /// - If the user joins the channel using the joinChannel method in the RtcChannel class, set this parameter as the channelId of the RtcChannel object.
-  /// See [RtcChannel.joinChannel]
+  /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
+  /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
   final String channelId;
 
   /// The video mirror.
