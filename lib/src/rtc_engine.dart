@@ -10,32 +10,10 @@ import 'events.dart';
 import 'rtc_channel.dart';
 
 /// RtcEngine is the main class of the Agora SDK.
-class RtcEngine
-    implements
-        RtcUserInfoInterface,
-        RtcAudioInterface,
-        RtcVideoInterface,
-        RtcAudioMixingInterface,
-        RtcAudioEffectInterface,
-        RtcVoiceChangerInterface,
-        RtcVoicePositionInterface,
-        RtcPublishStreamInterface,
-        RtcMediaRelayInterface,
-        RtcAudioRouteInterface,
-        RtcEarMonitoringInterface,
-        RtcDualStreamInterface,
-        RtcFallbackInterface,
-        RtcTestInterface,
-        RtcMediaMetadataInterface,
-        RtcWatermarkInterface,
-        RtcEncryptionInterface,
-        RtcAudioRecorderInterface,
-        RtcInjectStreamInterface,
-        RtcCameraInterface,
-        RtcStreamMessageInterface {
+class RtcEngine with RtcEngineInterface {
   static const MethodChannel _methodChannel = MethodChannel('agora_rtc_engine');
-  static const EventChannel _eventChannel = EventChannel(
-      'agora_rtc_engine/events');
+  static const EventChannel _eventChannel =
+      EventChannel('agora_rtc_engine/events');
 
   static RtcEngine _engine;
 
@@ -70,7 +48,7 @@ class RtcEngine
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> create(String appId) async {
-    return createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL);
+    return createWithAreaCode(appId, AreaCode.GLOB);
   }
 
   /// Creates an [RtcEngine] instance.
@@ -84,10 +62,10 @@ class RtcEngine
   ///
   /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
   ///
-  /// **Parameter** [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions. 
-  ///           
+  /// **Parameter** [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions.
+  ///
   /// For details, see [IPAreaCode].
-  ///          
+  ///
   /// After specifying the area of connection:
   /// - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
   /// - When the app that integrates the Agora SDK is used out of the specified area, it connects to the Agora servers either in the specified area or in the area where the app is located.
@@ -96,22 +74,19 @@ class RtcEngine
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcEngine> createWithAreaCode(String appId,
-      IPAreaCode areaCode) async {
+  static Future<RtcEngine> createWithAreaCode(
+      String appId, AreaCode areaCode) async {
     if (_engine != null) return _engine;
-    await _methodChannel.invokeMethod('create',
-        {'appId': appId, 'areaCode': IPAreaCodeConverter(areaCode).value()});
+    await _methodChannel.invokeMethod('create', {
+      'appId': appId,
+      'areaCode': AreaCodeConverter(areaCode).value(),
+      'appType': 4
+    });
     _engine = RtcEngine._();
     return _engine;
   }
 
-  /// Destroys the [RtcEngine] instance and releases all resources used by the Agora SDK.
-  ///
-  /// This method is useful for apps that occasionally make voice or video calls, to free up resources for other operations when not making calls.
-  ///
-  /// **Note**
-  /// - Call this method in the subthread.
-  /// - Once the app calls [RtcEngine.destroy] to destroy the created [RtcEngine] instance, you cannot use any method or callback in the SDK.
+  @override
   Future<void> destroy() {
     RtcChannel.destroyAll();
     _engine = null;
@@ -127,61 +102,21 @@ class RtcEngine
     _handler = handler;
   }
 
-  /// Sets the channel profile of the Agora RtcEngine.
-  ///
-  /// The Agora RtcEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
-  ///
-  /// **Parameter** [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
+  @override
   Future<void> setChannelProfile(ChannelProfile profile) {
     return _invokeMethod('setChannelProfile',
         {'profile': ChannelProfileConverter(profile).value()});
   }
 
-  /// Sets the role of a user ([ChannelProfile.LiveBroadcasting] only).
-  ///
-  /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
-  /// This method can be used to switch the user role after a user joins a channel. In the [ChannelProfile.LiveBroadcasting] profile, when a user switches user roles after joining a channel, a successful `setClientRole` method call triggers the following callbacks:
-  /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
-  /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
-  ///
-  /// **Parameter** [role] Sets the role of a user. See [ClientRole].
+  @override
   Future<void> setClientRole(ClientRole role) {
     return _invokeMethod(
         'setClientRole', {'role': ClientRoleConverter(role).value()});
   }
 
-  /// Allows a user to join a channel.
-  ///
-  /// Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other.
-  /// You must call the [RtcEngine.leaveChannel] method to exit the current call before joining another channel.
-  /// A successful joinChannel method call triggers the following callbacks:
-  /// - The local client: [RtcEngineEventHandler.joinChannelSuccess].
-  /// - The remote client: [RtcEngineEventHandler.userJoined], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
-  ///
-  /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [RtcEngineEventHandler.rejoinChannelSuccess] callback on the local client.
-  ///
-  /// **Note**
-  /// - A channel does not accept duplicate uids, such as two users with the same uid. If you set uid as 0, the system automatically assigns a uid.
-  ///
-  /// **Warning**
-  /// - Ensure that the App ID used for creating the token is the same App ID used in the create method for creating an [RtcEngine] object. Otherwise, CDN live streaming may fail.
-  ///
-  /// **Parameter** [token] The token for authentication:
-  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
-  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
-  ///
-  /// **Parameter** [channelName] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
-  /// - All lowercase English letters: a to z.
-  /// - All uppercase English letters: A to Z.
-  /// - All numeric characters: 0 to 9.
-  /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  ///
-  /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
-  ///
-  /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
-  Future<void> joinChannel(String token, String channelName,
-      String optionalInfo, int optionalUid) {
+  @override
+  Future<void> joinChannel(
+      String token, String channelName, String optionalInfo, int optionalUid) {
     return _invokeMethod('joinChannel', {
       'token': token,
       'channelName': channelName,
@@ -190,150 +125,70 @@ class RtcEngine
     });
   }
 
-  /// Switches to a different channel.
-  ///
-  /// This method allows the audience of a [ChannelProfile.LiveBroadcasting] channel to switch to a different channel.
-  /// After the user successfully switches to another channel, the [RtcEngineEventHandler.leaveChannel] and [RtcEngineEventHandler.joinChannelSuccess] callbacks are triggered to indicate that the user has left the original channel and joined a new one.
-  ///
-  /// **Note**
-  /// - This method applies to the [ClientRole.Audience] role in a [ChannelProfile.LiveBroadcasting] channel only.
-  ///
-  /// **Parameter** [token] The token for authentication:
-  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
-  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
-  ///
-  /// **Parameter** [channelName] Unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
-  /// - All lowercase English letters: a to z.
-  /// - All uppercase English letters: A to Z.
-  /// - All numeric characters: 0 to 9.
-  /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  @override
   Future<void> switchChannel(String token, String channelName) {
     return _invokeMethod(
         'switchChannel', {'token': token, 'channelName': channelName});
   }
 
-  /// Allows a user to leave a channel.
-  ///
-  /// After joining a channel, the user must call this method to end the call before joining another channel. This method returns 0 if the user leaves the channel and releases all resources related to the call. This method call is asynchronous, and the user has not exited the channel when the method call returns. Once the user leaves the channel, the SDK triggers the [RtcEngineEventHandler.leaveChannel] callback.
-  /// A successful method call triggers the following callbacks:
-  /// - The local client: [RtcEngineEventHandler.leaveChannel].
-  /// - The remote client: [RtcEngineEventHandler.userOffline], if the user leaving the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
-  ///
-  /// **Note**
-  /// - If you call the [RtcEngine.destroy] method immediately after calling this method, the `leaveChannel` process interrupts, and the SDK does not trigger the [RtcEngineEventHandler.leaveChannel] callback.
-  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcEngine.removeInjectStreamUrl] method.
+  @override
   Future<void> leaveChannel() {
     return _invokeMethod('leaveChannel');
   }
 
-  /// Renews the token when the current token expires.
-  ///
-  /// The token expires after a period of time once the token schema is enabled when:
-  /// - The SDK triggers the [RtcEngineEventHandler.tokenPrivilegeWillExpire] callback
-  /// - The [RtcEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
-  /// The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
-  ///
-  /// **Parameter** [token] The new token.
+  @override
   Future<void> renewToken(String token) {
     return _invokeMethod('renewToken', {'token': token});
   }
 
-  /// Enables interoperability with the Agora Web SDK (LiveBroadcasting only).
-  ///
-  /// The SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.
-  /// If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.
-  /// Use this method when the channel profile is [ChannelProfile.LiveBroadcasting]. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [ChannelProfile.Communication].
-  ///
-  /// **Parameter** [enabled] Sets whether to enable/disable interoperability with the Agora Web SDK:
-  /// - `true`: Enable.
-  /// - `false`: (Default) Disable.
+  @override
   @deprecated
   Future<void> enableWebSdkInteroperability(bool enabled) {
     return _invokeMethod('enableWebSdkInteroperability', {'enabled': enabled});
   }
 
-  /// Gets the connection state of the SDK.
+  @override
   Future<ConnectionStateType> getConnectionState() {
     return _invokeMethod('getConnectionState').then((value) {
-      return ConnectionStateTypeConverter
-          .fromValue(value)
-          .e;
+      return ConnectionStateTypeConverter.fromValue(value).e;
     });
   }
 
-  /// Gets the current call ID.
-  ///
-  /// When a user joins a channel on a client, a call ID is generated to identify the call from the client. Feedback methods, such as the [RtcEngine.rate] and [RtcEngine.complain] method, must be called after the call ends to submit feedback to the SDK.
-  ///
-  /// The `rate` and `complain` methods require the `callId` parameter retrieved from the [RtcEngine.getCallId] method during a call. `callId` is passed as an argument into the rate and complain methods after the call ends.
-  ///
-  ///  **Returns**
-  /// - The current call ID, if the method call succeeds.
-  /// - The empty string "", if the method call fails.
+  @override
   Future<String> getCallId() {
     return _invokeMethod('getCallId');
   }
 
-  /// Allows the user to rate a call after the call ends.
-  ///
-  /// **Parameter** [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
-  ///
-  /// **Parameter** [rating] Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the [ErrorCode.InvalidArgument](-2) error occurs.
-  ///
-  /// **Parameter** [description] (Optional) The description of the rating. The string length must be less than 800 bytes.
+  @override
   Future<void> rate(String callId, int rating, {String description}) {
     return _invokeMethod('rate',
         {'callId': callId, 'rating': rating, 'description': description});
   }
 
-  /// Allows a user to complain about the call quality after a call ends.
-  ///
-  /// **Parameter** [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
-  ///
-  /// **Parameter** [description] (Optional) The description of the complaint. The string length must be less than 800 bytes.
+  @override
   Future<void> complain(String callId, String description) {
     return _invokeMethod(
         'complain', {'callId': callId, 'description': description});
   }
 
-  /// Specifies an SDK output log file.
-  ///
-  /// The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
-  ///
-  /// **Note**
-  /// - Ensure that you call this method immediately after calling the [RtcEngine.create] method, otherwise the output log may not be complete.
-  ///
-  /// **Parameter** [filePath] File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log`.
+  @override
   Future<void> setLogFile(String filePath) {
     return _invokeMethod('setLogFile', {'filePath': filePath});
   }
 
-  /// Sets the output log level of the SDK.
-  ///
-  /// You can use one or a combination of the filters. The log level follows the sequence of `OFF`, `CRITICAL`, `ERROR`, `WARNING`, `INFO`, and `DEBUG`. Choose a level to see the logs preceding that level. For example, if you set the log level to `WARNING`, you see the logs within levels `CRITICAL`, `ERROR`, and `WARNING`.
-  ///
-  /// **Parameter** [filter] Sets the log filter level. See [LogFilter].
+  @override
   Future<void> setLogFilter(LogFilter filter) {
     return _invokeMethod(
         'setLogFilter', {'filter': LogFilterConverter(filter).value()});
   }
 
-  /// Sets the log file size (KB).
-  ///
-  /// The Agora SDK has two log files, each with a default size of 512 KB. If you set `fileSizeInKBytes` as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB. If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
-  ///
-  /// **Parameter** [fileSizeInKBytes] The SDK log file size (KB).
+  @override
   Future<void> setLogFileSize(int fileSizeInKBytes) {
     return _invokeMethod(
         'setLogFileSize', {'fileSizeInKBytes': fileSizeInKBytes});
   }
 
-  /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
-  ///
-  /// The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
-  ///
-  /// **Parameter** [parameters] Sets the parameter as a JSON string in the specified format.
+  @override
   Future<void> setParameters(String parameters) {
     return _invokeMethod('setParameters', {'parameters': parameters});
   }
@@ -354,8 +209,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> joinChannelWithUserAccount(String token, String channelName,
-      String userAccount) {
+  Future<void> joinChannelWithUserAccount(
+      String token, String channelName, String userAccount) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'channelName': channelName,
@@ -396,8 +251,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> enableAudioVolumeIndication(int interval, int smooth,
-      bool report_vad) {
+  Future<void> enableAudioVolumeIndication(
+      int interval, int smooth, bool report_vad) {
     return _invokeMethod('enableAudioVolumeIndication',
         {'interval': interval, 'smooth': smooth, 'report_vad': report_vad});
   }
@@ -545,8 +400,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> startAudioMixing(String filePath, bool loopback, bool replace,
-      int cycle) {
+  Future<void> startAudioMixing(
+      String filePath, bool loopback, bool replace, int cycle) {
     return _invokeMethod('startAudioMixing', {
       'filePath': filePath,
       'loopback': loopback,
@@ -573,8 +428,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> addVideoWatermark(String watermarkUrl,
-      WatermarkOptions options) {
+  Future<void> addVideoWatermark(
+      String watermarkUrl, WatermarkOptions options) {
     return _invokeMethod('addVideoWatermark',
         {'watermarkUrl': watermarkUrl, 'options': options.toJson()});
   }
@@ -735,8 +590,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> setCameraExposurePosition(double positionXinView,
-      double positionYinView) {
+  Future<void> setCameraExposurePosition(
+      double positionXinView, double positionYinView) {
     return _invokeMethod('setCameraExposurePosition', {
       'positionXinView': positionXinView,
       'positionYinView': positionYinView
@@ -744,8 +599,8 @@ class RtcEngine
   }
 
   @override
-  Future<void> setCameraFocusPositionInPreview(double positionX,
-      double positionY) {
+  Future<void> setCameraFocusPositionInPreview(
+      double positionX, double positionY) {
     return _invokeMethod('setCameraFocusPositionInPreview',
         {'positionX': positionX, 'positionY': positionY});
   }
@@ -815,7 +670,7 @@ class RtcEngine
       AudioEqualizationBandFrequency bandFrequency, int bandGain) {
     return _invokeMethod('setLocalVoiceEqualization', {
       'bandFrequency':
-      AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
+          AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
       'bandGain': bandGain
     });
   }
@@ -975,6 +830,210 @@ class RtcEngine
   Future<void> setAudioMixingPitch(int pitch) {
     return _invokeMethod('setAudioMixingPitch', {'pitch': pitch});
   }
+
+  @override
+  Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
+    return _invokeMethod(
+        'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
+  }
+}
+
+mixin RtcEngineInterface
+    implements
+        RtcUserInfoInterface,
+        RtcAudioInterface,
+        RtcVideoInterface,
+        RtcAudioMixingInterface,
+        RtcAudioEffectInterface,
+        RtcVoiceChangerInterface,
+        RtcVoicePositionInterface,
+        RtcPublishStreamInterface,
+        RtcMediaRelayInterface,
+        RtcAudioRouteInterface,
+        RtcEarMonitoringInterface,
+        RtcDualStreamInterface,
+        RtcFallbackInterface,
+        RtcTestInterface,
+        RtcMediaMetadataInterface,
+        RtcWatermarkInterface,
+        RtcEncryptionInterface,
+        RtcAudioRecorderInterface,
+        RtcInjectStreamInterface,
+        RtcCameraInterface,
+        RtcStreamMessageInterface {
+  /// Destroys the [RtcEngine] instance and releases all resources used by the Agora SDK.
+  ///
+  /// This method is useful for apps that occasionally make voice or video calls, to free up resources for other operations when not making calls.
+  ///
+  /// **Note**
+  /// - Call this method in the subthread.
+  /// - Once the app calls [RtcEngine.destroy] to destroy the created [RtcEngine] instance, you cannot use any method or callback in the SDK.
+  Future<void> destroy();
+
+  /// Sets the channel profile of the Agora RtcEngine.
+  ///
+  /// The Agora RtcEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
+  ///
+  /// **Parameter** [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
+  Future<void> setChannelProfile(ChannelProfile profile);
+
+  /// Sets the role of a user ([ChannelProfile.LiveBroadcasting] only).
+  ///
+  /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
+  /// This method can be used to switch the user role after a user joins a channel. In the [ChannelProfile.LiveBroadcasting] profile, when a user switches user roles after joining a channel, a successful `setClientRole` method call triggers the following callbacks:
+  /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
+  /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
+  ///
+  /// **Parameter** [role] Sets the role of a user. See [ClientRole].
+  Future<void> setClientRole(ClientRole role);
+
+  /// Allows a user to join a channel.
+  ///
+  /// Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other.
+  /// You must call the [RtcEngine.leaveChannel] method to exit the current call before joining another channel.
+  /// A successful joinChannel method call triggers the following callbacks:
+  /// - The local client: [RtcEngineEventHandler.joinChannelSuccess].
+  /// - The remote client: [RtcEngineEventHandler.userJoined], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
+  ///
+  /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [RtcEngineEventHandler.rejoinChannelSuccess] callback on the local client.
+  ///
+  /// **Note**
+  /// - A channel does not accept duplicate uids, such as two users with the same uid. If you set uid as 0, the system automatically assigns a uid.
+  ///
+  /// **Warning**
+  /// - Ensure that the App ID used for creating the token is the same App ID used in the create method for creating an [RtcEngine] object. Otherwise, CDN live streaming may fail.
+  ///
+  /// **Parameter** [token] The token for authentication:
+  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
+  /// **Parameter** [channelName] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
+  /// - All lowercase English letters: a to z.
+  /// - All uppercase English letters: A to Z.
+  /// - All numeric characters: 0 to 9.
+  /// - The space character.
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  ///
+  /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
+  ///
+  /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
+  Future<void> joinChannel(
+      String token, String channelName, String optionalInfo, int optionalUid);
+
+  /// Switches to a different channel.
+  ///
+  /// This method allows the audience of a [ChannelProfile.LiveBroadcasting] channel to switch to a different channel.
+  /// After the user successfully switches to another channel, the [RtcEngineEventHandler.leaveChannel] and [RtcEngineEventHandler.joinChannelSuccess] callbacks are triggered to indicate that the user has left the original channel and joined a new one.
+  ///
+  /// **Note**
+  /// - This method applies to the [ClientRole.Audience] role in a [ChannelProfile.LiveBroadcasting] channel only.
+  ///
+  /// **Parameter** [token] The token for authentication:
+  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
+  /// **Parameter** [channelName] Unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
+  /// - All lowercase English letters: a to z.
+  /// - All uppercase English letters: A to Z.
+  /// - All numeric characters: 0 to 9.
+  /// - The space character.
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  Future<void> switchChannel(String token, String channelName);
+
+  /// Allows a user to leave a channel.
+  ///
+  /// After joining a channel, the user must call this method to end the call before joining another channel. This method returns 0 if the user leaves the channel and releases all resources related to the call. This method call is asynchronous, and the user has not exited the channel when the method call returns. Once the user leaves the channel, the SDK triggers the [RtcEngineEventHandler.leaveChannel] callback.
+  /// A successful method call triggers the following callbacks:
+  /// - The local client: [RtcEngineEventHandler.leaveChannel].
+  /// - The remote client: [RtcEngineEventHandler.userOffline], if the user leaving the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
+  ///
+  /// **Note**
+  /// - If you call the [RtcEngine.destroy] method immediately after calling this method, the `leaveChannel` process interrupts, and the SDK does not trigger the [RtcEngineEventHandler.leaveChannel] callback.
+  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcEngine.removeInjectStreamUrl] method.
+  Future<void> leaveChannel();
+
+  /// Renews the token when the current token expires.
+  ///
+  /// The token expires after a period of time once the token schema is enabled when:
+  /// - The SDK triggers the [RtcEngineEventHandler.tokenPrivilegeWillExpire] callback
+  /// - The [RtcEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
+  /// The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
+  ///
+  /// **Parameter** [token] The new token.
+  Future<void> renewToken(String token);
+
+  /// Enables interoperability with the Agora Web SDK (LiveBroadcasting only).
+  ///
+  /// The SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.
+  /// If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.
+  /// Use this method when the channel profile is [ChannelProfile.LiveBroadcasting]. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [ChannelProfile.Communication].
+  ///
+  /// **Parameter** [enabled] Sets whether to enable/disable interoperability with the Agora Web SDK:
+  /// - `true`: Enable.
+  /// - `false`: (Default) Disable.
+  @deprecated
+  Future<void> enableWebSdkInteroperability(bool enabled);
+
+  /// Gets the connection state of the SDK.
+  Future<ConnectionStateType> getConnectionState();
+
+  /// Gets the current call ID.
+  ///
+  /// When a user joins a channel on a client, a call ID is generated to identify the call from the client. Feedback methods, such as the [RtcEngine.rate] and [RtcEngine.complain] method, must be called after the call ends to submit feedback to the SDK.
+  ///
+  /// The `rate` and `complain` methods require the `callId` parameter retrieved from the [RtcEngine.getCallId] method during a call. `callId` is passed as an argument into the rate and complain methods after the call ends.
+  ///
+  ///  **Returns**
+  /// - The current call ID, if the method call succeeds.
+  /// - The empty string "", if the method call fails.
+  Future<String> getCallId();
+
+  /// Allows the user to rate a call after the call ends.
+  ///
+  /// **Parameter** [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
+  ///
+  /// **Parameter** [rating] Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the [ErrorCode.InvalidArgument](-2) error occurs.
+  ///
+  /// **Parameter** [description] (Optional) The description of the rating. The string length must be less than 800 bytes.
+  Future<void> rate(String callId, int rating, {String description});
+
+  /// Allows a user to complain about the call quality after a call ends.
+  ///
+  /// **Parameter** [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
+  ///
+  /// **Parameter** [description] (Optional) The description of the complaint. The string length must be less than 800 bytes.
+  Future<void> complain(String callId, String description);
+
+  /// Specifies an SDK output log file.
+  ///
+  /// The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
+  ///
+  /// **Note**
+  /// - Ensure that you call this method immediately after calling the [RtcEngine.create] method, otherwise the output log may not be complete.
+  ///
+  /// **Parameter** [filePath] File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log`.
+  Future<void> setLogFile(String filePath);
+
+  /// Sets the output log level of the SDK.
+  ///
+  /// You can use one or a combination of the filters. The log level follows the sequence of `OFF`, `CRITICAL`, `ERROR`, `WARNING`, `INFO`, and `DEBUG`. Choose a level to see the logs preceding that level. For example, if you set the log level to `WARNING`, you see the logs within levels `CRITICAL`, `ERROR`, and `WARNING`.
+  ///
+  /// **Parameter** [filter] Sets the log filter level. See [LogFilter].
+  Future<void> setLogFilter(LogFilter filter);
+
+  /// Sets the log file size (KB).
+  ///
+  /// The Agora SDK has two log files, each with a default size of 512 KB. If you set `fileSizeInKBytes` as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB. If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
+  ///
+  /// **Parameter** [fileSizeInKBytes] The SDK log file size (KB).
+  Future<void> setLogFileSize(int fileSizeInKBytes);
+
+  /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
+  ///
+  /// The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
+  ///
+  /// **Parameter** [parameters] Sets the parameter as a JSON string in the specified format.
+  Future<void> setParameters(String parameters);
 }
 
 mixin RtcUserInfoInterface {
@@ -1027,8 +1086,8 @@ mixin RtcUserInfoInterface {
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  Future<void> joinChannelWithUserAccount(String token, String channelName,
-      String userAccount);
+  Future<void> joinChannelWithUserAccount(
+      String token, String channelName, String userAccount);
 
   /// Gets the user information by passing in the user account.
   ///
@@ -1216,8 +1275,8 @@ mixin RtcAudioInterface {
   /// **Parameter** [report_vad]
   /// - `true`: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
   /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
-  Future<void> enableAudioVolumeIndication(int interval, int smooth,
-      bool report_vad);
+  Future<void> enableAudioVolumeIndication(
+      int interval, int smooth, bool report_vad);
 }
 
 mixin RtcVideoInterface {
@@ -1377,8 +1436,8 @@ mixin RtcAudioMixingInterface {
   /// **Parameter** [cycle] Sets the number of playback loops:
   /// - Positive integer: Number of playback loops
   /// - -1: Infinite playback loops
-  Future<void> startAudioMixing(String filePath, bool loopback, bool replace,
-      int cycle);
+  Future<void> startAudioMixing(
+      String filePath, bool loopback, bool replace, int cycle);
 
   /// Stops playing or mixing the music file.
   ///
@@ -1976,6 +2035,25 @@ mixin RtcEncryptionInterface {
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
+
+  /// Enables/Disables the built-in encryption.
+  ///
+  /// @since v3.1.2.
+  ///
+  /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
+  ///
+  /// All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+  ///
+  /// **Note**
+  /// - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+  /// - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
+  ///
+  ///
+  /// @param enabled Whether to enable the built-in encryption.
+  /// - `true`: Enable the built-in encryption.
+  /// - `false`: Disable the built-in encryption.
+  /// @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+  Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
 mixin RtcAudioRecorderInterface {
@@ -2073,8 +2151,8 @@ mixin RtcCameraInterface {
   /// **Parameter** [positionX] The horizontal coordinate of the touch point in the view.
   ///
   /// **Parameter** [positionY] The vertical coordinate of the touch point in the view.
-  Future<void> setCameraFocusPositionInPreview(double positionX,
-      double positionY);
+  Future<void> setCameraFocusPositionInPreview(
+      double positionX, double positionY);
 
   /// Sets the camera exposure position.
   ///
@@ -2084,8 +2162,8 @@ mixin RtcCameraInterface {
   /// **Parameter** [positionXinView] The horizontal coordinate of the touch point in the view.
   ///
   /// **Parameter** [positionYinView] The vertical coordinate of the touch point in the view.
-  Future<void> setCameraExposurePosition(double positionXinView,
-      double positionYinView);
+  Future<void> setCameraExposurePosition(
+      double positionXinView, double positionYinView);
 
   /// Enables/Disables face detection for the local user.
   ///

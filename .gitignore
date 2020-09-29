@@ -3,6 +3,8 @@
 .idea
 .vscode
 *.iml
+gitpull.sh
+gitpush.sh
 
 .packages
 .pub/
