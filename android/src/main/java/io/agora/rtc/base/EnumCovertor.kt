@@ -1,5 +1,6 @@
 package io.agora.rtc.base
 
+import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
 import io.agora.rtc.video.CameraCapturerConfiguration
@@ -84,4 +85,13 @@ fun intToCameraDirection(@Annotations.AgoraCameraDirection intValue: Int): Camer
         }
     }
     throw RuntimeException("CameraCapturerConfiguration.CAMERA_DIRECTION not contains $intValue")
+}
+
+fun intToEncryptionMode(@Annotations.AgoraEncryptionMode intValue: Int): EncryptionConfig.EncryptionMode {
+    for (value in EncryptionConfig.EncryptionMode.values()) {
+        if (value.value == intValue) {
+            return value
+        }
+    }
+    throw RuntimeException("EncryptionConfig.EncryptionMode not contains $intValue")
 }

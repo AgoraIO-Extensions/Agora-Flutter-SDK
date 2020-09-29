@@ -32,7 +32,7 @@ func mapToSize(_ map: Dictionary<String, Any>) -> CGSize {
 }
 
 func mapToRect(_ map: Dictionary<String, Any>) -> CGRect {
-    CGRect(
+    return CGRect(
             origin: mapToPoint(map),
             size: mapToSize(map)
     )
@@ -122,7 +122,7 @@ func mapToTranscodingUser(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodin
 }
 
 func mapToColor(_ map: Dictionary<String, Any>) -> UIColor {
-    UIColor(
+    return UIColor(
             red: CGFloat(map["red"] as! Int),
             green: CGFloat(map["green"] as! Int),
             blue: CGFloat(map["blue"] as! Int),
@@ -291,4 +291,17 @@ func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannel
         options.autoSubscribeVideo = autoSubscribeVideo
     }
     return options
+}
+
+func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
+    let encryptionConfig = AgoraEncryptionConfig()
+    if let encryptionMode = map["encryptionMode"] as? Int {
+        if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode) {
+            encryptionConfig.encryptionMode = encryptionMode
+        }
+    }
+    if let encryptionKey = map["encryptionKey"] as? String {
+        encryptionConfig.encryptionKey = encryptionKey
+    }
+    return encryptionConfig
 }

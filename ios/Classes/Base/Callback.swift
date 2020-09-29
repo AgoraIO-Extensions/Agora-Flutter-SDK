@@ -9,6 +9,7 @@
 import Foundation
 import AgoraRtcKit
 
+@objc
 protocol Callback: class {
     func success(_ data: Any?)
 

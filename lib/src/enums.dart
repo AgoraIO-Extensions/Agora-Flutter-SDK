@@ -4,26 +4,34 @@ import 'events.dart';
 import 'rtc_engine.dart';
 
 /// The area of connection.
-enum IPAreaCode {
+enum AreaCode {
   /// Mainland China
-  @JsonValue(1 << 0)
-  AREA_CN,
+  @JsonValue(0x00000001)
+  CN,
 
   /// North America
-  @JsonValue(1 << 1)
-  AREA_NA,
+  @JsonValue(0x00000002)
+  NA,
 
   /// Europe
-  @JsonValue(1 << 2)
-  AREA_EUR,
+  @JsonValue(0x00000004)
+  EU,
 
   /// Asia, excluding Mainland China
-  @JsonValue(1 << 3)
-  AREA_AS,
+  @JsonValue(0x00000008)
+  AS,
+
+  /// Japan
+  @JsonValue(0x00000010)
+  JP,
+
+  /// India
+  @JsonValue(0x00000020)
+  IN,
 
   /// (Default) Global
   @JsonValue(-1)
-  AREA_GLOBAL,
+  GLOB,
 }
 
 /// Self-defined audio codec profile.
@@ -222,22 +230,6 @@ enum AudioProfile {
   /// A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
   @JsonValue(5)
   MusicHighQualityStereo,
-}
-
-/// Use mode of the RecordAudioFrame callback.
-/// TODO @nodoc setPlaybackAudioFrameParameters
-enum AudioRawFrameOperationMode {
-  /// Users only read the Agora Audio Frame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
-  @JsonValue(0)
-  ReadOnly,
-
-  /// Users replace the Agora Audio Frame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
-  @JsonValue(1)
-  WriteOnly,
-
-  /// Users read the data from Agora Audio Frame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
-  @JsonValue(2)
-  ReadWrite,
 }
 
 /// Audio recording quality.
@@ -458,30 +450,6 @@ enum AudioScenario {
   /// Gaming scenario.
   @JsonValue(5)
   ChatRoomGaming,
-}
-
-/// (iOS only) Audio session restriction.
-/// TODO @nodoc iOS setAudioSessionOperationRestriction
-enum AudioSessionOperationRestriction {
-  /// No restriction, the SDK has full control of the audio session operations.
-  @JsonValue(0)
-  None,
-
-  /// The SDK does not change the audio session category.
-  @JsonValue(1)
-  SetCategory,
-
-  /// The SDK does not change any setting of the audio session (category, mode, categoryOptions).
-  @JsonValue(1 << 1)
-  ConfigureSession,
-
-  /// The SDK keeps the audio session active when leaving a channel.
-  @JsonValue(1 << 2)
-  DeactivateSession,
-
-  /// The SDK does not configure the audio session anymore.
-  @JsonValue(1 << 7)
-  All,
 }
 
 /// The preset audio voice configuration used to change the voice effect.
@@ -895,17 +863,28 @@ enum DegradationPreference {
 
 /// Encryption mode
 enum EncryptionMode {
+  /// @deprecated
+  /// This mode is deprecated.
+  @JsonValue(0)
+  None,
+
   /// (Default) 128-bit AES encryption, XTS mode.
-  @JsonValue('aes-128-xts')
+  @JsonValue(1)
   AES128XTS,
 
+  /// 128-bit AES encryption, ECB mode.
+  @JsonValue(2)
+  AES128ECB,
+
   /// 256-bit AES encryption, XTS mode.
-  @JsonValue('aes-256-xts')
+  @JsonValue(3)
   AES256XTS,
 
-  /// 128-bit AES encryption, ECB mode.
-  @JsonValue('aes-128-ecb')
-  AES128ECB,
+  /// 128-bit SM4 encryption, ECB mode.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(4)
+  SM4128ECB,
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
@@ -1013,6 +992,12 @@ enum ErrorCode {
   /// The specified channel name is invalid. Please try to rejoin the channel with a valid channel name.
   @JsonValue(102)
   InvalidChannelId,
+
+  /// 103: Fails to get server resources in the specified region. Please try to specify another region.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(103)
+  NoServerResources,
 
   /// The token expired. Agora recommends that you use `TokenExpired`(9) in the reason parameter of `connectionStateChanged` instead.
   ///
@@ -1412,62 +1397,6 @@ enum LogFilter {
   Critical,
 }
 
-/// (iOS only) Media device type.
-/// TODO @nodoc MacOS AgoraMediaDeviceType
-enum MediaDeviceType {
-  /// Unknown device.
-  @JsonValue(-1)
-  AudioUnknown,
-
-  /// Audio playback device.
-  @JsonValue(0)
-  AudioPlayout,
-
-  /// Audio recording device.
-  @JsonValue(1)
-  AudioRecording,
-
-  /// Video render device.
-  @JsonValue(2)
-  VideoRender,
-
-  /// Video capture device.
-  @JsonValue(3)
-  VideoCapture,
-}
-
-/// Media type.
-/// TODO @nodoc LiveEngine
-enum MediaType {
-  /// No audio and video.
-  @JsonValue(0)
-  None,
-
-  /// Audio only.
-  @JsonValue(1)
-  AudioOnly,
-
-  /// Video only.
-  @JsonValue(2)
-  VideoOnly,
-
-  /// Audio and video.
-  @JsonValue(3)
-  AudioAndVideo,
-}
-
-/// (Android only) The metadata type.
-/// TODO @nodoc registerMediaMetadataObserver
-enum MetadataType {
-  /// The metadata type is unknown.
-  @JsonValue(-1)
-  Unknown,
-
-  /// The metadata type is video.
-  @JsonValue(0)
-  Video,
-}
-
 /// Network quality.
 enum NetworkQuality {
   /// The network quality is unknown.
@@ -1536,30 +1465,6 @@ enum NetworkType {
   /// The network type is mobile 4G.
   @JsonValue(5)
   Mobile4G,
-}
-
-/// (Android only) Default camera position
-/// TODO @nodoc AgoraRtcDefaultCamera
-enum RtcDefaultCameraPosition {
-  /// Front camera
-  @JsonValue(0)
-  Front,
-
-  /// Rear camera
-  @JsonValue(1)
-  Back
-}
-
-/// Lifecycle of the CDN live video stream.
-/// TODO @nodoc AgoraPublisherConfiguration
-enum RtmpStreamLifeCycle {
-  /// Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
-  @JsonValue(1)
-  BindToChannel,
-
-  /// Bound to the owner of the RTMP stream. If the owner leaves the channel, the CDN live streaming stops immediately.
-  @JsonValue(2)
-  BindToOwnner,
 }
 
 /// The detailed error information for streaming.
@@ -1696,18 +1601,6 @@ enum UserPriority {
   Normal,
 }
 
-/// (iOS only) Video buffer type.
-/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
-enum VideoBufferType {
-  /// Use a pixel buffer to transmit the video data.
-  @JsonValue(1)
-  PixelBuffer,
-
-  /// Use raw data to transmit the video data.
-  @JsonValue(2)
-  RawData,
-}
-
 /// Self-defined video codec profile.
 enum VideoCodecProfileType {
   /// Baseline video codec profile. Generally used in video calls on mobile phones.
@@ -1721,22 +1614,6 @@ enum VideoCodecProfileType {
   /// (Default) High video codec profile. Generally used in high-resolution broadcasts or television.
   @JsonValue(100)
   High,
-}
-
-/// (iOS only) The content hint for screen sharing.
-/// TODO @nodoc MacOS setScreenCaptureContentHint
-enum VideoContentHint {
-  /// (Default) No content hint.
-  @JsonValue(0)
-  None,
-
-  /// Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
-  @JsonValue(1)
-  Motion,
-
-  /// Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slide, or text.
-  @JsonValue(2)
-  Details,
 }
 
 /// Video frame rate.
@@ -1774,7 +1651,7 @@ enum VideoFrameRate {
   Fps60,
 }
 
-/// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. 
+/// Sets the video bitrate (Kbps). Refer to the table below and set your bitrate.
 /// **Video Bitrate Table**
 ///
 /// | Resolution             | Frame Rate (fps) | Base Bitrate (Kbps)                    | Live Bitrate (Kbps)                    |
@@ -1806,7 +1683,7 @@ enum VideoFrameRate {
 /// | 960 * 720              | 30               | 1380                                   | 2760                                   |
 ///
 ///  **Note**
-/// - The base bitrate in this table applies to the Communication profile. 
+/// - The base bitrate in this table applies to the Communication profile.
 /// - The LiveBroadcasting profile generally requires a higher bitrate for better video quality. We recommend setting the bitrate mode as `0`. You can also set the bitrate as the base bitrate value x 2.
 ///
 /// If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
@@ -1855,22 +1732,6 @@ enum VideoOutputOrientationMode {
   /// The video encoder always sends the video in portrait mode. The video encoder rotates the original video before sending it and the rotational information is 0. This mode applies to scenarios involving CDN live streaming.
   @JsonValue(2)
   FixedPortrait,
-}
-
-/// (iOS only) Video pixel format.
-/// TODO @nodoc iOS AgoraVideoSinkProtocol
-enum VideoPixelFormat {
-  /// The video pixel format is I420.
-  @JsonValue(1)
-  I420,
-
-  /// The video pixel format is BGRA.
-  @JsonValue(2)
-  BGRA,
-
-  /// The video pixel format is NV21.
-  @JsonValue(8)
-  NV12,
 }
 
 /// Quality change of the local video in terms of target frame rate and target bit rate since last count.
@@ -1986,26 +1847,6 @@ enum VideoRenderMode {
   FILL,
 }
 
-/// (iOS only) Video rotation.
-/// TODO @nodoc iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
-enum VideoRotation {
-  /// No rotation
-  @JsonValue(0)
-  RotationNone,
-
-  /// 90 degrees
-  @JsonValue(1)
-  Rotation90,
-
-  /// 180 degrees
-  @JsonValue(2)
-  Rotation180,
-
-  /// 270 degrees
-  @JsonValue(3)
-  Rotation270,
-}
-
 /// Video stream type.
 enum VideoStreamType {
   /// High-bitrate, high-resolution video stream.
@@ -2105,6 +1946,12 @@ enum WarningCode {
   @JsonValue(1025)
   AdmInterruption,
 
+  /// During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(1029)
+  AdmCategoryNotPlayAndRecord,
+
   /// Audio Device Module: the recorded audio is too low.
   @JsonValue(1031)
   AdmRecordAudioLowlevel,
@@ -2117,6 +1964,21 @@ enum WarningCode {
   @JsonValue(1033)
   AdmRecordIsOccupied,
 
+  /// Audio device module: An error occurs in the audio driver. Solutions:
+  /// - Restart your audio device.
+  /// - Restart your device where the app runs.
+  /// - Upgrade the sound card drive.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(1040)
+  AdmNoDataReadyCallback,
+
+  /// Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(1042)
+  AdmInconsistentDevices,
+
   /// Audio Device Module: howling is detected.
   @JsonValue(1051)
   ApmHowling,
@@ -2125,9 +1987,9 @@ enum WarningCode {
   @JsonValue(1052)
   AdmGlitchState,
 
-  /// Audio Device Module: the underlying audio settings have changed.
+  /// Audio processing module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
   @JsonValue(1053)
-  AdmImproperSettings,
+  ApmResidualEcho,
 }
 
 /// The audio channel of the sound.
@@ -2174,4 +2036,65 @@ enum VideoCodecType {
   /// Enhanced H264.
   @JsonValue(4)
   E264,
+}
+
+/// The publishing state.
+///
+/// @since v3.1.2.
+enum StreamPublishState {
+  /// The initial publishing state after joining the channel.
+  @JsonValue(0)
+  Idle,
+
+  /// Fails to publish the local stream. Possible reasons:
+  /// - The local user calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} to stop sending local streams.
+  /// - The local user calls [`disableAudio`]{@link RtcEngine.disableAudio} or [`disableVideo`]{@link RtcEngine.disableVideo} to disable the entire audio or video module.
+  /// - The local user calls [`enableLocalAudio(false)`]{@link RtcEngine.enableLocalAudio} or [`enableLocalVideo(false)`]{@link enableLocalVideo} to disable the local audio sampling or video capturing.
+  /// - The role of the local user is `Audience`.
+  @JsonValue(1)
+  NoPublished,
+
+  /// Publishing.
+  @JsonValue(2)
+  Publishing,
+
+  /// Publishes successfully.
+  @JsonValue(3)
+  Published,
+}
+
+/// The subscribing state.
+///
+/// @since v3.1.2.
+enum StreamSubscribeState {
+  /// The initial subscribing state after joining the channel.
+  @JsonValue(0)
+  Idle,
+
+  /// Fails to subscribe to the remote stream. Possible reasons:
+  /// - The remote user:
+  ///   - Calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} to stop sending local streams.
+  ///   - The local user calls [`disableAudio`]{@link RtcEngine.disableAudio} or [`disableVideo`]{@link RtcEngine.disableVideo} to disable the entire audio or video module.
+  ///   - The local user calls [`enableLocalAudio(false)`]{@link RtcEngine.enableLocalAudio} or [`enableLocalVideo(false)`]{@link enableLocalVideo} to disable the local audio sampling or video capturing.
+  ///   - The role of the local user is `Audience`.
+  /// - The local user calls the following methods to stop receiving remote streams:
+  ///   - Calls [`muteRemoteAudioStream(true)`]{@link RtcEngine.muteRemoteAudioStream}, [`muteAllRemoteAudioStreams(true)`]{@link RtcEngine.muteAllRemoteAudioStreams}, or [`setDefaultMuteAllRemoteAudioStreams(true)`]{@link RtcEngine.setDefaultMuteAllRemoteAudioStreams} to stop receiving remote audio streams.
+  ///   - Calls [`muteRemoteVideoStream(true)`]{@link RtcEngine.muteRemoteVideoStream}, [`muteAllRemoteVideoStreams(true)`]{@link RtcEngine.muteAllRemoteVideoStreams}, or [`setDefaultMuteAllRemoteVideoStreams(true)`]{@link RtcEngine.setDefaultMuteAllRemoteVideoStreams} to stop receiving remote video streams.
+  @JsonValue(1)
+  NoSubscribed,
+
+  /// Subscribing.
+  @JsonValue(2)
+  Subscribing,
+
+  /// Subscribes to and receives the remote stream successfully.
+  @JsonValue(3)
+  Subscribed,
+}
+
+/// Events during the RTMP streaming.
+enum RtmpStreamingEvent {
+  /// An error occurs when you add a background image or a watermark image to the RTMP stream.
+  @JsonValue(1)
+  FailedLoadImage,
 }
