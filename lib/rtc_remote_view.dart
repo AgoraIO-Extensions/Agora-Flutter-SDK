@@ -18,19 +18,18 @@ class SurfaceView extends RtcSurfaceView {
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
-  })
-      : assert(uid != 0),
+  })  : assert(uid != 0),
         super(
-        key: key,
-        uid: uid,
-        zOrderMediaOverlay: zOrderMediaOverlay,
-        zOrderOnTop: zOrderOnTop,
-        renderMode: renderMode,
-        channelId: channelId,
-        mirrorMode: mirrorMode,
-        gestureRecognizers: gestureRecognizers,
-        onPlatformViewCreated: onPlatformViewCreated,
-      );
+          key: key,
+          uid: uid,
+          zOrderMediaOverlay: zOrderMediaOverlay,
+          zOrderOnTop: zOrderOnTop,
+          renderMode: renderMode,
+          channelId: channelId,
+          mirrorMode: mirrorMode,
+          gestureRecognizers: gestureRecognizers,
+          onPlatformViewCreated: onPlatformViewCreated,
+        );
 }
 
 /// (Android only) TextureView.
@@ -39,18 +38,19 @@ class TextureView extends RtcTextureView {
   TextureView({
     Key key,
     @required int uid,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     String channelId,
-    bool mirror = false,
+    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
-  })
-      : assert(uid != 0),
+  })  : assert(uid != 0),
         super(
-        key: key,
-        uid: uid,
-        channelId: channelId,
-        mirror: mirror,
-        gestureRecognizers: gestureRecognizers,
-        onPlatformViewCreated: onPlatformViewCreated,
-      );
+          key: key,
+          uid: uid,
+          renderMode: renderMode,
+          channelId: channelId,
+          mirrorMode: mirrorMode,
+          gestureRecognizers: gestureRecognizers,
+          onPlatformViewCreated: onPlatformViewCreated,
+        );
 }
