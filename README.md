@@ -70,4 +70,4 @@ You can refer to this [pull request](https://github.com/flutter/engine/pull/1432
 
 ## How to contribute
 
-To help work on this sdk, see our [contributor guide](CONTRIBUTING.md).
+To help work on this sdk, see our [contributor guide](https://github.com/AgoraIO/Flutter-SDK/blob/master/CONTRIBUTING.md).
