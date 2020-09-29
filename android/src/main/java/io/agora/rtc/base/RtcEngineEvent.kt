@@ -77,6 +77,13 @@ class RtcEngineEvents {
         const val CameraReady = "CameraReady"
         const val VideoStopped = "VideoStopped"
         const val MetadataReceived = "MetadataReceived"
+        const val FirstLocalAudioFramePublished = "FirstLocalAudioFramePublished"
+        const val FirstLocalVideoFramePublished = "FirstLocalVideoFramePublished"
+        const val AudioPublishStateChanged = "AudioPublishStateChanged"
+        const val VideoPublishStateChanged = "VideoPublishStateChanged"
+        const val AudioSubscribeStateChanged = "AudioSubscribeStateChanged"
+        const val VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
+        const val RtmpStreamingEvent = "RtmpStreamingEvent"
 
         fun toMap(): Map<String, String> {
             return hashMapOf(
@@ -149,7 +156,14 @@ class RtcEngineEvents {
                     "AudioQuality" to AudioQuality,
                     "CameraReady" to CameraReady,
                     "VideoStopped" to VideoStopped,
-                    "MetadataReceived" to MetadataReceived
+                    "MetadataReceived" to MetadataReceived,
+                    "FirstLocalAudioFramePublished" to FirstLocalAudioFramePublished,
+                    "FirstLocalVideoFramePublished" to FirstLocalVideoFramePublished,
+                    "AudioPublishStateChanged" to AudioPublishStateChanged,
+                    "VideoPublishStateChanged" to VideoPublishStateChanged,
+                    "AudioSubscribeStateChanged" to AudioSubscribeStateChanged,
+                    "VideoSubscribeStateChanged" to VideoSubscribeStateChanged,
+                    "RtmpStreamingEvent" to RtmpStreamingEvent
             )
         }
     }
@@ -183,7 +197,7 @@ class RtcEngineEventHandler(
     }
 
     override fun onRejoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
-        callback(RtcEngineEvents.RejoinChannelSuccess, uid, elapsed)
+        callback(RtcEngineEvents.RejoinChannelSuccess, channel, uid, elapsed)
     }
 
     override fun onLeaveChannel(stats: RtcStats?) {
@@ -469,5 +483,33 @@ class RtcEngineEventHandler(
     @Deprecated("", ReplaceWith("onLocalVideoStateChanged"))
     override fun onVideoStopped() {
         callback(RtcEngineEvents.VideoStopped)
+    }
+
+    override fun onFirstLocalAudioFramePublished(elapsed: Int) {
+        callback(RtcEngineEvents.FirstLocalAudioFramePublished, elapsed)
+    }
+
+    override fun onFirstLocalVideoFramePublished(elapsed: Int) {
+        callback(RtcEngineEvents.FirstLocalVideoFramePublished, elapsed)
+    }
+
+    override fun onAudioPublishStateChanged(channel: String?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.AudioPublishStateChanged, channel, oldState, newState, elapseSinceLastState)
+    }
+
+    override fun onVideoPublishStateChanged(channel: String?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.VideoPublishStateChanged, channel, oldState, newState, elapseSinceLastState)
+    }
+
+    override fun onAudioSubscribeStateChanged(channel: String?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.AudioSubscribeStateChanged, channel, uid, oldState, newState, elapseSinceLastState)
+    }
+
+    override fun onVideoSubscribeStateChanged(channel: String?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.VideoSubscribeStateChanged, channel, uid, oldState, newState, elapseSinceLastState)
+    }
+
+    override fun onRtmpStreamingEvent(url: String?, @Annotations.AgoraRtmpStreamingEvent error: Int) {
+        callback(RtcEngineEvents.RtmpStreamingEvent, url, error)
     }
 }

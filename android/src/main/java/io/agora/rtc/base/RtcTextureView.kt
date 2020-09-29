@@ -1,59 +1,73 @@
 package io.agora.rtc.base
 
 import android.content.Context
+import android.view.TextureView
 import android.widget.FrameLayout
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
-import io.agora.rtc.mediaio.AgoraTextureView
-import io.agora.rtc.mediaio.MediaIO
+import io.agora.rtc.video.VideoCanvas
 import java.lang.ref.WeakReference
 
 class RtcTextureView(
         context: Context
 ) : FrameLayout(context) {
-    private var texture: AgoraTextureView = AgoraTextureView(context)
-    private var uid: Int = 0
+    private var texture: TextureView
+    private var canvas: VideoCanvas
     private var channel: WeakReference<RtcChannel>? = null
 
     init {
-        texture.init(null)
-        texture.setBufferType(MediaIO.BufferType.BYTE_ARRAY)
-        texture.setPixelFormat(MediaIO.PixelFormat.I420)
+        try {
+            texture = RtcEngine.CreateTextureView(context)
+        } catch (e: UnsatisfiedLinkError) {
+            throw RuntimeException("Please init RtcEngine first!")
+        }
+        canvas = VideoCanvas(texture)
         addView(texture)
     }
 
     fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Int) {
         this.channel = if (channel != null) WeakReference(channel) else null
-        this.uid = uid
-        setupVideoRenderer(engine)
+        canvas.channelId = this.channel?.get()?.channelId()
+        canvas.uid = uid
+        setupVideoCanvas(engine)
     }
 
-    fun setMirror(engine: RtcEngine, mirror: Boolean) {
-        texture.setMirror(mirror)
-        setupVideoRenderer(engine)
-    }
-
-    fun resetVideoRender(engine: RtcEngine) {
-        if (uid == 0) {
-            engine.setLocalVideoRenderer(null)
+    fun resetVideoCanvas(engine: RtcEngine) {
+        val canvas = VideoCanvas(null, canvas.renderMode, canvas.channelId, canvas.uid, canvas.mirrorMode)
+        if (canvas.uid == 0) {
+            engine.setupLocalVideo(canvas)
         } else {
-            channel?.get()?.let {
-                it.setRemoteVideoRenderer(uid, null)
-                return@resetVideoRender
-            }
-            engine.setRemoteVideoRenderer(uid, null)
+            engine.setupRemoteVideo(canvas)
         }
     }
 
-    private fun setupVideoRenderer(engine: RtcEngine) {
-        if (uid == 0) {
-            engine.setLocalVideoRenderer(texture)
+    private fun setupVideoCanvas(engine: RtcEngine) {
+        if (canvas.uid == 0) {
+            engine.setupLocalVideo(canvas)
+        } else {
+            engine.setupRemoteVideo(canvas)
+        }
+    }
+
+    fun setRenderMode(engine: RtcEngine, @Annotations.AgoraVideoRenderMode renderMode: Int) {
+        canvas.renderMode = renderMode
+        setupRenderMode(engine)
+    }
+
+    fun setMirrorMode(engine: RtcEngine, @Annotations.AgoraVideoMirrorMode mirrorMode: Int) {
+        canvas.mirrorMode = mirrorMode
+        setupRenderMode(engine)
+    }
+
+    private fun setupRenderMode(engine: RtcEngine) {
+        if (canvas.uid == 0) {
+            engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
         } else {
             channel?.get()?.let {
-                it.setRemoteVideoRenderer(uid, texture)
-                return@setupVideoRenderer
+                it.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
+                return@setupRenderMode
             }
-            engine.setRemoteVideoRenderer(uid, texture)
+            engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
         }
     }
 

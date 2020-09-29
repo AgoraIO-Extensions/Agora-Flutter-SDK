@@ -1,18 +1,17 @@
 package io.agora.rtc.base;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import io.agora.rtc.Constants;
-import io.agora.rtc.IMetadataObserver;
+import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoCanvas;
 
+@SuppressWarnings("deprecation")
 public class Annotations {
-
     @IntDef({
             AgoraRtcAppType.NATIVE,
             AgoraRtcAppType.COCOS,
@@ -129,15 +128,6 @@ public class Annotations {
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraAudioProfile {
-    }
-
-    @IntDef({
-            Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY,
-            Constants.RAW_AUDIO_FRAME_OP_MODE_WRITE_ONLY,
-            Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE,
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface AgoraAudioRawFrameOperationMode {
     }
 
     @IntDef({
@@ -386,16 +376,20 @@ public class Annotations {
         int MAINTAIN_BALANCED = 2;
     }
 
-    @StringDef({
+    @IntDef({
+            AgoraEncryptionMode.NONE,
             AgoraEncryptionMode.AES128XTS,
-            AgoraEncryptionMode.AES256XTS,
             AgoraEncryptionMode.AES128ECB,
+            AgoraEncryptionMode.AES256XTS,
+            AgoraEncryptionMode.SM4128ECB,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraEncryptionMode {
-        String AES128XTS = "aes-128-xts";
-        String AES256XTS = "aes-256-xts";
-        String AES128ECB = "aes-128-ecb";
+        int NONE = 0;
+        int AES128XTS = 1;
+        int AES128ECB = 2;
+        int AES256XTS = 3;
+        int SM4128ECB = 4;
     }
 
     @IntDef({
@@ -419,6 +413,7 @@ public class Annotations {
             Constants.ERR_ALREADY_IN_USE,
             Constants.ERR_INVALID_APP_ID,
             Constants.ERR_INVALID_CHANNEL_NAME,
+            Constants.ERR_NO_SERVER_RESOURCES,
             Constants.ERR_TOKEN_EXPIRED,
             Constants.ERR_INVALID_TOKEN,
             Constants.ERR_CONNECTION_INTERRUPTED,
@@ -541,24 +536,6 @@ public class Annotations {
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraLogFilter {
-    }
-
-    @IntDef({
-            Constants.MEDIA_TYPE_NONE,
-            Constants.MEDIA_TYPE_AUDIO_ONLY,
-            Constants.MEDIA_TYPE_VIDEO_ONLY,
-            Constants.MEDIA_TYPE_AUDIO_AND_VIDEO,
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface AgoraMediaType {
-    }
-
-    @IntDef({
-            IMetadataObserver.UNKNOWN_METADATA,
-            IMetadataObserver.VIDEO_METADATA,
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface AgoraMetadataType {
     }
 
     @IntDef({
@@ -766,15 +743,57 @@ public class Annotations {
             Constants.WARN_ADM_RUNTIME_PLAYOUT_WARNING,
             Constants.WARN_ADM_RUNTIME_RECORDING_WARNING,
             Constants.WARN_ADM_RECORD_AUDIO_SILENCE,
+            Constants.WARN_ADM_PLAYOUT_ABNORMAL_FREQUENCY,
+            Constants.WARN_ADM_RECORD_ABNORMAL_FREQUENCY,
             Constants.WARN_ADM_CALL_INTERRUPTION,
             Constants.WARN_ADM_RECORD_AUDIO_LOWLEVEL,
             Constants.WARN_ADM_PLAYOUT_AUDIO_LOWLEVEL,
             Constants.WARN_ADM_RECORD_IS_OCCUPIED,
             Constants.WARN_APM_HOWLING,
             Constants.WARN_ADM_GLITCH_STATE,
-            Constants.WARN_ADM_IMPROPER_SETTINGS,
+            Constants.WARN_APM_RESIDUAL_ECHO,
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface AgoraWarningCode {
+    }
+
+    @IntDef({
+            RtcEngineConfig.AreaCode.AREA_CODE_CN,
+            RtcEngineConfig.AreaCode.AREA_CODE_NA,
+            RtcEngineConfig.AreaCode.AREA_CODE_EU,
+            RtcEngineConfig.AreaCode.AREA_CODE_AS,
+            RtcEngineConfig.AreaCode.AREA_CODE_JP,
+            RtcEngineConfig.AreaCode.AREA_CODE_IN,
+            RtcEngineConfig.AreaCode.AREA_CODE_GLOB,
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AgoraAreaCode {
+    }
+
+    @IntDef({
+            Constants.SUB_STATE_IDLE,
+            Constants.SUB_STATE_NO_SUBSCRIBED,
+            Constants.SUB_STATE_SUBSCRIBING,
+            Constants.SUB_STATE_SUBSCRIBED,
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AgoraStreamSubscribeState {
+    }
+
+    @IntDef({
+            Constants.PUB_STATE_IDLE,
+            Constants.PUB_STATE_NO_PUBLISHED,
+            Constants.PUB_STATE_PUBLISHING,
+            Constants.PUB_STATE_PUBLISHED,
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AgoraStreamPublishState {
+    }
+
+    @IntDef({
+            Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AgoraRtmpStreamingEvent {
     }
 }
