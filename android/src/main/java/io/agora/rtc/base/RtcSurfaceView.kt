@@ -19,8 +19,7 @@ class RtcSurfaceView(
         try {
             surface = RtcEngine.CreateRendererView(context)
         } catch (e: UnsatisfiedLinkError) {
-            surface = SurfaceView(context)
-            e.printStackTrace()
+            throw RuntimeException("Please init RtcEngine first!")
         }
         canvas = VideoCanvas(surface)
         addView(surface)
