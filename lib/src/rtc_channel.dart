@@ -654,7 +654,7 @@ mixin RtcEncryptionInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
+  /// This method is deprecated. Use [RtcChannel.enableEncryption] instead.
   ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
