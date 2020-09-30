@@ -311,8 +311,8 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user stops/resumes sending the video stream.
   ///
   /// @deprecated This callback is deprecated. Use the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters for the same function:
-  /// - [VideoRemoteState.Stopped](0) and [VideoRemoteStateReason.RemoteMuted](5).
-  /// - [VideoRemoteState.Decoding](2) and [VideoRemoteStateReason.RemoteUnmuted](6).
+  /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
+  /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
   /// The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [RtcEngine.muteLocalVideoStream] method.
   ///
@@ -347,10 +347,10 @@ class RtcEngineEventHandler {
 
   /// Occurs when the local video state changes.
   ///
-  /// The SDK returns the current video state in this callback. When the state is [LocalVideoStreamState.Failed](3), see the error parameter for details.
+  /// The SDK returns the current video state in this callback. When the state is [LocalVideoStreamState.Failed], see the error parameter for details.
   ///
   /// **Note**
-  /// - This callback reports the current state of the local video, which keeps changing throughout the RtcEngine life cycle. We recommend maintaining the states reported in this callback, and check the local video state before starting the local camera. If the SDK reports [LocalVideoStreamError.CaptureFailure](4), the local camera is occupied by either the system or a third-party app. To access the camera, call [RtcEngine.enableLocalVideo] (`false`) first, and then [RtcEngine.enableLocalVideo] (`true`).
+  /// - This callback reports the current state of the local video, which keeps changing throughout the RtcEngine life cycle. We recommend maintaining the states reported in this callback, and check the local video state before starting the local camera. If the SDK reports [LocalVideoStreamError.CaptureFailure], the local camera is occupied by either the system or a third-party app. To access the camera, call [RtcEngine.enableLocalVideo] (`false`) first, and then [RtcEngine.enableLocalVideo] (`true`).
   ///
   /// The `LocalVideoStateCallback` typedef includes the following parameters:
   /// - [LocalVideoStreamState] `localVideoState`: The local video state.
@@ -373,7 +373,7 @@ class RtcEngineEventHandler {
   /// This callback indicates the state change of the local audio stream, including the state of the audio recording and encoding, and allows you to troubleshoot issues when exceptions occur.
   ///
   /// **Note**
-  /// - When the state is [AudioLocalState.Failed](3), see the error parameter for details.
+  /// - When the state is [AudioLocalState.Failed], see the error parameter for details.
   ///
   /// The `LocalAudioStateCallback` typedef includes the following parameters:
   /// - [AudioLocalState] `state`: State of the local audio.
@@ -382,7 +382,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
-  /// If you call [RtcEngine.setLocalPublishFallbackOption] and set option as [StreamFallbackOptions.AudioOnly](2), this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+  /// If you call [RtcEngine.setLocalPublishFallbackOption] and set option as [StreamFallbackOptions.AudioOnly], this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
   ///
   /// The `FallbackCallback` typedef includes the following parameters:
   /// - [bool] `isFallbackOrRecover`: Whether the published stream fell back to audio-only or switched back to the video:
@@ -392,7 +392,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
-  /// If you call [RtcEngine.setRemoteSubscribeFallbackOption] and set option as [StreamFallbackOptions.AudioOnly](2), this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.
+  /// If you call [RtcEngine.setRemoteSubscribeFallbackOption] and set option as [StreamFallbackOptions.AudioOnly], this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.
   ///
   /// The `FallbackWithUidCallback` typedef includes the following parameters:
   /// - [int]: `uid`: ID of the remote user sending the stream.
@@ -536,7 +536,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the state of the RTMP streaming changes.
   ///
-  /// The SDK triggers this callback to report the result of the local user calling the [RtcEngine.addPublishStreamUrl] or [RtcEngine.removePublishStreamUrl] method. This callback returns the URL and its current streaming state. When the streaming state is [RtmpStreamingState.Failure](4), see the `errCode` parameter for details.
+  /// The SDK triggers this callback to report the result of the local user calling the [RtcEngine.addPublishStreamUrl] or [RtcEngine.removePublishStreamUrl] method. This callback returns the URL and its current streaming state. When the streaming state is [RtmpStreamingState.Failure], see the `errCode` parameter for details.
   ///
   /// This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
   ///
@@ -612,7 +612,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first remote video frame is rendered.
   ///
-  /// @deprecated Use [VideoRemoteState.Starting](1) or [VideoRemoteState.Decoding](2) in the [remoteVideoStateChanged] callback instead.
+  /// @deprecated Use [VideoRemoteState.Starting] or [VideoRemoteState.Decoding] in the [remoteVideoStateChanged] callback instead.
   ///
   /// This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
   ///
@@ -626,7 +626,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first remote audio frame is received.
   ///
-  /// @deprecated Use [AudioRemoteState.Starting](1) in [remoteAudioStateChanged] instead.
+  /// @deprecated Use [AudioRemoteState.Starting] in [remoteAudioStateChanged] instead.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
@@ -646,7 +646,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the engine receives the first audio frame from a specified remote user.
   ///
-  /// @deprecated Use [VideoRemoteState.Decoding](2) in [remoteAudioStateChanged] instead.
+  /// @deprecated Use [VideoRemoteState.Decoding] in [remoteAudioStateChanged] instead.
   ///
   /// This callback is triggered in either of the following scenarios：
   /// - The remote user joins the channel and sends the audio stream.
@@ -675,8 +675,8 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user stops/resumes sending the audio stream.
   ///
   /// @deprecated Use the [RtcEngineEventHandler.remoteAudioStateChanged] callback with the following parameters instead:
-  /// - [VideoRemoteState.Stopped](0) and [VideoRemoteStateReason.RemoteMuted](5).
-  /// - [VideoRemoteState.Decoding](2) and [VideoRemoteStateReason.RemoteUnmuted](6).
+  /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
+  /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
   /// The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the [RtcEngine.muteLocalAudioStream] method.
   ///
@@ -745,8 +745,8 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user enables/disables the video module.
   ///
   /// @deprecated This callback is deprecated and replaced by the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters:
-  /// - [VideoRemoteState.Stopped](0) and [VideoRemoteStateReason.RemoteMuted](5).
-  /// - [VideoRemoteState.Decoding](2) and [VideoRemoteStateReason.RemoteUnmuted](6).
+  /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
+  /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
   /// Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.
   ///
@@ -766,8 +766,8 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user enables/disables the local video capture function.
   ///
   /// @deprecated This callback is deprecated and replaced by the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters:
-  /// - [VideoRemoteState.Stopped](0) and [VideoRemoteStateReason.RemoteMuted](5).
-  /// - [VideoRemoteState.Decoding](2) and [VideoRemoteStateReason.RemoteUnmuted](6).
+  /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
+  /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
   /// The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the [RtcEngine.enableLocalVideo] method.
   /// This callback is only applicable to the scenario when the remote user only wants to watch the remote video without sending any video stream to the other user.
@@ -782,7 +782,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first remote video frame is received and decoded.
   ///
-  /// @deprecated This callback is deprecated. Use [VideoRemoteState.Starting](1) or [VideoRemoteState.Decoding](2) in the [RtcEngineEventHandler.remoteVideoStateChanged] callback instead.
+  /// @deprecated This callback is deprecated. Use [VideoRemoteState.Starting] or [VideoRemoteState.Decoding] in the [RtcEngineEventHandler.remoteVideoStateChanged] callback instead.
   ///
   /// This callback is triggered in either of the following scenarios:
   /// - The remote user joins the channel and sends the video stream.
@@ -803,7 +803,7 @@ class RtcEngineEventHandler {
   /// Occurs when the microphone is enabled/disabled.
   ///
   ///
-  /// @deprecated This callback is deprecated. Use [AudioLocalState.Stopped](0) or [AudioLocalState.Recording](1) in the [RtcEngineEventHandler.localAudioStateChanged] callback instead.
+  /// @deprecated This callback is deprecated. Use [AudioLocalState.Stopped] (0) or [AudioLocalState.Recording] (1) in the [RtcEngineEventHandler.localAudioStateChanged] callback instead.
   /// The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling the [RtcEngine.enableLocalAudio] method.
   ///
   /// The `EnabledCallback` includes the following parameter:
@@ -849,14 +849,14 @@ class RtcEngineEventHandler {
 
   /// Occurs when the camera is turned on and ready to capture video.
   ///
-  /// @deprecated Use [LocalVideoStreamState.Capturing](1) in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. If the camera fails to turn on, fix the error reported in the [LocalVideoStreamState.Failed] callback.
+  /// @deprecated Use [LocalVideoStreamState.Capturing] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. If the camera fails to turn on, fix the error reported in the [LocalVideoStreamState.Failed] callback.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
   EmptyCallback cameraReady;
 
   /// Occurs when the video stops playing.
   ///
-  /// @deprecated Use [LocalVideoStreamState.Stopped](0) in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
+  /// @deprecated Use [LocalVideoStreamState.Stopped] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
   EmptyCallback videoStopped;
@@ -874,9 +874,9 @@ class RtcEngineEventHandler {
   /// @since v3.1.2.
   ///
   /// The SDK triggers this callback under one of the following circumstances:
-  /// - The local client enables the audio module and calls [`joinChannel`]{@link joinChannel} successfully.
-  /// - The local client calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} and [`muteLocalAudioStream(false)`]{@link RtcEngine.muteLocalAudioStream} in sequence.
-  /// - The local client calls [`disableAudio`]{@link RtcEngine.disableAudio} and [`enableAudio`]{@link RtcEngine.enableAudio} in sequence.
+  /// - The local client enables the audio module and calls [RtcEngine.joinChannel] successfully.
+  /// - The local client calls [RtcEngine.muteLocalAudioStream] (`true`) and [RtcEngine.muteLocalAudioStream] (`false`) in sequence.
+  /// - The local client calls [RtcEngine.disableAudio] (`true`) and [`enableAudio`] in sequence.
   ElapsedCallback firstLocalAudioFramePublished;
 
   /// Occurs when the first video frame is published.
@@ -884,9 +884,9 @@ class RtcEngineEventHandler {
   /// @since v3.1.2.
   ///
   /// The SDK triggers this callback under one of the following circumstances:
-  /// - The local client enables the video module and calls [`joinChannel`]{@link joinChannel} successfully.
-  /// - The local client calls [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} and [`muteLocalVideoStream(false)`]{@link RtcEngine.muteLocalVideoStream} in sequence.
-  /// - The local client calls [`disableVideo`]{@link RtcEngine.disableVideo} and [`enableVideo`]{@link RtcEngine.enableVideo} in sequence.
+  /// - The local client enables the video module and calls [RtcEngine.joinChannel] successfully.
+  /// - The local client calls [RtcEngine.muteLocalVideoStream] (`true`) and [RtcEngine.muteLocalVideoStream] (`false`) in sequence.
+  /// - The local client calls [RtcEngine.disableVideo] and [RtcEngine.enableVideo] in sequence.
   ElapsedCallback firstLocalVideoFramePublished;
 
   /// Occurs when the audio publishing state changes.
@@ -1493,7 +1493,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
-  /// If you call [RtcEngine.setLocalPublishFallbackOption] and set option as [StreamFallbackOptions.AudioOnly](2), this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+  /// If you call [RtcEngine.setLocalPublishFallbackOption] and set option as [StreamFallbackOptions.AudioOnly], this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
   ///
   /// The `FallbackCallback` typedef includes the following parameters:
   /// - [bool] `isFallbackOrRecover`: Whether the published stream fell back to audio-only or switched back to the video:
@@ -1503,7 +1503,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
-  /// If you call [RtcEngine.setRemoteSubscribeFallbackOption] and set option as [StreamFallbackOptions.AudioOnly](2), this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
+  /// If you call [RtcEngine.setRemoteSubscribeFallbackOption] and set option as [StreamFallbackOptions.AudioOnly], this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
   ///
   /// **Note**
   /// - Once the remote media stream is switched to the low stream due to poor network conditions, you can monitor the stream switch between a high and low stream in the [RtcEngineEventHandler.remoteVideoStats] callback.
@@ -1548,7 +1548,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the state of the RTMP streaming changes.
   ///
-  /// The SDK triggers this callback to report the result of the local user calling the [RtcChannel.addPublishStreamUrl] or [RtcChannel.removePublishStreamUrl] method. This callback returns the URL and its current streaming state. When the streaming state is [RtmpStreamingState.Failure](4), see the `errCode` parameter for details.
+  /// The SDK triggers this callback to report the result of the local user calling the [RtcChannel.addPublishStreamUrl] or [RtcChannel.removePublishStreamUrl] method. This callback returns the URL and its current streaming state. When the streaming state is [RtmpStreamingState.Failure], see the `errCode` parameter for details.
   ///
   /// This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
   ///
