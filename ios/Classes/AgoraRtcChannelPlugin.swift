@@ -59,7 +59,7 @@ public class AgoraRtcChannelPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
         eventSink?(event)
     }
 
-    private var engine: AgoraRtcEngineKit? {
+    private weak var engine: AgoraRtcEngineKit? {
         return rtcEnginePlugin?.engine
     }
 

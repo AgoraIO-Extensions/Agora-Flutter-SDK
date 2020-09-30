@@ -632,12 +632,14 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
     return _invokeMethod('setEncryptionMode',
         {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
@@ -2037,6 +2039,7 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
+  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
@@ -2049,6 +2052,7 @@ mixin RtcEncryptionInterface {
   /// - Call the [RtcEngine.setEncryptionSecret] method before calling this method.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
   /// Enables/Disables the built-in encryption.
