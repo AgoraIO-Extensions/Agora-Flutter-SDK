@@ -1,6 +1,7 @@
 package io.agora.rtc.base
 
 import android.graphics.Color
+import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.internal.LastmileProbeConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
@@ -167,5 +168,12 @@ fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
     return ChannelMediaOptions().apply {
         (map["autoSubscribeAudio"] as? Boolean)?.let { autoSubscribeAudio = it }
         (map["autoSubscribeVideo"] as? Boolean)?.let { autoSubscribeVideo = it }
+    }
+}
+
+fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
+    return EncryptionConfig().apply {
+        (map["encryptionMode"] as? Number)?.let { encryptionMode = intToEncryptionMode(it.toInt()) }
+        (map["encryptionKey"] as? String)?.let { encryptionKey = it }
     }
 }

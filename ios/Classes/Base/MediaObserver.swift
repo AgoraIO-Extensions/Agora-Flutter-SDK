@@ -29,7 +29,7 @@ class MediaObserver: NSObject {
 
 extension MediaObserver: AgoraMediaMetadataDataSource {
     func metadataMaxSize() -> Int {
-        maxMetadataSize
+        return maxMetadataSize
     }
 
     func readyToSendMetadata(atTimestamp timestamp: TimeInterval) -> Data? {
