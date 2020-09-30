@@ -829,8 +829,8 @@ enum DegradationPreference {
 
 /// Encryption mode
 enum EncryptionMode {
-  /// @deprecated
   /// This mode is deprecated.
+  @deprecated
   @JsonValue(0)
   None,
 

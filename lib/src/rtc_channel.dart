@@ -19,18 +19,19 @@ class RtcChannel with RtcChannelInterface {
 
   static final Map<String, RtcChannel> _channels = {};
 
-  final String _channelId;
+  /// The ID of RtcChannel
+  final String channelId;
 
   RtcChannelEventHandler _handler;
 
-  RtcChannel._(this._channelId);
+  RtcChannel._(this.channelId);
 
   Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
     return _methodChannel.invokeMethod(
         method,
         arguments == null
-            ? {'channelId': _channelId}
-            : {'channelId': _channelId, ...arguments});
+            ? {'channelId': channelId}
+            : {'channelId': channelId, ...arguments});
   }
 
   /// Creates and gets an [RtcChannel] instance.
@@ -61,7 +62,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> destroy() {
-    _channels.remove(_channelId);
+    _channels.remove(channelId);
     return _invokeMethod('destroy');
   }
 
@@ -229,11 +230,13 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
 
   @override
+  @deprecated
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
     return _invokeMethod(
         'setLiveTranscoding', {'transcoding': transcoding.toJson()});
@@ -659,6 +662,7 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
+  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
@@ -671,6 +675,7 @@ mixin RtcEncryptionInterface {
   /// - Before calling this method, ensure that you have called [RtcEngine.setEncryptionSecret] to enable encryption.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
   /// Enables/Disables the built-in encryption.
