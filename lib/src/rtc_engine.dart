@@ -882,7 +882,7 @@ mixin RtcEngineInterface
   /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
   /// This method can be used to switch the user role after a user joins a channel. In the [ChannelProfile.LiveBroadcasting] profile, when a user switches user roles after joining a channel, a successful `setClientRole` method call triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
-  /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
+  /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
   /// **Parameter** [role] Sets the role of a user. See [ClientRole].
   Future<void> setClientRole(ClientRole role);
@@ -1418,9 +1418,9 @@ mixin RtcAudioMixingInterface {
   ///
   /// This method mixes the specified local or online audio file with the audio stream from the microphone, or replaces the microphone’s audio stream with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. When the audio mixing file playback finishes after calling this method, the SDK triggers the [RtcEngineEventHandler.audioMixingFinished] callback.
   ///
-  /// A successful `startAudioMixing` method call triggers the [RtcEngineEventHandler.audioMixingStateChanged]([AudioMixingStateCode.Playing]) callback on the local client.
+  /// A successful `startAudioMixing` method call triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]) callback on the local client.
   ///
-  /// When the audio mixing file playback finishes, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged]([AudioMixingStateCode.Stopped]) callback on the local client.
+  /// When the audio mixing file playback finishes, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]) callback on the local client.
   ///
   /// **Note**
   /// - This method supports both Android and iOS. To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
@@ -1778,7 +1778,7 @@ mixin RtcMediaRelayInterface {
   ///
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the `updateChannelMediaRelay` method.
   ///
-  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.updateDestinationChannel] state code.
+  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel] state code.
   ///
   /// **Note**
   /// - Call this method after the [RtcEngine.startChannelMediaRelay] method to update the destination channel.
