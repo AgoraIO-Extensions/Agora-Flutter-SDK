@@ -39,7 +39,7 @@ class RtcChannel with RtcChannelInterface {
   /// To join more than one channel, call this method multiple times to create as many [RtcChannel] instances as needed, and call the [RtcChannel.joinChannel] method of each created [RtcChannel] object.
   /// After joining multiple channels, you can simultaneously subscribe to streams of all the channels, but publish a stream in only one channel at one time.
   ///
-  /// **Parameter** [channelId] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. This parameter does not have a default value. You must set it. Do not set it as the empty string "". Otherwise, the SDK returns [ErrorCode.Refused](-5). Supported character scopes are:
+  /// **Parameter** [channelId] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. This parameter does not have a default value. You must set it. Do not set it as the empty string "". Otherwise, the SDK returns [ErrorCode.Refused]. Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
@@ -330,7 +330,7 @@ mixin RtcChannelInterface
   ///
   /// A successful call of this method triggers the following callbacks:
   /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
-  /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
+  /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
   /// **Parameter** [role] The role of the user. See [ClientRole].
   Future<void> setClientRole(ClientRole role);
@@ -400,7 +400,7 @@ mixin RtcChannelInterface
 
   /// Publishes the local stream to the channel.
   ///
-  /// You must keep the following restrictions in mind when calling this method. Otherwise, the SDK returns the [ErrorCode.Refused](-5)：
+  /// You must keep the following restrictions in mind when calling this method. Otherwise, the SDK returns [ErrorCode.Refused]：
   /// - This method publishes one stream only to the channel corresponding to the current [RtcChannel] instance.
   /// - In a LiveBroadcasting channel, only a broadcaster can call this method. To switch the client role, call [RtcChannel.setClientRole] of the current [RtcChannel] instance.
   /// - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
@@ -408,7 +408,7 @@ mixin RtcChannelInterface
 
   /// Stops publishing a stream to the channel.
   ///
-  /// If you call this method in a channel where you are not publishing streams, the SDK returns [ErrorCode.Refused](-5).
+  /// If you call this method in a channel where you are not publishing streams, the SDK returns [ErrorCode.Refused].
   Future<void> unpublish();
 
   /// Gets the current call ID.
