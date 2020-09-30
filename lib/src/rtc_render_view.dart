@@ -12,7 +12,8 @@ import 'rtc_engine.dart';
 final Map<int, MethodChannel> _channels = {};
 
 /// Use SurfaceView in Android.
-/// Use UIView in iOS.
+///
+/// Use [UIView](https://developer.apple.com/documentation/uikit/uiview) in iOS.
 class RtcSurfaceView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -36,11 +37,13 @@ class RtcSurfaceView extends StatefulWidget {
   final VideoMirrorMode mirrorMode;
 
   /// Control whether the surface view's surface is placed on top of its window.
-  /// [TargetPlatform.android]
+  ///
+  /// See [TargetPlatform.android].
   final bool zOrderOnTop;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
-  /// [TargetPlatform.android]
+  ///
+  /// See [TargetPlatform.android].
   final bool zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
