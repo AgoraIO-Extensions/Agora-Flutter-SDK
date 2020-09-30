@@ -409,6 +409,10 @@ mixin RtcChannelInterface
   Future<void> unpublish();
 
   /// Gets the current call ID.
+  ///
+  ///  **Returns**
+  /// - The current call ID, if the method call succeeds.
+  /// - The empty string "", if the method call fails.
   Future<String> getCallId();
 }
 
