@@ -12,7 +12,8 @@ import 'rtc_engine.dart';
 final Map<int, MethodChannel> _channels = {};
 
 /// Use SurfaceView in Android.
-/// Use UIView in iOS.
+///
+/// Use [UIView](https://developer.apple.com/documentation/uikit/uiview) in iOS.
 class RtcSurfaceView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -36,11 +37,13 @@ class RtcSurfaceView extends StatefulWidget {
   final VideoMirrorMode mirrorMode;
 
   /// Control whether the surface view's surface is placed on top of its window.
-  /// [TargetPlatform.android]
+  ///
+  /// See [TargetPlatform.android].
   final bool zOrderOnTop;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
-  /// [TargetPlatform.android]
+  ///
+  /// See [TargetPlatform.android].
   final bool zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
@@ -212,13 +215,17 @@ class RtcTextureView extends StatefulWidget {
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  /// Note
+  ///
+  /// **Note**
   /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
   /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
   final String channelId;
 
-  /// The video mirror.
-  final bool mirror;
+  /// The rendering mode of the video view.
+  final VideoRenderMode renderMode;
+
+  /// The video mirror mode.
+  final VideoMirrorMode mirrorMode;
 
   /// Callback signature for when a platform view was created.
   ///
@@ -241,7 +248,8 @@ class RtcTextureView extends StatefulWidget {
     Key key,
     @required this.uid,
     this.channelId,
-    this.mirror = false,
+    this.renderMode = VideoRenderMode.Hidden,
+    this.mirrorMode = VideoMirrorMode.Auto,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
   }) : super(key: key ?? Key('texture-${channelId}-${uid}'));
@@ -254,13 +262,11 @@ class RtcTextureView extends StatefulWidget {
 
 class _RtcTextureViewState extends State<RtcTextureView> {
   int _id;
+  int _renderMode;
+  int _mirrorMode;
 
   @override
   Widget build(BuildContext context) {
-    final creationParams = {
-      'data': {'uid': widget.uid, 'channelId': widget.channelId},
-      'mirror': widget.mirror,
-    };
     if (defaultTargetPlatform == TargetPlatform.android) {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -268,7 +274,11 @@ class _RtcTextureViewState extends State<RtcTextureView> {
           viewType: 'AgoraTextureView',
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-          creationParams: creationParams,
+          creationParams: {
+            'data': {'uid': widget.uid, 'channelId': widget.channelId},
+            'renderMode': _renderMode,
+            'mirrorMode': _mirrorMode,
+          },
           creationParamsCodec: const StandardMessageCodec(),
           gestureRecognizers: widget.gestureRecognizers,
         ),
@@ -280,6 +290,8 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   @override
   void initState() {
     super.initState();
+    _renderMode = VideoRenderModeConverter(widget.renderMode).value();
+    _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
   }
 
   @override
@@ -289,8 +301,11 @@ class _RtcTextureViewState extends State<RtcTextureView> {
         oldWidget.channelId != widget.channelId) {
       setData();
     }
-    if (oldWidget.mirror != widget.mirror) {
-      setMirror();
+    if (oldWidget.renderMode != widget.renderMode) {
+      setRenderMode();
+    }
+    if (oldWidget.mirrorMode != widget.mirrorMode) {
+      setMirrorMode();
     }
   }
 
@@ -307,9 +322,16 @@ class _RtcTextureViewState extends State<RtcTextureView> {
     });
   }
 
-  void setMirror() {
-    if (widget.mirror == null) return;
-    _channels[_id]?.invokeMethod('setMirror', {'mirror': widget.mirror});
+  void setRenderMode() {
+    if (widget.renderMode == null) return;
+    _renderMode = VideoRenderModeConverter(widget.renderMode).value();
+    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
+  }
+
+  void setMirrorMode() {
+    if (widget.mirrorMode == null) return;
+    _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
+    _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
   }
 
   Future<void> onPlatformViewCreated(int id) async {

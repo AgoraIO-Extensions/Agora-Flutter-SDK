@@ -16,11 +16,11 @@ class UserInfo {
   /// Constructs a [UserInfo]
   UserInfo();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
 
@@ -36,18 +36,17 @@ class VideoDimensions {
   /// Constructs a [VideoDimensions]
   VideoDimensions(this.width, this.height);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc ignore: public_member_api_docs
   factory VideoDimensions.fromJson(Map<String, dynamic> json) =>
       _$VideoDimensionsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$VideoDimensionsToJson(this);
 }
 
 /// Definition of VideoEncoderConfiguration.
 @JsonSerializable(explicitToJson: true)
 class VideoEncoderConfiguration {
-
   /// The video frame dimensions (px), which is used to specify the video quality and measured by the total number of pixels along a frame's width and height. The default value is 640 × 360.
   /// You can customize the dimension, or select from the following list:
   /// - 120x120
@@ -119,8 +118,8 @@ class VideoEncoderConfiguration {
   /// | 960 * 720              | 15               | 910                                    | 1820                                   |
   /// | 960 * 720              | 30               | 1380                                   | 2760                                   |
   ///
-  ///  **Note** 
-  /// - The base bitrate in this table applies to the Communication profile. 
+  ///  **Note**
+  /// - The base bitrate in this table applies to the Communication profile.
   /// - The LiveBroadcasting profile generally requires a higher bitrate for better video quality. We recommend setting the bitrate mode as `0`. You can also set the bitrate as the base bitrate value x 2.
   @JsonKey(includeIfNull: false)
   int bitrate;
@@ -146,20 +145,21 @@ class VideoEncoderConfiguration {
   VideoMirrorMode mirrorMode;
 
   /// Constructs a [VideoEncoderConfiguration]
-  VideoEncoderConfiguration({this.dimensions,
-    this.frameRate,
-    this.minFrameRate,
-    this.bitrate,
-    this.minBitrate,
-    this.orientationMode,
-    this.degradationPrefer,
-    this.mirrorMode});
+  VideoEncoderConfiguration(
+      {this.dimensions,
+      this.frameRate,
+      this.minFrameRate,
+      this.bitrate,
+      this.minBitrate,
+      this.orientationMode,
+      this.degradationPrefer,
+      this.mirrorMode});
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory VideoEncoderConfiguration.fromJson(Map<String, dynamic> json) =>
       _$VideoEncoderConfigurationFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$VideoEncoderConfigurationToJson(this);
 }
 
@@ -183,16 +183,17 @@ class BeautyOptions {
   double rednessLevel;
 
   /// Constructs a [BeautyOptions]
-  BeautyOptions({this.lighteningContrastLevel,
-    this.lighteningLevel,
-    this.smoothnessLevel,
-    this.rednessLevel});
+  BeautyOptions(
+      {this.lighteningContrastLevel,
+      this.lighteningLevel,
+      this.smoothnessLevel,
+      this.rednessLevel});
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory BeautyOptions.fromJson(Map<String, dynamic> json) =>
       _$BeautyOptionsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$BeautyOptionsToJson(this);
 }
 
@@ -217,15 +218,12 @@ class AgoraImage {
   /// Constructs a [AgoraImage]
   AgoraImage(this.url, this.x, this.y, this.width, this.height);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory AgoraImage.fromJson(Map<String, dynamic> json) =>
       _$AgoraImageFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$AgoraImageToJson(this);
-}
-
-class JsonSerializable {
 }
 
 /// The transcodingUser class, which defines the audio and video properties in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
@@ -264,21 +262,22 @@ class TranscodingUser {
   AudioChannel audioChannel;
 
   /// Constructs a [TranscodingUser]
-  TranscodingUser(this.uid,
-      this.x,
-      this.y, {
-        this.width,
-        this.height,
-        this.zOrder,
-        this.alpha,
-        this.audioChannel,
-      });
+  TranscodingUser(
+    this.uid,
+    this.x,
+    this.y, {
+    this.width,
+    this.height,
+    this.zOrder,
+    this.alpha,
+    this.audioChannel,
+  });
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory TranscodingUser.fromJson(Map<String, dynamic> json) =>
       _$TranscodingUserFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$TranscodingUserToJson(this);
 }
 
@@ -297,10 +296,10 @@ class Color {
   /// Constructs a [Color]
   Color(this.red, this.green, this.blue);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$ColorToJson(this);
 }
 
@@ -382,7 +381,8 @@ class LiveTranscoding {
   final List<TranscodingUser> transcodingUsers;
 
   /// Constructs a [LiveTranscoding]
-  LiveTranscoding(this.transcodingUsers, {
+  LiveTranscoding(
+    this.transcodingUsers, {
     this.width,
     this.height,
     this.videoBitrate,
@@ -400,11 +400,11 @@ class LiveTranscoding {
     this.userConfigExtraInfo,
   });
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory LiveTranscoding.fromJson(Map<String, dynamic> json) =>
       _$LiveTranscodingFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 }
 
@@ -425,11 +425,11 @@ class ChannelMediaInfo {
   /// Constructs a [ChannelMediaInfo]
   ChannelMediaInfo(this.uid, {this.channelName, this.token});
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory ChannelMediaInfo.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaInfoFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$ChannelMediaInfoToJson(this);
 }
 
@@ -456,11 +456,11 @@ class ChannelMediaRelayConfiguration {
   /// Constructs a [ChannelMediaRelayConfiguration]
   ChannelMediaRelayConfiguration(this.srcInfo, this.destInfos);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory ChannelMediaRelayConfiguration.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaRelayConfigurationFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$ChannelMediaRelayConfigurationToJson(this);
 }
 
@@ -483,11 +483,11 @@ class LastmileProbeConfig {
   LastmileProbeConfig(this.probeUplink, this.probeDownlink,
       this.expectedUplinkBitrate, this.expectedDownlinkBitrate);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory LastmileProbeConfig.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeConfigFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$LastmileProbeConfigToJson(this);
 }
 
@@ -509,11 +509,11 @@ class Rectangle {
   /// Constructs a [Rectangle]
   Rectangle(this.x, this.y, this.width, this.height);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory Rectangle.fromJson(Map<String, dynamic> json) =>
       _$RectangleFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$RectangleToJson(this);
 }
 
@@ -538,11 +538,11 @@ class WatermarkOptions {
   WatermarkOptions(this.positionInLandscapeMode, this.positionInPortraitMode,
       {this.visibleInPreview});
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory WatermarkOptions.fromJson(Map<String, dynamic> json) =>
       _$WatermarkOptionsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
 }
 
@@ -586,20 +586,21 @@ class LiveInjectStreamConfig {
   AudioChannel audioChannels;
 
   /// Constructs a [LiveInjectStreamConfig]
-  LiveInjectStreamConfig({this.width,
-    this.height,
-    this.videoGop,
-    this.videoFramerate,
-    this.videoBitrate,
-    this.audioSampleRate,
-    this.audioBitrate,
-    this.audioChannels});
+  LiveInjectStreamConfig(
+      {this.width,
+      this.height,
+      this.videoGop,
+      this.videoFramerate,
+      this.videoBitrate,
+      this.audioSampleRate,
+      this.audioBitrate,
+      this.audioChannels});
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory LiveInjectStreamConfig.fromJson(Map<String, dynamic> json) =>
       _$LiveInjectStreamConfigFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$LiveInjectStreamConfigToJson(this);
 }
 
@@ -617,11 +618,11 @@ class CameraCapturerConfiguration {
   /// Constructs a [CameraCapturerConfiguration]
   CameraCapturerConfiguration(this.preference, this.cameraDirection);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory CameraCapturerConfiguration.fromJson(Map<String, dynamic> json) =>
       _$CameraCapturerConfigurationFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$CameraCapturerConfigurationToJson(this);
 }
 
@@ -647,12 +648,38 @@ class ChannelMediaOptions {
   /// Constructs a [ChannelMediaOptions]
   ChannelMediaOptions(this.autoSubscribeAudio, this.autoSubscribeVideo);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
       _$ChannelMediaOptionsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$ChannelMediaOptionsToJson(this);
+}
+
+/// Definition of `EncryptionConfig`.
+///
+/// @since v3.1.2.
+@JsonSerializable(explicitToJson: true)
+class EncryptionConfig {
+  /// Encryption mode. The default encryption mode is `AES128XTS`. See [EncryptionMode].
+  final EncryptionMode encryptionMode;
+
+  /// Encryption key in string type.
+  ///
+  /// **Note**
+  ///
+  /// If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [ErrorCode.InvalidArgument].
+  final String encryptionKey;
+
+  /// Constructs a [EncryptionConfig]
+  EncryptionConfig(this.encryptionMode, this.encryptionKey);
+
+  /// @nodoc
+  factory EncryptionConfig.fromJson(Map<String, dynamic> json) =>
+      _$EncryptionConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$EncryptionConfigToJson(this);
 }
 
 /// Statistics of RTCEngine.
@@ -740,11 +767,11 @@ class RtcStats {
   /// Constructs a [RtcStats]
   RtcStats();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory RtcStats.fromJson(Map<String, dynamic> json) =>
       _$RtcStatsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$RtcStatsToJson(this);
 }
 
@@ -775,11 +802,11 @@ class AudioVolumeInfo {
   /// Constructs a [AudioVolumeInfo]
   AudioVolumeInfo();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory AudioVolumeInfo.fromJson(Map<String, dynamic> json) =>
       _$AudioVolumeInfoFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$AudioVolumeInfoToJson(this);
 }
 
@@ -801,10 +828,10 @@ class Rect {
   /// Constructs a [Rect]
   Rect();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory Rect.fromJson(Map<String, dynamic> json) => _$RectFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$RectToJson(this);
 }
 
@@ -823,11 +850,11 @@ class LastmileProbeOneWayResult {
   /// Constructs a [LastmileProbeOneWayResult]
   LastmileProbeOneWayResult();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory LastmileProbeOneWayResult.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeOneWayResultFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$LastmileProbeOneWayResultToJson(this);
 }
 
@@ -852,11 +879,11 @@ class LastmileProbeResult {
   /// Constructs a [LastmileProbeResult]
   LastmileProbeResult();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory LastmileProbeResult.fromJson(Map<String, dynamic> json) =>
       _$LastmileProbeResultFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$LastmileProbeResultToJson(this);
 }
 
@@ -872,14 +899,19 @@ class LocalAudioStats {
   /// The average sending bitrate (Kbps).
   int sentBitrate;
 
+  /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
+  ///
+  /// @since v3.1.2.
+  int txPacketLossRate;
+
   /// Constructs a [LocalAudioStats]
   LocalAudioStats();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
       _$LocalAudioStatsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$LocalAudioStatsToJson(this);
 }
 
@@ -924,14 +956,24 @@ class LocalVideoStats {
   /// See [VideoCodecType].
   VideoCodecType codecType;
 
+  /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
+  ///
+  /// @since v3.1.2.
+  int txPacketLossRate;
+
+  /// The capture frame rate (fps) of the local video.
+  ///
+  /// @since v3.1.2.
+  int captureFrameRate;
+
   /// Constructs a [LocalVideoStats]
   LocalVideoStats();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
       _$LocalVideoStatsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$LocalVideoStatsToJson(this);
 }
 
@@ -972,14 +1014,19 @@ class RemoteAudioStats {
   /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the LiveBroadcasting profile neither stops sending the audio stream nor disables the audio module after joining the channel.
   int totalActiveTime;
 
+  /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
+  ///
+  /// @since v3.1.2.
+  int publishDuration;
+
   /// Constructs a [RemoteAudioStats]
   RemoteAudioStats();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
       _$RemoteAudioStatsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$RemoteAudioStatsToJson(this);
 }
 
@@ -1025,14 +1072,19 @@ class RemoteVideoStats {
   /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the Live-broadcast profile neither stops sending the video stream nor disables the video module after joining the channel.
   int totalActiveTime;
 
+  /// The total publish duration (ms) of the remote video stream.
+  ///
+  /// @since v3.1.2.
+  int publishDuration;
+
   /// Constructs a [RemoteVideoStats]
   RemoteVideoStats();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory RemoteVideoStats.fromJson(Map<String, dynamic> json) =>
       _$RemoteVideoStatsFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$RemoteVideoStatsToJson(this);
 }
 
@@ -1057,10 +1109,10 @@ class FacePositionInfo {
   /// Constructs a [FacePositionInfo]
   FacePositionInfo();
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory FacePositionInfo.fromJson(Map<String, dynamic> json) =>
       _$FacePositionInfoFromJson(json);
 
-  // @nodoc ignore: public_member_api_docs
+  /// @nodoc
   Map<String, dynamic> toJson() => _$FacePositionInfoToJson(this);
 }

@@ -1,5 +1,8 @@
 # Change log
 
+## 3.1.2
+* upgrade Agora SDK to 3.1.2
+
 ## 3.0.1-dev.7
 * fix android `VideoSizeChanged` bug
 

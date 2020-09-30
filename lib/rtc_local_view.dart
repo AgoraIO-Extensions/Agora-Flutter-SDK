@@ -6,7 +6,9 @@ import 'package:flutter/widgets.dart';
 import './src/enums.dart';
 import './src/rtc_render_view.dart';
 
-/// (Android only) SurfaceView. Please use UIView for iOS.
+/// (Android only) SurfaceView.
+///
+/// Please use [UIView](https://developer.apple.com/documentation/uikit/uiview) for iOS.
 class SurfaceView extends RtcSurfaceView {
   /// Constructs a [SurfaceView]
   SurfaceView({
@@ -19,15 +21,15 @@ class SurfaceView extends RtcSurfaceView {
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(
-      key: key,
-      zOrderMediaOverlay: zOrderMediaOverlay,
-      zOrderOnTop: zOrderOnTop,
-      renderMode: renderMode,
-      channelId: channelId,
-      mirrorMode: mirrorMode,
-      gestureRecognizers: gestureRecognizers,
-      onPlatformViewCreated: onPlatformViewCreated,
-      uid: 0);
+            key: key,
+            zOrderMediaOverlay: zOrderMediaOverlay,
+            zOrderOnTop: zOrderOnTop,
+            renderMode: renderMode,
+            channelId: channelId,
+            mirrorMode: mirrorMode,
+            gestureRecognizers: gestureRecognizers,
+            onPlatformViewCreated: onPlatformViewCreated,
+            uid: 0);
 }
 
 /// (Android only) TextureView.
@@ -35,15 +37,17 @@ class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
     Key key,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     String channelId,
-    bool mirror = false,
+    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(
-      key: key,
-      channelId: channelId,
-      mirror: mirror,
-      gestureRecognizers: gestureRecognizers,
-      onPlatformViewCreated: onPlatformViewCreated,
-      uid: 0);
+            key: key,
+            renderMode: renderMode,
+            channelId: channelId,
+            mirrorMode: mirrorMode,
+            gestureRecognizers: gestureRecognizers,
+            onPlatformViewCreated: onPlatformViewCreated,
+            uid: 0);
 }

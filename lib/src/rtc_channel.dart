@@ -9,40 +9,29 @@ import 'events.dart';
 import 'rtc_engine.dart';
 
 /// The RtcChannel class.
-class RtcChannel
-    implements
-        RtcAudioInterface,
-        RtcVideoInterface,
-        RtcVoicePositionInterface,
-        RtcPublishStreamInterface,
-        RtcMediaRelayInterface,
-        RtcDualStreamInterface,
-        RtcFallbackInterface,
-        RtcMediaMetadataInterface,
-        RtcEncryptionInterface,
-        RtcInjectStreamInterface,
-        RtcStreamMessageInterface {
-  static const MethodChannel _methodChannel = MethodChannel(
-      'agora_rtc_channel');
-  static const EventChannel _eventChannel = EventChannel(
-      'agora_rtc_channel/events');
+class RtcChannel with RtcChannelInterface {
+  static const MethodChannel _methodChannel =
+      MethodChannel('agora_rtc_channel');
+  static const EventChannel _eventChannel =
+      EventChannel('agora_rtc_channel/events');
 
   static StreamSubscription _subscription;
 
   static final Map<String, RtcChannel> _channels = {};
 
-  final String _channelId;
+  /// The ID of RtcChannel
+  final String channelId;
 
   RtcChannelEventHandler _handler;
 
-  RtcChannel._(this._channelId);
+  RtcChannel._(this.channelId);
 
   Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
     return _methodChannel.invokeMethod(
         method,
         arguments == null
-            ? {'channelId': _channelId}
-            : {'channelId': _channelId, ...arguments});
+            ? {'channelId': channelId}
+            : {'channelId': channelId, ...arguments});
   }
 
   /// Creates and gets an [RtcChannel] instance.
@@ -50,7 +39,7 @@ class RtcChannel
   /// To join more than one channel, call this method multiple times to create as many [RtcChannel] instances as needed, and call the [RtcChannel.joinChannel] method of each created [RtcChannel] object.
   /// After joining multiple channels, you can simultaneously subscribe to streams of all the channels, but publish a stream in only one channel at one time.
   ///
-  /// **Parameter** [channelId] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. This parameter does not have a default value. You must set it. Do not set it as the empty string "". Otherwise, the SDK returns [ErrorCode.Refused](-5). Supported character scopes are:
+  /// **Parameter** [channelId] The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. This parameter does not have a default value. You must set it. Do not set it as the empty string "". Otherwise, the SDK returns [ErrorCode.Refused]. Supported character scopes are:
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
@@ -71,9 +60,9 @@ class RtcChannel
     _channels.clear();
   }
 
-  /// Destroys the [RtcChannel] instance.
+  @override
   Future<void> destroy() {
-    _channels.remove(_channelId);
+    _channels.remove(channelId);
     return _invokeMethod('destroy');
   }
 
@@ -93,36 +82,13 @@ class RtcChannel
     });
   }
 
-  /// Sets the role of a user.
-  ///
-  /// This method sets the role of a user, such as a host or an audience. In a LiveBroadcasting channel, only a broadcaster can call the [RtcChannel.publish] method in the [RtcChannel] class.
-  /// A successful call of this method triggers the following callbacks:
-  /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
-  /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
-  ///
-  /// **Parameter** [role] The role of the user. See [ClientRole].
+  @override
   Future<void> setClientRole(ClientRole role) {
     return _invokeMethod(
         'setClientRole', {'role': ClientRoleConverter(role).value()});
   }
 
-  /// Joins the channel with a user ID.
-  ///
-  /// **Note**
-  /// - If you are already in a channel, you cannot rejoin it with the same uid.
-  /// - We recommend using different UIDs for different channels.
-  /// - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
-  /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
-  ///
-  /// **Parameter** [token] The token generated at your server.
-  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
-  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
-  ///
-  /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
-  ///
-  /// **Parameter** [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the onJoinChannelSuccess callback. The app must maintain this user ID.
-  ///
-  /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
+  @override
   Future<void> joinChannel(String token, String optionalInfo, int optionalUid,
       ChannelMediaOptions options) {
     return _invokeMethod('joinChannel', {
@@ -133,29 +99,9 @@ class RtcChannel
     });
   }
 
-  /// Joins a channel with the user account.
-  ///
-  /// **Note**
-  /// - If you are already in a channel, you cannot rejoin it with the same uid.
-  /// - We recommend using different user accounts for different channels.
-  /// - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
-  /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
-  ///
-  /// **Parameter** [token] The token generated at your server.
-  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
-  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
-  ///
-  /// **Parameter** [userAccount] The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
-  /// - All lowercase English letters: a to z.
-  /// - All uppercase English letters: A to Z.
-  /// - All numeric characters: 0 to 9.
-  /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  ///
-  /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
-  ///
-  Future<void> joinChannelWithUserAccount(String token, String userAccount,
-      ChannelMediaOptions options) {
+  @override
+  Future<void> joinChannelWithUserAccount(
+      String token, String userAccount, ChannelMediaOptions options) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'userAccount': userAccount,
@@ -163,53 +109,34 @@ class RtcChannel
     });
   }
 
-  /// Leaves the current channel.
-  ///
-  /// A successful leaveChannel method call triggers the following callbacks:
-  /// - The local client: [RtcChannelEventHandler.leaveChannel].
-  /// - The remote client: [RtcChannelEventHandler.userOffline], if the user leaving the channel is in a Communication channel, or is a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
+  @override
   Future<void> leaveChannel() {
     return _invokeMethod('leaveChannel');
   }
 
-  /// Renews the token when the current token expires.
-  ///
-  /// In the following situations, the SDK decides that the current token has expired:
-  /// - The SDK triggers the [RtcChannelEventHandler.tokenPrivilegeWillExpire] callback, or
-  /// - The [RtcChannelEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
-  /// You should get a new token from your server and call this method to renew it. Failure to do so results in the SDK disconnecting from the Agora server.
-  /// **Parameter** [token] The new token.
+  @override
   Future<void> renewToken(String token) {
     return _invokeMethod('renewToken', {'token': token});
   }
 
-  /// Gets the connection state of the SDK.
+  @override
   Future<ConnectionStateType> getConnectionState() {
     return _invokeMethod('getConnectionState').then((value) {
-      return ConnectionStateTypeConverter
-          .fromValue(value)
-          .e;
+      return ConnectionStateTypeConverter.fromValue(value).e;
     });
   }
 
-  /// Publishes the local stream to the channel.
-  ///
-  /// You must keep the following restrictions in mind when calling this method. Otherwise, the SDK returns the [ErrorCode.Refused](-5)：
-  /// - This method publishes one stream only to the channel corresponding to the current [RtcChannel] instance.
-  /// - In a LiveBroadcasting channel, only a broadcaster can call this method. To switch the client role, call [RtcChannel.setClientRole] of the current [RtcChannel] instance.
-  /// - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
+  @override
   Future<void> publish() {
     return _invokeMethod('publish');
   }
 
-  /// Stops publishing a stream to the channel.
-  ///
-  /// If you call this method in a channel where you are not publishing streams, the SDK returns [ErrorCode.Refused](-5).
+  @override
   Future<void> unpublish() {
     return _invokeMethod('unpublish');
   }
 
-  /// Gets the current call ID.
+  @override
   Future<String> getCallId() {
     return _invokeMethod('getCallId');
   }
@@ -303,11 +230,13 @@ class RtcChannel
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
 
   @override
+  @deprecated
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
     return _invokeMethod(
         'setLiveTranscoding', {'transcoding': transcoding.toJson()});
@@ -371,6 +300,123 @@ class RtcChannel
       'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
     });
   }
+
+  @override
+  Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
+    return _invokeMethod(
+        'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
+  }
+}
+
+mixin RtcChannelInterface
+    implements
+        RtcAudioInterface,
+        RtcVideoInterface,
+        RtcVoicePositionInterface,
+        RtcPublishStreamInterface,
+        RtcMediaRelayInterface,
+        RtcDualStreamInterface,
+        RtcFallbackInterface,
+        RtcMediaMetadataInterface,
+        RtcEncryptionInterface,
+        RtcInjectStreamInterface,
+        RtcStreamMessageInterface {
+  /// Destroys the [RtcChannel] instance.
+  Future<void> destroy();
+
+  /// Sets the role of a user.
+  ///
+  /// This method sets the role of a user, such as a host or an audience. In a LiveBroadcasting channel, only a broadcaster can call the [RtcChannel.publish] method in the [RtcChannel] class.
+  ///
+  /// A successful call of this method triggers the following callbacks:
+  /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
+  /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
+  ///
+  /// **Parameter** [role] The role of the user. See [ClientRole].
+  Future<void> setClientRole(ClientRole role);
+
+  /// Joins the channel with a user ID.
+  ///
+  /// **Note**
+  /// - If you are already in a channel, you cannot rejoin it with the same uid.
+  /// - We recommend using different UIDs for different channels.
+  /// - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
+  /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
+  ///
+  /// **Parameter** [token] The token generated at your server.
+  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
+  /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
+  ///
+  /// **Parameter** [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the onJoinChannelSuccess callback. The app must maintain this user ID.
+  ///
+  /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
+  Future<void> joinChannel(String token, String optionalInfo, int optionalUid,
+      ChannelMediaOptions options);
+
+  /// Joins a channel with the user account.
+  ///
+  /// **Note**
+  /// - If you are already in a channel, you cannot rejoin it with the same uid.
+  /// - We recommend using different user accounts for different channels.
+  /// - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
+  /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
+  ///
+  /// **Parameter** [token] The token generated at your server.
+  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  ///
+  /// **Parameter** [userAccount] The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
+  /// - All lowercase English letters: a to z.
+  /// - All uppercase English letters: A to Z.
+  /// - All numeric characters: 0 to 9.
+  /// - The space character.
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  ///
+  /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
+  ///
+  Future<void> joinChannelWithUserAccount(
+      String token, String userAccount, ChannelMediaOptions options);
+
+  /// Leaves the current channel.
+  ///
+  /// A successful leaveChannel method call triggers the following callbacks:
+  /// - The local client: [RtcChannelEventHandler.leaveChannel].
+  /// - The remote client: [RtcChannelEventHandler.userOffline], if the user leaving the channel is in a Communication channel, or is a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
+  Future<void> leaveChannel();
+
+  /// Renews the token when the current token expires.
+  ///
+  /// In the following situations, the SDK decides that the current token has expired:
+  /// - The SDK triggers the [RtcChannelEventHandler.tokenPrivilegeWillExpire] callback, or
+  /// - The [RtcChannelEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired] error.
+  /// You should get a new token from your server and call this method to renew it. Failure to do so results in the SDK disconnecting from the Agora server.
+  /// **Parameter** [token] The new token.
+  Future<void> renewToken(String token);
+
+  /// Gets the connection state of the SDK.
+  Future<ConnectionStateType> getConnectionState();
+
+  /// Publishes the local stream to the channel.
+  ///
+  /// You must keep the following restrictions in mind when calling this method. Otherwise, the SDK returns [ErrorCode.Refused]：
+  /// - This method publishes one stream only to the channel corresponding to the current [RtcChannel] instance.
+  /// - In a LiveBroadcasting channel, only a broadcaster can call this method. To switch the client role, call [RtcChannel.setClientRole] of the current [RtcChannel] instance.
+  /// - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
+  Future<void> publish();
+
+  /// Stops publishing a stream to the channel.
+  ///
+  /// If you call this method in a channel where you are not publishing streams, the SDK returns [ErrorCode.Refused].
+  Future<void> unpublish();
+
+  /// Gets the current call ID.
+  ///
+  ///  **Returns**
+  /// - The current call ID, if the method call succeeds.
+  /// - The empty string "", if the method call fails.
+  Future<String> getCallId();
 }
 
 mixin RtcAudioInterface {
@@ -508,8 +554,9 @@ mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
   ///
   /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] and [RtcChannelEventHandler.channelMediaRelayEvent] callbacks, and these callbacks report the state and events of the media stream relay.
-  /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback reports [ChannelMediaRelayState.Running](2) and [ChannelMediaRelayError.None](0), and the [RtcChannelEventHandler.channelMediaRelayEvent] callback reports [ChannelMediaRelayEvent.SentToDestinationChannel](4), the SDK starts relaying media streams between the original and the destination channel.
+  /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback reports [ChannelMediaRelayState.Running] and [ChannelMediaRelayError.None], and the [RtcChannelEventHandler.channelMediaRelayEvent] callback reports [ChannelMediaRelayEvent.SentToDestinationChannel], the SDK starts relaying media streams between the original and the destination channel.
   /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback returns Failure(3), an exception occurs during the media stream relay.
+  ///
   /// See [ChannelMediaRelayState.Failure]
   ///
   /// **Note**
@@ -524,7 +571,8 @@ mixin RtcMediaRelayInterface {
   /// Updates the channels for media relay.
   ///
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.
-  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel](7) state code.
+  ///
+  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel] state code.
   ///
   /// **Note**
   /// - Call this method after the startChannelMediaRelay method to update the destination channel.
@@ -539,10 +587,10 @@ mixin RtcMediaRelayInterface {
   /// Stops the media stream relay.
   ///
   /// Once the relay stops, the broadcaster quits all the destination channels.
-  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback. If the callback reports [ChannelMediaRelayState.Idle](0) and [ChannelMediaRelayError.None](0), the broadcaster successfully stops the relay.
+  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback. If the callback reports [ChannelMediaRelayState.Idle] and [ChannelMediaRelayError.None], the broadcaster successfully stops the relay.
   ///
   /// **Note**
-  /// - If the method call fails, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse](2) or [ChannelMediaRelayError.ServerConnectionLost](8) state code. You can leave the channel using [RtcChannel.leaveChannel], and the media stream relay automatically stops.
+  /// - If the method call fails, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] state code. You can leave the channel using [RtcChannel.leaveChannel], and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 }
 
@@ -607,6 +655,10 @@ mixin RtcMediaMetadataInterface {
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated. Use [RtcChannel.enableEncryption] instead.
+  ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
   /// **Note**
@@ -614,19 +666,44 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
+  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
+  ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated. Use [RtcChannel.enableEncryption] instead.
   ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
   ///
   /// **Note**
   /// - Do not use this method for CDN streaming.
-  /// - Before calling this method, ensure that you have called [RtcEngine.setEncryptionSecret] to enable encryption.
+  /// - Before calling this method, ensure that you have called [RtcChannel.setEncryptionSecret] to enable encryption.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
+
+  /// Enables/Disables the built-in encryption.
+  ///
+  /// @since v3.1.2.
+  ///
+  /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
+  ///
+  /// All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+  ///
+  /// **Note**
+  /// - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+  /// - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
+  ///
+  ///
+  /// **Parameter** [enabled] Whether to enable the built-in encryption.
+  /// - `true`: Enable the built-in encryption.
+  /// - `false`: Disable the built-in encryption.
+  /// **Parameter** [config] Configurations of built-in encryption schemas. See [EncryptionConfig].
+  Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
 mixin RtcInjectStreamInterface {
@@ -639,10 +716,10 @@ mixin RtcInjectStreamInterface {
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
   /// Calling this method triggers the following callbacks:
   /// - The local client:
-  /// -- [RtcChannelEventHandler.streamInjectedStatus], with the state of injecting the media stream.
-  /// -- [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
+  ///   - [RtcChannelEventHandler.streamInjectedStatus], with the state of injecting the media stream.
+  ///   - [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
   /// - The remote client:
-  /// -- [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
+  ///   - [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
   ///
   /// **Parameter** [url] The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and FLV.
   /// - Supported FLV audio codec type: AAC.
