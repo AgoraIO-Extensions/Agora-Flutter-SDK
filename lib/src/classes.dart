@@ -661,14 +661,14 @@ class ChannelMediaOptions {
 /// @since v3.1.2.
 @JsonSerializable(explicitToJson: true)
 class EncryptionConfig {
-  /// Encryption mode. The default encryption mode is `AES128XTS`. See [`EncryptionMode`]{@link EncryptionMode}.
+  /// Encryption mode. The default encryption mode is `AES128XTS`. See [EncryptionMode].
   final EncryptionMode encryptionMode;
 
   /// Encryption key in string type.
   ///
   /// **Note**
   ///
-  /// If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [`InvalidArgument(2)`]{@link ErrorCode.InvalidArgument}.
+  /// If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [ErrorCode.InvalidArgument].
   final String encryptionKey;
 
   /// Constructs a [EncryptionConfig]

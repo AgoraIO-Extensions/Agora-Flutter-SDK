@@ -324,6 +324,7 @@ mixin RtcChannelInterface
   /// Sets the role of a user.
   ///
   /// This method sets the role of a user, such as a host or an audience. In a LiveBroadcasting channel, only a broadcaster can call the [RtcChannel.publish] method in the [RtcChannel] class.
+  ///
   /// A successful call of this method triggers the following callbacks:
   /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
   /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline]([UserOfflineReason.BecomeAudience]).
@@ -386,7 +387,7 @@ mixin RtcChannelInterface
   ///
   /// In the following situations, the SDK decides that the current token has expired:
   /// - The SDK triggers the [RtcChannelEventHandler.tokenPrivilegeWillExpire] callback, or
-  /// - The [RtcChannelEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
+  /// - The [RtcChannelEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired] error.
   /// You should get a new token from your server and call this method to renew it. Failure to do so results in the SDK disconnecting from the Agora server.
   /// **Parameter** [token] The new token.
   Future<void> renewToken(String token);
@@ -546,8 +547,9 @@ mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
   ///
   /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] and [RtcChannelEventHandler.channelMediaRelayEvent] callbacks, and these callbacks report the state and events of the media stream relay.
-  /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback reports [ChannelMediaRelayState.Running](2) and [ChannelMediaRelayError.None](0), and the [RtcChannelEventHandler.channelMediaRelayEvent] callback reports [ChannelMediaRelayEvent.SentToDestinationChannel](4), the SDK starts relaying media streams between the original and the destination channel.
+  /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback reports [ChannelMediaRelayState.Running] and [ChannelMediaRelayError.None], and the [RtcChannelEventHandler.channelMediaRelayEvent] callback reports [ChannelMediaRelayEvent.SentToDestinationChannel], the SDK starts relaying media streams between the original and the destination channel.
   /// - If the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback returns Failure(3), an exception occurs during the media stream relay.
+  ///
   /// See [ChannelMediaRelayState.Failure]
   ///
   /// **Note**
@@ -562,7 +564,8 @@ mixin RtcMediaRelayInterface {
   /// Updates the channels for media relay.
   ///
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.
-  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel](7) state code.
+  ///
+  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel] state code.
   ///
   /// **Note**
   /// - Call this method after the startChannelMediaRelay method to update the destination channel.
@@ -577,10 +580,10 @@ mixin RtcMediaRelayInterface {
   /// Stops the media stream relay.
   ///
   /// Once the relay stops, the broadcaster quits all the destination channels.
-  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback. If the callback reports [ChannelMediaRelayState.Idle](0) and [ChannelMediaRelayError.None](0), the broadcaster successfully stops the relay.
+  /// After a successful method call, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback. If the callback reports [ChannelMediaRelayState.Idle] and [ChannelMediaRelayError.None], the broadcaster successfully stops the relay.
   ///
   /// **Note**
-  /// - If the method call fails, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse](2) or [ChannelMediaRelayError.ServerConnectionLost](8) state code. You can leave the channel using [RtcChannel.leaveChannel], and the media stream relay automatically stops.
+  /// - If the method call fails, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] state code. You can leave the channel using [RtcChannel.leaveChannel], and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 }
 
@@ -679,10 +682,10 @@ mixin RtcEncryptionInterface {
   /// - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
   ///
   ///
-  /// @param enabled Whether to enable the built-in encryption.
+  /// **Parameter** [enabled] Whether to enable the built-in encryption.
   /// - `true`: Enable the built-in encryption.
   /// - `false`: Disable the built-in encryption.
-  /// @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+  /// **Parameter** [config] Configurations of built-in encryption schemas. See [EncryptionConfig].
   Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
@@ -696,10 +699,10 @@ mixin RtcInjectStreamInterface {
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
   /// Calling this method triggers the following callbacks:
   /// - The local client:
-  /// -- [RtcChannelEventHandler.streamInjectedStatus], with the state of injecting the media stream.
-  /// -- [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
+  ///   - [RtcChannelEventHandler.streamInjectedStatus], with the state of injecting the media stream.
+  ///   - [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
   /// - The remote client:
-  /// -- [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
+  ///   - [RtcChannelEventHandler.userJoined](uid: 666), if the method call succeeds and the online media stream is injected into the channel.
   ///
   /// **Parameter** [url] The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and FLV.
   /// - Supported FLV audio codec type: AAC.

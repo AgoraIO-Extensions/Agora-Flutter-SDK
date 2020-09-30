@@ -956,7 +956,7 @@ mixin RtcEngineInterface
   ///
   /// The token expires after a period of time once the token schema is enabled when:
   /// - The SDK triggers the [RtcEngineEventHandler.tokenPrivilegeWillExpire] callback
-  /// - The [RtcEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired](9) error.
+  /// - The [RtcEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired] error.
   /// The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
   ///
   /// **Parameter** [token] The new token.
@@ -1023,12 +1023,14 @@ mixin RtcEngineInterface
 
   /// Sets the log file size (KB).
   ///
-  /// The Agora SDK has two log files, each with a default size of 512 KB. If you set `fileSizeInKBytes` as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB. If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
+  /// By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB.
   ///
-  /// **Parameter** [fileSizeInKBytes] The SDK log file size (KB).
+  /// These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When agorasdk.log is full, the SDK deletes the log file with the earliest modification time among the other four, renames agorasdk.log to the name of the deleted log file, and create a new `agorasdk.log` to record latest logs.
+  ///
+  /// **Parameter** [fileSizeInKBytes] The size (KB) of a log file. The default value is 1024 KB. If you set `fileSizeInKBytes` to 1024 KB, the SDK outputs at most 5 MB log files; if you set it to less than 1024 KB, the maximum size of a log file is still 1024 KB.
   Future<void> setLogFileSize(int fileSizeInKBytes);
 
-  /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
+  /// @nodoc Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
   ///
   /// The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
   ///
@@ -1040,6 +1042,7 @@ mixin RtcUserInfoInterface {
   /// Registers a user account.
   ///
   /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the [RtcEngineEventHandler.localUserRegistered] callback on the local client, reporting the user ID and user account of the local user.
+  ///
   /// To join a channel with a user account, you can choose either of the following:
   /// - Call the [RtcEngine.registerLocalUserAccount] method to create a user account, and then the [RtcEngine.joinChannelWithUserAccount] method to join the channel.
   /// - Call the [RtcEngine.joinChannelWithUserAccount] method to join the channel.
@@ -1130,10 +1133,10 @@ mixin RtcAudioInterface {
   /// **Note**
   /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method resets the internal engine and takes some time to take effect. We recommend using the following API methods to control the audio engine modules separately:
-  /// -- [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
-  /// -- [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
-  /// -- [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
-  /// -- [RtcEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
+  ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
+  ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
+  ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
+  ///   - [RtcEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
   Future<void> enableAudio();
 
   /// Disables the audio module.
@@ -1141,10 +1144,10 @@ mixin RtcAudioInterface {
   /// **Note**
   /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method resets the engine and takes some time to take effect. We recommend using the following API methods to control the audio engine modules separately:
-  /// -- [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
-  /// -- [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
-  /// -- [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
-  /// -- [RtcEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
+  ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
+  ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
+  ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
+  ///   - [RtcEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
   Future<void> disableAudio();
 
   /// Sets the audio parameters and application scenarios.
@@ -1153,7 +1156,7 @@ mixin RtcAudioInterface {
   /// - You must call this method before calling the joinChannel method.
   /// See [RtcEngine.joinChannel]
   /// - In the Communication and [ChannelProfile.LiveBroadcasting] profiles, the bitrates may be different from your settings due to network self-adaptation.
-  /// - In scenarios requiring high-quality audio, we recommend setting profile as [AudioScenario.ShowRoom](4) and scenario as [AudioScenario.GameStreaming](3). For example, for music education scenarios.
+  /// - In scenarios requiring high-quality audio, we recommend setting profile as [AudioScenario.ShowRoom] and scenario as [AudioScenario.GameStreaming]. For example, for music education scenarios.
   ///
   /// **Parameter** [profile] Sets the sample rate, bitrate, encoding mode, and the number of channels. See [AudioProfile].
   ///
@@ -1191,9 +1194,7 @@ mixin RtcAudioInterface {
   ///
   /// **Note**
   /// - This method adjusts the playback volume which is mixed volume of all remote users.
-  /// - To mute the local audio playback, call both adjustPlaybackSignalVolume and adjustAudioMixingVolume, and set volume as 0.
-  /// See [RtcEngine.adjustPlaybackSignalVolume]
-  /// See [RtcEngine.adjustAudioMixingVolume]
+  /// - To mute the local audio playback, call both [RtcEngine.adjustPlaybackSignalVolume] and [RtcEngine.adjustAudioMixingVolume], and set volume as 0.
   /// - To avoid echoes and improve call quality, Agora recommends setting the value of volume between 0 and 100. If you need to set the value higher than 100, contact support@agora.io first.
   ///
   /// **Parameter** [volume] The playback volume of all remote users. The value ranges from 0 to 400:
@@ -1205,13 +1206,15 @@ mixin RtcAudioInterface {
   /// Enables/Disables the local audio capture.
   ///
   /// The audio function is enabled by default. This method disables/re-enables the local audio function, that is, to stop or restart local audio capture and processing.
+  ///
   /// This method does not affect receiving or playing the remote audio streams, and enableLocalAudio(false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
+  ///
   /// The SDK triggers the [RtcEngineEventHandler.microphoneEnabled] callback once the local audio function is disabled or re-enabled.
   ///
   /// **Note**
   /// - This method is different from the [RtcEngine.muteLocalAudioStream] method:
-  /// -- [RtcEngine.enableLocalAudio]: Disables/Re-enables the local audio capture and processing. If you disable or re-enable local audio recording using the [RtcEngine.enableLocalAudio] method, the local user may hear a pause in the remote audio playback.
-  /// -- [RtcEngine.muteLocalAudioStream]: Stops/Continues sending the local audio streams.
+  ///   - [RtcEngine.enableLocalAudio]: Disables/Re-enables the local audio capture and processing. If you disable or re-enable local audio recording using the [RtcEngine.enableLocalAudio] method, the local user may hear a pause in the remote audio playback.
+  ///   - [RtcEngine.muteLocalAudioStream]: Stops/Continues sending the local audio streams.
   ///
   /// **Parameter** [enabled] Sets whether to disable/re-enable the local audio function:
   /// - `true`: (Default) Re-enable the local audio function, that is, to start local audio capture and processing.
@@ -1252,10 +1255,10 @@ mixin RtcAudioInterface {
 
   /// Sets whether to receive all remote audio streams by default.
   ///
-  /// You can call this method either before or after joining a channel. If you call [RtcEngine.setDefaultMuteAllRemoteAudioStreams](true) after joining a channel, you will not receive the audio streams of any subsequent user.
+  /// You can call this method either before or after joining a channel. If you call [RtcEngine.setDefaultMuteAllRemoteAudioStreams] (true) after joining a channel, you will not receive the audio streams of any subsequent user.
   ///
   /// **Note**
-  /// - If you want to resume receiving audio streams, call [RtcEngine.muteRemoteAudioStream](false), and specify the ID of the remote user that you want to subscribe to. To resume audio streams of multiple users, call [RtcEngine.muteRemoteAudioStream] as many times. Calling [RtcEngine.setDefaultMuteAllRemoteAudioStreams](false) resumes receiving audio streams of the subsequent users only.
+  /// - If you want to resume receiving audio streams, call [RtcEngine.muteRemoteAudioStream] (false), and specify the ID of the remote user that you want to subscribe to. To resume audio streams of multiple users, call [RtcEngine.muteRemoteAudioStream] as many times. Calling [RtcEngine.setDefaultMuteAllRemoteAudioStreams] (false) resumes receiving audio streams of the subsequent users only.
   ///
   /// **Parameter** [muted] Sets whether or not to receive/stop receiving the remote audio streams by default:
   /// - `true`: Stop receiving any audio stream by default.
@@ -1283,31 +1286,33 @@ mixin RtcVideoInterface {
   /// Enables the video module.
   ///
   /// You can call this method either before joining a channel or during a call. If you call this method before joining a channel, the service starts in the video mode. If you call this method during an audio call, the audio mode switches to the video mode.
-  /// A successful enableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo](true) callback on the remote client.
+  ///
+  /// A successful enableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo] (true) callback on the remote client.
+  ///
   /// To disable the video, call the [RtcEngine.disableVideo] method.
   ///
   /// **Note**
   /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method resets the internal engine and takes some time to take effect. We recommend using the following API methods to control the video engine modules separately:
-  /// -- [RtcEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
-  /// -- [RtcEngine.muteLocalVideoStream]: Whether to publish the local video stream.
-  /// -- [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
-  /// -- [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
+  ///   - [RtcEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
+  ///   - [RtcEngine.muteLocalVideoStream]: Whether to publish the local video stream.
+  ///   - [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
+  ///   - [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
   Future<void> enableVideo();
 
   /// Disables the video module.
   ///
   /// You can call this method before joining a channel or during a call. If you call this method before joining a channel, the service starts in audio mode. If you call this method during a video call, the video mode switches to the audio mode.
-  /// - A successful disableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo](false) callback on the remote client.
+  /// - A successful disableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo] (false) callback on the remote client.
   /// - To enable the video mode, call the [RtcEngine.enableVideo] method.
   ///
   /// **Note**
   /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method resets the internal engine and takes some time to take effect. We recommend using the following API methods to control the video engine modules separately:
-  /// -- [RtcEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
-  /// -- [RtcEngine.muteLocalVideoStream]: Whether to publish the local video stream.
-  /// -- [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
-  /// -- [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
+  ///   - [RtcEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
+  ///   - [RtcEngine.muteLocalVideoStream]: Whether to publish the local video stream.
+  ///   - [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
+  ///   - [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
   Future<void> disableVideo();
 
   /// Sets the video encoder configuration.
@@ -1323,7 +1328,7 @@ mixin RtcVideoInterface {
   /// Before calling this method, you must:
   /// - Create the RtcLocalView.
   ///   - (Android only) See [TextureView] and [SurfaceView].
-  ///   - (iOS only) See [UIView]: https://developer.apple.com/documentation/uikit/uiview.
+  ///   - (iOS only) See [UIView](https://developer.apple.com/documentation/uikit/uiview).
   /// - Call the [RtcEngine.enableVideo] method to enable the video.
   ///
   /// **Note**
@@ -1337,7 +1342,9 @@ mixin RtcVideoInterface {
   /// Disables/Re-enables the local video capture.
   ///
   /// This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.
-  /// After you call the [RtcEngine.enableVideo] method, the local video capturer is enabled by default. You can call [RtcEngine.enableVideo](false) to disable the local video capturer. If you want to re-enable it, call [RtcEngine.enableVideo](true).
+  ///
+  /// After you call the [RtcEngine.enableVideo] method, the local video capturer is enabled by default. You can call [RtcEngine.enableVideo] (false) to disable the local video capturer. If you want to re-enable it, call [RtcEngine.enableVideo] (true).
+  ///
   /// After the local video capturer is successfully disabled or re-enabled, the SDK triggers the [RtcEngineEventHandler.userEnableLocalVideo] callback on the remote client.
   ///
   /// **Note**
@@ -1385,7 +1392,7 @@ mixin RtcVideoInterface {
   /// You can call this method either before or after joining a channel. If you call `setDefaultMuteAllRemoteVideoStreams`(true) after joining a channel, you will not receive the video stream of any subsequent user.
   ///
   /// **Note**
-  /// - If you want to resume receiving video streams, call [RtcEngine.muteRemoteVideoStream](false), and specify the ID of the remote user that you want to subscribe to. To resume receiving video streams of multiple users, call [RtcEngine.muteRemoteVideoStream] as many times. Calling `setDefaultMuteAllRemoteVideoStreams`(false) resumes receiving video streams of the subsequent users only.
+  /// - If you want to resume receiving video streams, call [RtcEngine.muteRemoteVideoStream] (false), and specify the ID of the remote user that you want to subscribe to. To resume receiving video streams of multiple users, call [RtcEngine.muteRemoteVideoStream] as many times. Calling `setDefaultMuteAllRemoteVideoStreams`(false) resumes receiving video streams of the subsequent users only.
   ///
   /// **Parameter** [muted] Sets whether to receive/stop receiving all remote video streams by default:
   /// - `true`: Stop receiving any remote video stream by default.
@@ -1410,15 +1417,17 @@ mixin RtcAudioMixingInterface {
   /// Starts playing and mixing the music file.
   ///
   /// This method mixes the specified local or online audio file with the audio stream from the microphone, or replaces the microphone’s audio stream with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. When the audio mixing file playback finishes after calling this method, the SDK triggers the [RtcEngineEventHandler.audioMixingFinished] callback.
+  ///
   /// A successful `startAudioMixing` method call triggers the [RtcEngineEventHandler.audioMixingStateChanged]([AudioMixingStateCode.Playing]) callback on the local client.
+  ///
   /// When the audio mixing file playback finishes, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged]([AudioMixingStateCode.Stopped]) callback on the local client.
   ///
   /// **Note**
   /// - This method supports both Android and iOS. To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
   /// - Call this method when you are in the channel, otherwise it may cause issues.
-  /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingErrorCode.TooFrequentCall] = 702 error occurs.
+  /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingErrorCode.TooFrequentCall] error occurs.
   /// - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
-  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingErrorCode.CanNotOpen] = 701.
+  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingErrorCode.CanNotOpen].
   /// - If you call this method on an emulator, only the MP3 file format is supported.
   ///
   /// **Parameter** [filePath] Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
@@ -1552,7 +1561,9 @@ mixin RtcAudioEffectInterface {
   /// Plays a specified local or online audio effect file.
   ///
   /// With this method, you can set the loop count, pitch, pan, and gain of the audio effect file and whether the remote user can hear the audio effect.
+  ///
   /// To play multiple audio effect files simultaneously, call this method multiple times with different soundIds and filePaths. We recommend playing no more than three audio effect files at the same time.
+  ///
   /// When the audio effect file playback is finished, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
   ///
   /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the soundID value is set to the same value as in the [RtcEngine.preloadEffect] method.
@@ -1705,18 +1716,17 @@ mixin RtcPublishStreamInterface {
   ///
   /// **Note**
   /// - Before calling the methods listed in this section:
-  /// -- This method applies to [ChannelProfile.LiveBroadcasting] only.
-  /// -- Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
-  /// -- Ensure that you call the [RtcEngine.setClientRole] method and set the user role as the host.
-  /// -- Ensure that you call the `setLiveTranscoding` method before calling the [RtcEngine.addPublishStreamUrl] method.
+  ///   - This method applies to [ChannelProfile.LiveBroadcasting] only.
+  ///   - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+  ///   - Ensure that you call the [RtcEngine.setClientRole] method and set the user role as the host.
+  ///   - Ensure that you call the `setLiveTranscoding` method before calling the [RtcEngine.addPublishStreamUrl] method.
   ///
   /// **Parameter** [transcoding] Sets the CDN live audio/video transcoding settings. See [LiveTranscoding].
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
   /// Publishes the local stream to the CDN.
   ///
-  /// The addPublishStreamUrl method call triggers the onRtmpStreamingStateChanged callback on the local client to report the state of adding a local stream to the CDN.
-  /// See [RtcEngineEventHandler.rtmpStreamingStateChanged]
+  /// The addPublishStreamUrl method call triggers the [RtcEngineEventHandler.rtmpStreamingStateChanged] callback on the local client to report the state of adding a local stream to the CDN.
   ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
@@ -1750,8 +1760,8 @@ mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
   ///
   /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] and [RtcEngineEventHandler.channelMediaRelayEvent] callbacks, and these callbacks return the state and events of the media stream relay.
-  /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Running](2) and [ChannelMediaRelayError.None](0), and the [RtcEngineEventHandler.channelMediaRelayEvent] callback returns [ChannelMediaRelayEvent.SentToDestinationChannel](4), the SDK starts relaying media streams between the original and the destination channel.
-  /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Failure](3), an exception occurs during the media stream relay.
+  /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Running] and [ChannelMediaRelayError.None], and the [RtcEngineEventHandler.channelMediaRelayEvent] callback returns [ChannelMediaRelayEvent.SentToDestinationChannel], the SDK starts relaying media streams between the original and the destination channel.
+  /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Failure], an exception occurs during the media stream relay.
   ///
   /// **Note**
   /// - Contact sales-us@agora.io before implementing this function.
@@ -1767,7 +1777,8 @@ mixin RtcMediaRelayInterface {
   /// Updates the channels for media relay.
   ///
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the `updateChannelMediaRelay` method.
-  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.updateDestinationChannel](7) state code.
+  ///
+  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.updateDestinationChannel] state code.
   ///
   /// **Note**
   /// - Call this method after the [RtcEngine.startChannelMediaRelay] method to update the destination channel.
@@ -1780,26 +1791,22 @@ mixin RtcMediaRelayInterface {
   /// Stops the media stream relay.
   ///
   /// Once the relay stops, the broadcaster quits all the destination channels.
-  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback. If the callback returns [ChannelMediaRelayState.Idle](0) and [ChannelMediaRelayError.None](0), the [ClientRole.Broadcaster] successfully stops the relay.
+  ///
+  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback. If the callback returns [ChannelMediaRelayState.Idle] and [ChannelMediaRelayError.None], the [ClientRole.Broadcaster] successfully stops the relay.
   ///
   /// **Note**
-  /// - If the method call fails, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse](2) or [ChannelMediaRelayError.ServerConnectionLost](8) state code. You can leave the channel by calling the [RtcEngine.leaveChannel] method, and the media stream relay automatically stops.
+  /// - If the method call fails, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] state code. You can leave the channel by calling the [RtcEngine.leaveChannel] method, and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 }
 
 mixin RtcAudioRouteInterface {
   /// Sets the default audio playback route.
   ///
-  /// This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the setEnableSpeakerphone method.
-  /// See [RtcEngine.setEnableSpeakerphone]
+  /// This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the [RtcEngine.setEnableSpeakerphone] method.
   /// The default audio route for each scenario:
   /// - In the [ChannelProfile.Communication] profile:
-  /// See [ChannelProfile.Communication]
-  /// -- For a voice call, the default audio route is the earpiece.
-  /// -- For a video call, the default audio route is the speaker. If the user disables the video using disableVideo, or muteLocalVideoStream and muteAllRemoteVideoStreams, the default audio route automatically switches back to the earpiece.
-  /// See [RtcEngine.disableVideo]
-  /// See [RtcEngine.muteLocalVideoStream]
-  /// See [RtcEngine.muteAllRemoteVideoStreams]
+  ///   - For a voice call, the default audio route is the earpiece.
+  ///   - For a video call, the default audio route is the speaker. If the user disables the video using [RtcEngine.disableVideo], or [RtcEngine.muteLocalVideoStream] and [RtcEngine.muteAllRemoteVideoStreams], the default audio route automatically switches back to the earpiece.
   /// - In the [ChannelProfile.LiveBroadcasting] profile: The default audio route is the speaker.
   /// See [ChannelProfile.LiveBroadcasting]
   ///
@@ -1855,9 +1862,12 @@ mixin RtcDualStreamInterface {
 
   /// Sets the stream type of the remote video.
   ///
-  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using [RtcEngine.enableDualStreamMode](false), the receiver can choose to receive either the high-video stream (the high resolution, and high bitrate video stream) or the low-video stream (the low resolution, and low bitrate video stream).
+  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using [RtcEngine.enableDualStreamMode] (false), the receiver can choose to receive either the high-video stream (the high resolution, and high bitrate video stream) or the low-video stream (the low resolution, and low bitrate video stream).
+  ///
   /// By default, users receive the high-video stream. Call this method if you want to switch to the low-video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources.
+  ///
   /// The aspect ratio of the low-video stream is the same as the high-video stream. Once the resolution of the high-video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-video stream.
+  ///
   /// The SDK reports the result of calling this method in the [RtcEngineEventHandler.apiCallExecuted] callback.
   ///
   /// **Parameter** [uid] ID of the remote user sending the video stream.
@@ -1874,9 +1884,10 @@ mixin RtcDualStreamInterface {
 mixin RtcFallbackInterface {
   /// Sets the fallback option for the locally published video stream based on the network conditions.
   ///
-  /// If option is set as [StreamFallbackOptions.AudioOnly](2), the SDK will:
+  /// If option is set as [StreamFallbackOptions.AudioOnly], the SDK will:
   /// - Disable the upstream video but enable audio only when the network conditions deteriorate and cannot support both video and audio.
   /// - Re-enable the video when the network conditions improve.
+  ///
   /// When the locally published video stream falls back to audio only or when the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.localPublishFallbackToAudioOnly].
   ///
   /// **Note**
@@ -1888,7 +1899,7 @@ mixin RtcFallbackInterface {
 
   /// Sets the fallback option for the remotely subscribed video stream based on the network conditions.
   ///
-  /// If option is set as [StreamFallbackOptions.VideoStreamLow](1) or [StreamFallbackOptions.AudioOnly](2), the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
+  /// If option is set as [StreamFallbackOptions.VideoStreamLow] or [StreamFallbackOptions.AudioOnly], the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
   ///
   /// **Parameter** [option] Sets the fallback option for the remotely subscribed video stream. See [StreamFallbackOptions].
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
@@ -1925,6 +1936,7 @@ mixin RtcTestInterface {
   /// Enables the network connection quality test.
   ///
   /// This method tests the quality of the users' network connections and is disabled by default.
+  ///
   /// Before users join a channel or before an audience switches to a host, call this method to check the uplink network quality. This method consumes additional network traffic, which may affect the communication quality. Call the [RtcEngine.disableLastmileTest] method to disable this test after receiving the [RtcEngineEventHandler.lastmileQuality] callback, and before the user joins a channel or switches the user role.
   ///
   /// **Note**
@@ -1944,6 +1956,7 @@ mixin RtcTestInterface {
   /// Once this method is enabled, the SDK returns the following callbacks:
   /// - [RtcEngineEventHandler.lastmileQuality]: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
   /// - [RtcEngineEventHandler.lastmileProbeResult]: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
+  ///
   /// Call this method to check the uplink network quality before users join a channel or before an audience switches to a host.
   ///
   /// **Note**
@@ -1978,7 +1991,9 @@ mixin RtcMediaMetadataInterface {
   /// Sends the metadata.
   ///
   /// **Parameter** [metadata] The metadata to be sent in the form of String.
+  ///
   /// **Note**
+  ///
   /// Ensure that the size of the metadata does not exceed the value set in the [setMaxMetadataSize] method.
   Future<void> sendMetadata(String metadata);
 }
@@ -2049,10 +2064,10 @@ mixin RtcEncryptionInterface {
   /// - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
   ///
   ///
-  /// @param enabled Whether to enable the built-in encryption.
+  /// **Parameter** [enabled] Whether to enable the built-in encryption.
   /// - `true`: Enable the built-in encryption.
   /// - `false`: Disable the built-in encryption.
-  /// @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+  /// **Parameter** [config] Configurations of built-in encryption schemas. See [EncryptionConfig].
   Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
@@ -2097,10 +2112,10 @@ mixin RtcInjectStreamInterface {
   ///
   /// This method call triggers the following callbacks:
   /// - The local client:
-  /// -- [RtcEngineEventHandler.streamInjectedStatus], with the state of the injecting the online stream.
-  /// -- [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
+  ///   - [RtcEngineEventHandler.streamInjectedStatus], with the state of the injecting the online stream.
+  ///   - [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
   /// - The remote client:
-  /// -- [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
+  ///   - [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
   ///
   /// **Parameter** [url] The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and HTTP-FLV.
   /// - Supported audio codec type: AAC.
@@ -2112,6 +2127,7 @@ mixin RtcInjectStreamInterface {
   /// Removes the injected online media stream from a live broadcast.
   ///
   /// This method removes the URL address (added by [RtcEngine.addInjectStreamUrl]) from a live broadcast.
+  ///
   /// If this method call is successful, the SDK triggers the [RtcEngineEventHandler.userOffline] callback and returns a stream uid of 666.
   ///
   /// **Parameter** [url] HTTP/HTTPS URL address of the added stream to be removed.
@@ -2194,9 +2210,9 @@ mixin RtcCameraInterface {
   /// Sets the camera capturer configuration.
   ///
   /// For a video call or live broadcast, generally the SDK controls the camera output parameters. When the default camera capture settings do not meet special requirements or cause performance problems, we recommend using this method to set the camera capturer configuration:
-  /// - If the resolution or frame rate of the captured raw video data are higher than those set by [RtcEngine.setVideoEncoderConfiguration], processing video frames requires extra CPU and RAM usage and degrades performance. We recommend setting config as [CameraCaptureOutputPreference.Performance](1) to avoid such problems.
-  /// - If you do not need local video preview or are willing to sacrifice preview quality, we recommend setting config as [CameraCaptureOutputPreference.Performance](1) to optimize CPU and RAM usage.
-  /// - If you want better quality for the local video preview, we recommend setting config as [CameraCaptureOutputPreference.Preview](2).
+  /// - If the resolution or frame rate of the captured raw video data are higher than those set by [RtcEngine.setVideoEncoderConfiguration], processing video frames requires extra CPU and RAM usage and degrades performance. We recommend setting config as [CameraCaptureOutputPreference.Performance] to avoid such problems.
+  /// - If you do not need local video preview or are willing to sacrifice preview quality, we recommend setting config as [CameraCaptureOutputPreference.Performance] to optimize CPU and RAM usage.
+  /// - If you want better quality for the local video preview, we recommend setting config as [CameraCaptureOutputPreference.Preview].
   ///
   /// **Note**
   /// - Call this method before enabling the local camera. That said, you can call this method before calling [RtcEngine.joinChannel], [RtcEngine.enableVideo], or [RtcEngine.enableLocalVideo], depending on which method you use to turn on your local camera.
@@ -2215,7 +2231,7 @@ mixin RtcStreamMessageInterface {
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
   ///
   /// **Parameter** [reliable] Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds:
-  /// - `true`: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the onStreamMessageError callback and returns an error code. See [RtcEngineEventHandler.streamMessageError].
+  /// - `true`: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the [RtcEngineEventHandler.streamMessageError] callback and returns an error code.
   /// - `false`: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
   ///
   /// **Parameter** [ordered] Sets whether or not the recipients receive the data stream in the sent order:
