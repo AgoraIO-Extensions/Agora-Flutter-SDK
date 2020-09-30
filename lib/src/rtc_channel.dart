@@ -652,6 +652,10 @@ mixin RtcMediaMetadataInterface {
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
+  ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
   /// **Note**
@@ -662,6 +666,10 @@ mixin RtcEncryptionInterface {
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
+  ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
   ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
