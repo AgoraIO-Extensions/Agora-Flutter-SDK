@@ -445,6 +445,7 @@ class RtcEngineEventHandler {
   FacePositionCallback facePositionChanged;
 
   /// Reports the statistics of the [RtcEngine] once every two seconds.
+  ///
   /// The `RtcStatsCallback` typedef includes the following parameter:
   /// - [RtcStats] `stats`: Statistics of the call.
   RtcStatsCallback rtcStats;
@@ -877,6 +878,9 @@ class RtcEngineEventHandler {
   /// - The local client enables the audio module and calls [RtcEngine.joinChannel] successfully.
   /// - The local client calls [RtcEngine.muteLocalAudioStream] (`true`) and [RtcEngine.muteLocalAudioStream] (`false`) in sequence.
   /// - The local client calls [RtcEngine.disableAudio] (`true`) and [`enableAudio`] in sequence.
+  ///
+  /// The `ElapsedCallback` typedef includes the following parameters:
+  /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
   ElapsedCallback firstLocalAudioFramePublished;
 
   /// Occurs when the first video frame is published.
@@ -887,6 +891,9 @@ class RtcEngineEventHandler {
   /// - The local client enables the video module and calls [RtcEngine.joinChannel] successfully.
   /// - The local client calls [RtcEngine.muteLocalVideoStream] (`true`) and [RtcEngine.muteLocalVideoStream] (`false`) in sequence.
   /// - The local client calls [RtcEngine.disableVideo] and [RtcEngine.enableVideo] in sequence.
+  ///
+  /// The `ElapsedCallback` typedef includes the following parameters:
+  /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
   ElapsedCallback firstLocalVideoFramePublished;
 
   /// Occurs when the audio publishing state changes.
@@ -894,6 +901,12 @@ class RtcEngineEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the publishing state change of the local audio stream.
+  ///
+  /// The `StreamPublishStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamPublishStateCallback audioPublishStateChanged;
 
   /// Occurs when the video publishing state changes.
@@ -901,6 +914,12 @@ class RtcEngineEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the publishing state change of the local video stream.
+  ///
+  /// The `StreamPublishStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamPublishStateCallback videoPublishStateChanged;
 
   /// Occurs when the audio subscribing state changes.
@@ -908,6 +927,12 @@ class RtcEngineEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the subscribing state change of a remote audio stream.
+  ///
+  /// The `StreamSubscribeStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamSubscribeStateCallback audioSubscribeStateChanged;
 
   /// Occurs when the video subscribing state changes.
@@ -915,11 +940,21 @@ class RtcEngineEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the subscribing state change of a remote video stream.
+  ///
+  /// The `StreamSubscribeStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamSubscribeStateCallback videoSubscribeStateChanged;
 
   /// Reports events during the RTMP streaming.
   ///
   /// @since v3.1.2.
+  ///
+  /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
+  /// - [String] `url`: The RTMP streaming URL.
+  /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
   /// Constructs a [RtcEngineEventHandler]
@@ -1616,6 +1651,11 @@ class RtcChannelEventHandler {
   /// - `buffer`: The sent or received metadata.
   /// - `uid`: ID of the user who sends the metadata.
   /// - `timeStampMs`: The timestamp of the metadata.
+  ///
+   /// The `MetadataCallback` typedef includes the following parameters:
+  /// - [String]: `buffer`: The received metadata.
+  /// - [int]: `uid`: The ID of the user who sent the metadata.
+  /// - [int]: `timeStampMs`: The timestamp (ms) of the received metadata.
   MetadataCallback metadataReceived;
 
   /// Occurs when the audio publishing state changes.
@@ -1623,6 +1663,12 @@ class RtcChannelEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the publishing state change of the local audio stream.
+  ///
+  /// The `StreamPublishStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamPublishStateCallback audioPublishStateChanged;
 
   /// Occurs when the video publishing state changes.
@@ -1630,6 +1676,12 @@ class RtcChannelEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the publishing state change of the local video stream.
+  ///
+  /// The `StreamPublishStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamPublishStateCallback videoPublishStateChanged;
 
   /// Occurs when the audio subscribing state changes.
@@ -1637,6 +1689,12 @@ class RtcChannelEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the subscribing state change of a remote audio stream.
+  ///
+  /// The `StreamSubscribeStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamSubscribeStateCallback audioSubscribeStateChanged;
 
   /// Occurs when the video subscribing state changes.
@@ -1644,11 +1702,21 @@ class RtcChannelEventHandler {
   /// @since v3.1.2.
   ///
   /// This callback indicates the subscribing state change of a remote video stream.
+  ///
+  /// The `StreamSubscribeStateCallback` typedef includes the following parameters:
+  /// - [String] `channel`: The channel name.
+  /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
+  /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
+  /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamSubscribeStateCallback videoSubscribeStateChanged;
 
   /// Reports events during the RTMP streaming.
   ///
   /// @since v3.1.2.
+  ///
+  /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
+  /// - [String] `url`: The RTMP streaming URL.
+  /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
   /// Constructs a [RtcChannelEventHandler]
