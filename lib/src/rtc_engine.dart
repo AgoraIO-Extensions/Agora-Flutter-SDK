@@ -992,7 +992,7 @@ mixin RtcEngineInterface
   ///
   /// **Parameter** [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
   ///
-  /// **Parameter** [rating] Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the [ErrorCode.InvalidArgument](-2) error occurs.
+  /// **Parameter** [rating] Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the [ErrorCode.InvalidArgument] error occurs.
   ///
   /// **Parameter** [description] (Optional) The description of the rating. The string length must be less than 800 bytes.
   Future<void> rate(String callId, int rating, {String description});
