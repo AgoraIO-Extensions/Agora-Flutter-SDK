@@ -1800,7 +1800,7 @@ enum WarningCode {
   @JsonValue(104)
   LookupChannelTimeout,
 
-  /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal. Agora recommends that you use [ConnectionChangedReason.RejectedByServer](10) in the reason parameter of [RtcEngineEventHandler.connectionStateChanged] instead.
+  /// The server rejects the request to look up the channel. The server cannot process this request or the request is illegal. Agora recommends that you use [ConnectionChangedReason.RejectedByServer] in the reason parameter of [RtcEngineEventHandler.connectionStateChanged] instead.
   @deprecated
   @JsonValue(105)
   LookupChannelRejected,
