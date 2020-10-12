@@ -618,7 +618,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker) {
     return _invokeMethod('setDefaultAudioRoutetoSpeakerphone',
-        {'booldefaultToSpeaker': defaultToSpeaker});
+        {'defaultToSpeaker': defaultToSpeaker});
   }
 
   @override
@@ -838,6 +838,27 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod(
         'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
   }
+
+  @override
+  Future<void> sendCustomReportMessage(
+      String id, String category, String event, String label, int value) {
+    return _invokeMethod('sendCustomReportMessage', {
+      'id': id,
+      'category': category,
+      'event': event,
+      'label': label,
+      'value': value
+    });
+  }
+
+  @override
+  Future<void> setAudioSessionOperationRestriction(
+      AudioSessionOperationRestriction restriction) {
+    return _invokeMethod('setAudioSessionOperationRestriction', {
+      'restriction':
+          AudioSessionOperationRestrictionConverter(restriction).value()
+    });
+  }
 }
 
 mixin RtcEngineInterface
@@ -978,6 +999,10 @@ mixin RtcEngineInterface
 
   /// Gets the connection state of the SDK.
   Future<ConnectionStateType> getConnectionState();
+
+  /// This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
+  Future<void> sendCustomReportMessage(
+      String id, String category, String event, String label, int value);
 
   /// Gets the current call ID.
   ///
@@ -1638,6 +1663,17 @@ mixin RtcAudioEffectInterface {
 
   /// Resumes playing all audio effects.
   Future<void> resumeAllEffects();
+
+  /// The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
+  ///
+  /// You can call this method at any time to return the control of the audio sessions to the SDK.
+  ///
+  /// **Note**
+  /// - This method restricts the SDK’s manipulation of the audio session. Any operation to the audio session relies solely on the app, other apps, or third-party components.
+  ///
+  /// **Parameter** [restriction] The operational restriction (bit mask) of the SDK on the audio session. See [AudioSessionOperationRestriction].
+  Future<void> setAudioSessionOperationRestriction(
+      AudioSessionOperationRestriction restriction);
 }
 
 mixin RtcVoiceChangerInterface {
