@@ -2032,7 +2032,7 @@ enum AudioSessionOperationRestriction {
   @JsonValue(1 << 2)
   DeactivateSession,
 
-  ///The SDK does not configure the audio session anymore.
+  /// The SDK does not configure the audio session anymore.
   @JsonValue(1 << 7)
   All,
 }
