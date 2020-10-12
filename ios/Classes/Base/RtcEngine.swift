@@ -51,6 +51,8 @@ protocol RtcEngineInterface:
     func enableWebSdkInteroperability(_ params: NSDictionary, _ callback: Callback)
 
     func getConnectionState(_ callback: Callback)
+    
+    func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback)
 
     func getCallId(_ callback: Callback)
 
@@ -179,6 +181,8 @@ protocol RtcEngineAudioEffectInterface {
     func resumeEffect(_ params: NSDictionary, _ callback: Callback)
 
     func resumeAllEffects(_ callback: Callback)
+
+    func setAudioSessionOperationRestriction(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoiceChangerInterface {
@@ -398,6 +402,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.resolve(engine) { it in
             it.getConnectionState().rawValue
         }
+    }
+    
+    @objc func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.sendCustomReportMessage(params["id"] as! String, category: params["category"] as! String, event: params["event"] as! String, label: params["label"] as! String, value: params["value"] as! Int))
     }
 
     @objc func getCallId(_ callback: Callback) {
@@ -651,6 +659,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func resumeAllEffects(_ callback: Callback) {
         callback.code(engine?.resumeAllEffects())
     }
+    
+    @objc func setAudioSessionOperationRestriction(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) { it in
+            it.setAudioSessionOperationRestriction(AgoraAudioSessionOperationRestriction(rawValue: params["restriction"] as! UInt))
+        }
+    }
 
     @objc func setLocalVoiceChanger(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLocalVoiceChanger(AgoraAudioVoiceChanger(rawValue: params["voiceChanger"] as! Int)!))
@@ -874,10 +888,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func isCameraFocusSupported(_ callback: Callback) {
-        // TODO Not in iOS
-        callback.resolve(engine) { it in
-            nil
-        }
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
     }
 
     @objc func isCameraExposurePositionSupported(_ callback: Callback) {
@@ -900,10 +911,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getCameraMaxZoomFactor(_ callback: Callback) {
-        // TODO Not in iOS
-        callback.resolve(engine) { it in
-            nil
-        }
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
     }
 
     @objc func setCameraFocusPositionInPreview(_ params: NSDictionary, _ callback: Callback) {
