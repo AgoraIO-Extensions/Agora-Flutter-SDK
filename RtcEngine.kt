@@ -628,7 +628,7 @@ class RtcEngineManager(
     }
 
     override fun setAudioSessionOperationRestriction(params: Map<String, *>, callback: Callback) {
-        callback.resolve(engine) { Constants.ERR_NOT_SUPPORTED }
+        callback.code(-Constants.ERR_NOT_SUPPORTED)
     }
 
     override fun setLocalVoiceChanger(params: Map<String, *>, callback: Callback) {
