@@ -1,5 +1,9 @@
 # Change log
 
+## 3.1.3
+* fix `setDefaultAudioRoutetoSpeakerphone` crash bug
+* add `setAudioSessionOperationRestriction` and `sendCustomReportMessage` method
+
 ## 3.1.2
 * upgrade Agora SDK to 3.1.2
 
