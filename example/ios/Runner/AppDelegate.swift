@@ -12,7 +12,7 @@ import Flutter
         guard let controller = window?.rootViewController as? FlutterViewController else {
             fatalError("rootViewController is not type FlutterViewController")
         }
-        let batteryChannel = FlutterMethodChannel(name: "test", binaryMessenger: controller.binaryMessenger)
+        let batteryChannel = FlutterMethodChannel(name: "io.agora.raw_data", binaryMessenger: controller.binaryMessenger)
         batteryChannel.setMethodCallHandler({[weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in
             guard call.method == "enableRawDataObserver" else {
                 result(FlutterMethodNotImplemented)
