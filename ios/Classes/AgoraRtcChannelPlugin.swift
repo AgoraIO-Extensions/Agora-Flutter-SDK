@@ -63,7 +63,7 @@ public class AgoraRtcChannelPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
         return rtcEnginePlugin?.engine
     }
 
-    public func channel(_ channelId: String) -> AgoraRtcChannel? {
+    func channel(_ channelId: String) -> AgoraRtcChannel? {
         return manager[channelId]
     }
 

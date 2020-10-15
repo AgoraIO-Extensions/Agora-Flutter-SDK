@@ -34,6 +34,8 @@ class IRtcEngine {
 
         fun getConnectionState(callback: Callback)
 
+        fun sendCustomReportMessage(params: Map<String, *>, callback: Callback)
+
         fun getCallId(callback: Callback)
 
         fun rate(params: Map<String, *>, callback: Callback)
@@ -161,6 +163,8 @@ class IRtcEngine {
         fun resumeEffect(params: Map<String, *>, callback: Callback)
 
         fun resumeAllEffects(callback: Callback)
+
+        fun setAudioSessionOperationRestriction(params: Map<String, *>, callback: Callback)
     }
 
     interface RtcVoiceChangerInterface {
@@ -373,6 +377,10 @@ class RtcEngineManager(
 
     override fun getConnectionState(callback: Callback) {
         callback.resolve(engine) { it.connectionState }
+    }
+
+    override fun sendCustomReportMessage(params: Map<String, *>, callback: Callback) {
+        callback.code(engine?.sendCustomReportMessage(params["id"] as String, params["category"] as String, params["event"] as String, params["label"] as String, (params["value"] as Number).toInt()))
     }
 
     override fun getCallId(callback: Callback) {
@@ -617,6 +625,10 @@ class RtcEngineManager(
 
     override fun resumeAllEffects(callback: Callback) {
         callback.code(engine?.audioEffectManager?.resumeAllEffects())
+    }
+
+    override fun setAudioSessionOperationRestriction(params: Map<String, *>, callback: Callback) {
+        callback.code(-Constants.ERR_NOT_SUPPORTED)
     }
 
     override fun setLocalVoiceChanger(params: Map<String, *>, callback: Callback) {

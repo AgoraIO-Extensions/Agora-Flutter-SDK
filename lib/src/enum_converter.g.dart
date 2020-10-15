@@ -1380,3 +1380,25 @@ Map<String, dynamic> _$RtmpStreamingEventConverterToJson(
 const _$RtmpStreamingEventEnumMap = {
   RtmpStreamingEvent.FailedLoadImage: 1,
 };
+
+AudioSessionOperationRestrictionConverter
+    _$AudioSessionOperationRestrictionConverterFromJson(
+        Map<String, dynamic> json) {
+  return AudioSessionOperationRestrictionConverter(
+    _$enumDecodeNullable(_$AudioSessionOperationRestrictionEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$AudioSessionOperationRestrictionConverterToJson(
+        AudioSessionOperationRestrictionConverter instance) =>
+    <String, dynamic>{
+      'e': _$AudioSessionOperationRestrictionEnumMap[instance.e],
+    };
+
+const _$AudioSessionOperationRestrictionEnumMap = {
+  AudioSessionOperationRestriction.None: 0,
+  AudioSessionOperationRestriction.SetCategory: 1,
+  AudioSessionOperationRestriction.ConfigureSession: 2,
+  AudioSessionOperationRestriction.DeactivateSession: 4,
+  AudioSessionOperationRestriction.All: 128,
+};

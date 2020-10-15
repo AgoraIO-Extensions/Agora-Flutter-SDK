@@ -748,3 +748,17 @@ class RtmpStreamingEventConverter
     return super.toValue(_$RtmpStreamingEventEnumMap);
   }
 }
+
+@JsonSerializable()
+class AudioSessionOperationRestrictionConverter
+    extends EnumConverter<AudioSessionOperationRestriction, int> {
+  AudioSessionOperationRestrictionConverter(AudioSessionOperationRestriction e)
+      : super(e);
+
+  AudioSessionOperationRestrictionConverter.fromValue(int value)
+      : super.fromValue(_$AudioSessionOperationRestrictionEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioSessionOperationRestrictionEnumMap);
+  }
+}

@@ -2013,3 +2013,26 @@ enum RtmpStreamingEvent {
   @JsonValue(1)
   FailedLoadImage,
 }
+
+/// Audio session restriction.
+enum AudioSessionOperationRestriction {
+  /// No restriction, the SDK has full control of the audio session operations.
+  @JsonValue(0)
+  None,
+
+  /// The SDK does not change the audio session category.
+  @JsonValue(1)
+  SetCategory,
+
+  /// The SDK does not change any setting of the audio session (category, mode, categoryOptions).
+  @JsonValue(1 << 1)
+  ConfigureSession,
+
+  /// The SDK keeps the audio session active when leaving a channel.
+  @JsonValue(1 << 2)
+  DeactivateSession,
+
+  /// The SDK does not configure the audio session anymore.
+  @JsonValue(1 << 7)
+  All,
+}
