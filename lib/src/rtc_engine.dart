@@ -859,6 +859,11 @@ class RtcEngine with RtcEngineInterface {
           AudioSessionOperationRestrictionConverter(restriction).value()
     });
   }
+
+  @override
+  Future<int> getNativeHandle() {
+    return _invokeMethod('getNativeHandle');
+  }
 }
 
 mixin RtcEngineInterface
@@ -1063,6 +1068,8 @@ mixin RtcEngineInterface
   ///
   /// **Parameter** [parameters] Sets the parameter as a JSON string in the specified format.
   Future<void> setParameters(String parameters);
+
+  Future<int> getNativeHandle();
 }
 
 mixin RtcUserInfoInterface {
