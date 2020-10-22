@@ -1,5 +1,8 @@
 # Change log
 
+## 3.1.4
+* fix `getUserInfoByUid` `getUserInfoByUserAccount` type cast error for [issue](https://github.com/AgoraIO/Flutter-SDK/issues/204)
+
 ## 3.1.3
 * fix `setDefaultAudioRoutetoSpeakerphone` crash bug
 * add `setAudioSessionOperationRestriction` and `sendCustomReportMessage` method

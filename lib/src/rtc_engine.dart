@@ -196,7 +196,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<UserInfo> getUserInfoByUid(int uid) {
     return _invokeMethod('getUserInfoByUid', {'uid': uid}).then((value) {
-      return UserInfo.fromJson(value);
+      return UserInfo.fromJson(Map<String, dynamic>.from(value));
     });
   }
 
@@ -204,7 +204,7 @@ class RtcEngine with RtcEngineInterface {
   Future<UserInfo> getUserInfoByUserAccount(String userAccount) {
     return _invokeMethod(
         'getUserInfoByUserAccount', {'userAccount': userAccount}).then((value) {
-      return UserInfo.fromJson(value);
+      return UserInfo.fromJson(Map<String, dynamic>.from(value));
     });
   }
 
