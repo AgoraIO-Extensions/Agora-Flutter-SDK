@@ -1069,6 +1069,9 @@ mixin RtcEngineInterface
   /// **Parameter** [parameters] Sets the parameter as a JSON string in the specified format.
   Future<void> setParameters(String parameters);
 
+  /// Gets the native handle of the SDK engine.
+  ///
+  /// This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
   Future<int> getNativeHandle();
 }
 
