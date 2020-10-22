@@ -56,12 +56,6 @@ Your application can still run the voice call when it is switched to the backgro
 
 Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *info.plist*
 
-### iOS memory leak
-
-If your flutter channel is stable, `PlatformView` will cause memory leak, you can run `flutter channel beta`
-
-You can refer to this [pull request](https://github.com/flutter/engine/pull/14326)
-
 ## API
 
 * [Flutter API](https://agoraio.github.io/Flutter-SDK/index.html)
