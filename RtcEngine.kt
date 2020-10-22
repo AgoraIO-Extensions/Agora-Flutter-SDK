@@ -49,6 +49,8 @@ class IRtcEngine {
         fun setLogFileSize(params: Map<String, *>, callback: Callback)
 
         fun setParameters(params: Map<String, *>, callback: Callback)
+
+        fun getNativeHandle(callback: Callback)
     }
 
     interface RtcUserInfoInterface {
@@ -409,6 +411,10 @@ class RtcEngineManager(
 
     override fun setParameters(params: Map<String, *>, callback: Callback) {
         callback.code(engine?.setParameters(params["parameters"] as String))
+    }
+
+    override fun getNativeHandle(callback: Callback) {
+        callback.resolve(engine) { it.nativeHandle }
     }
 
     override fun registerLocalUserAccount(params: Map<String, *>, callback: Callback) {
