@@ -55,13 +55,15 @@ class RtcChannel with RtcChannelInterface {
   /// Destroys all [RtcChannel] instance.
   static void destroyAll() {
     _channels.forEach((key, value) async {
-      await value.destroy();
+      value._handler = null;
+      await value._invokeMethod('destroy');
     });
     _channels.clear();
   }
 
   @override
   Future<void> destroy() {
+    _handler = null;
     _channels.remove(channelId);
     return _invokeMethod('destroy');
   }
