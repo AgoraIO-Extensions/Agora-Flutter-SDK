@@ -89,6 +89,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> destroy() {
     RtcChannel.destroyAll();
+    _handler = null;
     _engine = null;
     return _invokeMethod('destroy');
   }
