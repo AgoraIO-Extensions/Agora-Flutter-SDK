@@ -84,6 +84,7 @@ typedef StreamPublishStateCallback = void Function(
     int elapseSinceLastState);
 typedef StreamSubscribeStateCallback = void Function(
     String channel,
+    int uid,
     StreamSubscribeState oldState,
     StreamSubscribeState newState,
     int elapseSinceLastState);
@@ -1128,8 +1129,9 @@ class RtcEngineEventHandler {
             data[3]);
         break;
       case 'LocalVideoStateChanged':
-        localVideoStateChanged?.call(LocalVideoStreamStateConverter(data[0]).e,
-            LocalVideoStreamErrorConverter(data[1]).e);
+        localVideoStateChanged?.call(
+            LocalVideoStreamStateConverter.fromValue(data[0]).e,
+            LocalVideoStreamErrorConverter.fromValue(data[1]).e);
         break;
       case 'RemoteAudioStateChanged':
         remoteAudioStateChanged?.call(
@@ -1139,8 +1141,9 @@ class RtcEngineEventHandler {
             data[3]);
         break;
       case 'LocalAudioStateChanged':
-        localAudioStateChanged?.call(AudioLocalStateConverter(data[0]).e,
-            AudioLocalErrorConverter(data[1]).e);
+        localAudioStateChanged?.call(
+            AudioLocalStateConverter.fromValue(data[0]).e,
+            AudioLocalErrorConverter.fromValue(data[1]).e);
         break;
       case 'LocalPublishFallbackToAudioOnly':
         localPublishFallbackToAudioOnly?.call(data[0]);
@@ -1328,16 +1331,18 @@ class RtcEngineEventHandler {
       case 'AudioSubscribeStateChanged':
         audioSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'VideoSubscribeStateChanged':
         videoSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);
@@ -1895,16 +1900,18 @@ class RtcChannelEventHandler {
       case 'AudioSubscribeStateChanged':
         audioSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'VideoSubscribeStateChanged':
         videoSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);
