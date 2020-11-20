@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   json_annotation: ^3.0.0
 
 dev_dependencies:
@@ -41,6 +43,13 @@ flutter:
         pluginClass: AgoraRtcEnginePlugin
       linux:
         pluginClass: AgoraRtcEnginePlugin
+      macos:
+        pluginClass: AgoraRtcEnginePlugin
+      windows:
+        pluginClass: AgoraRtcEnginePlugin
+      web:
+        fileName: agora_rtc_engine_web.dart
+        pluginClass: AgoraRtcEngineWeb
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
