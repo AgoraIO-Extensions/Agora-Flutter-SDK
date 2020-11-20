@@ -17,7 +17,7 @@ class StringUid extends StatefulWidget {
 
 class _State extends State<StringUid> {
   String channelId = config.channelId;
-  String stringUid = '';
+  String stringUid = config.stringUid;
   bool isJoined = false;
   TextEditingController _controller0, _controller1;
 

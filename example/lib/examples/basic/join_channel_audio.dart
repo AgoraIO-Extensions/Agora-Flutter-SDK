@@ -63,7 +63,8 @@ class _State extends State<JoinChannelAudio> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    await widget._engine?.joinChannel(config.token, channelId, null, 0);
+    await widget._engine
+        ?.joinChannel(config.token, channelId, null, config.uid);
   }
 
   _leaveChannel() async {

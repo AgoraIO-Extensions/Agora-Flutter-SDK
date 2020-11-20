@@ -81,7 +81,8 @@ class _State extends State<JoinChannelVideo> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    await widget._engine?.joinChannel(config.token, channelId, null, 0);
+    await widget._engine
+        ?.joinChannel(config.token, channelId, null, config.uid);
   }
 
   _leaveChannel() async {
