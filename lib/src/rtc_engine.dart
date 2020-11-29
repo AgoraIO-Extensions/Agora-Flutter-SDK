@@ -196,7 +196,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<UserInfo> getUserInfoByUid(int uid) {
     return _invokeMethod('getUserInfoByUid', {'uid': uid}).then((value) {
-      return UserInfo.fromJson(value);
+      return UserInfo.fromJson((value as Map).cast());
     });
   }
 
