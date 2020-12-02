@@ -7,26 +7,28 @@ import androidx.annotation.NonNull
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.EventChannel
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
+import java.io.FileNotFoundException
 import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.jvm.javaMethod
 
 /** AgoraRtcEnginePlugin */
 class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+    private var registrar: Registrar? = null
+    private var binding: FlutterPlugin.FlutterPluginBinding? = null
+    private lateinit var applicationContext: Context
+
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private lateinit var methodChannel: MethodChannel
     private lateinit var eventChannel: EventChannel
-    private lateinit var applicationContext: Context
+
     private var eventSink: EventChannel.EventSink? = null
     private val manager = RtcEngineManager { methodName, data -> emit(methodName, data) }
     private val handler = Handler(Looper.getMainLooper())
@@ -45,8 +47,9 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             AgoraRtcEnginePlugin().apply {
-                initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
+                this.registrar = registrar
                 rtcChannelPlugin.initPlugin(registrar.messenger())
+                initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
             }
         }
     }
@@ -63,6 +66,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     }
 
     override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        this.binding = binding
         rtcChannelPlugin.onAttachedToEngine(binding)
         initPlugin(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
     }
@@ -95,6 +99,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        if (call.method == "getAssetAbsolutePath") {
+            getAssetAbsolutePath(call, result)
+            return
+        }
         manager::class.declaredMemberFunctions.find { it.name == call.method }?.let { function ->
             function.javaMethod?.let { method ->
                 try {
@@ -113,5 +121,20 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
             }
         }
         result.notImplemented()
+    }
+
+    private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
+        call.arguments<String>()?.let {
+            val assetKey = registrar?.lookupKeyForAsset(it)
+                    ?: binding?.flutterAssets?.getAssetFilePathByName(it)
+            try {
+                applicationContext.assets.openFd(assetKey!!).close()
+                result.success("/assets/$assetKey")
+            } catch (e: Exception) {
+                result.error(e.javaClass.simpleName, e.message, e.cause)
+            }
+            return@getAssetAbsolutePath
+        }
+        result.error(IllegalArgumentException::class.simpleName, null, null)
     }
 }

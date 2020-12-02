@@ -1,114 +1,55 @@
-import 'dart:async';
-
-import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'examples/advanced/index.dart';
+import 'examples/basic/index.dart';
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+void main() => runApp(MyApp());
 
-class _MyAppState extends State<MyApp> {
-  bool _joined = false;
-  int _remoteUid = null;
-  bool _switch = false;
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    await [Permission.camera, Permission.microphone, Permission.storage]
-        .request();
-
-    var engine = await RtcEngine.create(YOUR_APP_ID);
-    engine.setEventHandler(RtcEngineEventHandler(
-        joinChannelSuccess: (String channel, int uid, int elapsed) {
-          print('joinChannelSuccess ${channel} ${uid}');
-          setState(() {
-            _joined = true;
-          });
-        }, userJoined: (int uid, int elapsed) {
-      print('userJoined ${uid}');
-      setState(() {
-        _remoteUid = uid;
-      });
-    }, userOffline: (int uid, UserOfflineReason reason) {
-      print('userOffline ${uid}');
-      setState(() {
-        _remoteUid = null;
-      });
-    }));
-    await engine.enableVideo();
-    await engine.joinChannel(null, '123', null, 0);
-  }
+/// This widget is the root of your application.
+class MyApp extends StatelessWidget {
+  final _DATA = [...Basic, ...Advanced];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('APIExample'),
         ),
-        body: Stack(
-          children: [
-            Center(
-              child: _switch ? _renderRemoteVideo() : _renderLocalPreview(),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                width: 100,
-                height: 100,
-                color: Colors.blue,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _switch = !_switch;
-                    });
-                  },
-                  child: Center(
-                    child:
-                    _switch ? _renderLocalPreview() : _renderRemoteVideo(),
-                  ),
-                ),
-              ),
-            ),
-          ],
+        body: ListView.builder(
+          itemCount: _DATA.length,
+          itemBuilder: (context, index) {
+            return _DATA[index]['widget'] == null
+                ? Ink(
+                    color: Colors.grey,
+                    child: ListTile(
+                      title: Text(_DATA[index]['name'],
+                          style: TextStyle(fontSize: 24, color: Colors.white)),
+                    ),
+                  )
+                : ListTile(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Scaffold(
+                                    appBar: AppBar(
+                                      title: Text(_DATA[index]['name']),
+                                    ),
+                                    body: _DATA[index]['widget'],
+                                  )));
+                    },
+                    title: Text(
+                      _DATA[index]['name'],
+                      style: TextStyle(fontSize: 24, color: Colors.black),
+                    ),
+                  );
+          },
         ),
       ),
     );
-  }
-
-  Widget _renderLocalPreview() {
-    if (_joined) {
-      return RtcLocalView.SurfaceView();
-    } else {
-      return Text(
-        'Please join channel first',
-        textAlign: TextAlign.center,
-      );
-    }
-  }
-
-  Widget _renderRemoteVideo() {
-    if (_remoteUid != null) {
-      return RtcRemoteView.SurfaceView(uid: _remoteUid);
-    } else {
-      return Text(
-        'Please wait remote user join',
-        textAlign: TextAlign.center,
-      );
-    }
   }
 }

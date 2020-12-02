@@ -67,6 +67,8 @@ protocol RtcEngineInterface:
     func setLogFileSize(_ params: NSDictionary, _ callback: Callback)
 
     func setParameters(_ params: NSDictionary, _ callback: Callback)
+    
+    func getNativeHandle(_ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -432,6 +434,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setLogFileSize(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLogFileSize((params["fileSizeInKBytes"] as! UInt)))
+    }
+    
+    @objc func getNativeHandle(_ callback: Callback) {
+        callback.resolve(engine) { it in
+            Int(bitPattern: it.getNativeHandle())
+        }
     }
 
     @objc func setParameters(_ params: NSDictionary, _ callback: Callback) {
