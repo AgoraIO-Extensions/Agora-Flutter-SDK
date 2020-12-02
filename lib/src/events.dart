@@ -84,6 +84,7 @@ typedef StreamPublishStateCallback = void Function(
     int elapseSinceLastState);
 typedef StreamSubscribeStateCallback = void Function(
     String channel,
+    int uid,
     StreamSubscribeState oldState,
     StreamSubscribeState newState,
     int elapseSinceLastState);
@@ -142,7 +143,7 @@ class RtcEngineEventHandler {
   ///
   /// The `RtcStatsCallback` typedef includes the following parameter:
   /// - [RtcStats] `stats`: Statistics of the call.
-  RtcStatsCallback rejoinChannelSuccess;
+  UidWithElapsedAndChannelCallback rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
   ///
@@ -296,6 +297,7 @@ class RtcEngineEventHandler {
   ///
   /// The `ElapsedCallback` typedef includes the following parameters:
   /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
+  @deprecated
   ElapsedCallback firstLocalAudioFrame;
 
   /// Occurs when the first local video frame is rendered.
@@ -1054,8 +1056,7 @@ class RtcEngineEventHandler {
         joinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'RejoinChannelSuccess':
-        rejoinChannelSuccess
-            ?.call(RtcStats.fromJson(Map<String, dynamic>.from(data[0])));
+        rejoinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'LeaveChannel':
         leaveChannel
@@ -1128,8 +1129,9 @@ class RtcEngineEventHandler {
             data[3]);
         break;
       case 'LocalVideoStateChanged':
-        localVideoStateChanged?.call(LocalVideoStreamStateConverter(data[0]).e,
-            LocalVideoStreamErrorConverter(data[1]).e);
+        localVideoStateChanged?.call(
+            LocalVideoStreamStateConverter.fromValue(data[0]).e,
+            LocalVideoStreamErrorConverter.fromValue(data[1]).e);
         break;
       case 'RemoteAudioStateChanged':
         remoteAudioStateChanged?.call(
@@ -1139,8 +1141,9 @@ class RtcEngineEventHandler {
             data[3]);
         break;
       case 'LocalAudioStateChanged':
-        localAudioStateChanged?.call(AudioLocalStateConverter(data[0]).e,
-            AudioLocalErrorConverter(data[1]).e);
+        localAudioStateChanged?.call(
+            AudioLocalStateConverter.fromValue(data[0]).e,
+            AudioLocalErrorConverter.fromValue(data[1]).e);
         break;
       case 'LocalPublishFallbackToAudioOnly':
         localPublishFallbackToAudioOnly?.call(data[0]);
@@ -1328,16 +1331,18 @@ class RtcEngineEventHandler {
       case 'AudioSubscribeStateChanged':
         audioSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'VideoSubscribeStateChanged':
         videoSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);
@@ -1377,7 +1382,7 @@ class RtcChannelEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedCallback joinChannelSuccess;
+  UidWithElapsedAndChannelCallback joinChannelSuccess;
 
   /// Occurs when a user rejoins the channel after being disconnected due to network problems.
   ///
@@ -1396,7 +1401,7 @@ class RtcChannelEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedCallback rejoinChannelSuccess;
+  UidWithElapsedAndChannelCallback rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
   ///
@@ -1652,7 +1657,7 @@ class RtcChannelEventHandler {
   /// - `uid`: ID of the user who sends the metadata.
   /// - `timeStampMs`: The timestamp of the metadata.
   ///
-   /// The `MetadataCallback` typedef includes the following parameters:
+  /// The `MetadataCallback` typedef includes the following parameters:
   /// - [String]: `buffer`: The received metadata.
   /// - [int]: `uid`: The ID of the user who sent the metadata.
   /// - [int]: `timeStampMs`: The timestamp (ms) of the received metadata.
@@ -1767,10 +1772,10 @@ class RtcChannelEventHandler {
         error?.call(ErrorCodeConverter.fromValue(data[0]).e);
         break;
       case 'JoinChannelSuccess':
-        joinChannelSuccess?.call(data[0], data[1]);
+        joinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'RejoinChannelSuccess':
-        rejoinChannelSuccess?.call(data[0], data[1]);
+        rejoinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'LeaveChannel':
         leaveChannel
@@ -1895,16 +1900,18 @@ class RtcChannelEventHandler {
       case 'AudioSubscribeStateChanged':
         audioSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'VideoSubscribeStateChanged':
         videoSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);

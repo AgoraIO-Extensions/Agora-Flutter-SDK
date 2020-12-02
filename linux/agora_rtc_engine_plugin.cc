@@ -1,78 +1,70 @@
-#include "agora_rtc_engine_plugin.h"
+#include "include/agora_rtc_engine/agora_rtc_engine_plugin.h"
 
-#include <flutter/method_channel.h>
-#include <flutter/plugin_registrar_glfw.h>
-#include <flutter/standard_method_codec.h>
+#include <flutter_linux/flutter_linux.h>
+#include <gtk/gtk.h>
 #include <sys/utsname.h>
 
-#include <map>
-#include <memory>
-#include <sstream>
+#include <cstring>
 
-namespace {
+#define AGORA_RTC_ENGINE_PLUGIN(obj) \
+  (G_TYPE_CHECK_INSTANCE_CAST((obj), agora_rtc_engine_plugin_get_type(), \
+                              AgoraRtcEnginePlugin))
 
-class AgoraRtcEnginePlugin : public flutter::Plugin {
- public:
-  static void RegisterWithRegistrar(flutter::PluginRegistrarGlfw *registrar);
-
-  AgoraRtcEnginePlugin();
-
-  virtual ~AgoraRtcEnginePlugin();
-
- private:
-  // Called when a method is called on this plugin's channel from Dart.
-  void HandleMethodCall(
-      const flutter::MethodCall<flutter::EncodableValue> &method_call,
-      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+struct _AgoraRtcEnginePlugin {
+  GObject parent_instance;
 };
 
-// static
-void AgoraRtcEnginePlugin::RegisterWithRegistrar(
-    flutter::PluginRegistrarGlfw *registrar) {
-  auto channel =
-      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-          registrar->messenger(), "agora_rtc_engine",
-          &flutter::StandardMethodCodec::GetInstance());
-  auto plugin = std::make_unique<AgoraRtcEnginePlugin>();
+G_DEFINE_TYPE(AgoraRtcEnginePlugin, agora_rtc_engine_plugin, g_object_get_type())
 
-  channel->SetMethodCallHandler(
-      [plugin_pointer = plugin.get()](const auto &call, auto result) {
-        plugin_pointer->HandleMethodCall(call, std::move(result));
-      });
+// Called when a method call is received from Flutter.
+static void agora_rtc_engine_plugin_handle_method_call(
+    AgoraRtcEnginePlugin* self,
+    FlMethodCall* method_call) {
+  g_autoptr(FlMethodResponse) response = nullptr;
 
-  registrar->AddPlugin(std::move(plugin));
-}
+  const gchar* method = fl_method_call_get_name(method_call);
 
-AgoraRtcEnginePlugin::AgoraRtcEnginePlugin() {}
-
-AgoraRtcEnginePlugin::~AgoraRtcEnginePlugin() {}
-
-void AgoraRtcEnginePlugin::HandleMethodCall(
-    const flutter::MethodCall<flutter::EncodableValue> &method_call,
-    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-  // Replace "getPlatformVersion" check with your plugin's method.
-  // See:
-  // https://github.com/flutter/engine/tree/master/shell/platform/common/cpp/client_wrapper/include/flutter
-  // and
-  // https://github.com/flutter/engine/tree/master/shell/platform/glfw/client_wrapper/include/flutter
-  // for the relevant Flutter APIs.
-  if (method_call.method_name().compare("getPlatformVersion") == 0) {
+  if (strcmp(method, "getPlatformVersion") == 0) {
     struct utsname uname_data = {};
     uname(&uname_data);
-    std::ostringstream version_stream;
-    version_stream << "Linux " << uname_data.version;
-    flutter::EncodableValue response(version_stream.str());
-    result->Success(&response);
+    g_autofree gchar *version = g_strdup_printf("Linux %s", uname_data.version);
+    g_autoptr(FlValue) result = fl_value_new_string(version);
+    response = FL_METHOD_RESPONSE(fl_method_success_response_new(result));
   } else {
-    result->NotImplemented();
+    response = FL_METHOD_RESPONSE(fl_method_not_implemented_response_new());
   }
+
+  fl_method_call_respond(method_call, response, nullptr);
 }
 
-}  // namespace
+static void agora_rtc_engine_plugin_dispose(GObject* object) {
+  G_OBJECT_CLASS(agora_rtc_engine_plugin_parent_class)->dispose(object);
+}
 
-void AgoraRtcEnginePluginRegisterWithRegistrar(
-    FlutterDesktopPluginRegistrarRef registrar) {
-  AgoraRtcEnginePlugin::RegisterWithRegistrar(
-      flutter::PluginRegistrarManager::GetInstance()
-          ->GetRegistrar<flutter::PluginRegistrarGlfw>(registrar));
+static void agora_rtc_engine_plugin_class_init(AgoraRtcEnginePluginClass* klass) {
+  G_OBJECT_CLASS(klass)->dispose = agora_rtc_engine_plugin_dispose;
+}
+
+static void agora_rtc_engine_plugin_init(AgoraRtcEnginePlugin* self) {}
+
+static void method_call_cb(FlMethodChannel* channel, FlMethodCall* method_call,
+                           gpointer user_data) {
+  AgoraRtcEnginePlugin* plugin = AGORA_RTC_ENGINE_PLUGIN(user_data);
+  agora_rtc_engine_plugin_handle_method_call(plugin, method_call);
+}
+
+void agora_rtc_engine_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
+  AgoraRtcEnginePlugin* plugin = AGORA_RTC_ENGINE_PLUGIN(
+      g_object_new(agora_rtc_engine_plugin_get_type(), nullptr));
+
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  g_autoptr(FlMethodChannel) channel =
+      fl_method_channel_new(fl_plugin_registrar_get_messenger(registrar),
+                            "agora_rtc_engine",
+                            FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(channel, method_call_cb,
+                                            g_object_ref(plugin),
+                                            g_object_unref);
+
+  g_object_unref(plugin);
 }

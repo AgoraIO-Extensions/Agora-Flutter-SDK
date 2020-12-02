@@ -55,13 +55,15 @@ class RtcChannel with RtcChannelInterface {
   /// Destroys all [RtcChannel] instance.
   static void destroyAll() {
     _channels.forEach((key, value) async {
-      await value.destroy();
+      value._handler = null;
+      await value._invokeMethod('destroy');
     });
     _channels.clear();
   }
 
   @override
   Future<void> destroy() {
+    _handler = null;
     _channels.remove(channelId);
     return _invokeMethod('destroy');
   }
@@ -308,6 +310,7 @@ class RtcChannel with RtcChannelInterface {
   }
 }
 
+/// @nodoc
 mixin RtcChannelInterface
     implements
         RtcAudioInterface,
@@ -419,6 +422,7 @@ mixin RtcChannelInterface
   Future<String> getCallId();
 }
 
+/// @nodoc
 mixin RtcAudioInterface {
   /// Adjusts the playback volume of a specified remote user.
   ///
@@ -461,6 +465,7 @@ mixin RtcAudioInterface {
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 }
 
+/// @nodoc
 mixin RtcVideoInterface {
   /// Stops/Resumes receiving the video stream of the specified user.
   ///
@@ -486,6 +491,7 @@ mixin RtcVideoInterface {
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 }
 
+/// @nodoc
 mixin RtcVoicePositionInterface {
   /// Sets the sound position of a remote user.
   ///
@@ -506,6 +512,7 @@ mixin RtcVoicePositionInterface {
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain);
 }
 
+/// @nodoc
 mixin RtcPublishStreamInterface {
   /// Sets the video layout and audio settings for CDN live.
   ///
@@ -550,6 +557,7 @@ mixin RtcPublishStreamInterface {
   Future<void> removePublishStreamUrl(String url);
 }
 
+/// @nodoc
 mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
   ///
@@ -594,6 +602,7 @@ mixin RtcMediaRelayInterface {
   Future<void> stopChannelMediaRelay();
 }
 
+/// @nodoc
 mixin RtcDualStreamInterface {
   /// Sets the video stream type of the remote video stream when the remote user sends dual streams.
   ///
@@ -612,6 +621,7 @@ mixin RtcDualStreamInterface {
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 }
 
+/// @nodoc
 mixin RtcFallbackInterface {
   /// Sets the priority of a remote user's media stream.
   ///
@@ -626,6 +636,7 @@ mixin RtcFallbackInterface {
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority);
 }
 
+/// @nodoc
 mixin RtcMediaMetadataInterface {
   /// Registers the metadata observer.
   ///
@@ -652,6 +663,7 @@ mixin RtcMediaMetadataInterface {
   Future<void> sendMetadata(String metadata);
 }
 
+/// @nodoc
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   ///
@@ -706,6 +718,7 @@ mixin RtcEncryptionInterface {
   Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
+/// @nodoc
 mixin RtcInjectStreamInterface {
   /// Injects an online media stream to a [ChannelProfile.LiveBroadcasting] channel.
   ///
@@ -737,6 +750,7 @@ mixin RtcInjectStreamInterface {
   Future<void> removeInjectStreamUrl(String url);
 }
 
+/// @nodoc
 mixin RtcStreamMessageInterface {
   /// Creates a data stream.
   ///
