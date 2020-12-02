@@ -5,37 +5,37 @@ import io.agora.rtc.RtcEngine
 import kotlin.math.abs
 
 abstract class Callback {
-    fun code(code: Int?, runnable: ((Int) -> Any?)? = null) {
-        if (code == null || code < 0) {
-            val newCode = abs(code ?: Constants.ERR_NOT_INITIALIZED)
-            failure(newCode.toString(), RtcEngine.getErrorDescription(newCode))
-            return
-        }
-
-        val res = if (runnable != null) runnable(code) else Unit
-        if (res is Unit) {
-            success(null)
-        } else {
-            success(res)
-        }
+  fun code(code: Int?, runnable: ((Int) -> Any?)? = null) {
+    if (code == null || code < 0) {
+      val newCode = abs(code ?: Constants.ERR_NOT_INITIALIZED)
+      failure(newCode.toString(), RtcEngine.getErrorDescription(newCode))
+      return
     }
 
-    fun <T> resolve(source: T?, runnable: (T) -> Any?) {
-        if (source == null) {
-            val code = Constants.ERR_NOT_INITIALIZED
-            failure(code.toString(), RtcEngine.getErrorDescription(code))
-            return
-        }
+    val res = if (runnable != null) runnable(code) else Unit
+    if (res is Unit) {
+      success(null)
+    } else {
+      success(res)
+    }
+  }
 
-        val res = runnable(source)
-        if (res is Unit) {
-            success(null)
-        } else {
-            success(res)
-        }
+  fun <T> resolve(source: T?, runnable: (T) -> Any?) {
+    if (source == null) {
+      val code = Constants.ERR_NOT_INITIALIZED
+      failure(code.toString(), RtcEngine.getErrorDescription(code))
+      return
     }
 
-    abstract fun success(data: Any?)
+    val res = runnable(source)
+    if (res is Unit) {
+      success(null)
+    } else {
+      success(res)
+    }
+  }
 
-    abstract fun failure(code: String, message: String)
+  abstract fun success(data: Any?)
+
+  abstract fun failure(code: String, message: String)
 }
