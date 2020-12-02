@@ -666,6 +666,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger) {
     return _invokeMethod('setLocalVoiceChanger',
         {'voiceChanger': AudioVoiceChangerConverter(voiceChanger).value()});
@@ -695,6 +696,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset) {
     return _invokeMethod('setLocalVoiceReverbPreset',
         {'preset': AudioReverbPresetConverter(preset).value()});
@@ -867,6 +869,28 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<int> getNativeHandle() {
     return _invokeMethod('getNativeHandle');
+  }
+
+  @override
+  Future<void> setAudioEffectParameters(
+      AudioEffectPreset preset, int param1, int param2) {
+    return _invokeMethod('setAudioEffectParameters', {
+      'preset': AudioEffectPresetConverter(preset).value(),
+      'param1': param1,
+      'param2': param2
+    });
+  }
+
+  @override
+  Future<void> setAudioEffectPreset(AudioEffectPreset preset) {
+    return _invokeMethod('setAudioEffectPreset',
+        {'preset': AudioEffectPresetConverter(preset).value()});
+  }
+
+  @override
+  Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset) {
+    return _invokeMethod('setVoiceBeautifierPreset',
+        {'preset': VoiceBeautifierPresetConverter(preset).value()});
   }
 }
 
@@ -1704,6 +1728,7 @@ mixin RtcVoiceChangerInterface {
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
   ///
   /// **Parameter** [voiceChanger] The local voice changer option. See [AudioVoiceChanger].
+  @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger);
 
   /// Sets the preset local voice reverberation effect
@@ -1713,6 +1738,7 @@ mixin RtcVoiceChangerInterface {
   /// - Do not use this method together with [RtcEngine.setLocalVoiceChanger], or the method called eariler does not take effect.
   ///
   /// **Parameter** [preset] The local voice reverberation preset. See See [AudioReverbPreset].
+  @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset);
 
   /// Changes the voice pitch of the local speaker.
@@ -1738,6 +1764,16 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Parameter** [value] Sets the local voice reverberation value.
   Future<void> setLocalVoiceReverb(AudioReverbType reverbKey, int value);
+
+  /// TODO
+  Future<void> setAudioEffectPreset(AudioEffectPreset preset);
+
+  /// TODO
+  Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
+
+  /// TODO
+  Future<void> setAudioEffectParameters(
+      AudioEffectPreset preset, int param1, int param2);
 }
 
 /// @nodoc
