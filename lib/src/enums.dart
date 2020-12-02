@@ -447,6 +447,14 @@ enum AudioScenario {
   /// Gaming scenario.
   @JsonValue(5)
   ChatRoomGaming,
+
+  /// TODO
+  @JsonValue(6)
+  IOT,
+
+  /// TODO
+  @JsonValue(8)
+  MEETING,
 }
 
 /// The preset audio voice configuration used to change the voice effect.
@@ -1905,6 +1913,18 @@ enum WarningCode {
   /// Audio processing module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
   @JsonValue(1053)
   ApmResidualEcho,
+
+  /// Super-resolution warning: the original video dimensions of the remote user exceed 640*480.
+  @JsonValue(1610)
+  SuperResolutionStreamOverLimitation,
+
+  /// Super-resolution warning: another user is using super resolution.
+  @JsonValue(1611)
+  SuperResolutionUserCountOverLimitation,
+
+  /// Super-resolution warning: The device is not supported.
+  @JsonValue(1612)
+  SuperResolutionDeviceNotSupported,
 }
 
 /// The audio channel of the sound.
@@ -2035,4 +2055,103 @@ enum AudioSessionOperationRestriction {
   /// The SDK does not configure the audio session anymore.
   @JsonValue(1 << 7)
   All,
+}
+
+/// TODO
+enum AudioEffectPreset {
+  @JsonValue(0x00000000)
+  AudioEffectOff,
+
+  @JsonValue(0x02010100)
+  RoomAcousticsKTV,
+
+  @JsonValue(0x02010200)
+  RoomAcousticsVocalConcert,
+
+  @JsonValue(0x02010300)
+  RoomAcousticsStudio,
+
+  @JsonValue(0x02010400)
+  RoomAcousticsPhonograph,
+
+  @JsonValue(0x02010500)
+  RoomAcousticsVirtualStereo,
+
+  @JsonValue(0x02010600)
+  RoomAcousticsSpacial,
+
+  @JsonValue(0x02010700)
+  RoomAcousticsEthereal,
+
+  @JsonValue(0x02010800)
+  RoomAcoustics3DVoice,
+
+  @JsonValue(0x02020100)
+  VoiceChangerEffectUncle,
+
+  @JsonValue(0x02020200)
+  VoiceChangerEffectOldMan,
+
+  @JsonValue(0x02020300)
+  VoiceChangerEffectBoy,
+
+  @JsonValue(0x02020400)
+  VoiceChangerEffectSister,
+
+  @JsonValue(0x02020500)
+  VoiceChangerEffectGirl,
+
+  @JsonValue(0x02020600)
+  VoiceChangerEffectPigKing,
+
+  @JsonValue(0x02020700)
+  VoiceChangerEffectHulk,
+
+  @JsonValue(0x02030100)
+  StyleTransformationRnB,
+
+  @JsonValue(0x02030200)
+  StyleTransformationPopular,
+
+  @JsonValue(0x02040100)
+  PitchCorrection,
+}
+
+/// TODO
+enum VoiceBeautifierPreset {
+  @JsonValue(0x00000000)
+  VoiceBeautifierOff,
+
+  @JsonValue(0x01010100)
+  ChatBeautifierMagnetic,
+
+  @JsonValue(0x01010200)
+  ChatBeautifierFresh,
+
+  @JsonValue(0x01010300)
+  ChatBeautifierVitality,
+
+  @JsonValue(0x01030100)
+  TimbreTransformationVigorous,
+
+  @JsonValue(0x01030200)
+  TimbreTransformationDeep,
+
+  @JsonValue(0x01030300)
+  TimbreTransformationMellow,
+
+  @JsonValue(0x01030400)
+  TimbreTransformationFalsetto,
+
+  @JsonValue(0x01030500)
+  TimbreTransformationFull,
+
+  @JsonValue(0x01030600)
+  TimbreTransformationClear,
+
+  @JsonValue(0x01030700)
+  TimbreTransformationResounding,
+
+  @JsonValue(0x01030800)
+  TimbreTransformationRinging,
 }
