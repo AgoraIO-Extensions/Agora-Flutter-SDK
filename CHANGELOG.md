@@ -1,3 +1,16 @@
+## [3.1.4](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/compare/v3.1.4-rc.0...v3.1.4) (2020-12-02)
+
+
+### Bug Fixes
+
+* add lost file ([4e899b7](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/4e899b7be469b0f5cc16f4d594e596171a659047))
+
+
+### Features
+
+* add `getAssetAbsolutePath` to support flutter assets. (fix [#181](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/issues/181)) ([b158d7d](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/b158d7d67b790f7c1773bf6b58afb64378c0ff5b))
+* optimize for other platforms ([0df4a28](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/0df4a28c813e0c9a9a3fa632bf0da49b30a71394))
+
 ## [3.1.4-rc.0](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/compare/3.1.3...v3.1.4-rc.0) (2020-10-23)
 
 
