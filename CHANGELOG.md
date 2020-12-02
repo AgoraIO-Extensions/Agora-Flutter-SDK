@@ -1,31 +1,31 @@
-## [3.1.4](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/compare/v3.1.4-rc.0...v3.1.4) (2020-12-02)
+## [3.1.4](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.4-rc.0...v3.1.4) (2020-12-02)
 
 
 ### Bug Fixes
 
-* add lost file ([4e899b7](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/4e899b7be469b0f5cc16f4d594e596171a659047))
+* add lost file ([4e899b7](https://github.com/AgoraIO/Flutter-SDK/commit/4e899b7be469b0f5cc16f4d594e596171a659047))
 
 
 ### Features
 
-* add `getAssetAbsolutePath` to support flutter assets. (fix [#181](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/issues/181)) ([b158d7d](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/b158d7d67b790f7c1773bf6b58afb64378c0ff5b))
-* optimize for other platforms ([0df4a28](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/0df4a28c813e0c9a9a3fa632bf0da49b30a71394))
+* add `getAssetAbsolutePath` to support flutter assets. (fix [#181](https://github.com/AgoraIO/Flutter-SDK/issues/181)) ([b158d7d](https://github.com/AgoraIO/Flutter-SDK/commit/b158d7d67b790f7c1773bf6b58afb64378c0ff5b))
+* optimize for other platforms ([0df4a28](https://github.com/AgoraIO/Flutter-SDK/commit/0df4a28c813e0c9a9a3fa632bf0da49b30a71394))
 
-## [3.1.4-rc.0](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/compare/3.1.3...v3.1.4-rc.0) (2020-10-23)
+## [3.1.4-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/3.1.3...v3.1.4-rc.0) (2020-10-23)
 
 
 ### Bug Fixes
 
-* `getUserInfoByUid` `getUserInfoByUserAccount` type cast error, resolve [#204](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/issues/204) ([cb75715](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/cb757152f81717fb640771e38e489fb0a268b2d6))
-* events.dart `joinChannelSuccess` `rejoinChannelSuccess` bug ([b25771f](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/b25771f73be3dd8a4ac2cfbce435f78e824ba0e6))
-* rtc_engine `destroy` bug ([263ad09](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/263ad09c0b20073eb10c4d8cdd2c5a1e7ad87fd4))
+* `getUserInfoByUid` `getUserInfoByUserAccount` type cast error, resolve [#204](https://github.com/AgoraIO/Flutter-SDK/issues/204) ([cb75715](https://github.com/AgoraIO/Flutter-SDK/commit/cb757152f81717fb640771e38e489fb0a268b2d6))
+* events.dart `joinChannelSuccess` `rejoinChannelSuccess` bug ([b25771f](https://github.com/AgoraIO/Flutter-SDK/commit/b25771f73be3dd8a4ac2cfbce435f78e824ba0e6))
+* rtc_engine `destroy` bug ([263ad09](https://github.com/AgoraIO/Flutter-SDK/commit/263ad09c0b20073eb10c4d8cdd2c5a1e7ad87fd4))
 
 
 ### Features
 
-* add API example ([1b01711](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/1b01711ccdac0ea182afd71735e791af5a008bae))
-* Android add getNativeHandle ([0eab471](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/0eab47114cde933482f90879e177fd019430cafd))
-* iOS add getNativeHandle ([1a4833e](https://github.i.agoralab.co/AgoraIO/Flutter-SDK/commit/1a4833eadd97d48149bcac04549bc7debbaf5e36))
+* add API example ([1b01711](https://github.com/AgoraIO/Flutter-SDK/commit/1b01711ccdac0ea182afd71735e791af5a008bae))
+* Android add getNativeHandle ([0eab471](https://github.com/AgoraIO/Flutter-SDK/commit/0eab47114cde933482f90879e177fd019430cafd))
+* iOS add getNativeHandle ([1a4833e](https://github.com/AgoraIO/Flutter-SDK/commit/1a4833eadd97d48149bcac04549bc7debbaf5e36))
 
 ## 3.1.3
 * fix `setDefaultAudioRoutetoSpeakerphone` crash bug
