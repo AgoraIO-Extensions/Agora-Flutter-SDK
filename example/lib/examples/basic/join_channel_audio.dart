@@ -17,7 +17,10 @@ class JoinChannelAudio extends StatefulWidget {
 
 class _State extends State<JoinChannelAudio> {
   String channelId = config.channelId;
-  bool isJoined = false, openMicrophone = true, enableSpeakerphone = true;
+  bool isJoined = false,
+      openMicrophone = true,
+      enableSpeakerphone = true,
+      playEffect = false;
   TextEditingController _controller;
 
   @override
@@ -91,6 +94,36 @@ class _State extends State<JoinChannelAudio> {
     });
   }
 
+  _switchEffect() async {
+    if (playEffect) {
+      widget._engine?.stopEffect(1)?.then((value) {
+        setState(() {
+          playEffect = false;
+        });
+      })?.catchError((err) {
+        log('stopEffect $err');
+      });
+    } else {
+      widget._engine
+          ?.playEffect(
+              1,
+              await RtcEngineExtension.getAssetAbsolutePath(
+                  "assets/Sound_Horizon.mp3"),
+              -1,
+              1,
+              1,
+              100,
+              true)
+          ?.then((value) {
+        setState(() {
+          playEffect = true;
+        });
+      })?.catchError((err) {
+        log('playEffect $err');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -132,6 +165,10 @@ class _State extends State<JoinChannelAudio> {
               RaisedButton(
                 onPressed: this._switchSpeakerphone,
                 child: Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
+              ),
+              RaisedButton(
+                onPressed: this._switchEffect,
+                child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
               ),
             ],
           ),

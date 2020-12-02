@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 
 public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+    private var registrar: FlutterPluginRegistrar?
     private var methodChannel: FlutterMethodChannel?
     private var eventChannel: FlutterEventChannel?
     private var eventSink: FlutterEventSink? = nil
@@ -16,6 +17,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let rtcEnginePlugin = SwiftAgoraRtcEnginePlugin()
+        rtcEnginePlugin.registrar = registrar
         rtcEnginePlugin.rtcChannelPlugin.initPlugin(registrar)
         rtcEnginePlugin.initPlugin(registrar)
     }
@@ -61,6 +63,10 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if call.method == "getAssetAbsolutePath" {
+            getAssetAbsolutePath(call, result: result)
+            return
+        }
         if let params = call.arguments as? NSDictionary {
             let selector = NSSelectorFromString(call.method + "::")
             if manager.responds(to: selector) {
@@ -75,5 +81,19 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
             }
         }
         result(FlutterMethodNotImplemented)
+    }
+    
+    private func getAssetAbsolutePath(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let assetPath = call.arguments as? String {
+            if let assetKey = registrar?.lookupKey(forAsset: assetPath) {
+                if let realPath = Bundle.main.path(forResource: assetKey, ofType: nil) {
+                    result(realPath)
+                    return
+                }
+            }
+            result(FlutterError.init(code: "FileNotFoundException", message: nil, details: nil))
+            return
+        }
+        result(FlutterError.init(code: "IllegalArgumentException", message: nil, details: nil))
     }
 }
