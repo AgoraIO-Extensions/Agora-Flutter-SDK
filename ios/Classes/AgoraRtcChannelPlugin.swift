@@ -59,11 +59,11 @@ public class AgoraRtcChannelPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
         eventSink?(event)
     }
 
-    private var engine: AgoraRtcEngineKit? {
+    private weak var engine: AgoraRtcEngineKit? {
         return rtcEnginePlugin?.engine
     }
 
-    public func channel(_ channelId: String) -> AgoraRtcChannel? {
+    func channel(_ channelId: String) -> AgoraRtcChannel? {
         return manager[channelId]
     }
 

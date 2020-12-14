@@ -15,6 +15,9 @@ class RtcEngine with RtcEngineInterface {
   static const EventChannel _eventChannel =
       EventChannel('agora_rtc_engine/events');
 
+  /// Exposing methodChannel to other files
+  static MethodChannel get methodChannel => _methodChannel;
+
   static RtcEngine _engine;
 
   RtcEngineEventHandler _handler;
@@ -89,6 +92,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> destroy() {
     RtcChannel.destroyAll();
+    _handler = null;
     _engine = null;
     return _invokeMethod('destroy');
   }
@@ -196,7 +200,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<UserInfo> getUserInfoByUid(int uid) {
     return _invokeMethod('getUserInfoByUid', {'uid': uid}).then((value) {
-      return UserInfo.fromJson(value);
+      return UserInfo.fromJson(Map<String, dynamic>.from(value));
     });
   }
 
@@ -204,7 +208,7 @@ class RtcEngine with RtcEngineInterface {
   Future<UserInfo> getUserInfoByUserAccount(String userAccount) {
     return _invokeMethod(
         'getUserInfoByUserAccount', {'userAccount': userAccount}).then((value) {
-      return UserInfo.fromJson(value);
+      return UserInfo.fromJson(Map<String, dynamic>.from(value));
     });
   }
 
@@ -618,7 +622,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker) {
     return _invokeMethod('setDefaultAudioRoutetoSpeakerphone',
-        {'booldefaultToSpeaker': defaultToSpeaker});
+        {'defaultToSpeaker': defaultToSpeaker});
   }
 
   @override
@@ -632,12 +636,14 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
     return _invokeMethod('setEncryptionMode',
         {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
@@ -660,6 +666,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger) {
     return _invokeMethod('setLocalVoiceChanger',
         {'voiceChanger': AudioVoiceChangerConverter(voiceChanger).value()});
@@ -689,6 +696,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset) {
     return _invokeMethod('setLocalVoiceReverbPreset',
         {'preset': AudioReverbPresetConverter(preset).value()});
@@ -836,8 +844,57 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod(
         'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
   }
+
+  @override
+  Future<void> sendCustomReportMessage(
+      String id, String category, String event, String label, int value) {
+    return _invokeMethod('sendCustomReportMessage', {
+      'id': id,
+      'category': category,
+      'event': event,
+      'label': label,
+      'value': value
+    });
+  }
+
+  @override
+  Future<void> setAudioSessionOperationRestriction(
+      AudioSessionOperationRestriction restriction) {
+    return _invokeMethod('setAudioSessionOperationRestriction', {
+      'restriction':
+          AudioSessionOperationRestrictionConverter(restriction).value()
+    });
+  }
+
+  @override
+  Future<int> getNativeHandle() {
+    return _invokeMethod('getNativeHandle');
+  }
+
+  @override
+  Future<void> setAudioEffectParameters(
+      AudioEffectPreset preset, int param1, int param2) {
+    return _invokeMethod('setAudioEffectParameters', {
+      'preset': AudioEffectPresetConverter(preset).value(),
+      'param1': param1,
+      'param2': param2
+    });
+  }
+
+  @override
+  Future<void> setAudioEffectPreset(AudioEffectPreset preset) {
+    return _invokeMethod('setAudioEffectPreset',
+        {'preset': AudioEffectPresetConverter(preset).value()});
+  }
+
+  @override
+  Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset) {
+    return _invokeMethod('setVoiceBeautifierPreset',
+        {'preset': VoiceBeautifierPresetConverter(preset).value()});
+  }
 }
 
+/// @nodoc
 mixin RtcEngineInterface
     implements
         RtcUserInfoInterface,
@@ -977,6 +1034,10 @@ mixin RtcEngineInterface
   /// Gets the connection state of the SDK.
   Future<ConnectionStateType> getConnectionState();
 
+  /// This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
+  Future<void> sendCustomReportMessage(
+      String id, String category, String event, String label, int value);
+
   /// Gets the current call ID.
   ///
   /// When a user joins a channel on a client, a call ID is generated to identify the call from the client. Feedback methods, such as the [RtcEngine.rate] and [RtcEngine.complain] method, must be called after the call ends to submit feedback to the SDK.
@@ -1036,8 +1097,14 @@ mixin RtcEngineInterface
   ///
   /// **Parameter** [parameters] Sets the parameter as a JSON string in the specified format.
   Future<void> setParameters(String parameters);
+
+  /// Gets the native handle of the SDK engine.
+  ///
+  /// This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
+  Future<int> getNativeHandle();
 }
 
+/// @nodoc
 mixin RtcUserInfoInterface {
   /// Registers a user account.
   ///
@@ -1125,6 +1192,7 @@ mixin RtcUserInfoInterface {
   Future<UserInfo> getUserInfoByUid(int uid);
 }
 
+/// @nodoc
 mixin RtcAudioInterface {
   /// Enables the audio module.
   ///
@@ -1282,6 +1350,7 @@ mixin RtcAudioInterface {
       int interval, int smooth, bool report_vad);
 }
 
+/// @nodoc
 mixin RtcVideoInterface {
   /// Enables the video module.
   ///
@@ -1413,6 +1482,7 @@ mixin RtcVideoInterface {
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 }
 
+/// @nodoc
 mixin RtcAudioMixingInterface {
   /// Starts playing and mixing the music file.
   ///
@@ -1540,6 +1610,7 @@ mixin RtcAudioMixingInterface {
   Future<void> setAudioMixingPitch(int pitch);
 }
 
+/// @nodoc
 mixin RtcAudioEffectInterface {
   /// Gets the volume of the audio effects.
   ///
@@ -1636,8 +1707,20 @@ mixin RtcAudioEffectInterface {
 
   /// Resumes playing all audio effects.
   Future<void> resumeAllEffects();
+
+  /// The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
+  ///
+  /// You can call this method at any time to return the control of the audio sessions to the SDK.
+  ///
+  /// **Note**
+  /// - This method restricts the SDK’s manipulation of the audio session. Any operation to the audio session relies solely on the app, other apps, or third-party components.
+  ///
+  /// **Parameter** [restriction] The operational restriction (bit mask) of the SDK on the audio session. See [AudioSessionOperationRestriction].
+  Future<void> setAudioSessionOperationRestriction(
+      AudioSessionOperationRestriction restriction);
 }
 
+/// @nodoc
 mixin RtcVoiceChangerInterface {
   /// Sets the local voice changer option.
   ///
@@ -1645,6 +1728,7 @@ mixin RtcVoiceChangerInterface {
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
   ///
   /// **Parameter** [voiceChanger] The local voice changer option. See [AudioVoiceChanger].
+  @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger);
 
   /// Sets the preset local voice reverberation effect
@@ -1654,6 +1738,7 @@ mixin RtcVoiceChangerInterface {
   /// - Do not use this method together with [RtcEngine.setLocalVoiceChanger], or the method called eariler does not take effect.
   ///
   /// **Parameter** [preset] The local voice reverberation preset. See See [AudioReverbPreset].
+  @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset);
 
   /// Changes the voice pitch of the local speaker.
@@ -1679,8 +1764,19 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Parameter** [value] Sets the local voice reverberation value.
   Future<void> setLocalVoiceReverb(AudioReverbType reverbKey, int value);
+
+  /// TODO
+  Future<void> setAudioEffectPreset(AudioEffectPreset preset);
+
+  /// TODO
+  Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
+
+  /// TODO
+  Future<void> setAudioEffectParameters(
+      AudioEffectPreset preset, int param1, int param2);
 }
 
+/// @nodoc
 mixin RtcVoicePositionInterface {
   /// Enables/Disables stereo panning for remote users.
   ///
@@ -1709,6 +1805,7 @@ mixin RtcVoicePositionInterface {
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain);
 }
 
+/// @nodoc
 mixin RtcPublishStreamInterface {
   /// Sets the video layout and audio settings for CDN live.
   ///
@@ -1756,6 +1853,7 @@ mixin RtcPublishStreamInterface {
   Future<void> removePublishStreamUrl(String url);
 }
 
+/// @nodoc
 mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
   ///
@@ -1799,6 +1897,7 @@ mixin RtcMediaRelayInterface {
   Future<void> stopChannelMediaRelay();
 }
 
+/// @nodoc
 mixin RtcAudioRouteInterface {
   /// Sets the default audio playback route.
   ///
@@ -1836,6 +1935,7 @@ mixin RtcAudioRouteInterface {
   Future<bool> isSpeakerphoneEnabled();
 }
 
+/// @nodoc
 mixin RtcEarMonitoringInterface {
   /// Enables in-ear monitoring.
   ///
@@ -1850,6 +1950,7 @@ mixin RtcEarMonitoringInterface {
   Future<void> setInEarMonitoringVolume(int volume);
 }
 
+/// @nodoc
 mixin RtcDualStreamInterface {
   /// Enables/Disables the dual video stream mode.
   ///
@@ -1881,6 +1982,7 @@ mixin RtcDualStreamInterface {
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 }
 
+/// @nodoc
 mixin RtcFallbackInterface {
   /// Sets the fallback option for the locally published video stream based on the network conditions.
   ///
@@ -1917,6 +2019,7 @@ mixin RtcFallbackInterface {
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority);
 }
 
+/// @nodoc
 mixin RtcTestInterface {
   /// Starts an audio call test.
   ///
@@ -1971,6 +2074,7 @@ mixin RtcTestInterface {
   Future<void> stopLastmileProbeTest();
 }
 
+/// @nodoc
 mixin RtcMediaMetadataInterface {
   /// Registers the metadata observer.
   ///
@@ -1998,6 +2102,7 @@ mixin RtcMediaMetadataInterface {
   Future<void> sendMetadata(String metadata);
 }
 
+/// @nodoc
 mixin RtcWatermarkInterface {
   /// Adds a watermark image to the local video.
   ///
@@ -2027,6 +2132,7 @@ mixin RtcWatermarkInterface {
   Future<void> clearVideoWatermarks();
 }
 
+/// @nodoc
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   ///
@@ -2041,6 +2147,7 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
+  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
@@ -2057,6 +2164,7 @@ mixin RtcEncryptionInterface {
   /// - Call the [RtcEngine.setEncryptionSecret] method before calling this method.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
   /// Enables/Disables the built-in encryption.
@@ -2079,6 +2187,7 @@ mixin RtcEncryptionInterface {
   Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
+/// @nodoc
 mixin RtcAudioRecorderInterface {
   /// Starts an audio recording on the client.
   ///
@@ -2108,6 +2217,7 @@ mixin RtcAudioRecorderInterface {
   Future<void> stopAudioRecording();
 }
 
+/// @nodoc
 mixin RtcInjectStreamInterface {
   /// Injects an online media stream to a live broadcast.
   ///
@@ -2142,6 +2252,7 @@ mixin RtcInjectStreamInterface {
   Future<void> removeInjectStreamUrl(String url);
 }
 
+/// @nodoc
 mixin RtcCameraInterface {
   /// Switches between front and rear cameras.
   Future<void> switchCamera();
@@ -2230,6 +2341,7 @@ mixin RtcCameraInterface {
       CameraCapturerConfiguration config);
 }
 
+/// @nodoc
 mixin RtcStreamMessageInterface {
   /// Creates a data stream.
   ///
