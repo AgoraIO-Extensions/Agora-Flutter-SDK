@@ -388,6 +388,8 @@ const _$AudioScenarioEnumMap = {
   AudioScenario.GameStreaming: 3,
   AudioScenario.ShowRoom: 4,
   AudioScenario.ChatRoomGaming: 5,
+  AudioScenario.IOT: 6,
+  AudioScenario.MEETING: 8,
 };
 
 AudioVoiceChangerConverter _$AudioVoiceChangerConverterFromJson(
@@ -1280,6 +1282,9 @@ const _$WarningCodeEnumMap = {
   WarningCode.ApmHowling: 1051,
   WarningCode.AdmGlitchState: 1052,
   WarningCode.ApmResidualEcho: 1053,
+  WarningCode.SuperResolutionStreamOverLimitation: 1610,
+  WarningCode.SuperResolutionUserCountOverLimitation: 1611,
+  WarningCode.SuperResolutionDeviceNotSupported: 1612,
 };
 
 AudioChannelConverter _$AudioChannelConverterFromJson(
@@ -1379,4 +1384,89 @@ Map<String, dynamic> _$RtmpStreamingEventConverterToJson(
 
 const _$RtmpStreamingEventEnumMap = {
   RtmpStreamingEvent.FailedLoadImage: 1,
+};
+
+AudioSessionOperationRestrictionConverter
+    _$AudioSessionOperationRestrictionConverterFromJson(
+        Map<String, dynamic> json) {
+  return AudioSessionOperationRestrictionConverter(
+    _$enumDecodeNullable(_$AudioSessionOperationRestrictionEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$AudioSessionOperationRestrictionConverterToJson(
+        AudioSessionOperationRestrictionConverter instance) =>
+    <String, dynamic>{
+      'e': _$AudioSessionOperationRestrictionEnumMap[instance.e],
+    };
+
+const _$AudioSessionOperationRestrictionEnumMap = {
+  AudioSessionOperationRestriction.None: 0,
+  AudioSessionOperationRestriction.SetCategory: 1,
+  AudioSessionOperationRestriction.ConfigureSession: 2,
+  AudioSessionOperationRestriction.DeactivateSession: 4,
+  AudioSessionOperationRestriction.All: 128,
+};
+
+AudioEffectPresetConverter _$AudioEffectPresetConverterFromJson(
+    Map<String, dynamic> json) {
+  return AudioEffectPresetConverter(
+    _$enumDecodeNullable(_$AudioEffectPresetEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$AudioEffectPresetConverterToJson(
+        AudioEffectPresetConverter instance) =>
+    <String, dynamic>{
+      'e': _$AudioEffectPresetEnumMap[instance.e],
+    };
+
+const _$AudioEffectPresetEnumMap = {
+  AudioEffectPreset.AudioEffectOff: 0,
+  AudioEffectPreset.RoomAcousticsKTV: 33620224,
+  AudioEffectPreset.RoomAcousticsVocalConcert: 33620480,
+  AudioEffectPreset.RoomAcousticsStudio: 33620736,
+  AudioEffectPreset.RoomAcousticsPhonograph: 33620992,
+  AudioEffectPreset.RoomAcousticsVirtualStereo: 33621248,
+  AudioEffectPreset.RoomAcousticsSpacial: 33621504,
+  AudioEffectPreset.RoomAcousticsEthereal: 33621760,
+  AudioEffectPreset.RoomAcoustics3DVoice: 33622016,
+  AudioEffectPreset.VoiceChangerEffectUncle: 33685760,
+  AudioEffectPreset.VoiceChangerEffectOldMan: 33686016,
+  AudioEffectPreset.VoiceChangerEffectBoy: 33686272,
+  AudioEffectPreset.VoiceChangerEffectSister: 33686528,
+  AudioEffectPreset.VoiceChangerEffectGirl: 33686784,
+  AudioEffectPreset.VoiceChangerEffectPigKing: 33687040,
+  AudioEffectPreset.VoiceChangerEffectHulk: 33687296,
+  AudioEffectPreset.StyleTransformationRnB: 33751296,
+  AudioEffectPreset.StyleTransformationPopular: 33751552,
+  AudioEffectPreset.PitchCorrection: 33816832,
+};
+
+VoiceBeautifierPresetConverter _$VoiceBeautifierPresetConverterFromJson(
+    Map<String, dynamic> json) {
+  return VoiceBeautifierPresetConverter(
+    _$enumDecodeNullable(_$VoiceBeautifierPresetEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$VoiceBeautifierPresetConverterToJson(
+        VoiceBeautifierPresetConverter instance) =>
+    <String, dynamic>{
+      'e': _$VoiceBeautifierPresetEnumMap[instance.e],
+    };
+
+const _$VoiceBeautifierPresetEnumMap = {
+  VoiceBeautifierPreset.VoiceBeautifierOff: 0,
+  VoiceBeautifierPreset.ChatBeautifierMagnetic: 16843008,
+  VoiceBeautifierPreset.ChatBeautifierFresh: 16843264,
+  VoiceBeautifierPreset.ChatBeautifierVitality: 16843520,
+  VoiceBeautifierPreset.TimbreTransformationVigorous: 16974080,
+  VoiceBeautifierPreset.TimbreTransformationDeep: 16974336,
+  VoiceBeautifierPreset.TimbreTransformationMellow: 16974592,
+  VoiceBeautifierPreset.TimbreTransformationFalsetto: 16974848,
+  VoiceBeautifierPreset.TimbreTransformationFull: 16975104,
+  VoiceBeautifierPreset.TimbreTransformationClear: 16975360,
+  VoiceBeautifierPreset.TimbreTransformationResounding: 16975616,
+  VoiceBeautifierPreset.TimbreTransformationRinging: 16975872,
 };

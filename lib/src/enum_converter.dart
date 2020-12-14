@@ -748,3 +748,42 @@ class RtmpStreamingEventConverter
     return super.toValue(_$RtmpStreamingEventEnumMap);
   }
 }
+
+@JsonSerializable()
+class AudioSessionOperationRestrictionConverter
+    extends EnumConverter<AudioSessionOperationRestriction, int> {
+  AudioSessionOperationRestrictionConverter(AudioSessionOperationRestriction e)
+      : super(e);
+
+  AudioSessionOperationRestrictionConverter.fromValue(int value)
+      : super.fromValue(_$AudioSessionOperationRestrictionEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioSessionOperationRestrictionEnumMap);
+  }
+}
+
+@JsonSerializable()
+class AudioEffectPresetConverter extends EnumConverter<AudioEffectPreset, int> {
+  AudioEffectPresetConverter(AudioEffectPreset e) : super(e);
+
+  AudioEffectPresetConverter.fromValue(int value)
+      : super.fromValue(_$AudioEffectPresetEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioEffectPresetEnumMap);
+  }
+}
+
+@JsonSerializable()
+class VoiceBeautifierPresetConverter
+    extends EnumConverter<VoiceBeautifierPreset, int> {
+  VoiceBeautifierPresetConverter(VoiceBeautifierPreset e) : super(e);
+
+  VoiceBeautifierPresetConverter.fromValue(int value)
+      : super.fromValue(_$VoiceBeautifierPresetEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VoiceBeautifierPresetEnumMap);
+  }
+}

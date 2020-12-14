@@ -84,6 +84,7 @@ typedef StreamPublishStateCallback = void Function(
     int elapseSinceLastState);
 typedef StreamSubscribeStateCallback = void Function(
     String channel,
+    int uid,
     StreamSubscribeState oldState,
     StreamSubscribeState newState,
     int elapseSinceLastState);
@@ -142,7 +143,7 @@ class RtcEngineEventHandler {
   ///
   /// The `RtcStatsCallback` typedef includes the following parameter:
   /// - [RtcStats] `stats`: Statistics of the call.
-  RtcStatsCallback rejoinChannelSuccess;
+  UidWithElapsedAndChannelCallback rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
   ///
@@ -296,6 +297,7 @@ class RtcEngineEventHandler {
   ///
   /// The `ElapsedCallback` typedef includes the following parameters:
   /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
+  @deprecated
   ElapsedCallback firstLocalAudioFrame;
 
   /// Occurs when the first local video frame is rendered.
@@ -310,7 +312,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a remote user stops/resumes sending the video stream.
   ///
-  /// @deprecated This callback is deprecated. Use the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters for the same function:
+  /// **Deprecated** This callback is deprecated. Use the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters for the same function:
   /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
   /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
@@ -506,7 +508,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the audio mixing file playback finishes.
   ///
-  /// @deprecated This callback is deprecated. Use [RtcEngineEventHandler.audioMixingStateChanged] instead.
+  /// **Deprecated** This callback is deprecated. Use [RtcEngineEventHandler.audioMixingStateChanged] instead.
   ///
   /// You can start an audio mixing file playback by calling the [RtcEngine.startAudioMixing] method. This callback is triggered when the audio mixing file playback finishes.
   ///
@@ -613,7 +615,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first remote video frame is rendered.
   ///
-  /// @deprecated Use [VideoRemoteState.Starting] or [VideoRemoteState.Decoding] in the [remoteVideoStateChanged] callback instead.
+  /// **Deprecated** Use [VideoRemoteState.Starting] or [VideoRemoteState.Decoding] in the [remoteVideoStateChanged] callback instead.
   ///
   /// This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
   ///
@@ -627,7 +629,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first remote audio frame is received.
   ///
-  /// @deprecated Use [AudioRemoteState.Starting] in [remoteAudioStateChanged] instead.
+  /// **Deprecated** Use [AudioRemoteState.Starting] in [remoteAudioStateChanged] instead.
   ///
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
@@ -647,7 +649,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the engine receives the first audio frame from a specified remote user.
   ///
-  /// @deprecated Use [VideoRemoteState.Decoding] in [remoteAudioStateChanged] instead.
+  /// **Deprecated** Use [VideoRemoteState.Decoding] in [remoteAudioStateChanged] instead.
   ///
   /// This callback is triggered in either of the following scenarios：
   /// - The remote user joins the channel and sends the audio stream.
@@ -675,7 +677,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a remote user stops/resumes sending the audio stream.
   ///
-  /// @deprecated Use the [RtcEngineEventHandler.remoteAudioStateChanged] callback with the following parameters instead:
+  /// **Deprecated** Use the [RtcEngineEventHandler.remoteAudioStateChanged] callback with the following parameters instead:
   /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
   /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
@@ -694,7 +696,7 @@ class RtcEngineEventHandler {
 
   /// Reports the result of calling the [RtcEngine.addPublishStreamUrl] method.
   ///
-  /// @deprecated Use [RtcEngineEventHandler.rtmpStreamingStateChanged] instead.
+  /// **Deprecated** Use [RtcEngineEventHandler.rtmpStreamingStateChanged] instead.
   ///
   /// This callback indicates whether you have successfully added an RTMP stream to the CDN.
   ///
@@ -706,7 +708,7 @@ class RtcEngineEventHandler {
 
   /// Reports the result of calling the [RtcEngine.removePublishStreamUrl] method.
   ///
-  /// @deprecated Use [RtcEngineEventHandler.rtmpStreamingStateChanged] instead.
+  /// **Deprecated** Use [RtcEngineEventHandler.rtmpStreamingStateChanged] instead.
   ///
   /// This callback indicates whether you have successfully removed an RTMP stream from the CDN.
   ///
@@ -717,7 +719,7 @@ class RtcEngineEventHandler {
 
   /// Reports the transport-layer statistics of each remote audio stream.
   ///
-  /// @deprecated This callback is deprecated. Use [RtcEngineEventHandler.remoteAudioStats] instead.
+  /// **Deprecated** This callback is deprecated. Use [RtcEngineEventHandler.remoteAudioStats] instead.
   ///
   /// This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user.
   ///
@@ -731,7 +733,7 @@ class RtcEngineEventHandler {
 
   /// Reports the transport-layer statistics of each remote video stream.
   ///
-  /// @deprecated This callback is deprecated. Use [RtcEngineEventHandler.remoteVideoStats] instead.
+  /// **Deprecated** This callback is deprecated. Use [RtcEngineEventHandler.remoteVideoStats] instead.
   ///
   /// This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user.
   ///
@@ -745,7 +747,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a remote user enables/disables the video module.
   ///
-  /// @deprecated This callback is deprecated and replaced by the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters:
+  /// **Deprecated** This callback is deprecated and replaced by the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters:
   /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
   /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
@@ -766,7 +768,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a remote user enables/disables the local video capture function.
   ///
-  /// @deprecated This callback is deprecated and replaced by the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters:
+  /// **Deprecated** This callback is deprecated and replaced by the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters:
   /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
   /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
@@ -783,7 +785,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first remote video frame is received and decoded.
   ///
-  /// @deprecated This callback is deprecated. Use [VideoRemoteState.Starting] or [VideoRemoteState.Decoding] in the [RtcEngineEventHandler.remoteVideoStateChanged] callback instead.
+  /// **Deprecated** This callback is deprecated. Use [VideoRemoteState.Starting] or [VideoRemoteState.Decoding] in the [RtcEngineEventHandler.remoteVideoStateChanged] callback instead.
   ///
   /// This callback is triggered in either of the following scenarios:
   /// - The remote user joins the channel and sends the video stream.
@@ -804,7 +806,7 @@ class RtcEngineEventHandler {
   /// Occurs when the microphone is enabled/disabled.
   ///
   ///
-  /// @deprecated This callback is deprecated. Use [AudioLocalState.Stopped] (0) or [AudioLocalState.Recording] (1) in the [RtcEngineEventHandler.localAudioStateChanged] callback instead.
+  /// **Deprecated** This callback is deprecated. Use [AudioLocalState.Stopped] (0) or [AudioLocalState.Recording] (1) in the [RtcEngineEventHandler.localAudioStateChanged] callback instead.
   /// The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling the [RtcEngine.enableLocalAudio] method.
   ///
   /// The `EnabledCallback` includes the following parameter:
@@ -816,7 +818,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the connection between the SDK and the server is interrupted.
   ///
-  /// @deprecated Use [RtcEngineEventHandler.connectionStateChanged] instead.
+  /// **Deprecated** Use [RtcEngineEventHandler.connectionStateChanged] instead.
   ///
   /// The SDK triggers this callback when it loses connection to the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. This callback is different from [RtcEngineEventHandler.connectionLost]:
   /// - The SDK triggers the [RtcEngineEventHandler.connectionInterrupted] callback when the SDK loses connection with the server for more than four seconds after it joins the channel.
@@ -829,14 +831,14 @@ class RtcEngineEventHandler {
 
   /// Occurs when your connection is banned by the Agora Server.
   ///
-  /// @deprecated Use [RtcEngineEventHandler.connectionStateChanged] instead.
+  /// **Deprecated** Use [RtcEngineEventHandler.connectionStateChanged] instead.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
   EmptyCallback connectionBanned;
 
   /// Reports the statistics of the audio stream from each remote user/host.
   ///
-  /// @deprecated Use [RtcEngineEventHandler.remoteAudioStats] instead.
+  /// **Deprecated** Use [RtcEngineEventHandler.remoteAudioStats] instead.
   ///
   /// The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple remote users/hosts sending audio streams, the SDK trggers this callback as many times.
   ///
@@ -850,14 +852,14 @@ class RtcEngineEventHandler {
 
   /// Occurs when the camera is turned on and ready to capture video.
   ///
-  /// @deprecated Use [LocalVideoStreamState.Capturing] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. If the camera fails to turn on, fix the error reported in the [LocalVideoStreamState.Failed] callback.
+  /// **Deprecated** Use [LocalVideoStreamState.Capturing] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. If the camera fails to turn on, fix the error reported in the [LocalVideoStreamState.Failed] callback.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
   EmptyCallback cameraReady;
 
   /// Occurs when the video stops playing.
   ///
-  /// @deprecated Use [LocalVideoStreamState.Stopped] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
+  /// **Deprecated** Use [LocalVideoStreamState.Stopped] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
   EmptyCallback videoStopped;
@@ -1054,8 +1056,7 @@ class RtcEngineEventHandler {
         joinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'RejoinChannelSuccess':
-        rejoinChannelSuccess
-            ?.call(RtcStats.fromJson(Map<String, dynamic>.from(data[0])));
+        rejoinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'LeaveChannel':
         leaveChannel
@@ -1128,8 +1129,9 @@ class RtcEngineEventHandler {
             data[3]);
         break;
       case 'LocalVideoStateChanged':
-        localVideoStateChanged?.call(LocalVideoStreamStateConverter(data[0]).e,
-            LocalVideoStreamErrorConverter(data[1]).e);
+        localVideoStateChanged?.call(
+            LocalVideoStreamStateConverter.fromValue(data[0]).e,
+            LocalVideoStreamErrorConverter.fromValue(data[1]).e);
         break;
       case 'RemoteAudioStateChanged':
         remoteAudioStateChanged?.call(
@@ -1139,8 +1141,9 @@ class RtcEngineEventHandler {
             data[3]);
         break;
       case 'LocalAudioStateChanged':
-        localAudioStateChanged?.call(AudioLocalStateConverter(data[0]).e,
-            AudioLocalErrorConverter(data[1]).e);
+        localAudioStateChanged?.call(
+            AudioLocalStateConverter.fromValue(data[0]).e,
+            AudioLocalErrorConverter.fromValue(data[1]).e);
         break;
       case 'LocalPublishFallbackToAudioOnly':
         localPublishFallbackToAudioOnly?.call(data[0]);
@@ -1328,16 +1331,18 @@ class RtcEngineEventHandler {
       case 'AudioSubscribeStateChanged':
         audioSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'VideoSubscribeStateChanged':
         videoSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);
@@ -1377,7 +1382,7 @@ class RtcChannelEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedCallback joinChannelSuccess;
+  UidWithElapsedAndChannelCallback joinChannelSuccess;
 
   /// Occurs when a user rejoins the channel after being disconnected due to network problems.
   ///
@@ -1396,7 +1401,7 @@ class RtcChannelEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedCallback rejoinChannelSuccess;
+  UidWithElapsedAndChannelCallback rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
   ///
@@ -1652,7 +1657,7 @@ class RtcChannelEventHandler {
   /// - `uid`: ID of the user who sends the metadata.
   /// - `timeStampMs`: The timestamp of the metadata.
   ///
-   /// The `MetadataCallback` typedef includes the following parameters:
+  /// The `MetadataCallback` typedef includes the following parameters:
   /// - [String]: `buffer`: The received metadata.
   /// - [int]: `uid`: The ID of the user who sent the metadata.
   /// - [int]: `timeStampMs`: The timestamp (ms) of the received metadata.
@@ -1767,10 +1772,10 @@ class RtcChannelEventHandler {
         error?.call(ErrorCodeConverter.fromValue(data[0]).e);
         break;
       case 'JoinChannelSuccess':
-        joinChannelSuccess?.call(data[0], data[1]);
+        joinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'RejoinChannelSuccess':
-        rejoinChannelSuccess?.call(data[0], data[1]);
+        rejoinChannelSuccess?.call(data[0], data[1], data[2]);
         break;
       case 'LeaveChannel':
         leaveChannel
@@ -1895,16 +1900,18 @@ class RtcChannelEventHandler {
       case 'AudioSubscribeStateChanged':
         audioSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'VideoSubscribeStateChanged':
         videoSubscribeStateChanged?.call(
             data[0],
-            StreamSubscribeStateConverter.fromValue(data[1]).e,
+            data[1],
             StreamSubscribeStateConverter.fromValue(data[2]).e,
-            data[3]);
+            StreamSubscribeStateConverter.fromValue(data[3]).e,
+            data[4]);
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);

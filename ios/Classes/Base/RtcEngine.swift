@@ -51,6 +51,8 @@ protocol RtcEngineInterface:
     func enableWebSdkInteroperability(_ params: NSDictionary, _ callback: Callback)
 
     func getConnectionState(_ callback: Callback)
+    
+    func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback)
 
     func getCallId(_ callback: Callback)
 
@@ -65,6 +67,8 @@ protocol RtcEngineInterface:
     func setLogFileSize(_ params: NSDictionary, _ callback: Callback)
 
     func setParameters(_ params: NSDictionary, _ callback: Callback)
+    
+    func getNativeHandle(_ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -179,11 +183,15 @@ protocol RtcEngineAudioEffectInterface {
     func resumeEffect(_ params: NSDictionary, _ callback: Callback)
 
     func resumeAllEffects(_ callback: Callback)
+
+    func setAudioSessionOperationRestriction(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoiceChangerInterface {
+    @available(*, deprecated)
     func setLocalVoiceChanger(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLocalVoiceReverbPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setLocalVoicePitch(_ params: NSDictionary, _ callback: Callback)
@@ -191,6 +199,12 @@ protocol RtcEngineVoiceChangerInterface {
     func setLocalVoiceEqualization(_ params: NSDictionary, _ callback: Callback)
 
     func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback)
+    
+    func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoicePositionInterface {
@@ -276,8 +290,10 @@ protocol RtcEngineWatermarkInterface {
 }
 
 protocol RtcEngineEncryptionInterface {
+    @available(*, deprecated)
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
 
     func enableEncryption(_ params: NSDictionary, _ callback: Callback)
@@ -399,6 +415,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
             it.getConnectionState().rawValue
         }
     }
+    
+    @objc func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.sendCustomReportMessage(params["id"] as! String, category: params["category"] as! String, event: params["event"] as! String, label: params["label"] as! String, value: params["value"] as! Int))
+    }
 
     @objc func getCallId(_ callback: Callback) {
         callback.resolve(engine) { it in
@@ -424,6 +444,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setLogFileSize(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLogFileSize((params["fileSizeInKBytes"] as! UInt)))
+    }
+    
+    @objc func getNativeHandle(_ callback: Callback) {
+        callback.resolve(engine) { it in
+            Int(bitPattern: it.getNativeHandle())
+        }
     }
 
     @objc func setParameters(_ params: NSDictionary, _ callback: Callback) {
@@ -651,6 +677,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func resumeAllEffects(_ callback: Callback) {
         callback.code(engine?.resumeAllEffects())
     }
+    
+    @objc func setAudioSessionOperationRestriction(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) { it in
+            it.setAudioSessionOperationRestriction(AgoraAudioSessionOperationRestriction(rawValue: params["restriction"] as! UInt))
+        }
+    }
 
     @objc func setLocalVoiceChanger(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLocalVoiceChanger(AgoraAudioVoiceChanger(rawValue: params["voiceChanger"] as! Int)!))
@@ -670,6 +702,18 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLocalVoiceReverbOf(AgoraAudioReverbType(rawValue: params["reverbKey"] as! Int)!, withValue: params["value"] as! Int))
+    }
+    
+    @objc func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectPreset(AgoraAudioEffectPreset(rawValue: params["preset"] as! Int)!))
+    }
+    
+    @objc func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceBeautifierPreset(AgoraVoiceBeautifierPreset(rawValue: params["preset"] as! Int)!))
+    }
+    
+    @objc func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectParameters(AgoraAudioEffectPreset(rawValue: params["preset"] as! Int)!, param1: params["param1"] as! Int32, param2: params["param2"] as! Int32))
     }
 
     @objc func enableSoundPositionIndication(_ params: NSDictionary, _ callback: Callback) {
@@ -874,10 +918,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func isCameraFocusSupported(_ callback: Callback) {
-        // TODO Not in iOS
-        callback.resolve(engine) { it in
-            nil
-        }
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
     }
 
     @objc func isCameraExposurePositionSupported(_ callback: Callback) {
@@ -900,10 +941,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getCameraMaxZoomFactor(_ callback: Callback) {
-        // TODO Not in iOS
-        callback.resolve(engine) { it in
-            nil
-        }
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
     }
 
     @objc func setCameraFocusPositionInPreview(_ params: NSDictionary, _ callback: Callback) {

@@ -19,18 +19,19 @@ class RtcChannel with RtcChannelInterface {
 
   static final Map<String, RtcChannel> _channels = {};
 
-  final String _channelId;
+  /// The ID of RtcChannel
+  final String channelId;
 
   RtcChannelEventHandler _handler;
 
-  RtcChannel._(this._channelId);
+  RtcChannel._(this.channelId);
 
   Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
     return _methodChannel.invokeMethod(
         method,
         arguments == null
-            ? {'channelId': _channelId}
-            : {'channelId': _channelId, ...arguments});
+            ? {'channelId': channelId}
+            : {'channelId': channelId, ...arguments});
   }
 
   /// Creates and gets an [RtcChannel] instance.
@@ -54,14 +55,16 @@ class RtcChannel with RtcChannelInterface {
   /// Destroys all [RtcChannel] instance.
   static void destroyAll() {
     _channels.forEach((key, value) async {
-      await value.destroy();
+      value._handler = null;
+      await value._invokeMethod('destroy');
     });
     _channels.clear();
   }
 
   @override
   Future<void> destroy() {
-    _channels.remove(_channelId);
+    _handler = null;
+    _channels.remove(channelId);
     return _invokeMethod('destroy');
   }
 
@@ -229,11 +232,13 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
 
   @override
+  @deprecated
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
     return _invokeMethod(
         'setLiveTranscoding', {'transcoding': transcoding.toJson()});
@@ -305,6 +310,7 @@ class RtcChannel with RtcChannelInterface {
   }
 }
 
+/// @nodoc
 mixin RtcChannelInterface
     implements
         RtcAudioInterface,
@@ -416,6 +422,7 @@ mixin RtcChannelInterface
   Future<String> getCallId();
 }
 
+/// @nodoc
 mixin RtcAudioInterface {
   /// Adjusts the playback volume of a specified remote user.
   ///
@@ -458,6 +465,7 @@ mixin RtcAudioInterface {
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 }
 
+/// @nodoc
 mixin RtcVideoInterface {
   /// Stops/Resumes receiving the video stream of the specified user.
   ///
@@ -483,6 +491,7 @@ mixin RtcVideoInterface {
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 }
 
+/// @nodoc
 mixin RtcVoicePositionInterface {
   /// Sets the sound position of a remote user.
   ///
@@ -503,6 +512,7 @@ mixin RtcVoicePositionInterface {
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain);
 }
 
+/// @nodoc
 mixin RtcPublishStreamInterface {
   /// Sets the video layout and audio settings for CDN live.
   ///
@@ -547,6 +557,7 @@ mixin RtcPublishStreamInterface {
   Future<void> removePublishStreamUrl(String url);
 }
 
+/// @nodoc
 mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
   ///
@@ -591,6 +602,7 @@ mixin RtcMediaRelayInterface {
   Future<void> stopChannelMediaRelay();
 }
 
+/// @nodoc
 mixin RtcDualStreamInterface {
   /// Sets the video stream type of the remote video stream when the remote user sends dual streams.
   ///
@@ -609,6 +621,7 @@ mixin RtcDualStreamInterface {
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 }
 
+/// @nodoc
 mixin RtcFallbackInterface {
   /// Sets the priority of a remote user's media stream.
   ///
@@ -623,6 +636,7 @@ mixin RtcFallbackInterface {
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority);
 }
 
+/// @nodoc
 mixin RtcMediaMetadataInterface {
   /// Registers the metadata observer.
   ///
@@ -649,6 +663,7 @@ mixin RtcMediaMetadataInterface {
   Future<void> sendMetadata(String metadata);
 }
 
+/// @nodoc
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   ///
@@ -663,6 +678,7 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
+  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
@@ -679,6 +695,7 @@ mixin RtcEncryptionInterface {
   /// - Before calling this method, ensure that you have called [RtcChannel.setEncryptionSecret] to enable encryption.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
   /// Enables/Disables the built-in encryption.
@@ -701,6 +718,7 @@ mixin RtcEncryptionInterface {
   Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
+/// @nodoc
 mixin RtcInjectStreamInterface {
   /// Injects an online media stream to a [ChannelProfile.LiveBroadcasting] channel.
   ///
@@ -732,6 +750,7 @@ mixin RtcInjectStreamInterface {
   Future<void> removeInjectStreamUrl(String url);
 }
 
+/// @nodoc
 mixin RtcStreamMessageInterface {
   /// Creates a data stream.
   ///
