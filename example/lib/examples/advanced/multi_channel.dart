@@ -243,19 +243,18 @@ class _State extends State<MultiChannel> {
           RtcLocalView.SurfaceView(
             channelId: renderChannelId,
           ),
-          remoteUid != null
-              ? Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    child: RtcRemoteView.SurfaceView(
-                      uid: remoteUid,
-                      channelId: renderChannelId,
-                    ),
-                  ),
-                )
-              : Container()
+          if (remoteUid != null)
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                width: 200,
+                height: 200,
+                child: RtcRemoteView.SurfaceView(
+                  uid: remoteUid,
+                  channelId: renderChannelId,
+                ),
+              ),
+            )
         ],
       ),
     );
