@@ -18,13 +18,17 @@ class RtcSurfaceView: UIView {
     }()
     private weak var channel: AgoraRtcChannel?
 
+    func destroy() {
+        canvas.view = nil
+    }
+
     func setData(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?, _ uid: Int) {
         self.channel = channel
         canvas.channelId = channel?.getId()
         canvas.uid = UInt(uid)
         setupVideoCanvas(engine)
     }
-    
+
     func resetVideoCanvas(_ engine: AgoraRtcEngineKit) {
         let canvas = AgoraRtcVideoCanvas()
         canvas.view = nil
@@ -32,14 +36,14 @@ class RtcSurfaceView: UIView {
         canvas.channelId = self.canvas.channelId
         canvas.uid = self.canvas.uid
         canvas.mirrorMode = self.canvas.mirrorMode
-        
+
         if canvas.uid == 0 {
             engine.setupLocalVideo(canvas)
         } else {
             engine.setupRemoteVideo(canvas)
         }
     }
-    
+
     private func setupVideoCanvas(_ engine: AgoraRtcEngineKit) {
         if canvas.uid == 0 {
             engine.setupLocalVideo(canvas)
@@ -47,7 +51,7 @@ class RtcSurfaceView: UIView {
             engine.setupRemoteVideo(canvas)
         }
     }
-    
+
     func setRenderMode(_ engine: AgoraRtcEngineKit, _ renderMode: Int) {
         canvas.renderMode = AgoraVideoRenderMode(rawValue: UInt(renderMode))!
         setupRenderMode(engine)
