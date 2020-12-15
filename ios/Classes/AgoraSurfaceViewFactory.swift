@@ -68,6 +68,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
 
     deinit {
         channel.setMethodCallHandler(nil)
+        _view.destroy()
     }
 
     func setData(_ data: NSDictionary) {
