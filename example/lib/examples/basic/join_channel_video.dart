@@ -19,7 +19,7 @@ class JoinChannelVideo extends StatefulWidget {
 
 class _State extends State<JoinChannelVideo> {
   String channelId = config.channelId;
-  bool isJoined = false, switchCamera = true;
+  bool isJoined = false, switchCamera = true, switchRender = true;
   int remoteUid;
   TextEditingController _controller;
 
@@ -99,6 +99,12 @@ class _State extends State<JoinChannelVideo> {
     });
   }
 
+  _switchRender() {
+    setState(() {
+      switchRender = !switchRender;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -149,19 +155,21 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          RtcLocalView.SurfaceView(),
-          remoteUid != null
-              ? Align(
-                  alignment: Alignment.topLeft,
+          switchRender
+              ? RtcLocalView.SurfaceView()
+              : RtcRemoteView.SurfaceView(uid: remoteUid),
+          if (remoteUid != null)
+            Align(
+                alignment: Alignment.topLeft,
+                child: GestureDetector(
+                  onTap: this._switchRender,
                   child: Container(
-                    width: 200,
-                    height: 200,
-                    child: RtcRemoteView.SurfaceView(
-                      uid: remoteUid,
-                    ),
-                  ),
-                )
-              : Container()
+                      width: 200,
+                      height: 200,
+                      child: switchRender
+                          ? RtcRemoteView.SurfaceView(uid: remoteUid)
+                          : RtcLocalView.SurfaceView()),
+                ))
         ],
       ),
     );
