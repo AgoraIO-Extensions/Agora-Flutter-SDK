@@ -1,3 +1,16 @@
+## [3.1.5](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.4...v3.1.5) (2020-12-15)
+
+
+### Bug Fixes
+
+* `RtcSurfaceView` memory leak ([c0f7025](https://github.com/AgoraIO/Flutter-SDK/commit/c0f7025d641c61f47fefcbdc71f988823f513dfc))
+* `RtcSurfaceView` memory leak ([c8845fe](https://github.com/AgoraIO/Flutter-SDK/commit/c8845fe04c1596fe2e7242302bf160bc671910cb))
+
+
+### Features
+
+* example support `switchRender` ([f69c495](https://github.com/AgoraIO/Flutter-SDK/commit/f69c4953b31e551f8ec7259e9e43398e1560fc1d))
+
 ## [3.1.4](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.4-rc.0...v3.1.4) (2020-12-02)
 
 
