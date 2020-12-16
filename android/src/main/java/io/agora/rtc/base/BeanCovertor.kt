@@ -7,6 +7,7 @@ import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
 import io.agora.rtc.live.LiveTranscoding.TranscodingUser
 import io.agora.rtc.models.ChannelMediaOptions
+import io.agora.rtc.models.ClientRoleOptions
 import io.agora.rtc.video.*
 
 fun mapToVideoDimensions(map: Map<*, *>): VideoEncoderConfiguration.VideoDimensions {
@@ -175,5 +176,11 @@ fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
   return EncryptionConfig().apply {
     (map["encryptionMode"] as? Number)?.let { encryptionMode = intToEncryptionMode(it.toInt()) }
     (map["encryptionKey"] as? String)?.let { encryptionKey = it }
+  }
+}
+
+fun mapToClientRoleOptions(map: Map<*, *>): ClientRoleOptions {
+  return ClientRoleOptions().apply {
+    (map["audienceLatencyLevel"] as? Number)?.let { audienceLatencyLevel = it.toInt() }
   }
 }

@@ -364,7 +364,12 @@ class RtcEngineManager(
   }
 
   override fun setClientRole(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setClientRole((params["role"] as Number).toInt()))
+    val role = (params["role"] as Number).toInt()
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.setClientRole(role, mapToClientRoleOptions(it)))
+      return@setClientRole
+    }
+    callback.code(engine?.setClientRole(role))
   }
 
   override fun joinChannel(params: Map<String, *>, callback: Callback) {
