@@ -171,7 +171,12 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.setClientRole(AgoraClientRole(rawValue: params["role"] as! Int)!))
+        let role = AgoraClientRole(rawValue: params["role"] as! Int)!
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(self[params["channelId"] as! String]?.setClientRole(role, options: mapToClientRoleOptions(options)))
+            return
+        }
+        callback.code(self[params["channelId"] as! String]?.setClientRole(role))
     }
 
     @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {
