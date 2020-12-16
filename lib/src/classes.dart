@@ -371,7 +371,7 @@ class LiveTranscoding {
   /// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
   /// See [Color].
   @JsonKey(includeIfNull: false)
-  Color backgroundColor;
+  ColorRGB backgroundColor;
 
   /// Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
   @JsonKey(includeIfNull: false)
