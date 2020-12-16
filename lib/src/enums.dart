@@ -2155,3 +2155,18 @@ enum VoiceBeautifierPreset {
   @JsonValue(0x01030800)
   TimbreTransformationRinging,
 }
+
+/// The latency level of an audience member in a interactive live streaming.
+///
+/// **Note**
+///
+/// Takes effect only when the user role is AgoraClientRoleBroadcaster.
+enum AudienceLatencyLevelType {
+  /// 1: Low latency.
+  @JsonValue(1)
+  LowLatency,
+
+  /// 2: (Default) Ultra low latency.
+  @JsonValue(2)
+  UltraLowLatency,
+}

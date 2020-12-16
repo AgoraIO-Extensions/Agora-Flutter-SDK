@@ -85,9 +85,11 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> setClientRole(ClientRole role) {
-    return _invokeMethod(
-        'setClientRole', {'role': ClientRoleConverter(role).value()});
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]) {
+    return _invokeMethod('setClientRole', {
+      'role': ClientRoleConverter(role).value(),
+      'options': options?.toJson()
+    });
   }
 
   @override
@@ -327,6 +329,7 @@ mixin RtcChannelInterface
   /// Destroys the [RtcChannel] instance.
   Future<void> destroy();
 
+  /// TODO
   /// Sets the role of a user.
   ///
   /// This method sets the role of a user, such as a host or an audience. In a LiveBroadcasting channel, only a broadcaster can call the [RtcChannel.publish] method in the [RtcChannel] class.
@@ -336,7 +339,7 @@ mixin RtcChannelInterface
   /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
   /// **Parameter** [role] The role of the user. See [ClientRole].
-  Future<void> setClientRole(ClientRole role);
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]);
 
   /// Joins the channel with a user ID.
   ///
