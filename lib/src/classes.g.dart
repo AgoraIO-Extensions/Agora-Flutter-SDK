@@ -238,7 +238,7 @@ ColorRGB _$ColorFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ColorToJson(Color instance) => <String, dynamic>{
+Map<String, dynamic> _$ColorToJson(ColorRGB instance) => <String, dynamic>{
       'red': instance.red,
       'green': instance.green,
       'blue': instance.blue,
@@ -275,7 +275,7 @@ LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) {
         _$VideoCodecProfileTypeEnumMap, json['videoCodecProfile']),
     backgroundColor: json['backgroundColor'] == null
         ? null
-        : Color.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+        : ColorRGB.fromJson(json['backgroundColor'] as Map<String, dynamic>),
     userConfigExtraInfo: json['userConfigExtraInfo'] as String,
   );
 }
