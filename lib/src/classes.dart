@@ -1116,3 +1116,20 @@ class FacePositionInfo {
   /// @nodoc
   Map<String, dynamic> toJson() => _$FacePositionInfoToJson(this);
 }
+
+/// TODO
+@JsonSerializable(explicitToJson: true)
+class ClientRoleOptions {
+  /// TODO
+  AudienceLatencyLevelType audienceLatencyLevel;
+
+  /// Constructs a [ClientRoleOptions]
+  ClientRoleOptions();
+
+  /// @nodoc
+  factory ClientRoleOptions.fromJson(Map<String, dynamic> json) =>
+      _$ClientRoleOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ClientRoleOptionsToJson(this);
+}

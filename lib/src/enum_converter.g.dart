@@ -1470,3 +1470,21 @@ const _$VoiceBeautifierPresetEnumMap = {
   VoiceBeautifierPreset.TimbreTransformationResounding: 16975616,
   VoiceBeautifierPreset.TimbreTransformationRinging: 16975872,
 };
+
+AudienceLatencyLevelTypeConverter _$AudienceLatencyLevelTypeConverterFromJson(
+    Map<String, dynamic> json) {
+  return AudienceLatencyLevelTypeConverter(
+    _$enumDecodeNullable(_$AudienceLatencyLevelTypeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$AudienceLatencyLevelTypeConverterToJson(
+        AudienceLatencyLevelTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$AudienceLatencyLevelTypeEnumMap[instance.e],
+    };
+
+const _$AudienceLatencyLevelTypeEnumMap = {
+  AudienceLatencyLevelType.LowLatency: 1,
+  AudienceLatencyLevelType.UltraLowLatency: 2,
+};
