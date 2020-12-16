@@ -787,3 +787,16 @@ class VoiceBeautifierPresetConverter
     return super.toValue(_$VoiceBeautifierPresetEnumMap);
   }
 }
+
+@JsonSerializable()
+class AudienceLatencyLevelTypeConverter
+    extends EnumConverter<AudienceLatencyLevelType, int> {
+  AudienceLatencyLevelTypeConverter(AudienceLatencyLevelType e) : super(e);
+
+  AudienceLatencyLevelTypeConverter.fromValue(int value)
+      : super.fromValue(_$AudienceLatencyLevelTypeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudienceLatencyLevelTypeEnumMap);
+  }
+}

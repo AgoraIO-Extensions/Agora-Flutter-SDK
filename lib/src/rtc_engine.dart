@@ -113,9 +113,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setClientRole(ClientRole role) {
-    return _invokeMethod(
-        'setClientRole', {'role': ClientRoleConverter(role).value()});
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]) {
+    return _invokeMethod('setClientRole', {
+      'role': ClientRoleConverter(role).value(),
+      'options': options?.toJson()
+    });
   }
 
   @override
@@ -934,6 +936,7 @@ mixin RtcEngineInterface
   /// **Parameter** [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
   Future<void> setChannelProfile(ChannelProfile profile);
 
+  /// TODO
   /// Sets the role of a user ([ChannelProfile.LiveBroadcasting] only).
   ///
   /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
@@ -942,7 +945,7 @@ mixin RtcEngineInterface
   /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
   /// **Parameter** [role] Sets the role of a user. See [ClientRole].
-  Future<void> setClientRole(ClientRole role);
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]);
 
   /// Allows a user to join a channel.
   ///
