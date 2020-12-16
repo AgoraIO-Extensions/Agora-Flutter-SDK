@@ -283,7 +283,7 @@ class TranscodingUser {
 
 /// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
 @JsonSerializable(explicitToJson: true)
-class Color {
+class ColorRGB {
   /// Red.
   final int red;
 
@@ -294,10 +294,10 @@ class Color {
   final int blue;
 
   /// Constructs a [Color]
-  Color(this.red, this.green, this.blue);
+  ColorRGB(this.red, this.green, this.blue);
 
   /// @nodoc
-  factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
+  factory ColorRGB.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$ColorToJson(this);
