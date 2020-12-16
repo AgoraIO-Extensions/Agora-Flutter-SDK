@@ -387,7 +387,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setClientRole(AgoraClientRole(rawValue: params["role"] as! Int)!))
+        let role = AgoraClientRole(rawValue: params["role"] as! Int)!
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.setClientRole(role, options: mapToClientRoleOptions(options)))
+            return
+        }
+        callback.code(engine?.setClientRole(role))
     }
 
     @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {

@@ -857,4 +857,12 @@ public class Annotations {
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraVoiceBeautifierPreset {
   }
+
+  @IntDef({
+    Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY,
+    Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraAudienceLatencyLevelType {
+  }
 }
