@@ -230,8 +230,8 @@ const _$AudioChannelEnumMap = {
   AudioChannel.Channel5: 5,
 };
 
-Color _$ColorFromJson(Map<String, dynamic> json) {
-  return Color(
+ColorRGB _$ColorFromJson(Map<String, dynamic> json) {
+  return ColorRGB(
     json['red'] as int,
     json['green'] as int,
     json['blue'] as int,
