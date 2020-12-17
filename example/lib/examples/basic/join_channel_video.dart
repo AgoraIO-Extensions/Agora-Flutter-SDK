@@ -20,7 +20,7 @@ class JoinChannelVideo extends StatefulWidget {
 class _State extends State<JoinChannelVideo> {
   String channelId = config.channelId;
   bool isJoined = false, switchCamera = true, switchRender = true;
-  int remoteUid;
+  List<int> remoteUid = [];
   TextEditingController _controller;
 
   @override
@@ -57,21 +57,20 @@ class _State extends State<JoinChannelVideo> {
       userJoined: (uid, elapsed) {
         log('userJoined  ${uid} ${elapsed}');
         setState(() {
-          remoteUid = uid;
+          remoteUid.add(uid);
         });
       },
       userOffline: (uid, reason) {
         log('userOffline  ${uid} ${reason}');
-        if (uid == remoteUid) {
-          setState(() {
-            remoteUid = null;
-          });
-        }
+        setState(() {
+          remoteUid.removeWhere((element) => element == uid);
+        });
       },
       leaveChannel: (stats) {
         log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
+          remoteUid.clear();
         });
       },
     ));
@@ -102,6 +101,7 @@ class _State extends State<JoinChannelVideo> {
   _switchRender() {
     setState(() {
       switchRender = !switchRender;
+      remoteUid = List.of(remoteUid.reversed);
     });
   }
 
@@ -155,21 +155,28 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          switchRender
-              ? RtcLocalView.SurfaceView()
-              : RtcRemoteView.SurfaceView(uid: remoteUid),
+          RtcLocalView.SurfaceView(),
           if (remoteUid != null)
             Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: this._switchRender,
-                  child: Container(
-                      width: 200,
-                      height: 200,
-                      child: switchRender
-                          ? RtcRemoteView.SurfaceView(uid: remoteUid)
-                          : RtcLocalView.SurfaceView()),
-                ))
+              alignment: Alignment.topLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.of(remoteUid.map(
+                    (e) => GestureDetector(
+                      onTap: this._switchRender,
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        child: RtcRemoteView.SurfaceView(
+                          uid: e,
+                        ),
+                      ),
+                    ),
+                  )),
+                ),
+              ),
+            )
         ],
       ),
     );
