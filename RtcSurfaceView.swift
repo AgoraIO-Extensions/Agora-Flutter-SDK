@@ -11,15 +11,26 @@ import UIKit
 import AgoraRtcKit
 
 class RtcSurfaceView: UIView {
-    private lazy var canvas: AgoraRtcVideoCanvas = {
-        var canvas = AgoraRtcVideoCanvas()
-        canvas.view = self
-        return canvas
-    }()
+    private var surface: UIView
+    private var canvas: AgoraRtcVideoCanvas
     private weak var channel: AgoraRtcChannel?
-
-    func destroy() {
+    
+    override init(frame: CGRect) {
+        surface = UIView(frame: frame)
+        canvas = AgoraRtcVideoCanvas()
+        canvas.view = surface
+        super.init(frame: frame)
+        addSubview(surface)
+        addObserver(self, forKeyPath: "frame", options: .new, context: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
         canvas.view = nil
+        removeObserver(self, forKeyPath: "frame", context: nil)
     }
 
     func setData(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?, _ uid: Int) {
@@ -45,6 +56,10 @@ class RtcSurfaceView: UIView {
     }
 
     private func setupVideoCanvas(_ engine: AgoraRtcEngineKit) {
+        subviews.forEach { $0.removeFromSuperview() }
+        surface = UIView(frame: self.frame)
+        addSubview(surface)
+        canvas.view = surface
         if canvas.uid == 0 {
             engine.setupLocalVideo(canvas)
         } else {
@@ -71,6 +86,12 @@ class RtcSurfaceView: UIView {
             } else {
                 engine.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
             }
+        }
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "frame" {
+            surface.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
         }
     }
 }
