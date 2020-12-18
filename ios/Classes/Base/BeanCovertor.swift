@@ -179,8 +179,8 @@ func mapToLiveTranscoding(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodin
         transcoding.transcodingExtraInfo = userConfigExtraInfo
     }
     if let transcodingUsers = map["transcodingUsers"] as? Array<Any> {
-        transcodingUsers.forEach { (item) in
-            if let item = item as? Dictionary<String, Any> {
+        transcodingUsers.forEach {
+            if let item = $0 as? Dictionary<String, Any> {
                 transcoding.add(mapToTranscodingUser(item))
             }
         }
@@ -208,8 +208,8 @@ func mapToChannelMediaRelayConfiguration(_ map: Dictionary<String, Any>) -> Agor
         config.sourceInfo = mapToChannelMediaInfo(srcInfo)
     }
     if let destInfos = map["destInfos"] as? Array<Any> {
-        destInfos.forEach { (item) in
-            if let item = item as? Dictionary<String, Any> {
+        destInfos.forEach {
+            if let item = $0 as? Dictionary<String, Any> {
                 let info = mapToChannelMediaInfo(item)
                 config.setDestinationInfo(info, forChannelName: info.channelName ?? "")
             }
