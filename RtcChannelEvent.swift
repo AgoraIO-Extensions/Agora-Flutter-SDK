@@ -220,23 +220,23 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, didReceive event: AgoraChannelMediaRelayEvent) {
         callback(RtcChannelEvents.ChannelMediaRelayEvent, rtcChannel, event.rawValue)
     }
-    
+
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, didAudioPublishStateChange oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
         callback(RtcChannelEvents.AudioPublishStateChanged, rtcChannel, rtcChannel.getId(), oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
-    
+
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, didVideoPublishStateChange oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
         callback(RtcChannelEvents.VideoPublishStateChanged, rtcChannel, rtcChannel.getId(), oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
-    
+
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, didAudioSubscribeStateChange uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
         callback(RtcChannelEvents.AudioSubscribeStateChanged, rtcChannel, rtcChannel.getId(), uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
-    
+
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, didVideoSubscribeStateChange uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
         callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, rtcChannel.getId(), uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
-    
+
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
         callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, eventCode.rawValue)
     }
