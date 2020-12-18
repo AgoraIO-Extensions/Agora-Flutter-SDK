@@ -329,16 +329,21 @@ mixin RtcChannelInterface
   /// Destroys the [RtcChannel] instance.
   Future<void> destroy();
 
-  /// TODO
-  /// Sets the role of a user.
+  /// Sets the role of a user in a live interactive streaming.
   ///
-  /// This method sets the role of a user, such as a host or an audience. In a LiveBroadcasting channel, only a broadcaster can call the [RtcChannel.publish] method in the [RtcChannel] class.
-  ///
-  /// A successful call of this method triggers the following callbacks:
+  /// You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
   /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
   /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
+  /// **Note**
+  /// - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
+  /// - Since v3.2.0, this method can set the user level in addition to the user role.
+  ///    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
+  ///    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. Levels affect prices.
+  ///
   /// **Parameter** [role] The role of the user. See [ClientRole].
+  ///
+  /// **Parameter** [options] The detailed options of a user, including user level. See [ClientRoleOptions].
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]);
 
   /// Joins the channel with a user ID.
@@ -355,7 +360,7 @@ mixin RtcChannelInterface
   ///
   /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
   ///
-  /// **Parameter** [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the onJoinChannelSuccess callback. The app must maintain this user ID.
+  /// **Parameter** [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the `onJoinChannelSuccess` callback. The app must maintain this user ID.
   ///
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
   Future<void> joinChannel(String token, String optionalInfo, int optionalUid,

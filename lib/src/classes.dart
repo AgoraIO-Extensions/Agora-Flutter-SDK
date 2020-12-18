@@ -1117,10 +1117,10 @@ class FacePositionInfo {
   Map<String, dynamic> toJson() => _$FacePositionInfoToJson(this);
 }
 
-/// TODO
+/// The detailed options of a user.
 @JsonSerializable(explicitToJson: true)
 class ClientRoleOptions {
-  /// TODO
+  /// The latency level of an audience member in a live interactive streaming.
   AudienceLatencyLevelType audienceLatencyLevel;
 
   /// Constructs a [ClientRoleOptions]
