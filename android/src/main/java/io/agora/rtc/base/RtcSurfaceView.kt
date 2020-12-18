@@ -71,6 +71,7 @@ class RtcSurfaceView(
     surface.setZOrderMediaOverlay(isMediaOverlay)
     surface.setZOrderOnTop(onTop)
     addView(surface)
+    surface.layout(0, 0, width, height)
     canvas.view = surface
     if (canvas.uid == 0) {
       engine.setupLocalVideo(canvas)
