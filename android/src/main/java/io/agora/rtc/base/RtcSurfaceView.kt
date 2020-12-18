@@ -13,6 +13,8 @@ class RtcSurfaceView(
 ) : FrameLayout(context) {
   private var surface: SurfaceView
   private var canvas: VideoCanvas
+  private var isMediaOverlay = false
+  private var onTop = false
   private var channel: WeakReference<RtcChannel>? = null
 
   init {
@@ -26,6 +28,7 @@ class RtcSurfaceView(
   }
 
   fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
+    this.isMediaOverlay = isMediaOverlay
     try {
       removeView(surface)
       surface.setZOrderMediaOverlay(isMediaOverlay)
@@ -36,6 +39,7 @@ class RtcSurfaceView(
   }
 
   fun setZOrderOnTop(onTop: Boolean) {
+    this.onTop = onTop
     try {
       removeView(surface)
       surface.setZOrderOnTop(onTop)
@@ -62,6 +66,13 @@ class RtcSurfaceView(
   }
 
   private fun setupVideoCanvas(engine: RtcEngine) {
+    removeAllViews()
+    surface = RtcEngine.CreateRendererView(context.applicationContext)
+    surface.setZOrderMediaOverlay(isMediaOverlay)
+    surface.setZOrderOnTop(onTop)
+    addView(surface)
+    surface.layout(0, 0, width, height)
+    canvas.view = surface
     if (canvas.uid == 0) {
       engine.setupLocalVideo(canvas)
     } else {

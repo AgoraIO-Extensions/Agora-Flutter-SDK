@@ -5,7 +5,7 @@ import io.agora.rtc.RtcEngine
 import kotlin.math.abs
 
 abstract class Callback {
-  fun code(code: Int?, runnable: ((Int) -> Any?)? = null) {
+  fun code(code: Int?, runnable: ((Int?) -> Any?)? = null) {
     if (code == null || code < 0) {
       val newCode = abs(code ?: Constants.ERR_NOT_INITIALIZED)
       failure(newCode.toString(), RtcEngine.getErrorDescription(newCode))
