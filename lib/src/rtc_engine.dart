@@ -1816,6 +1816,7 @@ mixin RtcVoiceChangerInterface {
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierPreset`:
   ///   - `setAudioEffectPreset`
+  ///   - `setAudioEffectParameters`
   ///   - `setLocalVoiceReverbPreset`
   ///   - `setLocalVoiceChanger`
   ///   - `setLocalVoicePitch`
