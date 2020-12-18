@@ -936,15 +936,21 @@ mixin RtcEngineInterface
   /// **Parameter** [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
   Future<void> setChannelProfile(ChannelProfile profile);
 
-  /// TODO
-  /// Sets the role of a user ([ChannelProfile.LiveBroadcasting] only).
+  /// Sets the role of a user in a live interactive streaming.
   ///
-  /// This method sets the role of a user, such as a host or an audience (default), before joining a channel.
-  /// This method can be used to switch the user role after a user joins a channel. In the [ChannelProfile.LiveBroadcasting] profile, when a user switches user roles after joining a channel, a successful `setClientRole` method call triggers the following callbacks:
+  /// You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
   /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
   /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
+  /// **Note**
+  /// - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
+  /// - Since v3.2.0, this method can set the user level in addition to the user role.
+  ///    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
+  ///    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. Levels affect prices.
+  ///
   /// **Parameter** [role] Sets the role of a user. See [ClientRole].
+  ///
+  /// **Parameter** [options] The detailed options of a user, including user level. See [ClientRoleOptions].
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]);
 
   /// Allows a user to join a channel.
@@ -1075,7 +1081,7 @@ mixin RtcEngineInterface
   /// **Note**
   /// - Ensure that you call this method immediately after calling the [RtcEngine.create] method, otherwise the output log may not be complete.
   ///
-  /// **Parameter** [filePath] File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log`.
+  /// **Parameter** [filePath] File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log` for Android and `App Sandbox/Library/caches/agorasdk.log` for iOS.
   Future<void> setLogFile(String filePath);
 
   /// Sets the output log level of the SDK.
@@ -1740,7 +1746,7 @@ mixin RtcVoiceChangerInterface {
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverb].
   /// - Do not use this method together with [RtcEngine.setLocalVoiceChanger], or the method called eariler does not take effect.
   ///
-  /// **Parameter** [preset] The local voice reverberation preset. See See [AudioReverbPreset].
+  /// **Parameter** [preset] The local voice reverberation preset. See [AudioReverbPreset].
   @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset);
 
@@ -1752,7 +1758,7 @@ mixin RtcVoiceChangerInterface {
   /// Sets the local voice equalization effect.
   ///
   /// **Parameter** [bandFrequency] Sets the band frequency. The value ranges between 0 and 9; representing the respective 10-band center frequencies of the voice effects, including 31, 62, 125, 500, 1k, 2k, 4k, 8k, and 16k Hz.
-  /// See [AudioEqualizationBandFrequency]
+  /// See [AudioEqualizationBandFrequency].
   ///
   /// **Parameter** [bandGain] Sets the gain of each band (dB). The value ranges between -15 and 15. The default value is 0.
   Future<void> setLocalVoiceEqualization(
@@ -1768,13 +1774,110 @@ mixin RtcVoiceChangerInterface {
   /// **Parameter** [value] Sets the local voice reverberation value.
   Future<void> setLocalVoiceReverb(AudioReverbType reverbKey, int value);
 
-  /// TODO
+  /// Sets an SDK preset audio effect.
+  ///
+  /// Since v3.2.0
+  ///
+  /// Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect.
+  ///
+  /// You can set different audio effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` before calling this method.
+  ///
+  ///**Note**
+  /// - You can call this method either before or after joining a channel.
+  /// - Do not set the profile parameter of [RtcEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call fails.
+  /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
+  /// - If you call this method and set the preset parameter to enumerators except `RoomAcoustics3DVoice` or `PitchCorrection`, do not call [RtcEngine.setAudioEffectParameters]; otherwise, [RtcEngine.setAudioEffectParameters] overrides this method.
+  /// - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectPreset`:
+  ///     - `setVoiceBeautifierPreset`
+  ///     - `setLocalVoiceReverbPreset`
+  ///     - `setLocalVoiceChanger`
+  ///     - `setLocalVoicePitch`
+  ///     - `setLocalVoiceEqualization`
+  ///     - `setLocalVoiceReverb`
+  ///
+  /// **Parameter** [preset] The options for SDK preset audio effects. See [AudioEffectPreset].
   Future<void> setAudioEffectPreset(AudioEffectPreset preset);
 
-  /// TODO
+  /// Sets an SDK preset voice beautifier effect.
+  ///
+  /// Since v3.2.0
+  ///
+  /// Call this method to set an SDK preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect.
+  ///
+  /// You can set different voice beautifier effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` and the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
+  ///
+  /// **Note**
+  /// - You can call this method either before or after joining a channel.
+  /// - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
+  /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
+  /// - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierPreset`:
+  ///   - `setAudioEffectPreset`
+  ///   - `setAudioEffectParameters`
+  ///   - `setLocalVoiceReverbPreset`
+  ///   - `setLocalVoiceChanger`
+  ///   - `setLocalVoicePitch`
+  ///   - `setLocalVoiceEqualization`
+  ///   - `setLocalVoiceReverb`
+  ///
+  /// **Parameter** [preset] The options for SDK preset voice beautifier effects. See [VoiceBeautifierPreset].
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
 
-  /// TODO
+  /// Sets parameters for SDK preset audio effects.
+  ///
+  /// Call this method to set the following parameters for the local user who send an audio stream:
+  /// - 3D voice effect: Sets the cycle period of the 3D voice effect.
+  /// - Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches. Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively.
+  ///
+  /// After setting parameters, all users in the channel can hear the relevant effect.
+  ///
+  /// You can call this method directly or after [RtcEngine.setAudioEffectPreset]. If you call this method after `setAudioEffectPreset`, ensure that you set the preset parameter of `setAudioEffectPreset` to `RoomAcoustics3DVoice` or `PitchCorrection` and then call this method to set the same enumerator; otherwise, this method overrides `setAudioEffectPreset`.
+  ///
+  /// **Note**
+  /// - You can call this method either before or after joining a channel.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` before calling this method.
+  /// - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
+  /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
+  /// - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectParameters`:
+  ///   - `setAudioEffectPreset`
+  ///   - `setVoiceBeautifierPreset`
+  ///   - `setLocalVoiceReverbPreset`
+  ///   - `setLocalVoiceChanger`
+  ///   - `setLocalVoicePitch`
+  ///   - `setLocalVoiceEqualization`
+  ///   - `setLocalVoiceReverb`
+  ///
+  /// **Parameter** [preset] The options for SDK preset audio effects:
+  /// - 3D voice effect: `RoomAcoustics3DVoice`
+  ///   - Call `setAudioProfile` and set the `profile` parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)` before setting this enumerator; otherwise, the enumerator setting does not take effect.
+  ///   - If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
+  /// - Pitch correction effect: `PitchCorrection`. To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the `profile` parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  ///
+  /// **Parameter** [param1]
+  /// - If you set `preset` to `RoomAcoustics3DVoice`, the `param1` sets the cycle period of the 3D voice effect. The value range is [1, 60] and the unit is a second. The default value is 10 seconds, indicating that the voice moves around you every 10 seconds.
+  /// - If you set `preset` to `PitchCorrection`, `param1` sets the basic mode of the pitch correction effect:
+  ///   - 1: (Default) Natural major scale.
+  ///   - 2: Natural minor scale.
+  ///   - 3: Japanese pentatonic scale.
+  ///
+  /// **Parameter** [param2]
+  /// - If you set `preset` to `RoomAcoustics3DVoice`, you need to set `param2` to 0.
+  /// - If you set `preset` to `PitchCorrection`, `param2` sets the tonic pitch of the pitch correction effect:
+  ///   - 1: A
+  ///   - 2: A#
+  ///   - 3: B
+  ///   - 4: (Default) C
+  ///   - 5: C#
+  ///   - 6: D
+  ///   - 7: D#
+  ///   - 8: E
+  ///   - 9: F
+  ///   - 10: F#
+  ///   - 11: G
+  ///   - 12: G#
   Future<void> setAudioEffectParameters(
       AudioEffectPreset preset, int param1, int param2);
 }
