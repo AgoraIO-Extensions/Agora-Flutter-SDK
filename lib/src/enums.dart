@@ -1422,7 +1422,7 @@ enum NetworkType {
 
 /// The detailed error information for streaming.
 enum RtmpStreamingErrorCode {
-  /// The RTMP streaming publishes successfully.
+  /// The RTMP or RTMPS streaming publishes successfully.
   @JsonValue(0)
   OK,
 
@@ -1430,11 +1430,11 @@ enum RtmpStreamingErrorCode {
   @JsonValue(1)
   InvalidParameters,
 
-  /// The RTMP streaming is encrypted and cannot be published.
+  /// The RTMP or RTMPS streaming is encrypted and cannot be published.
   @JsonValue(2)
   EncryptedStreamNotAllowed,
 
-  /// Timeout for the RTMP streaming. Call the [RtcEngine.addPublishStreamUrl] method to publish the streaming again.
+  /// Timeout for the RTMP or RTMPS streaming. Call the [RtcEngine.addPublishStreamUrl] method to publish the streaming again.
   @JsonValue(3)
   ConnectionTimeout,
 
@@ -1446,7 +1446,7 @@ enum RtmpStreamingErrorCode {
   @JsonValue(5)
   RtmpServerError,
 
-  /// The RTMP streaming publishes too frequently.
+  /// The RTMP or RTMPS streaming publishes too frequently.
   @JsonValue(6)
   TooOften,
 
@@ -1458,18 +1458,18 @@ enum RtmpStreamingErrorCode {
   @JsonValue(8)
   NotAuthorized,
 
-  /// Agora’s server fails to find the RTMP streaming.
+  /// Agora’s server fails to find the RTMP or RTMPS streaming.
   @JsonValue(9)
   StreamNotFound,
 
-  /// The format of the RTMP streaming URL is not supported. Check whether the URL format is correct.
+  /// The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
   @JsonValue(10)
   FormatNotSupported,
 }
 
-/// The RTMP streaming state.
+/// The RTMP or RTMPS streaming state.
 enum RtmpStreamingState {
-  /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling [RtcEngine.removePublishStreamUrl].
+  /// The RTMP or RTMPS streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling [RtcEngine.removePublishStreamUrl].
   @JsonValue(0)
   Idle,
 
@@ -1477,17 +1477,17 @@ enum RtmpStreamingState {
   @JsonValue(1)
   Connecting,
 
-  /// The RTMP streaming is being published. The SDK successfully publishes the RTMP streaming and returns this state.
+  /// The RTMP or RTMPS streaming is being published. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
   @JsonValue(2)
   Running,
 
-  /// The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP streaming and returns this state.
+  /// The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP or RTMPS streaming and returns this state.
   /// - If the SDK successfully resumes the streaming, [RtmpStreamingState.Running] returns.
   /// - If the streaming does not resume within 60 seconds or server errors occur, [RtmpStreamingState.Failure] returns. You can also reconnect to the server by calling the [RtcEngine.removePublishStreamUrl] and [RtcEngine.addPublishStreamUrl] methods.
   @JsonValue(3)
   Recovering,
 
-  /// The RTMP streaming fails. See the `errorCode` parameter for the detailed error information. You can also call the [RtcEngine.addPublishStreamUrl] method to publish the RTMP streaming again.
+  /// The RTMP or RTMPS streaming fails. See the `errorCode` parameter for the detailed error information. You can also call the [RtcEngine.addPublishStreamUrl] method to publish the RTMP or RTMPS streaming again.
   @JsonValue(4)
   Failure,
 }
@@ -2029,7 +2029,7 @@ enum StreamSubscribeState {
   Subscribed,
 }
 
-/// Events during the RTMP streaming.
+/// Events during the RTMP or RTMPS streaming.
 enum RtmpStreamingEvent {
   /// An error occurs when you add a background image or a watermark image to the RTMP stream.
   @JsonValue(1)
