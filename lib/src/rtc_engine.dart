@@ -1210,8 +1210,8 @@ mixin RtcAudioInterface {
   /// The audio module is enabled by default.
   ///
   /// **Note**
-  /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
-  /// - This method resets the internal engine and takes some time to take effect. We recommend using the following API methods to control the audio engine modules separately:
+  /// - This method affects the audio module and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method enables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine modules separately:
   ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
   ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
   ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
@@ -1221,8 +1221,8 @@ mixin RtcAudioInterface {
   /// Disables the audio module.
   ///
   /// **Note**
-  /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
-  /// - This method enables/disables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine module separately:
+  /// - This method affects the audio module and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method disables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine module separately:
   ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
   ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
   ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
