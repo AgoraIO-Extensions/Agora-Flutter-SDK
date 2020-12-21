@@ -963,6 +963,8 @@ mixin RtcEngineInterface
   ///
   /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [RtcEngineEventHandler.rejoinChannelSuccess] callback on the local client.
   ///
+  /// Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the mute methods accordingly.
+  ///
   /// **Note**
   /// - A channel does not accept duplicate uids, such as two users with the same uid. If you set uid as 0, the system automatically assigns a uid.
   ///
@@ -1015,7 +1017,7 @@ mixin RtcEngineInterface
   ///
   /// **Note**
   /// - If you call the [RtcEngine.destroy] method immediately after calling this method, the `leaveChannel` process interrupts, and the SDK does not trigger the [RtcEngineEventHandler.leaveChannel] callback.
-  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcEngine.removeInjectStreamUrl] method.
+  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcEngine.removePublishStreamUrl] method.
   Future<void> leaveChannel();
 
   /// Renews the token when the current token expires.
@@ -1208,8 +1210,8 @@ mixin RtcAudioInterface {
   /// The audio module is enabled by default.
   ///
   /// **Note**
-  /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
-  /// - This method resets the internal engine and takes some time to take effect. We recommend using the following API methods to control the audio engine modules separately:
+  /// - This method affects the audio module and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method enables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine modules separately:
   ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
   ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
   ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
@@ -1219,8 +1221,8 @@ mixin RtcAudioInterface {
   /// Disables the audio module.
   ///
   /// **Note**
-  /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
-  /// - This method resets the engine and takes some time to take effect. We recommend using the following API methods to control the audio engine modules separately:
+  /// - This method affects the audio module and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method disables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine module separately:
   ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
   ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
   ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
@@ -1284,7 +1286,7 @@ mixin RtcAudioInterface {
   ///
   /// The audio function is enabled by default. This method disables/re-enables the local audio function, that is, to stop or restart local audio capture and processing.
   ///
-  /// This method does not affect receiving or playing the remote audio streams, and enableLocalAudio(false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
+  /// This method does not affect receiving or playing the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
   ///
   /// The SDK triggers the [RtcEngineEventHandler.microphoneEnabled] callback once the local audio function is disabled or re-enabled.
   ///
@@ -1354,7 +1356,7 @@ mixin RtcAudioInterface {
   ///
   /// **Parameter** [report_vad]
   /// - `true`: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
-  /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
+  /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
   Future<void> enableAudioVolumeIndication(
       int interval, int smooth, bool report_vad);
 }
@@ -1733,6 +1735,10 @@ mixin RtcAudioEffectInterface {
 mixin RtcVoiceChangerInterface {
   /// Sets the local voice changer option.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated since v3.2.0. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
+  ///
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
   ///
@@ -1740,7 +1746,11 @@ mixin RtcVoiceChangerInterface {
   @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger);
 
-  /// Sets the preset local voice reverberation effect
+  /// Sets the preset local voice reverberation effect.
+  ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated since v3.2.0. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
   ///
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverb].
@@ -1782,7 +1792,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// You can set different audio effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
   ///
-  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` before calling this method.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
   ///
   ///**Note**
   /// - You can call this method either before or after joining a channel.
@@ -1808,7 +1818,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// You can set different voice beautifier effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
   ///
-  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` and the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` and the `profile` parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
   ///
   /// **Note**
   /// - You can call this method either before or after joining a channel.
@@ -1838,7 +1848,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Note**
   /// - You can call this method either before or after joining a channel.
-  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` before calling this method.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
   /// - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectParameters`:
@@ -2033,11 +2043,15 @@ mixin RtcAudioRouteInterface {
   /// - This method is invalid for audience users in the [ChannelProfile.LiveBroadcasting] profile.
   ///
   /// **Parameter** [enabled] Sets whether to route the audio to the speakerphone or earpiece:
-  /// - `true`: Route the audio to the speakerphone.
+  /// - `true`: Route the audio to the speakerphone. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the speakerphone.
   /// - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
   Future<void> setEnableSpeakerphone(bool enabled);
 
   /// Checks whether the speakerphone is enabled.
+  ///
+  /// **Returns**
+  /// - `true`: The speakerphone is enabled, and the audio plays from the speakerphone.
+  /// - `false`: The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
   Future<bool> isSpeakerphoneEnabled();
 }
 
