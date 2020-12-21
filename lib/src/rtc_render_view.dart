@@ -73,7 +73,7 @@ class RtcSurfaceView extends StatefulWidget {
     this.zOrderMediaOverlay = false,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
-  }) : super(key: key ?? Key('surface-${channelId}-${uid}'));
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -252,7 +252,7 @@ class RtcTextureView extends StatefulWidget {
     this.mirrorMode = VideoMirrorMode.Auto,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
-  }) : super(key: key ?? Key('texture-${channelId}-${uid}'));
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
