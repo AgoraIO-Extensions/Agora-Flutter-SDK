@@ -963,6 +963,8 @@ mixin RtcEngineInterface
   ///
   /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [RtcEngineEventHandler.rejoinChannelSuccess] callback on the local client.
   ///
+  /// Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the mute methods accordingly.
+  ///
   /// **Note**
   /// - A channel does not accept duplicate uids, such as two users with the same uid. If you set uid as 0, the system automatically assigns a uid.
   ///
@@ -1733,6 +1735,10 @@ mixin RtcAudioEffectInterface {
 mixin RtcVoiceChangerInterface {
   /// Sets the local voice changer option.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated since v3.2.0. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
+  ///
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
   ///
@@ -1740,7 +1746,11 @@ mixin RtcVoiceChangerInterface {
   @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger);
 
-  /// Sets the preset local voice reverberation effect
+  /// Sets the preset local voice reverberation effect.
+  ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated since v3.2.0. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
   ///
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverb].
@@ -1782,7 +1792,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// You can set different audio effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
   ///
-  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` before calling this method.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
   ///
   ///**Note**
   /// - You can call this method either before or after joining a channel.
@@ -1808,7 +1818,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// You can set different voice beautifier effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
   ///
-  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` and the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` and the `profile` parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
   ///
   /// **Note**
   /// - You can call this method either before or after joining a channel.
@@ -1838,7 +1848,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Note**
   /// - You can call this method either before or after joining a channel.
-  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the scenario parameter to `GameStreaming(3)` before calling this method.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
   /// - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectParameters`:
