@@ -1015,7 +1015,7 @@ mixin RtcEngineInterface
   ///
   /// **Note**
   /// - If you call the [RtcEngine.destroy] method immediately after calling this method, the `leaveChannel` process interrupts, and the SDK does not trigger the [RtcEngineEventHandler.leaveChannel] callback.
-  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcEngine.removeInjectStreamUrl] method.
+  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcEngine.removePublishStreamUrl] method.
   Future<void> leaveChannel();
 
   /// Renews the token when the current token expires.
@@ -1220,7 +1220,7 @@ mixin RtcAudioInterface {
   ///
   /// **Note**
   /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
-  /// - This method resets the engine and takes some time to take effect. We recommend using the following API methods to control the audio engine modules separately:
+  /// - This method enables/disables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine module separately:
   ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
   ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
   ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
@@ -1284,7 +1284,7 @@ mixin RtcAudioInterface {
   ///
   /// The audio function is enabled by default. This method disables/re-enables the local audio function, that is, to stop or restart local audio capture and processing.
   ///
-  /// This method does not affect receiving or playing the remote audio streams, and enableLocalAudio(false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
+  /// This method does not affect receiving or playing the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
   ///
   /// The SDK triggers the [RtcEngineEventHandler.microphoneEnabled] callback once the local audio function is disabled or re-enabled.
   ///
@@ -1354,7 +1354,7 @@ mixin RtcAudioInterface {
   ///
   /// **Parameter** [report_vad]
   /// - `true`: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
-  /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
+  /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
   Future<void> enableAudioVolumeIndication(
       int interval, int smooth, bool report_vad);
 }
@@ -2033,11 +2033,15 @@ mixin RtcAudioRouteInterface {
   /// - This method is invalid for audience users in the [ChannelProfile.LiveBroadcasting] profile.
   ///
   /// **Parameter** [enabled] Sets whether to route the audio to the speakerphone or earpiece:
-  /// - `true`: Route the audio to the speakerphone.
+  /// - `true`: Route the audio to the speakerphone. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the speakerphone.
   /// - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
   Future<void> setEnableSpeakerphone(bool enabled);
 
   /// Checks whether the speakerphone is enabled.
+  ///
+  /// **Returns**
+  /// - `true`: The speakerphone is enabled, and the audio plays from the speakerphone.
+  /// - `false`: The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
   Future<bool> isSpeakerphoneEnabled();
 }
 
