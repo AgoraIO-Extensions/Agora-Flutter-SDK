@@ -1,3 +1,22 @@
+## [3.1.6](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.5...v3.1.6) (2020-12-21)
+
+
+### Bug Fixes
+
+* `MetadataReceived` event parameters bug ([56ab25b](https://github.com/AgoraIO/Flutter-SDK/commit/56ab25bcf41b9b7034049fb307cca95fdfae3e4c))
+* `MetadataReceived` event parameters bug ([9ab28a7](https://github.com/AgoraIO/Flutter-SDK/commit/9ab28a7ae559f3bd5ce8ab8e0455860d9de89977))
+* add missing permissions for Android ([fd74959](https://github.com/AgoraIO/Flutter-SDK/commit/fd74959e94d5f43d6ab7a77d197ec450e3421769))
+* some rendering problems when change render widget order ([12e2561](https://github.com/AgoraIO/Flutter-SDK/commit/12e25618ce8fabd5bf9b34e418792450518e219e))
+* some rendering problems when change render widget order ([95bbf39](https://github.com/AgoraIO/Flutter-SDK/commit/95bbf39ef58bcda58c1b2ba9063d07e631939c69))
+* some rendering problems when change render widget order ([c737102](https://github.com/AgoraIO/Flutter-SDK/commit/c737102ecc22e3cb563f9762a88d9b519fdc599f))
+* use the better way to fix rendering problems ([a290e73](https://github.com/AgoraIO/Flutter-SDK/commit/a290e7313e3d189dc9ea69e49c0c3be4799a7933))
+* use the better way to fix rendering problems ([75f572d](https://github.com/AgoraIO/Flutter-SDK/commit/75f572df2afed36a4bbd3ccffd0baad7bace2eae))
+
+
+### Features
+
+* example support render multi remote-videos ([72e94b0](https://github.com/AgoraIO/Flutter-SDK/commit/72e94b0aa06332f5477e336ecf28bcbb89141c46))
+
 ## [3.1.5](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.4...v3.1.5) (2020-12-15)
 
 
@@ -61,7 +80,7 @@
 * fix `startPreview` `stopPreview` bug
 
 ## 3.0.1-dev.3
-* fix `toJson` bug 
+* fix `toJson` bug
 * add `startPreview` `stopPreview`
 
 ## 3.0.1-dev.2
