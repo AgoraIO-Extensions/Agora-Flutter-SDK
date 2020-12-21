@@ -322,7 +322,7 @@ class LiveTranscoding {
   @JsonKey(includeIfNull: false)
   int videoBitrate;
 
-  /// The frame rate (fps) of the video. The value range is [0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
+  /// The frame rate (fps) of the video. The value range is (0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
   @JsonKey(includeIfNull: false)
   VideoFrameRate videoFramerate;
 
@@ -991,6 +991,10 @@ class RemoteAudioStats {
   int networkTransportDelay;
 
   /// Network delay (ms) from the receiver to the jitter buffer.
+  ///
+  /// **Note**
+  ///
+  /// When the receiver is an audience member and [AudienceLatencyLevelType] is `1`, this parameter does not take effect.
   int jitterBufferDelay;
 
   /// Packet loss rate in the reported interval.
