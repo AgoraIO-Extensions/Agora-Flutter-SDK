@@ -2161,16 +2161,14 @@ enum AudioEffectPreset {
   ///
   /// **Note**
   ///
-  /// - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
   @JsonValue(0x02020600)
   VoiceChangerEffectPigKing,
   /// The voice of Hulk.
   ///
   /// **Note**
   ///
-  /// - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
   @JsonValue(0x02020700)
   VoiceChangerEffectHulk,
   /// An audio effect typical of R&B music.

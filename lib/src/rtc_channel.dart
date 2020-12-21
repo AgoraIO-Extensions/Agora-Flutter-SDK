@@ -348,6 +348,21 @@ mixin RtcChannelInterface
 
   /// Joins the channel with a user ID.
   ///
+  /// - [RtcChannel.joinChannel]
+  ///   - Does not contain the `channelName` parameter, because `channelName` is specified when creating the `RtcChannel` instance.
+  ///   - Contains the `options` parameter, which decides whether to subscribe to all streams before joining the channel.
+  ///   - Users can join multiple channels simultaneously by creating multiple `RtcChannel` instances and calling the `joinChannel` method of each instance.
+  ///   - By default, the SDK does not publish any stream after the user joins the channel. You need to call the publish method to do that.
+  ///
+  ///
+  /// - [RtcEngine.joinChannel]
+  ///   - Contains the `channelName` parameter, which specifies the channel to join.
+  ///   - Does not contain the `options` parameter. By default, users subscribe to all streams when joining the channel.
+  ///   - Users can join only one channel.
+  ///   - By default, the SDK publishes streams once the user joins the channel.
+  ///
+  /// Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+  ///
   /// **Note**
   /// - If you are already in a channel, you cannot rejoin it with the same uid.
   /// - We recommend using different UIDs for different channels.
