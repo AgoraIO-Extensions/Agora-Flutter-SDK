@@ -1,3 +1,15 @@
+# [3.2.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.6...v3.2.0-rc.0) (2020-12-21)
+
+
+### Features
+
+* add `Future<void> setClientRole(ClientRole role, [ClientRoleOptions options])` ([2c8a38d](https://github.com/AgoraIO/Flutter-SDK/commit/2c8a38d9473a71e9d17e9f97b7b1d4bedec0665b))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([2fef3ae](https://github.com/AgoraIO/Flutter-SDK/commit/2fef3aee038b31808af53cee80a0fddc8d444fe8))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([3a55997](https://github.com/AgoraIO/Flutter-SDK/commit/3a55997db81dcd16e68ee551d69b9079ff8052b0))
+* upgrade to 3.2.0 ([78d9e0e](https://github.com/AgoraIO/Flutter-SDK/commit/78d9e0e12dad00fcf5a379e49522fca80516f1d4))
+* upgrade to 3.2.0 ([fcb57cc](https://github.com/AgoraIO/Flutter-SDK/commit/fcb57cc3e2cbb3e16750e9ce8ddca069184ac1c0))
+* upgrade to 3.2.0 ([4ee51a9](https://github.com/AgoraIO/Flutter-SDK/commit/4ee51a9b405deb17b467f5359f6717033c3961a2))
+
 ## [3.1.6](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.5...v3.1.6) (2020-12-21)
 
 
