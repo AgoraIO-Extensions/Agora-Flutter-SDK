@@ -537,15 +537,15 @@ class RtcEngineEventHandler {
   /// - [int] `soundId`: ID of the local audio effect. Each local audio effect has a unique ID.
   SoundIdCallback audioEffectFinished;
 
-  /// Occurs when the state of the RTMP streaming changes.
+  /// Occurs when the state of the RTMP or RTMPS streaming changes.
   ///
   /// The SDK triggers this callback to report the result of the local user calling the [RtcEngine.addPublishStreamUrl] or [RtcEngine.removePublishStreamUrl] method. This callback returns the URL and its current streaming state. When the streaming state is [RtmpStreamingState.Failure], see the `errCode` parameter for details.
   ///
-  /// This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
+  /// This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
   ///
   /// The `RtmpStreamingStateCallback` typedef includes the following parameters:
-  /// - [String] `url`: The RTMP URL address.
-  /// - [RtmpStreamingState] `state`: The RTMP streaming state.
+  /// - [String] `url`: The CDN streaming URL.
+  /// - [RtmpStreamingState] `state`: The RTMP or RTMPS streaming state.
   /// - [RtmpStreamingErrorCode] `errCode`: The detailed error information for streaming.
   RtmpStreamingStateCallback rtmpStreamingStateChanged;
 
@@ -701,7 +701,7 @@ class RtcEngineEventHandler {
   /// This callback indicates whether you have successfully added an RTMP stream to the CDN.
   ///
   /// The `UrlWithErrorCallback` includes the following parameters:
-  /// - [String] `url`: The RTMP URL address.
+  /// - [String] `url`: The CDN streaming URL.
   /// - [ErrorCode] `error`: The detailed error information.
   @deprecated
   UrlWithErrorCallback streamPublished;
@@ -713,7 +713,7 @@ class RtcEngineEventHandler {
   /// This callback indicates whether you have successfully removed an RTMP stream from the CDN.
   ///
   /// The `UrlCallback` typedef includes the following parameter:
-  /// - [String] `url`: The RTMP URL address.
+  /// - [String] `url`: The CDN streaming URL.
   @deprecated
   UrlCallback streamUnpublished;
 
@@ -874,7 +874,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first audio frame is published.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The SDK triggers this callback under one of the following circumstances:
   /// - The local client enables the audio module and calls [RtcEngine.joinChannel] successfully.
@@ -887,7 +887,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first video frame is published.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The SDK triggers this callback under one of the following circumstances:
   /// - The local client enables the video module and calls [RtcEngine.joinChannel] successfully.
@@ -900,7 +900,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the audio publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local audio stream.
   ///
@@ -913,7 +913,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the video publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local video stream.
   ///
@@ -926,7 +926,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the audio subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote audio stream.
   ///
@@ -939,7 +939,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the video subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote video stream.
   ///
@@ -950,12 +950,12 @@ class RtcEngineEventHandler {
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamSubscribeStateCallback videoSubscribeStateChanged;
 
-  /// Reports events during the RTMP streaming.
+  /// Reports events during the RTMP or RTMPS streaming.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
-  /// - [String] `url`: The RTMP streaming URL.
+  /// - [String] `url`: The RTMP or RTMPS streaming URL.
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
@@ -1586,15 +1586,15 @@ class RtcChannelEventHandler {
   /// - [RemoteAudioStats] `stats`: Statistics of the received remote audio streams.
   RemoteAudioStatsCallback remoteAudioStats;
 
-  /// Occurs when the state of the RTMP streaming changes.
+  /// Occurs when the state of the RTMP or RTMPS streaming changes.
   ///
   /// The SDK triggers this callback to report the result of the local user calling the [RtcChannel.addPublishStreamUrl] or [RtcChannel.removePublishStreamUrl] method. This callback returns the URL and its current streaming state. When the streaming state is [RtmpStreamingState.Failure], see the `errCode` parameter for details.
   ///
-  /// This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
+  /// This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
   ///
   /// The `RtmpStreamingStateCallback` typedef includes the following parameters:
-  /// - [String] `url`: The RTMP URL address.
-  /// - [RtmpStreamingState] `state`: The RTMP streaming state.
+  /// - [String] `url`: The CDN streaming URL.
+  /// - [RtmpStreamingState] `state`: The RTMP or RTMPS streaming state.
   /// - [RtmpStreamingErrorCode] `errCode`: The detailed error information for streaming.
   RtmpStreamingStateCallback rtmpStreamingStateChanged;
 
@@ -1665,7 +1665,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the audio publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local audio stream.
   ///
@@ -1678,7 +1678,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the video publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local video stream.
   ///
@@ -1691,7 +1691,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the audio subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote audio stream.
   ///
@@ -1704,7 +1704,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the video subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote video stream.
   ///
@@ -1715,12 +1715,12 @@ class RtcChannelEventHandler {
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
   StreamSubscribeStateCallback videoSubscribeStateChanged;
 
-  /// Reports events during the RTMP streaming.
+  /// Reports events during the RTMP or RTMPS streaming.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
-  /// - [String] `url`: The RTMP streaming URL.
+  /// - [String] `url`: The RTMP or RTMPS streaming URL.
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
