@@ -858,7 +858,7 @@ enum EncryptionMode {
 
   /// 128-bit SM4 encryption, ECB mode.
   ///
-  /// @since v3.1.2.
+  ///
   @JsonValue(4)
   SM4128ECB,
 }
@@ -969,7 +969,7 @@ enum ErrorCode {
 
   /// 103: Fails to get server resources in the specified region. Please try to specify another region.
   ///
-  /// @since v3.1.2.
+  ///
   @JsonValue(103)
   NoServerResources,
 
@@ -1873,7 +1873,7 @@ enum WarningCode {
 
   /// During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
   ///
-  /// @since v3.1.2.
+  ///
   @JsonValue(1029)
   AdmCategoryNotPlayAndRecord,
 
@@ -1894,13 +1894,13 @@ enum WarningCode {
   /// - Restart your device where the app runs.
   /// - Upgrade the sound card drive.
   ///
-  /// @since v3.1.2.
+  ///
   @JsonValue(1040)
   AdmNoDataReadyCallback,
 
   /// Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
   ///
-  /// @since v3.1.2.
+  ///
   @JsonValue(1042)
   AdmInconsistentDevices,
 
@@ -1977,7 +1977,7 @@ enum VideoCodecType {
 
 /// The publishing state.
 ///
-/// @since v3.1.2.
+///
 enum StreamPublishState {
   /// The initial publishing state after joining the channel.
   @JsonValue(0)
@@ -2002,7 +2002,7 @@ enum StreamPublishState {
 
 /// The subscribing state.
 ///
-/// @since v3.1.2.
+///
 enum StreamSubscribeState {
   /// The initial subscribing state after joining the channel.
   @JsonValue(0)

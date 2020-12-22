@@ -874,7 +874,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first audio frame is published.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The SDK triggers this callback under one of the following circumstances:
   /// - The local client enables the audio module and calls [RtcEngine.joinChannel] successfully.
@@ -887,7 +887,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the first video frame is published.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The SDK triggers this callback under one of the following circumstances:
   /// - The local client enables the video module and calls [RtcEngine.joinChannel] successfully.
@@ -900,7 +900,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the audio publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local audio stream.
   ///
@@ -913,7 +913,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the video publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local video stream.
   ///
@@ -926,7 +926,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the audio subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote audio stream.
   ///
@@ -939,7 +939,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the video subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote video stream.
   ///
@@ -952,7 +952,7 @@ class RtcEngineEventHandler {
 
   /// Reports events during the RTMP or RTMPS streaming.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
   /// - [String] `url`: The RTMP or RTMPS streaming URL.
@@ -1665,7 +1665,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the audio publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local audio stream.
   ///
@@ -1678,7 +1678,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the video publishing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the publishing state change of the local video stream.
   ///
@@ -1691,7 +1691,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the audio subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote audio stream.
   ///
@@ -1704,7 +1704,7 @@ class RtcChannelEventHandler {
 
   /// Occurs when the video subscribing state changes.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// This callback indicates the subscribing state change of a remote video stream.
   ///
@@ -1717,7 +1717,7 @@ class RtcChannelEventHandler {
 
   /// Reports events during the RTMP or RTMPS streaming.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
   /// - [String] `url`: The RTMP or RTMPS streaming URL.
