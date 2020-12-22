@@ -81,11 +81,13 @@ class VideoEncoderConfiguration {
   VideoFrameRate minFrameRate;
 
   /// Bitrate of the video (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
-  ///  You can also choose from the following options:
-  ///     - [BitRate.Standard]: (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
-  ///              - In the Communication profile, the video bitrate is the same as the base bitrate.
-  ///              - In the LiveBroadcasting profile, the video bitrate is twice the base bitrate.
-  ///     - [BitRate.Compatible]: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. If you choose this mode for the Live Broadcast profile, the video frame rate may be lower than the set value.
+  ///
+  /// You can also choose from the following options:
+  /// - [BitRate.Standard]: (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
+  ///   - In the Communication profile, the video bitrate is the same as the base bitrate.
+  ///   - In the LiveBroadcasting profile, the video bitrate is twice the base bitrate.
+  /// - [BitRate.Compatible]: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. If you choose this mode for the Live Broadcast profile, the video frame rate may be lower than the set value.
+  ///
   /// Agora uses different video codecs for different profiles to optimize the user experience. For example, the Communication profile prioritizes the smoothness while the Live Broadcast profile prioritizes the video quality (a higher bitrate). Therefore, We recommend setting this parameter as `0`.
   ///
   /// **Video Bitrate Table**
