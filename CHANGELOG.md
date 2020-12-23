@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
+
+
+### Features
+
+* upgrade native SDK to 3.2.1 ([771ffc7](https://github.com/AgoraIO/Flutter-SDK/commit/771ffc756d1a2ad19726a45d4d9dbf1bf8b69205))
+
 # [3.2.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.6...v3.2.0-rc.0) (2020-12-21)
 
 
