@@ -305,3 +305,13 @@ func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionCon
     }
     return encryptionConfig
 }
+
+func mapToClientRoleOptions(_ map: Dictionary<String, Any>) -> AgoraClientRoleOptions {
+    let clientRoleOptions = AgoraClientRoleOptions()
+    if let audienceLatencyLevel = map["audienceLatencyLevel"] as? Int {
+        if let audienceLatencyLevel = AgoraAudienceLatencyLevelType(rawValue: audienceLatencyLevel) {
+            clientRoleOptions.audienceLatencyLevel = audienceLatencyLevel
+        }
+    }
+    return clientRoleOptions
+}

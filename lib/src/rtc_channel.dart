@@ -85,9 +85,11 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> setClientRole(ClientRole role) {
-    return _invokeMethod(
-        'setClientRole', {'role': ClientRoleConverter(role).value()});
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]) {
+    return _invokeMethod('setClientRole', {
+      'role': ClientRoleConverter(role).value(),
+      'options': options?.toJson()
+    });
   }
 
   @override
@@ -327,18 +329,39 @@ mixin RtcChannelInterface
   /// Destroys the [RtcChannel] instance.
   Future<void> destroy();
 
-  /// Sets the role of a user.
+  /// Sets the role of a user in a live interactive streaming.
   ///
-  /// This method sets the role of a user, such as a host or an audience. In a LiveBroadcasting channel, only a broadcaster can call the [RtcChannel.publish] method in the [RtcChannel] class.
-  ///
-  /// A successful call of this method triggers the following callbacks:
+  /// You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
   /// - The local client: [RtcChannelEventHandler.clientRoleChanged].
   /// - The remote client: [RtcChannelEventHandler.userJoined] or [RtcChannelEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
+  /// **Note**
+  /// - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
+  /// - Since v3.2.0, this method can set the user level in addition to the user role.
+  ///    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
+  ///    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. Levels affect prices.
+  ///
   /// **Parameter** [role] The role of the user. See [ClientRole].
-  Future<void> setClientRole(ClientRole role);
+  ///
+  /// **Parameter** [options] The detailed options of a user, including user level. See [ClientRoleOptions].
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]);
 
   /// Joins the channel with a user ID.
+  ///
+  /// - [RtcChannel.joinChannel]
+  ///   - Does not contain the `channelName` parameter, because `channelName` is specified when creating the `RtcChannel` instance.
+  ///   - Contains the `options` parameter, which decides whether to subscribe to all streams before joining the channel.
+  ///   - Users can join multiple channels simultaneously by creating multiple `RtcChannel` instances and calling the `joinChannel` method of each instance.
+  ///   - By default, the SDK does not publish any stream after the user joins the channel. You need to call the publish method to do that.
+  ///
+  ///
+  /// - [RtcEngine.joinChannel]
+  ///   - Contains the `channelName` parameter, which specifies the channel to join.
+  ///   - Does not contain the `options` parameter. By default, users subscribe to all streams when joining the channel.
+  ///   - Users can join only one channel.
+  ///   - By default, the SDK publishes streams once the user joins the channel.
+  ///
+  /// Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
   ///
   /// **Note**
   /// - If you are already in a channel, you cannot rejoin it with the same uid.
@@ -352,7 +375,7 @@ mixin RtcChannelInterface
   ///
   /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
   ///
-  /// **Parameter** [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the onJoinChannelSuccess callback. The app must maintain this user ID.
+  /// **Parameter** [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the `onJoinChannelSuccess` callback. The app must maintain this user ID.
   ///
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
   Future<void> joinChannel(String token, String optionalInfo, int optionalUid,
@@ -546,14 +569,14 @@ mixin RtcPublishStreamInterface {
 
   /// Removes an RTMP stream from the CDN.
   ///
-  /// This method removes the RTMP URL address (added by [RtcChannel.addPublishStreamUrl]) from a CDN live stream. The SDK reports the result of this method call in the [RtcChannelEventHandler.rtmpStreamingStateChanged] callback.
+  /// This method removes the CDN streaming URL (added by [RtcChannel.addPublishStreamUrl]) from a CDN live stream. The SDK reports the result of this method call in the [RtcChannelEventHandler.rtmpStreamingStateChanged] callback.
   ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
   /// - This method removes only one stream HTTP/HTTPS URL address each time it is called.
   ///
-  /// **Parameter** [url] The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
+  /// **Parameter** [url] The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
   Future<void> removePublishStreamUrl(String url);
 }
 
@@ -700,14 +723,14 @@ mixin RtcEncryptionInterface {
 
   /// Enables/Disables the built-in encryption.
   ///
-  /// @since v3.1.2.
+  ///
   ///
   /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
   ///
   /// All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
   ///
   /// **Note**
-  /// - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+  /// - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
   /// - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
   ///
   ///

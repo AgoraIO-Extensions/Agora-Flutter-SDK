@@ -170,8 +170,10 @@ class IRtcEngine {
   }
 
   interface RtcVoiceChangerInterface {
+    @Deprecated("")
     fun setLocalVoiceChanger(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setLocalVoiceReverbPreset(params: Map<String, *>, callback: Callback)
 
     fun setLocalVoicePitch(params: Map<String, *>, callback: Callback)
@@ -179,6 +181,12 @@ class IRtcEngine {
     fun setLocalVoiceEqualization(params: Map<String, *>, callback: Callback)
 
     fun setLocalVoiceReverb(params: Map<String, *>, callback: Callback)
+
+    fun setAudioEffectPreset(params: Map<String, *>, callback: Callback)
+
+    fun setVoiceBeautifierPreset(params: Map<String, *>, callback: Callback)
+
+    fun setAudioEffectParameters(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcVoicePositionInterface {
@@ -264,8 +272,10 @@ class IRtcEngine {
   }
 
   interface RtcEncryptionInterface {
+    @Deprecated("")
     fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setEncryptionMode(params: Map<String, *>, callback: Callback)
 
     fun enableEncryption(params: Map<String, *>, callback: Callback)
@@ -354,7 +364,12 @@ class RtcEngineManager(
   }
 
   override fun setClientRole(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setClientRole((params["role"] as Number).toInt()))
+    val role = (params["role"] as Number).toInt()
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.setClientRole(role, mapToClientRoleOptions(it)))
+      return@setClientRole
+    }
+    callback.code(engine?.setClientRole(role))
   }
 
   override fun joinChannel(params: Map<String, *>, callback: Callback) {
@@ -655,6 +670,18 @@ class RtcEngineManager(
 
   override fun setLocalVoiceReverb(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setLocalVoiceReverb((params["reverbKey"] as Number).toInt(), (params["value"] as Number).toInt()))
+  }
+
+  override fun setAudioEffectPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioEffectPreset((params["preset"] as Number).toInt()))
+  }
+
+  override fun setVoiceBeautifierPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVoiceBeautifierPreset((params["preset"] as Number).toInt()))
+  }
+
+  override fun setAudioEffectParameters(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioEffectParameters((params["preset"] as Number).toInt(), (params["param1"] as Number).toInt(), (params["param2"] as Number).toInt()))
   }
 
   override fun enableSoundPositionIndication(params: Map<String, *>, callback: Callback) {
