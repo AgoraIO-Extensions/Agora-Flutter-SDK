@@ -840,3 +840,20 @@ Map<String, dynamic> _$FacePositionInfoToJson(FacePositionInfo instance) =>
       'height': instance.height,
       'distance': instance.distance,
     };
+
+ClientRoleOptions _$ClientRoleOptionsFromJson(Map<String, dynamic> json) {
+  return ClientRoleOptions()
+    ..audienceLatencyLevel = _$enumDecodeNullable(
+        _$AudienceLatencyLevelTypeEnumMap, json['audienceLatencyLevel']);
+}
+
+Map<String, dynamic> _$ClientRoleOptionsToJson(ClientRoleOptions instance) =>
+    <String, dynamic>{
+      'audienceLatencyLevel':
+          _$AudienceLatencyLevelTypeEnumMap[instance.audienceLatencyLevel],
+    };
+
+const _$AudienceLatencyLevelTypeEnumMap = {
+  AudienceLatencyLevelType.LowLatency: 1,
+  AudienceLatencyLevelType.UltraLowLatency: 2,
+};

@@ -81,11 +81,13 @@ class VideoEncoderConfiguration {
   VideoFrameRate minFrameRate;
 
   /// Bitrate of the video (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
-  ///  You can also choose from the following options:
-  ///     - [BitRate.Standard]: (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
-  ///              - In the Communication profile, the video bitrate is the same as the base bitrate.
-  ///              - In the LiveBroadcasting profile, the video bitrate is twice the base bitrate.
-  ///     - [BitRate.Compatible]: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. If you choose this mode for the Live Broadcast profile, the video frame rate may be lower than the set value.
+  ///
+  /// You can also choose from the following options:
+  /// - [BitRate.Standard]: (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the LiveBroadcasting and Communication profiles:
+  ///   - In the Communication profile, the video bitrate is the same as the base bitrate.
+  ///   - In the LiveBroadcasting profile, the video bitrate is twice the base bitrate.
+  /// - [BitRate.Compatible]: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. If you choose this mode for the Live Broadcast profile, the video frame rate may be lower than the set value.
+  ///
   /// Agora uses different video codecs for different profiles to optimize the user experience. For example, the Communication profile prioritizes the smoothness while the Live Broadcast profile prioritizes the video quality (a higher bitrate). Therefore, We recommend setting this parameter as `0`.
   ///
   /// **Video Bitrate Table**
@@ -322,7 +324,7 @@ class LiveTranscoding {
   @JsonKey(includeIfNull: false)
   int videoBitrate;
 
-  /// The frame rate (fps) of the video. The value range is [0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
+  /// The frame rate (fps) of the video. The value range is (0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
   @JsonKey(includeIfNull: false)
   VideoFrameRate videoFramerate;
 
@@ -658,7 +660,7 @@ class ChannelMediaOptions {
 
 /// Definition of `EncryptionConfig`.
 ///
-/// @since v3.1.2.
+///
 @JsonSerializable(explicitToJson: true)
 class EncryptionConfig {
   /// Encryption mode. The default encryption mode is `AES128XTS`. See [EncryptionMode].
@@ -901,7 +903,7 @@ class LocalAudioStats {
 
   /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
   ///
-  /// @since v3.1.2.
+  ///
   int txPacketLossRate;
 
   /// Constructs a [LocalAudioStats]
@@ -958,12 +960,12 @@ class LocalVideoStats {
 
   /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
   ///
-  /// @since v3.1.2.
+  ///
   int txPacketLossRate;
 
   /// The capture frame rate (fps) of the local video.
   ///
-  /// @since v3.1.2.
+  ///
   int captureFrameRate;
 
   /// Constructs a [LocalVideoStats]
@@ -991,6 +993,10 @@ class RemoteAudioStats {
   int networkTransportDelay;
 
   /// Network delay (ms) from the receiver to the jitter buffer.
+  ///
+  /// **Note**
+  ///
+  /// When the receiver is an audience member and [AudienceLatencyLevelType] is `1`, this parameter does not take effect.
   int jitterBufferDelay;
 
   /// Packet loss rate in the reported interval.
@@ -1016,7 +1022,7 @@ class RemoteAudioStats {
 
   /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
   ///
-  /// @since v3.1.2.
+  ///
   int publishDuration;
 
   /// Constructs a [RemoteAudioStats]
@@ -1074,7 +1080,7 @@ class RemoteVideoStats {
 
   /// The total publish duration (ms) of the remote video stream.
   ///
-  /// @since v3.1.2.
+  ///
   int publishDuration;
 
   /// Constructs a [RemoteVideoStats]
@@ -1115,4 +1121,21 @@ class FacePositionInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$FacePositionInfoToJson(this);
+}
+
+/// The detailed options of a user.
+@JsonSerializable(explicitToJson: true)
+class ClientRoleOptions {
+  /// The latency level of an audience member in a live interactive streaming.
+  AudienceLatencyLevelType audienceLatencyLevel;
+
+  /// Constructs a [ClientRoleOptions]
+  ClientRoleOptions();
+
+  /// @nodoc
+  factory ClientRoleOptions.fromJson(Map<String, dynamic> json) =>
+      _$ClientRoleOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ClientRoleOptionsToJson(this);
 }

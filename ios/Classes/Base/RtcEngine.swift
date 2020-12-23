@@ -188,8 +188,10 @@ protocol RtcEngineAudioEffectInterface {
 }
 
 protocol RtcEngineVoiceChangerInterface {
+    @available(*, deprecated)
     func setLocalVoiceChanger(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLocalVoiceReverbPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setLocalVoicePitch(_ params: NSDictionary, _ callback: Callback)
@@ -197,6 +199,12 @@ protocol RtcEngineVoiceChangerInterface {
     func setLocalVoiceEqualization(_ params: NSDictionary, _ callback: Callback)
 
     func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback)
+    
+    func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoicePositionInterface {
@@ -282,8 +290,10 @@ protocol RtcEngineWatermarkInterface {
 }
 
 protocol RtcEngineEncryptionInterface {
+    @available(*, deprecated)
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
 
     func enableEncryption(_ params: NSDictionary, _ callback: Callback)
@@ -377,7 +387,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setClientRole(AgoraClientRole(rawValue: params["role"] as! Int)!))
+        let role = AgoraClientRole(rawValue: params["role"] as! Int)!
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.setClientRole(role, options: mapToClientRoleOptions(options)))
+            return
+        }
+        callback.code(engine?.setClientRole(role))
     }
 
     @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {
@@ -692,6 +707,18 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLocalVoiceReverbOf(AgoraAudioReverbType(rawValue: params["reverbKey"] as! Int)!, withValue: params["value"] as! Int))
+    }
+    
+    @objc func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectPreset(AgoraAudioEffectPreset(rawValue: params["preset"] as! Int)!))
+    }
+    
+    @objc func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceBeautifierPreset(AgoraVoiceBeautifierPreset(rawValue: params["preset"] as! Int)!))
+    }
+    
+    @objc func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectParameters(AgoraAudioEffectPreset(rawValue: params["preset"] as! Int)!, param1: params["param1"] as! Int32, param2: params["param2"] as! Int32))
     }
 
     @objc func enableSoundPositionIndication(_ params: NSDictionary, _ callback: Callback) {

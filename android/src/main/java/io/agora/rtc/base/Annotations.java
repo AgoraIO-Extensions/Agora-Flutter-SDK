@@ -20,8 +20,14 @@ public class Annotations {
     AgoraRtcAppType.FLUTTER,
     AgoraRtcAppType.UNREAL,
     AgoraRtcAppType.XAMARIN,
-    AgoraRtcAppType.APICLOUD,
-    AgoraRtcAppType.REACTNATIVE,
+    AgoraRtcAppType.API_CLOUD,
+    AgoraRtcAppType.REACT_NATIVE,
+    AgoraRtcAppType.PYTHON,
+    AgoraRtcAppType.COCOS_CREATOR,
+    AgoraRtcAppType.RUST,
+    AgoraRtcAppType.C_SHARP,
+    AgoraRtcAppType.CEF,
+    AgoraRtcAppType.UNI_APP,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtcAppType {
@@ -32,8 +38,14 @@ public class Annotations {
     int FLUTTER = 4;
     int UNREAL = 5;
     int XAMARIN = 6;
-    int APICLOUD = 7;
-    int REACTNATIVE = 8;
+    int API_CLOUD = 7;
+    int REACT_NATIVE = 8;
+    int PYTHON = 9;
+    int COCOS_CREATOR = 10;
+    int RUST = 11;
+    int C_SHARP = 12;
+    int CEF = 13;
+    int UNI_APP = 14;
   }
 
   @IntDef({
@@ -217,6 +229,8 @@ public class Annotations {
     Constants.AUDIO_SCENARIO_GAME_STREAMING,
     Constants.AUDIO_SCENARIO_SHOWROOM,
     Constants.AUDIO_SCENARIO_CHATROOM_GAMING,
+    Constants.AUDIO_SCENARIO_IOT,
+    Constants.AUDIO_SCENARIO_MEETING,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioScenario {
@@ -614,7 +628,7 @@ public class Annotations {
 
   @IntDef({
     Constants.USER_PRIORITY_HIGH,
-    Constants.USER_PRIORITY_NORANL,
+    Constants.USER_PRIORITY_NORMAL,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraUserPriority {
@@ -751,7 +765,11 @@ public class Annotations {
     Constants.WARN_ADM_RECORD_IS_OCCUPIED,
     Constants.WARN_APM_HOWLING,
     Constants.WARN_ADM_GLITCH_STATE,
-    Constants.WARN_APM_RESIDUAL_ECHO,
+    // TODO(3.3.0) WARN_APM_RESIDUAL_ECHO
+    Constants.WARN_ADM_IMPROPER_SETTINGS,
+    Constants.WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION,
+    Constants.WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION,
+    Constants.WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraWarningCode {
@@ -795,5 +813,56 @@ public class Annotations {
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingEvent {
+  }
+
+  @IntDef({
+    Constants.AUDIO_EFFECT_OFF,
+    Constants.ROOM_ACOUSTICS_KTV,
+    Constants.ROOM_ACOUSTICS_VOCAL_CONCERT,
+    Constants.ROOM_ACOUSTICS_STUDIO,
+    Constants.ROOM_ACOUSTICS_PHONOGRAPH,
+    Constants.ROOM_ACOUSTICS_VIRTUAL_STEREO,
+    Constants.ROOM_ACOUSTICS_SPACIAL,
+    Constants.ROOM_ACOUSTICS_ETHEREAL,
+    Constants.ROOM_ACOUSTICS_3D_VOICE,
+    Constants.VOICE_CHANGER_EFFECT_UNCLE,
+    Constants.VOICE_CHANGER_EFFECT_OLDMAN,
+    Constants.VOICE_CHANGER_EFFECT_BOY,
+    Constants.VOICE_CHANGER_EFFECT_SISTER,
+    Constants.VOICE_CHANGER_EFFECT_GIRL,
+    Constants.VOICE_CHANGER_EFFECT_PIGKING,
+    Constants.VOICE_CHANGER_EFFECT_HULK,
+    Constants.STYLE_TRANSFORMATION_RNB,
+    Constants.STYLE_TRANSFORMATION_POPULAR,
+    Constants.PITCH_CORRECTION,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraAudioEffectPreset {
+  }
+
+  @IntDef({
+    Constants.VOICE_BEAUTIFIER_OFF,
+    Constants.CHAT_BEAUTIFIER_MAGNETIC,
+    Constants.CHAT_BEAUTIFIER_FRESH,
+    Constants.CHAT_BEAUTIFIER_VITALITY,
+    Constants.TIMBRE_TRANSFORMATION_VIGOROUS,
+    Constants.TIMBRE_TRANSFORMATION_DEEP,
+    Constants.TIMBRE_TRANSFORMATION_MELLOW,
+    Constants.TIMBRE_TRANSFORMATION_FALSETTO,
+    Constants.TIMBRE_TRANSFORMATION_FULL,
+    Constants.TIMBRE_TRANSFORMATION_CLEAR,
+    Constants.TIMBRE_TRANSFORMATION_RESOUNDING,
+    Constants.TIMBRE_TRANSFORMATION_RINGING,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraVoiceBeautifierPreset {
+  }
+
+  @IntDef({
+    Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY,
+    Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraAudienceLatencyLevelType {
   }
 }
