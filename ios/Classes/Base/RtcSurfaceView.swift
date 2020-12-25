@@ -40,6 +40,7 @@ class RtcSurfaceView: UIView {
     func setData(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?, _ uid: Int) {
         self.channel = channel
 //        canvas.channelId = channel?.getId()
+        canvas.channel = channel?.getId()
         canvas.uid = UInt(uid)
         setupVideoCanvas(engine)
     }
@@ -49,6 +50,7 @@ class RtcSurfaceView: UIView {
         canvas.view = nil
         canvas.renderMode = self.canvas.renderMode
 //        canvas.channelId = self.canvas.channelId
+        canvas.channel = self.canvas.channel
         canvas.uid = self.canvas.uid
 //        canvas.mirrorMode = self.canvas.mirrorMode
 
