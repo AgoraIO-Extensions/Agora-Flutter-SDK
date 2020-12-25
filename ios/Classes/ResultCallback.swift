@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 class ResultCallback: NSObject, Callback {
     private var result: FlutterResult?

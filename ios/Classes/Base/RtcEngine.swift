@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 protocol RtcEngineInterface:
         RtcEngineUserInfoInterface,
@@ -359,10 +359,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         delegate = RtcEngineEventHandler() { [weak self] in
             self?.emitter($0, $1)
         }
-        let config = AgoraRtcEngineConfig()
-        config.appId = params["appId"] as? String
-        config.areaCode = (params["areaCode"] as! NSNumber).uintValue
-        engine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: delegate)
+//        let config = AgoraRtcEngineConfig()
+//        config.appId = params["appId"] as? String
+//        config.areaCode = (params["areaCode"] as! NSNumber).uintValue
+//        engine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: delegate)
+        engine = AgoraRtcEngineKit.sharedEngine(withAppId: params["appId"] as! String, delegate: delegate)
         callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: params["appType"] as! UInt)!))
     }
 
@@ -483,7 +484,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func adjustUserPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.adjustUserPlaybackSignalVolume(params["uid"] as! UInt, volume: params["volume"] as! Int32))
+//        callback.code(engine?.adjustUserPlaybackSignalVolume(params["uid"] as! UInt, volume: params["volume"] as! Int32))
     }
 
     @objc func adjustPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback) {
@@ -615,7 +616,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setAudioMixingPitch(params["pitch"] as! Int))
+//        callback.code(engine?.setAudioMixingPitch(params["pitch"] as! Int))
     }
 
     @objc func getEffectsVolume(_ callback: Callback) {
@@ -633,7 +634,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func playEffect(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.playEffect(params["soundId"] as! Int32, filePath: params["filePath"] as? String, loopCount: params["loopCount"] as! Int32, pitch: params["pitch"] as! Double, pan: params["pan"] as! Double, gain: params["gain"] as! Double, publish: params["publish"] as! Bool))
+//        callback.code(engine?.playEffect(params["soundId"] as! Int32, filePath: params["filePath"] as? String, loopCount: params["loopCount"] as! Int32, pitch: params["pitch"] as! Double, pan: params["pan"] as! Double, gain: params["gain"] as! Double, publish: params["publish"] as! Bool))
     }
 
     @objc func stopEffect(_ params: NSDictionary, _ callback: Callback) {
@@ -834,7 +835,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func addVideoWatermark(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.addVideoWatermark(URL(string: params["watermarkUrl"] as! String)!, options: mapToWatermarkOptions(params["options"] as! Dictionary)))
+//        callback.code(engine?.addVideoWatermark(URL(string: params["watermarkUrl"] as! String)!, options: mapToWatermarkOptions(params["options"] as! Dictionary)))
     }
 
     @objc func clearVideoWatermarks(_ callback: Callback) {
@@ -860,11 +861,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
+//        callback.code(engine?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
     }
 
     @objc func startAudioRecording(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.startAudioRecording(params["filePath"] as! String, sampleRate: params["sampleRate"] as! Int, quality: AgoraAudioRecordingQuality(rawValue: params["quality"] as! Int)!))
+//        callback.code(engine?.startAudioRecording(params["filePath"] as! String, sampleRate: params["sampleRate"] as! Int, quality: AgoraAudioRecordingQuality(rawValue: params["quality"] as! Int)!))
     }
 
     @objc func stopAudioRecording(_ callback: Callback) {
@@ -937,7 +938,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func enableFaceDetection(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.enableFaceDetection(params["enable"] as! Bool))
+//        callback.code(engine?.enableFaceDetection(params["enable"] as! Bool))
     }
 
     @objc func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback) {
@@ -954,7 +955,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setCameraCapturerConfiguration(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(params["config"] as! Dictionary)))
+//        callback.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(params["config"] as! Dictionary)))
     }
 
     @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {

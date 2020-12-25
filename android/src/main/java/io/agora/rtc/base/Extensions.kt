@@ -141,16 +141,16 @@ fun LastmileProbeResult.toMap(): Map<String, Any?> {
   )
 }
 
-fun AgoraFacePositionInfo.toMap(): Map<String, Any?> {
-  return hashMapOf(
-    "x" to x,
-    "y" to y,
-    "width" to width,
-    "height" to height,
-    "distance" to distance
-  )
-}
+//fun AgoraFacePositionInfo.toMap(): Map<String, Any?> {
+//  return hashMapOf(
+//    "x" to x,
+//    "y" to y,
+//    "width" to width,
+//    "height" to height,
+//    "distance" to distance
+//  )
+//}
 
-fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
-  return List(size) { this[it].toMap() }
-}
+//fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
+//  return List(size) { this[it].toMap() }
+//}

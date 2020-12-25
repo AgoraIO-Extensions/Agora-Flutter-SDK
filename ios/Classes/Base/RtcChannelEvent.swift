@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 class RtcChannelEvents {
     static let Warning = "Warning"
@@ -237,7 +237,7 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
         callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, rtcChannel.getId(), uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
-        callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, eventCode.rawValue)
-    }
+//    func rtcChannel(_ rtcChannel: AgoraRtcChannel, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
+//        callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, eventCode.rawValue)
+//    }
 }

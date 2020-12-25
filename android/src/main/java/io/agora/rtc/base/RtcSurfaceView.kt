@@ -57,7 +57,8 @@ class RtcSurfaceView(
   }
 
   fun resetVideoCanvas(engine: RtcEngine) {
-    val canvas = VideoCanvas(null, canvas.renderMode, canvas.channelId, canvas.uid, canvas.mirrorMode)
+//    val canvas = VideoCanvas(null, canvas.renderMode, canvas.channelId, canvas.uid, canvas.mirrorMode)
+    val canvas = VideoCanvas(null, canvas.renderMode, canvas.channelId, canvas.uid)
     if (canvas.uid == 0) {
       engine.setupLocalVideo(canvas)
     } else {
@@ -86,19 +87,22 @@ class RtcSurfaceView(
   }
 
   fun setMirrorMode(engine: RtcEngine, @Annotations.AgoraVideoMirrorMode mirrorMode: Int) {
-    canvas.mirrorMode = mirrorMode
-    setupRenderMode(engine)
+//    canvas.mirrorMode = mirrorMode
+//    setupRenderMode(engine)
   }
 
   private fun setupRenderMode(engine: RtcEngine) {
     if (canvas.uid == 0) {
-      engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
+//      engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
+      engine.setLocalRenderMode(canvas.renderMode)
     } else {
       channel?.get()?.let {
-        it.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
+//        it.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
+        it.setRemoteRenderMode(canvas.uid, canvas.renderMode)
         return@setupRenderMode
       }
-      engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
+//      engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
+      engine.setRemoteRenderMode(canvas.uid, canvas.renderMode)
     }
   }
 

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 extension AgoraUserInfo {
     func toMap() -> Dictionary<String, Any?> {
@@ -172,24 +172,24 @@ extension AgoraLastmileProbeResult {
     }
 }
 
-extension AgoraFacePositionInfo {
-    func toMap() -> Dictionary<String, Any?> {
-        return [
-            "x": x,
-            "y": y,
-            "width": width,
-            "height": height,
-            "distance": distance
-        ]
-    }
-}
+//extension AgoraFacePositionInfo {
+//    func toMap() -> Dictionary<String, Any?> {
+//        return [
+//            "x": x,
+//            "y": y,
+//            "width": width,
+//            "height": height,
+//            "distance": distance
+//        ]
+//    }
+//}
 
-extension Array where Element: AgoraFacePositionInfo {
-    func toMapList() -> Array<Dictionary<String, Any?>> {
-        var list = [Dictionary<String, Any?>]()
-        self.forEach {
-            list.append($0.toMap())
-        }
-        return list
-    }
-}
+//extension Array where Element: AgoraFacePositionInfo {
+//    func toMapList() -> Array<Dictionary<String, Any?>> {
+//        var list = [Dictionary<String, Any?>]()
+//        self.forEach {
+//            list.append($0.toMap())
+//        }
+//        return list
+//    }
+//}

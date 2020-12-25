@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 protocol RtcChannelInterface:
         RtcChannelAudioInterface,
@@ -211,7 +211,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func adjustUserPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.adjustUserPlaybackSignalVolume(params["uid"] as! UInt, volume: params["volume"] as! Int32))
+//        callback.code(self[params["channelId"] as! String]?.adjustUserPlaybackSignalVolume(params["uid"] as! UInt, volume: params["volume"] as! Int32))
     }
 
     @objc func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback) {
@@ -334,7 +334,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
+//        callback.code(self[params["channelId"] as! String]?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
     }
 
     @objc func addInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {

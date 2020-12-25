@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 class MediaObserver: NSObject {
     private var emitter: (_ data: Dictionary<String, Any?>?) -> Void

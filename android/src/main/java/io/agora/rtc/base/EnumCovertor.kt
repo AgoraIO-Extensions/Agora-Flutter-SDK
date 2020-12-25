@@ -1,6 +1,6 @@
 package io.agora.rtc.base
 
-import io.agora.rtc.internal.EncryptionConfig
+//import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
 import io.agora.rtc.video.CameraCapturerConfiguration
@@ -78,20 +78,20 @@ fun intToCapturerOutputPreference(@Annotations.AgoraCameraCaptureOutputPreferenc
   throw RuntimeException("CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE not contains $intValue")
 }
 
-fun intToCameraDirection(@Annotations.AgoraCameraDirection intValue: Int): CameraCapturerConfiguration.CAMERA_DIRECTION {
-  for (value in CameraCapturerConfiguration.CAMERA_DIRECTION.values()) {
-    if (value.value == intValue) {
-      return value
-    }
-  }
-  throw RuntimeException("CameraCapturerConfiguration.CAMERA_DIRECTION not contains $intValue")
-}
+//fun intToCameraDirection(@Annotations.AgoraCameraDirection intValue: Int): CameraCapturerConfiguration.CAMERA_DIRECTION {
+//  for (value in CameraCapturerConfiguration.CAMERA_DIRECTION.values()) {
+//    if (value.value == intValue) {
+//      return value
+//    }
+//  }
+//  throw RuntimeException("CameraCapturerConfiguration.CAMERA_DIRECTION not contains $intValue")
+//}
 
-fun intToEncryptionMode(@Annotations.AgoraEncryptionMode intValue: Int): EncryptionConfig.EncryptionMode {
-  for (value in EncryptionConfig.EncryptionMode.values()) {
-    if (value.value == intValue) {
-      return value
-    }
-  }
-  throw RuntimeException("EncryptionConfig.EncryptionMode not contains $intValue")
-}
+//fun intToEncryptionMode(@Annotations.AgoraEncryptionMode intValue: Int): EncryptionConfig.EncryptionMode {
+//  for (value in EncryptionConfig.EncryptionMode.values()) {
+//    if (value.value == intValue) {
+//      return value
+//    }
+//  }
+//  throw RuntimeException("EncryptionConfig.EncryptionMode not contains $intValue")
+//}

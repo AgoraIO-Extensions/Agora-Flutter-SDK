@@ -6,7 +6,7 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-#import <AgoraRtcKit/AgoraRtcEngineKit.h>
+#import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
 
 typedef NS_ENUM(NSUInteger, AgoraRtcQualityReportFormat) {
     AgoraRtc_QualityReportFormat_Json = 0,

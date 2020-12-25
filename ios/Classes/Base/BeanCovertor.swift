@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 func mapToPoint(_ map: Dictionary<String, Any>) -> CGPoint {
     var point = CGPoint()
@@ -235,19 +235,19 @@ func mapToLastmileProbeConfig(_ map: Dictionary<String, Any>) -> AgoraLastmilePr
     return config
 }
 
-func mapToWatermarkOptions(_ map: Dictionary<String, Any>) -> WatermarkOptions {
-    let options = WatermarkOptions()
-    if let visibleInPreview = map["visibleInPreview"] as? Bool {
-        options.visibleInPreview = visibleInPreview
-    }
-    if let positionInLandscapeMode = map["positionInLandscapeMode"] as? Dictionary<String, Any> {
-        options.positionInLandscapeMode = mapToRect(positionInLandscapeMode)
-    }
-    if let positionInPortraitMode = map["positionInPortraitMode"] as? Dictionary<String, Any> {
-        options.positionInPortraitMode = mapToRect(positionInPortraitMode)
-    }
-    return options
-}
+//func mapToWatermarkOptions(_ map: Dictionary<String, Any>) -> WatermarkOptions {
+//    let options = WatermarkOptions()
+//    if let visibleInPreview = map["visibleInPreview"] as? Bool {
+//        options.visibleInPreview = visibleInPreview
+//    }
+//    if let positionInLandscapeMode = map["positionInLandscapeMode"] as? Dictionary<String, Any> {
+//        options.positionInLandscapeMode = mapToRect(positionInLandscapeMode)
+//    }
+//    if let positionInPortraitMode = map["positionInPortraitMode"] as? Dictionary<String, Any> {
+//        options.positionInPortraitMode = mapToRect(positionInPortraitMode)
+//    }
+//    return options
+//}
 
 func mapToLiveInjectStreamConfig(_ map: Dictionary<String, Any>) -> AgoraLiveInjectStreamConfig {
     let config = AgoraLiveInjectStreamConfig.default()
@@ -275,12 +275,12 @@ func mapToLiveInjectStreamConfig(_ map: Dictionary<String, Any>) -> AgoraLiveInj
     return config
 }
 
-func mapToCameraCapturerConfiguration(_ map: Dictionary<String, Any>) -> AgoraCameraCapturerConfiguration {
-    let config = AgoraCameraCapturerConfiguration()
-    config.preference = AgoraCameraCaptureOutputPreference(rawValue: map["preference"] as! Int)!
-    config.cameraDirection = AgoraCameraDirection(rawValue: map["cameraDirection"] as! Int)!
-    return config
-}
+//func mapToCameraCapturerConfiguration(_ map: Dictionary<String, Any>) -> AgoraCameraCapturerConfiguration {
+//    let config = AgoraCameraCapturerConfiguration()
+//    config.preference = AgoraCameraCaptureOutputPreference(rawValue: map["preference"] as! Int)!
+//    config.cameraDirection = AgoraCameraDirection(rawValue: map["cameraDirection"] as! Int)!
+//    return config
+//}
 
 func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannelMediaOptions {
     let options = AgoraRtcChannelMediaOptions()
@@ -293,15 +293,15 @@ func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannel
     return options
 }
 
-func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
-    let encryptionConfig = AgoraEncryptionConfig()
-    if let encryptionMode = map["encryptionMode"] as? Int {
-        if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode) {
-            encryptionConfig.encryptionMode = encryptionMode
-        }
-    }
-    if let encryptionKey = map["encryptionKey"] as? String {
-        encryptionConfig.encryptionKey = encryptionKey
-    }
-    return encryptionConfig
-}
+//func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
+//    let encryptionConfig = AgoraEncryptionConfig()
+//    if let encryptionMode = map["encryptionMode"] as? Int {
+//        if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode) {
+//            encryptionConfig.encryptionMode = encryptionMode
+//        }
+//    }
+//    if let encryptionKey = map["encryptionKey"] as? String {
+//        encryptionConfig.encryptionKey = encryptionKey
+//    }
+//    return encryptionConfig
+//}

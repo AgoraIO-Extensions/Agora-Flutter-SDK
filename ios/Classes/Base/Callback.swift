@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 @objc
 protocol Callback: class {
@@ -20,7 +20,8 @@ extension Callback {
     func code(_ code: Int32?, _ runnable: ((Int32?) -> Any?)? = nil) {
         if code == nil || code! < 0 {
             let newCode = abs(Int(code ?? Int32(AgoraErrorCode.notInitialized.rawValue)))
-            failure(String(newCode), AgoraRtcEngineKit.getErrorDescription(newCode) ?? "")
+//            failure(String(newCode), AgoraRtcEngineKit.getErrorDescription(newCode) ?? "")
+            failure(String(newCode), "")
             return
         }
 
@@ -35,7 +36,8 @@ extension Callback {
     func resolve<T>(_ source: T?, _ runnable: (T) -> Any?) {
         guard let `source` = source else {
             let code = AgoraErrorCode.notInitialized.rawValue
-            failure(String(code), AgoraRtcEngineKit.getErrorDescription(code) ?? "")
+//            failure(String(code), AgoraRtcEngineKit.getErrorDescription(code) ?? "")
+            failure(String(code), "")
             return
         }
 

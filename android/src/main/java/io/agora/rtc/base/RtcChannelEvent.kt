@@ -165,9 +165,9 @@ class RtcChannelEventHandler(
     callback(RtcChannelEvents.RemoteAudioStateChanged, rtcChannel, uid, state, reason, elapsed)
   }
 
-  override fun onLocalPublishFallbackToAudioOnly(rtcChannel: RtcChannel?, isFallbackOrRecover: Boolean) {
-    callback(RtcChannelEvents.LocalPublishFallbackToAudioOnly, rtcChannel, isFallbackOrRecover)
-  }
+//  override fun onLocalPublishFallbackToAudioOnly(rtcChannel: RtcChannel?, isFallbackOrRecover: Boolean) {
+//    callback(RtcChannelEvents.LocalPublishFallbackToAudioOnly, rtcChannel, isFallbackOrRecover)
+//  }
 
   override fun onRemoteSubscribeFallbackToAudioOnly(rtcChannel: RtcChannel?, uid: Int, isFallbackOrRecover: Boolean) {
     callback(RtcChannelEvents.RemoteSubscribeFallbackToAudioOnly, rtcChannel, uid, isFallbackOrRecover)
@@ -217,23 +217,23 @@ class RtcChannelEventHandler(
     callback(RtcChannelEvents.ChannelMediaRelayEvent, rtcChannel, code)
   }
 
-  override fun onAudioPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.AudioPublishStateChanged, rtcChannel, rtcChannel?.channelId(), oldState, newState, elapseSinceLastState)
-  }
+//  override fun onAudioPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
+//    callback(RtcChannelEvents.AudioPublishStateChanged, rtcChannel, rtcChannel?.channelId(), oldState, newState, elapseSinceLastState)
+//  }
 
-  override fun onVideoPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.VideoPublishStateChanged, rtcChannel, rtcChannel?.channelId(), oldState, newState, elapseSinceLastState)
-  }
+//  override fun onVideoPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
+//    callback(RtcChannelEvents.VideoPublishStateChanged, rtcChannel, rtcChannel?.channelId(), oldState, newState, elapseSinceLastState)
+//  }
 
-  override fun onAudioSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.AudioSubscribeStateChanged, rtcChannel, rtcChannel?.channelId(), uid, oldState, newState, elapseSinceLastState)
-  }
+//  override fun onAudioSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
+//    callback(RtcChannelEvents.AudioSubscribeStateChanged, rtcChannel, rtcChannel?.channelId(), uid, oldState, newState, elapseSinceLastState)
+//  }
 
-  override fun onVideoSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, rtcChannel?.channelId(), uid, oldState, newState, elapseSinceLastState)
-  }
+//  override fun onVideoSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
+//    callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, rtcChannel?.channelId(), uid, oldState, newState, elapseSinceLastState)
+//  }
 
-  override fun onRtmpStreamingEvent(rtcChannel: RtcChannel?, url: String?, @Annotations.AgoraRtmpStreamingEvent errCode: Int) {
-    callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, errCode)
-  }
+//  override fun onRtmpStreamingEvent(rtcChannel: RtcChannel?, url: String?, @Annotations.AgoraRtmpStreamingEvent errCode: Int) {
+//    callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, errCode)
+//  }
 }

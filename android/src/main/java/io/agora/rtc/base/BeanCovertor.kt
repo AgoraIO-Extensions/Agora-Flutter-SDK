@@ -1,7 +1,7 @@
 package io.agora.rtc.base
 
 import android.graphics.Color
-import io.agora.rtc.internal.EncryptionConfig
+//import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.internal.LastmileProbeConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
@@ -127,22 +127,22 @@ fun mapToLastmileProbeConfig(map: Map<*, *>): LastmileProbeConfig {
   }
 }
 
-fun mapToRectangle(map: Map<*, *>): WatermarkOptions.Rectangle {
-  return WatermarkOptions.Rectangle().apply {
-    (map["x"] as? Number)?.let { x = it.toInt() }
-    (map["y"] as? Number)?.let { y = it.toInt() }
-    (map["width"] as? Number)?.let { width = it.toInt() }
-    (map["height"] as? Number)?.let { height = it.toInt() }
-  }
-}
+//fun mapToRectangle(map: Map<*, *>): WatermarkOptions.Rectangle {
+//  return WatermarkOptions.Rectangle().apply {
+//    (map["x"] as? Number)?.let { x = it.toInt() }
+//    (map["y"] as? Number)?.let { y = it.toInt() }
+//    (map["width"] as? Number)?.let { width = it.toInt() }
+//    (map["height"] as? Number)?.let { height = it.toInt() }
+//  }
+//}
 
-fun mapToWatermarkOptions(map: Map<*, *>): WatermarkOptions {
-  return WatermarkOptions().apply {
-    (map["visibleInPreview"] as? Boolean)?.let { visibleInPreview = it }
-    (map["positionInLandscapeMode"] as? Map<*, *>)?.let { positionInLandscapeMode = mapToRectangle(it) }
-    (map["positionInPortraitMode"] as? Map<*, *>)?.let { positionInPortraitMode = mapToRectangle(it) }
-  }
-}
+//fun mapToWatermarkOptions(map: Map<*, *>): WatermarkOptions {
+//  return WatermarkOptions().apply {
+//    (map["visibleInPreview"] as? Boolean)?.let { visibleInPreview = it }
+//    (map["positionInLandscapeMode"] as? Map<*, *>)?.let { positionInLandscapeMode = mapToRectangle(it) }
+//    (map["positionInPortraitMode"] as? Map<*, *>)?.let { positionInPortraitMode = mapToRectangle(it) }
+//  }
+//}
 
 fun mapToLiveInjectStreamConfig(map: Map<*, *>): LiveInjectStreamConfig {
   return LiveInjectStreamConfig().apply {
@@ -157,12 +157,12 @@ fun mapToLiveInjectStreamConfig(map: Map<*, *>): LiveInjectStreamConfig {
   }
 }
 
-fun mapToCameraCapturerConfiguration(map: Map<*, *>): CameraCapturerConfiguration {
-  return CameraCapturerConfiguration(
-    intToCapturerOutputPreference((map["preference"] as Number).toInt()),
-    intToCameraDirection((map["cameraDirection"] as Number).toInt())
-  )
-}
+//fun mapToCameraCapturerConfiguration(map: Map<*, *>): CameraCapturerConfiguration {
+//  return CameraCapturerConfiguration(
+//    intToCapturerOutputPreference((map["preference"] as Number).toInt()),
+//    intToCameraDirection((map["cameraDirection"] as Number).toInt())
+//  )
+//}
 
 fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
   return ChannelMediaOptions().apply {
@@ -171,9 +171,9 @@ fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
   }
 }
 
-fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
-  return EncryptionConfig().apply {
-    (map["encryptionMode"] as? Number)?.let { encryptionMode = intToEncryptionMode(it.toInt()) }
-    (map["encryptionKey"] as? String)?.let { encryptionKey = it }
-  }
-}
+//fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
+//  return EncryptionConfig().apply {
+//    (map["encryptionMode"] as? Number)?.let { encryptionMode = intToEncryptionMode(it.toInt()) }
+//    (map["encryptionKey"] as? String)?.let { encryptionKey = it }
+//  }
+//}

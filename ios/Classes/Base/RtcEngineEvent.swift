@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AgoraRtcKit
+import AgoraRtcEngineKit
 
 class RtcEngineEvents {
     static let Warning = "Warning"
@@ -310,9 +310,9 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.CameraExposureAreaChanged, rect.toMap())
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, facePositionDidChangeWidth width: Int32, previewHeight height: Int32, faces: [AgoraFacePositionInfo]?) {
-        callback(RtcEngineEvents.FacePositionChanged, width, height, faces?.toMapList())
-    }
+//    func rtcEngine(_ engine: AgoraRtcEngineKit, facePositionDidChangeWidth width: Int32, previewHeight height: Int32, faces: [AgoraFacePositionInfo]?) {
+//        callback(RtcEngineEvents.FacePositionChanged, width, height, faces?.toMapList())
+//    }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
         callback(RtcEngineEvents.RtcStats, stats.toMap())
@@ -494,7 +494,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.VideoSubscribeStateChanged, channel, uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
-        callback(RtcEngineEvents.RtmpStreamingEvent, url, eventCode.rawValue)
-    }
+//    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
+//        callback(RtcEngineEvents.RtmpStreamingEvent, url, eventCode.rawValue)
+//    }
 }
