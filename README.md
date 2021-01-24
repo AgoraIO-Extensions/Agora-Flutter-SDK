@@ -43,7 +43,7 @@ Open the `AndroidManifest.xml` file and add the required device permissions to t
 
 ### iOS
 
-Open the `info.plist` and add:
+Open the `Info.plist` and add:
 
 - `Privacy - Microphone Usage Description`, and add a note in the Value column.
 - `Privacy - Camera Usage Description`, and add a note in the Value column.
@@ -52,9 +52,9 @@ Your application can still run the voice call when it is switched to the backgro
 
 ## Error handling
 
-### iOS video cant show (Android works fine)
+### iOS video can't show (Android works fine)
 
-Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *info.plist*
+Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *Info.plist*
 
 ## API
 
