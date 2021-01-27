@@ -1,6 +1,5 @@
 package io.agora.rtc.base
 
-import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
@@ -42,6 +41,7 @@ class IRtcChannel {
 
     fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
   }
 
@@ -50,7 +50,10 @@ class IRtcChannel {
 
     fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
+
+    fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcVoicePositionInterface {
@@ -94,8 +97,10 @@ class IRtcChannel {
   }
 
   interface RtcEncryptionInterface {
+    @Deprecated("")
     fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setEncryptionMode(params: Map<String, *>, callback: Callback)
 
     fun enableEncryption(params: Map<String, *>, callback: Callback)
@@ -141,11 +146,7 @@ class RtcChannelManager(
   }
 
   override fun destroy(params: Map<String, *>, callback: Callback) {
-    var code: Int? = -Constants.ERR_NOT_INITIALIZED
-    this[params["channelId"] as String]?.let {
-      code = rtcChannelMap.remove(it.channelId())?.destroy()
-    }
-    callback.code(code)
+    callback.code(rtcChannelMap.remove(params["channelId"] as String)?.destroy())
   }
 
   override fun setClientRole(params: Map<String, *>, callback: Callback) {
@@ -217,6 +218,10 @@ class RtcChannelManager(
     callback.code(this[params["channelId"] as String]?.setDefaultMuteAllRemoteVideoStreams(params["muted"] as Boolean))
   }
 
+  override fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback) {
+    callback.code(this[params["channelId"] as String]?.enableRemoteSuperResolution((params["uid"] as Number).toInt(), params["enable"] as Boolean))
+  }
+
   override fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback) {
     callback.code(this[params["channelId"] as String]?.setRemoteVoicePosition((params["uid"] as Number).toInt(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
   }
@@ -258,24 +263,22 @@ class RtcChannelManager(
   }
 
   override fun registerMediaMetadataObserver(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    this[params["channelId"] as String]?.let {
-      val mediaObserver = MediaObserver { data ->
-        emit(RtcChannelEvents.MetadataReceived, data?.toMutableMap()?.apply { put("channelId", it.channelId()) })
-      }
-      code = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
-      if (code == 0) mediaObserverMap[it.channelId()] = mediaObserver
+    val channelId = params["channelId"] as String
+    val mediaObserver = MediaObserver { data ->
+      emit(RtcChannelEvents.MetadataReceived, data?.toMutableMap()?.apply { put("channelId", channelId) })
     }
-    callback.code(code)
+    callback.code(this[channelId]?.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)) {
+      mediaObserverMap[channelId] = mediaObserver
+      Unit
+    }
   }
 
   override fun unregisterMediaMetadataObserver(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    this[params["channelId"] as String]?.let {
-      code = it.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)
-      if (code == 0) mediaObserverMap.remove(it.channelId())
+    val channelId = params["channelId"] as String
+    callback.code(this[channelId]?.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)) {
+      mediaObserverMap.remove(channelId)
+      Unit
     }
-    callback.code(code)
   }
 
   override fun setMaxMetadataSize(params: Map<String, *>, callback: Callback) {
@@ -318,18 +321,15 @@ class RtcChannelManager(
   }
 
   override fun createDataStream(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    this[params["channelId"] as String]?.let {
-      code = it.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)
+    val channel = this[params["channelId"] as String]
+    (params["config"] as? Map<*, *>)?.let { config ->
+      callback.code(channel?.createDataStream(mapToDataStreamConfig(config))) { it }
+      return@createDataStream
     }
-    callback.code(code) { it }
+    callback.code(channel?.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)) { it }
   }
 
   override fun sendStreamMessage(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    this[params["channelId"] as String]?.let {
-      code = it.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray())
-    }
-    callback.code(code)
+    callback.code(this[params["channelId"] as String]?.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray()))
   }
 }
