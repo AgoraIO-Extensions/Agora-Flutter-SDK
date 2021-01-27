@@ -45,6 +45,7 @@ class RtcChannelEvents {
     static let AudioSubscribeStateChanged = "AudioSubscribeStateChanged"
     static let VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
     static let RtmpStreamingEvent = "RtmpStreamingEvent"
+    static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
 
     static func toMap() -> Dictionary<String, String> {
         return [
@@ -83,6 +84,7 @@ class RtcChannelEvents {
             "AudioSubscribeStateChanged": AudioSubscribeStateChanged,
             "VideoSubscribeStateChanged": VideoSubscribeStateChanged,
             "RtmpStreamingEvent": RtmpStreamingEvent,
+            "UserSuperResolutionEnabled": UserSuperResolutionEnabled
         ]
     }
 }
@@ -239,5 +241,9 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
 
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
         callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, eventCode.rawValue)
+    }
+    
+    func rtcChannel(_ rtcChannel: AgoraRtcChannel, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+        callback(RtcChannelEvents.UserSuperResolutionEnabled, rtcChannel, uid, enabled, reason.rawValue)
     }
 }
