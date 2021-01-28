@@ -90,6 +90,10 @@ typedef StreamSubscribeStateCallback = void Function(
     int elapseSinceLastState);
 typedef RtmpStreamingEventCallback = void Function(
     String url, RtmpStreamingEvent eventCode);
+typedef UserSuperResolutionEnabledCallback = void Function(
+    int uid, bool enabled, SuperResolutionStateReason reason);
+typedef UploadLogResultCallback = void Function(
+    String requestId, bool success, UploadErrorReason reason);
 
 /// The SDK uses the [RtcEngineEventHandler] class to send callbacks to the application, and the application inherits the methods of this class to retrieve these callbacks.
 ///
@@ -959,6 +963,12 @@ class RtcEngineEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
+  /// TODO(DOC)
+  UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
+
+  /// TODO(DOC)
+  UploadLogResultCallback uploadLogResult;
+
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler(
       {this.warning,
@@ -1037,7 +1047,9 @@ class RtcEngineEventHandler {
       this.videoPublishStateChanged,
       this.audioSubscribeStateChanged,
       this.videoSubscribeStateChanged,
-      this.rtmpStreamingEvent});
+      this.rtmpStreamingEvent,
+      this.userSuperResolutionEnabled,
+      this.uploadLogResult});
 
   // ignore: public_member_api_docs
   void process(String methodName, List<dynamic> data) {
@@ -1346,6 +1358,14 @@ class RtcEngineEventHandler {
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);
+        break;
+      case 'UserSuperResolutionEnabled':
+        userSuperResolutionEnabled?.call(data[0], data[1],
+            SuperResolutionStateReasonConverter.fromValue(data[2]).e);
+        break;
+      case 'UploadLogResult':
+        uploadLogResult?.call(
+            data[0], data[1], UploadErrorReasonConverter.fromValue(data[2]).e);
         break;
     }
   }
@@ -1724,6 +1744,9 @@ class RtcChannelEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
+  /// TODO(DOC)
+  UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
+
   /// Constructs a [RtcChannelEventHandler]
   RtcChannelEventHandler(
       {this.warning,
@@ -1760,7 +1783,8 @@ class RtcChannelEventHandler {
       this.videoPublishStateChanged,
       this.audioSubscribeStateChanged,
       this.videoSubscribeStateChanged,
-      this.rtmpStreamingEvent});
+      this.rtmpStreamingEvent,
+      this.userSuperResolutionEnabled});
 
   // ignore: public_member_api_docs
   void process(String methodName, List<dynamic> data) {
@@ -1915,6 +1939,10 @@ class RtcChannelEventHandler {
         break;
       case 'RtmpStreamingEvent':
         rtmpStreamingEvent?.call(data[0], data[1]);
+        break;
+      case 'UserSuperResolutionEnabled':
+        userSuperResolutionEnabled?.call(data[0], data[1],
+            SuperResolutionStateReasonConverter.fromValue(data[2]).e);
         break;
     }
   }

@@ -445,7 +445,7 @@ const _$CameraCaptureOutputPreferenceEnumMap = {
   CameraCaptureOutputPreference.Auto: 0,
   CameraCaptureOutputPreference.Performance: 1,
   CameraCaptureOutputPreference.Preview: 2,
-  CameraCaptureOutputPreference.Unkown: 3,
+  CameraCaptureOutputPreference.Manual: 3,
 };
 
 CameraDirectionConverter _$CameraDirectionConverterFromJson(
@@ -607,6 +607,7 @@ const _$ConnectionChangedReasonEnumMap = {
   ConnectionChangedReason.RenewToken: 12,
   ConnectionChangedReason.ClientIpAddressChanged: 13,
   ConnectionChangedReason.KeepAliveTimeout: 14,
+  ConnectionChangedReason.ProxyServerInterrupted: 15,
 };
 
 ConnectionStateTypeConverter _$ConnectionStateTypeConverterFromJson(
@@ -730,6 +731,7 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.PublishStreamInternalServerError: 154,
   ErrorCode.PublishStreamNotFound: 155,
   ErrorCode.PublishStreamFormatNotSuppported: 156,
+  ErrorCode.ModuleNotFound: 157,
   ErrorCode.LoadMediaEngine: 1001,
   ErrorCode.StartCall: 1002,
   ErrorCode.StartCamera: 1003,
@@ -846,6 +848,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.DeviceBusy: 3,
   LocalVideoStreamError.CaptureFailure: 4,
   LocalVideoStreamError.EncodeFailure: 5,
+  LocalVideoStreamError.CaptureInBackground: 6,
+  LocalVideoStreamError.CaptureMultipleForegroundApps: 7,
 };
 
 LocalVideoStreamStateConverter _$LocalVideoStreamStateConverterFromJson(
@@ -1461,6 +1465,7 @@ const _$VoiceBeautifierPresetEnumMap = {
   VoiceBeautifierPreset.ChatBeautifierMagnetic: 16843008,
   VoiceBeautifierPreset.ChatBeautifierFresh: 16843264,
   VoiceBeautifierPreset.ChatBeautifierVitality: 16843520,
+  VoiceBeautifierPreset.SingingBeautifier: 16908544,
   VoiceBeautifierPreset.TimbreTransformationVigorous: 16974080,
   VoiceBeautifierPreset.TimbreTransformationDeep: 16974336,
   VoiceBeautifierPreset.TimbreTransformationMellow: 16974592,
@@ -1487,4 +1492,140 @@ Map<String, dynamic> _$AudienceLatencyLevelTypeConverterToJson(
 const _$AudienceLatencyLevelTypeEnumMap = {
   AudienceLatencyLevelType.LowLatency: 1,
   AudienceLatencyLevelType.UltraLowLatency: 2,
+};
+
+LogLevelConverter _$LogLevelConverterFromJson(Map<String, dynamic> json) {
+  return LogLevelConverter(
+    _$enumDecodeNullable(_$LogLevelEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$LogLevelConverterToJson(LogLevelConverter instance) =>
+    <String, dynamic>{
+      'e': _$LogLevelEnumMap[instance.e],
+    };
+
+const _$LogLevelEnumMap = {
+  LogLevel.None: 0,
+  LogLevel.Info: 1,
+  LogLevel.Warn: 2,
+  LogLevel.Error: 4,
+  LogLevel.Fatal: 8,
+};
+
+CaptureBrightnessLevelTypeConverter
+    _$CaptureBrightnessLevelTypeConverterFromJson(Map<String, dynamic> json) {
+  return CaptureBrightnessLevelTypeConverter(
+    _$enumDecodeNullable(_$CaptureBrightnessLevelTypeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$CaptureBrightnessLevelTypeConverterToJson(
+        CaptureBrightnessLevelTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$CaptureBrightnessLevelTypeEnumMap[instance.e],
+    };
+
+const _$CaptureBrightnessLevelTypeEnumMap = {
+  CaptureBrightnessLevelType.Invalid: -1,
+  CaptureBrightnessLevelType.Normal: 0,
+  CaptureBrightnessLevelType.Bright: 1,
+  CaptureBrightnessLevelType.Dark: 2,
+};
+
+SuperResolutionStateReasonConverter
+    _$SuperResolutionStateReasonConverterFromJson(Map<String, dynamic> json) {
+  return SuperResolutionStateReasonConverter(
+    _$enumDecodeNullable(_$SuperResolutionStateReasonEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$SuperResolutionStateReasonConverterToJson(
+        SuperResolutionStateReasonConverter instance) =>
+    <String, dynamic>{
+      'e': _$SuperResolutionStateReasonEnumMap[instance.e],
+    };
+
+const _$SuperResolutionStateReasonEnumMap = {
+  SuperResolutionStateReason.Success: 0,
+  SuperResolutionStateReason.StreamOverLimitation: 1,
+  SuperResolutionStateReason.UserCountOverLimitation: 2,
+  SuperResolutionStateReason.DeviceNotSupported: 3,
+};
+
+UploadErrorReasonConverter _$UploadErrorReasonConverterFromJson(
+    Map<String, dynamic> json) {
+  return UploadErrorReasonConverter(
+    _$enumDecodeNullable(_$UploadErrorReasonEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$UploadErrorReasonConverterToJson(
+        UploadErrorReasonConverter instance) =>
+    <String, dynamic>{
+      'e': _$UploadErrorReasonEnumMap[instance.e],
+    };
+
+const _$UploadErrorReasonEnumMap = {
+  UploadErrorReason.Success: 0,
+  UploadErrorReason.NetError: 1,
+  UploadErrorReason.ServerError: 2,
+};
+
+CloudProxyTypeConverter _$CloudProxyTypeConverterFromJson(
+    Map<String, dynamic> json) {
+  return CloudProxyTypeConverter(
+    _$enumDecodeNullable(_$CloudProxyTypeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$CloudProxyTypeConverterToJson(
+        CloudProxyTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$CloudProxyTypeEnumMap[instance.e],
+    };
+
+const _$CloudProxyTypeEnumMap = {
+  CloudProxyType.None: 0,
+  CloudProxyType.UDP: 1,
+  CloudProxyType.TCP: 2,
+};
+
+ExperienceQualityTypeConverter _$ExperienceQualityTypeConverterFromJson(
+    Map<String, dynamic> json) {
+  return ExperienceQualityTypeConverter(
+    _$enumDecodeNullable(_$ExperienceQualityTypeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$ExperienceQualityTypeConverterToJson(
+        ExperienceQualityTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$ExperienceQualityTypeEnumMap[instance.e],
+    };
+
+const _$ExperienceQualityTypeEnumMap = {
+  ExperienceQualityType.Good: 0,
+  ExperienceQualityType.Bad: 0,
+};
+
+ExperiencePoorReasonConverter _$ExperiencePoorReasonConverterFromJson(
+    Map<String, dynamic> json) {
+  return ExperiencePoorReasonConverter(
+    _$enumDecodeNullable(_$ExperiencePoorReasonEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$ExperiencePoorReasonConverterToJson(
+        ExperiencePoorReasonConverter instance) =>
+    <String, dynamic>{
+      'e': _$ExperiencePoorReasonEnumMap[instance.e],
+    };
+
+const _$ExperiencePoorReasonEnumMap = {
+  ExperiencePoorReason.None: 0,
+  ExperiencePoorReason.RemoteNetworkQualityPoor: 1,
+  ExperiencePoorReason.LocalNetworkQualityPoor: 2,
+  ExperiencePoorReason.WirelessSignalPoor: 4,
+  ExperiencePoorReason.WifiBluetoothCoexist: 8,
 };

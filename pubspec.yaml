@@ -41,15 +41,15 @@ flutter:
         pluginClass: AgoraRtcEnginePlugin
       ios:
         pluginClass: AgoraRtcEnginePlugin
-      linux:
-        pluginClass: AgoraRtcEnginePlugin
-      macos:
-        pluginClass: AgoraRtcEnginePlugin
-      windows:
-        pluginClass: AgoraRtcEnginePlugin
-      web:
-        fileName: agora_rtc_engine_web.dart
-        pluginClass: AgoraRtcEngineWeb
+#      linux:
+#        pluginClass: AgoraRtcEnginePlugin
+#      macos:
+#        pluginClass: AgoraRtcEnginePlugin
+#      windows:
+#        pluginClass: AgoraRtcEnginePlugin
+#      web:
+#        fileName: agora_rtc_engine_web.dart
+#        pluginClass: AgoraRtcEngineWeb
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
