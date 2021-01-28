@@ -902,6 +902,7 @@ public class Annotations {
     Constants.CAPTURE_BRIGHTNESS_LEVEL_BRIGHT,
     Constants.CAPTURE_BRIGHTNESS_LEVEL_DARK,
   })
+  @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraCaptureBrightnessLevelType {
   }
 
@@ -910,6 +911,7 @@ public class Annotations {
     IRtcEngineEventHandler.UploadErrorReason.UPLOAD_NET_ERROR,
     IRtcEngineEventHandler.UploadErrorReason.UPLOAD_SERVER_ERROR,
   })
+  @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraUploadErrorReason {
   }
 
@@ -917,6 +919,7 @@ public class Annotations {
     IRtcEngineEventHandler.ExperienceQuality.EXPERIENCE_GOOD,
     IRtcEngineEventHandler.ExperienceQuality.EXPERIENCE_BAD,
   })
+  @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraExperienceQualityType {
   }
 
@@ -927,6 +930,7 @@ public class Annotations {
     IRtcEngineEventHandler.ExperiencePoorReason.WIRELESS_SIGNAL_POOR,
     IRtcEngineEventHandler.ExperiencePoorReason.WIFI_BLUETOOTH_COEXIST,
   })
+  @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraExperiencePoorReason {
   }
 
@@ -936,6 +940,7 @@ public class Annotations {
     Constants.SR_STATE_REASON_USER_COUNT_OVER_LIMITATION,
     Constants.SR_STATE_REASON_DEVICE_NOT_SUPPORTED,
   })
+  @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraSuperResolutionStateReason {
   }
 }
