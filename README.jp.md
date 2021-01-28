@@ -2,6 +2,7 @@
 
 ![pub package](https://img.shields.io/pub/v/agora_rtc_engine.svg?include_prereleases)
 
+[English](README.md)
 [中国語](README.zh.md)
 
 このFlutterプラグインは[Agora Video SDK](https://docs.agora.io/en/Interactive%20Broadcast/product_live?platform=All%20Platforms)のラッパーです。
@@ -34,7 +35,7 @@ Agora Video SDKを使用するには、ビデオ通話を開始するために`c
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     ...
