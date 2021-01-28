@@ -60,15 +60,28 @@ protocol RtcEngineInterface:
 
     func complain(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLogFile(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLogFilter(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLogFileSize(_ params: NSDictionary, _ callback: Callback)
 
     func setParameters(_ params: NSDictionary, _ callback: Callback)
+    
+    func getSdkVersion(callback: Callback)
+
+    func getErrorDescription(_ params: NSDictionary, callback: Callback)
 
     func getNativeHandle(_ callback: Callback)
+    
+    func enableDeepLearningDenoise(_ params: NSDictionary, callback: Callback)
+
+    func setCloudProxy(_ params: NSDictionary, callback: Callback)
+
+    func uploadLogFile(callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -102,6 +115,7 @@ protocol RtcEngineAudioInterface {
 
     func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
     func enableAudioVolumeIndication(_ params: NSDictionary, _ callback: Callback)
@@ -126,9 +140,12 @@ protocol RtcEngineVideoInterface {
 
     func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
     func setBeautyEffectOptions(_ params: NSDictionary, _ callback: Callback)
+    
+    func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback)
 }
 
 protocol RtcEngineAudioMixingInterface {
@@ -205,6 +222,8 @@ protocol RtcEngineVoiceChangerInterface {
     func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
+    
+    func setVoiceBeautifierParameters(_ params: NSDictionary, callback: Callback)
 }
 
 protocol RtcEngineVoicePositionInterface {
@@ -369,15 +388,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         delegate = RtcEngineEventHandler() { [weak self] in
             self?.emitter($0, $1)
         }
-        let config = AgoraRtcEngineConfig()
-        config.appId = params["appId"] as? String
-        config.areaCode = (params["areaCode"] as! NSNumber).uintValue
-        engine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: delegate)
+        engine = AgoraRtcEngineKit.sharedEngine(with: mapToRtcEngineConfig(params["config"] as! Dictionary), delegate: delegate)
         callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: params["appType"] as! UInt)!))
     }
 
     @objc func destroy(_ callback: Callback) {
-        callback.resolve(engine) { [weak self] ignore in
+        callback.resolve(engine) { [weak self] _ in
             self?.Release()
         }
     }
@@ -396,11 +412,25 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.joinChannel(byToken: params["token"] as? String, channelId: params["channelName"] as! String, info: params["optionalInfo"] as? String, uid: params["optionalUid"] as! UInt))
+        let token = params["token"] as? String
+        let channelName = params["channelName"] as! String
+        let optionalInfo = params["optionalInfo"] as? String
+        let optionalUid = params["optionalUid"] as! UInt
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: optionalUid, options: mapToChannelMediaOptions(options)))
+            return
+        }
+        callback.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: optionalUid))
     }
 
     @objc func switchChannel(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.switchChannel(byToken: params["token"] as? String, channelId: params["channelName"] as! String))
+        let token = params["token"] as? String
+        let channelName = params["channelName"] as! String
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.switchChannel(byToken: token, channelId: channelName, options: mapToChannelMediaOptions(options)))
+            return
+        }
+        callback.code(engine?.switchChannel(byToken: token, channelId: channelName))
     }
 
     @objc func leaveChannel(_ callback: Callback) {
@@ -466,7 +496,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func joinChannelWithUserAccount(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.joinChannel(byUserAccount: params["userAccount"] as! String, token: params["token"] as? String, channelId: params["channelName"] as! String))
+        let userAccount = params["userAccount"] as! String
+        let token = params["token"] as? String
+        let channelName = params["channelName"] as! String
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName, options: mapToChannelMediaOptions(options)))
+            return
+        }
+        callback.code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName))
     }
 
     @objc func getUserInfoByUserAccount(_ params: NSDictionary, _ callback: Callback) {
@@ -824,28 +861,24 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func registerMediaMetadataObserver(_ callback: Callback) {
-        var code = -AgoraErrorCode.notInitialized.rawValue
-        if let `engine` = engine {
-            let mediaObserver = MediaObserver { [weak self] in
-                self?.emitter(RtcEngineEvents.MetadataReceived, $0)
-            }
-            if engine.setMediaMetadataDelegate(mediaObserver, with: .video) {
-                self.mediaObserver = mediaObserver
-                code = AgoraErrorCode.noError.rawValue
-            }
+        let mediaObserver = MediaObserver { [weak self] in
+            self?.emitter(RtcEngineEvents.MetadataReceived, $0)
         }
-        callback.code(Int32(code))
+        callback.resolve(engine) {
+            if $0.setMediaMetadataDelegate(mediaObserver, with: .video) {
+                self.mediaObserver = mediaObserver
+            }
+            return nil
+        }
     }
 
     @objc func unregisterMediaMetadataObserver(_ callback: Callback) {
-        var code = -AgoraErrorCode.notInitialized.rawValue
-        if let it = engine {
-            if it.setMediaMetadataDelegate(nil, with: .video) {
+        callback.resolve(engine) {
+            if $0.setMediaMetadataDelegate(nil, with: .video) {
                 self.mediaObserver = nil
-                code = AgoraErrorCode.noError.rawValue
             }
+            return nil
         }
-        callback.code(Int32(code))
     }
 
     @objc func setMaxMetadataSize(_ params: NSDictionary, _ callback: Callback) {
@@ -985,25 +1018,45 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {
-        var code: Int32 = -Int32(AgoraErrorCode.notInitialized.rawValue)
         var streamId = 0
-        if let it = engine {
-            code = it.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)
+        if let config = params["config"] as? Dictionary<String, Any> {
+            callback.code(engine?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in streamId }
+            return
         }
-        callback.code(code) { ignore in
-            streamId
-        }
+        callback.code(engine?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in streamId }
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
-        var code: Int32 = -Int32(AgoraErrorCode.notInitialized.rawValue)
-        if let it = engine {
-            if let data = (params["message"] as! String).data(using: .utf8) {
-                code = it.sendStreamMessage(params["streamId"] as! Int, data: data)
-            } else {
-                code = -Int32(AgoraErrorCode.invalidArgument.rawValue)
-            }
+        callback.code(engine?.sendStreamMessage(params["streamId"] as! Int, data: (params["message"] as! String).data(using: .utf8)!))
+    }
+    
+    @objc func setVoiceBeautifierParameters(_ params: NSDictionary, callback: Callback) {
+        callback.code(engine?.setVoiceBeautifierParameters(AgoraVoiceBeautifierPreset.init(rawValue: params["preset"] as! Int)!, param1: params["param1"] as! Int32, param2: params["param2"] as! Int32))
+    }
+    
+    @objc func getSdkVersion(callback: Callback) {
+        callback.success(AgoraRtcEngineKit.getSdkVersion())
+    }
+    
+    @objc func getErrorDescription(_ params: NSDictionary, callback: Callback) {
+        callback.success(AgoraRtcEngineKit.getErrorDescription(params["code"] as! Int))
+    }
+    
+    @objc func enableDeepLearningDenoise(_ params: NSDictionary, callback: Callback) {
+        callback.code(engine?.enableDeepLearningDenoise(params["enabled"] as! Bool))
+    }
+    
+    @objc func setCloudProxy(_ params: NSDictionary, callback: Callback) {
+        callback.code(engine?.setCloudProxy(AgoraCloudProxyType.init(rawValue: params["proxyType"] as! UInt)!))
+    }
+    
+    @objc func uploadLogFile(callback: Callback) {
+        callback.resolve(engine) {
+            return $0.uploadLogFile()
         }
-        callback.code(code)
+    }
+    
+    @objc func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback) {
+        callback.code(engine?.enableRemoteSuperResolution(params["uid"] as! UInt, enabled: params["enabled"] as! Bool))
     }
 }

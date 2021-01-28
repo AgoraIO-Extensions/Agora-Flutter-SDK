@@ -11,7 +11,7 @@ import AgoraRtcKit
 
 class MediaObserver: NSObject {
     private var emitter: (_ data: Dictionary<String, Any?>?) -> Void
-    private var maxMetadataSize = 0
+    private var maxMetadataSize = 1024
     private var metadataList = [String]()
 
     init(_ emitter: @escaping (_ data: Dictionary<String, Any?>?) -> Void) {
