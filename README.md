@@ -3,6 +3,7 @@
 ![pub package](https://img.shields.io/pub/v/agora_rtc_engine.svg?include_prereleases)
 
 [中文](README.zh.md)
+[日本語](README.jp.md)
 
 This Flutter plugin is a wrapper for [Agora Video SDK](https://docs.agora.io/en/Interactive%20Broadcast/product_live?platform=All%20Platforms).
 
