@@ -36,7 +36,8 @@ class _State extends State<StringUid> {
   }
 
   _initEngine() async {
-    widget._engine = await RtcEngine.create(config.appId);
+    widget._engine =
+        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
 
     await widget._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
