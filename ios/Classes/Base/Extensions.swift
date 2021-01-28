@@ -84,7 +84,9 @@ extension AgoraRtcRemoteAudioStats {
             "totalFrozenTime": totalFrozenTime,
             "frozenRate": frozenRate,
             "totalActiveTime": totalActiveTime,
-            "publishDuration": publishDuration
+            "publishDuration": publishDuration,
+            "qoeQuality": qoeQuality,
+            "qualityChangedReason": qualityChangedReason
         ]
     }
 }
@@ -105,7 +107,8 @@ extension AgoraRtcLocalVideoStats {
             "encodedFrameCount": encodedFrameCount,
             "codecType": codecType.rawValue,
             "txPacketLossRate": txPacketLossRate,
-            "captureFrameRate": captureFrameRate
+            "captureFrameRate": captureFrameRate,
+            "captureBrightnessLevel": captureBrightnessLevel.rawValue
         ]
     }
 }

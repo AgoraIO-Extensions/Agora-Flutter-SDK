@@ -51,6 +51,7 @@ protocol RtcChannelAudioInterface {
 
     func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 }
 
@@ -59,7 +60,10 @@ protocol RtcChannelVideoInterface {
 
     func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
+
+    func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback)
 }
 
 protocol RtcChannelVoicePositionInterface {
@@ -103,8 +107,10 @@ protocol RtcChannelMediaMetadataInterface {
 }
 
 protocol RtcChannelEncryptionInterface {
+    @available(*, deprecated)
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
 
     func enableEncryption(_ params: NSDictionary, _ callback: Callback)
@@ -163,11 +169,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func destroy(_ params: NSDictionary, _ callback: Callback) {
-        var code: Int32? = -Int32(AgoraErrorCode.notInitialized.rawValue)
-        if let it = self[params["channelId"] as! String] {
-            code = rtcChannelMap.removeValue(forKey: it.getId()!)?.destroy()
-        }
-        callback.code(code)
+        callback.code(rtcChannelMap.removeValue(forKey:params["channelId"] as! String)?.destroy())
     }
 
     @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
@@ -284,28 +286,29 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func registerMediaMetadataObserver(_ params: NSDictionary, _ callback: Callback) {
-        var code = -AgoraErrorCode.notInitialized.rawValue
-        if let it = self[params["channelId"] as! String] {
-            let mediaObserver = MediaObserver { [weak self] in
-                self?.emitter(RtcEngineEvents.MetadataReceived, $0)
-            }
-            if it.setMediaMetadataDelegate(mediaObserver, with: .video) {
-                mediaObserverMap[it.getId()!] = mediaObserver
-                code = AgoraErrorCode.noError.rawValue
+        let channelId = params["channelId"] as! String
+        let mediaObserver = MediaObserver { [weak self] in
+            if var data = $0 {
+                data["channelId"] = channelId;
+                self?.emitter(RtcEngineEvents.MetadataReceived, data)
             }
         }
-        callback.code(Int32(code))
+        callback.resolve(self[channelId]) {
+            if $0.setMediaMetadataDelegate(mediaObserver, with: .video) {
+                mediaObserverMap[channelId] = mediaObserver
+            }
+            return nil
+        }
     }
 
     @objc func unregisterMediaMetadataObserver(_ params: NSDictionary, _ callback: Callback) {
-        var code = -AgoraErrorCode.notInitialized.rawValue
-        if let it = self[params["channelId"] as! String] {
-            if it.setMediaMetadataDelegate(nil, with: .video) {
-                mediaObserverMap.removeValue(forKey: it.getId()!)
-                code = AgoraErrorCode.noError.rawValue
+        let channelId = params["channelId"] as! String
+        callback.resolve(self[channelId]) {
+            if $0.setMediaMetadataDelegate(nil, with: .video) {
+                mediaObserverMap.removeValue(forKey: channelId)
             }
+            return nil
         }
-        callback.code(Int32(code))
     }
 
     @objc func setMaxMetadataSize(_ params: NSDictionary, _ callback: Callback) {
@@ -351,25 +354,20 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {
-        var code: Int32 = -Int32(AgoraErrorCode.notInitialized.rawValue)
+        let channel = self[params["channelId"] as! String]
         var streamId = 0
-        if let it = self[params["channelId"] as! String] {
-            code = it.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)
+        if let config = params["config"] as? Dictionary<String, Any> {
+            callback.code(channel?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in streamId }
+            return
         }
-        callback.code(code) { ignore in
-            streamId
-        }
+        callback.code(channel?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in streamId }
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
-        var code: Int32 = -Int32(AgoraErrorCode.notInitialized.rawValue)
-        if let it = self[params["channelId"] as! String] {
-            if let data = (params["message"] as! String).data(using: .utf8) {
-                code = it.sendStreamMessage(params["streamId"] as! Int, data: data)
-            } else {
-                code = -Int32(AgoraErrorCode.invalidArgument.rawValue)
-            }
-        }
-        callback.code(code)
+        callback.code(self[params["channelId"] as! String]?.sendStreamMessage(params["streamId"] as! Int, data: (params["message"] as! String).data(using: .utf8)!))
+    }
+    
+    @objc func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution(params["uid"] as! UInt, enabled: params["enable"] as! Bool))
     }
 }
