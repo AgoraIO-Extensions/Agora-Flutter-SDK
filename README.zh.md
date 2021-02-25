@@ -3,6 +3,7 @@
 ![pub package](https://img.shields.io/pub/v/agora_rtc_engine.svg?include_prereleases)
 
 [English](README.md)
+[日本語](README.jp.md)
 
 此 Flutter 插件 是对 [Agora 视频 SDK](https://docs.agora.io/cn/Interactive%20Broadcast/product_live?platform=All%20Platforms) 的包装。
 
@@ -34,7 +35,7 @@ Agora 视频 SDK 需要 `摄像头` 和 `麦克风` 权限来开始视频通话�
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     ...

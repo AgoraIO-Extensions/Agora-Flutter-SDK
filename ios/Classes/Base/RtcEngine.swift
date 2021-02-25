@@ -51,7 +51,7 @@ protocol RtcEngineInterface:
     func enableWebSdkInteroperability(_ params: NSDictionary, _ callback: Callback)
 
     func getConnectionState(_ callback: Callback)
-    
+
     func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback)
 
     func getCallId(_ callback: Callback)
@@ -67,7 +67,7 @@ protocol RtcEngineInterface:
     func setLogFileSize(_ params: NSDictionary, _ callback: Callback)
 
     func setParameters(_ params: NSDictionary, _ callback: Callback)
-    
+
     func getNativeHandle(_ callback: Callback)
 }
 
@@ -366,8 +366,8 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func create(_ params: NSDictionary, _ callback: Callback) {
-        delegate = RtcEngineEventHandler() { [weak self] methodName, data in
-            self?.emitter(methodName, data)
+        delegate = RtcEngineEventHandler() { [weak self] in
+            self?.emitter($0, $1)
         }
         let config = AgoraRtcEngineConfig()
         config.appId = params["appId"] as? String
@@ -377,7 +377,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func destroy(_ callback: Callback) {
-        callback.resolve(engine) { [weak self] it in
+        callback.resolve(engine) { [weak self] ignore in
             self?.Release()
         }
     }
@@ -416,18 +416,18 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getConnectionState(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.getConnectionState().rawValue
+        callback.resolve(engine) {
+            $0.getConnectionState().rawValue
         }
     }
-    
+
     @objc func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.sendCustomReportMessage(params["id"] as! String, category: params["category"] as! String, event: params["event"] as! String, label: params["label"] as! String, value: params["value"] as! Int))
     }
 
     @objc func getCallId(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.getCallId()
+        callback.resolve(engine) {
+            $0.getCallId()
         }
     }
 
@@ -450,10 +450,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func setLogFileSize(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLogFileSize((params["fileSizeInKBytes"] as! UInt)))
     }
-    
+
     @objc func getNativeHandle(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            Int(bitPattern: it.getNativeHandle())
+        callback.resolve(engine) {
+            Int(bitPattern: $0.getNativeHandle())
         }
     }
 
@@ -470,14 +470,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getUserInfoByUserAccount(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.getUserInfo(byUserAccount: params["userAccount"] as! String, withError: nil)?.toMap()
+        callback.resolve(engine) {
+            $0.getUserInfo(byUserAccount: params["userAccount"] as! String, withError: nil)?.toMap()
         }
     }
 
     @objc func getUserInfoByUid(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.getUserInfo(byUid: params["uid"] as! UInt, withError: nil)?.toMap()
+        callback.resolve(engine) {
+            $0.getUserInfo(byUid: params["uid"] as! UInt, withError: nil)?.toMap()
         }
     }
 
@@ -602,26 +602,26 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getAudioMixingPlayoutVolume(_ callback: Callback) {
-        callback.code(engine?.getAudioMixingPlayoutVolume()) { it in
-            it
+        callback.code(engine?.getAudioMixingPlayoutVolume()) {
+            $0
         }
     }
 
     @objc func getAudioMixingPublishVolume(_ callback: Callback) {
-        callback.code(engine?.getAudioMixingPublishVolume()) { it in
-            it
+        callback.code(engine?.getAudioMixingPublishVolume()) {
+            $0
         }
     }
 
     @objc func getAudioMixingDuration(_ callback: Callback) {
-        callback.code(engine?.getAudioMixingDuration()) { it in
-            it
+        callback.code(engine?.getAudioMixingDuration()) {
+            $0
         }
     }
 
     @objc func getAudioMixingCurrentPosition(_ callback: Callback) {
-        callback.code(engine?.getAudioMixingCurrentPosition()) { it in
-            it
+        callback.code(engine?.getAudioMixingCurrentPosition()) {
+            $0
         }
     }
 
@@ -634,8 +634,8 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getEffectsVolume(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.getEffectsVolume()
+        callback.resolve(engine) {
+            $0.getEffectsVolume()
         }
     }
 
@@ -682,10 +682,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func resumeAllEffects(_ callback: Callback) {
         callback.code(engine?.resumeAllEffects())
     }
-    
+
     @objc func setAudioSessionOperationRestriction(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.setAudioSessionOperationRestriction(AgoraAudioSessionOperationRestriction(rawValue: params["restriction"] as! UInt))
+        callback.resolve(engine) {
+            $0.setAudioSessionOperationRestriction(AgoraAudioSessionOperationRestriction(rawValue: params["restriction"] as! UInt))
         }
     }
 
@@ -762,8 +762,8 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func isSpeakerphoneEnabled(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.isSpeakerphoneEnabled()
+        callback.resolve(engine) {
+            $0.isSpeakerphoneEnabled()
         }
     }
 
@@ -825,11 +825,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func registerMediaMetadataObserver(_ callback: Callback) {
         var code = -AgoraErrorCode.notInitialized.rawValue
-        if let it = engine {
-            let mediaObserver = MediaObserver { [weak self] data in
-                self?.emitter(RtcEngineEvents.MetadataReceived, data)
+        if let `engine` = engine {
+            let mediaObserver = MediaObserver { [weak self] in
+                self?.emitter(RtcEngineEvents.MetadataReceived, $0)
             }
-            if it.setMediaMetadataDelegate(mediaObserver, with: .video) {
+            if engine.setMediaMetadataDelegate(mediaObserver, with: .video) {
                 self.mediaObserver = mediaObserver
                 code = AgoraErrorCode.noError.rawValue
             }
@@ -849,14 +849,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setMaxMetadataSize(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(mediaObserver) { it in
-            it.setMaxMetadataSize(params["size"] as! Int)
+        callback.resolve(mediaObserver) {
+            $0.setMaxMetadataSize(params["size"] as! Int)
         }
     }
 
     @objc func sendMetadata(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(mediaObserver) { it in
-            it.addMetadata(params["metadata"] as! String)
+        callback.resolve(mediaObserver) {
+            $0.addMetadata(params["metadata"] as! String)
         }
     }
 
@@ -911,14 +911,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func isCameraZoomSupported(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.isCameraZoomSupported()
+        callback.resolve(engine) {
+            $0.isCameraZoomSupported()
         }
     }
 
     @objc func isCameraTorchSupported(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.isCameraTorchSupported()
+        callback.resolve(engine) {
+            $0.isCameraTorchSupported()
         }
     }
 
@@ -927,20 +927,20 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func isCameraExposurePositionSupported(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.isCameraExposurePositionSupported()
+        callback.resolve(engine) {
+            $0.isCameraExposurePositionSupported()
         }
     }
 
     @objc func isCameraAutoFocusFaceModeSupported(_ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.isCameraAutoFocusFaceModeSupported()
+        callback.resolve(engine) {
+            $0.isCameraAutoFocusFaceModeSupported()
         }
     }
 
     @objc func setCameraZoomFactor(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.setCameraZoomFactor(CGFloat(params["factor"] as! Float))
+        callback.resolve(engine) {
+            $0.setCameraZoomFactor(CGFloat(params["factor"] as! Float))
             return nil
         }
     }
@@ -950,15 +950,15 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setCameraFocusPositionInPreview(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            engine?.setCameraFocusPositionInPreview(CGPoint(x: params["positionX"] as! Double, y: params["positionY"] as! Double))
+        callback.resolve(engine) {
+            $0.setCameraFocusPositionInPreview(CGPoint(x: params["positionX"] as! Double, y: params["positionY"] as! Double))
             return nil
         }
     }
 
     @objc func setCameraExposurePosition(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.setCameraExposurePosition(CGPoint(x: params["positionXinView"] as! Double, y: params["positionYinView"] as! Double))
+        callback.resolve(engine) {
+            $0.setCameraExposurePosition(CGPoint(x: params["positionXinView"] as! Double, y: params["positionYinView"] as! Double))
             return nil
         }
     }
@@ -968,15 +968,15 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.setCameraTorchOn(params["isOn"] as! Bool)
+        callback.resolve(engine) {
+            $0.setCameraTorchOn(params["isOn"] as! Bool)
             return nil
         }
     }
 
     @objc func setCameraAutoFocusFaceModeEnabled(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) { it in
-            it.setCameraAutoFocusFaceModeEnabled(params["enabled"] as! Bool)
+        callback.resolve(engine) {
+            $0.setCameraAutoFocusFaceModeEnabled(params["enabled"] as! Bool)
         }
     }
 
@@ -990,7 +990,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         if let it = engine {
             code = it.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)
         }
-        callback.code(code) { it in
+        callback.code(code) { ignore in
             streamId
         }
     }

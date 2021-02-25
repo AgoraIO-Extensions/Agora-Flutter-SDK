@@ -144,8 +144,8 @@ extension AgoraRtcAudioVolumeInfo {
 extension Array where Element: AgoraRtcAudioVolumeInfo {
     func toMapList() -> Array<Dictionary<String, Any?>> {
         var list = [Dictionary<String, Any?>]()
-        self.forEach { (item) in
-            list.append(item.toMap())
+        self.forEach {
+            list.append($0.toMap())
         }
         return list
     }
@@ -187,8 +187,8 @@ extension AgoraFacePositionInfo {
 extension Array where Element: AgoraFacePositionInfo {
     func toMapList() -> Array<Dictionary<String, Any?>> {
         var list = [Dictionary<String, Any?>]()
-        self.forEach { (item) in
-            list.append(item.toMap())
+        self.forEach {
+            list.append($0.toMap())
         }
         return list
     }

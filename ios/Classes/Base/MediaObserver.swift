@@ -43,9 +43,7 @@ extension MediaObserver: AgoraMediaMetadataDataSource {
 extension MediaObserver: AgoraMediaMetadataDelegate {
     func receiveMetadata(_ data: Data, fromUser uid: Int, atTimestamp timestamp: TimeInterval) {
         emitter([
-            "buffer": String(data: data, encoding: .utf8),
-            "uid": uid,
-            "timeStampMs": timestamp
+            "data": [String(data: data, encoding: .utf8) ?? "", uid, timestamp]
         ])
     }
 }
