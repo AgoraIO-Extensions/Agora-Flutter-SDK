@@ -747,6 +747,10 @@ mixin RtcInjectStreamInterface {
   ///
   /// If this method call succeeds, the server pulls the voice or video stream and injects it into a live channel. This applies to scenarios where all audience members in the channel can watch a live show and interact with each other.
   ///
+  /// **Warning**
+  ///
+  /// Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+  ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
   /// - This method can only be called by a broadcaster in a [ChannelProfile.LiveBroadcasting] channel .
