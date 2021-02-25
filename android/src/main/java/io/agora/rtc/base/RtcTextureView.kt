@@ -42,6 +42,11 @@ class RtcTextureView(
   }
 
   private fun setupVideoCanvas(engine: RtcEngine) {
+    removeAllViews()
+    texture = RtcEngine.CreateTextureView(context.applicationContext)
+    addView(texture)
+    texture.layout(0, 0, width, height)
+    canvas.view = texture
     if (canvas.uid == 0) {
       engine.setupLocalVideo(canvas)
     } else {

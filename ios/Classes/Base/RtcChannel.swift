@@ -134,8 +134,8 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     func Release() {
-        rtcChannelMap.forEach { key, value in
-            value.destroy()
+        rtcChannelMap.forEach {
+            $1.destroy()
         }
         rtcChannelMap.removeAll()
         rtcChannelDelegateMap.removeAll()
@@ -149,10 +149,10 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func create(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(params["engine"] as? AgoraRtcEngineKit) { [weak self] it in
-            if let rtcChannel = it.createRtcChannel(params["channelId"] as! String) {
-                let delegate = RtcChannelEventHandler() { [weak self] methodName, data in
-                    self?.emitter(methodName, data)
+        callback.resolve(params["engine"] as? AgoraRtcEngineKit) { [weak self] in
+            if let rtcChannel = $0.createRtcChannel(params["channelId"] as! String) {
+                let delegate = RtcChannelEventHandler() { [weak self] in
+                    self?.emitter($0, $1)
                 }
                 rtcChannel.setRtcChannelDelegate(delegate)
                 self?.rtcChannelMap[rtcChannel.getId()!] = rtcChannel
@@ -196,8 +196,8 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func getConnectionState(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(self[params["channelId"] as! String]) { it in
-            it.getConnectionState().rawValue
+        callback.resolve(self[params["channelId"] as! String]) {
+            $0.getConnectionState().rawValue
         }
     }
 
@@ -210,8 +210,8 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func getCallId(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(self[params["channelId"] as! String]) { it in
-            it.getCallId()
+        callback.resolve(self[params["channelId"] as! String]) {
+            $0.getCallId()
         }
     }
 
@@ -286,8 +286,8 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     @objc func registerMediaMetadataObserver(_ params: NSDictionary, _ callback: Callback) {
         var code = -AgoraErrorCode.notInitialized.rawValue
         if let it = self[params["channelId"] as! String] {
-            let mediaObserver = MediaObserver { [weak self] data in
-                self?.emitter(RtcEngineEvents.MetadataReceived, data)
+            let mediaObserver = MediaObserver { [weak self] in
+                self?.emitter(RtcEngineEvents.MetadataReceived, $0)
             }
             if it.setMediaMetadataDelegate(mediaObserver, with: .video) {
                 mediaObserverMap[it.getId()!] = mediaObserver
@@ -309,14 +309,14 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setMaxMetadataSize(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(mediaObserverMap[params["channelId"] as! String]) { it in
-            it.setMaxMetadataSize(params["size"] as! Int)
+        callback.resolve(mediaObserverMap[params["channelId"] as! String]) {
+            $0.setMaxMetadataSize(params["size"] as! Int)
         }
     }
 
     @objc func sendMetadata(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(mediaObserverMap[params["channelId"] as! String]) { it in
-            it.addMetadata(params["metadata"] as! String)
+        callback.resolve(mediaObserverMap[params["channelId"] as! String]) {
+            $0.addMetadata(params["metadata"] as! String)
         }
     }
 
@@ -356,7 +356,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
         if let it = self[params["channelId"] as! String] {
             code = it.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)
         }
-        callback.code(code) { it in
+        callback.code(code) { ignore in
             streamId
         }
     }

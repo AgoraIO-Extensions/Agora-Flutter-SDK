@@ -1,3 +1,56 @@
+## [3.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.0...v3.2.1) (2020-12-24)
+
+## [3.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
+
+
+### Features
+
+* upgrade native SDK to 3.2.1 ([771ffc7](https://github.com/AgoraIO/Flutter-SDK/commit/771ffc756d1a2ad19726a45d4d9dbf1bf8b69205))
+
+## [3.2.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.6...v3.2.0-rc.0) (2020-12-21)
+
+
+### Features
+
+* add `Future<void> setClientRole(ClientRole role, [ClientRoleOptions options])` ([2c8a38d](https://github.com/AgoraIO/Flutter-SDK/commit/2c8a38d9473a71e9d17e9f97b7b1d4bedec0665b))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([2fef3ae](https://github.com/AgoraIO/Flutter-SDK/commit/2fef3aee038b31808af53cee80a0fddc8d444fe8))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([3a55997](https://github.com/AgoraIO/Flutter-SDK/commit/3a55997db81dcd16e68ee551d69b9079ff8052b0))
+* upgrade to 3.2.0 ([78d9e0e](https://github.com/AgoraIO/Flutter-SDK/commit/78d9e0e12dad00fcf5a379e49522fca80516f1d4))
+* upgrade to 3.2.0 ([fcb57cc](https://github.com/AgoraIO/Flutter-SDK/commit/fcb57cc3e2cbb3e16750e9ce8ddca069184ac1c0))
+* upgrade to 3.2.0 ([4ee51a9](https://github.com/AgoraIO/Flutter-SDK/commit/4ee51a9b405deb17b467f5359f6717033c3961a2))
+
+## [3.1.6](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.5...v3.1.6) (2020-12-21)
+
+
+### Bug Fixes
+
+* `MetadataReceived` event parameters bug ([56ab25b](https://github.com/AgoraIO/Flutter-SDK/commit/56ab25bcf41b9b7034049fb307cca95fdfae3e4c))
+* `MetadataReceived` event parameters bug ([9ab28a7](https://github.com/AgoraIO/Flutter-SDK/commit/9ab28a7ae559f3bd5ce8ab8e0455860d9de89977))
+* add missing permissions for Android ([fd74959](https://github.com/AgoraIO/Flutter-SDK/commit/fd74959e94d5f43d6ab7a77d197ec450e3421769))
+* some rendering problems when change render widget order ([12e2561](https://github.com/AgoraIO/Flutter-SDK/commit/12e25618ce8fabd5bf9b34e418792450518e219e))
+* some rendering problems when change render widget order ([95bbf39](https://github.com/AgoraIO/Flutter-SDK/commit/95bbf39ef58bcda58c1b2ba9063d07e631939c69))
+* some rendering problems when change render widget order ([c737102](https://github.com/AgoraIO/Flutter-SDK/commit/c737102ecc22e3cb563f9762a88d9b519fdc599f))
+* use the better way to fix rendering problems ([a290e73](https://github.com/AgoraIO/Flutter-SDK/commit/a290e7313e3d189dc9ea69e49c0c3be4799a7933))
+* use the better way to fix rendering problems ([75f572d](https://github.com/AgoraIO/Flutter-SDK/commit/75f572df2afed36a4bbd3ccffd0baad7bace2eae))
+
+
+### Features
+
+* example support render multi remote-videos ([72e94b0](https://github.com/AgoraIO/Flutter-SDK/commit/72e94b0aa06332f5477e336ecf28bcbb89141c46))
+
+## [3.1.5](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.4...v3.1.5) (2020-12-15)
+
+
+### Bug Fixes
+
+* `RtcSurfaceView` memory leak ([c0f7025](https://github.com/AgoraIO/Flutter-SDK/commit/c0f7025d641c61f47fefcbdc71f988823f513dfc))
+* `RtcSurfaceView` memory leak ([c8845fe](https://github.com/AgoraIO/Flutter-SDK/commit/c8845fe04c1596fe2e7242302bf160bc671910cb))
+
+
+### Features
+
+* example support `switchRender` ([f69c495](https://github.com/AgoraIO/Flutter-SDK/commit/f69c4953b31e551f8ec7259e9e43398e1560fc1d))
+
 ## [3.1.4](https://github.com/AgoraIO/Flutter-SDK/compare/v3.1.4-rc.0...v3.1.4) (2020-12-02)
 
 
@@ -48,7 +101,7 @@
 * fix `startPreview` `stopPreview` bug
 
 ## 3.0.1-dev.3
-* fix `toJson` bug 
+* fix `toJson` bug
 * add `startPreview` `stopPreview`
 
 ## 3.0.1-dev.2
