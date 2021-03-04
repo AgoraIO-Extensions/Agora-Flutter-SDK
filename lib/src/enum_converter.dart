@@ -7,7 +7,7 @@ import 'enums.dart';
 part 'enum_converter.g.dart';
 
 abstract class EnumConverter<E, T> {
-  E e;
+  E? e;
 
   EnumConverter(this.e);
 
@@ -16,7 +16,7 @@ abstract class EnumConverter<E, T> {
   }
 
   T toValue(Map<E, T> map) {
-    return map[e];
+    return map[e]!;
   }
 }
 
@@ -337,8 +337,8 @@ class ConnectionChangedReasonConverter
 
 @JsonSerializable()
 class ConnectionStateTypeConverter
-    extends EnumConverter<ConnectionStateType, int> {
-  ConnectionStateTypeConverter(ConnectionStateType e) : super(e);
+    extends EnumConverter<ConnectionStateType?, int> {
+  ConnectionStateTypeConverter(ConnectionStateType? e) : super(e);
 
   ConnectionStateTypeConverter.fromValue(int value)
       : super.fromValue(_$ConnectionStateTypeEnumMap, value);
@@ -587,8 +587,8 @@ class BitRateConverter extends EnumConverter<BitRate, int> {
 }
 
 @JsonSerializable()
-class VideoMirrorModeConverter extends EnumConverter<VideoMirrorMode, int> {
-  VideoMirrorModeConverter(VideoMirrorMode e) : super(e);
+class VideoMirrorModeConverter extends EnumConverter<VideoMirrorMode?, int> {
+  VideoMirrorModeConverter(VideoMirrorMode? e) : super(e);
 
   VideoMirrorModeConverter.fromValue(int value)
       : super.fromValue(_$VideoMirrorModeEnumMap, value);
@@ -600,8 +600,8 @@ class VideoMirrorModeConverter extends EnumConverter<VideoMirrorMode, int> {
 
 @JsonSerializable()
 class VideoOutputOrientationModeConverter
-    extends EnumConverter<VideoOutputOrientationMode, int> {
-  VideoOutputOrientationModeConverter(VideoOutputOrientationMode e) : super(e);
+    extends EnumConverter<VideoOutputOrientationMode?, int> {
+  VideoOutputOrientationModeConverter(VideoOutputOrientationMode? e) : super(e);
 
   VideoOutputOrientationModeConverter.fromValue(int value)
       : super.fromValue(_$VideoOutputOrientationModeEnumMap, value);
@@ -651,8 +651,8 @@ class VideoRemoteStateReasonConverter
 }
 
 @JsonSerializable()
-class VideoRenderModeConverter extends EnumConverter<VideoRenderMode, int> {
-  VideoRenderModeConverter(VideoRenderMode e) : super(e);
+class VideoRenderModeConverter extends EnumConverter<VideoRenderMode?, int> {
+  VideoRenderModeConverter(VideoRenderMode? e) : super(e);
 
   VideoRenderModeConverter.fromValue(int value)
       : super.fromValue(_$VideoRenderModeEnumMap, value);

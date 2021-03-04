@@ -75,7 +75,7 @@ class _State extends State<StringUid> {
   _getUserInfo() {
     widget._engine?.getUserInfoByUserAccount(stringUid)?.then((userInfo) {
       log('getUserInfoByUserAccount ${userInfo.toJson()}');
-      Scaffold.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${userInfo.toJson()}'),
       ));
     })?.catchError((err) {
@@ -111,7 +111,7 @@ class _State extends State<StringUid> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed:
                         isJoined ? this._leaveChannel : this._joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
@@ -126,7 +126,7 @@ class _State extends State<StringUid> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._getUserInfo,
                 child: Text('Get userInfo'),
               ),

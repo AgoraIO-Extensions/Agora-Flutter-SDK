@@ -124,7 +124,7 @@ class _State extends State<JoinChannelVideo> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed:
                         isJoined ? this._leaveChannel : this._joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
@@ -140,7 +140,7 @@ class _State extends State<JoinChannelVideo> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._switchCamera,
                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
               ),

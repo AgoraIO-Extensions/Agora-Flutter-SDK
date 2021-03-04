@@ -159,7 +159,7 @@ class _State extends State<MultiChannel> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       if (isJoined0) {
                         this._leaveChannel0();
@@ -176,7 +176,7 @@ class _State extends State<MultiChannel> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       if (isJoined1) {
                         this._leaveChannel1();
@@ -197,11 +197,11 @@ class _State extends State<MultiChannel> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._publishChannel0,
                 child: Text('Publish ${channelId0}'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   setState(() {
                     renderChannelId = channelId0;
@@ -209,11 +209,11 @@ class _State extends State<MultiChannel> {
                 },
                 child: Text('Render ${channelId0}'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._publishChannel1,
                 child: Text('Publish ${channelId1}'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   setState(() {
                     renderChannelId = channelId1;

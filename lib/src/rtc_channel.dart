@@ -15,18 +15,19 @@ class RtcChannel with RtcChannelInterface {
   static const EventChannel _eventChannel =
       EventChannel('agora_rtc_channel/events');
 
-  static StreamSubscription _subscription;
+  static StreamSubscription? _subscription;
 
   static final Map<String, RtcChannel> _channels = {};
 
   /// The ID of RtcChannel
-  final String channelId;
+  final String? channelId;
 
-  RtcChannelEventHandler _handler;
+  RtcChannelEventHandler? _handler;
 
   RtcChannel._(this.channelId);
 
-  Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
+  Future<T?> _invokeMethod<T>(String method,
+      [Map<String, dynamic>? arguments]) {
     return _methodChannel.invokeMethod(
         method,
         arguments == null
@@ -46,10 +47,10 @@ class RtcChannel with RtcChannelInterface {
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
   static Future<RtcChannel> create(String channelId) async {
-    if (_channels.containsKey(channelId)) return _channels[channelId];
+    if (_channels.containsKey(channelId)) return _channels[channelId]!;
     await _methodChannel.invokeMethod('create', {'channelId': channelId});
     _channels[channelId] = RtcChannel._(channelId);
-    return _channels[channelId];
+    return _channels[channelId]!;
   }
 
   /// Destroys all [RtcChannel] instance.
@@ -85,7 +86,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]) {
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
       'options': options?.toJson()
@@ -124,7 +125,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<ConnectionStateType> getConnectionState() {
+  Future<ConnectionStateType?> getConnectionState() {
     return _invokeMethod('getConnectionState').then((value) {
       return ConnectionStateTypeConverter.fromValue(value).e;
     });
@@ -141,7 +142,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<String> getCallId() {
+  Future<String?> getCallId() {
     return _invokeMethod('getCallId');
   }
 
@@ -196,7 +197,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<int> createDataStream(bool reliable, bool ordered) {
+  Future<int?> createDataStream(bool reliable, bool ordered) {
     return _invokeMethod(
         'createDataStream', {'reliable': reliable, 'ordered': ordered});
   }
@@ -422,7 +423,7 @@ mixin RtcChannelInterface
   Future<void> renewToken(String token);
 
   /// Gets the connection state of the SDK.
-  Future<ConnectionStateType> getConnectionState();
+  Future<ConnectionStateType?> getConnectionState();
 
   /// Publishes the local stream to the channel.
   ///
@@ -442,7 +443,7 @@ mixin RtcChannelInterface
   ///  **Returns**
   /// - The current call ID, if the method call succeeds.
   /// - The empty string "", if the method call fails.
-  Future<String> getCallId();
+  Future<String?> getCallId();
 }
 
 /// @nodoc
@@ -793,7 +794,7 @@ mixin RtcStreamMessageInterface {
   /// **Returns**
   /// - 0: Success.
   /// - < 0: Failure.
-  Future<int> createDataStream(bool reliable, bool ordered);
+  Future<int?> createDataStream(bool reliable, bool ordered);
 
   /// Sends the data stream message.
   ///

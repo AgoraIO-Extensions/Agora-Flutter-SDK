@@ -12,14 +12,14 @@ import './src/rtc_render_view.dart';
 class SurfaceView extends RtcSurfaceView {
   /// Constructs a [SurfaceView]
   SurfaceView({
-    Key key,
+    Key? key,
     bool zOrderMediaOverlay = false,
     bool zOrderOnTop = false,
     VideoRenderMode renderMode = VideoRenderMode.Hidden,
-    String channelId,
+    String? channelId,
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
-    PlatformViewCreatedCallback onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    PlatformViewCreatedCallback? onPlatformViewCreated,
   }) : super(
             key: key,
             zOrderMediaOverlay: zOrderMediaOverlay,
@@ -36,12 +36,12 @@ class SurfaceView extends RtcSurfaceView {
 class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
-    Key key,
+    Key? key,
     VideoRenderMode renderMode = VideoRenderMode.Hidden,
-    String channelId,
+    String? channelId,
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
-    PlatformViewCreatedCallback onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    PlatformViewCreatedCallback? onPlatformViewCreated,
   }) : super(
             key: key,
             renderMode: renderMode,

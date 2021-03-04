@@ -6,7 +6,7 @@ extension RtcEngineExtension on RtcEngine {
   ///
   /// - [assetPath] The resource path configured in the `flutter` -> `assets` field of pubspec.yaml, for example: assets/Sound_Horizon.mp3
   /// - Returns the actual absolute path of the asset
-  static Future<String> getAssetAbsolutePath(String assetPath) {
+  static Future<String?> getAssetAbsolutePath(String assetPath) {
     return RtcEngine.methodChannel
         .invokeMethod('getAssetAbsolutePath', assetPath);
   }
