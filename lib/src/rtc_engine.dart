@@ -18,9 +18,9 @@ class RtcEngine with RtcEngineInterface {
   /// Exposing methodChannel to other files
   static MethodChannel get methodChannel => _methodChannel;
 
-  static RtcEngine _engine;
+  static RtcEngine? _engine;
 
-  RtcEngineEventHandler _handler;
+  RtcEngineEventHandler? _handler;
 
   RtcEngine._() {
     _eventChannel.receiveBroadcastStream().listen((event) {
@@ -31,18 +31,18 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  static Future<T> _invokeMethod<T>(String method,
-      [Map<String, dynamic> arguments]) {
+  static Future<T?> _invokeMethod<T>(String method,
+      [Map<String, dynamic>? arguments]) {
     return _methodChannel.invokeMethod(method, arguments);
   }
 
   /// TODO(DOC)
-  static Future<String> getSdkVersion() {
+  static Future<String?> getSdkVersion() {
     return _invokeMethod('getSdkVersion');
   }
 
   /// TODO(DOC)
-  static Future<String> getErrorDescription(int error) {
+  static Future<String?> getErrorDescription(int error) {
     return _invokeMethod('getErrorDescription', {'error': error});
   }
 
@@ -97,10 +97,10 @@ class RtcEngine with RtcEngineInterface {
 
   /// TODO(DOC)
   static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
-    if (_engine != null) return _engine;
+    if (_engine != null) return _engine!;
     await _invokeMethod('create', {'config': config.toJson(), 'appType': 4});
     _engine = RtcEngine._();
-    return _engine;
+    return _engine!;
   }
 
   @override
@@ -127,7 +127,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]) {
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
       'options': options?.toJson()
@@ -136,8 +136,8 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> joinChannel(
-      String token, String channelName, String optionalInfo, int optionalUid,
-      [ChannelMediaOptions options]) {
+      String? token, String channelName, String? optionalInfo, int optionalUid,
+      [ChannelMediaOptions? options]) {
     return _invokeMethod('joinChannel', {
       'token': token,
       'channelName': channelName,
@@ -148,8 +148,8 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> switchChannel(String token, String channelName,
-      [ChannelMediaOptions options]) {
+  Future<void> switchChannel(String? token, String channelName,
+      [ChannelMediaOptions? options]) {
     return _invokeMethod('switchChannel', {
       'token': token,
       'channelName': channelName,
@@ -181,12 +181,12 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<String> getCallId() {
+  Future<String?> getCallId() {
     return _invokeMethod('getCallId');
   }
 
   @override
-  Future<void> rate(String callId, int rating, {String description}) {
+  Future<void> rate(String callId, int rating, {String? description}) {
     return _invokeMethod('rate',
         {'callId': callId, 'rating': rating, 'description': description});
   }
@@ -239,8 +239,8 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> joinChannelWithUserAccount(
-      String token, String channelName, String userAccount,
-      [ChannelMediaOptions options]) {
+      String? token, String channelName, String userAccount,
+      [ChannelMediaOptions? options]) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'channelName': channelName,
@@ -398,22 +398,22 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int> getAudioMixingCurrentPosition() {
+  Future<int?> getAudioMixingCurrentPosition() {
     return _invokeMethod('getAudioMixingCurrentPosition');
   }
 
   @override
-  Future<int> getAudioMixingDuration() {
+  Future<int?> getAudioMixingDuration() {
     return _invokeMethod('getAudioMixingDuration');
   }
 
   @override
-  Future<int> getAudioMixingPlayoutVolume() {
+  Future<int?> getAudioMixingPlayoutVolume() {
     return _invokeMethod('getAudioMixingPlayoutVolume');
   }
 
   @override
-  Future<int> getAudioMixingPublishVolume() {
+  Future<int?> getAudioMixingPublishVolume() {
     return _invokeMethod('getAudioMixingPublishVolume');
   }
 
@@ -473,7 +473,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int> createDataStream(bool reliable, bool ordered) {
+  Future<int?> createDataStream(bool reliable, bool ordered) {
     return _invokeMethod(
         'createDataStream', {'reliable': reliable, 'ordered': ordered});
   }
@@ -504,42 +504,42 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<double> getCameraMaxZoomFactor() {
+  Future<double?> getCameraMaxZoomFactor() {
     return _invokeMethod('getCameraMaxZoomFactor');
   }
 
   @override
-  Future<double> getEffectsVolume() {
+  Future<double?> getEffectsVolume() {
     return _invokeMethod('getEffectsVolume');
   }
 
   @override
-  Future<bool> isCameraAutoFocusFaceModeSupported() {
+  Future<bool?> isCameraAutoFocusFaceModeSupported() {
     return _invokeMethod('isCameraAutoFocusFaceModeSupported');
   }
 
   @override
-  Future<bool> isCameraExposurePositionSupported() {
+  Future<bool?> isCameraExposurePositionSupported() {
     return _invokeMethod('isCameraExposurePositionSupported');
   }
 
   @override
-  Future<bool> isCameraFocusSupported() {
+  Future<bool?> isCameraFocusSupported() {
     return _invokeMethod('isCameraFocusSupported');
   }
 
   @override
-  Future<bool> isCameraTorchSupported() {
+  Future<bool?> isCameraTorchSupported() {
     return _invokeMethod('isCameraTorchSupported');
   }
 
   @override
-  Future<bool> isCameraZoomSupported() {
+  Future<bool?> isCameraZoomSupported() {
     return _invokeMethod('isCameraZoomSupported');
   }
 
   @override
-  Future<bool> isSpeakerphoneEnabled() {
+  Future<bool?> isSpeakerphoneEnabled() {
     return _invokeMethod('isSpeakerphoneEnabled');
   }
 
@@ -896,7 +896,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int> getNativeHandle() {
+  Future<int?> getNativeHandle() {
     return _invokeMethod('getNativeHandle');
   }
 
@@ -923,7 +923,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int> createDataStreamWithConfig(DataStreamConfig config) {
+  Future<int?> createDataStreamWithConfig(DataStreamConfig config) {
     return _invokeMethod(
         'createDataStreamWithConfig', {'config': config.toJson()});
   }
@@ -946,7 +946,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<String> uploadLogFile() {
+  Future<String?> uploadLogFile() {
     return _invokeMethod('uploadLogFile');
   }
 
@@ -1016,7 +1016,7 @@ mixin RtcEngineInterface
   /// **Parameter** [role] Sets the role of a user. See [ClientRole].
   ///
   /// **Parameter** [options] The detailed options of a user, including user level. See [ClientRoleOptions].
-  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]);
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]);
 
   /// Allows a user to join a channel.
   ///
@@ -1051,8 +1051,8 @@ mixin RtcEngineInterface
   ///
   /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
   Future<void> joinChannel(
-      String token, String channelName, String optionalInfo, int optionalUid,
-      [ChannelMediaOptions options]);
+      String? token, String channelName, String? optionalInfo, int optionalUid,
+      [ChannelMediaOptions? options]);
 
   /// Switches to a different channel.
   ///
@@ -1072,8 +1072,8 @@ mixin RtcEngineInterface
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  Future<void> switchChannel(String token, String channelName,
-      [ChannelMediaOptions options]);
+  Future<void> switchChannel(String? token, String channelName,
+      [ChannelMediaOptions? options]);
 
   /// Allows a user to leave a channel.
   ///
@@ -1125,7 +1125,7 @@ mixin RtcEngineInterface
   ///  **Returns**
   /// - The current call ID, if the method call succeeds.
   /// - The empty string "", if the method call fails.
-  Future<String> getCallId();
+  Future<String?> getCallId();
 
   /// Allows the user to rate a call after the call ends.
   ///
@@ -1134,7 +1134,7 @@ mixin RtcEngineInterface
   /// **Parameter** [rating] Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the [ErrorCode.InvalidArgument] error occurs.
   ///
   /// **Parameter** [description] (Optional) The description of the rating. The string length must be less than 800 bytes.
-  Future<void> rate(String callId, int rating, {String description});
+  Future<void> rate(String callId, int rating, {String? description});
 
   /// Allows a user to complain about the call quality after a call ends.
   ///
@@ -1182,7 +1182,7 @@ mixin RtcEngineInterface
   /// Gets the native handle of the SDK engine.
   ///
   /// This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
-  Future<int> getNativeHandle();
+  Future<int?> getNativeHandle();
 
   /// TODO(DOC)
   Future<void> enableDeepLearningDenoise(bool enabled);
@@ -1191,7 +1191,7 @@ mixin RtcEngineInterface
   Future<void> setCloudProxy(CloudProxyType proxyType);
 
   /// TODO(DOC)
-  Future<String> uploadLogFile();
+  Future<String?> uploadLogFile();
 }
 
 /// @nodoc
@@ -1247,8 +1247,8 @@ mixin RtcUserInfoInterface {
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
   Future<void> joinChannelWithUserAccount(
-      String token, String channelName, String userAccount,
-      [ChannelMediaOptions options]);
+      String? token, String channelName, String userAccount,
+      [ChannelMediaOptions? options]);
 
   /// Gets the user information by passing in the user account.
   ///
@@ -1660,7 +1660,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
   /// - < 0: Failure.
-  Future<int> getAudioMixingPlayoutVolume();
+  Future<int?> getAudioMixingPlayoutVolume();
 
   /// Gets the audio mixing volume for publishing.
   ///
@@ -1669,7 +1669,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
   /// - < 0: Failure.
-  Future<int> getAudioMixingPublishVolume();
+  Future<int?> getAudioMixingPublishVolume();
 
   /// Gets the duration (ms) of the music file.
   ///
@@ -1678,7 +1678,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The audio mixing duration, if this method call is successful.
   /// - < 0: Failure.
-  Future<int> getAudioMixingDuration();
+  Future<int?> getAudioMixingDuration();
 
   /// Gets the playback position (ms) of the music file.
   ///
@@ -1687,7 +1687,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The current playback position of the audio mixing file, if this method call is successful.
   /// - < 0: Failure.
-  Future<int> getAudioMixingCurrentPosition();
+  Future<int?> getAudioMixingCurrentPosition();
 
   /// Sets the playback position (ms) of the music file to a different starting position (the default plays from the beginning).
   ///
@@ -1711,7 +1711,7 @@ mixin RtcAudioEffectInterface {
   /// Gets the volume of the audio effects.
   ///
   /// The value ranges between 0.0 and 100.0.
-  Future<double> getEffectsVolume();
+  Future<double?> getEffectsVolume();
 
   /// Sets the volume of the audio effects.
   ///
@@ -2144,7 +2144,7 @@ mixin RtcAudioRouteInterface {
   /// **Returns**
   /// - `true`: The speakerphone is enabled, and the audio plays from the speakerphone.
   /// - `false`: The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
-  Future<bool> isSpeakerphoneEnabled();
+  Future<bool?> isSpeakerphoneEnabled();
 }
 
 /// @nodoc
@@ -2470,19 +2470,19 @@ mixin RtcCameraInterface {
   Future<void> switchCamera();
 
   /// Checks whether the camera zoom function is supported.
-  Future<bool> isCameraZoomSupported();
+  Future<bool?> isCameraZoomSupported();
 
   /// Checks whether the camera flash function is supported.
-  Future<bool> isCameraTorchSupported();
+  Future<bool?> isCameraTorchSupported();
 
   /// Checks whether the camera manual focus function is supported.
-  Future<bool> isCameraFocusSupported();
+  Future<bool?> isCameraFocusSupported();
 
   /// Checks whether the camera exposure function is supported.
-  Future<bool> isCameraExposurePositionSupported();
+  Future<bool?> isCameraExposurePositionSupported();
 
   /// Checks whether the camera auto-face focus function is supported.
-  Future<bool> isCameraAutoFocusFaceModeSupported();
+  Future<bool?> isCameraAutoFocusFaceModeSupported();
 
   /// Sets the camera zoom ratio.
   ///
@@ -2490,7 +2490,7 @@ mixin RtcCameraInterface {
   Future<void> setCameraZoomFactor(double factor);
 
   /// Gets the maximum zoom ratio supported by the camera.
-  Future<double> getCameraMaxZoomFactor();
+  Future<double?> getCameraMaxZoomFactor();
 
   /// Sets the camera manual focus position.
   /// A successful method call triggers the [RtcEngineEventHandler.cameraFocusAreaChanged] callback on the local client.
@@ -2574,10 +2574,10 @@ mixin RtcStreamMessageInterface {
   /// **Returns**
   /// - 0: Success.
   /// - < 0: Failure.
-  Future<int> createDataStream(bool reliable, bool ordered);
+  Future<int?> createDataStream(bool reliable, bool ordered);
 
   /// TODO(DOC)
-  Future<int> createDataStreamWithConfig(DataStreamConfig config);
+  Future<int?> createDataStreamWithConfig(DataStreamConfig config);
 
   /// Sends data stream messages.
   ///
