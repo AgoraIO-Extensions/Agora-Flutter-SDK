@@ -11,17 +11,16 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
-  RtcEngine _engine = null;
-
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<JoinChannelVideo> {
+  late final RtcEngine _engine;
   String channelId = config.channelId;
   bool isJoined = false, switchCamera = true, switchRender = true;
   List<int> remoteUid = [];
-  TextEditingController _controller;
+  TextEditingController? _controller;
 
   @override
   void initState() {
@@ -33,22 +32,21 @@ class _State extends State<JoinChannelVideo> {
   @override
   void dispose() {
     super.dispose();
-    widget._engine?.destroy();
+    _engine.destroy();
   }
 
   _initEngine() async {
-    widget._engine =
-        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
 
-    await widget._engine.enableVideo();
-    await widget._engine.startPreview();
-    await widget._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await widget._engine.setClientRole(ClientRole.Broadcaster);
+    await _engine.enableVideo();
+    await _engine.startPreview();
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(ClientRole.Broadcaster);
   }
 
   _addListeners() {
-    widget._engine?.setEventHandler(RtcEngineEventHandler(
+    _engine.setEventHandler(RtcEngineEventHandler(
       joinChannelSuccess: (channel, uid, elapsed) {
         log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
@@ -81,20 +79,19 @@ class _State extends State<JoinChannelVideo> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    await widget._engine
-        ?.joinChannel(config.token, channelId, null, config.uid);
+    await _engine.joinChannel(config.token, channelId, null, config.uid);
   }
 
   _leaveChannel() async {
-    await widget._engine?.leaveChannel();
+    await _engine.leaveChannel();
   }
 
   _switchCamera() {
-    widget._engine?.switchCamera()?.then((value) {
+    _engine.switchCamera().then((value) {
       setState(() {
         switchCamera = !switchCamera;
       });
-    })?.catchError((err) {
+    }).catchError((err) {
       log('switchCamera $err');
     });
   }
@@ -125,7 +122,7 @@ class _State extends State<JoinChannelVideo> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed:
                         isJoined ? this._leaveChannel : this._joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
@@ -141,7 +138,7 @@ class _State extends State<JoinChannelVideo> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._switchCamera,
                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
               ),
@@ -157,27 +154,26 @@ class _State extends State<JoinChannelVideo> {
       child: Stack(
         children: [
           RtcLocalView.SurfaceView(),
-          if (remoteUid != null)
-            Align(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.of(remoteUid.map(
-                    (e) => GestureDetector(
-                      onTap: this._switchRender,
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        child: RtcRemoteView.SurfaceView(
-                          uid: e,
-                        ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.of(remoteUid.map(
+                  (e) => GestureDetector(
+                    onTap: this._switchRender,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      child: RtcRemoteView.SurfaceView(
+                        uid: e,
                       ),
                     ),
-                  )),
-                ),
+                  ),
+                )),
               ),
-            )
+            ),
+          )
         ],
       ),
     );
