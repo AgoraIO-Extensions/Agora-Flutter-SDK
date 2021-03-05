@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
@@ -9,19 +10,18 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// MultiChannel Example
 class JoinChannelAudio extends StatefulWidget {
-  RtcEngine _engine = null;
-
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<JoinChannelAudio> {
+  late final RtcEngine _engine;
   String channelId = config.channelId;
   bool isJoined = false,
       openMicrophone = true,
       enableSpeakerphone = true,
       playEffect = false;
-  TextEditingController _controller;
+  TextEditingController? _controller;
 
   @override
   void initState() {
@@ -33,21 +33,20 @@ class _State extends State<JoinChannelAudio> {
   @override
   void dispose() {
     super.dispose();
-    widget._engine?.destroy();
+    _engine.destroy();
   }
 
   _initEngine() async {
-    widget._engine =
-        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
 
-    await widget._engine.enableAudio();
-    await widget._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await widget._engine.setClientRole(ClientRole.Broadcaster);
+    await _engine.enableAudio();
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(ClientRole.Broadcaster);
   }
 
   _addListeners() {
-    widget._engine?.setEventHandler(RtcEngineEventHandler(
+    _engine.setEventHandler(RtcEngineEventHandler(
       joinChannelSuccess: (channel, uid, elapsed) {
         log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
@@ -67,59 +66,58 @@ class _State extends State<JoinChannelAudio> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    await widget._engine
-        ?.joinChannel(config.token, channelId, null, config.uid);
+    await _engine.joinChannel(config.token, channelId, null, config.uid);
   }
 
   _leaveChannel() async {
-    await widget._engine?.leaveChannel();
+    await _engine.leaveChannel();
   }
 
   _switchMicrophone() {
-    widget._engine?.enableLocalAudio(!openMicrophone)?.then((value) {
+    _engine.enableLocalAudio(!openMicrophone).then((value) {
       setState(() {
         openMicrophone = !openMicrophone;
       });
-    })?.catchError((err) {
+    }).catchError((err) {
       log('enableLocalAudio $err');
     });
   }
 
   _switchSpeakerphone() {
-    widget._engine?.setEnableSpeakerphone(!enableSpeakerphone)?.then((value) {
+    _engine.setEnableSpeakerphone(!enableSpeakerphone).then((value) {
       setState(() {
         enableSpeakerphone = !enableSpeakerphone;
       });
-    })?.catchError((err) {
+    }).catchError((err) {
       log('setEnableSpeakerphone $err');
     });
   }
 
   _switchEffect() async {
     if (playEffect) {
-      widget._engine?.stopEffect(1)?.then((value) {
+      _engine.stopEffect(1).then((value) {
         setState(() {
           playEffect = false;
         });
-      })?.catchError((err) {
+      }).catchError((err) {
         log('stopEffect $err');
       });
     } else {
-      widget._engine
-          ?.playEffect(
+      _engine
+          .playEffect(
               1,
-              await RtcEngineExtension.getAssetAbsolutePath(
-                  "assets/Sound_Horizon.mp3"),
+              await (RtcEngineExtension.getAssetAbsolutePath(
+                  "assets/Sound_Horizon.mp3") as FutureOr<String>),
               -1,
               1,
               1,
               100,
               true)
-          ?.then((value) {
+          .then((value) {
         setState(() {
           playEffect = true;
         });
-      })?.catchError((err) {
+      }).catchError((err) {
         log('playEffect $err');
       });
     }
@@ -144,7 +142,7 @@ class _State extends State<JoinChannelAudio> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed:
                         isJoined ? this._leaveChannel : this._joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
@@ -159,15 +157,15 @@ class _State extends State<JoinChannelAudio> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._switchMicrophone,
                 child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._switchSpeakerphone,
                 child: Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._switchEffect,
                 child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
               ),

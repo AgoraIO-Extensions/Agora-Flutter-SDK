@@ -9,17 +9,16 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// MultiChannel Example
 class StringUid extends StatefulWidget {
-  RtcEngine _engine = null;
-
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<StringUid> {
+  late final RtcEngine _engine;
   String channelId = config.channelId;
   String stringUid = config.stringUid;
   bool isJoined = false;
-  TextEditingController _controller0, _controller1;
+  TextEditingController? _controller0, _controller1;
 
   @override
   void initState() {
@@ -32,20 +31,19 @@ class _State extends State<StringUid> {
   @override
   void dispose() {
     super.dispose();
-    widget._engine?.destroy();
+    _engine.destroy();
   }
 
   _initEngine() async {
-    widget._engine =
-        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
 
-    await widget._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await widget._engine.setClientRole(ClientRole.Broadcaster);
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(ClientRole.Broadcaster);
   }
 
   _addListeners() {
-    widget._engine?.setEventHandler(RtcEngineEventHandler(
+    _engine.setEventHandler(RtcEngineEventHandler(
       joinChannelSuccess: (channel, uid, elapsed) {
         log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
@@ -65,21 +63,21 @@ class _State extends State<StringUid> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    await widget._engine
-        ?.joinChannelWithUserAccount(config.token, channelId, stringUid);
+    await _engine.joinChannelWithUserAccount(
+        config.token, channelId, stringUid);
   }
 
   _leaveChannel() async {
-    await widget._engine?.leaveChannel();
+    await _engine.leaveChannel();
   }
 
   _getUserInfo() {
-    widget._engine?.getUserInfoByUserAccount(stringUid)?.then((userInfo) {
+    _engine.getUserInfoByUserAccount(stringUid).then((userInfo) {
       log('getUserInfoByUserAccount ${userInfo.toJson()}');
-      Scaffold.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${userInfo.toJson()}'),
       ));
-    })?.catchError((err) {
+    }).catchError((err) {
       log('getUserInfoByUserAccount ${err}');
     });
   }
@@ -112,7 +110,7 @@ class _State extends State<StringUid> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed:
                         isJoined ? this._leaveChannel : this._joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
@@ -127,7 +125,7 @@ class _State extends State<StringUid> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._getUserInfo,
                 child: Text('Get userInfo'),
               ),
