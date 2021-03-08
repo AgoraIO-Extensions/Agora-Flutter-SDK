@@ -1,3 +1,11 @@
+# [4.0.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.0...v4.0.0-rc.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* iOS `pod install` error ([fea1984](https://github.com/AgoraIO/Flutter-SDK/commit/fea1984f1eb8fd98dcba781463411a6675d176f0))
+* support null safety ([3d17230](https://github.com/AgoraIO/Flutter-SDK/commit/3d172304fcd454403d6a8d72c73070362514ea00))
+
 ## [3.3.1-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.0-rc.0...v3.3.1-rc.0) (2021-03-08)
 
 
