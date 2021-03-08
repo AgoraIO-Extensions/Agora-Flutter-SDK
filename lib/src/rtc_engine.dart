@@ -959,6 +959,12 @@ class RtcEngine with RtcEngineInterface {
       'param2': param2
     });
   }
+
+  @override
+  Future<void> setVoiceConversionPreset(VoiceConversionPreset preset) {
+    return _invokeMethod('setVoiceConversionPreset',
+        {'preset': VoiceConversionPresetConverter(preset).e});
+  }
 }
 
 /// @nodoc
@@ -1920,6 +1926,9 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Parameter** [preset] The options for SDK preset voice beautifier effects. See [VoiceBeautifierPreset].
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
+
+  /// TODO(DOC)
+  Future<void> setVoiceConversionPreset(VoiceConversionPreset preset);
 
   /// Sets parameters for SDK preset audio effects.
   ///

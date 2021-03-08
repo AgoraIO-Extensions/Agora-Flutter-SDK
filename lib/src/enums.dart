@@ -863,6 +863,14 @@ enum EncryptionMode {
   /// 128-bit SM4 encryption, ECB mode.
   @JsonValue(4)
   SM4128ECB,
+
+  /// 128-bit AES encryption, GCM mode.
+  @JsonValue(5)
+  AES128GCM,
+
+  /// 256-bit AES encryption, GCM mode.
+  @JsonValue(6)
+  AES256GCM,
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
@@ -2409,4 +2417,22 @@ enum ExperiencePoorReason {
 
   @JsonValue(8)
   WifiBluetoothCoexist,
+}
+
+/// TODO(DOC)
+enum VoiceConversionPreset {
+  @JsonValue(0)
+  conversionOff,
+
+  @JsonValue(50397440)
+  changerNeutral,
+
+  @JsonValue(50397696)
+  changerSweet,
+
+  @JsonValue(50397952)
+  changerSolid,
+
+  @JsonValue(50398208)
+  changerBass,
 }
