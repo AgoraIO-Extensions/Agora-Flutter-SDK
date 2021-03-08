@@ -886,3 +886,16 @@ class ExperiencePoorReasonConverter
     return super.toValue(_$ExperiencePoorReasonEnumMap);
   }
 }
+
+@JsonSerializable()
+class VoiceConversionPresetConverter
+    extends EnumConverter<VoiceConversionPreset, int> {
+  VoiceConversionPresetConverter(VoiceConversionPreset e) : super(e);
+
+  VoiceConversionPresetConverter.fromValue(int value)
+      : super.fromValue(_$VoiceConversionPresetEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VoiceConversionPresetEnumMap);
+  }
+}

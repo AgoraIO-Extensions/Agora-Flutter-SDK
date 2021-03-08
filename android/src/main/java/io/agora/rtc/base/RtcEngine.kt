@@ -203,6 +203,8 @@ class IRtcEngine {
 
     fun setVoiceBeautifierPreset(params: Map<String, *>, callback: Callback)
 
+    fun setVoiceConversionPreset(params: Map<String, *>, callback: Callback)
+
     fun setAudioEffectParameters(params: Map<String, *>, callback: Callback)
 
     fun setVoiceBeautifierParameters(params: Map<String, *>, callback: Callback)
@@ -740,6 +742,10 @@ class RtcEngineManager(
 
   override fun setVoiceBeautifierPreset(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setVoiceBeautifierPreset((params["preset"] as Number).toInt()))
+  }
+
+  override fun setVoiceConversionPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVoiceConversionPreset((params["preset"] as Number).toInt()))
   }
 
   override fun setAudioEffectParameters(params: Map<String, *>, callback: Callback) {

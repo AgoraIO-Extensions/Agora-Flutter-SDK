@@ -538,6 +538,8 @@ const _$EncryptionModeEnumMap = {
   EncryptionMode.AES128ECB: 2,
   EncryptionMode.AES256XTS: 3,
   EncryptionMode.SM4128ECB: 4,
+  EncryptionMode.AES128GCM: 5,
+  EncryptionMode.AES256GCM: 6,
 };
 
 RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) {
@@ -767,7 +769,8 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) {
     ..qoeQuality =
         _$enumDecodeNullable(_$ExperienceQualityTypeEnumMap, json['qoeQuality'])
     ..qualityChangedReason = _$enumDecodeNullable(
-        _$ExperiencePoorReasonEnumMap, json['qualityChangedReason']);
+        _$ExperiencePoorReasonEnumMap, json['qualityChangedReason'])
+    ..mosValue = json['mosValue'] as int;
 }
 
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) =>
@@ -787,6 +790,7 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) =>
       'qoeQuality': _$ExperienceQualityTypeEnumMap[instance.qoeQuality],
       'qualityChangedReason':
           _$ExperiencePoorReasonEnumMap[instance.qualityChangedReason],
+      'mosValue': instance.mosValue,
     };
 
 const _$NetworkQualityEnumMap = {

@@ -400,6 +400,8 @@ public class Annotations {
     AgoraEncryptionMode.AES128ECB,
     AgoraEncryptionMode.AES256XTS,
     AgoraEncryptionMode.SM4128ECB,
+    AgoraEncryptionMode.AES128GCM,
+    AgoraEncryptionMode.AES256GCM,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraEncryptionMode {
@@ -408,6 +410,8 @@ public class Annotations {
     int AES128ECB = 2;
     int AES256XTS = 3;
     int SM4128ECB = 4;
+    int AES128GCM = 5;
+    int AES256GCM = 6;
   }
 
   @IntDef({

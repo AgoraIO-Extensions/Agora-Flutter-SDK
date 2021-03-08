@@ -663,6 +663,8 @@ const _$EncryptionModeEnumMap = {
   EncryptionMode.AES128ECB: 2,
   EncryptionMode.AES256XTS: 3,
   EncryptionMode.SM4128ECB: 4,
+  EncryptionMode.AES128GCM: 5,
+  EncryptionMode.AES256GCM: 6,
 };
 
 ErrorCodeConverter _$ErrorCodeConverterFromJson(Map<String, dynamic> json) {
@@ -1622,4 +1624,25 @@ const _$ExperiencePoorReasonEnumMap = {
   ExperiencePoorReason.LocalNetworkQualityPoor: 2,
   ExperiencePoorReason.WirelessSignalPoor: 4,
   ExperiencePoorReason.WifiBluetoothCoexist: 8,
+};
+
+VoiceConversionPresetConverter _$VoiceConversionPresetConverterFromJson(
+    Map<String, dynamic> json) {
+  return VoiceConversionPresetConverter(
+    _$enumDecodeNullable(_$VoiceConversionPresetEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$VoiceConversionPresetConverterToJson(
+        VoiceConversionPresetConverter instance) =>
+    <String, dynamic>{
+      'e': _$VoiceConversionPresetEnumMap[instance.e],
+    };
+
+const _$VoiceConversionPresetEnumMap = {
+  VoiceConversionPreset.Off: 0,
+  VoiceConversionPreset.Neutral: 50397440,
+  VoiceConversionPreset.Sweet: 50397696,
+  VoiceConversionPreset.Solid: 50397952,
+  VoiceConversionPreset.Bass: 50398208,
 };

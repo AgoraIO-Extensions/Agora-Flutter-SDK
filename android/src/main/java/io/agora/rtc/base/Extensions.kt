@@ -72,7 +72,8 @@ fun RemoteAudioStats.toMap(): Map<String, Any?> {
     "totalActiveTime" to totalActiveTime,
     "publishDuration" to publishDuration,
     "qoeQuality" to qoeQuality,
-    "qualityChangedReason" to qualityChangedReason
+    "qualityChangedReason" to qualityChangedReason,
+    "mosValue" to mosValue
   )
 }
 
