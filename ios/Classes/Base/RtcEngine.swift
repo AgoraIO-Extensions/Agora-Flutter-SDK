@@ -220,6 +220,8 @@ protocol RtcEngineVoiceChangerInterface {
     func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback)
+    
+    func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
     
@@ -752,6 +754,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     
     @objc func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setVoiceBeautifierPreset(AgoraVoiceBeautifierPreset(rawValue: params["preset"] as! Int)!))
+    }
+    
+    @objc func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceConversionPreset(AgoraVoiceConversionPreset(rawValue: params["preset"] as! Int)!))
     }
     
     @objc func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback) {
