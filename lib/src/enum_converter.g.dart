@@ -1629,7 +1629,7 @@ const _$ExperiencePoorReasonEnumMap = {
 VoiceConversionPresetConverter _$VoiceConversionPresetConverterFromJson(
     Map<String, dynamic> json) {
   return VoiceConversionPresetConverter(
-    _$enumDecodeNullable(_$VoiceConversionPresetEnumMap, json['e']),
+    _$enumDecode(_$VoiceConversionPresetEnumMap, json['e']),
   );
 }
 

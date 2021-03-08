@@ -1031,7 +1031,7 @@ class RemoteAudioStats {
   ExperiencePoorReason? qualityChangedReason;
 
   /// The quality of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval. The return value ranges from 0 to 500. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.
-  int mosValue;
+  int? mosValue;
 
   /// Constructs a [RemoteAudioStats]
   RemoteAudioStats();
