@@ -86,7 +86,8 @@ extension AgoraRtcRemoteAudioStats {
             "totalActiveTime": totalActiveTime,
             "publishDuration": publishDuration,
             "qoeQuality": qoeQuality,
-            "qualityChangedReason": qualityChangedReason
+            "qualityChangedReason": qualityChangedReason,
+            "mosValue": mosValue
         ]
     }
 }
