@@ -2422,17 +2422,17 @@ enum ExperiencePoorReason {
 /// TODO(DOC)
 enum VoiceConversionPreset {
   @JsonValue(0)
-  conversionOff,
+  Off,
 
   @JsonValue(50397440)
-  changerNeutral,
+  Neutral,
 
   @JsonValue(50397696)
-  changerSweet,
+  Sweet,
 
   @JsonValue(50397952)
-  changerSolid,
+  Solid,
 
   @JsonValue(50398208)
-  changerBass,
+  Bass,
 }
