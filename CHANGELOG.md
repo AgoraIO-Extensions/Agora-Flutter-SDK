@@ -1,3 +1,17 @@
+## [3.3.1-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.0-rc.0...v3.3.1-rc.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* rename values of enum VoiceConversionPreset ([1d9e9ef](https://github.com/AgoraIO/Flutter-SDK/commit/1d9e9efdbc908e615731fc07ca74bf4ce11f98ef))
+
+
+### Features
+
+* support 3.3.1 for Android ([cd7a2cd](https://github.com/AgoraIO/Flutter-SDK/commit/cd7a2cdaff747cad9d2e386d79589c7299036ff6))
+* support 3.3.1 for Dart ([35715e0](https://github.com/AgoraIO/Flutter-SDK/commit/35715e042209814ab503e102b110b015cbae4484))
+* support 3.3.1 for iOS ([836f3b4](https://github.com/AgoraIO/Flutter-SDK/commit/836f3b4c87f0c0a478c135a4a6ed0ed4279a446e))
+
 # [3.3.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.1...v3.3.0-rc.0) (2021-01-28)
 
 
