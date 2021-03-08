@@ -1646,9 +1646,9 @@ Map<String, dynamic> _$VoiceConversionPresetConverterToJson(
     };
 
 const _$VoiceConversionPresetEnumMap = {
-  VoiceConversionPreset.conversionOff: 0,
-  VoiceConversionPreset.changerNeutral: 50397440,
-  VoiceConversionPreset.changerSweet: 50397696,
-  VoiceConversionPreset.changerSolid: 50397952,
-  VoiceConversionPreset.changerBass: 50398208,
+  VoiceConversionPreset.Off: 0,
+  VoiceConversionPreset.Neutral: 50397440,
+  VoiceConversionPreset.Sweet: 50397696,
+  VoiceConversionPreset.Solid: 50397952,
+  VoiceConversionPreset.Bass: 50398208,
 };
