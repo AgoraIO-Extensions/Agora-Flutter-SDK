@@ -6,6 +6,10 @@
 * iOS `pod install` error ([fea1984](https://github.com/AgoraIO/Flutter-SDK/commit/fea1984f1eb8fd98dcba781463411a6675d176f0))
 * support null safety ([3d17230](https://github.com/AgoraIO/Flutter-SDK/commit/3d172304fcd454403d6a8d72c73070362514ea00))
 
+
+### Features
+* upgrade to dart 2.12.0 and migrating to null safety [#264](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/264) [#265](https://github.com/AgoraIO/Agora-Flutter-SDK/pull/265) ([b555e37b](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/b555e37b1d3ee7045d02341e2172cdefe2359b7b))
+
 ## [3.3.1-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.0-rc.0...v3.3.1-rc.0) (2021-03-08)
 
 
