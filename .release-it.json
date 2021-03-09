@@ -10,6 +10,10 @@
     "@release-it/conventional-changelog": {
       "preset": "angular",
       "infile": "CHANGELOG.md"
+    },
+    "@release-it/bumper": {
+      "in": "pubspec.yaml",
+      "out": "pubspec.yaml"
     }
   }
 }
