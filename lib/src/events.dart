@@ -401,7 +401,7 @@ class RtcEngineEventHandler {
   /// If you call [RtcEngine.setRemoteSubscribeFallbackOption] and set option as [StreamFallbackOptions.AudioOnly], this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.
   ///
   /// The `FallbackWithUidCallback` typedef includes the following parameters:
-  /// - [int]: `uid`: ID of the remote user sending the stream.
+  /// - [int] `uid`: ID of the remote user sending the stream.
   /// - [bool] `isFallbackOrRecover`: Whether the published stream fell back to audio-only or switched back to the video:
   /// -- `true`: The published stream fell back to audio-only due to poor network conditions.
   /// -- `false`: The published stream switched back to the video after the network conditions improved.
@@ -410,6 +410,7 @@ class RtcEngineEventHandler {
   /// Occurs when the local audio playback route changes.
   ///
   /// This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.
+  ///
   /// See [AudioOutputRouting] for the definition of the routing.
   ///
   /// The `AudioRouteCallback` typedef includes the following parameter:
@@ -963,10 +964,10 @@ class RtcEngineEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
-  /// TODO(DOC)
+  ///  @nodoc
   UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
 
-  /// TODO(DOC)
+  ///  @nodoc
   UploadLogResultCallback uploadLogResult;
 
   /// Constructs a [RtcEngineEventHandler]
@@ -1744,7 +1745,7 @@ class RtcChannelEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
-  /// TODO(DOC)
+  ///  @nodoc
   UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]
