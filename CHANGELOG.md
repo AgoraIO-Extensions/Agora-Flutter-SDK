@@ -10,6 +10,14 @@
 ### Features
 * upgrade to dart 2.12.0 and migrating to null safety [#264](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/264) [#265](https://github.com/AgoraIO/Agora-Flutter-SDK/pull/265) ([b555e37b](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/b555e37b1d3ee7045d02341e2172cdefe2359b7b))
 
+## [3.3.1-rc.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.0...v3.3.1-rc.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* type cast error ([e12781e](https://github.com/AgoraIO/Flutter-SDK/commit/e12781e5d337fc1f85bba5f00d0301696fc9a3e5))
+* type cast error ([98c4331](https://github.com/AgoraIO/Flutter-SDK/commit/98c4331bd97ab1e2dc7216470fc2978c5d4dcd74))
+
 ## [3.3.1-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.0-rc.0...v3.3.1-rc.0) (2021-03-08)
 
 
