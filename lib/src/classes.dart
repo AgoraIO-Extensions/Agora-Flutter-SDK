@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'enums.dart';
@@ -283,28 +285,6 @@ class TranscodingUser {
   Map<String, dynamic> toJson() => _$TranscodingUserToJson(this);
 }
 
-/// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
-@JsonSerializable(explicitToJson: true)
-class Color {
-  /// Red.
-  final int red;
-
-  /// Green.
-  final int green;
-
-  /// Blue.
-  final int blue;
-
-  /// Constructs a [Color]
-  Color(this.red, this.green, this.blue);
-
-  /// @nodoc
-  factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$ColorToJson(this);
-}
-
 /// A class for managing user-specific CDN live audio/video transcoding settings.
 @JsonSerializable(explicitToJson: true)
 class LiveTranscoding {
@@ -371,8 +351,8 @@ class LiveTranscoding {
   VideoCodecProfileType videoCodecProfile;
 
   /// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
-  /// See [Color].
-  @JsonKey(includeIfNull: false)
+  @JsonKey(
+      includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
   Color backgroundColor;
 
   /// Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
@@ -408,6 +388,18 @@ class LiveTranscoding {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
+
+  static Color _$ColorFromJson(Map<String, dynamic> json) {
+    return Color.fromRGBO(
+        json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
+  }
+
+  static Map<String, dynamic> _$ColorToJson(Color instance) =>
+      <String, dynamic>{
+        'red': instance.red,
+        'green': instance.green,
+        'blue': instance.blue,
+      };
 }
 
 /// The ChannelMediaInfo class.
