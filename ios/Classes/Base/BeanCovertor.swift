@@ -277,8 +277,22 @@ func mapToLiveInjectStreamConfig(_ map: Dictionary<String, Any>) -> AgoraLiveInj
 
 func mapToCameraCapturerConfiguration(_ map: Dictionary<String, Any>) -> AgoraCameraCapturerConfiguration {
     let config = AgoraCameraCapturerConfiguration()
-    config.preference = AgoraCameraCaptureOutputPreference(rawValue: map["preference"] as! Int)!
-    config.cameraDirection = AgoraCameraDirection(rawValue: map["cameraDirection"] as! Int)!
+    if let preference = map["preference"] as? Int {
+        if let preference = AgoraCameraCaptureOutputPreference(rawValue: preference) {
+            config.preference = preference
+        }
+    }
+    if let captureWidth = map["captureWidth"] as? Int32 {
+        config.captureWidth = captureWidth
+    }
+    if let captureHeight = map["captureHeight"] as? Int32 {
+        config.captureHeight = captureHeight
+    }
+    if let cameraDirection = map["cameraDirection"] as? Int {
+        if let cameraDirection = AgoraCameraDirection(rawValue: cameraDirection) {
+            config.cameraDirection = cameraDirection
+        }
+    }
     return config
 }
 
@@ -293,25 +307,62 @@ func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannel
     return options
 }
 
+func mapToRtcEngineConfig(_ map: Dictionary<String, Any>) -> AgoraRtcEngineConfig {
+    let config = AgoraRtcEngineConfig()
+    config.appId = map["appId"] as? String
+    if let areaCode = map["areaCode"] as? UInt {
+        config.areaCode = areaCode
+    }
+    if let logConfig = map["logConfig"] as? Dictionary<String, Any> {
+        config.logConfig = mapToLogConfig(logConfig)
+    }
+    return config
+}
+
 func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
-    let encryptionConfig = AgoraEncryptionConfig()
+    let config = AgoraEncryptionConfig()
     if let encryptionMode = map["encryptionMode"] as? Int {
         if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode) {
-            encryptionConfig.encryptionMode = encryptionMode
+            config.encryptionMode = encryptionMode
         }
     }
     if let encryptionKey = map["encryptionKey"] as? String {
-        encryptionConfig.encryptionKey = encryptionKey
+        config.encryptionKey = encryptionKey
     }
-    return encryptionConfig
+    return config
 }
 
 func mapToClientRoleOptions(_ map: Dictionary<String, Any>) -> AgoraClientRoleOptions {
-    let clientRoleOptions = AgoraClientRoleOptions()
+    let options = AgoraClientRoleOptions()
     if let audienceLatencyLevel = map["audienceLatencyLevel"] as? Int {
         if let audienceLatencyLevel = AgoraAudienceLatencyLevelType(rawValue: audienceLatencyLevel) {
-            clientRoleOptions.audienceLatencyLevel = audienceLatencyLevel
+            options.audienceLatencyLevel = audienceLatencyLevel
         }
     }
-    return clientRoleOptions
+    return options
+}
+
+func mapToLogConfig(_ map: Dictionary<String, Any>) -> AgoraLogConfig {
+    let config = AgoraLogConfig()
+    config.filePath = map["filePath"] as? String
+    if let fileSize = map["fileSize"] as? Int {
+        config.fileSize = fileSize
+    }
+    if let level = map["level"] as? Int {
+        if let level = AgoraLogLevel.init(rawValue: level) {
+            config.level = level;
+        }
+    }
+    return config
+}
+
+func mapToDataStreamConfig(_ map: Dictionary<String, Any>) -> AgoraDataStreamConfig {
+    let config = AgoraDataStreamConfig()
+    if let syncWithAudio = map["syncWithAudio"] as? Bool {
+        config.syncWithAudio = syncWithAudio
+    }
+    if let ordered = map["ordered"] as? Bool {
+        config.ordered = ordered
+    }
+    return config
 }

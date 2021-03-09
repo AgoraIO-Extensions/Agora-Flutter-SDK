@@ -42,15 +42,28 @@ class IRtcEngine {
 
     fun complain(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setLogFile(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setLogFilter(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setLogFileSize(params: Map<String, *>, callback: Callback)
 
     fun setParameters(params: Map<String, *>, callback: Callback)
 
+    fun getSdkVersion(callback: Callback)
+
+    fun getErrorDescription(params: Map<String, *>, callback: Callback)
+
     fun getNativeHandle(callback: Callback)
+
+    fun enableDeepLearningDenoise(params: Map<String, *>, callback: Callback)
+
+    fun setCloudProxy(params: Map<String, *>, callback: Callback)
+
+    fun uploadLogFile(callback: Callback)
   }
 
   interface RtcUserInfoInterface {
@@ -84,6 +97,7 @@ class IRtcEngine {
 
     fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
 
     fun enableAudioVolumeIndication(params: Map<String, *>, callback: Callback)
@@ -108,9 +122,12 @@ class IRtcEngine {
 
     fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
 
     fun setBeautyEffectOptions(params: Map<String, *>, callback: Callback)
+
+    fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcAudioMixingInterface {
@@ -186,7 +203,11 @@ class IRtcEngine {
 
     fun setVoiceBeautifierPreset(params: Map<String, *>, callback: Callback)
 
+    fun setVoiceConversionPreset(params: Map<String, *>, callback: Callback)
+
     fun setAudioEffectParameters(params: Map<String, *>, callback: Callback)
+
+    fun setVoiceBeautifierParameters(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcVoicePositionInterface {
@@ -344,10 +365,8 @@ class RtcEngineManager(
   }
 
   override fun create(params: Map<String, *>, callback: Callback) {
-    engine = RtcEngineEx.create(RtcEngineConfig().apply {
+    engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
       mContext = params["context"] as Context
-      mAppId = params["appId"] as String
-      mAreaCode = (params["areaCode"] as Number).toInt()
       mEventHandler = RtcEngineEventHandler { methodName, data ->
         emit(methodName, data)
       }
@@ -373,11 +392,25 @@ class RtcEngineManager(
   }
 
   override fun joinChannel(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.joinChannel(params["token"] as? String, params["channelName"] as String, params["optionalInfo"] as? String, (params["optionalUid"] as Number).toInt()))
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    val optionalInfo = params["optionalInfo"] as? String
+    val optionalUid = (params["optionalUid"] as Number).toInt()
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.joinChannel(token, channelName, optionalInfo, optionalUid, mapToChannelMediaOptions(it)))
+      return@joinChannel
+    }
+    callback.code(engine?.joinChannel(token, channelName, optionalInfo, optionalUid))
   }
 
   override fun switchChannel(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.switchChannel(params["token"] as? String, params["channelName"] as String))
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.switchChannel(token, channelName, mapToChannelMediaOptions(it)))
+      return@switchChannel
+    }
+    callback.code(engine?.switchChannel(token, channelName))
   }
 
   override fun leaveChannel(callback: Callback) {
@@ -428,8 +461,28 @@ class RtcEngineManager(
     callback.code(engine?.setParameters(params["parameters"] as String))
   }
 
+  override fun getSdkVersion(callback: Callback) {
+    callback.success(RtcEngine.getSdkVersion())
+  }
+
+  override fun getErrorDescription(params: Map<String, *>, callback: Callback) {
+    callback.success(RtcEngine.getErrorDescription((params["error"] as Number).toInt()))
+  }
+
   override fun getNativeHandle(callback: Callback) {
     callback.resolve(engine) { it.nativeHandle }
+  }
+
+  override fun enableDeepLearningDenoise(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableDeepLearningDenoise(params["enabled"] as Boolean))
+  }
+
+  override fun setCloudProxy(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCloudProxy((params["proxyType"] as Number).toInt()))
+  }
+
+  override fun uploadLogFile(callback: Callback) {
+    callback.resolve(engine) { it.uploadLogFile() }
   }
 
   override fun registerLocalUserAccount(params: Map<String, *>, callback: Callback) {
@@ -437,7 +490,14 @@ class RtcEngineManager(
   }
 
   override fun joinChannelWithUserAccount(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.joinChannelWithUserAccount(params["token"] as? String, params["channelName"] as String, params["userAccount"] as String))
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    val userAccount = params["userAccount"] as String
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.joinChannelWithUserAccount(token, channelName, userAccount, mapToChannelMediaOptions(it)))
+      return@joinChannelWithUserAccount
+    }
+    callback.code(engine?.joinChannelWithUserAccount(token, channelName, userAccount))
   }
 
   override fun getUserInfoByUserAccount(params: Map<String, *>, callback: Callback) {
@@ -546,6 +606,10 @@ class RtcEngineManager(
 
   override fun setBeautyEffectOptions(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setBeautyEffectOptions(params["enabled"] as Boolean, mapToBeautyOptions(params["options"] as Map<*, *>)))
+  }
+
+  override fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableRemoteSuperResolution((params["uid"] as Number).toInt(), params["enable"] as Boolean))
   }
 
   override fun startAudioMixing(params: Map<String, *>, callback: Callback) {
@@ -680,8 +744,16 @@ class RtcEngineManager(
     callback.code(engine?.setVoiceBeautifierPreset((params["preset"] as Number).toInt()))
   }
 
+  override fun setVoiceConversionPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVoiceConversionPreset((params["preset"] as Number).toInt()))
+  }
+
   override fun setAudioEffectParameters(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setAudioEffectParameters((params["preset"] as Number).toInt(), (params["param1"] as Number).toInt(), (params["param2"] as Number).toInt()))
+  }
+
+  override fun setVoiceBeautifierParameters(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVoiceBeautifierParameters((params["preset"] as Number).toInt(), (params["param1"] as Number).toInt(), (params["param2"] as Number).toInt()))
   }
 
   override fun enableSoundPositionIndication(params: Map<String, *>, callback: Callback) {
@@ -785,24 +857,20 @@ class RtcEngineManager(
   }
 
   override fun registerMediaMetadataObserver(callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      val mediaObserver = MediaObserver { data ->
-        emit(RtcEngineEvents.MetadataReceived, data)
-      }
-      code = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
-      if (code == 0) this.mediaObserver = mediaObserver
+    val mediaObserver = MediaObserver { data ->
+      emit(RtcEngineEvents.MetadataReceived, data)
     }
-    callback.code(code)
+    callback.code(engine?.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)) {
+      this.mediaObserver = mediaObserver
+      Unit
+    }
   }
 
   override fun unregisterMediaMetadataObserver(callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      code = it.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)
-      if (code == 0) mediaObserver = null
+    callback.code(engine?.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)) {
+      mediaObserver = null
+      Unit
     }
-    callback.code(code)
   }
 
   override fun setMaxMetadataSize(params: Map<String, *>, callback: Callback) {
@@ -916,18 +984,14 @@ class RtcEngineManager(
   }
 
   override fun createDataStream(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      code = it.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)
+    (params["config"] as? Map<*, *>)?.let { config ->
+      callback.code(engine?.createDataStream(mapToDataStreamConfig(config))) { it }
+      return@createDataStream
     }
-    callback.code(code) { it }
+    callback.code(engine?.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)) { it }
   }
 
   override fun sendStreamMessage(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      code = it.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray())
-    }
-    callback.code(code)
+    callback.code(engine?.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray()))
   }
 }

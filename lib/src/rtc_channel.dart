@@ -162,6 +162,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted) {
     return _invokeMethod(
         'setDefaultMuteAllRemoteAudioStreams', {'muted': muted});
@@ -178,6 +179,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) {
     return _invokeMethod(
         'setDefaultMuteAllRemoteVideoStreams', {'muted': muted});
@@ -196,6 +198,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<int> createDataStream(bool reliable, bool ordered) {
     return _invokeMethod(
         'createDataStream', {'reliable': reliable, 'ordered': ordered});
@@ -228,6 +231,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
     return _invokeMethod('setEncryptionMode',
         {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
@@ -240,7 +244,6 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  @deprecated
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
     return _invokeMethod(
         'setLiveTranscoding', {'transcoding': transcoding.toJson()});
@@ -310,6 +313,18 @@ class RtcChannel with RtcChannelInterface {
     return _invokeMethod(
         'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
   }
+
+  @override
+  Future<int> createDataStreamWithConfig(DataStreamConfig config) {
+    return _invokeMethod(
+        'createDataStreamWithConfig', {'config': config.toJson()});
+  }
+
+  @override
+  Future<void> enableRemoteSuperResolution(int uid, bool enable) {
+    return _invokeMethod(
+        'enableRemoteSuperResolution', {'uid': uid, 'enable': enable});
+  }
 }
 
 /// @nodoc
@@ -353,7 +368,6 @@ mixin RtcChannelInterface
   ///   - Contains the `options` parameter, which decides whether to subscribe to all streams before joining the channel.
   ///   - Users can join multiple channels simultaneously by creating multiple `RtcChannel` instances and calling the `joinChannel` method of each instance.
   ///   - By default, the SDK does not publish any stream after the user joins the channel. You need to call the publish method to do that.
-  ///
   ///
   /// - [RtcEngine.joinChannel]
   ///   - Contains the `channelName` parameter, which specifies the channel to join.
@@ -485,6 +499,7 @@ mixin RtcAudioInterface {
   /// **Parameter** [muted] Determines whether to receive/stop receiving all remote audio streams by default:
   /// - `true`: Stop receiving all remote audio streams by default.
   /// - `false`: (Default) Receive all remote audio streams by default.
+  @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 }
 
@@ -511,7 +526,11 @@ mixin RtcVideoInterface {
   /// **Parameter** [muted] Determines whether to receive/stop receiving all remote video streams by default:
   /// - `true`: Stop receiving all remote video streams by default.
   /// - `false`: (Default) Receive all remote video streams by default.
+  @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
+
+  /// TODO(DOC)
+  Future<void> enableRemoteSuperResolution(int uid, bool enable);
 }
 
 /// @nodoc
@@ -797,7 +816,11 @@ mixin RtcStreamMessageInterface {
   /// **Returns**
   /// - 0: Success.
   /// - < 0: Failure.
+  @deprecated
   Future<int> createDataStream(bool reliable, bool ordered);
+
+  /// TODO(DOC)
+  Future<int> createDataStreamWithConfig(DataStreamConfig config);
 
   /// Sends the data stream message.
   ///
