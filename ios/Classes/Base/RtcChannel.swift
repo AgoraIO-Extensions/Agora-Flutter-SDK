@@ -173,7 +173,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
-        let role = AgoraClientRole(rawValue: params["role"] as! Int)!
+        let role = AgoraClientRole(rawValue: (params["role"] as! NSNumber).intValue)!
         if let options = params["options"] as? Dictionary<String, Any> {
             callback.code(self[params["channelId"] as! String]?.setClientRole(role, options: mapToClientRoleOptions(options)))
             return
@@ -182,7 +182,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.join(byToken: params["token"] as? String, info: params["optionalInfo"] as? String, uid: params["optionalUid"] as! UInt, options: mapToChannelMediaOptions(params["options"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.join(byToken: params["token"] as? String, info: params["optionalInfo"] as? String, uid: (params["optionalUid"] as! NSNumber).uintValue, options: mapToChannelMediaOptions(params["options"] as! Dictionary)))
     }
 
     @objc func joinChannelWithUserAccount(_ params: NSDictionary, _ callback: Callback) {
@@ -218,11 +218,11 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func adjustUserPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.adjustUserPlaybackSignalVolume(params["uid"] as! UInt, volume: params["volume"] as! Int32))
+        callback.code(self[params["channelId"] as! String]?.adjustUserPlaybackSignalVolume((params["uid"] as! NSNumber).uintValue, volume: (params["volume"] as! NSNumber).int32Value))
     }
 
     @objc func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.muteRemoteAudioStream(params["uid"] as! UInt, mute: params["muted"] as! Bool))
+        callback.code(self[params["channelId"] as! String]?.muteRemoteAudioStream((params["uid"] as! NSNumber).uintValue, mute: params["muted"] as! Bool))
     }
 
     @objc func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback) {
@@ -234,7 +234,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func muteRemoteVideoStream(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.muteRemoteVideoStream(params["uid"] as! UInt, mute: params["muted"] as! Bool))
+        callback.code(self[params["channelId"] as! String]?.muteRemoteVideoStream((params["uid"] as! NSNumber).uintValue, mute: params["muted"] as! Bool))
     }
 
     @objc func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback) {
@@ -246,7 +246,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setRemoteVoicePosition(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.setRemoteVoicePosition(params["uid"] as! UInt, pan: params["pan"] as! Double, gain: params["gain"] as! Double))
+        callback.code(self[params["channelId"] as! String]?.setRemoteVoicePosition((params["uid"] as! NSNumber).uintValue, pan: (params["pan"] as! NSNumber).doubleValue, gain: (params["gain"] as! NSNumber).doubleValue))
     }
 
     @objc func setLiveTranscoding(_ params: NSDictionary, _ callback: Callback) {
@@ -274,15 +274,15 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setRemoteVideoStreamType(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.setRemoteVideoStream(params["uid"] as! UInt, type: AgoraVideoStreamType(rawValue: params["streamType"] as! Int)!))
+        callback.code(self[params["channelId"] as! String]?.setRemoteVideoStream((params["uid"] as! NSNumber).uintValue, type: AgoraVideoStreamType(rawValue: (params["streamType"] as! NSNumber).intValue)!))
     }
 
     @objc func setRemoteDefaultVideoStreamType(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.setRemoteDefaultVideoStreamType(AgoraVideoStreamType(rawValue: params["streamType"] as! Int)!))
+        callback.code(self[params["channelId"] as! String]?.setRemoteDefaultVideoStreamType(AgoraVideoStreamType(rawValue: (params["streamType"] as! NSNumber).intValue)!))
     }
 
     @objc func setRemoteUserPriority(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.setRemoteUserPriority(params["uid"] as! UInt, type: AgoraUserPriority(rawValue: params["userPriority"] as! Int)!))
+        callback.code(self[params["channelId"] as! String]?.setRemoteUserPriority((params["uid"] as! NSNumber).uintValue, type: AgoraUserPriority(rawValue: (params["userPriority"] as! NSNumber).intValue)!))
     }
 
     @objc func registerMediaMetadataObserver(_ params: NSDictionary, _ callback: Callback) {
@@ -313,7 +313,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
 
     @objc func setMaxMetadataSize(_ params: NSDictionary, _ callback: Callback) {
         callback.resolve(mediaObserverMap[params["channelId"] as! String]) {
-            $0.setMaxMetadataSize(params["size"] as! Int)
+            $0.setMaxMetadataSize((params["size"] as! NSNumber).intValue)
         }
     }
 
@@ -329,7 +329,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
 
     @objc func setEncryptionMode(_ params: NSDictionary, _ callback: Callback) {
         var encryptionMode = ""
-        switch params["encryptionMode"] as! Int {
+        switch (params["encryptionMode"] as! NSNumber).intValue {
         case AgoraEncryptionMode.AES128XTS.rawValue:
             encryptionMode = "aes-128-xts"
         case AgoraEncryptionMode.AES128ECB.rawValue:
@@ -364,10 +364,10 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.sendStreamMessage(params["streamId"] as! Int, data: (params["message"] as! String).data(using: .utf8)!))
+        callback.code(self[params["channelId"] as! String]?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
     }
     
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution(params["uid"] as! UInt, enabled: params["enable"] as! Bool))
+        callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enable"] as! Bool))
     }
 }
