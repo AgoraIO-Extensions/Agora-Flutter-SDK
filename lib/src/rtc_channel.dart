@@ -496,6 +496,10 @@ mixin RtcAudioInterface {
 
   /// Sets whether to receive all remote audio streams by default.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated from v3.3.1.
+  ///
   /// **Parameter** [muted] Determines whether to receive/stop receiving all remote audio streams by default:
   /// - `true`: Stop receiving all remote audio streams by default.
   /// - `false`: (Default) Receive all remote audio streams by default.
@@ -523,13 +527,17 @@ mixin RtcVideoInterface {
 
   /// Sets whether to receive all remote video streams by default.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated from v3.3.1.
+  ///
   /// **Parameter** [muted] Determines whether to receive/stop receiving all remote video streams by default:
   /// - `true`: Stop receiving all remote video streams by default.
   /// - `false`: (Default) Receive all remote video streams by default.
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
-  /// TODO(DOC)
+  ///  @nodoc
   Future<void> enableRemoteSuperResolution(int uid, bool enable);
 }
 
@@ -541,7 +549,7 @@ mixin RtcVoicePositionInterface {
   ///
   /// **Note**
   /// - For this method to work, enable stereo panning for remote users by calling the [RtcEngine.enableSoundPositionIndication] method before joining a channel.
-  /// - This method requires hardware support. For the best sound positioning, we recommend using a stereo headset.
+  /// - This method requires hardware support. For the best sound positioning, we recommend using a wired headset.
   ///
   /// **Parameter** [uid] The ID of the remote user.
   ///
@@ -659,6 +667,10 @@ mixin RtcDualStreamInterface {
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType);
 
   /// Sets the default video-stream type of the remote video stream when the remote user sends dual streams.
+  ///
+  /// You can call this method either before or after joining a channel.
+  /// If you call both [setRemoteVideoStreamType] and [setRemoteDefaultVideoStreamType], the SDK applies the settings in the [setRemoteVideoStreamType] method.
+  ///
   /// **Parameter** [streamType] Sets the default video-stream type. See [VideoStreamType].
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 }
@@ -802,6 +814,10 @@ mixin RtcStreamMessageInterface {
   ///
   /// Each user can create up to five data streams during the life cycle of the [RtcChannel] instance.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated from v3.3.1.
+  ///
   /// **Note**
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
   ///
@@ -819,7 +835,19 @@ mixin RtcStreamMessageInterface {
   @deprecated
   Future<int> createDataStream(bool reliable, bool ordered);
 
-  /// TODO(DOC)
+  ///  Creates a data stream.
+  ///
+  /// Since v3.3.1.
+  ///
+  /// Each user can create up to five data streams in a single channel.
+  ///
+  /// This method does not support data reliability. If the receiver receives a data packet five seconds or more after it was sent, the SDK directly discards the data.
+  ///
+  /// **Parameter** [config] The configurations for the data stream: [DataStreamConfig].
+  ///
+  /// **Returns**
+  /// - Returns the stream ID if you successfully create the data stream.
+  /// - < 0: Fails to create the data stream.
   Future<int> createDataStreamWithConfig(DataStreamConfig config);
 
   /// Sends the data stream message.
