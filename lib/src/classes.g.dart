@@ -230,20 +230,6 @@ const _$AudioChannelEnumMap = {
   AudioChannel.Channel5: 5,
 };
 
-Color _$ColorFromJson(Map<String, dynamic> json) {
-  return Color(
-    json['red'] as int,
-    json['green'] as int,
-    json['blue'] as int,
-  );
-}
-
-Map<String, dynamic> _$ColorToJson(Color instance) => <String, dynamic>{
-      'red': instance.red,
-      'green': instance.green,
-      'blue': instance.blue,
-    };
-
 LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) {
   return LiveTranscoding(
     (json['transcodingUsers'] as List)
@@ -273,9 +259,8 @@ LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) {
         _$AudioCodecProfileTypeEnumMap, json['audioCodecProfile']),
     videoCodecProfile: _$enumDecodeNullable(
         _$VideoCodecProfileTypeEnumMap, json['videoCodecProfile']),
-    backgroundColor: json['backgroundColor'] == null
-        ? null
-        : Color.fromJson(json['backgroundColor'] as Map<String, dynamic>),
+    backgroundColor: LiveTranscoding._$ColorFromJson(
+        json['backgroundColor'] as Map<String, dynamic>),
     userConfigExtraInfo: json['userConfigExtraInfo'] as String,
   );
 }
@@ -306,7 +291,8 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
       _$AudioCodecProfileTypeEnumMap[instance.audioCodecProfile]);
   writeNotNull('videoCodecProfile',
       _$VideoCodecProfileTypeEnumMap[instance.videoCodecProfile]);
-  writeNotNull('backgroundColor', instance.backgroundColor?.toJson());
+  writeNotNull('backgroundColor',
+      LiveTranscoding._$ColorToJson(instance.backgroundColor));
   writeNotNull('userConfigExtraInfo', instance.userConfigExtraInfo);
   val['transcodingUsers'] =
       instance.transcodingUsers?.map((e) => e?.toJson())?.toList();
