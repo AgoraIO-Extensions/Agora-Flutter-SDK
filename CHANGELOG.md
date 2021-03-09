@@ -1,3 +1,11 @@
+## [3.3.1-rc.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.0...v3.3.1-rc.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* type cast error ([e12781e](https://github.com/AgoraIO/Flutter-SDK/commit/e12781e5d337fc1f85bba5f00d0301696fc9a3e5))
+* type cast error ([98c4331](https://github.com/AgoraIO/Flutter-SDK/commit/98c4331bd97ab1e2dc7216470fc2978c5d4dcd74))
+
 ## [3.3.1-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.0-rc.0...v3.3.1-rc.0) (2021-03-08)
 
 
