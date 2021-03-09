@@ -41,8 +41,8 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
         super.init()
         if let map = args {
             setData(map["data"] as! NSDictionary)
-            setRenderMode(map["renderMode"] as! Int)
-            setMirrorMode(map["mirrorMode"] as! Int)
+            setRenderMode((map["renderMode"] as! NSNumber).uintValue)
+            setMirrorMode((map["mirrorMode"] as! NSNumber).uintValue)
         }
         channel.setMethodCallHandler { [weak self] (call, result) in
             var args = [String: Any?]()
@@ -53,9 +53,9 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
             case "setData":
                 self?.setData(args["data"] as! NSDictionary)
             case "setRenderMode":
-                self?.setRenderMode(args["renderMode"] as! Int)
+                self?.setRenderMode((args["renderMode"] as! NSNumber).uintValue)
             case "setMirrorMode":
-                self?.setMirrorMode(args["mirrorMode"] as! Int)
+                self?.setMirrorMode((args["mirrorMode"] as! NSNumber).uintValue)
             default:
                 result(FlutterMethodNotImplemented)
             }
@@ -76,17 +76,17 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
             channel = getChannel(channelId)
         }
         if let `engine` = engine {
-            _view.setData(engine, channel, data["uid"] as! Int)
+            _view.setData(engine, channel, (data["uid"] as! NSNumber).uintValue)
         }
     }
 
-    func setRenderMode(_ renderMode: Int) {
+    func setRenderMode(_ renderMode: UInt) {
         if let `engine` = engine {
             _view.setRenderMode(engine, renderMode)
         }
     }
 
-    func setMirrorMode(_ mirrorMode: Int) {
+    func setMirrorMode(_ mirrorMode: UInt) {
         if let `engine` = engine {
             _view.setMirrorMode(engine, mirrorMode)
         }
