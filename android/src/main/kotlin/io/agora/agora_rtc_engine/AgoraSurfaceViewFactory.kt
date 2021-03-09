@@ -77,7 +77,7 @@ class AgoraSurfaceView(
 
   private fun setData(data: Map<*, *>) {
     val channel = (data["channelId"] as? String)?.let { getChannel(it) }
-    getEngine()?.let { view.setData(it, channel, data["uid"] as Int) }
+    getEngine()?.let { view.setData(it, channel, (data["uid"] as Number).toInt()) }
   }
 
   private fun setRenderMode(renderMode: Int) {
