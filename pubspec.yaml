@@ -1,6 +1,6 @@
 name: agora_rtc_engine
 description: Flutter plugin for Agora Video SDK.
-version: 3.2.1
+version: 3.3.1-rc.0
 homepage: https://www.agora.io
 repository: https://github.com/AgoraIO/Flutter-SDK
 
@@ -41,15 +41,15 @@ flutter:
         pluginClass: AgoraRtcEnginePlugin
       ios:
         pluginClass: AgoraRtcEnginePlugin
-      linux:
-        pluginClass: AgoraRtcEnginePlugin
-      macos:
-        pluginClass: AgoraRtcEnginePlugin
-      windows:
-        pluginClass: AgoraRtcEnginePlugin
-      web:
-        fileName: agora_rtc_engine_web.dart
-        pluginClass: AgoraRtcEngineWeb
+#      linux:
+#        pluginClass: AgoraRtcEnginePlugin
+#      macos:
+#        pluginClass: AgoraRtcEnginePlugin
+#      windows:
+#        pluginClass: AgoraRtcEnginePlugin
+#      web:
+#        fileName: agora_rtc_engine_web.dart
+#        pluginClass: AgoraRtcEngineWeb
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

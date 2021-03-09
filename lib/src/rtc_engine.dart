@@ -31,8 +31,19 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
+  static Future<T> _invokeMethod<T>(String method,
+      [Map<String, dynamic> arguments]) {
     return _methodChannel.invokeMethod(method, arguments);
+  }
+
+  /// TODO(DOC)
+  static Future<String> getSdkVersion() {
+    return _invokeMethod('getSdkVersion');
+  }
+
+  /// TODO(DOC)
+  static Future<String> getErrorDescription(int error) {
+    return _invokeMethod('getErrorDescription', {'error': error});
   }
 
   /// Creates an [RtcEngine] instance.
@@ -50,8 +61,9 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcEngine> create(String appId) async {
-    return createWithAreaCode(appId, AreaCode.GLOB);
+  @deprecated
+  static Future<RtcEngine> create(String appId) {
+    return createWithConfig(RtcEngineConfig(appId));
   }
 
   /// Creates an [RtcEngine] instance.
@@ -77,14 +89,16 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
+  @deprecated
   static Future<RtcEngine> createWithAreaCode(
       String appId, AreaCode areaCode) async {
+    return createWithConfig(RtcEngineConfig(appId, areaCode: areaCode));
+  }
+
+  /// TODO(DOC)
+  static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
     if (_engine != null) return _engine;
-    await _methodChannel.invokeMethod('create', {
-      'appId': appId,
-      'areaCode': AreaCodeConverter(areaCode).value(),
-      'appType': 4
-    });
+    await _invokeMethod('create', {'config': config.toJson(), 'appType': 4});
     _engine = RtcEngine._();
     return _engine;
   }
@@ -122,19 +136,25 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> joinChannel(
-      String token, String channelName, String optionalInfo, int optionalUid) {
+      String token, String channelName, String optionalInfo, int optionalUid,
+      [ChannelMediaOptions options]) {
     return _invokeMethod('joinChannel', {
       'token': token,
       'channelName': channelName,
       'optionalInfo': optionalInfo,
-      'optionalUid': optionalUid
+      'optionalUid': optionalUid,
+      'options': options?.toJson()
     });
   }
 
   @override
-  Future<void> switchChannel(String token, String channelName) {
-    return _invokeMethod(
-        'switchChannel', {'token': token, 'channelName': channelName});
+  Future<void> switchChannel(String token, String channelName,
+      [ChannelMediaOptions options]) {
+    return _invokeMethod('switchChannel', {
+      'token': token,
+      'channelName': channelName,
+      'options': options?.toJson()
+    });
   }
 
   @override
@@ -178,17 +198,20 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setLogFile(String filePath) {
     return _invokeMethod('setLogFile', {'filePath': filePath});
   }
 
   @override
+  @deprecated
   Future<void> setLogFilter(LogFilter filter) {
     return _invokeMethod(
         'setLogFilter', {'filter': LogFilterConverter(filter).value()});
   }
 
   @override
+  @deprecated
   Future<void> setLogFileSize(int fileSizeInKBytes) {
     return _invokeMethod(
         'setLogFileSize', {'fileSizeInKBytes': fileSizeInKBytes});
@@ -216,11 +239,13 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> joinChannelWithUserAccount(
-      String token, String channelName, String userAccount) {
+      String token, String channelName, String userAccount,
+      [ChannelMediaOptions options]) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'channelName': channelName,
-      'userAccount': userAccount
+      'userAccount': userAccount,
+      'options': options?.toJson()
     });
   }
 
@@ -292,6 +317,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted) {
     return _invokeMethod(
         'setDefaultMuteAllRemoteAudioStreams', {'muted': muted});
@@ -334,6 +360,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) {
     return _invokeMethod(
         'setDefaultMuteAllRemoteVideoStreams', {'muted': muted});
@@ -894,6 +921,50 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('setVoiceBeautifierPreset',
         {'preset': VoiceBeautifierPresetConverter(preset).value()});
   }
+
+  @override
+  Future<int> createDataStreamWithConfig(DataStreamConfig config) {
+    return _invokeMethod(
+        'createDataStreamWithConfig', {'config': config.toJson()});
+  }
+
+  @override
+  Future<void> enableDeepLearningDenoise(bool enabled) {
+    return _invokeMethod('enableDeepLearningDenoise', {'enabled': enabled});
+  }
+
+  @override
+  Future<void> enableRemoteSuperResolution(int uid, bool enable) {
+    return _invokeMethod(
+        'enableRemoteSuperResolution', {'uid': uid, 'enable': enable});
+  }
+
+  @override
+  Future<void> setCloudProxy(CloudProxyType proxyType) {
+    return _invokeMethod('enableRemoteSuperResolution',
+        {'proxyType': CloudProxyTypeConverter(proxyType).e});
+  }
+
+  @override
+  Future<String> uploadLogFile() {
+    return _invokeMethod('uploadLogFile');
+  }
+
+  @override
+  Future<void> setVoiceBeautifierParameters(
+      VoiceBeautifierPreset preset, int param1, int param2) {
+    return _invokeMethod('setVoiceBeautifierParameters', {
+      'preset': VoiceBeautifierPresetConverter(preset).e,
+      'param1': param1,
+      'param2': param2
+    });
+  }
+
+  @override
+  Future<void> setVoiceConversionPreset(VoiceConversionPreset preset) {
+    return _invokeMethod('setVoiceConversionPreset',
+        {'preset': VoiceConversionPresetConverter(preset).e});
+  }
 }
 
 /// @nodoc
@@ -986,7 +1057,8 @@ mixin RtcEngineInterface
   ///
   /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
   Future<void> joinChannel(
-      String token, String channelName, String optionalInfo, int optionalUid);
+      String token, String channelName, String optionalInfo, int optionalUid,
+      [ChannelMediaOptions options]);
 
   /// Switches to a different channel.
   ///
@@ -1006,7 +1078,8 @@ mixin RtcEngineInterface
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-  Future<void> switchChannel(String token, String channelName);
+  Future<void> switchChannel(String token, String channelName,
+      [ChannelMediaOptions options]);
 
   /// Allows a user to leave a channel.
   ///
@@ -1084,6 +1157,7 @@ mixin RtcEngineInterface
   /// - Ensure that you call this method immediately after calling the [RtcEngine.create] method, otherwise the output log may not be complete.
   ///
   /// **Parameter** [filePath] File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log` for Android and `App Sandbox/Library/caches/agorasdk.log` for iOS.
+  @deprecated
   Future<void> setLogFile(String filePath);
 
   /// Sets the output log level of the SDK.
@@ -1091,6 +1165,7 @@ mixin RtcEngineInterface
   /// You can use one or a combination of the filters. The log level follows the sequence of `OFF`, `CRITICAL`, `ERROR`, `WARNING`, `INFO`, and `DEBUG`. Choose a level to see the logs preceding that level. For example, if you set the log level to `WARNING`, you see the logs within levels `CRITICAL`, `ERROR`, and `WARNING`.
   ///
   /// **Parameter** [filter] Sets the log filter level. See [LogFilter].
+  @deprecated
   Future<void> setLogFilter(LogFilter filter);
 
   /// Sets the log file size (KB).
@@ -1100,6 +1175,7 @@ mixin RtcEngineInterface
   /// These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When agorasdk.log is full, the SDK deletes the log file with the earliest modification time among the other four, renames agorasdk.log to the name of the deleted log file, and create a new `agorasdk.log` to record latest logs.
   ///
   /// **Parameter** [fileSizeInKBytes] The size (KB) of a log file. The default value is 1024 KB. If you set `fileSizeInKBytes` to 1024 KB, the SDK outputs at most 5 MB log files; if you set it to less than 1024 KB, the maximum size of a log file is still 1024 KB.
+  @deprecated
   Future<void> setLogFileSize(int fileSizeInKBytes);
 
   /// @nodoc Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
@@ -1113,6 +1189,15 @@ mixin RtcEngineInterface
   ///
   /// This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
   Future<int> getNativeHandle();
+
+  /// TODO(DOC)
+  Future<void> enableDeepLearningDenoise(bool enabled);
+
+  /// TODO(DOC)
+  Future<void> setCloudProxy(CloudProxyType proxyType);
+
+  /// TODO(DOC)
+  Future<String> uploadLogFile();
 }
 
 /// @nodoc
@@ -1168,7 +1253,8 @@ mixin RtcUserInfoInterface {
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
   Future<void> joinChannelWithUserAccount(
-      String token, String channelName, String userAccount);
+      String token, String channelName, String userAccount,
+      [ChannelMediaOptions options]);
 
   /// Gets the user information by passing in the user account.
   ///
@@ -1342,6 +1428,7 @@ mixin RtcAudioInterface {
   /// **Parameter** [muted] Sets whether or not to receive/stop receiving the remote audio streams by default:
   /// - `true`: Stop receiving any audio stream by default.
   /// - `false`: (Default) Receive all remote audio streams by default.
+  @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 
   /// Enables the [RtcEngineEventHandler.audioVolumeIndication] callback at a set time interval to report on which users are speaking and the speakers' volume.
@@ -1477,6 +1564,7 @@ mixin RtcVideoInterface {
   /// **Parameter** [muted] Sets whether to receive/stop receiving all remote video streams by default:
   /// - `true`: Stop receiving any remote video stream by default.
   /// - `false`: (Default) Receive all remote video streams by default.
+  @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
   /// Enables/Disables image enhancement and sets the options.
@@ -1491,6 +1579,9 @@ mixin RtcVideoInterface {
   ///
   /// **Parameter** [options] The image enhancement options. See [BeautyOptions].
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
+
+  /// TODO(DOC)
+  Future<void> enableRemoteSuperResolution(int uid, bool enable);
 }
 
 /// @nodoc
@@ -1836,6 +1927,9 @@ mixin RtcVoiceChangerInterface {
   /// **Parameter** [preset] The options for SDK preset voice beautifier effects. See [VoiceBeautifierPreset].
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
 
+  /// TODO(DOC)
+  Future<void> setVoiceConversionPreset(VoiceConversionPreset preset);
+
   /// Sets parameters for SDK preset audio effects.
   ///
   /// Call this method to set the following parameters for the local user who send an audio stream:
@@ -1890,6 +1984,10 @@ mixin RtcVoiceChangerInterface {
   ///   - 12: G#
   Future<void> setAudioEffectParameters(
       AudioEffectPreset preset, int param1, int param2);
+
+  /// TODO(DOC)
+  Future<void> setVoiceBeautifierParameters(
+      VoiceBeautifierPreset preset, int param1, int param2);
 }
 
 /// @nodoc
@@ -2490,6 +2588,9 @@ mixin RtcStreamMessageInterface {
   /// - 0: Success.
   /// - < 0: Failure.
   Future<int> createDataStream(bool reliable, bool ordered);
+
+  /// TODO(DOC)
+  Future<int> createDataStreamWithConfig(DataStreamConfig config);
 
   /// Sends data stream messages.
   ///

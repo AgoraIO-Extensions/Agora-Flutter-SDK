@@ -1,3 +1,32 @@
+## [3.3.1-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.0-rc.0...v3.3.1-rc.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* rename values of enum VoiceConversionPreset ([1d9e9ef](https://github.com/AgoraIO/Flutter-SDK/commit/1d9e9efdbc908e615731fc07ca74bf4ce11f98ef))
+
+
+### Features
+
+* support 3.3.1 for Android ([cd7a2cd](https://github.com/AgoraIO/Flutter-SDK/commit/cd7a2cdaff747cad9d2e386d79589c7299036ff6))
+* support 3.3.1 for Dart ([35715e0](https://github.com/AgoraIO/Flutter-SDK/commit/35715e042209814ab503e102b110b015cbae4484))
+* support 3.3.1 for iOS ([836f3b4](https://github.com/AgoraIO/Flutter-SDK/commit/836f3b4c87f0c0a478c135a4a6ed0ed4279a446e))
+
+# [3.3.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.1...v3.3.0-rc.0) (2021-01-28)
+
+
+### Bug Fixes
+
+* annotation build warning ([551ebfe](https://github.com/AgoraIO/Flutter-SDK/commit/551ebfe3c8dec34cfdf7e006d38523c60123bc58))
+
+
+### Features
+
+* support 3.3.0 for Android ([9c48594](https://github.com/AgoraIO/Flutter-SDK/commit/9c485942661c0e60c8413f9088b4ed0fa37ae2da))
+* support 3.3.0 for Dart ([b6ee197](https://github.com/AgoraIO/Flutter-SDK/commit/b6ee197b65677b9f47af57d5eec7c6fdf30e28c8))
+* support 3.3.0 for iOS ([b422ce8](https://github.com/AgoraIO/Flutter-SDK/commit/b422ce8e8660067075317e4f0f16a29f5a49b6b7))
+* use flutter `Color` class instead of the `Color` defined ([a09c1f1](https://github.com/AgoraIO/Flutter-SDK/commit/a09c1f17cc4dbbfbafedd496168ff8787f66275b))
+
 ## [3.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.0...v3.2.1) (2020-12-24)
 
 ## [3.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
