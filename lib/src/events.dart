@@ -145,8 +145,10 @@ class RtcEngineEventHandler {
   ///
   /// When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.
   ///
-  /// The `RtcStatsCallback` typedef includes the following parameter:
-  /// - [RtcStats] `stats`: Statistics of the call.
+  /// The `UidWithElapsedAndChannelCallback` typedef includes the following parameters:
+  /// - [String] `channel`: Channel name.
+  /// - [int] `uid`: User ID.
+  /// - [int] `elapsed`:Time elapsed (ms) from the user calling [RtcEngine.joinChannel] until this callback is triggered.
   UidWithElapsedAndChannelCallback rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
