@@ -53,7 +53,7 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('getSdkVersion');
   }
 
-  ///  Retrieves the description of a warning or error code.
+  /// Retrieves the description of a warning or error code.
   ///
   /// Since v3.3.1
   ///
@@ -67,6 +67,10 @@ class RtcEngine with RtcEngineInterface {
   }
 
   /// Creates an [RtcEngine] instance.
+  ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated since v3.3.1.
   ///
   /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
@@ -88,7 +92,9 @@ class RtcEngine with RtcEngineInterface {
 
   /// Creates an [RtcEngine] instance.
   ///
-  /// Since v3.3.1
+  /// **Deprecated**
+  ///
+  /// This method is deprecated since v3.3.1.
   ///
   /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
@@ -117,7 +123,9 @@ class RtcEngine with RtcEngineInterface {
     return createWithConfig(RtcEngineConfig(appId, areaCode: areaCode));
   }
 
-  ///  Creates an [RtcEngine] instance.
+  /// Creates an [RtcEngine] instance.
+  ///
+  /// Since v3.3.1
   ///
   /// Unless otherwise specified, all the methods provided by the [RtcEngine] instance are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
@@ -1092,6 +1100,8 @@ mixin RtcEngineInterface
   /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
   ///
   /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
+  ///
+  /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
   Future<void> joinChannel(
       String token, String channelName, String optionalInfo, int optionalUid,
       [ChannelMediaOptions options]);
@@ -2160,19 +2170,19 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Note**
   ///
-  /// You can call this method either before or after joining a channel.
-  /// Do not set the profile parameter of [RtcEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call does not take effect.
-  /// This method works best with the human voice. Agora does not recommend using this method for audio containing music.
-  /// After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierParameters`:
-  /// - [RtcEngine.setAudioEffectPreset]
-  /// - [RtcEngine.setAudioEffectParameters]
-  /// - [RtcEngine.setVoiceBeautifierPreset]
-  /// - [RtcEngine.setVoiceConversionPreset]
-  /// - [RtcEngine.setLocalVoiceReverbPreset]
-  /// - [RtcEngine.setLocalVoiceChanger]
-  /// - [RtcEngine.setLocalVoicePitch]
-  /// - [RtcEngine.setLocalVoiceEqualization]
-  /// - [RtcEngine.setLocalVoiceReverb]
+  /// - You can call this method either before or after joining a channel.
+  /// - Do not set the `profile` parameter of [RtcEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call does not take effect.
+  /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
+  /// - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierParameters`:
+  ///   - [RtcEngine.setAudioEffectPreset]
+  ///   - [RtcEngine.setAudioEffectParameters]
+  ///   - [RtcEngine.setVoiceBeautifierPreset]
+  ///   - [RtcEngine.setVoiceConversionPreset]
+  ///   - [RtcEngine.setLocalVoiceReverbPreset]
+  ///   - [RtcEngine.setLocalVoiceChanger]
+  ///   - [RtcEngine.setLocalVoicePitch]
+  ///   - [RtcEngine.setLocalVoiceEqualization]
+  ///   - [RtcEngine.setLocalVoiceReverb]
   Future<void> setVoiceBeautifierParameters(
       VoiceBeautifierPreset preset, int param1, int param2);
 }
@@ -2567,7 +2577,7 @@ mixin RtcEncryptionInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
+  /// This method is deprecated since v3.1.2. Use [RtcEngine.enableEncryption] instead.
   ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   ///
