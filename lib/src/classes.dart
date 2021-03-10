@@ -1075,7 +1075,7 @@ class RemoteAudioStats {
   /// </tr>
   /// <tr>
   /// <td>Less than 2</td>
-  /// <td>- Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible.</td>
+  /// <td> Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible.</td>
   /// </tr>
   /// </tbody>
   /// </table>
@@ -1238,15 +1238,6 @@ class LogConfig {
 /// | `true`        | `true`     | If the delay of a data packet is within the audio delay, the SDK corrects the order of the data packet. If the delay of a data packet exceeds the audio delay, the SDK discards this data packet.                                                                                                                                                                                            |
 @JsonSerializable(explicitToJson: true)
 class DataStreamConfig {
-  /// Whether the SDK guarantees that the receiver receives the data in the sent order.
-  ///
-  /// - `true`: Guarantee that the receiver receives the data in the sent order.
-  /// - `false`: Do not guarantee that the receiver receives the data in the sent order.
-  ///
-  /// Do not set this parameter to `true` if you need the receiver to receive the data immediately.
-  @JsonKey(includeIfNull: false)
-  bool syncWithAudio;
-
   /// Whether to synchronize the data packet with the published audio packet.
   ///
   /// - `true`: Synchronize the data packet with the audio packet.
@@ -1254,6 +1245,15 @@ class DataStreamConfig {
   ///
   /// When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the `streamMessage` callback when the synchronized audio packet is played out.
   /// Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
+  @JsonKey(includeIfNull: false)
+  bool syncWithAudio;
+
+  /// Whether the SDK guarantees that the receiver receives the data in the sent order.
+  ///
+  /// - `true`: Guarantee that the receiver receives the data in the sent order.
+  /// - `false`: Do not guarantee that the receiver receives the data in the sent order.
+  ///
+  /// Do not set this parameter to `true` if you need the receiver to receive the data immediately.
   @JsonKey(includeIfNull: false)
   bool ordered;
 
