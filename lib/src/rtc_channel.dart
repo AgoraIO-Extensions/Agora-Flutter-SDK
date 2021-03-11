@@ -44,7 +44,7 @@ class RtcChannel with RtcChannelInterface {
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   static Future<RtcChannel> create(String channelId) async {
     if (_channels.containsKey(channelId)) return _channels[channelId];
     await _methodChannel.invokeMethod('create', {'channelId': channelId});
@@ -412,7 +412,7 @@ mixin RtcChannelInterface
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
   ///
@@ -712,7 +712,9 @@ mixin RtcMediaMetadataInterface {
   /// Sends the metadata.
   ///
   /// **Parameter** [metadata] The metadata to be sent in the form of String.
+  ///
   /// **Note**
+  ///
   /// Ensure that the size of the metadata does not exceed the value set in the [setMaxMetadataSize] method.
   Future<void> sendMetadata(String metadata);
 }

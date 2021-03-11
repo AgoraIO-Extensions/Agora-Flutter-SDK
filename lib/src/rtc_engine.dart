@@ -1095,7 +1095,7 @@ mixin RtcEngineInterface
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
   /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
   ///
@@ -1123,7 +1123,7 @@ mixin RtcEngineInterface
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
   /// **Parameter** [options] The channel media options: [ChannelMediaOptions].
   Future<void> switchChannel(String token, String channelName,
@@ -1321,7 +1321,7 @@ mixin RtcUserInfoInterface {
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   Future<void> registerLocalUserAccount(String appId, String userAccount);
 
   /// Joins the channel with a user account.
@@ -1342,14 +1342,14 @@ mixin RtcUserInfoInterface {
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
   /// **Parameter** [userAccount] The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
   /// - All lowercase English letters: a to z.
   /// - All uppercase English letters: A to Z.
   /// - All numeric characters: 0 to 9.
   /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
   /// **Parameter** [options] The channel media options: [ChannelMediaOptions].
   Future<void> joinChannelWithUserAccount(
