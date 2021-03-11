@@ -770,7 +770,7 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) {
         _$enumDecodeNullable(_$ExperienceQualityTypeEnumMap, json['qoeQuality'])
     ..qualityChangedReason = _$enumDecodeNullable(
         _$ExperiencePoorReasonEnumMap, json['qualityChangedReason'])
-    ..mosValue = json['mosValue'] as int;
+    ..mosValue = json['mosValue'] as int?;
 }
 
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) =>
