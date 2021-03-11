@@ -807,7 +807,7 @@ const _$NetworkQualityEnumMap = {
 
 const _$ExperienceQualityTypeEnumMap = {
   ExperienceQualityType.Good: 0,
-  ExperienceQualityType.Bad: 0,
+  ExperienceQualityType.Bad: 1,
 };
 
 const _$ExperiencePoorReasonEnumMap = {

@@ -4,28 +4,28 @@ version: 4.0.0-rc.1
 homepage: 'https://www.agora.io'
 repository: 'https://github.com/AgoraIO/Flutter-SDK'
 environment:
-      sdk: '>=2.12.0 <3.0.0'
-      flutter: '>=1.12.13+hotfix.6'
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: '>=1.12.13+hotfix.6'
 dependencies:
-      flutter:
-            sdk: flutter
-      flutter_web_plugins:
-            sdk: flutter
-      json_annotation: ^4.0.0
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  json_annotation: ^4.0.0
 dev_dependencies:
-      integration_test: ^1.0.2+2
-      flutter_test:
-            sdk: flutter
-      flutter_driver:
-            sdk: flutter
-      pedantic: ^1.11.0
-      build_runner: ^1.11.5
-      json_serializable: ^4.0.2
+  integration_test: ^1.0.2+2
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  pedantic: ^1.11.0
+  build_runner: ^1.11.5
+  json_serializable: ^4.0.2
 flutter:
-      plugin:
-            platforms:
-                  android:
-                        package: io.agora.agora_rtc_engine
-                        pluginClass: AgoraRtcEnginePlugin
-                  ios:
-                        pluginClass: AgoraRtcEnginePlugin
+  plugin:
+    platforms:
+      android:
+        package: io.agora.agora_rtc_engine
+        pluginClass: AgoraRtcEnginePlugin
+      ios:
+        pluginClass: AgoraRtcEnginePlugin
