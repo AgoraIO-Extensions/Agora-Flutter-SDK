@@ -2396,7 +2396,7 @@ enum ExperienceQualityType {
   Good,
 
   /// 1: Bad experience quality.
-  @JsonValue(0)
+  @JsonValue(1)
   Bad,
 }
 
