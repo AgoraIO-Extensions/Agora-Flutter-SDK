@@ -1602,7 +1602,7 @@ Map<String, dynamic> _$ExperienceQualityTypeConverterToJson(
 
 const _$ExperienceQualityTypeEnumMap = {
   ExperienceQualityType.Good: 0,
-  ExperienceQualityType.Bad: 0,
+  ExperienceQualityType.Bad: 1,
 };
 
 ExperiencePoorReasonConverter _$ExperiencePoorReasonConverterFromJson(
