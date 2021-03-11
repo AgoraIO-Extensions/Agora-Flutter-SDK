@@ -383,9 +383,7 @@ mixin RtcChannelInterface
   /// - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
   /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
   ///
-  /// **Parameter** [token] The token generated at your server.
-  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
-  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  /// **Parameter** [token] The token generated at your server.Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
   ///
   /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
   ///
@@ -403,9 +401,7 @@ mixin RtcChannelInterface
   /// - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
   /// - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [RtcEngine] instance.
   ///
-  /// **Parameter** [token] The token generated at your server.
-  /// - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
-  /// - In situations requiring high security: Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+  /// **Parameter** [token] The token generated at your server. Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
   ///
   /// **Parameter** [userAccount] The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
   /// - All lowercase English letters: a to z.
