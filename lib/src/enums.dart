@@ -454,7 +454,7 @@ enum AudioScenario {
 
   /// Meeting scenario that mainly contains the human voice.
   ///
-  /// Since v3.2.0
+  /// Since v3.2.1
   @JsonValue(8)
   MEETING,
 }
