@@ -1059,7 +1059,7 @@ mixin RtcEngineInterface
   ///
   /// **Note**
   /// - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
-  /// - Since v3.2.0, this method can set the user level in addition to the user role.
+  /// - Since v3.2.1, this method can set the user level in addition to the user role.
   ///    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
   ///    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. Levels affect prices.
   ///
@@ -1962,7 +1962,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated since v3.2.0. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
+  /// This method is deprecated since v3.2.1. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
   ///
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
@@ -1975,7 +1975,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated since v3.2.0. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
+  /// This method is deprecated since v3.2.1. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
   ///
   /// **Note**
   /// - Do not use this method together with [RtcEngine.setLocalVoiceReverb].
@@ -2011,7 +2011,7 @@ mixin RtcVoiceChangerInterface {
 
   /// Sets an SDK preset audio effect.
   ///
-  /// Since v3.2.0
+  /// Since v3.2.1
   ///
   /// Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect.
   ///
@@ -2037,7 +2037,7 @@ mixin RtcVoiceChangerInterface {
 
   /// Sets an SDK preset voice beautifier effect.
   ///
-  /// Since v3.2.0
+  /// Since v3.2.1
   ///
   /// Call this method to set an SDK preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect.
   ///

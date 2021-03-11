@@ -352,7 +352,7 @@ mixin RtcChannelInterface
   ///
   /// **Note**
   /// - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
-  /// - Since v3.2.0, this method can set the user level in addition to the user role.
+  /// - Since v3.2.1, this method can set the user level in addition to the user role.
   ///    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
   ///    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. Levels affect prices.
   ///
