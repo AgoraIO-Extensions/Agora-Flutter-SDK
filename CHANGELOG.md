@@ -1,3 +1,10 @@
+# [4.0.0-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2021-03-11)
+
+
+### Bug Fixes
+
+* enum ExperienceQualityType value error ([d77ae0a](https://github.com/AgoraIO/Flutter-SDK/commit/d77ae0a2d2d6b953b16a98e855268bedbdce1066))
+
 # [4.0.0-rc.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.0...v4.0.0-rc.1) (2021-03-09)
 
 
