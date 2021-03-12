@@ -1,3 +1,5 @@
+## [3.3.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.2...v3.3.1) (2021-03-12)
+
 ## [3.3.1-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.1...v3.3.1-rc.2) (2021-03-11)
 
 
