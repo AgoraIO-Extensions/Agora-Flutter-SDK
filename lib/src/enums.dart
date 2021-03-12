@@ -454,7 +454,7 @@ enum AudioScenario {
 
   /// Meeting scenario that mainly contains the human voice.
   ///
-  /// Since v3.2.0
+  /// Since v3.2.1
   @JsonValue(8)
   MEETING,
 }
@@ -538,7 +538,7 @@ enum AudioVoiceChanger {
   GENERAL_BEAUTY_VOICE_FEMALE_VITALITY,
 }
 
-/// The camera capturer configuration.
+/// The camera capture configuration.
 enum CameraCaptureOutputPreference {
   /// (default) Self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
   @JsonValue(0)
@@ -860,7 +860,7 @@ enum EncryptionMode {
   @JsonValue(3)
   AES256XTS,
 
-  /// 128-bit SM4 encryption, ECB mode.
+  /// @nodoc 128-bit SM4 encryption, ECB mode.
   @JsonValue(4)
   SM4128ECB,
 
@@ -1315,11 +1315,11 @@ enum LocalVideoStreamError {
   @JsonValue(5)
   EncodeFailure,
 
-  /// Capture InBackground.
+  /// (iOS only) The application is in the background.
   @JsonValue(6)
   CaptureInBackground,
 
-  /// Capture MultipleForegroundApps.
+  /// (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
   @JsonValue(7)
   CaptureMultipleForegroundApps,
 }
@@ -2250,7 +2250,7 @@ enum VoiceBeautifierPreset {
   @JsonValue(0x01010300)
   ChatBeautifierVitality,
 
-  /// TODO(DOC)
+  ///  Singing beautifier effect.
   @JsonValue(0x01020100)
   SingingBeautifier,
 
@@ -2302,41 +2302,43 @@ enum AudienceLatencyLevelType {
   UltraLowLatency,
 }
 
-/// TODO(DOC)
+///  The output log level of the SDK.
 enum LogLevel {
-  /// 0: Do not output any log information.
+  /// Do not output any log.
   @JsonValue(0x0000)
   None,
 
-  /// 0x000f: Output CRITICAL, ERROR, WARNING, and INFO level log information.
+  /// (Default) Output logs of the `Fatal`, `Error`, `Warn`, and `Info` level.
   /// We recommend setting your log filter as this level.
   @JsonValue(0x0001)
   Info,
 
-  /// 0x000e: Outputs CRITICAL, ERROR, and WARNING level log information.
+  /// Output logs of the `Fatal`, `Error`, and `Warn` level.
   @JsonValue(0x0002)
   Warn,
 
-  /// 0x000c: Outputs CRITICAL and ERROR level log information.
+  /// Output logs of the `Fatal` and `Error` level.
   @JsonValue(0x0004)
   Error,
 
-  /// 0x0008: Outputs CRITICAL level log information.
+  /// Output logs of the `Fatal` level.
   @JsonValue(0x0008)
   Fatal,
 }
 
-/// TODO(DOC)
+/// The brightness level of the video image captured by the local camera.
 enum CaptureBrightnessLevelType {
+  /// The SDK does not detect the brightness level of the video image.
+  /// Wait a few seconds to get the brightness level from [CaptureBrightnessLevelType] in the next callback.
   @JsonValue(-1)
   Invalid,
-
+  /// The brightness level of the video image is normal.
   @JsonValue(0)
   Normal,
-
+  /// The brightness level of the video image is too bright.
   @JsonValue(1)
   Bright,
-
+  /// The brightness level of the video image is too dark.
   @JsonValue(2)
   Dark,
 }
@@ -2360,7 +2362,7 @@ enum SuperResolutionStateReason {
   DeviceNotSupported,
 }
 
-/// TODO(DOC)
+/// @nodoc
 enum UploadErrorReason {
   @JsonValue(0)
   Success,
@@ -2372,23 +2374,21 @@ enum UploadErrorReason {
   ServerError,
 }
 
-/// TODO(DOC)
-/// Cloud proxy transport type
+/// The cloud proxy type.
 enum CloudProxyType {
-  /// no proxy
+  /// Do not use the cloud proxy.
   @JsonValue(0)
   None,
 
-  /// udp proxy
+  /// The cloud proxy for the UDP protocol.
   @JsonValue(1)
   UDP,
 
-  /// tcp proxy
+  /// @nodoc The cloud proxy for the TCP protocol.
   @JsonValue(2)
   TCP,
 }
 
-/// TODO(DOC)
 /// Experience quality types.
 enum ExperienceQualityType {
   /// 0: Good experience quality.
@@ -2400,39 +2400,40 @@ enum ExperienceQualityType {
   Bad,
 }
 
-/// TODO(DOC)
-/// The reason for poor experience
+/// The reason for poor QoE of the local user when receiving a remote audio stream.
 enum ExperiencePoorReason {
+  /// None, indicating good QoE of the local user.
   @JsonValue(0)
   None,
-
+  /// The remote user’s network quality is poor.
   @JsonValue(1)
   RemoteNetworkQualityPoor,
-
+  /// The local user’s network quality is poor.
   @JsonValue(2)
   LocalNetworkQualityPoor,
-
+  /// The local user’s Wi-Fi or mobile network signal is weak.
   @JsonValue(4)
   WirelessSignalPoor,
-
+  /// The local user enables both Wi-Fi and bluetooth, and their signals interfere with each other. As a result, audio transmission quality is undermined.
   @JsonValue(8)
   WifiBluetoothCoexist,
 }
 
-/// TODO(DOC)
+/// The options for SDK preset voice conversion effects.
 enum VoiceConversionPreset {
+  /// Turn off voice conversion effects and use the original voice.
   @JsonValue(0)
   Off,
-
+  /// A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
   @JsonValue(50397440)
   Neutral,
-
+  /// A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
   @JsonValue(50397696)
   Sweet,
-
+  /// A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50397952)
   Solid,
-
+  /// A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50398208)
   Bass,
 }

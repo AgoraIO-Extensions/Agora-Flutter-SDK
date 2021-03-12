@@ -604,18 +604,20 @@ class LiveInjectStreamConfig {
   Map<String, dynamic> toJson() => _$LiveInjectStreamConfigToJson(this);
 }
 
-/// The definition of CameraCapturerConfiguration.
+/// The configuration of camera capturer.
 @JsonSerializable(explicitToJson: true)
 class CameraCapturerConfiguration {
-  /// The camera capturer configuration.
+  /// The camera capture configuration.
   /// See [CameraCaptureOutputPreference].
   CameraCaptureOutputPreference preference;
 
-  /// Camera Capture Width
+  /// The width (px) of the video image captured by the local camera.
+  /// To customize the width of the video image, set [preference] as `Manual(3)` first, and then use this parameter.
   @JsonKey(includeIfNull: false)
   int captureWidth;
 
-  /// Camera Capture Height
+  /// The height (px) of the video image captured by the local camera.
+  /// To customize the height of the video image, set [preference] as `Manual(3)` first, and then use this parameter.
   @JsonKey(includeIfNull: false)
   int captureHeight;
 
@@ -748,9 +750,17 @@ class RtcStats {
   int rxPacketLossRate;
 
   /// System CPU usage (%).
+  ///
+  /// **Note**
+  ///
+  /// The `cpuTotalUsage` reported in the `leaveChannel` callback is always 0.
   double cpuTotalUsage;
 
   /// Application CPU usage (%).
+  ///
+  /// **Note**
+  ///
+  /// The `cpuAppUsage` reported in the `leaveChannel` callback is always 0.
   double cpuAppUsage;
 
   /// The round-trip time delay from the client to the local router.
@@ -1024,13 +1034,51 @@ class RemoteAudioStats {
   /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
   int publishDuration;
 
-  /// Experience quality: #EXPERIENCE_QUALITY_TYPE
+  /// Quality of experience (QoE) of the local user when receiving a remote audio stream. See [ExperienceQuality].
   ExperienceQualityType qoeQuality;
 
-  /// The reason for poor experience quality: #EXPERIENCE_POOR_REASON
+  /// The reason for poor QoE of the local user when receiving a remote audio stream. See [ExperiencePoorReason].
   ExperiencePoorReason qualityChangedReason;
 
-  /// The quality of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval. The return value ranges from 0 to 500. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.
+  /// The [quality] of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval.
+  /// The return value ranges from 0 to 500. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.
+  ///
+  /// The subjective perception of audio quality corresponding to the Agora real-time audio MOS scores is as follows:
+  ///
+  /// <table border="1">
+  /// <thead>
+  /// <tr>
+  ///   <th>MOS score</th>
+  ///   <th>Perception of audio quality</th>
+  /// </tr>
+  /// </thead>
+  /// <tbody>
+  /// <tr>
+  /// <td>Greater than 4</td>
+  /// <td>- Excellent. The audio sounds clear and smooth.</td>
+  /// </tr>
+  /// <tr>
+  /// <td>From 3.5 to 4</td>
+  /// <td>Good. The audio has some perceptible impairment, but still sounds clear.</td>
+  /// </tr>
+  /// <tr>
+  /// <td>From 3 to 3.5</td>
+  /// <td>Fair. The audio freezes occasionally and requires attentive listening.</td>
+  /// </tr>
+  /// <tr>
+  /// <td>From 2.5 to 3</td>
+  /// <td>Poor. The audio sounds choppy and requires considerable effort to understand.</td>
+  /// </tr>
+  /// <tr>
+  /// <td>From 2 to 2.5</td>
+  /// <td>Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.</td>
+  /// </tr>
+  /// <tr>
+  /// <td>Less than 2</td>
+  /// <td> Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible.</td>
+  /// </tr>
+  /// </tbody>
+  /// </table>
   int mosValue;
 
   /// Constructs a [RemoteAudioStats]
@@ -1146,19 +1194,24 @@ class ClientRoleOptions {
   Map<String, dynamic> toJson() => _$ClientRoleOptionsToJson(this);
 }
 
-/// TODO(DOC)
-/// Definition of LogConfiguration
+///  Log file configurations.
 @JsonSerializable(explicitToJson: true)
 class LogConfig {
-  /// The log file path, default is NULL for default log path
+  /// The absolute path of log files. The default file path is `/storage/emulated/0/Android/data/<package name>/files/agorasdk.log` for Android or `App Sandbox/Library/caches/agorasdk.log` for iOS.
+  ///
+  /// Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
   @JsonKey(includeIfNull: false)
   String filePath;
 
-  /// The log file size, KB , set -1 to use default log size
+  /// The size (KB) of a log file. The default value is 1024 KB.
+  ///
+  /// If you set `fileSize` to 1024 KB, the SDK outputs at most 5 MB log files; if you set it to less than 1024 KB, the setting is invalid, and the maximum size of a log file is still 1024 KB.
   @JsonKey(includeIfNull: false)
   int fileSize;
 
-  /// The log level, set LOG_LEVEL_INFO to use default log level
+  /// The output log level of the SDK. See details in [LogLevel].
+  ///
+  /// For example, if you set the log level to `Warn`, the SDK outputs the logs within levels `Fatal`, `Error`, and `Warn`.
   @JsonKey(includeIfNull: false)
   LogLevel level;
 
@@ -1173,15 +1226,34 @@ class LogConfig {
   Map<String, dynamic> toJson() => _$LogConfigToJson(this);
 }
 
-/// TODO(DOC)
-/// Data stream config
+///  The configurations for the data stream.
+///
+/// The following table shows the relationship between the [syncWithAudio] parameter and the [ordered] parameter:
+///
+/// | [syncWithAudio] | [ordered] | SDK behaviors                                                                                                                                                                                                                                                                                                                                                                                |
+/// |---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+/// | `false`       | `false`    | The SDK triggers the `streamMessage` callback immediately after the receiver receives a data packet.                                                                                                                                                                                                                                                                             |
+/// | `true`        | `false`    | If the data packet delay is within the audio delay, the SDK triggers the `streamMessage` callback when the synchronized audio packet is played out. If the data packet delay exceeds the audio delay, the SDK triggers the `streamMessage` callback as soon as the data packet is received. In this case, the data packet is not synchronized with the audio packet. |
+/// | `false`       | `true`     | If the delay of a data packet is within five seconds, the SDK corrects the order of the data packet. If the delay of a data packet exceeds five seconds, the SDK discards the data packet.                                                                                                                                                                                                   |
+/// | `true`        | `true`     | If the delay of a data packet is within the audio delay, the SDK corrects the order of the data packet. If the delay of a data packet exceeds the audio delay, the SDK discards this data packet.                                                                                                                                                                                            |
 @JsonSerializable(explicitToJson: true)
 class DataStreamConfig {
-  /// syncWithAudio Sets whether or not the recipients receive the data stream sync with current audio stream.
+  /// Whether to synchronize the data packet with the published audio packet.
+  ///
+  /// - `true`: Synchronize the data packet with the audio packet.
+  /// - `false`: Do not synchronize the data packet with the audio packet.
+  ///
+  /// When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the `streamMessage` callback when the synchronized audio packet is played out.
+  /// Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
   @JsonKey(includeIfNull: false)
   bool syncWithAudio;
 
-  /// ordered Sets whether or not the recipients receive the data stream in the sent order:
+  /// Whether the SDK guarantees that the receiver receives the data in the sent order.
+  ///
+  /// - `true`: Guarantee that the receiver receives the data in the sent order.
+  /// - `false`: Do not guarantee that the receiver receives the data in the sent order.
+  ///
+  /// Do not set this parameter to `true` if you need the receiver to receive the data immediately.
   @JsonKey(includeIfNull: false)
   bool ordered;
 
@@ -1196,25 +1268,26 @@ class DataStreamConfig {
   Map<String, dynamic> toJson() => _$DataStreamConfigToJson(this);
 }
 
-/// TODO(DOC)
-/// Definition of RtcEngineConfig.
+///  Configurations for the RtcEngineConfig instance.
 @JsonSerializable(explicitToJson: true)
 class RtcEngineConfig {
   /// The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
   /// Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
-  /// one `IRtcEngine` instance. To change your App ID, call `release` to destroy the current `IRtcEngine` instance and then call `createAgoraRtcEngine`
-  /// and `initialize` to create an `IRtcEngine` instance with the new App ID.
+  /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithConfig`
+  /// to create an `RtcEngine` instance with the new App ID.
   String appId;
 
   /// The region for connection. This advanced feature applies to scenarios that have regional restrictions.
   ///
-  /// For the regions that Agora supports, see #AREA_CODE. After specifying the region, the SDK connects to the Agora servers within that region.
-  ///
-  /// @note The SDK supports specify only one region.
+  /// For the regions that Agora supports, see [AreaCode]. After specifying the region, the SDK connects to the Agora servers within that region.
   @JsonKey(includeIfNull: false)
   AreaCode areaCode;
 
-  /// The config for custumer set log path, log size and log level
+  /// The configuration of the log files that the SDK outputs. See [LogConfig].
+  ///
+  /// By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB.
+  /// These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification
+  /// time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
   @JsonKey(includeIfNull: false)
   LogConfig logConfig;
 
