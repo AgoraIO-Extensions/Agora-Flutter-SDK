@@ -70,7 +70,10 @@ fun RemoteAudioStats.toMap(): Map<String, Any?> {
     "totalFrozenTime" to totalFrozenTime,
     "frozenRate" to frozenRate,
     "totalActiveTime" to totalActiveTime,
-    "publishDuration" to publishDuration
+    "publishDuration" to publishDuration,
+    "qoeQuality" to qoeQuality,
+    "qualityChangedReason" to qualityChangedReason,
+    "mosValue" to mosValue
   )
 }
 
@@ -89,7 +92,8 @@ fun LocalVideoStats.toMap(): Map<String, Any?> {
     "encodedFrameCount" to encodedFrameCount,
     "codecType" to codecType,
     "txPacketLossRate" to txPacketLossRate,
-    "captureFrameRate" to captureFrameRate
+    "captureFrameRate" to captureFrameRate,
+    "captureBrightnessLevel" to captureBrightnessLevel
   )
 }
 

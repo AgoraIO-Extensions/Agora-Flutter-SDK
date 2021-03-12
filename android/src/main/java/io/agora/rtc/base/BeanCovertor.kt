@@ -1,6 +1,7 @@
 package io.agora.rtc.base
 
 import android.graphics.Color
+import io.agora.rtc.RtcEngineConfig
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.internal.LastmileProbeConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
@@ -8,6 +9,7 @@ import io.agora.rtc.live.LiveTranscoding
 import io.agora.rtc.live.LiveTranscoding.TranscodingUser
 import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.rtc.models.ClientRoleOptions
+import io.agora.rtc.models.DataStreamConfig
 import io.agora.rtc.video.*
 
 fun mapToVideoDimensions(map: Map<*, *>): VideoEncoderConfiguration.VideoDimensions {
@@ -162,13 +164,25 @@ fun mapToCameraCapturerConfiguration(map: Map<*, *>): CameraCapturerConfiguratio
   return CameraCapturerConfiguration(
     intToCapturerOutputPreference((map["preference"] as Number).toInt()),
     intToCameraDirection((map["cameraDirection"] as Number).toInt())
-  )
+  ).apply {
+    dimensions = CameraCapturerConfiguration.CaptureDimensions()
+    (map["captureWidth"] as? Number)?.toInt()?.let { dimensions.width = it }
+    (map["captureHeight"] as? Number)?.toInt()?.let { dimensions.height = it }
+  }
 }
 
 fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
   return ChannelMediaOptions().apply {
     (map["autoSubscribeAudio"] as? Boolean)?.let { autoSubscribeAudio = it }
     (map["autoSubscribeVideo"] as? Boolean)?.let { autoSubscribeVideo = it }
+  }
+}
+
+fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
+  return RtcEngineConfig().apply {
+    mAppId = map["appId"] as String
+    (map["areaCode"] as? Number)?.toInt()?.let { mAreaCode = it }
+    (map["logConfig"] as? Map<*, *>)?.let { mLogConfig = mapToLogConfig(it) }
   }
 }
 
@@ -182,5 +196,20 @@ fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
 fun mapToClientRoleOptions(map: Map<*, *>): ClientRoleOptions {
   return ClientRoleOptions().apply {
     (map["audienceLatencyLevel"] as? Number)?.let { audienceLatencyLevel = it.toInt() }
+  }
+}
+
+fun mapToLogConfig(map: Map<*, *>): RtcEngineConfig.LogConfig {
+  return RtcEngineConfig.LogConfig().apply {
+    (map["filePath"] as? String)?.let { filePath = it }
+    (map["fileSize"] as? Number)?.let { fileSize = it.toInt() }
+    (map["level"] as? Number)?.let { level = it.toInt() }
+  }
+}
+
+fun mapToDataStreamConfig(map: Map<*, *>): DataStreamConfig {
+  return DataStreamConfig().apply {
+    (map["syncWithAudio"] as? Boolean)?.let { syncWithAudio = it }
+    (map["ordered"] as? Boolean)?.let { ordered = it }
   }
 }

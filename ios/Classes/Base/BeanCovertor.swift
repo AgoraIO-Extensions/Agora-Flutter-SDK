@@ -11,22 +11,22 @@ import AgoraRtcKit
 
 func mapToPoint(_ map: Dictionary<String, Any>) -> CGPoint {
     var point = CGPoint()
-    if let x = map["x"] as? Int {
-        point.x = CGFloat(x)
+    if let x = map["x"] as? NSNumber {
+        point.x = CGFloat(truncating: x)
     }
-    if let y = map["y"] as? Int {
-        point.y = CGFloat(y)
+    if let y = map["y"] as? NSNumber {
+        point.y = CGFloat(truncating: y)
     }
     return point
 }
 
 func mapToSize(_ map: Dictionary<String, Any>) -> CGSize {
     var size = CGSize()
-    if let width = map["width"] as? Int {
-        size.width = CGFloat(width)
+    if let width = map["width"] as? NSNumber {
+        size.width = CGFloat(truncating: width)
     }
-    if let height = map["height"] as? Int {
-        size.height = CGFloat(height)
+    if let height = map["height"] as? NSNumber {
+        size.height = CGFloat(truncating: height)
     }
     return size
 }
@@ -43,30 +43,30 @@ func mapToVideoEncoderConfiguration(_ map: Dictionary<String, Any>) -> AgoraVide
     if let dimensions = map["dimensions"] as? Dictionary<String, Any> {
         config.dimensions = mapToSize(dimensions)
     }
-    if let frameRate = map["frameRate"] as? Int {
-        config.frameRate = frameRate
+    if let frameRate = map["frameRate"] as? NSNumber {
+        config.frameRate = frameRate.intValue
     }
-    if let minFrameRate = map["minFrameRate"] as? Int {
-        config.minFrameRate = minFrameRate
+    if let minFrameRate = map["minFrameRate"] as? NSNumber {
+        config.minFrameRate = minFrameRate.intValue
     }
-    if let bitrate = map["bitrate"] as? Int {
-        config.bitrate = bitrate
+    if let bitrate = map["bitrate"] as? NSNumber {
+        config.bitrate = bitrate.intValue
     }
-    if let minBitrate = map["minBitrate"] as? Int {
-        config.minBitrate = minBitrate
+    if let minBitrate = map["minBitrate"] as? NSNumber {
+        config.minBitrate = minBitrate.intValue
     }
-    if let orientationMode = map["orientationMode"] as? Int {
-        if let orientationMode = AgoraVideoOutputOrientationMode(rawValue: orientationMode) {
+    if let orientationMode = map["orientationMode"] as? NSNumber {
+        if let orientationMode = AgoraVideoOutputOrientationMode(rawValue: orientationMode.intValue) {
             config.orientationMode = orientationMode
         }
     }
-    if let degradationPreference = map["degradationPrefer"] as? Int {
-        if let degradationPreference = AgoraDegradationPreference(rawValue: degradationPreference) {
+    if let degradationPreference = map["degradationPrefer"] as? NSNumber {
+        if let degradationPreference = AgoraDegradationPreference(rawValue: degradationPreference.intValue) {
             config.degradationPreference = degradationPreference
         }
     }
-    if let mirrorMode = map["mirrorMode"] as? Int {
-        if let mirrorMode = AgoraVideoMirrorMode(rawValue: UInt(mirrorMode)) {
+    if let mirrorMode = map["mirrorMode"] as? NSNumber {
+        if let mirrorMode = AgoraVideoMirrorMode(rawValue: mirrorMode.uintValue) {
             config.mirrorMode = mirrorMode
         }
     }
@@ -75,19 +75,19 @@ func mapToVideoEncoderConfiguration(_ map: Dictionary<String, Any>) -> AgoraVide
 
 func mapToBeautyOptions(_ map: Dictionary<String, Any>) -> AgoraBeautyOptions {
     let options = AgoraBeautyOptions()
-    if let lighteningContrastLevel = map["lighteningContrastLevel"] as? Int {
-        if let lighteningContrastLevel = AgoraLighteningContrastLevel(rawValue: UInt(lighteningContrastLevel)) {
+    if let lighteningContrastLevel = map["lighteningContrastLevel"] as? NSNumber {
+        if let lighteningContrastLevel = AgoraLighteningContrastLevel(rawValue: lighteningContrastLevel.uintValue) {
             options.lighteningContrastLevel = lighteningContrastLevel
         }
     }
-    if let lighteningLevel = map["lighteningLevel"] as? Float {
-        options.lighteningLevel = lighteningLevel
+    if let lighteningLevel = map["lighteningLevel"] as? NSNumber {
+        options.lighteningLevel = lighteningLevel.floatValue
     }
-    if let smoothnessLevel = map["smoothnessLevel"] as? Float {
-        options.smoothnessLevel = smoothnessLevel
+    if let smoothnessLevel = map["smoothnessLevel"] as? NSNumber {
+        options.smoothnessLevel = smoothnessLevel.floatValue
     }
-    if let rednessLevel = map["rednessLevel"] as? Float {
-        options.rednessLevel = rednessLevel
+    if let rednessLevel = map["rednessLevel"] as? NSNumber {
+        options.rednessLevel = rednessLevel.floatValue
     }
     return options
 }
@@ -105,45 +105,45 @@ func mapToAgoraImage(_ map: Dictionary<String, Any>) -> AgoraImage {
 
 func mapToTranscodingUser(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodingUser {
     let user = AgoraLiveTranscodingUser()
-    if let uid = map["uid"] as? Int {
-        user.uid = UInt(uid)
+    if let uid = map["uid"] as? NSNumber {
+        user.uid = uid.uintValue
     }
     user.rect = mapToRect(map)
-    if let zOrder = map["zOrder"] as? Int {
-        user.zOrder = zOrder
+    if let zOrder = map["zOrder"] as? NSNumber {
+        user.zOrder = zOrder.intValue
     }
-    if let alpha = map["alpha"] as? Double {
-        user.alpha = alpha
+    if let alpha = map["alpha"] as? NSNumber {
+        user.alpha = alpha.doubleValue
     }
-    if let audioChannel = map["audioChannel"] as? Int {
-        user.audioChannel = audioChannel
+    if let audioChannel = map["audioChannel"] as? NSNumber {
+        user.audioChannel = audioChannel.intValue
     }
     return user
 }
 
 func mapToColor(_ map: Dictionary<String, Any>) -> UIColor {
     return UIColor(
-            red: CGFloat(map["red"] as! Int),
-            green: CGFloat(map["green"] as! Int),
-            blue: CGFloat(map["blue"] as! Int),
-            alpha: 1.0
+        red: CGFloat((map["red"] as! NSNumber).intValue),
+        green: CGFloat((map["green"] as! NSNumber).intValue),
+        blue: CGFloat((map["blue"] as! NSNumber).intValue),
+        alpha: 1.0
     )
 }
 
 func mapToLiveTranscoding(_ map: Dictionary<String, Any>) -> AgoraLiveTranscoding {
     let transcoding = AgoraLiveTranscoding.default()
     transcoding.size = mapToSize(map)
-    if let videoBitrate = map["videoBitrate"] as? Int {
-        transcoding.videoBitrate = videoBitrate
+    if let videoBitrate = map["videoBitrate"] as? NSNumber {
+        transcoding.videoBitrate = videoBitrate.intValue
     }
-    if let videoFramerate = map["videoFramerate"] as? Int {
-        transcoding.videoFramerate = videoFramerate
+    if let videoFramerate = map["videoFramerate"] as? NSNumber {
+        transcoding.videoFramerate = videoFramerate.intValue
     }
     if let lowLatency = map["lowLatency"] as? Bool {
         transcoding.lowLatency = lowLatency
     }
-    if let videoGop = map["videoGop"] as? Int {
-        transcoding.videoGop = videoGop
+    if let videoGop = map["videoGop"] as? NSNumber {
+        transcoding.videoGop = videoGop.intValue
     }
     if let watermark = map["watermark"] as? Dictionary<String, Any> {
         transcoding.watermark = mapToAgoraImage(watermark)
@@ -151,24 +151,24 @@ func mapToLiveTranscoding(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodin
     if let backgroundImage = map["backgroundImage"] as? Dictionary<String, Any> {
         transcoding.backgroundImage = mapToAgoraImage(backgroundImage)
     }
-    if let audioSampleRate = map["audioSampleRate"] as? Int {
-        if let audioSampleRate = AgoraAudioSampleRateType(rawValue: audioSampleRate) {
+    if let audioSampleRate = map["audioSampleRate"] as? NSNumber {
+        if let audioSampleRate = AgoraAudioSampleRateType(rawValue: audioSampleRate.intValue) {
             transcoding.audioSampleRate = audioSampleRate
         }
     }
-    if let audioBitrate = map["audioBitrate"] as? Int {
-        transcoding.audioBitrate = audioBitrate
+    if let audioBitrate = map["audioBitrate"] as? NSNumber {
+        transcoding.audioBitrate = audioBitrate.intValue
     }
-    if let audioChannels = map["audioChannels"] as? Int {
-        transcoding.audioChannels = audioChannels
+    if let audioChannels = map["audioChannels"] as? NSNumber {
+        transcoding.audioChannels = audioChannels.intValue
     }
-    if let audioCodecProfile = map["audioCodecProfile"] as? Int {
-        if let audioCodecProfile = AgoraAudioCodecProfileType(rawValue: audioCodecProfile) {
+    if let audioCodecProfile = map["audioCodecProfile"] as? NSNumber {
+        if let audioCodecProfile = AgoraAudioCodecProfileType(rawValue: audioCodecProfile.intValue) {
             transcoding.audioCodecProfile = audioCodecProfile
         }
     }
-    if let videoCodecProfile = map["videoCodecProfile"] as? Int {
-        if let videoCodecProfile = AgoraVideoCodecProfileType(rawValue: videoCodecProfile) {
+    if let videoCodecProfile = map["videoCodecProfile"] as? NSNumber {
+        if let videoCodecProfile = AgoraVideoCodecProfileType(rawValue: videoCodecProfile.intValue) {
             transcoding.videoCodecProfile = videoCodecProfile
         }
     }
@@ -196,8 +196,8 @@ func mapToChannelMediaInfo(_ map: Dictionary<String, Any>) -> AgoraChannelMediaR
     if let token = map["token"] as? String {
         info.token = token
     }
-    if let uid = map["uid"] as? UInt {
-        info.uid = uid
+    if let uid = map["uid"] as? NSNumber {
+        info.uid = uid.uintValue
     }
     return info
 }
@@ -226,11 +226,11 @@ func mapToLastmileProbeConfig(_ map: Dictionary<String, Any>) -> AgoraLastmilePr
     if let probeDownlink = map["probeDownlink"] as? Bool {
         config.probeDownlink = probeDownlink
     }
-    if let expectedUplinkBitrate = map["expectedUplinkBitrate"] as? Int {
-        config.expectedUplinkBitrate = UInt(expectedUplinkBitrate)
+    if let expectedUplinkBitrate = map["expectedUplinkBitrate"] as? NSNumber {
+        config.expectedUplinkBitrate = expectedUplinkBitrate.uintValue
     }
-    if let expectedDownlinkBitrate = map["expectedDownlinkBitrate"] as? Int {
-        config.expectedDownlinkBitrate = UInt(expectedDownlinkBitrate)
+    if let expectedDownlinkBitrate = map["expectedDownlinkBitrate"] as? NSNumber {
+        config.expectedDownlinkBitrate = expectedDownlinkBitrate.uintValue
     }
     return config
 }
@@ -252,33 +252,47 @@ func mapToWatermarkOptions(_ map: Dictionary<String, Any>) -> WatermarkOptions {
 func mapToLiveInjectStreamConfig(_ map: Dictionary<String, Any>) -> AgoraLiveInjectStreamConfig {
     let config = AgoraLiveInjectStreamConfig.default()
     config.size = mapToSize(map)
-    if let videoGop = map["videoGop"] as? Int {
-        config.videoGop = videoGop
+    if let videoGop = map["videoGop"] as? NSNumber {
+        config.videoGop = videoGop.intValue
     }
-    if let videoFramerate = map["videoFramerate"] as? Int {
-        config.videoFramerate = videoFramerate
+    if let videoFramerate = map["videoFramerate"] as? NSNumber {
+        config.videoFramerate = videoFramerate.intValue
     }
-    if let videoBitrate = map["videoBitrate"] as? Int {
-        config.videoBitrate = videoBitrate
+    if let videoBitrate = map["videoBitrate"] as? NSNumber {
+        config.videoBitrate = videoBitrate.intValue
     }
-    if let audioSampleRate = map["audioSampleRate"] as? Int {
-        if let audioSampleRate = AgoraAudioSampleRateType(rawValue: audioSampleRate) {
+    if let audioSampleRate = map["audioSampleRate"] as? NSNumber {
+        if let audioSampleRate = AgoraAudioSampleRateType(rawValue: audioSampleRate.intValue) {
             config.audioSampleRate = audioSampleRate
         }
     }
-    if let audioBitrate = map["audioBitrate"] as? Int {
-        config.audioBitrate = audioBitrate
+    if let audioBitrate = map["audioBitrate"] as? NSNumber {
+        config.audioBitrate = audioBitrate.intValue
     }
-    if let audioChannels = map["audioChannels"] as? Int {
-        config.audioChannels = audioChannels
+    if let audioChannels = map["audioChannels"] as? NSNumber {
+        config.audioChannels = audioChannels.intValue
     }
     return config
 }
 
 func mapToCameraCapturerConfiguration(_ map: Dictionary<String, Any>) -> AgoraCameraCapturerConfiguration {
     let config = AgoraCameraCapturerConfiguration()
-    config.preference = AgoraCameraCaptureOutputPreference(rawValue: map["preference"] as! Int)!
-    config.cameraDirection = AgoraCameraDirection(rawValue: map["cameraDirection"] as! Int)!
+    if let preference = map["preference"] as? NSNumber {
+        if let preference = AgoraCameraCaptureOutputPreference(rawValue: preference.intValue) {
+            config.preference = preference
+        }
+    }
+    if let captureWidth = map["captureWidth"] as? NSNumber {
+        config.captureWidth = captureWidth.int32Value
+    }
+    if let captureHeight = map["captureHeight"] as? NSNumber {
+        config.captureHeight = captureHeight.int32Value
+    }
+    if let cameraDirection = map["cameraDirection"] as? NSNumber {
+        if let cameraDirection = AgoraCameraDirection(rawValue: cameraDirection.intValue) {
+            config.cameraDirection = cameraDirection
+        }
+    }
     return config
 }
 
@@ -293,25 +307,62 @@ func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannel
     return options
 }
 
+func mapToRtcEngineConfig(_ map: Dictionary<String, Any>) -> AgoraRtcEngineConfig {
+    let config = AgoraRtcEngineConfig()
+    config.appId = map["appId"] as? String
+    if let areaCode = map["areaCode"] as? NSNumber {
+        config.areaCode = areaCode.uintValue
+    }
+    if let logConfig = map["logConfig"] as? Dictionary<String, Any> {
+        config.logConfig = mapToLogConfig(logConfig)
+    }
+    return config
+}
+
 func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
-    let encryptionConfig = AgoraEncryptionConfig()
-    if let encryptionMode = map["encryptionMode"] as? Int {
-        if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode) {
-            encryptionConfig.encryptionMode = encryptionMode
+    let config = AgoraEncryptionConfig()
+    if let encryptionMode = map["encryptionMode"] as? NSNumber {
+        if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode.intValue) {
+            config.encryptionMode = encryptionMode
         }
     }
     if let encryptionKey = map["encryptionKey"] as? String {
-        encryptionConfig.encryptionKey = encryptionKey
+        config.encryptionKey = encryptionKey
     }
-    return encryptionConfig
+    return config
 }
 
 func mapToClientRoleOptions(_ map: Dictionary<String, Any>) -> AgoraClientRoleOptions {
-    let clientRoleOptions = AgoraClientRoleOptions()
-    if let audienceLatencyLevel = map["audienceLatencyLevel"] as? Int {
-        if let audienceLatencyLevel = AgoraAudienceLatencyLevelType(rawValue: audienceLatencyLevel) {
-            clientRoleOptions.audienceLatencyLevel = audienceLatencyLevel
+    let options = AgoraClientRoleOptions()
+    if let audienceLatencyLevel = map["audienceLatencyLevel"] as? NSNumber {
+        if let audienceLatencyLevel = AgoraAudienceLatencyLevelType(rawValue: audienceLatencyLevel.intValue) {
+            options.audienceLatencyLevel = audienceLatencyLevel
         }
     }
-    return clientRoleOptions
+    return options
+}
+
+func mapToLogConfig(_ map: Dictionary<String, Any>) -> AgoraLogConfig {
+    let config = AgoraLogConfig()
+    config.filePath = map["filePath"] as? String
+    if let fileSize = map["fileSize"] as? NSNumber {
+        config.fileSize = fileSize.intValue
+    }
+    if let level = map["level"] as? NSNumber {
+        if let level = AgoraLogLevel.init(rawValue: level.intValue) {
+            config.level = level;
+        }
+    }
+    return config
+}
+
+func mapToDataStreamConfig(_ map: Dictionary<String, Any>) -> AgoraDataStreamConfig {
+    let config = AgoraDataStreamConfig()
+    if let syncWithAudio = map["syncWithAudio"] as? Bool {
+        config.syncWithAudio = syncWithAudio
+    }
+    if let ordered = map["ordered"] as? Bool {
+        config.ordered = ordered
+    }
+    return config
 }

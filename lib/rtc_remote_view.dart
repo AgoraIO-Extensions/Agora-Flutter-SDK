@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 import './src/enums.dart';
 import './src/rtc_render_view.dart';
 
-/// (Android only) SurfaceView.
-///
-/// Please use [UIView](https://developer.apple.com/documentation/uikit/uiview) for iOS.
+/// SurfaceView.
 class SurfaceView extends RtcSurfaceView {
   /// Constructs a [SurfaceView]
   SurfaceView({
