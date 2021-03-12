@@ -2745,6 +2745,16 @@ mixin RtcCameraInterface {
   Future<void> setCameraZoomFactor(double factor);
 
   /// Gets the maximum zoom ratio supported by the camera.
+  ///
+  /// **Note**
+  ///
+  /// This method is only supported in iOS.
+  ///
+  /// Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+  ///
+  /// **Returns**
+  ///
+  /// The maximum camera zoom factor.
   Future<double> getCameraMaxZoomFactor();
 
   /// Sets the camera manual focus position.
