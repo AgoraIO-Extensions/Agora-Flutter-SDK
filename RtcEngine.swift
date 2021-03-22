@@ -31,456 +31,1038 @@ protocol RtcEngineInterface:
         RtcEngineInjectStreamInterface,
         RtcEngineCameraInterface,
         RtcEngineStreamMessageInterface {
-    associatedtype Map
-    associatedtype Callback
+    func create(_ params: NSDictionary, _ callback: Callback)
 
-    func create(_ appId: String, _ callback: Callback?)
+    func destroy(_ callback: Callback)
 
-    func destroy(_ callback: Callback?)
+    func setChannelProfile(_ params: NSDictionary, _ callback: Callback)
 
-    func setChannelProfile(_ profile: Int, _ callback: Callback?)
+    func setClientRole(_ params: NSDictionary, _ callback: Callback)
 
-    func setClientRole(_ role: Int, _ callback: Callback?)
+    func joinChannel(_ params: NSDictionary, _ callback: Callback)
 
-    func joinChannel(_ token: String?, _ channelName: String, _ optionalInfo: String?, _ optionalUid: Int, _ callback: Callback?)
+    func switchChannel(_ params: NSDictionary, _ callback: Callback)
 
-    func switchChannel(_ token: String?, _ channelName: String, _ callback: Callback?)
+    func leaveChannel(_ callback: Callback)
 
-    func leaveChannel(_ callback: Callback?)
-
-    func renewToken(_ token: String, _ callback: Callback?)
+    func renewToken(_ params: NSDictionary, _ callback: Callback)
 
     @available(*, deprecated)
-    func enableWebSdkInteroperability(_ enabled: Bool, _ callback: Callback?)
+    func enableWebSdkInteroperability(_ params: NSDictionary, _ callback: Callback)
 
-    func getConnectionState(_ callback: Callback?)
+    func getConnectionState(_ callback: Callback)
 
-    func getCallId(_ callback: Callback?)
+    func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback)
 
-    func rate(_ callId: String, _ rating: Int, _ description: String?, _ callback: Callback?)
+    func getCallId(_ callback: Callback)
 
-    func complain(_ callId: String, _ description: String, _ callback: Callback?)
+    func rate(_ params: NSDictionary, _ callback: Callback)
 
-    func setLogFile(_ filePath: String, _ callback: Callback?)
+    func complain(_ params: NSDictionary, _ callback: Callback)
 
-    func setLogFilter(_ filter: Int, _ callback: Callback?)
+    @available(*, deprecated)
+    func setLogFile(_ params: NSDictionary, _ callback: Callback)
 
-    func setLogFileSize(_ fileSizeInKBytes: Int, _ callback: Callback?)
+    @available(*, deprecated)
+    func setLogFilter(_ params: NSDictionary, _ callback: Callback)
 
-    func setParameters(_ parameters: String, _ callback: Callback?)
-}
+    @available(*, deprecated)
+    func setLogFileSize(_ params: NSDictionary, _ callback: Callback)
 
-class RtcEngineManager {
-    private var _engine: AgoraRtcEngineKit?
-    private var delegate: RtcEngineEventHandler?
-    private var mediaObserver: MediaObserver?
+    func setParameters(_ params: NSDictionary, _ callback: Callback)
 
-    func create(_ appId: String, _ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
-        delegate = RtcEngineEventHandler() { methodName, data in
-            emit(methodName, data)
-        }
-        _engine = AgoraRtcEngineKit.sharedEngine(withAppId: appId, delegate: delegate)
-        _engine?.setAppType(.APP_TYPE_REACTNATIVE)
-    }
+    func getSdkVersion(_ callback: Callback)
 
-    func destroy() {
-        AgoraRtcEngineKit.destroy()
-        _engine = nil
-        delegate = nil
-    }
+    func getErrorDescription(_ params: NSDictionary, _ callback: Callback)
 
-    func release() {
-        destroy()
-        mediaObserver = nil
-    }
+    func getNativeHandle(_ callback: Callback)
 
-    var engine: AgoraRtcEngineKit? {
-        return _engine
-    }
+    func enableDeepLearningDenoise(_ params: NSDictionary, _ callback: Callback)
 
-    func getUserInfoByUserAccount(_ userAccount: String) -> Dictionary<String, Any?>? {
-        if let engine = _engine {
-            let userInfo = engine.getUserInfo(byUserAccount: userAccount, withError: nil)
-            return userInfo?.toMap()
-        }
-        return nil
-    }
+    func setCloudProxy(_ params: NSDictionary, _ callback: Callback)
 
-    func getUserInfoByUid(_ uid: Int) -> Dictionary<String, Any?>? {
-        if let engine = _engine {
-            let userInfo = engine.getUserInfo(byUid: UInt(uid), withError: nil)
-            return userInfo?.toMap()
-        }
-        return nil
-    }
-
-    func registerMediaMetadataObserver(_ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) -> Int32 {
-        if let engine = _engine {
-            let mediaObserver = MediaObserver() { methodName, data in
-                emit(methodName, data)
-            }
-            let res = engine.setMediaMetadataDelegate(mediaObserver, with: .video)
-            if res {
-                self.mediaObserver = mediaObserver
-                return 0
-            } else {
-                return Int32(AgoraErrorCode.noPermission.rawValue)
-            }
-        }
-        return Int32(AgoraErrorCode.notInitialized.rawValue)
-    }
-
-    func unregisterMediaMetadataObserver() -> Int32 {
-        if let engine = _engine {
-            let res = engine.setMediaMetadataDelegate(nil, with: .video)
-            if res {
-                mediaObserver = nil
-                return 0
-            } else {
-                return Int32(AgoraErrorCode.noPermission.rawValue)
-            }
-        }
-        return Int32(AgoraErrorCode.notInitialized.rawValue)
-    }
-
-    func setMaxMetadataSize(_ size: Int) -> Int32 {
-        if let observer = mediaObserver {
-            observer.setMaxMetadataSize(size: size)
-            return 0
-        }
-        return Int32(AgoraErrorCode.notInitialized.rawValue)
-    }
-
-    func addMetadata(_ metadata: String) -> Int32 {
-        if let observer = mediaObserver {
-            observer.addMetadata(metadata: metadata)
-            return 0
-        }
-        return Int32(AgoraErrorCode.notInitialized.rawValue)
-    }
-
-    func createDataStream(_ reliable: Bool, _ ordered: Bool) -> Int32 {
-        if let engine = _engine {
-            var streamId = 0
-            let res = engine.createDataStream(&streamId, reliable: reliable, ordered: ordered)
-            if res == 0 {
-                return Int32(streamId)
-            }
-            return res
-        }
-        return Int32(AgoraErrorCode.notInitialized.rawValue)
-    }
-
-    func sendStreamMessage(_ streamId: Int, _ message: String) -> Int32 {
-        if let engine = _engine {
-            if let data = message.data(using: .utf8) {
-                return engine.sendStreamMessage(streamId, data: data)
-            }
-            return Int32(AgoraErrorCode.invalidArgument.rawValue)
-        }
-        return Int32(AgoraErrorCode.notInitialized.rawValue)
-    }
+    func uploadLogFile(_ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
-    associatedtype Callback
+    func registerLocalUserAccount(_ params: NSDictionary, _ callback: Callback)
 
-    func registerLocalUserAccount(_ appId: String, _ userAccount: String, _ callback: Callback?)
+    func joinChannelWithUserAccount(_ params: NSDictionary, _ callback: Callback)
 
-    func joinChannelWithUserAccount(_ token: String?, _ channelName: String, _ userAccount: String, _ callback: Callback?)
+    func getUserInfoByUserAccount(_ params: NSDictionary, _ callback: Callback)
 
-    func getUserInfoByUserAccount(_ userAccount: String, _ callback: Callback?)
-
-    func getUserInfoByUid(_ uid: Int, _ callback: Callback?)
+    func getUserInfoByUid(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioInterface {
-    associatedtype Callback
+    func enableAudio(_ callback: Callback)
 
-    func enableAudio(_ callback: Callback?)
+    func disableAudio(_ callback: Callback)
 
-    func disableAudio(_ callback: Callback?)
+    func setAudioProfile(_ params: NSDictionary, _ callback: Callback)
 
-    func setAudioProfile(_ profile: Int, _ scenario: Int, _ callback: Callback?)
+    func adjustRecordingSignalVolume(_ params: NSDictionary, _ callback: Callback)
 
-    func adjustRecordingSignalVolume(_ volume: Int, _ callback: Callback?)
+    func adjustUserPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback)
 
-    func adjustUserPlaybackSignalVolume(_ uid: Int, _ volume: Int, _ callback: Callback?)
+    func adjustPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback)
 
-    func adjustPlaybackSignalVolume(_ volume: Int, _ callback: Callback?)
+    func enableLocalAudio(_ params: NSDictionary, _ callback: Callback)
 
-    func enableLocalAudio(_ enabled: Bool, _ callback: Callback?)
+    func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback)
 
-    func muteLocalAudioStream(_ muted: Bool, _ callback: Callback?)
+    func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback)
 
-    func muteRemoteAudioStream(_ uid: Int, _ muted: Bool, _ callback: Callback?)
+    func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
-    func muteAllRemoteAudioStreams(_ muted: Bool, _ callback: Callback?)
+    @available(*, deprecated)
+    func setDefaultMuteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
-    func setDefaultMuteAllRemoteAudioStreams(_ muted: Bool, _ callback: Callback?)
-
-    func enableAudioVolumeIndication(_ interval: Int, _ smooth: Int, _ report_vad: Bool, _ callback: Callback?)
+    func enableAudioVolumeIndication(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVideoInterface {
-    associatedtype Map
-    associatedtype Callback
+    func enableVideo(_ callback: Callback)
 
-    func enableVideo(_ callback: Callback?)
+    func disableVideo(_ callback: Callback)
 
-    func disableVideo(_ callback: Callback?)
+    func setVideoEncoderConfiguration(_ params: NSDictionary, _ callback: Callback)
 
-    func setVideoEncoderConfiguration(_ config: Map, _ callback: Callback?)
+    func startPreview(_ callback: Callback)
 
-    func enableLocalVideo(_ enabled: Bool, _ callback: Callback?)
+    func stopPreview(_ callback: Callback)
 
-    func muteLocalVideoStream(_ muted: Bool, _ callback: Callback?)
+    func enableLocalVideo(_ params: NSDictionary, _ callback: Callback)
 
-    func muteRemoteVideoStream(_ uid: Int, _ muted: Bool, _ callback: Callback?)
+    func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback)
 
-    func muteAllRemoteVideoStreams(_ muted: Bool, _ callback: Callback?)
+    func muteRemoteVideoStream(_ params: NSDictionary, _ callback: Callback)
 
-    func setDefaultMuteAllRemoteVideoStreams(_ muted: Bool, _ callback: Callback?)
+    func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
-    func setBeautyEffectOptions(_ enabled: Bool, _ options: Map, _ callback: Callback?)
+    @available(*, deprecated)
+    func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
+
+    func setBeautyEffectOptions(_ params: NSDictionary, _ callback: Callback)
+
+    func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioMixingInterface {
-    associatedtype Callback
+    func startAudioMixing(_ params: NSDictionary, _ callback: Callback)
 
-    func startAudioMixing(_ filePath: String, _ loopback: Bool, _ replace: Bool, _ cycle: Int, _ callback: Callback?)
+    func stopAudioMixing(_ callback: Callback)
 
-    func stopAudioMixing(_ callback: Callback?)
+    func pauseAudioMixing(_ callback: Callback)
 
-    func pauseAudioMixing(_ callback: Callback?)
+    func resumeAudioMixing(_ callback: Callback)
 
-    func resumeAudioMixing(_ callback: Callback?)
+    func adjustAudioMixingVolume(_ params: NSDictionary, _ callback: Callback)
 
-    func adjustAudioMixingVolume(_ volume: Int, _ callback: Callback?)
+    func adjustAudioMixingPlayoutVolume(_ params: NSDictionary, _ callback: Callback)
 
-    func adjustAudioMixingPlayoutVolume(_ volume: Int, _ callback: Callback?)
+    func adjustAudioMixingPublishVolume(_ params: NSDictionary, _ callback: Callback)
 
-    func adjustAudioMixingPublishVolume(_ volume: Int, _ callback: Callback?)
+    func getAudioMixingPlayoutVolume(_ callback: Callback)
 
-    func getAudioMixingPlayoutVolume(_ callback: Callback?)
+    func getAudioMixingPublishVolume(_ callback: Callback)
 
-    func getAudioMixingPublishVolume(_ callback: Callback?)
+    func getAudioMixingDuration(_ callback: Callback)
 
-    func getAudioMixingDuration(_ callback: Callback?)
+    func getAudioMixingCurrentPosition(_ callback: Callback)
 
-    func getAudioMixingCurrentPosition(_ callback: Callback?)
+    func setAudioMixingPosition(_ params: NSDictionary, _ callback: Callback)
 
-    func setAudioMixingPosition(_ pos: Int, _ callback: Callback?)
+    func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioEffectInterface {
-    associatedtype Callback
+    func getEffectsVolume(_ callback: Callback)
 
-    func getEffectsVolume(_ callback: Callback?)
+    func setEffectsVolume(_ params: NSDictionary, _ callback: Callback)
 
-    func setEffectsVolume(_ volume: Double, _ callback: Callback?)
+    func setVolumeOfEffect(_ params: NSDictionary, _ callback: Callback)
 
-    func setVolumeOfEffect(_ soundId: Int, _ volume: Double, _ callback: Callback?)
+    func playEffect(_ params: NSDictionary, _ callback: Callback)
 
-    func playEffect(_ soundId: Int, _ filePath: String, _ loopCount: Int, _ pitch: Double, _ pan: Double, _ gain: Double, _ publish: Bool, _ callback: Callback?)
+    func stopEffect(_ params: NSDictionary, _ callback: Callback)
 
-    func stopEffect(_ soundId: Int, _ callback: Callback?)
+    func stopAllEffects(_ callback: Callback)
 
-    func stopAllEffects(_ callback: Callback?)
+    func preloadEffect(_ params: NSDictionary, _ callback: Callback)
 
-    func preloadEffect(_ soundId: Int, _ filePath: String, _ callback: Callback?)
+    func unloadEffect(_ params: NSDictionary, _ callback: Callback)
 
-    func unloadEffect(_ soundId: Int, _ callback: Callback?)
+    func pauseEffect(_ params: NSDictionary, _ callback: Callback)
 
-    func pauseEffect(_ soundId: Int, _ callback: Callback?)
+    func pauseAllEffects(_ callback: Callback)
 
-    func pauseAllEffects(_ callback: Callback?)
+    func resumeEffect(_ params: NSDictionary, _ callback: Callback)
 
-    func resumeEffect(_ soundId: Int, _ callback: Callback?)
+    func resumeAllEffects(_ callback: Callback)
 
-    func resumeAllEffects(_ callback: Callback?)
+    func setAudioSessionOperationRestriction(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoiceChangerInterface {
-    associatedtype Callback
+    @available(*, deprecated)
+    func setLocalVoiceChanger(_ params: NSDictionary, _ callback: Callback)
 
-    func setLocalVoiceChanger(_ voiceChanger: Int, _ callback: Callback?)
+    @available(*, deprecated)
+    func setLocalVoiceReverbPreset(_ params: NSDictionary, _ callback: Callback)
 
-    func setLocalVoiceReverbPreset(_ preset: Int, _ callback: Callback?)
+    func setLocalVoicePitch(_ params: NSDictionary, _ callback: Callback)
 
-    func setLocalVoicePitch(_ pitch: Double, _ callback: Callback?)
+    func setLocalVoiceEqualization(_ params: NSDictionary, _ callback: Callback)
 
-    func setLocalVoiceEqualization(_ bandFrequency: Int, _ bandGain: Int, _ callback: Callback?)
+    func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback)
 
-    func setLocalVoiceReverb(_ reverbKey: Int, _ value: Int, _ callback: Callback?)
+    func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoicePositionInterface {
-    associatedtype Callback
+    func enableSoundPositionIndication(_ params: NSDictionary, _ callback: Callback)
 
-    func enableSoundPositionIndication(_ enabled: Bool, _ callback: Callback?)
-
-    func setRemoteVoicePosition(_ uid: Int, _ pan: Double, _ gain: Double, _ callback: Callback?)
+    func setRemoteVoicePosition(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEnginePublishStreamInterface {
-    associatedtype Map
-    associatedtype Callback
+    func setLiveTranscoding(_ params: NSDictionary, _ callback: Callback)
 
-    func setLiveTranscoding(_ transcoding: Map, _ callback: Callback?)
+    func addPublishStreamUrl(_ params: NSDictionary, _ callback: Callback)
 
-    func addPublishStreamUrl(_ url: String, _ transcodingEnabled: Bool, _ callback: Callback?)
-
-    func removePublishStreamUrl(_ url: String, _ callback: Callback?)
+    func removePublishStreamUrl(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineMediaRelayInterface {
-    associatedtype Map
-    associatedtype Callback
+    func startChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
-    func startChannelMediaRelay(_ channelMediaRelayConfiguration: Map, _ callback: Callback?)
+    func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
-    func updateChannelMediaRelay(_ channelMediaRelayConfiguration: Map, _ callback: Callback?)
-
-    func stopChannelMediaRelay(_ callback: Callback?)
+    func stopChannelMediaRelay(_ callback: Callback)
 }
 
 protocol RtcEngineAudioRouteInterface {
-    associatedtype Callback
+    func setDefaultAudioRoutetoSpeakerphone(_ params: NSDictionary, _ callback: Callback)
 
-    func setDefaultAudioRoutetoSpeakerphone(_ defaultToSpeaker: Bool, _ callback: Callback?)
+    func setEnableSpeakerphone(_ params: NSDictionary, _ callback: Callback)
 
-    func setEnableSpeakerphone(_ enabled: Bool, _ callback: Callback?)
-
-    func isSpeakerphoneEnabled(_ callback: Callback?)
+    func isSpeakerphoneEnabled(_ callback: Callback)
 }
 
 protocol RtcEngineEarMonitoringInterface {
-    associatedtype Callback
+    func enableInEarMonitoring(_ params: NSDictionary, _ callback: Callback)
 
-    func enableInEarMonitoring(_ enabled: Bool, _ callback: Callback?)
-
-    func setInEarMonitoringVolume(_ volume: Int, _ callback: Callback?)
+    func setInEarMonitoringVolume(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineDualStreamInterface {
-    associatedtype Callback
+    func enableDualStreamMode(_ params: NSDictionary, _ callback: Callback)
 
-    func enableDualStreamMode(_ enabled: Bool, _ callback: Callback?)
+    func setRemoteVideoStreamType(_ params: NSDictionary, _ callback: Callback)
 
-    func setRemoteVideoStreamType(_ uid: Int, _ streamType: Int, _ callback: Callback?)
-
-    func setRemoteDefaultVideoStreamType(_ streamType: Int, _ callback: Callback?)
+    func setRemoteDefaultVideoStreamType(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineFallbackInterface {
-    associatedtype Callback
+    func setLocalPublishFallbackOption(_ params: NSDictionary, _ callback: Callback)
 
-    func setLocalPublishFallbackOption(_ option: Int, _ callback: Callback?)
+    func setRemoteSubscribeFallbackOption(_ params: NSDictionary, _ callback: Callback)
 
-    func setRemoteSubscribeFallbackOption(_ option: Int, _ callback: Callback?)
-
-    func setRemoteUserPriority(_ uid: Int, _ userPriority: Int, _ callback: Callback?)
+    func setRemoteUserPriority(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineTestInterface {
-    associatedtype Map
-    associatedtype Callback
+    func startEchoTest(_ params: NSDictionary, _ callback: Callback)
 
-    func startEchoTest(_ intervalInSeconds: Int, _ callback: Callback?)
+    func stopEchoTest(_ callback: Callback)
 
-    func stopEchoTest(_ callback: Callback?)
+    func enableLastmileTest(_ callback: Callback)
 
-    func enableLastmileTest(_ callback: Callback?)
+    func disableLastmileTest(_ callback: Callback)
 
-    func disableLastmileTest(_ callback: Callback?)
+    func startLastmileProbeTest(_ params: NSDictionary, _ callback: Callback)
 
-    func startLastmileProbeTest(_ config: Map, _ callback: Callback?)
-
-    func stopLastmileProbeTest(_ callback: Callback?)
+    func stopLastmileProbeTest(_ callback: Callback)
 }
 
 protocol RtcEngineMediaMetadataInterface {
-    associatedtype Callback
+    func registerMediaMetadataObserver(_ callback: Callback)
 
-    func registerMediaMetadataObserver(_ callback: Callback?)
+    func unregisterMediaMetadataObserver(_ callback: Callback)
 
-    func unregisterMediaMetadataObserver(_ callback: Callback?)
+    func setMaxMetadataSize(_ params: NSDictionary, _ callback: Callback)
 
-    func setMaxMetadataSize(_ size: Int, _ callback: Callback?)
-
-    func sendMetadata(_ metadata: String, _ callback: Callback?)
+    func sendMetadata(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineWatermarkInterface {
-    associatedtype Map
-    associatedtype Callback
+    func addVideoWatermark(_ params: NSDictionary, _ callback: Callback)
 
-    func addVideoWatermark(_ watermarkUrl: String, _ options: Map, _ callback: Callback?)
-
-    func clearVideoWatermarks(_ callback: Callback?)
+    func clearVideoWatermarks(_ callback: Callback)
 }
 
 protocol RtcEngineEncryptionInterface {
-    associatedtype Callback
+    @available(*, deprecated)
+    func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
-    func setEncryptionSecret(_ secret: String, _ callback: Callback?)
+    @available(*, deprecated)
+    func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
 
-    func setEncryptionMode(_ encryptionMode: String, _ callback: Callback?)
+    func enableEncryption(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioRecorderInterface {
-    associatedtype Callback
+    func startAudioRecording(_ params: NSDictionary, _ callback: Callback)
 
-    func startAudioRecording(_ filePath: String, _ sampleRate: Int, _ quality: Int, _ callback: Callback?)
-
-    func stopAudioRecording(_ callback: Callback?)
+    func stopAudioRecording(_ callback: Callback)
 }
 
 protocol RtcEngineInjectStreamInterface {
-    associatedtype Map
-    associatedtype Callback
+    func addInjectStreamUrl(_ params: NSDictionary, _ callback: Callback)
 
-    func addInjectStreamUrl(_ url: String, _ config: Map, _ callback: Callback?)
-
-    func removeInjectStreamUrl(_ url: String, _ callback: Callback?)
+    func removeInjectStreamUrl(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineCameraInterface {
-    associatedtype Map
-    associatedtype Callback
+    func switchCamera(_ callback: Callback)
 
-    func switchCamera(_ callback: Callback?)
+    func isCameraZoomSupported(_ callback: Callback)
 
-    func isCameraZoomSupported(_ callback: Callback?)
+    func isCameraTorchSupported(_ callback: Callback)
 
-    func isCameraTorchSupported(_ callback: Callback?)
+    func isCameraFocusSupported(_ callback: Callback)
 
-    func isCameraFocusSupported(_ callback: Callback?)
+    func isCameraExposurePositionSupported(_ callback: Callback)
 
-    func isCameraExposurePositionSupported(_ callback: Callback?)
+    func isCameraAutoFocusFaceModeSupported(_ callback: Callback)
 
-    func isCameraAutoFocusFaceModeSupported(_ callback: Callback?)
+    func setCameraZoomFactor(_ params: NSDictionary, _ callback: Callback)
 
-    func setCameraZoomFactor(_ factor: Float, _ callback: Callback?)
+    func getCameraMaxZoomFactor(_ callback: Callback)
 
-    func getCameraMaxZoomFactor(_ callback: Callback?)
+    func setCameraFocusPositionInPreview(_ params: NSDictionary, _ callback: Callback)
 
-    func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: Callback?)
+    func setCameraExposurePosition(_ params: NSDictionary, _ callback: Callback)
 
-    func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: Callback?)
+    func enableFaceDetection(_ params: NSDictionary, _ callback: Callback)
 
-    func setCameraTorchOn(_ isOn: Bool, _ callback: Callback?)
+    func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback)
 
-    func setCameraAutoFocusFaceModeEnabled(_ enabled: Bool, _ callback: Callback?)
+    func setCameraAutoFocusFaceModeEnabled(_ params: NSDictionary, _ callback: Callback)
 
-    func setCameraCapturerConfiguration(_ config: Map, _ callback: Callback?)
+    func setCameraCapturerConfiguration(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineStreamMessageInterface {
-    associatedtype Callback
+    func createDataStream(_ params: NSDictionary, _ callback: Callback)
 
-    func createDataStream(_ reliable: Bool, _ ordered: Bool, _ callback: Callback?)
+    func sendStreamMessage(_ params: NSDictionary, _ callback: Callback)
+}
 
-    func sendStreamMessage(_ streamId: Int, _ message: String, _ callback: Callback?)
+@objc
+class RtcEngineManager: NSObject, RtcEngineInterface {
+    private var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
+    private(set) var engine: AgoraRtcEngineKit?
+    private var delegate: RtcEngineEventHandler?
+    private var mediaObserver: MediaObserver?
+
+    init(_ emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+        self.emitter = emitter
+    }
+
+    func Release() {
+        AgoraRtcEngineKit.destroy()
+        engine = nil
+        delegate = nil
+        mediaObserver = nil
+    }
+
+    @objc func create(_ params: NSDictionary, _ callback: Callback) {
+        delegate = RtcEngineEventHandler() { [weak self] in
+            self?.emitter($0, $1)
+        }
+        engine = AgoraRtcEngineKit.sharedEngine(with: mapToRtcEngineConfig(params["config"] as! Dictionary), delegate: delegate)
+        callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: (params["appType"] as! NSNumber).uintValue)!))
+    }
+
+    @objc func destroy(_ callback: Callback) {
+        callback.resolve(engine) { [weak self] _ in
+            self?.Release()
+        }
+    }
+
+    @objc func setChannelProfile(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setChannelProfile(AgoraChannelProfile(rawValue: (params["profile"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
+        let role = AgoraClientRole(rawValue: (params["role"] as! NSNumber).intValue)!
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.setClientRole(role, options: mapToClientRoleOptions(options)))
+            return
+        }
+        callback.code(engine?.setClientRole(role))
+    }
+
+    @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {
+        let token = params["token"] as? String
+        let channelName = params["channelName"] as! String
+        let optionalInfo = params["optionalInfo"] as? String
+        let optionalUid = params["optionalUid"] as! NSNumber
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: optionalUid.uintValue, options: mapToChannelMediaOptions(options)))
+            return
+        }
+        callback.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: optionalUid.uintValue))
+    }
+
+    @objc func switchChannel(_ params: NSDictionary, _ callback: Callback) {
+        let token = params["token"] as? String
+        let channelName = params["channelName"] as! String
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.switchChannel(byToken: token, channelId: channelName, options: mapToChannelMediaOptions(options)))
+            return
+        }
+        callback.code(engine?.switchChannel(byToken: token, channelId: channelName))
+    }
+
+    @objc func leaveChannel(_ callback: Callback) {
+        callback.code(engine?.leaveChannel())
+    }
+
+    @objc func renewToken(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.renewToken(params["token"] as! String))
+    }
+
+    @objc func enableWebSdkInteroperability(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableWebSdkInteroperability(params["enabled"] as! Bool))
+    }
+
+    @objc func getConnectionState(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.getConnectionState().rawValue
+        }
+    }
+
+    @objc func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.sendCustomReportMessage(params["id"] as! String, category: params["category"] as! String, event: params["event"] as! String, label: params["label"] as! String, value: (params["value"] as! NSNumber).intValue))
+    }
+
+    @objc func getCallId(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.getCallId()
+        }
+    }
+
+    @objc func rate(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.rate(params["callId"] as! String, rating: (params["rating"] as! NSNumber).intValue, description: params["description"] as? String))
+    }
+
+    @objc func complain(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.complain(params["callId"] as! String, description: params["description"] as? String))
+    }
+
+    @objc func setLogFile(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLogFile(params["filePath"] as! String))
+    }
+
+    @objc func setLogFilter(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLogFilter((params["filter"] as! NSNumber).uintValue))
+    }
+
+    @objc func setLogFileSize(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLogFileSize((params["fileSizeInKBytes"] as! NSNumber).uintValue))
+    }
+
+    @objc func getNativeHandle(_ callback: Callback) {
+        callback.resolve(engine) {
+            Int(bitPattern: $0.getNativeHandle())
+        }
+    }
+
+    @objc func setParameters(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setParameters(params["parameters"] as! String))
+    }
+
+    @objc func registerLocalUserAccount(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.registerLocalUserAccount(params["userAccount"] as! String, appId: params["appId"] as! String))
+    }
+
+    @objc func joinChannelWithUserAccount(_ params: NSDictionary, _ callback: Callback) {
+        let userAccount = params["userAccount"] as! String
+        let token = params["token"] as? String
+        let channelName = params["channelName"] as! String
+        if let options = params["options"] as? Dictionary<String, Any> {
+            callback.code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName, options: mapToChannelMediaOptions(options)))
+            return
+        }
+        callback.code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName))
+    }
+
+    @objc func getUserInfoByUserAccount(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.getUserInfo(byUserAccount: params["userAccount"] as! String, withError: nil)?.toMap()
+        }
+    }
+
+    @objc func getUserInfoByUid(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.getUserInfo(byUid: (params["uid"] as! NSNumber).uintValue, withError: nil)?.toMap()
+        }
+    }
+
+    @objc func enableAudio(_ callback: Callback) {
+        callback.code(engine?.enableAudio())
+    }
+
+    @objc func disableAudio(_ callback: Callback) {
+        callback.code(engine?.disableAudio())
+    }
+
+    @objc func setAudioProfile(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioProfile(AgoraAudioProfile(rawValue: (params["profile"] as! NSNumber).intValue)!, scenario: AgoraAudioScenario(rawValue: (params["scenario"] as! NSNumber).intValue)!))
+    }
+
+    @objc func adjustRecordingSignalVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.adjustRecordingSignalVolume((params["volume"] as! NSNumber).intValue))
+    }
+
+    @objc func adjustUserPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.adjustUserPlaybackSignalVolume((params["uid"] as! NSNumber).uintValue, volume: (params["volume"] as! NSNumber).int32Value))
+    }
+
+    @objc func adjustPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.adjustPlaybackSignalVolume((params["volume"] as! NSNumber).intValue))
+    }
+
+    @objc func enableLocalAudio(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableLocalAudio(params["enabled"] as! Bool))
+    }
+
+    @objc func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.muteLocalAudioStream(params["muted"] as! Bool))
+    }
+
+    @objc func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.muteRemoteAudioStream((params["uid"] as! NSNumber).uintValue, mute: params["muted"] as! Bool))
+    }
+
+    @objc func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.muteAllRemoteAudioStreams(params["muted"] as! Bool))
+    }
+
+    @objc func setDefaultMuteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setDefaultMuteAllRemoteAudioStreams(params["muted"] as! Bool))
+    }
+
+    @objc func enableAudioVolumeIndication(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableAudioVolumeIndication((params["interval"] as! NSNumber).intValue, smooth: (params["smooth"] as! NSNumber).intValue, report_vad: params["report_vad"] as! Bool))
+    }
+
+    @objc func enableVideo(_ callback: Callback) {
+        callback.code(engine?.enableVideo())
+    }
+
+    @objc func disableVideo(_ callback: Callback) {
+        callback.code(engine?.disableVideo())
+    }
+
+    @objc func setVideoEncoderConfiguration(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(params["config"] as! Dictionary)))
+    }
+
+    @objc func startPreview(_ callback: Callback) {
+        callback.code(engine?.startPreview())
+    }
+
+    @objc func stopPreview(_ callback: Callback) {
+        callback.code(engine?.stopPreview())
+    }
+
+    @objc func enableLocalVideo(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableLocalVideo(params["enabled"] as! Bool))
+    }
+
+    @objc func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.muteLocalVideoStream(params["muted"] as! Bool))
+    }
+
+    @objc func muteRemoteVideoStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.muteRemoteVideoStream((params["uid"] as! NSNumber).uintValue, mute: params["muted"] as! Bool))
+    }
+
+    @objc func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.muteAllRemoteVideoStreams(params["muted"] as! Bool))
+    }
+
+    @objc func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setDefaultMuteAllRemoteVideoStreams(params["muted"] as! Bool))
+    }
+
+    @objc func setBeautyEffectOptions(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setBeautyEffectOptions(params["enabled"] as! Bool, options: mapToBeautyOptions(params["options"] as! Dictionary)))
+    }
+
+    @objc func startAudioMixing(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startAudioMixing(params["filePath"] as! String, loopback: params["loopback"] as! Bool, replace: params["replace"] as! Bool, cycle: (params["cycle"] as! NSNumber).intValue))
+    }
+
+    @objc func stopAudioMixing(_ callback: Callback) {
+        callback.code(engine?.stopAudioMixing())
+    }
+
+    @objc func pauseAudioMixing(_ callback: Callback) {
+        callback.code(engine?.pauseAudioMixing())
+    }
+
+    @objc func resumeAudioMixing(_ callback: Callback) {
+        callback.code(engine?.resumeAudioMixing())
+    }
+
+    @objc func adjustAudioMixingVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.adjustAudioMixingVolume((params["volume"] as! NSNumber).intValue))
+    }
+
+    @objc func adjustAudioMixingPlayoutVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.adjustAudioMixingPlayoutVolume((params["volume"] as! NSNumber).intValue))
+    }
+
+    @objc func adjustAudioMixingPublishVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.adjustAudioMixingPublishVolume((params["volume"] as! NSNumber).intValue))
+    }
+
+    @objc func getAudioMixingPlayoutVolume(_ callback: Callback) {
+        callback.code(engine?.getAudioMixingPlayoutVolume()) {
+            $0
+        }
+    }
+
+    @objc func getAudioMixingPublishVolume(_ callback: Callback) {
+        callback.code(engine?.getAudioMixingPublishVolume()) {
+            $0
+        }
+    }
+
+    @objc func getAudioMixingDuration(_ callback: Callback) {
+        callback.code(engine?.getAudioMixingDuration()) {
+            $0
+        }
+    }
+
+    @objc func getAudioMixingCurrentPosition(_ callback: Callback) {
+        callback.code(engine?.getAudioMixingCurrentPosition()) {
+            $0
+        }
+    }
+
+    @objc func setAudioMixingPosition(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioMixingPosition((params["pos"] as! NSNumber).intValue))
+    }
+
+    @objc func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioMixingPitch((params["pitch"] as! NSNumber).intValue))
+    }
+
+    @objc func getEffectsVolume(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.getEffectsVolume()
+        }
+    }
+
+    @objc func setEffectsVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setEffectsVolume((params["volume"] as! NSNumber).doubleValue))
+    }
+
+    @objc func setVolumeOfEffect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVolumeOfEffect((params["soundId"] as! NSNumber).int32Value, withVolume: (params["volume"] as! NSNumber).doubleValue))
+    }
+
+    @objc func playEffect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.playEffect((params["soundId"] as! NSNumber).int32Value, filePath: params["filePath"] as? String, loopCount: (params["loopCount"] as! NSNumber).int32Value, pitch: (params["pitch"] as! NSNumber).doubleValue, pan: (params["pan"] as! NSNumber).doubleValue, gain: (params["gain"] as! NSNumber).doubleValue, publish: params["publish"] as! Bool))
+    }
+
+    @objc func stopEffect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.stopEffect((params["soundId"] as! NSNumber).int32Value))
+    }
+
+    @objc func stopAllEffects(_ callback: Callback) {
+        callback.code(engine?.stopAllEffects())
+    }
+
+    @objc func preloadEffect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.preloadEffect((params["soundId"] as! NSNumber).int32Value, filePath: params["filePath"] as? String))
+    }
+
+    @objc func unloadEffect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.unloadEffect((params["soundId"] as! NSNumber).int32Value))
+    }
+
+    @objc func pauseEffect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.pauseEffect((params["soundId"] as! NSNumber).int32Value))
+    }
+
+    @objc func pauseAllEffects(_ callback: Callback) {
+        callback.code(engine?.pauseAllEffects())
+    }
+
+    @objc func resumeEffect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.resumeEffect((params["soundId"] as! NSNumber).int32Value))
+    }
+
+    @objc func resumeAllEffects(_ callback: Callback) {
+        callback.code(engine?.resumeAllEffects())
+    }
+
+    @objc func setAudioSessionOperationRestriction(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.setAudioSessionOperationRestriction(AgoraAudioSessionOperationRestriction(rawValue: (params["restriction"] as! NSNumber).uintValue))
+        }
+    }
+
+    @objc func setLocalVoiceChanger(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLocalVoiceChanger(AgoraAudioVoiceChanger(rawValue: (params["voiceChanger"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setLocalVoiceReverbPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLocalVoiceReverbPreset(AgoraAudioReverbPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setLocalVoicePitch(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLocalVoicePitch((params["pitch"] as! NSNumber).doubleValue))
+    }
+
+    @objc func setLocalVoiceEqualization(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLocalVoiceEqualizationOf(AgoraAudioEqualizationBandFrequency(rawValue: (params["bandFrequency"] as! NSNumber).intValue)!, withGain: (params["bandGain"] as! NSNumber).intValue))
+    }
+
+    @objc func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLocalVoiceReverbOf(AgoraAudioReverbType(rawValue: (params["reverbKey"] as! NSNumber).intValue)!, withValue: (params["value"] as! NSNumber).intValue))
+    }
+
+    @objc func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectPreset(AgoraAudioEffectPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceBeautifierPreset(AgoraVoiceBeautifierPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceConversionPreset(AgoraVoiceConversionPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectParameters(AgoraAudioEffectPreset(rawValue: (params["preset"] as! NSNumber).intValue)!, param1: (params["param1"] as! NSNumber).int32Value, param2: (params["param2"] as! NSNumber).int32Value))
+    }
+
+    @objc func enableSoundPositionIndication(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableSoundPositionIndication(params["enabled"] as! Bool))
+    }
+
+    @objc func setRemoteVoicePosition(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setRemoteVoicePosition((params["uid"] as! NSNumber).uintValue, pan: (params["pan"] as! NSNumber).doubleValue, gain: (params["gain"] as! NSNumber).doubleValue))
+    }
+
+    @objc func setLiveTranscoding(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLiveTranscoding(mapToLiveTranscoding(params["transcoding"] as! Dictionary)))
+    }
+
+    @objc func addPublishStreamUrl(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.addPublishStreamUrl(params["url"] as! String, transcodingEnabled: params["transcodingEnabled"] as! Bool))
+    }
+
+    @objc func removePublishStreamUrl(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.removePublishStreamUrl(params["url"] as! String))
+    }
+
+    @objc func startChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! Dictionary)))
+    }
+
+    @objc func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! Dictionary)))
+    }
+
+    @objc func stopChannelMediaRelay(_ callback: Callback) {
+        callback.code(engine?.stopChannelMediaRelay())
+    }
+
+    @objc func setDefaultAudioRoutetoSpeakerphone(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setDefaultAudioRouteToSpeakerphone(params["defaultToSpeaker"] as! Bool))
+    }
+
+    @objc func setEnableSpeakerphone(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setEnableSpeakerphone(params["enabled"] as! Bool))
+    }
+
+    @objc func isSpeakerphoneEnabled(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.isSpeakerphoneEnabled()
+        }
+    }
+
+    @objc func enableInEarMonitoring(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enable(inEarMonitoring: params["enabled"] as! Bool))
+    }
+
+    @objc func setInEarMonitoringVolume(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setInEarMonitoringVolume((params["volume"] as! NSNumber).intValue))
+    }
+
+    @objc func enableDualStreamMode(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableDualStreamMode(params["enabled"] as! Bool))
+    }
+
+    @objc func setRemoteVideoStreamType(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setRemoteVideoStream((params["uid"] as! NSNumber).uintValue, type: AgoraVideoStreamType(rawValue: (params["streamType"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setRemoteDefaultVideoStreamType(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setRemoteDefaultVideoStreamType(AgoraVideoStreamType(rawValue: (params["streamType"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setLocalPublishFallbackOption(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLocalPublishFallbackOption(AgoraStreamFallbackOptions(rawValue: (params["option"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setRemoteSubscribeFallbackOption(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setRemoteSubscribeFallbackOption(AgoraStreamFallbackOptions(rawValue: (params["option"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setRemoteUserPriority(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setRemoteUserPriority((params["uid"] as! NSNumber).uintValue, type: AgoraUserPriority(rawValue: (params["userPriority"] as! NSNumber).intValue)!))
+    }
+
+    @objc func startEchoTest(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startEchoTest(withInterval: (params["intervalInSeconds"] as! NSNumber).intValue))
+    }
+
+    @objc func stopEchoTest(_ callback: Callback) {
+        callback.code(engine?.stopEchoTest())
+    }
+
+    @objc func enableLastmileTest(_ callback: Callback) {
+        callback.code(engine?.enableLastmileTest())
+    }
+
+    @objc func disableLastmileTest(_ callback: Callback) {
+        callback.code(engine?.disableLastmileTest())
+    }
+
+    @objc func startLastmileProbeTest(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(params["config"] as! Dictionary)))
+    }
+
+    @objc func stopLastmileProbeTest(_ callback: Callback) {
+        callback.code(engine?.stopLastmileProbeTest())
+    }
+
+    @objc func registerMediaMetadataObserver(_ callback: Callback) {
+        let mediaObserver = MediaObserver { [weak self] in
+            self?.emitter(RtcEngineEvents.MetadataReceived, $0)
+        }
+        callback.resolve(engine) {
+            if $0.setMediaMetadataDelegate(mediaObserver, with: .video) {
+                self.mediaObserver = mediaObserver
+            }
+            return nil
+        }
+    }
+
+    @objc func unregisterMediaMetadataObserver(_ callback: Callback) {
+        callback.resolve(engine) {
+            if $0.setMediaMetadataDelegate(nil, with: .video) {
+                self.mediaObserver = nil
+            }
+            return nil
+        }
+    }
+
+    @objc func setMaxMetadataSize(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(mediaObserver) {
+            $0.setMaxMetadataSize((params["size"] as! NSNumber).intValue)
+        }
+    }
+
+    @objc func sendMetadata(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(mediaObserver) {
+            $0.addMetadata(params["metadata"] as! String)
+        }
+    }
+
+    @objc func addVideoWatermark(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.addVideoWatermark(URL(string: params["watermarkUrl"] as! String)!, options: mapToWatermarkOptions(params["options"] as! Dictionary)))
+    }
+
+    @objc func clearVideoWatermarks(_ callback: Callback) {
+        callback.code(engine?.clearVideoWatermarks())
+    }
+
+    @objc func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setEncryptionSecret(params["secret"] as? String))
+    }
+
+    @objc func setEncryptionMode(_ params: NSDictionary, _ callback: Callback) {
+        var encryptionMode = ""
+        switch (params["encryptionMode"] as! NSNumber).intValue {
+        case AgoraEncryptionMode.AES128XTS.rawValue:
+            encryptionMode = "aes-128-xts"
+        case AgoraEncryptionMode.AES128ECB.rawValue:
+            encryptionMode = "aes-128-ecb"
+        case AgoraEncryptionMode.AES256XTS.rawValue:
+            encryptionMode = "aes-256-xts"
+        default: encryptionMode = ""
+        }
+        callback.code(engine?.setEncryptionMode(encryptionMode))
+    }
+
+    @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
+    }
+
+    @objc func startAudioRecording(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startAudioRecording(params["filePath"] as! String, sampleRate: (params["sampleRate"] as! NSNumber).intValue, quality: AgoraAudioRecordingQuality(rawValue: (params["quality"] as! NSNumber).intValue)!))
+    }
+
+    @objc func stopAudioRecording(_ callback: Callback) {
+        callback.code(engine?.stopAudioRecording())
+    }
+
+    @objc func addInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.addInjectStreamUrl(params["url"] as! String, config: mapToLiveInjectStreamConfig(params["config"] as! Dictionary)))
+    }
+
+    @objc func removeInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.removeInjectStreamUrl(params["url"] as! String))
+    }
+
+    @objc func switchCamera(_ callback: Callback) {
+        callback.code(engine?.switchCamera())
+    }
+
+    @objc func isCameraZoomSupported(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.isCameraZoomSupported()
+        }
+    }
+
+    @objc func isCameraTorchSupported(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.isCameraTorchSupported()
+        }
+    }
+
+    @objc func isCameraFocusSupported(_ callback: Callback) {
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
+    }
+
+    @objc func isCameraExposurePositionSupported(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.isCameraExposurePositionSupported()
+        }
+    }
+
+    @objc func isCameraAutoFocusFaceModeSupported(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.isCameraAutoFocusFaceModeSupported()
+        }
+    }
+
+    @objc func setCameraZoomFactor(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.setCameraZoomFactor(CGFloat(truncating: params["factor"] as! NSNumber))
+            return nil
+        }
+    }
+
+    @objc func getCameraMaxZoomFactor(_ callback: Callback) {
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
+    }
+
+    @objc func setCameraFocusPositionInPreview(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.setCameraFocusPositionInPreview(CGPoint(x: (params["positionX"] as! NSNumber).doubleValue, y: (params["positionY"] as! NSNumber).doubleValue))
+            return nil
+        }
+    }
+
+    @objc func setCameraExposurePosition(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.setCameraExposurePosition(CGPoint(x: (params["positionXinView"] as! NSNumber).doubleValue, y: (params["positionYinView"] as! NSNumber).doubleValue))
+            return nil
+        }
+    }
+
+    @objc func enableFaceDetection(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableFaceDetection(params["enable"] as! Bool))
+    }
+
+    @objc func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.setCameraTorchOn(params["isOn"] as! Bool)
+            return nil
+        }
+    }
+
+    @objc func setCameraAutoFocusFaceModeEnabled(_ params: NSDictionary, _ callback: Callback) {
+        callback.resolve(engine) {
+            $0.setCameraAutoFocusFaceModeEnabled(params["enabled"] as! Bool)
+        }
+    }
+
+    @objc func setCameraCapturerConfiguration(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(params["config"] as! Dictionary)))
+    }
+
+    @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {
+        var streamId = 0
+        if let config = params["config"] as? Dictionary<String, Any> {
+            callback.code(engine?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in streamId }
+            return
+        }
+        callback.code(engine?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in streamId }
+    }
+
+    @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
+    }
+
+    @objc func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceBeautifierParameters(AgoraVoiceBeautifierPreset.init(rawValue: (params["preset"] as! NSNumber).intValue)!, param1: (params["param1"] as! NSNumber).int32Value, param2: (params["param2"] as! NSNumber).int32Value))
+    }
+
+    @objc func getSdkVersion(_ callback: Callback) {
+        callback.success(AgoraRtcEngineKit.getSdkVersion())
+    }
+
+    @objc func getErrorDescription(_ params: NSDictionary, _ callback: Callback) {
+        callback.success(AgoraRtcEngineKit.getErrorDescription((params["code"] as! NSNumber).intValue))
+    }
+
+    @objc func enableDeepLearningDenoise(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableDeepLearningDenoise(params["enabled"] as! Bool))
+    }
+
+    @objc func setCloudProxy(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setCloudProxy(AgoraCloudProxyType.init(rawValue: (params["proxyType"] as! NSNumber).uintValue)!))
+    }
+
+    @objc func uploadLogFile(_ callback: Callback) {
+        callback.resolve(engine) {
+            return $0.uploadLogFile()
+        }
+    }
+
+    @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enabled"] as! Bool))
+    }
 }
