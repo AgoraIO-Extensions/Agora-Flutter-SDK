@@ -63,7 +63,7 @@ protocol RtcChannelVideoInterface {
     @available(*, deprecated)
     func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
-    func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback)
+    func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcChannelVoicePositionInterface {
@@ -366,8 +366,8 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
     }
-    
-    @objc func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback) {
+
+    @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enable"] as! Bool))
     }
 }
