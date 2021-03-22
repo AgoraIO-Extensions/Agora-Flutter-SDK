@@ -70,18 +70,18 @@ protocol RtcEngineInterface:
     func setLogFileSize(_ params: NSDictionary, _ callback: Callback)
 
     func setParameters(_ params: NSDictionary, _ callback: Callback)
-    
-    func getSdkVersion(callback: Callback)
 
-    func getErrorDescription(_ params: NSDictionary, callback: Callback)
+    func getSdkVersion(_ callback: Callback)
+
+    func getErrorDescription(_ params: NSDictionary, _ callback: Callback)
 
     func getNativeHandle(_ callback: Callback)
-    
-    func enableDeepLearningDenoise(_ params: NSDictionary, callback: Callback)
 
-    func setCloudProxy(_ params: NSDictionary, callback: Callback)
+    func enableDeepLearningDenoise(_ params: NSDictionary, _ callback: Callback)
 
-    func uploadLogFile(callback: Callback)
+    func setCloudProxy(_ params: NSDictionary, _ callback: Callback)
+
+    func uploadLogFile(_ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -144,8 +144,8 @@ protocol RtcEngineVideoInterface {
     func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
     func setBeautyEffectOptions(_ params: NSDictionary, _ callback: Callback)
-    
-    func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback)
+
+    func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioMixingInterface {
@@ -216,16 +216,16 @@ protocol RtcEngineVoiceChangerInterface {
     func setLocalVoiceEqualization(_ params: NSDictionary, _ callback: Callback)
 
     func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback)
-    
+
     func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback)
-    
+
     func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
-    
-    func setVoiceBeautifierParameters(_ params: NSDictionary, callback: Callback)
+
+    func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoicePositionInterface {
@@ -747,19 +747,19 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setLocalVoiceReverbOf(AgoraAudioReverbType(rawValue: (params["reverbKey"] as! NSNumber).intValue)!, withValue: (params["value"] as! NSNumber).intValue))
     }
-    
+
     @objc func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setAudioEffectPreset(AgoraAudioEffectPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
     }
-    
+
     @objc func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setVoiceBeautifierPreset(AgoraVoiceBeautifierPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
     }
-    
+
     @objc func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setVoiceConversionPreset(AgoraVoiceConversionPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
     }
-    
+
     @objc func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setAudioEffectParameters(AgoraAudioEffectPreset(rawValue: (params["preset"] as! NSNumber).intValue)!, param1: (params["param1"] as! NSNumber).int32Value, param2: (params["param2"] as! NSNumber).int32Value))
     }
@@ -1035,34 +1035,34 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
     }
-    
-    @objc func setVoiceBeautifierParameters(_ params: NSDictionary, callback: Callback) {
+
+    @objc func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setVoiceBeautifierParameters(AgoraVoiceBeautifierPreset.init(rawValue: (params["preset"] as! NSNumber).intValue)!, param1: (params["param1"] as! NSNumber).int32Value, param2: (params["param2"] as! NSNumber).int32Value))
     }
-    
-    @objc func getSdkVersion(callback: Callback) {
+
+    @objc func getSdkVersion(_ callback: Callback) {
         callback.success(AgoraRtcEngineKit.getSdkVersion())
     }
-    
-    @objc func getErrorDescription(_ params: NSDictionary, callback: Callback) {
+
+    @objc func getErrorDescription(_ params: NSDictionary, _ callback: Callback) {
         callback.success(AgoraRtcEngineKit.getErrorDescription((params["code"] as! NSNumber).intValue))
     }
-    
-    @objc func enableDeepLearningDenoise(_ params: NSDictionary, callback: Callback) {
+
+    @objc func enableDeepLearningDenoise(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableDeepLearningDenoise(params["enabled"] as! Bool))
     }
-    
-    @objc func setCloudProxy(_ params: NSDictionary, callback: Callback) {
+
+    @objc func setCloudProxy(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setCloudProxy(AgoraCloudProxyType.init(rawValue: (params["proxyType"] as! NSNumber).uintValue)!))
     }
-    
-    @objc func uploadLogFile(callback: Callback) {
+
+    @objc func uploadLogFile(_ callback: Callback) {
         callback.resolve(engine) {
             return $0.uploadLogFile()
         }
     }
-    
-    @objc func enableRemoteSuperResolution(_ params: NSDictionary, callback: Callback) {
+
+    @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enabled"] as! Bool))
     }
 }

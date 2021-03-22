@@ -1,3 +1,10 @@
+## [3.3.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1...v3.3.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* iOS selector error ([2d1ac8f](https://github.com/AgoraIO/Flutter-SDK/commit/2d1ac8f1b902f71c06b0b1729579adf396b58c9b))
+
 ## [3.3.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.2...v3.3.1) (2021-03-12)
 
 ## [3.3.1-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.1...v3.3.1-rc.2) (2021-03-11)
