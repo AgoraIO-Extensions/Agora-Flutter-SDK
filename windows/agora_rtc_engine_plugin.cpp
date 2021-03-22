@@ -1,4 +1,4 @@
-#include "agora_rtc_engine_plugin.h"
+#include "include/agora_rtc_engine/agora_rtc_engine_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -56,12 +56,6 @@ AgoraRtcEnginePlugin::~AgoraRtcEnginePlugin() {}
 void AgoraRtcEnginePlugin::HandleMethodCall(
     const flutter::MethodCall<flutter::EncodableValue> &method_call,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-  // Replace "getPlatformVersion" check with your plugin's method.
-  // See:
-  // https://github.com/flutter/engine/tree/master/shell/platform/common/cpp/client_wrapper/include/flutter
-  // and
-  // https://github.com/flutter/engine/tree/master/shell/platform/glfw/client_wrapper/include/flutter
-  // for the relevant Flutter APIs.
   if (method_call.method_name().compare("getPlatformVersion") == 0) {
     std::ostringstream version_stream;
     version_stream << "Windows ";
@@ -72,8 +66,7 @@ void AgoraRtcEnginePlugin::HandleMethodCall(
     } else if (IsWindows7OrGreater()) {
       version_stream << "7";
     }
-    flutter::EncodableValue response(version_stream.str());
-    result->Success(&response);
+    result->Success(flutter::EncodableValue(version_stream.str()));
   } else {
     result->NotImplemented();
   }

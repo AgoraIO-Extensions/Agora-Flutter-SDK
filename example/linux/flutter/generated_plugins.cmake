@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  agora_rtc_engine
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

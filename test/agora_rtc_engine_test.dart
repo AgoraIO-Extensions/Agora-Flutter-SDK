@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const channel = MethodChannel('agora_rtc_engine');
+  const MethodChannel channel = MethodChannel('agora_rtc_engine');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -14,13 +14,13 @@ void main() {
     });
   });
 
+  tearDown(() {
+    channel.setMockMethodCallHandler(null);
+  });
+
   test('LiveTranscoding', () {
     var transcoding = LiveTranscoding(null, backgroundColor: Colors.red);
     print(transcoding.backgroundColor);
     print(transcoding.toJson());
-  });
-
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
   });
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../rtc_engine.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'rtc_channel.dart';
@@ -238,6 +240,8 @@ class RtcTextureView extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
+  final bool useFlutterTexture;
+
   /// Constructs a [RtcTextureView]
   RtcTextureView({
     Key? key,
@@ -247,6 +251,7 @@ class RtcTextureView extends StatefulWidget {
     this.mirrorMode = VideoMirrorMode.Auto,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
+    this.useFlutterTexture = true,
   }) : super(key: key);
 
   @override
@@ -262,24 +267,33 @@ class _RtcTextureViewState extends State<RtcTextureView> {
 
   @override
   Widget build(BuildContext context) {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: AndroidView(
-          viewType: 'AgoraTextureView',
-          onPlatformViewCreated: onPlatformViewCreated,
-          hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-          creationParams: {
-            'data': {'uid': widget.uid, 'channelId': widget.channelId},
-            'renderMode': _renderMode,
-            'mirrorMode': _mirrorMode,
-          },
-          creationParamsCodec: const StandardMessageCodec(),
-          gestureRecognizers: widget.gestureRecognizers,
-        ),
+    if (widget.useFlutterTexture) {
+      if (_id != null) {
+        return Texture(textureId: _id!);
+      }
+      return Container(
+        color: Colors.yellow,
       );
+    } else {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          child: AndroidView(
+            viewType: 'AgoraTextureView',
+            onPlatformViewCreated: onPlatformViewCreated,
+            hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+            creationParams: {
+              'data': {'uid': widget.uid, 'channelId': widget.channelId},
+              'renderMode': _renderMode,
+              'mirrorMode': _mirrorMode,
+            },
+            creationParamsCodec: const StandardMessageCodec(),
+            gestureRecognizers: widget.gestureRecognizers,
+          ),
+        );
+      }
+      return Text('$defaultTargetPlatform is not yet supported by the plugin');
     }
-    return Text('$defaultTargetPlatform is not yet supported by the plugin');
   }
 
   @override
@@ -287,6 +301,18 @@ class _RtcTextureViewState extends State<RtcTextureView> {
     super.initState();
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
+    if (widget.useFlutterTexture) {
+      RtcEngine.methodChannel.invokeMethod('createTextureRender').then((value) {
+        setState(() {
+          _id = value;
+        });
+        if (!_channels.containsKey(value)) {
+          _channels[value] =
+              MethodChannel('agora_rtc_engine/texture_render_$value');
+          setData();
+        }
+      });
+    }
   }
 
   @override
@@ -308,6 +334,9 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   void dispose() {
     super.dispose();
     _channels.remove(_id);
+    if (widget.useFlutterTexture) {
+      RtcEngine.methodChannel.invokeMethod('destroyTextureRender', {'id': _id});
+    }
   }
 
   void setData() {

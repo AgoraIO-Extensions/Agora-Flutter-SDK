@@ -1,5 +1,4 @@
 import 'dart:async';
-
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
@@ -12,10 +11,10 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 /// A web implementation of the AgoraRtcEngine plugin.
 class AgoraRtcEngineWeb {
   static void registerWith(Registrar registrar) {
-    final channel = MethodChannel(
+    final MethodChannel channel = MethodChannel(
       'agora_rtc_engine',
       const StandardMethodCodec(),
-      registrar.messenger,
+      registrar,
     );
 
     final pluginInstance = AgoraRtcEngineWeb();
@@ -29,11 +28,11 @@ class AgoraRtcEngineWeb {
     switch (call.method) {
       case 'getPlatformVersion':
         return getPlatformVersion();
+        break;
       default:
         throw PlatformException(
           code: 'Unimplemented',
-          details:
-              'agora_rtc_engine for web doesn\'t implement \'${call.method}\'',
+          details: 'agora_rtc_engine for web doesn\'t implement \'${call.method}\'',
         );
     }
   }

@@ -63,6 +63,19 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if call.method == "createTextureRender" {
+            let id = AgoraTextureViewFactory.createTextureRender(registrar!.textures(), registrar!.messenger(), self, rtcChannelPlugin)
+            result(id)
+            return
+        } else if call.method == "destroyTextureRender" {
+            if let params = call.arguments as? NSDictionary {
+                if let id = params["id"] as? NSNumber {
+                    AgoraTextureViewFactory.destroyTextureRender(id.int64Value)
+                }
+            }
+            return
+        }
+        
         if call.method == "getAssetAbsolutePath" {
             getAssetAbsolutePath(call, result: result)
             return
