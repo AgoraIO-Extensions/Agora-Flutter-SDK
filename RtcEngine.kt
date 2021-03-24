@@ -334,10 +334,8 @@ class RtcEngineManager(
   }
 
   override fun create(params: Map<String, *>, callback: Callback) {
-    engine = RtcEngineEx.create(RtcEngineConfig().apply {
+    engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
       mContext = params["context"] as Context
-      mAppId = params["appId"] as String
-      mAreaCode = (params["areaCode"] as Number).toInt()
       mEventHandler = RtcEngineEventHandler { methodName, data ->
         emit(methodName, data)
       }
@@ -354,15 +352,22 @@ class RtcEngineManager(
   }
 
   override fun setClientRole(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setClientRole((params["role"] as Number).toInt()))
+    val role = (params["role"] as Number).toInt()
+    callback.code(engine?.setClientRole(role))
   }
 
   override fun joinChannel(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.joinChannel(params["token"] as? String, params["channelName"] as String, params["optionalInfo"] as? String, (params["optionalUid"] as Number).toInt()))
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    val optionalInfo = params["optionalInfo"] as? String
+    val optionalUid = (params["optionalUid"] as Number).toInt()
+    callback.code(engine?.joinChannel(token, channelName, optionalInfo, optionalUid))
   }
 
   override fun switchChannel(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.switchChannel(params["token"] as? String, params["channelName"] as String))
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    callback.code(engine?.switchChannel(token, channelName))
   }
 
   override fun leaveChannel(callback: Callback) {
@@ -422,7 +427,10 @@ class RtcEngineManager(
   }
 
   override fun joinChannelWithUserAccount(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.joinChannelWithUserAccount(params["token"] as? String, params["channelName"] as String, params["userAccount"] as String))
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    val userAccount = params["userAccount"] as String
+    callback.code(engine?.joinChannelWithUserAccount(token, channelName, userAccount))
   }
 
   override fun getUserInfoByUserAccount(params: Map<String, *>, callback: Callback) {
@@ -758,24 +766,20 @@ class RtcEngineManager(
   }
 
   override fun registerMediaMetadataObserver(callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      val mediaObserver = MediaObserver { data ->
-        emit(RtcEngineEvents.MetadataReceived, data)
-      }
-      code = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
-      if (code == 0) this.mediaObserver = mediaObserver
+    val mediaObserver = MediaObserver { data ->
+      emit(RtcEngineEvents.MetadataReceived, data)
     }
-    callback.code(code)
+    callback.code(engine?.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)) {
+      this.mediaObserver = mediaObserver
+      Unit
+    }
   }
 
   override fun unregisterMediaMetadataObserver(callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      code = it.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)
-      if (code == 0) mediaObserver = null
+    callback.code(engine?.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)) {
+      mediaObserver = null
+      Unit
     }
-    callback.code(code)
   }
 
   override fun setMaxMetadataSize(params: Map<String, *>, callback: Callback) {
@@ -889,18 +893,10 @@ class RtcEngineManager(
   }
 
   override fun createDataStream(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      code = it.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)
-    }
-    callback.code(code) { it }
+    callback.code(engine?.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)) { it }
   }
 
   override fun sendStreamMessage(params: Map<String, *>, callback: Callback) {
-    var code = -Constants.ERR_NOT_INITIALIZED
-    engine?.let {
-      code = it.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray())
-    }
-    callback.code(code)
+    callback.code(engine?.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray()))
   }
 }
