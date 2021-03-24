@@ -24,7 +24,7 @@ extension AgoraRtcLocalAudioStats {
             "numChannels": numChannels,
             "sentSampleRate": sentSampleRate,
             "sentBitrate": sentBitrate,
-            "txPacketLossRate": txPacketLossRate
+//            "txPacketLossRate": txPacketLossRate
         ]
     }
 }
@@ -83,8 +83,8 @@ extension AgoraRtcRemoteAudioStats {
             "receivedBitrate": receivedBitrate,
             "totalFrozenTime": totalFrozenTime,
             "frozenRate": frozenRate,
-            "totalActiveTime": totalActiveTime,
-            "publishDuration": publishDuration
+//            "totalActiveTime": totalActiveTime,
+//            "publishDuration": publishDuration
         ]
     }
 }
@@ -104,8 +104,8 @@ extension AgoraRtcLocalVideoStats {
             "encodedFrameHeight": encodedFrameHeight,
             "encodedFrameCount": encodedFrameCount,
             "codecType": codecType.rawValue,
-            "txPacketLossRate": txPacketLossRate,
-            "captureFrameRate": captureFrameRate
+//            "txPacketLossRate": txPacketLossRate,
+//            "captureFrameRate": captureFrameRate
         ]
     }
 }
@@ -124,8 +124,8 @@ extension AgoraRtcRemoteVideoStats {
             "rxStreamType": rxStreamType.rawValue,
             "totalFrozenTime": totalFrozenTime,
             "frozenRate": frozenRate,
-            "totalActiveTime": totalActiveTime,
-            "publishDuration": publishDuration
+//            "totalActiveTime": totalActiveTime,
+//            "publishDuration": publishDuration
         ]
     }
 }
@@ -172,24 +172,24 @@ extension AgoraLastmileProbeResult {
     }
 }
 
-extension AgoraFacePositionInfo {
-    func toMap() -> Dictionary<String, Any?> {
-        return [
-            "x": x,
-            "y": y,
-            "width": width,
-            "height": height,
-            "distance": distance
-        ]
-    }
-}
+//extension AgoraFacePositionInfo {
+//    func toMap() -> Dictionary<String, Any?> {
+//        return [
+//            "x": x,
+//            "y": y,
+//            "width": width,
+//            "height": height,
+//            "distance": distance
+//        ]
+//    }
+//}
 
-extension Array where Element: AgoraFacePositionInfo {
-    func toMapList() -> Array<Dictionary<String, Any?>> {
-        var list = [Dictionary<String, Any?>]()
-        self.forEach {
-            list.append($0.toMap())
-        }
-        return list
-    }
-}
+//extension Array where Element: AgoraFacePositionInfo {
+//    func toMapList() -> Array<Dictionary<String, Any?>> {
+//        var list = [Dictionary<String, Any?>]()
+//        self.forEach {
+//            list.append($0.toMap())
+//        }
+//        return list
+//    }
+//}
