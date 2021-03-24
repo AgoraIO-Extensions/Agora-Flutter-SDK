@@ -3,6 +3,7 @@
 ![pub package](https://img.shields.io/pub/v/agora_rtc_engine.svg?include_prereleases)
 
 [中文](README.zh.md)
+[日本語](README.jp.md)
 
 This Flutter plugin is a wrapper for [Agora Video SDK](https://docs.agora.io/en/Interactive%20Broadcast/product_live?platform=All%20Platforms).
 
@@ -43,7 +44,7 @@ Open the `AndroidManifest.xml` file and add the required device permissions to t
 
 ### iOS
 
-Open the `info.plist` and add:
+Open the `Info.plist` and add:
 
 - `Privacy - Microphone Usage Description`, and add a note in the Value column.
 - `Privacy - Camera Usage Description`, and add a note in the Value column.
@@ -52,15 +53,9 @@ Your application can still run the voice call when it is switched to the backgro
 
 ## Error handling
 
-### iOS video cant show (Android works fine)
+### iOS video can't show (Android works fine)
 
-Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *info.plist*
-
-### iOS memory leak
-
-If your flutter channel is stable, `PlatformView` will cause memory leak, you can run `flutter channel beta`
-
-You can refer to this [pull request](https://github.com/flutter/engine/pull/14326)
+Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *Info.plist*
 
 ## API
 
