@@ -20,8 +20,14 @@ public class Annotations {
     AgoraRtcAppType.FLUTTER,
     AgoraRtcAppType.UNREAL,
     AgoraRtcAppType.XAMARIN,
-    AgoraRtcAppType.APICLOUD,
-    AgoraRtcAppType.REACTNATIVE,
+    AgoraRtcAppType.API_CLOUD,
+    AgoraRtcAppType.REACT_NATIVE,
+    AgoraRtcAppType.PYTHON,
+    AgoraRtcAppType.COCOS_CREATOR,
+    AgoraRtcAppType.RUST,
+    AgoraRtcAppType.C_SHARP,
+    AgoraRtcAppType.CEF,
+    AgoraRtcAppType.UNI_APP,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtcAppType {
@@ -32,8 +38,14 @@ public class Annotations {
     int FLUTTER = 4;
     int UNREAL = 5;
     int XAMARIN = 6;
-    int APICLOUD = 7;
-    int REACTNATIVE = 8;
+    int API_CLOUD = 7;
+    int REACT_NATIVE = 8;
+    int PYTHON = 9;
+    int COCOS_CREATOR = 10;
+    int RUST = 11;
+    int C_SHARP = 12;
+    int CEF = 13;
+    int UNI_APP = 14;
   }
 
   @IntDef({

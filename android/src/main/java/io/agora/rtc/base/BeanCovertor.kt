@@ -1,6 +1,7 @@
 package io.agora.rtc.base
 
 import android.graphics.Color
+import io.agora.rtc.RtcEngineConfig
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.internal.LastmileProbeConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
@@ -168,6 +169,13 @@ fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
   return ChannelMediaOptions().apply {
     (map["autoSubscribeAudio"] as? Boolean)?.let { autoSubscribeAudio = it }
     (map["autoSubscribeVideo"] as? Boolean)?.let { autoSubscribeVideo = it }
+  }
+}
+
+fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
+  return RtcEngineConfig().apply {
+    mAppId = map["appId"] as String
+    (map["areaCode"] as? Number)?.toInt()?.let { mAreaCode = it }
   }
 }
 
