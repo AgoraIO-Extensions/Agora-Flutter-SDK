@@ -85,7 +85,6 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  @deprecated
   static Future<RtcEngine> create(String appId) {
     return createWithConfig(RtcEngineConfig(appId));
   }
