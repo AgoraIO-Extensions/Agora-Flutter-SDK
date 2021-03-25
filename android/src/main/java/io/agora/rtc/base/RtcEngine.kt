@@ -2,7 +2,7 @@ package io.agora.rtc.base
 
 import android.content.Context
 import io.agora.rtc.*
-import io.agora.rtc.internal.EncryptionConfig
+//import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.models.UserInfo
 
 class IRtcEngine {
@@ -334,11 +334,8 @@ class RtcEngineManager(
   }
 
   override fun create(params: Map<String, *>, callback: Callback) {
-    engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
-      mContext = params["context"] as Context
-      mEventHandler = RtcEngineEventHandler { methodName, data ->
-        emit(methodName, data)
-      }
+    engine = RtcEngine.create(params["context"] as Context,params["appId"] as String,RtcEngineEventHandler { methodName, data ->
+      emit(methodName, data)
     })
     callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
   }
@@ -387,7 +384,7 @@ class RtcEngineManager(
   }
 
   override fun sendCustomReportMessage(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.sendCustomReportMessage(params["id"] as String, params["category"] as String, params["event"] as String, params["label"] as String, (params["value"] as Number).toInt()))
+//    callback.code(engine?.sendCustomReportMessage(params["id"] as String, params["category"] as String, params["event"] as String, params["label"] as String, (params["value"] as Number).toInt()))
   }
 
   override fun getCallId(callback: Callback) {
@@ -590,7 +587,7 @@ class RtcEngineManager(
   }
 
   override fun setAudioMixingPitch(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setAudioMixingPitch((params["pitch"] as Number).toInt()))
+//    callback.code(engine?.setAudioMixingPitch((params["pitch"] as Number).toInt()))
   }
 
   override fun getEffectsVolume(callback: Callback) {
@@ -809,15 +806,15 @@ class RtcEngineManager(
 
   override fun setEncryptionMode(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setEncryptionMode(when ((params["encryptionMode"] as Number).toInt()) {
-      EncryptionConfig.EncryptionMode.AES_128_XTS.value -> "aes-128-xts"
-      EncryptionConfig.EncryptionMode.AES_128_ECB.value -> "aes-128-ecb"
-      EncryptionConfig.EncryptionMode.AES_256_XTS.value -> "aes-256-xts"
+      1 -> "aes-128-xts"
+      3 -> "aes-128-ecb"
+      2 -> "aes-256-xts"
       else -> ""
     }))
   }
 
   override fun enableEncryption(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.enableEncryption(params["enabled"] as Boolean, mapToEncryptionConfig(params["config"] as Map<*, *>)))
+//    callback.code(engine?.enableEncryption(params["enabled"] as Boolean, mapToEncryptionConfig(params["config"] as Map<*, *>)))
   }
 
   override fun startAudioRecording(params: Map<String, *>, callback: Callback) {
@@ -877,7 +874,7 @@ class RtcEngineManager(
   }
 
   override fun enableFaceDetection(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.enableFaceDetection(params["enable"] as Boolean))
+//    callback.code(engine?.enableFaceDetection(params["enable"] as Boolean))
   }
 
   override fun setCameraTorchOn(params: Map<String, *>, callback: Callback) {

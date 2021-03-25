@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import io.agora.rtc.Constants;
-import io.agora.rtc.RtcEngineConfig;
+//import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoCanvas;
 
@@ -185,15 +185,15 @@ public class Annotations {
     Constants.AUDIO_REVERB_VOCAL_CONCERT,
     Constants.AUDIO_REVERB_KTV,
     Constants.AUDIO_REVERB_STUDIO,
-    Constants.AUDIO_REVERB_FX_KTV,
-    Constants.AUDIO_REVERB_FX_VOCAL_CONCERT,
-    Constants.AUDIO_REVERB_FX_UNCLE,
-    Constants.AUDIO_REVERB_FX_SISTER,
-    Constants.AUDIO_REVERB_FX_STUDIO,
-    Constants.AUDIO_REVERB_FX_POPULAR,
-    Constants.AUDIO_REVERB_FX_RNB,
-    Constants.AUDIO_REVERB_FX_PHONOGRAPH,
-    Constants.AUDIO_VIRTUAL_STEREO,
+//    Constants.AUDIO_REVERB_FX_KTV,
+//    Constants.AUDIO_REVERB_FX_VOCAL_CONCERT,
+//    Constants.AUDIO_REVERB_FX_UNCLE,
+//    Constants.AUDIO_REVERB_FX_SISTER,
+//    Constants.AUDIO_REVERB_FX_STUDIO,
+//    Constants.AUDIO_REVERB_FX_POPULAR,
+//    Constants.AUDIO_REVERB_FX_RNB,
+//    Constants.AUDIO_REVERB_FX_PHONOGRAPH,
+//    Constants.AUDIO_VIRTUAL_STEREO,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioReverbPreset {
@@ -242,18 +242,19 @@ public class Annotations {
     Constants.VOICE_CHANGER_ZHUBAJIE,
     Constants.VOICE_CHANGER_ETHEREAL,
     Constants.VOICE_CHANGER_HULK,
-    Constants.VOICE_BEAUTY_VIGOROUS,
-    Constants.VOICE_BEAUTY_DEEP,
-    Constants.VOICE_BEAUTY_MELLOW,
-    Constants.VOICE_BEAUTY_FALSETTO,
-    Constants.VOICE_BEAUTY_FULL,
-    Constants.VOICE_BEAUTY_CLEAR,
-    Constants.VOICE_BEAUTY_RESOUNDING,
-    Constants.VOICE_BEAUTY_RINGING,
-    Constants.VOICE_BEAUTY_SPACIAL,
-    Constants.GENERAL_BEAUTY_VOICE_MALE_MAGNETIC,
-    Constants.GENERAL_BEAUTY_VOICE_FEMALE_FRESH,
-    Constants.GENERAL_BEAUTY_VOICE_FEMALE_VITALITY,
+    Constants.RELAY_ERROR_FAILED_PACKET_SENT_TO_DEST
+//    Constants.VOICE_BEAUTY_VIGOROUS,
+//    Constants.VOICE_BEAUTY_DEEP,
+//    Constants.VOICE_BEAUTY_MELLOW,
+//    Constants.VOICE_BEAUTY_FALSETTO,
+//    Constants.VOICE_BEAUTY_FULL,
+//    Constants.VOICE_BEAUTY_CLEAR,
+//    Constants.VOICE_BEAUTY_RESOUNDING,
+//    Constants.VOICE_BEAUTY_RINGING,
+//    Constants.VOICE_BEAUTY_SPACIAL,
+//    Constants.GENERAL_BEAUTY_VOICE_MALE_MAGNETIC,
+//    Constants.GENERAL_BEAUTY_VOICE_FEMALE_FRESH,
+//    Constants.GENERAL_BEAUTY_VOICE_FEMALE_VITALITY,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioVoiceChanger {
@@ -425,7 +426,7 @@ public class Annotations {
     Constants.ERR_ALREADY_IN_USE,
     Constants.ERR_INVALID_APP_ID,
     Constants.ERR_INVALID_CHANNEL_NAME,
-    Constants.ERR_NO_SERVER_RESOURCES,
+//    Constants.ERR_NO_SERVER_RESOURCES,
     Constants.ERR_TOKEN_EXPIRED,
     Constants.ERR_INVALID_TOKEN,
     Constants.ERR_CONNECTION_INTERRUPTED,
@@ -723,7 +724,7 @@ public class Annotations {
     VideoCanvas.RENDER_MODE_HIDDEN,
     VideoCanvas.RENDER_MODE_FIT,
     VideoCanvas.RENDER_MODE_ADAPTIVE,
-    VideoCanvas.RENDER_MODE_FILL,
+//    VideoCanvas.RENDER_MODE_FILL,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraVideoRenderMode {
@@ -755,56 +756,65 @@ public class Annotations {
     Constants.WARN_ADM_RUNTIME_PLAYOUT_WARNING,
     Constants.WARN_ADM_RUNTIME_RECORDING_WARNING,
     Constants.WARN_ADM_RECORD_AUDIO_SILENCE,
-    Constants.WARN_ADM_PLAYOUT_ABNORMAL_FREQUENCY,
-    Constants.WARN_ADM_RECORD_ABNORMAL_FREQUENCY,
+//    Constants.WARN_ADM_PLAYOUT_ABNORMAL_FREQUENCY,
+//    Constants.WARN_ADM_RECORD_ABNORMAL_FREQUENCY,
     Constants.WARN_ADM_CALL_INTERRUPTION,
     Constants.WARN_ADM_RECORD_AUDIO_LOWLEVEL,
     Constants.WARN_ADM_PLAYOUT_AUDIO_LOWLEVEL,
     Constants.WARN_ADM_RECORD_IS_OCCUPIED,
     Constants.WARN_APM_HOWLING,
-    Constants.WARN_ADM_GLITCH_STATE,
-    Constants.WARN_APM_RESIDUAL_ECHO,
+    Constants.WARN_ADM_GLITCH_STATE
+//    Constants.WARN_APM_RESIDUAL_ECHO,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraWarningCode {
   }
 
-  @IntDef({
-    RtcEngineConfig.AreaCode.AREA_CODE_CN,
-    RtcEngineConfig.AreaCode.AREA_CODE_NA,
-    RtcEngineConfig.AreaCode.AREA_CODE_EU,
-    RtcEngineConfig.AreaCode.AREA_CODE_AS,
-    RtcEngineConfig.AreaCode.AREA_CODE_JP,
-    RtcEngineConfig.AreaCode.AREA_CODE_IN,
-    RtcEngineConfig.AreaCode.AREA_CODE_GLOB,
-  })
+//  @IntDef({
+//    RtcEngineConfig.AreaCode.AREA_CODE_CN,
+//    RtcEngineConfig.AreaCode.AREA_CODE_NA,
+//    RtcEngineConfig.AreaCode.AREA_CODE_EU,
+//    RtcEngineConfig.AreaCode.AREA_CODE_AS,
+//    RtcEngineConfig.AreaCode.AREA_CODE_JP,
+//    RtcEngineConfig.AreaCode.AREA_CODE_IN,
+//    RtcEngineConfig.AreaCode.AREA_CODE_GLOB,
+//  })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAreaCode {
   }
 
   @IntDef({
-    Constants.SUB_STATE_IDLE,
-    Constants.SUB_STATE_NO_SUBSCRIBED,
-    Constants.SUB_STATE_SUBSCRIBING,
-    Constants.SUB_STATE_SUBSCRIBED,
+    Constants.RELAY_STATE_IDLE,
+    Constants.RELAY_STATE_CONNECTING,
+    Constants.RELAY_STATE_RUNNING,
+    Constants.RELAY_STATE_FAILURE
+//    Constants.SUB_STATE_IDLE,
+//    Constants.SUB_STATE_NO_SUBSCRIBED,
+//    Constants.SUB_STATE_SUBSCRIBING,
+//    Constants.SUB_STATE_SUBSCRIBED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraStreamSubscribeState {
   }
 
   @IntDef({
-    Constants.PUB_STATE_IDLE,
-    Constants.PUB_STATE_NO_PUBLISHED,
-    Constants.PUB_STATE_PUBLISHING,
-    Constants.PUB_STATE_PUBLISHED,
+    Constants.RTMP_STREAM_PUBLISH_STATE_IDLE,
+    Constants.RTMP_STREAM_PUBLISH_STATE_CONNECTING,
+    Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING,
+    Constants.RTMP_STREAM_PUBLISH_STATE_RECOVERING,
+    Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE,
+//    Constants.PUB_STATE_IDLE,
+//    Constants.PUB_STATE_NO_PUBLISHED,
+//    Constants.PUB_STATE_PUBLISHING,
+//    Constants.PUB_STATE_PUBLISHED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraStreamPublishState {
   }
 
-  @IntDef({
-    Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
-  })
+//  @IntDef({
+//    Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
+//  })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingEvent {
   }

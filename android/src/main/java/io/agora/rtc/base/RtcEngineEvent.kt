@@ -305,9 +305,9 @@ class RtcEngineEventHandler(
     callback(RtcEngineEvents.CameraExposureAreaChanged, rect?.toMap())
   }
 
-  override fun onFacePositionChanged(imageWidth: Int, imageHeight: Int, faces: Array<out AgoraFacePositionInfo>?) {
-    callback(RtcEngineEvents.FacePositionChanged, imageWidth, imageHeight, faces?.toMapList())
-  }
+//  fun onFacePositionChanged(imageWidth: Int, imageHeight: Int, faces: Array<out AgoraFacePositionInfo>?) {
+//    callback(RtcEngineEvents.FacePositionChanged, imageWidth, imageHeight, faces?.toMapList())
+//  }
 
   override fun onRtcStats(stats: RtcStats?) {
     callback(RtcEngineEvents.RtcStats, stats?.toMap())
@@ -485,31 +485,31 @@ class RtcEngineEventHandler(
     callback(RtcEngineEvents.VideoStopped)
   }
 
-  override fun onFirstLocalAudioFramePublished(elapsed: Int) {
+  fun onFirstLocalAudioFramePublished(elapsed: Int) {
     callback(RtcEngineEvents.FirstLocalAudioFramePublished, elapsed)
   }
 
-  override fun onFirstLocalVideoFramePublished(elapsed: Int) {
+  fun onFirstLocalVideoFramePublished(elapsed: Int) {
     callback(RtcEngineEvents.FirstLocalVideoFramePublished, elapsed)
   }
 
-  override fun onAudioPublishStateChanged(channel: String?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
+  fun onAudioPublishStateChanged(channel: String?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
     callback(RtcEngineEvents.AudioPublishStateChanged, channel, oldState, newState, elapseSinceLastState)
   }
 
-  override fun onVideoPublishStateChanged(channel: String?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
+  fun onVideoPublishStateChanged(channel: String?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
     callback(RtcEngineEvents.VideoPublishStateChanged, channel, oldState, newState, elapseSinceLastState)
   }
 
-  override fun onAudioSubscribeStateChanged(channel: String?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
+  fun onAudioSubscribeStateChanged(channel: String?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
     callback(RtcEngineEvents.AudioSubscribeStateChanged, channel, uid, oldState, newState, elapseSinceLastState)
   }
 
-  override fun onVideoSubscribeStateChanged(channel: String?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
+  fun onVideoSubscribeStateChanged(channel: String?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
     callback(RtcEngineEvents.VideoSubscribeStateChanged, channel, uid, oldState, newState, elapseSinceLastState)
   }
 
-  override fun onRtmpStreamingEvent(url: String?, @Annotations.AgoraRtmpStreamingEvent error: Int) {
+  fun onRtmpStreamingEvent(url: String?, @Annotations.AgoraRtmpStreamingEvent error: Int) {
     callback(RtcEngineEvents.RtmpStreamingEvent, url, error)
   }
 }
