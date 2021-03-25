@@ -828,34 +828,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableFaceDetection(bool enable) {
-    return _invokeMethod('enableFaceDetection', {'enable': enable});
-  }
-
-  @override
-  Future<void> setAudioMixingPitch(int pitch) {
-    return _invokeMethod('setAudioMixingPitch', {'pitch': pitch});
-  }
-
-  @override
-  Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
-    return _invokeMethod(
-        'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
-  }
-
-  @override
-  Future<void> sendCustomReportMessage(
-      String id, String category, String event, String label, int value) {
-    return _invokeMethod('sendCustomReportMessage', {
-      'id': id,
-      'category': category,
-      'event': event,
-      'label': label,
-      'value': value
-    });
-  }
-
-  @override
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction) {
     return _invokeMethod('setAudioSessionOperationRestriction', {
@@ -1009,10 +981,6 @@ mixin RtcEngineInterface
 
   /// Gets the connection state of the SDK.
   Future<ConnectionStateType> getConnectionState();
-
-  /// This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
-  Future<void> sendCustomReportMessage(
-      String id, String category, String event, String label, int value);
 
   /// Gets the current call ID.
   ///
@@ -1573,17 +1541,6 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Parameter** [pos] The playback starting position (ms) of the audio mixing file.
   Future<void> setAudioMixingPosition(int pos);
-
-  /// Sets the pitch of the local music file.
-  ///
-  /// When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only.
-  ///
-  /// **Note**
-  /// - Call this method after calling startAudioMixing.
-  /// See [RtcEngine.startAudioMixing]
-  ///
-  /// **Parameter** [pitch] Sets the pitch of the local music file by chromatic scale. The default value is 0, which means keep the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
-  Future<void> setAudioMixingPitch(int pitch);
 }
 
 /// @nodoc
@@ -2100,10 +2057,6 @@ mixin RtcWatermarkInterface {
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   ///
-  /// **Deprecated**
-  ///
-  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
-  ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
   /// **Note**
@@ -2116,10 +2069,6 @@ mixin RtcEncryptionInterface {
 
   /// Sets the built-in encryption mode.
   ///
-  /// **Deprecated**
-  ///
-  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
-  ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   ///
   /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
@@ -2130,25 +2079,6 @@ mixin RtcEncryptionInterface {
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
-
-  /// Enables/Disables the built-in encryption.
-  ///
-  /// @since v3.1.2.
-  ///
-  /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
-  ///
-  /// All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
-  ///
-  /// **Note**
-  /// - If you enable the built-in encryption, you cannot use the RTMP streaming function.
-  /// - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
-  ///
-  ///
-  /// **Parameter** [enabled] Whether to enable the built-in encryption.
-  /// - `true`: Enable the built-in encryption.
-  /// - `false`: Disable the built-in encryption.
-  /// **Parameter** [config] Configurations of built-in encryption schemas. See [EncryptionConfig].
-  Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
 /// @nodoc
@@ -2263,18 +2193,6 @@ mixin RtcCameraInterface {
   /// **Parameter** [positionYinView] The vertical coordinate of the touch point in the view.
   Future<void> setCameraExposurePosition(
       double positionXinView, double positionYinView);
-
-  /// Enables/Disables face detection for the local user.
-  ///
-  /// Once face detection is enabled, the SDK triggers the [RtcEngineEventHandler.facePositionChanged] callback to report the face information of the local user, which includes the following aspects:
-  /// - The width and height of the local video.
-  /// - The position of the human face in the local video.
-  /// - The distance between the human face and the device screen.
-  ///
-  /// **Parameter** [enable] Determines whether to enable the face detection function for the local user:
-  /// - `true`: Enable face detection.
-  /// - `false`: (Default) Disable face detection.
-  Future<void> enableFaceDetection(bool enable);
 
   /// Enables the camera flash function.
   ///

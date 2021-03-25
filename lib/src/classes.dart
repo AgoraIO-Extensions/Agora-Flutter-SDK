@@ -899,11 +899,6 @@ class LocalAudioStats {
   /// The average sending bitrate (Kbps).
   int sentBitrate;
 
-  /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
-  ///
-  /// @since v3.1.2.
-  int txPacketLossRate;
-
   /// Constructs a [LocalAudioStats]
   LocalAudioStats();
 
@@ -956,15 +951,6 @@ class LocalVideoStats {
   /// See [VideoCodecType].
   VideoCodecType codecType;
 
-  /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
-  ///
-  /// @since v3.1.2.
-  int txPacketLossRate;
-
-  /// The capture frame rate (fps) of the local video.
-  ///
-  /// @since v3.1.2.
-  int captureFrameRate;
 
   /// Constructs a [LocalVideoStats]
   LocalVideoStats();
@@ -1011,13 +997,6 @@ class RemoteAudioStats {
   /// The total audio freeze time as a percentage (%) of the total time when the audio is available.
   int frozenRate;
 
-  /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the LiveBroadcasting profile neither stops sending the audio stream nor disables the audio module after joining the channel.
-  int totalActiveTime;
-
-  /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
-  ///
-  /// @since v3.1.2.
-  int publishDuration;
 
   /// Constructs a [RemoteAudioStats]
   RemoteAudioStats();
@@ -1069,13 +1048,6 @@ class RemoteVideoStats {
   /// The total video freeze time (`totalFrozenTime`) as a percentage (%) of the total time when the video is available (`totalActiveTime`).
   int frozenRate;
 
-  /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the Live-broadcast profile neither stops sending the video stream nor disables the video module after joining the channel.
-  int totalActiveTime;
-
-  /// The total publish duration (ms) of the remote video stream.
-  ///
-  /// @since v3.1.2.
-  int publishDuration;
 
   /// Constructs a [RemoteVideoStats]
   RemoteVideoStats();
