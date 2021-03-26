@@ -104,11 +104,11 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
     }
 
     public func rtcChannelDidJoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
-        callback(RtcChannelEvents.JoinChannelSuccess, rtcChannel, uid, elapsed)
+        callback(RtcChannelEvents.JoinChannelSuccess, rtcChannel, rtcChannel.getId(), uid, elapsed)
     }
 
     public func rtcChannelDidRejoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
-        callback(RtcChannelEvents.RejoinChannelSuccess, rtcChannel, uid, elapsed)
+        callback(RtcChannelEvents.RejoinChannelSuccess, rtcChannel, rtcChannel.getId(), uid, elapsed)
     }
 
     public func rtcChannelDidLeave(_ rtcChannel: AgoraRtcChannel, with stats: AgoraChannelStats) {
