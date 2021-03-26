@@ -305,20 +305,7 @@ func mapToRtcEngineConfig(_ map: Dictionary<String, Any>) -> AgoraRtcEngineConfi
     let config = AgoraRtcEngineConfig()
     config.appId = map["appId"] as? String
     if let areaCode = map["areaCode"] as? NSNumber {
-        config.areaCode = areaCode.uintValue
-    }
-    return config
-}
-
-func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
-    let config = AgoraEncryptionConfig()
-    if let encryptionMode = map["encryptionMode"] as? NSNumber {
-        if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode.intValue) {
-            config.encryptionMode = encryptionMode
-        }
-    }
-    if let encryptionKey = map["encryptionKey"] as? String {
-        config.encryptionKey = encryptionKey
+        config.areaCode = areaCode.int32Value
     }
     return config
 }

@@ -23,8 +23,7 @@ extension AgoraRtcLocalAudioStats {
         return [
             "numChannels": numChannels,
             "sentSampleRate": sentSampleRate,
-            "sentBitrate": sentBitrate,
-            "txPacketLossRate": txPacketLossRate
+            "sentBitrate": sentBitrate
         ]
     }
 }
@@ -83,8 +82,7 @@ extension AgoraRtcRemoteAudioStats {
             "receivedBitrate": receivedBitrate,
             "totalFrozenTime": totalFrozenTime,
             "frozenRate": frozenRate,
-            "totalActiveTime": totalActiveTime,
-            "publishDuration": publishDuration
+            "totalActiveTime": totalActiveTime
         ]
     }
 }
@@ -103,9 +101,7 @@ extension AgoraRtcLocalVideoStats {
             "encodedFrameWidth": encodedFrameWidth,
             "encodedFrameHeight": encodedFrameHeight,
             "encodedFrameCount": encodedFrameCount,
-            "codecType": codecType.rawValue,
-            "txPacketLossRate": txPacketLossRate,
-            "captureFrameRate": captureFrameRate
+            "codecType": codecType.rawValue
         ]
     }
 }
@@ -124,8 +120,7 @@ extension AgoraRtcRemoteVideoStats {
             "rxStreamType": rxStreamType.rawValue,
             "totalFrozenTime": totalFrozenTime,
             "frozenRate": frozenRate,
-            "totalActiveTime": totalActiveTime,
-            "publishDuration": publishDuration
+            "totalActiveTime": totalActiveTime
         ]
     }
 }
