@@ -189,7 +189,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, didRejoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
-        callback(RtcEngineEvents.RejoinChannelSuccess, uid, elapsed)
+        callback(RtcEngineEvents.RejoinChannelSuccess, channel, uid, elapsed)
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {

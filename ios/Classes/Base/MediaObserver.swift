@@ -11,7 +11,7 @@ import AgoraRtcKit
 
 class MediaObserver: NSObject {
     private var emitter: (_ data: Dictionary<String, Any?>?) -> Void
-    private var maxMetadataSize = 0
+    private var maxMetadataSize = 1024
     private var metadataList = [String]()
 
     init(_ emitter: @escaping (_ data: Dictionary<String, Any?>?) -> Void) {
@@ -29,7 +29,7 @@ class MediaObserver: NSObject {
 
 extension MediaObserver: AgoraMediaMetadataDataSource {
     func metadataMaxSize() -> Int {
-        maxMetadataSize
+        return maxMetadataSize
     }
 
     func readyToSendMetadata(atTimestamp timestamp: TimeInterval) -> Data? {
@@ -43,9 +43,7 @@ extension MediaObserver: AgoraMediaMetadataDataSource {
 extension MediaObserver: AgoraMediaMetadataDelegate {
     func receiveMetadata(_ data: Data, fromUser uid: Int, atTimestamp timestamp: TimeInterval) {
         emitter([
-            "buffer": String(data: data, encoding: .utf8),
-            "uid": uid,
-            "timeStampMs": timestamp
+            "data": [String(data: data, encoding: .utf8) ?? "", uid, timestamp]
         ])
     }
 }
