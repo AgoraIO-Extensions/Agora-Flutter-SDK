@@ -445,6 +445,7 @@ class RtcEngineEventHandler {
   /// Occurs when the local audio playback route changes.
   ///
   /// This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.
+  ///
   /// See [AudioOutputRouting] for the definition of the routing.
   ///
   /// The `AudioRouteCallback` typedef includes the following parameter:
