@@ -44,11 +44,11 @@ class TextureView extends RtcTextureView {
     PlatformViewCreatedCallback onPlatformViewCreated,
   })  : assert(uid != 0),
         super(
-        key: key,
-        uid: uid,
-        channelId: channelId,
-        mirror: mirror,
-        gestureRecognizers: gestureRecognizers,
-        onPlatformViewCreated: onPlatformViewCreated,
-      );
+          key: key,
+          uid: uid,
+          channelId: channelId,
+          mirror: mirror,
+          gestureRecognizers: gestureRecognizers,
+          onPlatformViewCreated: onPlatformViewCreated,
+        );
 }
