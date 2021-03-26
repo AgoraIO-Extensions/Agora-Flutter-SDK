@@ -40,10 +40,10 @@ class TextureView extends RtcTextureView {
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(
-      key: key,
-      channelId: channelId,
-      mirror: mirror,
-      gestureRecognizers: gestureRecognizers,
-      onPlatformViewCreated: onPlatformViewCreated,
-      uid: 0);
+            key: key,
+            channelId: channelId,
+            mirror: mirror,
+            gestureRecognizers: gestureRecognizers,
+            onPlatformViewCreated: onPlatformViewCreated,
+            uid: 0);
 }

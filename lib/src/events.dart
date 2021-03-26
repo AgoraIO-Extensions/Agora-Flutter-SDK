@@ -2,79 +2,131 @@ import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 
+// ignore: public_member_api_docs
 typedef EmptyCallback = void Function();
+// ignore: public_member_api_docs
 typedef WarningCallback = void Function(WarningCode warn);
+// ignore: public_member_api_docs
 typedef ErrorCallback = void Function(ErrorCode err);
+// ignore: public_member_api_docs
 typedef ApiCallCallback = void Function(
     ErrorCode error, String api, String result);
+// ignore: public_member_api_docs
 typedef UidWithElapsedAndChannelCallback = void Function(
     String channel, int uid, int elapsed);
+// ignore: public_member_api_docs
 typedef RtcStatsCallback = void Function(RtcStats stats);
+// ignore: public_member_api_docs
 typedef UserAccountCallback = void Function(int uid, String userAccount);
+// ignore: public_member_api_docs
 typedef UserInfoCallback = void Function(int uid, UserInfo userInfo);
+// ignore: public_member_api_docs
 typedef ClientRoleCallback = void Function(
     ClientRole oldRole, ClientRole newRole);
+// ignore: public_member_api_docs
 typedef UidWithElapsedCallback = void Function(int uid, int elapsed);
+// ignore: public_member_api_docs
 typedef UserOfflineCallback = void Function(int uid, UserOfflineReason reason);
+// ignore: public_member_api_docs
 typedef ConnectionStateCallback = void Function(
     ConnectionStateType state, ConnectionChangedReason reason);
+// ignore: public_member_api_docs
 typedef NetworkTypeCallback = void Function(NetworkType type);
+// ignore: public_member_api_docs
 typedef TokenCallback = void Function(String token);
+// ignore: public_member_api_docs
 typedef AudioVolumeCallback = void Function(
     List<AudioVolumeInfo> speakers, int totalVolume);
+// ignore: public_member_api_docs
 typedef UidCallback = void Function(int uid);
+// ignore: public_member_api_docs
 typedef ElapsedCallback = void Function(int elapsed);
+// ignore: public_member_api_docs
 typedef VideoFrameCallback = void Function(int width, int height, int elapsed);
+// ignore: public_member_api_docs
 typedef UidWithMutedCallback = void Function(int uid, bool muted);
+// ignore: public_member_api_docs
 typedef VideoSizeCallback = void Function(
     int uid, int width, int height, int rotation);
+// ignore: public_member_api_docs
 typedef RemoteVideoStateCallback = void Function(int uid,
     VideoRemoteState state, VideoRemoteStateReason reason, int elapsed);
+// ignore: public_member_api_docs
 typedef LocalVideoStateCallback = void Function(
     LocalVideoStreamState localVideoState, LocalVideoStreamError error);
+// ignore: public_member_api_docs
 typedef RemoteAudioStateCallback = void Function(int uid,
     AudioRemoteState state, AudioRemoteStateReason reason, int elapsed);
+// ignore: public_member_api_docs
 typedef LocalAudioStateCallback = void Function(
     AudioLocalState state, AudioLocalError error);
+// ignore: public_member_api_docs
 typedef FallbackCallback = void Function(bool isFallbackOrRecover);
+// ignore: public_member_api_docs
 typedef FallbackWithUidCallback = void Function(
     int uid, bool isFallbackOrRecover);
+// ignore: public_member_api_docs
 typedef AudioRouteCallback = void Function(AudioOutputRouting routing);
+// ignore: public_member_api_docs
 typedef RectCallback = void Function(Rect rect);
+// ignore: public_member_api_docs
 typedef NetworkQualityCallback = void Function(NetworkQuality quality);
+// ignore: public_member_api_docs
 typedef NetworkQualityWithUidCallback = void Function(
     int uid, NetworkQuality txQuality, NetworkQuality rxQuality);
+// ignore: public_member_api_docs
 typedef LastmileProbeCallback = void Function(LastmileProbeResult result);
+// ignore: public_member_api_docs
 typedef LocalVideoStatsCallback = void Function(LocalVideoStats stats);
+// ignore: public_member_api_docs
 typedef LocalAudioStatsCallback = void Function(LocalAudioStats stats);
+// ignore: public_member_api_docs
 typedef RemoteVideoStatsCallback = void Function(RemoteVideoStats stats);
+// ignore: public_member_api_docs
 typedef RemoteAudioStatsCallback = void Function(RemoteAudioStats stats);
+// ignore: public_member_api_docs
 typedef AudioMixingStateCallback = void Function(
     AudioMixingStateCode state, AudioMixingErrorCode errorCode);
+// ignore: public_member_api_docs
 typedef SoundIdCallback = void Function(int soundId);
+// ignore: public_member_api_docs
 typedef RtmpStreamingStateCallback = void Function(
     String url, RtmpStreamingState state, RtmpStreamingErrorCode errCode);
+// ignore: public_member_api_docs
 typedef StreamInjectedStatusCallback = void Function(
     String url, int uid, InjectStreamStatus status);
+// ignore: public_member_api_docs
 typedef StreamMessageCallback = void Function(
     int uid, int streamId, String data);
+// ignore: public_member_api_docs
 typedef StreamMessageErrorCallback = void Function(
     int uid, int streamId, ErrorCode error, int missed, int cached);
+// ignore: public_member_api_docs
 typedef MediaRelayStateCallback = void Function(
     ChannelMediaRelayState state, ChannelMediaRelayError code);
+// ignore: public_member_api_docs
 typedef MediaRelayEventCallback = void Function(ChannelMediaRelayEvent code);
+// ignore: public_member_api_docs
 typedef VideoFrameWithUidCallback = void Function(
     int uid, int width, int height, int elapsed);
+// ignore: public_member_api_docs
 typedef UrlWithErrorCallback = void Function(String url, ErrorCode error);
+// ignore: public_member_api_docs
 typedef UrlCallback = void Function(String url);
+// ignore: public_member_api_docs
 typedef TransportStatsCallback = void Function(
     int uid, int delay, int lost, int rxKBitRate);
+// ignore: public_member_api_docs
 typedef UidWithEnabledCallback = void Function(int uid, bool enabled);
+// ignore: public_member_api_docs
 typedef EnabledCallback = void Function(bool enabled);
+// ignore: public_member_api_docs
 typedef AudioQualityCallback = void Function(
     int uid, int quality, int delay, int lost);
+// ignore: public_member_api_docs
 typedef MetadataCallback = void Function(
     String buffer, int uid, int timeStampMs);
+// ignore: public_member_api_docs
 typedef FacePositionCallback = void Function(
     int imageWidth, int imageHeight, List<FacePositionInfo> faces);
 
@@ -860,95 +912,90 @@ class RtcEngineEventHandler {
   MetadataCallback metadataReceived;
 
   /// Constructs a [RtcEngineEventHandler]
-  RtcEngineEventHandler({this.warning,
-    this.error,
-    this.apiCallExecuted,
-    this.joinChannelSuccess,
-    this.rejoinChannelSuccess,
-    this.leaveChannel,
-    this.localUserRegistered,
-    this.userInfoUpdated,
-    this.clientRoleChanged,
-    this.userJoined,
-    this.userOffline,
-    this.connectionStateChanged,
-    this.networkTypeChanged,
-    this.connectionLost,
-    this.tokenPrivilegeWillExpire,
-    this.requestToken,
-    this.audioVolumeIndication,
-    this.activeSpeaker,
-    this.firstLocalAudioFrame,
-    this.firstLocalVideoFrame,
-    this.userMuteVideo,
-    this.videoSizeChanged,
-    this.remoteVideoStateChanged,
-    this.localVideoStateChanged,
-    this.remoteAudioStateChanged,
-    this.localAudioStateChanged,
-    this.localPublishFallbackToAudioOnly,
-    this.remoteSubscribeFallbackToAudioOnly,
-    this.audioRouteChanged,
-    this.cameraFocusAreaChanged,
-    this.cameraExposureAreaChanged,
-    this.facePositionChanged,
-    this.rtcStats,
-    this.lastmileQuality,
-    this.networkQuality,
-    this.lastmileProbeResult,
-    this.localVideoStats,
-    this.localAudioStats,
-    this.remoteVideoStats,
-    this.remoteAudioStats,
-    this.audioMixingFinished,
-    this.audioMixingStateChanged,
-    this.audioEffectFinished,
-    this.rtmpStreamingStateChanged,
-    this.transcodingUpdated,
-    this.streamInjectedStatus,
-    this.streamMessage,
-    this.streamMessageError,
-    this.mediaEngineLoadSuccess,
-    this.mediaEngineStartCallSuccess,
-    this.channelMediaRelayStateChanged,
-    this.channelMediaRelayEvent,
-    this.firstRemoteVideoFrame,
-    this.firstRemoteAudioFrame,
-    this.firstRemoteAudioDecoded,
-    this.userMuteAudio,
-    this.streamPublished,
-    this.streamUnpublished,
-    this.remoteAudioTransportStats,
-    this.remoteVideoTransportStats,
-    this.userEnableVideo,
-    this.userEnableLocalVideo,
-    this.firstRemoteVideoDecoded,
-    this.microphoneEnabled,
-    this.connectionInterrupted,
-    this.connectionBanned,
-    this.audioQuality,
-    this.cameraReady,
-    this.videoStopped,
-    this.metadataReceived});
+  RtcEngineEventHandler(
+      {this.warning,
+      this.error,
+      this.apiCallExecuted,
+      this.joinChannelSuccess,
+      this.rejoinChannelSuccess,
+      this.leaveChannel,
+      this.localUserRegistered,
+      this.userInfoUpdated,
+      this.clientRoleChanged,
+      this.userJoined,
+      this.userOffline,
+      this.connectionStateChanged,
+      this.networkTypeChanged,
+      this.connectionLost,
+      this.tokenPrivilegeWillExpire,
+      this.requestToken,
+      this.audioVolumeIndication,
+      this.activeSpeaker,
+      this.firstLocalAudioFrame,
+      this.firstLocalVideoFrame,
+      this.userMuteVideo,
+      this.videoSizeChanged,
+      this.remoteVideoStateChanged,
+      this.localVideoStateChanged,
+      this.remoteAudioStateChanged,
+      this.localAudioStateChanged,
+      this.localPublishFallbackToAudioOnly,
+      this.remoteSubscribeFallbackToAudioOnly,
+      this.audioRouteChanged,
+      this.cameraFocusAreaChanged,
+      this.cameraExposureAreaChanged,
+      this.facePositionChanged,
+      this.rtcStats,
+      this.lastmileQuality,
+      this.networkQuality,
+      this.lastmileProbeResult,
+      this.localVideoStats,
+      this.localAudioStats,
+      this.remoteVideoStats,
+      this.remoteAudioStats,
+      this.audioMixingFinished,
+      this.audioMixingStateChanged,
+      this.audioEffectFinished,
+      this.rtmpStreamingStateChanged,
+      this.transcodingUpdated,
+      this.streamInjectedStatus,
+      this.streamMessage,
+      this.streamMessageError,
+      this.mediaEngineLoadSuccess,
+      this.mediaEngineStartCallSuccess,
+      this.channelMediaRelayStateChanged,
+      this.channelMediaRelayEvent,
+      this.firstRemoteVideoFrame,
+      this.firstRemoteAudioFrame,
+      this.firstRemoteAudioDecoded,
+      this.userMuteAudio,
+      this.streamPublished,
+      this.streamUnpublished,
+      this.remoteAudioTransportStats,
+      this.remoteVideoTransportStats,
+      this.userEnableVideo,
+      this.userEnableLocalVideo,
+      this.firstRemoteVideoDecoded,
+      this.microphoneEnabled,
+      this.connectionInterrupted,
+      this.connectionBanned,
+      this.audioQuality,
+      this.cameraReady,
+      this.videoStopped,
+      this.metadataReceived});
 
   // ignore: public_member_api_docs
   void process(String methodName, List<dynamic> data) {
     switch (methodName) {
       case 'Warning':
-        warning?.call(WarningCodeConverter
-            .fromValue(data[0])
-            .e);
+        warning?.call(WarningCodeConverter.fromValue(data[0]).e);
         break;
       case 'Error':
-        error?.call(ErrorCodeConverter
-            .fromValue(data[0])
-            .e);
+        error?.call(ErrorCodeConverter.fromValue(data[0]).e);
         break;
       case 'ApiCallExecuted':
         apiCallExecuted?.call(
-            ErrorCodeConverter
-                .fromValue(data[0])
-                .e, data[1], data[2]);
+            ErrorCodeConverter.fromValue(data[0]).e, data[1], data[2]);
         break;
       case 'JoinChannelSuccess':
         joinChannelSuccess?.call(data[0], data[1], data[2]);
@@ -968,35 +1015,23 @@ class RtcEngineEventHandler {
             data[0], UserInfo.fromJson(Map<String, dynamic>.from(data[1])));
         break;
       case 'ClientRoleChanged':
-        clientRoleChanged?.call(ClientRoleConverter
-            .fromValue(data[0])
-            .e,
-            ClientRoleConverter
-                .fromValue(data[1])
-                .e);
+        clientRoleChanged?.call(ClientRoleConverter.fromValue(data[0]).e,
+            ClientRoleConverter.fromValue(data[1]).e);
         break;
       case 'UserJoined':
         userJoined?.call(data[0], data[1]);
         break;
       case 'UserOffline':
         userOffline?.call(
-            data[0], UserOfflineReasonConverter
-            .fromValue(data[1])
-            .e);
+            data[0], UserOfflineReasonConverter.fromValue(data[1]).e);
         break;
       case 'ConnectionStateChanged':
         connectionStateChanged?.call(
-            ConnectionStateTypeConverter
-                .fromValue(data[0])
-                .e,
-            ConnectionChangedReasonConverter
-                .fromValue(data[1])
-                .e);
+            ConnectionStateTypeConverter.fromValue(data[0]).e,
+            ConnectionChangedReasonConverter.fromValue(data[1]).e);
         break;
       case 'NetworkTypeChanged':
-        networkTypeChanged?.call(NetworkTypeConverter
-            .fromValue(data[0])
-            .e);
+        networkTypeChanged?.call(NetworkTypeConverter.fromValue(data[0]).e);
         break;
       case 'ConnectionLost':
         connectionLost?.call();
@@ -1012,9 +1047,8 @@ class RtcEngineEventHandler {
         audioVolumeIndication?.call(
             List.generate(
                 list.length,
-                    (index) =>
-                    AudioVolumeInfo.fromJson(
-                        Map<String, dynamic>.from(list[index]))),
+                (index) => AudioVolumeInfo.fromJson(
+                    Map<String, dynamic>.from(list[index]))),
             data[1]);
         break;
       case 'ActiveSpeaker':
@@ -1035,42 +1069,26 @@ class RtcEngineEventHandler {
       case 'RemoteVideoStateChanged':
         remoteVideoStateChanged?.call(
             data[0],
-            VideoRemoteStateConverter
-                .fromValue(data[1])
-                .e,
-            VideoRemoteStateReasonConverter
-                .fromValue(data[2])
-                .e,
+            VideoRemoteStateConverter.fromValue(data[1]).e,
+            VideoRemoteStateReasonConverter.fromValue(data[2]).e,
             data[3]);
         break;
       case 'LocalVideoStateChanged':
         localVideoStateChanged?.call(
-            LocalVideoStreamStateConverter
-                .fromValue(data[0])
-                .e,
-            LocalVideoStreamErrorConverter
-                .fromValue(data[1])
-                .e);
+            LocalVideoStreamStateConverter.fromValue(data[0]).e,
+            LocalVideoStreamErrorConverter.fromValue(data[1]).e);
         break;
       case 'RemoteAudioStateChanged':
         remoteAudioStateChanged?.call(
             data[0],
-            AudioRemoteStateConverter
-                .fromValue(data[1])
-                .e,
-            AudioRemoteStateReasonConverter
-                .fromValue(data[2])
-                .e,
+            AudioRemoteStateConverter.fromValue(data[1]).e,
+            AudioRemoteStateReasonConverter.fromValue(data[2]).e,
             data[3]);
         break;
       case 'LocalAudioStateChanged':
         localAudioStateChanged?.call(
-            AudioLocalStateConverter
-                .fromValue(data[0])
-                .e,
-            AudioLocalErrorConverter
-                .fromValue(data[1])
-                .e);
+            AudioLocalStateConverter.fromValue(data[0]).e,
+            AudioLocalErrorConverter.fromValue(data[1]).e);
         break;
       case 'LocalPublishFallbackToAudioOnly':
         localPublishFallbackToAudioOnly?.call(data[0]);
@@ -1080,9 +1098,7 @@ class RtcEngineEventHandler {
         break;
       case 'AudioRouteChanged':
         audioRouteChanged
-            ?.call(AudioOutputRoutingConverter
-            .fromValue(data[0])
-            .e);
+            ?.call(AudioOutputRoutingConverter.fromValue(data[0]).e);
         break;
       case 'CameraFocusAreaChanged':
         cameraFocusAreaChanged
@@ -1099,27 +1115,20 @@ class RtcEngineEventHandler {
             data[1],
             List.generate(
                 list.length,
-                    (index) =>
-                    FacePositionInfo.fromJson(
-                        Map<String, dynamic>.from(list[index]))));
+                (index) => FacePositionInfo.fromJson(
+                    Map<String, dynamic>.from(list[index]))));
         break;
       case 'RtcStats':
         rtcStats?.call(RtcStats.fromJson(Map<String, dynamic>.from(data[0])));
         break;
       case 'LastmileQuality':
-        lastmileQuality?.call(NetworkQualityConverter
-            .fromValue(data[0])
-            .e);
+        lastmileQuality?.call(NetworkQualityConverter.fromValue(data[0]).e);
         break;
       case 'NetworkQuality':
         networkQuality?.call(
             data[0],
-            NetworkQualityConverter
-                .fromValue(data[1])
-                .e,
-            NetworkQualityConverter
-                .fromValue(data[2])
-                .e);
+            NetworkQualityConverter.fromValue(data[1]).e,
+            NetworkQualityConverter.fromValue(data[2]).e);
         break;
       case 'LastmileProbeResult':
         lastmileProbeResult?.call(
@@ -1146,12 +1155,8 @@ class RtcEngineEventHandler {
         break;
       case 'AudioMixingStateChanged':
         audioMixingStateChanged?.call(
-          AudioMixingStateCodeConverter
-              .fromValue(data[0])
-              .e,
-          AudioMixingErrorCodeConverter
-              .fromValue(data[1])
-              .e,
+          AudioMixingStateCodeConverter.fromValue(data[0]).e,
+          AudioMixingErrorCodeConverter.fromValue(data[1]).e,
         );
         break;
       case 'AudioEffectFinished':
@@ -1160,12 +1165,8 @@ class RtcEngineEventHandler {
       case 'RtmpStreamingStateChanged':
         rtmpStreamingStateChanged?.call(
           data[0],
-          RtmpStreamingStateConverter
-              .fromValue(data[1])
-              .e,
-          RtmpStreamingErrorCodeConverter
-              .fromValue(data[2])
-              .e,
+          RtmpStreamingStateConverter.fromValue(data[1]).e,
+          RtmpStreamingErrorCodeConverter.fromValue(data[2]).e,
         );
         break;
       case 'TranscodingUpdated':
@@ -1173,18 +1174,14 @@ class RtcEngineEventHandler {
         break;
       case 'StreamInjectedStatus':
         streamInjectedStatus?.call(
-            data[0], data[1], InjectStreamStatusConverter
-            .fromValue(data[2])
-            .e);
+            data[0], data[1], InjectStreamStatusConverter.fromValue(data[2]).e);
         break;
       case 'StreamMessage':
         streamMessage?.call(data[0], data[1], data[2]);
         break;
       case 'StreamMessageError':
         streamMessageError?.call(data[0], data[1],
-            ErrorCodeConverter
-                .fromValue(data[2])
-                .e, data[3], data[4]);
+            ErrorCodeConverter.fromValue(data[2]).e, data[3], data[4]);
         break;
       case 'MediaEngineLoadSuccess':
         mediaEngineLoadSuccess?.call();
@@ -1194,19 +1191,13 @@ class RtcEngineEventHandler {
         break;
       case 'ChannelMediaRelayStateChanged':
         channelMediaRelayStateChanged?.call(
-          ChannelMediaRelayStateConverter
-              .fromValue(data[0])
-              .e,
-          ChannelMediaRelayErrorConverter
-              .fromValue(data[1])
-              .e,
+          ChannelMediaRelayStateConverter.fromValue(data[0]).e,
+          ChannelMediaRelayErrorConverter.fromValue(data[1]).e,
         );
         break;
       case 'ChannelMediaRelayEvent':
         channelMediaRelayEvent
-            ?.call(ChannelMediaRelayEventConverter
-            .fromValue(data[0])
-            .e);
+            ?.call(ChannelMediaRelayEventConverter.fromValue(data[0]).e);
         break;
       case 'FirstRemoteVideoFrame':
         firstRemoteVideoFrame?.call(data[0], data[1], data[2], data[3]);
@@ -1221,9 +1212,7 @@ class RtcEngineEventHandler {
         userMuteAudio?.call(data[0], data[1]);
         break;
       case 'StreamPublished':
-        streamPublished?.call(data[0], ErrorCodeConverter
-            .fromValue(data[1])
-            .e);
+        streamPublished?.call(data[0], ErrorCodeConverter.fromValue(data[1]).e);
         break;
       case 'StreamUnpublished':
         streamUnpublished?.call(data[0]);
@@ -1581,49 +1570,46 @@ class RtcChannelEventHandler {
   MetadataCallback metadataReceived;
 
   /// Constructs a [RtcChannelEventHandler]
-  RtcChannelEventHandler({this.warning,
-    this.error,
-    this.joinChannelSuccess,
-    this.rejoinChannelSuccess,
-    this.leaveChannel,
-    this.clientRoleChanged,
-    this.userJoined,
-    this.userOffline,
-    this.connectionStateChanged,
-    this.connectionLost,
-    this.tokenPrivilegeWillExpire,
-    this.requestToken,
-    this.activeSpeaker,
-    this.videoSizeChanged,
-    this.remoteVideoStateChanged,
-    this.remoteAudioStateChanged,
-    this.localPublishFallbackToAudioOnly,
-    this.remoteSubscribeFallbackToAudioOnly,
-    this.rtcStats,
-    this.networkQuality,
-    this.remoteVideoStats,
-    this.remoteAudioStats,
-    this.rtmpStreamingStateChanged,
-    this.transcodingUpdated,
-    this.streamInjectedStatus,
-    this.streamMessage,
-    this.streamMessageError,
-    this.channelMediaRelayStateChanged,
-    this.channelMediaRelayEvent,
-    this.metadataReceived});
+  RtcChannelEventHandler(
+      {this.warning,
+      this.error,
+      this.joinChannelSuccess,
+      this.rejoinChannelSuccess,
+      this.leaveChannel,
+      this.clientRoleChanged,
+      this.userJoined,
+      this.userOffline,
+      this.connectionStateChanged,
+      this.connectionLost,
+      this.tokenPrivilegeWillExpire,
+      this.requestToken,
+      this.activeSpeaker,
+      this.videoSizeChanged,
+      this.remoteVideoStateChanged,
+      this.remoteAudioStateChanged,
+      this.localPublishFallbackToAudioOnly,
+      this.remoteSubscribeFallbackToAudioOnly,
+      this.rtcStats,
+      this.networkQuality,
+      this.remoteVideoStats,
+      this.remoteAudioStats,
+      this.rtmpStreamingStateChanged,
+      this.transcodingUpdated,
+      this.streamInjectedStatus,
+      this.streamMessage,
+      this.streamMessageError,
+      this.channelMediaRelayStateChanged,
+      this.channelMediaRelayEvent,
+      this.metadataReceived});
 
   // ignore: public_member_api_docs
   void process(String methodName, List<dynamic> data) {
     switch (methodName) {
       case 'Warning':
-        warning?.call(WarningCodeConverter
-            .fromValue(data[0])
-            .e);
+        warning?.call(WarningCodeConverter.fromValue(data[0]).e);
         break;
       case 'Error':
-        error?.call(ErrorCodeConverter
-            .fromValue(data[0])
-            .e);
+        error?.call(ErrorCodeConverter.fromValue(data[0]).e);
         break;
       case 'JoinChannelSuccess':
         joinChannelSuccess?.call(data[0], data[1], data[2]);
@@ -1636,30 +1622,20 @@ class RtcChannelEventHandler {
             ?.call(RtcStats.fromJson(Map<String, dynamic>.from(data[0])));
         break;
       case 'ClientRoleChanged':
-        clientRoleChanged?.call(ClientRoleConverter
-            .fromValue(data[0])
-            .e,
-            ClientRoleConverter
-                .fromValue(data[1])
-                .e);
+        clientRoleChanged?.call(ClientRoleConverter.fromValue(data[0]).e,
+            ClientRoleConverter.fromValue(data[1]).e);
         break;
       case 'UserJoined':
         userJoined?.call(data[0], data[1]);
         break;
       case 'UserOffline':
         userOffline?.call(
-            data[0], UserOfflineReasonConverter
-            .fromValue(data[1])
-            .e);
+            data[0], UserOfflineReasonConverter.fromValue(data[1]).e);
         break;
       case 'ConnectionStateChanged':
         connectionStateChanged?.call(
-            ConnectionStateTypeConverter
-                .fromValue(data[0])
-                .e,
-            ConnectionChangedReasonConverter
-                .fromValue(data[1])
-                .e);
+            ConnectionStateTypeConverter.fromValue(data[0]).e,
+            ConnectionChangedReasonConverter.fromValue(data[1]).e);
         break;
       case 'ConnectionLost':
         connectionLost?.call();
@@ -1679,23 +1655,15 @@ class RtcChannelEventHandler {
       case 'RemoteVideoStateChanged':
         remoteVideoStateChanged?.call(
             data[0],
-            VideoRemoteStateConverter
-                .fromValue(data[1])
-                .e,
-            VideoRemoteStateReasonConverter
-                .fromValue(data[2])
-                .e,
+            VideoRemoteStateConverter.fromValue(data[1]).e,
+            VideoRemoteStateReasonConverter.fromValue(data[2]).e,
             data[3]);
         break;
       case 'RemoteAudioStateChanged':
         remoteAudioStateChanged?.call(
             data[0],
-            AudioRemoteStateConverter
-                .fromValue(data[1])
-                .e,
-            AudioRemoteStateReasonConverter
-                .fromValue(data[2])
-                .e,
+            AudioRemoteStateConverter.fromValue(data[1]).e,
+            AudioRemoteStateReasonConverter.fromValue(data[2]).e,
             data[3]);
         break;
       case 'LocalPublishFallbackToAudioOnly':
@@ -1710,12 +1678,8 @@ class RtcChannelEventHandler {
       case 'NetworkQuality':
         networkQuality?.call(
             data[0],
-            NetworkQualityConverter
-                .fromValue(data[1])
-                .e,
-            NetworkQualityConverter
-                .fromValue(data[2])
-                .e);
+            NetworkQualityConverter.fromValue(data[1]).e,
+            NetworkQualityConverter.fromValue(data[2]).e);
         break;
       case 'RemoteVideoStats':
         remoteVideoStats?.call(
@@ -1728,12 +1692,8 @@ class RtcChannelEventHandler {
       case 'RtmpStreamingStateChanged':
         rtmpStreamingStateChanged?.call(
           data[0],
-          RtmpStreamingStateConverter
-              .fromValue(data[1])
-              .e,
-          RtmpStreamingErrorCodeConverter
-              .fromValue(data[2])
-              .e,
+          RtmpStreamingStateConverter.fromValue(data[1]).e,
+          RtmpStreamingErrorCodeConverter.fromValue(data[2]).e,
         );
         break;
       case 'TranscodingUpdated':
@@ -1741,34 +1701,24 @@ class RtcChannelEventHandler {
         break;
       case 'StreamInjectedStatus':
         streamInjectedStatus?.call(
-            data[0], data[1], InjectStreamStatusConverter
-            .fromValue(data[2])
-            .e);
+            data[0], data[1], InjectStreamStatusConverter.fromValue(data[2]).e);
         break;
       case 'StreamMessage':
         streamMessage?.call(data[0], data[1], data[2]);
         break;
       case 'StreamMessageError':
         streamMessageError?.call(data[0], data[1],
-            ErrorCodeConverter
-                .fromValue(data[2])
-                .e, data[3], data[4]);
+            ErrorCodeConverter.fromValue(data[2]).e, data[3], data[4]);
         break;
       case 'ChannelMediaRelayStateChanged':
         channelMediaRelayStateChanged?.call(
-          ChannelMediaRelayStateConverter
-              .fromValue(data[0])
-              .e,
-          ChannelMediaRelayErrorConverter
-              .fromValue(data[1])
-              .e,
+          ChannelMediaRelayStateConverter.fromValue(data[0]).e,
+          ChannelMediaRelayErrorConverter.fromValue(data[1]).e,
         );
         break;
       case 'ChannelMediaRelayEvent':
         channelMediaRelayEvent
-            ?.call(ChannelMediaRelayEventConverter
-            .fromValue(data[0])
-            .e);
+            ?.call(ChannelMediaRelayEventConverter.fromValue(data[0]).e);
         break;
       case 'MetadataReceived':
         metadataReceived?.call(data[0], data[1], data[2]);

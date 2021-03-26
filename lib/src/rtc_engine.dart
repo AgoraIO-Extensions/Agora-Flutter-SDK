@@ -31,7 +31,8 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
+  static Future<T> _invokeMethod<T>(String method,
+      [Map<String, dynamic> arguments]) {
     return _methodChannel.invokeMethod(method, arguments);
   }
 
@@ -50,7 +51,7 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcEngine> create(String appId) async {
+  static Future<RtcEngine> create(String appId) {
     return createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL);
   }
 
@@ -77,13 +78,13 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcEngine> createWithAreaCode(String appId,
-      IPAreaCode areaCode) async {
+  static Future<RtcEngine> createWithAreaCode(
+      String appId, IPAreaCode areaCode) async {
     if (_engine != null) return _engine;
     await _methodChannel.invokeMethod('create', {
       'config': {
-      'appId': appId,
-      'areaCode': IPAreaCodeConverter(areaCode).value()
+        'appId': appId,
+        'areaCode': IPAreaCodeConverter(areaCode).value()
       },
       'appType': 4
     });
