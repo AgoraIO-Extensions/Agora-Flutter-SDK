@@ -106,8 +106,6 @@ protocol RtcChannelEncryptionInterface {
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
-
-    func enableEncryption(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcChannelInjectStreamInterface {
@@ -318,21 +316,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setEncryptionMode(_ params: NSDictionary, _ callback: Callback) {
-        var encryptionMode = ""
-        switch (params["encryptionMode"] as! NSNumber).intValue {
-        case AgoraEncryptionMode.AES128XTS.rawValue:
-            encryptionMode = "aes-128-xts"
-        case AgoraEncryptionMode.AES128ECB.rawValue:
-            encryptionMode = "aes-128-ecb"
-        case AgoraEncryptionMode.AES256XTS.rawValue:
-            encryptionMode = "aes-256-xts"
-        default: encryptionMode = ""
-        }
-        callback.code(self[params["channelId"] as! String]?.setEncryptionMode(encryptionMode))
-    }
-
-    @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
-//            callback.code(self[params["channelId"] as! String]?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.setEncryptionMode(params["encryptionMode"] as? String))
     }
 
     @objc func addInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {

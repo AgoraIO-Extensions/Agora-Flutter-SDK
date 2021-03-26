@@ -52,8 +52,6 @@ protocol RtcEngineInterface:
 
     func getConnectionState(_ callback: Callback)
 
-//    func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback)
-
     func getCallId(_ callback: Callback)
 
     func rate(_ params: NSDictionary, _ callback: Callback)
@@ -155,8 +153,6 @@ protocol RtcEngineAudioMixingInterface {
     func getAudioMixingCurrentPosition(_ callback: Callback)
 
     func setAudioMixingPosition(_ params: NSDictionary, _ callback: Callback)
-
-    func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioEffectInterface {
@@ -285,8 +281,6 @@ protocol RtcEngineEncryptionInterface {
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
-
-    func enableEncryption(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioRecorderInterface {
@@ -321,8 +315,6 @@ protocol RtcEngineCameraInterface {
     func setCameraFocusPositionInPreview(_ params: NSDictionary, _ callback: Callback)
 
     func setCameraExposurePosition(_ params: NSDictionary, _ callback: Callback)
-
-    func enableFaceDetection(_ params: NSDictionary, _ callback: Callback)
 
     func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback)
 
@@ -409,10 +401,6 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
             $0.getConnectionState().rawValue
         }
     }
-
-//    @objc func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback) {
-//        callback.code(engine?.sendCustomReportMessage(params["id"] as! String, category: params["category"] as! String, event: params["event"] as! String, label: params["label"] as! String, value: (params["value"] as! NSNumber).intValue))
-//    }
 
     @objc func getCallId(_ callback: Callback) {
         callback.resolve(engine) {
@@ -619,10 +607,6 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setAudioMixingPosition(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setAudioMixingPosition((params["pos"] as! NSNumber).intValue))
-    }
-
-    @objc func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback) {
-//        callback.code(engine?.setAudioMixingPitch((params["pitch"] as! NSNumber).intValue))
     }
 
     @objc func getEffectsVolume(_ callback: Callback) {
@@ -849,21 +833,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setEncryptionMode(_ params: NSDictionary, _ callback: Callback) {
-        var encryptionMode = ""
-        switch (params["encryptionMode"] as! NSNumber).intValue {
-        case AgoraEncryptionMode.AES128XTS.rawValue:
-            encryptionMode = "aes-128-xts"
-        case AgoraEncryptionMode.AES128ECB.rawValue:
-            encryptionMode = "aes-128-ecb"
-        case AgoraEncryptionMode.AES256XTS.rawValue:
-            encryptionMode = "aes-256-xts"
-        default: encryptionMode = ""
-        }
-        callback.code(engine?.setEncryptionMode(encryptionMode))
-    }
-
-    @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
-//        callback.code(engine?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
+        callback.code(engine?.setEncryptionMode(params["encryptionMode"] as? String))
     }
 
     @objc func startAudioRecording(_ params: NSDictionary, _ callback: Callback) {
@@ -937,10 +907,6 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
             $0.setCameraExposurePosition(CGPoint(x: (params["positionXinView"] as! NSNumber).doubleValue, y: (params["positionYinView"] as! NSNumber).doubleValue))
             return nil
         }
-    }
-
-    @objc func enableFaceDetection(_ params: NSDictionary, _ callback: Callback) {
-//        callback.code(engine?.enableFaceDetection(params["enable"] as! Bool))
     }
 
     @objc func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback) {

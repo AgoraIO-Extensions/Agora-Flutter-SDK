@@ -31,7 +31,8 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
+  static Future<T> _invokeMethod<T>(String method,
+      [Map<String, dynamic> arguments]) {
     return _methodChannel.invokeMethod(method, arguments);
   }
 
@@ -51,40 +52,8 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> create(String appId) async {
-    return createWithAreaCode(appId, AreaCode.GLOB);
-  }
-
-  /// Creates an [RtcEngine] instance.
-  ///
-  /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
-  ///
-  /// **Note**
-  /// - You must create an [RtcEngine] instance before calling any other method.
-  /// - You can create an [RtcEngine] instance either by calling this method or by calling [RtcEngine.create]. The difference between [RtcEngine.create] and this method is that this method enables you to specify the connection area.
-  /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
-  ///
-  /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
-  ///
-  /// **Parameter** [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions.
-  ///
-  /// For details, see [IPAreaCode].
-  ///
-  /// After specifying the area of connection:
-  /// - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
-  /// - When the app that integrates the Agora SDK is used out of the specified area, it connects to the Agora servers either in the specified area or in the area where the app is located.
-  ///
-  /// **Returns**
-  /// - An [RtcEngine] instance if the method call succeeds.
-  /// - The error code, if this method call fails:
-  ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcEngine> createWithAreaCode(
-      String appId, AreaCode areaCode) async {
     if (_engine != null) return _engine;
-    await _methodChannel.invokeMethod('create', {
-      'appId': appId,
-      'areaCode': AreaCodeConverter(areaCode).value(),
-      'appType': 4
-    });
+    await _methodChannel.invokeMethod('create', {'appId': appId, 'appType': 4});
     _engine = RtcEngine._();
     return _engine;
   }
@@ -636,14 +605,12 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
     return _invokeMethod('setEncryptionMode',
         {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
   }
 
   @override
-  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
@@ -2064,7 +2031,6 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
-  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
@@ -2077,7 +2043,6 @@ mixin RtcEncryptionInterface {
   /// - Call the [RtcEngine.setEncryptionSecret] method before calling this method.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
-  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 }
 

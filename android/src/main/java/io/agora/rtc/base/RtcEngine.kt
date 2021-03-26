@@ -1,8 +1,10 @@
 package io.agora.rtc.base
 
 import android.content.Context
-import io.agora.rtc.*
-//import io.agora.rtc.internal.EncryptionConfig
+import io.agora.rtc.Constants
+import io.agora.rtc.IMetadataObserver
+import io.agora.rtc.RtcEngine
+import io.agora.rtc.RtcEngineEx
 import io.agora.rtc.models.UserInfo
 
 class IRtcEngine {
@@ -33,8 +35,6 @@ class IRtcEngine {
     fun enableWebSdkInteroperability(params: Map<String, *>, callback: Callback)
 
     fun getConnectionState(callback: Callback)
-
-    fun sendCustomReportMessage(params: Map<String, *>, callback: Callback)
 
     fun getCallId(callback: Callback)
 
@@ -137,8 +137,6 @@ class IRtcEngine {
     fun getAudioMixingCurrentPosition(callback: Callback)
 
     fun setAudioMixingPosition(params: Map<String, *>, callback: Callback)
-
-    fun setAudioMixingPitch(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcAudioEffectInterface {
@@ -267,8 +265,6 @@ class IRtcEngine {
     fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
 
     fun setEncryptionMode(params: Map<String, *>, callback: Callback)
-
-    fun enableEncryption(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcAudioRecorderInterface {
@@ -304,8 +300,6 @@ class IRtcEngine {
 
     fun setCameraExposurePosition(params: Map<String, *>, callback: Callback)
 
-    fun enableFaceDetection(params: Map<String, *>, callback: Callback)
-
     fun setCameraTorchOn(params: Map<String, *>, callback: Callback)
 
     fun setCameraAutoFocusFaceModeEnabled(params: Map<String, *>, callback: Callback)
@@ -334,9 +328,13 @@ class RtcEngineManager(
   }
 
   override fun create(params: Map<String, *>, callback: Callback) {
-    engine = RtcEngine.create(params["context"] as Context,params["appId"] as String,RtcEngineEventHandler { methodName, data ->
-      emit(methodName, data)
-    })
+    engine = RtcEngineEx.create(
+      params["context"] as Context,
+      params["appId"] as String,
+      RtcEngineEventHandler { methodName, data ->
+        emit(methodName, data)
+      }
+    )
     callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
   }
 
@@ -381,10 +379,6 @@ class RtcEngineManager(
 
   override fun getConnectionState(callback: Callback) {
     callback.resolve(engine) { it.connectionState }
-  }
-
-  override fun sendCustomReportMessage(params: Map<String, *>, callback: Callback) {
-//    callback.code(engine?.sendCustomReportMessage(params["id"] as String, params["category"] as String, params["event"] as String, params["label"] as String, (params["value"] as Number).toInt()))
   }
 
   override fun getCallId(callback: Callback) {
@@ -584,10 +578,6 @@ class RtcEngineManager(
 
   override fun setAudioMixingPosition(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setAudioMixingPosition((params["pos"] as Number).toInt()))
-  }
-
-  override fun setAudioMixingPitch(params: Map<String, *>, callback: Callback) {
-//    callback.code(engine?.setAudioMixingPitch((params["pitch"] as Number).toInt()))
   }
 
   override fun getEffectsVolume(callback: Callback) {
@@ -805,16 +795,7 @@ class RtcEngineManager(
   }
 
   override fun setEncryptionMode(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setEncryptionMode(when ((params["encryptionMode"] as Number).toInt()) {
-      1 -> "aes-128-xts"
-      3 -> "aes-128-ecb"
-      2 -> "aes-256-xts"
-      else -> ""
-    }))
-  }
-
-  override fun enableEncryption(params: Map<String, *>, callback: Callback) {
-//    callback.code(engine?.enableEncryption(params["enabled"] as Boolean, mapToEncryptionConfig(params["config"] as Map<*, *>)))
+    callback.code(engine?.setEncryptionMode(params["encryptionMode"] as String))
   }
 
   override fun startAudioRecording(params: Map<String, *>, callback: Callback) {
@@ -871,10 +852,6 @@ class RtcEngineManager(
 
   override fun setCameraExposurePosition(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setCameraExposurePosition((params["positionXinView"] as Number).toFloat(), (params["positionYinView"] as Number).toFloat()))
-  }
-
-  override fun enableFaceDetection(params: Map<String, *>, callback: Callback) {
-//    callback.code(engine?.enableFaceDetection(params["enable"] as Boolean))
   }
 
   override fun setCameraTorchOn(params: Map<String, *>, callback: Callback) {

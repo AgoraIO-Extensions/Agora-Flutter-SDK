@@ -35,7 +35,7 @@ Open the `AndroidManifest.xml` file and add the required device permissions to t
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     ...

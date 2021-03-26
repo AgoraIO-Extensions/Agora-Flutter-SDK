@@ -23,7 +23,6 @@ class RtcChannelEvents {
     const val VideoSizeChanged = "VideoSizeChanged"
     const val RemoteVideoStateChanged = "RemoteVideoStateChanged"
     const val RemoteAudioStateChanged = "RemoteAudioStateChanged"
-    const val LocalPublishFallbackToAudioOnly = "LocalPublishFallbackToAudioOnly"
     const val RemoteSubscribeFallbackToAudioOnly = "RemoteSubscribeFallbackToAudioOnly"
     const val RtcStats = "RtcStats"
     const val NetworkQuality = "NetworkQuality"
@@ -37,11 +36,6 @@ class RtcChannelEvents {
     const val ChannelMediaRelayStateChanged = "ChannelMediaRelayStateChanged"
     const val ChannelMediaRelayEvent = "ChannelMediaRelayEvent"
     const val MetadataReceived = "MetadataReceived"
-    const val AudioPublishStateChanged = "AudioPublishStateChanged"
-    const val VideoPublishStateChanged = "VideoPublishStateChanged"
-    const val AudioSubscribeStateChanged = "AudioSubscribeStateChanged"
-    const val VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
-    const val RtmpStreamingEvent = "RtmpStreamingEvent"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -61,7 +55,6 @@ class RtcChannelEvents {
         "VideoSizeChanged" to VideoSizeChanged,
         "RemoteVideoStateChanged" to RemoteVideoStateChanged,
         "RemoteAudioStateChanged" to RemoteAudioStateChanged,
-        "LocalPublishFallbackToAudioOnly" to LocalPublishFallbackToAudioOnly,
         "RemoteSubscribeFallbackToAudioOnly" to RemoteSubscribeFallbackToAudioOnly,
         "RtcStats" to RtcStats,
         "NetworkQuality" to NetworkQuality,
@@ -74,12 +67,7 @@ class RtcChannelEvents {
         "StreamMessageError" to StreamMessageError,
         "ChannelMediaRelayStateChanged" to ChannelMediaRelayStateChanged,
         "ChannelMediaRelayEvent" to ChannelMediaRelayEvent,
-        "MetadataReceived" to MetadataReceived,
-        "AudioPublishStateChanged" to AudioPublishStateChanged,
-        "VideoPublishStateChanged" to VideoPublishStateChanged,
-        "AudioSubscribeStateChanged" to AudioSubscribeStateChanged,
-        "VideoSubscribeStateChanged" to VideoSubscribeStateChanged,
-        "RtmpStreamingEvent" to RtmpStreamingEvent
+        "MetadataReceived" to MetadataReceived
       )
     }
   }
@@ -165,10 +153,6 @@ class RtcChannelEventHandler(
     callback(RtcChannelEvents.RemoteAudioStateChanged, rtcChannel, uid, state, reason, elapsed)
   }
 
-  fun onLocalPublishFallbackToAudioOnly(rtcChannel: RtcChannel?, isFallbackOrRecover: Boolean) {
-    callback(RtcChannelEvents.LocalPublishFallbackToAudioOnly, rtcChannel, isFallbackOrRecover)
-  }
-
   override fun onRemoteSubscribeFallbackToAudioOnly(rtcChannel: RtcChannel?, uid: Int, isFallbackOrRecover: Boolean) {
     callback(RtcChannelEvents.RemoteSubscribeFallbackToAudioOnly, rtcChannel, uid, isFallbackOrRecover)
   }
@@ -215,25 +199,5 @@ class RtcChannelEventHandler(
 
   override fun onChannelMediaRelayEvent(rtcChannel: RtcChannel?, @Annotations.AgoraChannelMediaRelayEvent code: Int) {
     callback(RtcChannelEvents.ChannelMediaRelayEvent, rtcChannel, code)
-  }
-
-  fun onAudioPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.AudioPublishStateChanged, rtcChannel, rtcChannel?.channelId(), oldState, newState, elapseSinceLastState)
-  }
-
-  fun onVideoPublishStateChanged(rtcChannel: RtcChannel?, @Annotations.AgoraStreamPublishState oldState: Int, @Annotations.AgoraStreamPublishState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.VideoPublishStateChanged, rtcChannel, rtcChannel?.channelId(), oldState, newState, elapseSinceLastState)
-  }
-
-  fun onAudioSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.AudioSubscribeStateChanged, rtcChannel, rtcChannel?.channelId(), uid, oldState, newState, elapseSinceLastState)
-  }
-
-  fun onVideoSubscribeStateChanged(rtcChannel: RtcChannel?, uid: Int, @Annotations.AgoraStreamSubscribeState oldState: Int, @Annotations.AgoraStreamSubscribeState newState: Int, elapseSinceLastState: Int) {
-    callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, rtcChannel?.channelId(), uid, oldState, newState, elapseSinceLastState)
-  }
-
-  fun onRtmpStreamingEvent(rtcChannel: RtcChannel?, url: String?, @Annotations.AgoraRtmpStreamingEvent errCode: Int) {
-    callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, errCode)
   }
 }

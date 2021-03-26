@@ -2,94 +2,130 @@ import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 
+// ignore: public_member_api_docs
 typedef EmptyCallback = void Function();
+// ignore: public_member_api_docs
 typedef WarningCallback = void Function(WarningCode warn);
+// ignore: public_member_api_docs
 typedef ErrorCallback = void Function(ErrorCode err);
+// ignore: public_member_api_docs
 typedef ApiCallCallback = void Function(
     ErrorCode error, String api, String result);
+// ignore: public_member_api_docs
 typedef UidWithElapsedAndChannelCallback = void Function(
     String channel, int uid, int elapsed);
+// ignore: public_member_api_docs
 typedef RtcStatsCallback = void Function(RtcStats stats);
+// ignore: public_member_api_docs
 typedef UserAccountCallback = void Function(int uid, String userAccount);
+// ignore: public_member_api_docs
 typedef UserInfoCallback = void Function(int uid, UserInfo userInfo);
+// ignore: public_member_api_docs
 typedef ClientRoleCallback = void Function(
     ClientRole oldRole, ClientRole newRole);
+// ignore: public_member_api_docs
 typedef UidWithElapsedCallback = void Function(int uid, int elapsed);
+// ignore: public_member_api_docs
 typedef UserOfflineCallback = void Function(int uid, UserOfflineReason reason);
+// ignore: public_member_api_docs
 typedef ConnectionStateCallback = void Function(
     ConnectionStateType state, ConnectionChangedReason reason);
+// ignore: public_member_api_docs
 typedef NetworkTypeCallback = void Function(NetworkType type);
+// ignore: public_member_api_docs
 typedef TokenCallback = void Function(String token);
+// ignore: public_member_api_docs
 typedef AudioVolumeCallback = void Function(
     List<AudioVolumeInfo> speakers, int totalVolume);
+// ignore: public_member_api_docs
 typedef UidCallback = void Function(int uid);
+// ignore: public_member_api_docs
 typedef ElapsedCallback = void Function(int elapsed);
+// ignore: public_member_api_docs
 typedef VideoFrameCallback = void Function(int width, int height, int elapsed);
+// ignore: public_member_api_docs
 typedef UidWithMutedCallback = void Function(int uid, bool muted);
+// ignore: public_member_api_docs
 typedef VideoSizeCallback = void Function(
     int uid, int width, int height, int rotation);
+// ignore: public_member_api_docs
 typedef RemoteVideoStateCallback = void Function(int uid,
     VideoRemoteState state, VideoRemoteStateReason reason, int elapsed);
+// ignore: public_member_api_docs
 typedef LocalVideoStateCallback = void Function(
     LocalVideoStreamState localVideoState, LocalVideoStreamError error);
+// ignore: public_member_api_docs
 typedef RemoteAudioStateCallback = void Function(int uid,
     AudioRemoteState state, AudioRemoteStateReason reason, int elapsed);
+// ignore: public_member_api_docs
 typedef LocalAudioStateCallback = void Function(
     AudioLocalState state, AudioLocalError error);
+// ignore: public_member_api_docs
 typedef FallbackCallback = void Function(bool isFallbackOrRecover);
+// ignore: public_member_api_docs
 typedef FallbackWithUidCallback = void Function(
     int uid, bool isFallbackOrRecover);
+// ignore: public_member_api_docs
 typedef AudioRouteCallback = void Function(AudioOutputRouting routing);
+// ignore: public_member_api_docs
 typedef RectCallback = void Function(Rect rect);
+// ignore: public_member_api_docs
 typedef NetworkQualityCallback = void Function(NetworkQuality quality);
+// ignore: public_member_api_docs
 typedef NetworkQualityWithUidCallback = void Function(
     int uid, NetworkQuality txQuality, NetworkQuality rxQuality);
+// ignore: public_member_api_docs
 typedef LastmileProbeCallback = void Function(LastmileProbeResult result);
+// ignore: public_member_api_docs
 typedef LocalVideoStatsCallback = void Function(LocalVideoStats stats);
+// ignore: public_member_api_docs
 typedef LocalAudioStatsCallback = void Function(LocalAudioStats stats);
+// ignore: public_member_api_docs
 typedef RemoteVideoStatsCallback = void Function(RemoteVideoStats stats);
+// ignore: public_member_api_docs
 typedef RemoteAudioStatsCallback = void Function(RemoteAudioStats stats);
+// ignore: public_member_api_docs
 typedef AudioMixingStateCallback = void Function(
     AudioMixingStateCode state, AudioMixingErrorCode errorCode);
+// ignore: public_member_api_docs
 typedef SoundIdCallback = void Function(int soundId);
+// ignore: public_member_api_docs
 typedef RtmpStreamingStateCallback = void Function(
     String url, RtmpStreamingState state, RtmpStreamingErrorCode errCode);
+// ignore: public_member_api_docs
 typedef StreamInjectedStatusCallback = void Function(
     String url, int uid, InjectStreamStatus status);
+// ignore: public_member_api_docs
 typedef StreamMessageCallback = void Function(
     int uid, int streamId, String data);
+// ignore: public_member_api_docs
 typedef StreamMessageErrorCallback = void Function(
     int uid, int streamId, ErrorCode error, int missed, int cached);
+// ignore: public_member_api_docs
 typedef MediaRelayStateCallback = void Function(
     ChannelMediaRelayState state, ChannelMediaRelayError code);
+// ignore: public_member_api_docs
 typedef MediaRelayEventCallback = void Function(ChannelMediaRelayEvent code);
+// ignore: public_member_api_docs
 typedef VideoFrameWithUidCallback = void Function(
     int uid, int width, int height, int elapsed);
+// ignore: public_member_api_docs
 typedef UrlWithErrorCallback = void Function(String url, ErrorCode error);
+// ignore: public_member_api_docs
 typedef UrlCallback = void Function(String url);
+// ignore: public_member_api_docs
 typedef TransportStatsCallback = void Function(
     int uid, int delay, int lost, int rxKBitRate);
+// ignore: public_member_api_docs
 typedef UidWithEnabledCallback = void Function(int uid, bool enabled);
+// ignore: public_member_api_docs
 typedef EnabledCallback = void Function(bool enabled);
+// ignore: public_member_api_docs
 typedef AudioQualityCallback = void Function(
     int uid, int quality, int delay, int lost);
+// ignore: public_member_api_docs
 typedef MetadataCallback = void Function(
     String buffer, int uid, int timeStampMs);
-typedef FacePositionCallback = void Function(
-    int imageWidth, int imageHeight, List<FacePositionInfo> faces);
-typedef StreamPublishStateCallback = void Function(
-    String channel,
-    StreamPublishState oldState,
-    StreamPublishState newState,
-    int elapseSinceLastState);
-typedef StreamSubscribeStateCallback = void Function(
-    String channel,
-    int uid,
-    StreamSubscribeState oldState,
-    StreamSubscribeState newState,
-    int elapseSinceLastState);
-typedef RtmpStreamingEventCallback = void Function(
-    String url, RtmpStreamingEvent eventCode);
 
 /// The SDK uses the [RtcEngineEventHandler] class to send callbacks to the application, and the application inherits the methods of this class to retrieve these callbacks.
 ///
@@ -854,32 +890,6 @@ class RtcEngineEventHandler {
   /// - [int]: `timeStampMs`: The timestamp (ms) of the received metadata.
   MetadataCallback metadataReceived;
 
-  /// Occurs when the first audio frame is published.
-  ///
-  /// @since v3.1.2.
-  ///
-  /// The SDK triggers this callback under one of the following circumstances:
-  /// - The local client enables the audio module and calls [RtcEngine.joinChannel] successfully.
-  /// - The local client calls [RtcEngine.muteLocalAudioStream] (`true`) and [RtcEngine.muteLocalAudioStream] (`false`) in sequence.
-  /// - The local client calls [RtcEngine.disableAudio] (`true`) and [`enableAudio`] in sequence.
-  ///
-  /// The `ElapsedCallback` typedef includes the following parameters:
-  /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
-  ElapsedCallback firstLocalAudioFramePublished;
-
-  /// Occurs when the first video frame is published.
-  ///
-  /// @since v3.1.2.
-  ///
-  /// The SDK triggers this callback under one of the following circumstances:
-  /// - The local client enables the video module and calls [RtcEngine.joinChannel] successfully.
-  /// - The local client calls [RtcEngine.muteLocalVideoStream] (`true`) and [RtcEngine.muteLocalVideoStream] (`false`) in sequence.
-  /// - The local client calls [RtcEngine.disableVideo] and [RtcEngine.enableVideo] in sequence.
-  ///
-  /// The `ElapsedCallback` typedef includes the following parameters:
-  /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
-  ElapsedCallback firstLocalVideoFramePublished;
-
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler(
       {this.warning,
@@ -950,9 +960,7 @@ class RtcEngineEventHandler {
       this.audioQuality,
       this.cameraReady,
       this.videoStopped,
-      this.metadataReceived,
-      this.firstLocalAudioFramePublished,
-      this.firstLocalVideoFramePublished});
+      this.metadataReceived});
 
   // ignore: public_member_api_docs
   void process(String methodName, List<dynamic> data) {
@@ -1212,12 +1220,6 @@ class RtcEngineEventHandler {
         break;
       case 'MetadataReceived':
         metadataReceived?.call(data[0], data[1], data[2]);
-        break;
-      case 'FirstLocalAudioFramePublished':
-        firstLocalAudioFramePublished?.call(data[0]);
-        break;
-      case 'FirstLocalVideoFramePublished':
-        firstLocalVideoFramePublished?.call(data[0]);
         break;
     }
   }

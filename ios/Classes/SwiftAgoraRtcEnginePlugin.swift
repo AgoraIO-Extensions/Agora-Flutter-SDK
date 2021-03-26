@@ -82,7 +82,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         }
         result(FlutterMethodNotImplemented)
     }
-    
+
     private func getAssetAbsolutePath(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let assetPath = call.arguments as? String {
             if let assetKey = registrar?.lookupKey(forAsset: assetPath) {

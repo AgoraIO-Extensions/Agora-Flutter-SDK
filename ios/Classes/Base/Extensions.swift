@@ -23,8 +23,7 @@ extension AgoraRtcLocalAudioStats {
         return [
             "numChannels": numChannels,
             "sentSampleRate": sentSampleRate,
-            "sentBitrate": sentBitrate,
-//            "txPacketLossRate": txPacketLossRate
+            "sentBitrate": sentBitrate
         ]
     }
 }
@@ -82,9 +81,7 @@ extension AgoraRtcRemoteAudioStats {
             "receivedSampleRate": receivedSampleRate,
             "receivedBitrate": receivedBitrate,
             "totalFrozenTime": totalFrozenTime,
-            "frozenRate": frozenRate,
-//            "totalActiveTime": totalActiveTime,
-//            "publishDuration": publishDuration
+            "frozenRate": frozenRate
         ]
     }
 }
@@ -103,9 +100,7 @@ extension AgoraRtcLocalVideoStats {
             "encodedFrameWidth": encodedFrameWidth,
             "encodedFrameHeight": encodedFrameHeight,
             "encodedFrameCount": encodedFrameCount,
-            "codecType": codecType.rawValue,
-//            "txPacketLossRate": txPacketLossRate,
-//            "captureFrameRate": captureFrameRate
+            "codecType": codecType.rawValue
         ]
     }
 }
@@ -123,9 +118,7 @@ extension AgoraRtcRemoteVideoStats {
             "packetLossRate": packetLossRate,
             "rxStreamType": rxStreamType.rawValue,
             "totalFrozenTime": totalFrozenTime,
-            "frozenRate": frozenRate,
-//            "totalActiveTime": totalActiveTime,
-//            "publishDuration": publishDuration
+            "frozenRate": frozenRate
         ]
     }
 }
@@ -171,25 +164,3 @@ extension AgoraLastmileProbeResult {
         ]
     }
 }
-
-//extension AgoraFacePositionInfo {
-//    func toMap() -> Dictionary<String, Any?> {
-//        return [
-//            "x": x,
-//            "y": y,
-//            "width": width,
-//            "height": height,
-//            "distance": distance
-//        ]
-//    }
-//}
-
-//extension Array where Element: AgoraFacePositionInfo {
-//    func toMapList() -> Array<Dictionary<String, Any?>> {
-//        var list = [Dictionary<String, Any?>]()
-//        self.forEach {
-//            list.append($0.toMap())
-//        }
-//        return list
-//    }
-//}

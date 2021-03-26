@@ -232,13 +232,11 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
 
   @override
-  @deprecated
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
     return _invokeMethod(
         'setLiveTranscoding', {'transcoding': transcoding.toJson()});
@@ -668,7 +666,6 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
-  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
@@ -681,7 +678,6 @@ mixin RtcEncryptionInterface {
   /// - Before calling this method, ensure that you have called [RtcChannel.setEncryptionSecret] to enable encryption.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
-  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 }
 
