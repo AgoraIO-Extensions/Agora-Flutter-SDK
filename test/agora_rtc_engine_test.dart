@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('agora_rtc_engine');
+  const channel = MethodChannel('agora_rtc_engine');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
