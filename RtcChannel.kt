@@ -1,10 +1,8 @@
 package io.agora.rtc.base
 
-import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
-import io.agora.rtc.internal.EncryptionConfig
 import java.util.*
 
 class IRtcChannel {
@@ -97,8 +95,6 @@ class IRtcChannel {
     fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
 
     fun setEncryptionMode(params: Map<String, *>, callback: Callback)
-
-    fun enableEncryption(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcInjectStreamInterface {
@@ -287,16 +283,7 @@ class RtcChannelManager(
   }
 
   override fun setEncryptionMode(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.setEncryptionMode(when ((params["encryptionMode"] as Number).toInt()) {
-      EncryptionConfig.EncryptionMode.AES_128_XTS.value -> "aes-128-xts"
-      EncryptionConfig.EncryptionMode.AES_128_ECB.value -> "aes-128-ecb"
-      EncryptionConfig.EncryptionMode.AES_256_XTS.value -> "aes-256-xts"
-      else -> ""
-    }))
-  }
-
-  override fun enableEncryption(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.enableEncryption(params["enabled"] as Boolean, mapToEncryptionConfig(params["config"] as Map<*, *>)))
+    callback.code(this[params["channelId"] as String]?.setEncryptionMode(params["encryptionMode"] as String))
   }
 
   override fun addInjectStreamUrl(params: Map<String, *>, callback: Callback) {

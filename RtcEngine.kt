@@ -1,8 +1,10 @@
 package io.agora.rtc.base
 
 import android.content.Context
-import io.agora.rtc.*
-import io.agora.rtc.internal.EncryptionConfig
+import io.agora.rtc.Constants
+import io.agora.rtc.IMetadataObserver
+import io.agora.rtc.RtcEngine
+import io.agora.rtc.RtcEngineEx
 import io.agora.rtc.models.UserInfo
 
 class IRtcEngine {
@@ -33,8 +35,6 @@ class IRtcEngine {
     fun enableWebSdkInteroperability(params: Map<String, *>, callback: Callback)
 
     fun getConnectionState(callback: Callback)
-
-    fun sendCustomReportMessage(params: Map<String, *>, callback: Callback)
 
     fun getCallId(callback: Callback)
 
@@ -267,8 +267,6 @@ class IRtcEngine {
     fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
 
     fun setEncryptionMode(params: Map<String, *>, callback: Callback)
-
-    fun enableEncryption(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcAudioRecorderInterface {
@@ -384,10 +382,6 @@ class RtcEngineManager(
 
   override fun getConnectionState(callback: Callback) {
     callback.resolve(engine) { it.connectionState }
-  }
-
-  override fun sendCustomReportMessage(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.sendCustomReportMessage(params["id"] as String, params["category"] as String, params["event"] as String, params["label"] as String, (params["value"] as Number).toInt()))
   }
 
   override fun getCallId(callback: Callback) {
@@ -808,16 +802,7 @@ class RtcEngineManager(
   }
 
   override fun setEncryptionMode(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setEncryptionMode(when ((params["encryptionMode"] as Number).toInt()) {
-      EncryptionConfig.EncryptionMode.AES_128_XTS.value -> "aes-128-xts"
-      EncryptionConfig.EncryptionMode.AES_128_ECB.value -> "aes-128-ecb"
-      EncryptionConfig.EncryptionMode.AES_256_XTS.value -> "aes-256-xts"
-      else -> ""
-    }))
-  }
-
-  override fun enableEncryption(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.enableEncryption(params["enabled"] as Boolean, mapToEncryptionConfig(params["config"] as Map<*, *>)))
+    callback.code(engine?.setEncryptionMode(params["encryptionMode"] as String))
   }
 
   override fun startAudioRecording(params: Map<String, *>, callback: Callback) {

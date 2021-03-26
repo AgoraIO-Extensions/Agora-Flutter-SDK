@@ -15,8 +15,7 @@ fun LocalAudioStats.toMap(): Map<String, Any?> {
   return hashMapOf(
     "numChannels" to numChannels,
     "sentSampleRate" to sentSampleRate,
-    "sentBitrate" to sentBitrate,
-    "txPacketLossRate" to txPacketLossRate
+    "sentBitrate" to sentBitrate
   )
 }
 
@@ -69,8 +68,7 @@ fun RemoteAudioStats.toMap(): Map<String, Any?> {
     "receivedBitrate" to receivedBitrate,
     "totalFrozenTime" to totalFrozenTime,
     "frozenRate" to frozenRate,
-    "totalActiveTime" to totalActiveTime,
-    "publishDuration" to publishDuration
+    "totalActiveTime" to totalActiveTime
   )
 }
 
@@ -87,9 +85,7 @@ fun LocalVideoStats.toMap(): Map<String, Any?> {
     "encodedFrameWidth" to encodedFrameWidth,
     "encodedFrameHeight" to encodedFrameHeight,
     "encodedFrameCount" to encodedFrameCount,
-    "codecType" to codecType,
-    "txPacketLossRate" to txPacketLossRate,
-    "captureFrameRate" to captureFrameRate
+    "codecType" to codecType
   )
 }
 
@@ -106,8 +102,7 @@ fun RemoteVideoStats.toMap(): Map<String, Any?> {
     "rxStreamType" to rxStreamType,
     "totalFrozenTime" to totalFrozenTime,
     "frozenRate" to frozenRate,
-    "totalActiveTime" to totalActiveTime,
-    "publishDuration" to publishDuration
+    "totalActiveTime" to totalActiveTime
   )
 }
 
