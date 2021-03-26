@@ -135,19 +135,6 @@ class AudioProfileConverter extends EnumConverter<AudioProfile, int> {
 }
 
 @JsonSerializable()
-class AudioRawFrameOperationModeConverter
-    extends EnumConverter<AudioRawFrameOperationMode, int> {
-  AudioRawFrameOperationModeConverter(AudioRawFrameOperationMode e) : super(e);
-
-  AudioRawFrameOperationModeConverter.fromValue(int value)
-      : super.fromValue(_$AudioRawFrameOperationModeEnumMap, value);
-
-  int value() {
-    return super.toValue(_$AudioRawFrameOperationModeEnumMap);
-  }
-}
-
-@JsonSerializable()
 class AudioRecordingQualityConverter
     extends EnumConverter<AudioRecordingQuality, int> {
   AudioRecordingQualityConverter(AudioRecordingQuality e) : super(e);
@@ -231,20 +218,6 @@ class AudioScenarioConverter extends EnumConverter<AudioScenario, int> {
 
   int value() {
     return super.toValue(_$AudioScenarioEnumMap);
-  }
-}
-
-@JsonSerializable()
-class AudioSessionOperationRestrictionConverter
-    extends EnumConverter<AudioSessionOperationRestriction, int> {
-  AudioSessionOperationRestrictionConverter(AudioSessionOperationRestriction e)
-      : super(e);
-
-  AudioSessionOperationRestrictionConverter.fromValue(int value)
-      : super.fromValue(_$AudioSessionOperationRestrictionEnumMap, value);
-
-  int value() {
-    return super.toValue(_$AudioSessionOperationRestrictionEnumMap);
   }
 }
 
@@ -490,42 +463,6 @@ class LogFilterConverter extends EnumConverter<LogFilter, int> {
 }
 
 @JsonSerializable()
-class MediaDeviceTypeConverter extends EnumConverter<MediaDeviceType, int> {
-  MediaDeviceTypeConverter(MediaDeviceType e) : super(e);
-
-  MediaDeviceTypeConverter.fromValue(int value)
-      : super.fromValue(_$MediaDeviceTypeEnumMap, value);
-
-  int value() {
-    return super.toValue(_$MediaDeviceTypeEnumMap);
-  }
-}
-
-@JsonSerializable()
-class MediaTypeConverter extends EnumConverter<MediaType, int> {
-  MediaTypeConverter(MediaType e) : super(e);
-
-  MediaTypeConverter.fromValue(int value)
-      : super.fromValue(_$MediaTypeEnumMap, value);
-
-  int value() {
-    return super.toValue(_$MediaTypeEnumMap);
-  }
-}
-
-@JsonSerializable()
-class MetadataTypeConverter extends EnumConverter<MetadataType, int> {
-  MetadataTypeConverter(MetadataType e) : super(e);
-
-  MetadataTypeConverter.fromValue(int value)
-      : super.fromValue(_$MetadataTypeEnumMap, value);
-
-  int value() {
-    return super.toValue(_$MetadataTypeEnumMap);
-  }
-}
-
-@JsonSerializable()
 class NetworkQualityConverter extends EnumConverter<NetworkQuality, int> {
   NetworkQualityConverter(NetworkQuality e) : super(e);
 
@@ -546,32 +483,6 @@ class NetworkTypeConverter extends EnumConverter<NetworkType, int> {
 
   int value() {
     return super.toValue(_$NetworkTypeEnumMap);
-  }
-}
-
-@JsonSerializable()
-class RtcDefaultCameraPositionConverter
-    extends EnumConverter<RtcDefaultCameraPosition, int> {
-  RtcDefaultCameraPositionConverter(RtcDefaultCameraPosition e) : super(e);
-
-  RtcDefaultCameraPositionConverter.fromValue(int value)
-      : super.fromValue(_$RtcDefaultCameraPositionEnumMap, value);
-
-  int value() {
-    return super.toValue(_$RtcDefaultCameraPositionEnumMap);
-  }
-}
-
-@JsonSerializable()
-class RtmpStreamLifeCycleConverter
-    extends EnumConverter<RtmpStreamLifeCycle, int> {
-  RtmpStreamLifeCycleConverter(RtmpStreamLifeCycle e) : super(e);
-
-  RtmpStreamLifeCycleConverter.fromValue(int value)
-      : super.fromValue(_$RtmpStreamLifeCycleEnumMap, value);
-
-  int value() {
-    return super.toValue(_$RtmpStreamLifeCycleEnumMap);
   }
 }
 
@@ -639,18 +550,6 @@ class UserPriorityConverter extends EnumConverter<UserPriority, int> {
 }
 
 @JsonSerializable()
-class VideoBufferTypeConverter extends EnumConverter<VideoBufferType, int> {
-  VideoBufferTypeConverter(VideoBufferType e) : super(e);
-
-  VideoBufferTypeConverter.fromValue(int value)
-      : super.fromValue(_$VideoBufferTypeEnumMap, value);
-
-  int value() {
-    return super.toValue(_$VideoBufferTypeEnumMap);
-  }
-}
-
-@JsonSerializable()
 class VideoCodecProfileTypeConverter
     extends EnumConverter<VideoCodecProfileType, int> {
   VideoCodecProfileTypeConverter(VideoCodecProfileType e) : super(e);
@@ -660,18 +559,6 @@ class VideoCodecProfileTypeConverter
 
   int value() {
     return super.toValue(_$VideoCodecProfileTypeEnumMap);
-  }
-}
-
-@JsonSerializable()
-class VideoContentHintConverter extends EnumConverter<VideoContentHint, int> {
-  VideoContentHintConverter(VideoContentHint e) : super(e);
-
-  VideoContentHintConverter.fromValue(int value)
-      : super.fromValue(_$VideoContentHintEnumMap, value);
-
-  int value() {
-    return super.toValue(_$VideoContentHintEnumMap);
   }
 }
 
@@ -721,18 +608,6 @@ class VideoOutputOrientationModeConverter
 
   int value() {
     return super.toValue(_$VideoOutputOrientationModeEnumMap);
-  }
-}
-
-@JsonSerializable()
-class VideoPixelFormatConverter extends EnumConverter<VideoPixelFormat, int> {
-  VideoPixelFormatConverter(VideoPixelFormat e) : super(e);
-
-  VideoPixelFormatConverter.fromValue(int value)
-      : super.fromValue(_$VideoPixelFormatEnumMap, value);
-
-  int value() {
-    return super.toValue(_$VideoPixelFormatEnumMap);
   }
 }
 
@@ -788,18 +663,6 @@ class VideoRenderModeConverter extends EnumConverter<VideoRenderMode, int> {
 }
 
 @JsonSerializable()
-class VideoRotationConverter extends EnumConverter<VideoRotation, int> {
-  VideoRotationConverter(VideoRotation e) : super(e);
-
-  VideoRotationConverter.fromValue(int value)
-      : super.fromValue(_$VideoRotationEnumMap, value);
-
-  int value() {
-    return super.toValue(_$VideoRotationEnumMap);
-  }
-}
-
-@JsonSerializable()
 class VideoStreamTypeConverter extends EnumConverter<VideoStreamType, int> {
   VideoStreamTypeConverter(VideoStreamType e) : super(e);
 
@@ -844,5 +707,19 @@ class VideoCodecTypeConverter extends EnumConverter<VideoCodecType, int> {
 
   int value() {
     return super.toValue(_$VideoCodecTypeEnumMap);
+  }
+}
+
+@JsonSerializable()
+class AudioSessionOperationRestrictionConverter
+    extends EnumConverter<AudioSessionOperationRestriction, int> {
+  AudioSessionOperationRestrictionConverter(AudioSessionOperationRestriction e)
+      : super(e);
+
+  AudioSessionOperationRestrictionConverter.fromValue(int value)
+      : super.fromValue(_$AudioSessionOperationRestrictionEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioSessionOperationRestrictionEnumMap);
   }
 }

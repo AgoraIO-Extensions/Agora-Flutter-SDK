@@ -6,8 +6,7 @@ import 'package:flutter/widgets.dart';
 import './src/enums.dart';
 import './src/rtc_render_view.dart';
 
-/// Use SurfaceView in Android.
-/// Use UIView in iOS.
+/// SurfaceView.
 class SurfaceView extends RtcSurfaceView {
   /// Constructs a [SurfaceView]
   SurfaceView({
@@ -20,19 +19,18 @@ class SurfaceView extends RtcSurfaceView {
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(
-      key: key,
-      zOrderMediaOverlay: zOrderMediaOverlay,
-      zOrderOnTop: zOrderOnTop,
-      renderMode: renderMode,
-      channelId: channelId,
-      mirrorMode: mirrorMode,
-      gestureRecognizers: gestureRecognizers,
-      onPlatformViewCreated: onPlatformViewCreated,
-      uid: 0);
+            key: key,
+            zOrderMediaOverlay: zOrderMediaOverlay,
+            zOrderOnTop: zOrderOnTop,
+            renderMode: renderMode,
+            channelId: channelId,
+            mirrorMode: mirrorMode,
+            gestureRecognizers: gestureRecognizers,
+            onPlatformViewCreated: onPlatformViewCreated,
+            uid: 0);
 }
 
-/// Use TextureView in Android.
-/// Not support for iOS.
+/// (Android only) TextureView.
 class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
