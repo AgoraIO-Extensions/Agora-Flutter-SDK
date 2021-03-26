@@ -156,27 +156,26 @@ class _State extends State<JoinChannelVideo> {
       child: Stack(
         children: [
           RtcLocalView.SurfaceView(),
-          if (remoteUid != null)
-            Align(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.of(remoteUid.map(
-                    (e) => GestureDetector(
-                      onTap: this._switchRender,
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        child: RtcRemoteView.SurfaceView(
-                          uid: e,
-                        ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.of(remoteUid.map(
+                  (e) => GestureDetector(
+                    onTap: this._switchRender,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      child: RtcRemoteView.SurfaceView(
+                        uid: e,
                       ),
                     ),
-                  )),
-                ),
+                  ),
+                )),
               ),
-            )
+            ),
+          )
         ],
       ),
     );
