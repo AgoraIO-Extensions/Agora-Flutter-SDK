@@ -10,7 +10,7 @@ void main() {
 
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
-      engine = await RtcEngine.create('***REMOVED***');
+      engine = await RtcEngine.create('');
       engine.setEventHandler(RtcEngineEventHandler(warning: (warn) {
         print('engine warn $warn');
       }, rtcStats: (stats) {
