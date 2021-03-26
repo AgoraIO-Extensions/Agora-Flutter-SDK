@@ -10,8 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-const channelId0 = 'channel0';
-const channelId1 = 'channel1';
+const _channelId0 = 'channel0';
+const _channelId1 = 'channel1';
 
 /// MultiChannel Example
 class MultiChannel extends StatefulWidget {
@@ -54,7 +54,7 @@ class _State extends State<MultiChannel> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    widget._channel0 = await RtcChannel.create(channelId0);
+    widget._channel0 = await RtcChannel.create(_channelId0);
     this._addListener(widget._channel0);
 
     await widget._channel0.setClientRole(ClientRole.Broadcaster);
@@ -67,7 +67,7 @@ class _State extends State<MultiChannel> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    widget._channel1 = await RtcChannel.create(channelId1);
+    widget._channel1 = await RtcChannel.create(_channelId1);
     this._addListener(widget._channel1);
 
     await widget._channel1.setClientRole(ClientRole.Broadcaster);
@@ -80,11 +80,11 @@ class _State extends State<MultiChannel> {
     channel.setEventHandler(
         RtcChannelEventHandler(joinChannelSuccess: (channel, uid, elapsed) {
       log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      if (channelId == channelId0) {
+      if (channelId == _channelId0) {
         setState(() {
           isJoined0 = true;
         });
-      } else if (channelId == channelId1) {
+      } else if (channelId == _channelId1) {
         setState(() {
           isJoined1 = true;
         });
@@ -95,12 +95,12 @@ class _State extends State<MultiChannel> {
       log('userOffline ${channel.channelId} $uid $reason');
     }, leaveChannel: (stats) {
       log('leaveChannel ${channel.channelId} ${stats.toJson()}');
-      if (channelId == channelId0) {
+      if (channelId == _channelId0) {
         this.setState(() {
           isJoined0 = false;
           remoteUid0.clear();
         });
-      } else if (channelId == channelId1) {
+      } else if (channelId == _channelId1) {
         this.setState(() {
           isJoined1 = false;
           remoteUid1.clear();
@@ -109,21 +109,21 @@ class _State extends State<MultiChannel> {
     }, remoteVideoStateChanged: (uid, state, reason, elapsed) {
       log('remoteVideoStateChanged ${uid} ${state} ${reason} ${elapsed}');
       if (state == VideoRemoteState.Starting) {
-        if (channelId == channelId0) {
+        if (channelId == _channelId0) {
           this.setState(() {
             remoteUid0.add(uid);
           });
-        } else if (channelId == channelId1) {
+        } else if (channelId == _channelId1) {
           this.setState(() {
             remoteUid1.add(uid);
           });
         }
       } else if (state == VideoRemoteState.Stopped) {
-        if (channelId == channelId0) {
+        if (channelId == _channelId0) {
           this.setState(() {
             remoteUid0.removeWhere((element) => element == uid);
           });
-        } else if (channelId == channelId1) {
+        } else if (channelId == _channelId1) {
           this.setState(() {
             remoteUid1.removeWhere((element) => element == uid);
           });
@@ -168,7 +168,7 @@ class _State extends State<MultiChannel> {
                         this._joinChannel0();
                       }
                     },
-                    child: Text('${isJoined0 ? 'Leave' : 'Join'} $channelId0'),
+                    child: Text('${isJoined0 ? 'Leave' : 'Join'} $_channelId0'),
                   ),
                 )
               ],
@@ -185,7 +185,7 @@ class _State extends State<MultiChannel> {
                         this._joinChannel1();
                       }
                     },
-                    child: Text('${isJoined1 ? 'Leave' : 'Join'} $channelId1'),
+                    child: Text('${isJoined1 ? 'Leave' : 'Join'} $_channelId1'),
                   ),
                 )
               ],
@@ -200,27 +200,27 @@ class _State extends State<MultiChannel> {
             children: [
               RaisedButton(
                 onPressed: this._publishChannel0,
-                child: Text('Publish ${channelId0}'),
+                child: Text('Publish ${_channelId0}'),
               ),
               RaisedButton(
                 onPressed: () {
                   setState(() {
-                    renderChannelId = channelId0;
+                    renderChannelId = _channelId0;
                   });
                 },
-                child: Text('Render ${channelId0}'),
+                child: Text('Render ${_channelId0}'),
               ),
               RaisedButton(
                 onPressed: this._publishChannel1,
-                child: Text('Publish ${channelId1}'),
+                child: Text('Publish ${_channelId1}'),
               ),
               RaisedButton(
                 onPressed: () {
                   setState(() {
-                    renderChannelId = channelId1;
+                    renderChannelId = _channelId1;
                   });
                 },
-                child: Text('Render ${channelId1}'),
+                child: Text('Render ${_channelId1}'),
               ),
             ],
           ),
@@ -231,9 +231,9 @@ class _State extends State<MultiChannel> {
 
   _renderVideo() {
     List<int> remoteUid = null;
-    if (renderChannelId == channelId0) {
+    if (renderChannelId == _channelId0) {
       remoteUid = remoteUid0;
-    } else if (renderChannelId == channelId1) {
+    } else if (renderChannelId == _channelId1) {
       remoteUid = remoteUid1;
     }
     return Expanded(
