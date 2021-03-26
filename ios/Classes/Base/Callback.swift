@@ -9,6 +9,7 @@
 import Foundation
 import AgoraRtcKit
 
+@objc
 protocol Callback: class {
     func success(_ data: Any?)
 
@@ -16,14 +17,14 @@ protocol Callback: class {
 }
 
 extension Callback {
-    func code(_ code: Int32?, _ runnable: ((Int32) -> Any?)? = nil) {
+    func code(_ code: Int32?, _ runnable: ((Int32?) -> Any?)? = nil) {
         if code == nil || code! < 0 {
             let newCode = abs(Int(code ?? Int32(AgoraErrorCode.notInitialized.rawValue)))
             failure(String(newCode), AgoraRtcEngineKit.getErrorDescription(newCode) ?? "")
             return
         }
 
-        let res = runnable?(code!)
+        let res = runnable?(code)
         if res is Void {
             success(nil)
         } else {
