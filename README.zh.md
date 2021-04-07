@@ -65,7 +65,7 @@ Agora 视频 SDK 需要 `摄像头` 和 `麦克风` 权限来开始视频通话�
 
 ## API
 
-* [Flutter API](https://agoraio.github.io/Flutter-SDK/index.html)
+* [Flutter API](https://docs.agora.io/cn/All/api-ref?platform=Flutter)
 * [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 * [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
