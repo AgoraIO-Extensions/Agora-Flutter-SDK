@@ -317,7 +317,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   Future<int> createDataStreamWithConfig(DataStreamConfig config) {
     return _invokeMethod(
-        'createDataStreamWithConfig', {'config': config.toJson()});
+        'createDataStream', {'config': config.toJson()});
   }
 
   @override
