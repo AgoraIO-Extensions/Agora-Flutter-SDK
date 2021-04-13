@@ -963,7 +963,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<int> createDataStreamWithConfig(DataStreamConfig config) {
     return _invokeMethod(
-        'createDataStreamWithConfig', {'config': config.toJson()});
+        'createDataStream', {'config': config.toJson()});
   }
 
   @override
