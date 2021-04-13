@@ -1,3 +1,15 @@
+## [3.3.3](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.2...v3.3.3) (2021-04-13)
+
+
+### Bug Fixes
+
+* **change method call:** createDataStream ([6783442](https://github.com/AgoraIO/Flutter-SDK/commit/6783442af2af7273b318aca3aad9ddc88fddca58))
+
+
+### Features
+
+* **add example:** example ([e98d6cc](https://github.com/AgoraIO/Flutter-SDK/commit/e98d6cc1bd2d11c21e2d846ecbd39c502028fbd4))
+
 ## [3.3.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1...v3.3.2) (2021-03-22)
 
 
