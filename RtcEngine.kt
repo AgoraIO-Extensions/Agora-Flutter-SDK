@@ -1,417 +1,997 @@
 package io.agora.rtc.base
 
 import android.content.Context
-import androidx.annotation.FloatRange
-import androidx.annotation.IntRange
-import io.agora.rtc.Constants
-import io.agora.rtc.IMetadataObserver
-import io.agora.rtc.RtcEngine
-import io.agora.rtc.RtcEngineEx
+import io.agora.rtc.*
+import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.models.UserInfo
 
-interface RtcEngineInterface<Map, Callback> :
-        RtcEngineManager.RtcUserInfoInterface<Callback>,
-        RtcEngineManager.RtcAudioInterface<Callback>,
-        RtcEngineManager.RtcVideoInterface<Map, Callback>,
-        RtcEngineManager.RtcAudioMixingInterface<Callback>,
-        RtcEngineManager.RtcAudioEffectInterface<Callback>,
-        RtcEngineManager.RtcVoiceChangerInterface<Callback>,
-        RtcEngineManager.RtcVoicePositionInterface<Callback>,
-        RtcEngineManager.RtcPublishStreamInterface<Map, Callback>,
-        RtcEngineManager.RtcMediaRelayInterface<Map, Callback>,
-        RtcEngineManager.RtcAudioRouteInterface<Callback>,
-        RtcEngineManager.RtcEarMonitoringInterface<Callback>,
-        RtcEngineManager.RtcDualStreamInterface<Callback>,
-        RtcEngineManager.RtcFallbackInterface<Callback>,
-        RtcEngineManager.RtcTestInterface<Map, Callback>,
-        RtcEngineManager.RtcMediaMetadataInterface<Callback>,
-        RtcEngineManager.RtcWatermarkInterface<Map, Callback>,
-        RtcEngineManager.RtcEncryptionInterface<Callback>,
-        RtcEngineManager.RtcAudioRecorderInterface<Callback>,
-        RtcEngineManager.RtcInjectStreamInterface<Map, Callback>,
-        RtcEngineManager.RtcCameraInterface<Map, Callback>,
-        RtcEngineManager.RtcStreamMessageInterface<Callback> {
-    fun create(appId: String, callback: Callback?)
+class IRtcEngine {
+  interface RtcEngineInterface : RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface,
+    RtcAudioMixingInterface, RtcAudioEffectInterface, RtcVoiceChangerInterface,
+    RtcVoicePositionInterface, RtcPublishStreamInterface, RtcMediaRelayInterface,
+    RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface,
+    RtcFallbackInterface, RtcTestInterface, RtcMediaMetadataInterface,
+    RtcWatermarkInterface, RtcEncryptionInterface, RtcAudioRecorderInterface,
+    RtcInjectStreamInterface, RtcCameraInterface, RtcStreamMessageInterface {
+    fun create(params: Map<String, *>, callback: Callback)
 
-    fun destroy(callback: Callback?)
+    fun destroy(callback: Callback)
 
-    fun setChannelProfile(@Annotations.AgoraChannelProfile profile: Int, callback: Callback?)
+    fun setChannelProfile(params: Map<String, *>, callback: Callback)
 
-    fun setClientRole(@Annotations.AgoraClientRole role: Int, callback: Callback?)
+    fun setClientRole(params: Map<String, *>, callback: Callback)
 
-    fun joinChannel(token: String?, channelName: String, optionalInfo: String?, optionalUid: Int, callback: Callback?)
+    fun joinChannel(params: Map<String, *>, callback: Callback)
 
-    fun switchChannel(token: String?, channelName: String, callback: Callback?)
+    fun switchChannel(params: Map<String, *>, callback: Callback)
 
-    fun leaveChannel(callback: Callback?)
+    fun leaveChannel(callback: Callback)
 
-    fun renewToken(token: String, callback: Callback?)
+    fun renewToken(params: Map<String, *>, callback: Callback)
 
     @Deprecated("")
-    fun enableWebSdkInteroperability(enabled: Boolean, callback: Callback?)
+    fun enableWebSdkInteroperability(params: Map<String, *>, callback: Callback)
 
-    fun getConnectionState(callback: Callback?)
+    fun getConnectionState(callback: Callback)
 
-    fun getCallId(callback: Callback?)
+    fun sendCustomReportMessage(params: Map<String, *>, callback: Callback)
 
-    fun rate(callId: String, @IntRange(from = 1, to = 5) rating: Int, description: String?, callback: Callback?)
+    fun getCallId(callback: Callback)
 
-    fun complain(callId: String, description: String, callback: Callback?)
+    fun rate(params: Map<String, *>, callback: Callback)
 
-    fun setLogFile(filePath: String, callback: Callback?)
+    fun complain(params: Map<String, *>, callback: Callback)
 
-    fun setLogFilter(@Annotations.AgoraLogFilter filter: Int, callback: Callback?)
+    @Deprecated("")
+    fun setLogFile(params: Map<String, *>, callback: Callback)
 
-    fun setLogFileSize(fileSizeInKBytes: Int, callback: Callback?)
+    @Deprecated("")
+    fun setLogFilter(params: Map<String, *>, callback: Callback)
 
-    fun setParameters(parameters: String, callback: Callback?)
+    @Deprecated("")
+    fun setLogFileSize(params: Map<String, *>, callback: Callback)
+
+    fun setParameters(params: Map<String, *>, callback: Callback)
+
+    fun getSdkVersion(callback: Callback)
+
+    fun getErrorDescription(params: Map<String, *>, callback: Callback)
+
+    fun getNativeHandle(callback: Callback)
+
+    fun enableDeepLearningDenoise(params: Map<String, *>, callback: Callback)
+
+    fun setCloudProxy(params: Map<String, *>, callback: Callback)
+
+    fun uploadLogFile(callback: Callback)
+  }
+
+  interface RtcUserInfoInterface {
+    fun registerLocalUserAccount(params: Map<String, *>, callback: Callback)
+
+    fun joinChannelWithUserAccount(params: Map<String, *>, callback: Callback)
+
+    fun getUserInfoByUserAccount(params: Map<String, *>, callback: Callback)
+
+    fun getUserInfoByUid(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcAudioInterface {
+    fun enableAudio(callback: Callback)
+
+    fun disableAudio(callback: Callback)
+
+    fun setAudioProfile(params: Map<String, *>, callback: Callback)
+
+    fun adjustRecordingSignalVolume(params: Map<String, *>, callback: Callback)
+
+    fun adjustUserPlaybackSignalVolume(params: Map<String, *>, callback: Callback)
+
+    fun adjustPlaybackSignalVolume(params: Map<String, *>, callback: Callback)
+
+    fun enableLocalAudio(params: Map<String, *>, callback: Callback)
+
+    fun muteLocalAudioStream(params: Map<String, *>, callback: Callback)
+
+    fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback)
+
+    fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
+
+    @Deprecated("")
+    fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
+
+    fun enableAudioVolumeIndication(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcVideoInterface {
+    fun enableVideo(callback: Callback)
+
+    fun disableVideo(callback: Callback)
+
+    fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback)
+
+    fun startPreview(callback: Callback)
+
+    fun stopPreview(callback: Callback)
+
+    fun enableLocalVideo(params: Map<String, *>, callback: Callback)
+
+    fun muteLocalVideoStream(params: Map<String, *>, callback: Callback)
+
+    fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback)
+
+    fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
+
+    @Deprecated("")
+    fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
+
+    fun setBeautyEffectOptions(params: Map<String, *>, callback: Callback)
+
+    fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcAudioMixingInterface {
+    fun startAudioMixing(params: Map<String, *>, callback: Callback)
+
+    fun stopAudioMixing(callback: Callback)
+
+    fun pauseAudioMixing(callback: Callback)
+
+    fun resumeAudioMixing(callback: Callback)
+
+    fun adjustAudioMixingVolume(params: Map<String, *>, callback: Callback)
+
+    fun adjustAudioMixingPlayoutVolume(params: Map<String, *>, callback: Callback)
+
+    fun adjustAudioMixingPublishVolume(params: Map<String, *>, callback: Callback)
+
+    fun getAudioMixingPlayoutVolume(callback: Callback)
+
+    fun getAudioMixingPublishVolume(callback: Callback)
+
+    fun getAudioMixingDuration(callback: Callback)
+
+    fun getAudioMixingCurrentPosition(callback: Callback)
+
+    fun setAudioMixingPosition(params: Map<String, *>, callback: Callback)
+
+    fun setAudioMixingPitch(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcAudioEffectInterface {
+    fun getEffectsVolume(callback: Callback)
+
+    fun setEffectsVolume(params: Map<String, *>, callback: Callback)
+
+    fun setVolumeOfEffect(params: Map<String, *>, callback: Callback)
+
+    fun playEffect(params: Map<String, *>, callback: Callback)
+
+    fun stopEffect(params: Map<String, *>, callback: Callback)
+
+    fun stopAllEffects(callback: Callback)
+
+    fun preloadEffect(params: Map<String, *>, callback: Callback)
+
+    fun unloadEffect(params: Map<String, *>, callback: Callback)
+
+    fun pauseEffect(params: Map<String, *>, callback: Callback)
+
+    fun pauseAllEffects(callback: Callback)
+
+    fun resumeEffect(params: Map<String, *>, callback: Callback)
+
+    fun resumeAllEffects(callback: Callback)
+
+    fun setAudioSessionOperationRestriction(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcVoiceChangerInterface {
+    @Deprecated("")
+    fun setLocalVoiceChanger(params: Map<String, *>, callback: Callback)
+
+    @Deprecated("")
+    fun setLocalVoiceReverbPreset(params: Map<String, *>, callback: Callback)
+
+    fun setLocalVoicePitch(params: Map<String, *>, callback: Callback)
+
+    fun setLocalVoiceEqualization(params: Map<String, *>, callback: Callback)
+
+    fun setLocalVoiceReverb(params: Map<String, *>, callback: Callback)
+
+    fun setAudioEffectPreset(params: Map<String, *>, callback: Callback)
+
+    fun setVoiceBeautifierPreset(params: Map<String, *>, callback: Callback)
+
+    fun setVoiceConversionPreset(params: Map<String, *>, callback: Callback)
+
+    fun setAudioEffectParameters(params: Map<String, *>, callback: Callback)
+
+    fun setVoiceBeautifierParameters(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcVoicePositionInterface {
+    fun enableSoundPositionIndication(params: Map<String, *>, callback: Callback)
+
+    fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcPublishStreamInterface {
+    fun setLiveTranscoding(params: Map<String, *>, callback: Callback)
+
+    fun addPublishStreamUrl(params: Map<String, *>, callback: Callback)
+
+    fun removePublishStreamUrl(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcMediaRelayInterface {
+    fun startChannelMediaRelay(params: Map<String, *>, callback: Callback)
+
+    fun updateChannelMediaRelay(params: Map<String, *>, callback: Callback)
+
+    fun stopChannelMediaRelay(callback: Callback)
+  }
+
+  interface RtcAudioRouteInterface {
+    fun setDefaultAudioRoutetoSpeakerphone(params: Map<String, *>, callback: Callback)
+
+    fun setEnableSpeakerphone(params: Map<String, *>, callback: Callback)
+
+    fun isSpeakerphoneEnabled(callback: Callback)
+  }
+
+  interface RtcEarMonitoringInterface {
+    fun enableInEarMonitoring(params: Map<String, *>, callback: Callback)
+
+    fun setInEarMonitoringVolume(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcDualStreamInterface {
+    fun enableDualStreamMode(params: Map<String, *>, callback: Callback)
+
+    fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback)
+
+    fun setRemoteDefaultVideoStreamType(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcFallbackInterface {
+    fun setLocalPublishFallbackOption(params: Map<String, *>, callback: Callback)
+
+    fun setRemoteSubscribeFallbackOption(params: Map<String, *>, callback: Callback)
+
+    fun setRemoteUserPriority(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcTestInterface {
+    fun startEchoTest(params: Map<String, *>, callback: Callback)
+
+    fun stopEchoTest(callback: Callback)
+
+    fun enableLastmileTest(callback: Callback)
+
+    fun disableLastmileTest(callback: Callback)
+
+    fun startLastmileProbeTest(params: Map<String, *>, callback: Callback)
+
+    fun stopLastmileProbeTest(callback: Callback)
+  }
+
+  interface RtcMediaMetadataInterface {
+    fun registerMediaMetadataObserver(callback: Callback)
+
+    fun unregisterMediaMetadataObserver(callback: Callback)
+
+    fun setMaxMetadataSize(params: Map<String, *>, callback: Callback)
+
+    fun sendMetadata(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcWatermarkInterface {
+    fun addVideoWatermark(params: Map<String, *>, callback: Callback)
+
+    fun clearVideoWatermarks(callback: Callback)
+  }
+
+  interface RtcEncryptionInterface {
+    @Deprecated("")
+    fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
+
+    @Deprecated("")
+    fun setEncryptionMode(params: Map<String, *>, callback: Callback)
+
+    fun enableEncryption(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcAudioRecorderInterface {
+    fun startAudioRecording(params: Map<String, *>, callback: Callback)
+
+    fun stopAudioRecording(callback: Callback)
+  }
+
+  interface RtcInjectStreamInterface {
+    fun addInjectStreamUrl(params: Map<String, *>, callback: Callback)
+
+    fun removeInjectStreamUrl(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcCameraInterface {
+    fun switchCamera(callback: Callback)
+
+    fun isCameraZoomSupported(callback: Callback)
+
+    fun isCameraTorchSupported(callback: Callback)
+
+    fun isCameraFocusSupported(callback: Callback)
+
+    fun isCameraExposurePositionSupported(callback: Callback)
+
+    fun isCameraAutoFocusFaceModeSupported(callback: Callback)
+
+    fun setCameraZoomFactor(params: Map<String, *>, callback: Callback)
+
+    fun getCameraMaxZoomFactor(callback: Callback)
+
+    fun setCameraFocusPositionInPreview(params: Map<String, *>, callback: Callback)
+
+    fun setCameraExposurePosition(params: Map<String, *>, callback: Callback)
+
+    fun enableFaceDetection(params: Map<String, *>, callback: Callback)
+
+    fun setCameraTorchOn(params: Map<String, *>, callback: Callback)
+
+    fun setCameraAutoFocusFaceModeEnabled(params: Map<String, *>, callback: Callback)
+
+    fun setCameraCapturerConfiguration(params: Map<String, *>, callback: Callback)
+  }
+
+  interface RtcStreamMessageInterface {
+    fun createDataStream(params: Map<String, *>, callback: Callback)
+
+    fun sendStreamMessage(params: Map<String, *>, callback: Callback)
+  }
 }
 
-class RtcEngineManager {
-    private var engine: RtcEngine? = null
-    private var mediaObserver: MediaObserver? = null
+class RtcEngineManager(
+  private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit
+) : IRtcEngine.RtcEngineInterface {
+  var engine: RtcEngine? = null
+    private set
+  private var mediaObserver: MediaObserver? = null
 
-    fun create(context: Context, appId: String, emit: (methodName: String, data: Map<String, Any?>?) -> Unit) {
-        engine = RtcEngineEx.create(context, appId, RtcEngineEventHandler { methodName, data ->
-            emit(methodName, data)
-        })
-        (engine as? RtcEngineEx)?.setAppType(8)
+  fun release() {
+    RtcEngine.destroy()
+    engine = null
+    mediaObserver = null
+  }
+
+  override fun create(params: Map<String, *>, callback: Callback) {
+    engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
+      mContext = params["context"] as Context
+      mEventHandler = RtcEngineEventHandler { methodName, data ->
+        emit(methodName, data)
+      }
+    })
+    callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
+  }
+
+  override fun destroy(callback: Callback) {
+    callback.resolve(engine) { release() }
+  }
+
+  override fun setChannelProfile(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setChannelProfile((params["profile"] as Number).toInt()))
+  }
+
+  override fun setClientRole(params: Map<String, *>, callback: Callback) {
+    val role = (params["role"] as Number).toInt()
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.setClientRole(role, mapToClientRoleOptions(it)))
+      return@setClientRole
     }
+    callback.code(engine?.setClientRole(role))
+  }
 
-    fun destroy() {
-        RtcEngine.destroy()
-        engine = null
+  override fun joinChannel(params: Map<String, *>, callback: Callback) {
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    val optionalInfo = params["optionalInfo"] as? String
+    val optionalUid = (params["optionalUid"] as Number).toInt()
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.joinChannel(token, channelName, optionalInfo, optionalUid, mapToChannelMediaOptions(it)))
+      return@joinChannel
     }
+    callback.code(engine?.joinChannel(token, channelName, optionalInfo, optionalUid))
+  }
 
-    fun release() {
-        destroy()
-        mediaObserver = null
+  override fun switchChannel(params: Map<String, *>, callback: Callback) {
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.switchChannel(token, channelName, mapToChannelMediaOptions(it)))
+      return@switchChannel
     }
+    callback.code(engine?.switchChannel(token, channelName))
+  }
 
-    fun engine(): RtcEngine? {
-        return engine
+  override fun leaveChannel(callback: Callback) {
+    callback.code(engine?.leaveChannel())
+  }
+
+  override fun renewToken(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.renewToken(params["token"] as String))
+  }
+
+  override fun enableWebSdkInteroperability(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableWebSdkInteroperability(params["enabled"] as Boolean))
+  }
+
+  override fun getConnectionState(callback: Callback) {
+    callback.resolve(engine) { it.connectionState }
+  }
+
+  override fun sendCustomReportMessage(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.sendCustomReportMessage(params["id"] as String, params["category"] as String, params["event"] as String, params["label"] as String, (params["value"] as Number).toInt()))
+  }
+
+  override fun getCallId(callback: Callback) {
+    callback.resolve(engine) { it.callId }
+  }
+
+  override fun rate(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.rate(params["callId"] as String, (params["rating"] as Number).toInt(), params["description"] as? String))
+  }
+
+  override fun complain(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.complain(params["callId"] as String, params["description"] as String))
+  }
+
+  override fun setLogFile(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLogFile(params["filePath"] as String))
+  }
+
+  override fun setLogFilter(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLogFilter((params["filter"] as Number).toInt()))
+  }
+
+  override fun setLogFileSize(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLogFileSize((params["fileSizeInKBytes"] as Number).toInt()))
+  }
+
+  override fun setParameters(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setParameters(params["parameters"] as String))
+  }
+
+  override fun getSdkVersion(callback: Callback) {
+    callback.success(RtcEngine.getSdkVersion())
+  }
+
+  override fun getErrorDescription(params: Map<String, *>, callback: Callback) {
+    callback.success(RtcEngine.getErrorDescription((params["error"] as Number).toInt()))
+  }
+
+  override fun getNativeHandle(callback: Callback) {
+    callback.resolve(engine) { it.nativeHandle }
+  }
+
+  override fun enableDeepLearningDenoise(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableDeepLearningDenoise(params["enabled"] as Boolean))
+  }
+
+  override fun setCloudProxy(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCloudProxy((params["proxyType"] as Number).toInt()))
+  }
+
+  override fun uploadLogFile(callback: Callback) {
+    callback.resolve(engine) { it.uploadLogFile() }
+  }
+
+  override fun registerLocalUserAccount(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.registerLocalUserAccount(params["appId"] as String, params["userAccount"] as String))
+  }
+
+  override fun joinChannelWithUserAccount(params: Map<String, *>, callback: Callback) {
+    val token = params["token"] as? String
+    val channelName = params["channelName"] as String
+    val userAccount = params["userAccount"] as String
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(engine?.joinChannelWithUserAccount(token, channelName, userAccount, mapToChannelMediaOptions(it)))
+      return@joinChannelWithUserAccount
     }
+    callback.code(engine?.joinChannelWithUserAccount(token, channelName, userAccount))
+  }
 
-    fun getUserInfoByUserAccount(userAccount: String): Map<String, Any?>? {
-        engine?.let {
-            val userInfo = UserInfo()
-            it.getUserInfoByUserAccount(userAccount, userInfo)
-            return@getUserInfoByUserAccount userInfo.toMap()
-        }
-        return null
+  override fun getUserInfoByUserAccount(params: Map<String, *>, callback: Callback) {
+    callback.resolve(engine) {
+      val userInfo = UserInfo()
+      it.getUserInfoByUserAccount(params["userAccount"] as String, userInfo)
+      userInfo.toMap()
     }
+  }
 
-    fun getUserInfoByUid(uid: Int): Map<String, Any?>? {
-        engine?.let {
-            val userInfo = UserInfo()
-            it.getUserInfoByUid(uid, userInfo)
-            return@getUserInfoByUid userInfo.toMap()
-        }
-        return null
+  override fun getUserInfoByUid(params: Map<String, *>, callback: Callback) {
+    callback.resolve(engine) {
+      val userInfo = UserInfo()
+      it.getUserInfoByUid((params["uid"] as Number).toInt(), userInfo)
+      userInfo.toMap()
     }
+  }
 
-    fun registerMediaMetadataObserver(emit: (methodName: String, data: Map<String, Any?>?) -> Unit): Int {
-        engine?.let {
-            val mediaObserver = MediaObserver { methodName, data ->
-                emit(methodName, data)
-            }
-            val res = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
-            if (res == 0) this.mediaObserver = mediaObserver
-            return@registerMediaMetadataObserver res
-        }
-        return Constants.ERR_NOT_INITIALIZED
+  override fun enableAudio(callback: Callback) {
+    callback.code(engine?.enableAudio())
+  }
+
+  override fun disableAudio(callback: Callback) {
+    callback.code(engine?.disableAudio())
+  }
+
+  override fun setAudioProfile(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioProfile((params["profile"] as Number).toInt(), (params["scenario"] as Number).toInt()))
+  }
+
+  override fun adjustRecordingSignalVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.adjustRecordingSignalVolume((params["volume"] as Number).toInt()))
+  }
+
+  override fun adjustUserPlaybackSignalVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.adjustUserPlaybackSignalVolume((params["uid"] as Number).toInt(), (params["volume"] as Number).toInt()))
+  }
+
+  override fun adjustPlaybackSignalVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.adjustPlaybackSignalVolume((params["volume"] as Number).toInt()))
+  }
+
+  override fun enableLocalAudio(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableLocalAudio(params["enabled"] as Boolean))
+  }
+
+  override fun muteLocalAudioStream(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.muteLocalAudioStream(params["muted"] as Boolean))
+  }
+
+  override fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.muteRemoteAudioStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+  }
+
+  override fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.muteAllRemoteAudioStreams(params["muted"] as Boolean))
+  }
+
+  override fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setDefaultMuteAllRemoteAudioStreams(params["muted"] as Boolean))
+  }
+
+  override fun enableAudioVolumeIndication(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableAudioVolumeIndication((params["interval"] as Number).toInt(), (params["smooth"] as Number).toInt(), params["report_vad"] as Boolean))
+  }
+
+  override fun enableVideo(callback: Callback) {
+    callback.code(engine?.enableVideo())
+  }
+
+  override fun disableVideo(callback: Callback) {
+    callback.code(engine?.disableVideo())
+  }
+
+  override fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(params["config"] as Map<*, *>)))
+  }
+
+  override fun startPreview(callback: Callback) {
+    callback.code(engine?.startPreview())
+  }
+
+  override fun stopPreview(callback: Callback) {
+    callback.code(engine?.stopPreview())
+  }
+
+  override fun enableLocalVideo(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableLocalVideo(params["enabled"] as Boolean))
+  }
+
+  override fun muteLocalVideoStream(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.muteLocalVideoStream(params["muted"] as Boolean))
+  }
+
+  override fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.muteRemoteVideoStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+  }
+
+  override fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.muteAllRemoteVideoStreams(params["muted"] as Boolean))
+  }
+
+  override fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setDefaultMuteAllRemoteVideoStreams(params["muted"] as Boolean))
+  }
+
+  override fun setBeautyEffectOptions(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setBeautyEffectOptions(params["enabled"] as Boolean, mapToBeautyOptions(params["options"] as Map<*, *>)))
+  }
+
+  override fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableRemoteSuperResolution((params["uid"] as Number).toInt(), params["enable"] as Boolean))
+  }
+
+  override fun startAudioMixing(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.startAudioMixing(params["filePath"] as String, params["loopback"] as Boolean, params["replace"] as Boolean, (params["cycle"] as Number).toInt()))
+  }
+
+  override fun stopAudioMixing(callback: Callback) {
+    callback.code(engine?.stopAudioMixing())
+  }
+
+  override fun pauseAudioMixing(callback: Callback) {
+    callback.code(engine?.pauseAudioMixing())
+  }
+
+  override fun resumeAudioMixing(callback: Callback) {
+    callback.code(engine?.resumeAudioMixing())
+  }
+
+  override fun adjustAudioMixingVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.adjustAudioMixingVolume((params["volume"] as Number).toInt()))
+  }
+
+  override fun adjustAudioMixingPlayoutVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.adjustAudioMixingPlayoutVolume((params["volume"] as Number).toInt()))
+  }
+
+  override fun adjustAudioMixingPublishVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.adjustAudioMixingPublishVolume((params["volume"] as Number).toInt()))
+  }
+
+  override fun getAudioMixingPlayoutVolume(callback: Callback) {
+    callback.code(engine?.audioMixingPlayoutVolume) { it }
+  }
+
+  override fun getAudioMixingPublishVolume(callback: Callback) {
+    callback.code(engine?.audioMixingPublishVolume) { it }
+  }
+
+  override fun getAudioMixingDuration(callback: Callback) {
+    callback.code(engine?.audioMixingDuration) { it }
+  }
+
+  override fun getAudioMixingCurrentPosition(callback: Callback) {
+    callback.code(engine?.audioMixingCurrentPosition) { it }
+  }
+
+  override fun setAudioMixingPosition(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioMixingPosition((params["pos"] as Number).toInt()))
+  }
+
+  override fun setAudioMixingPitch(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioMixingPitch((params["pitch"] as Number).toInt()))
+  }
+
+  override fun getEffectsVolume(callback: Callback) {
+    callback.resolve(engine) { it.audioEffectManager.effectsVolume }
+  }
+
+  override fun setEffectsVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.setEffectsVolume((params["volume"] as Number).toDouble()))
+  }
+
+  override fun setVolumeOfEffect(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.setVolumeOfEffect((params["soundId"] as Number).toInt(), (params["volume"] as Number).toDouble()))
+  }
+
+  override fun playEffect(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.playEffect((params["soundId"] as Number).toInt(), params["filePath"] as String, (params["loopCount"] as Number).toInt(), (params["pitch"] as Number).toDouble(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble(), params["publish"] as Boolean))
+  }
+
+  override fun stopEffect(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.stopEffect((params["soundId"] as Number).toInt()))
+  }
+
+  override fun stopAllEffects(callback: Callback) {
+    callback.code(engine?.audioEffectManager?.stopAllEffects())
+  }
+
+  override fun preloadEffect(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.preloadEffect((params["soundId"] as Number).toInt(), params["filePath"] as String))
+  }
+
+  override fun unloadEffect(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.unloadEffect((params["soundId"] as Number).toInt()))
+  }
+
+  override fun pauseEffect(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.pauseEffect((params["soundId"] as Number).toInt()))
+  }
+
+  override fun pauseAllEffects(callback: Callback) {
+    callback.code(engine?.audioEffectManager?.pauseAllEffects())
+  }
+
+  override fun resumeEffect(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.audioEffectManager?.resumeEffect((params["soundId"] as Number).toInt()))
+  }
+
+  override fun resumeAllEffects(callback: Callback) {
+    callback.code(engine?.audioEffectManager?.resumeAllEffects())
+  }
+
+  override fun setAudioSessionOperationRestriction(params: Map<String, *>, callback: Callback) {
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+  }
+
+  override fun setLocalVoiceChanger(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLocalVoiceChanger((params["voiceChanger"] as Number).toInt()))
+  }
+
+  override fun setLocalVoiceReverbPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLocalVoiceReverbPreset((params["preset"] as Number).toInt()))
+  }
+
+  override fun setLocalVoicePitch(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLocalVoicePitch((params["pitch"] as Number).toDouble()))
+  }
+
+  override fun setLocalVoiceEqualization(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLocalVoiceEqualization((params["bandFrequency"] as Number).toInt(), (params["bandGain"] as Number).toInt()))
+  }
+
+  override fun setLocalVoiceReverb(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLocalVoiceReverb((params["reverbKey"] as Number).toInt(), (params["value"] as Number).toInt()))
+  }
+
+  override fun setAudioEffectPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioEffectPreset((params["preset"] as Number).toInt()))
+  }
+
+  override fun setVoiceBeautifierPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVoiceBeautifierPreset((params["preset"] as Number).toInt()))
+  }
+
+  override fun setVoiceConversionPreset(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVoiceConversionPreset((params["preset"] as Number).toInt()))
+  }
+
+  override fun setAudioEffectParameters(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioEffectParameters((params["preset"] as Number).toInt(), (params["param1"] as Number).toInt(), (params["param2"] as Number).toInt()))
+  }
+
+  override fun setVoiceBeautifierParameters(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setVoiceBeautifierParameters((params["preset"] as Number).toInt(), (params["param1"] as Number).toInt(), (params["param2"] as Number).toInt()))
+  }
+
+  override fun enableSoundPositionIndication(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableSoundPositionIndication(params["enabled"] as Boolean))
+  }
+
+  override fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setRemoteVoicePosition((params["uid"] as Number).toInt(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
+  }
+
+  override fun setLiveTranscoding(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLiveTranscoding(mapToLiveTranscoding(params["transcoding"] as Map<*, *>)))
+  }
+
+  override fun addPublishStreamUrl(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.addPublishStreamUrl(params["url"] as String, params["transcodingEnabled"] as Boolean))
+  }
+
+  override fun removePublishStreamUrl(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.removePublishStreamUrl(params["url"] as String))
+  }
+
+  override fun startChannelMediaRelay(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as Map<*, *>)))
+  }
+
+  override fun updateChannelMediaRelay(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as Map<*, *>)))
+  }
+
+  override fun stopChannelMediaRelay(callback: Callback) {
+    callback.code(engine?.stopChannelMediaRelay())
+  }
+
+  override fun setDefaultAudioRoutetoSpeakerphone(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setDefaultAudioRoutetoSpeakerphone(params["defaultToSpeaker"] as Boolean))
+  }
+
+  override fun setEnableSpeakerphone(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setEnableSpeakerphone(params["enabled"] as Boolean))
+  }
+
+  override fun isSpeakerphoneEnabled(callback: Callback) {
+    callback.resolve(engine) { it.isSpeakerphoneEnabled }
+  }
+
+  override fun enableInEarMonitoring(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableInEarMonitoring(params["enabled"] as Boolean))
+  }
+
+  override fun setInEarMonitoringVolume(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setInEarMonitoringVolume((params["volume"] as Number).toInt()))
+  }
+
+  override fun enableDualStreamMode(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableDualStreamMode(params["enabled"] as Boolean))
+  }
+
+  override fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setRemoteVideoStreamType((params["uid"] as Number).toInt(), (params["streamType"] as Number).toInt()))
+  }
+
+  override fun setRemoteDefaultVideoStreamType(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setRemoteDefaultVideoStreamType((params["streamType"] as Number).toInt()))
+  }
+
+  override fun setLocalPublishFallbackOption(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setLocalPublishFallbackOption((params["option"] as Number).toInt()))
+  }
+
+  override fun setRemoteSubscribeFallbackOption(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setRemoteSubscribeFallbackOption((params["option"] as Number).toInt()))
+  }
+
+  override fun setRemoteUserPriority(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setRemoteUserPriority((params["uid"] as Number).toInt(), (params["userPriority"] as Number).toInt()))
+  }
+
+  override fun startEchoTest(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.startEchoTest((params["intervalInSeconds"] as Number).toInt()))
+  }
+
+  override fun stopEchoTest(callback: Callback) {
+    callback.code(engine?.stopEchoTest())
+  }
+
+  override fun enableLastmileTest(callback: Callback) {
+    callback.code(engine?.enableLastmileTest())
+  }
+
+  override fun disableLastmileTest(callback: Callback) {
+    callback.code(engine?.disableLastmileTest())
+  }
+
+  override fun startLastmileProbeTest(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(params["config"] as Map<*, *>)))
+  }
+
+  override fun stopLastmileProbeTest(callback: Callback) {
+    callback.code(engine?.stopLastmileProbeTest())
+  }
+
+  override fun registerMediaMetadataObserver(callback: Callback) {
+    val mediaObserver = MediaObserver { data ->
+      emit(RtcEngineEvents.MetadataReceived, data)
     }
-
-    fun unregisterMediaMetadataObserver(): Int {
-        engine?.let {
-            val res = it.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)
-            if (res == 0) mediaObserver = null
-            return@unregisterMediaMetadataObserver res
-        }
-        return Constants.ERR_NOT_INITIALIZED
+    callback.code(engine?.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)) {
+      this.mediaObserver = mediaObserver
+      Unit
     }
+  }
 
-    fun setMaxMetadataSize(@IntRange(from = 0, to = 1024) size: Int): Int {
-        mediaObserver?.let {
-            it.maxMetadataSize = size
-            return@setMaxMetadataSize 0
-        }
-        return Constants.ERR_NOT_INITIALIZED
+  override fun unregisterMediaMetadataObserver(callback: Callback) {
+    callback.code(engine?.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)) {
+      mediaObserver = null
+      Unit
     }
+  }
 
-    fun addMetadata(metadata: String): Int {
-        mediaObserver?.let {
-            it.addMetadata(metadata)
-            return@addMetadata 0
-        }
-        return Constants.ERR_NOT_INITIALIZED
+  override fun setMaxMetadataSize(params: Map<String, *>, callback: Callback) {
+    callback.resolve(mediaObserver) {
+      it.maxMetadataSize = (params["size"] as Number).toInt()
+      Unit
     }
+  }
 
-    fun createDataStream(reliable: Boolean, ordered: Boolean): Int {
-        engine?.let {
-            return@createDataStream it.createDataStream(reliable, ordered)
-        }
-        return Constants.ERR_NOT_INITIALIZED
+  override fun sendMetadata(params: Map<String, *>, callback: Callback) {
+    callback.resolve(mediaObserver) {
+      it.addMetadata(params["metadata"] as String)
     }
+  }
 
-    fun sendStreamMessage(streamId: Int, message: String): Int {
-        engine?.let {
-            return@sendStreamMessage it.sendStreamMessage(streamId, message.toByteArray())
-        }
-        return Constants.ERR_NOT_INITIALIZED
+  override fun addVideoWatermark(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.addVideoWatermark(params["watermarkUrl"] as String, mapToWatermarkOptions(params["options"] as Map<*, *>)))
+  }
+
+  override fun clearVideoWatermarks(callback: Callback) {
+    callback.code(engine?.clearVideoWatermarks())
+  }
+
+  override fun setEncryptionSecret(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setEncryptionSecret(params["secret"] as String))
+  }
+
+  override fun setEncryptionMode(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setEncryptionMode(when ((params["encryptionMode"] as Number).toInt()) {
+      EncryptionConfig.EncryptionMode.AES_128_XTS.value -> "aes-128-xts"
+      EncryptionConfig.EncryptionMode.AES_128_ECB.value -> "aes-128-ecb"
+      EncryptionConfig.EncryptionMode.AES_256_XTS.value -> "aes-256-xts"
+      else -> ""
+    }))
+  }
+
+  override fun enableEncryption(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableEncryption(params["enabled"] as Boolean, mapToEncryptionConfig(params["config"] as Map<*, *>)))
+  }
+
+  override fun startAudioRecording(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.startAudioRecording(params["filePath"] as String, (params["sampleRate"] as Number).toInt(), (params["quality"] as Number).toInt()))
+  }
+
+  override fun stopAudioRecording(callback: Callback) {
+    callback.code(engine?.stopAudioRecording())
+  }
+
+  override fun addInjectStreamUrl(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.addInjectStreamUrl(params["url"] as String, mapToLiveInjectStreamConfig(params["config"] as Map<*, *>)))
+  }
+
+  override fun removeInjectStreamUrl(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.removeInjectStreamUrl(params["url"] as String))
+  }
+
+  override fun switchCamera(callback: Callback) {
+    callback.code(engine?.switchCamera())
+  }
+
+  override fun isCameraZoomSupported(callback: Callback) {
+    callback.resolve(engine) { it.isCameraZoomSupported }
+  }
+
+  override fun isCameraTorchSupported(callback: Callback) {
+    callback.resolve(engine) { it.isCameraTorchSupported }
+  }
+
+  override fun isCameraFocusSupported(callback: Callback) {
+    callback.resolve(engine) { it.isCameraFocusSupported }
+  }
+
+  override fun isCameraExposurePositionSupported(callback: Callback) {
+    callback.resolve(engine) { it.isCameraExposurePositionSupported }
+  }
+
+  override fun isCameraAutoFocusFaceModeSupported(callback: Callback) {
+    callback.resolve(engine) { it.isCameraAutoFocusFaceModeSupported }
+  }
+
+  override fun setCameraZoomFactor(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCameraZoomFactor((params["factor"] as Number).toFloat()))
+  }
+
+  override fun getCameraMaxZoomFactor(callback: Callback) {
+    callback.resolve(engine) { it.cameraMaxZoomFactor }
+  }
+
+  override fun setCameraFocusPositionInPreview(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCameraFocusPositionInPreview((params["positionX"] as Number).toFloat(), (params["positionY"] as Number).toFloat()))
+  }
+
+  override fun setCameraExposurePosition(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCameraExposurePosition((params["positionXinView"] as Number).toFloat(), (params["positionYinView"] as Number).toFloat()))
+  }
+
+  override fun enableFaceDetection(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableFaceDetection(params["enable"] as Boolean))
+  }
+
+  override fun setCameraTorchOn(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCameraTorchOn(params["isOn"] as Boolean))
+  }
+
+  override fun setCameraAutoFocusFaceModeEnabled(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCameraAutoFocusFaceModeEnabled(params["enabled"] as Boolean))
+  }
+
+  override fun setCameraCapturerConfiguration(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(params["config"] as Map<*, *>)))
+  }
+
+  override fun createDataStream(params: Map<String, *>, callback: Callback) {
+    (params["config"] as? Map<*, *>)?.let { config ->
+      callback.code(engine?.createDataStream(mapToDataStreamConfig(config))) { it }
+      return@createDataStream
     }
-
-    interface RtcUserInfoInterface<Callback> {
-        fun registerLocalUserAccount(appId: String, userAccount: String, callback: Callback?)
-
-        fun joinChannelWithUserAccount(token: String?, channelName: String, userAccount: String, callback: Callback?)
-
-        fun getUserInfoByUserAccount(userAccount: String, callback: Callback?)
-
-        fun getUserInfoByUid(uid: Int, callback: Callback?)
-    }
-
-    interface RtcAudioInterface<Callback> {
-        fun enableAudio(callback: Callback?)
-
-        fun disableAudio(callback: Callback?)
-
-        fun setAudioProfile(@Annotations.AgoraAudioProfile profile: Int, @Annotations.AgoraAudioScenario scenario: Int, callback: Callback?)
-
-        fun adjustRecordingSignalVolume(@IntRange(from = 0, to = 400) volume: Int, callback: Callback?)
-
-        fun adjustUserPlaybackSignalVolume(uid: Int, @IntRange(from = 0, to = 100) volume: Int, callback: Callback?)
-
-        fun adjustPlaybackSignalVolume(@IntRange(from = 0, to = 400) volume: Int, callback: Callback?)
-
-        fun enableLocalAudio(enabled: Boolean, callback: Callback?)
-
-        fun muteLocalAudioStream(muted: Boolean, callback: Callback?)
-
-        fun muteRemoteAudioStream(uid: Int, muted: Boolean, callback: Callback?)
-
-        fun muteAllRemoteAudioStreams(muted: Boolean, callback: Callback?)
-
-        fun setDefaultMuteAllRemoteAudioStreams(muted: Boolean, callback: Callback?)
-
-        fun enableAudioVolumeIndication(interval: Int, @IntRange(from = 0, to = 10) smooth: Int, report_vad: Boolean, callback: Callback?)
-    }
-
-    interface RtcVideoInterface<Map, Callback> {
-        fun enableVideo(callback: Callback?)
-
-        fun disableVideo(callback: Callback?)
-
-        fun setVideoEncoderConfiguration(config: Map, callback: Callback?)
-
-        fun enableLocalVideo(enabled: Boolean, callback: Callback?)
-
-        fun muteLocalVideoStream(muted: Boolean, callback: Callback?)
-
-        fun muteRemoteVideoStream(uid: Int, muted: Boolean, callback: Callback?)
-
-        fun muteAllRemoteVideoStreams(muted: Boolean, callback: Callback?)
-
-        fun setDefaultMuteAllRemoteVideoStreams(muted: Boolean, callback: Callback?)
-
-        fun setBeautyEffectOptions(enabled: Boolean, options: Map, callback: Callback?)
-    }
-
-    interface RtcAudioMixingInterface<Callback> {
-        fun startAudioMixing(filePath: String, loopback: Boolean, replace: Boolean, cycle: Int, callback: Callback?)
-
-        fun stopAudioMixing(callback: Callback?)
-
-        fun pauseAudioMixing(callback: Callback?)
-
-        fun resumeAudioMixing(callback: Callback?)
-
-        fun adjustAudioMixingVolume(@IntRange(from = 0, to = 100) volume: Int, callback: Callback?)
-
-        fun adjustAudioMixingPlayoutVolume(@IntRange(from = 0, to = 400) volume: Int, callback: Callback?)
-
-        fun adjustAudioMixingPublishVolume(@IntRange(from = 0, to = 100) volume: Int, callback: Callback?)
-
-        fun getAudioMixingPlayoutVolume(callback: Callback?)
-
-        fun getAudioMixingPublishVolume(callback: Callback?)
-
-        fun getAudioMixingDuration(callback: Callback?)
-
-        fun getAudioMixingCurrentPosition(callback: Callback?)
-
-        fun setAudioMixingPosition(pos: Int, callback: Callback?)
-    }
-
-    interface RtcAudioEffectInterface<Callback> {
-        fun getEffectsVolume(callback: Callback?)
-
-        fun setEffectsVolume(@FloatRange(from = 0.0, to = 100.0) volume: Double, callback: Callback?)
-
-        fun setVolumeOfEffect(soundId: Int, @FloatRange(from = 0.0, to = 100.0) volume: Double, callback: Callback?)
-
-        fun playEffect(soundId: Int, filePath: String, loopCount: Int, @FloatRange(from = 0.5, to = 2.0) pitch: Double, @FloatRange(from = -1.0, to = 1.0) pan: Double, @FloatRange(from = 0.0, to = 100.0) gain: Double, publish: Boolean, callback: Callback?)
-
-        fun stopEffect(soundId: Int, callback: Callback?)
-
-        fun stopAllEffects(callback: Callback?)
-
-        fun preloadEffect(soundId: Int, filePath: String, callback: Callback?)
-
-        fun unloadEffect(soundId: Int, callback: Callback?)
-
-        fun pauseEffect(soundId: Int, callback: Callback?)
-
-        fun pauseAllEffects(callback: Callback?)
-
-        fun resumeEffect(soundId: Int, callback: Callback?)
-
-        fun resumeAllEffects(callback: Callback?)
-    }
-
-    interface RtcVoiceChangerInterface<Callback> {
-        fun setLocalVoiceChanger(@Annotations.AgoraAudioVoiceChanger voiceChanger: Int, callback: Callback?)
-
-        fun setLocalVoiceReverbPreset(@Annotations.AgoraAudioReverbPreset preset: Int, callback: Callback?)
-
-        fun setLocalVoicePitch(@FloatRange(from = 0.5, to = 2.0) pitch: Double, callback: Callback?)
-
-        fun setLocalVoiceEqualization(@IntRange(from = 0, to = 9) bandFrequency: Int, @IntRange(from = -15, to = 15) bandGain: Int, callback: Callback?)
-
-        fun setLocalVoiceReverb(@Annotations.AgoraAudioReverbType reverbKey: Int, value: Int, callback: Callback?)
-    }
-
-    interface RtcVoicePositionInterface<Callback> {
-        fun enableSoundPositionIndication(enabled: Boolean, callback: Callback?)
-
-        fun setRemoteVoicePosition(uid: Int, @FloatRange(from = -1.0, to = 1.0) pan: Double, @FloatRange(from = 0.0, to = 100.0) gain: Double, callback: Callback?)
-    }
-
-    interface RtcPublishStreamInterface<Map, Callback> {
-        fun setLiveTranscoding(transcoding: Map, callback: Callback?)
-
-        fun addPublishStreamUrl(url: String, transcodingEnabled: Boolean, callback: Callback?)
-
-        fun removePublishStreamUrl(url: String, callback: Callback?)
-    }
-
-    interface RtcMediaRelayInterface<Map, Callback> {
-        fun startChannelMediaRelay(channelMediaRelayConfiguration: Map, callback: Callback?)
-
-        fun updateChannelMediaRelay(channelMediaRelayConfiguration: Map, callback: Callback?)
-
-        fun stopChannelMediaRelay(callback: Callback?)
-    }
-
-    interface RtcAudioRouteInterface<Callback> {
-        fun setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker: Boolean, callback: Callback?)
-
-        fun setEnableSpeakerphone(enabled: Boolean, callback: Callback?)
-
-        fun isSpeakerphoneEnabled(callback: Callback?)
-    }
-
-    interface RtcEarMonitoringInterface<Callback> {
-        fun enableInEarMonitoring(enabled: Boolean, callback: Callback?)
-
-        fun setInEarMonitoringVolume(@IntRange(from = 0, to = 100) volume: Int, callback: Callback?)
-    }
-
-    interface RtcDualStreamInterface<Callback> {
-        fun enableDualStreamMode(enabled: Boolean, callback: Callback?)
-
-        fun setRemoteVideoStreamType(uid: Int, @Annotations.AgoraVideoStreamType streamType: Int, callback: Callback?)
-
-        fun setRemoteDefaultVideoStreamType(@Annotations.AgoraVideoStreamType streamType: Int, callback: Callback?)
-    }
-
-    interface RtcFallbackInterface<Callback> {
-        fun setLocalPublishFallbackOption(@Annotations.AgoraStreamFallbackOptions option: Int, callback: Callback?)
-
-        fun setRemoteSubscribeFallbackOption(@Annotations.AgoraStreamFallbackOptions option: Int, callback: Callback?)
-
-        fun setRemoteUserPriority(uid: Int, @Annotations.AgoraUserPriority userPriority: Int, callback: Callback?)
-    }
-
-    interface RtcTestInterface<Map, Callback> {
-        fun startEchoTest(@IntRange(from = 2, to = 10) intervalInSeconds: Int, callback: Callback?)
-
-        fun stopEchoTest(callback: Callback?)
-
-        fun enableLastmileTest(callback: Callback?)
-
-        fun disableLastmileTest(callback: Callback?)
-
-        fun startLastmileProbeTest(config: Map, callback: Callback?)
-
-        fun stopLastmileProbeTest(callback: Callback?)
-    }
-
-    interface RtcMediaMetadataInterface<Callback> {
-        fun registerMediaMetadataObserver(callback: Callback?)
-
-        fun unregisterMediaMetadataObserver(callback: Callback?)
-
-        fun setMaxMetadataSize(@IntRange(from = 0, to = 1024) size: Int, callback: Callback?)
-
-        fun sendMetadata(metadata: String, callback: Callback?)
-    }
-
-    interface RtcWatermarkInterface<Map, Callback> {
-        fun addVideoWatermark(watermarkUrl: String, options: Map, callback: Callback?)
-
-        fun clearVideoWatermarks(callback: Callback?)
-    }
-
-    interface RtcEncryptionInterface<Callback> {
-        fun setEncryptionSecret(secret: String, callback: Callback?)
-
-        fun setEncryptionMode(@Annotations.AgoraEncryptionMode encryptionMode: String, callback: Callback?)
-    }
-
-    interface RtcAudioRecorderInterface<Callback> {
-        fun startAudioRecording(filePath: String, sampleRate: Int, @Annotations.AgoraAudioRecordingQuality quality: Int, callback: Callback?)
-
-        fun stopAudioRecording(callback: Callback?)
-    }
-
-    interface RtcInjectStreamInterface<Map, Callback> {
-        fun addInjectStreamUrl(url: String, config: Map, callback: Callback?)
-
-        fun removeInjectStreamUrl(url: String, callback: Callback?)
-    }
-
-    interface RtcCameraInterface<Map, Callback> {
-        fun switchCamera(callback: Callback?)
-
-        fun isCameraZoomSupported(callback: Callback?)
-
-        fun isCameraTorchSupported(callback: Callback?)
-
-        fun isCameraFocusSupported(callback: Callback?)
-
-        fun isCameraExposurePositionSupported(callback: Callback?)
-
-        fun isCameraAutoFocusFaceModeSupported(callback: Callback?)
-
-        fun setCameraZoomFactor(@FloatRange(from = 1.0) factor: Float, callback: Callback?)
-
-        fun getCameraMaxZoomFactor(callback: Callback?)
-
-        fun setCameraFocusPositionInPreview(positionX: Float, positionY: Float, callback: Callback?)
-
-        fun setCameraExposurePosition(positionXinView: Float, positionYinView: Float, callback: Callback?)
-
-        fun setCameraTorchOn(isOn: Boolean, callback: Callback?)
-
-        fun setCameraAutoFocusFaceModeEnabled(enabled: Boolean, callback: Callback?)
-
-        fun setCameraCapturerConfiguration(config: Map, callback: Callback?)
-    }
-
-    interface RtcStreamMessageInterface<Callback> {
-        fun createDataStream(reliable: Boolean, ordered: Boolean, callback: Callback?)
-
-        fun sendStreamMessage(streamId: Int, message: String, callback: Callback?)
-    }
+    callback.code(engine?.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)) { it }
+  }
+
+  override fun sendStreamMessage(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.sendStreamMessage((params["streamId"] as Number).toInt(), (params["message"] as String).toByteArray()))
+  }
 }
