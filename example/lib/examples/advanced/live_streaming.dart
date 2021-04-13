@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:agora_rtc_engine/rtc_channel.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
@@ -14,7 +13,6 @@ import 'package:permission_handler/permission_handler.dart';
 /// LiveStreaming Example
 class LiveStreaming extends StatefulWidget {
   RtcEngine _engine = null;
-  RtcChannel _channel = null;
 
   @override
   State<StatefulWidget> createState() => _State();
