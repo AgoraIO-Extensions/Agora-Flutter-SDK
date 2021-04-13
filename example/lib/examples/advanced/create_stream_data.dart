@@ -150,32 +150,6 @@ class _State extends State<CreateStreamData> {
     _controller.clear();
   }
 
-  _renderToolBar() {
-    return Positioned(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ElevatedButton(
-            child: Text('Toggle Role'),
-          ),
-          Container(
-            color: Colors.white,
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Text('Toggle Audience Latency Level'),
-              Switch(
-                value: isLowAudio,
-                activeTrackColor: Colors.grey[350],
-                activeColor: Colors.white,
-              ),
-            ]),
-          )
-        ],
-      ),
-      left: 10,
-      bottom: 10,
-    );
-  }
-
   final TextEditingController _controller = TextEditingController();
 
   @override
