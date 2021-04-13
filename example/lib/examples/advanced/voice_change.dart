@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_engine_example/examples/config/VoiceChangeConfig.dart';
+import 'package:agora_rtc_engine_example/examples/config/voice_changer.config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -392,7 +392,7 @@ class _State extends State<VoiceChange> {
   }
 
   _renderBtnItem(Map<String, dynamic> config, int index) {
-    return CusBtn(
+    return _CusBtn(
         config['alertTitle'], selectedVoiceToolBtn != index, config['options'],
         (type) {
       setState(() {
@@ -452,26 +452,26 @@ class _State extends State<VoiceChange> {
   }
 }
 
-class CusBtn extends StatefulWidget {
+class _CusBtn extends StatefulWidget {
   String alertTitle;
   dynamic options;
   bool isOff = false;
   void Function(dynamic type) onPressed;
 
-  CusBtn(this.alertTitle, this.isOff, this.options, this.onPressed);
+  _CusBtn(this.alertTitle, this.isOff, this.options, this.onPressed);
 
   @override
-  State<StatefulWidget> createState() => CusBtnState(isOff);
+  State<StatefulWidget> createState() => _CusBtnState(isOff);
 }
 
-class CusBtnState extends State<CusBtn> {
+class _CusBtnState extends State<_CusBtn> {
   String title = "Off";
   bool isEnable;
 
-  CusBtnState(this.isEnable);
+  _CusBtnState(this.isEnable);
 
   @override
-  void didUpdateWidget(covariant CusBtn oldWidget) {
+  void didUpdateWidget(covariant _CusBtn oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     this.setState(() {

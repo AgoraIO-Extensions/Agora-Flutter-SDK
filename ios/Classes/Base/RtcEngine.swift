@@ -1045,7 +1045,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getErrorDescription(_ params: NSDictionary, _ callback: Callback) {
-        callback.success(AgoraRtcEngineKit.getErrorDescription((params["code"] as! NSNumber).intValue))
+        callback.success(AgoraRtcEngineKit.getErrorDescription((params["error"] as! NSNumber).intValue))
     }
 
     @objc func enableDeepLearningDenoise(_ params: NSDictionary, _ callback: Callback) {

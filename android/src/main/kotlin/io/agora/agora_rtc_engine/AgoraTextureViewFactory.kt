@@ -11,8 +11,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.jvm.javaMethod
 
 class AgoraTextureViewFactory(
   private val messenger: BinaryMessenger,
@@ -53,8 +51,8 @@ class AgoraTextureView(
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    this::class.declaredMemberFunctions.find { it.name == call.method }?.let { function ->
-      function.javaMethod?.let { method ->
+    this.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
+      function.let { method ->
         val parameters = mutableListOf<Any?>()
         function.parameters.forEach { parameter ->
           val map = call.arguments<Map<*, *>>()
