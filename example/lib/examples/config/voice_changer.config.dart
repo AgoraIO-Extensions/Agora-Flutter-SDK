@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
 
+/// VoiceChangeConfig
 const VoiceChangeConfig = [
   {
     'alertTitle': 'Set Chat Beautifier',
@@ -119,6 +120,7 @@ const VoiceChangeConfig = [
   },
 ];
 
+/// FreqOptions
 const FreqOptions = [
   {'text': '31Hz', 'type': AudioEqualizationBandFrequency.Band31},
   {'text': '62Hz', 'type': AudioEqualizationBandFrequency.Band62},
@@ -132,6 +134,7 @@ const FreqOptions = [
   {'text': '16KHz', 'type': AudioEqualizationBandFrequency.Band16K},
 ];
 
+/// ReverbKeyOptions
 const ReverbKeyOptions = [
   {
     'text': 'Dry Level',
@@ -145,7 +148,22 @@ const ReverbKeyOptions = [
     'min': -20.0,
     'max': 10.0
   },
-  {'text': 'Room Size', 'type': AudioReverbType.RoomSize, 'min': 0.0, 'max': 100.0},
-  {'text': 'Wet Delay', 'type': AudioReverbType.WetDelay, 'min': 0.0, 'max': 200.0},
-  {'text': 'Strength', 'type': AudioReverbType.Strength, 'min': 0.0, 'max': 100.0},
+  {
+    'text': 'Room Size',
+    'type': AudioReverbType.RoomSize,
+    'min': 0.0,
+    'max': 100.0
+  },
+  {
+    'text': 'Wet Delay',
+    'type': AudioReverbType.WetDelay,
+    'min': 0.0,
+    'max': 200.0
+  },
+  {
+    'text': 'Strength',
+    'type': AudioReverbType.Strength,
+    'min': 0.0,
+    'max': 100.0
+  },
 ];
