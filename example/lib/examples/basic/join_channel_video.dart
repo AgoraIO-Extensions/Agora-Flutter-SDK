@@ -16,7 +16,7 @@ class JoinChannelVideo extends StatefulWidget {
 }
 
 class _State extends State<JoinChannelVideo> {
-  late final RtcEngine _engine;
+  RtcEngine? engine;
   String channelId = config.channelId;
   bool isJoined = false, switchCamera = true, switchRender = true;
   List<int> remoteUid = [];
@@ -26,27 +26,32 @@ class _State extends State<JoinChannelVideo> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: channelId);
-    this._initEngine();
+    _initEngine();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _engine.destroy();
+    engine?.destroy();
   }
 
-  _initEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
-    this._addListeners();
-
-    await _engine.enableVideo();
-    await _engine.startPreview();
-    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await _engine.setClientRole(ClientRole.Broadcaster);
+  _initEngine() {
+    RtcEngine.createWithConfig(RtcEngineConfig(config.appId)).then((value) {
+      setState(() {
+        engine = value;
+        _addListeners();
+        () async {
+          await engine?.enableVideo();
+          await engine?.startPreview();
+          await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
+          await engine?.setClientRole(ClientRole.Broadcaster);
+        }();
+      });
+    });
   }
 
   _addListeners() {
-    _engine.setEventHandler(RtcEngineEventHandler(
+    engine?.setEventHandler(RtcEngineEventHandler(
       joinChannelSuccess: (channel, uid, elapsed) {
         log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
@@ -79,15 +84,15 @@ class _State extends State<JoinChannelVideo> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    await _engine.joinChannel(config.token, channelId, null, config.uid);
+    await engine?.joinChannel(config.token, channelId, null, config.uid);
   }
 
   _leaveChannel() async {
-    await _engine.leaveChannel();
+    await engine?.leaveChannel();
   }
 
   _switchCamera() {
-    _engine.switchCamera().then((value) {
+    engine?.switchCamera().then((value) {
       setState(() {
         switchCamera = !switchCamera;
       });
@@ -123,8 +128,7 @@ class _State extends State<JoinChannelVideo> {
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed:
-                        isJoined ? this._leaveChannel : this._joinChannel,
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
@@ -139,7 +143,7 @@ class _State extends State<JoinChannelVideo> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
-                onPressed: this._switchCamera,
+                onPressed: _switchCamera,
                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
               ),
             ],
@@ -153,7 +157,7 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          RtcLocalView.TextureView(),
+          if (engine != null) RtcLocalView.SurfaceView(),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(
@@ -161,11 +165,11 @@ class _State extends State<JoinChannelVideo> {
               child: Row(
                 children: List.of(remoteUid.map(
                   (e) => GestureDetector(
-                    onTap: this._switchRender,
+                    onTap: _switchRender,
                     child: Container(
                       width: 120,
                       height: 120,
-                      child: RtcRemoteView.TextureView(
+                      child: RtcRemoteView.SurfaceView(
                         uid: e,
                       ),
                     ),

@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
+  js: ^0.6.3
   json_annotation: ^4.0.0
 dev_dependencies:
   integration_test: ^1.0.2+2
@@ -29,4 +30,14 @@ flutter:
         pluginClass: AgoraRtcEnginePlugin
       ios:
         pluginClass: AgoraRtcEnginePlugin
+      linux:
+        pluginClass: AgoraRtcEnginePlugin
+      macos:
+        pluginClass: AgoraRtcEnginePlugin
+      windows:
+        pluginClass: AgoraRtcEnginePlugin
+      web:
+        fileName: agora_rtc_engine_web.dart
+        pluginClass: AgoraRtcEngineWeb
+
 

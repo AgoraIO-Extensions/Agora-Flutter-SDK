@@ -14,6 +14,8 @@ class RtcEngine with RtcEngineInterface {
   static const MethodChannel _methodChannel = MethodChannel('agora_rtc_engine');
   static const EventChannel _eventChannel =
       EventChannel('agora_rtc_engine/events');
+  static final Stream _stream = _eventChannel.receiveBroadcastStream();
+  static StreamSubscription? _subscription;
 
   /// Exposing methodChannel to other files
   static MethodChannel get methodChannel => _methodChannel;
@@ -22,14 +24,7 @@ class RtcEngine with RtcEngineInterface {
 
   RtcEngineEventHandler? _handler;
 
-  RtcEngine._() {
-    _eventChannel.receiveBroadcastStream().listen((event) {
-      final eventMap = Map<dynamic, dynamic>.from(event);
-      final methodName = eventMap['methodName'] as String;
-      final data = List<dynamic>.from(eventMap['data']);
-      _handler?.process(methodName, data);
-    });
-  }
+  RtcEngine._();
 
   static Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
@@ -162,6 +157,13 @@ class RtcEngine with RtcEngineInterface {
   /// **Parameter** [handler] The event handler.
   void setEventHandler(RtcEngineEventHandler handler) {
     _handler = handler;
+    _subscription ??= _stream.listen((event) {
+      print('onEvent $event');
+      final eventMap = Map<dynamic, dynamic>.from(event);
+      final methodName = eventMap['methodName'] as String;
+      final data = List<dynamic>.from(eventMap['data']);
+      _handler?.process(methodName, data);
+    });
   }
 
   @override

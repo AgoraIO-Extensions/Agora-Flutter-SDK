@@ -14,7 +14,7 @@ class RtcChannel with RtcChannelInterface {
       MethodChannel('agora_rtc_channel');
   static const EventChannel _eventChannel =
       EventChannel('agora_rtc_channel/events');
-
+  static final Stream _stream = _eventChannel.receiveBroadcastStream();
   static StreamSubscription? _subscription;
 
   static final Map<String, RtcChannel> _channels = {};
@@ -76,7 +76,7 @@ class RtcChannel with RtcChannelInterface {
   /// **Parameter** [handler] The event handler.
   void setEventHandler(RtcChannelEventHandler handler) {
     _handler = handler;
-    _subscription ??= _eventChannel.receiveBroadcastStream().listen((event) {
+    _subscription ??= _stream.listen((event) {
       final eventMap = Map<dynamic, dynamic>.from(event);
       final channelId = eventMap['channelId'];
       final methodName = eventMap['methodName'] as String;
