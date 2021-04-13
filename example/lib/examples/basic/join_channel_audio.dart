@@ -63,7 +63,7 @@ class _State extends State<JoinChannelAudio> {
         });
         await widget._engine
             ?.joinChannel(config.token, config.channelId, null, config.uid)
-            .catchError((err) {
+            ?.catchError((err) {
           print('error ${err.toString()}');
         });
       },
@@ -77,7 +77,7 @@ class _State extends State<JoinChannelAudio> {
 
     await widget._engine
         ?.joinChannel(config.token, config.channelId, null, config.uid)
-        .catchError((onError) {
+        ?.catchError((onError) {
       print('error ${onError.toString()}');
     });
   }

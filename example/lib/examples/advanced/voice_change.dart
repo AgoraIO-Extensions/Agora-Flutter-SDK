@@ -1,9 +1,6 @@
 import 'dart:developer';
 
-import 'package:agora_rtc_engine/rtc_channel.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/config/VoiceChangeConfig.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 /// VoiceChange Example
 class VoiceChange extends StatefulWidget {
   RtcEngine _engine = null;
-  RtcChannel _channel = null;
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -46,6 +42,7 @@ class _State extends State<VoiceChange> {
   double voicePitchValue = 0.5;
   double bandGainValue = 0;
   double reverbValue = 1;
+
   @override
   void initState() {
     super.initState();
@@ -472,6 +469,7 @@ class CusBtnState extends State<CusBtn> {
   bool isEnable;
 
   CusBtnState(this.isEnable);
+
   @override
   void didUpdateWidget(covariant CusBtn oldWidget) {
     // TODO: implement didUpdateWidget
