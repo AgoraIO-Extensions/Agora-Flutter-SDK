@@ -3,7 +3,6 @@ library agora_rtc_engine;
 
 import 'dart:async';
 import 'dart:convert';
-
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
@@ -859,7 +858,8 @@ class _VideoPlayerConfig {
 }
 
 @JS('callApi')
-external Future<dynamic> _callApi(String apiType, String params);
+external Future<dynamic> _callApi(String apiType, String params,
+    [Object? extra]);
 
 @JS('setEventHandler')
 external void _setEventHandler(Function params);
@@ -889,8 +889,7 @@ class AgoraRtcEngineWeb {
 
     ui.platformViewRegistry.registerViewFactory('AgoraSurfaceView',
         (int viewId) {
-      var id = viewId.toString();
-      var element = DivElement()..id = id;
+      var element = DivElement();
       MethodChannel('agora_rtc_engine/surface_view_$viewId',
               const StandardMethodCodec(), registrar)
           .setMethodCallHandler(
@@ -912,14 +911,13 @@ class AgoraRtcEngineWeb {
   /// https://flutter.dev/go/federated-plugins
   Future<dynamic> handleMethodCall(MethodCall call) async {
     _setEventHandler(allowInterop((String event) {
-      print('_setEventHandler $event');
       _controller.add(jsonDecode(event));
     }));
     var args = <String, dynamic>{};
     if (call.arguments != null) {
       args = Map<String, dynamic>.from(call.arguments);
     }
-    return _callApi(call.method, jsonEncode(args));
+    return promiseToFuture(_callApi(call.method, jsonEncode(args)));
 
     switch (call.method) {
       case 'getSdkVersion':
@@ -965,9 +963,25 @@ class AgoraRtcEngineWeb {
       case 'setData':
         var data = Map<String, dynamic>.from(args['data']);
         if (data['uid'] == 0) {
+          return promiseToFuture(_callApi(
+              'setupLocalVideo',
+              jsonEncode({
+                'canvas': {
+                  'uid': 0,
+                }
+              }),
+              element));
           // _videoTrack.play(element);
-        } else {}
-        break;
+        } else {
+          return promiseToFuture(_callApi(
+              'setupRemoteVideo',
+              jsonEncode({
+                'canvas': {
+                  'uid': data['uid'],
+                }
+              }),
+              element));
+        }
       default:
         throw PlatformException(
           code: 'Unimplemented',

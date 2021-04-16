@@ -18,7 +18,10 @@ class JoinChannelVideo extends StatefulWidget {
 class _State extends State<JoinChannelVideo> {
   RtcEngine? engine;
   String channelId = config.channelId;
-  bool isJoined = false, switchCamera = true, switchRender = true;
+  bool startPreview = false,
+      isJoined = false,
+      switchCamera = true,
+      switchRender = true;
   List<int> remoteUid = [];
   TextEditingController? _controller;
 
@@ -45,6 +48,9 @@ class _State extends State<JoinChannelVideo> {
           await engine?.startPreview();
           await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
           await engine?.setClientRole(ClientRole.Broadcaster);
+          setState(() {
+            startPreview = true;
+          });
         }();
       });
     });
@@ -60,9 +66,17 @@ class _State extends State<JoinChannelVideo> {
       },
       userJoined: (uid, elapsed) {
         log('userJoined  ${uid} ${elapsed}');
-        setState(() {
-          remoteUid.add(uid);
-        });
+        // setState(() {
+        //   remoteUid.add(uid);
+        // });
+      },
+      remoteVideoStateChanged: (uid, state, reason, elapsed) {
+        log('remoteVideoStateChanged ${uid} ${state} ${reason} ${elapsed}');
+        if (state == VideoRemoteState.Decoding) {
+          setState(() {
+            remoteUid.add(uid);
+          });
+        }
       },
       userOffline: (uid, reason) {
         log('userOffline  ${uid} ${reason}');
@@ -137,18 +151,20 @@ class _State extends State<JoinChannelVideo> {
             _renderVideo(),
           ],
         ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: _switchCamera,
-                child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
-              ),
-            ],
-          ),
-        )
+        if (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: _switchCamera,
+                  child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
+                ),
+              ],
+            ),
+          )
       ],
     );
   }
@@ -157,7 +173,7 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          if (engine != null) RtcLocalView.SurfaceView(),
+          if (startPreview) RtcLocalView.SurfaceView(),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(
