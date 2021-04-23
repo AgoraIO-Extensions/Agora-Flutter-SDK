@@ -360,6 +360,20 @@ Map<String, dynamic> _$ChannelMediaRelayConfigurationToJson(
       'destInfos': instance.destInfos?.map((e) => e?.toJson())?.toList(),
     };
 
+RhythmPlayerConfig _$RhythmPlayerConfigFromJson(Map<String, dynamic> json) {
+  return RhythmPlayerConfig(
+    json['beatsPerMeasure'] as int,
+    json['beatsPerMinute'] as int,
+    json['publish'] as bool,
+  );
+}
+
+Map<String, dynamic> _$RhythmPlayerConfigToJson(RhythmPlayerConfig instance) => <String, dynamic>{
+      'beatsPerMeasure': instance.beatsPerMeasure,
+      'beatsPerMinute': instance.beatsPerMinute,
+      'publish': instance.publish,
+    };
+
 LastmileProbeConfig _$LastmileProbeConfigFromJson(Map<String, dynamic> json) {
   return LastmileProbeConfig(
     json['probeUplink'] as bool,

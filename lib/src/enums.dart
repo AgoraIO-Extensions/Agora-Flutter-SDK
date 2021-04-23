@@ -247,6 +247,20 @@ enum AudioRecordingQuality {
   High,
 }
 
+enum AudioRecordingPosition {
+  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  @JsonValue(0)
+  PositionMixedRecordingAndPlayback,
+
+  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+  @JsonValue(1)
+  PositionRecording,
+
+  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  @JsonValue(2)
+  PositionMixedPlayback,
+}
+
 /// The state of the remote audio.
 enum AudioRemoteState {
   /// The remote audio is in the default state, probably due to:

@@ -119,6 +119,12 @@ protocol RtcEngineAudioInterface {
     func setDefaultMuteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
     func enableAudioVolumeIndication(_ params: NSDictionary, _ callback: Callback)
+
+    func startRhythmPlayer(_ params: NSDictionary, _ callback: Callback)
+    
+    func stopRhythmPlayer(_ callback: Callback)
+    
+    func configRhythmPlayer(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVideoInterface {
@@ -167,7 +173,7 @@ protocol RtcEngineAudioMixingInterface {
 
     func getAudioMixingPublishVolume(_ callback: Callback)
 
-    func getAudioMixingDuration(_ callback: Callback)
+    func getAudioMixingDuration(_ params: NSDictionary, _ callback: Callback)
 
     func getAudioMixingCurrentPosition(_ callback: Callback)
 
@@ -184,6 +190,12 @@ protocol RtcEngineAudioEffectInterface {
     func setVolumeOfEffect(_ params: NSDictionary, _ callback: Callback)
 
     func playEffect(_ params: NSDictionary, _ callback: Callback)
+    
+    func setEffectPosition(_ params: NSDictionary, _ callback: Callback)
+    
+    func getEffectDuration(_ params: NSDictionary, _ callback: Callback)
+    
+    func getEffectCurrentPosition(_ params: NSDictionary, _ callback: Callback)
 
     func stopEffect(_ params: NSDictionary, _ callback: Callback)
 
@@ -567,6 +579,17 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func enableAudioVolumeIndication(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableAudioVolumeIndication((params["interval"] as! NSNumber).intValue, smooth: (params["smooth"] as! NSNumber).intValue, report_vad: params["report_vad"] as! Bool))
     }
+    @objc func startRhythmPlayer(_ params: NSDictionary,_ callback: Callback){
+        callback.code(engine?.startRhythmPlayer(params["sound1"] as! String, sound2: params["sound2"] as! String, config: mapToRhythmPlayerConfig(params["config"] as! Dictionary)))
+    }
+    
+    @objc func stopRhythmPlayer(_ callback: Callback){
+        callback.code(engine?.stopRhythmPlayer())
+    }
+    
+    @objc func configRhythmPlayer(_ params: NSDictionary,_ callback: Callback){
+        callback.code(engine?.configRhythmPlayer(mapToRhythmPlayerConfig(params as! Dictionary)))
+    }
 
     @objc func enableVideo(_ callback: Callback) {
         callback.code(engine?.enableVideo())
@@ -613,6 +636,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func startAudioMixing(_ params: NSDictionary, _ callback: Callback) {
+        if let startPos = params["startPos"] as? NSNumber {
+            callback.code(engine?.startAudioMixing(params["filePath"] as! String, loopback: params["loopback"] as! Bool, replace: params["replace"] as! Bool, cycle: (params["cycle"] as! NSNumber).intValue,startPos: startPos.intValue))
+            return
+        }
         callback.code(engine?.startAudioMixing(params["filePath"] as! String, loopback: params["loopback"] as! Bool, replace: params["replace"] as! Bool, cycle: (params["cycle"] as! NSNumber).intValue))
     }
 
@@ -652,7 +679,13 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         }
     }
 
-    @objc func getAudioMixingDuration(_ callback: Callback) {
+    @objc func getAudioMixingDuration(_ params: NSDictionary,_ callback: Callback) {
+        if let filePath = (params["filePath"] as? String) {
+            callback.code(engine?.getAudioMixingDuration(filePath)) {
+                $0
+            }
+            return
+        }
         callback.code(engine?.getAudioMixingDuration()) {
             $0
         }
@@ -687,9 +720,26 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func playEffect(_ params: NSDictionary, _ callback: Callback) {
+        if let startPos = (params["startPos"] as? NSNumber) {
+            callback.code(engine?.playEffect((params["soundId"] as! NSNumber).int32Value, filePath: params["filePath"] as? String, loopCount: (params["loopCount"] as! NSNumber).int32Value, pitch: (params["pitch"] as! NSNumber).doubleValue, pan: (params["pan"] as! NSNumber).doubleValue, gain: (params["gain"] as! NSNumber).doubleValue, publish: params["publish"] as! Bool, startPos: startPos.int32Value))
+            return
+        }
         callback.code(engine?.playEffect((params["soundId"] as! NSNumber).int32Value, filePath: params["filePath"] as? String, loopCount: (params["loopCount"] as! NSNumber).int32Value, pitch: (params["pitch"] as! NSNumber).doubleValue, pan: (params["pan"] as! NSNumber).doubleValue, gain: (params["gain"] as! NSNumber).doubleValue, publish: params["publish"] as! Bool))
     }
 
+    @objc func setEffectPosition(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setEffectPosition((params["soundId"] as! NSNumber).int32Value, pos: (params["pos"] as! NSNumber).intValue))
+    }
+    @objc func getEffectDuration(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.getEffectDuration(params["filePath"] as? String)){
+            $0
+        }
+    }
+    @objc func getEffectCurrentPosition(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.getEffectCurrentPosition((params["soundId"] as! NSNumber).int32Value)){
+            $0
+        }
+    }
     @objc func stopEffect(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.stopEffect((params["soundId"] as! NSNumber).int32Value))
     }
@@ -930,7 +980,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func startAudioRecording(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.startAudioRecording(params["filePath"] as! String, sampleRate: (params["sampleRate"] as! NSNumber).intValue, quality: AgoraAudioRecordingQuality(rawValue: (params["quality"] as! NSNumber).intValue)!))
+        guard params["recordingPosition"] != nil else {
+            callback.code(engine?.startAudioRecording(params["filePath"] as! String, sampleRate: (params["sampleRate"] as! NSNumber).intValue, quality: AgoraAudioRecordingQuality(rawValue: (params["quality"] as! NSNumber).intValue)!))
+            return
+        }
+        callback.code(engine?.startAudioRecording(withConfig: mapToAudioRecordingConfiguration(params as! Dictionary)))
     }
 
     @objc func stopAudioRecording(_ callback: Callback) {

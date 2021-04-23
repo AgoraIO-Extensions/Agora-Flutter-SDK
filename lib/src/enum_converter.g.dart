@@ -250,6 +250,12 @@ const _$AudioRecordingQualityEnumMap = {
   AudioRecordingQuality.High: 2,
 };
 
+const _$AudioRecordingPositionEnumMap = {
+  AudioRecordingPosition.PositionMixedRecordingAndPlayback: 0,
+  AudioRecordingPosition.PositionRecording: 1,
+  AudioRecordingPosition.PositionMixedPlayback: 2,
+};
+
 AudioRemoteStateConverter _$AudioRemoteStateConverterFromJson(
     Map<String, dynamic> json) {
   return AudioRemoteStateConverter(
