@@ -101,6 +101,12 @@ class IRtcEngine {
     fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
 
     fun enableAudioVolumeIndication(params: Map<String, *>, callback: Callback)
+
+    fun startRhythmPlayer(params: Map<String, *>,callback: Callback)
+
+    fun stopRhythmPlayer(callback: Callback)
+
+    fun configRhythmPlayer(params: Map<String, *>,callback: Callback)
   }
 
   interface RtcVideoInterface {
@@ -149,7 +155,7 @@ class IRtcEngine {
 
     fun getAudioMixingPublishVolume(callback: Callback)
 
-    fun getAudioMixingDuration(callback: Callback)
+    fun getAudioMixingDuration(params: Map<String, *>, callback: Callback)
 
     fun getAudioMixingCurrentPosition(callback: Callback)
 
@@ -166,6 +172,12 @@ class IRtcEngine {
     fun setVolumeOfEffect(params: Map<String, *>, callback: Callback)
 
     fun playEffect(params: Map<String, *>, callback: Callback)
+
+    fun setEffectPosition(params: Map<String, *>, callback: Callback)
+
+    fun getEffectDuration(params: Map<String, *>, callback: Callback)
+
+    fun getEffectCurrentPosition(params: Map<String, *>, callback: Callback)
 
     fun stopEffect(params: Map<String, *>, callback: Callback)
 
@@ -563,6 +575,17 @@ class RtcEngineManager(
   override fun enableAudioVolumeIndication(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.enableAudioVolumeIndication((params["interval"] as Number).toInt(), (params["smooth"] as Number).toInt(), params["report_vad"] as Boolean))
   }
+  override fun startRhythmPlayer(params: Map<String, *>,callback: Callback){
+    callback.code(engine?.audioEffectManager?.startRhythmPlayer(params["sound1"] as String, params["sound2"] as String,mapToRhythmPlayerConfig(params["config"] as Map<*, *>)))
+  }
+
+  override fun stopRhythmPlayer(callback: Callback){
+    callback.code(engine?.audioEffectManager?.stopRhythmPlayer())
+  }
+
+  override fun configRhythmPlayer(params: Map<String, *>,callback: Callback){
+    callback.code(engine?.audioEffectManager?.configRhythmPlayer(mapToRhythmPlayerConfig(params as Map<*, *>)))
+  }
 
   override fun enableVideo(callback: Callback) {
     callback.code(engine?.enableVideo())
@@ -613,6 +636,10 @@ class RtcEngineManager(
   }
 
   override fun startAudioMixing(params: Map<String, *>, callback: Callback) {
+    (params["startPos"] as? Number)?.let { startPos ->
+      callback.code(engine?.startAudioMixing(params["filePath"] as String, params["loopback"] as Boolean, params["replace"] as Boolean, (params["cycle"] as Number).toInt(), startPos.toInt()))
+      return@startAudioMixing
+    }
     callback.code(engine?.startAudioMixing(params["filePath"] as String, params["loopback"] as Boolean, params["replace"] as Boolean, (params["cycle"] as Number).toInt()))
   }
 
@@ -648,7 +675,11 @@ class RtcEngineManager(
     callback.code(engine?.audioMixingPublishVolume) { it }
   }
 
-  override fun getAudioMixingDuration(callback: Callback) {
+  override fun getAudioMixingDuration(params: Map<String, *>, callback: Callback) {
+    (params["filePath"] as? String)?.let { file ->
+      callback.code(engine?.getAudioMixingDuration(file)){ it }
+      return@getAudioMixingDuration
+    }
     callback.code(engine?.audioMixingDuration) { it }
   }
 
@@ -677,7 +708,25 @@ class RtcEngineManager(
   }
 
   override fun playEffect(params: Map<String, *>, callback: Callback) {
+    (params["startPos"] as? Number)?.let { startPos ->
+      callback.code(engine?.audioEffectManager?.playEffect((params["soundId"] as Number).toInt(), params["filePath"] as String, (params["loopCount"] as Number).toInt(), (params["pitch"] as Number).toDouble(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble(), params["publish"] as Boolean, startPos.toInt()))
+      return@playEffect
+    }
     callback.code(engine?.audioEffectManager?.playEffect((params["soundId"] as Number).toInt(), params["filePath"] as String, (params["loopCount"] as Number).toInt(), (params["pitch"] as Number).toDouble(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble(), params["publish"] as Boolean))
+  }
+
+  override fun setEffectPosition(params: Map<String, *>, callback: Callback){
+    callback.code(engine?.audioEffectManager?.setEffectPosition((params["soundId"] as Number).toInt(), (params["pos"] as Number).toInt()))
+  }
+
+  override fun getEffectDuration(params: Map<String, *>, callback: Callback){
+    callback.code(engine?.audioEffectManager?.getEffectDuration(params["filePath"] as String)){
+      it
+    }
+  }
+
+  override fun getEffectCurrentPosition(params: Map<String, *>, callback: Callback){
+    callback.code(engine?.audioEffectManager?.getEffectCurrentPosition((params["soundId"] as Number).toInt())){ it }
   }
 
   override fun stopEffect(params: Map<String, *>, callback: Callback) {
@@ -912,6 +961,10 @@ class RtcEngineManager(
   }
 
   override fun startAudioRecording(params: Map<String, *>, callback: Callback) {
+    (params["recordingPosition"] as? Number)?.let {
+      callback.code(engine?.startAudioRecording(mapToAudioRecordingConfiguration(params)))
+      return@startAudioRecording
+    }
     callback.code(engine?.startAudioRecording(params["filePath"] as String, (params["sampleRate"] as Number).toInt(), (params["quality"] as Number).toInt()))
   }
 

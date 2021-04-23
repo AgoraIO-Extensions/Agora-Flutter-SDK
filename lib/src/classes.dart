@@ -462,6 +462,25 @@ class ChannelMediaRelayConfiguration {
   Map<String, dynamic> toJson() => _$ChannelMediaRelayConfigurationToJson(this);
 }
 
+
+@JsonSerializable(explicitToJson: true)
+class RhythmPlayerConfig {
+  
+  int beatsPerMeasure;
+  int beatsPerMinute;
+  bool publish;
+
+  /// Constructs a [ChannelMediaRelayConfiguration]
+  RhythmPlayerConfig(this.beatsPerMeasure, this.beatsPerMinute, this.publish);
+
+  /// @nodoc
+  factory RhythmPlayerConfig.fromJson(Map<String, dynamic> json) =>
+      _$RhythmPlayerConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$RhythmPlayerConfigToJson(this);
+}
+
 /// Lastmile probe configuration.
 @JsonSerializable(explicitToJson: true)
 class LastmileProbeConfig {

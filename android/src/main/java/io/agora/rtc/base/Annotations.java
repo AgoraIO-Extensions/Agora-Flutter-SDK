@@ -98,13 +98,20 @@ public class Annotations {
   }
 
   @IntDef({
-    Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_OPEN,
-    Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_TOO_FREQUENT,
-    Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_INTERRUPTED_EOF,
-    AgoraAudioMixingErrorCode.MEDIA_ENGINE_AUDIO_ERROR_OK,
+    Constants.AUDIO_MIXING_REASON_CAN_NOT_OPEN,
+    Constants.AUDIO_MIXING_REASON_TOO_FREQUENT_CALL,
+    Constants.AUDIO_MIXING_REASON_INTERRUPTED_EOF,
+    Constants.AUDIO_MIXING_REASON_STARTED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_ONE_LOOP_COMPLETED,
+    Constants.AUDIO_MIXING_REASON_START_NEW_LOOP,
+    Constants.AUDIO_MIXING_REASON_ALL_LOOPS_COMPLETED,
+    Constants.AUDIO_MIXING_REASON_STOPPED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_PAUSED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_RESUMED_BY_USER,
+    AgoraAudioMixingReason.MEDIA_ENGINE_AUDIO_ERROR_OK,
   })
   @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraAudioMixingErrorCode {
+  public @interface AgoraAudioMixingReason {
     int MEDIA_ENGINE_AUDIO_ERROR_OK = 0;
   }
 
@@ -534,6 +541,7 @@ public class Annotations {
     Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY,
     Constants.LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE,
     Constants.LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE,
+    Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_NOT_FOUND
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraLocalVideoStreamError {

@@ -354,8 +354,8 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.AudioMixingFinished)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, errorCode: AgoraAudioMixingErrorCode) {
-        callback(RtcEngineEvents.AudioMixingStateChanged, state.rawValue, errorCode.rawValue)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, reason: AgoraAudioMixingReasonCode) {
+        callback(RtcEngineEvents.AudioMixingStateChanged, state.rawValue, reason.rawValue)
     }
 
     public func rtcEngineRemoteAudioMixingDidStart(_ engine: AgoraRtcEngineKit) {

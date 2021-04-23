@@ -319,6 +319,27 @@ func mapToRtcEngineConfig(_ map: Dictionary<String, Any>) -> AgoraRtcEngineConfi
     return config
 }
 
+func mapToAudioRecordingConfiguration(_ map: Dictionary<String, Any>) -> AgoraAudioRecordingConfiguration {
+    let config = AgoraAudioRecordingConfiguration()
+    if let filePath = map["filePath"] as? String {
+        config.filePath = filePath
+    }
+    if let recordingQuality = map["quality"] as? NSNumber {
+        if let recordingQuality = AgoraAudioRecordingQuality.init(rawValue: recordingQuality.intValue) {
+            config.recordingQuality = recordingQuality
+        }
+    }
+    if let recordingPosition = map["recordingPosition"] as? NSNumber {
+        if let recordingPosition = AgoraAudioRecordingPosition.init(rawValue: recordingPosition.intValue) {
+            config.recordingPosition = recordingPosition
+        }
+    }
+    if let recordingSampleRate = map["sampleRate"] as? NSNumber {
+        config.recordingSampleRate = recordingSampleRate.intValue
+    }
+    return config
+}
+
 func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
     let config = AgoraEncryptionConfig()
     if let encryptionMode = map["encryptionMode"] as? NSNumber {
@@ -328,6 +349,20 @@ func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionCon
     }
     if let encryptionKey = map["encryptionKey"] as? String {
         config.encryptionKey = encryptionKey
+    }
+    return config
+}
+
+func mapToRhythmPlayerConfig(_ map: Dictionary<String, Any>) -> AgoraRtcRhythmPlayerConfig {
+    let config = AgoraRtcRhythmPlayerConfig()
+    if let beatsPerMeasure = map["beatsPerMeasure"] as? NSNumber {
+        config.beatsPerMeasure = beatsPerMeasure.uintValue;
+    }
+    if let beatsPerMinute = map["beatsPerMinute"] as? NSNumber {
+        config.beatsPerMinute = beatsPerMinute.uintValue;
+    }
+    if let publish = map["publish"] as? NSNumber {
+        config.publish = publish.boolValue;
     }
     return config
 }

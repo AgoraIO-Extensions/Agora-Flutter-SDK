@@ -2,6 +2,8 @@ package io.agora.rtc.base
 
 import android.graphics.Color
 import io.agora.rtc.RtcEngineConfig
+import io.agora.rtc.audio.AgoraRhythmPlayerConfig
+import io.agora.rtc.audio.AudioRecordingConfiguration
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.internal.LastmileProbeConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
@@ -160,6 +162,14 @@ fun mapToLiveInjectStreamConfig(map: Map<*, *>): LiveInjectStreamConfig {
   }
 }
 
+fun mapToRhythmPlayerConfig(map: Map<*, *>): AgoraRhythmPlayerConfig {
+  return AgoraRhythmPlayerConfig().apply {
+    (map["beatsPerMeasure"] as? Number)?.let { beatsPerMeasure = it.toInt() }
+    (map["beatsPerMinute"] as? Number)?.let { beatsPerMinute = it.toInt() }
+    (map["publish"] as? Boolean)?.let { publish = it }
+  }
+}
+
 fun mapToCameraCapturerConfiguration(map: Map<*, *>): CameraCapturerConfiguration {
   return CameraCapturerConfiguration(
     intToCapturerOutputPreference((map["preference"] as Number).toInt()),
@@ -183,6 +193,15 @@ fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
     mAppId = map["appId"] as String
     (map["areaCode"] as? Number)?.toInt()?.let { mAreaCode = it }
     (map["logConfig"] as? Map<*, *>)?.let { mLogConfig = mapToLogConfig(it) }
+  }
+}
+
+fun mapToAudioRecordingConfiguration(map: Map<*, *>): AudioRecordingConfiguration {
+  return AudioRecordingConfiguration().apply {
+    (map["filePath"] as? String)?.let { filePath = it }
+    (map["quality"] as? Number)?.let { recordingQuality = it.toInt() }
+    (map["recordingPosition"] as? Number)?.let { recordingPosition = it.toInt() }
+    (map["sampleRate"] as? Number)?.let { recordingSampleRate = it.toInt() }
   }
 }
 

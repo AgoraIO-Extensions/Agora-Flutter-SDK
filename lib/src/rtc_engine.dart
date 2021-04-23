@@ -441,8 +441,10 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int> getAudioMixingDuration() {
-    return _invokeMethod('getAudioMixingDuration');
+  Future<int> getAudioMixingDuration([String filePath]) {
+    return _invokeMethod('getAudioMixingDuration', {
+      'filePath': filePath,
+    });
   }
 
   @override
@@ -472,12 +474,14 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle) {
+      String filePath, bool loopback, bool replace, int cycle,
+      [int startPos]) {
     return _invokeMethod('startAudioMixing', {
       'filePath': filePath,
       'loopback': loopback,
       'replace': replace,
-      'cycle': cycle
+      'cycle': cycle,
+      'startPos': startPos
     });
   }
 
@@ -593,7 +597,8 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish) {
+      double pitch, double pan, double gain, bool publish,
+      [int startPos]) {
     return _invokeMethod('playEffect', {
       'soundId': soundId,
       'filePath': filePath,
@@ -601,8 +606,24 @@ class RtcEngine with RtcEngineInterface {
       'pitch': pitch,
       'pan': pan,
       'gain': gain,
-      'publish': publish
+      'publish': publish,
+      'startPos': startPos
     });
+  }
+
+  @override
+  Future<void> setEffectPosition(int soundId, int pos) {
+    return _invokeMethod('setEffectPosition', {'soundId': soundId, 'pos': pos});
+  }
+
+  @override
+  Future<int> getEffectDuration(String filePath) {
+    return _invokeMethod('getEffectDuration', {'filePath': filePath});
+  }
+
+  @override
+  Future<int> getEffectCurrentPosition(int soundId) {
+    return _invokeMethod('getEffectCurrentPosition', {'soundId': soundId});
   }
 
   @override
@@ -816,19 +837,43 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
+      AudioSampleRateType sampleRate, 
+      AudioRecordingQuality quality,
+      [AudioRecordingPosition recordingPosition]
+      ) {
     return _invokeMethod('startAudioRecording', {
       'filePath': filePath,
       'sampleRate': AudioSampleRateTypeConverter(sampleRate).value(),
-      'quality': AudioRecordingQualityConverter(quality).value()
+      'quality': AudioRecordingQualityConverter(quality).value(),
+      'recordingPosition': AudioRecordingPositionConverter(recordingPosition).value(),
     });
   }
-
   @override
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('startChannelMediaRelay', {
       'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
+    });
+  }
+
+  @override
+  Future<void> startRhythmPlayer(String sound1, String sound2, RhythmPlayerConfig config) {
+    return _invokeMethod('startRhythmPlayer', {
+      'sound1': sound1,
+      'sound2': sound2,
+      'config': config.toJson(),
+    });
+  }
+  
+  @override
+  Future<void> stopRhythmPlayer() {
+    return _invokeMethod('stopRhythmPlayer');
+  }
+
+  @override
+  Future<void> configRhythmPlayer(RhythmPlayerConfig config) {
+    return _invokeMethod('configRhythmPlayer', {
+      'config': config.toJson()
     });
   }
 
@@ -962,8 +1007,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod(
-        'createDataStream', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {'config': config.toJson()});
   }
 
   @override
@@ -1720,7 +1764,8 @@ mixin RtcAudioMixingInterface {
   /// - Positive integer: Number of playback loops
   /// - -1: Infinite playback loops
   Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle);
+      String filePath, bool loopback, bool replace, int cycle,
+      [int startPos]);
 
   /// Stops playing or mixing the music file.
   ///
@@ -1801,7 +1846,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The audio mixing duration, if this method call is successful.
   /// - < 0: Failure.
-  Future<int> getAudioMixingDuration();
+  Future<int> getAudioMixingDuration([String filePath]);
 
   /// Gets the playback position (ms) of the music file.
   ///
@@ -1886,7 +1931,14 @@ mixin RtcAudioEffectInterface {
   /// - `true`: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
   /// - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish);
+      double pitch, double pan, double gain, bool publish,
+      [int startPos]);
+
+  Future<void> setEffectPosition(int soundId, int pos);
+
+  Future<int> getEffectDuration(String filePath);
+
+  Future<int> getEffectCurrentPosition(int soundId);
 
   /// Stops playing a specified audio effect.
   ///
@@ -2617,7 +2669,7 @@ mixin RtcAudioRecorderInterface {
   ///
   /// **Parameter** [quality] The audio recording quality. See [AudioRecordingQuality].
   Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, AudioRecordingQuality quality);
+      AudioSampleRateType sampleRate, AudioRecordingQuality quality, [AudioRecordingPosition recordingPosition]);
 
   /// Stops the audio recording on the client.
   ///

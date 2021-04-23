@@ -148,6 +148,19 @@ class AudioRecordingQualityConverter
 }
 
 @JsonSerializable()
+class AudioRecordingPositionConverter
+    extends EnumConverter<AudioRecordingPosition, int> {
+  AudioRecordingPositionConverter(AudioRecordingPosition e) : super(e);
+
+  AudioRecordingPositionConverter.fromValue(int value)
+      : super.fromValue(_$AudioRecordingPositionEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioRecordingPositionEnumMap);
+  }
+}
+
+@JsonSerializable()
 class AudioRemoteStateConverter extends EnumConverter<AudioRemoteState, int> {
   AudioRemoteStateConverter(AudioRemoteState e) : super(e);
 
