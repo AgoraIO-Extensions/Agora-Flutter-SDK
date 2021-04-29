@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -31,7 +33,7 @@ class RtcEngine with RtcEngineInterface {
     return _methodChannel.invokeMethod(method, arguments);
   }
 
-  ///  Retrieves the SDK version.
+  /// Retrieves the SDK version.
   ///
   /// Since v3.3.1
   ///
@@ -137,7 +139,14 @@ class RtcEngine with RtcEngineInterface {
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
     if (_engine != null) return _engine!;
-    await _invokeMethod('create', {'config': config.toJson(), 'appType': 4});
+    if (Platform.isWindows) {
+      await _invokeMethod('callApi', {
+        'apiType': 0,
+        'params': jsonEncode({'context': config.toJson()})
+      });
+    } else {
+      await _invokeMethod('create', {'config': config.toJson(), 'appType': 4});
+    }
     _engine = RtcEngine._();
     return _engine!;
   }
@@ -147,6 +156,9 @@ class RtcEngine with RtcEngineInterface {
     RtcChannel.destroyAll();
     _engine?._handler = null;
     _engine = null;
+    if (Platform.isWindows) {
+      return _invokeMethod('callApi', {'apiType': 1, 'params': jsonEncode({})});
+    }
     return _invokeMethod('destroy');
   }
 
@@ -167,12 +179,28 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setChannelProfile(ChannelProfile profile) {
+    if (Platform.isWindows) {
+      return _invokeMethod('callApi', {
+        'apiType': 2,
+        'params':
+            jsonEncode({'profile': ChannelProfileConverter(profile).value()})
+      });
+    }
     return _invokeMethod('setChannelProfile',
         {'profile': ChannelProfileConverter(profile).value()});
   }
 
   @override
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
+    if (Platform.isWindows) {
+      return _invokeMethod('callApi', {
+        'apiType': 3,
+        'params': jsonEncode({
+          'role': ClientRoleConverter(role).value(),
+          'options': options?.toJson()
+        })
+      });
+    }
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
       'options': options?.toJson()
@@ -183,6 +211,18 @@ class RtcEngine with RtcEngineInterface {
   Future<void> joinChannel(
       String? token, String channelName, String? optionalInfo, int optionalUid,
       [ChannelMediaOptions? options]) {
+    if (Platform.isWindows) {
+      return _invokeMethod('callApi', {
+        'apiType': 4,
+        'params': jsonEncode({
+          'token': token,
+          'channelId': channelName,
+          'info': optionalInfo,
+          'uid': optionalUid,
+          'options': options?.toJson()
+        })
+      });
+    }
     return _invokeMethod('joinChannel', {
       'token': token,
       'channelName': channelName,
@@ -204,6 +244,9 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> leaveChannel() {
+    if (Platform.isWindows) {
+      return _invokeMethod('callApi', {'apiType': 6, 'params': jsonEncode({})});
+    }
     return _invokeMethod('leaveChannel');
   }
 
@@ -380,6 +423,10 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableVideo() {
+    if (Platform.isWindows) {
+      return _invokeMethod(
+          'callApi', {'apiType': 15, 'params': jsonEncode({})});
+    }
     return _invokeMethod('enableVideo');
   }
 
@@ -419,6 +466,10 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startPreview() {
+    if (Platform.isWindows) {
+      return _invokeMethod(
+          'callApi', {'apiType': 22, 'params': jsonEncode({})});
+    }
     return _invokeMethod('startPreview');
   }
 
@@ -882,6 +933,10 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> switchCamera() {
+    if (Platform.isWindows) {
+      return _invokeMethod(
+          'callApi', {'apiType': 103, 'params': jsonEncode({})});
+    }
     return _invokeMethod('switchCamera');
   }
 
