@@ -32,7 +32,7 @@ class MediaObserver(
 
   override fun onMetadataReceived(buffer: ByteArray, uid: Int, timeStampMs: Long) {
     emit(hashMapOf(
-      "data" to arrayListOf(String(buffer), uid, timeStampMs)
+      "data" to arrayListOf(String(buffer), uid.toJSUInt(), timeStampMs)
     ))
   }
 }

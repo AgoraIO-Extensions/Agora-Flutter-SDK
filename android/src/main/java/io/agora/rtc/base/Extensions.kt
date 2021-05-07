@@ -6,7 +6,7 @@ import io.agora.rtc.models.UserInfo
 
 fun UserInfo.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toJSUInt(),
     "userAccount" to userAccount
   )
 }
@@ -59,7 +59,7 @@ fun Rect.toMap(): Map<String, Any?> {
 
 fun RemoteAudioStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toJSUInt(),
     "quality" to quality,
     "networkTransportDelay" to networkTransportDelay,
     "jitterBufferDelay" to jitterBufferDelay,
@@ -99,7 +99,7 @@ fun LocalVideoStats.toMap(): Map<String, Any?> {
 
 fun RemoteVideoStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toJSUInt(),
     "delay" to delay,
     "width" to width,
     "height" to height,
@@ -117,7 +117,7 @@ fun RemoteVideoStats.toMap(): Map<String, Any?> {
 
 fun AudioVolumeInfo.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toJSUInt(),
     "volume" to volume,
     "vad" to vad,
     "channelId" to channelId
@@ -157,4 +157,13 @@ fun AgoraFacePositionInfo.toMap(): Map<String, Any?> {
 
 fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
   return List(size) { this[it].toMap() }
+}
+
+@ExperimentalUnsignedTypes
+fun Any.toSDKUInt(): Int? {
+  return (this as? Number)?.toLong()?.toUInt()?.toInt()
+}
+
+fun Int.toJSUInt(): Long {
+  return this.toUInt().toLong();
 }
