@@ -55,7 +55,7 @@ fun mapToAgoraImage(map: Map<*, *>): AgoraImage {
 
 fun mapToTranscodingUser(map: Map<*, *>): TranscodingUser {
   return TranscodingUser().apply {
-    (map["uid"] as? Number)?.let { uid = it.toInt() }
+    map["uid"]?.toSDKUInt()?.let { uid = it }
     (map["x"] as? Number)?.let { x = it.toInt() }
     (map["y"] as? Number)?.let { y = it.toInt() }
     (map["width"] as? Number)?.let { width = it.toInt() }
@@ -105,7 +105,7 @@ fun mapToChannelMediaInfo(map: Map<*, *>): ChannelMediaInfo {
   return ChannelMediaInfo(
     map["channelName"] as? String,
     map["token"] as? String,
-    (map["uid"] as Number).toInt()
+    map["uid"]?.toSDKUInt()!!
   )
 }
 

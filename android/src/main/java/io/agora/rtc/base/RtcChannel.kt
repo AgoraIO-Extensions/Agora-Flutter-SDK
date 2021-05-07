@@ -159,7 +159,7 @@ class RtcChannelManager(
   }
 
   override fun joinChannel(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.joinChannel(params["token"] as? String, params["optionalInfo"] as? String, (params["optionalUid"] as Number).toInt(), mapToChannelMediaOptions(params["options"] as Map<*, *>)))
+    callback.code(this[params["channelId"] as String]?.joinChannel(params["token"] as? String, params["optionalInfo"] as? String, params["optionalUid"]?.toSDKUInt()!!, mapToChannelMediaOptions(params["options"] as Map<*, *>)))
   }
 
   override fun joinChannelWithUserAccount(params: Map<String, *>, callback: Callback) {
@@ -191,11 +191,11 @@ class RtcChannelManager(
   }
 
   override fun adjustUserPlaybackSignalVolume(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.adjustUserPlaybackSignalVolume((params["uid"] as Number).toInt(), (params["volume"] as Number).toInt()))
+    callback.code(this[params["channelId"] as String]?.adjustUserPlaybackSignalVolume(params["uid"]?.toSDKUInt()!!, (params["volume"] as Number).toInt()))
   }
 
   override fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.muteRemoteAudioStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+    callback.code(this[params["channelId"] as String]?.muteRemoteAudioStream(params["uid"]?.toSDKUInt()!!, params["muted"] as Boolean))
   }
 
   override fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback) {
@@ -207,7 +207,7 @@ class RtcChannelManager(
   }
 
   override fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.muteRemoteVideoStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+    callback.code(this[params["channelId"] as String]?.muteRemoteVideoStream(params["uid"]?.toSDKUInt()!!, params["muted"] as Boolean))
   }
 
   override fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback) {
@@ -219,11 +219,11 @@ class RtcChannelManager(
   }
 
   override fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.enableRemoteSuperResolution((params["uid"] as Number).toInt(), params["enable"] as Boolean))
+    callback.code(this[params["channelId"] as String]?.enableRemoteSuperResolution(params["uid"]?.toSDKUInt()!!, params["enable"] as Boolean))
   }
 
   override fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.setRemoteVoicePosition((params["uid"] as Number).toInt(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
+    callback.code(this[params["channelId"] as String]?.setRemoteVoicePosition(params["uid"]?.toSDKUInt()!!, (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
   }
 
   override fun setLiveTranscoding(params: Map<String, *>, callback: Callback) {
@@ -251,7 +251,7 @@ class RtcChannelManager(
   }
 
   override fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.setRemoteVideoStreamType((params["uid"] as Number).toInt(), (params["streamType"] as Number).toInt()))
+    callback.code(this[params["channelId"] as String]?.setRemoteVideoStreamType(params["uid"]?.toSDKUInt()!!, (params["streamType"] as Number).toInt()))
   }
 
   override fun setRemoteDefaultVideoStreamType(params: Map<String, *>, callback: Callback) {
@@ -259,7 +259,7 @@ class RtcChannelManager(
   }
 
   override fun setRemoteUserPriority(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.setRemoteUserPriority((params["uid"] as Number).toInt(), (params["userPriority"] as Number).toInt()))
+    callback.code(this[params["channelId"] as String]?.setRemoteUserPriority(params["uid"]?.toSDKUInt()!!, (params["userPriority"] as Number).toInt()))
   }
 
   override fun registerMediaMetadataObserver(params: Map<String, *>, callback: Callback) {
