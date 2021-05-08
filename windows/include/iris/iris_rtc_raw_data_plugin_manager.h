@@ -2,23 +2,23 @@
 // Created by LXH on 2021/4/21.
 //
 
-#ifndef IRIS_INCLUDE_IRIS_IRIS_RAW_DATA_PLUGIN_H_
-#define IRIS_INCLUDE_IRIS_IRIS_RAW_DATA_PLUGIN_H_
+#ifndef IRIS_RTC_RAW_DATA_PLUGIN_MANAGER_H_
+#define IRIS_RTC_RAW_DATA_PLUGIN_MANAGER_H_
 
-#include "iris/IAVFramePlugin.h"
-#include "iris/iris_raw_data.h"
+#include "iris_rtc_raw_data.h"
+#include "iris_rtc_raw_data_plugin.h"
 
 namespace agora {
 namespace iris {
+namespace rtc {
 const int kMaxPluginIdLength = 512;
 
-class IRIS_CPP_API IrisRawDataPlugin : public IrisAudioFrameObserver,
-                                       public IrisVideoFrameObserver {
+class IRIS_CPP_API IrisRtcRawDataPlugin : public IrisRtcAudioFrameObserver,
+                                          public IrisRtcVideoFrameObserver {
  public:
-  explicit IrisRawDataPlugin(const char plugin_id[kMaxPluginIdLength],
-                             const char *plugin_path);
-
-  virtual ~IrisRawDataPlugin();
+  explicit IrisRtcRawDataPlugin(const char plugin_id[kMaxPluginIdLength],
+                                const char *plugin_path);
+  virtual ~IrisRtcRawDataPlugin();
 
   const char *plugin_id();
 
@@ -43,10 +43,10 @@ class IRIS_CPP_API IrisRawDataPlugin : public IrisAudioFrameObserver,
 
  private:
   static void CopyAudioFrame(AudioPluginFrame &dest,
-                             const IrisAudioFrameObserver::AudioFrame &src);
+                             const IrisRtcAudioFrameObserver::AudioFrame &src);
 
   static void CopyVideoFrame(VideoPluginFrame &dest,
-                             const IrisVideoFrameObserver::VideoFrame &src);
+                             const IrisRtcVideoFrameObserver::VideoFrame &src);
 
  private:
   char plugin_id_[kMaxPluginIdLength];
@@ -55,20 +55,20 @@ class IRIS_CPP_API IrisRawDataPlugin : public IrisAudioFrameObserver,
   bool enabled_;
 };
 
-class IRIS_CPP_API IrisRawDataPluginManager {
+class IRIS_CPP_API IrisRtcRawDataPluginManager {
  public:
-  explicit IrisRawDataPluginManager(IrisRawData *iris_raw_data);
-
-  virtual ~IrisRawDataPluginManager();
+  explicit IrisRtcRawDataPluginManager(IrisRtcRawData *raw_data);
+  virtual ~IrisRtcRawDataPluginManager();
 
   int CallApi(ApiTypeRawDataPlugin api_type, const char *params,
               char result[kMaxResultLength]);
 
  private:
-  class IrisRawDataPluginManagerImpl;
-  IrisRawDataPluginManagerImpl *iris_raw_data_plugin_manager_;
+  class IrisRtcRawDataPluginManagerImpl;
+  IrisRtcRawDataPluginManagerImpl *plugin_manager_;
 };
+}// namespace rtc
 }// namespace iris
 }// namespace agora
 
-#endif//IRIS_INCLUDE_IRIS_IRIS_RAW_DATA_PLUGIN_H_
+#endif//IRIS_RTC_RAW_DATA_PLUGIN_MANAGER_H_

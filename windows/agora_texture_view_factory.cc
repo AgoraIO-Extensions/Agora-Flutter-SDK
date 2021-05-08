@@ -2,17 +2,17 @@
 
 #include <functional>
 
-#include "include/iris/iris_raw_data.h"
+#include "include/iris/iris_rtc_raw_data.h"
 
 using namespace flutter;
-using namespace agora::iris;
+using namespace agora::iris::rtc;
 
 TextureRenderer::TextureRenderer(AgoraTextureViewFactory *factory)
     : factory_(factory),
       texture_(PixelBufferTexture(std::bind(&TextureRenderer::CopyPixelBuffer,
                                             this, std::placeholders::_1,
                                             std::placeholders::_2))),
-      uid_(0), pixel_buffer_(nullptr) {
+      uid_(0), pixel_buffer_(new FlutterDesktopPixelBuffer{nullptr, 0, 0}) {
   texture_id_ = factory_->registrar()->RegisterTexture(&texture_);
   auto channel = std::make_unique<MethodChannel<EncodableValue>>(
       factory_->messenger(),
@@ -48,7 +48,8 @@ void TextureRenderer::HandleMethodCall(
     auto arguments = std::get<flutter::EncodableMap>(*method_call.arguments());
     auto data = std::get<flutter::EncodableMap>(
         arguments[flutter::EncodableValue("data")]);
-    auto uid = (unsigned int)std::get<int32_t>(data[flutter::EncodableValue("uid")]);
+    auto uid =
+        (unsigned int)std::get<int32_t>(data[flutter::EncodableValue("uid")]);
     auto channel_id =
         std::get_if<std::string>(&data[flutter::EncodableValue("channelId")]);
     if (uid_ != uid) {
@@ -57,12 +58,11 @@ void TextureRenderer::HandleMethodCall(
     uid_ = uid;
     if (channel_id) {
       channel_id_ = channel_id->c_str();
-    }
-    else {
+    } else {
       channel_id_ = "";
     }
-    IrisRendererCacheConfig config(IrisVideoFrameObserver::kFrameTypeRGBA,
-                                   this);
+    IrisRtcRendererCacheConfig config(IrisRtcVideoFrameObserver::kFrameTypeRGBA,
+                                      this);
     factory_->renderer()->EnableVideoFrameCache(config, uid_,
                                                 channel_id_.c_str());
     result->Success();
@@ -73,18 +73,17 @@ void TextureRenderer::HandleMethodCall(
 }
 
 void TextureRenderer::OnVideoFrameReceived(
-    const IrisVideoFrameObserver::VideoFrame &video_frame, bool resize) {
-  if (pixel_buffer_) {
+    const IrisRtcVideoFrameObserver::VideoFrame &video_frame, bool resize) {
+  std::lock_guard<std::mutex> lock_guard(mutex_);
+  if (pixel_buffer_->width != video_frame.width ||
+      pixel_buffer_->height != video_frame.height) {
     if (pixel_buffer_->buffer) {
       delete[] pixel_buffer_->buffer;
     }
-    delete pixel_buffer_;
-    pixel_buffer_ = nullptr;
+    pixel_buffer_->buffer = new uint8_t[video_frame.y_buffer_length];
   }
-  pixel_buffer_ = new FlutterDesktopPixelBuffer;
-  auto buffer = new uint8_t[video_frame.y_buffer_length];
-  memcpy(buffer, video_frame.y_buffer, video_frame.y_buffer_length);
-  pixel_buffer_->buffer = buffer;
+  memcpy((void *)pixel_buffer_->buffer, video_frame.y_buffer,
+         video_frame.y_buffer_length);
   pixel_buffer_->width = video_frame.width;
   pixel_buffer_->height = video_frame.height;
   factory_->registrar()->MarkTextureFrameAvailable(texture_id_);
@@ -92,11 +91,12 @@ void TextureRenderer::OnVideoFrameReceived(
 
 const FlutterDesktopPixelBuffer *
 TextureRenderer::CopyPixelBuffer(size_t width, size_t height) {
+  std::lock_guard<std::mutex> lock_guard(mutex_);
   return pixel_buffer_;
 }
 
 AgoraTextureViewFactory::AgoraTextureViewFactory(PluginRegistrar *registrar,
-                                                 IrisRenderer *iris_renderer)
+                                                 IrisRtcRenderer *iris_renderer)
     : messenger_(registrar->messenger()),
       registrar_(registrar->texture_registrar()), renderer_(iris_renderer) {}
 
@@ -106,12 +106,12 @@ BinaryMessenger *AgoraTextureViewFactory::messenger() { return messenger_; }
 
 TextureRegistrar *AgoraTextureViewFactory::registrar() { return registrar_; }
 
-IrisRenderer *AgoraTextureViewFactory::renderer() { return renderer_; }
+IrisRtcRenderer *AgoraTextureViewFactory::renderer() { return renderer_; }
 
 int64_t AgoraTextureViewFactory::CreateTextureRenderer() {
   std::unique_ptr<TextureRenderer> texture(new TextureRenderer(this));
-  IrisRendererCacheConfig config(IrisVideoFrameObserver::kFrameTypeRGBA,
-                                 texture.get());
+  IrisRtcRendererCacheConfig config(IrisRtcVideoFrameObserver::kFrameTypeRGBA,
+                                    texture.get());
   renderer_->EnableVideoFrameCache(config, 0);
   int64_t texture_id = texture->texture_id();
   renderers_[texture_id] = std::move(texture);

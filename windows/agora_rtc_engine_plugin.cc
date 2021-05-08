@@ -16,11 +16,11 @@
 #include <sstream>
 
 #include "include/agora_rtc_engine/agora_texture_view_factory.h"
-#include "include/iris/iris_engine.h"
-#include "include/iris/iris_renderer.h"
+#include "include/iris/iris_rtc_engine.h"
+#include "include/iris/iris_rtc_renderer.h"
 
 namespace {
-using namespace agora::iris;
+using namespace agora::iris::rtc;
 
 class AgoraRtcEnginePlugin : public flutter::Plugin {
 public:
@@ -37,7 +37,7 @@ private:
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 
 private:
-  std::unique_ptr<IrisEngine> engine_;
+  std::unique_ptr<IrisRtcEngine> engine_;
   std::unique_ptr<AgoraTextureViewFactory> factory_;
 };
 
@@ -60,9 +60,9 @@ void AgoraRtcEnginePlugin::RegisterWithRegistrar(
 }
 
 AgoraRtcEnginePlugin::AgoraRtcEnginePlugin(flutter::PluginRegistrar *registrar)
-    : engine_(new IrisEngine),
-      factory_(new AgoraTextureViewFactory(
-          registrar, engine_->iris_raw_data()->iris_renderer())) {}
+    : engine_(new IrisRtcEngine),
+      factory_(new AgoraTextureViewFactory(registrar,
+                                           engine_->raw_data()->renderer())) {}
 
 AgoraRtcEnginePlugin::~AgoraRtcEnginePlugin() {}
 

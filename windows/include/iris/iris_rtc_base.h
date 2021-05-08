@@ -2,8 +2,8 @@
 // Created by LXH on 2021/1/14.
 //
 
-#ifndef IRIS_IRIS_BASE_H
-#define IRIS_IRIS_BASE_H
+#ifndef IRIS_RTC_BASE_H_
+#define IRIS_RTC_BASE_H_
 
 #if defined(_WIN32)
 #define IRIS_CALL __cdecl
@@ -306,17 +306,4 @@ enum ApiTypeRawDataPlugin {
 }
 #endif
 
-namespace agora {
-namespace iris {
-class IRIS_CPP_API IrisProxy {
- public:
-  virtual int CallApi(unsigned int api_type, const char *params,
-                      char *result) = 0;
-
-  virtual int CallApi(unsigned int api_type, const char *params, void *buffer,
-                      char *result) = 0;
-};
-}// namespace iris
-}// namespace agora
-
-#endif// IRIS_IRIS_BASE_H
+#endif// IRIS_RTC_BASE_H_

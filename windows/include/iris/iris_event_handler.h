@@ -2,8 +2,8 @@
 // Created by LXH on 2021/1/14.
 //
 
-#ifndef IRIS_IRIS_EVENT_HANDLER_H
-#define IRIS_IRIS_EVENT_HANDLER_H
+#ifndef IRIS_RTC_EVENT_HANDLER_H_
+#define IRIS_RTC_EVENT_HANDLER_H_
 
 namespace agora {
 namespace iris {
@@ -20,4 +20,4 @@ class IrisEventHandler {
 }// namespace iris
 }// namespace agora
 
-#endif// IRIS_IRIS_EVENT_HANDLER_H
+#endif// IRIS_RTC_EVENT_HANDLER_H_

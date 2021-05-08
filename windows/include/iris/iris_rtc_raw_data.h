@@ -2,19 +2,24 @@
 // Created by LXH on 2021/3/1.
 //
 
-#ifndef IRIS_INCLUDE_IRIS_IRIS_RAW_DATA_H_
-#define IRIS_INCLUDE_IRIS_IRIS_RAW_DATA_H_
+#ifndef IRIS_RTC_RAW_DATA_H_
+#define IRIS_RTC_RAW_DATA_H_
 
-#include "iris_base.h"
 #include "iris_event_handler.h"
+#include "iris_rtc_base.h"
 #include <cstdint>
 
 namespace agora {
-namespace iris {
-class IrisRawDataPluginManager;
-class IrisRenderer;
+namespace rtc {
+class IRtcEngine;
+}
 
-class IrisAudioFrameObserver {
+namespace iris {
+namespace rtc {
+class IrisRtcRawDataPluginManager;
+class IrisRtcRenderer;
+
+class IrisRtcAudioFrameObserver {
  public:
   enum AudioFrameType {
     kFrameTypePCM16,
@@ -56,7 +61,7 @@ class IrisAudioFrameObserver {
   };
 };
 
-class IrisVideoFrameObserver {
+class IrisRtcVideoFrameObserver {
  public:
   enum VideoFrameType {
     kFrameTypeYUV420,
@@ -125,38 +130,36 @@ class IrisVideoFrameObserver {
   };
 };
 
-class IRIS_CPP_API IrisRawData {
+class IRIS_CPP_API IrisRtcRawData {
  public:
-  explicit IrisRawData(void *rtc_engine);
-
-  virtual ~IrisRawData();
+  explicit IrisRtcRawData(agora::rtc::IRtcEngine *rtc_engine);
+  virtual ~IrisRtcRawData();
 
   void Initialize();
 
   void Release();
 
-  void
-  RegisterAudioFrameObserver(IrisAudioFrameObserver *iris_audio_frame_observer,
-                             int order, const char *identifier);
+  void RegisterAudioFrameObserver(IrisRtcAudioFrameObserver *observer,
+                                  int order, const char *identifier);
 
   void UnRegisterAudioFrameObserver(const char *identifier);
 
-  void
-  RegisterVideoFrameObserver(IrisVideoFrameObserver *iris_video_frame_observer,
-                             int order, const char *identifier);
+  void RegisterVideoFrameObserver(IrisRtcVideoFrameObserver *observer,
+                                  int order, const char *identifier);
 
   void UnRegisterVideoFrameObserver(const char *identifier);
 
-  IrisRawDataPluginManager *iris_raw_data_plugin_manager();
+  IrisRtcRawDataPluginManager *plugin_manager();
 
-  IrisRenderer *iris_renderer();
+  IrisRtcRenderer *renderer();
 
  private:
-  class IrisRawDataImpl;
-  IrisRawDataImpl *iris_raw_data_;
-  IrisRawDataPluginManager *iris_raw_data_plugin_manager_;
+  class IrisRtcRawDataImpl;
+  IrisRtcRawDataImpl *raw_data_;
+  IrisRtcRawDataPluginManager *plugin_manager_;
 };
+}// namespace rtc
 }// namespace iris
 }// namespace agora
 
-#endif//IRIS_INCLUDE_IRIS_IRIS_RAW_DATA_H_
+#endif//IRIS_RTC_RAW_DATA_H_
