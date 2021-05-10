@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../rtc_engine.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'rtc_channel.dart';
