@@ -346,8 +346,7 @@ class RtcEngine with RtcEngineInterface {
     _subscription ??= _stream.listen((event) {
       final eventMap = Map<dynamic, dynamic>.from(event);
       final methodName = eventMap['methodName'] as String;
-      final data = List<dynamic>.from(eventMap['data']);
-      _engine?._handler?.process(methodName, data);
+      _engine?._handler?.process(methodName, eventMap['data']);
     });
   }
 
