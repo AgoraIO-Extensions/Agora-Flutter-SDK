@@ -1102,10 +1102,10 @@ class RtcEngineEventHandler {
 
   // ignore: public_member_api_docs
   void process(String methodName, dynamic data) {
-    var newData;
+    List<dynamic> newData;
     if (Platform.isWindows) {
       methodName = methodName.substring(2);
-      newData = Map<String, dynamic>.from(jsonDecode(data as String));
+      newData = List<dynamic>.from(Map<String, dynamic>.from(jsonDecode(data as String)).values);
     } else {
       newData = List<dynamic>.from(data);
     }

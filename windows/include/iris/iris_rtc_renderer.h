@@ -37,6 +37,8 @@ class IRIS_CPP_API IrisRtcRenderer {
   IrisRtcRenderer();
   virtual ~IrisRtcRenderer();
 
+  void SetEventHandler(IrisEventHandler *event_handler);
+
   /**
    * Enable cache the video frame from user.
    * @param cache_config The cache config.

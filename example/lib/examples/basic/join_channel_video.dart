@@ -66,17 +66,17 @@ class _State extends State<JoinChannelVideo> {
       },
       userJoined: (uid, elapsed) {
         log('userJoined  ${uid} ${elapsed}');
-        // setState(() {
-        //   remoteUid.add(uid);
-        // });
+        setState(() {
+          remoteUid.add(uid);
+        });
       },
       remoteVideoStateChanged: (uid, state, reason, elapsed) {
         log('remoteVideoStateChanged ${uid} ${state} ${reason} ${elapsed}');
-        if (state == VideoRemoteState.Decoding) {
-          setState(() {
-            remoteUid.add(uid);
-          });
-        }
+        // if (state == VideoRemoteState.Decoding) {
+        //   setState(() {
+        //     remoteUid.add(uid);
+        //   });
+        // }
       },
       userOffline: (uid, reason) {
         log('userOffline  ${uid} ${reason}');
@@ -173,7 +173,7 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          if (startPreview) RtcLocalView.SurfaceView(),
+          if (startPreview) RtcLocalView.TextureView(),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(
@@ -185,8 +185,9 @@ class _State extends State<JoinChannelVideo> {
                     child: Container(
                       width: 120,
                       height: 120,
-                      child: RtcRemoteView.SurfaceView(
+                      child: RtcRemoteView.TextureView(
                         uid: e,
+                        channelId: channelId,
                       ),
                     ),
                   ),

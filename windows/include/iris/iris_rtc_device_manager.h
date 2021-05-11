@@ -18,8 +18,12 @@ class IrisProxy;
 namespace rtc {
 class IRIS_CPP_API IrisRtcDeviceManager {
  public:
-  explicit IrisRtcDeviceManager(agora::rtc::IRtcEngine *engine);
+  IrisRtcDeviceManager();
   virtual ~IrisRtcDeviceManager();
+
+  void Initialize(agora::rtc::IRtcEngine *engine);
+
+  void Release();
 
   void SetProxy(IrisProxy *proxy);
 

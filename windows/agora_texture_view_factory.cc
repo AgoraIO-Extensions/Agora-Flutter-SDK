@@ -24,6 +24,7 @@ TextureRenderer::TextureRenderer(AgoraTextureViewFactory *factory)
 }
 
 TextureRenderer::~TextureRenderer() {
+  factory_->renderer()->DisableVideoFrameCache(this);
   factory_->registrar()->UnregisterTexture(texture_id_);
   if (pixel_buffer_) {
     if (pixel_buffer_->buffer) {
@@ -48,8 +49,16 @@ void TextureRenderer::HandleMethodCall(
     auto arguments = std::get<flutter::EncodableMap>(*method_call.arguments());
     auto data = std::get<flutter::EncodableMap>(
         arguments[flutter::EncodableValue("data")]);
-    auto uid =
-        (unsigned int)std::get<int32_t>(data[flutter::EncodableValue("uid")]);
+    unsigned int uid = 0;
+    auto uid_int32 =
+        std::get_if<int32_t>(&data[flutter::EncodableValue("uid")]);
+    if (!uid_int32) {
+      auto uid_int64 =
+          std::get_if<int64_t>(&data[flutter::EncodableValue("uid")]);
+      uid = (unsigned int)*uid_int64;
+    } else {
+      uid = (unsigned int)*uid_int32;
+    }
     auto channel_id =
         std::get_if<std::string>(&data[flutter::EncodableValue("channelId")]);
     if (uid_ != uid) {
@@ -110,9 +119,6 @@ IrisRtcRenderer *AgoraTextureViewFactory::renderer() { return renderer_; }
 
 int64_t AgoraTextureViewFactory::CreateTextureRenderer() {
   std::unique_ptr<TextureRenderer> texture(new TextureRenderer(this));
-  IrisRtcRendererCacheConfig config(IrisRtcVideoFrameObserver::kFrameTypeRGBA,
-                                    texture.get());
-  renderer_->EnableVideoFrameCache(config, 0);
   int64_t texture_id = texture->texture_id();
   renderers_[texture_id] = std::move(texture);
   return texture_id;

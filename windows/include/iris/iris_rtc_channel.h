@@ -19,10 +19,19 @@ class IrisProxy;
 namespace rtc {
 class IRIS_CPP_API IrisRtcChannel {
  public:
-  explicit IrisRtcChannel(agora::rtc::IRtcEngine *engine);
+  IrisRtcChannel();
   virtual ~IrisRtcChannel();
 
+  void Initialize(agora::rtc::IRtcEngine *engine);
+
+  void Release();
+
   void SetEventHandler(IrisEventHandler *event_handler);
+
+  void RegisterEventHandler(const char *channel_id,
+                            IrisEventHandler *event_handler);
+
+  void UnRegisterEventHandler(const char *channel_id);
 
   void SetProxy(IrisProxy *proxy);
 

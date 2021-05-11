@@ -29,6 +29,11 @@ class IrisRtcAudioFrameObserver {
    public:
     AudioFrame();
     virtual ~AudioFrame();
+    AudioFrame &operator=(const AudioFrame &rhs);
+
+    void ResizeBuffer();
+
+    void ClearBuffer();
 
    public:
     AudioFrameType type;
@@ -79,6 +84,7 @@ class IrisRtcVideoFrameObserver {
    public:
     VideoFrame();
     virtual ~VideoFrame();
+    VideoFrame &operator=(const VideoFrame &rhs);
 
     void ResizeBuffer();
 
@@ -132,10 +138,10 @@ class IrisRtcVideoFrameObserver {
 
 class IRIS_CPP_API IrisRtcRawData {
  public:
-  explicit IrisRtcRawData(agora::rtc::IRtcEngine *rtc_engine);
+  IrisRtcRawData();
   virtual ~IrisRtcRawData();
 
-  void Initialize();
+  void Initialize(agora::rtc::IRtcEngine *rtc_engine);
 
   void Release();
 
