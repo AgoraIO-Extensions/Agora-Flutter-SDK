@@ -238,10 +238,6 @@ class RtcEngine with RtcEngineInterface {
 
   /// Creates an [RtcEngine] instance.
   ///
-  /// **Deprecated**
-  ///
-  /// This method is deprecated since v3.3.1.
-  ///
   /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
@@ -255,7 +251,6 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  @deprecated
   static Future<RtcEngine> create(String appId) {
     return createWithConfig(RtcEngineConfig(appId));
   }
@@ -288,8 +283,7 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   @deprecated
-  static Future<RtcEngine> createWithAreaCode(
-      String appId, AreaCode areaCode) async {
+  static Future<RtcEngine> createWithAreaCode(String appId, AreaCode areaCode) {
     return createWithConfig(RtcEngineConfig(appId, areaCode: areaCode));
   }
 
@@ -3674,8 +3668,6 @@ mixin RtcEncryptionInterface {
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
   /// Enables/Disables the built-in encryption.
-  ///
-  ///
   ///
   /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
   ///

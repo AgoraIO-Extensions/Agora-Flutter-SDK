@@ -1987,8 +1987,6 @@ enum VideoCodecType {
 }
 
 /// The publishing state.
-///
-///
 enum StreamPublishState {
   /// The initial publishing state after joining the channel.
   @JsonValue(0)

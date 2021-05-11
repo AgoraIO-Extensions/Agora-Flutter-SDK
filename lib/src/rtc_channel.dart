@@ -1122,8 +1122,6 @@ mixin RtcEncryptionInterface {
 
   /// Enables/Disables the built-in encryption.
   ///
-  ///
-  ///
   /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
   ///
   /// All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.

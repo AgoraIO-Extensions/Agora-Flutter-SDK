@@ -1,3 +1,10 @@
+# [4.0.0-rc.3](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-03-22)
+
+
+### Bug Fixes
+
+* iOS selector error ([2d1ac8f](https://github.com/AgoraIO/Flutter-SDK/commit/2d1ac8f1b902f71c06b0b1729579adf396b58c9b))
+
 # [4.0.0-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2021-03-11)
 
 
@@ -24,6 +31,13 @@
 
 ### Features
 * upgrade to dart 2.12.0 and migrating to null safety [#264](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/264) [#265](https://github.com/AgoraIO/Agora-Flutter-SDK/pull/265) ([b555e37b](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/b555e37b1d3ee7045d02341e2172cdefe2359b7b))
+
+## [3.3.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1...v3.3.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* iOS selector error ([2d1ac8f](https://github.com/AgoraIO/Flutter-SDK/commit/2d1ac8f1b902f71c06b0b1729579adf396b58c9b))
 
 ## [3.3.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.2...v3.3.1) (2021-03-12)
 
