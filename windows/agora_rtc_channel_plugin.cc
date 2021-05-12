@@ -1,4 +1,4 @@
-#include "include/agora_rtc_engine/agora_rtc_engine_plugin.h"
+#include "include/agora_rtc_engine/agora_rtc_channel_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -8,30 +8,20 @@
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
 #include <flutter/standard_method_codec.h>
-#include <flutter/texture_registrar.h>
-
-#include <map>
-#include <memory>
-#include <sstream>
-#include <vector>
-
-#include "include/agora_rtc_engine/agora_rtc_channel_plugin.h"
-#include "include/agora_rtc_engine/agora_texture_view_factory.h"
-#include "include/iris/iris_rtc_engine.h"
-#include "include/iris/iris_rtc_renderer.h"
 
 namespace {
 using namespace flutter;
 using namespace agora::iris;
 using namespace agora::iris::rtc;
 
-class AgoraRtcEnginePlugin : public Plugin, public IrisEventHandler {
+class AgoraRtcChannelPlugin : public Plugin, public IrisEventHandler {
 public:
-  static void RegisterWithRegistrar(PluginRegistrarWindows *registrar);
+  static void RegisterWithRegistrar(PluginRegistrarWindows *registrar,
+                                    IrisRtcEngine *engine);
 
-  AgoraRtcEnginePlugin(PluginRegistrar *registrar);
+  AgoraRtcChannelPlugin(PluginRegistrar *registrar, IrisRtcEngine *engine);
 
-  virtual ~AgoraRtcEnginePlugin();
+  virtual ~AgoraRtcChannelPlugin();
 
 public:
   virtual void OnEvent(const char *event, const char *data) override;
@@ -46,21 +36,20 @@ private:
 
 private:
   std::unique_ptr<EventSink<EncodableValue>> event_sink_;
-  std::unique_ptr<IrisRtcEngine> engine_;
-  std::unique_ptr<AgoraTextureViewFactory> factory_;
+  IrisRtcEngine *engine_;
 };
 
 // static
-void AgoraRtcEnginePlugin::RegisterWithRegistrar(
-    PluginRegistrarWindows *registrar) {
+void AgoraRtcChannelPlugin::RegisterWithRegistrar(
+    PluginRegistrarWindows *registrar, IrisRtcEngine *engine) {
   auto method_channel = std::make_unique<MethodChannel<EncodableValue>>(
-      registrar->messenger(), "agora_rtc_engine",
+      registrar->messenger(), "agora_rtc_channel",
       &StandardMethodCodec::GetInstance());
   auto event_channel = std::make_unique<EventChannel<EncodableValue>>(
-      registrar->messenger(), "agora_rtc_engine/events",
+      registrar->messenger(), "agora_rtc_channel/events",
       &StandardMethodCodec::GetInstance());
 
-  auto plugin = std::make_unique<AgoraRtcEnginePlugin>(registrar);
+  auto plugin = std::make_unique<AgoraRtcChannelPlugin>(registrar, engine);
 
   method_channel->SetMethodCallHandler(
       [plugin_pointer = plugin.get()](const auto &call, auto result) {
@@ -82,21 +71,18 @@ void AgoraRtcEnginePlugin::RegisterWithRegistrar(
       });
   event_channel->SetStreamHandler(std::move(handler));
 
-  AgoraRtcChannelPluginRegisterWithRegistrar(registrar, plugin->engine_.get());
-
   registrar->AddPlugin(std::move(plugin));
 }
 
-AgoraRtcEnginePlugin::AgoraRtcEnginePlugin(PluginRegistrar *registrar)
-    : engine_(new IrisRtcEngine),
-      factory_(new AgoraTextureViewFactory(registrar,
-                                           engine_->raw_data()->renderer())) {
-  engine_->SetEventHandler(this);
+AgoraRtcChannelPlugin::AgoraRtcChannelPlugin(PluginRegistrar *registrar,
+                                             IrisRtcEngine *engine)
+    : engine_(engine) {
+  engine_->channel()->SetEventHandler(this);
 }
 
-AgoraRtcEnginePlugin::~AgoraRtcEnginePlugin() {}
+AgoraRtcChannelPlugin::~AgoraRtcChannelPlugin() {}
 
-void AgoraRtcEnginePlugin::HandleMethodCall(
+void AgoraRtcChannelPlugin::HandleMethodCall(
     const MethodCall<EncodableValue> &method_call,
     std::unique_ptr<MethodResult<EncodableValue>> result) {
   auto method = method_call.method_name();
@@ -109,23 +95,15 @@ void AgoraRtcEnginePlugin::HandleMethodCall(
     auto api_type = std::get<int32_t>(arguments[EncodableValue("apiType")]);
     auto &params = std::get<std::string>(arguments[EncodableValue("params")]);
     char res[kMaxResultLength];
-    auto ret = engine_->CallApi(static_cast<ApiTypeEngine>(api_type),
-                                params.c_str(), res);
+    auto ret = engine_->channel()->CallApi(
+        static_cast<ApiTypeChannel>(api_type), params.c_str(), res);
     result->Success(EncodableValue(ret));
-  } else if (method.compare("createTextureRender") == 0) {
-    auto texture_id = factory_->CreateTextureRenderer();
-    result->Success(EncodableValue(texture_id));
-  } else if (method.compare("destroyTextureRender") == 0) {
-    auto arguments = std::get<EncodableMap>(*method_call.arguments());
-    auto texture_id = std::get<int64_t>(arguments[EncodableValue("id")]);
-    factory_->DestoryTextureRenderer(texture_id);
-    result->Success();
   } else {
     result->NotImplemented();
   }
 }
 
-void AgoraRtcEnginePlugin::OnEvent(const char *event, const char *data) {
+void AgoraRtcChannelPlugin::OnEvent(const char *event, const char *data) {
   if (event_sink_) {
     EncodableMap ret = {{EncodableValue("methodName"), EncodableValue(event)},
                         {EncodableValue("data"), EncodableValue(data)}};
@@ -133,8 +111,8 @@ void AgoraRtcEnginePlugin::OnEvent(const char *event, const char *data) {
   }
 }
 
-void AgoraRtcEnginePlugin::OnEvent(const char *event, const char *data,
-                                   const void *buffer, unsigned int length) {
+void AgoraRtcChannelPlugin::OnEvent(const char *event, const char *data,
+                                    const void *buffer, unsigned int length) {
   if (event_sink_) {
     std::vector<uint8_t> vector(length);
     if (buffer && length) {
@@ -148,9 +126,7 @@ void AgoraRtcEnginePlugin::OnEvent(const char *event, const char *data,
 }
 } // namespace
 
-void AgoraRtcEnginePluginRegisterWithRegistrar(
-    FlutterDesktopPluginRegistrarRef registrar) {
-  AgoraRtcEnginePlugin::RegisterWithRegistrar(
-      PluginRegistrarManager::GetInstance()
-          ->GetRegistrar<PluginRegistrarWindows>(registrar));
+void AgoraRtcChannelPluginRegisterWithRegistrar(
+    PluginRegistrarWindows *registrar, IrisRtcEngine *engine) {
+  AgoraRtcChannelPlugin::RegisterWithRegistrar(registrar, engine);
 }

@@ -7,6 +7,7 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
 add_library(${PLUGIN_NAME} SHARED
+  "agora_rtc_channel_plugin.cc"
   "agora_rtc_engine_plugin.cc"
   "agora_texture_view_factory.cc"
 )

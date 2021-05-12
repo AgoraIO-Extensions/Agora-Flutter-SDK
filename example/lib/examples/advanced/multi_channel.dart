@@ -235,7 +235,7 @@ class _State extends State<MultiChannel> {
     return Expanded(
       child: Stack(
         children: [
-          RtcLocalView.SurfaceView(
+          RtcLocalView.TextureView(
             channelId: renderChannelId,
           ),
           if (remoteUid != null)
@@ -248,7 +248,7 @@ class _State extends State<MultiChannel> {
                     (e) => Container(
                       width: 120,
                       height: 120,
-                      child: RtcRemoteView.SurfaceView(
+                      child: RtcRemoteView.TextureView(
                         uid: e,
                         channelId: renderChannelId,
                       ),

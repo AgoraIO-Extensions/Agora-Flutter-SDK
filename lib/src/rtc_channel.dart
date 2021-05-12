@@ -147,10 +147,12 @@ class RtcChannel with RtcChannelInterface {
     _subscription ??= _stream.listen((event) {
       final eventMap = Map<dynamic, dynamic>.from(event);
       final methodName = eventMap['methodName'] as String;
-      final data = eventMap['data'] as String;
+      var data = eventMap['data'];
       String channelId;
       if (Platform.isWindows) {
-        channelId = jsonDecode(data)['channelId'];
+        final map = Map<String, dynamic>.from(jsonDecode(data));
+        channelId = map.remove('channelId');
+        data = jsonEncode(map);
       } else {
         channelId = eventMap['channelId'];
       }
