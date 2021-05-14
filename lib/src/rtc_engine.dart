@@ -1734,35 +1734,35 @@ mixin RtcVideoInterface {
 mixin RtcAudioMixingInterface {
   /// Starts playing and mixing the music file.
   ///
-  /// This method mixes the specified local or online audio file with the audio stream from the microphone, or replaces the microphone’s audio stream with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. When the audio mixing file playback finishes after calling this method, the SDK triggers the [RtcEngineEventHandler.audioMixingFinished] callback.
-  ///
-  /// A successful `startAudioMixing` method call triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]) callback on the local client.
-  ///
-  /// When the audio mixing file playback finishes, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]) callback on the local client.
+  /// This method mixes the specified local or online audio file with the audio captured by the microphone, or replaces the audio captured by the microphone with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. 
+  /// 
+  /// After successfully playing the music file, the SDK triggers [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]). 
+  /// After finishing playing the music file, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]).
   ///
   /// **Note**
-  /// - This method supports both Android and iOS. To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
-  /// - Call this method when you are in the channel, otherwise it may cause issues.
-  /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingErrorCode.TooFrequentCall] error occurs.
-  /// - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
-  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingErrorCode.CanNotOpen].
+  /// - To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
+  /// - Call this method after joining a channel.
+  /// - If you want to call `startAudioMixing` multiple times, ensure that the call interval is longer than 500 ms.
+  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns `WARN_AUDIO_MIXING_OPEN_ERROR(701)`.
   /// - If you call this method on an emulator, only the MP3 file format is supported.
   ///
-  /// **Parameter** [filePath] Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
-  /// - If the path begins with `/assets/`, the audio file is in the `/assets/` directory.
-  /// - Otherwise, the audio file is in the absolute path.
+  /// **Parameter** [filePath] The absolute path or URL address (including the filename extensions) of the music file. For example, `/sdcard/emulated/0/audio.mp4` an Android or `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
+  /// - If the path starts with `/assets/`, the SDK searches for music files in the assets folder. 
+  /// - If the path does not start with `/assets/`, the SDK searches for music files in the absolute path.
   ///
-  /// **Parameter** [loopback] Sets which user can hear the audio mixing:
-  /// - `true`: Only the local user can hear the audio mixing.
-  /// - `false`: Both users can hear the audio mixing.
+  /// **Parameter** [loopback] Whether to only play the music file on the local client: 
+  /// - `true`: Only play music files on the local client so that only the local user can hear the music.
+  /// - `false`: Publish music files to remote clients so that both the local user and remote users can hear the music.
   ///
-  /// **Parameter** [replace] Sets the audio mixing content:
-  /// - `true`: Only publish the specified audio file; the audio stream from the microphone is not published.
-  /// - `false`: The local audio file is mixed with the audio stream from the microphone.
+  /// **Parameter** [replace] Whether to replace the audio captured by the microphone with a music file: 
+  /// - `true`: Replace. Users can only hear music. 
+  /// - `false`: Do not replace. Users can hear both music and audio captured by the microphone.
   ///
-  /// **Parameter** [cycle] Sets the number of playback loops:
-  /// - Positive integer: Number of playback loops
-  /// - -1: Infinite playback loops
+  /// **Parameter** [cycle] The number of times the music file plays.
+  /// - &le; 0: The number of playback times. For example, 0 means that the SDK does not play the music file, while 1 means that the SDK plays the music file once.
+  /// - -1: Play the music in an indefinite loop.
+  ///
+  /// **Parameter** [startPos] The playback position (ms) of the music file.
   Future<void> startAudioMixing(
       String filePath, bool loopback, bool replace, int cycle,
       [int startPos]);
@@ -1835,16 +1835,15 @@ mixin RtcAudioMixingInterface {
   /// - < 0: Failure.
   Future<int> getAudioMixingPublishVolume();
 
-  /// Gets the duration (ms) of the music file.
-  ///
-  /// Call this method when you are in a channel.
+  /// Gets the total duration (ms) of the music file.
   ///
   /// **Note**
+  /// - Call this method after joining a channel.
   ///
-  /// Call this method after calling [startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
-  ///
+  /// **Parameter** [filePath] The absolute path or URL address (including the filename extensions) of the music file. For example, `/sdcard/emulated/0/audio.mp4` an Android or `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
+  /// 
   /// **Returns**
-  /// - The audio mixing duration, if this method call is successful.
+  /// - &le; 0: A successful method call. Returns the total duration (ms) of the specified music file.
   /// - < 0: Failure.
   Future<int> getAudioMixingDuration([String filePath]);
 
@@ -1907,37 +1906,73 @@ mixin RtcAudioEffectInterface {
   ///
   /// To play multiple audio effect files simultaneously, call this method multiple times with different soundIds and filePaths. We recommend playing no more than three audio effect files at the same time.
   ///
-  /// When the audio effect file playback is finished, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
+  /// After completing playing an audio effect file, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
   ///
-  /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the soundID value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  /// **Note**
+  /// - Call this method joining a channel.
   ///
-  /// **Parameter** [filePath] The absolute file path (including the suffixes of the filename) of the audio effect file or the URL of the online audio effect file. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac. 3gp, mkv, and wav.
+  /// **Parameter** [soundId] Audio effect ID. The ID of each audio effect file is unique. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that this parameter is set to the same value as in [RtcEngine.preloadEffect].
   ///
-  /// **Parameter** [loopCount] Sets the number of times the audio effect loops:
-  /// - 0: Plays the audio effect once.
-  /// - 1: Plays the audio effect twice.
-  /// - -1: Plays the audio effect in a loop indefinitely, until you call the [RtcEngine.stopEffect] or [RtcEngine.stopAllEffects] method.
+  /// **Parameter** [filePath] The absolute file path or URL address (including the filename extensions) of the audio effect file. For example, `/sdcard/emulated/0/audio.mp4` on Android or `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats: mp3, mp4, m4a, aac. 3gp, mkv, and wav. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that this parameter is set to the same value as in [RtcEngine.preloadEffect].
   ///
-  /// **Parameter** [pitch] Sets the pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
+  /// **Parameter** [loopCount] The number of times the audio effect loops:
+  /// - &ge; 0: The number of loops. For example, `1` means loop one time, which means play the audio effect two times in total.
+  /// - -1: Play the audio effect in an indefinite loop.
   ///
-  /// **Parameter** [pan] Sets the spatial position of the audio effect. The value ranges between -1.0 and 1.0.
-  /// - 0.0: The audio effect shows ahead.
-  /// - 1.0: The audio effect shows on the right.
-  /// - -1.0: The audio effect shows on the left.
+  /// **Parameter** [pitch] The pitch of the audio effect. The range is [0.5,2.0]. The default value is 1.0, which means the original pitch. The lower the value, the lower the pitch.
   ///
-  /// **Parameter** [gain] Sets the volume of the audio effect. The value ranges between 0.0 and 100,0. The default value is 100.0. The lower the value, the lower the volume of the audio effect.
+  /// **Parameter** [pan] The spatial position of the audio effect. The range is [-1.0,1.0]. For example:
+  /// - -1.0: The audio effect occurs on the left.
+  /// - 0.0: The audio effect occurs in the front.
+  /// - 1.0: The audio effect occurs on the right.
   ///
-  /// **Parameter** [publish] Set whether or not to publish the specified audio effect to the remote stream:
-  /// - `true`: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
-  /// - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
+  /// **Parameter** [gain] The volume of the audio effect. The range is [0.0,100.0]. The default value is 100.0, which means the original volume. The smaller the value, the less the gain.
+  ///
+  /// **Parameter** [publish] Whether to publish the audio effect to the remote users: 
+  /// - `true`: Publish. Both the local user and remote users can hear the audio effect.
+  /// - `false`: Do not publish. Only the local user can hear the audio effect.
+  ///
+  /// **Parameter** [startPos] The playback position (ms) of the audio effect file.
   Future<void> playEffect(int soundId, String filePath, int loopCount,
       double pitch, double pan, double gain, bool publish,
       [int startPos]);
 
+  /// Sets the playback position of an audio effect file.
+  /// 
+  /// After a successful setting, the local audio effect file starts playing at the specified position.
+  ///
+  /// **Note**
+  /// - Call this method after [RtcEngine.playEffect].
+  ///
+  /// **Parameter** [soundId] Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
+  ///
+  /// **Parameter** [pos] The playback position (ms) of the audio effect file.
   Future<void> setEffectPosition(int soundId, int pos);
 
+  /// Gets the playback position of the audio effect file.
+  ///
+  /// **Note**
+  /// - Call this method after [RtcEngine.playEffect].
+  ///
+  /// **Parameter** [filePath] The absolute path (including the filename extensions) of the local audio effect file. For example, `/sdcard/emulated/0/audio.mp4` on Android or `/var/mobile/containers/data/audio.mp4` on iOS.
+  ///
+  /// **Return**
+  /// - &le; 0: A successful method call. Returns the total duration (ms) of the specified audio effect file.
+  /// - < 0: Failure.
+  ///   - -22(`ERR_RESOURCE_LIMITED`): Cannot find the audio effect file. Please set a valid `filePath`.
   Future<int> getEffectDuration(String filePath);
 
+  /// Gets the playback postion of the audio effect file.
+  ///
+  /// **Note**
+  /// - Call this method after [RtcEngine.playEffect].
+  ///
+  /// **Parameter** [soundId] Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
+  ///
+  /// **Return**
+  /// - &le; 0: A successful method call. Returns the playback position (ms) of the specified audio effect file.
+  /// - < 0: Failure.
+  ///   - -22(`ERR_RESOURCE_LIMITED`):  Cannot find the audio effect file. Please set a valid `soundId`.
   Future<int> getEffectCurrentPosition(int soundId);
 
   /// Stops playing a specified audio effect.
@@ -1946,6 +1981,11 @@ mixin RtcAudioEffectInterface {
   /// - If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
   ///
   /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID.
+  ///
+  /// **Return**
+  /// - 0: Success.
+  /// - < 0: Failure.
+  ///   - -22(`ERR_RESOURCE_LIMITED`): Cannot find the audio effect file. Please set a valid `soundId`.
   Future<void> stopEffect(int soundId);
 
   /// Stops playing all audio effects.

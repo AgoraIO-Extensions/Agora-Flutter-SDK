@@ -842,15 +842,21 @@ enum ConnectionStateType {
 
 /// The video encoding degradation preference under limited bandwidth.
 enum DegradationPreference {
-  /// (Default) Degrades the frame rate to guarantee the video quality.
+  /// (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+  ///
+  /// **Note**
+  /// - In the `COMMUNICATION` channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(0)
   MaintainQuality,
 
-  /// Degrades the video quality to guarantee the frame rate.
+  /// refers to reduce the video quality while maintaining the video frame rate during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
   @JsonValue(1)
   MaintainFramerate,
 
-  /// Reserved for future use.
+  /// Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. `Balenced` has a lower reduction than `MaintainQuality` and `MaintainFramerate`, and this preference is suitable for scenarios where both smoothness and video quality are a priority.
+  ///
+  /// **Note**
+  /// - the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(2)
   Balanced
 }
