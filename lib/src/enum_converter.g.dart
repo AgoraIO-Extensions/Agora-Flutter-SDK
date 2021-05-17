@@ -761,6 +761,7 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.PublishStreamNotFound: 155,
   ErrorCode.PublishStreamFormatNotSuppported: 156,
   ErrorCode.ModuleNotFound: 157,
+  ErrorCode.AlreadyInRecording: 160,
   ErrorCode.LoadMediaEngine: 1001,
   ErrorCode.StartCall: 1002,
   ErrorCode.StartCamera: 1003,
