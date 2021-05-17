@@ -1743,18 +1743,11 @@ mixin RtcAudioMixingInterface {
   /// After finishing playing the music file, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]).
   ///
   /// **Note**
-<<<<<<< HEAD
-  /// - To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
-  /// - Call this method after joining a channel.
-  /// - If you want to call `startAudioMixing` multiple times, ensure that the call interval is longer than 500 ms.
-  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns `WARN_AUDIO_MIXING_OPEN_ERROR(701)`.
-=======
   /// - This method supports both Android and iOS. To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
   /// - Call this method when you are in the channel, otherwise it may cause issues.
   /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingReason.TooFrequentCall] error occurs.
   /// - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
   /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingReason.CanNotOpen].
->>>>>>> rc/3.4.+
   /// - If you call this method on an emulator, only the MP3 file format is supported.
   ///
   /// **Parameter** [filePath] The absolute path or URL address (including the filename extensions) of the music file. For example, `/sdcard/emulated/0/audio.mp4` an Android or `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
