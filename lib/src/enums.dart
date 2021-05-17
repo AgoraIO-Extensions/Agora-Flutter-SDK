@@ -1137,6 +1137,10 @@ enum ErrorCode {
   @JsonValue(157)
   ModuleNotFound,
 
+  /// TODO(doc)
+  @JsonValue(160)
+  AlreadyInRecording,
+
   /// Fails to load the media engine.
   @JsonValue(1001)
   LoadMediaEngine,
