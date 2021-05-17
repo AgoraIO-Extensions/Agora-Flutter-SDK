@@ -60,9 +60,9 @@ class _State extends State<JoinChannelAudio> {
         setState(() {
           isJoined = false;
         });
-        await widget._engine
-            ?.joinChannel(config.token, config.channelId, null, config.uid)
-            ?.catchError((err) {
+        await _engine
+            .joinChannel(config.token, config.channelId, null, config.uid)
+            .catchError((err) {
           print('error ${err.toString()}');
         });
       },
@@ -74,8 +74,9 @@ class _State extends State<JoinChannelAudio> {
       await Permission.microphone.request();
     }
 
-    await _engine.joinChannel(config.token, config.channelId, null, config.uid)
-        ?.catchError((onError) {
+    await _engine
+        .joinChannel(config.token, config.channelId, null, config.uid)
+        .catchError((onError) {
       print('error ${onError.toString()}');
     });
   }
@@ -138,14 +139,14 @@ class _State extends State<JoinChannelAudio> {
     setState(() {
       _inEarMonitoringVolume = value;
     });
-    widget._engine?.setInEarMonitoringVolume(value.toInt());
+    _engine.setInEarMonitoringVolume(value.toInt());
   }
 
   _toggleInEarMonitoring(value) {
     setState(() {
       _enableInEarMonitoring = value;
     });
-    widget._engine?.enableInEarMonitoring(value);
+    _engine.enableInEarMonitoring(value);
   }
 
   @override
@@ -211,8 +212,7 @@ class _State extends State<JoinChannelAudio> {
                           setState(() {
                             _recordingVolume = value;
                           });
-                          widget._engine
-                              ?.adjustRecordingSignalVolume(value.toInt());
+                          _engine.adjustRecordingSignalVolume(value.toInt());
                         },
                       )
                     ],
@@ -231,8 +231,7 @@ class _State extends State<JoinChannelAudio> {
                           setState(() {
                             _playbackVolume = value;
                           });
-                          widget._engine
-                              ?.adjustPlaybackSignalVolume(value.toInt());
+                          _engine.adjustPlaybackSignalVolume(value.toInt());
                         },
                       )
                     ],

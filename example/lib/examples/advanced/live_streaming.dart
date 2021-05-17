@@ -12,23 +12,21 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// LiveStreaming Example
 class LiveStreaming extends StatefulWidget {
-  RtcEngine _engine = null;
-
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<LiveStreaming> {
-  String renderChannelId;
+  late final RtcEngine _engine;
   bool isJoined = false;
-  ClientRole role;
-  int remoteUid;
+  ClientRole role = ClientRole.Audience;
+  int? remoteUid;
   bool isLowAudio = true;
 
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+    SchedulerBinding?.instance?.addPostFrameCallback((timeStamp) {
       _showMyDialog();
     });
   }
@@ -36,7 +34,7 @@ class _State extends State<LiveStreaming> {
   @override
   void dispose() {
     super.dispose();
-    widget._engine?.destroy();
+    _engine.destroy();
   }
 
   Future<void> _showMyDialog() async {
@@ -80,20 +78,19 @@ class _State extends State<LiveStreaming> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    widget._engine =
-        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
 
     this._addListener();
 
     // enable video module and set up video encoding configs
-    await widget._engine?.enableVideo();
+    await _engine.enableVideo();
 
     // make this room live broadcasting room
-    await widget._engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await this._updateClientRole(role);
 
     // Set audio route to speaker
-    await widget._engine?.setDefaultAudioRoutetoSpeakerphone(true);
+    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
 
     // start joining channel
     // 1. Users can only see each other after they join the
@@ -101,13 +98,11 @@ class _State extends State<LiveStreaming> {
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    await widget._engine
-        ?.joinChannel(config.token, config.channelId, null, 0, null);
+    await _engine.joinChannel(config.token, config.channelId, null, 0, null);
   }
 
   _addListener() {
-    widget._engine
-        ?.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
+    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
       log('Warning ${warningCode}');
     }, error: (errorCode) {
       log('Warning ${errorCode}');
@@ -132,21 +127,20 @@ class _State extends State<LiveStreaming> {
   _updateClientRole(ClientRole role) async {
     var option;
     if (role == ClientRole.Broadcaster) {
-      await widget._engine?.setVideoEncoderConfiguration(
-          VideoEncoderConfiguration(
-              dimensions: VideoDimensions(640, 360),
-              frameRate: VideoFrameRate.Fps30,
-              orientationMode: VideoOutputOrientationMode.Adaptative));
+      await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
+          dimensions: VideoDimensions(640, 360),
+          frameRate: VideoFrameRate.Fps30,
+          orientationMode: VideoOutputOrientationMode.Adaptative));
       // enable camera/mic, this will bring up permission dialog for first time
-      await widget._engine?.enableLocalAudio(true);
-      await widget._engine?.enableLocalVideo(true);
+      await _engine.enableLocalAudio(true);
+      await _engine.enableLocalVideo(true);
     } else {
       // You have to provide client role options if set to audience
       option = ClientRoleOptions(isLowAudio
           ? AudienceLatencyLevelType.LowLatency
           : AudienceLatencyLevelType.UltraLowLatency);
     }
-    await widget._engine?.setClientRole(role, option);
+    await _engine.setClientRole(role, option);
   }
 
   _onPressToggleRole() {
@@ -161,7 +155,7 @@ class _State extends State<LiveStreaming> {
   _onPressToggleLatencyLevel(value) {
     this.setState(() {
       isLowAudio = !isLowAudio;
-      widget._engine?.setClientRole(
+      _engine.setClientRole(
           ClientRole.Audience,
           ClientRoleOptions(isLowAudio
               ? AudienceLatencyLevelType.LowLatency
@@ -208,7 +202,7 @@ class _State extends State<LiveStreaming> {
                 if (!isJoined)
                   Expanded(
                     flex: 1,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: _initEngine,
                       child: Text('Join channel'),
                     ),
@@ -228,12 +222,10 @@ class _State extends State<LiveStreaming> {
       child: Stack(
         children: [
           role == ClientRole.Broadcaster
-              ? RtcLocalView.SurfaceView(
-                  channelId: renderChannelId,
-                )
+              ? RtcLocalView.SurfaceView()
               : remoteUid != null
                   ? RtcRemoteView.SurfaceView(
-                      uid: remoteUid,
+                      uid: remoteUid!,
                     )
                   : Container()
         ],

@@ -440,7 +440,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int?> getAudioMixingDuration([String filePath]) {
+  Future<int?> getAudioMixingDuration([String? filePath]) {
     return _invokeMethod('getAudioMixingDuration', {
       'filePath': filePath,
     });
@@ -474,7 +474,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> startAudioMixing(
       String filePath, bool loopback, bool replace, int cycle,
-      [int startPos]) {
+      [int? startPos]) {
     return _invokeMethod('startAudioMixing', {
       'filePath': filePath,
       'loopback': loopback,
@@ -597,7 +597,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> playEffect(int soundId, String filePath, int loopCount,
       double pitch, double pan, double gain, bool publish,
-      [int startPos]) {
+      [int? startPos]) {
     return _invokeMethod('playEffect', {
       'soundId': soundId,
       'filePath': filePath,
@@ -616,12 +616,12 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int> getEffectDuration(String filePath) {
+  Future<int?> getEffectDuration(String filePath) {
     return _invokeMethod('getEffectDuration', {'filePath': filePath});
   }
 
   @override
-  Future<int> getEffectCurrentPosition(int soundId) {
+  Future<int?> getEffectCurrentPosition(int soundId) {
     return _invokeMethod('getEffectCurrentPosition', {'soundId': soundId});
   }
 
@@ -1767,7 +1767,7 @@ mixin RtcAudioMixingInterface {
   /// - -1: Infinite playback loops
   Future<void> startAudioMixing(
       String filePath, bool loopback, bool replace, int cycle,
-      [int startPos]);
+      [int? startPos]);
 
   /// Stops playing or mixing the music file.
   ///
@@ -1848,7 +1848,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The audio mixing duration, if this method call is successful.
   /// - < 0: Failure.
-  Future<int?> getAudioMixingDuration([String filePath]);
+  Future<int?> getAudioMixingDuration([String? filePath]);
 
   /// Gets the playback position (ms) of the music file.
   ///
@@ -1934,13 +1934,13 @@ mixin RtcAudioEffectInterface {
   /// - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
   Future<void> playEffect(int soundId, String filePath, int loopCount,
       double pitch, double pan, double gain, bool publish,
-      [int startPos]);
+      [int? startPos]);
 
   Future<void> setEffectPosition(int soundId, int pos);
 
-  Future<int> getEffectDuration(String filePath);
+  Future<int?> getEffectDuration(String filePath);
 
-  Future<int> getEffectCurrentPosition(int soundId);
+  Future<int?> getEffectCurrentPosition(int soundId);
 
   /// Stops playing a specified audio effect.
   ///
