@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'events.dart';
-import 'rtc_engine.dart';
 
 /// The area of connection.
 enum AreaCode {
