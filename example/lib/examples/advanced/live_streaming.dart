@@ -26,7 +26,7 @@ class _State extends State<LiveStreaming> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding?.instance?.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
       _showMyDialog();
     });
   }
