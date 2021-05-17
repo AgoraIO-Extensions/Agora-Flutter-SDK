@@ -2716,18 +2716,54 @@ mixin RtcAudioRecorderInterface {
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality);
 
-  /// TODO(doc)
+  /// Starts an audio recording on the client.
+  ///
+  /// The SDK allows recording audio during a call. After successfully calling this method, you can record the audio of users in the channel and get an audio recording file. Supported file formats are as follows:
+  /// - WAV: High-fidelity files with typically larger file sizes. For example, if the sample rate is 32,000 Hz, the file size for a 10-minute recording is approximately 73 MB.
+  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `AUDIO_RECORDING_QUALITY_MEDIUM`, the file size for a 10-minute recording is approximately 2 MB.
+  ///
+  /// Once the user leaves the channel, the recording automatically stops.
+  ///
+  /// **Note**
+  /// - Call this method after joining a channel.
+  ///
+  /// **Parameter** [config] Recording configuration. See [AudioRecordingConfiguration].
   Future<void> startAudioRecordingWithConfig(
       AudioRecordingConfiguration config);
 
-  /// TODO(doc)
+  /// Enables the virtual metronome.
+  ///
+  /// In music education, physical education, and other scenarios, teachers often need to use a metronome so that students can practice
+  /// at the correct tempo. A meter is composed of a downbeat and some number of upbeats (including zero). The first beat of each
+  /// measure is called the downbeat, and the rest are called the upbeats. In this method, you need to set the paths of the upbeat and
+  /// downbeat files, the number of beats per measure, the tempo, and whether to send the sound of the metronome to remote users.
+  ///
+  /// **Note**
+  /// - After enabling the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig]. 
+  /// If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
+  ///
+  /// **Parameter** [sound1] The absolute path or URL address (including the filename extensions) of the file for the downbeat. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP.
+  ///
+  /// **Parameter** [sound2] The absolute path or URL address (including the filename extensions) of the file for the upbeats. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP.
+  ///
+  /// **Parameter** [config] The metronome configuration. See [RhythmPlayerConfig].
   Future<void> startRhythmPlayer(
       String sound1, String sound2, RhythmPlayerConfig config);
 
-  /// TODO(doc)
+  /// Disables the virtual metronome.
+  ///
+  /// After calling [RtcEngine.startRhythmPlayer], you can call this method to disable the virtual metronome.
   Future<void> stopRhythmPlayer();
 
-  /// TODO(doc)
+  /// Configures the virtual metronome.
+  ///
+  /// After calling [RtcEngine.startRhythmPlayer], you can call this method to reconfigure the virtual metronome.
+  ///
+  /// **Note**
+  /// - After reconfiguring the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig]. 
+  /// If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
+  ///
+  /// **Parameter** [config] The metronome configuration. For details, see [RhythmPlayerConfig].
   Future<void> configRhythmPlayer(RhythmPlayerConfig config);
 
   /// Stops the audio recording on the client.
