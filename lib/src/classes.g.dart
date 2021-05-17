@@ -984,9 +984,9 @@ const _$AreaCodeEnumMap = {
 
 RhythmPlayerConfig _$RhythmPlayerConfigFromJson(Map<String, dynamic> json) {
   return RhythmPlayerConfig(
-    beatsPerMeasure: json['beatsPerMeasure'] as int,
-    beatsPerMinute: json['beatsPerMinute'] as int,
-    publish: json['publish'] as bool,
+    beatsPerMeasure: json['beatsPerMeasure'] as int?,
+    beatsPerMinute: json['beatsPerMinute'] as int?,
+    publish: json['publish'] as bool?,
   );
 }
 

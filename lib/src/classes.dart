@@ -1306,13 +1306,13 @@ class RtcEngineConfig {
 @JsonSerializable(explicitToJson: true)
 class RhythmPlayerConfig {
   @JsonKey(includeIfNull: false)
-  int beatsPerMeasure;
+  int? beatsPerMeasure;
 
   @JsonKey(includeIfNull: false)
-  int beatsPerMinute;
+  int? beatsPerMinute;
 
   @JsonKey(includeIfNull: false)
-  bool publish;
+  bool? publish;
 
   /// Constructs a [RhythmPlayerConfig]
   RhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute, this.publish});
@@ -1331,13 +1331,13 @@ class AudioRecordingConfiguration {
   String filePath;
 
   @JsonKey(includeIfNull: false)
-  AudioRecordingQuality recordingQuality;
+  AudioRecordingQuality? recordingQuality;
 
   @JsonKey(includeIfNull: false)
-  AudioRecordingPosition recordingPosition;
+  AudioRecordingPosition? recordingPosition;
 
   @JsonKey(includeIfNull: false)
-  AudioSampleRateType recordingSampleRate;
+  AudioSampleRateType? recordingSampleRate;
 
   /// Constructs a [AudioRecordingConfiguration]
   AudioRecordingConfiguration(this.filePath,
