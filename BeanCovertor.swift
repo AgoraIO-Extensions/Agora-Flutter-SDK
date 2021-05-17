@@ -6,10 +6,10 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
-func mapToPoint(_ map: Dictionary<String, Any>) -> CGPoint {
+func mapToPoint(_ map: [String: Any]) -> CGPoint {
     var point = CGPoint()
     if let x = map["x"] as? NSNumber {
         point.x = CGFloat(truncating: x)
@@ -20,7 +20,7 @@ func mapToPoint(_ map: Dictionary<String, Any>) -> CGPoint {
     return point
 }
 
-func mapToSize(_ map: Dictionary<String, Any>) -> CGSize {
+func mapToSize(_ map: [String: Any]) -> CGSize {
     var size = CGSize()
     if let width = map["width"] as? NSNumber {
         size.width = CGFloat(truncating: width)
@@ -31,16 +31,16 @@ func mapToSize(_ map: Dictionary<String, Any>) -> CGSize {
     return size
 }
 
-func mapToRect(_ map: Dictionary<String, Any>) -> CGRect {
+func mapToRect(_ map: [String: Any]) -> CGRect {
     return CGRect(
-            origin: mapToPoint(map),
-            size: mapToSize(map)
+        origin: mapToPoint(map),
+        size: mapToSize(map)
     )
 }
 
-func mapToVideoEncoderConfiguration(_ map: Dictionary<String, Any>) -> AgoraVideoEncoderConfiguration {
+func mapToVideoEncoderConfiguration(_ map: [String: Any]) -> AgoraVideoEncoderConfiguration {
     let config = AgoraVideoEncoderConfiguration()
-    if let dimensions = map["dimensions"] as? Dictionary<String, Any> {
+    if let dimensions = map["dimensions"] as? [String: Any] {
         config.dimensions = mapToSize(dimensions)
     }
     if let frameRate = map["frameRate"] as? NSNumber {
@@ -73,7 +73,7 @@ func mapToVideoEncoderConfiguration(_ map: Dictionary<String, Any>) -> AgoraVide
     return config
 }
 
-func mapToBeautyOptions(_ map: Dictionary<String, Any>) -> AgoraBeautyOptions {
+func mapToBeautyOptions(_ map: [String: Any]) -> AgoraBeautyOptions {
     let options = AgoraBeautyOptions()
     if let lighteningContrastLevel = map["lighteningContrastLevel"] as? NSNumber {
         if let lighteningContrastLevel = AgoraLighteningContrastLevel(rawValue: lighteningContrastLevel.uintValue) {
@@ -92,7 +92,7 @@ func mapToBeautyOptions(_ map: Dictionary<String, Any>) -> AgoraBeautyOptions {
     return options
 }
 
-func mapToAgoraImage(_ map: Dictionary<String, Any>) -> AgoraImage {
+func mapToAgoraImage(_ map: [String: Any]) -> AgoraImage {
     let image = AgoraImage()
     if let url = map["url"] as? String {
         if let url = URL(string: url) {
@@ -103,7 +103,7 @@ func mapToAgoraImage(_ map: Dictionary<String, Any>) -> AgoraImage {
     return image
 }
 
-func mapToTranscodingUser(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodingUser {
+func mapToTranscodingUser(_ map: [String: Any]) -> AgoraLiveTranscodingUser {
     let user = AgoraLiveTranscodingUser()
     if let uid = map["uid"] as? NSNumber {
         user.uid = uid.uintValue
@@ -121,7 +121,7 @@ func mapToTranscodingUser(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodin
     return user
 }
 
-func mapToColor(_ map: Dictionary<String, Any>) -> UIColor {
+func mapToColor(_ map: [String: Any]) -> UIColor {
     return UIColor(
         red: CGFloat((map["red"] as! NSNumber).intValue),
         green: CGFloat((map["green"] as! NSNumber).intValue),
@@ -130,7 +130,7 @@ func mapToColor(_ map: Dictionary<String, Any>) -> UIColor {
     )
 }
 
-func mapToLiveTranscoding(_ map: Dictionary<String, Any>) -> AgoraLiveTranscoding {
+func mapToLiveTranscoding(_ map: [String: Any]) -> AgoraLiveTranscoding {
     let transcoding = AgoraLiveTranscoding.default()
     transcoding.size = mapToSize(map)
     if let videoBitrate = map["videoBitrate"] as? NSNumber {
@@ -145,10 +145,10 @@ func mapToLiveTranscoding(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodin
     if let videoGop = map["videoGop"] as? NSNumber {
         transcoding.videoGop = videoGop.intValue
     }
-    if let watermark = map["watermark"] as? Dictionary<String, Any> {
+    if let watermark = map["watermark"] as? [String: Any] {
         transcoding.watermark = mapToAgoraImage(watermark)
     }
-    if let backgroundImage = map["backgroundImage"] as? Dictionary<String, Any> {
+    if let backgroundImage = map["backgroundImage"] as? [String: Any] {
         transcoding.backgroundImage = mapToAgoraImage(backgroundImage)
     }
     if let audioSampleRate = map["audioSampleRate"] as? NSNumber {
@@ -172,15 +172,15 @@ func mapToLiveTranscoding(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodin
             transcoding.videoCodecProfile = videoCodecProfile
         }
     }
-    if let backgroundColor = map["backgroundColor"] as? Dictionary<String, Any> {
+    if let backgroundColor = map["backgroundColor"] as? [String: Any] {
         transcoding.backgroundColor = mapToColor(backgroundColor)
     }
     if let userConfigExtraInfo = map["userConfigExtraInfo"] as? String {
         transcoding.transcodingExtraInfo = userConfigExtraInfo
     }
-    if let transcodingUsers = map["transcodingUsers"] as? Array<Any> {
+    if let transcodingUsers = map["transcodingUsers"] as? [Any] {
         transcodingUsers.forEach {
-            if let item = $0 as? Dictionary<String, Any> {
+            if let item = $0 as? [String: Any] {
                 transcoding.add(mapToTranscodingUser(item))
             }
         }
@@ -188,7 +188,7 @@ func mapToLiveTranscoding(_ map: Dictionary<String, Any>) -> AgoraLiveTranscodin
     return transcoding
 }
 
-func mapToChannelMediaInfo(_ map: Dictionary<String, Any>) -> AgoraChannelMediaRelayInfo {
+func mapToChannelMediaInfo(_ map: [String: Any]) -> AgoraChannelMediaRelayInfo {
     let info = AgoraChannelMediaRelayInfo()
     if let channelName = map["channelName"] as? String {
         info.channelName = channelName
@@ -202,14 +202,14 @@ func mapToChannelMediaInfo(_ map: Dictionary<String, Any>) -> AgoraChannelMediaR
     return info
 }
 
-func mapToChannelMediaRelayConfiguration(_ map: Dictionary<String, Any>) -> AgoraChannelMediaRelayConfiguration {
+func mapToChannelMediaRelayConfiguration(_ map: [String: Any]) -> AgoraChannelMediaRelayConfiguration {
     let config = AgoraChannelMediaRelayConfiguration()
-    if let srcInfo = map["srcInfo"] as? Dictionary<String, Any> {
+    if let srcInfo = map["srcInfo"] as? [String: Any] {
         config.sourceInfo = mapToChannelMediaInfo(srcInfo)
     }
-    if let destInfos = map["destInfos"] as? Array<Any> {
+    if let destInfos = map["destInfos"] as? [Any] {
         destInfos.forEach {
-            if let item = $0 as? Dictionary<String, Any> {
+            if let item = $0 as? [String: Any] {
                 let info = mapToChannelMediaInfo(item)
                 config.setDestinationInfo(info, forChannelName: info.channelName ?? "")
             }
@@ -218,7 +218,7 @@ func mapToChannelMediaRelayConfiguration(_ map: Dictionary<String, Any>) -> Agor
     return config
 }
 
-func mapToLastmileProbeConfig(_ map: Dictionary<String, Any>) -> AgoraLastmileProbeConfig {
+func mapToLastmileProbeConfig(_ map: [String: Any]) -> AgoraLastmileProbeConfig {
     let config = AgoraLastmileProbeConfig()
     if let probeUplink = map["probeUplink"] as? Bool {
         config.probeUplink = probeUplink
@@ -235,21 +235,21 @@ func mapToLastmileProbeConfig(_ map: Dictionary<String, Any>) -> AgoraLastmilePr
     return config
 }
 
-func mapToWatermarkOptions(_ map: Dictionary<String, Any>) -> WatermarkOptions {
+func mapToWatermarkOptions(_ map: [String: Any]) -> WatermarkOptions {
     let options = WatermarkOptions()
     if let visibleInPreview = map["visibleInPreview"] as? Bool {
         options.visibleInPreview = visibleInPreview
     }
-    if let positionInLandscapeMode = map["positionInLandscapeMode"] as? Dictionary<String, Any> {
+    if let positionInLandscapeMode = map["positionInLandscapeMode"] as? [String: Any] {
         options.positionInLandscapeMode = mapToRect(positionInLandscapeMode)
     }
-    if let positionInPortraitMode = map["positionInPortraitMode"] as? Dictionary<String, Any> {
+    if let positionInPortraitMode = map["positionInPortraitMode"] as? [String: Any] {
         options.positionInPortraitMode = mapToRect(positionInPortraitMode)
     }
     return options
 }
 
-func mapToLiveInjectStreamConfig(_ map: Dictionary<String, Any>) -> AgoraLiveInjectStreamConfig {
+func mapToLiveInjectStreamConfig(_ map: [String: Any]) -> AgoraLiveInjectStreamConfig {
     let config = AgoraLiveInjectStreamConfig.default()
     config.size = mapToSize(map)
     if let videoGop = map["videoGop"] as? NSNumber {
@@ -275,7 +275,7 @@ func mapToLiveInjectStreamConfig(_ map: Dictionary<String, Any>) -> AgoraLiveInj
     return config
 }
 
-func mapToCameraCapturerConfiguration(_ map: Dictionary<String, Any>) -> AgoraCameraCapturerConfiguration {
+func mapToCameraCapturerConfiguration(_ map: [String: Any]) -> AgoraCameraCapturerConfiguration {
     let config = AgoraCameraCapturerConfiguration()
     if let preference = map["preference"] as? NSNumber {
         if let preference = AgoraCameraCaptureOutputPreference(rawValue: preference.intValue) {
@@ -296,7 +296,7 @@ func mapToCameraCapturerConfiguration(_ map: Dictionary<String, Any>) -> AgoraCa
     return config
 }
 
-func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannelMediaOptions {
+func mapToChannelMediaOptions(_ map: [String: Any]) -> AgoraRtcChannelMediaOptions {
     let options = AgoraRtcChannelMediaOptions()
     if let autoSubscribeAudio = map["autoSubscribeAudio"] as? Bool {
         options.autoSubscribeAudio = autoSubscribeAudio
@@ -307,19 +307,40 @@ func mapToChannelMediaOptions(_ map: Dictionary<String, Any>) -> AgoraRtcChannel
     return options
 }
 
-func mapToRtcEngineConfig(_ map: Dictionary<String, Any>) -> AgoraRtcEngineConfig {
+func mapToRtcEngineConfig(_ map: [String: Any]) -> AgoraRtcEngineConfig {
     let config = AgoraRtcEngineConfig()
     config.appId = map["appId"] as? String
     if let areaCode = map["areaCode"] as? NSNumber {
         config.areaCode = areaCode.uintValue
     }
-    if let logConfig = map["logConfig"] as? Dictionary<String, Any> {
+    if let logConfig = map["logConfig"] as? [String: Any] {
         config.logConfig = mapToLogConfig(logConfig)
     }
     return config
 }
 
-func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionConfig {
+func mapToAudioRecordingConfiguration(_ map: [String: Any]) -> AgoraAudioRecordingConfiguration {
+    let config = AgoraAudioRecordingConfiguration()
+    if let filePath = map["filePath"] as? String {
+        config.filePath = filePath
+    }
+    if let recordingQuality = map["recordingQuality"] as? NSNumber {
+        if let recordingQuality = AgoraAudioRecordingQuality(rawValue: recordingQuality.intValue) {
+            config.recordingQuality = recordingQuality
+        }
+    }
+    if let recordingPosition = map["recordingPosition"] as? NSNumber {
+        if let recordingPosition = AgoraAudioRecordingPosition(rawValue: recordingPosition.intValue) {
+            config.recordingPosition = recordingPosition
+        }
+    }
+    if let recordingSampleRate = map["recordingSampleRate"] as? NSNumber {
+        config.recordingSampleRate = recordingSampleRate.intValue
+    }
+    return config
+}
+
+func mapToEncryptionConfig(_ map: [String: Any]) -> AgoraEncryptionConfig {
     let config = AgoraEncryptionConfig()
     if let encryptionMode = map["encryptionMode"] as? NSNumber {
         if let encryptionMode = AgoraEncryptionMode(rawValue: encryptionMode.intValue) {
@@ -332,7 +353,21 @@ func mapToEncryptionConfig(_ map: Dictionary<String, Any>) -> AgoraEncryptionCon
     return config
 }
 
-func mapToClientRoleOptions(_ map: Dictionary<String, Any>) -> AgoraClientRoleOptions {
+func mapToRhythmPlayerConfig(_ map: [String: Any]) -> AgoraRtcRhythmPlayerConfig {
+    let config = AgoraRtcRhythmPlayerConfig()
+    if let beatsPerMeasure = map["beatsPerMeasure"] as? NSNumber {
+        config.beatsPerMeasure = beatsPerMeasure.uintValue
+    }
+    if let beatsPerMinute = map["beatsPerMinute"] as? NSNumber {
+        config.beatsPerMinute = beatsPerMinute.uintValue
+    }
+    if let publish = map["publish"] as? NSNumber {
+        config.publish = publish.boolValue
+    }
+    return config
+}
+
+func mapToClientRoleOptions(_ map: [String: Any]) -> AgoraClientRoleOptions {
     let options = AgoraClientRoleOptions()
     if let audienceLatencyLevel = map["audienceLatencyLevel"] as? NSNumber {
         if let audienceLatencyLevel = AgoraAudienceLatencyLevelType(rawValue: audienceLatencyLevel.intValue) {
@@ -342,21 +377,21 @@ func mapToClientRoleOptions(_ map: Dictionary<String, Any>) -> AgoraClientRoleOp
     return options
 }
 
-func mapToLogConfig(_ map: Dictionary<String, Any>) -> AgoraLogConfig {
+func mapToLogConfig(_ map: [String: Any]) -> AgoraLogConfig {
     let config = AgoraLogConfig()
     config.filePath = map["filePath"] as? String
     if let fileSize = map["fileSize"] as? NSNumber {
         config.fileSize = fileSize.intValue
     }
     if let level = map["level"] as? NSNumber {
-        if let level = AgoraLogLevel.init(rawValue: level.intValue) {
-            config.level = level;
+        if let level = AgoraLogLevel(rawValue: level.intValue) {
+            config.level = level
         }
     }
     return config
 }
 
-func mapToDataStreamConfig(_ map: Dictionary<String, Any>) -> AgoraDataStreamConfig {
+func mapToDataStreamConfig(_ map: [String: Any]) -> AgoraDataStreamConfig {
     let config = AgoraDataStreamConfig()
     if let syncWithAudio = map["syncWithAudio"] as? Bool {
         config.syncWithAudio = syncWithAudio
