@@ -6,7 +6,6 @@ import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'events.dart';
-import 'rtc_engine.dart';
 
 /// The RtcChannel class.
 class RtcChannel with RtcChannelInterface {
@@ -317,8 +316,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<int?> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod(
-        'createDataStream', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {'config': config.toJson()});
   }
 
   @override

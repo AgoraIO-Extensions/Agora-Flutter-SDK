@@ -3,8 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import './src/enums.dart';
-import './src/rtc_render_view.dart';
+import 'src/enums.dart';
+import 'src/rtc_render_view.dart';
 
 /// SurfaceView.
 class SurfaceView extends RtcSurfaceView {
