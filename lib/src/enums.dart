@@ -1,8 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'events.dart';
-import 'rtc_engine.dart';
-
 /// The area of connection.
 enum AreaCode {
   /// Mainland China
@@ -1154,6 +1151,10 @@ enum ErrorCode {
   /// The App lack necessary library file. Check whether the dynamic library is loaded.
   @JsonValue(157)
   ModuleNotFound,
+
+  /// TODO(doc)
+  @JsonValue(160)
+  AlreadyInRecording,
 
   /// Fails to load the media engine.
   @JsonValue(1001)

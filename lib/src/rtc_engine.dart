@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-import '../rtc_local_view.dart';
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
