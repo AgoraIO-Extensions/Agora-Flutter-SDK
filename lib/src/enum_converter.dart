@@ -84,15 +84,14 @@ class AudioLocalStateConverter extends EnumConverter<AudioLocalState, int> {
 }
 
 @JsonSerializable()
-class AudioMixingErrorCodeConverter
-    extends EnumConverter<AudioMixingErrorCode, int> {
-  AudioMixingErrorCodeConverter(AudioMixingErrorCode e) : super(e);
+class AudioMixingReasonConverter extends EnumConverter<AudioMixingReason, int> {
+  AudioMixingReasonConverter(AudioMixingReason e) : super(e);
 
-  AudioMixingErrorCodeConverter.fromValue(int value)
-      : super.fromValue(_$AudioMixingErrorCodeEnumMap, value);
+  AudioMixingReasonConverter.fromValue(int value)
+      : super.fromValue(_$AudioMixingReasonEnumMap, value);
 
   int value() {
-    return super.toValue(_$AudioMixingErrorCodeEnumMap);
+    return super.toValue(_$AudioMixingReasonEnumMap);
   }
 }
 

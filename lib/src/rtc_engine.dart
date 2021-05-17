@@ -836,18 +836,22 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, 
-      AudioRecordingQuality quality,
-      [AudioRecordingPosition recordingPosition]
-      ) {
+      AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
     return _invokeMethod('startAudioRecording', {
       'filePath': filePath,
       'sampleRate': AudioSampleRateTypeConverter(sampleRate).value(),
-      'quality': AudioRecordingQualityConverter(quality).value(),
-      'recordingPosition': AudioRecordingPositionConverter(recordingPosition).value(),
+      'quality': AudioRecordingQualityConverter(quality).value()
     });
   }
+
+  @override
+  Future<void> startAudioRecordingWithConfig(
+      AudioRecordingConfiguration config) {
+    return _invokeMethod('startAudioRecording', {'config': config.toJson()});
+  }
+
   @override
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
@@ -857,14 +861,15 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startRhythmPlayer(String sound1, String sound2, RhythmPlayerConfig config) {
+  Future<void> startRhythmPlayer(
+      String sound1, String sound2, RhythmPlayerConfig config) {
     return _invokeMethod('startRhythmPlayer', {
       'sound1': sound1,
       'sound2': sound2,
       'config': config.toJson(),
     });
   }
-  
+
   @override
   Future<void> stopRhythmPlayer() {
     return _invokeMethod('stopRhythmPlayer');
@@ -872,9 +877,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> configRhythmPlayer(RhythmPlayerConfig config) {
-    return _invokeMethod('configRhythmPlayer', {
-      'config': config.toJson()
-    });
+    return _invokeMethod('configRhythmPlayer', {'config': config.toJson()});
   }
 
   @override
@@ -1743,9 +1746,9 @@ mixin RtcAudioMixingInterface {
   /// **Note**
   /// - This method supports both Android and iOS. To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
   /// - Call this method when you are in the channel, otherwise it may cause issues.
-  /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingErrorCode.TooFrequentCall] error occurs.
+  /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingReason.TooFrequentCall] error occurs.
   /// - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
-  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingErrorCode.CanNotOpen].
+  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingReason.CanNotOpen].
   /// - If you call this method on an emulator, only the MP3 file format is supported.
   ///
   /// **Parameter** [filePath] Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
@@ -2668,8 +2671,23 @@ mixin RtcAudioRecorderInterface {
   /// **Parameter** [sampleRate] Sample rate (Hz) of the recording file. See [AudioSampleRateType] for supported values.
   ///
   /// **Parameter** [quality] The audio recording quality. See [AudioRecordingQuality].
+  @deprecated
   Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, AudioRecordingQuality quality, [AudioRecordingPosition recordingPosition]);
+      AudioSampleRateType sampleRate, AudioRecordingQuality quality);
+
+  /// TODO(doc)
+  Future<void> startAudioRecordingWithConfig(
+      AudioRecordingConfiguration config);
+
+  /// TODO(doc)
+  Future<void> startRhythmPlayer(
+      String sound1, String sound2, RhythmPlayerConfig config);
+
+  /// TODO(doc)
+  Future<void> stopRhythmPlayer();
+
+  /// TODO(doc)
+  Future<void> configRhythmPlayer(RhythmPlayerConfig config);
 
   /// Stops the audio recording on the client.
   ///
