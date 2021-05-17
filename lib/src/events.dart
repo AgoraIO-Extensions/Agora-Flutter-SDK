@@ -86,7 +86,7 @@ typedef RemoteVideoStatsCallback = void Function(RemoteVideoStats stats);
 typedef RemoteAudioStatsCallback = void Function(RemoteAudioStats stats);
 // ignore: public_member_api_docs
 typedef AudioMixingStateCallback = void Function(
-    AudioMixingStateCode state, AudioMixingErrorCode errorCode);
+    AudioMixingStateCode state, AudioMixingReason reason);
 // ignore: public_member_api_docs
 typedef SoundIdCallback = void Function(int soundId);
 // ignore: public_member_api_docs
@@ -590,7 +590,7 @@ class RtcEngineEventHandler {
   ///
   /// The `AudioMixingStateCallback` typedef includes the following parameters:
   /// - [AudioMixingStateCode] `state`: The state code.
-  /// - [AudioMixingErrorCode] `errorCode`: The error code.
+  /// - [AudioMixingReason] `reason`: The reason.
   AudioMixingStateCallback audioMixingStateChanged;
 
   /// Occurs when the audio effect file playback finishes.
@@ -1269,7 +1269,7 @@ class RtcEngineEventHandler {
       case 'AudioMixingStateChanged':
         audioMixingStateChanged?.call(
           AudioMixingStateCodeConverter.fromValue(data[0]).e,
-          AudioMixingErrorCodeConverter.fromValue(data[1]).e,
+          AudioMixingReasonConverter.fromValue(data[1]).e,
         );
         break;
       case 'AudioEffectFinished':
