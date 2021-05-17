@@ -29,7 +29,9 @@ fun mapToVideoEncoderConfiguration(map: Map<*, *>): VideoEncoderConfiguration {
     (map["bitrate"] as? Number)?.let { bitrate = it.toInt() }
     (map["minBitrate"] as? Number)?.let { minBitrate = it.toInt() }
     (map["orientationMode"] as? Number)?.let { orientationMode = intToOrientationMode(it.toInt()) }
-    (map["degradationPrefer"] as? Number)?.let { degradationPrefer = intToDegradationPreference(it.toInt()) }
+    (map["degradationPrefer"] as? Number)?.let {
+      degradationPrefer = intToDegradationPreference(it.toInt())
+    }
     (map["mirrorMode"] as? Number)?.let { mirrorMode = it.toInt() }
   }
 }
@@ -55,7 +57,7 @@ fun mapToAgoraImage(map: Map<*, *>): AgoraImage {
 
 fun mapToTranscodingUser(map: Map<*, *>): TranscodingUser {
   return TranscodingUser().apply {
-    map["uid"]?.toSDKUInt()?.let { uid = it }
+    (map["uid"] as? Number)?.let { uid = it.toNativeUInt() }
     (map["x"] as? Number)?.let { x = it.toInt() }
     (map["y"] as? Number)?.let { y = it.toInt() }
     (map["width"] as? Number)?.let { width = it.toInt() }
@@ -84,11 +86,17 @@ fun mapToLiveTranscoding(map: Map<*, *>): LiveTranscoding {
     (map["videoGop"] as? Number)?.let { videoGop = it.toInt() }
     (map["watermark"] as? Map<*, *>)?.let { watermark = mapToAgoraImage(it) }
     (map["backgroundImage"] as? Map<*, *>)?.let { backgroundImage = mapToAgoraImage(it) }
-    (map["audioSampleRate"] as? Number)?.let { audioSampleRate = intToLiveTranscodingAudioSampleRate(it.toInt()) }
+    (map["audioSampleRate"] as? Number)?.let {
+      audioSampleRate = intToLiveTranscodingAudioSampleRate(it.toInt())
+    }
     (map["audioBitrate"] as? Number)?.let { audioBitrate = it.toInt() }
     (map["audioChannels"] as? Number)?.let { audioChannels = it.toInt() }
-    (map["audioCodecProfile"] as? Number)?.let { audioCodecProfile = intToAudioCodecProfile(it.toInt()) }
-    (map["videoCodecProfile"] as? Number)?.let { videoCodecProfile = intToVideoCodecProfile(it.toInt()) }
+    (map["audioCodecProfile"] as? Number)?.let {
+      audioCodecProfile = intToAudioCodecProfile(it.toInt())
+    }
+    (map["videoCodecProfile"] as? Number)?.let {
+      videoCodecProfile = intToVideoCodecProfile(it.toInt())
+    }
     (map["backgroundColor"] as? Map<*, *>)?.let { backgroundColor = mapToColor(it) }
     (map["userConfigExtraInfo"] as? String)?.let { userConfigExtraInfo = it }
     (map["transcodingUsers"] as? List<*>)?.let { list ->
@@ -105,7 +113,7 @@ fun mapToChannelMediaInfo(map: Map<*, *>): ChannelMediaInfo {
   return ChannelMediaInfo(
     map["channelName"] as? String,
     map["token"] as? String,
-    map["uid"]?.toSDKUInt()!!
+    (map["uid"] as Number).toNativeUInt()
   )
 }
 
@@ -144,8 +152,12 @@ fun mapToRectangle(map: Map<*, *>): WatermarkOptions.Rectangle {
 fun mapToWatermarkOptions(map: Map<*, *>): WatermarkOptions {
   return WatermarkOptions().apply {
     (map["visibleInPreview"] as? Boolean)?.let { visibleInPreview = it }
-    (map["positionInLandscapeMode"] as? Map<*, *>)?.let { positionInLandscapeMode = mapToRectangle(it) }
-    (map["positionInPortraitMode"] as? Map<*, *>)?.let { positionInPortraitMode = mapToRectangle(it) }
+    (map["positionInLandscapeMode"] as? Map<*, *>)?.let {
+      positionInLandscapeMode = mapToRectangle(it)
+    }
+    (map["positionInPortraitMode"] as? Map<*, *>)?.let {
+      positionInPortraitMode = mapToRectangle(it)
+    }
   }
 }
 
@@ -156,7 +168,9 @@ fun mapToLiveInjectStreamConfig(map: Map<*, *>): LiveInjectStreamConfig {
     (map["videoGop"] as? Number)?.let { videoGop = it.toInt() }
     (map["videoFramerate"] as? Number)?.let { videoFramerate = it.toInt() }
     (map["videoBitrate"] as? Number)?.let { videoBitrate = it.toInt() }
-    (map["audioSampleRate"] as? Number)?.let { audioSampleRate = intToLiveInjectStreamConfigAudioSampleRate(it.toInt()) }
+    (map["audioSampleRate"] as? Number)?.let {
+      audioSampleRate = intToLiveInjectStreamConfigAudioSampleRate(it.toInt())
+    }
     (map["audioBitrate"] as? Number)?.let { audioBitrate = it.toInt() }
     (map["audioChannels"] as? Number)?.let { audioChannels = it.toInt() }
   }
@@ -199,9 +213,9 @@ fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
 fun mapToAudioRecordingConfiguration(map: Map<*, *>): AudioRecordingConfiguration {
   return AudioRecordingConfiguration().apply {
     (map["filePath"] as? String)?.let { filePath = it }
-    (map["quality"] as? Number)?.let { recordingQuality = it.toInt() }
+    (map["recordingQuality"] as? Number)?.let { recordingQuality = it.toInt() }
     (map["recordingPosition"] as? Number)?.let { recordingPosition = it.toInt() }
-    (map["sampleRate"] as? Number)?.let { recordingSampleRate = it.toInt() }
+    (map["recordingQuality"] as? Number)?.let { recordingSampleRate = it.toInt() }
   }
 }
 
