@@ -1152,7 +1152,7 @@ enum ErrorCode {
   @JsonValue(157)
   ModuleNotFound,
 
-  /// TODO(doc)
+  /// The client is already recording audio. To start a new recording, call [RtcEngine.stopAudioRecording] to stop the current recording first, and then call [RtcEngine.startAudioRecording].
   @JsonValue(160)
   AlreadyInRecording,
 
