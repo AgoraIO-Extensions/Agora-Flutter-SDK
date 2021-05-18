@@ -587,8 +587,8 @@ class RtcEngineEventHandler {
   /// When the playback state of the local user's music file changes, the SDK triggers this callback and reports the current playback state and the reason for the change.
   ///
   /// The `AudioMixingStateCallback` typedef includes the following parameters:
-  /// - [AudioMixingStateCode] `state`: The state code.
-  /// - [AudioMixingReason] `reason`: The reason.
+  /// - [AudioMixingStateCode] `state`: The current music file playback state.
+  /// - [AudioMixingReason] `reason`: The reason for the change of the music file playback state.
   AudioMixingStateCallback audioMixingStateChanged;
 
   /// Occurs when the audio effect file playback finishes.

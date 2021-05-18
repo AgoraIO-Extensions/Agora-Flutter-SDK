@@ -1749,9 +1749,11 @@ mixin RtcAudioMixingInterface {
   /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingReason.CanNotOpen].
   /// - If you call this method on an emulator, only the MP3 file format is supported.
   ///
-  /// **Parameter** [filePath] The absolute path or URL address (including the filename extensions) of the music file. For example, `/sdcard/emulated/0/audio.mp4` an Android or `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
-  /// - If the path starts with `/assets/`, the SDK searches for music files in the assets folder. 
-  /// - If the path does not start with `/assets/`, the SDK searches for music files in the absolute path.
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
   /// **Parameter** [loopback] Whether to only play the music file on the local client: 
   /// - `true`: Only play music files on the local client so that only the local user can hear the music.
@@ -1843,7 +1845,11 @@ mixin RtcAudioMixingInterface {
   /// **Note**
   /// - Call this method after joining a channel.
   ///
-  /// **Parameter** [filePath] The absolute path or URL address (including the filename extensions) of the music file. For example, `/sdcard/emulated/0/audio.mp4` an Android or `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   /// 
   /// **Returns**
   /// - &le; 0: A successful method call. Returns the total duration (ms) of the specified music file.
@@ -1916,7 +1922,11 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Parameter** [soundId] Audio effect ID. The ID of each audio effect file is unique. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that this parameter is set to the same value as in [RtcEngine.preloadEffect].
   ///
-  /// **Parameter** [filePath] The absolute file path or URL address (including the filename extensions) of the audio effect file. For example, `/sdcard/emulated/0/audio.mp4` on Android or `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats: mp3, mp4, m4a, aac. 3gp, mkv, and wav. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that this parameter is set to the same value as in [RtcEngine.preloadEffect].
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
   /// **Parameter** [loopCount] The number of times the audio effect loops:
   /// - &ge; 0: The number of loops. For example, `1` means loop one time, which means play the audio effect two times in total.
@@ -1952,12 +1962,16 @@ mixin RtcAudioEffectInterface {
   /// **Parameter** [pos] The playback position (ms) of the audio effect file.
   Future<void> setEffectPosition(int soundId, int pos);
 
-  /// Gets the playback position of the audio effect file.
+  /// Gets the duration of the audio effect file.
   ///
   /// **Note**
-  /// - Call this method after [RtcEngine.playEffect].
+  /// Call this method after [RtcEngine.playEffect].
   ///
-  /// **Parameter** [filePath] The absolute path (including the filename extensions) of the local audio effect file. For example, `/sdcard/emulated/0/audio.mp4` on Android or `/var/mobile/containers/data/audio.mp4` on iOS.
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
   /// **Return**
   /// - &le; 0: A successful method call. Returns the total duration (ms) of the specified audio effect file.
@@ -1968,7 +1982,7 @@ mixin RtcAudioEffectInterface {
   /// Gets the playback postion of the audio effect file.
   ///
   /// **Note**
-  /// - Call this method after [RtcEngine.playEffect].
+  /// Call this method after [RtcEngine.playEffect].
   ///
   /// **Parameter** [soundId] Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
   ///
@@ -1981,7 +1995,7 @@ mixin RtcAudioEffectInterface {
   /// Stops playing a specified audio effect.
   ///
   /// **Note**
-  /// - If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  /// If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
   ///
   /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID.
   ///
@@ -2000,13 +2014,15 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Note**
   /// - This method does not support online audio effect files.
-  ///
-  /// **Note**
   /// - To ensure smooth communication, limit the size of the audio effect file. We recommend using this method to preload the audio effect before calling the [RtcEngine.joinChannel] method.
   ///
   /// **Parameter** [soundId] ID of the audio effect. Each audio effect has a unique ID.
   ///
-  /// **Parameter** [filePath] Absolute path of the audio effect file.
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   Future<void> preloadEffect(int soundId, String filePath);
 
   /// Releases a specified preloaded audio effect from the memory.
@@ -2039,7 +2055,6 @@ mixin RtcAudioEffectInterface {
   /// **Parameter** [restriction] The operational permission of the SDK on the audio session. See [AudioSessionOperationRestriction]. This parameter is in bit mask format, and each bit corresponds to a permission.
   ///
   /// **Note**
-  ///
   /// This method does not restrict the operational permission of the app on the audio session.
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction);
