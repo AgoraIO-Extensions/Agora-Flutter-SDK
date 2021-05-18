@@ -192,7 +192,7 @@ enum AudioMixingStateCode {
   @JsonValue(711)
   Paused,
 
-  /// The music file resumes playing.
+  /// Ignore this state.
   @JsonValue(712)
   Restart,
 
