@@ -1200,6 +1200,10 @@ mixin RtcEngineInterface
   Future<void> enableWebSdkInteroperability(bool enabled);
 
   /// Gets the connection state of the SDK.
+  ///
+  /// **Returns**
+  /// - The current connection state [ConnectionStateType], if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<ConnectionStateType> getConnectionState();
 
   /// This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
@@ -1284,6 +1288,10 @@ mixin RtcEngineInterface
   /// Gets the native handle of the SDK engine.
   ///
   /// This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
+  ///
+  /// **Returns**
+  /// - The native handle of the SDK, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<int> getNativeHandle();
 
   ///  Enables or disables deep-learning noise reduction.
@@ -1399,8 +1407,8 @@ mixin RtcUserInfoInterface {
   /// **Parameter** [userAccount] The user account of the user. Ensure that you set this parameter.
   ///
   /// **Returns**
-  /// - [UserInfo], if successful.
-  /// - Error code, if failed.
+  /// - [UserInfo], if this method call succeeds.
+  /// - Error code, if this method call fails.
   ///   - [ErrorCode.InvalidArgument]
   ///   - [ErrorCode.NotReady]
   ///   - [ErrorCode.Refused]
@@ -1415,8 +1423,8 @@ mixin RtcUserInfoInterface {
   /// **Parameter** [uid] The user ID of the user. Ensure that you set this parameter.
   ///
   /// **Returns**
-  /// - [UserInfo], if successful.
-  /// - Error code, if failed.
+  /// - [UserInfo], if this method call succeeds.
+  /// - Error code, if this method call fails.
   ///   - [ErrorCode.InvalidArgument]
   ///   - [ErrorCode.NotReady]
   ///   - [ErrorCode.Refused]
@@ -1824,7 +1832,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Returns**
   /// - The audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
-  /// - < 0: Failure.
+  /// - Error code, if the method call fails.
   Future<int> getAudioMixingPlayoutVolume();
 
   /// Gets the audio mixing volume for publishing.
@@ -1837,7 +1845,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Returns**
   /// - The audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
-  /// - < 0: Failure.
+  /// - Error code, if the method call fails.
   Future<int> getAudioMixingPublishVolume();
 
   /// Gets the total duration (ms) of the music file.
@@ -1852,8 +1860,8 @@ mixin RtcAudioMixingInterface {
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   /// 
   /// **Returns**
-  /// - &le; 0: A successful method call. Returns the total duration (ms) of the specified music file.
-  /// - < 0: Failure.
+  /// - The total duration (ms) of the specified music file, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<int> getAudioMixingDuration([String filePath]);
 
   /// Gets the playback position (ms) of the music file.
@@ -1866,7 +1874,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Returns**
   /// - The current playback position of the audio mixing file, if this method call is successful.
-  /// - < 0: Failure.
+  /// - Error code, if this method call fails.
   Future<int> getAudioMixingCurrentPosition();
 
   /// Sets the playback position (ms) of the music file to a different starting position (the default plays from the beginning).
@@ -1895,6 +1903,10 @@ mixin RtcAudioEffectInterface {
   /// Gets the volume of the audio effects.
   ///
   /// The value ranges between 0.0 and 100.0.
+  ///
+  /// **Returns**
+  /// - Volume of the audio effects, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<double> getEffectsVolume();
 
   /// Sets the volume of the audio effects.
@@ -1973,9 +1985,9 @@ mixin RtcAudioEffectInterface {
   /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
-  /// **Return**
-  /// - &le; 0: A successful method call. Returns the total duration (ms) of the specified audio effect file.
-  /// - < 0: Failure.
+  /// **Returns**
+  /// - The total duration (ms) of the specified audio file, if this method call succeeds.
+  /// - Error code, if this method call fails.
   ///   - -22(`ERR_RESOURCE_LIMITED`): Cannot find the audio effect file. Please set a valid `filePath`.
   Future<int> getEffectDuration(String filePath);
 
@@ -1986,9 +1998,9 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Parameter** [soundId] Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
   ///
-  /// **Return**
-  /// - &le; 0: A successful method call. Returns the playback position (ms) of the specified audio effect file.
-  /// - < 0: Failure.
+  /// **Returns**
+  /// - The playback position (ms) of the specified audio effect file, if this method call succeeds.
+  /// - Error code, if this method call fails.
   ///   - -22(`ERR_RESOURCE_LIMITED`):  Cannot find the audio effect file. Please set a valid `soundId`.
   Future<int> getEffectCurrentPosition(int soundId);
 
@@ -1998,11 +2010,6 @@ mixin RtcAudioEffectInterface {
   /// If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
   ///
   /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID.
-  ///
-  /// **Return**
-  /// - 0: Success.
-  /// - < 0: Failure.
-  ///   - -22(`ERR_RESOURCE_LIMITED`): Cannot find the audio effect file. Please set a valid `soundId`.
   Future<void> stopEffect(int soundId);
 
   /// Stops playing all audio effects.
@@ -2907,7 +2914,8 @@ mixin RtcCameraInterface {
   ///
   /// **Returns**
   ///
-  /// The maximum camera zoom factor.
+  /// - The maximum camera zoom factor, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<double> getCameraMaxZoomFactor();
 
   /// Sets the camera manual focus position.
@@ -2994,8 +3002,8 @@ mixin RtcStreamMessageInterface {
   ///
   ///
   /// **Returns**
-  /// - 0: Success.
-  /// - < 0: Failure.
+  /// - The stream ID, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<int> createDataStream(bool reliable, bool ordered);
 
   /// Creates a data stream.
@@ -3009,8 +3017,8 @@ mixin RtcStreamMessageInterface {
   /// **Parameter** [config] The configurations for the data stream: [DataStreamConfig].
   ///
   /// **Returns**
-  /// - Returns the stream ID if you successfully create the data stream.
-  /// - < 0: Fails to create the data stream.
+  /// - The stream ID, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<int> createDataStreamWithConfig(DataStreamConfig config);
 
   /// Sends data stream messages.
