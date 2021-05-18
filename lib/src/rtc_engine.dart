@@ -1751,7 +1751,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
-  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
   /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
@@ -1847,7 +1847,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
-  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
   /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   /// 
@@ -1924,7 +1924,7 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
-  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
   /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
@@ -1969,7 +1969,7 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
-  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
   /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
@@ -2020,7 +2020,7 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
-  ///   **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
   /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   Future<void> preloadEffect(int soundId, String filePath);
