@@ -51,15 +51,25 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     }
   }
 
-  private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
+  private fun initPlugin(
+    context: Context,
+    binaryMessenger: BinaryMessenger,
+    platformViewRegistry: PlatformViewRegistry
+  ) {
     applicationContext = context.applicationContext
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
     eventChannel.setStreamHandler(this)
 
-    platformViewRegistry.registerViewFactory("AgoraSurfaceView", AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin))
-    platformViewRegistry.registerViewFactory("AgoraTextureView", AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin))
+    platformViewRegistry.registerViewFactory(
+      "AgoraSurfaceView",
+      AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin)
+    )
+    platformViewRegistry.registerViewFactory(
+      "AgoraTextureView",
+      AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin)
+    )
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

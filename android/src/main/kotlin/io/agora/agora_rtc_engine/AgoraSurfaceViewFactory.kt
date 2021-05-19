@@ -18,7 +18,14 @@ class AgoraSurfaceViewFactory(
   private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
   override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-    return AgoraSurfaceView(context.applicationContext, messenger, viewId, args as? Map<*, *>, rtcEnginePlugin, rtcChannelPlugin)
+    return AgoraSurfaceView(
+      context.applicationContext,
+      messenger,
+      viewId,
+      args as? Map<*, *>,
+      rtcEnginePlugin,
+      rtcChannelPlugin
+    )
   }
 }
 
@@ -56,17 +63,18 @@ class AgoraSurfaceView(
     this.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
       function.let { method ->
         val parameters = mutableListOf<Any?>()
-        function.parameters.forEach { parameter ->
-          val map = call.arguments<Map<*, *>>()
-          if (map.containsKey(parameter.name)) {
-            parameters.add(map[parameter.name])
+        call.arguments<Map<*, *>>()?.let { args ->
+          args.values.forEach {
+            parameters.add(it)
           }
         }
         try {
           method.invoke(this, *parameters.toTypedArray())
+          result.success(null)
           return@onMethodCall
         } catch (e: Exception) {
           e.printStackTrace()
+          result.error(e.toString(), null, null)
         }
       }
     }

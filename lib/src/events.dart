@@ -584,16 +584,14 @@ class RtcEngineEventHandler {
   @deprecated
   EmptyCallback? audioMixingFinished;
 
-  /// Occurs when the state of the local user's audio mixing file changes.
+  /// Occurs when the playback state of the local user's music file changes.
   ///
   /// When you call the [RtcEngine.startAudioMixing] method and the state of audio mixing file changes, the Agora SDK triggers this callback.
-  /// - When the audio mixing file plays, pauses playing, or stops playing, this callback returns 710, 711, or 713 in state, and 0 in the `errorCode` parameter.
-  /// - When exceptions occur during playback, this callback returns 714 in state and an error in the `errorCode` parameter.
-  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [WarningCode.AudioMixingOpenError] = 701.
+  /// When the playback state of the local user's music file changes, the SDK triggers this callback and reports the current playback state and the reason for the change.
   ///
   /// The `AudioMixingStateCallback` typedef includes the following parameters:
-  /// - [AudioMixingStateCode] `state`: The state code.
-  /// - [AudioMixingReason] `reason`: The reason.
+  /// - [AudioMixingStateCode] `state`: The current music file playback state.
+  /// - [AudioMixingReason] `reason`: The reason for the change of the music file playback state.
   AudioMixingStateCallback? audioMixingStateChanged;
 
   /// Occurs when the audio effect file playback finishes.
