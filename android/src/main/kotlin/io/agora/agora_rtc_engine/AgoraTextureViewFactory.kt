@@ -79,17 +79,39 @@ class TextureRender(
     return render.pixelFormat
   }
 
-  override fun consumeByteBufferFrame(buffer: ByteBuffer?, format: Int, width: Int, height: Int, rotation: Int, timestamp: Long) {
+  override fun consumeByteBufferFrame(
+    buffer: ByteBuffer?,
+    format: Int,
+    width: Int,
+    height: Int,
+    rotation: Int,
+    timestamp: Long
+  ) {
     updateTextureSize(width, height)
     render.consume(buffer, format, width, height, rotation, timestamp)
   }
 
-  override fun consumeByteArrayFrame(data: ByteArray?, format: Int, width: Int, height: Int, rotation: Int, timestamp: Long) {
+  override fun consumeByteArrayFrame(
+    data: ByteArray?,
+    format: Int,
+    width: Int,
+    height: Int,
+    rotation: Int,
+    timestamp: Long
+  ) {
     updateTextureSize(width, height)
     render.consume(data, format, width, height, rotation, timestamp)
   }
 
-  override fun consumeTextureFrame(textureId: Int, format: Int, width: Int, height: Int, rotation: Int, timestamp: Long, matrix: FloatArray?) {
+  override fun consumeTextureFrame(
+    textureId: Int,
+    format: Int,
+    width: Int,
+    height: Int,
+    rotation: Int,
+    timestamp: Long,
+    matrix: FloatArray?
+  ) {
     updateTextureSize(width, height)
     render.consume(textureId, format, width, height, rotation, timestamp, matrix)
   }
@@ -106,17 +128,18 @@ class TextureRender(
     this.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
       function.let { method ->
         val parameters = mutableListOf<Any?>()
-        function.parameters.forEach { parameter ->
-          val map = call.arguments<Map<*, *>>()
-          if (map.containsKey(parameter.name)) {
-            parameters.add(map[parameter.name])
+        call.arguments<Map<*, *>>()?.let { args ->
+          args.values.forEach {
+            parameters.add(it)
           }
         }
         try {
           method.invoke(this, *parameters.toTypedArray())
+          result.success(null)
           return@onMethodCall
         } catch (e: Exception) {
           e.printStackTrace()
+          result.error(e.toString(), null, null)
         }
       }
     }
@@ -128,7 +151,10 @@ class TextureRender(
     val channel = (data["channelId"] as? String)?.let { getChannel(it) }
     if (uid == 0) {
       getEngine()?.setLocalVideoRenderer(this)
-      getEngine()?.setLocalRenderMode(Constants.RENDER_MODE_FIT, Constants.VIDEO_MIRROR_MODE_ENABLED)
+      getEngine()?.setLocalRenderMode(
+        Constants.RENDER_MODE_FIT,
+        Constants.VIDEO_MIRROR_MODE_ENABLED
+      )
     } else {
       channel?.let {
         it.setRemoteVideoRenderer(uid, this)
@@ -155,7 +181,12 @@ class AgoraTextureViewFactory(
   companion object {
     private val renders = mutableMapOf<Long, TextureRender>()
 
-    fun createTextureRender(textureRegistry: TextureRegistry, messenger: BinaryMessenger, rtcEnginePlugin: AgoraRtcEnginePlugin, rtcChannelPlugin: AgoraRtcChannelPlugin): Long {
+    fun createTextureRender(
+      textureRegistry: TextureRegistry,
+      messenger: BinaryMessenger,
+      rtcEnginePlugin: AgoraRtcEnginePlugin,
+      rtcChannelPlugin: AgoraRtcChannelPlugin
+    ): Long {
       val render = TextureRender(textureRegistry, messenger, rtcEnginePlugin, rtcChannelPlugin)
       val id = render.getId()
       renders[id] = render

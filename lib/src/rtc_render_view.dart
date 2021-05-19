@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 
 import 'enum_converter.dart';
 import 'enums.dart';
+import 'rtc_engine.dart';
 
 final Map<int, MethodChannel> _channels = {};
 

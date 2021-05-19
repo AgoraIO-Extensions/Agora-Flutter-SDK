@@ -109,7 +109,12 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
     val messenger = registrar?.messenger() ?: binding?.binaryMessenger
     if (call.method == "createTextureRender") {
-      val id = AgoraTextureViewFactory.createTextureRender(textureRegistry!!, messenger!!, this, rtcChannelPlugin)
+      val id = AgoraTextureViewFactory.createTextureRender(
+        textureRegistry!!,
+        messenger!!,
+        this,
+        rtcChannelPlugin
+      )
       result.success(id)
       return
     } else if (call.method == "destroyTextureRender") {
