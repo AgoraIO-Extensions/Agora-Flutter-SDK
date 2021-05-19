@@ -1,3 +1,54 @@
+# [4.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.4...v4.0.0) (2021-05-19)
+
+# [4.0.0-rc.4](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-05-19)
+
+
+### Bug Fixes
+
+* build error ([4d05a50](https://github.com/AgoraIO/Flutter-SDK/commit/4d05a50135ab30dd1abea54c990fbc488e284408))
+* **uid compatible:** int to uint ([ddaa354](https://github.com/AgoraIO/Flutter-SDK/commit/ddaa3544a126d39f58184e8ed98e7031fa2d3991))
+
+
+### Features
+
+* support native 3.4.2 ([e792d26](https://github.com/AgoraIO/Flutter-SDK/commit/e792d263f271b2ec1aae2c7970471527d7dc5c1b))
+* support native 3.4.2 ([ca658b2](https://github.com/AgoraIO/Flutter-SDK/commit/ca658b2893174f9b71a6a6b704da55d6e4617267))
+* **upgrade:** 3.4.1 ([11cef0f](https://github.com/AgoraIO/Flutter-SDK/commit/11cef0f052783e0a8eec0e5da8b461588f03a78d))
+
+# [4.0.0-rc.3](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-03-22)
+
+
+### Bug Fixes
+
+* iOS selector error ([2d1ac8f](https://github.com/AgoraIO/Flutter-SDK/commit/2d1ac8f1b902f71c06b0b1729579adf396b58c9b))
+
+# [4.0.0-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2021-03-11)
+
+
+### Bug Fixes
+
+* enum ExperienceQualityType value error ([d77ae0a](https://github.com/AgoraIO/Flutter-SDK/commit/d77ae0a2d2d6b953b16a98e855268bedbdce1066))
+
+# [4.0.0-rc.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.0...v4.0.0-rc.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* type cast error ([e12781e](https://github.com/AgoraIO/Flutter-SDK/commit/e12781e5d337fc1f85bba5f00d0301696fc9a3e5))
+* type cast error ([98c4331](https://github.com/AgoraIO/Flutter-SDK/commit/98c4331bd97ab1e2dc7216470fc2978c5d4dcd74))
+
+# [4.0.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.0...v4.0.0-rc.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* iOS `pod install` error ([fea1984](https://github.com/AgoraIO/Flutter-SDK/commit/fea1984f1eb8fd98dcba781463411a6675d176f0))
+* support null safety ([3d17230](https://github.com/AgoraIO/Flutter-SDK/commit/3d172304fcd454403d6a8d72c73070362514ea00))
+
+
+### Features
+* upgrade to dart 2.12.0 and migrating to null safety [#264](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/264) [#265](https://github.com/AgoraIO/Agora-Flutter-SDK/pull/265) ([b555e37b](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/b555e37b1d3ee7045d02341e2172cdefe2359b7b))
+
 ## [3.3.3](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.2...v3.3.3) (2021-04-13)
 
 

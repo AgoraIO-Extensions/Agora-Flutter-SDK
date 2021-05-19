@@ -6,7 +6,6 @@ import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'events.dart';
-import 'rtc_engine.dart';
 
 /// The RtcChannel class.
 class RtcChannel with RtcChannelInterface {
@@ -15,18 +14,19 @@ class RtcChannel with RtcChannelInterface {
   static const EventChannel _eventChannel =
       EventChannel('agora_rtc_channel/events');
 
-  static StreamSubscription _subscription;
+  static StreamSubscription? _subscription;
 
   static final Map<String, RtcChannel> _channels = {};
 
   /// The ID of RtcChannel
   final String channelId;
 
-  RtcChannelEventHandler _handler;
+  RtcChannelEventHandler? _handler;
 
   RtcChannel._(this.channelId);
 
-  Future<T> _invokeMethod<T>(String method, [Map<String, dynamic> arguments]) {
+  Future<T?> _invokeMethod<T>(String method,
+      [Map<String, dynamic>? arguments]) {
     return _methodChannel.invokeMethod(
         method,
         arguments == null
@@ -46,10 +46,10 @@ class RtcChannel with RtcChannelInterface {
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   static Future<RtcChannel> create(String channelId) async {
-    if (_channels.containsKey(channelId)) return _channels[channelId];
+    if (_channels.containsKey(channelId)) return _channels[channelId]!;
     await _methodChannel.invokeMethod('create', {'channelId': channelId});
     _channels[channelId] = RtcChannel._(channelId);
-    return _channels[channelId];
+    return _channels[channelId]!;
   }
 
   /// Destroys all [RtcChannel] instance.
@@ -85,7 +85,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]) {
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
       'options': options?.toJson()
@@ -93,7 +93,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> joinChannel(String token, String optionalInfo, int optionalUid,
+  Future<void> joinChannel(String? token, String? optionalInfo, int optionalUid,
       ChannelMediaOptions options) {
     return _invokeMethod('joinChannel', {
       'token': token,
@@ -105,7 +105,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> joinChannelWithUserAccount(
-      String token, String userAccount, ChannelMediaOptions options) {
+      String? token, String userAccount, ChannelMediaOptions options) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'userAccount': userAccount,
@@ -141,7 +141,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<String> getCallId() {
+  Future<String?> getCallId() {
     return _invokeMethod('getCallId');
   }
 
@@ -199,7 +199,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   @deprecated
-  Future<int> createDataStream(bool reliable, bool ordered) {
+  Future<int?> createDataStream(bool reliable, bool ordered) {
     return _invokeMethod(
         'createDataStream', {'reliable': reliable, 'ordered': ordered});
   }
@@ -315,9 +315,8 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<int> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod(
-        'createDataStream', {'config': config.toJson()});
+  Future<int?> createDataStreamWithConfig(DataStreamConfig config) {
+    return _invokeMethod('createDataStream', {'config': config.toJson()});
   }
 
   @override
@@ -359,7 +358,7 @@ mixin RtcChannelInterface
   /// **Parameter** [role] The role of the user. See [ClientRole].
   ///
   /// **Parameter** [options] The detailed options of a user, including user level. See [ClientRoleOptions].
-  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]);
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]);
 
   /// Joins the channel with a user ID.
   ///
@@ -390,7 +389,7 @@ mixin RtcChannelInterface
   /// **Parameter** [optionalUid] The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the `onJoinChannelSuccess` callback. The app must maintain this user ID.
   ///
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
-  Future<void> joinChannel(String token, String optionalInfo, int optionalUid,
+  Future<void> joinChannel(String? token, String? optionalInfo, int optionalUid,
       ChannelMediaOptions options);
 
   /// Joins a channel with the user account.
@@ -413,7 +412,7 @@ mixin RtcChannelInterface
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
   ///
   Future<void> joinChannelWithUserAccount(
-      String token, String userAccount, ChannelMediaOptions options);
+      String? token, String userAccount, ChannelMediaOptions options);
 
   /// Leaves the current channel.
   ///
@@ -452,7 +451,7 @@ mixin RtcChannelInterface
   ///  **Returns**
   /// - The current call ID, if the method call succeeds.
   /// - The empty string "", if the method call fails.
-  Future<String> getCallId();
+  Future<String?> getCallId();
 }
 
 /// @nodoc
@@ -829,7 +828,7 @@ mixin RtcStreamMessageInterface {
   /// - 0: Success.
   /// - < 0: Failure.
   @deprecated
-  Future<int> createDataStream(bool reliable, bool ordered);
+  Future<int?> createDataStream(bool reliable, bool ordered);
 
   ///  Creates a data stream.
   ///
@@ -844,7 +843,7 @@ mixin RtcStreamMessageInterface {
   /// **Returns**
   /// - Returns the stream ID if you successfully create the data stream.
   /// - < 0: Fails to create the data stream.
-  Future<int> createDataStreamWithConfig(DataStreamConfig config);
+  Future<int?> createDataStreamWithConfig(DataStreamConfig config);
 
   /// Sends the data stream message.
   ///

@@ -10,32 +10,26 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// VoiceChange Example
 class VoiceChange extends StatefulWidget {
-  RtcEngine _engine = null;
-
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<VoiceChange> {
-  String renderChannelId;
+  late final RtcEngine _engine;
   bool isJoined = false;
-  ClientRole role;
   List<int> remoteUids = [];
   bool isLowAudio = true;
-  int uidMySelf;
-  int selectedVoiceToolBtn;
-  AudioEffectPreset currentAudioEffectPreset;
+  int? uidMySelf;
+  int? selectedVoiceToolBtn;
+  AudioEffectPreset currentAudioEffectPreset = AudioEffectPreset.AudioEffectOff;
 
-  bool isEnableSlider1 = false;
-  bool isEnableSlider2 = false;
-  String sliderTitle1;
-  String sliderTitle2;
-  double minimumValue1;
-  double maximumValue1;
-  double minimumValue2;
-  double maximumValue2;
-  double sliderValue1;
-  double sliderValue2;
+  bool isEnableSlider1 = false, isEnableSlider2 = false;
+  String sliderTitle1 = '', sliderTitle2 = '';
+  double minimumValue1 = 0,
+      maximumValue1 = 0,
+      minimumValue2 = 0,
+      maximumValue2 = 0;
+  double? sliderValue1, sliderValue2;
   Map selectedFreq = FreqOptions[0];
   Map selectedReverbKey = ReverbKeyOptions[0];
 
@@ -51,26 +45,25 @@ class _State extends State<VoiceChange> {
   @override
   void dispose() {
     super.dispose();
-    widget._engine?.destroy();
+    _engine.destroy();
   }
 
   _initEngine() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    widget._engine =
-        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListener();
 
     // enable video module and set up video encoding configs
-    await widget._engine?.enableVideo();
+    await _engine.enableVideo();
 
     // make this room live broadcasting room
-    await widget._engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await this._updateClientRole(ClientRole.Broadcaster);
 
     // Set audio route to speaker
-    await widget._engine?.setDefaultAudioRoutetoSpeakerphone(true);
+    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
 
     // start joining channel
     // 1. Users can only see each other after they join the
@@ -78,13 +71,11 @@ class _State extends State<VoiceChange> {
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    await widget._engine
-        ?.joinChannel(config.token, config.channelId, null, 0, null);
+    await _engine.joinChannel(config.token, config.channelId, null, 0, null);
   }
 
   _addListener() {
-    widget._engine
-        ?.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
+    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
       log('Warning ${warningCode}');
     }, error: (errorCode) {
       log('Warning ${errorCode}');
@@ -111,37 +102,35 @@ class _State extends State<VoiceChange> {
   _updateClientRole(ClientRole role) async {
     var option;
     if (role == ClientRole.Broadcaster) {
-      await widget._engine?.setVideoEncoderConfiguration(
-          VideoEncoderConfiguration(
-              dimensions: VideoDimensions(640, 360),
-              frameRate: VideoFrameRate.Fps30,
-              orientationMode: VideoOutputOrientationMode.Adaptative));
+      await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
+          dimensions: VideoDimensions(640, 360),
+          frameRate: VideoFrameRate.Fps30,
+          orientationMode: VideoOutputOrientationMode.Adaptative));
       // enable camera/mic, this will bring up permission dialog for first time
-      await widget._engine?.enableLocalAudio(true);
-      await widget._engine?.enableLocalVideo(true);
+      await _engine.enableLocalAudio(true);
+      await _engine.enableLocalVideo(true);
     } else {
       // You have to provide client role options if set to audience
       option = ClientRoleOptions(isLowAudio
           ? AudienceLatencyLevelType.LowLatency
           : AudienceLatencyLevelType.UltraLowLatency);
     }
-    await widget._engine?.setClientRole(role, option);
+    await _engine.setClientRole(role, option);
   }
 
   _onPressBFButtonn(dynamic type, int index) async {
     switch (index) {
       case 0:
       case 1:
-        await widget._engine
-            ?.setVoiceBeautifierPreset(type as VoiceBeautifierPreset);
+        await _engine.setVoiceBeautifierPreset(type as VoiceBeautifierPreset);
         this._updateSliderUI(AudioEffectPreset.AudioEffectOff);
         break;
       case 2:
       case 3:
       case 4:
       case 5:
-        await widget._engine?.setAudioEffectPreset(type as AudioEffectPreset);
-        this._updateSliderUI(type as AudioEffectPreset);
+        await _engine.setAudioEffectPreset(type as AudioEffectPreset);
+        this._updateSliderUI(type);
         break;
       default:
         break;
@@ -181,8 +170,8 @@ class _State extends State<VoiceChange> {
   }
 
   _onAudioEffectUpdate({
-    double value1,
-    double value2,
+    double? value1,
+    double? value2,
   }) async {
     this.setState(() {
       if (value1 != null) {
@@ -191,7 +180,7 @@ class _State extends State<VoiceChange> {
       if (value2 != null) {
         sliderValue2 = value2;
       }
-      widget._engine?.setAudioEffectParameters(
+      _engine.setAudioEffectParameters(
           currentAudioEffectPreset,
           (isEnableSlider1 ? sliderValue1 ?? minimumValue1 : 0).toInt(),
           (isEnableSlider2 ? sliderValue2 ?? minimumValue2 : 0).toInt());
@@ -208,12 +197,13 @@ class _State extends State<VoiceChange> {
           actions: <Widget>[
             for (var freqOpt in FreqOptions)
               TextButton(
-                child: Text(freqOpt['text']),
+                child: Text(freqOpt['text'] as String),
                 onPressed: () {
                   setState(() {
                     selectedFreq = freqOpt;
-                    widget._engine?.setLocalVoiceEqualization(
-                        freqOpt['type'], bandGainValue.toInt());
+                    _engine.setLocalVoiceEqualization(
+                        freqOpt['type'] as AudioEqualizationBandFrequency,
+                        bandGainValue.toInt());
                   });
                   Navigator.of(context).pop();
                 },
@@ -234,7 +224,7 @@ class _State extends State<VoiceChange> {
           actions: <Widget>[
             for (var reverbKey in ReverbKeyOptions)
               TextButton(
-                child: Text(reverbKey['text']),
+                child: Text(reverbKey['text'] as String),
                 onPressed: () {
                   setState(() {
                     selectedReverbKey = reverbKey;
@@ -274,7 +264,7 @@ class _State extends State<VoiceChange> {
                   ),
                   Expanded(
                     child: Slider(
-                      value: sliderValue1,
+                      value: sliderValue1!,
                       min: minimumValue1,
                       max: maximumValue1,
                       divisions: 5,
@@ -295,7 +285,7 @@ class _State extends State<VoiceChange> {
                   Expanded(child: Text(sliderTitle2), flex: 1),
                   Expanded(
                       child: Slider(
-                        value: sliderValue2,
+                        value: sliderValue2!,
                         min: minimumValue2,
                         max: maximumValue2,
                         divisions: 5,
@@ -324,7 +314,7 @@ class _State extends State<VoiceChange> {
                     setState(() {
                       voicePitchValue = value;
                     });
-                    widget._engine?.setLocalVoicePitch(value);
+                    _engine.setLocalVoicePitch(value);
                   },
                 )
               ],
@@ -352,7 +342,7 @@ class _State extends State<VoiceChange> {
                     this.setState(() {
                       bandGainValue = value;
                     });
-                    widget._engine?.setLocalVoiceEqualization(
+                    _engine.setLocalVoiceEqualization(
                         selectedFreq['type'], value.toInt());
                   },
                 )
@@ -381,7 +371,7 @@ class _State extends State<VoiceChange> {
                     setState(() {
                       reverbValue = value;
                     });
-                    await widget._engine?.setLocalVoiceReverb(
+                    await _engine.setLocalVoiceReverb(
                         selectedReverbKey['type'], value.toInt());
                   },
                 )
@@ -413,7 +403,7 @@ class _State extends State<VoiceChange> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _initEngine,
                           child: Text('Join channel'),
                         ),

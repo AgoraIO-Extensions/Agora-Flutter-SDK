@@ -6,31 +6,31 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 extension AgoraUserInfo {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "uid": uid,
-            "userAccount": userAccount
+            "userAccount": userAccount,
         ]
     }
 }
 
 extension AgoraRtcLocalAudioStats {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "numChannels": numChannels,
             "sentSampleRate": sentSampleRate,
             "sentBitrate": sentBitrate,
-            "txPacketLossRate": txPacketLossRate
+            "txPacketLossRate": txPacketLossRate,
         ]
     }
 }
 
 extension AgoraChannelStats {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "totalDuration": duration,
             "txBytes": txBytes,
@@ -54,24 +54,24 @@ extension AgoraChannelStats {
             "gatewayRtt": gatewayRtt,
             "memoryAppUsageRatio": memoryAppUsageRatio,
             "memoryTotalUsageRatio": memoryTotalUsageRatio,
-            "memoryAppUsageInKbytes": memoryAppUsageInKbytes
+            "memoryAppUsageInKbytes": memoryAppUsageInKbytes,
         ]
     }
 }
 
 extension CGRect {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "left": origin.x,
             "top": origin.y,
             "right": origin.x + size.width,
-            "bottom": origin.y + size.height
+            "bottom": origin.y + size.height,
         ]
     }
 }
 
 extension AgoraRtcRemoteAudioStats {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "uid": uid,
             "quality": quality,
@@ -87,13 +87,13 @@ extension AgoraRtcRemoteAudioStats {
             "publishDuration": publishDuration,
             "qoeQuality": qoeQuality,
             "qualityChangedReason": qualityChangedReason,
-            "mosValue": mosValue
+            "mosValue": mosValue,
         ]
     }
 }
 
 extension AgoraRtcLocalVideoStats {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "sentBitrate": sentBitrate,
             "sentFrameRate": sentFrameRate,
@@ -109,13 +109,13 @@ extension AgoraRtcLocalVideoStats {
             "codecType": codecType.rawValue,
             "txPacketLossRate": txPacketLossRate,
             "captureFrameRate": captureFrameRate,
-            "captureBrightnessLevel": captureBrightnessLevel.rawValue
+            "captureBrightnessLevel": captureBrightnessLevel.rawValue,
         ]
     }
 }
 
 extension AgoraRtcRemoteVideoStats {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "uid": uid,
             "delay": delay,
@@ -129,26 +129,26 @@ extension AgoraRtcRemoteVideoStats {
             "totalFrozenTime": totalFrozenTime,
             "frozenRate": frozenRate,
             "totalActiveTime": totalActiveTime,
-            "publishDuration": publishDuration
+            "publishDuration": publishDuration,
         ]
     }
 }
 
 extension AgoraRtcAudioVolumeInfo {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "uid": uid,
             "volume": volume,
             "vad": vad,
-            "channelId": channelId
+            "channelId": channelId,
         ]
     }
 }
 
 extension Array where Element: AgoraRtcAudioVolumeInfo {
-    func toMapList() -> Array<Dictionary<String, Any?>> {
-        var list = [Dictionary<String, Any?>]()
-        self.forEach {
+    func toMapList() -> [[String: Any?]] {
+        var list = [[String: Any?]]()
+        forEach {
             list.append($0.toMap())
         }
         return list
@@ -156,42 +156,42 @@ extension Array where Element: AgoraRtcAudioVolumeInfo {
 }
 
 extension AgoraLastmileProbeOneWayResult {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "packetLossRate": packetLossRate,
             "jitter": jitter,
-            "availableBandwidth": availableBandwidth
+            "availableBandwidth": availableBandwidth,
         ]
     }
 }
 
 extension AgoraLastmileProbeResult {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "state": state.rawValue,
             "rtt": rtt,
             "uplinkReport": uplinkReport.toMap(),
-            "downlinkReport": downlinkReport.toMap()
+            "downlinkReport": downlinkReport.toMap(),
         ]
     }
 }
 
 extension AgoraFacePositionInfo {
-    func toMap() -> Dictionary<String, Any?> {
+    func toMap() -> [String: Any?] {
         return [
             "x": x,
             "y": y,
             "width": width,
             "height": height,
-            "distance": distance
+            "distance": distance,
         ]
     }
 }
 
 extension Array where Element: AgoraFacePositionInfo {
-    func toMapList() -> Array<Dictionary<String, Any?>> {
-        var list = [Dictionary<String, Any?>]()
-        self.forEach {
+    func toMapList() -> [[String: Any?]] {
+        var list = [[String: Any?]]()
+        forEach {
             list.append($0.toMap())
         }
         return list

@@ -86,7 +86,7 @@ typedef RemoteVideoStatsCallback = void Function(RemoteVideoStats stats);
 typedef RemoteAudioStatsCallback = void Function(RemoteAudioStats stats);
 // ignore: public_member_api_docs
 typedef AudioMixingStateCallback = void Function(
-    AudioMixingStateCode state, AudioMixingErrorCode errorCode);
+    AudioMixingStateCode state, AudioMixingReason reason);
 // ignore: public_member_api_docs
 typedef SoundIdCallback = void Function(int soundId);
 // ignore: public_member_api_docs
@@ -166,7 +166,7 @@ class RtcEngineEventHandler {
   ///
   /// The `WarningCallback` typedef includes the following parameter:
   /// - [WarningCode] `warn`: Warning code.
-  WarningCallback warning;
+  WarningCallback? warning;
 
   /// Reports an error during SDK runtime.
   ///
@@ -176,7 +176,7 @@ class RtcEngineEventHandler {
   ///
   /// The `ErrorCallback` typedef includes the following parameter:
   /// - [ErrorCode] `err`: Error code.
-  ErrorCallback error;
+  ErrorCallback? error;
 
   /// Occurs when an API method is executed.
   ///
@@ -184,7 +184,7 @@ class RtcEngineEventHandler {
   /// - [ErrorCode] `error`: Error code.
   /// - [String] `api`: The method executed by the SDK.
   /// - [String] `result`: The result of the method call.
-  ApiCallCallback apiCallExecuted;
+  ApiCallCallback? apiCallExecuted;
 
   /// Occurs when the local user joins a specified channel.
   ///
@@ -196,7 +196,7 @@ class RtcEngineEventHandler {
   /// - [String] `channel`: Channel name.
   /// - [int] `uid`: User ID.
   /// - [int] `elapsed`:Time elapsed (ms) from the user calling [RtcEngine.joinChannel] until this callback is triggered.
-  UidWithElapsedAndChannelCallback joinChannelSuccess;
+  UidWithElapsedAndChannelCallback? joinChannelSuccess;
 
   /// Occurs when a user rejoins the channel after being disconnected due to network problems.
   ///
@@ -206,7 +206,7 @@ class RtcEngineEventHandler {
   /// - [String] `channel`: Channel name.
   /// - [int] `uid`: User ID.
   /// - [int] `elapsed`:Time elapsed (ms) from the user calling [RtcEngine.joinChannel] until this callback is triggered.
-  UidWithElapsedAndChannelCallback rejoinChannelSuccess;
+  UidWithElapsedAndChannelCallback? rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
   ///
@@ -216,7 +216,7 @@ class RtcEngineEventHandler {
   ///
   /// The `RtcStatsCallback` typedef includes the following parameter:
   /// - [RtcStats] `stats`: Statistics of the call.
-  RtcStatsCallback leaveChannel;
+  RtcStatsCallback? leaveChannel;
 
   /// Occurs when the local user registers a user account.
   ///
@@ -225,7 +225,7 @@ class RtcEngineEventHandler {
   /// The `UserAccountCallback` typedef includes the following parameters:
   /// - [int] `uid`: The ID of the local user.
   /// - [String] `userAccount`: The account of the local user.
-  UserAccountCallback localUserRegistered;
+  UserAccountCallback? localUserRegistered;
 
   /// Occurs when the SDK gets the user ID and user account of the remote user.
   ///
@@ -234,7 +234,7 @@ class RtcEngineEventHandler {
   /// The `UserInfoCallback` typedef includes the following parameters:
   /// - [int] `uid`: The ID of the local user.
   /// - [UserInfo] `userInfo`: The `UserInfo` object that contains the user ID and user account of the remote user.
-  UserInfoCallback userInfoUpdated;
+  UserInfoCallback? userInfoUpdated;
 
   /// Occurs when the user role switches in a live broadcast. For example, from a host to an audience or from an audience to a host.
   ///
@@ -243,7 +243,7 @@ class RtcEngineEventHandler {
   /// The `ClientRoleCallback` typedef includes the following parameters:
   /// - [ClientRole] `oldRole`: Role that the user switches from.
   /// - [ClientRole] `newRole`: Role that the user switches to.
-  ClientRoleCallback clientRoleChanged;
+  ClientRoleCallback? clientRoleChanged;
 
   /// Occurs when a remote user ([ChannelProfile.Communication])/host ([ChannelProfile.LiveBroadcasting]) joins the channel.
   /// - [ChannelProfile.Communication] profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
@@ -274,7 +274,7 @@ class RtcEngineEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedCallback userJoined;
+  UidWithElapsedCallback? userJoined;
 
   /// Occurs when a remote user ([ChannelProfile.Communication])/host ([ChannelProfile.LiveBroadcasting]) leaves the channel.
   ///
@@ -285,7 +285,7 @@ class RtcEngineEventHandler {
   /// The `UserOfflineCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the user or host who leaves the channel or goes offline.
   /// - [UserOfflineReason] `reason`: Reason why the user goes offline.
-  UserOfflineCallback userOffline;
+  UserOfflineCallback? userOffline;
 
   /// Occurs when the network connection state changes.
   ///
@@ -294,7 +294,7 @@ class RtcEngineEventHandler {
   /// The `ConnectionStateCallback` typedef includes the following parameters:
   /// - [ConnectionStateType] `state`: The current network connection state.
   /// - [ConnectionChangedReason] `reason`: The reason causing the change of the connection state.
-  ConnectionStateCallback connectionStateChanged;
+  ConnectionStateCallback? connectionStateChanged;
 
   /// Occurs when the network type changes.
   ///
@@ -302,7 +302,7 @@ class RtcEngineEventHandler {
   ///
   /// The `NetworkTypeCallback` typedef includes the following parameters:
   /// - [NetworkType] `type`: The network type.
-  NetworkTypeCallback networkTypeChanged;
+  NetworkTypeCallback? networkTypeChanged;
 
   /// Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
   ///
@@ -310,7 +310,7 @@ class RtcEngineEventHandler {
   /// If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
   ///
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback connectionLost;
+  EmptyCallback? connectionLost;
 
   /// Occurs when the token expires in 30 seconds.
   ///
@@ -318,14 +318,14 @@ class RtcEngineEventHandler {
   ///
   /// The `TokenCallback` typedef includes the following parameters:
   /// - [String] `token`: The token that will expire in 30 seconds.
-  TokenCallback tokenPrivilegeWillExpire;
+  TokenCallback? tokenPrivilegeWillExpire;
 
   /// Occurs when the token has expired.
   ///
   /// After a token is specified when joining the channel, the token expires after a certain period of time, and a new token is required to reconnect to the server. This callback notifies the app to generate a new token and call [RtcEngine.joinChannel] to rejoin the channel with the new token.
   ///
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback requestToken;
+  EmptyCallback? requestToken;
 
   /// Reports which users are speaking and the speakers' volume, and whether the local user is speaking.
   ///
@@ -342,7 +342,7 @@ class RtcEngineEventHandler {
   /// The `AudioVolumeCallback` typedef includes the following parameters:
   /// - [List]<[AudioVolumeInfo]> `speakers`: An array containing the user ID and volume information for each speaker.
   /// - [int] `totalVolume`: Total volume after audio mixing. The value ranges between 0 (lowest volume) and 255 (highest volume).
-  AudioVolumeCallback audioVolumeIndication;
+  AudioVolumeCallback? audioVolumeIndication;
 
   /// Reports which user is the loudest speaker.
   ///
@@ -354,14 +354,14 @@ class RtcEngineEventHandler {
   ///
   /// The `UidCallback` typedef includes the following parameters:
   /// - [int] `uid`: User ID of the active speaker. A `uid` of 0 represents the local user.
-  UidCallback activeSpeaker;
+  UidCallback? activeSpeaker;
 
   /// Occurs when the first local audio frame is sent.
   ///
   /// The `ElapsedCallback` typedef includes the following parameters:
   /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
   @deprecated
-  ElapsedCallback firstLocalAudioFrame;
+  ElapsedCallback? firstLocalAudioFrame;
 
   /// Occurs when the first local video frame is rendered.
   ///
@@ -371,7 +371,7 @@ class RtcEngineEventHandler {
   /// - [int] `width`: Width (pixels) of the first local video frame.
   /// - [int] `height`: Height (pixels) of the first local video frame.
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered. If [RtcEngine.startPreview] is called before [RtcEngine.joinChannel], elapsed is the time elapsed (ms) from the local user calling [RtcEngine.startPreview] until this callback is triggered.
-  VideoFrameCallback firstLocalVideoFrame;
+  VideoFrameCallback? firstLocalVideoFrame;
 
   /// Occurs when a remote user stops/resumes sending the video stream.
   ///
@@ -390,7 +390,7 @@ class RtcEngineEventHandler {
   ///    - `true`: Pause.
   ///    - `false`: Resume.
   @deprecated
-  UidWithMutedCallback userMuteVideo;
+  UidWithMutedCallback? userMuteVideo;
 
   /// Occurs when the video size or rotation information of a remote user changes.
   ///
@@ -399,7 +399,7 @@ class RtcEngineEventHandler {
   /// - [int] `width`: New width (pixels) of the video.
   /// - [int] `height`: New height (pixels) of the video.
   /// - [int] `rotation`: New rotation of the video [0 to 360).
-  VideoSizeCallback videoSizeChanged;
+  VideoSizeCallback? videoSizeChanged;
 
   /// Occurs when the remote video state changes.
   ///
@@ -408,7 +408,7 @@ class RtcEngineEventHandler {
   /// - [VideoRemoteState] `state`: State of the remote video.
   /// - [VideoRemoteStateReason] `reason`: The reason of the remote video state change.
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
-  RemoteVideoStateCallback remoteVideoStateChanged;
+  RemoteVideoStateCallback? remoteVideoStateChanged;
 
   /// Occurs when the local video state changes.
   ///
@@ -420,7 +420,7 @@ class RtcEngineEventHandler {
   /// The `LocalVideoStateCallback` typedef includes the following parameters:
   /// - [LocalVideoStreamState] `localVideoState`: The local video state.
   /// - [LocalVideoStreamError] `error`: The detailed error information of the local video.
-  LocalVideoStateCallback localVideoStateChanged;
+  LocalVideoStateCallback? localVideoStateChanged;
 
   /// Occurs when the remote audio state changes.
   ///
@@ -431,7 +431,7 @@ class RtcEngineEventHandler {
   /// - [AudioRemoteState] `state`: State of the remote audio.
   /// - [AudioRemoteStateReason] `reason`: The reason of the remote audio state change.
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
-  RemoteAudioStateCallback remoteAudioStateChanged;
+  RemoteAudioStateCallback? remoteAudioStateChanged;
 
   /// Occurs when the local audio stream state changes.
   ///
@@ -443,7 +443,7 @@ class RtcEngineEventHandler {
   /// The `LocalAudioStateCallback` typedef includes the following parameters:
   /// - [AudioLocalState] `state`: State of the local audio.
   /// - [AudioLocalError] `error`: The error information of the local audio.
-  LocalAudioStateCallback localAudioStateChanged;
+  LocalAudioStateCallback? localAudioStateChanged;
 
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
@@ -453,7 +453,7 @@ class RtcEngineEventHandler {
   /// - [bool] `isFallbackOrRecover`: Whether the published stream fell back to audio-only or switched back to the video:
   /// -- `true`: The published stream fell back to audio-only due to poor network conditions.
   /// -- `false`: The published stream switched back to the video after the network conditions improved.
-  FallbackCallback localPublishFallbackToAudioOnly;
+  FallbackCallback? localPublishFallbackToAudioOnly;
 
   /// Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
@@ -464,7 +464,7 @@ class RtcEngineEventHandler {
   /// - [bool] `isFallbackOrRecover`: Whether the published stream fell back to audio-only or switched back to the video:
   /// -- `true`: The published stream fell back to audio-only due to poor network conditions.
   /// -- `false`: The published stream switched back to the video after the network conditions improved.
-  FallbackWithUidCallback remoteSubscribeFallbackToAudioOnly;
+  FallbackWithUidCallback? remoteSubscribeFallbackToAudioOnly;
 
   /// Occurs when the local audio playback route changes.
   ///
@@ -474,7 +474,7 @@ class RtcEngineEventHandler {
   ///
   /// The `AudioRouteCallback` typedef includes the following parameter:
   /// - [AudioOutputRouting] `routing`: Audio output routing.
-  AudioRouteCallback audioRouteChanged;
+  AudioRouteCallback? audioRouteChanged;
 
   /// Occurs when the camera focus area is changed.
   ///
@@ -482,7 +482,7 @@ class RtcEngineEventHandler {
   ///
   /// The `RectCallback` typedef includes the following parameter:
   /// - [Rect] `rect`: Rectangular area in the camera zoom specifying the focus area.
-  RectCallback cameraFocusAreaChanged;
+  RectCallback? cameraFocusAreaChanged;
 
   /// The camera exposure area has changed.
   ///
@@ -490,7 +490,7 @@ class RtcEngineEventHandler {
   ///
   /// The `RectCallback` typedef includes the following parameter:
   /// - [Rect] `rect`: Rectangular area in the camera zoom specifying the focus area.
-  RectCallback cameraExposureAreaChanged;
+  RectCallback? cameraExposureAreaChanged;
 
   /// Reports the face detection result of the local user.
   ///
@@ -508,19 +508,19 @@ class RtcEngineEventHandler {
   /// - [int] `imageWidth`: The width (px) of the local video.
   /// - [int] `imageHeight`: The height (px) of the local video.
   /// - [List]<[FacePositionInfo]> `faces`: The information of the detected human face. For details, see [FacePositionInfo]. The number of the `FacePositionInfo` array depends on the number of human faces detected. If the array length is 0, it means that no human face is detected.
-  FacePositionCallback facePositionChanged;
+  FacePositionCallback? facePositionChanged;
 
   /// Reports the statistics of the [RtcEngine] once every two seconds.
   ///
   /// The `RtcStatsCallback` typedef includes the following parameter:
   /// - [RtcStats] `stats`: Statistics of the call.
-  RtcStatsCallback rtcStats;
+  RtcStatsCallback? rtcStats;
 
   /// Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. After the application calls the [RtcEngine.enableLastmileTest] method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.
   ///
   /// The `NetworkQualityCallback` typedef includes the following parameter:
   /// - [NetworkQuality] `quality`: The last mile network quality based on the uplink and downlink packet loss rate and jitter.
-  NetworkQualityCallback lastmileQuality;
+  NetworkQualityCallback? lastmileQuality;
 
   /// Reports the last mile network quality of each user in the channel once every two seconds.
   ///
@@ -530,7 +530,7 @@ class RtcEngineEventHandler {
   /// - [int] `uid`：User ID. The network quality of the user with this uid is reported. If `uid` is 0, the local network quality is reported.
   /// - [NetworkQuality] `txQuality`: Uplink transmission quality of the user in terms of the transmission bitrate, packet loss rate, average RTT (Round-Trip Time)and jitter of the uplink network. `txQuality` is a quality rating helping you understand how well the current uplink network conditions can support the selected [VideoEncoderConfiguration]. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 680 × 480 and a frame rate of 30 fps, but may be inadequate for resolutions higher than 1280 × 720.
   /// - [NetworkQuality] `rxQuality`: Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network.
-  NetworkQualityWithUidCallback networkQuality;
+  NetworkQualityWithUidCallback? networkQuality;
 
   /// Reports the last-mile network probe result.
   ///
@@ -538,7 +538,7 @@ class RtcEngineEventHandler {
   ///
   /// The `LastmileProbeCallback` typedef includes the following parameter:
   /// - [LastmileProbeResult] `result`: The uplink and downlink last-mile network probe test result.
-  LastmileProbeCallback lastmileProbeResult;
+  LastmileProbeCallback? lastmileProbeResult;
 
   /// Reports the statistics of the local video streams.
   ///
@@ -546,19 +546,19 @@ class RtcEngineEventHandler {
   ///
   /// The `LocalVideoStatsCallback` typedef includes the following parameter:
   /// - [LocalVideoStats] `stats`: The statistics of the local video stream.
-  LocalVideoStatsCallback localVideoStats;
+  LocalVideoStatsCallback? localVideoStats;
 
   /// Reports the statistics of the local audio stream.
   ///
   /// The `LocalAudioStats` typedef includes the following parameter:
   /// - [LocalAudioStats] `stats`: The statistics of the local audio stream.
-  LocalAudioStatsCallback localAudioStats;
+  LocalAudioStatsCallback? localAudioStats;
 
   /// Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
   ///
   /// The `RemoteVideoStatsCallback` typedef includes the following parameter:
   /// - [RemoteVideoStats] `stats`: Statistics of the received remote video streams.
-  RemoteVideoStatsCallback remoteVideoStats;
+  RemoteVideoStatsCallback? remoteVideoStats;
 
   /// Reports the statistics of the audio stream from each remote user/host.
   ///
@@ -568,7 +568,7 @@ class RtcEngineEventHandler {
   ///
   /// The `RemoteAudioStatsCallback` typedef includes the following parameter:
   /// - [RemoteAudioStats] `stats`: Statistics of the received remote audio streams.
-  RemoteAudioStatsCallback remoteAudioStats;
+  RemoteAudioStatsCallback? remoteAudioStats;
 
   /// Occurs when the audio mixing file playback finishes.
   ///
@@ -579,7 +579,7 @@ class RtcEngineEventHandler {
   /// If the [RtcEngine.startAudioMixing] method call fails, an [WarningCode.AudioMixingOpenError] warning returns in the [warning] callback.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
-  EmptyCallback audioMixingFinished;
+  EmptyCallback? audioMixingFinished;
 
   /// Occurs when the state of the local user's audio mixing file changes.
   ///
@@ -590,8 +590,8 @@ class RtcEngineEventHandler {
   ///
   /// The `AudioMixingStateCallback` typedef includes the following parameters:
   /// - [AudioMixingStateCode] `state`: The state code.
-  /// - [AudioMixingErrorCode] `errorCode`: The error code.
-  AudioMixingStateCallback audioMixingStateChanged;
+  /// - [AudioMixingReason] `reason`: The reason.
+  AudioMixingStateCallback? audioMixingStateChanged;
 
   /// Occurs when the audio effect file playback finishes.
   ///
@@ -599,7 +599,7 @@ class RtcEngineEventHandler {
   ///
   /// The `SoundIdCallback` typedef includes the following parameter:
   /// - [int] `soundId`: ID of the local audio effect. Each local audio effect has a unique ID.
-  SoundIdCallback audioEffectFinished;
+  SoundIdCallback? audioEffectFinished;
 
   /// Occurs when the state of the RTMP or RTMPS streaming changes.
   ///
@@ -611,7 +611,7 @@ class RtcEngineEventHandler {
   /// - [String] `url`: The CDN streaming URL.
   /// - [RtmpStreamingState] `state`: The RTMP or RTMPS streaming state.
   /// - [RtmpStreamingErrorCode] `errCode`: The detailed error information for streaming.
-  RtmpStreamingStateCallback rtmpStreamingStateChanged;
+  RtmpStreamingStateCallback? rtmpStreamingStateChanged;
 
   /// Occurs when the publisher's transcoding settings are updated.
   ///
@@ -620,7 +620,7 @@ class RtcEngineEventHandler {
   /// **Note**
   /// - If you call the [RtcEngine.setLiveTranscoding] method to set the [LiveTranscoding] class for the first time, the SDK does not trigger this callback.
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback transcodingUpdated;
+  EmptyCallback? transcodingUpdated;
 
   /// Reports the status of injecting the online media stream.
   ///
@@ -628,7 +628,7 @@ class RtcEngineEventHandler {
   /// - [String] `url`: The URL address of the externally injected stream.
   /// - [int] `uid`: User ID.
   /// - [InjectStreamStatus] `status`: State of the externally injected stream.
-  StreamInjectedStatusCallback streamInjectedStatus;
+  StreamInjectedStatusCallback? streamInjectedStatus;
 
   /// Occurs when the local user receives a remote data stream.
   ///
@@ -638,7 +638,7 @@ class RtcEngineEventHandler {
   /// - [int] `uid`: User ID of the remote user sending the data stream.
   /// - [int] `streamId`: Stream ID.
   /// - [String] `data`: Data received by the local user.
-  StreamMessageCallback streamMessage;
+  StreamMessageCallback? streamMessage;
 
   /// Occurs when the local user fails to receive a remote data stream.
   ///
@@ -650,17 +650,17 @@ class RtcEngineEventHandler {
   /// - [ErrorCode] `error`: Error code.
   /// - [int] `missed`: The number of lost messages.
   /// - [int] `cached`: The number of incoming cached messages when the data stream is interrupted.
-  StreamMessageErrorCallback streamMessageError;
+  StreamMessageErrorCallback? streamMessageError;
 
   /// Occurs when the media engine is loaded.
   ///
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback mediaEngineLoadSuccess;
+  EmptyCallback? mediaEngineLoadSuccess;
 
   /// Occurs when the media engine starts.
   ///
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback mediaEngineStartCallSuccess;
+  EmptyCallback? mediaEngineStartCallSuccess;
 
   /// Occurs when the state of the media stream relay changes.
   ///
@@ -669,13 +669,13 @@ class RtcEngineEventHandler {
   /// The `MediaRelayStateCallback` typedef includes the following parameters:
   /// - [ChannelMediaRelayState] `state`: The state code.
   /// - [ChannelMediaRelayError] `code`: The error code.
-  MediaRelayStateCallback channelMediaRelayStateChanged;
+  MediaRelayStateCallback? channelMediaRelayStateChanged;
 
   /// Reports events during the media stream relay.
   ///
   /// The `MediaRelayEventCallback` typedef includes the following parameter:
   /// - [ChannelMediaRelayEvent] `code`: The event code for media stream relay.
-  MediaRelayEventCallback channelMediaRelayEvent;
+  MediaRelayEventCallback? channelMediaRelayEvent;
 
   /// Occurs when the first remote video frame is rendered.
   ///
@@ -689,7 +689,7 @@ class RtcEngineEventHandler {
   /// - [int] `height`: Height (pixels) of the video stream.
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   @deprecated
-  VideoFrameWithUidCallback firstRemoteVideoFrame;
+  VideoFrameWithUidCallback? firstRemoteVideoFrame;
 
   /// Occurs when the first remote audio frame is received.
   ///
@@ -709,7 +709,7 @@ class RtcEngineEventHandler {
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   @deprecated
-  UidWithElapsedCallback firstRemoteAudioFrame;
+  UidWithElapsedCallback? firstRemoteAudioFrame;
 
   /// Occurs when the engine receives the first audio frame from a specified remote user.
   ///
@@ -737,7 +737,7 @@ class RtcEngineEventHandler {
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
   @deprecated
-  UidWithElapsedCallback firstRemoteAudioDecoded;
+  UidWithElapsedCallback? firstRemoteAudioDecoded;
 
   /// Occurs when a remote user stops/resumes sending the audio stream.
   ///
@@ -756,7 +756,7 @@ class RtcEngineEventHandler {
   ///    - `true`: Pause.
   ///    - `false`: Resume.
   @deprecated
-  UidWithMutedCallback userMuteAudio;
+  UidWithMutedCallback? userMuteAudio;
 
   /// Reports the result of calling the [RtcEngine.addPublishStreamUrl] method.
   ///
@@ -768,7 +768,7 @@ class RtcEngineEventHandler {
   /// - [String] `url`: The CDN streaming URL.
   /// - [ErrorCode] `error`: The detailed error information.
   @deprecated
-  UrlWithErrorCallback streamPublished;
+  UrlWithErrorCallback? streamPublished;
 
   /// Reports the result of calling the [RtcEngine.removePublishStreamUrl] method.
   ///
@@ -779,7 +779,7 @@ class RtcEngineEventHandler {
   /// The `UrlCallback` typedef includes the following parameter:
   /// - [String] `url`: The CDN streaming URL.
   @deprecated
-  UrlCallback streamUnpublished;
+  UrlCallback? streamUnpublished;
 
   /// Reports the transport-layer statistics of each remote audio stream.
   ///
@@ -793,7 +793,7 @@ class RtcEngineEventHandler {
   /// - [int] `lost`: Packet loss rate (%) of the audio packet sent from the remote user.
   /// - [int] `rxKBitRate`: Received bitrate (Kbps) of the audio packet sent from the remote user.
   @deprecated
-  TransportStatsCallback remoteAudioTransportStats;
+  TransportStatsCallback? remoteAudioTransportStats;
 
   /// Reports the transport-layer statistics of each remote video stream.
   ///
@@ -807,7 +807,7 @@ class RtcEngineEventHandler {
   /// - [int] `lost`: Packet loss rate (%) of the audio packet sent from the remote user.
   /// - [int] `rxKBitRate`: Received bitrate (Kbps) of the audio packet sent from the remote user.
   @deprecated
-  TransportStatsCallback remoteVideoTransportStats;
+  TransportStatsCallback? remoteVideoTransportStats;
 
   /// Occurs when a remote user enables/disables the video module.
   ///
@@ -828,7 +828,7 @@ class RtcEngineEventHandler {
   ///   - `true`: Enabled. The remote user can enter a video session.
   ///   - `false`: Disabled. The remote user can only enter a voice session, and cannot send or receive any video stream.
   @deprecated
-  UidWithEnabledCallback userEnableVideo;
+  UidWithEnabledCallback? userEnableVideo;
 
   /// Occurs when a remote user enables/disables the local video capture function.
   ///
@@ -845,7 +845,7 @@ class RtcEngineEventHandler {
   ///   - `true`: Enabled. The remote user can enter a video session.
   ///   - `false`: Disabled. The remote user can only enter a voice session, and cannot send or receive any video stream.
   @deprecated
-  UidWithEnabledCallback userEnableLocalVideo;
+  UidWithEnabledCallback? userEnableLocalVideo;
 
   /// Occurs when the first remote video frame is received and decoded.
   ///
@@ -865,7 +865,7 @@ class RtcEngineEventHandler {
   /// - [int] `height`: Height (pixels) of the video stream.
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   @deprecated
-  VideoFrameWithUidCallback firstRemoteVideoDecoded;
+  VideoFrameWithUidCallback? firstRemoteVideoDecoded;
 
   /// Occurs when the microphone is enabled/disabled.
   ///
@@ -878,7 +878,7 @@ class RtcEngineEventHandler {
   ///   - `true`：Enabled.
   ///   - `false`：Disabled.
   @deprecated
-  EnabledCallback microphoneEnabled;
+  EnabledCallback? microphoneEnabled;
 
   /// Occurs when the connection between the SDK and the server is interrupted.
   ///
@@ -891,14 +891,14 @@ class RtcEngineEventHandler {
   /// If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
-  EmptyCallback connectionInterrupted;
+  EmptyCallback? connectionInterrupted;
 
   /// Occurs when your connection is banned by the Agora Server.
   ///
   /// **Deprecated** Use [RtcEngineEventHandler.connectionStateChanged] instead.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
-  EmptyCallback connectionBanned;
+  EmptyCallback? connectionBanned;
 
   /// Reports the statistics of the audio stream from each remote user/host.
   ///
@@ -912,21 +912,21 @@ class RtcEngineEventHandler {
   /// [int] `delay`: Time delay (ms) of the audio packet from the sender to the receiver, including the time delay from audio sampling pre-processing, transmission, and the jitter buffer.
   /// [int] `lost`: Packet loss rate (%) of the audio packet sent from the sender to the receiver.
   @deprecated
-  AudioQualityCallback audioQuality;
+  AudioQualityCallback? audioQuality;
 
   /// Occurs when the camera is turned on and ready to capture video.
   ///
   /// **Deprecated** Use [LocalVideoStreamState.Capturing] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. If the camera fails to turn on, fix the error reported in the [LocalVideoStreamState.Failed] callback.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
-  EmptyCallback cameraReady;
+  EmptyCallback? cameraReady;
 
   /// Occurs when the video stops playing.
   ///
   /// **Deprecated** Use [LocalVideoStreamState.Stopped] in the [RtcEngineEventHandler.localVideoStateChanged] callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
   /// The `EmptyCallback` typedef does not include any parameter.
   @deprecated
-  EmptyCallback videoStopped;
+  EmptyCallback? videoStopped;
 
   /// Occurs when the local user receives the metadata.
   ///
@@ -934,7 +934,7 @@ class RtcEngineEventHandler {
   /// - [String]: `buffer`: The received metadata.
   /// - [int]: `uid`: The ID of the user who sent the metadata.
   /// - [int]: `timeStampMs`: The timestamp (ms) of the received metadata.
-  MetadataCallback metadataReceived;
+  MetadataCallback? metadataReceived;
 
   /// Occurs when the first audio frame is published.
   ///
@@ -945,7 +945,7 @@ class RtcEngineEventHandler {
   ///
   /// The `ElapsedCallback` typedef includes the following parameters:
   /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
-  ElapsedCallback firstLocalAudioFramePublished;
+  ElapsedCallback? firstLocalAudioFramePublished;
 
   /// Occurs when the first video frame is published.
   ///
@@ -956,7 +956,7 @@ class RtcEngineEventHandler {
   ///
   /// The `ElapsedCallback` typedef includes the following parameters:
   /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
-  ElapsedCallback firstLocalVideoFramePublished;
+  ElapsedCallback? firstLocalVideoFramePublished;
 
   /// Occurs when the audio publishing state changes.
   ///
@@ -967,7 +967,7 @@ class RtcEngineEventHandler {
   /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamPublishStateCallback audioPublishStateChanged;
+  StreamPublishStateCallback? audioPublishStateChanged;
 
   /// Occurs when the video publishing state changes.
   ///
@@ -978,7 +978,7 @@ class RtcEngineEventHandler {
   /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamPublishStateCallback videoPublishStateChanged;
+  StreamPublishStateCallback? videoPublishStateChanged;
 
   /// Occurs when the audio subscribing state changes.
   ///
@@ -989,7 +989,7 @@ class RtcEngineEventHandler {
   /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamSubscribeStateCallback audioSubscribeStateChanged;
+  StreamSubscribeStateCallback? audioSubscribeStateChanged;
 
   /// Occurs when the video subscribing state changes.
   ///
@@ -1000,20 +1000,20 @@ class RtcEngineEventHandler {
   /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamSubscribeStateCallback videoSubscribeStateChanged;
+  StreamSubscribeStateCallback? videoSubscribeStateChanged;
 
   /// Reports events during the RTMP or RTMPS streaming.
   ///
   /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
   /// - [String] `url`: The RTMP or RTMPS streaming URL.
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
-  RtmpStreamingEventCallback rtmpStreamingEvent;
+  RtmpStreamingEventCallback? rtmpStreamingEvent;
 
   ///  @nodoc
-  UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
+  UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
   ///  @nodoc
-  UploadLogResultCallback uploadLogResult;
+  UploadLogResultCallback? uploadLogResult;
 
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler(
@@ -1269,7 +1269,7 @@ class RtcEngineEventHandler {
       case 'AudioMixingStateChanged':
         audioMixingStateChanged?.call(
           AudioMixingStateCodeConverter.fromValue(data[0]).e,
-          AudioMixingErrorCodeConverter.fromValue(data[1]).e,
+          AudioMixingReasonConverter.fromValue(data[1]).e,
         );
         break;
       case 'AudioEffectFinished':
@@ -1423,13 +1423,13 @@ class RtcChannelEventHandler {
   ///
   /// The `WarningCallback` typedef includes the following parameter:
   /// - [WarningCode] `warn`: Warning code.
-  WarningCallback warning;
+  WarningCallback? warning;
 
   /// Reports the error code of the [RtcChannel] instance.
   ///
   /// The `ErrorCallback` typedef includes the following parameter:
   /// - [ErrorCode] `err`: Error code.
-  ErrorCallback error;
+  ErrorCallback? error;
 
   /// Occurs when the local user joins a specified channel.
   ///
@@ -1448,7 +1448,7 @@ class RtcChannelEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedAndChannelCallback joinChannelSuccess;
+  UidWithElapsedAndChannelCallback? joinChannelSuccess;
 
   /// Occurs when a user rejoins the channel after being disconnected due to network problems.
   ///
@@ -1467,7 +1467,7 @@ class RtcChannelEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedAndChannelCallback rejoinChannelSuccess;
+  UidWithElapsedAndChannelCallback? rejoinChannelSuccess;
 
   /// Occurs when a user leaves the channel.
   ///
@@ -1476,7 +1476,7 @@ class RtcChannelEventHandler {
   /// With this callback, the app retrieves the channel information, such as the call duration and statistics.
   /// The `RtcStatsCallback` typedef includes the following parameter:
   /// - [RtcStats] `stats`: Statistics of the call.
-  RtcStatsCallback leaveChannel;
+  RtcStatsCallback? leaveChannel;
 
   /// Occurs when the user role switches in a [ChannelProfile.LiveBroadcasting] channel. For example, from broadcaster to audience or vice versa.
   ///
@@ -1486,7 +1486,7 @@ class RtcChannelEventHandler {
   /// The `ClientRoleCallback` typedef includes the following parameters:
   /// - [ClientRole] `oldRole`: Role that the user switches from.
   /// - [ClientRole] `newRole`: Role that the user switches to.
-  ClientRoleCallback clientRoleChanged;
+  ClientRoleCallback? clientRoleChanged;
 
   /// Occurs when a remote user (Communication) or a broadcaster ([ChannelProfile.LiveBroadcasting]) joins the channel.
   /// - [ChannelProfile.Communication] profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
@@ -1511,7 +1511,7 @@ class RtcChannelEventHandler {
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
-  UidWithElapsedCallback userJoined;
+  UidWithElapsedCallback? userJoined;
 
   /// Occurs when a remote user ([ChannelProfile.Communication]) or a broadcaster ([ChannelProfile.LiveBroadcasting]) leaves the channel.
   ///
@@ -1522,7 +1522,7 @@ class RtcChannelEventHandler {
   /// The `UserOfflineCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the user or host who leaves the channel or goes offline.
   /// - [UserOfflineReason] `reason`: Reason why the user goes offline.
-  UserOfflineCallback userOffline;
+  UserOfflineCallback? userOffline;
 
   /// Occurs when the network connection state changes.
   ///
@@ -1531,14 +1531,14 @@ class RtcChannelEventHandler {
   /// The `ConnectionStateCallback` typedef includes the following parameters:
   /// - [ConnectionStateType] `state`: The current network connection state.
   /// - [ConnectionChangedReason] `reason`: The reason causing the change of the connection state.
-  ConnectionStateCallback connectionStateChanged;
+  ConnectionStateCallback? connectionStateChanged;
 
   /// Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
   ///
   /// The SDK also triggers this callback when it cannot connect to the server 10 seconds after calling [RtcChannel.joinChannel], regardless of whether it is in the channel or not.
   /// If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback connectionLost;
+  EmptyCallback? connectionLost;
 
   /// Occurs when the token expires in 30 seconds.
   ///
@@ -1546,13 +1546,13 @@ class RtcChannelEventHandler {
   ///
   /// The `TokenCallback` typedef includes the following parameters:
   /// - [String] `token`: The token that will expire in 30 seconds.
-  TokenCallback tokenPrivilegeWillExpire;
+  TokenCallback? tokenPrivilegeWillExpire;
 
   /// Occurs when the token has expired.
   ///
   /// After a token is specified when joining the channel, the token expires after a certain period of time, and a new token is required to reconnect to the server. This callback notifies the app to generate a new token and call [RtcChannel.renewToken] to renew the token.
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback requestToken;
+  EmptyCallback? requestToken;
 
   /// Reports which user is the loudest speaker.
   ///
@@ -1564,7 +1564,7 @@ class RtcChannelEventHandler {
   ///
   /// The `UidCallback` typedef includes the following parameters:
   /// - [int] `uid`: User ID of the active speaker. A `uid` of 0 represents the local user.
-  UidCallback activeSpeaker;
+  UidCallback? activeSpeaker;
 
   /// Occurs when the video size or rotation information of a remote user changes.
   ///
@@ -1573,7 +1573,7 @@ class RtcChannelEventHandler {
   /// - [int] `width`: New width (pixels) of the video.
   /// - [int] `height`: New height (pixels) of the video.
   /// - [int] `rotation`: New rotation of the video [0 to 360).
-  VideoSizeCallback videoSizeChanged;
+  VideoSizeCallback? videoSizeChanged;
 
   /// Occurs when the remote video state changes.
   ///
@@ -1582,7 +1582,7 @@ class RtcChannelEventHandler {
   /// - [VideoRemoteState] `state`: State of the remote video.
   /// - [VideoRemoteStateReason] `reason`: The reason of the remote video state change.
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
-  RemoteVideoStateCallback remoteVideoStateChanged;
+  RemoteVideoStateCallback? remoteVideoStateChanged;
 
   /// Occurs when the remote audio state changes.
   ///
@@ -1595,7 +1595,7 @@ class RtcChannelEventHandler {
   /// - [AudioRemoteState] `state`: State of the remote audio.
   /// - [AudioRemoteStateReason] `reason`: The reason of the remote audio state change.
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
-  RemoteAudioStateCallback remoteAudioStateChanged;
+  RemoteAudioStateCallback? remoteAudioStateChanged;
 
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
@@ -1605,7 +1605,7 @@ class RtcChannelEventHandler {
   /// - [bool] `isFallbackOrRecover`: Whether the published stream fell back to audio-only or switched back to the video:
   /// -- `true`: The published stream fell back to audio-only due to poor network conditions.
   /// -- `false`: The published stream switched back to the video after the network conditions improved.
-  FallbackCallback localPublishFallbackToAudioOnly;
+  FallbackCallback? localPublishFallbackToAudioOnly;
 
   /// Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///
@@ -1619,12 +1619,12 @@ class RtcChannelEventHandler {
   /// - [bool] `isFallbackOrRecover`: Whether the published stream fell back to audio-only or switched back to the video:
   /// -- `true`: The published stream fell back to audio-only due to poor network conditions.
   /// -- `false`: The published stream switched back to the video after the network conditions improved.
-  FallbackWithUidCallback remoteSubscribeFallbackToAudioOnly;
+  FallbackWithUidCallback? remoteSubscribeFallbackToAudioOnly;
 
   /// Reports the statistics of the [RtcEngine] once every two seconds.
   /// The `RtcStatsCallback` typedef includes the following parameter:
   /// - [RtcStats] `stats`: Statistics of the call.
-  RtcStatsCallback rtcStats;
+  RtcStatsCallback? rtcStats;
 
   /// Reports the last mile network quality of each user in the channel once every two seconds.
   ///
@@ -1634,13 +1634,13 @@ class RtcChannelEventHandler {
   /// - [int] `uid`：User ID. The network quality of the user with this uid is reported. If `uid` is 0, the local network quality is reported.
   /// - [NetworkQuality] `txQuality`: Uplink transmission quality of the user in terms of the transmission bitrate, packet loss rate, average RTT (Round-Trip Time)and jitter of the uplink network. `txQuality` is a quality rating helping you understand how well the current uplink network conditions can support the selected [VideoEncoderConfiguration]. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 680 × 480 and a frame rate of 30 fps, but may be inadequate for resolutions higher than 1280 × 720.
   /// - [NetworkQuality] `rxQuality`: Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network.
-  NetworkQualityWithUidCallback networkQuality;
+  NetworkQualityWithUidCallback? networkQuality;
 
   /// Reports the statistics of the video stream from each remote user/broadcaster. The SDK triggers this callback once every two seconds for each remote user/broadcaster. If a channel includes multiple remote users, the SDK triggers this callback as many times.
   ///
   /// The `RemoteVideoStatsCallback` typedef includes the following parameter:
   /// - [RemoteVideoStats] `stats`: Statistics of the received remote video streams.
-  RemoteVideoStatsCallback remoteVideoStats;
+  RemoteVideoStatsCallback? remoteVideoStats;
 
   /// Reports the statistics of the audio stream from each remote user/broadcaster.
   ///
@@ -1650,7 +1650,7 @@ class RtcChannelEventHandler {
   ///
   /// The `RemoteAudioStatsCallback` typedef includes the following parameter:
   /// - [RemoteAudioStats] `stats`: Statistics of the received remote audio streams.
-  RemoteAudioStatsCallback remoteAudioStats;
+  RemoteAudioStatsCallback? remoteAudioStats;
 
   /// Occurs when the state of the RTMP or RTMPS streaming changes.
   ///
@@ -1662,7 +1662,7 @@ class RtcChannelEventHandler {
   /// - [String] `url`: The CDN streaming URL.
   /// - [RtmpStreamingState] `state`: The RTMP or RTMPS streaming state.
   /// - [RtmpStreamingErrorCode] `errCode`: The detailed error information for streaming.
-  RtmpStreamingStateCallback rtmpStreamingStateChanged;
+  RtmpStreamingStateCallback? rtmpStreamingStateChanged;
 
   /// Occurs when the publisher's transcoding settings are updated.
   ///
@@ -1671,7 +1671,7 @@ class RtcChannelEventHandler {
   /// **Note**
   /// - If you call the [RtcChannel.setLiveTranscoding] method to set the [LiveTranscoding] class for the first time, the SDK does not trigger this callback.
   /// The `EmptyCallback` typedef does not include any parameter.
-  EmptyCallback transcodingUpdated;
+  EmptyCallback? transcodingUpdated;
 
   /// Reports the status of injecting the online media stream.
   ///
@@ -1679,7 +1679,7 @@ class RtcChannelEventHandler {
   /// - [String] `url`: The URL address of the externally injected stream.
   /// - [int] `uid`: User ID.
   /// - [InjectStreamStatus] `status`: State of the externally injected stream.
-  StreamInjectedStatusCallback streamInjectedStatus;
+  StreamInjectedStatusCallback? streamInjectedStatus;
 
   /// Occurs when the local user receives a remote data stream.
   ///
@@ -1689,7 +1689,7 @@ class RtcChannelEventHandler {
   /// - [int] `uid`: User ID of the remote user sending the data stream.
   /// - [int] `streamId`: Stream ID.
   /// - [String] `data`: Data received by the local user.
-  StreamMessageCallback streamMessage;
+  StreamMessageCallback? streamMessage;
 
   /// Occurs when the local user fails to receive a remote data stream.
   ///
@@ -1701,7 +1701,7 @@ class RtcChannelEventHandler {
   /// - [ErrorCode] `error`: Error code.
   /// - [int] `missed`: The number of lost messages.
   /// - [int] `cached`: The number of incoming cached messages when the data stream is interrupted.
-  StreamMessageErrorCallback streamMessageError;
+  StreamMessageErrorCallback? streamMessageError;
 
   /// Occurs when the state of the media stream relay changes.
   ///
@@ -1710,13 +1710,13 @@ class RtcChannelEventHandler {
   /// The `MediaRelayStateCallback` typedef includes the following parameters:
   /// - [ChannelMediaRelayState] `state`: The state code.
   /// - [ChannelMediaRelayError] `code`: The error code.
-  MediaRelayStateCallback channelMediaRelayStateChanged;
+  MediaRelayStateCallback? channelMediaRelayStateChanged;
 
   /// Reports events during the media stream relay.
   ///
   /// The `MediaRelayEventCallback` typedef includes the following parameter:
   /// - [ChannelMediaRelayEvent] `code`: The event code for media stream relay.
-  MediaRelayEventCallback channelMediaRelayEvent;
+  MediaRelayEventCallback? channelMediaRelayEvent;
 
   /// Occurs when the local user receives the metadata, including the following parameters:
   /// - `buffer`: The sent or received metadata.
@@ -1727,7 +1727,7 @@ class RtcChannelEventHandler {
   /// - [String]: `buffer`: The received metadata.
   /// - [int]: `uid`: The ID of the user who sent the metadata.
   /// - [int]: `timeStampMs`: The timestamp (ms) of the received metadata.
-  MetadataCallback metadataReceived;
+  MetadataCallback? metadataReceived;
 
   /// Occurs when the audio publishing state changes.
   ///
@@ -1738,7 +1738,7 @@ class RtcChannelEventHandler {
   /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamPublishStateCallback audioPublishStateChanged;
+  StreamPublishStateCallback? audioPublishStateChanged;
 
   /// Occurs when the video publishing state changes.
   ///
@@ -1749,7 +1749,7 @@ class RtcChannelEventHandler {
   /// - [StreamPublishState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamPublishState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamPublishStateCallback videoPublishStateChanged;
+  StreamPublishStateCallback? videoPublishStateChanged;
 
   /// Occurs when the audio subscribing state changes.
   ///
@@ -1760,7 +1760,7 @@ class RtcChannelEventHandler {
   /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamSubscribeStateCallback audioSubscribeStateChanged;
+  StreamSubscribeStateCallback? audioSubscribeStateChanged;
 
   /// Occurs when the video subscribing state changes.
   ///
@@ -1771,17 +1771,17 @@ class RtcChannelEventHandler {
   /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
-  StreamSubscribeStateCallback videoSubscribeStateChanged;
+  StreamSubscribeStateCallback? videoSubscribeStateChanged;
 
   /// Reports events during the RTMP or RTMPS streaming.
   ///
   /// The `RtmpStreamingEventCallback` typedef includes the following parameters:
   /// - [String] `url`: The RTMP or RTMPS streaming URL.
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
-  RtmpStreamingEventCallback rtmpStreamingEvent;
+  RtmpStreamingEventCallback? rtmpStreamingEvent;
 
   ///  @nodoc
-  UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
+  UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]
   RtcChannelEventHandler(
