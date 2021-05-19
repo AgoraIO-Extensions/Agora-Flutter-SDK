@@ -1,8 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'events.dart';
-import 'rtc_engine.dart';
-
 /// The area of connection.
 enum AreaCode {
   /// Mainland China
@@ -135,7 +132,7 @@ enum AudioLocalState {
 }
 
 /// The error code of the audio mixing file.
-enum AudioMixingErrorCode {
+enum AudioMixingReason {
   /// The SDK cannot open the audio mixing file.
   @JsonValue(701)
   CanNotOpen,
@@ -147,6 +144,34 @@ enum AudioMixingErrorCode {
   /// The opening of the audio mixing file is interrupted.
   @JsonValue(703)
   InterruptedEOF,
+
+  /// TODO(doc)
+  @JsonValue(720)
+  StartedByUser,
+
+  /// TODO(doc)
+  @JsonValue(721)
+  OneLoopCompleted,
+
+  /// TODO(doc)
+  @JsonValue(722)
+  StartNewLoop,
+
+  /// TODO(doc)
+  @JsonValue(723)
+  AllLoopsCompleted,
+
+  /// TODO(doc)
+  @JsonValue(724)
+  StoppedByUser,
+
+  /// TODO(doc)
+  @JsonValue(725)
+  PausedByUser,
+
+  /// TODO(doc)
+  @JsonValue(726)
+  ResumedByUser,
 
   /// No error.
   @JsonValue(0)
@@ -162,6 +187,10 @@ enum AudioMixingStateCode {
   /// The audio mixing file pauses playing.
   @JsonValue(711)
   Paused,
+
+  /// TODO(doc)
+  @JsonValue(712)
+  Restart,
 
   /// The audio mixing file stops playing.
   @JsonValue(713)
@@ -245,6 +274,21 @@ enum AudioRecordingQuality {
   /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
   @JsonValue(2)
   High,
+}
+
+/// TODO(doc)
+enum AudioRecordingPosition {
+  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  @JsonValue(0)
+  PositionMixedRecordingAndPlayback,
+
+  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+  @JsonValue(1)
+  PositionRecording,
+
+  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  @JsonValue(2)
+  PositionMixedPlayback,
 }
 
 /// The state of the remote audio.
@@ -838,7 +882,7 @@ enum DegradationPreference {
 
   /// Reserved for future use.
   @JsonValue(2)
-  Balanced
+  MaintainBalanced
 }
 
 /// Encryption mode
@@ -1093,6 +1137,10 @@ enum ErrorCode {
   @JsonValue(157)
   ModuleNotFound,
 
+  /// TODO(doc)
+  @JsonValue(160)
+  AlreadyInRecording,
+
   /// Fails to load the media engine.
   @JsonValue(1001)
   LoadMediaEngine,
@@ -1322,6 +1370,10 @@ enum LocalVideoStreamError {
   /// (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
   @JsonValue(7)
   CaptureMultipleForegroundApps,
+
+  /// TODO(doc)
+  @JsonValue(8)
+  DeviceNotFound,
 }
 
 /// The state of the local video stream.
@@ -2330,12 +2382,15 @@ enum CaptureBrightnessLevelType {
   /// Wait a few seconds to get the brightness level from [CaptureBrightnessLevelType] in the next callback.
   @JsonValue(-1)
   Invalid,
+
   /// The brightness level of the video image is normal.
   @JsonValue(0)
   Normal,
+
   /// The brightness level of the video image is too bright.
   @JsonValue(1)
   Bright,
+
   /// The brightness level of the video image is too dark.
   @JsonValue(2)
   Dark,
@@ -2403,15 +2458,19 @@ enum ExperiencePoorReason {
   /// None, indicating good QoE of the local user.
   @JsonValue(0)
   None,
+
   /// The remote user’s network quality is poor.
   @JsonValue(1)
   RemoteNetworkQualityPoor,
+
   /// The local user’s network quality is poor.
   @JsonValue(2)
   LocalNetworkQualityPoor,
+
   /// The local user’s Wi-Fi or mobile network signal is weak.
   @JsonValue(4)
   WirelessSignalPoor,
+
   /// The local user enables both Wi-Fi and bluetooth, and their signals interfere with each other. As a result, audio transmission quality is undermined.
   @JsonValue(8)
   WifiBluetoothCoexist,
@@ -2422,15 +2481,19 @@ enum VoiceConversionPreset {
   /// Turn off voice conversion effects and use the original voice.
   @JsonValue(0)
   Off,
+
   /// A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
   @JsonValue(50397440)
   Neutral,
+
   /// A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
   @JsonValue(50397696)
   Sweet,
+
   /// A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50397952)
   Solid,
+
   /// A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50398208)
   Bass,

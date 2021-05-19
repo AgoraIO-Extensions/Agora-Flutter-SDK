@@ -6,8 +6,8 @@
 //  Copyright (c) 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 class RtcEngineEvents {
     static let Warning = "Warning"
@@ -90,7 +90,7 @@ class RtcEngineEvents {
     static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     static let UploadLogResult = "UploadLogResult"
 
-    static func toMap() -> Dictionary<String, String> {
+    static func toMap() -> [String: String] {
         return [
             "Warning": Warning,
             "Error": Error,
@@ -170,7 +170,7 @@ class RtcEngineEvents {
             "VideoSubscribeStateChanged": VideoSubscribeStateChanged,
             "RtmpStreamingEvent": RtmpStreamingEvent,
             "UserSuperResolutionEnabled": UserSuperResolutionEnabled,
-            "UploadLogResult": UploadLogResult
+            "UploadLogResult": UploadLogResult,
         ]
     }
 }
@@ -178,9 +178,9 @@ class RtcEngineEvents {
 class RtcEngineEventHandler: NSObject {
     static let PREFIX = "io.agora.rtc."
 
-    var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
+    var emitter: (_ methodName: String, _ data: [String: Any?]?) -> Void
 
-    init(emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+    init(emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void) {
         self.emitter = emitter
     }
 
@@ -190,323 +190,323 @@ class RtcEngineEventHandler: NSObject {
 }
 
 extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         callback(RtcEngineEvents.Warning, warningCode.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         callback(RtcEngineEvents.Error, errorCode.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didApiCallExecute error: Int, api: String, result: String) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didApiCallExecute error: Int, api: String, result: String) {
         callback(RtcEngineEvents.ApiCallExecuted, error, api, result)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         callback(RtcEngineEvents.JoinChannelSuccess, channel, uid, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didRejoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didRejoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         callback(RtcEngineEvents.RejoinChannelSuccess, channel, uid, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
         callback(RtcEngineEvents.LeaveChannel, stats.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didRegisteredLocalUser userAccount: String, withUid uid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didRegisteredLocalUser userAccount: String, withUid uid: UInt) {
         callback(RtcEngineEvents.LocalUserRegistered, uid, userAccount)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didUpdatedUserInfo userInfo: AgoraUserInfo, withUid uid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didUpdatedUserInfo userInfo: AgoraUserInfo, withUid uid: UInt) {
         callback(RtcEngineEvents.UserInfoUpdated, uid, userInfo.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didClientRoleChanged oldRole: AgoraClientRole, newRole: AgoraClientRole) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didClientRoleChanged oldRole: AgoraClientRole, newRole: AgoraClientRole) {
         callback(RtcEngineEvents.ClientRoleChanged, oldRole.rawValue, newRole.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         callback(RtcEngineEvents.UserJoined, uid, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         callback(RtcEngineEvents.UserOffline, uid, reason.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, connectionChangedTo state: AgoraConnectionStateType, reason: AgoraConnectionChangedReason) {
+    public func rtcEngine(_: AgoraRtcEngineKit, connectionChangedTo state: AgoraConnectionStateType, reason: AgoraConnectionChangedReason) {
         callback(RtcEngineEvents.ConnectionStateChanged, state.rawValue, reason.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, networkTypeChangedTo type: AgoraNetworkType) {
+    public func rtcEngine(_: AgoraRtcEngineKit, networkTypeChangedTo type: AgoraNetworkType) {
         callback(RtcEngineEvents.NetworkTypeChanged, type.rawValue)
     }
 
-    public func rtcEngineConnectionDidLost(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineConnectionDidLost(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.ConnectionLost)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, tokenPrivilegeWillExpire token: String) {
+    public func rtcEngine(_: AgoraRtcEngineKit, tokenPrivilegeWillExpire token: String) {
         callback(RtcEngineEvents.TokenPrivilegeWillExpire, token)
     }
 
-    public func rtcEngineRequestToken(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineRequestToken(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.RequestToken)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
         callback(RtcEngineEvents.AudioVolumeIndication, speakers.toMapList(), totalVolume)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, activeSpeaker speakerUid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, activeSpeaker speakerUid: UInt) {
         callback(RtcEngineEvents.ActiveSpeaker, speakerUid)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, firstLocalAudioFrame elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstLocalAudioFrame elapsed: Int) {
         callback(RtcEngineEvents.FirstLocalAudioFrame, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, firstLocalVideoFrameWith size: CGSize, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstLocalVideoFrameWith size: CGSize, elapsed: Int) {
         callback(RtcEngineEvents.FirstLocalVideoFrame, Int(size.width), Int(size.height), elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoMuted muted: Bool, byUid uid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didVideoMuted muted: Bool, byUid uid: UInt) {
         callback(RtcEngineEvents.UserMuteVideo, uid, muted)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, videoSizeChangedOfUid uid: UInt, size: CGSize, rotation: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, videoSizeChangedOfUid uid: UInt, size: CGSize, rotation: Int) {
         callback(RtcEngineEvents.VideoSizeChanged, uid, Int(size.width), Int(size.height), rotation)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteStateReason, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteStateReason, elapsed: Int) {
         callback(RtcEngineEvents.RemoteVideoStateChanged, uid, state.rawValue, reason.rawValue, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChange state: AgoraLocalVideoStreamState, error: AgoraLocalVideoStreamError) {
+    public func rtcEngine(_: AgoraRtcEngineKit, localVideoStateChange state: AgoraLocalVideoStreamState, error: AgoraLocalVideoStreamError) {
         callback(RtcEngineEvents.LocalVideoStateChanged, state.rawValue, error.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState, reason: AgoraAudioRemoteStateReason, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState, reason: AgoraAudioRemoteStateReason, elapsed: Int) {
         callback(RtcEngineEvents.RemoteAudioStateChanged, uid, state.rawValue, reason.rawValue, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChange state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+    public func rtcEngine(_: AgoraRtcEngineKit, localAudioStateChange state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
         callback(RtcEngineEvents.LocalAudioStateChanged, state.rawValue, error.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didLocalPublishFallbackToAudioOnly isFallbackOrRecover: Bool) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didLocalPublishFallbackToAudioOnly isFallbackOrRecover: Bool) {
         callback(RtcEngineEvents.LocalPublishFallbackToAudioOnly, isFallbackOrRecover)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didRemoteSubscribeFallbackToAudioOnly isFallbackOrRecover: Bool, byUid uid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didRemoteSubscribeFallbackToAudioOnly isFallbackOrRecover: Bool, byUid uid: UInt) {
         callback(RtcEngineEvents.RemoteSubscribeFallbackToAudioOnly, uid, isFallbackOrRecover)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didAudioRouteChanged routing: AgoraAudioOutputRouting) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didAudioRouteChanged routing: AgoraAudioOutputRouting) {
         callback(RtcEngineEvents.AudioRouteChanged, routing.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, cameraFocusDidChangedTo rect: CGRect) {
+    public func rtcEngine(_: AgoraRtcEngineKit, cameraFocusDidChangedTo rect: CGRect) {
         callback(RtcEngineEvents.CameraFocusAreaChanged, rect.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, cameraExposureDidChangedTo rect: CGRect) {
+    public func rtcEngine(_: AgoraRtcEngineKit, cameraExposureDidChangedTo rect: CGRect) {
         callback(RtcEngineEvents.CameraExposureAreaChanged, rect.toMap())
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, facePositionDidChangeWidth width: Int32, previewHeight height: Int32, faces: [AgoraFacePositionInfo]?) {
+    func rtcEngine(_: AgoraRtcEngineKit, facePositionDidChangeWidth width: Int32, previewHeight height: Int32, faces: [AgoraFacePositionInfo]?) {
         callback(RtcEngineEvents.FacePositionChanged, width, height, faces?.toMapList())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+    public func rtcEngine(_: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
         callback(RtcEngineEvents.RtcStats, stats.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, lastmileQuality quality: AgoraNetworkQuality) {
+    public func rtcEngine(_: AgoraRtcEngineKit, lastmileQuality quality: AgoraNetworkQuality) {
         callback(RtcEngineEvents.LastmileQuality, quality.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, networkQuality uid: UInt, txQuality: AgoraNetworkQuality, rxQuality: AgoraNetworkQuality) {
+    public func rtcEngine(_: AgoraRtcEngineKit, networkQuality uid: UInt, txQuality: AgoraNetworkQuality, rxQuality: AgoraNetworkQuality) {
         callback(RtcEngineEvents.NetworkQuality, uid, txQuality.rawValue, rxQuality.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, lastmileProbeTest result: AgoraLastmileProbeResult) {
+    public func rtcEngine(_: AgoraRtcEngineKit, lastmileProbeTest result: AgoraLastmileProbeResult) {
         callback(RtcEngineEvents.LastmileProbeResult, result.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+    public func rtcEngine(_: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
         callback(RtcEngineEvents.LocalVideoStats, stats.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+    public func rtcEngine(_: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
         callback(RtcEngineEvents.LocalAudioStats, stats.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
+    public func rtcEngine(_: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
         callback(RtcEngineEvents.RemoteVideoStats, stats.toMap())
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+    public func rtcEngine(_: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         callback(RtcEngineEvents.RemoteAudioStats, stats.toMap())
     }
 
-    public func rtcEngineLocalAudioMixingDidFinish(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineLocalAudioMixingDidFinish(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.AudioMixingFinished)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, errorCode: AgoraAudioMixingErrorCode) {
-        callback(RtcEngineEvents.AudioMixingStateChanged, state.rawValue, errorCode.rawValue)
+    func rtcEngine(_: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, reason: AgoraAudioMixingReasonCode) {
+        callback(RtcEngineEvents.AudioMixingStateChanged, state.rawValue, reason.rawValue)
     }
 
-    public func rtcEngineRemoteAudioMixingDidStart(_ engine: AgoraRtcEngineKit) {
-        // TODO Not in Android
+    public func rtcEngineRemoteAudioMixingDidStart(_: AgoraRtcEngineKit) {
+        // TODO: Not in Android
     }
 
-    public func rtcEngineRemoteAudioMixingDidFinish(_ engine: AgoraRtcEngineKit) {
-        // TODO Not in Android
+    public func rtcEngineRemoteAudioMixingDidFinish(_: AgoraRtcEngineKit) {
+        // TODO: Not in Android
     }
 
-    public func rtcEngineDidAudioEffectFinish(_ engine: AgoraRtcEngineKit, soundId: Int) {
+    public func rtcEngineDidAudioEffectFinish(_: AgoraRtcEngineKit, soundId: Int) {
         callback(RtcEngineEvents.AudioEffectFinished, soundId)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
+    public func rtcEngine(_: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
         callback(RtcEngineEvents.RtmpStreamingStateChanged, url, state.rawValue, errorCode.rawValue)
     }
 
-    public func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineTranscodingUpdated(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.TranscodingUpdated)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, streamInjectedStatusOfUrl url: String, uid: UInt, status: AgoraInjectStreamStatus) {
+    public func rtcEngine(_: AgoraRtcEngineKit, streamInjectedStatusOfUrl url: String, uid: UInt, status: AgoraInjectStreamStatus) {
         callback(RtcEngineEvents.StreamInjectedStatus, url, uid, status.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, receiveStreamMessageFromUid uid: UInt, streamId: Int, data: Data) {
+    public func rtcEngine(_: AgoraRtcEngineKit, receiveStreamMessageFromUid uid: UInt, streamId: Int, data: Data) {
         callback(RtcEngineEvents.StreamMessage, uid, streamId, String(data: data, encoding: .utf8))
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {
         callback(RtcEngineEvents.StreamMessageError, uid, streamId, error, missed, cached)
     }
 
-    public func rtcEngineMediaEngineDidLoaded(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineMediaEngineDidLoaded(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.MediaEngineLoadSuccess)
     }
 
-    public func rtcEngineMediaEngineDidStartCall(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineMediaEngineDidStartCall(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.MediaEngineStartCallSuccess)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, channelMediaRelayStateDidChange state: AgoraChannelMediaRelayState, error: AgoraChannelMediaRelayError) {
+    public func rtcEngine(_: AgoraRtcEngineKit, channelMediaRelayStateDidChange state: AgoraChannelMediaRelayState, error: AgoraChannelMediaRelayError) {
         callback(RtcEngineEvents.ChannelMediaRelayStateChanged, state.rawValue, error.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didReceive event: AgoraChannelMediaRelayEvent) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didReceive event: AgoraChannelMediaRelayEvent) {
         callback(RtcEngineEvents.ChannelMediaRelayEvent, event.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteVideoFrameOfUid uid: UInt, size: CGSize, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstRemoteVideoFrameOfUid uid: UInt, size: CGSize, elapsed: Int) {
         callback(RtcEngineEvents.FirstRemoteVideoFrame, uid, Int(size.width), Int(size.height), elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteAudioFrameOfUid uid: UInt, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstRemoteAudioFrameOfUid uid: UInt, elapsed: Int) {
         callback(RtcEngineEvents.FirstRemoteAudioFrame, uid, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteAudioFrameDecodedOfUid uid: UInt, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstRemoteAudioFrameDecodedOfUid uid: UInt, elapsed: Int) {
         callback(RtcEngineEvents.FirstRemoteAudioDecoded, uid, elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didAudioMuted muted: Bool, byUid uid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didAudioMuted muted: Bool, byUid uid: UInt) {
         callback(RtcEngineEvents.UserMuteAudio, uid, muted)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, streamPublishedWithUrl url: String, errorCode: AgoraErrorCode) {
+    public func rtcEngine(_: AgoraRtcEngineKit, streamPublishedWithUrl url: String, errorCode: AgoraErrorCode) {
         callback(RtcEngineEvents.StreamPublished, url, errorCode.rawValue)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
+    public func rtcEngine(_: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
         callback(RtcEngineEvents.StreamUnpublished, url)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, audioTransportStatsOfUid uid: UInt, delay: UInt, lost: UInt, rxKBitRate: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, audioTransportStatsOfUid uid: UInt, delay: UInt, lost: UInt, rxKBitRate: UInt) {
         callback(RtcEngineEvents.RemoteAudioTransportStats, uid, delay, lost, rxKBitRate)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, videoTransportStatsOfUid uid: UInt, delay: UInt, lost: UInt, rxKBitRate: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, videoTransportStatsOfUid uid: UInt, delay: UInt, lost: UInt, rxKBitRate: UInt) {
         callback(RtcEngineEvents.RemoteVideoTransportStats, uid, delay, lost, rxKBitRate)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoEnabled enabled: Bool, byUid uid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didVideoEnabled enabled: Bool, byUid uid: UInt) {
         callback(RtcEngineEvents.UserEnableVideo, uid, enabled)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didLocalVideoEnabled enabled: Bool, byUid uid: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didLocalVideoEnabled enabled: Bool, byUid uid: UInt) {
         callback(RtcEngineEvents.UserEnableLocalVideo, uid, enabled)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteVideoDecodedOfUid uid: UInt, size: CGSize, elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstRemoteVideoDecodedOfUid uid: UInt, size: CGSize, elapsed: Int) {
         callback(RtcEngineEvents.FirstRemoteVideoDecoded, uid, Int(size.width), Int(size.height), elapsed)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, didMicrophoneEnabled enabled: Bool) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didMicrophoneEnabled enabled: Bool) {
         callback(RtcEngineEvents.MicrophoneEnabled, enabled)
     }
 
-    public func rtcEngineConnectionDidInterrupted(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineConnectionDidInterrupted(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.ConnectionInterrupted)
     }
 
-    public func rtcEngineConnectionDidBanned(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineConnectionDidBanned(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.ConnectionBanned)
     }
 
-    public func rtcEngine(_ engine: AgoraRtcEngineKit, audioQualityOfUid uid: UInt, quality: AgoraNetworkQuality, delay: UInt, lost: UInt) {
+    public func rtcEngine(_: AgoraRtcEngineKit, audioQualityOfUid uid: UInt, quality: AgoraNetworkQuality, delay: UInt, lost: UInt) {
         callback(RtcEngineEvents.AudioQuality, uid, quality.rawValue, delay, lost)
     }
 
-    public func rtcEngineCameraDidReady(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineCameraDidReady(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.CameraReady)
     }
 
-    public func rtcEngineVideoDidStop(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineVideoDidStop(_: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.VideoStopped)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, firstLocalAudioFramePublished elapsed: Int) {
+    func rtcEngine(_: AgoraRtcEngineKit, firstLocalAudioFramePublished elapsed: Int) {
         callback(RtcEngineEvents.FirstLocalAudioFramePublished, elapsed)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, firstLocalVideoFramePublished elapsed: Int) {
+    func rtcEngine(_: AgoraRtcEngineKit, firstLocalVideoFramePublished elapsed: Int) {
         callback(RtcEngineEvents.FirstLocalVideoFramePublished, elapsed)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didAudioPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+    func rtcEngine(_: AgoraRtcEngineKit, didAudioPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.AudioPublishStateChanged, channel, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+    func rtcEngine(_: AgoraRtcEngineKit, didVideoPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.VideoPublishStateChanged, channel, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didAudioSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+    func rtcEngine(_: AgoraRtcEngineKit, didAudioSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.AudioSubscribeStateChanged, channel, uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+    func rtcEngine(_: AgoraRtcEngineKit, didVideoSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.VideoSubscribeStateChanged, channel, uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
+    func rtcEngine(_: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
         callback(RtcEngineEvents.RtmpStreamingEvent, url, eventCode.rawValue)
     }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+
+    func rtcEngine(_: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
         callback(RtcEngineEvents.UserSuperResolutionEnabled, uid, enabled, reason.rawValue)
     }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, uploadLogResultRequestId requestId: String, success: Bool, reason: AgoraUploadErrorReason) {
+
+    func rtcEngine(_: AgoraRtcEngineKit, uploadLogResultRequestId requestId: String, success: Bool, reason: AgoraUploadErrorReason) {
         callback(RtcEngineEvents.UploadLogResult, requestId, success, reason.rawValue)
     }
 }
