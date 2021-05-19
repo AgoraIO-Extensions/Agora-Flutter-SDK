@@ -1,3 +1,5 @@
+# [4.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.4...v4.0.0) (2021-05-19)
+
 # [4.0.0-rc.4](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-05-19)
 
 
