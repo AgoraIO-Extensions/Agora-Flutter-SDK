@@ -1,3 +1,18 @@
+# [4.0.0-rc.4](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-05-19)
+
+
+### Bug Fixes
+
+* build error ([4d05a50](https://github.com/AgoraIO/Flutter-SDK/commit/4d05a50135ab30dd1abea54c990fbc488e284408))
+* **uid compatible:** int to uint ([ddaa354](https://github.com/AgoraIO/Flutter-SDK/commit/ddaa3544a126d39f58184e8ed98e7031fa2d3991))
+
+
+### Features
+
+* support native 3.4.2 ([e792d26](https://github.com/AgoraIO/Flutter-SDK/commit/e792d263f271b2ec1aae2c7970471527d7dc5c1b))
+* support native 3.4.2 ([ca658b2](https://github.com/AgoraIO/Flutter-SDK/commit/ca658b2893174f9b71a6a6b704da55d6e4617267))
+* **upgrade:** 3.4.1 ([11cef0f](https://github.com/AgoraIO/Flutter-SDK/commit/11cef0f052783e0a8eec0e5da8b461588f03a78d))
+
 # [4.0.0-rc.3](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-03-22)
 
 
