@@ -6,9 +6,9 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
+import AgoraRtcKit
 import Foundation
 import UIKit
-import AgoraRtcKit
 
 class RtcSurfaceView: UIView {
     private var surface: UIView
@@ -28,7 +28,8 @@ class RtcSurfaceView: UIView {
         return "frame"
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -87,7 +88,7 @@ class RtcSurfaceView: UIView {
         if canvas.uid == 0 {
             engine.setLocalRenderMode(canvas.renderMode, mirrorMode: canvas.mirrorMode)
         } else {
-            if let `channel` = channel {
+            if let channel = channel {
                 channel.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
             } else {
                 engine.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
@@ -95,7 +96,7 @@ class RtcSurfaceView: UIView {
         }
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of _: Any?, change: [NSKeyValueChangeKey: Any]?, context _: UnsafeMutableRawPointer?) {
         if keyPath == observerForKeyPath() {
             if let rect = change?[.newKey] as? CGRect {
                 surface.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: rect.size)

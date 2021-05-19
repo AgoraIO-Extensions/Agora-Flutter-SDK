@@ -132,7 +132,7 @@ enum AudioLocalState {
 }
 
 /// The error code of the audio mixing file.
-enum AudioMixingErrorCode {
+enum AudioMixingReason {
   /// The SDK cannot open the audio mixing file.
   @JsonValue(701)
   CanNotOpen,
@@ -144,6 +144,34 @@ enum AudioMixingErrorCode {
   /// The opening of the audio mixing file is interrupted.
   @JsonValue(703)
   InterruptedEOF,
+
+  /// TODO(doc)
+  @JsonValue(720)
+  StartedByUser,
+
+  /// TODO(doc)
+  @JsonValue(721)
+  OneLoopCompleted,
+
+  /// TODO(doc)
+  @JsonValue(722)
+  StartNewLoop,
+
+  /// TODO(doc)
+  @JsonValue(723)
+  AllLoopsCompleted,
+
+  /// TODO(doc)
+  @JsonValue(724)
+  StoppedByUser,
+
+  /// TODO(doc)
+  @JsonValue(725)
+  PausedByUser,
+
+  /// TODO(doc)
+  @JsonValue(726)
+  ResumedByUser,
 
   /// No error.
   @JsonValue(0)
@@ -159,6 +187,10 @@ enum AudioMixingStateCode {
   /// The audio mixing file pauses playing.
   @JsonValue(711)
   Paused,
+
+  /// TODO(doc)
+  @JsonValue(712)
+  Restart,
 
   /// The audio mixing file stops playing.
   @JsonValue(713)
@@ -242,6 +274,21 @@ enum AudioRecordingQuality {
   /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
   @JsonValue(2)
   High,
+}
+
+/// TODO(doc)
+enum AudioRecordingPosition {
+  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  @JsonValue(0)
+  PositionMixedRecordingAndPlayback,
+
+  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+  @JsonValue(1)
+  PositionRecording,
+
+  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  @JsonValue(2)
+  PositionMixedPlayback,
 }
 
 /// The state of the remote audio.
@@ -835,7 +882,7 @@ enum DegradationPreference {
 
   /// Reserved for future use.
   @JsonValue(2)
-  Balanced
+  MaintainBalanced
 }
 
 /// Encryption mode
@@ -1090,6 +1137,10 @@ enum ErrorCode {
   @JsonValue(157)
   ModuleNotFound,
 
+  /// TODO(doc)
+  @JsonValue(160)
+  AlreadyInRecording,
+
   /// Fails to load the media engine.
   @JsonValue(1001)
   LoadMediaEngine,
@@ -1319,6 +1370,10 @@ enum LocalVideoStreamError {
   /// (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
   @JsonValue(7)
   CaptureMultipleForegroundApps,
+
+  /// TODO(doc)
+  @JsonValue(8)
+  DeviceNotFound,
 }
 
 /// The state of the local video stream.

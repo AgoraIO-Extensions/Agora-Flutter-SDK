@@ -1301,3 +1301,54 @@ class RtcEngineConfig {
   /// @nodoc
   Map<String, dynamic> toJson() => _$RtcEngineConfigToJson(this);
 }
+
+/// TODO(doc)
+@JsonSerializable(explicitToJson: true)
+class RhythmPlayerConfig {
+  @JsonKey(includeIfNull: false)
+  int? beatsPerMeasure;
+
+  @JsonKey(includeIfNull: false)
+  int? beatsPerMinute;
+
+  @JsonKey(includeIfNull: false)
+  bool? publish;
+
+  /// Constructs a [RhythmPlayerConfig]
+  RhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute, this.publish});
+
+  /// @nodoc
+  factory RhythmPlayerConfig.fromJson(Map<String, dynamic> json) =>
+      _$RhythmPlayerConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$RhythmPlayerConfigToJson(this);
+}
+
+/// TODO(doc)
+@JsonSerializable(explicitToJson: true)
+class AudioRecordingConfiguration {
+  String filePath;
+
+  @JsonKey(includeIfNull: false)
+  AudioRecordingQuality? recordingQuality;
+
+  @JsonKey(includeIfNull: false)
+  AudioRecordingPosition? recordingPosition;
+
+  @JsonKey(includeIfNull: false)
+  AudioSampleRateType? recordingSampleRate;
+
+  /// Constructs a [AudioRecordingConfiguration]
+  AudioRecordingConfiguration(this.filePath,
+      {this.recordingQuality,
+      this.recordingPosition,
+      this.recordingSampleRate});
+
+  /// @nodoc
+  factory AudioRecordingConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$AudioRecordingConfigurationFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
+}

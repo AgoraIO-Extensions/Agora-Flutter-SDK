@@ -1,3 +1,20 @@
+# [4.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.4...v4.0.0) (2021-05-19)
+
+# [4.0.0-rc.4](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-05-19)
+
+
+### Bug Fixes
+
+* build error ([4d05a50](https://github.com/AgoraIO/Flutter-SDK/commit/4d05a50135ab30dd1abea54c990fbc488e284408))
+* **uid compatible:** int to uint ([ddaa354](https://github.com/AgoraIO/Flutter-SDK/commit/ddaa3544a126d39f58184e8ed98e7031fa2d3991))
+
+
+### Features
+
+* support native 3.4.2 ([e792d26](https://github.com/AgoraIO/Flutter-SDK/commit/e792d263f271b2ec1aae2c7970471527d7dc5c1b))
+* support native 3.4.2 ([ca658b2](https://github.com/AgoraIO/Flutter-SDK/commit/ca658b2893174f9b71a6a6b704da55d6e4617267))
+* **upgrade:** 3.4.1 ([11cef0f](https://github.com/AgoraIO/Flutter-SDK/commit/11cef0f052783e0a8eec0e5da8b461588f03a78d))
+
 # [4.0.0-rc.3](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-03-22)
 
 
@@ -31,6 +48,18 @@
 
 ### Features
 * upgrade to dart 2.12.0 and migrating to null safety [#264](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/264) [#265](https://github.com/AgoraIO/Agora-Flutter-SDK/pull/265) ([b555e37b](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/b555e37b1d3ee7045d02341e2172cdefe2359b7b))
+
+## [3.3.3](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.2...v3.3.3) (2021-04-13)
+
+
+### Bug Fixes
+
+* **change method call:** createDataStream ([6783442](https://github.com/AgoraIO/Flutter-SDK/commit/6783442af2af7273b318aca3aad9ddc88fddca58))
+
+
+### Features
+
+* **add example:** example ([e98d6cc](https://github.com/AgoraIO/Flutter-SDK/commit/e98d6cc1bd2d11c21e2d846ecbd39c502028fbd4))
 
 ## [3.3.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1...v3.3.2) (2021-03-22)
 

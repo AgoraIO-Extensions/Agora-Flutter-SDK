@@ -8,7 +8,6 @@ import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'events.dart';
-import 'rtc_engine.dart';
 
 enum _ApiTypeChannel {
   kChannelCreateChannel,
@@ -686,8 +685,7 @@ class RtcChannel with RtcChannelInterface {
             jsonEncode({'channelId': channelId, 'config': config.toJson()})
       });
     }
-    return _invokeMethod(
-        'createDataStreamWithConfig', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {'config': config.toJson()});
   }
 
   @override

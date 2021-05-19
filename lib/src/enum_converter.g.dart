@@ -140,24 +140,31 @@ const _$AudioLocalStateEnumMap = {
   AudioLocalState.Failed: 3,
 };
 
-AudioMixingErrorCodeConverter _$AudioMixingErrorCodeConverterFromJson(
+AudioMixingReasonConverter _$AudioMixingReasonConverterFromJson(
     Map<String, dynamic> json) {
-  return AudioMixingErrorCodeConverter(
-    _$enumDecode(_$AudioMixingErrorCodeEnumMap, json['e']),
+  return AudioMixingReasonConverter(
+    _$enumDecode(_$AudioMixingReasonEnumMap, json['e']),
   );
 }
 
-Map<String, dynamic> _$AudioMixingErrorCodeConverterToJson(
-        AudioMixingErrorCodeConverter instance) =>
+Map<String, dynamic> _$AudioMixingReasonConverterToJson(
+        AudioMixingReasonConverter instance) =>
     <String, dynamic>{
-      'e': _$AudioMixingErrorCodeEnumMap[instance.e],
+      'e': _$AudioMixingReasonEnumMap[instance.e],
     };
 
-const _$AudioMixingErrorCodeEnumMap = {
-  AudioMixingErrorCode.CanNotOpen: 701,
-  AudioMixingErrorCode.TooFrequentCall: 702,
-  AudioMixingErrorCode.InterruptedEOF: 703,
-  AudioMixingErrorCode.OK: 0,
+const _$AudioMixingReasonEnumMap = {
+  AudioMixingReason.CanNotOpen: 701,
+  AudioMixingReason.TooFrequentCall: 702,
+  AudioMixingReason.InterruptedEOF: 703,
+  AudioMixingReason.StartedByUser: 720,
+  AudioMixingReason.OneLoopCompleted: 721,
+  AudioMixingReason.StartNewLoop: 722,
+  AudioMixingReason.AllLoopsCompleted: 723,
+  AudioMixingReason.StoppedByUser: 724,
+  AudioMixingReason.PausedByUser: 725,
+  AudioMixingReason.ResumedByUser: 726,
+  AudioMixingReason.OK: 0,
 };
 
 AudioMixingStateCodeConverter _$AudioMixingStateCodeConverterFromJson(
@@ -176,6 +183,7 @@ Map<String, dynamic> _$AudioMixingStateCodeConverterToJson(
 const _$AudioMixingStateCodeEnumMap = {
   AudioMixingStateCode.Playing: 710,
   AudioMixingStateCode.Paused: 711,
+  AudioMixingStateCode.Restart: 712,
   AudioMixingStateCode.Stopped: 713,
   AudioMixingStateCode.Failed: 714,
 };
@@ -242,6 +250,25 @@ const _$AudioRecordingQualityEnumMap = {
   AudioRecordingQuality.Low: 0,
   AudioRecordingQuality.Medium: 1,
   AudioRecordingQuality.High: 2,
+};
+
+AudioRecordingPositionConverter _$AudioRecordingPositionConverterFromJson(
+    Map<String, dynamic> json) {
+  return AudioRecordingPositionConverter(
+    _$enumDecode(_$AudioRecordingPositionEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$AudioRecordingPositionConverterToJson(
+        AudioRecordingPositionConverter instance) =>
+    <String, dynamic>{
+      'e': _$AudioRecordingPositionEnumMap[instance.e],
+    };
+
+const _$AudioRecordingPositionEnumMap = {
+  AudioRecordingPosition.PositionMixedRecordingAndPlayback: 0,
+  AudioRecordingPosition.PositionRecording: 1,
+  AudioRecordingPosition.PositionMixedPlayback: 2,
 };
 
 AudioRemoteStateConverter _$AudioRemoteStateConverterFromJson(
@@ -641,7 +668,7 @@ Map<String, dynamic> _$DegradationPreferenceConverterToJson(
 const _$DegradationPreferenceEnumMap = {
   DegradationPreference.MaintainQuality: 0,
   DegradationPreference.MaintainFramerate: 1,
-  DegradationPreference.Balanced: 2,
+  DegradationPreference.MaintainBalanced: 2,
 };
 
 EncryptionModeConverter _$EncryptionModeConverterFromJson(
@@ -728,6 +755,7 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.PublishStreamNotFound: 155,
   ErrorCode.PublishStreamFormatNotSuppported: 156,
   ErrorCode.ModuleNotFound: 157,
+  ErrorCode.AlreadyInRecording: 160,
   ErrorCode.LoadMediaEngine: 1001,
   ErrorCode.StartCall: 1002,
   ErrorCode.StartCamera: 1003,
@@ -846,6 +874,7 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.EncodeFailure: 5,
   LocalVideoStreamError.CaptureInBackground: 6,
   LocalVideoStreamError.CaptureMultipleForegroundApps: 7,
+  LocalVideoStreamError.DeviceNotFound: 8,
 };
 
 LocalVideoStreamStateConverter _$LocalVideoStreamStateConverterFromJson(

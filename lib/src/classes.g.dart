@@ -130,7 +130,7 @@ const _$VideoOutputOrientationModeEnumMap = {
 const _$DegradationPreferenceEnumMap = {
   DegradationPreference.MaintainQuality: 0,
   DegradationPreference.MaintainFramerate: 1,
-  DegradationPreference.Balanced: 2,
+  DegradationPreference.MaintainBalanced: 2,
 };
 
 const _$VideoMirrorModeEnumMap = {
@@ -980,4 +980,73 @@ const _$AreaCodeEnumMap = {
   AreaCode.JP: 16,
   AreaCode.IN: 32,
   AreaCode.GLOB: -1,
+};
+
+RhythmPlayerConfig _$RhythmPlayerConfigFromJson(Map<String, dynamic> json) {
+  return RhythmPlayerConfig(
+    beatsPerMeasure: json['beatsPerMeasure'] as int?,
+    beatsPerMinute: json['beatsPerMinute'] as int?,
+    publish: json['publish'] as bool?,
+  );
+}
+
+Map<String, dynamic> _$RhythmPlayerConfigToJson(RhythmPlayerConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('beatsPerMeasure', instance.beatsPerMeasure);
+  writeNotNull('beatsPerMinute', instance.beatsPerMinute);
+  writeNotNull('publish', instance.publish);
+  return val;
+}
+
+AudioRecordingConfiguration _$AudioRecordingConfigurationFromJson(
+    Map<String, dynamic> json) {
+  return AudioRecordingConfiguration(
+    json['filePath'] as String,
+    recordingQuality: _$enumDecodeNullable(
+        _$AudioRecordingQualityEnumMap, json['recordingQuality']),
+    recordingPosition: _$enumDecodeNullable(
+        _$AudioRecordingPositionEnumMap, json['recordingPosition']),
+    recordingSampleRate: _$enumDecodeNullable(
+        _$AudioSampleRateTypeEnumMap, json['recordingSampleRate']),
+  );
+}
+
+Map<String, dynamic> _$AudioRecordingConfigurationToJson(
+    AudioRecordingConfiguration instance) {
+  final val = <String, dynamic>{
+    'filePath': instance.filePath,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('recordingQuality',
+      _$AudioRecordingQualityEnumMap[instance.recordingQuality]);
+  writeNotNull('recordingPosition',
+      _$AudioRecordingPositionEnumMap[instance.recordingPosition]);
+  writeNotNull('recordingSampleRate',
+      _$AudioSampleRateTypeEnumMap[instance.recordingSampleRate]);
+  return val;
+}
+
+const _$AudioRecordingQualityEnumMap = {
+  AudioRecordingQuality.Low: 0,
+  AudioRecordingQuality.Medium: 1,
+  AudioRecordingQuality.High: 2,
+};
+
+const _$AudioRecordingPositionEnumMap = {
+  AudioRecordingPosition.PositionMixedRecordingAndPlayback: 0,
+  AudioRecordingPosition.PositionRecording: 1,
+  AudioRecordingPosition.PositionMixedPlayback: 2,
 };
