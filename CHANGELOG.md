@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0...v4.0.1) (2021-05-19)
+
+
+### Bug Fixes
+
+* function.parameters may cause error ([927f8d6](https://github.com/AgoraIO/Flutter-SDK/commit/927f8d61962c486c33bb5dfad7ca5a369aa94199))
+
 # [4.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.4...v4.0.0) (2021-05-19)
 
 # [4.0.0-rc.4](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-05-19)
