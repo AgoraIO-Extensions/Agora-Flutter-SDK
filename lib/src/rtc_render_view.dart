@@ -348,9 +348,7 @@ class _RtcTextureViewState extends State<RtcTextureView> {
       if (_id != null) {
         return Texture(textureId: _id!);
       }
-      return Container(
-        color: Colors.yellow,
-      );
+      return Container();
     } else {
       if (defaultTargetPlatform == TargetPlatform.android) {
         return GestureDetector(

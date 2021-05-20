@@ -8,7 +8,7 @@
 #include <map>
 #include <mutex>
 
-#include "include/iris/iris_rtc_renderer.h"
+#include "third_party/iris/include/iris_rtc_renderer.h"
 
 class AgoraTextureViewFactory;
 

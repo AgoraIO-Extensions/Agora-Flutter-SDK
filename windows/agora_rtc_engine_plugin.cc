@@ -17,8 +17,8 @@
 
 #include "include/agora_rtc_engine/agora_rtc_channel_plugin.h"
 #include "include/agora_rtc_engine/agora_texture_view_factory.h"
-#include "include/iris/iris_rtc_engine.h"
-#include "include/iris/iris_rtc_renderer.h"
+#include "third_party/iris/include/iris_rtc_engine.h"
+#include "third_party/iris/include/iris_rtc_renderer.h"
 
 namespace {
 using namespace flutter;

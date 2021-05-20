@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "include/iris/iris_rtc_raw_data.h"
+#include "third_party/iris/include/iris_rtc_raw_data.h"
 
 using namespace flutter;
 using namespace agora::iris::rtc;
