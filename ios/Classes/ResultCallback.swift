@@ -5,8 +5,8 @@
 //  Created by LXH on 2020/6/24.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 class ResultCallback: NSObject, Callback {
     private var result: FlutterResult?
@@ -20,6 +20,6 @@ class ResultCallback: NSObject, Callback {
     }
 
     func failure(_ code: String, _ message: String) {
-        result?(FlutterError.init(code: code, message: message, details: nil))
+        result?(FlutterError(code: code, message: message, details: nil))
     }
 }

@@ -17,9 +17,9 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'FlutterMacOS'
-  s.dependency 'AgoraRtcEngine_macOS', '3.3.1'
-
+  s.dependency 'AgoraRtcEngine_macOS', '3.4.2'
   s.platform = :osx, '10.11'
+
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
-  s.swift_version = '5.0'
+  s.swift_version = '4.0'
 end

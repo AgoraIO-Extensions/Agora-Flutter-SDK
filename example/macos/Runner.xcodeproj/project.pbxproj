@@ -307,6 +307,7 @@
 				"${PODS_ROOT}/AgoraRtcEngine_macOS/AgoraSoundTouch.framework",
 				"${PODS_ROOT}/AgoraRtcEngine_macOS/av1.framework",
 				"${PODS_ROOT}/AgoraRtcEngine_macOS/AgoraDav1dExtension.framework",
+				"${PODS_ROOT}/AgoraRtcEngine_macOS/AgoraJNDExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/agora_rtc_engine/agora_rtc_engine.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -319,6 +320,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraSoundTouch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/av1.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraDav1dExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraJNDExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/agora_rtc_engine.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

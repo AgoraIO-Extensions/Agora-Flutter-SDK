@@ -23,7 +23,7 @@ class AgoraSurfaceViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 
     func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return AgoraSurfaceView(messager!, frame, viewId, args as? Dictionary<String, Any?>, rtcEnginePlugin!, rtcChannelPlugin!)
+        return AgoraSurfaceView(messager!, frame, viewId, args as? [String: Any?], rtcEnginePlugin!, rtcChannelPlugin!)
     }
 }
 
@@ -33,7 +33,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
     private let _view: RtcSurfaceView
     private let channel: FlutterMethodChannel
 
-    init(_ messager: FlutterBinaryMessenger, _ frame: CGRect, _ viewId: Int64, _ args: Dictionary<String, Any?>?, _ rtcEnginePlugin: SwiftAgoraRtcEnginePlugin, _ rtcChannelPlugin: AgoraRtcChannelPlugin) {
+    init(_ messager: FlutterBinaryMessenger, _ frame: CGRect, _ viewId: Int64, _ args: [String: Any?]?, _ rtcEnginePlugin: SwiftAgoraRtcEnginePlugin, _ rtcChannelPlugin: AgoraRtcChannelPlugin) {
         self.rtcEnginePlugin = rtcEnginePlugin
         self.rtcChannelPlugin = rtcChannelPlugin
         self._view = RtcSurfaceView(frame: frame)
@@ -44,10 +44,10 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
             setRenderMode((map["renderMode"] as! NSNumber).uintValue)
             setMirrorMode((map["mirrorMode"] as! NSNumber).uintValue)
         }
-        channel.setMethodCallHandler { [weak self] (call, result) in
+        channel.setMethodCallHandler { [weak self] call, result in
             var args = [String: Any?]()
             if let arguments = call.arguments {
-                args = arguments as! Dictionary<String, Any?>
+                args = arguments as! [String: Any?]
             }
             switch call.method {
             case "setData":
@@ -71,23 +71,23 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
     }
 
     func setData(_ data: NSDictionary) {
-        var channel: AgoraRtcChannel? = nil
+        var channel: AgoraRtcChannel?
         if let channelId = data["channelId"] as? String {
             channel = getChannel(channelId)
         }
-        if let `engine` = engine {
+        if let engine = engine {
             _view.setData(engine, channel, (data["uid"] as! NSNumber).uintValue)
         }
     }
 
     func setRenderMode(_ renderMode: UInt) {
-        if let `engine` = engine {
+        if let engine = engine {
             _view.setRenderMode(engine, renderMode)
         }
     }
 
     func setMirrorMode(_ mirrorMode: UInt) {
-        if let `engine` = engine {
+        if let engine = engine {
             _view.setMirrorMode(engine, mirrorMode)
         }
     }
@@ -97,7 +97,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
     }
 
     private func getChannel(_ channelId: String?) -> AgoraRtcChannel? {
-        guard let `channelId` = channelId else {
+        guard let channelId = channelId else {
             return nil
         }
         return rtcChannelPlugin?.channel(channelId)

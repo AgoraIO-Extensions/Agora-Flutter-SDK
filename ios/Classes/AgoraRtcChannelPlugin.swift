@@ -11,9 +11,9 @@ public class AgoraRtcChannelPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
     private final weak var rtcEnginePlugin: SwiftAgoraRtcEnginePlugin?
     private var methodChannel: FlutterMethodChannel?
     private var eventChannel: FlutterEventChannel?
-    private var eventSink: FlutterEventSink? = nil
+    private var eventSink: FlutterEventSink?
     private lazy var manager: RtcChannelManager = {
-        return RtcChannelManager() { [weak self] methodName, data in
+        RtcChannelManager { [weak self] methodName, data in
             self?.emit(methodName, data)
         }
     }()
@@ -22,9 +22,7 @@ public class AgoraRtcChannelPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
         self.rtcEnginePlugin = rtcEnginePlugin
     }
 
-    public static func register(with registrar: FlutterPluginRegistrar) {
-
-    }
+    public static func register(with _: FlutterPluginRegistrar) {}
 
     public func initPlugin(_ registrar: FlutterPluginRegistrar) {
         methodChannel = FlutterMethodChannel(name: "agora_rtc_channel", binaryMessenger: registrar.messenger())
@@ -33,26 +31,26 @@ public class AgoraRtcChannelPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
         eventChannel?.setStreamHandler(self)
     }
 
-    public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
+    public func detachFromEngine(for _: FlutterPluginRegistrar) {
         methodChannel?.setMethodCallHandler(nil)
         eventChannel?.setStreamHandler(nil)
         manager.Release()
     }
 
-    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+    public func onListen(withArguments _: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         eventSink = events
         return nil
     }
 
-    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    public func onCancel(withArguments _: Any?) -> FlutterError? {
         eventSink = nil
         return nil
     }
 
-    private func emit(_ methodName: String, _ data: Dictionary<String, Any?>?) {
-        var event: Dictionary<String, Any?> = ["methodName": methodName]
-        if let `data` = data {
-            event.merge(data) { (current, _) in
+    private func emit(_ methodName: String, _ data: [String: Any?]?) {
+        var event: [String: Any?] = ["methodName": methodName]
+        if let data = data {
+            event.merge(data) { current, _ in
                 current
             }
         }

@@ -5,14 +5,15 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
     private var registrar: FlutterPluginRegistrar?
     private var methodChannel: FlutterMethodChannel?
     private var eventChannel: FlutterEventChannel?
-    private var eventSink: FlutterEventSink? = nil
+    private var eventSink: FlutterEventSink?
     private lazy var manager: RtcEngineManager = {
-        return RtcEngineManager() { [weak self] methodName, data in
+        RtcEngineManager { [weak self] methodName, data in
             self?.emit(methodName, data)
         }
     }()
+
     private lazy var rtcChannelPlugin: AgoraRtcChannelPlugin = {
-        return AgoraRtcChannelPlugin(self)
+        AgoraRtcChannelPlugin(self)
     }()
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -38,20 +39,20 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         manager.Release()
     }
 
-    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+    public func onListen(withArguments _: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         eventSink = events
         return nil
     }
 
-    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    public func onCancel(withArguments _: Any?) -> FlutterError? {
         eventSink = nil
         return nil
     }
 
-    private func emit(_ methodName: String, _ data: Dictionary<String, Any?>?) {
-        var event: Dictionary<String, Any?> = ["methodName": methodName]
-        if let `data` = data {
-            event.merge(data) { (current, _) in
+    private func emit(_ methodName: String, _ data: [String: Any?]?) {
+        var event: [String: Any?] = ["methodName": methodName]
+        if let data = data {
+            event.merge(data) { current, _ in
                 current
             }
         }
@@ -75,7 +76,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
             }
             return
         }
-        
+
         if call.method == "getAssetAbsolutePath" {
             getAssetAbsolutePath(call, result: result)
             return
@@ -95,7 +96,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         }
         result(FlutterMethodNotImplemented)
     }
-    
+
     private func getAssetAbsolutePath(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let assetPath = call.arguments as? String {
             if let assetKey = registrar?.lookupKey(forAsset: assetPath) {
@@ -104,9 +105,9 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
                     return
                 }
             }
-            result(FlutterError.init(code: "FileNotFoundException", message: nil, details: nil))
+            result(FlutterError(code: "FileNotFoundException", message: nil, details: nil))
             return
         }
-        result(FlutterError.init(code: "IllegalArgumentException", message: nil, details: nil))
+        result(FlutterError(code: "IllegalArgumentException", message: nil, details: nil))
     }
 }
