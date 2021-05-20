@@ -173,7 +173,8 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          if (startPreview) RtcLocalView.TextureView(),
+          if (startPreview)
+            kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(
@@ -185,10 +186,15 @@ class _State extends State<JoinChannelVideo> {
                     child: Container(
                       width: 120,
                       height: 120,
-                      child: RtcRemoteView.TextureView(
-                        uid: e,
-                        channelId: channelId,
-                      ),
+                      child: kIsWeb
+                          ? RtcRemoteView.SurfaceView(
+                              uid: e,
+                              channelId: channelId,
+                            )
+                          : RtcRemoteView.TextureView(
+                              uid: e,
+                              channelId: channelId,
+                            ),
                     ),
                   ),
                 )),

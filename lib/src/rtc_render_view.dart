@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +13,10 @@ import 'rtc_engine.dart';
 
 final Map<int, MethodChannel> _channels = {};
 
-/// Use SurfaceView in Android.
-///
-/// Use [UIView](https://developer.apple.com/documentation/uikit/uiview) in iOS.
+/// Use SurfaceView on Android.
+/// Use UIView on iOS.
+/// Use DivElement on Web.
+/// Not support Mac/Windows.
 class RtcSurfaceView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -38,12 +41,12 @@ class RtcSurfaceView extends StatefulWidget {
 
   /// Control whether the surface view's surface is placed on top of its window.
   ///
-  /// See [TargetPlatform.android].
+  /// Only support [TargetPlatform.android].
   final bool zOrderOnTop;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
   ///
-  /// See [TargetPlatform.android].
+  /// Only support [TargetPlatform.android].
   final bool zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
@@ -272,9 +275,9 @@ class _HtmlElementViewController extends PlatformViewController
   }
 }
 
-/// Use TextureView in Android.
-/// Not support for iOS.
-/// [TargetPlatform.android]
+/// Use TextureView or FlutterTexture on Android.
+/// Use FlutterTexture on iOS/Mac/Windows.
+/// Not support Web.
 class RtcTextureView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -313,6 +316,7 @@ class RtcTextureView extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
+  /// Use Flutter Texture to render.
   final bool useFlutterTexture;
 
   /// Constructs a [RtcTextureView]
@@ -340,6 +344,9 @@ class _RtcTextureViewState extends State<RtcTextureView> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return Text('Web is not yet supported by the plugin');
+    }
     if (widget.useFlutterTexture) {
       if (_id != null) {
         return Texture(textureId: _id!);

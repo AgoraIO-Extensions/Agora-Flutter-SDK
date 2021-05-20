@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'classes.dart';
@@ -208,7 +209,7 @@ class RtcEngine with RtcEngineInterface {
   ///
   /// The version of the current SDK in the string format. For example, 2.3.0.
   static Future<String?> getSdkVersion() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetVersion.index,
         'params': jsonEncode({})
@@ -227,7 +228,7 @@ class RtcEngine with RtcEngineInterface {
   ///
   /// [WarningCode] or [ErrorCode].
   static Future<String?> getErrorDescription(int error) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetErrorDescription.index,
         'params': jsonEncode({'code': error})
@@ -306,7 +307,7 @@ class RtcEngine with RtcEngineInterface {
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
     if (_engine != null) return _engine!;
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       await _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineInitialize.index,
         'params': jsonEncode({'context': config.toJson()})
@@ -327,7 +328,7 @@ class RtcEngine with RtcEngineInterface {
     RtcChannel.destroyAll();
     _engine?._handler = null;
     _engine = null;
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRelease.index,
         'params': jsonEncode({})
@@ -353,7 +354,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setChannelProfile(ChannelProfile profile) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetChannelProfile.index,
         'params':
@@ -366,7 +367,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetClientRole.index,
         'params': jsonEncode({
@@ -385,7 +386,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> joinChannel(
       String? token, String channelName, String? optionalInfo, int optionalUid,
       [ChannelMediaOptions? options]) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineJoinChannel.index,
         'params': jsonEncode({
@@ -409,7 +410,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> switchChannel(String? token, String channelName,
       [ChannelMediaOptions? options]) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSwitchChannel.index,
         'params': jsonEncode({
@@ -428,7 +429,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> leaveChannel() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineLeaveChannel.index,
         'params': jsonEncode({})
@@ -439,7 +440,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> renewToken(String token) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRenewToken.index,
         'params': jsonEncode({'token': token})
@@ -451,7 +452,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> enableWebSdkInteroperability(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableWebSdkInteroperability.index,
         'params': jsonEncode({'enabled': enabled})
@@ -462,7 +463,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<ConnectionStateType> getConnectionState() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetConnectionState.index,
         'params': jsonEncode({})
@@ -477,7 +478,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<String?> getCallId() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetCallId.index,
         'params': jsonEncode({})
@@ -488,7 +489,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> rate(String callId, int rating, {String? description}) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRate.index,
         'params': jsonEncode(
@@ -501,7 +502,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> complain(String callId, String description) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineComplain.index,
         'params': jsonEncode({'callId': callId, 'description': description})
@@ -514,7 +515,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setLogFile(String filePath) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLogFile.index,
         'params': jsonEncode({'filePath': filePath})
@@ -526,7 +527,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setLogFilter(LogFilter filter) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLogFilter.index,
         'params': jsonEncode({'filter': LogFilterConverter(filter).value()})
@@ -539,7 +540,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setLogFileSize(int fileSizeInKBytes) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLogFileSize.index,
         'params': jsonEncode({'fileSizeInKBytes': fileSizeInKBytes})
@@ -551,7 +552,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setParameters(String parameters) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetParameters.index,
         'params': jsonEncode({'parameters': parameters})
@@ -562,7 +563,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<UserInfo> getUserInfoByUid(int uid) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetUserInfoByUid.index,
         'params': jsonEncode({'uid': uid})
@@ -577,7 +578,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<UserInfo> getUserInfoByUserAccount(String userAccount) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetUserInfoByUserAccount.index,
         'params': jsonEncode({'userAccount': userAccount})
@@ -595,7 +596,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> joinChannelWithUserAccount(
       String? token, String channelName, String userAccount,
       [ChannelMediaOptions? options]) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineJoinChannelWithUserAccount.index,
         'params': jsonEncode({
@@ -616,7 +617,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> registerLocalUserAccount(String appId, String userAccount) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRegisterLocalUserAccount.index,
         'params': jsonEncode({'appId': appId, 'userAccount': userAccount})
@@ -628,7 +629,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> adjustPlaybackSignalVolume(int volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustPlaybackSignalVolume.index,
         'params': jsonEncode({'volume': volume})
@@ -639,7 +640,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> adjustRecordingSignalVolume(int volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustRecordingSignalVolume.index,
         'params': jsonEncode({'volume': volume})
@@ -650,7 +651,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustUserPlaybackSignalVolume.index,
         'params': jsonEncode({'uid': uid, 'volume': volume})
@@ -662,7 +663,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> disableAudio() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineDisableAudio.index,
         'params': jsonEncode({})
@@ -673,7 +674,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableAudio() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableAudio.index,
         'params': jsonEncode({})
@@ -685,7 +686,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> enableAudioVolumeIndication(
       int interval, int smooth, bool report_vad) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableAudioVolumeIndication.index,
         'params': jsonEncode(
@@ -698,7 +699,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableLocalAudio(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableLocalAudio.index,
         'params': jsonEncode({'enabled': enabled})
@@ -709,7 +710,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> muteAllRemoteAudioStreams(bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteAllRemoteAudioStreams.index,
         'params': jsonEncode({'mute': muted})
@@ -720,7 +721,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> muteLocalAudioStream(bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteLocalAudioStream.index,
         'params': jsonEncode({'mute': muted})
@@ -731,7 +732,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> muteRemoteAudioStream(int uid, bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteRemoteAudioStream.index,
         'params': jsonEncode({'userId': uid, 'mute': muted})
@@ -742,7 +743,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setAudioProfile(AudioProfile profile, AudioScenario scenario) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioProfile.index,
         'params': jsonEncode({
@@ -760,7 +761,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeEngine.kEngineSetDefaultMuteAllRemoteAudioStreams.index,
@@ -773,7 +774,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> disableVideo() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineDisableVideo.index,
         'params': jsonEncode({})
@@ -784,7 +785,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableLocalVideo(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableLocalVideo.index,
         'params': jsonEncode({'enabled': enabled})
@@ -795,7 +796,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableVideo() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableVideo.index,
         'params': jsonEncode({})
@@ -806,7 +807,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> muteAllRemoteVideoStreams(bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteAllRemoteVideoStreams.index,
         'params': jsonEncode({'mute': muted})
@@ -817,7 +818,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> muteLocalVideoStream(bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteLocalVideoStream.index,
         'params': jsonEncode({'mute': muted})
@@ -828,7 +829,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> muteRemoteVideoStream(int uid, bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteRemoteVideoStream.index,
         'params': jsonEncode({'userId': uid, 'mute': muted})
@@ -839,7 +840,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetBeautyEffectOptions.index,
         'params': jsonEncode({'enabled': enabled, 'options': options.toJson()})
@@ -852,7 +853,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeEngine.kEngineSetDefaultMuteAllRemoteVideoStreams.index,
@@ -865,7 +866,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVideoEncoderConfiguration.index,
         'params': jsonEncode({'config': config.toJson()})
@@ -877,7 +878,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startPreview() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartPreview.index,
         'params': jsonEncode({})
@@ -888,7 +889,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopPreview() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopPreview.index,
         'params': jsonEncode({})
@@ -899,7 +900,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> adjustAudioMixingPlayoutVolume(int volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustAudioMixingPlayoutVolume.index,
         'params': jsonEncode({'volume': volume})
@@ -910,7 +911,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> adjustAudioMixingPublishVolume(int volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustAudioMixingPublishVolume.index,
         'params': jsonEncode({'volume': volume})
@@ -921,7 +922,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> adjustAudioMixingVolume(int volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustAudioMixingVolume.index,
         'params': jsonEncode({'volume': volume})
@@ -932,7 +933,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getAudioMixingCurrentPosition() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingCurrentPosition.index,
         'params': jsonEncode({})
@@ -943,7 +944,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getAudioMixingDuration([String? filePath]) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingDuration.index,
         'params': jsonEncode({})
@@ -956,7 +957,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getAudioMixingPlayoutVolume() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingPlayoutVolume.index,
         'params': jsonEncode({})
@@ -967,7 +968,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getAudioMixingPublishVolume() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingPublishVolume.index,
         'params': jsonEncode({})
@@ -978,7 +979,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> pauseAudioMixing() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePauseAudioMixing.index,
         'params': jsonEncode({})
@@ -989,7 +990,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> resumeAudioMixing() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineResumeAudioMixing.index,
         'params': jsonEncode({})
@@ -1000,7 +1001,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setAudioMixingPosition(int pos) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioMixingPosition.index,
         'params': jsonEncode({'pos': pos})
@@ -1013,7 +1014,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> startAudioMixing(
       String filePath, bool loopback, bool replace, int cycle,
       [int? startPos]) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartAudioMixing.index,
         'params': jsonEncode({
@@ -1035,7 +1036,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopAudioMixing() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopAudioMixing.index,
         'params': jsonEncode({})
@@ -1046,7 +1047,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAddInjectStreamUrl.index,
         'params': jsonEncode({'url': url, 'config': config.toJson()})
@@ -1058,7 +1059,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAddPublishStreamUrl.index,
         'params':
@@ -1072,7 +1073,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> addVideoWatermark(
       String watermarkUrl, WatermarkOptions options) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAddVideoWaterMark.index,
         'params': jsonEncode(
@@ -1085,7 +1086,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> clearVideoWatermarks() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineClearVideoWaterMarks.index,
         'params': jsonEncode({})
@@ -1096,7 +1097,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> createDataStream(bool reliable, bool ordered) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineCreateDataStream.index,
         'params': jsonEncode({'reliable': reliable, 'ordered': ordered})
@@ -1108,7 +1109,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> disableLastmileTest() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineDisableLastMileTest.index,
         'params': jsonEncode({})
@@ -1119,7 +1120,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableDualStreamMode(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableDualStreamMode.index,
         'params': jsonEncode({'enabled': enabled})
@@ -1130,7 +1131,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableInEarMonitoring(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableInEarMonitoring.index,
         'params': jsonEncode({'enabled': enabled})
@@ -1141,7 +1142,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableLastmileTest() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableLastMileTest.index,
         'params': jsonEncode({})
@@ -1152,7 +1153,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableSoundPositionIndication(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableSoundPositionIndication.index,
         'params': jsonEncode({'enabled': enabled})
@@ -1163,7 +1164,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<double?> getCameraMaxZoomFactor() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('getCameraMaxZoomFactor');
@@ -1171,7 +1172,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<double?> getEffectsVolume() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetEffectsVolume.index,
         'params': jsonEncode({})
@@ -1182,7 +1183,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<bool?> isCameraAutoFocusFaceModeSupported() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('isCameraAutoFocusFaceModeSupported');
@@ -1190,7 +1191,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<bool?> isCameraExposurePositionSupported() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('isCameraExposurePositionSupported');
@@ -1198,7 +1199,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<bool?> isCameraFocusSupported() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('isCameraFocusSupported');
@@ -1206,7 +1207,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<bool?> isCameraTorchSupported() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('isCameraTorchSupported');
@@ -1214,7 +1215,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<bool?> isCameraZoomSupported() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('isCameraZoomSupported');
@@ -1222,7 +1223,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<bool?> isSpeakerphoneEnabled() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineIsSpeakerPhoneEnabled.index,
         'params': jsonEncode({})
@@ -1233,7 +1234,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> pauseAllEffects() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePauseAllEffects.index,
         'params': jsonEncode({})
@@ -1244,7 +1245,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> pauseEffect(int soundId) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePauseEffect.index,
         'params': jsonEncode({'soundId': soundId})
@@ -1257,7 +1258,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> playEffect(int soundId, String filePath, int loopCount,
       double pitch, double pan, double gain, bool publish,
       [int? startPos]) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePlayEffect.index,
         'params': jsonEncode({
@@ -1300,7 +1301,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> preloadEffect(int soundId, String filePath) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePreloadEffect.index,
         'params': jsonEncode({'soundId': soundId, 'filePath': filePath})
@@ -1312,7 +1313,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> registerMediaMetadataObserver() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRegisterMediaMetadataObserver.index,
         'params': jsonEncode({})
@@ -1323,7 +1324,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> removeInjectStreamUrl(String url) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRemoveInjectStreamUrl.index,
         'params': jsonEncode({'url': url})
@@ -1334,7 +1335,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> removePublishStreamUrl(String url) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRemovePublishStreamUrl.index,
         'params': jsonEncode({'url': url})
@@ -1345,7 +1346,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> resumeAllEffects() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineResumeAllEffects.index,
         'params': jsonEncode({})
@@ -1356,7 +1357,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> resumeEffect(int soundId) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineResumeEffect.index,
         'params': jsonEncode({'soundId': soundId})
@@ -1367,7 +1368,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> sendMetadata(String metadata) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApiWithBuffer', {
         'apiType': _ApiTypeEngine.kEngineSendMetadata.index,
         'params': jsonEncode({
@@ -1381,7 +1382,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> sendStreamMessage(int streamId, String message) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApiWithBuffer', {
         'apiType': _ApiTypeEngine.kEngineSendStreamMessage.index,
         'params': jsonEncode({'streamId': streamId, 'length': message.length}),
@@ -1394,7 +1395,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod(
@@ -1404,7 +1405,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setCameraCapturerConfiguration(
       CameraCapturerConfiguration config) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetCameraCapturerConfiguration.index,
         'params': jsonEncode({'config': config.toJson()})
@@ -1417,7 +1418,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setCameraExposurePosition(
       double positionXinView, double positionYinView) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('setCameraExposurePosition', {
@@ -1429,7 +1430,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setCameraFocusPositionInPreview(
       double positionX, double positionY) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('setCameraFocusPositionInPreview',
@@ -1438,7 +1439,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setCameraTorchOn(bool isOn) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('setCameraTorchOn', {'isOn': isOn});
@@ -1446,7 +1447,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setCameraZoomFactor(double factor) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('setCameraZoomFactor', {'factor': factor});
@@ -1454,7 +1455,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeEngine.kEngineSetDefaultAudioRouteToSpeakerPhone.index,
@@ -1467,7 +1468,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setEffectsVolume(double volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEffectsVolume.index,
         'params': jsonEncode({'volume': volume})
@@ -1478,7 +1479,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setEnableSpeakerphone(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEnableSpeakerPhone.index,
         'params': jsonEncode({'enabled': enabled})
@@ -1490,7 +1491,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEncryptionMode.index,
         'params': jsonEncode({'encryptionMode': encryptionMode})
@@ -1503,7 +1504,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setEncryptionSecret(String secret) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEncryptionSecret.index,
         'params': jsonEncode({'secret': secret})
@@ -1514,7 +1515,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setInEarMonitoringVolume(int volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetInEarMonitoringVolume.index,
         'params': jsonEncode({'volume': volume})
@@ -1525,7 +1526,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLiveTranscoding.index,
         'params': jsonEncode({'transcoding': transcoding.toJson()})
@@ -1537,7 +1538,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setLocalPublishFallbackOption(StreamFallbackOptions option) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalPublishFallbackOption.index,
         'params': jsonEncode(
@@ -1551,7 +1552,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoiceChanger.index,
         'params': jsonEncode(
@@ -1565,7 +1566,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setLocalVoiceEqualization(
       AudioEqualizationBandFrequency bandFrequency, int bandGain) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoiceEqualization.index,
         'params': jsonEncode({
@@ -1584,7 +1585,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setLocalVoicePitch(double pitch) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoicePitch.index,
         'params': jsonEncode({'pitch': pitch})
@@ -1595,7 +1596,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setLocalVoiceReverb(AudioReverbType reverbKey, int value) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoiceReverb.index,
         'params': jsonEncode({
@@ -1613,7 +1614,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoiceReverbPreset.index,
         'params':
@@ -1626,7 +1627,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setMaxMetadataSize(int size) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetMaxMetadataSize.index,
         'params': jsonEncode({'size': size})
@@ -1637,7 +1638,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteDefaultVideoStreamType.index,
         'params': jsonEncode(
@@ -1650,7 +1651,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteSubscribeFallbackOption.index,
         'params': jsonEncode(
@@ -1663,7 +1664,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteUserPriority.index,
         'params': jsonEncode({
@@ -1680,7 +1681,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteVideoStreamType.index,
         'params': jsonEncode({
@@ -1697,7 +1698,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteVoicePosition.index,
         'params': jsonEncode({'uid': uid, 'pan': pan, 'gain': gain})
@@ -1709,7 +1710,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setVolumeOfEffect(int soundId, double volume) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVolumeOfEffect.index,
         'params': jsonEncode({'soundId': soundId, 'volume': volume})
@@ -1723,7 +1724,7 @@ class RtcEngine with RtcEngineInterface {
   @deprecated
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartAudioRecording.index,
         'params': jsonEncode({
@@ -1749,7 +1750,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartChannelMediaRelay.index,
         'params': jsonEncode(
@@ -1783,7 +1784,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startEchoTest(int intervalInSeconds) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartEchoTest.index,
         'params': jsonEncode({'intervalInSeconds': intervalInSeconds})
@@ -1795,7 +1796,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startLastmileProbeTest(LastmileProbeConfig config) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartLastMileProbeTest.index,
         'params': jsonEncode({'config': config.toJson()})
@@ -1806,7 +1807,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopAllEffects() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopAllEffects.index,
         'params': jsonEncode({})
@@ -1817,7 +1818,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopAudioRecording() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopAudioRecording.index,
         'params': jsonEncode({})
@@ -1828,7 +1829,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopChannelMediaRelay() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopChannelMediaRelay.index,
         'params': jsonEncode({})
@@ -1839,7 +1840,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopEchoTest() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopEchoTest.index,
         'params': jsonEncode({})
@@ -1850,7 +1851,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopEffect(int soundId) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopEffect.index,
         'params': jsonEncode({'soundId': soundId})
@@ -1861,7 +1862,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopLastmileProbeTest() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopLastMileProbeTest.index,
         'params': jsonEncode({})
@@ -1872,7 +1873,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> switchCamera() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSwitchCamera.index,
         'params': jsonEncode({})
@@ -1883,7 +1884,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> unloadEffect(int soundId) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUnloadEffect.index,
         'params': jsonEncode({'soundId': soundId})
@@ -1894,7 +1895,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> unregisterMediaMetadataObserver() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUnRegisterMediaMetadataObserver.index,
         'params': jsonEncode({})
@@ -1906,7 +1907,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUpdateChannelMediaRelay.index,
         'params': jsonEncode(
@@ -1920,7 +1921,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableFaceDetection(bool enable) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableFaceDetection.index,
         'params': jsonEncode({'enable': enable})
@@ -1931,7 +1932,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setAudioMixingPitch(int pitch) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioMixingPitch.index,
         'params': jsonEncode({'pitch': pitch})
@@ -1942,7 +1943,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableEncryption.index,
         'params': jsonEncode({'enabled': enabled, 'config': config.toJson()})
@@ -1955,7 +1956,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> sendCustomReportMessage(
       String id, String category, String event, String label, int value) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSendCustomReportMessage.index,
         'params': jsonEncode({
@@ -1979,7 +1980,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeEngine.kEngineSetAudioSessionOperationRestriction.index,
@@ -1997,7 +1998,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getNativeHandle() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       // TODO
     }
     return _invokeMethod('getNativeHandle');
@@ -2006,7 +2007,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setAudioEffectParameters(
       AudioEffectPreset preset, int param1, int param2) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioEffectParameters.index,
         'params': jsonEncode({
@@ -2025,7 +2026,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setAudioEffectPreset(AudioEffectPreset preset) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioEffectPreset.index,
         'params':
@@ -2038,7 +2039,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceBeautifierPreset.index,
         'params': jsonEncode(
@@ -2051,7 +2052,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> createDataStreamWithConfig(DataStreamConfig config) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineCreateDataStream.index,
         'params': jsonEncode({'config': config.toJson()})
@@ -2062,7 +2063,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableDeepLearningDenoise(bool enabled) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableDeepLearningDenoise.index,
         'params': jsonEncode({'enabled': enabled})
@@ -2073,7 +2074,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> enableRemoteSuperResolution(int uid, bool enable) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableRemoteSuperResolution.index,
         'params': jsonEncode({'uid': uid, 'enable': enable})
@@ -2085,7 +2086,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setCloudProxy(CloudProxyType proxyType) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetCloudProxy.index,
         'params':
@@ -2098,7 +2099,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<String?> uploadLogFile() {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUploadLogFile.index,
         'params': jsonEncode({})
@@ -2110,7 +2111,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setVoiceBeautifierParameters(
       VoiceBeautifierPreset preset, int param1, int param2) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceBeautifierParameters.index,
         'params': jsonEncode({
@@ -2129,7 +2130,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset) {
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceConversionPreset.index,
         'params':

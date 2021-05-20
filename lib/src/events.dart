@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
@@ -1101,7 +1103,7 @@ class RtcEngineEventHandler {
   // ignore: public_member_api_docs
   void process(String methodName, dynamic data) {
     List<dynamic> newData;
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       methodName = methodName.substring(2);
       newData = List<dynamic>.from(
           Map<String, dynamic>.from(jsonDecode(data as String)).values);
@@ -1840,7 +1842,7 @@ class RtcChannelEventHandler {
   // ignore: public_member_api_docs
   void process(String methodName, dynamic data) {
     List<dynamic> newData;
-    if (Platform.isWindows) {
+    if (!kIsWeb && Platform.isWindows) {
       methodName = methodName.substring(2);
       newData = List<dynamic>.from(
           Map<String, dynamic>.from(jsonDecode(data as String)).values);

@@ -43,6 +43,7 @@ class TextureView extends RtcTextureView {
     mirrorMode = VideoMirrorMode.Auto,
     PlatformViewCreatedCallback? onPlatformViewCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    useFlutterTexture = true,
   })  : assert(uid != 0),
         super(
           key: key,
@@ -52,5 +53,6 @@ class TextureView extends RtcTextureView {
           mirrorMode: mirrorMode,
           onPlatformViewCreated: onPlatformViewCreated,
           gestureRecognizers: gestureRecognizers,
+          useFlutterTexture: useFlutterTexture,
         );
 }
