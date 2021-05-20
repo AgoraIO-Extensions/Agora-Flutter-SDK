@@ -53,9 +53,11 @@ Your application can still run the voice call when it is switched to the backgro
 
 ## Error handling
 
-### iOS video can't show (Android works fine)
+### Android build error
 
-Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *Info.plist*
+The error log like `Could not find com.github.agorabuilder:native-full-sdk:3.4.2.`
+
+pls refer to https://github.com/AgoraIO/Agora-Flutter-SDK/issues/321#issuecomment-843913064
 
 ## API
 
