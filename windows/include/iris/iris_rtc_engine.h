@@ -21,14 +21,14 @@ class IrisProxy;
 namespace rtc {
 class IRIS_CPP_API IrisRtcEngine {
  public:
-  IrisRtcEngine();
+  explicit IrisRtcEngine(EngineType type = kEngineTypeNormal);
   virtual ~IrisRtcEngine();
 
   void SetEventHandler(IrisEventHandler *event_handler);
 
   void SetProxy(IrisProxy *proxy);
 
-  void EnableTest(agora::rtc::IRtcEngine *engine);
+  void EnableTest(agora::rtc::IRtcEngine *tester);
 
   int CallApi(ApiTypeEngine api_type, const char *params,
               char result[kBasicResultLength]);
@@ -51,4 +51,4 @@ class IRIS_CPP_API IrisRtcEngine {
 }// namespace iris
 }// namespace agora
 
-#endif// IRIS_RTC_ENGINE_H_
+#endif//IRIS_RTC_ENGINE_H_

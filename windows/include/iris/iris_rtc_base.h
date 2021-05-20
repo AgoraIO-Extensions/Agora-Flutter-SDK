@@ -10,6 +10,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+enum EngineType {
+  kEngineTypeNormal,
+  kEngineTypeSubProcess,
+};
 
 enum ApiTypeEngine {
   kEngineInitialize,
@@ -274,4 +278,4 @@ enum ApiTypeRawDataPlugin {
 }
 #endif
 
-#endif// IRIS_RTC_BASE_H_
+#endif//IRIS_RTC_BASE_H_

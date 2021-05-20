@@ -28,7 +28,8 @@ typedef void *IrisRtcChannelPtr;
 typedef void *IrisRtcDeviceManagerPtr;
 typedef void *IrisRtcTesterPtr;
 
-IRIS_API IrisRtcEnginePtr CreateIrisRtcEngine();
+IRIS_API IrisRtcEnginePtr
+CreateIrisRtcEngine(EngineType type = kEngineTypeNormal);
 
 IRIS_API void DestroyIrisRtcEngine(IrisRtcEnginePtr engine_ptr);
 
@@ -105,4 +106,4 @@ IRIS_DEBUG_API void OnEventReceived(IrisRtcTesterPtr tester_ptr,
 }
 #endif
 
-#endif// IRIS_RTC_C_API_H_
+#endif//IRIS_RTC_C_API_H_

@@ -11,7 +11,8 @@
 namespace agora {
 namespace rtc {
 class IRtcEngine;
-}
+class IChannel;
+}// namespace rtc
 
 namespace iris {
 class IrisProxy;
@@ -35,6 +36,8 @@ class IRIS_CPP_API IrisRtcChannel {
 
   void SetProxy(IrisProxy *proxy);
 
+  void EnableTest(agora::rtc::IChannel *tester);
+
   int CallApi(ApiTypeChannel api_type, const char *params,
               char result[kBasicResultLength]);
 
@@ -50,4 +53,4 @@ class IRIS_CPP_API IrisRtcChannel {
 }// namespace iris
 }// namespace agora
 
-#endif// IRIS_RTC_CHANNEL_H_
+#endif//IRIS_RTC_CHANNEL_H_
