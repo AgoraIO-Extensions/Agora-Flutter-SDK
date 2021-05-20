@@ -18,6 +18,14 @@ buildscript {
   }
 }
 
+rootProject.allprojects {
+  repositories {
+    mavenCentral()
+    google()
+    maven { url 'https://www.jitpack.io' }
+  }
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
@@ -39,12 +47,6 @@ android {
   lintOptions {
     disable 'InvalidPackage'
   }
-}
-
-repositories {
-  mavenCentral()
-  google()
-  maven { url 'https://www.jitpack.io' }
 }
 
 dependencies {
