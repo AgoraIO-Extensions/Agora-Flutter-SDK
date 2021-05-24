@@ -1148,7 +1148,7 @@ enum ErrorCode {
   @JsonValue(156)
   PublishStreamFormatNotSuppported,
 
-  /// The App lack necessary library file. Check whether the dynamic library is loaded.
+  /// The extension library is not integrated, such as the library for enabling deep-learning noise reduction.
   @JsonValue(157)
   ModuleNotFound,
 
