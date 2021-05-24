@@ -285,7 +285,7 @@ enum AudioRecordingQuality {
   High,
 }
 
-/// Recording content, which is set in [RtcEngine.startAduioRecording].
+/// Recording content, which is set in [RtcEngine.startAudioRecording].
 enum AudioRecordingPosition {
   /// 0: (Default) Records the mixed audio of the local user and all remote users.
   @JsonValue(0)
