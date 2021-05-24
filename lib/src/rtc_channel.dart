@@ -6,7 +6,6 @@ import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'events.dart';
-import 'rtc_engine.dart';
 
 /// The RtcChannel class.
 class RtcChannel with RtcChannelInterface {
@@ -316,8 +315,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<int> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod(
-        'createDataStreamWithConfig', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {'config': config.toJson()});
   }
 
   @override
@@ -751,8 +749,6 @@ mixin RtcEncryptionInterface {
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
   /// Enables/Disables the built-in encryption.
-  ///
-  ///
   ///
   /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
   ///
