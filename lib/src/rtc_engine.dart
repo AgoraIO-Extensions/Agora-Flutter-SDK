@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-import '../rtc_local_view.dart';
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
@@ -68,10 +67,6 @@ class RtcEngine with RtcEngineInterface {
 
   /// Creates an [RtcEngine] instance.
   ///
-  /// **Deprecated**
-  ///
-  /// This method is deprecated since v3.3.1.
-  ///
   /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
@@ -85,7 +80,6 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  @deprecated
   static Future<RtcEngine> create(String appId) {
     return createWithConfig(RtcEngineConfig(appId));
   }
@@ -118,8 +112,7 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   @deprecated
-  static Future<RtcEngine> createWithAreaCode(
-      String appId, AreaCode areaCode) async {
+  static Future<RtcEngine> createWithAreaCode(String appId, AreaCode areaCode) {
     return createWithConfig(RtcEngineConfig(appId, areaCode: areaCode));
   }
 
@@ -447,8 +440,10 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int> getAudioMixingDuration() {
-    return _invokeMethod('getAudioMixingDuration');
+  Future<int> getAudioMixingDuration([String filePath]) {
+    return _invokeMethod('getAudioMixingDuration', {
+      'filePath': filePath,
+    });
   }
 
   @override
@@ -478,12 +473,14 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle) {
+      String filePath, bool loopback, bool replace, int cycle,
+      [int startPos]) {
     return _invokeMethod('startAudioMixing', {
       'filePath': filePath,
       'loopback': loopback,
       'replace': replace,
-      'cycle': cycle
+      'cycle': cycle,
+      'startPos': startPos
     });
   }
 
@@ -599,7 +596,8 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish) {
+      double pitch, double pan, double gain, bool publish,
+      [int startPos]) {
     return _invokeMethod('playEffect', {
       'soundId': soundId,
       'filePath': filePath,
@@ -607,8 +605,24 @@ class RtcEngine with RtcEngineInterface {
       'pitch': pitch,
       'pan': pan,
       'gain': gain,
-      'publish': publish
+      'publish': publish,
+      'startPos': startPos
     });
+  }
+
+  @override
+  Future<void> setEffectPosition(int soundId, int pos) {
+    return _invokeMethod('setEffectPosition', {'soundId': soundId, 'pos': pos});
+  }
+
+  @override
+  Future<int> getEffectDuration(String filePath) {
+    return _invokeMethod('getEffectDuration', {'filePath': filePath});
+  }
+
+  @override
+  Future<int> getEffectCurrentPosition(int soundId) {
+    return _invokeMethod('getEffectCurrentPosition', {'soundId': soundId});
   }
 
   @override
@@ -821,6 +835,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
     return _invokeMethod('startAudioRecording', {
@@ -831,11 +846,37 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  Future<void> startAudioRecordingWithConfig(
+      AudioRecordingConfiguration config) {
+    return _invokeMethod('startAudioRecording', {'config': config.toJson()});
+  }
+
+  @override
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('startChannelMediaRelay', {
       'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
     });
+  }
+
+  @override
+  Future<void> startRhythmPlayer(
+      String sound1, String sound2, RhythmPlayerConfig config) {
+    return _invokeMethod('startRhythmPlayer', {
+      'sound1': sound1,
+      'sound2': sound2,
+      'config': config.toJson(),
+    });
+  }
+
+  @override
+  Future<void> stopRhythmPlayer() {
+    return _invokeMethod('stopRhythmPlayer');
+  }
+
+  @override
+  Future<void> configRhythmPlayer(RhythmPlayerConfig config) {
+    return _invokeMethod('configRhythmPlayer', {'config': config.toJson()});
   }
 
   @override
@@ -968,8 +1009,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod(
-        'createDataStreamWithConfig', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {'config': config.toJson()});
   }
 
   @override
@@ -1160,6 +1200,10 @@ mixin RtcEngineInterface
   Future<void> enableWebSdkInteroperability(bool enabled);
 
   /// Gets the connection state of the SDK.
+  ///
+  /// **Returns**
+  /// - The current connection state [ConnectionStateType], if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<ConnectionStateType> getConnectionState();
 
   /// This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
@@ -1244,6 +1288,10 @@ mixin RtcEngineInterface
   /// Gets the native handle of the SDK engine.
   ///
   /// This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
+  ///
+  /// **Returns**
+  /// - The native handle of the SDK, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<int> getNativeHandle();
 
   ///  Enables or disables deep-learning noise reduction.
@@ -1359,8 +1407,8 @@ mixin RtcUserInfoInterface {
   /// **Parameter** [userAccount] The user account of the user. Ensure that you set this parameter.
   ///
   /// **Returns**
-  /// - [UserInfo], if successful.
-  /// - Error code, if failed.
+  /// - [UserInfo], if this method call succeeds.
+  /// - Error code, if this method call fails.
   ///   - [ErrorCode.InvalidArgument]
   ///   - [ErrorCode.NotReady]
   ///   - [ErrorCode.Refused]
@@ -1375,8 +1423,8 @@ mixin RtcUserInfoInterface {
   /// **Parameter** [uid] The user ID of the user. Ensure that you set this parameter.
   ///
   /// **Returns**
-  /// - [UserInfo], if successful.
-  /// - Error code, if failed.
+  /// - [UserInfo], if this method call succeeds.
+  /// - Error code, if this method call fails.
   ///   - [ErrorCode.InvalidArgument]
   ///   - [ErrorCode.NotReady]
   ///   - [ErrorCode.Refused]
@@ -1696,37 +1744,41 @@ mixin RtcVideoInterface {
 mixin RtcAudioMixingInterface {
   /// Starts playing and mixing the music file.
   ///
-  /// This method mixes the specified local or online audio file with the audio stream from the microphone, or replaces the microphone’s audio stream with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. When the audio mixing file playback finishes after calling this method, the SDK triggers the [RtcEngineEventHandler.audioMixingFinished] callback.
-  ///
-  /// A successful `startAudioMixing` method call triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]) callback on the local client.
-  ///
-  /// When the audio mixing file playback finishes, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]) callback on the local client.
+  /// This method mixes the specified local or online audio file with the audio captured by the microphone, or replaces the audio captured by the microphone with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. 
+  /// 
+  /// After successfully playing the music file, the SDK triggers [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]). 
+  /// After finishing playing the music file, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]).
   ///
   /// **Note**
   /// - This method supports both Android and iOS. To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
   /// - Call this method when you are in the channel, otherwise it may cause issues.
-  /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingErrorCode.TooFrequentCall] error occurs.
+  /// - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [AudioMixingReason.TooFrequentCall] error occurs.
   /// - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
-  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingErrorCode.CanNotOpen].
+  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [AudioMixingReason.CanNotOpen].
   /// - If you call this method on an emulator, only the MP3 file format is supported.
   ///
-  /// **Parameter** [filePath] Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
-  /// - If the path begins with `/assets/`, the audio file is in the `/assets/` directory.
-  /// - Otherwise, the audio file is in the absolute path.
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
-  /// **Parameter** [loopback] Sets which user can hear the audio mixing:
-  /// - `true`: Only the local user can hear the audio mixing.
-  /// - `false`: Both users can hear the audio mixing.
+  /// **Parameter** [loopback] Whether to only play the music file on the local client: 
+  /// - `true`: Only play music files on the local client so that only the local user can hear the music.
+  /// - `false`: Publish music files to remote clients so that both the local user and remote users can hear the music.
   ///
-  /// **Parameter** [replace] Sets the audio mixing content:
-  /// - `true`: Only publish the specified audio file; the audio stream from the microphone is not published.
-  /// - `false`: The local audio file is mixed with the audio stream from the microphone.
+  /// **Parameter** [replace] Whether to replace the audio captured by the microphone with a music file: 
+  /// - `true`: Replace. Users can only hear music. 
+  /// - `false`: Do not replace. Users can hear both music and audio captured by the microphone.
   ///
-  /// **Parameter** [cycle] Sets the number of playback loops:
-  /// - Positive integer: Number of playback loops
-  /// - -1: Infinite playback loops
+  /// **Parameter** [cycle] The number of times the music file plays.
+  /// - &le; 0: The number of playback times. For example, 0 means that the SDK does not play the music file, while 1 means that the SDK plays the music file once.
+  /// - -1: Play the music in an indefinite loop.
+  ///
+  /// **Parameter** [startPos] The playback position (ms) of the music file.
   Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle);
+      String filePath, bool loopback, bool replace, int cycle,
+      [int startPos]);
 
   /// Stops playing or mixing the music file.
   ///
@@ -1780,7 +1832,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Returns**
   /// - The audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
-  /// - < 0: Failure.
+  /// - Error code, if the method call fails.
   Future<int> getAudioMixingPlayoutVolume();
 
   /// Gets the audio mixing volume for publishing.
@@ -1793,21 +1845,24 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Returns**
   /// - The audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
-  /// - < 0: Failure.
+  /// - Error code, if the method call fails.
   Future<int> getAudioMixingPublishVolume();
 
-  /// Gets the duration (ms) of the music file.
-  ///
-  /// Call this method when you are in a channel.
+  /// Gets the total duration (ms) of the music file.
   ///
   /// **Note**
+  /// - Call this method after joining a channel.
   ///
-  /// Call this method after calling [startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
-  ///
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
+  /// 
   /// **Returns**
-  /// - The audio mixing duration, if this method call is successful.
-  /// - < 0: Failure.
-  Future<int> getAudioMixingDuration();
+  /// - The total duration (ms) of the specified music file, if this method call succeeds.
+  /// - Error code, if this method call fails.
+  Future<int> getAudioMixingDuration([String filePath]);
 
   /// Gets the playback position (ms) of the music file.
   ///
@@ -1819,7 +1874,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Returns**
   /// - The current playback position of the audio mixing file, if this method call is successful.
-  /// - < 0: Failure.
+  /// - Error code, if this method call fails.
   Future<int> getAudioMixingCurrentPosition();
 
   /// Sets the playback position (ms) of the music file to a different starting position (the default plays from the beginning).
@@ -1848,6 +1903,10 @@ mixin RtcAudioEffectInterface {
   /// Gets the volume of the audio effects.
   ///
   /// The value ranges between 0.0 and 100.0.
+  ///
+  /// **Returns**
+  /// - Volume of the audio effects, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<double> getEffectsVolume();
 
   /// Sets the volume of the audio effects.
@@ -1868,36 +1927,87 @@ mixin RtcAudioEffectInterface {
   ///
   /// To play multiple audio effect files simultaneously, call this method multiple times with different soundIds and filePaths. We recommend playing no more than three audio effect files at the same time.
   ///
-  /// When the audio effect file playback is finished, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
+  /// After completing playing an audio effect file, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
   ///
-  /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the soundID value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  /// **Note**
+  /// - Call this method joining a channel.
   ///
-  /// **Parameter** [filePath] The absolute file path (including the suffixes of the filename) of the audio effect file or the URL of the online audio effect file. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac. 3gp, mkv, and wav.
+  /// **Parameter** [soundId] Audio effect ID. The ID of each audio effect file is unique. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that this parameter is set to the same value as in [RtcEngine.preloadEffect].
   ///
-  /// **Parameter** [loopCount] Sets the number of times the audio effect loops:
-  /// - 0: Plays the audio effect once.
-  /// - 1: Plays the audio effect twice.
-  /// - -1: Plays the audio effect in a loop indefinitely, until you call the [RtcEngine.stopEffect] or [RtcEngine.stopAllEffects] method.
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
-  /// **Parameter** [pitch] Sets the pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
+  /// **Parameter** [loopCount] The number of times the audio effect loops:
+  /// - &ge; 0: The number of loops. For example, `1` means loop one time, which means play the audio effect two times in total.
+  /// - -1: Play the audio effect in an indefinite loop.
   ///
-  /// **Parameter** [pan] Sets the spatial position of the audio effect. The value ranges between -1.0 and 1.0.
-  /// - 0.0: The audio effect shows ahead.
-  /// - 1.0: The audio effect shows on the right.
-  /// - -1.0: The audio effect shows on the left.
+  /// **Parameter** [pitch] The pitch of the audio effect. The range is [0.5,2.0]. The default value is 1.0, which means the original pitch. The lower the value, the lower the pitch.
   ///
-  /// **Parameter** [gain] Sets the volume of the audio effect. The value ranges between 0.0 and 100,0. The default value is 100.0. The lower the value, the lower the volume of the audio effect.
+  /// **Parameter** [pan] The spatial position of the audio effect. The range is [-1.0,1.0]. For example:
+  /// - -1.0: The audio effect occurs on the left.
+  /// - 0.0: The audio effect occurs in the front.
+  /// - 1.0: The audio effect occurs on the right.
   ///
-  /// **Parameter** [publish] Set whether or not to publish the specified audio effect to the remote stream:
-  /// - `true`: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
-  /// - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
+  /// **Parameter** [gain] The volume of the audio effect. The range is [0.0,100.0]. The default value is 100.0, which means the original volume. The smaller the value, the less the gain.
+  ///
+  /// **Parameter** [publish] Whether to publish the audio effect to the remote users: 
+  /// - `true`: Publish. Both the local user and remote users can hear the audio effect.
+  /// - `false`: Do not publish. Only the local user can hear the audio effect.
+  ///
+  /// **Parameter** [startPos] The playback position (ms) of the audio effect file.
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish);
+      double pitch, double pan, double gain, bool publish,
+      [int startPos]);
+
+  /// Sets the playback position of an audio effect file.
+  /// 
+  /// After a successful setting, the local audio effect file starts playing at the specified position.
+  ///
+  /// **Note**
+  /// - Call this method after [RtcEngine.playEffect].
+  ///
+  /// **Parameter** [soundId] Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
+  ///
+  /// **Parameter** [pos] The playback position (ms) of the audio effect file.
+  Future<void> setEffectPosition(int soundId, int pos);
+
+  /// Gets the duration of the audio effect file.
+  ///
+  /// **Note**
+  /// Call this method after [RtcEngine.playEffect].
+  ///
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
+  ///
+  /// **Returns**
+  /// - The total duration (ms) of the specified audio file, if this method call succeeds.
+  /// - Error code, if this method call fails.
+  ///   - -22(`ERR_RESOURCE_LIMITED`): Cannot find the audio effect file. Please set a valid `filePath`.
+  Future<int> getEffectDuration(String filePath);
+
+  /// Gets the playback postion of the audio effect file.
+  ///
+  /// **Note**
+  /// Call this method after [RtcEngine.playEffect].
+  ///
+  /// **Parameter** [soundId] Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
+  ///
+  /// **Returns**
+  /// - The playback position (ms) of the specified audio effect file, if this method call succeeds.
+  /// - Error code, if this method call fails.
+  ///   - -22(`ERR_RESOURCE_LIMITED`):  Cannot find the audio effect file. Please set a valid `soundId`.
+  Future<int> getEffectCurrentPosition(int soundId);
 
   /// Stops playing a specified audio effect.
   ///
   /// **Note**
-  /// - If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  /// If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
   ///
   /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID.
   Future<void> stopEffect(int soundId);
@@ -1911,13 +2021,15 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Note**
   /// - This method does not support online audio effect files.
-  ///
-  /// **Note**
   /// - To ensure smooth communication, limit the size of the audio effect file. We recommend using this method to preload the audio effect before calling the [RtcEngine.joinChannel] method.
   ///
   /// **Parameter** [soundId] ID of the audio effect. Each audio effect has a unique ID.
   ///
-  /// **Parameter** [filePath] Absolute path of the audio effect file.
+  /// **Parameter** [filePath] The file path, including the filename extensions.
+  /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
+  ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   Future<void> preloadEffect(int soundId, String filePath);
 
   /// Releases a specified preloaded audio effect from the memory.
@@ -1950,7 +2062,6 @@ mixin RtcAudioEffectInterface {
   /// **Parameter** [restriction] The operational permission of the SDK on the audio session. See [AudioSessionOperationRestriction]. This parameter is in bit mask format, and each bit corresponds to a permission.
   ///
   /// **Note**
-  ///
   /// This method does not restrict the operational permission of the app on the audio session.
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction);
@@ -2586,8 +2697,6 @@ mixin RtcEncryptionInterface {
 
   /// Enables/Disables the built-in encryption.
   ///
-  ///
-  ///
   /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
   ///
   /// All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
@@ -2624,8 +2733,59 @@ mixin RtcAudioRecorderInterface {
   /// **Parameter** [sampleRate] Sample rate (Hz) of the recording file. See [AudioSampleRateType] for supported values.
   ///
   /// **Parameter** [quality] The audio recording quality. See [AudioRecordingQuality].
+  @deprecated
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality);
+
+  /// Starts an audio recording on the client.
+  ///
+  /// The SDK allows recording audio during a call. After successfully calling this method, you can record the audio of users in the channel and get an audio recording file. Supported file formats are as follows:
+  /// - WAV: High-fidelity files with typically larger file sizes. For example, if the sample rate is 32,000 Hz, the file size for a 10-minute recording is approximately 73 MB.
+  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `AUDIO_RECORDING_QUALITY_MEDIUM`, the file size for a 10-minute recording is approximately 2 MB.
+  ///
+  /// Once the user leaves the channel, the recording automatically stops.
+  ///
+  /// **Note**
+  /// - Call this method after joining a channel.
+  ///
+  /// **Parameter** [config] Recording configuration. See [AudioRecordingConfiguration].
+  Future<void> startAudioRecordingWithConfig(
+      AudioRecordingConfiguration config);
+
+  /// Enables the virtual metronome.
+  ///
+  /// In music education, physical education, and other scenarios, teachers often need to use a metronome so that students can practice
+  /// at the correct tempo. A meter is composed of a downbeat and some number of upbeats (including zero). The first beat of each
+  /// measure is called the downbeat, and the rest are called the upbeats. In this method, you need to set the paths of the upbeat and
+  /// downbeat files, the number of beats per measure, the tempo, and whether to send the sound of the metronome to remote users.
+  ///
+  /// **Note**
+  /// - After enabling the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig]. 
+  /// If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
+  ///
+  /// **Parameter** [sound1] The absolute path or URL address (including the filename extensions) of the file for the downbeat. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP.
+  ///
+  /// **Parameter** [sound2] The absolute path or URL address (including the filename extensions) of the file for the upbeats. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP.
+  ///
+  /// **Parameter** [config] The metronome configuration. See [RhythmPlayerConfig].
+  Future<void> startRhythmPlayer(
+      String sound1, String sound2, RhythmPlayerConfig config);
+
+  /// Disables the virtual metronome.
+  ///
+  /// After calling [RtcEngine.startRhythmPlayer], you can call this method to disable the virtual metronome.
+  Future<void> stopRhythmPlayer();
+
+  /// Configures the virtual metronome.
+  ///
+  /// After calling [RtcEngine.startRhythmPlayer], you can call this method to reconfigure the virtual metronome.
+  ///
+  /// **Note**
+  /// - After reconfiguring the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig]. 
+  /// If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
+  ///
+  /// **Parameter** [config] The metronome configuration. For details, see [RhythmPlayerConfig].
+  Future<void> configRhythmPlayer(RhythmPlayerConfig config);
 
   /// Stops the audio recording on the client.
   ///
@@ -2754,7 +2914,8 @@ mixin RtcCameraInterface {
   ///
   /// **Returns**
   ///
-  /// The maximum camera zoom factor.
+  /// - The maximum camera zoom factor, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<double> getCameraMaxZoomFactor();
 
   /// Sets the camera manual focus position.
@@ -2841,8 +3002,8 @@ mixin RtcStreamMessageInterface {
   ///
   ///
   /// **Returns**
-  /// - 0: Success.
-  /// - < 0: Failure.
+  /// - The stream ID, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<int> createDataStream(bool reliable, bool ordered);
 
   /// Creates a data stream.
@@ -2856,8 +3017,8 @@ mixin RtcStreamMessageInterface {
   /// **Parameter** [config] The configurations for the data stream: [DataStreamConfig].
   ///
   /// **Returns**
-  /// - Returns the stream ID if you successfully create the data stream.
-  /// - < 0: Fails to create the data stream.
+  /// - The stream ID, if this method call succeeds.
+  /// - Error code, if this method call fails.
   Future<int> createDataStreamWithConfig(DataStreamConfig config);
 
   /// Sends data stream messages.

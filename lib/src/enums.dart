@@ -1,8 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'events.dart';
-import 'rtc_engine.dart';
-
 /// The area of connection.
 enum AreaCode {
   /// Mainland China
@@ -134,19 +131,47 @@ enum AudioLocalState {
   Failed,
 }
 
-/// The error code of the audio mixing file.
-enum AudioMixingErrorCode {
-  /// The SDK cannot open the audio mixing file.
+/// The reason for the change of the music file playback state, reported in the [RtcEngineEventHandler.audioMixingStateChanged].
+enum AudioMixingReason {
+  /// The SDK cannot open the music file. Possible causes include the local music file does not exist, the SDK does not support the file format, or the SDK cannot access the music file URL.
   @JsonValue(701)
   CanNotOpen,
 
-  /// The SDK opens the audio mixing file too frequently.
+  /// The SDK opens the music file too frequently. If you need to call [RtcEngine.startAudioMixing] multiple times, ensure that the call interval is longer than 500 ms.
   @JsonValue(702)
   TooFrequentCall,
 
-  /// The opening of the audio mixing file is interrupted.
+  /// The music file playback is interrupted.
   @JsonValue(703)
   InterruptedEOF,
+
+  /// Successfully calls `startAudioMixing` to play a music file.
+  @JsonValue(720)
+  StartedByUser,
+
+  /// The music file completes a loop playback.
+  @JsonValue(721)
+  OneLoopCompleted,
+
+  /// The music file starts a new loop playback.
+  @JsonValue(722)
+  StartNewLoop,
+
+  /// The music file completes all loop playback.
+  @JsonValue(723)
+  AllLoopsCompleted,
+
+  /// Successfully calls `stopAudioMixing` to stop playing the music file.
+  @JsonValue(724)
+  StoppedByUser,
+
+  /// Successfully calls `pauseAudioMixing` to pause playing the music file.
+  @JsonValue(725)
+  PausedByUser,
+
+  /// Successfully calls `resumeAudioMixing` to resume playing the music file.
+  @JsonValue(726)
+  ResumedByUser,
 
   /// No error.
   @JsonValue(0)
@@ -155,19 +180,32 @@ enum AudioMixingErrorCode {
 
 /// The state of the audio mixing file.
 enum AudioMixingStateCode {
-  /// The audio mixing file is playing.
+  /// The music file is playing. This state comes with one of the following associated reasons:
+  /// - `StartedByuser(720)`
+  /// - `LoopCompleted(721)`
+  /// - `NewLoop(722)`
+  /// - `ResumedByUser(726)`
   @JsonValue(710)
   Playing,
 
-  /// The audio mixing file pauses playing.
+  /// The music file pauses playing. This state comes with `PausedByUser(725)`
   @JsonValue(711)
   Paused,
 
-  /// The audio mixing file stops playing.
+  /// Ignore this state.
+  @JsonValue(712)
+  Restart,
+
+  /// The music file stops playing. This state comes with one of the following associated reasons:
+  /// - `AllLoopsCompleted(723)`
+  /// - `StoppedByUser(724)`
   @JsonValue(713)
   Stopped,
 
-  /// An exception occurs when playing the audio mixing file.
+  /// An exception occurs during the playback of the music file. This state comes with one of the following associated reasons:
+  /// - `CanNotOpen(701)`
+  /// - `TooFrequentCall(702)`
+  /// - `InterruptedEOF(703)`
   @JsonValue(714)
   Failed,
 }
@@ -232,19 +270,34 @@ enum AudioProfile {
   MusicHighQualityStereo,
 }
 
-/// Audio recording quality.
+/// Audio recording quality, which is set in [RtcEngine.startAudioRecording].
 enum AudioRecordingQuality {
-  /// Low quality. The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+  /// Low quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 1.2 MB.
   @JsonValue(0)
   Low,
 
-  /// Medium quality. The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+  /// (Default) Medium quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 2 MB.
   @JsonValue(1)
   Medium,
 
-  /// High quality. The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+  /// High quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 3.75 MB.
   @JsonValue(2)
   High,
+}
+
+/// Recording content, which is set in [RtcEngine.startAduioRecording].
+enum AudioRecordingPosition {
+  /// 0: (Default) Records the mixed audio of the local user and all remote users.
+  @JsonValue(0)
+  PositionMixedRecordingAndPlayback,
+
+  /// 1: Records the audio of the local user only.
+  @JsonValue(1)
+  PositionRecording,
+
+  /// 2: Records the audio of all remote users only.
+  @JsonValue(2)
+  PositionMixedPlayback,
 }
 
 /// The state of the remote audio.
@@ -828,17 +881,23 @@ enum ConnectionStateType {
 
 /// The video encoding degradation preference under limited bandwidth.
 enum DegradationPreference {
-  /// (Default) Degrades the frame rate to guarantee the video quality.
+  /// (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+  ///
+  /// **Note**
+  /// - In the `COMMUNICATION` channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(0)
   MaintainQuality,
 
-  /// Degrades the video quality to guarantee the frame rate.
+  /// Prefers to reduce the video quality while maintaining the video frame rate during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
   @JsonValue(1)
   MaintainFramerate,
 
-  /// Reserved for future use.
+  /// Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. `Balenced` has a lower reduction than `MaintainQuality` and `MaintainFramerate`, and this preference is suitable for scenarios where both smoothness and video quality are a priority.
+  ///
+  /// **Note**
+  /// - the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(2)
-  Balanced
+  MaintainBalanced
 }
 
 /// Encryption mode
@@ -1093,6 +1152,10 @@ enum ErrorCode {
   @JsonValue(157)
   ModuleNotFound,
 
+  /// The client is already recording audio. To start a new recording, call [RtcEngine.stopAudioRecording] to stop the current recording first, and then call [RtcEngine.startAudioRecording].
+  @JsonValue(160)
+  AlreadyInRecording,
+
   /// Fails to load the media engine.
   @JsonValue(1001)
   LoadMediaEngine,
@@ -1322,6 +1385,10 @@ enum LocalVideoStreamError {
   /// (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
   @JsonValue(7)
   CaptureMultipleForegroundApps,
+
+  /// The SDK cannot find the local video capture device.
+  @JsonValue(8)
+  DeviceNotFound,
 }
 
 /// The state of the local video stream.
@@ -1990,8 +2057,6 @@ enum VideoCodecType {
 }
 
 /// The publishing state.
-///
-///
 enum StreamPublishState {
   /// The initial publishing state after joining the channel.
   @JsonValue(0)
@@ -2332,12 +2397,15 @@ enum CaptureBrightnessLevelType {
   /// Wait a few seconds to get the brightness level from [CaptureBrightnessLevelType] in the next callback.
   @JsonValue(-1)
   Invalid,
+
   /// The brightness level of the video image is normal.
   @JsonValue(0)
   Normal,
+
   /// The brightness level of the video image is too bright.
   @JsonValue(1)
   Bright,
+
   /// The brightness level of the video image is too dark.
   @JsonValue(2)
   Dark,
@@ -2396,7 +2464,7 @@ enum ExperienceQualityType {
   Good,
 
   /// 1: Bad experience quality.
-  @JsonValue(0)
+  @JsonValue(1)
   Bad,
 }
 
@@ -2405,15 +2473,19 @@ enum ExperiencePoorReason {
   /// None, indicating good QoE of the local user.
   @JsonValue(0)
   None,
+
   /// The remote user’s network quality is poor.
   @JsonValue(1)
   RemoteNetworkQualityPoor,
+
   /// The local user’s network quality is poor.
   @JsonValue(2)
   LocalNetworkQualityPoor,
+
   /// The local user’s Wi-Fi or mobile network signal is weak.
   @JsonValue(4)
   WirelessSignalPoor,
+
   /// The local user enables both Wi-Fi and bluetooth, and their signals interfere with each other. As a result, audio transmission quality is undermined.
   @JsonValue(8)
   WifiBluetoothCoexist,
@@ -2424,15 +2496,19 @@ enum VoiceConversionPreset {
   /// Turn off voice conversion effects and use the original voice.
   @JsonValue(0)
   Off,
+
   /// A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
   @JsonValue(50397440)
   Neutral,
+
   /// A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
   @JsonValue(50397696)
   Sweet,
+
   /// A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50397952)
   Solid,
+
   /// A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50398208)
   Bass,
