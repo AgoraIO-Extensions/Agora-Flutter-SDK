@@ -1963,6 +1963,7 @@ mixin RtcAudioEffectInterface {
       [int? startPos]);
 
   /// Sets the playback position of an audio effect file.
+  ////// Since v3.4.2
   ///
   /// After a successful setting, the local audio effect file starts playing at the specified position.
   ///
@@ -1975,6 +1976,8 @@ mixin RtcAudioEffectInterface {
   Future<void> setEffectPosition(int soundId, int pos);
 
   /// Gets the duration of the audio effect file.
+  ///
+  /// Since v3.4.2
   ///
   /// **Note**
   /// Call this method after [RtcEngine.playEffect].
@@ -1992,6 +1995,8 @@ mixin RtcAudioEffectInterface {
   Future<int?> getEffectDuration(String filePath);
 
   /// Gets the playback postion of the audio effect file.
+  ///
+  /// Since v3.4.2
   ///
   /// **Note**
   /// Call this method after [RtcEngine.playEffect].
@@ -2739,9 +2744,11 @@ mixin RtcAudioRecorderInterface {
 
   /// Starts an audio recording on the client.
   ///
+  /// Since v3.4.2
+  ///
   /// The SDK allows recording audio during a call. After successfully calling this method, you can record the audio of users in the channel and get an audio recording file. Supported file formats are as follows:
   /// - WAV: High-fidelity files with typically larger file sizes. For example, if the sample rate is 32,000 Hz, the file size for a 10-minute recording is approximately 73 MB.
-  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `AUDIO_RECORDING_QUALITY_MEDIUM`, the file size for a 10-minute recording is approximately 2 MB.
+  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `[AudioRecordingQuality.Medium]`, the file size for a 10-minute recording is approximately 2 MB.
   ///
   /// Once the user leaves the channel, the recording automatically stops.
   ///
@@ -2753,6 +2760,8 @@ mixin RtcAudioRecorderInterface {
       AudioRecordingConfiguration config);
 
   /// Enables the virtual metronome.
+  ///
+  /// Since v3.4.2
   ///
   /// In music education, physical education, and other scenarios, teachers often need to use a metronome so that students can practice
   /// at the correct tempo. A meter is composed of a downbeat and some number of upbeats (including zero). The first beat of each
@@ -2773,10 +2782,14 @@ mixin RtcAudioRecorderInterface {
 
   /// Disables the virtual metronome.
   ///
+  /// Since v3.4.2
+  ///
   /// After calling [RtcEngine.startRhythmPlayer], you can call this method to disable the virtual metronome.
   Future<void> stopRhythmPlayer();
 
   /// Configures the virtual metronome.
+  ///
+  /// Since v3.4.2
   ///
   /// After calling [RtcEngine.startRhythmPlayer], you can call this method to reconfigure the virtual metronome.
   ///
