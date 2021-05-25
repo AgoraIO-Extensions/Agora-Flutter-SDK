@@ -1302,15 +1302,20 @@ class RtcEngineConfig {
   Map<String, dynamic> toJson() => _$RtcEngineConfigToJson(this);
 }
 
-/// TODO(doc)
+/// The metronome configuration, which is set in [RtcEngine.startRhythmPlayer] or [RtcEngine.configRhythmPlayer].
 @JsonSerializable(explicitToJson: true)
 class RhythmPlayerConfig {
+  /// The number of beats per measure. The range is 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
   @JsonKey(includeIfNull: false)
   int? beatsPerMeasure;
 
+  /// Tempo (beats per minute). The range is 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
   @JsonKey(includeIfNull: false)
   int? beatsPerMinute;
 
+  /// Whether to publish the sound of the metronome to remote users:
+  /// - `true`: (Default) Publish. Both the local user and remote users can hear the metronome.
+  /// - `false`: Do not publish. Only the local user can hear the metronome.
   @JsonKey(includeIfNull: false)
   bool? publish;
 
@@ -1325,17 +1330,29 @@ class RhythmPlayerConfig {
   Map<String, dynamic> toJson() => _$RhythmPlayerConfigToJson(this);
 }
 
-/// TODO(doc)
+/// Recording configuration, which is set in [RtcEngine.setAudioRecording].
 @JsonSerializable(explicitToJson: true)
 class AudioRecordingConfiguration {
+  /// The absolute path (including the filename extensions) of the recording file. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Ensure that the path you specify exists and is writable.
   String filePath;
 
+  /// Audio recording quality. For details, see [AudioRecordingQuality]. This parameter applies to AAC files only.
   @JsonKey(includeIfNull: false)
   AudioRecordingQuality? recordingQuality;
 
+  /// Recording content. For details, see [AudioRecordingPosition].
   @JsonKey(includeIfNull: false)
   AudioRecordingPosition? recordingPosition;
 
+  /// Recording sample rate (Hz). The following values are supported:
+  /// - 16000
+  /// - (Default) 32000
+  /// - 44100
+  /// - 48000
+  ///
+  /// **Note**
+  /// - If this parameter is set to 44100 or 48000, for better recording effects, Agora recommends recording WAV files or AAC files whose `recordingQuality`
+  /// is `Medium` or `High`.
   @JsonKey(includeIfNull: false)
   AudioSampleRateType? recordingSampleRate;
 
