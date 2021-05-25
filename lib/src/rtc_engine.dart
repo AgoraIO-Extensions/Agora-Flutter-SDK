@@ -1744,9 +1744,9 @@ mixin RtcVideoInterface {
 mixin RtcAudioMixingInterface {
   /// Starts playing and mixing the music file.
   ///
-  /// This method mixes the specified local or online audio file with the audio captured by the microphone, or replaces the audio captured by the microphone with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. 
-  /// 
-  /// After successfully playing the music file, the SDK triggers [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]). 
+  /// This method mixes the specified local or online audio file with the audio captured by the microphone, or replaces the audio captured by the microphone with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops.
+  ///
+  /// After successfully playing the music file, the SDK triggers [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]).
   /// After finishing playing the music file, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]).
   ///
   /// **Note**
@@ -1760,15 +1760,15 @@ mixin RtcAudioMixingInterface {
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
   ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
-  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
-  /// **Parameter** [loopback] Whether to only play the music file on the local client: 
+  /// **Parameter** [loopback] Whether to only play the music file on the local client:
   /// - `true`: Only play music files on the local client so that only the local user can hear the music.
   /// - `false`: Publish music files to remote clients so that both the local user and remote users can hear the music.
   ///
-  /// **Parameter** [replace] Whether to replace the audio captured by the microphone with a music file: 
-  /// - `true`: Replace. Users can only hear music. 
+  /// **Parameter** [replace] Whether to replace the audio captured by the microphone with a music file:
+  /// - `true`: Replace. Users can only hear music.
   /// - `false`: Do not replace. Users can hear both music and audio captured by the microphone.
   ///
   /// **Parameter** [cycle] The number of times the music file plays.
@@ -1856,9 +1856,9 @@ mixin RtcAudioMixingInterface {
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
   ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
-  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
-  /// 
+  ///
   /// **Returns**
   /// - The total duration (ms) of the specified music file, if this method call succeeds.
   /// - Error code, if this method call fails.
@@ -1937,7 +1937,7 @@ mixin RtcAudioEffectInterface {
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
   ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
-  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  /// - iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
   /// **Parameter** [loopCount] The number of times the audio effect loops:
@@ -1953,7 +1953,7 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Parameter** [gain] The volume of the audio effect. The range is [0.0,100.0]. The default value is 100.0, which means the original volume. The smaller the value, the less the gain.
   ///
-  /// **Parameter** [publish] Whether to publish the audio effect to the remote users: 
+  /// **Parameter** [publish] Whether to publish the audio effect to the remote users:
   /// - `true`: Publish. Both the local user and remote users can hear the audio effect.
   /// - `false`: Do not publish. Only the local user can hear the audio effect.
   ///
@@ -1963,7 +1963,9 @@ mixin RtcAudioEffectInterface {
       [int startPos]);
 
   /// Sets the playback position of an audio effect file.
-  /// 
+  ///
+  /// Since v3.4.2
+  ///
   /// After a successful setting, the local audio effect file starts playing at the specified position.
   ///
   /// **Note**
@@ -1976,13 +1978,15 @@ mixin RtcAudioEffectInterface {
 
   /// Gets the duration of the audio effect file.
   ///
+  /// Since v3.4.2
+  ///
   /// **Note**
   /// Call this method after [RtcEngine.playEffect].
   ///
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
   ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
-  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   ///
   /// **Returns**
@@ -1992,6 +1996,8 @@ mixin RtcAudioEffectInterface {
   Future<int> getEffectDuration(String filePath);
 
   /// Gets the playback postion of the audio effect file.
+  ///
+  /// Since v3.4.2
   ///
   /// **Note**
   /// Call this method after [RtcEngine.playEffect].
@@ -2028,7 +2034,7 @@ mixin RtcAudioEffectInterface {
   /// **Parameter** [filePath] The file path, including the filename extensions.
   /// - Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/. Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. For details, see [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats).
   ///   **Note**: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
-  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4. 
+  /// - iOS: Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
   ///   Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For details, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
   Future<void> preloadEffect(int soundId, String filePath);
 
@@ -2739,9 +2745,11 @@ mixin RtcAudioRecorderInterface {
 
   /// Starts an audio recording on the client.
   ///
+  /// Since v3.4.2
+  ///
   /// The SDK allows recording audio during a call. After successfully calling this method, you can record the audio of users in the channel and get an audio recording file. Supported file formats are as follows:
   /// - WAV: High-fidelity files with typically larger file sizes. For example, if the sample rate is 32,000 Hz, the file size for a 10-minute recording is approximately 73 MB.
-  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `AUDIO_RECORDING_QUALITY_MEDIUM`, the file size for a 10-minute recording is approximately 2 MB.
+  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `[AudioRecordingQuality.Medium]`, the file size for a 10-minute recording is approximately 2 MB.
   ///
   /// Once the user leaves the channel, the recording automatically stops.
   ///
@@ -2754,13 +2762,15 @@ mixin RtcAudioRecorderInterface {
 
   /// Enables the virtual metronome.
   ///
+  /// Since v3.4.2
+  ///
   /// In music education, physical education, and other scenarios, teachers often need to use a metronome so that students can practice
   /// at the correct tempo. A meter is composed of a downbeat and some number of upbeats (including zero). The first beat of each
   /// measure is called the downbeat, and the rest are called the upbeats. In this method, you need to set the paths of the upbeat and
   /// downbeat files, the number of beats per measure, the tempo, and whether to send the sound of the metronome to remote users.
   ///
   /// **Note**
-  /// - After enabling the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig]. 
+  /// - After enabling the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig].
   /// If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
   ///
   /// **Parameter** [sound1] The absolute path or URL address (including the filename extensions) of the file for the downbeat. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP.
@@ -2773,15 +2783,19 @@ mixin RtcAudioRecorderInterface {
 
   /// Disables the virtual metronome.
   ///
+  /// Since v3.4.2
+  ///
   /// After calling [RtcEngine.startRhythmPlayer], you can call this method to disable the virtual metronome.
   Future<void> stopRhythmPlayer();
 
   /// Configures the virtual metronome.
   ///
+  /// Since v3.4.2
+  ///
   /// After calling [RtcEngine.startRhythmPlayer], you can call this method to reconfigure the virtual metronome.
   ///
   /// **Note**
-  /// - After reconfiguring the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig]. 
+  /// - After reconfiguring the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value of `beatsPerMinute` in [RhythmPlayerConfig].
   /// If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
   ///
   /// **Parameter** [config] The metronome configuration. For details, see [RhythmPlayerConfig].
