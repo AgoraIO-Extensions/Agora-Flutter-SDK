@@ -1963,7 +1963,8 @@ mixin RtcAudioEffectInterface {
       [int? startPos]);
 
   /// Sets the playback position of an audio effect file.
-  ////// Since v3.4.2
+  ///
+  /// Since v3.4.2
   ///
   /// After a successful setting, the local audio effect file starts playing at the specified position.
   ///
