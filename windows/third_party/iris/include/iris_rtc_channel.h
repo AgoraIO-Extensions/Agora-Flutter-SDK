@@ -11,13 +11,18 @@
 namespace agora {
 namespace rtc {
 class IRtcEngine;
-class IChannel;
 }// namespace rtc
 
 namespace iris {
 class IrisProxy;
 
 namespace rtc {
+#if defined(IRIS_DEBUG)
+namespace test {
+class IrisRtcTester;
+}
+#endif
+
 class IRIS_CPP_API IrisRtcChannel {
  public:
   IrisRtcChannel();
@@ -36,7 +41,9 @@ class IRIS_CPP_API IrisRtcChannel {
 
   void SetProxy(IrisProxy *proxy);
 
-  void EnableTest(agora::rtc::IChannel *tester);
+#if defined(IRIS_DEBUG)
+  void EnableTest(test::IrisRtcTester *tester);
+#endif
 
   int CallApi(ApiTypeChannel api_type, const char *params,
               char result[kBasicResultLength]);

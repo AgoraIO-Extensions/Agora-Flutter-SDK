@@ -70,8 +70,7 @@ void TextureRenderer::HandleMethodCall(
     } else {
       channel_id_ = "";
     }
-    IrisRtcRendererCacheConfig config(IrisRtcVideoFrameObserver::kFrameTypeRGBA,
-                                      this);
+    IrisRtcRendererCacheConfig config(kFrameTypeRGBA, this);
     factory_->renderer()->EnableVideoFrameCache(config, uid_,
                                                 channel_id_.c_str());
     result->Success();
@@ -81,8 +80,10 @@ void TextureRenderer::HandleMethodCall(
   }
 }
 
-void TextureRenderer::OnVideoFrameReceived(
-    const IrisRtcVideoFrameObserver::VideoFrame &video_frame, bool resize) {
+void TextureRenderer::OnVideoFrameReceived(const IrisRtcVideoFrame &video_frame,
+                                           unsigned int uid,
+                                           const char *channel_id,
+                                           bool resize) {
   std::lock_guard<std::mutex> lock_guard(mutex_);
   if (pixel_buffer_->width != video_frame.width ||
       pixel_buffer_->height != video_frame.height) {

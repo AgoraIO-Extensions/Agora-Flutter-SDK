@@ -11,24 +11,28 @@
 #include "iris_rtc_raw_data.h"
 
 namespace agora {
-namespace rtc {
-class IRtcEngine;
-}
-
 namespace iris {
 class IrisProxy;
 
 namespace rtc {
+#if defined(IRIS_DEBUG)
+namespace test {
+class IrisRtcTester;
+}
+#endif
+
 class IRIS_CPP_API IrisRtcEngine {
  public:
-  explicit IrisRtcEngine(EngineType type = kEngineTypeNormal);
+  explicit IrisRtcEngine(const char *executable_path = nullptr);
   virtual ~IrisRtcEngine();
 
   void SetEventHandler(IrisEventHandler *event_handler);
 
   void SetProxy(IrisProxy *proxy);
 
-  void EnableTest(agora::rtc::IRtcEngine *tester);
+#if defined(IRIS_DEBUG)
+  void EnableTest(test::IrisRtcTester *tester);
+#endif
 
   int CallApi(ApiTypeEngine api_type, const char *params,
               char result[kBasicResultLength]);

@@ -28,11 +28,11 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES
 target_compile_definitions(${PLUGIN_NAME} PRIVATE FLUTTER_PLUGIN_IMPL)
 target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ${IRIS_SDK_PATH}/iris-rtc.lib)
+target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ${IRIS_SDK_PATH}/AgoraRtcWrapper.lib)
 
 # List of absolute paths to libraries that should be bundled with the plugin
 set(agora_rtc_engine_bundled_libraries
-  "${IRIS_SDK_PATH}/iris-rtc.dll"
+  "${IRIS_SDK_PATH}/AgoraRtcWrapper.dll"
   "${RTC_DLL_PATH}/agora_rtc_sdk.dll"
   "${RTC_DLL_PATH}/av1.dll"
   "${RTC_DLL_PATH}/libagora_ai_denoise_extension.dll"

@@ -20,10 +20,9 @@ public:
   int64_t texture_id();
 
   // 通过 IrisRendererDelegate 继承
-  virtual void OnVideoFrameReceived(
-      const agora::iris::rtc::IrisRtcVideoFrameObserver::VideoFrame
-          &video_frame,
-      bool resize) override;
+  virtual void OnVideoFrameReceived(const IrisRtcVideoFrame &video_frame,
+                                    unsigned int uid, const char *channel_id,
+                                    bool resize) override;
 
 private:
   void HandleMethodCall(

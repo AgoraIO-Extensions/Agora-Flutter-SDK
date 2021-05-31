@@ -13,18 +13,16 @@ namespace iris {
 namespace rtc {
 class IrisRtcRendererDelegate {
  public:
-  virtual void
-  OnVideoFrameReceived(const IrisRtcVideoFrameObserver::VideoFrame &video_frame,
-                       bool resize) = 0;
+  virtual void OnVideoFrameReceived(const IrisRtcVideoFrame &video_frame,
+                                    unsigned int uid, const char *channel_id,
+                                    bool resize) = 0;
 };
 
-class IRIS_CPP_API IrisRtcRendererCacheConfig
-    : public IrisRtcVideoFrameObserver::VideoFrame {
+class IRIS_CPP_API IrisRtcRendererCacheConfig : public IrisRtcVideoFrame {
  public:
   explicit IrisRtcRendererCacheConfig(
-      IrisRtcVideoFrameObserver::VideoFrameType type,
-      IrisRtcRendererDelegate *delegate = nullptr, int resize_width = 0,
-      int resize_height = 0);
+      VideoFrameType type, IrisRtcRendererDelegate *delegate = nullptr,
+      int resize_width = 0, int resize_height = 0);
 
  public:
   IrisRtcRendererDelegate *delegate;
@@ -53,17 +51,15 @@ class IRIS_CPP_API IrisRtcRenderer {
   void DisableVideoFrameCache(unsigned int uid = -1,
                               const char *channel_id = "");
 
-  bool GetVideoFrame(IrisRtcVideoFrameObserver::VideoFrame &video_frame,
-                     bool &is_new_frame, unsigned int uid,
-                     const char *channel_id = "");
+  bool GetVideoFrame(IrisRtcVideoFrame &video_frame, bool &is_new_frame,
+                     unsigned int uid, const char *channel_id = "");
 
  public:
-  void SetVideoFrameInternal(
-      const IrisRtcVideoFrameObserver::VideoFrame &video_frame,
-      unsigned int uid, const char *channel_id = "");
-
-  bool GetVideoFrameInternal(IrisRtcVideoFrameObserver::VideoFrame &video_frame,
+  void SetVideoFrameInternal(const IrisRtcVideoFrame &video_frame,
                              unsigned int uid, const char *channel_id = "");
+
+  bool GetVideoFrameInternal(IrisRtcVideoFrame &video_frame, unsigned int uid,
+                             const char *channel_id = "");
 
  private:
   class IrisRtcRendererImpl;

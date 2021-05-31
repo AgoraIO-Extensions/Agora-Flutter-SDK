@@ -10,14 +10,18 @@
 namespace agora {
 namespace rtc {
 class IRtcEngine;
-class IAudioDeviceManager;
-class IVideoDeviceManager;
 }// namespace rtc
 
 namespace iris {
 class IrisProxy;
 
 namespace rtc {
+#if defined(IRIS_DEBUG)
+namespace test {
+class IrisRtcTester;
+}
+#endif
+
 class IRIS_CPP_API IrisRtcDeviceManager {
  public:
   IrisRtcDeviceManager();
@@ -27,11 +31,13 @@ class IRIS_CPP_API IrisRtcDeviceManager {
 
   void Release();
 
-  void SetProxy(IrisProxy *proxy);
+  void SetAudioDeviceManagerProxy(IrisProxy *proxy);
 
-  void EnableTest(agora::rtc::IAudioDeviceManager *audio_tester);
+  void SetVideoDeviceManagerProxy(IrisProxy *proxy);
 
-  void EnableTest(agora::rtc::IVideoDeviceManager *video_tester);
+#if defined(IRIS_DEBUG)
+  void EnableTest(test::IrisRtcTester *tester);
+#endif
 
   int CallApi(ApiTypeAudioDeviceManager api_type, const char *params,
               char result[kMaxResultLength]);
@@ -40,7 +46,8 @@ class IRIS_CPP_API IrisRtcDeviceManager {
               char result[kMaxResultLength]);
 
  private:
-  IrisProxy *proxy_;
+  IrisProxy *audio_device_manager_proxy_;
+  IrisProxy *video_device_manager_proxy_;
   class IrisRtcDeviceManagerImpl;
   IrisRtcDeviceManagerImpl *device_manager_;
 };
