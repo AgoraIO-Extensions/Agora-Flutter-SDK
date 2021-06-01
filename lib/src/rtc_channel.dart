@@ -96,7 +96,7 @@ class RtcChannel with RtcChannelInterface {
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   static Future<RtcChannel> create(String channelId) async {
     if (_channels.containsKey(channelId)) return _channels[channelId]!;
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       await _methodChannel.invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelCreateChannel.index,
         'params': jsonEncode({'channelId': channelId})
@@ -112,7 +112,7 @@ class RtcChannel with RtcChannelInterface {
   static void destroyAll() {
     _channels.forEach((key, value) async {
       value._handler = null;
-      if (!kIsWeb && Platform.isWindows) {
+      if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
         await value._invokeMethod('callApi', {
           'apiType': _ApiTypeChannel.kChannelRelease.index,
           'params': jsonEncode({'channelId': value.channelId})
@@ -128,7 +128,7 @@ class RtcChannel with RtcChannelInterface {
   Future<void> destroy() {
     _handler = null;
     _channels.remove(channelId);
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRelease.index,
         'params': jsonEncode({'channelId': channelId})
@@ -149,7 +149,7 @@ class RtcChannel with RtcChannelInterface {
       final methodName = eventMap['methodName'] as String;
       var data = eventMap['data'];
       String channelId;
-      if (!kIsWeb && Platform.isWindows) {
+      if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
         final map = Map<String, dynamic>.from(jsonDecode(data));
         channelId = map.remove('channelId');
         data = jsonEncode(map);
@@ -162,7 +162,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetClientRole.index,
         'params': jsonEncode({
@@ -181,7 +181,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   Future<void> joinChannel(String? token, String? optionalInfo, int optionalUid,
       ChannelMediaOptions options) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelJoinChannel.index,
         'params': jsonEncode({
@@ -204,7 +204,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   Future<void> joinChannelWithUserAccount(
       String? token, String userAccount, ChannelMediaOptions options) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelJoinChannelWithUserAccount.index,
         'params': jsonEncode({
@@ -224,7 +224,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> leaveChannel() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelLeaveChannel.index,
         'params': jsonEncode({'channelId': channelId})
@@ -235,7 +235,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> renewToken(String token) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRenewToken.index,
         'params': jsonEncode({'channelId': channelId, 'token': token})
@@ -246,7 +246,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<ConnectionStateType> getConnectionState() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelGetConnectionState.index,
         'params': jsonEncode({'channelId': channelId})
@@ -261,7 +261,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> publish() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelPublish.index,
         'params': jsonEncode({'channelId': channelId})
@@ -272,7 +272,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> unpublish() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelUnPublish.index,
         'params': jsonEncode({'channelId': channelId})
@@ -283,7 +283,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<String?> getCallId() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelGetCallId.index,
         'params': jsonEncode({'channelId': channelId})
@@ -294,7 +294,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelAdjustUserPlaybackSignalVolume.index,
         'params':
@@ -307,7 +307,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> muteAllRemoteAudioStreams(bool muted) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteAllRemoteAudioStreams.index,
         'params': jsonEncode({'channelId': channelId, 'mute': muted})
@@ -318,7 +318,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> muteRemoteAudioStream(int uid, bool muted) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteRemoteAudioStream.index,
         'params':
@@ -331,7 +331,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeChannel.kChannelSetDefaultMuteAllRemoteAudioStreams.index,
@@ -344,7 +344,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> muteAllRemoteVideoStreams(bool muted) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteAllRemoteVideoStreams.index,
         'params': jsonEncode({'channelId': channelId, 'mute': muted})
@@ -355,7 +355,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> muteRemoteVideoStream(int uid, bool muted) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteRemoteVideoStream.index,
         'params':
@@ -368,7 +368,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeChannel.kChannelSetDefaultMuteAllRemoteVideoStreams.index,
@@ -381,7 +381,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelAddInjectStreamUrl.index,
         'params': jsonEncode(
@@ -394,7 +394,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelAddPublishStreamUrl.index,
         'params': jsonEncode({
@@ -411,7 +411,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   @deprecated
   Future<int?> createDataStream(bool reliable, bool ordered) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelCreateDataStream.index,
         'params': jsonEncode(
@@ -424,7 +424,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> registerMediaMetadataObserver() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRegisterMediaMetadataObserver.index,
         'params': jsonEncode({'channelId': channelId})
@@ -435,7 +435,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> removeInjectStreamUrl(String url) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRemoveInjectStreamUrl.index,
         'params': jsonEncode({'channelId': channelId, 'url': url})
@@ -446,7 +446,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> removePublishStreamUrl(String url) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRemovePublishStreamUrl.index,
         'params': jsonEncode({'channelId': channelId, 'url': url})
@@ -457,7 +457,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> sendMetadata(String metadata) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApiWithBuffer', {
         'apiType': _ApiTypeChannel.kChannelSendMetadata.index,
         'params': jsonEncode({
@@ -472,7 +472,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> sendStreamMessage(int streamId, String message) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApiWithBuffer', {
         'apiType': _ApiTypeChannel.kChannelSendStreamMessage.index,
         'params': jsonEncode({
@@ -490,7 +490,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetEncryptionMode.index,
         'params': jsonEncode({
@@ -506,7 +506,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   @deprecated
   Future<void> setEncryptionSecret(String secret) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetEncryptionSecret.index,
         'params': jsonEncode({'channelId': channelId, 'secret': secret})
@@ -517,7 +517,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetLiveTranscoding.index,
         'params': jsonEncode(
@@ -530,7 +530,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> setMaxMetadataSize(int size) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetMaxMetadataSize.index,
         'params': jsonEncode({'channelId': channelId, 'size': size})
@@ -541,7 +541,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeChannel.kChannelSetRemoteDefaultVideoStreamType.index,
@@ -557,7 +557,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetRemoteUserPriority.index,
         'params': jsonEncode({
@@ -575,7 +575,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetRemoteVideoStreamType.index,
         'params': jsonEncode({
@@ -593,7 +593,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetRemoteVoicePosition.index,
         'params': jsonEncode(
@@ -607,7 +607,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelStartChannelMediaRelay.index,
         'params': jsonEncode({
@@ -623,7 +623,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> stopChannelMediaRelay() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelStopChannelMediaRelay.index,
         'params': jsonEncode({'channelId': channelId})
@@ -634,7 +634,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> unregisterMediaMetadataObserver() {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeChannel.kChannelUnRegisterMediaMetadataObserver.index,
@@ -647,7 +647,7 @@ class RtcChannel with RtcChannelInterface {
   @override
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelUpdateChannelMediaRelay.index,
         'params': jsonEncode({
@@ -663,7 +663,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelEnableEncryption.index,
         'params': jsonEncode({
@@ -679,7 +679,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<int?> createDataStreamWithConfig(DataStreamConfig config) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelCreateDataStream.index,
         'params':
@@ -691,7 +691,7 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> enableRemoteSuperResolution(int uid, bool enable) {
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelEnableRemoteSuperResolution.index,
         'params':

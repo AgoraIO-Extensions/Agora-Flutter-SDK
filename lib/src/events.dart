@@ -1103,8 +1103,10 @@ class RtcEngineEventHandler {
   // ignore: public_member_api_docs
   void process(String methodName, dynamic data) {
     List<dynamic> newData;
-    if (!kIsWeb && Platform.isWindows) {
-      methodName = methodName.substring(2);
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      if (methodName.startsWith('on')) {
+        methodName = methodName.substring(2);
+      }
       newData = List<dynamic>.from(
           Map<String, dynamic>.from(jsonDecode(data as String)).values);
     } else {
@@ -1168,12 +1170,18 @@ class RtcEngineEventHandler {
         break;
       case 'AudioVolumeIndication':
         final list = List<Map>.from(newData[0]);
+        var totalVolume;
+        if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+          totalVolume = newData[1];
+        } else {
+          totalVolume = newData[2];
+        }
         audioVolumeIndication?.call(
             List.generate(
                 list.length,
                 (index) => AudioVolumeInfo.fromJson(
                     Map<String, dynamic>.from(list[index]))),
-            newData[1]);
+            totalVolume);
         break;
       case 'ActiveSpeaker':
         activeSpeaker?.call(newData[0]);
@@ -1842,7 +1850,7 @@ class RtcChannelEventHandler {
   // ignore: public_member_api_docs
   void process(String methodName, dynamic data) {
     List<dynamic> newData;
-    if (!kIsWeb && Platform.isWindows) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       methodName = methodName.substring(2);
       newData = List<dynamic>.from(
           Map<String, dynamic>.from(jsonDecode(data as String)).values);

@@ -3,6 +3,7 @@ library agora_rtc_engine;
 
 import 'dart:async';
 import 'dart:convert';
+
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
@@ -857,18 +858,18 @@ class _VideoPlayerConfig {
   });
 }
 
-@JS('callApi')
-external Future<dynamic> _callApi(String apiType, String params,
-    [Object? extra]);
-
-@JS('setEventHandler')
-external void _setEventHandler(Function params);
-
 @JS()
 class _Event {
   external String get methodName;
 
   external List<dynamic> get data;
+}
+
+@JS('IrisRtcEngine')
+class _IrisRtcEngine {
+  external Future<dynamic> callApi(int apiType, String params, [Object? extra]);
+
+  external void setEventHandler(Function params);
 }
 
 /// A web implementation of the AgoraRtcEngine plugin.
@@ -900,24 +901,27 @@ class AgoraRtcEngineWeb {
 
   final _controller = StreamController();
   String? _appId;
-  bool _enableAudio = true;
-  bool _enableVideo = false;
+  final bool _enableAudio = true;
+  final bool _enableVideo = false;
   _AgoraRTCClient? _client;
   late _MicrophoneAudioTrack _audioTrack;
   late _CameraVideoTrack _videoTrack;
+  final _IrisRtcEngine _engine = _IrisRtcEngine();
 
   /// Handles method calls over the MethodChannel of this plugin.
   /// Note: Check the "federated" architecture for a new way of doing this:
   /// https://flutter.dev/go/federated-plugins
   Future<dynamic> handleMethodCall(MethodCall call) async {
-    _setEventHandler(allowInterop((String event) {
-      _controller.add(jsonDecode(event));
+    _engine.setEventHandler(allowInterop((String event, String data) {
+      _controller.add({'methodName': event, 'data': data});
     }));
     var args = <String, dynamic>{};
     if (call.arguments != null) {
       args = Map<String, dynamic>.from(call.arguments);
     }
-    return promiseToFuture(_callApi(call.method, jsonEncode(args)));
+    if (call.method == 'callApi') {
+      return promiseToFuture(_engine.callApi(args['apiType'], args['params']));
+    }
 
     switch (call.method) {
       case 'getSdkVersion':
@@ -963,8 +967,9 @@ class AgoraRtcEngineWeb {
       case 'setData':
         var data = Map<String, dynamic>.from(args['data']);
         if (data['uid'] == 0) {
-          return promiseToFuture(_callApi(
-              'setupLocalVideo',
+          final kEngineSetupLocalVideo = 20;
+          return promiseToFuture(_engine.callApi(
+              kEngineSetupLocalVideo,
               jsonEncode({
                 'canvas': {
                   'uid': 0,
@@ -973,8 +978,9 @@ class AgoraRtcEngineWeb {
               element));
           // _videoTrack.play(element);
         } else {
-          return promiseToFuture(_callApi(
-              'setupRemoteVideo',
+          final kEngineSetupLocalVideo = 21;
+          return promiseToFuture(_engine.callApi(
+              kEngineSetupLocalVideo,
               jsonEncode({
                 'canvas': {
                   'uid': data['uid'],
