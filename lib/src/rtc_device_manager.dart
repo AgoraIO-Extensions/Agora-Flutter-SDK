@@ -63,7 +63,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMEnumerateAudioPlaybackDevices.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     }).then((value) => List<MediaDeviceInfo>.of(
             List<Map<String, dynamic>>.from(jsonDecode(value)).map((e) {
           return MediaDeviceInfo.fromJson(e);
@@ -74,7 +74,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMSetCurrentAudioPlaybackDeviceId.index,
-      'params': jsonEncode({'deviceId': deviceId})
+      'params': jsonEncode({
+        'deviceId': deviceId,
+      }),
     });
   }
 
@@ -82,7 +84,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMGetCurrentAudioPlaybackDeviceId.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -90,7 +92,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager
           .kADMGetCurrentAudioPlaybackDeviceInfo.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     }).then((value) => MediaDeviceInfo.fromJson(jsonDecode(value)));
   }
 
@@ -98,7 +100,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMSetAudioPlaybackDeviceVolume.index,
-      'params': jsonEncode({'volume': volume})
+      'params': jsonEncode({
+        'volume': volume,
+      }),
     });
   }
 
@@ -106,7 +110,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMGetAudioPlaybackDeviceVolume.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -114,7 +118,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMSetAudioPlaybackDeviceMute.index,
-      'params': jsonEncode({'mute': mute})
+      'params': jsonEncode({
+        'mute': mute,
+      }),
     });
   }
 
@@ -122,7 +128,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMGetAudioPlaybackDeviceMute.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -130,7 +136,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMStartAudioPlaybackDeviceTest.index,
-      'params': jsonEncode({'testAudioFilePath': testAudioFilePath})
+      'params': jsonEncode({
+        'testAudioFilePath': testAudioFilePath,
+      }),
     });
   }
 
@@ -138,7 +146,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMStopAudioPlaybackDeviceTest.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -146,7 +154,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMEnumerateAudioRecordingDevices.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     }).then((value) => List<MediaDeviceInfo>.of(
             List<Map<String, dynamic>>.from(jsonDecode(value)).map((e) {
           return MediaDeviceInfo.fromJson(e);
@@ -157,7 +165,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMSetCurrentAudioRecordingDeviceId.index,
-      'params': jsonEncode({'deviceId': deviceId})
+      'params': jsonEncode({
+        'deviceId': deviceId,
+      }),
     });
   }
 
@@ -165,7 +175,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMGetCurrentAudioRecordingDeviceId.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -173,7 +183,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager
           .kADMGetCurrentAudioRecordingDeviceInfo.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     }).then((value) => MediaDeviceInfo.fromJson(jsonDecode(value)));
   }
 
@@ -181,7 +191,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMSetAudioRecordingDeviceVolume.index,
-      'params': jsonEncode({'volume': volume})
+      'params': jsonEncode({
+        'volume': volume,
+      }),
     });
   }
 
@@ -189,7 +201,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMGetAudioRecordingDeviceVolume.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -197,7 +209,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMSetAudioRecordingDeviceMute.index,
-      'params': jsonEncode({'mute': mute})
+      'params': jsonEncode({
+        'mute': mute,
+      }),
     });
   }
 
@@ -205,7 +219,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMGetAudioRecordingDeviceMute.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -213,7 +227,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMStartAudioRecordingDeviceTest.index,
-      'params': jsonEncode({'testAudioFilePath': testAudioFilePath})
+      'params': jsonEncode({
+        'testAudioFilePath': testAudioFilePath,
+      }),
     });
   }
 
@@ -221,7 +237,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMStopAudioRecordingDeviceTest.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
@@ -229,7 +245,9 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMStartAudioDeviceLoopbackTest.index,
-      'params': jsonEncode({'indicationInterval': indicationInterval})
+      'params': jsonEncode({
+        'indicationInterval': indicationInterval,
+      }),
     });
   }
 
@@ -237,14 +255,14 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMStopAudioDeviceLoopbackTest.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
   Future<List<MediaDeviceInfo>> enumerateVideoDevices() {
     return _invokeVideoMethod('callApi', {
       'apiType': _ApiTypeVideoDeviceManager.kVDMEnumerateVideoDevices.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     }).then((value) => List<MediaDeviceInfo>.of(
             List<Map<String, dynamic>>.from(jsonDecode(value)).map((e) {
           return MediaDeviceInfo.fromJson(e);
@@ -254,28 +272,32 @@ class RtcDeviceManager {
   Future<void> setCurrentVideoDeviceId(String deviceId) {
     return _invokeVideoMethod('callApi', {
       'apiType': _ApiTypeVideoDeviceManager.kVDMSetCurrentVideoDeviceId.index,
-      'params': jsonEncode({'deviceId': deviceId})
+      'params': jsonEncode({
+        'deviceId': deviceId,
+      }),
     });
   }
 
   Future<String?> getCurrentVideoDeviceId() {
     return _invokeVideoMethod('callApi', {
       'apiType': _ApiTypeVideoDeviceManager.kVDMGetCurrentVideoDeviceId.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 
   Future<void> startVideoDeviceTest(int hwnd) {
     return _invokeVideoMethod('callApi', {
       'apiType': _ApiTypeVideoDeviceManager.kVDMStartVideoDeviceTest.index,
-      'params': jsonEncode({'hwnd': hwnd})
+      'params': jsonEncode({
+        'hwnd': hwnd,
+      }),
     });
   }
 
   Future<void> stopVideoDeviceTest() {
     return _invokeVideoMethod('callApi', {
       'apiType': _ApiTypeVideoDeviceManager.kVDMStopVideoDeviceTest.index,
-      'params': jsonEncode({})
+      'params': jsonEncode({}),
     });
   }
 }

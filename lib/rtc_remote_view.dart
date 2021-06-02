@@ -11,7 +11,7 @@ class SurfaceView extends RtcSurfaceView {
   SurfaceView({
     Key? key,
     required int uid,
-    String? channelId,
+    required String channelId,
     renderMode = VideoRenderMode.Hidden,
     mirrorMode = VideoMirrorMode.Auto,
     zOrderOnTop = false,
@@ -38,7 +38,7 @@ class TextureView extends RtcTextureView {
   TextureView({
     Key? key,
     required int uid,
-    String? channelId,
+    required String channelId,
     renderMode = VideoRenderMode.Hidden,
     mirrorMode = VideoMirrorMode.Auto,
     PlatformViewCreatedCallback? onPlatformViewCreated,

@@ -77,10 +77,11 @@ class RtcChannel with RtcChannelInterface {
   Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
     return _methodChannel.invokeMethod(
-        method,
-        arguments == null
-            ? {'channelId': channelId}
-            : {'channelId': channelId, ...arguments});
+      method,
+      arguments == null
+          ? {'channelId': channelId}
+          : {'channelId': channelId, ...arguments},
+    );
   }
 
   /// Creates and gets an [RtcChannel] instance.
@@ -99,10 +100,14 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       await _methodChannel.invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelCreateChannel.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     } else {
-      await _methodChannel.invokeMethod('create', {'channelId': channelId});
+      await _methodChannel.invokeMethod('create', {
+        'channelId': channelId,
+      });
     }
     _channels[channelId] = RtcChannel._(channelId);
     return _channels[channelId]!;
@@ -115,7 +120,9 @@ class RtcChannel with RtcChannelInterface {
       if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
         await value._invokeMethod('callApi', {
           'apiType': _ApiTypeChannel.kChannelRelease.index,
-          'params': jsonEncode({'channelId': value.channelId})
+          'params': jsonEncode({
+            'channelId': value.channelId,
+          }),
         });
       } else {
         await value._invokeMethod('destroy');
@@ -131,7 +138,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRelease.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('destroy');
@@ -168,13 +177,13 @@ class RtcChannel with RtcChannelInterface {
         'params': jsonEncode({
           'channelId': channelId,
           'role': ClientRoleConverter(role).value(),
-          'options': options?.toJson()
-        })
+          'options': options?.toJson(),
+        }),
       });
     }
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
-      'options': options?.toJson()
+      'options': options?.toJson(),
     });
   }
 
@@ -189,15 +198,15 @@ class RtcChannel with RtcChannelInterface {
           'token': token,
           'info': optionalInfo,
           'uid': optionalUid,
-          'options': options.toJson()
-        })
+          'options': options.toJson(),
+        }),
       });
     }
     return _invokeMethod('joinChannel', {
       'token': token,
       'optionalInfo': optionalInfo,
       'optionalUid': optionalUid,
-      'options': options.toJson()
+      'options': options.toJson(),
     });
   }
 
@@ -211,14 +220,14 @@ class RtcChannel with RtcChannelInterface {
           'channelId': channelId,
           'token': token,
           'userAccount': userAccount,
-          'options': options.toJson()
-        })
+          'options': options.toJson(),
+        }),
       });
     }
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'userAccount': userAccount,
-      'options': options.toJson()
+      'options': options.toJson(),
     });
   }
 
@@ -227,7 +236,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelLeaveChannel.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('leaveChannel');
@@ -238,10 +249,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRenewToken.index,
-        'params': jsonEncode({'channelId': channelId, 'token': token})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'token': token,
+        }),
       });
     }
-    return _invokeMethod('renewToken', {'token': token});
+    return _invokeMethod('renewToken', {
+      'token': token,
+    });
   }
 
   @override
@@ -249,7 +265,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelGetConnectionState.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       }).then((value) {
         return ConnectionStateTypeConverter.fromValue(value).e;
       });
@@ -264,7 +282,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelPublish.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('publish');
@@ -275,7 +295,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelUnPublish.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('unpublish');
@@ -286,7 +308,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelGetCallId.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('getCallId');
@@ -297,12 +321,17 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelAdjustUserPlaybackSignalVolume.index,
-        'params':
-            jsonEncode({'channelId': channelId, 'uid': uid, 'volume': volume})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'uid': uid,
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod(
-        'adjustUserPlaybackSignalVolume', {'uid': uid, 'volume': volume});
+    return _invokeMethod('adjustUserPlaybackSignalVolume', {
+      'uid': uid,
+      'volume': volume,
+    });
   }
 
   @override
@@ -310,10 +339,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteAllRemoteAudioStreams.index,
-        'params': jsonEncode({'channelId': channelId, 'mute': muted})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteAllRemoteAudioStreams', {'muted': muted});
+    return _invokeMethod('muteAllRemoteAudioStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -321,11 +355,17 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteRemoteAudioStream.index,
-        'params':
-            jsonEncode({'channelId': channelId, 'uid': uid, 'mute': muted})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'uid': uid,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteRemoteAudioStream', {'uid': uid, 'muted': muted});
+    return _invokeMethod('muteRemoteAudioStream', {
+      'uid': uid,
+      'muted': muted,
+    });
   }
 
   @override
@@ -335,11 +375,15 @@ class RtcChannel with RtcChannelInterface {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeChannel.kChannelSetDefaultMuteAllRemoteAudioStreams.index,
-        'params': jsonEncode({'channelId': channelId, 'mute': muted})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod(
-        'setDefaultMuteAllRemoteAudioStreams', {'muted': muted});
+    return _invokeMethod('setDefaultMuteAllRemoteAudioStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -347,10 +391,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteAllRemoteVideoStreams.index,
-        'params': jsonEncode({'channelId': channelId, 'mute': muted})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteAllRemoteVideoStreams', {'muted': muted});
+    return _invokeMethod('muteAllRemoteVideoStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -358,11 +407,17 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelMuteRemoteVideoStream.index,
-        'params':
-            jsonEncode({'channelId': channelId, 'uid': uid, 'mute': muted})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'uid': uid,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteRemoteVideoStream', {'uid': uid, 'muted': muted});
+    return _invokeMethod('muteRemoteVideoStream', {
+      'uid': uid,
+      'muted': muted,
+    });
   }
 
   @override
@@ -372,11 +427,15 @@ class RtcChannel with RtcChannelInterface {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeChannel.kChannelSetDefaultMuteAllRemoteVideoStreams.index,
-        'params': jsonEncode({'channelId': channelId, 'mute': muted})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod(
-        'setDefaultMuteAllRemoteVideoStreams', {'muted': muted});
+    return _invokeMethod('setDefaultMuteAllRemoteVideoStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -384,12 +443,17 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelAddInjectStreamUrl.index,
-        'params': jsonEncode(
-            {'channelId': channelId, 'url': url, 'config': config.toJson()})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'url': url,
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'addInjectStreamUrl', {'url': url, 'config': config.toJson()});
+    return _invokeMethod('addInjectStreamUrl', {
+      'url': url,
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -400,12 +464,14 @@ class RtcChannel with RtcChannelInterface {
         'params': jsonEncode({
           'channelId': channelId,
           'url': url,
-          'transcodingEnabled': transcodingEnabled
-        })
+          'transcodingEnabled': transcodingEnabled,
+        }),
       });
     }
-    return _invokeMethod('addPublishStreamUrl',
-        {'url': url, 'transcodingEnabled': transcodingEnabled});
+    return _invokeMethod('addPublishStreamUrl', {
+      'url': url,
+      'transcodingEnabled': transcodingEnabled,
+    });
   }
 
   @override
@@ -414,12 +480,17 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelCreateDataStream.index,
-        'params': jsonEncode(
-            {'channelId': channelId, 'reliable': reliable, 'ordered': ordered})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'reliable': reliable,
+          'ordered': ordered,
+        }),
       });
     }
-    return _invokeMethod(
-        'createDataStream', {'reliable': reliable, 'ordered': ordered});
+    return _invokeMethod('createDataStream', {
+      'reliable': reliable,
+      'ordered': ordered,
+    });
   }
 
   @override
@@ -427,7 +498,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRegisterMediaMetadataObserver.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('registerMediaMetadataObserver');
@@ -438,10 +511,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRemoveInjectStreamUrl.index,
-        'params': jsonEncode({'channelId': channelId, 'url': url})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'url': url,
+        }),
       });
     }
-    return _invokeMethod('removeInjectStreamUrl', {'url': url});
+    return _invokeMethod('removeInjectStreamUrl', {
+      'url': url,
+    });
   }
 
   @override
@@ -449,10 +527,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelRemovePublishStreamUrl.index,
-        'params': jsonEncode({'channelId': channelId, 'url': url})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'url': url,
+        }),
       });
     }
-    return _invokeMethod('removePublishStreamUrl', {'url': url});
+    return _invokeMethod('removePublishStreamUrl', {
+      'url': url,
+    });
   }
 
   @override
@@ -462,12 +545,16 @@ class RtcChannel with RtcChannelInterface {
         'apiType': _ApiTypeChannel.kChannelSendMetadata.index,
         'params': jsonEncode({
           'channelId': channelId,
-          'metadata': {'size': metadata.length}
+          'metadata': {
+            'size': metadata.length,
+          },
         }),
         'buffer': metadata
       });
     }
-    return _invokeMethod('sendMetadata', {'metadata': metadata});
+    return _invokeMethod('sendMetadata', {
+      'metadata': metadata,
+    });
   }
 
   @override
@@ -480,11 +567,13 @@ class RtcChannel with RtcChannelInterface {
           'streamId': streamId,
           'length': message.length,
         }),
-        'buffer': message
+        'buffer': message,
       });
     }
-    return _invokeMethod(
-        'sendStreamMessage', {'streamId': streamId, 'message': message});
+    return _invokeMethod('sendStreamMessage', {
+      'streamId': streamId,
+      'message': message,
+    });
   }
 
   @override
@@ -495,12 +584,13 @@ class RtcChannel with RtcChannelInterface {
         'apiType': _ApiTypeChannel.kChannelSetEncryptionMode.index,
         'params': jsonEncode({
           'channelId': channelId,
-          'encryptionMode': EncryptionModeConverter(encryptionMode).value()
-        })
+          'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
+        }),
       });
     }
-    return _invokeMethod('setEncryptionMode',
-        {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
+    return _invokeMethod('setEncryptionMode', {
+      'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
+    });
   }
 
   @override
@@ -509,10 +599,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetEncryptionSecret.index,
-        'params': jsonEncode({'channelId': channelId, 'secret': secret})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'secret': secret,
+        }),
       });
     }
-    return _invokeMethod('setEncryptionSecret', {'secret': secret});
+    return _invokeMethod('setEncryptionSecret', {
+      'secret': secret,
+    });
   }
 
   @override
@@ -520,12 +615,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetLiveTranscoding.index,
-        'params': jsonEncode(
-            {'channelId': channelId, 'transcoding': transcoding.toJson()})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'transcoding': transcoding.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'setLiveTranscoding', {'transcoding': transcoding.toJson()});
+    return _invokeMethod('setLiveTranscoding', {
+      'transcoding': transcoding.toJson(),
+    });
   }
 
   @override
@@ -533,10 +631,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetMaxMetadataSize.index,
-        'params': jsonEncode({'channelId': channelId, 'size': size})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'size': size,
+        }),
       });
     }
-    return _invokeMethod('setMaxMetadataSize', {'size': size});
+    return _invokeMethod('setMaxMetadataSize', {
+      'size': size,
+    });
   }
 
   @override
@@ -547,12 +650,13 @@ class RtcChannel with RtcChannelInterface {
             _ApiTypeChannel.kChannelSetRemoteDefaultVideoStreamType.index,
         'params': jsonEncode({
           'channelId': channelId,
-          'streamType': VideoStreamTypeConverter(streamType).value()
-        })
+          'streamType': VideoStreamTypeConverter(streamType).value(),
+        }),
       });
     }
-    return _invokeMethod('setRemoteDefaultVideoStreamType',
-        {'streamType': VideoStreamTypeConverter(streamType).value()});
+    return _invokeMethod('setRemoteDefaultVideoStreamType', {
+      'streamType': VideoStreamTypeConverter(streamType).value(),
+    });
   }
 
   @override
@@ -563,13 +667,13 @@ class RtcChannel with RtcChannelInterface {
         'params': jsonEncode({
           'channelId': channelId,
           'uid': uid,
-          'userPriority': UserPriorityConverter(userPriority).value()
-        })
+          'userPriority': UserPriorityConverter(userPriority).value(),
+        }),
       });
     }
     return _invokeMethod('setRemoteUserPriority', {
       'uid': uid,
-      'userPriority': UserPriorityConverter(userPriority).value()
+      'userPriority': UserPriorityConverter(userPriority).value(),
     });
   }
 
@@ -581,13 +685,13 @@ class RtcChannel with RtcChannelInterface {
         'params': jsonEncode({
           'channelId': channelId,
           'uid': uid,
-          'streamType': VideoStreamTypeConverter(streamType).value()
-        })
+          'streamType': VideoStreamTypeConverter(streamType).value(),
+        }),
       });
     }
     return _invokeMethod('setRemoteVideoStreamType', {
       'uid': uid,
-      'streamType': VideoStreamTypeConverter(streamType).value()
+      'streamType': VideoStreamTypeConverter(streamType).value(),
     });
   }
 
@@ -596,12 +700,19 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelSetRemoteVoicePosition.index,
-        'params': jsonEncode(
-            {'channelId': channelId, 'uid': uid, 'pan': pan, 'gain': gain})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'uid': uid,
+          'pan': pan,
+          'gain': gain,
+        }),
       });
     }
-    return _invokeMethod(
-        'setRemoteVoicePosition', {'uid': uid, 'pan': pan, 'gain': gain});
+    return _invokeMethod('setRemoteVoicePosition', {
+      'uid': uid,
+      'pan': pan,
+      'gain': gain,
+    });
   }
 
   @override
@@ -612,12 +723,12 @@ class RtcChannel with RtcChannelInterface {
         'apiType': _ApiTypeChannel.kChannelStartChannelMediaRelay.index,
         'params': jsonEncode({
           'channelId': channelId,
-          'configuration': channelMediaRelayConfiguration.toJson()
-        })
+          'configuration': channelMediaRelayConfiguration.toJson(),
+        }),
       });
     }
     return _invokeMethod('startChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
+      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
   }
 
@@ -626,7 +737,9 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelStopChannelMediaRelay.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('stopChannelMediaRelay');
@@ -638,7 +751,9 @@ class RtcChannel with RtcChannelInterface {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeChannel.kChannelUnRegisterMediaMetadataObserver.index,
-        'params': jsonEncode({'channelId': channelId})
+        'params': jsonEncode({
+          'channelId': channelId,
+        }),
       });
     }
     return _invokeMethod('unregisterMediaMetadataObserver');
@@ -652,12 +767,12 @@ class RtcChannel with RtcChannelInterface {
         'apiType': _ApiTypeChannel.kChannelUpdateChannelMediaRelay.index,
         'params': jsonEncode({
           'channelId': channelId,
-          'configuration': channelMediaRelayConfiguration.toJson()
-        })
+          'configuration': channelMediaRelayConfiguration.toJson(),
+        }),
       });
     }
     return _invokeMethod('updateChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
+      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
   }
 
@@ -669,12 +784,14 @@ class RtcChannel with RtcChannelInterface {
         'params': jsonEncode({
           'channelId': channelId,
           'enabled': enabled,
-          'config': config.toJson()
-        })
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
+    return _invokeMethod('enableEncryption', {
+      'enabled': enabled,
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -682,11 +799,15 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelCreateDataStream.index,
-        'params':
-            jsonEncode({'channelId': channelId, 'config': config.toJson()})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod('createDataStream', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -694,12 +815,17 @@ class RtcChannel with RtcChannelInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeChannel.kChannelEnableRemoteSuperResolution.index,
-        'params':
-            jsonEncode({'channelId': channelId, 'uid': uid, 'enable': enable})
+        'params': jsonEncode({
+          'channelId': channelId,
+          'uid': uid,
+          'enable': enable,
+        }),
       });
     }
-    return _invokeMethod(
-        'enableRemoteSuperResolution', {'uid': uid, 'enable': enable});
+    return _invokeMethod('enableRemoteSuperResolution', {
+      'uid': uid,
+      'enable': enable,
+    });
   }
 }
 

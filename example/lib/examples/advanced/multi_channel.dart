@@ -59,7 +59,12 @@ class _State extends State<MultiChannel> {
     }
 
     await _channel0.setClientRole(ClientRole.Broadcaster);
-    await _channel0.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel0.joinChannel(
+        null,
+        null,
+        0,
+        ChannelMediaOptions(
+            autoSubscribeAudio: true, autoSubscribeVideo: true));
   }
 
   _joinChannel1() async {
@@ -68,64 +73,80 @@ class _State extends State<MultiChannel> {
     }
 
     await _channel1.setClientRole(ClientRole.Broadcaster);
-    await _channel1.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel1.joinChannel(
+        null,
+        null,
+        0,
+        ChannelMediaOptions(
+            autoSubscribeAudio: true, autoSubscribeVideo: true));
   }
 
   _addListener(RtcChannel channel) {
     String channelId = channel.channelId;
-    channel.setEventHandler(
-        RtcChannelEventHandler(joinChannelSuccess: (channel, uid, elapsed) {
-      log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      if (channelId == _channelId0) {
-        setState(() {
-          isJoined0 = true;
-        });
-      } else if (channelId == _channelId1) {
-        setState(() {
-          isJoined1 = true;
-        });
-      }
-    }, userJoined: (uid, elapsed) {
-      log('userJoined ${channel.channelId} $uid $elapsed');
-    }, userOffline: (uid, reason) {
-      log('userOffline ${channel.channelId} $uid $reason');
-    }, leaveChannel: (stats) {
-      log('leaveChannel ${channel.channelId} ${stats.toJson()}');
-      if (channelId == _channelId0) {
-        this.setState(() {
-          isJoined0 = false;
-          remoteUid0.clear();
-        });
-      } else if (channelId == _channelId1) {
-        this.setState(() {
-          isJoined1 = false;
-          remoteUid1.clear();
-        });
-      }
-    }, remoteVideoStateChanged: (uid, state, reason, elapsed) {
-      log('remoteVideoStateChanged ${uid} ${state} ${reason} ${elapsed}');
-      if (state == VideoRemoteState.Starting) {
+    channel.setEventHandler(RtcChannelEventHandler(
+      warning: (warningCode) {
+        log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        log('error ${errorCode}');
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        if (channelId == _channelId0) {
+          setState(() {
+            isJoined0 = true;
+          });
+        } else if (channelId == _channelId1) {
+          setState(() {
+            isJoined1 = true;
+          });
+        }
+      },
+      userJoined: (uid, elapsed) {
+        log('userJoined ${channel.channelId} $uid $elapsed');
+      },
+      userOffline: (uid, reason) {
+        log('userOffline ${channel.channelId} $uid $reason');
+      },
+      leaveChannel: (stats) {
+        log('leaveChannel ${channel.channelId} ${stats.toJson()}');
         if (channelId == _channelId0) {
           this.setState(() {
-            remoteUid0.add(uid);
+            isJoined0 = false;
+            remoteUid0.clear();
           });
         } else if (channelId == _channelId1) {
           this.setState(() {
-            remoteUid1.add(uid);
+            isJoined1 = false;
+            remoteUid1.clear();
           });
         }
-      } else if (state == VideoRemoteState.Stopped) {
-        if (channelId == _channelId0) {
-          this.setState(() {
-            remoteUid0.removeWhere((element) => element == uid);
-          });
-        } else if (channelId == _channelId1) {
-          this.setState(() {
-            remoteUid1.removeWhere((element) => element == uid);
-          });
+      },
+      remoteVideoStateChanged: (uid, state, reason, elapsed) {
+        log('remoteVideoStateChanged ${uid} ${state} ${reason} ${elapsed}');
+        if (state == VideoRemoteState.Starting) {
+          if (channelId == _channelId0) {
+            this.setState(() {
+              remoteUid0.add(uid);
+            });
+          } else if (channelId == _channelId1) {
+            this.setState(() {
+              remoteUid1.add(uid);
+            });
+          }
+        } else if (state == VideoRemoteState.Stopped) {
+          if (channelId == _channelId0) {
+            this.setState(() {
+              remoteUid0.removeWhere((element) => element == uid);
+            });
+          } else if (channelId == _channelId1) {
+            this.setState(() {
+              remoteUid1.removeWhere((element) => element == uid);
+            });
+          }
         }
-      }
-    }));
+      },
+    ));
   }
 
   _publishChannel0() async {
@@ -235,9 +256,7 @@ class _State extends State<MultiChannel> {
     return Expanded(
       child: Stack(
         children: [
-          RtcLocalView.SurfaceView(
-            channelId: renderChannelId,
-          ),
+          kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
           if (remoteUid != null)
             Align(
               alignment: Alignment.topLeft,
@@ -248,10 +267,15 @@ class _State extends State<MultiChannel> {
                     (e) => Container(
                       width: 120,
                       height: 120,
-                      child: RtcRemoteView.SurfaceView(
-                        uid: e,
-                        channelId: renderChannelId,
-                      ),
+                      child: kIsWeb
+                          ? RtcRemoteView.SurfaceView(
+                              uid: e,
+                              channelId: renderChannelId!,
+                            )
+                          : RtcRemoteView.TextureView(
+                              uid: e,
+                              channelId: renderChannelId!,
+                            ),
                     ),
                   )),
                 ),

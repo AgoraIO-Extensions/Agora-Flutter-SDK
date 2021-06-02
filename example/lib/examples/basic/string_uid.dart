@@ -44,6 +44,12 @@ class _State extends State<StringUid> {
 
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        log('error ${errorCode}');
+      },
       joinChannelSuccess: (channel, uid, elapsed) {
         log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {

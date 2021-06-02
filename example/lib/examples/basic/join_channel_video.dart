@@ -58,6 +58,12 @@ class _State extends State<JoinChannelVideo> {
 
   _addListeners() {
     engine?.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        log('error ${errorCode}');
+      },
       joinChannelSuccess: (channel, uid, elapsed) {
         log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {

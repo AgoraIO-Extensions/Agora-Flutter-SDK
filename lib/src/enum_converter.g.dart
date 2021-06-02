@@ -1675,3 +1675,22 @@ const _$VoiceConversionPresetEnumMap = {
   VoiceConversionPreset.Solid: 50397952,
   VoiceConversionPreset.Bass: 50398208,
 };
+
+VideoContentHintConverter _$VideoContentHintConverterFromJson(
+    Map<String, dynamic> json) {
+  return VideoContentHintConverter(
+    _$enumDecode(_$VideoContentHintEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$VideoContentHintConverterToJson(
+        VideoContentHintConverter instance) =>
+    <String, dynamic>{
+      'e': _$VideoContentHintEnumMap[instance.e],
+    };
+
+const _$VideoContentHintEnumMap = {
+  VideoContentHint.None: 0,
+  VideoContentHint.Motion: 1,
+  VideoContentHint.Details: 2,
+};

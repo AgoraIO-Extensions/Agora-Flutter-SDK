@@ -911,3 +911,15 @@ class VoiceConversionPresetConverter
     return super.toValue(_$VoiceConversionPresetEnumMap);
   }
 }
+
+@JsonSerializable()
+class VideoContentHintConverter extends EnumConverter<VideoContentHint, int> {
+  VideoContentHintConverter(VideoContentHint e) : super(e);
+
+  VideoContentHintConverter.fromValue(int value)
+      : super.fromValue(_$VideoContentHintEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VideoContentHintEnumMap);
+  }
+}

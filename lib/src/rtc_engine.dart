@@ -187,11 +187,19 @@ class RtcEngine with RtcEngineInterface {
 
   static RtcEngine? _engine;
 
-  final RtcDeviceManager deviceManager = RtcDeviceManager();
+  final RtcDeviceManager _deviceManager = RtcDeviceManager();
 
   RtcEngineEventHandler? _handler;
 
   RtcEngine._();
+
+  /// TODO(doc)
+  RtcDeviceManager get deviceManager {
+    if (kIsWeb || (Platform.isAndroid || Platform.isIOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    return _deviceManager;
+  }
 
   static Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
@@ -215,7 +223,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetVersion.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('getSdkVersion');
@@ -234,10 +242,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetErrorDescription.index,
-        'params': jsonEncode({'code': error})
+        'params': jsonEncode({
+          'code': error,
+        }),
       });
     }
-    return _invokeMethod('getErrorDescription', {'error': error});
+    return _invokeMethod('getErrorDescription', {
+      'error': error,
+    });
   }
 
   /// Creates an [RtcEngine] instance.
@@ -313,14 +325,21 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       await _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineInitialize.index,
-        'params': jsonEncode({'context': config.toJson()})
+        'params': jsonEncode({
+          'context': config.toJson(),
+        }),
       });
       await _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAppType.index,
-        'params': jsonEncode({'appType': 4})
+        'params': jsonEncode({
+          'appType': 4,
+        }),
       });
     } else {
-      await _invokeMethod('create', {'config': config.toJson(), 'appType': 4});
+      await _invokeMethod('create', {
+        'config': config.toJson(),
+        'appType': 4,
+      });
     }
     _engine = RtcEngine._();
     return _engine!;
@@ -334,7 +353,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRelease.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('destroy');
@@ -360,12 +379,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetChannelProfile.index,
-        'params':
-            jsonEncode({'profile': ChannelProfileConverter(profile).value()})
+        'params': jsonEncode({
+          'profile': ChannelProfileConverter(profile).value(),
+        }),
       });
     }
-    return _invokeMethod('setChannelProfile',
-        {'profile': ChannelProfileConverter(profile).value()});
+    return _invokeMethod('setChannelProfile', {
+      'profile': ChannelProfileConverter(profile).value(),
+    });
   }
 
   @override
@@ -375,13 +396,13 @@ class RtcEngine with RtcEngineInterface {
         'apiType': _ApiTypeEngine.kEngineSetClientRole.index,
         'params': jsonEncode({
           'role': ClientRoleConverter(role).value(),
-          'options': options?.toJson()
-        })
+          'options': options?.toJson(),
+        }),
       });
     }
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
-      'options': options?.toJson()
+      'options': options?.toJson(),
     });
   }
 
@@ -397,8 +418,8 @@ class RtcEngine with RtcEngineInterface {
           'channelId': channelName,
           'info': optionalInfo,
           'uid': optionalUid,
-          'options': options?.toJson()
-        })
+          'options': options?.toJson(),
+        }),
       });
     }
     return _invokeMethod('joinChannel', {
@@ -406,7 +427,7 @@ class RtcEngine with RtcEngineInterface {
       'channelName': channelName,
       'optionalInfo': optionalInfo,
       'optionalUid': optionalUid,
-      'options': options?.toJson()
+      'options': options?.toJson(),
     });
   }
 
@@ -419,14 +440,14 @@ class RtcEngine with RtcEngineInterface {
         'params': jsonEncode({
           'token': token,
           'channelId': channelName,
-          'options': options?.toJson()
-        })
+          'options': options?.toJson(),
+        }),
       });
     }
     return _invokeMethod('switchChannel', {
       'token': token,
       'channelName': channelName,
-      'options': options?.toJson()
+      'options': options?.toJson(),
     });
   }
 
@@ -435,7 +456,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineLeaveChannel.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('leaveChannel');
@@ -446,10 +467,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRenewToken.index,
-        'params': jsonEncode({'token': token})
+        'params': jsonEncode({
+          'token': token,
+        }),
       });
     }
-    return _invokeMethod('renewToken', {'token': token});
+    return _invokeMethod('renewToken', {
+      'token': token,
+    });
   }
 
   @override
@@ -458,10 +483,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableWebSdkInteroperability.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('enableWebSdkInteroperability', {'enabled': enabled});
+    return _invokeMethod('enableWebSdkInteroperability', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -469,7 +498,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetConnectionState.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       }).then((value) {
         return ConnectionStateTypeConverter.fromValue(value).e;
       });
@@ -484,7 +513,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetCallId.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('getCallId');
@@ -495,12 +524,18 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRate.index,
-        'params': jsonEncode(
-            {'callId': callId, 'rating': rating, 'description': description})
+        'params': jsonEncode({
+          'callId': callId,
+          'rating': rating,
+          'description': description,
+        }),
       });
     }
-    return _invokeMethod('rate',
-        {'callId': callId, 'rating': rating, 'description': description});
+    return _invokeMethod('rate', {
+      'callId': callId,
+      'rating': rating,
+      'description': description,
+    });
   }
 
   @override
@@ -508,11 +543,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineComplain.index,
-        'params': jsonEncode({'callId': callId, 'description': description})
+        'params': jsonEncode({
+          'callId': callId,
+          'description': description,
+        }),
       });
     }
-    return _invokeMethod(
-        'complain', {'callId': callId, 'description': description});
+    return _invokeMethod('complain', {
+      'callId': callId,
+      'description': description,
+    });
   }
 
   @override
@@ -521,10 +561,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLogFile.index,
-        'params': jsonEncode({'filePath': filePath})
+        'params': jsonEncode({
+          'filePath': filePath,
+        }),
       });
     }
-    return _invokeMethod('setLogFile', {'filePath': filePath});
+    return _invokeMethod('setLogFile', {
+      'filePath': filePath,
+    });
   }
 
   @override
@@ -533,11 +577,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLogFilter.index,
-        'params': jsonEncode({'filter': LogFilterConverter(filter).value()})
+        'params': jsonEncode({
+          'filter': LogFilterConverter(filter).value(),
+        }),
       });
     }
-    return _invokeMethod(
-        'setLogFilter', {'filter': LogFilterConverter(filter).value()});
+    return _invokeMethod('setLogFilter', {
+      'filter': LogFilterConverter(filter).value(),
+    });
   }
 
   @override
@@ -546,11 +593,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLogFileSize.index,
-        'params': jsonEncode({'fileSizeInKBytes': fileSizeInKBytes})
+        'params': jsonEncode({
+          'fileSizeInKBytes': fileSizeInKBytes,
+        }),
       });
     }
-    return _invokeMethod(
-        'setLogFileSize', {'fileSizeInKBytes': fileSizeInKBytes});
+    return _invokeMethod('setLogFileSize', {
+      'fileSizeInKBytes': fileSizeInKBytes,
+    });
   }
 
   @override
@@ -558,10 +608,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetParameters.index,
-        'params': jsonEncode({'parameters': parameters})
+        'params': jsonEncode({
+          'parameters': parameters,
+        }),
       });
     }
-    return _invokeMethod('setParameters', {'parameters': parameters});
+    return _invokeMethod('setParameters', {
+      'parameters': parameters,
+    });
   }
 
   @override
@@ -569,12 +623,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetUserInfoByUid.index,
-        'params': jsonEncode({'uid': uid})
+        'params': jsonEncode({
+          'uid': uid,
+        }),
       }).then((value) {
         return UserInfo.fromJson(Map<String, dynamic>.from(jsonDecode(value)));
       });
     }
-    return _invokeMethod('getUserInfoByUid', {'uid': uid}).then((value) {
+    return _invokeMethod('getUserInfoByUid', {
+      'uid': uid,
+    }).then((value) {
       return UserInfo.fromJson(Map<String, dynamic>.from(value));
     });
   }
@@ -584,13 +642,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetUserInfoByUserAccount.index,
-        'params': jsonEncode({'userAccount': userAccount})
+        'params': jsonEncode({
+          'userAccount': userAccount,
+        }),
       }).then((value) {
         return UserInfo.fromJson(Map<String, dynamic>.from(jsonDecode(value)));
       });
     }
-    return _invokeMethod(
-        'getUserInfoByUserAccount', {'userAccount': userAccount}).then((value) {
+    return _invokeMethod('getUserInfoByUserAccount', {
+      'userAccount': userAccount,
+    }).then((value) {
       return UserInfo.fromJson(Map<String, dynamic>.from(value));
     });
   }
@@ -606,15 +667,15 @@ class RtcEngine with RtcEngineInterface {
           'token': token,
           'channelId': channelName,
           'userAccount': userAccount,
-          'options': options?.toJson()
-        })
+          'options': options?.toJson(),
+        }),
       });
     }
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'channelName': channelName,
       'userAccount': userAccount,
-      'options': options?.toJson()
+      'options': options?.toJson(),
     });
   }
 
@@ -623,11 +684,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRegisterLocalUserAccount.index,
-        'params': jsonEncode({'appId': appId, 'userAccount': userAccount})
+        'params': jsonEncode({
+          'appId': appId,
+          'userAccount': userAccount,
+        }),
       });
     }
-    return _invokeMethod('registerLocalUserAccount',
-        {'appId': appId, 'userAccount': userAccount});
+    return _invokeMethod('registerLocalUserAccount', {
+      'appId': appId,
+      'userAccount': userAccount,
+    });
   }
 
   @override
@@ -635,10 +701,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustPlaybackSignalVolume.index,
-        'params': jsonEncode({'volume': volume})
+        'params': jsonEncode({
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod('adjustPlaybackSignalVolume', {'volume': volume});
+    return _invokeMethod('adjustPlaybackSignalVolume', {
+      'volume': volume,
+    });
   }
 
   @override
@@ -646,10 +716,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustRecordingSignalVolume.index,
-        'params': jsonEncode({'volume': volume})
+        'params': jsonEncode({
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod('adjustRecordingSignalVolume', {'volume': volume});
+    return _invokeMethod('adjustRecordingSignalVolume', {
+      'volume': volume,
+    });
   }
 
   @override
@@ -657,11 +731,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustUserPlaybackSignalVolume.index,
-        'params': jsonEncode({'uid': uid, 'volume': volume})
+        'params': jsonEncode({
+          'uid': uid,
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod(
-        'adjustUserPlaybackSignalVolume', {'uid': uid, 'volume': volume});
+    return _invokeMethod('adjustUserPlaybackSignalVolume', {
+      'uid': uid,
+      'volume': volume,
+    });
   }
 
   @override
@@ -669,7 +748,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineDisableAudio.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('disableAudio');
@@ -680,7 +759,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableAudio.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('enableAudio');
@@ -692,12 +771,18 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableAudioVolumeIndication.index,
-        'params': jsonEncode(
-            {'interval': interval, 'smooth': smooth, 'report_vad': report_vad})
+        'params': jsonEncode({
+          'interval': interval,
+          'smooth': smooth,
+          'report_vad': report_vad,
+        }),
       });
     }
-    return _invokeMethod('enableAudioVolumeIndication',
-        {'interval': interval, 'smooth': smooth, 'report_vad': report_vad});
+    return _invokeMethod('enableAudioVolumeIndication', {
+      'interval': interval,
+      'smooth': smooth,
+      'report_vad': report_vad,
+    });
   }
 
   @override
@@ -705,10 +790,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableLocalAudio.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('enableLocalAudio', {'enabled': enabled});
+    return _invokeMethod('enableLocalAudio', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -716,10 +805,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteAllRemoteAudioStreams.index,
-        'params': jsonEncode({'mute': muted})
+        'params': jsonEncode({
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteAllRemoteAudioStreams', {'muted': muted});
+    return _invokeMethod('muteAllRemoteAudioStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -727,10 +820,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteLocalAudioStream.index,
-        'params': jsonEncode({'mute': muted})
+        'params': jsonEncode({
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteLocalAudioStream', {'muted': muted});
+    return _invokeMethod('muteLocalAudioStream', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -738,10 +835,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteRemoteAudioStream.index,
-        'params': jsonEncode({'userId': uid, 'mute': muted})
+        'params': jsonEncode({
+          'userId': uid,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteRemoteAudioStream', {'uid': uid, 'muted': muted});
+    return _invokeMethod('muteRemoteAudioStream', {
+      'uid': uid,
+      'muted': muted,
+    });
   }
 
   @override
@@ -751,13 +854,13 @@ class RtcEngine with RtcEngineInterface {
         'apiType': _ApiTypeEngine.kEngineSetAudioProfile.index,
         'params': jsonEncode({
           'profile': AudioProfileConverter(profile).value(),
-          'scenario': AudioScenarioConverter(scenario).value()
-        })
+          'scenario': AudioScenarioConverter(scenario).value(),
+        }),
       });
     }
     return _invokeMethod('setAudioProfile', {
       'profile': AudioProfileConverter(profile).value(),
-      'scenario': AudioScenarioConverter(scenario).value()
+      'scenario': AudioScenarioConverter(scenario).value(),
     });
   }
 
@@ -768,11 +871,14 @@ class RtcEngine with RtcEngineInterface {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeEngine.kEngineSetDefaultMuteAllRemoteAudioStreams.index,
-        'params': jsonEncode({'mute': muted})
+        'params': jsonEncode({
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod(
-        'setDefaultMuteAllRemoteAudioStreams', {'muted': muted});
+    return _invokeMethod('setDefaultMuteAllRemoteAudioStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -780,7 +886,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineDisableVideo.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('disableVideo');
@@ -791,10 +897,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableLocalVideo.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('enableLocalVideo', {'enabled': enabled});
+    return _invokeMethod('enableLocalVideo', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -802,7 +912,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableVideo.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('enableVideo');
@@ -813,10 +923,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteAllRemoteVideoStreams.index,
-        'params': jsonEncode({'mute': muted})
+        'params': jsonEncode({
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteAllRemoteVideoStreams', {'muted': muted});
+    return _invokeMethod('muteAllRemoteVideoStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -824,10 +938,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteLocalVideoStream.index,
-        'params': jsonEncode({'mute': muted})
+        'params': jsonEncode({
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteLocalVideoStream', {'muted': muted});
+    return _invokeMethod('muteLocalVideoStream', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -835,10 +953,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineMuteRemoteVideoStream.index,
-        'params': jsonEncode({'userId': uid, 'mute': muted})
+        'params': jsonEncode({
+          'userId': uid,
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod('muteRemoteVideoStream', {'uid': uid, 'muted': muted});
+    return _invokeMethod('muteRemoteVideoStream', {
+      'uid': uid,
+      'muted': muted,
+    });
   }
 
   @override
@@ -846,11 +970,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetBeautyEffectOptions.index,
-        'params': jsonEncode({'enabled': enabled, 'options': options.toJson()})
+        'params': jsonEncode({
+          'enabled': enabled,
+          'options': options.toJson(),
+        }),
       });
     }
-    return _invokeMethod('setBeautyEffectOptions',
-        {'enabled': enabled, 'options': options.toJson()});
+    return _invokeMethod('setBeautyEffectOptions', {
+      'enabled': enabled,
+      'options': options.toJson(),
+    });
   }
 
   @override
@@ -860,11 +989,14 @@ class RtcEngine with RtcEngineInterface {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeEngine.kEngineSetDefaultMuteAllRemoteVideoStreams.index,
-        'params': jsonEncode({'mute': muted})
+        'params': jsonEncode({
+          'mute': muted,
+        }),
       });
     }
-    return _invokeMethod(
-        'setDefaultMuteAllRemoteVideoStreams', {'muted': muted});
+    return _invokeMethod('setDefaultMuteAllRemoteVideoStreams', {
+      'muted': muted,
+    });
   }
 
   @override
@@ -872,11 +1004,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVideoEncoderConfiguration.index,
-        'params': jsonEncode({'config': config.toJson()})
+        'params': jsonEncode({
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'setVideoEncoderConfiguration', {'config': config.toJson()});
+    return _invokeMethod('setVideoEncoderConfiguration', {
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -884,7 +1019,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartPreview.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('startPreview');
@@ -895,7 +1030,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopPreview.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('stopPreview');
@@ -906,10 +1041,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustAudioMixingPlayoutVolume.index,
-        'params': jsonEncode({'volume': volume})
+        'params': jsonEncode({
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod('adjustAudioMixingPlayoutVolume', {'volume': volume});
+    return _invokeMethod('adjustAudioMixingPlayoutVolume', {
+      'volume': volume,
+    });
   }
 
   @override
@@ -917,10 +1056,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustAudioMixingPublishVolume.index,
-        'params': jsonEncode({'volume': volume})
+        'params': jsonEncode({
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod('adjustAudioMixingPublishVolume', {'volume': volume});
+    return _invokeMethod('adjustAudioMixingPublishVolume', {
+      'volume': volume,
+    });
   }
 
   @override
@@ -928,10 +1071,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAdjustAudioMixingVolume.index,
-        'params': jsonEncode({'volume': volume})
+        'params': jsonEncode({
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod('adjustAudioMixingVolume', {'volume': volume});
+    return _invokeMethod('adjustAudioMixingVolume', {
+      'volume': volume,
+    });
   }
 
   @override
@@ -939,7 +1086,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingCurrentPosition.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('getAudioMixingCurrentPosition');
@@ -950,7 +1097,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingDuration.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('getAudioMixingDuration', {
@@ -963,7 +1110,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingPlayoutVolume.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('getAudioMixingPlayoutVolume');
@@ -974,7 +1121,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetAudioMixingPublishVolume.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('getAudioMixingPublishVolume');
@@ -985,7 +1132,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePauseAudioMixing.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('pauseAudioMixing');
@@ -996,7 +1143,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineResumeAudioMixing.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('resumeAudioMixing');
@@ -1007,10 +1154,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioMixingPosition.index,
-        'params': jsonEncode({'pos': pos})
+        'params': jsonEncode({
+          'pos': pos,
+        }),
       });
     }
-    return _invokeMethod('setAudioMixingPosition', {'pos': pos});
+    return _invokeMethod('setAudioMixingPosition', {
+      'pos': pos,
+    });
   }
 
   @override
@@ -1024,8 +1175,8 @@ class RtcEngine with RtcEngineInterface {
           'filePath': filePath,
           'loopback': loopback,
           'replace': replace,
-          'cycle': cycle
-        })
+          'cycle': cycle,
+        }),
       });
     }
     return _invokeMethod('startAudioMixing', {
@@ -1033,7 +1184,7 @@ class RtcEngine with RtcEngineInterface {
       'loopback': loopback,
       'replace': replace,
       'cycle': cycle,
-      'startPos': startPos
+      'startPos': startPos,
     });
   }
 
@@ -1042,7 +1193,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopAudioMixing.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('stopAudioMixing');
@@ -1053,11 +1204,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAddInjectStreamUrl.index,
-        'params': jsonEncode({'url': url, 'config': config.toJson()})
+        'params': jsonEncode({
+          'url': url,
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'addInjectStreamUrl', {'url': url, 'config': config.toJson()});
+    return _invokeMethod('addInjectStreamUrl', {
+      'url': url,
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -1065,12 +1221,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAddPublishStreamUrl.index,
-        'params':
-            jsonEncode({'url': url, 'transcodingEnabled': transcodingEnabled})
+        'params': jsonEncode({
+          'url': url,
+          'transcodingEnabled': transcodingEnabled,
+        }),
       });
     }
-    return _invokeMethod('addPublishStreamUrl',
-        {'url': url, 'transcodingEnabled': transcodingEnabled});
+    return _invokeMethod('addPublishStreamUrl', {
+      'url': url,
+      'transcodingEnabled': transcodingEnabled,
+    });
   }
 
   @override
@@ -1079,12 +1239,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineAddVideoWaterMark.index,
-        'params': jsonEncode(
-            {'watermarkUrl': watermarkUrl, 'options': options.toJson()})
+        'params': jsonEncode({
+          'watermarkUrl': watermarkUrl,
+          'options': options.toJson(),
+        }),
       });
     }
-    return _invokeMethod('addVideoWatermark',
-        {'watermarkUrl': watermarkUrl, 'options': options.toJson()});
+    return _invokeMethod('addVideoWatermark', {
+      'watermarkUrl': watermarkUrl,
+      'options': options.toJson(),
+    });
   }
 
   @override
@@ -1092,7 +1256,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineClearVideoWaterMarks.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('clearVideoWatermarks');
@@ -1103,11 +1267,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineCreateDataStream.index,
-        'params': jsonEncode({'reliable': reliable, 'ordered': ordered})
+        'params': jsonEncode({
+          'reliable': reliable,
+          'ordered': ordered,
+        }),
       });
     }
-    return _invokeMethod(
-        'createDataStream', {'reliable': reliable, 'ordered': ordered});
+    return _invokeMethod('createDataStream', {
+      'reliable': reliable,
+      'ordered': ordered,
+    });
   }
 
   @override
@@ -1115,7 +1284,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineDisableLastMileTest.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('disableLastmileTest');
@@ -1126,10 +1295,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableDualStreamMode.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('enableDualStreamMode', {'enabled': enabled});
+    return _invokeMethod('enableDualStreamMode', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -1137,10 +1310,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableInEarMonitoring.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('enableInEarMonitoring', {'enabled': enabled});
+    return _invokeMethod('enableInEarMonitoring', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -1148,7 +1325,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableLastMileTest.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('enableLastmileTest');
@@ -1159,10 +1336,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableSoundPositionIndication.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('enableSoundPositionIndication', {'enabled': enabled});
+    return _invokeMethod('enableSoundPositionIndication', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -1178,7 +1359,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetEffectsVolume.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('getEffectsVolume');
@@ -1229,7 +1410,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineIsSpeakerPhoneEnabled.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('isSpeakerphoneEnabled');
@@ -1240,7 +1421,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePauseAllEffects.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('pauseAllEffects');
@@ -1251,10 +1432,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePauseEffect.index,
-        'params': jsonEncode({'soundId': soundId})
+        'params': jsonEncode({
+          'soundId': soundId,
+        }),
       });
     }
-    return _invokeMethod('pauseEffect', {'soundId': soundId});
+    return _invokeMethod('pauseEffect', {
+      'soundId': soundId,
+    });
   }
 
   @override
@@ -1271,8 +1456,8 @@ class RtcEngine with RtcEngineInterface {
           'pitch': pitch,
           'pan': pan,
           'gain': gain,
-          'publish': publish
-        })
+          'publish': publish,
+        }),
       });
     }
     return _invokeMethod('playEffect', {
@@ -1283,23 +1468,39 @@ class RtcEngine with RtcEngineInterface {
       'pan': pan,
       'gain': gain,
       'publish': publish,
-      'startPos': startPos
+      'startPos': startPos,
     });
   }
 
   @override
   Future<void> setEffectPosition(int soundId, int pos) {
-    return _invokeMethod('setEffectPosition', {'soundId': soundId, 'pos': pos});
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    return _invokeMethod('setEffectPosition', {
+      'soundId': soundId,
+      'pos': pos,
+    });
   }
 
   @override
   Future<int?> getEffectDuration(String filePath) {
-    return _invokeMethod('getEffectDuration', {'filePath': filePath});
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    return _invokeMethod('getEffectDuration', {
+      'filePath': filePath,
+    });
   }
 
   @override
   Future<int?> getEffectCurrentPosition(int soundId) {
-    return _invokeMethod('getEffectCurrentPosition', {'soundId': soundId});
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    return _invokeMethod('getEffectCurrentPosition', {
+      'soundId': soundId,
+    });
   }
 
   @override
@@ -1307,11 +1508,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEnginePreloadEffect.index,
-        'params': jsonEncode({'soundId': soundId, 'filePath': filePath})
+        'params': jsonEncode({
+          'soundId': soundId,
+          'filePath': filePath,
+        }),
       });
     }
-    return _invokeMethod(
-        'preloadEffect', {'soundId': soundId, 'filePath': filePath});
+    return _invokeMethod('preloadEffect', {
+      'soundId': soundId,
+      'filePath': filePath,
+    });
   }
 
   @override
@@ -1319,7 +1525,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRegisterMediaMetadataObserver.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('registerMediaMetadataObserver');
@@ -1330,10 +1536,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRemoveInjectStreamUrl.index,
-        'params': jsonEncode({'url': url})
+        'params': jsonEncode({
+          'url': url,
+        }),
       });
     }
-    return _invokeMethod('removeInjectStreamUrl', {'url': url});
+    return _invokeMethod('removeInjectStreamUrl', {
+      'url': url,
+    });
   }
 
   @override
@@ -1341,10 +1551,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRemovePublishStreamUrl.index,
-        'params': jsonEncode({'url': url})
+        'params': jsonEncode({
+          'url': url,
+        }),
       });
     }
-    return _invokeMethod('removePublishStreamUrl', {'url': url});
+    return _invokeMethod('removePublishStreamUrl', {
+      'url': url,
+    });
   }
 
   @override
@@ -1352,7 +1566,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineResumeAllEffects.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('resumeAllEffects');
@@ -1363,10 +1577,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineResumeEffect.index,
-        'params': jsonEncode({'soundId': soundId})
+        'params': jsonEncode({
+          'soundId': soundId,
+        }),
       });
     }
-    return _invokeMethod('resumeEffect', {'soundId': soundId});
+    return _invokeMethod('resumeEffect', {
+      'soundId': soundId,
+    });
   }
 
   @override
@@ -1375,12 +1593,16 @@ class RtcEngine with RtcEngineInterface {
       return _invokeMethod('callApiWithBuffer', {
         'apiType': _ApiTypeEngine.kEngineSendMetadata.index,
         'params': jsonEncode({
-          'metadata': {'size': metadata.length}
+          'metadata': {
+            'size': metadata.length,
+          },
         }),
-        'buffer': metadata
+        'buffer': metadata,
       });
     }
-    return _invokeMethod('sendMetadata', {'metadata': metadata});
+    return _invokeMethod('sendMetadata', {
+      'metadata': metadata,
+    });
   }
 
   @override
@@ -1388,12 +1610,17 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApiWithBuffer', {
         'apiType': _ApiTypeEngine.kEngineSendStreamMessage.index,
-        'params': jsonEncode({'streamId': streamId, 'length': message.length}),
-        'buffer': message
+        'params': jsonEncode({
+          'streamId': streamId,
+          'length': message.length,
+        }),
+        'buffer': message,
       });
     }
-    return _invokeMethod(
-        'sendStreamMessage', {'streamId': streamId, 'message': message});
+    return _invokeMethod('sendStreamMessage', {
+      'streamId': streamId,
+      'message': message,
+    });
   }
 
   @override
@@ -1401,8 +1628,9 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
-    return _invokeMethod(
-        'setCameraAutoFocusFaceModeEnabled', {'enabled': enabled});
+    return _invokeMethod('setCameraAutoFocusFaceModeEnabled', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -1411,11 +1639,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetCameraCapturerConfiguration.index,
-        'params': jsonEncode({'config': config.toJson()})
+        'params': jsonEncode({
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'setCameraCapturerConfiguration', {'config': config.toJson()});
+    return _invokeMethod('setCameraCapturerConfiguration', {
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -1426,7 +1657,7 @@ class RtcEngine with RtcEngineInterface {
     }
     return _invokeMethod('setCameraExposurePosition', {
       'positionXinView': positionXinView,
-      'positionYinView': positionYinView
+      'positionYinView': positionYinView,
     });
   }
 
@@ -1436,8 +1667,10 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
-    return _invokeMethod('setCameraFocusPositionInPreview',
-        {'positionX': positionX, 'positionY': positionY});
+    return _invokeMethod('setCameraFocusPositionInPreview', {
+      'positionX': positionX,
+      'positionY': positionY,
+    });
   }
 
   @override
@@ -1445,7 +1678,9 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
-    return _invokeMethod('setCameraTorchOn', {'isOn': isOn});
+    return _invokeMethod('setCameraTorchOn', {
+      'isOn': isOn,
+    });
   }
 
   @override
@@ -1453,7 +1688,9 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
-    return _invokeMethod('setCameraZoomFactor', {'factor': factor});
+    return _invokeMethod('setCameraZoomFactor', {
+      'factor': factor,
+    });
   }
 
   @override
@@ -1462,11 +1699,14 @@ class RtcEngine with RtcEngineInterface {
       return _invokeMethod('callApi', {
         'apiType':
             _ApiTypeEngine.kEngineSetDefaultAudioRouteToSpeakerPhone.index,
-        'params': jsonEncode({'defaultToSpeaker': defaultToSpeaker})
+        'params': jsonEncode({
+          'defaultToSpeaker': defaultToSpeaker,
+        }),
       });
     }
-    return _invokeMethod('setDefaultAudioRoutetoSpeakerphone',
-        {'defaultToSpeaker': defaultToSpeaker});
+    return _invokeMethod('setDefaultAudioRoutetoSpeakerphone', {
+      'defaultToSpeaker': defaultToSpeaker,
+    });
   }
 
   @override
@@ -1474,10 +1714,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEffectsVolume.index,
-        'params': jsonEncode({'volume': volume})
+        'params': jsonEncode({
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod('setEffectsVolume', {'volume': volume});
+    return _invokeMethod('setEffectsVolume', {
+      'volume': volume,
+    });
   }
 
   @override
@@ -1485,10 +1729,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEnableSpeakerPhone.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('setEnableSpeakerphone', {'enabled': enabled});
+    return _invokeMethod('setEnableSpeakerphone', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -1497,11 +1745,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEncryptionMode.index,
-        'params': jsonEncode({'encryptionMode': encryptionMode})
+        'params': jsonEncode({
+          'encryptionMode': encryptionMode,
+        }),
       });
     }
-    return _invokeMethod('setEncryptionMode',
-        {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
+    return _invokeMethod('setEncryptionMode', {
+      'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
+    });
   }
 
   @override
@@ -1510,10 +1761,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetEncryptionSecret.index,
-        'params': jsonEncode({'secret': secret})
+        'params': jsonEncode({
+          'secret': secret,
+        }),
       });
     }
-    return _invokeMethod('setEncryptionSecret', {'secret': secret});
+    return _invokeMethod('setEncryptionSecret', {
+      'secret': secret,
+    });
   }
 
   @override
@@ -1521,10 +1776,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetInEarMonitoringVolume.index,
-        'params': jsonEncode({'volume': volume})
+        'params': jsonEncode({
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod('setInEarMonitoringVolume', {'volume': volume});
+    return _invokeMethod('setInEarMonitoringVolume', {
+      'volume': volume,
+    });
   }
 
   @override
@@ -1532,11 +1791,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLiveTranscoding.index,
-        'params': jsonEncode({'transcoding': transcoding.toJson()})
+        'params': jsonEncode({
+          'transcoding': transcoding.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'setLiveTranscoding', {'transcoding': transcoding.toJson()});
+    return _invokeMethod('setLiveTranscoding', {
+      'transcoding': transcoding.toJson(),
+    });
   }
 
   @override
@@ -1544,12 +1806,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalPublishFallbackOption.index,
-        'params': jsonEncode(
-            {'option': StreamFallbackOptionsConverter(option).value()})
+        'params': jsonEncode({
+          'option': StreamFallbackOptionsConverter(option).value(),
+        }),
       });
     }
-    return _invokeMethod('setLocalPublishFallbackOption',
-        {'option': StreamFallbackOptionsConverter(option).value()});
+    return _invokeMethod('setLocalPublishFallbackOption', {
+      'option': StreamFallbackOptionsConverter(option).value(),
+    });
   }
 
   @override
@@ -1558,12 +1822,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoiceChanger.index,
-        'params': jsonEncode(
-            {'voiceChanger': AudioVoiceChangerConverter(voiceChanger).value()})
+        'params': jsonEncode({
+          'voiceChanger': AudioVoiceChangerConverter(voiceChanger).value(),
+        }),
       });
     }
-    return _invokeMethod('setLocalVoiceChanger',
-        {'voiceChanger': AudioVoiceChangerConverter(voiceChanger).value()});
+    return _invokeMethod('setLocalVoiceChanger', {
+      'voiceChanger': AudioVoiceChangerConverter(voiceChanger).value(),
+    });
   }
 
   @override
@@ -1575,14 +1841,14 @@ class RtcEngine with RtcEngineInterface {
         'params': jsonEncode({
           'bandFrequency':
               AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
-          'bandGain': bandGain
-        })
+          'bandGain': bandGain,
+        }),
       });
     }
     return _invokeMethod('setLocalVoiceEqualization', {
       'bandFrequency':
           AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
-      'bandGain': bandGain
+      'bandGain': bandGain,
     });
   }
 
@@ -1591,10 +1857,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoicePitch.index,
-        'params': jsonEncode({'pitch': pitch})
+        'params': jsonEncode({
+          'pitch': pitch,
+        }),
       });
     }
-    return _invokeMethod('setLocalVoicePitch', {'pitch': pitch});
+    return _invokeMethod('setLocalVoicePitch', {
+      'pitch': pitch,
+    });
   }
 
   @override
@@ -1604,13 +1874,13 @@ class RtcEngine with RtcEngineInterface {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoiceReverb.index,
         'params': jsonEncode({
           'reverbKey': AudioReverbTypeConverter(reverbKey).value(),
-          'value': value
-        })
+          'value': value,
+        }),
       });
     }
     return _invokeMethod('setLocalVoiceReverb', {
       'reverbKey': AudioReverbTypeConverter(reverbKey).value(),
-      'value': value
+      'value': value,
     });
   }
 
@@ -1620,12 +1890,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetLocalVoiceReverbPreset.index,
-        'params':
-            jsonEncode({'preset': AudioReverbPresetConverter(preset).value()})
+        'params': jsonEncode({
+          'preset': AudioReverbPresetConverter(preset).value(),
+        }),
       });
     }
-    return _invokeMethod('setLocalVoiceReverbPreset',
-        {'preset': AudioReverbPresetConverter(preset).value()});
+    return _invokeMethod('setLocalVoiceReverbPreset', {
+      'preset': AudioReverbPresetConverter(preset).value(),
+    });
   }
 
   @override
@@ -1633,10 +1905,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetMaxMetadataSize.index,
-        'params': jsonEncode({'size': size})
+        'params': jsonEncode({
+          'size': size,
+        }),
       });
     }
-    return _invokeMethod('setMaxMetadataSize', {'size': size});
+    return _invokeMethod('setMaxMetadataSize', {
+      'size': size,
+    });
   }
 
   @override
@@ -1644,12 +1920,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteDefaultVideoStreamType.index,
-        'params': jsonEncode(
-            {'streamType': VideoStreamTypeConverter(streamType).value()})
+        'params': jsonEncode({
+          'streamType': VideoStreamTypeConverter(streamType).value(),
+        }),
       });
     }
-    return _invokeMethod('setRemoteDefaultVideoStreamType',
-        {'streamType': VideoStreamTypeConverter(streamType).value()});
+    return _invokeMethod('setRemoteDefaultVideoStreamType', {
+      'streamType': VideoStreamTypeConverter(streamType).value(),
+    });
   }
 
   @override
@@ -1657,12 +1935,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteSubscribeFallbackOption.index,
-        'params': jsonEncode(
-            {'option': StreamFallbackOptionsConverter(option).value()})
+        'params': jsonEncode({
+          'option': StreamFallbackOptionsConverter(option).value(),
+        }),
       });
     }
-    return _invokeMethod('setRemoteSubscribeFallbackOption',
-        {'option': StreamFallbackOptionsConverter(option).value()});
+    return _invokeMethod('setRemoteSubscribeFallbackOption', {
+      'option': StreamFallbackOptionsConverter(option).value(),
+    });
   }
 
   @override
@@ -1672,13 +1952,13 @@ class RtcEngine with RtcEngineInterface {
         'apiType': _ApiTypeEngine.kEngineSetRemoteUserPriority.index,
         'params': jsonEncode({
           'uid': uid,
-          'userPriority': UserPriorityConverter(userPriority).value()
-        })
+          'userPriority': UserPriorityConverter(userPriority).value(),
+        }),
       });
     }
     return _invokeMethod('setRemoteUserPriority', {
       'uid': uid,
-      'userPriority': UserPriorityConverter(userPriority).value()
+      'userPriority': UserPriorityConverter(userPriority).value(),
     });
   }
 
@@ -1689,13 +1969,13 @@ class RtcEngine with RtcEngineInterface {
         'apiType': _ApiTypeEngine.kEngineSetRemoteVideoStreamType.index,
         'params': jsonEncode({
           'uid': uid,
-          'streamType': VideoStreamTypeConverter(streamType).value()
-        })
+          'streamType': VideoStreamTypeConverter(streamType).value(),
+        }),
       });
     }
     return _invokeMethod('setRemoteVideoStreamType', {
       'uid': uid,
-      'streamType': VideoStreamTypeConverter(streamType).value()
+      'streamType': VideoStreamTypeConverter(streamType).value(),
     });
   }
 
@@ -1704,11 +1984,18 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetRemoteVoicePosition.index,
-        'params': jsonEncode({'uid': uid, 'pan': pan, 'gain': gain})
+        'params': jsonEncode({
+          'uid': uid,
+          'pan': pan,
+          'gain': gain,
+        }),
       });
     }
-    return _invokeMethod(
-        'setRemoteVoicePosition', {'uid': uid, 'pan': pan, 'gain': gain});
+    return _invokeMethod('setRemoteVoicePosition', {
+      'uid': uid,
+      'pan': pan,
+      'gain': gain,
+    });
   }
 
   @override
@@ -1716,11 +2003,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVolumeOfEffect.index,
-        'params': jsonEncode({'soundId': soundId, 'volume': volume})
+        'params': jsonEncode({
+          'soundId': soundId,
+          'volume': volume,
+        }),
       });
     }
-    return _invokeMethod(
-        'setVolumeOfEffect', {'soundId': soundId, 'volume': volume});
+    return _invokeMethod('setVolumeOfEffect', {
+      'soundId': soundId,
+      'volume': volume,
+    });
   }
 
   @override
@@ -1733,21 +2025,31 @@ class RtcEngine with RtcEngineInterface {
         'params': jsonEncode({
           'filePath': filePath,
           'sampleRate': AudioSampleRateTypeConverter(sampleRate).value(),
-          'quality': AudioRecordingQualityConverter(quality).value()
-        })
+          'quality': AudioRecordingQualityConverter(quality).value(),
+        }),
       });
     }
     return _invokeMethod('startAudioRecording', {
       'filePath': filePath,
       'sampleRate': AudioSampleRateTypeConverter(sampleRate).value(),
-      'quality': AudioRecordingQualityConverter(quality).value()
+      'quality': AudioRecordingQualityConverter(quality).value(),
     });
   }
 
   @override
   Future<void> startAudioRecordingWithConfig(
       AudioRecordingConfiguration config) {
-    return _invokeMethod('startAudioRecording', {'config': config.toJson()});
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineStartAudioRecording.index,
+        'params': jsonEncode({
+          'config': config.toJson(),
+        }),
+      });
+    }
+    return _invokeMethod('startAudioRecording', {
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -1756,18 +2058,22 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartChannelMediaRelay.index,
-        'params': jsonEncode(
-            {'configuration': channelMediaRelayConfiguration.toJson()})
+        'params': jsonEncode({
+          'configuration': channelMediaRelayConfiguration.toJson(),
+        }),
       });
     }
     return _invokeMethod('startChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
+      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
   }
 
   @override
   Future<void> startRhythmPlayer(
       String sound1, String sound2, RhythmPlayerConfig config) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
     return _invokeMethod('startRhythmPlayer', {
       'sound1': sound1,
       'sound2': sound2,
@@ -1777,12 +2083,20 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> stopRhythmPlayer() {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
     return _invokeMethod('stopRhythmPlayer');
   }
 
   @override
   Future<void> configRhythmPlayer(RhythmPlayerConfig config) {
-    return _invokeMethod('configRhythmPlayer', {'config': config.toJson()});
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    return _invokeMethod('configRhythmPlayer', {
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -1790,11 +2104,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartEchoTest.index,
-        'params': jsonEncode({'intervalInSeconds': intervalInSeconds})
+        'params': jsonEncode({
+          'intervalInSeconds': intervalInSeconds,
+        }),
       });
     }
-    return _invokeMethod(
-        'startEchoTest', {'intervalInSeconds': intervalInSeconds});
+    return _invokeMethod('startEchoTest', {
+      'intervalInSeconds': intervalInSeconds,
+    });
   }
 
   @override
@@ -1802,10 +2119,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartLastMileProbeTest.index,
-        'params': jsonEncode({'config': config.toJson()})
+        'params': jsonEncode({
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod('startLastmileProbeTest', {'config': config.toJson()});
+    return _invokeMethod('startLastmileProbeTest', {
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -1813,7 +2134,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopAllEffects.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('stopAllEffects');
@@ -1824,7 +2145,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopAudioRecording.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('stopAudioRecording');
@@ -1835,7 +2156,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopChannelMediaRelay.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('stopChannelMediaRelay');
@@ -1846,7 +2167,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopEchoTest.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('stopEchoTest');
@@ -1857,10 +2178,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopEffect.index,
-        'params': jsonEncode({'soundId': soundId})
+        'params': jsonEncode({
+          'soundId': soundId,
+        }),
       });
     }
-    return _invokeMethod('stopEffect', {'soundId': soundId});
+    return _invokeMethod('stopEffect', {
+      'soundId': soundId,
+    });
   }
 
   @override
@@ -1868,7 +2193,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStopLastMileProbeTest.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('stopLastmileProbeTest');
@@ -1879,7 +2204,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSwitchCamera.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('switchCamera');
@@ -1890,10 +2215,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUnloadEffect.index,
-        'params': jsonEncode({'soundId': soundId})
+        'params': jsonEncode({
+          'soundId': soundId,
+        }),
       });
     }
-    return _invokeMethod('unloadEffect', {'soundId': soundId});
+    return _invokeMethod('unloadEffect', {
+      'soundId': soundId,
+    });
   }
 
   @override
@@ -1901,7 +2230,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUnRegisterMediaMetadataObserver.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('unregisterMediaMetadataObserver');
@@ -1913,12 +2242,13 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUpdateChannelMediaRelay.index,
-        'params': jsonEncode(
-            {'configuration': channelMediaRelayConfiguration.toJson()})
+        'params': jsonEncode({
+          'configuration': channelMediaRelayConfiguration.toJson(),
+        }),
       });
     }
     return _invokeMethod('updateChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
+      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
   }
 
@@ -1927,10 +2257,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableFaceDetection.index,
-        'params': jsonEncode({'enable': enable})
+        'params': jsonEncode({
+          'enable': enable,
+        }),
       });
     }
-    return _invokeMethod('enableFaceDetection', {'enable': enable});
+    return _invokeMethod('enableFaceDetection', {
+      'enable': enable,
+    });
   }
 
   @override
@@ -1938,10 +2272,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioMixingPitch.index,
-        'params': jsonEncode({'pitch': pitch})
+        'params': jsonEncode({
+          'pitch': pitch,
+        }),
       });
     }
-    return _invokeMethod('setAudioMixingPitch', {'pitch': pitch});
+    return _invokeMethod('setAudioMixingPitch', {
+      'pitch': pitch,
+    });
   }
 
   @override
@@ -1949,11 +2287,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableEncryption.index,
-        'params': jsonEncode({'enabled': enabled, 'config': config.toJson()})
+        'params': jsonEncode({
+          'enabled': enabled,
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod(
-        'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
+    return _invokeMethod('enableEncryption', {
+      'enabled': enabled,
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -1967,8 +2310,8 @@ class RtcEngine with RtcEngineInterface {
           'category': category,
           'event': event,
           'label': label,
-          'value': value
-        })
+          'value': value,
+        }),
       });
     }
     return _invokeMethod('sendCustomReportMessage', {
@@ -1976,7 +2319,7 @@ class RtcEngine with RtcEngineInterface {
       'category': category,
       'event': event,
       'label': label,
-      'value': value
+      'value': value,
     });
   }
 
@@ -1989,13 +2332,13 @@ class RtcEngine with RtcEngineInterface {
             _ApiTypeEngine.kEngineSetAudioSessionOperationRestriction.index,
         'params': jsonEncode({
           'restriction':
-              AudioSessionOperationRestrictionConverter(restriction).value()
-        })
+              AudioSessionOperationRestrictionConverter(restriction).value(),
+        }),
       });
     }
     return _invokeMethod('setAudioSessionOperationRestriction', {
       'restriction':
-          AudioSessionOperationRestrictionConverter(restriction).value()
+          AudioSessionOperationRestrictionConverter(restriction).value(),
     });
   }
 
@@ -2016,14 +2359,14 @@ class RtcEngine with RtcEngineInterface {
         'params': jsonEncode({
           'preset': AudioEffectPresetConverter(preset).value(),
           'param1': param1,
-          'param2': param2
-        })
+          'param2': param2,
+        }),
       });
     }
     return _invokeMethod('setAudioEffectParameters', {
       'preset': AudioEffectPresetConverter(preset).value(),
       'param1': param1,
-      'param2': param2
+      'param2': param2,
     });
   }
 
@@ -2032,12 +2375,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetAudioEffectPreset.index,
-        'params':
-            jsonEncode({'preset': AudioEffectPresetConverter(preset).value()})
+        'params': jsonEncode({
+          'preset': AudioEffectPresetConverter(preset).value(),
+        }),
       });
     }
-    return _invokeMethod('setAudioEffectPreset',
-        {'preset': AudioEffectPresetConverter(preset).value()});
+    return _invokeMethod('setAudioEffectPreset', {
+      'preset': AudioEffectPresetConverter(preset).value(),
+    });
   }
 
   @override
@@ -2045,12 +2390,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceBeautifierPreset.index,
-        'params': jsonEncode(
-            {'preset': VoiceBeautifierPresetConverter(preset).value()})
+        'params': jsonEncode({
+          'preset': VoiceBeautifierPresetConverter(preset).value(),
+        }),
       });
     }
-    return _invokeMethod('setVoiceBeautifierPreset',
-        {'preset': VoiceBeautifierPresetConverter(preset).value()});
+    return _invokeMethod('setVoiceBeautifierPreset', {
+      'preset': VoiceBeautifierPresetConverter(preset).value(),
+    });
   }
 
   @override
@@ -2058,10 +2405,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineCreateDataStream.index,
-        'params': jsonEncode({'config': config.toJson()})
+        'params': jsonEncode({
+          'config': config.toJson(),
+        }),
       });
     }
-    return _invokeMethod('createDataStream', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {
+      'config': config.toJson(),
+    });
   }
 
   @override
@@ -2069,10 +2420,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableDeepLearningDenoise.index,
-        'params': jsonEncode({'enabled': enabled})
+        'params': jsonEncode({
+          'enabled': enabled,
+        }),
       });
     }
-    return _invokeMethod('enableDeepLearningDenoise', {'enabled': enabled});
+    return _invokeMethod('enableDeepLearningDenoise', {
+      'enabled': enabled,
+    });
   }
 
   @override
@@ -2080,11 +2435,16 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineEnableRemoteSuperResolution.index,
-        'params': jsonEncode({'uid': uid, 'enable': enable})
+        'params': jsonEncode({
+          'uid': uid,
+          'enable': enable,
+        }),
       });
     }
-    return _invokeMethod(
-        'enableRemoteSuperResolution', {'uid': uid, 'enable': enable});
+    return _invokeMethod('enableRemoteSuperResolution', {
+      'uid': uid,
+      'enable': enable,
+    });
   }
 
   @override
@@ -2092,12 +2452,14 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetCloudProxy.index,
-        'params':
-            jsonEncode({'proxyType': CloudProxyTypeConverter(proxyType).e})
+        'params': jsonEncode({
+          'proxyType': CloudProxyTypeConverter(proxyType).e,
+        }),
       });
     }
-    return _invokeMethod('enableRemoteSuperResolution',
-        {'proxyType': CloudProxyTypeConverter(proxyType).e});
+    return _invokeMethod('enableRemoteSuperResolution', {
+      'proxyType': CloudProxyTypeConverter(proxyType).e,
+    });
   }
 
   @override
@@ -2105,7 +2467,7 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUploadLogFile.index,
-        'params': jsonEncode({})
+        'params': jsonEncode({}),
       });
     }
     return _invokeMethod('uploadLogFile');
@@ -2120,14 +2482,14 @@ class RtcEngine with RtcEngineInterface {
         'params': jsonEncode({
           'preset': VoiceBeautifierPresetConverter(preset).e,
           'param1': param1,
-          'param2': param2
-        })
+          'param2': param2,
+        }),
       });
     }
     return _invokeMethod('setVoiceBeautifierParameters', {
       'preset': VoiceBeautifierPresetConverter(preset).e,
       'param1': param1,
-      'param2': param2
+      'param2': param2,
     });
   }
 
@@ -2136,12 +2498,113 @@ class RtcEngine with RtcEngineInterface {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceConversionPreset.index,
-        'params':
-            jsonEncode({'preset': VoiceConversionPresetConverter(preset).e})
+        'params': jsonEncode({
+          'preset': VoiceConversionPresetConverter(preset).e,
+        }),
       });
     }
-    return _invokeMethod('setVoiceConversionPreset',
-        {'preset': VoiceConversionPresetConverter(preset).e});
+    return _invokeMethod('setVoiceConversionPreset', {
+      'preset': VoiceConversionPresetConverter(preset).e,
+    });
+  }
+
+  @override
+  Future<void> setScreenCaptureContentHint(VideoContentHint contentHint) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineSetScreenCaptureContentHint.index,
+        'params': jsonEncode({
+          'contentHint': VideoContentHintConverter(contentHint).e,
+        }),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
+  }
+
+  @override
+  Future<void> startScreenCaptureByDisplayId(int displayId,
+      Rectangle regionRect, ScreenCaptureParameters captureParams) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByDisplayId.index,
+        'params': jsonEncode({
+          'displayId': displayId,
+          'regionRect': regionRect.toJson(),
+          'captureParams': captureParams.toJson(),
+        }),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
+  }
+
+  @override
+  Future<void> startScreenCaptureByScreenRect(Rectangle screenRect,
+      Rectangle regionRect, ScreenCaptureParameters captureParams) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByScreenRect.index,
+        'params': jsonEncode({
+          'screenRect': screenRect.toJson(),
+          'regionRect': regionRect.toJson(),
+          'captureParams': captureParams.toJson(),
+        }),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
+  }
+
+  @override
+  Future<void> startScreenCaptureByWindowId(int windowId, Rectangle regionRect,
+      ScreenCaptureParameters captureParams) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
+        'params': jsonEncode({
+          'windowId': windowId,
+          'regionRect': regionRect.toJson(),
+          'captureParams': captureParams.toJson(),
+        }),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
+  }
+
+  @override
+  Future<void> stopScreenCapture() {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
+        'params': jsonEncode({}),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
+  }
+
+  @override
+  Future<void> updateScreenCaptureParameters(
+      ScreenCaptureParameters captureParams) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineUpdateScreenCaptureParameters.index,
+        'params': jsonEncode({
+          'captureParams': captureParams.toJson(),
+        }),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
+  }
+
+  @override
+  Future<void> updateScreenCaptureRegion(Rectangle regionRect) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineUpdateScreenCaptureRegion.index,
+        'params': jsonEncode({
+          'regionRect': regionRect.toJson(),
+        }),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
   }
 }
 
@@ -2168,7 +2631,8 @@ mixin RtcEngineInterface
         RtcAudioRecorderInterface,
         RtcInjectStreamInterface,
         RtcCameraInterface,
-        RtcStreamMessageInterface {
+        RtcStreamMessageInterface,
+        RtcScreenSharingInterface {
   /// Destroys the [RtcEngine] instance and releases all resources used by the Agora SDK.
   ///
   /// This method is useful for apps that occasionally make voice or video calls, to free up resources for other operations when not making calls.
@@ -4134,4 +4598,25 @@ mixin RtcStreamMessageInterface {
   ///
   /// **Parameter** [message] Sent data.
   Future<void> sendStreamMessage(int streamId, String message);
+}
+
+/// TODO(doc)
+mixin RtcScreenSharingInterface {
+  Future<void> startScreenCaptureByDisplayId(int displayId,
+      Rectangle regionRect, ScreenCaptureParameters captureParams);
+
+  Future<void> startScreenCaptureByScreenRect(Rectangle screenRect,
+      Rectangle regionRect, ScreenCaptureParameters captureParams);
+
+  Future<void> startScreenCaptureByWindowId(int windowId, Rectangle regionRect,
+      ScreenCaptureParameters captureParams);
+
+  Future<void> setScreenCaptureContentHint(VideoContentHint contentHint);
+
+  Future<void> updateScreenCaptureParameters(
+      ScreenCaptureParameters captureParams);
+
+  Future<void> updateScreenCaptureRegion(Rectangle regionRect);
+
+  Future<void> stopScreenCapture();
 }

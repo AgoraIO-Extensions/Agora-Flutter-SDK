@@ -89,9 +89,6 @@ class _State extends State<LiveStreaming> {
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await this._updateClientRole(role);
 
-    // Set audio route to speaker
-    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
-
     // start joining channel
     // 1. Users can only see each other after they join the
     // same channel successfully using the same app id.
@@ -102,33 +99,39 @@ class _State extends State<LiveStreaming> {
   }
 
   _addListener() {
-    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
-      log('Warning ${warningCode}');
-    }, error: (errorCode) {
-      log('Warning ${errorCode}');
-    }, joinChannelSuccess: (channel, uid, elapsed) {
-      log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      setState(() {
-        isJoined = true;
-      });
-    }, userJoined: (uid, elapsed) {
-      log('userJoined $uid $elapsed');
-      this.setState(() {
-        remoteUid = uid;
-      });
-    }, userOffline: (uid, reason) {
-      log('userOffline $uid $reason');
-      this.setState(() {
-        remoteUid = null;
-      });
-    }));
+    _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        log('error ${errorCode}');
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        setState(() {
+          isJoined = true;
+        });
+      },
+      userJoined: (uid, elapsed) {
+        log('userJoined $uid $elapsed');
+        this.setState(() {
+          remoteUid = uid;
+        });
+      },
+      userOffline: (uid, reason) {
+        log('userOffline $uid $reason');
+        this.setState(() {
+          remoteUid = null;
+        });
+      },
+    ));
   }
 
   _updateClientRole(ClientRole role) async {
     var option;
     if (role == ClientRole.Broadcaster) {
       await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
-          dimensions: VideoDimensions(640, 360),
+          dimensions: VideoDimensions(width: 640, height: 360),
           frameRate: VideoFrameRate.Fps30,
           orientationMode: VideoOutputOrientationMode.Adaptative));
       // enable camera/mic, this will bring up permission dialog for first time
@@ -136,9 +139,10 @@ class _State extends State<LiveStreaming> {
       await _engine.enableLocalVideo(true);
     } else {
       // You have to provide client role options if set to audience
-      option = ClientRoleOptions(isLowAudio
-          ? AudienceLatencyLevelType.LowLatency
-          : AudienceLatencyLevelType.UltraLowLatency);
+      option = ClientRoleOptions(
+          audienceLatencyLevel: isLowAudio
+              ? AudienceLatencyLevelType.LowLatency
+              : AudienceLatencyLevelType.UltraLowLatency);
     }
     await _engine.setClientRole(role, option);
   }
@@ -157,9 +161,10 @@ class _State extends State<LiveStreaming> {
       isLowAudio = !isLowAudio;
       _engine.setClientRole(
           ClientRole.Audience,
-          ClientRoleOptions(isLowAudio
-              ? AudienceLatencyLevelType.LowLatency
-              : AudienceLatencyLevelType.UltraLowLatency));
+          ClientRoleOptions(
+              audienceLatencyLevel: isLowAudio
+                  ? AudienceLatencyLevelType.LowLatency
+                  : AudienceLatencyLevelType.UltraLowLatency));
     });
   }
 
@@ -222,11 +227,19 @@ class _State extends State<LiveStreaming> {
       child: Stack(
         children: [
           role == ClientRole.Broadcaster
-              ? RtcLocalView.SurfaceView()
+              ? (kIsWeb
+                  ? RtcLocalView.SurfaceView()
+                  : RtcLocalView.TextureView())
               : remoteUid != null
-                  ? RtcRemoteView.SurfaceView(
-                      uid: remoteUid!,
-                    )
+                  ? (kIsWeb
+                      ? RtcRemoteView.SurfaceView(
+                          uid: remoteUid!,
+                          channelId: config.channelId,
+                        )
+                      : RtcRemoteView.TextureView(
+                          uid: remoteUid!,
+                          channelId: config.channelId,
+                        ))
                   : Container()
         ],
       ),

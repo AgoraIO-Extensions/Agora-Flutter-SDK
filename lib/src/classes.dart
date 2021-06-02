@@ -10,13 +10,16 @@ part 'classes.g.dart';
 @JsonSerializable(explicitToJson: true)
 class UserInfo {
   /// The user ID.
-  int? uid;
+  int uid;
 
   /// The user account.
-  String? userAccount;
+  String userAccount;
 
   /// Constructs a [UserInfo]
-  UserInfo();
+  UserInfo(
+    this.uid,
+    this.userAccount,
+  );
 
   /// @nodoc
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
@@ -30,13 +33,18 @@ class UserInfo {
 @JsonSerializable(explicitToJson: true)
 class VideoDimensions {
   /// The video resolution on the horizontal axis.
+  @JsonKey(includeIfNull: false)
   int? width;
 
   /// The video resolution on the vertical axis.
+  @JsonKey(includeIfNull: false)
   int? height;
 
   /// Constructs a [VideoDimensions]
-  VideoDimensions(this.width, this.height);
+  VideoDimensions({
+    this.width,
+    this.height,
+  });
 
   /// @nodoc ignore: public_member_api_docs
   factory VideoDimensions.fromJson(Map<String, dynamic> json) =>
@@ -149,15 +157,16 @@ class VideoEncoderConfiguration {
   VideoMirrorMode? mirrorMode;
 
   /// Constructs a [VideoEncoderConfiguration]
-  VideoEncoderConfiguration(
-      {this.dimensions,
-      this.frameRate,
-      this.minFrameRate,
-      this.bitrate,
-      this.minBitrate,
-      this.orientationMode,
-      this.degradationPrefer,
-      this.mirrorMode});
+  VideoEncoderConfiguration({
+    this.dimensions,
+    this.frameRate,
+    this.minFrameRate,
+    this.bitrate,
+    this.minBitrate,
+    this.orientationMode,
+    this.degradationPrefer,
+    this.mirrorMode,
+  });
 
   /// @nodoc
   factory VideoEncoderConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -187,11 +196,12 @@ class BeautyOptions {
   double? rednessLevel;
 
   /// Constructs a [BeautyOptions]
-  BeautyOptions(
-      {this.lighteningContrastLevel,
-      this.lighteningLevel,
-      this.smoothnessLevel,
-      this.rednessLevel});
+  BeautyOptions({
+    this.lighteningContrastLevel,
+    this.lighteningLevel,
+    this.smoothnessLevel,
+    this.rednessLevel,
+  });
 
   /// @nodoc
   factory BeautyOptions.fromJson(Map<String, dynamic> json) =>
@@ -205,22 +215,30 @@ class BeautyOptions {
 @JsonSerializable(explicitToJson: true)
 class AgoraImage {
   /// HTTP/HTTPS URL address of the image on the broadcasting video. The maximum length of this parameter is 1024 bytes.
-  String? url;
+  String url;
 
   /// Position of the image on the upper left of the broadcasting video on the horizontal axis.
+  @JsonKey(includeIfNull: false)
   int? x;
 
   /// Position of the image on the upper left of the broadcasting video on the vertical axis.
+  @JsonKey(includeIfNull: false)
   int? y;
 
   /// Width of the image on the broadcasting video.
-  int? width;
+  int width;
 
   /// Height of the image on the broadcasting video.
-  int? height;
+  int height;
 
   /// Constructs a [AgoraImage]
-  AgoraImage(this.url, this.x, this.y, this.width, this.height);
+  AgoraImage(
+    this.url,
+    this.width,
+    this.height, {
+    this.x,
+    this.y,
+  });
 
   /// @nodoc
   factory AgoraImage.fromJson(Map<String, dynamic> json) =>
@@ -234,12 +252,14 @@ class AgoraImage {
 @JsonSerializable(explicitToJson: true)
 class TranscodingUser {
   /// ID of the user in the CDN live streaming.
-  int? uid;
+  int uid;
 
   /// Horizontal position of the video frame of the user from the top left corner of the CDN live streaming.
+  @JsonKey(includeIfNull: false)
   int? x;
 
   /// Vertical position of the video frame of the user from the top left corner of the CDN live streaming.
+  @JsonKey(includeIfNull: false)
   int? y;
 
   /// Width of the video frame of the user on the CDN live streaming. The default value is 360.
@@ -271,9 +291,9 @@ class TranscodingUser {
 
   /// Constructs a [TranscodingUser]
   TranscodingUser(
-    this.uid,
+    this.uid, {
     this.x,
-    this.y, {
+    this.y,
     this.width,
     this.height,
     this.zOrder,
@@ -364,7 +384,7 @@ class LiveTranscoding {
   String? userConfigExtraInfo;
 
   /// An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
-  List<TranscodingUser>? transcodingUsers;
+  List<TranscodingUser> transcodingUsers;
 
   /// Constructs a [LiveTranscoding]
   LiveTranscoding(
@@ -410,18 +430,21 @@ class LiveTranscoding {
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaInfo {
   /// The channel name.
-  @JsonKey(includeIfNull: false)
-  String? channelName;
+  String channelName;
 
   /// The token that enables the user to join the channel.
   @JsonKey(includeIfNull: false)
   String? token;
 
   /// The user ID.
-  int? uid;
+  int uid;
 
   /// Constructs a [ChannelMediaInfo]
-  ChannelMediaInfo(this.uid, {this.channelName, this.token});
+  ChannelMediaInfo(
+    this.channelName,
+    this.uid, {
+    this.token,
+  });
 
   /// @nodoc
   factory ChannelMediaInfo.fromJson(Map<String, dynamic> json) =>
@@ -440,7 +463,7 @@ class ChannelMediaRelayConfiguration {
   /// - `token`: The token for joining the source channel. It is generated with the `channelName` and `uid` you set in `srcInfo`.
   ///   - If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
   ///   - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`.
-  ChannelMediaInfo? srcInfo;
+  ChannelMediaInfo srcInfo;
 
   /// The information of the destination channel: [ChannelMediaInfo]. It contains the following members:
   ///- `channelName`: The name of the destination channel.
@@ -449,10 +472,13 @@ class ChannelMediaRelayConfiguration {
   ///  - `token`: The token for joining the destination channel. It is generated with the `channelName` and `uid` you set in `destInfo`.
   ///    - If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
   ///    - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`.
-  List<ChannelMediaInfo>? destInfos;
+  List<ChannelMediaInfo> destInfos;
 
   /// Constructs a [ChannelMediaRelayConfiguration]
-  ChannelMediaRelayConfiguration(this.srcInfo, this.destInfos);
+  ChannelMediaRelayConfiguration(
+    this.srcInfo,
+    this.destInfos,
+  );
 
   /// @nodoc
   factory ChannelMediaRelayConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -466,20 +492,24 @@ class ChannelMediaRelayConfiguration {
 @JsonSerializable(explicitToJson: true)
 class LastmileProbeConfig {
   /// Whether to probe uplink of lastmile. i.e., audience don't need probe uplink bandwidth.
-  bool? probeUplink;
+  bool probeUplink;
 
   /// Whether to probe downlink of lastmile.
-  bool? probeDownlink;
+  bool probeDownlink;
 
   /// The expected maximum sending bitrate in bps in range of [100000, 5000000]. It is recommended to set this value according to the required bitrate of selected video profile.
-  int? expectedUplinkBitrate;
+  int expectedUplinkBitrate;
 
   /// The expected maximum receive bitrate in bps in range of [100000, 5000000].
-  int? expectedDownlinkBitrate;
+  int expectedDownlinkBitrate;
 
   /// Constructs a [LastmileProbeConfig]
-  LastmileProbeConfig(this.probeUplink, this.probeDownlink,
-      this.expectedUplinkBitrate, this.expectedDownlinkBitrate);
+  LastmileProbeConfig(
+    this.probeUplink,
+    this.probeDownlink,
+    this.expectedUplinkBitrate,
+    this.expectedDownlinkBitrate,
+  );
 
   /// @nodoc
   factory LastmileProbeConfig.fromJson(Map<String, dynamic> json) =>
@@ -493,19 +523,28 @@ class LastmileProbeConfig {
 @JsonSerializable(explicitToJson: true)
 class Rectangle {
   /// The horizontal offset from the top-left corner.
+  @JsonKey(includeIfNull: false)
   int? x;
 
   /// The vertical offset from the top-left corner.
+  @JsonKey(includeIfNull: false)
   int? y;
 
   /// The width (pixels) of the watermark image.
+  @JsonKey(includeIfNull: false)
   int? width;
 
   /// The height (pixels) of the watermark image.
+  @JsonKey(includeIfNull: false)
   int? height;
 
   /// Constructs a [Rectangle]
-  Rectangle(this.x, this.y, this.width, this.height);
+  Rectangle({
+    this.x,
+    this.y,
+    this.width,
+    this.height,
+  });
 
   /// @nodoc
   factory Rectangle.fromJson(Map<String, dynamic> json) =>
@@ -526,15 +565,20 @@ class WatermarkOptions {
 
   /// The watermark position in the landscape mode.
   /// See [Rectangle].
+  @JsonKey(includeIfNull: false)
   Rectangle? positionInLandscapeMode;
 
   /// The watermark position in the portrait mode.
   /// See [Rectangle].
+  @JsonKey(includeIfNull: false)
   Rectangle? positionInPortraitMode;
 
   /// Constructs a [WatermarkOptions]
-  WatermarkOptions(this.positionInLandscapeMode, this.positionInPortraitMode,
-      {this.visibleInPreview});
+  WatermarkOptions({
+    this.visibleInPreview,
+    this.positionInLandscapeMode,
+    this.positionInPortraitMode,
+  });
 
   /// @nodoc
   factory WatermarkOptions.fromJson(Map<String, dynamic> json) =>
@@ -586,15 +630,16 @@ class LiveInjectStreamConfig {
   AudioChannel? audioChannels;
 
   /// Constructs a [LiveInjectStreamConfig]
-  LiveInjectStreamConfig(
-      {this.width,
-      this.height,
-      this.videoGop,
-      this.videoFramerate,
-      this.videoBitrate,
-      this.audioSampleRate,
-      this.audioBitrate,
-      this.audioChannels});
+  LiveInjectStreamConfig({
+    this.width,
+    this.height,
+    this.videoGop,
+    this.videoFramerate,
+    this.videoBitrate,
+    this.audioSampleRate,
+    this.audioBitrate,
+    this.audioChannels,
+  });
 
   /// @nodoc
   factory LiveInjectStreamConfig.fromJson(Map<String, dynamic> json) =>
@@ -609,6 +654,7 @@ class LiveInjectStreamConfig {
 class CameraCapturerConfiguration {
   /// The camera capture configuration.
   /// See [CameraCaptureOutputPreference].
+  @JsonKey(includeIfNull: false)
   CameraCaptureOutputPreference? preference;
 
   /// The width (px) of the video image captured by the local camera.
@@ -623,11 +669,16 @@ class CameraCapturerConfiguration {
 
   /// The camera direction.
   /// See [CameraDirection].
+  @JsonKey(includeIfNull: false)
   CameraDirection? cameraDirection;
 
   /// Constructs a [CameraCapturerConfiguration]
-  CameraCapturerConfiguration(this.preference, this.cameraDirection,
-      {this.captureWidth, this.captureHeight});
+  CameraCapturerConfiguration({
+    this.preference,
+    this.captureWidth,
+    this.captureHeight,
+    this.cameraDirection,
+  });
 
   /// @nodoc
   factory CameraCapturerConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -646,6 +697,7 @@ class ChannelMediaOptions {
   ///
   /// This member serves a similar function to the [RtcEngine.muteAllRemoteAudioStreams] method.
   /// After joining the channel, you can call `muteAllRemoteAudioStreams` to set whether to subscribe to audio streams in the channel.
+  @JsonKey(includeIfNull: false)
   bool? autoSubscribeAudio;
 
   /// Determines whether to subscribe to video streams when the user joins the channel.
@@ -654,10 +706,14 @@ class ChannelMediaOptions {
   ///
   /// This member serves a similar function to the [RtcEngine.muteAllRemoteVideoStreams] method.
   /// After joining the channel, you can call `muteAllRemoteVideoStreams` to set whether to subscribe to video streams in the channel.
+  @JsonKey(includeIfNull: false)
   bool? autoSubscribeVideo;
 
   /// Constructs a [ChannelMediaOptions]
-  ChannelMediaOptions(this.autoSubscribeAudio, this.autoSubscribeVideo);
+  ChannelMediaOptions({
+    this.autoSubscribeAudio,
+    this.autoSubscribeVideo,
+  });
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -671,6 +727,7 @@ class ChannelMediaOptions {
 @JsonSerializable(explicitToJson: true)
 class EncryptionConfig {
   /// Encryption mode. The default encryption mode is `AES128XTS`. See [EncryptionMode].
+  @JsonKey(includeIfNull: false)
   EncryptionMode? encryptionMode;
 
   /// Encryption key in string type.
@@ -678,10 +735,14 @@ class EncryptionConfig {
   /// **Note**
   ///
   /// If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [ErrorCode.InvalidArgument].
+  @JsonKey(includeIfNull: false)
   String? encryptionKey;
 
   /// Constructs a [EncryptionConfig]
-  EncryptionConfig(this.encryptionMode, this.encryptionKey);
+  EncryptionConfig({
+    this.encryptionMode,
+    this.encryptionKey,
+  });
 
   /// @nodoc
   factory EncryptionConfig.fromJson(Map<String, dynamic> json) =>
@@ -695,94 +756,118 @@ class EncryptionConfig {
 @JsonSerializable(explicitToJson: true)
 class RtcStats {
   /// Call duration in seconds, represented by an aggregate value.
-  int? totalDuration;
+  int duration;
 
   /// Total number of bytes transmitted, represented by an aggregate value.
-  int? txBytes;
+  int txBytes;
 
   /// Total number of bytes received, represented by an aggregate value.
-  int? rxBytes;
+  int rxBytes;
 
   /// Total number of audio bytes sent (bytes), represented by an aggregate value.
-  int? txAudioBytes;
+  int txAudioBytes;
 
   /// Total number of video bytes sent (bytes), represented by an aggregate value.
-  int? txVideoBytes;
+  int txVideoBytes;
 
   /// Total number of audio bytes received (bytes), represented by an aggregate value.
-  int? rxAudioBytes;
+  int rxAudioBytes;
 
   /// Total number of video bytes received (bytes), represented by an aggregate value.
-  int? rxVideoBytes;
+  int rxVideoBytes;
 
   /// Transmission bitrate in Kbps, represented by an instantaneous value.
-  int? txKBitRate;
+  int txKBitRate;
 
   /// Receive bitrate (Kbps), represented by an instantaneous value.
-  int? rxKBitRate;
+  int rxKBitRate;
 
   /// The transmission bitrate of the audio packet (Kbps), represented by an instantaneous value.
-  int? txAudioKBitRate;
+  int txAudioKBitRate;
 
   /// Audio receive bitrate (Kbps), represented by an instantaneous value.
-  int? rxAudioKBitRate;
+  int rxAudioKBitRate;
 
   /// Video transmission bitrate (Kbps), represented by an instantaneous value.
-  int? txVideoKBitRate;
+  int txVideoKBitRate;
 
   /// Video receive bitrate (Kbps), represented by an instantaneous value.
-  int? rxVideoKBitRate;
+  int rxVideoKBitRate;
 
   /// The number of users in the channel.
   /// - Communication profile: The number of users in the channel.
   /// - Live Broadcast profile:
   ///   - If the local user is an audience: The number of users in the channel = The number of hosts in the channel + 1.
   ///   - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
-  int? users;
+  int userCount;
 
   /// Client-server latency.
-  int? lastmileDelay;
+  int lastmileDelay;
 
   /// The packet loss rate (%) from the local client to Agora's edge server, before network countermeasures.
-  int? txPacketLossRate;
+  int txPacketLossRate;
 
   /// The packet loss rate (%) from Agora's edge server to the local client, before network countermeasures.
-  int? rxPacketLossRate;
+  int rxPacketLossRate;
 
   /// System CPU usage (%).
   ///
   /// **Note**
   ///
   /// The `cpuTotalUsage` reported in the `leaveChannel` callback is always 0.
-  double? cpuTotalUsage;
+  double cpuTotalUsage;
 
   /// Application CPU usage (%).
   ///
   /// **Note**
   ///
   /// The `cpuAppUsage` reported in the `leaveChannel` callback is always 0.
-  double? cpuAppUsage;
+  double cpuAppUsage;
 
   /// The round-trip time delay from the client to the local router.
-  int? gatewayRtt;
+  int gatewayRtt;
 
   /// The memory usage ratio of the app (%).
   ///
   /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
-  double? memoryAppUsageRatio;
+  double memoryAppUsageRatio;
 
   /// The memory usage ratio of the system (%).
   ///
   /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
-  double? memoryTotalUsageRatio;
+  double memoryTotalUsageRatio;
 
   /// The memory usage of the app (KB).
   ///
   /// **Note**: This value is for reference only. Due to system limitations, you may not get the value of this member.
-  int? memoryAppUsageInKbytes;
+  int memoryAppUsageInKbytes;
 
   /// Constructs a [RtcStats]
-  RtcStats();
+  RtcStats(
+    this.duration,
+    this.txBytes,
+    this.rxBytes,
+    this.txAudioBytes,
+    this.txVideoBytes,
+    this.rxAudioBytes,
+    this.rxVideoBytes,
+    this.txKBitRate,
+    this.rxKBitRate,
+    this.txAudioKBitRate,
+    this.rxAudioKBitRate,
+    this.txVideoKBitRate,
+    this.rxVideoKBitRate,
+    this.userCount,
+    this.lastmileDelay,
+    this.txPacketLossRate,
+    this.rxPacketLossRate,
+    this.cpuTotalUsage,
+    this.cpuAppUsage,
+    this.gatewayRtt,
+    this.memoryAppUsageRatio,
+    this.memoryTotalUsageRatio,
+    this.memoryAppUsageInKbytes,
+  );
 
   /// @nodoc
   factory RtcStats.fromJson(Map<String, dynamic> json) =>
@@ -797,10 +882,10 @@ class RtcStats {
 @JsonSerializable(explicitToJson: true)
 class AudioVolumeInfo {
   /// The user ID of the speaker. The uid of the local user is 0.
-  int? uid;
+  int uid;
 
   /// The sum of the voice volume and audio-mixing volume of the speaker. The value ranges between 0 (lowest volume) and 255 (highest volume).
-  int? volume;
+  int volume;
 
   /// Voice activity status of the local user.
   /// - 0: The local user is not speaking.
@@ -810,13 +895,18 @@ class AudioVolumeInfo {
   /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
   /// - Ensure that you set `report_vad`(true) in the [RtcEngine.enableAudioVolumeIndication] method to enable the voice activity
   /// detection of the local user.
-  int? vad;
+  int vad;
 
   /// The channel ID, which indicates which channel the speaker is in.
-  String? channelId;
+  String channelId;
 
   /// Constructs a [AudioVolumeInfo]
-  AudioVolumeInfo();
+  AudioVolumeInfo(
+    this.uid,
+    this.volume,
+    this.vad,
+    this.channelId,
+  );
 
   /// @nodoc
   factory AudioVolumeInfo.fromJson(Map<String, dynamic> json) =>
@@ -830,19 +920,28 @@ class AudioVolumeInfo {
 @JsonSerializable(explicitToJson: true)
 class Rect {
   /// The X coordinate of the left side of the rectangle.
+  @JsonKey(includeIfNull: false)
   int? left;
 
   /// The Y coordinate of the top side of the rectangle.
+  @JsonKey(includeIfNull: false)
   int? top;
 
   /// The X coordinate of the right side of the rectangle.
+  @JsonKey(includeIfNull: false)
   int? right;
 
   /// The Y coordinate of the bottom side of the rectangle.
+  @JsonKey(includeIfNull: false)
   int? bottom;
 
   /// Constructs a [Rect]
-  Rect();
+  Rect({
+    this.left,
+    this.top,
+    this.right,
+    this.bottom,
+  });
 
   /// @nodoc
   factory Rect.fromJson(Map<String, dynamic> json) => _$RectFromJson(json);
@@ -855,16 +954,20 @@ class Rect {
 @JsonSerializable(explicitToJson: true)
 class LastmileProbeOneWayResult {
   /// The packet loss rate (%).
-  int? packetLossRate;
+  int packetLossRate;
 
   /// The network jitter (ms).
-  int? jitter;
+  int jitter;
 
   /// The estimated available bandwidth (bps).
-  int? availableBandwidth;
+  int availableBandwidth;
 
   /// Constructs a [LastmileProbeOneWayResult]
-  LastmileProbeOneWayResult();
+  LastmileProbeOneWayResult(
+    this.packetLossRate,
+    this.jitter,
+    this.availableBandwidth,
+  );
 
   /// @nodoc
   factory LastmileProbeOneWayResult.fromJson(Map<String, dynamic> json) =>
@@ -879,21 +982,26 @@ class LastmileProbeOneWayResult {
 class LastmileProbeResult {
   /// The state of the probe test.
   /// See [LastmileProbeResultState].
-  LastmileProbeResultState? state;
+  LastmileProbeResultState state;
 
   /// The round-trip delay time (ms).
-  int? rtt;
+  int rtt;
 
   /// The uplink last-mile network report.
   /// See [LastmileProbeOneWayResult].
-  LastmileProbeOneWayResult? uplinkReport;
+  LastmileProbeOneWayResult uplinkReport;
 
   /// The downlink last-mile network report.
   /// See [LastmileProbeOneWayResult].
-  LastmileProbeOneWayResult? downlinkReport;
+  LastmileProbeOneWayResult downlinkReport;
 
   /// Constructs a [LastmileProbeResult]
-  LastmileProbeResult();
+  LastmileProbeResult(
+    this.state,
+    this.rtt,
+    this.uplinkReport,
+    this.downlinkReport,
+  );
 
   /// @nodoc
   factory LastmileProbeResult.fromJson(Map<String, dynamic> json) =>
@@ -907,19 +1015,24 @@ class LastmileProbeResult {
 @JsonSerializable(explicitToJson: true)
 class LocalAudioStats {
   /// The number of channels.
-  int? numChannels;
+  int numChannels;
 
   /// The sample rate (Hz).
-  int? sentSampleRate;
+  int sentSampleRate;
 
   /// The average sending bitrate (Kbps).
-  int? sentBitrate;
+  int sentBitrate;
 
   /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
-  int? txPacketLossRate;
+  int txPacketLossRate;
 
   /// Constructs a [LocalAudioStats]
-  LocalAudioStats();
+  LocalAudioStats(
+    this.numChannels,
+    this.sentSampleRate,
+    this.sentBitrate,
+    this.txPacketLossRate,
+  );
 
   /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -933,54 +1046,70 @@ class LocalAudioStats {
 @JsonSerializable(explicitToJson: true)
 class LocalVideoStats {
   /// Bitrate (Kbps) sent in the reported interval, which does not include the bitrate of the re-transmission video after the packet loss.
-  int? sentBitrate;
+  int sentBitrate;
 
   /// Frame rate (fps) sent in the reported interval, which does not include the frame rate of the re-transmission video after the packet loss.
-  int? sentFrameRate;
+  int sentFrameRate;
 
   /// The encoder output frame rate (fps) of the local video.
-  int? encoderOutputFrameRate;
+  int encoderOutputFrameRate;
 
   /// The renderer output frame rate (fps) of the local video.
-  int? rendererOutputFrameRate;
+  int rendererOutputFrameRate;
 
   /// The target bitrate (Kbps) of the current encoder. This value is estimated by the SDK based on the current network conditions.
-  int? targetBitrate;
+  int targetBitrate;
 
   /// The target frame rate (fps) of the current encoder.
-  int? targetFrameRate;
+  int targetFrameRate;
 
   /// Quality change of the local video in terms of target frame rate and target bit rate since last count.
   /// See [VideoQualityAdaptIndication].
-  VideoQualityAdaptIndication? qualityAdaptIndication;
+  VideoQualityAdaptIndication qualityAdaptIndication;
 
   /// The encoding bitrate (Kbps), which does not include the bitrate of the re-transmission video after packet loss.
-  int? encodedBitrate;
+  int encodedBitrate;
 
   /// The width of the encoding frame (px).
-  int? encodedFrameWidth;
+  int encodedFrameWidth;
 
   /// The height of the encoding frame (px).
-  int? encodedFrameHeight;
+  int encodedFrameHeight;
 
   /// The value of the sent frame rate, represented by an aggregate value.
-  int? encodedFrameCount;
+  int encodedFrameCount;
 
   /// The codec type of the local video.
   /// See [VideoCodecType].
-  VideoCodecType? codecType;
+  VideoCodecType codecType;
 
   /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
-  int? txPacketLossRate;
+  int txPacketLossRate;
 
   /// The capture frame rate (fps) of the local video.
-  int? captureFrameRate;
+  int captureFrameRate;
 
   /// The capture brightness level type.
-  CaptureBrightnessLevelType? captureBrightnessLevel;
+  CaptureBrightnessLevelType captureBrightnessLevel;
 
   /// Constructs a [LocalVideoStats]
-  LocalVideoStats();
+  LocalVideoStats(
+    this.sentBitrate,
+    this.sentFrameRate,
+    this.encoderOutputFrameRate,
+    this.rendererOutputFrameRate,
+    this.targetBitrate,
+    this.targetFrameRate,
+    this.qualityAdaptIndication,
+    this.encodedBitrate,
+    this.encodedFrameWidth,
+    this.encodedFrameHeight,
+    this.encodedFrameCount,
+    this.codecType,
+    this.txPacketLossRate,
+    this.captureFrameRate,
+    this.captureBrightnessLevel,
+  );
 
   /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -994,51 +1123,51 @@ class LocalVideoStats {
 @JsonSerializable(explicitToJson: true)
 class RemoteAudioStats {
   /// ID of the user sending the audio streams.
-  int? uid;
+  int uid;
 
   /// Audio quality received by the user.
   /// See [NetworkQuality].
-  NetworkQuality? quality;
+  NetworkQuality quality;
 
   /// Network delay (ms) from the sender to the receiver.
-  int? networkTransportDelay;
+  int networkTransportDelay;
 
   /// Network delay (ms) from the receiver to the jitter buffer.
   ///
   /// **Note**
   ///
   /// When the receiver is an audience member and [AudienceLatencyLevelType] is `1`, this parameter does not take effect.
-  int? jitterBufferDelay;
+  int jitterBufferDelay;
 
   /// Packet loss rate in the reported interval.
-  int? audioLossRate;
+  int audioLossRate;
 
   /// The number of channels.
-  int? numChannels;
+  int numChannels;
 
   /// The sample rate (Hz) of the received audio stream in the reported interval.
-  int? receivedSampleRate;
+  int receivedSampleRate;
 
   /// The average bitrate (Kbps) of the received audio stream in the reported interval.
-  int? receivedBitrate;
+  int receivedBitrate;
 
   /// The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In the reported interval, audio freeze occurs when the audio frame loss rate reaches 4%. totalFrozenTime = The audio freeze time × 2 × 1000 (ms).
-  int? totalFrozenTime;
+  int totalFrozenTime;
 
   /// The total audio freeze time as a percentage (%) of the total time when the audio is available.
-  int? frozenRate;
+  int frozenRate;
 
   /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the LiveBroadcasting profile neither stops sending the audio stream nor disables the audio module after joining the channel.
-  int? totalActiveTime;
+  int totalActiveTime;
 
   /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
-  int? publishDuration;
+  int publishDuration;
 
   /// Quality of experience (QoE) of the local user when receiving a remote audio stream. See [ExperienceQuality].
-  ExperienceQualityType? qoeQuality;
+  ExperienceQualityType qoeQuality;
 
   /// The reason for poor QoE of the local user when receiving a remote audio stream. See [ExperiencePoorReason].
-  ExperiencePoorReason? qualityChangedReason;
+  ExperiencePoorReason qualityChangedReason;
 
   /// The [quality] of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval.
   /// The return value ranges from 0 to 500. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.
@@ -1079,10 +1208,26 @@ class RemoteAudioStats {
   /// </tr>
   /// </tbody>
   /// </table>
-  int? mosValue;
+  int mosValue;
 
   /// Constructs a [RemoteAudioStats]
-  RemoteAudioStats();
+  RemoteAudioStats(
+    this.uid,
+    this.quality,
+    this.networkTransportDelay,
+    this.jitterBufferDelay,
+    this.audioLossRate,
+    this.numChannels,
+    this.receivedSampleRate,
+    this.receivedBitrate,
+    this.totalFrozenTime,
+    this.frozenRate,
+    this.totalActiveTime,
+    this.publishDuration,
+    this.qoeQuality,
+    this.qualityChangedReason,
+    this.mosValue,
+  );
 
   /// @nodoc
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -1096,49 +1241,63 @@ class RemoteAudioStats {
 @JsonSerializable(explicitToJson: true)
 class RemoteVideoStats {
   /// ID of the user sending the video streams.
-  int? uid;
+  int uid;
 
   /// Time delay (ms). In scenarios where audio and video is synchronized, you can use the value of `networkTransportDelay` and `jitterBufferDelay` in [RemoteAudioStats] to know the delay statistics of the remote video.
   @deprecated
-  int? delay;
+  int delay;
 
   /// Width (pixels) of the remote video.
-  int? width;
+  int width;
 
   /// Height (pixels) of the remote video.
-  int? height;
+  int height;
 
   /// Bitrate (Kbps) received in the reported interval.
-  int? receivedBitrate;
+  int receivedBitrate;
 
   /// The decoder output frame rate (fps) of the remote video.
-  int? decoderOutputFrameRate;
+  int decoderOutputFrameRate;
 
   /// The renderer output frame rate (fps) of the remote video.
-  int? rendererOutputFrameRate;
+  int rendererOutputFrameRate;
 
   /// Packet loss rate (%) of the remote video stream after network countermeasures.
-  int? packetLossRate;
+  int packetLossRate;
 
   /// Video stream type (high-stream or low-stream).
   /// See [VideoStreamType].
-  VideoStreamType? rxStreamType;
+  VideoStreamType rxStreamType;
 
   /// The total freeze time (ms) of the remote video stream after the remote user joins the channel.
   /// In a video session where the frame rate is set to no less than 5 fps, video freeze occurs when the time interval between two adjacent renderable video frames is more than 500 ms.
-  int? totalFrozenTime;
+  int totalFrozenTime;
 
   /// The total video freeze time (`totalFrozenTime`) as a percentage (%) of the total time when the video is available (`totalActiveTime`).
-  int? frozenRate;
+  int frozenRate;
 
   /// The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the Live-broadcast profile neither stops sending the video stream nor disables the video module after joining the channel.
-  int? totalActiveTime;
+  int totalActiveTime;
 
   /// The total publish duration (ms) of the remote video stream.
-  int? publishDuration;
+  int publishDuration;
 
   /// Constructs a [RemoteVideoStats]
-  RemoteVideoStats();
+  RemoteVideoStats(
+    this.uid,
+    this.delay,
+    this.width,
+    this.height,
+    this.receivedBitrate,
+    this.decoderOutputFrameRate,
+    this.rendererOutputFrameRate,
+    this.packetLossRate,
+    this.rxStreamType,
+    this.totalFrozenTime,
+    this.frozenRate,
+    this.totalActiveTime,
+    this.publishDuration,
+  );
 
   /// @nodoc
   factory RemoteVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -1152,22 +1311,28 @@ class RemoteVideoStats {
 @JsonSerializable(explicitToJson: true)
 class FacePositionInfo {
   /// The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
-  int? x;
+  int x;
 
   /// The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
-  int? y;
+  int y;
 
   /// The width (px) of the human face in the captured video.
-  int? width;
+  int width;
 
   /// The height (px) of the human face in the captured video.
-  int? height;
+  int height;
 
   /// The distance (cm) between the human face and the screen.
-  int? distance;
+  int distance;
 
   /// Constructs a [FacePositionInfo]
-  FacePositionInfo();
+  FacePositionInfo(
+    this.x,
+    this.y,
+    this.width,
+    this.height,
+    this.distance,
+  );
 
   /// @nodoc
   factory FacePositionInfo.fromJson(Map<String, dynamic> json) =>
@@ -1181,10 +1346,13 @@ class FacePositionInfo {
 @JsonSerializable(explicitToJson: true)
 class ClientRoleOptions {
   /// The latency level of an audience member in a live interactive streaming.
+  @JsonKey(includeIfNull: false)
   AudienceLatencyLevelType? audienceLatencyLevel;
 
   /// Constructs a [ClientRoleOptions]
-  ClientRoleOptions(this.audienceLatencyLevel);
+  ClientRoleOptions({
+    this.audienceLatencyLevel,
+  });
 
   /// @nodoc
   factory ClientRoleOptions.fromJson(Map<String, dynamic> json) =>
@@ -1216,7 +1384,11 @@ class LogConfig {
   LogLevel? level;
 
   /// Constructs a [LogConfig]
-  LogConfig({this.filePath, this.fileSize, this.level});
+  LogConfig({
+    this.filePath,
+    this.fileSize,
+    this.level,
+  });
 
   /// @nodoc
   factory LogConfig.fromJson(Map<String, dynamic> json) =>
@@ -1245,8 +1417,7 @@ class DataStreamConfig {
   ///
   /// When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the `streamMessage` callback when the synchronized audio packet is played out.
   /// Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
-  @JsonKey(includeIfNull: false)
-  bool? syncWithAudio;
+  bool syncWithAudio;
 
   /// Whether the SDK guarantees that the receiver receives the data in the sent order.
   ///
@@ -1254,11 +1425,13 @@ class DataStreamConfig {
   /// - `false`: Do not guarantee that the receiver receives the data in the sent order.
   ///
   /// Do not set this parameter to `true` if you need the receiver to receive the data immediately.
-  @JsonKey(includeIfNull: false)
-  bool? ordered;
+  bool ordered;
 
   /// Constructs a [DataStreamConfig]
-  DataStreamConfig({this.syncWithAudio, this.ordered});
+  DataStreamConfig(
+    this.syncWithAudio,
+    this.ordered,
+  );
 
   /// @nodoc
   factory DataStreamConfig.fromJson(Map<String, dynamic> json) =>
@@ -1275,7 +1448,7 @@ class RtcEngineConfig {
   /// Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
   /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithConfig`
   /// to create an `RtcEngine` instance with the new App ID.
-  String? appId;
+  String appId;
 
   /// The region for connection. This advanced feature applies to scenarios that have regional restrictions.
   ///
@@ -1292,7 +1465,11 @@ class RtcEngineConfig {
   LogConfig? logConfig;
 
   /// Constructs a [RtcEngineConfig]
-  RtcEngineConfig(this.appId, {this.areaCode, this.logConfig});
+  RtcEngineConfig(
+    this.appId, {
+    this.areaCode,
+    this.logConfig,
+  });
 
   /// @nodoc
   factory RtcEngineConfig.fromJson(Map<String, dynamic> json) =>
@@ -1320,7 +1497,11 @@ class RhythmPlayerConfig {
   bool? publish;
 
   /// Constructs a [RhythmPlayerConfig]
-  RhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute, this.publish});
+  RhythmPlayerConfig({
+    this.beatsPerMeasure,
+    this.beatsPerMinute,
+    this.publish,
+  });
 
   /// @nodoc
   factory RhythmPlayerConfig.fromJson(Map<String, dynamic> json) =>
@@ -1357,10 +1538,12 @@ class AudioRecordingConfiguration {
   AudioSampleRateType? recordingSampleRate;
 
   /// Constructs a [AudioRecordingConfiguration]
-  AudioRecordingConfiguration(this.filePath,
-      {this.recordingQuality,
-      this.recordingPosition,
-      this.recordingSampleRate});
+  AudioRecordingConfiguration(
+    this.filePath, {
+    this.recordingQuality,
+    this.recordingPosition,
+    this.recordingSampleRate,
+  });
 
   /// @nodoc
   factory AudioRecordingConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -1370,6 +1553,7 @@ class AudioRecordingConfiguration {
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }
 
+/// TODO(doc)
 @JsonSerializable(explicitToJson: true)
 class MediaDeviceInfo {
   String deviceId;
@@ -1377,7 +1561,10 @@ class MediaDeviceInfo {
   String deviceName;
 
   /// Constructs a [MediaDeviceInfo]
-  MediaDeviceInfo(this.deviceId, this.deviceName);
+  MediaDeviceInfo(
+    this.deviceId,
+    this.deviceName,
+  );
 
   /// @nodoc
   factory MediaDeviceInfo.fromJson(Map<String, dynamic> json) =>
@@ -1385,4 +1572,43 @@ class MediaDeviceInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$MediaDeviceInfoToJson(this);
+}
+
+/// TODO(doc)
+@JsonSerializable(explicitToJson: true)
+class ScreenCaptureParameters {
+  @JsonKey(includeIfNull: false)
+  VideoDimensions? dimensions;
+
+  @JsonKey(includeIfNull: false)
+  int? frameRate;
+
+  @JsonKey(includeIfNull: false)
+  int? bitrate;
+
+  @JsonKey(includeIfNull: false)
+  bool? captureMouseCursor;
+
+  @JsonKey(includeIfNull: false)
+  bool? windowFocus;
+
+  @JsonKey(includeIfNull: false)
+  List<int>? excludeWindowList;
+
+  /// Constructs a [ScreenCaptureParameters]
+  ScreenCaptureParameters({
+    this.dimensions,
+    this.frameRate,
+    this.bitrate,
+    this.captureMouseCursor,
+    this.windowFocus,
+    this.excludeWindowList,
+  });
+
+  /// @nodoc
+  factory ScreenCaptureParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenCaptureParametersFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ScreenCaptureParametersToJson(this);
 }

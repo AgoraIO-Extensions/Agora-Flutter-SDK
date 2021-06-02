@@ -49,6 +49,12 @@ class _State extends State<JoinChannelAudio> {
 
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        log('error ${errorCode}');
+      },
       joinChannelSuccess: (channel, uid, elapsed) {
         log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
@@ -115,23 +121,17 @@ class _State extends State<JoinChannelAudio> {
         log('stopEffect $err');
       });
     } else {
-      _engine
-          .playEffect(
-              1,
-              await (RtcEngineExtension.getAssetAbsolutePath(
-                  "assets/Sound_Horizon.mp3") as FutureOr<String>),
-              -1,
-              1,
-              1,
-              100,
-              true)
-          .then((value) {
-        setState(() {
-          playEffect = true;
+      final path = await RtcEngineExtension.getAssetAbsolutePath(
+          "assets/Sound_Horizon.mp3");
+      if (path != null) {
+        _engine.playEffect(1, path, -1, 1, 1, 100, true).then((value) {
+          setState(() {
+            playEffect = true;
+          });
+        }).catchError((err) {
+          log('playEffect $err');
         });
-      }).catchError((err) {
-        log('playEffect $err');
-      });
+      }
     }
   }
 
