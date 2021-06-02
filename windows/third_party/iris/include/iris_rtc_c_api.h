@@ -47,12 +47,10 @@ typedef bool(IRIS_CALL *Func_VideoFrameRemote)(unsigned int uid,
 typedef bool(IRIS_CALL *Func_VideoFrameEx)(const char *channel_id,
                                            unsigned int uid,
                                            IrisRtcVideoFrame *video_frame);
-typedef VideoFrameType(IRIS_CALL *Func_VideoFrameType)();
 typedef struct IrisRtcCVideoFrameObserver {
   Func_VideoFrameLocal OnCaptureVideoFrame;
   Func_VideoFrameLocal OnPreEncodeVideoFrame;
   Func_VideoFrameRemote OnRenderVideoFrame;
-  Func_VideoFrameType GetVideoFormatPreference;
   Func_Uint32_t GetObservedFramePosition;
   Func_Bool IsMultipleChannelFrameWanted;
   Func_VideoFrameEx OnRenderVideoFrameEx;
@@ -81,7 +79,8 @@ typedef void *IrisRtcTesterPtr;
 #endif
 
 /// IrisRtcEngine
-IRIS_API IrisRtcEnginePtr CreateIrisRtcEngine(const char *executable_path);
+IRIS_API IrisRtcEnginePtr CreateIrisRtcEngine(
+    EngineType type = kEngineTypeNormal, const char *executable_path = nullptr);
 
 IRIS_API void DestroyIrisRtcEngine(IrisRtcEnginePtr engine_ptr);
 
@@ -185,7 +184,8 @@ IRIS_API IrisRtcRendererPtr GetIrisRtcRenderer(IrisRtcRawDataPtr raw_data_ptr);
 /// IrisRtcRawDataPluginManager
 IRIS_API int CallIrisRtcRawDataPluginManagerApi(
     IrisRtcRawDataPluginManagerPtr plugin_manager_ptr,
-    enum ApiTypeRawDataPlugin api_type, const char *params, char *result);
+    enum ApiTypeRawDataPluginManager api_type, const char *params,
+    char *result);
 
 /// IrisRtcRenderer
 IRIS_API IrisEventHandlerHandle SetIrisRtcRendererEventHandler(

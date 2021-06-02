@@ -23,7 +23,8 @@ class IrisRtcTester;
 
 class IRIS_CPP_API IrisRtcEngine {
  public:
-  explicit IrisRtcEngine(const char *executable_path = nullptr);
+  explicit IrisRtcEngine(EngineType type = kEngineTypeNormal,
+                         const char *executable_path = nullptr);
   virtual ~IrisRtcEngine();
 
   void SetEventHandler(IrisEventHandler *event_handler);

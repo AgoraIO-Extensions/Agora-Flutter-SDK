@@ -51,8 +51,6 @@ class IrisRtcVideoFrameObserver {
   virtual bool OnRenderVideoFrame(unsigned int uid,
                                   IrisRtcVideoFrame &video_frame) = 0;
 
-  virtual VideoFrameType GetVideoFormatPreference() { return kFrameTypeYUV420; }
-
   virtual uint32_t GetObservedFramePosition() {
     return static_cast<uint32_t>(kPositionPostCapturer | kPositionPreRenderer);
   }

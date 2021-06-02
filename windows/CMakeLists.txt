@@ -19,6 +19,7 @@ DownloadSDK("Windows" "v3_3_2" "${RTC_SDK_PATH}")
 
 add_library(${PLUGIN_NAME} SHARED
   "agora_rtc_channel_plugin.cc"
+  "agora_rtc_device_manager_plugin.cc"
   "agora_rtc_engine_plugin.cc"
   "agora_texture_view_factory.cc"
 )
@@ -32,6 +33,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ${IR
 
 # List of absolute paths to libraries that should be bundled with the plugin
 set(agora_rtc_engine_bundled_libraries
+  "${IRIS_SDK_PATH}/AgoraRtcScreenSharing.exe"
   "${IRIS_SDK_PATH}/AgoraRtcWrapper.dll"
   "${RTC_DLL_PATH}/agora_rtc_sdk.dll"
   "${RTC_DLL_PATH}/av1.dll"

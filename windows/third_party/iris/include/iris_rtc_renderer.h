@@ -55,7 +55,7 @@ class IRIS_CPP_API IrisRtcRenderer {
                      unsigned int uid, const char *channel_id = "");
 
  public:
-  void SetVideoFrameInternal(const IrisRtcVideoFrame &video_frame,
+  bool SetVideoFrameInternal(const IrisRtcVideoFrame &video_frame,
                              unsigned int uid, const char *channel_id = "");
 
   bool GetVideoFrameInternal(IrisRtcVideoFrame &video_frame, unsigned int uid,

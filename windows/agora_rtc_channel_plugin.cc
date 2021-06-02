@@ -94,10 +94,22 @@ void AgoraRtcChannelPlugin::HandleMethodCall(
     auto arguments = std::get<EncodableMap>(*method_call.arguments());
     auto api_type = std::get<int32_t>(arguments[EncodableValue("apiType")]);
     auto &params = std::get<std::string>(arguments[EncodableValue("params")]);
-    char res[kMaxResultLength];
+    char res[kMaxResultLength] = "";
     auto ret = engine_->channel()->CallApi(
         static_cast<ApiTypeChannel>(api_type), params.c_str(), res);
-    result->Success(EncodableValue(ret));
+
+    if (ret == 0) {
+      std::string res_str(res);
+      if (res_str.empty()) {
+        result->Success();
+      } else {
+        result->Success(EncodableValue(res_str));
+      }
+    } else if (ret > 0) {
+      result->Success(EncodableValue(ret));
+    } else {
+      result->Error(std::to_string(ret));
+    }
   } else {
     result->NotImplemented();
   }

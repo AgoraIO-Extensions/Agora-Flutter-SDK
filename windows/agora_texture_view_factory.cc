@@ -70,7 +70,7 @@ void TextureRenderer::HandleMethodCall(
     } else {
       channel_id_ = "";
     }
-    IrisRtcRendererCacheConfig config(kFrameTypeRGBA, this);
+    IrisRtcRendererCacheConfig config(kVideoFrameTypeRGBA, this);
     factory_->renderer()->EnableVideoFrameCache(config, uid_,
                                                 channel_id_.c_str());
     result->Success();
