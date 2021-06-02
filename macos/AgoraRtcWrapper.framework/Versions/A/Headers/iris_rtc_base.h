@@ -227,56 +227,59 @@ enum ApiTypeChannel {
 };
 
 enum ApiTypeAudioDeviceManager {
-  kGetAudioPlaybackDeviceCount,
-  kGetAudioPlaybackDeviceInfoByIndex,
-  kSetCurrentAudioPlaybackDeviceId,
-  kGetCurrentAudioPlaybackDeviceId,
-  kGetCurrentAudioPlaybackDeviceInfo,
-  kSetAudioPlaybackDeviceVolume,
-  kGetAudioPlaybackDeviceVolume,
-  kSetAudioPlaybackDeviceMute,
-  kGetAudioPlaybackDeviceMute,
-  kStartAudioPlaybackDeviceTest,
-  kStopAudioPlaybackDeviceTest,
+  kADMEnumerateAudioPlaybackDevices,
+  kADMGetAudioPlaybackDeviceCount,
+  kADMGetAudioPlaybackDeviceInfoByIndex,
+  kADMSetCurrentAudioPlaybackDeviceId,
+  kADMGetCurrentAudioPlaybackDeviceId,
+  kADMGetCurrentAudioPlaybackDeviceInfo,
+  kADMSetAudioPlaybackDeviceVolume,
+  kADMGetAudioPlaybackDeviceVolume,
+  kADMSetAudioPlaybackDeviceMute,
+  kADMGetAudioPlaybackDeviceMute,
+  kADMStartAudioPlaybackDeviceTest,
+  kADMStopAudioPlaybackDeviceTest,
 
-  kGetAudioRecordingDeviceCount,
-  kGetAudioRecordingDeviceInfoByIndex,
-  kSetCurrentAudioRecordingDeviceId,
-  kGetCurrentAudioRecordingDeviceId,
-  kGetCurrentAudioRecordingDeviceInfo,
-  kSetAudioRecordingDeviceVolume,
-  kGetAudioRecordingDeviceVolume,
-  kSetAudioRecordingDeviceMute,
-  kGetAudioRecordingDeviceMute,
-  kStartAudioRecordingDeviceTest,
-  kStopAudioRecordingDeviceTest,
+  kADMEnumerateAudioRecordingDevices,
+  kADMGetAudioRecordingDeviceCount,
+  kADMGetAudioRecordingDeviceInfoByIndex,
+  kADMSetCurrentAudioRecordingDeviceId,
+  kADMGetCurrentAudioRecordingDeviceId,
+  kADMGetCurrentAudioRecordingDeviceInfo,
+  kADMSetAudioRecordingDeviceVolume,
+  kADMGetAudioRecordingDeviceVolume,
+  kADMSetAudioRecordingDeviceMute,
+  kADMGetAudioRecordingDeviceMute,
+  kADMStartAudioRecordingDeviceTest,
+  kADMStopAudioRecordingDeviceTest,
 
-  kStartAudioDeviceLoopbackTest,
-  kStopAudioDeviceLoopbackTest,
+  kADMStartAudioDeviceLoopbackTest,
+  kADMStopAudioDeviceLoopbackTest,
 };
 
 enum ApiTypeVideoDeviceManager {
-  kGetVideoDeviceCount,
-  kGetVideoDeviceInfoByIndex,
-  kSetCurrentVideoDeviceId,
-  kGetCurrentVideoDeviceId,
-  kStartVideoDeviceTest,
-  kStopVideoDeviceTest,
+  kVDMEnumerateVideoDevices,
+  kVDMGetVideoDeviceCount,
+  kVDMGetVideoDeviceInfoByIndex,
+  kVDMSetCurrentVideoDeviceId,
+  kVDMGetCurrentVideoDeviceId,
+  kVDMStartVideoDeviceTest,
+  kVDMStopVideoDeviceTest,
 };
 
-enum ApiTypeRawDataPlugin {
-  kRegisterPlugin,
-  kUnregisterPlugin,
-  kHasPlugin,
-  kEnablePlugin,
-  kGetPlugins,
-  kSetPluginParameter,
-  kGetPluginParameter,
-  kRelease
+enum ApiTypeRawDataPluginManager {
+  kRDPMRegisterPlugin,
+  kRDPMUnregisterPlugin,
+  kRDPMHasPlugin,
+  kRDPMEnablePlugin,
+  kRDPMGetPlugins,
+  kRDPMSetPluginParameter,
+  kRDPMGetPluginParameter,
+  kRDPMRelease
 };
 
 enum AudioFrameType {
-  kFrameTypePCM16,
+  kAudioFrameTypePCM16,
 };
 
 typedef struct IrisRtcAudioFrame {
@@ -301,10 +304,10 @@ IRIS_API void CopyAudioFrame(IrisRtcAudioFrame *dst,
                              const IrisRtcAudioFrame *src);
 
 enum VideoFrameType {
-  kFrameTypeYUV420,
-  kFrameTypeYUV422,
-  kFrameTypeRGBA,
-  kFrameTypeBGRA,
+  kVideoFrameTypeYUV420,
+  kVideoFrameTypeYUV422,
+  kVideoFrameTypeRGBA,
+  kVideoFrameTypeBGRA,
 };
 
 enum VideoObserverPosition {

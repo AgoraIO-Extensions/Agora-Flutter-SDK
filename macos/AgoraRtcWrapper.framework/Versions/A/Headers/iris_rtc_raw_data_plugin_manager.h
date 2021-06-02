@@ -29,6 +29,7 @@ class IRIS_CPP_API IrisRtcRawDataPlugin : public IrisRtcAudioFrameObserver,
 
   const char *GetParameter(const char *key);
 
+ public:
   bool OnRecordAudioFrame(IrisRtcAudioFrame &audio_frame) override;
 
   bool OnPlaybackAudioFrame(IrisRtcAudioFrame &audio_frame) override;
@@ -58,7 +59,7 @@ class IRIS_CPP_API IrisRtcRawDataPluginManager {
 
   void SetProxy(IrisProxy *proxy);
 
-  int CallApi(ApiTypeRawDataPlugin api_type, const char *params,
+  int CallApi(ApiTypeRawDataPluginManager api_type, const char *params,
               char result[kMaxResultLength]);
 
  private:

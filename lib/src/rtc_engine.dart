@@ -10,6 +10,7 @@ import 'enum_converter.dart';
 import 'enums.dart';
 import 'events.dart';
 import 'rtc_channel.dart';
+import 'rtc_device_manager.dart';
 
 enum _ApiTypeEngine {
   kEngineInitialize,
@@ -185,6 +186,8 @@ class RtcEngine with RtcEngineInterface {
   static MethodChannel get methodChannel => _methodChannel;
 
   static RtcEngine? _engine;
+
+  final RtcDeviceManager deviceManager = RtcDeviceManager();
 
   RtcEngineEventHandler? _handler;
 
@@ -1999,7 +2002,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<int?> getNativeHandle() {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      // TODO
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _invokeMethod('getNativeHandle');
   }

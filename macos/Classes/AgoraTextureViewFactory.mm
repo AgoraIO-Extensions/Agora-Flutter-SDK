@@ -92,7 +92,8 @@ public:
         NSNumber *uid = data[@"uid"];
         NSString *channelId = data[@"channelId"];
 
-        IrisRtcRendererCacheConfig config(kFrameTypeBGRA, weakSelf.delegate);
+        IrisRtcRendererCacheConfig config(kVideoFrameTypeBGRA,
+                                          weakSelf.delegate);
         renderer->EnableVideoFrameCache(
             config, [uid unsignedIntValue],
             (channelId && (NSNull *)channelId != [NSNull null])

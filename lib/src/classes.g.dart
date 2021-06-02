@@ -1050,3 +1050,16 @@ const _$AudioRecordingPositionEnumMap = {
   AudioRecordingPosition.PositionRecording: 1,
   AudioRecordingPosition.PositionMixedPlayback: 2,
 };
+
+MediaDeviceInfo _$MediaDeviceInfoFromJson(Map<String, dynamic> json) {
+  return MediaDeviceInfo(
+    json['deviceId'] as String,
+    json['deviceName'] as String,
+  );
+}
+
+Map<String, dynamic> _$MediaDeviceInfoToJson(MediaDeviceInfo instance) =>
+    <String, dynamic>{
+      'deviceId': instance.deviceId,
+      'deviceName': instance.deviceName,
+    };

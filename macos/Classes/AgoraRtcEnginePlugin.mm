@@ -1,5 +1,6 @@
 #import "AgoraRtcEnginePlugin.h"
 #import "AgoraRtcChannelPlugin.h"
+#import "AgoraRtcDeviceManagerPlugin.h"
 #import "AgoraTextureViewFactory.h"
 #import <AgoraRtcWrapper/iris_rtc_engine.h>
 #import <string>
@@ -8,7 +9,8 @@ using namespace agora::iris;
 using namespace agora::iris::rtc;
 
 @interface AgoraRtcEnginePlugin ()
-@property(nonatomic) IrisRtcEngine *engine;
+@property(nonatomic) IrisRtcEngine *engine_main;
+@property(nonatomic) IrisRtcEngine *engine_sub;
 @property(nonatomic) FlutterEventSink events;
 @property(nonatomic, strong) AgoraTextureViewFactory *factory;
 @end
@@ -63,25 +65,31 @@ public:
   [eventChannel setStreamHandler:instance];
 
   [AgoraRtcChannelPlugin registerWithRegistrar:registrar
-                                        engine:instance.engine];
+                                        engine:instance.engine_main];
+  [AgoraRtcDeviceManagerPlugin registerWithRegistrar:registrar
+                                              engine:instance.engine_main];
 }
 
 - (instancetype)init {
   self = [super init];
   if (self) {
-    self.engine = new IrisRtcEngine(kEngineTypeSubProcess);
-    //    self.engine = new IrisRtcEngine();
+    self.engine_main = new IrisRtcEngine();
+    self.engine_sub = new IrisRtcEngine(kEngineTypeSubProcess);
     self.handler = new ::EventHandler;
     self.handler->plugin_ = (__bridge void *)self;
-    self.engine->SetEventHandler(self.handler);
+    self.engine_main->SetEventHandler(self.handler);
   }
   return self;
 }
 
 - (void)dealloc {
-  if (self.engine) {
-    delete self.engine;
-    self.engine = nil;
+  if (self.engine_main) {
+    delete self.engine_main;
+    self.engine_main = nil;
+  }
+  if (self.engine_sub) {
+    delete self.engine_sub;
+    self.engine_sub = nil;
   }
 }
 
@@ -91,8 +99,9 @@ public:
     NSNumber *apiType = call.arguments[@"apiType"];
     NSString *params = call.arguments[@"params"];
     char res[kMaxResultLength];
-    auto ret = self.engine->CallApi((ApiTypeEngine)[apiType unsignedIntValue],
-                                    [params UTF8String], res);
+    auto ret = self.engine_main->CallApi(
+        (ApiTypeEngine)[apiType unsignedIntValue], [params UTF8String], res);
+
     if (ret == 0) {
       std::string res_str(res);
       if (res_str.empty()) {
@@ -109,7 +118,7 @@ public:
     }
   } else if ([@"createTextureRender" isEqualToString:call.method]) {
     int64_t textureId = [self.factory
-        createTextureRenderer:self.engine->raw_data()->renderer()];
+        createTextureRenderer:self.engine_main->raw_data()->renderer()];
     result(@(textureId));
   } else if ([@"destroyTextureRender" isEqualToString:call.method]) {
     NSNumber *textureId = call.arguments[@"id"];

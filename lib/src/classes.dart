@@ -1369,3 +1369,20 @@ class AudioRecordingConfiguration {
   /// @nodoc
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }
+
+@JsonSerializable(explicitToJson: true)
+class MediaDeviceInfo {
+  String deviceId;
+
+  String deviceName;
+
+  /// Constructs a [MediaDeviceInfo]
+  MediaDeviceInfo(this.deviceId, this.deviceName);
+
+  /// @nodoc
+  factory MediaDeviceInfo.fromJson(Map<String, dynamic> json) =>
+      _$MediaDeviceInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$MediaDeviceInfoToJson(this);
+}

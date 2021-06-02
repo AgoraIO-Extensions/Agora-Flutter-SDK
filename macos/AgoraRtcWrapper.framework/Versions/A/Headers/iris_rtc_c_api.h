@@ -184,7 +184,8 @@ IRIS_API IrisRtcRendererPtr GetIrisRtcRenderer(IrisRtcRawDataPtr raw_data_ptr);
 /// IrisRtcRawDataPluginManager
 IRIS_API int CallIrisRtcRawDataPluginManagerApi(
     IrisRtcRawDataPluginManagerPtr plugin_manager_ptr,
-    enum ApiTypeRawDataPlugin api_type, const char *params, char *result);
+    enum ApiTypeRawDataPluginManager api_type, const char *params,
+    char *result);
 
 /// IrisRtcRenderer
 IRIS_API IrisEventHandlerHandle SetIrisRtcRendererEventHandler(
