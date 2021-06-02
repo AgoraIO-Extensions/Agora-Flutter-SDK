@@ -41,7 +41,7 @@ using namespace agora::iris::rtc;
   if ([@"callApi" isEqualToString:call.method]) {
     NSNumber *apiType = call.arguments[@"apiType"];
     NSString *params = call.arguments[@"params"];
-    char res[kMaxResultLength];
+    char res[kMaxResultLength] = "";
     int ret = 0;
     if (self.audio) {
       ret = self.engine->device_manager()->CallApi(

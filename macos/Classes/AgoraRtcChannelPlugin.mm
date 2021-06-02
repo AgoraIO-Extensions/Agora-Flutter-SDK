@@ -69,7 +69,7 @@ public:
   if ([@"callApi" isEqualToString:call.method]) {
     NSNumber *apiType = call.arguments[@"apiType"];
     NSString *params = call.arguments[@"params"];
-    char res[kMaxResultLength];
+    char res[kMaxResultLength] = "";
     auto ret = self.engine->channel()->CallApi(
         (ApiTypeChannel)[apiType unsignedIntValue], [params UTF8String], res);
 
