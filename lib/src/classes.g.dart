@@ -184,10 +184,10 @@ const _$LighteningContrastLevelEnumMap = {
 AgoraImage _$AgoraImageFromJson(Map<String, dynamic> json) {
   return AgoraImage(
     json['url'] as String,
-    json['width'] as int,
-    json['height'] as int,
     x: json['x'] as int?,
     y: json['y'] as int?,
+    width: json['width'] as int?,
+    height: json['height'] as int?,
   );
 }
 

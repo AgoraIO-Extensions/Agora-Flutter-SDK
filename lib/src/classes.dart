@@ -226,18 +226,18 @@ class AgoraImage {
   int? y;
 
   /// Width of the image on the broadcasting video.
-  int width;
+  int? width;
 
   /// Height of the image on the broadcasting video.
-  int height;
+  int? height;
 
   /// Constructs a [AgoraImage]
   AgoraImage(
-    this.url,
-    this.width,
-    this.height, {
+    this.url, {
     this.x,
     this.y,
+    this.width,
+    this.height,
   });
 
   /// @nodoc

@@ -8,8 +8,10 @@ using namespace agora::iris::rtc;
 @property(nonatomic, weak) NSObject<FlutterTextureRegistry> *textureRegistry;
 @property(nonatomic, assign) int64_t textureId;
 @property(nonatomic, strong) FlutterMethodChannel *channel;
-@property(nonatomic) CVPixelBufferRef buffer;
+@property(nonatomic) CVPixelBufferRef buffer_cache;
+@property(nonatomic) CVPixelBufferRef buffer_temp;
 @property(nonatomic) IrisRtcRenderer *renderer;
+@property(nonatomic, strong) dispatch_semaphore_t lock;
 
 - (instancetype)
     initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
@@ -48,10 +50,10 @@ public:
              video_frame.y_buffer_length);
       CVPixelBufferUnlockBaseAddress(buffer, 0);
 
-      CVPixelBufferRelease(renderer.buffer);
-      renderer.buffer = buffer;
-      CVBufferRetain(renderer.buffer);
-      CVPixelBufferRelease(buffer);
+      dispatch_semaphore_wait(renderer.lock, DISPATCH_TIME_FOREVER);
+      renderer.buffer_cache = buffer;
+      dispatch_semaphore_signal(renderer.lock);
+
       [renderer.textureRegistry textureFrameAvailable:renderer.textureId];
     }
   }
@@ -73,14 +75,15 @@ public:
   self = [super init];
   if (self) {
     self.textureRegistry = textureRegistry;
-    self.renderer = renderer;
-    self.delegate = new ::RendererDelegate((__bridge void *)self);
     self.textureId = [self.textureRegistry registerTexture:self];
     self.channel = [FlutterMethodChannel
         methodChannelWithName:
             [NSString stringWithFormat:@"agora_rtc_engine/texture_render_%lld",
                                        self.textureId]
               binaryMessenger:messenger];
+    self.renderer = renderer;
+    self.lock = dispatch_semaphore_create(1);
+    self.delegate = new ::RendererDelegate((__bridge void *)self);
     __weak typeof(self) weakSelf = self;
     [self.channel setMethodCallHandler:^(FlutterMethodCall *_Nonnull call,
                                          FlutterResult _Nonnull result) {
@@ -116,7 +119,12 @@ public:
 }
 
 - (CVPixelBufferRef)copyPixelBuffer {
-  return self.buffer;
+  dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+  CVPixelBufferRelease(self.buffer_temp);
+  self.buffer_temp = self.buffer_cache;
+  CVBufferRetain(self.buffer_temp);
+  dispatch_semaphore_signal(self.lock);
+  return self.buffer_temp;
 }
 
 - (void)onTextureUnregistered:(NSObject<FlutterTexture> *)texture {

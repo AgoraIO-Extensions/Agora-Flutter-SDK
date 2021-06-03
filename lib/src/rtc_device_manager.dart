@@ -43,6 +43,7 @@ enum _ApiTypeVideoDeviceManager {
   kVDMStopVideoDeviceTest,
 }
 
+/// TODO(doc)
 class RtcDeviceManager {
   static const MethodChannel _audioMethodChannel =
       MethodChannel('agora_rtc_audio_device_manager');

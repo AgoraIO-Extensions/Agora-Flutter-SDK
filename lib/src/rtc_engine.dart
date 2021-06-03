@@ -2510,7 +2510,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setScreenCaptureContentHint(VideoContentHint contentHint) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetScreenCaptureContentHint.index,
         'params': jsonEncode({
@@ -2524,7 +2524,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> startScreenCaptureByDisplayId(int displayId,
       Rectangle regionRect, ScreenCaptureParameters captureParams) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByDisplayId.index,
         'params': jsonEncode({
@@ -2540,9 +2540,9 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> startScreenCaptureByScreenRect(Rectangle screenRect,
       Rectangle regionRect, ScreenCaptureParameters captureParams) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
-        'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByScreenRect.index,
+        'apiType': _ApiTypeEngine.kEngineStartScreenCapture.index,
         'params': jsonEncode({
           'screenRect': screenRect.toJson(),
           'regionRect': regionRect.toJson(),
@@ -2556,7 +2556,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> startScreenCaptureByWindowId(int windowId, Rectangle regionRect,
       ScreenCaptureParameters captureParams) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
         'params': jsonEncode({
@@ -2583,7 +2583,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> updateScreenCaptureParameters(
       ScreenCaptureParameters captureParams) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUpdateScreenCaptureParameters.index,
         'params': jsonEncode({
@@ -2596,11 +2596,28 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> updateScreenCaptureRegion(Rectangle regionRect) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineUpdateScreenCaptureRegion.index,
         'params': jsonEncode({
           'regionRect': regionRect.toJson(),
+        }),
+      });
+    }
+    throw PlatformException(code: ErrorCode.NotSupported.toString());
+  }
+
+  @override
+  Future<void> startScreenCapture(
+      int? windowId, int captureFreq, Rect rect, int bitrate) {
+    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineStartScreenCapture.index,
+        'params': jsonEncode({
+          'windowId': windowId,
+          'captureFreq': captureFreq,
+          'rect': rect.toJson(),
+          'bitrate': bitrate,
         }),
       });
     }
@@ -4619,4 +4636,7 @@ mixin RtcScreenSharingInterface {
   Future<void> updateScreenCaptureRegion(Rectangle regionRect);
 
   Future<void> stopScreenCapture();
+
+  Future<void> startScreenCapture(
+      int windowId, int captureFreq, Rect rect, int bitrate);
 }
