@@ -30,8 +30,6 @@ flutter:
         pluginClass: AgoraRtcEnginePlugin
       ios:
         pluginClass: AgoraRtcEnginePlugin
-      linux:
-        pluginClass: AgoraRtcEnginePlugin
       macos:
         pluginClass: AgoraRtcEnginePlugin
       windows:
