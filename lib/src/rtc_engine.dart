@@ -195,7 +195,7 @@ class RtcEngine with RtcEngineInterface {
 
   /// TODO(doc)
   RtcDeviceManager get deviceManager {
-    if (kIsWeb || (Platform.isAndroid || Platform.isIOS)) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     return _deviceManager;

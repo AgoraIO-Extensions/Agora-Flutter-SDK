@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
@@ -65,11 +64,6 @@ class _State extends State<JoinChannelAudio> {
         log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
-        });
-        await _engine
-            .joinChannel(config.token, config.channelId, null, config.uid)
-            .catchError((err) {
-          print('error ${err.toString()}');
         });
       },
     ));
