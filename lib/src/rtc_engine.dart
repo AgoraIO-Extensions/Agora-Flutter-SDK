@@ -2609,7 +2609,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startScreenCapture(
-      int? windowId, int captureFreq, Rect rect, int bitrate) {
+      int windowId, int captureFreq, Rect rect, int bitrate) {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartScreenCapture.index,

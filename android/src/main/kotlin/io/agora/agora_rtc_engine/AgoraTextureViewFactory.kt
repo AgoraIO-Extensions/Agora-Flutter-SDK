@@ -2,10 +2,10 @@ package io.agora.agora_rtc_engine
 
 import android.content.Context
 import android.view.View
-import io.agora.rtc.Constants
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcTextureView
+import io.agora.rtc.base.toNativeUInt
 import io.agora.rtc.mediaio.BaseVideoRenderer
 import io.agora.rtc.mediaio.IVideoSink
 import io.agora.rtc.mediaio.MediaIO
@@ -147,14 +147,10 @@ class TextureRender(
   }
 
   private fun setData(data: Map<*, *>) {
-    val uid = (data["uid"] as Number).toInt()
+    val uid = (data["uid"] as Number).toNativeUInt()
     val channel = (data["channelId"] as? String)?.let { getChannel(it) }
     if (uid == 0) {
       getEngine()?.setLocalVideoRenderer(this)
-      getEngine()?.setLocalRenderMode(
-        Constants.RENDER_MODE_FIT,
-        Constants.VIDEO_MIRROR_MODE_ENABLED
-      )
     } else {
       channel?.let {
         it.setRemoteVideoRenderer(uid, this)
@@ -262,7 +258,7 @@ class AgoraTextureView(
 
   private fun setData(data: Map<*, *>) {
     val channel = (data["channelId"] as? String)?.let { getChannel(it) }
-    getEngine()?.let { view.setData(it, channel, (data["uid"] as Number).toInt()) }
+    getEngine()?.let { view.setData(it, channel, data["uid"] as Number) }
   }
 
   private fun setRenderMode(renderMode: Int) {
