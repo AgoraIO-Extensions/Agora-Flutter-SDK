@@ -1025,8 +1025,8 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setCloudProxy(CloudProxyType proxyType) {
-    return _invokeMethod('enableRemoteSuperResolution',
-        {'proxyType': CloudProxyTypeConverter(proxyType).e});
+    return _invokeMethod('setCloudProxy',
+        {'proxyType': CloudProxyTypeConverter(proxyType).e.index});
   }
 
   @override
