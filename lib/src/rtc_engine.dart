@@ -1025,8 +1025,8 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setCloudProxy(CloudProxyType proxyType) {
-    return _invokeMethod('enableRemoteSuperResolution',
-        {'proxyType': CloudProxyTypeConverter(proxyType).e});
+    return _invokeMethod('setCloudProxy',
+        {'proxyType': CloudProxyTypeConverter(proxyType).value()});
   }
 
   @override
@@ -1038,7 +1038,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> setVoiceBeautifierParameters(
       VoiceBeautifierPreset preset, int param1, int param2) {
     return _invokeMethod('setVoiceBeautifierParameters', {
-      'preset': VoiceBeautifierPresetConverter(preset).e,
+      'preset': VoiceBeautifierPresetConverter(preset).value(),
       'param1': param1,
       'param2': param2
     });
@@ -1047,7 +1047,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset) {
     return _invokeMethod('setVoiceConversionPreset',
-        {'preset': VoiceConversionPresetConverter(preset).e});
+        {'preset': VoiceConversionPresetConverter(preset).value()});
   }
 }
 
