@@ -285,7 +285,7 @@ enum AudioRecordingQuality {
   High,
 }
 
-/// Recording content, which is set in [RtcEngine.startAduioRecording].
+/// Recording content, which is set in [RtcEngine.startAudioRecording].
 enum AudioRecordingPosition {
   /// 0: (Default) Records the mixed audio of the local user and all remote users.
   @JsonValue(0)
@@ -1148,7 +1148,7 @@ enum ErrorCode {
   @JsonValue(156)
   PublishStreamFormatNotSuppported,
 
-  /// The App lack necessary library file. Check whether the dynamic library is loaded.
+  /// The extension library is not integrated, such as the library for enabling deep-learning noise reduction.
   @JsonValue(157)
   ModuleNotFound,
 

@@ -2453,12 +2453,12 @@ class RtcEngine with RtcEngineInterface {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetCloudProxy.index,
         'params': jsonEncode({
-          'proxyType': CloudProxyTypeConverter(proxyType).e,
+          'proxyType': CloudProxyTypeConverter(proxyType).value(),
         }),
       });
     }
-    return _invokeMethod('enableRemoteSuperResolution', {
-      'proxyType': CloudProxyTypeConverter(proxyType).e,
+    return _invokeMethod('setCloudProxy', {
+      'proxyType': CloudProxyTypeConverter(proxyType).value(),
     });
   }
 
@@ -2480,14 +2480,14 @@ class RtcEngine with RtcEngineInterface {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceBeautifierParameters.index,
         'params': jsonEncode({
-          'preset': VoiceBeautifierPresetConverter(preset).e,
+          'preset': VoiceBeautifierPresetConverter(preset).value(),
           'param1': param1,
           'param2': param2,
         }),
       });
     }
     return _invokeMethod('setVoiceBeautifierParameters', {
-      'preset': VoiceBeautifierPresetConverter(preset).e,
+      'preset': VoiceBeautifierPresetConverter(preset).value(),
       'param1': param1,
       'param2': param2,
     });
@@ -2495,16 +2495,18 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset) {
+    return _invokeMethod('setVoiceConversionPreset',
+        {'preset': VoiceConversionPresetConverter(preset).value()});
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceConversionPreset.index,
         'params': jsonEncode({
-          'preset': VoiceConversionPresetConverter(preset).e,
+          'preset': VoiceConversionPresetConverter(preset).value(),
         }),
       });
     }
     return _invokeMethod('setVoiceConversionPreset', {
-      'preset': VoiceConversionPresetConverter(preset).e,
+      'preset': VoiceConversionPresetConverter(preset).value(),
     });
   }
 
@@ -2514,7 +2516,7 @@ class RtcEngine with RtcEngineInterface {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetScreenCaptureContentHint.index,
         'params': jsonEncode({
-          'contentHint': VideoContentHintConverter(contentHint).e,
+          'contentHint': VideoContentHintConverter(contentHint).value(),
         }),
       });
     }
@@ -3539,6 +3541,8 @@ mixin RtcAudioEffectInterface {
 
   /// Sets the playback position of an audio effect file.
   ///
+  /// Since v3.4.2
+  ///
   /// After a successful setting, the local audio effect file starts playing at the specified position.
   ///
   /// **Note**
@@ -3550,6 +3554,8 @@ mixin RtcAudioEffectInterface {
   Future<void> setEffectPosition(int soundId, int pos);
 
   /// Gets the duration of the audio effect file.
+  ///
+  /// Since v3.4.2
   ///
   /// **Note**
   /// Call this method after [RtcEngine.playEffect].
@@ -3567,6 +3573,8 @@ mixin RtcAudioEffectInterface {
   Future<int?> getEffectDuration(String filePath);
 
   /// Gets the playback postion of the audio effect file.
+  ///
+  /// Since v3.4.2
   ///
   /// **Note**
   /// Call this method after [RtcEngine.playEffect].
@@ -4314,9 +4322,11 @@ mixin RtcAudioRecorderInterface {
 
   /// Starts an audio recording on the client.
   ///
+  /// Since v3.4.2
+  ///
   /// The SDK allows recording audio during a call. After successfully calling this method, you can record the audio of users in the channel and get an audio recording file. Supported file formats are as follows:
   /// - WAV: High-fidelity files with typically larger file sizes. For example, if the sample rate is 32,000 Hz, the file size for a 10-minute recording is approximately 73 MB.
-  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `AUDIO_RECORDING_QUALITY_MEDIUM`, the file size for a 10-minute recording is approximately 2 MB.
+  /// - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `[AudioRecordingQuality.Medium]`, the file size for a 10-minute recording is approximately 2 MB.
   ///
   /// Once the user leaves the channel, the recording automatically stops.
   ///
@@ -4328,6 +4338,8 @@ mixin RtcAudioRecorderInterface {
       AudioRecordingConfiguration config);
 
   /// Enables the virtual metronome.
+  ///
+  /// Since v3.4.2
   ///
   /// In music education, physical education, and other scenarios, teachers often need to use a metronome so that students can practice
   /// at the correct tempo. A meter is composed of a downbeat and some number of upbeats (including zero). The first beat of each
@@ -4348,10 +4360,14 @@ mixin RtcAudioRecorderInterface {
 
   /// Disables the virtual metronome.
   ///
+  /// Since v3.4.2
+  ///
   /// After calling [RtcEngine.startRhythmPlayer], you can call this method to disable the virtual metronome.
   Future<void> stopRhythmPlayer();
 
   /// Configures the virtual metronome.
+  ///
+  /// Since v3.4.2
   ///
   /// After calling [RtcEngine.startRhythmPlayer], you can call this method to reconfigure the virtual metronome.
   ///

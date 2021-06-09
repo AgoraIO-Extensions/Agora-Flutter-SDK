@@ -1,3 +1,11 @@
+## [4.0.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.1...v4.0.2) (2021-06-09)
+
+
+### Bug Fixes
+
+* Android build error ([3af4476](https://github.com/AgoraIO/Flutter-SDK/commit/3af44762ad765cde99024e2b080d4c88f34cfc09))
+* enum type cast bug, close [#345](https://github.com/AgoraIO/Flutter-SDK/issues/345) ([85d720d](https://github.com/AgoraIO/Flutter-SDK/commit/85d720d1f13a7ff340419135a9d397be798b750f))
+
 # [4.1.0-alpha.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.1...v4.1.0-alpha.0) (2021-06-04)
 
 
