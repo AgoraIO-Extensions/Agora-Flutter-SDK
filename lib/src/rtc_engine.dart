@@ -2495,8 +2495,6 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset) {
-    return _invokeMethod('setVoiceConversionPreset',
-        {'preset': VoiceConversionPresetConverter(preset).value()});
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineSetVoiceConversionPreset.index,
