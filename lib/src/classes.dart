@@ -1,5 +1,6 @@
 import 'dart:ui' show Color;
 
+import 'package:agora_rtc_engine/src/enum_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'enums.dart';
@@ -1441,9 +1442,9 @@ class DataStreamConfig {
   Map<String, dynamic> toJson() => _$DataStreamConfigToJson(this);
 }
 
-///  Configurations for the RtcEngineConfig instance.
+///  Configurations for the RtcEngineContext instance.
 @JsonSerializable(explicitToJson: true)
-class RtcEngineConfig {
+class RtcEngineContext {
   /// The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
   /// Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
   /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithConfig`
@@ -1453,8 +1454,8 @@ class RtcEngineConfig {
   /// The region for connection. This advanced feature applies to scenarios that have regional restrictions.
   ///
   /// For the regions that Agora supports, see [AreaCode]. After specifying the region, the SDK connects to the Agora servers within that region.
-  @JsonKey(includeIfNull: false)
-  AreaCode? areaCode;
+  @JsonKey(includeIfNull: false, toJson: _$AreaCodeListToJson)
+  List<AreaCode>? areaCode;
 
   /// The configuration of the log files that the SDK outputs. See [LogConfig].
   ///
@@ -1464,19 +1465,28 @@ class RtcEngineConfig {
   @JsonKey(includeIfNull: false)
   LogConfig? logConfig;
 
-  /// Constructs a [RtcEngineConfig]
-  RtcEngineConfig(
+  /// Constructs a [RtcEngineContext]
+  RtcEngineContext(
     this.appId, {
     this.areaCode,
     this.logConfig,
   });
 
   /// @nodoc
-  factory RtcEngineConfig.fromJson(Map<String, dynamic> json) =>
-      _$RtcEngineConfigFromJson(json);
+  factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineContextFromJson(json);
 
   /// @nodoc
-  Map<String, dynamic> toJson() => _$RtcEngineConfigToJson(this);
+  Map<String, dynamic> toJson() => _$RtcEngineContextToJson(this);
+
+  static int? _$AreaCodeListToJson(List<AreaCode>? instance) {
+    if (instance == null) return null;
+    var areaCode = 0;
+    instance.forEach((element) {
+      areaCode |= AreaCodeConverter(element).value();
+    });
+    return areaCode;
+  }
 }
 
 /// The metronome configuration, which is set in [RtcEngine.startRhythmPlayer] or [RtcEngine.configRhythmPlayer].

@@ -32,14 +32,13 @@ public:
     @autoreleasepool {
       TextureRenderer *renderer = (__bridge TextureRenderer *)renderer_;
       CVPixelBufferRef buffer = NULL;
-      NSDictionary *dic =
-          [NSDictionary dictionaryWithObjectsAndKeys:
-                            [NSNumber numberWithBool:YES],
-                            kCVPixelBufferCGImageCompatibilityKey,
-                            [NSNumber numberWithBool:YES],
-                            kCVPixelBufferCGBitmapContextCompatibilityKey,
-                            [NSNumber numberWithBool:YES],
-                            kCVPixelBufferMetalCompatibilityKey, nil];
+      NSDictionary *dic = [NSDictionary
+          dictionaryWithObjectsAndKeys:
+              @(YES), kCVPixelBufferCGBitmapContextCompatibilityKey, @(YES),
+              kCVPixelBufferCGImageCompatibilityKey, @(YES),
+              kCVPixelBufferOpenGLCompatibilityKey, @(YES),
+              kCVPixelBufferMetalCompatibilityKey, @(YES),
+              kCVPixelBufferOpenGLTextureCacheCompatibilityKey, nil];
       CVPixelBufferCreate(kCFAllocatorDefault, video_frame.width,
                           video_frame.height, kCVPixelFormatType_32BGRA,
                           (__bridge CFDictionaryRef)dic, &buffer);
@@ -51,6 +50,7 @@ public:
       CVPixelBufferUnlockBaseAddress(buffer, 0);
 
       dispatch_semaphore_wait(renderer.lock, DISPATCH_TIME_FOREVER);
+      CVPixelBufferRelease(renderer.buffer_cache);
       renderer.buffer_cache = buffer;
       dispatch_semaphore_signal(renderer.lock);
 
@@ -110,6 +110,12 @@ public:
 
 - (void)dealloc {
   [self destroy];
+  if (self.buffer_cache) {
+    CVPixelBufferRelease(self.buffer_cache);
+  }
+  if (self.buffer_temp) {
+    CVPixelBufferRelease(self.buffer_temp);
+  }
 }
 
 - (void)destroy {
@@ -122,7 +128,7 @@ public:
   dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
   CVPixelBufferRelease(self.buffer_temp);
   self.buffer_temp = self.buffer_cache;
-  CVBufferRetain(self.buffer_temp);
+  CVPixelBufferRetain(self.buffer_temp);
   dispatch_semaphore_signal(self.lock);
   return self.buffer_temp;
 }

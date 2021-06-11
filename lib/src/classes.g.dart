@@ -1002,17 +1002,19 @@ Map<String, dynamic> _$DataStreamConfigToJson(DataStreamConfig instance) =>
       'ordered': instance.ordered,
     };
 
-RtcEngineConfig _$RtcEngineConfigFromJson(Map<String, dynamic> json) {
-  return RtcEngineConfig(
+RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) {
+  return RtcEngineContext(
     json['appId'] as String,
-    areaCode: _$enumDecodeNullable(_$AreaCodeEnumMap, json['areaCode']),
+    areaCode: (json['areaCode'] as List<dynamic>?)
+        ?.map((e) => _$enumDecode(_$AreaCodeEnumMap, e))
+        .toList(),
     logConfig: json['logConfig'] == null
         ? null
         : LogConfig.fromJson(json['logConfig'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$RtcEngineConfigToJson(RtcEngineConfig instance) {
+Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   final val = <String, dynamic>{
     'appId': instance.appId,
   };
@@ -1023,7 +1025,8 @@ Map<String, dynamic> _$RtcEngineConfigToJson(RtcEngineConfig instance) {
     }
   }
 
-  writeNotNull('areaCode', _$AreaCodeEnumMap[instance.areaCode]);
+  writeNotNull(
+      'areaCode', RtcEngineContext._$AreaCodeListToJson(instance.areaCode));
   writeNotNull('logConfig', instance.logConfig?.toJson());
   return val;
 }

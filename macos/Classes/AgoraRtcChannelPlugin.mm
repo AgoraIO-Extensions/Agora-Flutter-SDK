@@ -14,6 +14,8 @@ using namespace agora::iris::rtc;
 namespace {
 class EventHandler : public IrisEventHandler {
 public:
+  EventHandler(void *plugin) : plugin_(plugin) {}
+
   void OnEvent(const char *event, const char *data) override {
     @autoreleasepool {
       AgoraRtcChannelPlugin *plugin = (__bridge AgoraRtcChannelPlugin *)plugin_;
@@ -37,7 +39,7 @@ public:
     }
   }
 
-public:
+private:
   void *plugin_;
 };
 }
@@ -57,11 +59,17 @@ public:
                                 binaryMessenger:[registrar messenger]];
   AgoraRtcChannelPlugin *instance = [[AgoraRtcChannelPlugin alloc] init];
   instance.engine = (IrisRtcEngine *)engine;
-  instance.handler = new ::EventHandler;
-  instance.handler->plugin_ = (__bridge void *)instance;
+  instance.handler = new ::EventHandler((__bridge void *)instance);
   instance.engine->channel()->SetEventHandler(instance.handler);
   [registrar addMethodCallDelegate:instance channel:methodChannel];
   [eventChannel setStreamHandler:instance];
+}
+
+- (void)dealloc {
+  if (self.handler) {
+    delete self.handler;
+    self.handler = nil;
+  }
 }
 
 - (void)handleMethodCall:(FlutterMethodCall *)call

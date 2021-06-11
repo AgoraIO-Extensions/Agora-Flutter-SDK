@@ -38,7 +38,7 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _initEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
     this._addListeners();
 
     await _engine.enableAudio();
@@ -115,8 +115,8 @@ class _State extends State<JoinChannelAudio> {
         log('stopEffect $err');
       });
     } else {
-      final path = await RtcEngineExtension.getAssetAbsolutePath(
-          "assets/Sound_Horizon.mp3");
+      final path =
+          await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3");
       if (path != null) {
         _engine.playEffect(1, path, -1, 1, 1, 100, true).then((value) {
           setState(() {

@@ -18,13 +18,20 @@ using namespace agora::iris::rtc;
 namespace {
 class EventHandler : public IrisEventHandler {
 public:
+  EventHandler(void *plugin, bool sub_process = false)
+      : plugin_(plugin), sub_process_(sub_process) {}
+
   void OnEvent(const char *event, const char *data) override {
     @autoreleasepool {
       AgoraRtcEnginePlugin *plugin = (__bridge AgoraRtcEnginePlugin *)plugin_;
       if ([plugin events]) {
         NSString *eventApple = [NSString stringWithUTF8String:event];
         NSString *dataApple = [NSString stringWithUTF8String:data];
-        [plugin events](@{@"methodName" : eventApple, @"data" : dataApple});
+        [plugin events](@{
+          @"methodName" : eventApple,
+          @"data" : dataApple,
+          @"subProcess" : @(sub_process_)
+        });
       }
     }
   }
@@ -36,18 +43,24 @@ public:
       if ([plugin events]) {
         NSString *eventApple = [NSString stringWithUTF8String:event];
         NSString *dataApple = [NSString stringWithUTF8String:data];
-        [plugin events](@{@"methodName" : eventApple, @"data" : dataApple});
+        [plugin events](@{
+          @"methodName" : eventApple,
+          @"data" : dataApple,
+          @"subProcess" : @(sub_process_)
+        });
       }
     }
   }
 
-public:
+private:
   void *plugin_;
+  bool sub_process_;
 };
 }
 
 @interface AgoraRtcEnginePlugin ()
-@property(nonatomic) EventHandler *handler;
+@property(nonatomic) EventHandler *handler_main;
+@property(nonatomic) EventHandler *handler_sub;
 @end
 
 @implementation AgoraRtcEnginePlugin
@@ -74,10 +87,11 @@ public:
   self = [super init];
   if (self) {
     self.engine_main = new IrisRtcEngine();
+    self.handler_main = new ::EventHandler((__bridge void *)self);
+    self.engine_main->SetEventHandler(self.handler_main);
     self.engine_sub = new IrisRtcEngine(kEngineTypeSubProcess);
-    self.handler = new ::EventHandler;
-    self.handler->plugin_ = (__bridge void *)self;
-    self.engine_main->SetEventHandler(self.handler);
+    self.handler_sub = new ::EventHandler((__bridge void *)self, true);
+    self.engine_sub->SetEventHandler(self.handler_sub);
   }
   return self;
 }
@@ -87,9 +101,17 @@ public:
     delete self.engine_main;
     self.engine_main = nil;
   }
+  if (self.handler_main) {
+    delete self.handler_main;
+    self.handler_main = nil;
+  }
   if (self.engine_sub) {
     delete self.engine_sub;
     self.engine_sub = nil;
+  }
+  if (self.handler_sub) {
+    delete self.handler_sub;
+    self.handler_sub = nil;
   }
 }
 
@@ -98,9 +120,17 @@ public:
   if ([@"callApi" isEqualToString:call.method]) {
     NSNumber *apiType = call.arguments[@"apiType"];
     NSString *params = call.arguments[@"params"];
+    NSNumber *subProcess = call.arguments[@"subProcess"];
     char res[kMaxResultLength] = "";
-    auto ret = self.engine_main->CallApi(
-        (ApiTypeEngine)[apiType unsignedIntValue], [params UTF8String], res);
+    auto ret = 0;
+
+    if ([subProcess boolValue]) {
+      self.engine_sub->CallApi((ApiTypeEngine)[apiType unsignedIntValue],
+                               [params UTF8String], res);
+    } else {
+      self.engine_main->CallApi((ApiTypeEngine)[apiType unsignedIntValue],
+                                [params UTF8String], res);
+    }
 
     if (ret == 0) {
       std::string res_str(res);

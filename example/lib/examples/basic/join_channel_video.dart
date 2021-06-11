@@ -16,7 +16,7 @@ class JoinChannelVideo extends StatefulWidget {
 }
 
 class _State extends State<JoinChannelVideo> {
-  RtcEngine? engine;
+  late final RtcEngine _engine;
   String channelId = config.channelId;
   bool startPreview = false,
       isJoined = false,
@@ -35,19 +35,19 @@ class _State extends State<JoinChannelVideo> {
   @override
   void dispose() {
     super.dispose();
-    engine?.destroy();
+    _engine.destroy();
   }
 
   _initEngine() {
-    RtcEngine.createWithConfig(RtcEngineConfig(config.appId)).then((value) {
+    RtcEngine.createWithContext(RtcEngineContext(config.appId)).then((value) {
       setState(() {
-        engine = value;
+        _engine = value;
         _addListeners();
         () async {
-          await engine?.enableVideo();
-          await engine?.startPreview();
-          await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
-          await engine?.setClientRole(ClientRole.Broadcaster);
+          await _engine.enableVideo();
+          await _engine.startPreview();
+          await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+          await _engine.setClientRole(ClientRole.Broadcaster);
           setState(() {
             startPreview = true;
           });
@@ -57,7 +57,7 @@ class _State extends State<JoinChannelVideo> {
   }
 
   _addListeners() {
-    engine?.setEventHandler(RtcEngineEventHandler(
+    _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
         log('warning ${warningCode}');
       },
@@ -104,15 +104,15 @@ class _State extends State<JoinChannelVideo> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    await engine?.joinChannel(config.token, channelId, null, config.uid);
+    await _engine.joinChannel(config.token, channelId, null, config.uid);
   }
 
   _leaveChannel() async {
-    await engine?.leaveChannel();
+    await _engine.leaveChannel();
   }
 
   _switchCamera() {
-    engine?.switchCamera().then((value) {
+    _engine.switchCamera().then((value) {
       setState(() {
         switchCamera = !switchCamera;
       });

@@ -4,7 +4,7 @@ version: 4.1.0-alpha.0
 homepage: 'https://www.agora.io'
 repository: 'https://github.com/AgoraIO/Flutter-SDK'
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.13.0 <3.0.0'
   flutter: '>=1.12.13+hotfix.6'
 dependencies:
   flutter:
@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   js: ^0.6.3
   json_annotation: ^4.0.0
+  ffi: ^1.1.2
 dev_dependencies:
   integration_test: ^1.0.2+2
   flutter_test:

@@ -84,6 +84,9 @@ enum _ApiTypeEngine {
   kEnginePauseAllEffects,
   kEngineResumeEffect,
   kEngineResumeAllEffects,
+  kEngineGetEffectDuration,
+  kEngineSetEffectPosition,
+  kEngineGetEffectCurrentPosition,
   kEngineEnableDeepLearningDenoise,
   kEngineEnableSoundPositionIndication,
   kEngineSetRemoteVoicePosition,
@@ -112,6 +115,7 @@ enum _ApiTypeEngine {
   kEngineSetMixedAudioFrameParameters,
   kEngineAdjustRecordingSignalVolume,
   kEngineAdjustPlaybackSignalVolume,
+  kEngineAdjustLoopbackRecordingSignalVolume,
   kEngineEnableWebSdkInteroperability,
   kEngineSetVideoQualityParameters,
   kEngineSetLocalPublishFallbackOption,
@@ -185,13 +189,27 @@ class RtcEngine with RtcEngineInterface {
   /// Exposing methodChannel to other files
   static MethodChannel get methodChannel => _methodChannel;
 
-  static RtcEngine? _engine;
+  static RtcEngine? _instance;
+
+  /// Get the singleton of [RtcEngine].
+  static RtcEngine? get instance => _instance;
+
+  final bool _subProcess;
+  RtcEngine? _screenShareHelper;
+
+  /// TODO(doc)
+  RtcEngine getScreenShareHelper() {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    if (_subProcess) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    _screenShareHelper ??= RtcEngine._(true);
+    return _screenShareHelper!;
+  }
 
   final RtcDeviceManager _deviceManager = RtcDeviceManager();
-
-  RtcEngineEventHandler? _handler;
-
-  RtcEngine._();
 
   /// TODO(doc)
   RtcDeviceManager get deviceManager {
@@ -201,8 +219,15 @@ class RtcEngine with RtcEngineInterface {
     return _deviceManager;
   }
 
-  static Future<T?> _invokeMethod<T>(String method,
+  RtcEngineEventHandler? _handler;
+
+  RtcEngine._(this._subProcess);
+
+  Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
+    if (method == 'callApi') {
+      arguments?['subProcess'] = _subProcess;
+    }
     return _methodChannel.invokeMethod(method, arguments);
   }
 
@@ -221,12 +246,12 @@ class RtcEngine with RtcEngineInterface {
   /// The version of the current SDK in the string format. For example, 2.3.0.
   static Future<String?> getSdkVersion() {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      return _invokeMethod('callApi', {
+      return RtcEngine.methodChannel.invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetVersion.index,
         'params': jsonEncode({}),
       });
     }
-    return _invokeMethod('getSdkVersion');
+    return RtcEngine.methodChannel.invokeMethod('getSdkVersion');
   }
 
   /// Retrieves the description of a warning or error code.
@@ -240,14 +265,14 @@ class RtcEngine with RtcEngineInterface {
   /// [WarningCode] or [ErrorCode].
   static Future<String?> getErrorDescription(int error) {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      return _invokeMethod('callApi', {
+      return RtcEngine.methodChannel.invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineGetErrorDescription.index,
         'params': jsonEncode({
           'code': error,
         }),
       });
     }
-    return _invokeMethod('getErrorDescription', {
+    return RtcEngine.methodChannel.invokeMethod('getErrorDescription', {
       'error': error,
     });
   }
@@ -268,7 +293,7 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> create(String appId) {
-    return createWithConfig(RtcEngineConfig(appId));
+    return createWithContext(RtcEngineContext(appId));
   }
 
   /// Creates an [RtcEngine] instance.
@@ -299,8 +324,9 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   @deprecated
-  static Future<RtcEngine> createWithAreaCode(String appId, AreaCode areaCode) {
-    return createWithConfig(RtcEngineConfig(appId, areaCode: areaCode));
+  static Future<RtcEngine> createWithAreaCode(
+      String appId, List<AreaCode> areaCode) {
+    return createWithContext(RtcEngineContext(appId, areaCode: areaCode));
   }
 
   /// Creates an [RtcEngine] instance.
@@ -320,36 +346,43 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
-    if (_engine != null) return _engine!;
+  static Future<RtcEngine> createWithContext(RtcEngineContext config) async {
+    if (_instance != null) return _instance!;
+    _instance = RtcEngine._(false);
+    await _instance!.initialize(config);
+    return _instance!;
+  }
+
+  @override
+  Future<void> initialize(RtcEngineContext context) {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      await _invokeMethod('callApi', {
+      return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineInitialize.index,
         'params': jsonEncode({
-          'context': config.toJson(),
+          'context': context.toJson(),
         }),
-      });
-      await _invokeMethod('callApi', {
-        'apiType': _ApiTypeEngine.kEngineSetAppType.index,
-        'params': jsonEncode({
-          'appType': 4,
-        }),
-      });
+      }).then((value) => _invokeMethod('callApi', {
+            'apiType': _ApiTypeEngine.kEngineSetAppType.index,
+            'params': jsonEncode({
+              'appType': 4,
+            }),
+          }));
     } else {
-      await _invokeMethod('create', {
-        'config': config.toJson(),
+      return _invokeMethod('create', {
+        'config': context.toJson(),
         'appType': 4,
       });
     }
-    _engine = RtcEngine._();
-    return _engine!;
   }
 
   @override
   Future<void> destroy() {
-    RtcChannel.destroyAll();
-    _engine?._handler = null;
-    _engine = null;
+    if (!_subProcess) {
+      _screenShareHelper?.destroy();
+      RtcChannel.destroyAll();
+      _instance?._handler = null;
+      _instance = null;
+    }
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineRelease.index,
@@ -365,12 +398,17 @@ class RtcEngine with RtcEngineInterface {
   ///
   /// **Parameter** [handler] The event handler.
   void setEventHandler(RtcEngineEventHandler handler) {
-    _engine?._handler = handler;
+    _handler = handler;
     _subscription ??= _stream.listen((event) {
       final eventMap = Map<dynamic, dynamic>.from(event);
       final methodName = eventMap['methodName'] as String;
       final data = eventMap['data'];
-      _engine?._handler?.process(methodName, data);
+      final subProcess = (eventMap['subProcess'] as bool?) ?? false;
+      if (subProcess) {
+        _instance?._screenShareHelper?._handler?.process(methodName, data);
+      } else {
+        _instance?._handler?.process(methodName, data);
+      }
     });
   }
 
@@ -1474,8 +1512,17 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setEffectPosition(int soundId, int pos) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (kIsWeb) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    if (Platform.isWindows || Platform.isMacOS) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineSetEffectPosition.index,
+        'params': jsonEncode({
+          'soundId': soundId,
+          'pos': pos,
+        }),
+      });
     }
     return _invokeMethod('setEffectPosition', {
       'soundId': soundId,
@@ -1485,8 +1532,16 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getEffectDuration(String filePath) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (kIsWeb) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    if (Platform.isWindows || Platform.isMacOS) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineGetEffectDuration.index,
+        'params': jsonEncode({
+          'filePath': filePath,
+        }),
+      });
     }
     return _invokeMethod('getEffectDuration', {
       'filePath': filePath,
@@ -1495,8 +1550,16 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getEffectCurrentPosition(int soundId) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+    if (kIsWeb) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
+    if (Platform.isWindows || Platform.isMacOS) {
+      return _invokeMethod('callApi', {
+        'apiType': _ApiTypeEngine.kEngineGetEffectCurrentPosition.index,
+        'params': jsonEncode({
+          'soundId': soundId,
+        }),
+      });
     }
     return _invokeMethod('getEffectCurrentPosition', {
       'soundId': soundId,
@@ -2542,7 +2605,7 @@ class RtcEngine with RtcEngineInterface {
       Rectangle regionRect, ScreenCaptureParameters captureParams) {
     if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
-        'apiType': _ApiTypeEngine.kEngineStartScreenCapture.index,
+        'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByScreenRect.index,
         'params': jsonEncode({
           'screenRect': screenRect.toJson(),
           'regionRect': regionRect.toJson(),
@@ -2554,15 +2617,15 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startScreenCaptureByWindowId(int windowId, Rectangle regionRect,
-      ScreenCaptureParameters captureParams) {
+  Future<void> startScreenCaptureByWindowId(int windowId,
+      [Rectangle? regionRect, ScreenCaptureParameters? captureParams]) {
     if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
         'params': jsonEncode({
           'windowId': windowId,
-          'regionRect': regionRect.toJson(),
-          'captureParams': captureParams.toJson(),
+          'regionRect': regionRect?.toJson(),
+          'captureParams': captureParams?.toJson(),
         }),
       });
     }
@@ -2573,7 +2636,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> stopScreenCapture() {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
-        'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
+        'apiType': _ApiTypeEngine.kEngineStopScreenCapture.index,
         'params': jsonEncode({}),
       });
     }
@@ -2650,6 +2713,9 @@ mixin RtcEngineInterface
         RtcCameraInterface,
         RtcStreamMessageInterface,
         RtcScreenSharingInterface {
+  /// TODO(doc)
+  Future<void> initialize(RtcEngineContext config);
+
   /// Destroys the [RtcEngine] instance and releases all resources used by the Agora SDK.
   ///
   /// This method is useful for apps that occasionally make voice or video calls, to free up resources for other operations when not making calls.
