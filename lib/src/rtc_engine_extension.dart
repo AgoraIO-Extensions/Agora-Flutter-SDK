@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'classes.dart';
 import 'rtc_engine.dart';
@@ -100,7 +101,9 @@ class _WindowCollection extends Struct {
   external int length;
 }
 
-final DynamicLibrary _nativeLib = DynamicLibrary.process();
+final DynamicLibrary _nativeLib = Platform.isMacOS
+    ? DynamicLibrary.process()
+    : DynamicLibrary.open('AgoraRtcWrapper.dll');
 
 final Pointer<_DisplayCollection> Function() _EnumerateDisplays = _nativeLib
     .lookup<NativeFunction<Pointer<_DisplayCollection> Function()>>(

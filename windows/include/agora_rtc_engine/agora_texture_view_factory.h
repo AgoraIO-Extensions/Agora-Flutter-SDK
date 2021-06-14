@@ -14,12 +14,13 @@ class AgoraTextureViewFactory;
 
 class TextureRenderer : public agora::iris::rtc::IrisRtcRendererDelegate {
 public:
-  TextureRenderer(AgoraTextureViewFactory *factory);
+  TextureRenderer(flutter::BinaryMessenger *messenger,
+                  flutter::TextureRegistrar *registrar,
+                  agora::iris::rtc::IrisRtcRenderer *renderer);
   ~TextureRenderer();
 
   int64_t texture_id();
 
-  // 通过 IrisRendererDelegate 继承
   virtual void OnVideoFrameReceived(const IrisRtcVideoFrame &video_frame,
                                     unsigned int uid, const char *channel_id,
                                     bool resize) override;
@@ -32,7 +33,8 @@ private:
   const FlutterDesktopPixelBuffer *CopyPixelBuffer(size_t width, size_t height);
 
 public:
-  AgoraTextureViewFactory *factory_;
+  flutter::TextureRegistrar *registrar_;
+  agora::iris::rtc::IrisRtcRenderer *renderer_;
   flutter::TextureVariant texture_;
   int64_t texture_id_;
   std::unique_ptr<flutter::MethodCall<flutter::EncodableValue>> channel_;
@@ -44,24 +46,20 @@ public:
 
 class AgoraTextureViewFactory {
 public:
-  AgoraTextureViewFactory(flutter::PluginRegistrar *registrar,
-                          agora::iris::rtc::IrisRtcRenderer *renderer);
+  AgoraTextureViewFactory(flutter::PluginRegistrar *registrar);
   ~AgoraTextureViewFactory();
 
   flutter::BinaryMessenger *messenger();
 
   flutter::TextureRegistrar *registrar();
 
-  agora::iris::rtc::IrisRtcRenderer *renderer();
-
-  int64_t CreateTextureRenderer();
+  int64_t CreateTextureRenderer(agora::iris::rtc::IrisRtcRenderer *renderer);
 
   bool DestoryTextureRenderer(int64_t texture_id);
 
 private:
   flutter::BinaryMessenger *messenger_;
   flutter::TextureRegistrar *registrar_;
-  agora::iris::rtc::IrisRtcRenderer *renderer_;
   std::map<int64_t, std::unique_ptr<TextureRenderer>> renderers_;
 };
 

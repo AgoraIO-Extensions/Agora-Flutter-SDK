@@ -7,15 +7,17 @@
 using namespace flutter;
 using namespace agora::iris::rtc;
 
-TextureRenderer::TextureRenderer(AgoraTextureViewFactory *factory)
-    : factory_(factory),
+TextureRenderer::TextureRenderer(flutter::BinaryMessenger *messenger,
+                                 flutter::TextureRegistrar *registrar,
+                                 IrisRtcRenderer *renderer)
+    : registrar_(registrar), renderer_(renderer),
       texture_(PixelBufferTexture(std::bind(&TextureRenderer::CopyPixelBuffer,
                                             this, std::placeholders::_1,
                                             std::placeholders::_2))),
       uid_(0), pixel_buffer_(new FlutterDesktopPixelBuffer{nullptr, 0, 0}) {
-  texture_id_ = factory_->registrar()->RegisterTexture(&texture_);
+  texture_id_ = registrar->RegisterTexture(&texture_);
   auto channel = std::make_unique<MethodChannel<EncodableValue>>(
-      factory_->messenger(),
+      messenger,
       "agora_rtc_engine/texture_render_" + std::to_string(texture_id_),
       &flutter::StandardMethodCodec::GetInstance());
   channel->SetMethodCallHandler([this](const auto &call, auto result) {
@@ -24,8 +26,8 @@ TextureRenderer::TextureRenderer(AgoraTextureViewFactory *factory)
 }
 
 TextureRenderer::~TextureRenderer() {
-  factory_->renderer()->DisableVideoFrameCache(this);
-  factory_->registrar()->UnregisterTexture(texture_id_);
+  renderer_->DisableVideoFrameCache(this);
+  registrar_->UnregisterTexture(texture_id_);
   if (pixel_buffer_) {
     if (pixel_buffer_->buffer) {
       delete[] pixel_buffer_->buffer;
@@ -62,7 +64,7 @@ void TextureRenderer::HandleMethodCall(
     auto channel_id =
         std::get_if<std::string>(&data[flutter::EncodableValue("channelId")]);
     if (uid_ != uid) {
-      factory_->renderer()->DisableVideoFrameCache(this);
+      renderer_->DisableVideoFrameCache(this);
     }
     uid_ = uid;
     if (channel_id) {
@@ -71,8 +73,7 @@ void TextureRenderer::HandleMethodCall(
       channel_id_ = "";
     }
     IrisRtcRendererCacheConfig config(kVideoFrameTypeRGBA, this);
-    factory_->renderer()->EnableVideoFrameCache(config, uid_,
-                                                channel_id_.c_str());
+    renderer_->EnableVideoFrameCache(config, uid_, channel_id_.c_str());
     result->Success();
   } else if (method.compare("setRenderMode") == 0) {
 
@@ -96,7 +97,7 @@ void TextureRenderer::OnVideoFrameReceived(const IrisRtcVideoFrame &video_frame,
          video_frame.y_buffer_length);
   pixel_buffer_->width = video_frame.width;
   pixel_buffer_->height = video_frame.height;
-  factory_->registrar()->MarkTextureFrameAvailable(texture_id_);
+  registrar_->MarkTextureFrameAvailable(texture_id_);
 }
 
 const FlutterDesktopPixelBuffer *
@@ -105,21 +106,16 @@ TextureRenderer::CopyPixelBuffer(size_t width, size_t height) {
   return pixel_buffer_;
 }
 
-AgoraTextureViewFactory::AgoraTextureViewFactory(PluginRegistrar *registrar,
-                                                 IrisRtcRenderer *iris_renderer)
+AgoraTextureViewFactory::AgoraTextureViewFactory(PluginRegistrar *registrar)
     : messenger_(registrar->messenger()),
-      registrar_(registrar->texture_registrar()), renderer_(iris_renderer) {}
+      registrar_(registrar->texture_registrar()) {}
 
 AgoraTextureViewFactory::~AgoraTextureViewFactory() {}
 
-BinaryMessenger *AgoraTextureViewFactory::messenger() { return messenger_; }
-
-TextureRegistrar *AgoraTextureViewFactory::registrar() { return registrar_; }
-
-IrisRtcRenderer *AgoraTextureViewFactory::renderer() { return renderer_; }
-
-int64_t AgoraTextureViewFactory::CreateTextureRenderer() {
-  std::unique_ptr<TextureRenderer> texture(new TextureRenderer(this));
+int64_t
+AgoraTextureViewFactory::CreateTextureRenderer(IrisRtcRenderer *renderer) {
+  std::unique_ptr<TextureRenderer> texture(
+      new TextureRenderer(messenger_, registrar_, renderer));
   int64_t texture_id = texture->texture_id();
   renderers_[texture_id] = std::move(texture);
   return texture_id;

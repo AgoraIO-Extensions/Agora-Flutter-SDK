@@ -15,7 +15,7 @@ set(RTC_DLL_PATH "${RTC_SDK_PATH}/Agora_Native_SDK_for_Windows_FULL/libs/x86_64"
 
 # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
 include(DownloadSDK)
-DownloadSDK("Windows" "v3_3_2" "${RTC_SDK_PATH}")
+DownloadSDK("Windows" "v3_4_2" "${RTC_SDK_PATH}")
 
 add_library(${PLUGIN_NAME} SHARED
   "agora_rtc_channel_plugin.cc"

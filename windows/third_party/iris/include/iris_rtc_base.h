@@ -88,6 +88,9 @@ enum ApiTypeEngine {
   kEnginePauseAllEffects,
   kEngineResumeEffect,
   kEngineResumeAllEffects,
+  kEngineGetEffectDuration,
+  kEngineSetEffectPosition,
+  kEngineGetEffectCurrentPosition,
   kEngineEnableDeepLearningDenoise,
   kEngineEnableSoundPositionIndication,
   kEngineSetRemoteVoicePosition,
@@ -116,6 +119,7 @@ enum ApiTypeEngine {
   kEngineSetMixedAudioFrameParameters,
   kEngineAdjustRecordingSignalVolume,
   kEngineAdjustPlaybackSignalVolume,
+  kEngineAdjustLoopbackRecordingSignalVolume,
   kEngineEnableWebSdkInteroperability,
   kEngineSetVideoQualityParameters,
   kEngineSetLocalPublishFallbackOption,
@@ -227,31 +231,27 @@ enum ApiTypeChannel {
 };
 
 enum ApiTypeAudioDeviceManager {
-  kADMEnumerateAudioPlaybackDevices,
-  kADMGetAudioPlaybackDeviceCount,
-  kADMGetAudioPlaybackDeviceInfoByIndex,
-  kADMSetCurrentAudioPlaybackDeviceId,
-  kADMGetCurrentAudioPlaybackDeviceId,
-  kADMGetCurrentAudioPlaybackDeviceInfo,
-  kADMSetAudioPlaybackDeviceVolume,
-  kADMGetAudioPlaybackDeviceVolume,
-  kADMSetAudioPlaybackDeviceMute,
-  kADMGetAudioPlaybackDeviceMute,
-  kADMStartAudioPlaybackDeviceTest,
-  kADMStopAudioPlaybackDeviceTest,
+  kADMEnumeratePlaybackDevices,
+  kADMSetPlaybackDevice,
+  kADMGetPlaybackDevice,
+  kADMGetPlaybackDeviceInfo,
+  kADMSetPlaybackDeviceVolume,
+  kADMGetPlaybackDeviceVolume,
+  kADMSetPlaybackDeviceMute,
+  kADMGetPlaybackDeviceMute,
+  kADMStartPlaybackDeviceTest,
+  kADMStopPlaybackDeviceTest,
 
-  kADMEnumerateAudioRecordingDevices,
-  kADMGetAudioRecordingDeviceCount,
-  kADMGetAudioRecordingDeviceInfoByIndex,
-  kADMSetCurrentAudioRecordingDeviceId,
-  kADMGetCurrentAudioRecordingDeviceId,
-  kADMGetCurrentAudioRecordingDeviceInfo,
-  kADMSetAudioRecordingDeviceVolume,
-  kADMGetAudioRecordingDeviceVolume,
-  kADMSetAudioRecordingDeviceMute,
-  kADMGetAudioRecordingDeviceMute,
-  kADMStartAudioRecordingDeviceTest,
-  kADMStopAudioRecordingDeviceTest,
+  kADMEnumerateRecordingDevices,
+  kADMSetRecordingDevice,
+  kADMGetRecordingDevice,
+  kADMGetRecordingDeviceInfo,
+  kADMSetRecordingDeviceVolume,
+  kADMGetRecordingDeviceVolume,
+  kADMSetRecordingDeviceMute,
+  kADMGetRecordingDeviceMute,
+  kADMStartRecordingDeviceTest,
+  kADMStopRecordingDeviceTest,
 
   kADMStartAudioDeviceLoopbackTest,
   kADMStopAudioDeviceLoopbackTest,
@@ -259,12 +259,10 @@ enum ApiTypeAudioDeviceManager {
 
 enum ApiTypeVideoDeviceManager {
   kVDMEnumerateVideoDevices,
-  kVDMGetVideoDeviceCount,
-  kVDMGetVideoDeviceInfoByIndex,
-  kVDMSetCurrentVideoDeviceId,
-  kVDMGetCurrentVideoDeviceId,
-  kVDMStartVideoDeviceTest,
-  kVDMStopVideoDeviceTest,
+  kVDMSetDevice,
+  kVDMGetDevice,
+  kVDMStartDeviceTest,
+  kVDMStopDeviceTest,
 };
 
 enum ApiTypeRawDataPluginManager {
@@ -345,6 +343,47 @@ IRIS_API void CopyVideoFrame(IrisRtcVideoFrame *dst,
 
 IRIS_API IrisRtcVideoFrame ConvertVideoFrame(const IrisRtcVideoFrame *src,
                                              VideoFrameType format);
+
+typedef struct IrisRect {
+  double x;
+  double y;
+  double width;
+  double height;
+} IrisRect;
+
+typedef struct IrisDisplay {
+  unsigned int id;
+  float scale;
+  IrisRect bounds;
+  IrisRect work_area;
+  int rotation;
+} IrisDisplay;
+
+typedef struct IrisDisplayCollection {
+  IrisDisplay *displays;
+  unsigned int length;
+} IrisDisplayCollection;
+
+typedef struct IrisWindow {
+  unsigned int id;
+  char name[kBasicResultLength];
+  char owner_name[kBasicResultLength];
+  IrisRect bounds;
+  IrisRect work_area;
+} IrisWindow;
+
+typedef struct IrisWindowCollection {
+  IrisWindow *windows;
+  unsigned int length;
+} IrisWindowCollection;
+
+IRIS_API IrisDisplayCollection *EnumerateDisplays();
+
+IRIS_API void FreeIrisDisplayCollection(IrisDisplayCollection *collection);
+
+IRIS_API IrisWindowCollection *EnumerateWindows();
+
+IRIS_API void FreeIrisWindowCollection(IrisWindowCollection *collection);
 #ifdef __cplusplus
 }
 #endif

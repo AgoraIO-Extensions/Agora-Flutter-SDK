@@ -26,7 +26,9 @@ using namespace flutter;
 using namespace agora::iris;
 using namespace agora::iris::rtc;
 
-class AgoraRtcEnginePlugin : public Plugin, public IrisEventHandler {
+class EventHandler;
+
+class AgoraRtcEnginePlugin : public Plugin {
 public:
   static void RegisterWithRegistrar(PluginRegistrarWindows *registrar);
 
@@ -34,11 +36,7 @@ public:
 
   virtual ~AgoraRtcEnginePlugin();
 
-public:
-  virtual void OnEvent(const char *event, const char *data) override;
-
-  virtual void OnEvent(const char *event, const char *data, const void *buffer,
-                       unsigned int length) override;
+  EventSink<EncodableValue> *event_sink();
 
 private:
   // Called when a method is called on this plugin's channel from Dart.
@@ -47,8 +45,47 @@ private:
 
 private:
   std::unique_ptr<EventSink<EncodableValue>> event_sink_;
-  std::unique_ptr<IrisRtcEngine> engine_;
+  std::unique_ptr<IrisRtcEngine> engine_main_;
+  std::unique_ptr<IrisRtcEngine> engine_sub_;
+  std::unique_ptr<EventHandler> handler_main_;
+  std::unique_ptr<EventHandler> handler_sub_;
   std::unique_ptr<AgoraTextureViewFactory> factory_;
+};
+
+class EventHandler : public IrisEventHandler {
+public:
+  EventHandler(AgoraRtcEnginePlugin *plugin, bool sub_process = false)
+      : plugin_(plugin), sub_process_(sub_process) {}
+
+  void OnEvent(const char *event, const char *data) override {
+    if (plugin_->event_sink()) {
+      EncodableMap ret = {
+          {EncodableValue("methodName"), EncodableValue(event)},
+          {EncodableValue("data"), EncodableValue(data)},
+          {EncodableValue("subProcess"), EncodableValue(sub_process_)}};
+      plugin_->event_sink()->Success(ret);
+    }
+  }
+
+  void OnEvent(const char *event, const char *data, const void *buffer,
+               unsigned int length) override {
+    if (plugin_->event_sink()) {
+      std::vector<uint8_t> vector(length);
+      if (buffer && length) {
+        memcpy((void *)vector[0], buffer, length);
+      }
+      EncodableMap ret = {
+          {EncodableValue("methodName"), EncodableValue(event)},
+          {EncodableValue("data"), EncodableValue(data)},
+          {EncodableValue("buffer"), EncodableValue(vector)},
+          {EncodableValue("subProcess"), EncodableValue(sub_process_)}};
+      plugin_->event_sink()->Success(ret);
+    }
+  }
+
+private:
+  AgoraRtcEnginePlugin *plugin_;
+  bool sub_process_;
 };
 
 // static
@@ -83,21 +120,29 @@ void AgoraRtcEnginePlugin::RegisterWithRegistrar(
       });
   event_channel->SetStreamHandler(std::move(handler));
 
-  AgoraRtcChannelPluginRegisterWithRegistrar(registrar, plugin->engine_.get());
+  AgoraRtcChannelPluginRegisterWithRegistrar(registrar,
+                                             plugin->engine_main_.get());
   AgoraRtcDeviceManagerPluginRegisterWithRegistrar(registrar,
-                                                   plugin->engine_.get());
+                                                   plugin->engine_main_.get());
 
   registrar->AddPlugin(std::move(plugin));
 }
 
 AgoraRtcEnginePlugin::AgoraRtcEnginePlugin(PluginRegistrar *registrar)
-    : engine_(new IrisRtcEngine),
-      factory_(new AgoraTextureViewFactory(registrar,
-                                           engine_->raw_data()->renderer())) {
-  engine_->SetEventHandler(this);
+    : engine_main_(new IrisRtcEngine),
+      engine_sub_(new IrisRtcEngine(kEngineTypeSubProcess)),
+      handler_main_(new EventHandler(this)),
+      handler_sub_(new EventHandler(this, true)),
+      factory_(new AgoraTextureViewFactory(registrar)) {
+  engine_main_->SetEventHandler(handler_main_.get());
+  engine_sub_->SetEventHandler(handler_sub_.get());
 }
 
 AgoraRtcEnginePlugin::~AgoraRtcEnginePlugin() {}
+
+EventSink<EncodableValue> *AgoraRtcEnginePlugin::event_sink() {
+  return event_sink_.get();
+}
 
 void AgoraRtcEnginePlugin::HandleMethodCall(
     const MethodCall<EncodableValue> &method_call,
@@ -111,9 +156,16 @@ void AgoraRtcEnginePlugin::HandleMethodCall(
     auto arguments = std::get<EncodableMap>(*method_call.arguments());
     auto api_type = std::get<int32_t>(arguments[EncodableValue("apiType")]);
     auto &params = std::get<std::string>(arguments[EncodableValue("params")]);
+    auto subProcess = std::get<bool>(arguments[EncodableValue("subProcess")]);
     char res[kMaxResultLength] = "";
-    auto ret = engine_->CallApi(static_cast<ApiTypeEngine>(api_type),
-                                params.c_str(), res);
+    IrisRtcEngine *engine = nullptr;
+    if (subProcess) {
+      engine = engine_sub_.get();
+    } else {
+      engine = engine_main_.get();
+    }
+    auto ret = engine->CallApi(static_cast<ApiTypeEngine>(api_type),
+                               params.c_str(), res);
 
     if (ret == 0) {
       std::string res_str(res);
@@ -128,7 +180,16 @@ void AgoraRtcEnginePlugin::HandleMethodCall(
       result->Error(std::to_string(ret));
     }
   } else if (method.compare("createTextureRender") == 0) {
-    auto texture_id = factory_->CreateTextureRenderer();
+    auto arguments = std::get<EncodableMap>(*method_call.arguments());
+    auto subProcess = std::get<bool>(arguments[EncodableValue("subProcess")]);
+    IrisRtcEngine *engine = nullptr;
+    if (subProcess) {
+      engine = engine_sub_.get();
+    } else {
+      engine = engine_main_.get();
+    }
+    auto texture_id =
+        factory_->CreateTextureRenderer(engine->raw_data()->renderer());
     result->Success(EncodableValue(texture_id));
   } else if (method.compare("destroyTextureRender") == 0) {
     auto arguments = std::get<EncodableMap>(*method_call.arguments());
@@ -137,28 +198,6 @@ void AgoraRtcEnginePlugin::HandleMethodCall(
     result->Success();
   } else {
     result->NotImplemented();
-  }
-}
-
-void AgoraRtcEnginePlugin::OnEvent(const char *event, const char *data) {
-  if (event_sink_) {
-    EncodableMap ret = {{EncodableValue("methodName"), EncodableValue(event)},
-                        {EncodableValue("data"), EncodableValue(data)}};
-    event_sink_->Success(ret);
-  }
-}
-
-void AgoraRtcEnginePlugin::OnEvent(const char *event, const char *data,
-                                   const void *buffer, unsigned int length) {
-  if (event_sink_) {
-    std::vector<uint8_t> vector(length);
-    if (buffer && length) {
-      memcpy((void *)vector[0], buffer, length);
-    }
-    EncodableMap ret = {{EncodableValue("methodName"), EncodableValue(event)},
-                        {EncodableValue("data"), EncodableValue(data)},
-                        {EncodableValue("buffer"), EncodableValue(vector)}};
-    event_sink_->Success(ret);
   }
 }
 } // namespace
