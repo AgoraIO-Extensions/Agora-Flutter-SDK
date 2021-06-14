@@ -182,28 +182,37 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
 
   void setData() {
     _channels[_id]?.invokeMethod('setData', {
-      'data': {'uid': widget.uid, 'channelId': widget.channelId}
+      'data': {
+        'uid': widget.uid,
+        'channelId': widget.channelId,
+      },
     });
   }
 
   void setRenderMode() {
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
+    _channels[_id]?.invokeMethod('setRenderMode', {
+      'renderMode': _renderMode,
+    });
   }
 
   void setMirrorMode() {
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-    _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
+    _channels[_id]?.invokeMethod('setMirrorMode', {
+      'mirrorMode': _mirrorMode,
+    });
   }
 
   void setZOrderOnTop() {
-    _channels[_id]
-        ?.invokeMethod('setZOrderOnTop', {'onTop': widget.zOrderOnTop});
+    _channels[_id]?.invokeMethod('setZOrderOnTop', {
+      'onTop': widget.zOrderOnTop,
+    });
   }
 
   void setZOrderMediaOverlay() {
-    _channels[_id]?.invokeMethod(
-        'setZOrderMediaOverlay', {'isMediaOverlay': widget.zOrderMediaOverlay});
+    _channels[_id]?.invokeMethod('setZOrderMediaOverlay', {
+      'isMediaOverlay': widget.zOrderMediaOverlay,
+    });
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -316,6 +325,9 @@ class RtcTextureView extends StatefulWidget {
   /// Use Flutter Texture to render.
   final bool useFlutterTexture;
 
+  /// TODO(doc)
+  final bool subProcess;
+
   /// Constructs a [RtcTextureView]
   RtcTextureView({
     Key? key,
@@ -326,6 +338,7 @@ class RtcTextureView extends StatefulWidget {
     this.onPlatformViewCreated,
     this.gestureRecognizers,
     this.useFlutterTexture = true,
+    this.subProcess = false,
   }) : super(key: key);
 
   @override
@@ -377,7 +390,9 @@ class _RtcTextureViewState extends State<RtcTextureView> {
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
     if (widget.useFlutterTexture) {
-      RtcEngine.methodChannel.invokeMethod('createTextureRender').then((value) {
+      RtcEngine.methodChannel.invokeMethod('createTextureRender', {
+        'subProcess': widget.subProcess,
+      }).then((value) {
         setState(() {
           _id = value;
         });
@@ -410,24 +425,33 @@ class _RtcTextureViewState extends State<RtcTextureView> {
     super.dispose();
     _channels.remove(_id);
     if (widget.useFlutterTexture) {
-      RtcEngine.methodChannel.invokeMethod('destroyTextureRender', {'id': _id});
+      RtcEngine.methodChannel.invokeMethod('destroyTextureRender', {
+        'id': _id,
+      });
     }
   }
 
   void setData() {
     _channels[_id]?.invokeMethod('setData', {
-      'data': {'uid': widget.uid, 'channelId': widget.channelId}
+      'data': {
+        'uid': widget.uid,
+        'channelId': widget.channelId,
+      },
     });
   }
 
   void setRenderMode() {
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
+    _channels[_id]?.invokeMethod('setRenderMode', {
+      'renderMode': _renderMode,
+    });
   }
 
   void setMirrorMode() {
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-    _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
+    _channels[_id]?.invokeMethod('setMirrorMode', {
+      'mirrorMode': _mirrorMode,
+    });
   }
 
   Future<void> onPlatformViewCreated(int id) async {

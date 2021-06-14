@@ -147,8 +147,15 @@ private:
                                  details:nil]);
     }
   } else if ([@"createTextureRender" isEqualToString:call.method]) {
-    int64_t textureId = [self.factory
-        createTextureRenderer:self.engine_main->raw_data()->renderer()];
+    NSNumber *subProcess = call.arguments[@"subProcess"];
+    IrisRtcEngine *engine = nullptr;
+    if ([subProcess boolValue]) {
+      engine = self.engine_sub;
+    } else {
+      engine = self.engine_main;
+    }
+    int64_t textureId =
+        [self.factory createTextureRenderer:engine->raw_data()->renderer()];
     result(@(textureId));
   } else if ([@"destroyTextureRender" isEqualToString:call.method]) {
     NSNumber *textureId = call.arguments[@"id"];

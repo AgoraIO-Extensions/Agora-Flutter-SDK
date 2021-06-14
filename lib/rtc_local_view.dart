@@ -31,7 +31,7 @@ class SurfaceView extends RtcSurfaceView {
         );
 }
 
-/// (Android only) TextureView.
+/// TextureView.
 class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
@@ -51,5 +51,14 @@ class TextureView extends RtcTextureView {
           onPlatformViewCreated: onPlatformViewCreated,
           gestureRecognizers: gestureRecognizers,
           useFlutterTexture: useFlutterTexture,
+        );
+
+  /// TODO(doc)
+  TextureView.screenShare({
+    Key? key,
+  }) : super(
+          key: key,
+          uid: 0,
+          subProcess: true,
         );
 }

@@ -377,7 +377,9 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> destroy() {
-    if (!_subProcess) {
+    if (_subProcess) {
+      instance?._screenShareHelper = null;
+    } else {
       _screenShareHelper?.destroy();
       RtcChannel.destroyAll();
       _instance?._handler = null;
