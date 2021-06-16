@@ -188,10 +188,11 @@ class _State extends State<JoinChannelAudio> {
                     child:
                         Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
                   ),
-                  ElevatedButton(
-                    onPressed: this._switchEffect,
-                    child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
-                  ),
+                  if (!kIsWeb)
+                    ElevatedButton(
+                      onPressed: this._switchEffect,
+                      child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
+                    ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

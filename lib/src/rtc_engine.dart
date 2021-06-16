@@ -2588,14 +2588,14 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startScreenCaptureByDisplayId(int displayId,
-      Rectangle regionRect, ScreenCaptureParameters captureParams) {
+      [Rectangle? regionRect, ScreenCaptureParameters? captureParams]) {
     if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByDisplayId.index,
         'params': jsonEncode({
           'displayId': displayId,
-          'regionRect': regionRect.toJson(),
-          'captureParams': captureParams.toJson(),
+          'regionRect': regionRect?.toJson(),
+          'captureParams': captureParams?.toJson(),
         }),
       });
     }
@@ -2604,14 +2604,14 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startScreenCaptureByScreenRect(Rectangle screenRect,
-      Rectangle regionRect, ScreenCaptureParameters captureParams) {
+      [Rectangle? regionRect, ScreenCaptureParameters? captureParams]) {
     if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartScreenCaptureByScreenRect.index,
         'params': jsonEncode({
           'screenRect': screenRect.toJson(),
-          'regionRect': regionRect.toJson(),
-          'captureParams': captureParams.toJson(),
+          'regionRect': regionRect?.toJson(),
+          'captureParams': captureParams?.toJson(),
         }),
       });
     }
@@ -2673,15 +2673,15 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startScreenCapture(
-      int windowId, int captureFreq, Rect rect, int bitrate) {
+  Future<void> startScreenCapture(int windowId,
+      [int? captureFreq, Rect? rect, int? bitrate]) {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       return _invokeMethod('callApi', {
         'apiType': _ApiTypeEngine.kEngineStartScreenCapture.index,
         'params': jsonEncode({
           'windowId': windowId,
           'captureFreq': captureFreq,
-          'rect': rect.toJson(),
+          'rect': rect?.toJson(),
           'bitrate': bitrate,
         }),
       });
@@ -4702,13 +4702,13 @@ mixin RtcStreamMessageInterface {
 /// TODO(doc)
 mixin RtcScreenSharingInterface {
   Future<void> startScreenCaptureByDisplayId(int displayId,
-      Rectangle regionRect, ScreenCaptureParameters captureParams);
+      [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);
 
   Future<void> startScreenCaptureByScreenRect(Rectangle screenRect,
-      Rectangle regionRect, ScreenCaptureParameters captureParams);
+      [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);
 
-  Future<void> startScreenCaptureByWindowId(int windowId, Rectangle regionRect,
-      ScreenCaptureParameters captureParams);
+  Future<void> startScreenCaptureByWindowId(int windowId,
+      [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);
 
   Future<void> setScreenCaptureContentHint(VideoContentHint contentHint);
 
@@ -4719,6 +4719,6 @@ mixin RtcScreenSharingInterface {
 
   Future<void> stopScreenCapture();
 
-  Future<void> startScreenCapture(
-      int windowId, int captureFreq, Rect rect, int bitrate);
+  Future<void> startScreenCapture(int windowId,
+      [int? captureFreq, Rect? rect, int? bitrate]);
 }

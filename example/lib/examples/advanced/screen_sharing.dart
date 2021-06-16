@@ -42,7 +42,11 @@ class _State extends State<ScreenSharing> {
         _addListeners();
         () async {
           await _engine.enableVideo();
-          await _engine.startPreview();
+          if (kIsWeb) {
+            await _engine.startScreenCapture(0);
+          } else {
+            await _engine.startPreview();
+          }
           await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
           await _engine.setClientRole(ClientRole.Broadcaster);
           setState(() {
@@ -179,18 +183,21 @@ class _State extends State<ScreenSharing> {
             _renderVideo(),
           ],
         ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: screenSharing ? _stopScreenShare : _startScreenShare,
-                child: Text('${screenSharing ? 'Stop' : 'Start'} screen share'),
-              ),
-            ],
-          ),
-        )
+        if (!kIsWeb)
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed:
+                      screenSharing ? _stopScreenShare : _startScreenShare,
+                  child:
+                      Text('${screenSharing ? 'Stop' : 'Start'} screen share'),
+                ),
+              ],
+            ),
+          )
       ],
     );
   }
@@ -201,11 +208,12 @@ class _State extends State<ScreenSharing> {
       children: [
         Row(
           children: [
-            Expanded(
-                flex: 1,
-                child: kIsWeb
-                    ? RtcLocalView.SurfaceView()
-                    : RtcLocalView.TextureView()),
+            if (startPreview)
+              Expanded(
+                  flex: 1,
+                  child: kIsWeb
+                      ? RtcLocalView.SurfaceView()
+                      : RtcLocalView.TextureView()),
             if (screenSharing)
               Expanded(flex: 1, child: RtcLocalView.TextureView.screenShare()),
           ],
