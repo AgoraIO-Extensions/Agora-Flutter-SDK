@@ -1,3 +1,10 @@
+# [4.1.0-alpha.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.1.0-alpha.0...v4.1.0-alpha.1) (2021-06-16)
+
+
+### Features
+
+* Android build error
+
 ## [4.0.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.1...v4.0.2) (2021-06-09)
 
 
