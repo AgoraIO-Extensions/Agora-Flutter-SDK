@@ -3,7 +3,7 @@
 
 ### Features
 
-* Android build error
+* support screen share for desktop
 
 ## [4.0.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.1...v4.0.2) (2021-06-09)
 
