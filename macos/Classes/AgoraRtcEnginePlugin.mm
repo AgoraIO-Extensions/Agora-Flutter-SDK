@@ -122,15 +122,15 @@ private:
     NSString *params = call.arguments[@"params"];
     NSNumber *subProcess = call.arguments[@"subProcess"];
     char res[kMaxResultLength] = "";
-    auto ret = 0;
 
+    IrisRtcEngine *engine = nullptr;
     if ([subProcess boolValue]) {
-      self.engine_sub->CallApi((ApiTypeEngine)[apiType unsignedIntValue],
-                               [params UTF8String], res);
+      engine = self.engine_sub;
     } else {
-      self.engine_main->CallApi((ApiTypeEngine)[apiType unsignedIntValue],
-                                [params UTF8String], res);
+      engine = self.engine_main;
     }
+    auto ret = engine->CallApi((ApiTypeEngine)[apiType unsignedIntValue],
+                               [params UTF8String], res);
 
     if (ret == 0) {
       std::string res_str(res);
