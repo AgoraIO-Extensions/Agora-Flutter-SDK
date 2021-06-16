@@ -1,3 +1,10 @@
+# [4.1.0-alpha.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.1.0-alpha.1...v4.1.0-alpha.2) (2021-06-16)
+
+
+### Bug Fixes
+
+* web build error ([8c57eae](https://github.com/AgoraIO/Flutter-SDK/commit/8c57eae792e3d02cedeb52b87c5350e65a6be7f9))
+
 # [4.1.0-alpha.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.1.0-alpha.0...v4.1.0-alpha.1) (2021-06-16)
 
 
