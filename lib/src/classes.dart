@@ -710,10 +710,20 @@ class ChannelMediaOptions {
   @JsonKey(includeIfNull: false)
   bool? autoSubscribeVideo;
 
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  bool? publishLocalAudio;
+
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  bool? publishLocalVideo;
+
   /// Constructs a [ChannelMediaOptions]
   ChannelMediaOptions({
     this.autoSubscribeAudio,
     this.autoSubscribeVideo,
+    this.publishLocalAudio,
+    this.publishLocalVideo,
   });
 
   /// @nodoc
@@ -739,10 +749,15 @@ class EncryptionConfig {
   @JsonKey(includeIfNull: false)
   String? encryptionKey;
 
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  List<int>? encryptionKdfSalt;
+
   /// Constructs a [EncryptionConfig]
   EncryptionConfig({
     this.encryptionMode,
     this.encryptionKey,
+    this.encryptionKdfSalt,
   });
 
   /// @nodoc
@@ -1444,7 +1459,17 @@ class DataStreamConfig {
 
 ///  Configurations for the RtcEngineConfig instance.
 @JsonSerializable(explicitToJson: true)
-class RtcEngineConfig {
+@deprecated
+class RtcEngineConfig extends RtcEngineContext {
+  /// Constructs a [RtcEngineConfig]
+  RtcEngineConfig(String appId,
+      {List<AreaCode>? areaCode, LogConfig? logConfig})
+      : super(appId, areaCode: areaCode, logConfig: logConfig);
+}
+
+///  Configurations for the RtcEngineContext instance.
+@JsonSerializable(explicitToJson: true)
+class RtcEngineContext {
   /// The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
   /// Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
   /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithConfig`
@@ -1465,24 +1490,27 @@ class RtcEngineConfig {
   @JsonKey(includeIfNull: false)
   LogConfig? logConfig;
 
-  /// Constructs a [RtcEngineConfig]
-  RtcEngineConfig(
+  /// Constructs a [RtcEngineContext]
+  RtcEngineContext(
     this.appId, {
     this.areaCode,
     this.logConfig,
   });
 
   /// @nodoc
-  factory RtcEngineConfig.fromJson(Map<String, dynamic> json) =>
-      _$RtcEngineConfigFromJson(json);
+  factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineContextFromJson(json);
 
   /// @nodoc
-  Map<String, dynamic> toJson() => _$RtcEngineConfigToJson(this);
+  Map<String, dynamic> toJson() => _$RtcEngineContextToJson(this);
 
-  static List<int>? _$AreaCodeListToJson(List<AreaCode>? instance) {
+  static int? _$AreaCodeListToJson(List<AreaCode>? instance) {
     if (instance == null) return null;
-    return List.generate(
-        instance.length, (index) => AreaCodeConverter(instance[index]).value());
+    var areaCode = 0;
+    instance.forEach((element) {
+      areaCode |= AreaCodeConverter(element).value();
+    });
+    return areaCode;
   }
 }
 

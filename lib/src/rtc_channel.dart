@@ -136,11 +136,13 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<void> publish() {
     return _invokeMethod('publish');
   }
 
   @override
+  @deprecated
   Future<void> unpublish() {
     return _invokeMethod('unpublish');
   }
@@ -373,6 +375,20 @@ class RtcChannel with RtcChannelInterface {
       'enable': enable,
     });
   }
+
+  @override
+  Future<void> muteLocalAudioStream(bool muted) {
+    return _invokeMethod('muteLocalAudioStream', {
+      'muted': muted,
+    });
+  }
+
+  @override
+  Future<void> muteLocalVideoStream(bool muted) {
+    return _invokeMethod('muteLocalVideoStream', {
+      'muted': muted,
+    });
+  }
 }
 
 /// @nodoc
@@ -488,11 +504,13 @@ mixin RtcChannelInterface
   /// - This method publishes one stream only to the channel corresponding to the current [RtcChannel] instance.
   /// - In a LiveBroadcasting channel, only a broadcaster can call this method. To switch the client role, call [RtcChannel.setClientRole] of the current [RtcChannel] instance.
   /// - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
+  @deprecated
   Future<void> publish();
 
   /// Stops publishing a stream to the channel.
   ///
   /// If you call this method in a channel where you are not publishing streams, the SDK returns [ErrorCode.Refused].
+  @deprecated
   Future<void> unpublish();
 
   /// Gets the current call ID.
@@ -520,6 +538,9 @@ mixin RtcAudioInterface {
   /// - 0: Mute.
   /// - 100: The original volume.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
+
+  /// TODO(doc)
+  Future<void> muteLocalAudioStream(bool muted);
 
   /// Stops/Resumes receiving the audio stream of the specified user.
   ///
@@ -553,6 +574,9 @@ mixin RtcAudioInterface {
 
 /// @nodoc
 mixin RtcVideoInterface {
+  /// TODO(doc)
+  Future<void> muteLocalVideoStream(bool muted);
+
   /// Stops/Resumes receiving the video stream of the specified user.
   ///
   /// **Parameter** [uid] ID of the remote user whose video stream you want to mute.
