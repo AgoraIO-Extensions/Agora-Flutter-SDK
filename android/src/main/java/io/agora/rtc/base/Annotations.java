@@ -82,6 +82,7 @@ public class Annotations {
     Constants.LOCAL_AUDIO_STREAM_ERROR_DEVICE_BUSY,
     Constants.LOCAL_AUDIO_STREAM_ERROR_CAPTURE_FAILURE,
     Constants.LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE,
+    Constants.LOCAL_AUDIO_STREAM_ERROR_INTERRUPTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioLocalError {
@@ -410,6 +411,8 @@ public class Annotations {
     AgoraEncryptionMode.SM4128ECB,
     AgoraEncryptionMode.AES128GCM,
     AgoraEncryptionMode.AES256GCM,
+    AgoraEncryptionMode.AES128GCM2,
+    AgoraEncryptionMode.AES256GCM2,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraEncryptionMode {
@@ -420,6 +423,8 @@ public class Annotations {
     int SM4128ECB = 4;
     int AES128GCM = 5;
     int AES256GCM = 6;
+    int AES128GCM2 = 7;
+    int AES256GCM2 = 8;
   }
 
   @IntDef({
@@ -469,6 +474,7 @@ public class Annotations {
     Constants.ERR_PUBLISH_STREAM_NOT_FOUND,
     Constants.ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED,
     Constants.ERR_MODULE_NOT_FOUND,
+    Constants.ERR_ALREADY_IN_RECORDING,
     Constants.ERR_LOAD_MEDIA_ENGINE,
     Constants.ERR_START_CALL,
     Constants.ERR_START_CAMERA,
@@ -610,6 +616,7 @@ public class Annotations {
     Constants.RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED,
     Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND,
     Constants.RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED,
+    Constants.RTMP_STREAM_UNPUBLISH_ERROR_OK,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingErrorCode {
@@ -827,6 +834,7 @@ public class Annotations {
 
   @IntDef({
     Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
+    Constants.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingEvent {

@@ -199,13 +199,23 @@ fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
   return ChannelMediaOptions().apply {
     (map["autoSubscribeAudio"] as? Boolean)?.let { autoSubscribeAudio = it }
     (map["autoSubscribeVideo"] as? Boolean)?.let { autoSubscribeVideo = it }
+    (map["publishLocalAudio"] as? Boolean)?.let { publishLocalAudio = it }
+    (map["publishLocalVideo"] as? Boolean)?.let { publishLocalVideo = it }
   }
 }
 
 fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
   return RtcEngineConfig().apply {
     mAppId = map["appId"] as String
-    (map["areaCode"] as? Number)?.toInt()?.let { mAreaCode = it }
+    (map["areaCode"] as? List<*>)?.let { list ->
+      var areaCode = 0
+      for (i in list.indices) {
+        (list[i] as? Number)?.let {
+          areaCode = areaCode or it.toInt()
+        }
+      }
+      mAreaCode = areaCode
+    }
     (map["logConfig"] as? Map<*, *>)?.let { mLogConfig = mapToLogConfig(it) }
   }
 }
@@ -223,6 +233,13 @@ fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
   return EncryptionConfig().apply {
     (map["encryptionMode"] as? Number)?.let { encryptionMode = intToEncryptionMode(it.toInt()) }
     (map["encryptionKey"] as? String)?.let { encryptionKey = it }
+    (map["encryptionKdfSalt"] as? List<*>)?.let { list ->
+      for (i in list.indices) {
+        (list[i] as? Number)?.let {
+          encryptionKdfSalt[i] = it.toByte()
+        }
+      }
+    }
   }
 }
 
