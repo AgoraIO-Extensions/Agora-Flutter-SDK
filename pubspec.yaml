@@ -13,7 +13,8 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.0.0
 dev_dependencies:
-  integration_test: ^1.0.2+2
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   flutter_driver:
