@@ -110,6 +110,10 @@ enum AudioLocalError {
   /// The local audio encoding fails.
   @JsonValue(5)
   EncodeFailure,
+
+  /// TODO(doc)
+  @JsonValue(8)
+  Interrupted,
 }
 
 /// The state of the local audio.
@@ -930,6 +934,14 @@ enum EncryptionMode {
   /// 256-bit AES encryption, GCM mode.
   @JsonValue(6)
   AES256GCM,
+
+  /// TODO(doc)
+  @JsonValue(7)
+  AES128GCM2,
+
+  /// TODO(doc)
+  @JsonValue(8)
+  AES256GCM2,
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
@@ -1552,6 +1564,10 @@ enum RtmpStreamingErrorCode {
   /// The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
   @JsonValue(10)
   FormatNotSupported,
+
+  /// TODO(doc)
+  @JsonValue(100)
+  UnPublishOK,
 }
 
 /// The RTMP or RTMPS streaming state.
@@ -2111,6 +2127,10 @@ enum RtmpStreamingEvent {
   /// An error occurs when you add a background image or a watermark image to the RTMP stream.
   @JsonValue(1)
   FailedLoadImage,
+
+  /// TODO(doc)
+  @JsonValue(2)
+  UrlAlreadyInUse,
 }
 
 /// Audio session restriction.

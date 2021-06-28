@@ -118,6 +118,7 @@ const _$AudioLocalErrorEnumMap = {
   AudioLocalError.DeviceBusy: 3,
   AudioLocalError.RecordFailure: 4,
   AudioLocalError.EncodeFailure: 5,
+  AudioLocalError.Interrupted: 8,
 };
 
 AudioLocalStateConverter _$AudioLocalStateConverterFromJson(
@@ -692,6 +693,8 @@ const _$EncryptionModeEnumMap = {
   EncryptionMode.SM4128ECB: 4,
   EncryptionMode.AES128GCM: 5,
   EncryptionMode.AES256GCM: 6,
+  EncryptionMode.AES128GCM2: 7,
+  EncryptionMode.AES256GCM2: 8,
 };
 
 ErrorCodeConverter _$ErrorCodeConverterFromJson(Map<String, dynamic> json) {
@@ -989,6 +992,7 @@ const _$RtmpStreamingErrorCodeEnumMap = {
   RtmpStreamingErrorCode.NotAuthorized: 8,
   RtmpStreamingErrorCode.StreamNotFound: 9,
   RtmpStreamingErrorCode.FormatNotSupported: 10,
+  RtmpStreamingErrorCode.UnPublishOK: 100,
 };
 
 RtmpStreamingStateConverter _$RtmpStreamingStateConverterFromJson(
@@ -1413,6 +1417,7 @@ Map<String, dynamic> _$RtmpStreamingEventConverterToJson(
 
 const _$RtmpStreamingEventEnumMap = {
   RtmpStreamingEvent.FailedLoadImage: 1,
+  RtmpStreamingEvent.UrlAlreadyInUse: 2,
 };
 
 AudioSessionOperationRestrictionConverter

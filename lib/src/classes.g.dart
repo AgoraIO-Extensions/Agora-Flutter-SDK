@@ -539,6 +539,8 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) {
   return ChannelMediaOptions(
     autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
     autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
+    publishLocalAudio: json['publishLocalAudio'] as bool?,
+    publishLocalVideo: json['publishLocalVideo'] as bool?,
   );
 }
 
@@ -553,6 +555,8 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
 
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
+  writeNotNull('publishLocalAudio', instance.publishLocalAudio);
+  writeNotNull('publishLocalVideo', instance.publishLocalVideo);
   return val;
 }
 
@@ -561,6 +565,9 @@ EncryptionConfig _$EncryptionConfigFromJson(Map<String, dynamic> json) {
     encryptionMode:
         _$enumDecodeNullable(_$EncryptionModeEnumMap, json['encryptionMode']),
     encryptionKey: json['encryptionKey'] as String?,
+    encryptionKdfSalt: (json['encryptionKdfSalt'] as List<dynamic>?)
+        ?.map((e) => e as int)
+        .toList(),
   );
 }
 
@@ -576,6 +583,7 @@ Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) {
   writeNotNull(
       'encryptionMode', _$EncryptionModeEnumMap[instance.encryptionMode]);
   writeNotNull('encryptionKey', instance.encryptionKey);
+  writeNotNull('encryptionKdfSalt', instance.encryptionKdfSalt);
   return val;
 }
 
@@ -587,6 +595,8 @@ const _$EncryptionModeEnumMap = {
   EncryptionMode.SM4128ECB: 4,
   EncryptionMode.AES128GCM: 5,
   EncryptionMode.AES256GCM: 6,
+  EncryptionMode.AES128GCM2: 7,
+  EncryptionMode.AES256GCM2: 8,
 };
 
 RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) {
@@ -604,7 +614,7 @@ RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) {
     json['rxAudioKBitRate'] as int,
     json['txVideoKBitRate'] as int,
     json['rxVideoKBitRate'] as int,
-    json['users'] as int,
+    json['userCount'] as int,
     json['lastmileDelay'] as int,
     json['txPacketLossRate'] as int,
     json['rxPacketLossRate'] as int,
@@ -631,7 +641,7 @@ Map<String, dynamic> _$RtcStatsToJson(RtcStats instance) => <String, dynamic>{
       'rxAudioKBitRate': instance.rxAudioKBitRate,
       'txVideoKBitRate': instance.txVideoKBitRate,
       'rxVideoKBitRate': instance.rxVideoKBitRate,
-      'users': instance.users,
+      'userCount': instance.userCount,
       'lastmileDelay': instance.lastmileDelay,
       'txPacketLossRate': instance.txPacketLossRate,
       'rxPacketLossRate': instance.rxPacketLossRate,
@@ -1026,7 +1036,7 @@ Map<String, dynamic> _$RtcEngineConfigToJson(RtcEngineConfig instance) {
   }
 
   writeNotNull(
-      'areaCode', RtcEngineConfig._$AreaCodeListToJson(instance.areaCode));
+      'areaCode', RtcEngineContext._$AreaCodeListToJson(instance.areaCode));
   writeNotNull('logConfig', instance.logConfig?.toJson());
   return val;
 }
@@ -1040,6 +1050,35 @@ const _$AreaCodeEnumMap = {
   AreaCode.IN: 32,
   AreaCode.GLOB: -1,
 };
+
+RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) {
+  return RtcEngineContext(
+    json['appId'] as String,
+    areaCode: (json['areaCode'] as List<dynamic>?)
+        ?.map((e) => _$enumDecode(_$AreaCodeEnumMap, e))
+        .toList(),
+    logConfig: json['logConfig'] == null
+        ? null
+        : LogConfig.fromJson(json['logConfig'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
+  final val = <String, dynamic>{
+    'appId': instance.appId,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'areaCode', RtcEngineContext._$AreaCodeListToJson(instance.areaCode));
+  writeNotNull('logConfig', instance.logConfig?.toJson());
+  return val;
+}
 
 RhythmPlayerConfig _$RhythmPlayerConfigFromJson(Map<String, dynamic> json) {
   return RhythmPlayerConfig(
