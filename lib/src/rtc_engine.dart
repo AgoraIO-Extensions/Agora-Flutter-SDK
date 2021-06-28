@@ -81,7 +81,7 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> create(String appId) {
-    return createWithConfig(RtcEngineConfig(appId));
+    return createWithContext(RtcEngineContext(appId));
   }
 
   /// Creates an [RtcEngine] instance.
@@ -114,7 +114,7 @@ class RtcEngine with RtcEngineInterface {
   @deprecated
   static Future<RtcEngine> createWithAreaCode(
       String appId, List<AreaCode> areaCode) {
-    return createWithConfig(RtcEngineConfig(appId, areaCode: areaCode));
+    return createWithContext(RtcEngineContext(appId, areaCode: areaCode));
   }
 
   /// Creates an [RtcEngine] instance.
@@ -134,11 +134,33 @@ class RtcEngine with RtcEngineInterface {
   /// - An [RtcEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
+  @deprecated
   static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
+    return createWithContext(config);
+  }
+
+  /// Creates an [RtcEngine] instance.
+  ///
+  /// Since v3.3.1
+  ///
+  /// Unless otherwise specified, all the methods provided by the [RtcEngine] instance are executed asynchronously. Agora recommends calling these methods in the same thread.
+  ///
+  /// **Note**
+  /// - You must create the [RtcEngine] instance before calling any other method.
+  /// - You can create an [RtcEngine] instance either by calling this method or by calling [create]. The difference between [create] and this method is that this method enables you to specify the region for connection.
+  /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
+  ///
+  /// **Parameter**[context] Configurations for the [RtcEngine] instance. For details, see [RtcEngineContext].
+  ///
+  /// **Returns**
+  /// - An [RtcEngine] instance if the method call succeeds.
+  /// - The error code, if this method call fails:
+  ///   - [ErrorCode.InvalidAppId]
+  static Future<RtcEngine> createWithContext(RtcEngineContext context) async {
     if (_instance != null) return _instance!;
     _instance = RtcEngine._();
     await _instance!._invokeMethod('create', {
-      'config': config.toJson(),
+      'config': context.toJson(),
       'appType': 4,
     });
     return _instance!;

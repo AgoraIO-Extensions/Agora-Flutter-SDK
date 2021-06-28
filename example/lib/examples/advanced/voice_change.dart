@@ -51,7 +51,7 @@ class _State extends State<VoiceChange> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
     this._addListener();
 
     // make this room live broadcasting room
