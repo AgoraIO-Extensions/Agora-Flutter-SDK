@@ -18,7 +18,6 @@ class _State extends State<VoiceChange> {
   late final RtcEngine _engine;
   bool isJoined = false;
   List<int> remoteUids = [];
-  bool isLowAudio = true;
   int? uidMySelf;
   int? selectedVoiceToolBtn;
   AudioEffectPreset currentAudioEffectPreset = AudioEffectPreset.AudioEffectOff;
@@ -55,12 +54,9 @@ class _State extends State<VoiceChange> {
     _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListener();
 
-    // enable video module and set up video encoding configs
-    await _engine.enableVideo();
-
     // make this room live broadcasting room
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await this._updateClientRole(ClientRole.Broadcaster);
+    await _engine.setClientRole(ClientRole.Broadcaster);
 
     // Set audio route to speaker
     await _engine.setDefaultAudioRoutetoSpeakerphone(true);
@@ -99,26 +95,7 @@ class _State extends State<VoiceChange> {
     }));
   }
 
-  _updateClientRole(ClientRole role) async {
-    var option;
-    if (role == ClientRole.Broadcaster) {
-      await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
-          dimensions: VideoDimensions(640, 360),
-          frameRate: VideoFrameRate.Fps30,
-          orientationMode: VideoOutputOrientationMode.Adaptative));
-      // enable camera/mic, this will bring up permission dialog for first time
-      await _engine.enableLocalAudio(true);
-      await _engine.enableLocalVideo(true);
-    } else {
-      // You have to provide client role options if set to audience
-      option = ClientRoleOptions(isLowAudio
-          ? AudienceLatencyLevelType.LowLatency
-          : AudienceLatencyLevelType.UltraLowLatency);
-    }
-    await _engine.setClientRole(role, option);
-  }
-
-  _onPressBFButtonn(dynamic type, int index) async {
+  _onPressBFButton(dynamic type, int index) async {
     switch (index) {
       case 0:
       case 1:
@@ -388,7 +365,7 @@ class _State extends State<VoiceChange> {
       setState(() {
         selectedVoiceToolBtn = index;
       });
-      _onPressBFButtonn(type, index);
+      _onPressBFButton(type, index);
     });
   }
 
@@ -462,7 +439,6 @@ class _CusBtnState extends State<_CusBtn> {
 
   @override
   void didUpdateWidget(covariant _CusBtn oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     this.setState(() {
       isEnable = !widget.isOff;

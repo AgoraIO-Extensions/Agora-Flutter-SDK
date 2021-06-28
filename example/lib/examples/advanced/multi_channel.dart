@@ -56,7 +56,7 @@ class _State extends State<MultiChannel> {
     this._addListener(_channel0);
 
     await _channel0.setClientRole(ClientRole.Broadcaster);
-    await _channel0.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel0.joinChannel(null, null, 0, ChannelMediaOptions());
   }
 
   _joinChannel1() async {
@@ -68,7 +68,7 @@ class _State extends State<MultiChannel> {
     this._addListener(_channel1);
 
     await _channel1.setClientRole(ClientRole.Broadcaster);
-    await _channel1.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel1.joinChannel(null, null, 0, ChannelMediaOptions());
   }
 
   _addListener(RtcChannel channel) {

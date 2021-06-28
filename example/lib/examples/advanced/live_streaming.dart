@@ -128,7 +128,7 @@ class _State extends State<LiveStreaming> {
     var option;
     if (role == ClientRole.Broadcaster) {
       await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
-          dimensions: VideoDimensions(640, 360),
+          dimensions: VideoDimensions(width: 640, height: 360),
           frameRate: VideoFrameRate.Fps30,
           orientationMode: VideoOutputOrientationMode.Adaptative));
       // enable camera/mic, this will bring up permission dialog for first time
@@ -136,9 +136,10 @@ class _State extends State<LiveStreaming> {
       await _engine.enableLocalVideo(true);
     } else {
       // You have to provide client role options if set to audience
-      option = ClientRoleOptions(isLowAudio
-          ? AudienceLatencyLevelType.LowLatency
-          : AudienceLatencyLevelType.UltraLowLatency);
+      option = ClientRoleOptions(
+          audienceLatencyLevel: isLowAudio
+              ? AudienceLatencyLevelType.LowLatency
+              : AudienceLatencyLevelType.UltraLowLatency);
     }
     await _engine.setClientRole(role, option);
   }
@@ -157,9 +158,10 @@ class _State extends State<LiveStreaming> {
       isLowAudio = !isLowAudio;
       _engine.setClientRole(
           ClientRole.Audience,
-          ClientRoleOptions(isLowAudio
-              ? AudienceLatencyLevelType.LowLatency
-              : AudienceLatencyLevelType.UltraLowLatency));
+          ClientRoleOptions(
+              audienceLatencyLevel: isLowAudio
+                  ? AudienceLatencyLevelType.LowLatency
+                  : AudienceLatencyLevelType.UltraLowLatency));
     });
   }
 
