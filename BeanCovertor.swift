@@ -304,14 +304,26 @@ func mapToChannelMediaOptions(_ map: [String: Any]) -> AgoraRtcChannelMediaOptio
     if let autoSubscribeVideo = map["autoSubscribeVideo"] as? Bool {
         options.autoSubscribeVideo = autoSubscribeVideo
     }
+    if let publishLocalAudio = map["publishLocalAudio"] as? Bool {
+        options.publishLocalAudio = publishLocalAudio
+    }
+    if let publishLocalVideo = map["publishLocalVideo"] as? Bool {
+        options.publishLocalVideo = publishLocalVideo
+    }
     return options
 }
 
 func mapToRtcEngineConfig(_ map: [String: Any]) -> AgoraRtcEngineConfig {
     let config = AgoraRtcEngineConfig()
     config.appId = map["appId"] as? String
-    if let areaCode = map["areaCode"] as? NSNumber {
-        config.areaCode = areaCode.uintValue
+    if let list = map["areaCode"] as? [Any] {
+        var areaCode: UInt = 0
+        for i in list {
+            if let code = i as? NSNumber {
+                areaCode |= code.uintValue
+            }
+        }
+        config.areaCode = areaCode
     }
     if let logConfig = map["logConfig"] as? [String: Any] {
         config.logConfig = mapToLogConfig(logConfig)
@@ -349,6 +361,15 @@ func mapToEncryptionConfig(_ map: [String: Any]) -> AgoraEncryptionConfig {
     }
     if let encryptionKey = map["encryptionKey"] as? String {
         config.encryptionKey = encryptionKey
+    }
+    if let list = map["encryptionKdfSalt"] as? [Any] {
+        var encryptionKdfSalt: [UInt8] = []
+        for i in list.indices {
+            if let item = list[i] as? NSNumber {
+                encryptionKdfSalt[i] = item.uint8Value
+            }
+        }
+        config.encryptionKdfSalt = Data(bytes: encryptionKdfSalt)
     }
     return config
 }
