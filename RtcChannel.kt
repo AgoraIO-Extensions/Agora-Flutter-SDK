@@ -27,8 +27,10 @@ class IRtcChannel {
 
     fun getConnectionState(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun publish(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun unpublish(params: Map<String, *>, callback: Callback)
 
     fun getCallId(params: Map<String, *>, callback: Callback)
@@ -36,6 +38,8 @@ class IRtcChannel {
 
   interface RtcAudioInterface {
     fun adjustUserPlaybackSignalVolume(params: Map<String, *>, callback: Callback)
+
+    fun muteLocalAudioStream(params: Map<String, *>, callback: Callback)
 
     fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback)
 
@@ -46,6 +50,8 @@ class IRtcChannel {
   }
 
   interface RtcVideoInterface {
+    fun muteLocalVideoStream(params: Map<String, *>, callback: Callback)
+
     fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback)
 
     fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
@@ -222,6 +228,14 @@ class RtcChannelManager(
     )
   }
 
+  override fun muteLocalAudioStream(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      this[params["channelId"] as String]?.muteLocalAudioStream(
+        params["muted"] as Boolean
+      )
+    )
+  }
+
   override fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback) {
     callback.code(
       this[params["channelId"] as String]?.muteRemoteAudioStream(
@@ -237,6 +251,14 @@ class RtcChannelManager(
 
   override fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback) {
     callback.code(this[params["channelId"] as String]?.setDefaultMuteAllRemoteAudioStreams(params["muted"] as Boolean))
+  }
+
+  override fun muteLocalVideoStream(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      this[params["channelId"] as String]?.muteLocalVideoStream(
+        params["muted"] as Boolean
+      )
+    )
   }
 
   override fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback) {
