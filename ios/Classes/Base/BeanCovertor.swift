@@ -316,14 +316,8 @@ func mapToChannelMediaOptions(_ map: [String: Any]) -> AgoraRtcChannelMediaOptio
 func mapToRtcEngineConfig(_ map: [String: Any]) -> AgoraRtcEngineConfig {
     let config = AgoraRtcEngineConfig()
     config.appId = map["appId"] as? String
-    if let list = map["areaCode"] as? [Any] {
-        var areaCode: UInt = 0
-        for i in list {
-            if let code = i as? NSNumber {
-                areaCode |= code.uintValue
-            }
-        }
-        config.areaCode = areaCode
+    if let areaCode = map["areaCode"] as? NSNumber {
+        config.areaCode = areaCode.uintValue
     }
     if let logConfig = map["logConfig"] as? [String: Any] {
         config.logConfig = mapToLogConfig(logConfig)
