@@ -9,9 +9,8 @@ import 'enums.dart';
 
 final Map<int, MethodChannel> _channels = {};
 
-/// Use SurfaceView in Android.
-///
-/// Use [UIView](https://developer.apple.com/documentation/uikit/uiview) in iOS.
+/// Use SurfaceView on Android.
+/// Use UIView on iOS.
 class RtcSurfaceView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -36,12 +35,12 @@ class RtcSurfaceView extends StatefulWidget {
 
   /// Control whether the surface view's surface is placed on top of its window.
   ///
-  /// See [TargetPlatform.android].
+  /// Only support [TargetPlatform.android].
   final bool zOrderOnTop;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
   ///
-  /// See [TargetPlatform.android].
+  /// Only support [TargetPlatform.android].
   final bool zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
@@ -162,28 +161,37 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
 
   void setData() {
     _channels[_id]?.invokeMethod('setData', {
-      'data': {'uid': widget.uid, 'channelId': widget.channelId}
+      'data': {
+        'uid': widget.uid,
+        'channelId': widget.channelId,
+      },
     });
   }
 
   void setRenderMode() {
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
+    _channels[_id]?.invokeMethod('setRenderMode', {
+      'renderMode': _renderMode,
+    });
   }
 
   void setMirrorMode() {
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-    _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
+    _channels[_id]?.invokeMethod('setMirrorMode', {
+      'mirrorMode': _mirrorMode,
+    });
   }
 
   void setZOrderOnTop() {
-    _channels[_id]
-        ?.invokeMethod('setZOrderOnTop', {'onTop': widget.zOrderOnTop});
+    _channels[_id]?.invokeMethod('setZOrderOnTop', {
+      'onTop': widget.zOrderOnTop,
+    });
   }
 
   void setZOrderMediaOverlay() {
-    _channels[_id]?.invokeMethod(
-        'setZOrderMediaOverlay', {'isMediaOverlay': widget.zOrderMediaOverlay});
+    _channels[_id]?.invokeMethod('setZOrderMediaOverlay', {
+      'isMediaOverlay': widget.zOrderMediaOverlay,
+    });
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -195,9 +203,8 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   }
 }
 
-/// Use TextureView in Android.
-/// Not support for iOS.
-/// [TargetPlatform.android]
+/// Use TextureView on Android.
+/// Not support iOS.
 class RtcTextureView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -310,18 +317,25 @@ class _RtcTextureViewState extends State<RtcTextureView> {
 
   void setData() {
     _channels[_id]?.invokeMethod('setData', {
-      'data': {'uid': widget.uid, 'channelId': widget.channelId}
+      'data': {
+        'uid': widget.uid,
+        'channelId': widget.channelId,
+      },
     });
   }
 
   void setRenderMode() {
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
+    _channels[_id]?.invokeMethod('setRenderMode', {
+      'renderMode': _renderMode,
+    });
   }
 
   void setMirrorMode() {
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-    _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
+    _channels[_id]?.invokeMethod('setMirrorMode', {
+      'mirrorMode': _mirrorMode,
+    });
   }
 
   Future<void> onPlatformViewCreated(int id) async {
