@@ -207,15 +207,7 @@ fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
 fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
   return RtcEngineConfig().apply {
     mAppId = map["appId"] as String
-    (map["areaCode"] as? List<*>)?.let { list ->
-      var areaCode = 0
-      for (i in list.indices) {
-        (list[i] as? Number)?.let {
-          areaCode = areaCode or it.toInt()
-        }
-      }
-      mAreaCode = areaCode
-    }
+    (map["areaCode"] as? Number)?.toInt()?.let { mAreaCode = it }
     (map["logConfig"] as? Map<*, *>)?.let { mLogConfig = mapToLogConfig(it) }
   }
 }
