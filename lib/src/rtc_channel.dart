@@ -13,7 +13,7 @@ class RtcChannel with RtcChannelInterface {
       MethodChannel('agora_rtc_channel');
   static const EventChannel _eventChannel =
       EventChannel('agora_rtc_channel/events');
-
+  static final Stream _stream = _eventChannel.receiveBroadcastStream();
   static StreamSubscription? _subscription;
 
   static final Map<String, RtcChannel> _channels = {};
@@ -28,10 +28,11 @@ class RtcChannel with RtcChannelInterface {
   Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
     return _methodChannel.invokeMethod(
-        method,
-        arguments == null
-            ? {'channelId': channelId}
-            : {'channelId': channelId, ...arguments});
+      method,
+      arguments == null
+          ? {'channelId': channelId}
+          : {'channelId': channelId, ...arguments},
+    );
   }
 
   /// Creates and gets an [RtcChannel] instance.
@@ -47,7 +48,9 @@ class RtcChannel with RtcChannelInterface {
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   static Future<RtcChannel> create(String channelId) async {
     if (_channels.containsKey(channelId)) return _channels[channelId]!;
-    await _methodChannel.invokeMethod('create', {'channelId': channelId});
+    await _methodChannel.invokeMethod('create', {
+      'channelId': channelId,
+    });
     _channels[channelId] = RtcChannel._(channelId);
     return _channels[channelId]!;
   }
@@ -75,7 +78,7 @@ class RtcChannel with RtcChannelInterface {
   /// **Parameter** [handler] The event handler.
   void setEventHandler(RtcChannelEventHandler handler) {
     _handler = handler;
-    _subscription ??= _eventChannel.receiveBroadcastStream().listen((event) {
+    _subscription ??= _stream.listen((event) {
       final eventMap = Map<dynamic, dynamic>.from(event);
       final channelId = eventMap['channelId'];
       final methodName = eventMap['methodName'] as String;
@@ -88,7 +91,7 @@ class RtcChannel with RtcChannelInterface {
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
-      'options': options?.toJson()
+      'options': options?.toJson(),
     });
   }
 
@@ -99,7 +102,7 @@ class RtcChannel with RtcChannelInterface {
       'token': token,
       'optionalInfo': optionalInfo,
       'optionalUid': optionalUid,
-      'options': options.toJson()
+      'options': options.toJson(),
     });
   }
 
@@ -109,7 +112,7 @@ class RtcChannel with RtcChannelInterface {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'userAccount': userAccount,
-      'options': options.toJson()
+      'options': options.toJson(),
     });
   }
 
@@ -120,7 +123,9 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> renewToken(String token) {
-    return _invokeMethod('renewToken', {'token': token});
+    return _invokeMethod('renewToken', {
+      'token': token,
+    });
   }
 
   @override
@@ -131,11 +136,13 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  @deprecated
   Future<void> publish() {
     return _invokeMethod('publish');
   }
 
   @override
+  @deprecated
   Future<void> unpublish() {
     return _invokeMethod('unpublish');
   }
@@ -147,61 +154,81 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume) {
-    return _invokeMethod(
-        'adjustUserPlaybackSignalVolume', {'uid': uid, 'volume': volume});
+    return _invokeMethod('adjustUserPlaybackSignalVolume', {
+      'uid': uid,
+      'volume': volume,
+    });
   }
 
   @override
   Future<void> muteAllRemoteAudioStreams(bool muted) {
-    return _invokeMethod('muteAllRemoteAudioStreams', {'muted': muted});
+    return _invokeMethod('muteAllRemoteAudioStreams', {
+      'muted': muted,
+    });
   }
 
   @override
   Future<void> muteRemoteAudioStream(int uid, bool muted) {
-    return _invokeMethod('muteRemoteAudioStream', {'uid': uid, 'muted': muted});
+    return _invokeMethod('muteRemoteAudioStream', {
+      'uid': uid,
+      'muted': muted,
+    });
   }
 
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted) {
-    return _invokeMethod(
-        'setDefaultMuteAllRemoteAudioStreams', {'muted': muted});
+    return _invokeMethod('setDefaultMuteAllRemoteAudioStreams', {
+      'muted': muted,
+    });
   }
 
   @override
   Future<void> muteAllRemoteVideoStreams(bool muted) {
-    return _invokeMethod('muteAllRemoteVideoStreams', {'muted': muted});
+    return _invokeMethod('muteAllRemoteVideoStreams', {
+      'muted': muted,
+    });
   }
 
   @override
   Future<void> muteRemoteVideoStream(int uid, bool muted) {
-    return _invokeMethod('muteRemoteVideoStream', {'uid': uid, 'muted': muted});
+    return _invokeMethod('muteRemoteVideoStream', {
+      'uid': uid,
+      'muted': muted,
+    });
   }
 
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) {
-    return _invokeMethod(
-        'setDefaultMuteAllRemoteVideoStreams', {'muted': muted});
+    return _invokeMethod('setDefaultMuteAllRemoteVideoStreams', {
+      'muted': muted,
+    });
   }
 
   @override
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config) {
-    return _invokeMethod(
-        'addInjectStreamUrl', {'url': url, 'config': config.toJson()});
+    return _invokeMethod('addInjectStreamUrl', {
+      'url': url,
+      'config': config.toJson(),
+    });
   }
 
   @override
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled) {
-    return _invokeMethod('addPublishStreamUrl',
-        {'url': url, 'transcodingEnabled': transcodingEnabled});
+    return _invokeMethod('addPublishStreamUrl', {
+      'url': url,
+      'transcodingEnabled': transcodingEnabled,
+    });
   }
 
   @override
   @deprecated
   Future<int?> createDataStream(bool reliable, bool ordered) {
-    return _invokeMethod(
-        'createDataStream', {'reliable': reliable, 'ordered': ordered});
+    return _invokeMethod('createDataStream', {
+      'reliable': reliable,
+      'ordered': ordered,
+    });
   }
 
   @override
@@ -211,60 +238,75 @@ class RtcChannel with RtcChannelInterface {
 
   @override
   Future<void> removeInjectStreamUrl(String url) {
-    return _invokeMethod('removeInjectStreamUrl', {'url': url});
+    return _invokeMethod('removeInjectStreamUrl', {
+      'url': url,
+    });
   }
 
   @override
   Future<void> removePublishStreamUrl(String url) {
-    return _invokeMethod('removePublishStreamUrl', {'url': url});
+    return _invokeMethod('removePublishStreamUrl', {
+      'url': url,
+    });
   }
 
   @override
   Future<void> sendMetadata(String metadata) {
-    return _invokeMethod('sendMetadata', {'metadata': metadata});
+    return _invokeMethod('sendMetadata', {
+      'metadata': metadata,
+    });
   }
 
   @override
   Future<void> sendStreamMessage(int streamId, String message) {
-    return _invokeMethod(
-        'sendStreamMessage', {'streamId': streamId, 'message': message});
+    return _invokeMethod('sendStreamMessage', {
+      'streamId': streamId,
+      'message': message,
+    });
   }
 
   @override
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
-    return _invokeMethod('setEncryptionMode',
-        {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
+    return _invokeMethod('setEncryptionMode', {
+      'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
+    });
   }
 
   @override
   @deprecated
   Future<void> setEncryptionSecret(String secret) {
-    return _invokeMethod('setEncryptionSecret', {'secret': secret});
+    return _invokeMethod('setEncryptionSecret', {
+      'secret': secret,
+    });
   }
 
   @override
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
-    return _invokeMethod(
-        'setLiveTranscoding', {'transcoding': transcoding.toJson()});
+    return _invokeMethod('setLiveTranscoding', {
+      'transcoding': transcoding.toJson(),
+    });
   }
 
   @override
   Future<void> setMaxMetadataSize(int size) {
-    return _invokeMethod('setMaxMetadataSize', {'size': size});
+    return _invokeMethod('setMaxMetadataSize', {
+      'size': size,
+    });
   }
 
   @override
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType) {
-    return _invokeMethod('setRemoteDefaultVideoStreamType',
-        {'streamType': VideoStreamTypeConverter(streamType).value()});
+    return _invokeMethod('setRemoteDefaultVideoStreamType', {
+      'streamType': VideoStreamTypeConverter(streamType).value(),
+    });
   }
 
   @override
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority) {
     return _invokeMethod('setRemoteUserPriority', {
       'uid': uid,
-      'userPriority': UserPriorityConverter(userPriority).value()
+      'userPriority': UserPriorityConverter(userPriority).value(),
     });
   }
 
@@ -272,21 +314,24 @@ class RtcChannel with RtcChannelInterface {
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType) {
     return _invokeMethod('setRemoteVideoStreamType', {
       'uid': uid,
-      'streamType': VideoStreamTypeConverter(streamType).value()
+      'streamType': VideoStreamTypeConverter(streamType).value(),
     });
   }
 
   @override
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain) {
-    return _invokeMethod(
-        'setRemoteVoicePosition', {'uid': uid, 'pan': pan, 'gain': gain});
+    return _invokeMethod('setRemoteVoicePosition', {
+      'uid': uid,
+      'pan': pan,
+      'gain': gain,
+    });
   }
 
   @override
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('startChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
+      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
   }
 
@@ -304,25 +349,45 @@ class RtcChannel with RtcChannelInterface {
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('updateChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson()
+      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
   }
 
   @override
   Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
-    return _invokeMethod(
-        'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
+    return _invokeMethod('enableEncryption', {
+      'enabled': enabled,
+      'config': config.toJson(),
+    });
   }
 
   @override
   Future<int?> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod('createDataStream', {'config': config.toJson()});
+    return _invokeMethod('createDataStream', {
+      'config': config.toJson(),
+    });
   }
 
   @override
   Future<void> enableRemoteSuperResolution(int uid, bool enable) {
-    return _invokeMethod(
-        'enableRemoteSuperResolution', {'uid': uid, 'enable': enable});
+    return _invokeMethod('enableRemoteSuperResolution', {
+      'uid': uid,
+      'enable': enable,
+    });
+  }
+
+  @override
+  Future<void> muteLocalAudioStream(bool muted) {
+    return _invokeMethod('muteLocalAudioStream', {
+      'muted': muted,
+    });
+  }
+
+  @override
+  Future<void> muteLocalVideoStream(bool muted) {
+    return _invokeMethod('muteLocalVideoStream', {
+      'muted': muted,
+    });
   }
 }
 
@@ -439,11 +504,13 @@ mixin RtcChannelInterface
   /// - This method publishes one stream only to the channel corresponding to the current [RtcChannel] instance.
   /// - In a LiveBroadcasting channel, only a broadcaster can call this method. To switch the client role, call [RtcChannel.setClientRole] of the current [RtcChannel] instance.
   /// - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
+  @deprecated
   Future<void> publish();
 
   /// Stops publishing a stream to the channel.
   ///
   /// If you call this method in a channel where you are not publishing streams, the SDK returns [ErrorCode.Refused].
+  @deprecated
   Future<void> unpublish();
 
   /// Gets the current call ID.
@@ -471,6 +538,9 @@ mixin RtcAudioInterface {
   /// - 0: Mute.
   /// - 100: The original volume.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
+
+  /// TODO(doc)
+  Future<void> muteLocalAudioStream(bool muted);
 
   /// Stops/Resumes receiving the audio stream of the specified user.
   ///
@@ -504,6 +574,9 @@ mixin RtcAudioInterface {
 
 /// @nodoc
 mixin RtcVideoInterface {
+  /// TODO(doc)
+  Future<void> muteLocalVideoStream(bool muted);
+
   /// Stops/Resumes receiving the video stream of the specified user.
   ///
   /// **Parameter** [uid] ID of the remote user whose video stream you want to mute.

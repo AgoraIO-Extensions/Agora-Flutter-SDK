@@ -1,3 +1,11 @@
+## [4.0.5-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.2...v4.0.5-rc.0) (2021-06-28)
+
+
+### Features
+
+* add RtcEngineContext instead of RtcEngineConfig ([5dd294f](https://github.com/AgoraIO/Flutter-SDK/commit/5dd294fa95799dcc19d69775c19a13aeed61e2a2))
+* support native SDK 3.4.5 ([d1d8433](https://github.com/AgoraIO/Flutter-SDK/commit/d1d84330c9fcc1367cfe8160fe8c6d593c7bac9c))
+
 ## [4.0.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.1...v4.0.2) (2021-06-09)
 
 

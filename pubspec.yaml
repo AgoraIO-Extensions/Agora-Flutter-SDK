@@ -1,6 +1,6 @@
 name: agora_rtc_engine
 description: Flutter plugin for Agora Video SDK.
-version: 4.0.2
+version: 4.0.5-rc.0
 homepage: 'https://www.agora.io'
 repository: 'https://github.com/AgoraIO/Flutter-SDK'
 environment:
@@ -13,7 +13,8 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.0.0
 dev_dependencies:
-  integration_test: ^1.0.2+2
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   flutter_driver:

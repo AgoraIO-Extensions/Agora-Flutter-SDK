@@ -32,7 +32,7 @@ extension AgoraRtcLocalAudioStats {
 extension AgoraChannelStats {
     func toMap() -> [String: Any?] {
         return [
-            "totalDuration": duration,
+            "duration": duration,
             "txBytes": txBytes,
             "rxBytes": rxBytes,
             "txAudioBytes": txAudioBytes,
@@ -45,7 +45,7 @@ extension AgoraChannelStats {
             "rxAudioKBitRate": rxAudioKBitrate,
             "txVideoKBitRate": txVideoKBitrate,
             "rxVideoKBitRate": rxVideoKBitrate,
-            "users": userCount,
+            "userCount": userCount,
             "lastmileDelay": lastmileDelay,
             "txPacketLossRate": txPacketLossRate,
             "rxPacketLossRate": rxPacketLossRate,

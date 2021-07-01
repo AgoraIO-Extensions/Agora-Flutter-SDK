@@ -19,7 +19,6 @@ class _State extends State<CreateStreamData> {
   late final RtcEngine _engine;
   bool isJoined = false;
   int? remoteUid;
-  bool isLowAudio = true;
 
   @override
   void initState() {
@@ -36,7 +35,7 @@ class _State extends State<CreateStreamData> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
     this._addListener();
 
     // enable video module and set up video encoding configs
@@ -44,7 +43,7 @@ class _State extends State<CreateStreamData> {
 
     // make this room live broadcasting room
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await this._updateClientRole(ClientRole.Broadcaster);
+    await _engine.setClientRole(ClientRole.Broadcaster);
 
     // Set audio route to speaker
     await _engine.setDefaultAudioRoutetoSpeakerphone(true);
@@ -113,32 +112,13 @@ class _State extends State<CreateStreamData> {
     }));
   }
 
-  _updateClientRole(ClientRole role) async {
-    var option;
-    if (role == ClientRole.Broadcaster) {
-      await _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
-          dimensions: VideoDimensions(640, 360),
-          frameRate: VideoFrameRate.Fps30,
-          orientationMode: VideoOutputOrientationMode.Adaptative));
-      // enable camera/mic, this will bring up permission dialog for first time
-      await _engine.enableLocalAudio(true);
-      await _engine.enableLocalVideo(true);
-    } else {
-      // You have to provide client role options if set to audience
-      option = ClientRoleOptions(isLowAudio
-          ? AudienceLatencyLevelType.LowLatency
-          : AudienceLatencyLevelType.UltraLowLatency);
-    }
-    await _engine.setClientRole(role, option);
-  }
-
   _onPressSend() async {
     if (_controller.text.length == 0) {
       return;
     }
 
-    var streamId = await _engine.createDataStreamWithConfig(
-        DataStreamConfig(syncWithAudio: false, ordered: false));
+    var streamId = await _engine
+        .createDataStreamWithConfig(DataStreamConfig(false, false));
     if (streamId != null) {
       _engine.sendStreamMessage(streamId, _controller.text);
     }
@@ -158,7 +138,7 @@ class _State extends State<CreateStreamData> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _initEngine,
                           child: Text('Join channel'),
                         ),

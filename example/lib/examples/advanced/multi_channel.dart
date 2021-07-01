@@ -39,7 +39,7 @@ class _State extends State<MultiChannel> {
   }
 
   _initEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
 
     await _engine.enableVideo();
     await _engine.startPreview();
@@ -56,7 +56,14 @@ class _State extends State<MultiChannel> {
     this._addListener(_channel0);
 
     await _channel0.setClientRole(ClientRole.Broadcaster);
-    await _channel0.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel0.joinChannel(
+        null,
+        null,
+        0,
+        ChannelMediaOptions(
+          publishLocalAudio: false,
+          publishLocalVideo: false,
+        ));
   }
 
   _joinChannel1() async {
@@ -68,7 +75,14 @@ class _State extends State<MultiChannel> {
     this._addListener(_channel1);
 
     await _channel1.setClientRole(ClientRole.Broadcaster);
-    await _channel1.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel1.joinChannel(
+        null,
+        null,
+        0,
+        ChannelMediaOptions(
+          publishLocalAudio: false,
+          publishLocalVideo: false,
+        ));
   }
 
   _addListener(RtcChannel channel) {

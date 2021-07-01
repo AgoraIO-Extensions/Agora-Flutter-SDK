@@ -39,7 +39,7 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _initEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
     this._addListeners();
 
     await _engine.enableAudio();
@@ -118,8 +118,8 @@ class _State extends State<JoinChannelAudio> {
       _engine
           .playEffect(
               1,
-              await (RtcEngineExtension.getAssetAbsolutePath(
-                  "assets/Sound_Horizon.mp3") as FutureOr<String>),
+              await (_engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3")
+                  as FutureOr<String>),
               -1,
               1,
               1,
