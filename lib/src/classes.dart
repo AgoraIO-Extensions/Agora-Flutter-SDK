@@ -1,5 +1,6 @@
 import 'dart:ui' show Color;
 
+import 'package:agora_rtc_engine/src/enum_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'enums.dart';
@@ -16,7 +17,10 @@ class UserInfo {
   String userAccount;
 
   /// Constructs a [UserInfo]
-  UserInfo();
+  UserInfo(
+    this.uid,
+    this.userAccount,
+  );
 
   /// @nodoc
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
@@ -30,13 +34,18 @@ class UserInfo {
 @JsonSerializable(explicitToJson: true)
 class VideoDimensions {
   /// The video resolution on the horizontal axis.
-  int width;
+  @JsonKey(includeIfNull: false)
+  int? width;
 
   /// The video resolution on the vertical axis.
-  int height;
+  @JsonKey(includeIfNull: false)
+  int? height;
 
   /// Constructs a [VideoDimensions]
-  VideoDimensions(this.width, this.height);
+  VideoDimensions({
+    this.width,
+    this.height,
+  });
 
   /// @nodoc ignore: public_member_api_docs
   factory VideoDimensions.fromJson(Map<String, dynamic> json) =>
@@ -72,15 +81,15 @@ class VideoEncoderConfiguration {
   /// - The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [VideoOutputOrientationMode].</li>
   /// - Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
   @JsonKey(includeIfNull: false)
-  VideoDimensions dimensions;
+  VideoDimensions? dimensions;
 
   /// The video frame rate (fps). The default value is 15. You can either set the frame rate manually or choose from [VideoFrameRate]. We do not recommend setting this to a value greater than 30.
   @JsonKey(includeIfNull: false)
-  VideoFrameRate frameRate;
+  VideoFrameRate? frameRate;
 
   /// The minimum video encoder frame rate (fps). The default value is [VideoFrameRate.Min] (the SDK uses the lowest encoder frame rate).
   @JsonKey(includeIfNull: false)
-  VideoFrameRate minFrameRate;
+  VideoFrameRate? minFrameRate;
 
   /// Bitrate of the video (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
   ///
@@ -126,38 +135,39 @@ class VideoEncoderConfiguration {
   /// - The base bitrate in this table applies to the Communication profile.
   /// - The LiveBroadcasting profile generally requires a higher bitrate for better video quality. We recommend setting the bitrate mode as `0`. You can also set the bitrate as the base bitrate value x 2.
   @JsonKey(includeIfNull: false)
-  int bitrate;
+  int? bitrate;
 
   /// The minimum encoding bitrate (Kbps). The Agora SDK automatically adjusts the encoding bitrate to adapt to the network conditions. Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and hence sacrifice the smoothness of the video transmission. That said, unless you have special requirements for image quality, Agora does not recommend changing this value.
   @JsonKey(includeIfNull: false)
-  int minBitrate;
+  int? minBitrate;
 
   /// The orientation mode.
   /// See [VideoOutputOrientationMode].
   @JsonKey(includeIfNull: false)
-  VideoOutputOrientationMode orientationMode;
+  VideoOutputOrientationMode? orientationMode;
 
   /// The video encoding degradation preference under limited bandwidth:
   /// See [DegradationPreference].
   @JsonKey(includeIfNull: false)
-  DegradationPreference degradationPrefer;
+  DegradationPreference? degradationPrefer;
 
   /// Sets the mirror mode of the published local video stream.
   /// This member only affects the video that the remote user sees.
   /// See [VideoMirrorMode].
   @JsonKey(includeIfNull: false)
-  VideoMirrorMode mirrorMode;
+  VideoMirrorMode? mirrorMode;
 
   /// Constructs a [VideoEncoderConfiguration]
-  VideoEncoderConfiguration(
-      {this.dimensions,
-      this.frameRate,
-      this.minFrameRate,
-      this.bitrate,
-      this.minBitrate,
-      this.orientationMode,
-      this.degradationPrefer,
-      this.mirrorMode});
+  VideoEncoderConfiguration({
+    this.dimensions,
+    this.frameRate,
+    this.minFrameRate,
+    this.bitrate,
+    this.minBitrate,
+    this.orientationMode,
+    this.degradationPrefer,
+    this.mirrorMode,
+  });
 
   /// @nodoc
   factory VideoEncoderConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -172,26 +182,27 @@ class VideoEncoderConfiguration {
 class BeautyOptions {
   /// The lightening contrast level, used with [lighteningLevel].
   @JsonKey(includeIfNull: false)
-  LighteningContrastLevel lighteningContrastLevel;
+  LighteningContrastLevel? lighteningContrastLevel;
 
   /// The brightness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.7.
   @JsonKey(includeIfNull: false)
-  double lighteningLevel;
+  double? lighteningLevel;
 
   /// The sharpness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.5. This parameter is usually used to remove blemishes.
   @JsonKey(includeIfNull: false)
-  double smoothnessLevel;
+  double? smoothnessLevel;
 
   /// The redness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.1. This parameter adjusts the red saturation level.
   @JsonKey(includeIfNull: false)
-  double rednessLevel;
+  double? rednessLevel;
 
   /// Constructs a [BeautyOptions]
-  BeautyOptions(
-      {this.lighteningContrastLevel,
-      this.lighteningLevel,
-      this.smoothnessLevel,
-      this.rednessLevel});
+  BeautyOptions({
+    this.lighteningContrastLevel,
+    this.lighteningLevel,
+    this.smoothnessLevel,
+    this.rednessLevel,
+  });
 
   /// @nodoc
   factory BeautyOptions.fromJson(Map<String, dynamic> json) =>
@@ -208,19 +219,27 @@ class AgoraImage {
   String url;
 
   /// Position of the image on the upper left of the broadcasting video on the horizontal axis.
-  int x;
+  @JsonKey(includeIfNull: false)
+  int? x;
 
   /// Position of the image on the upper left of the broadcasting video on the vertical axis.
-  int y;
+  @JsonKey(includeIfNull: false)
+  int? y;
 
   /// Width of the image on the broadcasting video.
-  int width;
+  int? width;
 
   /// Height of the image on the broadcasting video.
-  int height;
+  int? height;
 
   /// Constructs a [AgoraImage]
-  AgoraImage(this.url, this.x, this.y, this.width, this.height);
+  AgoraImage(
+    this.url, {
+    this.x,
+    this.y,
+    this.width,
+    this.height,
+  });
 
   /// @nodoc
   factory AgoraImage.fromJson(Map<String, dynamic> json) =>
@@ -237,18 +256,20 @@ class TranscodingUser {
   int uid;
 
   /// Horizontal position of the video frame of the user from the top left corner of the CDN live streaming.
-  int x;
+  @JsonKey(includeIfNull: false)
+  int? x;
 
   /// Vertical position of the video frame of the user from the top left corner of the CDN live streaming.
-  int y;
+  @JsonKey(includeIfNull: false)
+  int? y;
 
   /// Width of the video frame of the user on the CDN live streaming. The default value is 360.
   @JsonKey(includeIfNull: false)
-  int width;
+  int? width;
 
   /// Height of the video frame of the user on the CDN live streaming. The default value is 640.
   @JsonKey(includeIfNull: false)
-  int height;
+  int? height;
 
   /// The layer index of the video frame. An integer. The value range is [0,100].
   /// - 0: (Default) Bottom layer.
@@ -256,24 +277,24 @@ class TranscodingUser {
   ///
   /// **Note**: If the value is set lower than 0 or higher than 100, the [ErrorCode.InvalidArgument] error is reported.
   @JsonKey(includeIfNull: false)
-  int zOrder;
+  int? zOrder;
 
   /// The transparency of the video frame of the user in the CDN live stream that ranges between 0.0 and 1.0. 0.0 means that the video frame is completely transparent and 1.0 means opaque. The default value is 1.0.
   @JsonKey(includeIfNull: false)
-  double alpha;
+  double? alpha;
 
   /// The audio channel ranging between 0 and 5. The default value is 0.
   /// See [AudioChannel].
   ///
   /// **Note** Special players are needed if `audioChannel` is not set as 0.
   @JsonKey(includeIfNull: false)
-  AudioChannel audioChannel;
+  AudioChannel? audioChannel;
 
   /// Constructs a [TranscodingUser]
   TranscodingUser(
-    this.uid,
+    this.uid, {
     this.x,
-    this.y, {
+    this.y,
     this.width,
     this.height,
     this.zOrder,
@@ -296,72 +317,72 @@ class LiveTranscoding {
   /// - When pushing video streams to the CDN, ensure that `width` is at least 64; otherwise, the Agora server adjusts the value to 64.
   /// - When pushing audio streams to the CDN, set `width` and `height` as 0.
   @JsonKey(includeIfNull: false)
-  int width;
+  int? width;
 
   /// Height (pixel) of the video. The default value is 640.
   /// - When pushing video streams to the CDN, ensure that `height` is at least 64; otherwise, the Agora server adjusts the value to 64.
   /// - When pushing audio streams to the CDN, set `width` and `height` as 0.
   @JsonKey(includeIfNull: false)
-  int height;
+  int? height;
 
   /// Bitrate (Kbps) of the CDN live output video stream. The default value is 400. Set this parameter according to the [VideoEncoderConfiguration.bitrate](Video Bitrate Table). If you set a bitrate beyond the proper range, the SDK automatically adapts it to a value within the range.
   @JsonKey(includeIfNull: false)
-  int videoBitrate;
+  int? videoBitrate;
 
   /// The frame rate (fps) of the video. The value range is (0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
   @JsonKey(includeIfNull: false)
-  VideoFrameRate videoFramerate;
+  VideoFrameRate? videoFramerate;
 
   /// Agora does not recommend using this parameter.
   /// - `true`: Low latency with unassured quality.
   /// - `false`: (Default) High latency with assured quality.
   @deprecated
   @JsonKey(includeIfNull: false)
-  bool lowLatency;
+  bool? lowLatency;
 
   /// Gop of the video frames in the CDN live stream. The default value is 30 fps.
   @JsonKey(includeIfNull: false)
-  int videoGop;
+  int? videoGop;
 
   /// The watermark image added to the CDN live publishing stream. Ensure that the format of the image is PNG. Once a watermark image is added, the audience of the CDN live publishing stream can see it.
   /// See [AgoraImage].
   @JsonKey(includeIfNull: false)
-  AgoraImage watermark;
+  AgoraImage? watermark;
 
   /// The background image added to the CDN live publishing stream. Once a background image is added, the audience of the CDN live publishing stream can see it.
   /// See [AgoraImage].
   @JsonKey(includeIfNull: false)
-  AgoraImage backgroundImage;
+  AgoraImage? backgroundImage;
 
   /// Self-defined audio-sample rate: [AudioSampleRateType].
   @JsonKey(includeIfNull: false)
-  AudioSampleRateType audioSampleRate;
+  AudioSampleRateType? audioSampleRate;
 
   /// Bitrate (Kbps) of the CDN live audio output stream. The default value is 48 and the highest value is 128.
   @JsonKey(includeIfNull: false)
-  int audioBitrate;
+  int? audioBitrate;
 
   /// Agora’s self-defined audio channel type. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
   /// See [AudioChannel].
   @JsonKey(includeIfNull: false)
-  AudioChannel audioChannels;
+  AudioChannel? audioChannels;
 
   /// Audio codec profile type: [AudioCodecProfileType]. Set it as `LCAAC` or `HEAAC`. The default value is `LCAAC`.
   @JsonKey(includeIfNull: false)
-  AudioCodecProfileType audioCodecProfile;
+  AudioCodecProfileType? audioCodecProfile;
 
   /// Video codec profile type: [VideoCodecProfileType]. Set it as `BASELINE`, `MAIN`, or `HIGH` (default). If you set this parameter to other values, Agora adjusts it to the default value `HIGH`.
   @JsonKey(includeIfNull: false)
-  VideoCodecProfileType videoCodecProfile;
+  VideoCodecProfileType? videoCodecProfile;
 
   /// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
   @JsonKey(
       includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
-  Color backgroundColor;
+  Color? backgroundColor;
 
   /// Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
   @JsonKey(includeIfNull: false)
-  String userConfigExtraInfo;
+  String? userConfigExtraInfo;
 
   /// An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
   List<TranscodingUser> transcodingUsers;
@@ -393,35 +414,38 @@ class LiveTranscoding {
   /// @nodoc
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 
-  static Color _$ColorFromJson(Map<String, dynamic> json) {
-    return Color.fromRGBO(
-        json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
-  }
+  static Color _$ColorFromJson(Map<String, dynamic> json) => Color.fromRGBO(
+      json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
 
-  static Map<String, dynamic> _$ColorToJson(Color instance) =>
-      <String, dynamic>{
-        'red': instance.red,
-        'green': instance.green,
-        'blue': instance.blue,
-      };
+  static Map<String, dynamic>? _$ColorToJson(Color? instance) =>
+      instance != null
+          ? <String, dynamic>{
+              'red': instance.red,
+              'green': instance.green,
+              'blue': instance.blue,
+            }
+          : null;
 }
 
 /// The ChannelMediaInfo class.
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaInfo {
   /// The channel name.
-  @JsonKey(includeIfNull: false)
   String channelName;
 
   /// The token that enables the user to join the channel.
   @JsonKey(includeIfNull: false)
-  String token;
+  String? token;
 
   /// The user ID.
   int uid;
 
   /// Constructs a [ChannelMediaInfo]
-  ChannelMediaInfo(this.uid, {this.channelName, this.token});
+  ChannelMediaInfo(
+    this.channelName,
+    this.uid, {
+    this.token,
+  });
 
   /// @nodoc
   factory ChannelMediaInfo.fromJson(Map<String, dynamic> json) =>
@@ -452,7 +476,10 @@ class ChannelMediaRelayConfiguration {
   List<ChannelMediaInfo> destInfos;
 
   /// Constructs a [ChannelMediaRelayConfiguration]
-  ChannelMediaRelayConfiguration(this.srcInfo, this.destInfos);
+  ChannelMediaRelayConfiguration(
+    this.srcInfo,
+    this.destInfos,
+  );
 
   /// @nodoc
   factory ChannelMediaRelayConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -478,8 +505,12 @@ class LastmileProbeConfig {
   int expectedDownlinkBitrate;
 
   /// Constructs a [LastmileProbeConfig]
-  LastmileProbeConfig(this.probeUplink, this.probeDownlink,
-      this.expectedUplinkBitrate, this.expectedDownlinkBitrate);
+  LastmileProbeConfig(
+    this.probeUplink,
+    this.probeDownlink,
+    this.expectedUplinkBitrate,
+    this.expectedDownlinkBitrate,
+  );
 
   /// @nodoc
   factory LastmileProbeConfig.fromJson(Map<String, dynamic> json) =>
@@ -493,19 +524,28 @@ class LastmileProbeConfig {
 @JsonSerializable(explicitToJson: true)
 class Rectangle {
   /// The horizontal offset from the top-left corner.
-  int x;
+  @JsonKey(includeIfNull: false)
+  int? x;
 
   /// The vertical offset from the top-left corner.
-  int y;
+  @JsonKey(includeIfNull: false)
+  int? y;
 
   /// The width (pixels) of the watermark image.
-  int width;
+  @JsonKey(includeIfNull: false)
+  int? width;
 
   /// The height (pixels) of the watermark image.
-  int height;
+  @JsonKey(includeIfNull: false)
+  int? height;
 
   /// Constructs a [Rectangle]
-  Rectangle(this.x, this.y, this.width, this.height);
+  Rectangle({
+    this.x,
+    this.y,
+    this.width,
+    this.height,
+  });
 
   /// @nodoc
   factory Rectangle.fromJson(Map<String, dynamic> json) =>
@@ -522,19 +562,24 @@ class WatermarkOptions {
   /// - `true`: (Default) The watermark image is visible in preview.
   /// - `false`: The watermark image is not visible in preview.
   @JsonKey(includeIfNull: false)
-  bool visibleInPreview;
+  bool? visibleInPreview;
 
   /// The watermark position in the landscape mode.
   /// See [Rectangle].
-  Rectangle positionInLandscapeMode;
+  @JsonKey(includeIfNull: false)
+  Rectangle? positionInLandscapeMode;
 
   /// The watermark position in the portrait mode.
   /// See [Rectangle].
-  Rectangle positionInPortraitMode;
+  @JsonKey(includeIfNull: false)
+  Rectangle? positionInPortraitMode;
 
   /// Constructs a [WatermarkOptions]
-  WatermarkOptions(this.positionInLandscapeMode, this.positionInPortraitMode,
-      {this.visibleInPreview});
+  WatermarkOptions({
+    this.visibleInPreview,
+    this.positionInLandscapeMode,
+    this.positionInPortraitMode,
+  });
 
   /// @nodoc
   factory WatermarkOptions.fromJson(Map<String, dynamic> json) =>
@@ -549,52 +594,53 @@ class WatermarkOptions {
 class LiveInjectStreamConfig {
   /// Width of the added stream to the broadcast. The default value is 0, which is the same width as the original stream.
   @JsonKey(includeIfNull: false)
-  int width;
+  int? width;
 
   /// Height of the added stream to the broadcast. The default value is 0, which is the same height as the original stream.
   @JsonKey(includeIfNull: false)
-  int height;
+  int? height;
 
   /// Video GOP of the added stream to the broadcast. The default value is 30 frames.
   @JsonKey(includeIfNull: false)
-  int videoGop;
+  int? videoGop;
 
   /// Video frame rate of the added stream to the broadcast. The default value is 15 fps.
   @JsonKey(includeIfNull: false)
-  VideoFrameRate videoFramerate;
+  VideoFrameRate? videoFramerate;
 
   /// Video bitrate of the added stream to the broadcast. The default value is 400 Kbps.
   @JsonKey(includeIfNull: false)
-  int videoBitrate;
+  int? videoBitrate;
 
   /// Audio sample rate of the added stream to the broadcast: [AudioSampleRateType]. The default value is 44100 Hz.
   ///
   /// **Note** We recommend you use the default value and not reset it.
   @JsonKey(includeIfNull: false)
-  AudioSampleRateType audioSampleRate;
+  AudioSampleRateType? audioSampleRate;
 
   /// Audio bitrate of the added stream to the broadcast. The default value is 48.
   ///
   /// **Note** We recommend you use the default value and not reset it.
   @JsonKey(includeIfNull: false)
-  int audioBitrate;
+  int? audioBitrate;
 
   /// Audio channels to add into the broadcast. The value ranges between 1 and 2. The default value is 1.
   ///
   /// **Note** We recommend you use the default value and not reset it.
   @JsonKey(includeIfNull: false)
-  AudioChannel audioChannels;
+  AudioChannel? audioChannels;
 
   /// Constructs a [LiveInjectStreamConfig]
-  LiveInjectStreamConfig(
-      {this.width,
-      this.height,
-      this.videoGop,
-      this.videoFramerate,
-      this.videoBitrate,
-      this.audioSampleRate,
-      this.audioBitrate,
-      this.audioChannels});
+  LiveInjectStreamConfig({
+    this.width,
+    this.height,
+    this.videoGop,
+    this.videoFramerate,
+    this.videoBitrate,
+    this.audioSampleRate,
+    this.audioBitrate,
+    this.audioChannels,
+  });
 
   /// @nodoc
   factory LiveInjectStreamConfig.fromJson(Map<String, dynamic> json) =>
@@ -609,25 +655,31 @@ class LiveInjectStreamConfig {
 class CameraCapturerConfiguration {
   /// The camera capture configuration.
   /// See [CameraCaptureOutputPreference].
-  CameraCaptureOutputPreference preference;
+  @JsonKey(includeIfNull: false)
+  CameraCaptureOutputPreference? preference;
 
   /// The width (px) of the video image captured by the local camera.
   /// To customize the width of the video image, set [preference] as `Manual(3)` first, and then use this parameter.
   @JsonKey(includeIfNull: false)
-  int captureWidth;
+  int? captureWidth;
 
   /// The height (px) of the video image captured by the local camera.
   /// To customize the height of the video image, set [preference] as `Manual(3)` first, and then use this parameter.
   @JsonKey(includeIfNull: false)
-  int captureHeight;
+  int? captureHeight;
 
   /// The camera direction.
   /// See [CameraDirection].
-  CameraDirection cameraDirection;
+  @JsonKey(includeIfNull: false)
+  CameraDirection? cameraDirection;
 
   /// Constructs a [CameraCapturerConfiguration]
-  CameraCapturerConfiguration(this.preference, this.cameraDirection,
-      {this.captureWidth, this.captureHeight});
+  CameraCapturerConfiguration({
+    this.preference,
+    this.captureWidth,
+    this.captureHeight,
+    this.cameraDirection,
+  });
 
   /// @nodoc
   factory CameraCapturerConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -646,7 +698,8 @@ class ChannelMediaOptions {
   ///
   /// This member serves a similar function to the [RtcEngine.muteAllRemoteAudioStreams] method.
   /// After joining the channel, you can call `muteAllRemoteAudioStreams` to set whether to subscribe to audio streams in the channel.
-  bool autoSubscribeAudio;
+  @JsonKey(includeIfNull: false)
+  bool? autoSubscribeAudio;
 
   /// Determines whether to subscribe to video streams when the user joins the channel.
   /// - `true`: (Default) Subscribe.
@@ -654,10 +707,24 @@ class ChannelMediaOptions {
   ///
   /// This member serves a similar function to the [RtcEngine.muteAllRemoteVideoStreams] method.
   /// After joining the channel, you can call `muteAllRemoteVideoStreams` to set whether to subscribe to video streams in the channel.
-  bool autoSubscribeVideo;
+  @JsonKey(includeIfNull: false)
+  bool? autoSubscribeVideo;
+
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  bool? publishLocalAudio;
+
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  bool? publishLocalVideo;
 
   /// Constructs a [ChannelMediaOptions]
-  ChannelMediaOptions(this.autoSubscribeAudio, this.autoSubscribeVideo);
+  ChannelMediaOptions({
+    this.autoSubscribeAudio,
+    this.autoSubscribeVideo,
+    this.publishLocalAudio,
+    this.publishLocalVideo,
+  });
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -671,17 +738,27 @@ class ChannelMediaOptions {
 @JsonSerializable(explicitToJson: true)
 class EncryptionConfig {
   /// Encryption mode. The default encryption mode is `AES128XTS`. See [EncryptionMode].
-  EncryptionMode encryptionMode;
+  @JsonKey(includeIfNull: false)
+  EncryptionMode? encryptionMode;
 
   /// Encryption key in string type.
   ///
   /// **Note**
   ///
   /// If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [ErrorCode.InvalidArgument].
-  String encryptionKey;
+  @JsonKey(includeIfNull: false)
+  String? encryptionKey;
+
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  List<int>? encryptionKdfSalt;
 
   /// Constructs a [EncryptionConfig]
-  EncryptionConfig(this.encryptionMode, this.encryptionKey);
+  EncryptionConfig({
+    this.encryptionMode,
+    this.encryptionKey,
+    this.encryptionKdfSalt,
+  });
 
   /// @nodoc
   factory EncryptionConfig.fromJson(Map<String, dynamic> json) =>
@@ -695,7 +772,7 @@ class EncryptionConfig {
 @JsonSerializable(explicitToJson: true)
 class RtcStats {
   /// Call duration in seconds, represented by an aggregate value.
-  int totalDuration;
+  int duration;
 
   /// Total number of bytes transmitted, represented by an aggregate value.
   int txBytes;
@@ -738,7 +815,7 @@ class RtcStats {
   /// - Live Broadcast profile:
   ///   - If the local user is an audience: The number of users in the channel = The number of hosts in the channel + 1.
   ///   - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
-  int users;
+  int userCount;
 
   /// Client-server latency.
   int lastmileDelay;
@@ -782,7 +859,31 @@ class RtcStats {
   int memoryAppUsageInKbytes;
 
   /// Constructs a [RtcStats]
-  RtcStats();
+  RtcStats(
+    this.duration,
+    this.txBytes,
+    this.rxBytes,
+    this.txAudioBytes,
+    this.txVideoBytes,
+    this.rxAudioBytes,
+    this.rxVideoBytes,
+    this.txKBitRate,
+    this.rxKBitRate,
+    this.txAudioKBitRate,
+    this.rxAudioKBitRate,
+    this.txVideoKBitRate,
+    this.rxVideoKBitRate,
+    this.userCount,
+    this.lastmileDelay,
+    this.txPacketLossRate,
+    this.rxPacketLossRate,
+    this.cpuTotalUsage,
+    this.cpuAppUsage,
+    this.gatewayRtt,
+    this.memoryAppUsageRatio,
+    this.memoryTotalUsageRatio,
+    this.memoryAppUsageInKbytes,
+  );
 
   /// @nodoc
   factory RtcStats.fromJson(Map<String, dynamic> json) =>
@@ -816,7 +917,12 @@ class AudioVolumeInfo {
   String channelId;
 
   /// Constructs a [AudioVolumeInfo]
-  AudioVolumeInfo();
+  AudioVolumeInfo(
+    this.uid,
+    this.volume,
+    this.vad,
+    this.channelId,
+  );
 
   /// @nodoc
   factory AudioVolumeInfo.fromJson(Map<String, dynamic> json) =>
@@ -830,19 +936,28 @@ class AudioVolumeInfo {
 @JsonSerializable(explicitToJson: true)
 class Rect {
   /// The X coordinate of the left side of the rectangle.
-  int left;
+  @JsonKey(includeIfNull: false)
+  int? left;
 
   /// The Y coordinate of the top side of the rectangle.
-  int top;
+  @JsonKey(includeIfNull: false)
+  int? top;
 
   /// The X coordinate of the right side of the rectangle.
-  int right;
+  @JsonKey(includeIfNull: false)
+  int? right;
 
   /// The Y coordinate of the bottom side of the rectangle.
-  int bottom;
+  @JsonKey(includeIfNull: false)
+  int? bottom;
 
   /// Constructs a [Rect]
-  Rect();
+  Rect({
+    this.left,
+    this.top,
+    this.right,
+    this.bottom,
+  });
 
   /// @nodoc
   factory Rect.fromJson(Map<String, dynamic> json) => _$RectFromJson(json);
@@ -864,7 +979,11 @@ class LastmileProbeOneWayResult {
   int availableBandwidth;
 
   /// Constructs a [LastmileProbeOneWayResult]
-  LastmileProbeOneWayResult();
+  LastmileProbeOneWayResult(
+    this.packetLossRate,
+    this.jitter,
+    this.availableBandwidth,
+  );
 
   /// @nodoc
   factory LastmileProbeOneWayResult.fromJson(Map<String, dynamic> json) =>
@@ -893,7 +1012,12 @@ class LastmileProbeResult {
   LastmileProbeOneWayResult downlinkReport;
 
   /// Constructs a [LastmileProbeResult]
-  LastmileProbeResult();
+  LastmileProbeResult(
+    this.state,
+    this.rtt,
+    this.uplinkReport,
+    this.downlinkReport,
+  );
 
   /// @nodoc
   factory LastmileProbeResult.fromJson(Map<String, dynamic> json) =>
@@ -919,7 +1043,12 @@ class LocalAudioStats {
   int txPacketLossRate;
 
   /// Constructs a [LocalAudioStats]
-  LocalAudioStats();
+  LocalAudioStats(
+    this.numChannels,
+    this.sentSampleRate,
+    this.sentBitrate,
+    this.txPacketLossRate,
+  );
 
   /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -980,7 +1109,23 @@ class LocalVideoStats {
   CaptureBrightnessLevelType captureBrightnessLevel;
 
   /// Constructs a [LocalVideoStats]
-  LocalVideoStats();
+  LocalVideoStats(
+    this.sentBitrate,
+    this.sentFrameRate,
+    this.encoderOutputFrameRate,
+    this.rendererOutputFrameRate,
+    this.targetBitrate,
+    this.targetFrameRate,
+    this.qualityAdaptIndication,
+    this.encodedBitrate,
+    this.encodedFrameWidth,
+    this.encodedFrameHeight,
+    this.encodedFrameCount,
+    this.codecType,
+    this.txPacketLossRate,
+    this.captureFrameRate,
+    this.captureBrightnessLevel,
+  );
 
   /// @nodoc
   factory LocalVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -1082,7 +1227,23 @@ class RemoteAudioStats {
   int mosValue;
 
   /// Constructs a [RemoteAudioStats]
-  RemoteAudioStats();
+  RemoteAudioStats(
+    this.uid,
+    this.quality,
+    this.networkTransportDelay,
+    this.jitterBufferDelay,
+    this.audioLossRate,
+    this.numChannels,
+    this.receivedSampleRate,
+    this.receivedBitrate,
+    this.totalFrozenTime,
+    this.frozenRate,
+    this.totalActiveTime,
+    this.publishDuration,
+    this.qoeQuality,
+    this.qualityChangedReason,
+    this.mosValue,
+  );
 
   /// @nodoc
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -1138,7 +1299,21 @@ class RemoteVideoStats {
   int publishDuration;
 
   /// Constructs a [RemoteVideoStats]
-  RemoteVideoStats();
+  RemoteVideoStats(
+    this.uid,
+    this.delay,
+    this.width,
+    this.height,
+    this.receivedBitrate,
+    this.decoderOutputFrameRate,
+    this.rendererOutputFrameRate,
+    this.packetLossRate,
+    this.rxStreamType,
+    this.totalFrozenTime,
+    this.frozenRate,
+    this.totalActiveTime,
+    this.publishDuration,
+  );
 
   /// @nodoc
   factory RemoteVideoStats.fromJson(Map<String, dynamic> json) =>
@@ -1167,7 +1342,13 @@ class FacePositionInfo {
   int distance;
 
   /// Constructs a [FacePositionInfo]
-  FacePositionInfo();
+  FacePositionInfo(
+    this.x,
+    this.y,
+    this.width,
+    this.height,
+    this.distance,
+  );
 
   /// @nodoc
   factory FacePositionInfo.fromJson(Map<String, dynamic> json) =>
@@ -1181,10 +1362,13 @@ class FacePositionInfo {
 @JsonSerializable(explicitToJson: true)
 class ClientRoleOptions {
   /// The latency level of an audience member in a live interactive streaming.
-  AudienceLatencyLevelType audienceLatencyLevel;
+  @JsonKey(includeIfNull: false)
+  AudienceLatencyLevelType? audienceLatencyLevel;
 
   /// Constructs a [ClientRoleOptions]
-  ClientRoleOptions(this.audienceLatencyLevel);
+  ClientRoleOptions({
+    this.audienceLatencyLevel,
+  });
 
   /// @nodoc
   factory ClientRoleOptions.fromJson(Map<String, dynamic> json) =>
@@ -1201,22 +1385,26 @@ class LogConfig {
   ///
   /// Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
   @JsonKey(includeIfNull: false)
-  String filePath;
+  String? filePath;
 
   /// The size (KB) of a log file. The default value is 1024 KB.
   ///
   /// If you set `fileSize` to 1024 KB, the SDK outputs at most 5 MB log files; if you set it to less than 1024 KB, the setting is invalid, and the maximum size of a log file is still 1024 KB.
   @JsonKey(includeIfNull: false)
-  int fileSize;
+  int? fileSize;
 
   /// The output log level of the SDK. See details in [LogLevel].
   ///
   /// For example, if you set the log level to `Warn`, the SDK outputs the logs within levels `Fatal`, `Error`, and `Warn`.
   @JsonKey(includeIfNull: false)
-  LogLevel level;
+  LogLevel? level;
 
   /// Constructs a [LogConfig]
-  LogConfig({this.filePath, this.fileSize, this.level});
+  LogConfig({
+    this.filePath,
+    this.fileSize,
+    this.level,
+  });
 
   /// @nodoc
   factory LogConfig.fromJson(Map<String, dynamic> json) =>
@@ -1245,7 +1433,6 @@ class DataStreamConfig {
   ///
   /// When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the `streamMessage` callback when the synchronized audio packet is played out.
   /// Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
-  @JsonKey(includeIfNull: false)
   bool syncWithAudio;
 
   /// Whether the SDK guarantees that the receiver receives the data in the sent order.
@@ -1254,11 +1441,13 @@ class DataStreamConfig {
   /// - `false`: Do not guarantee that the receiver receives the data in the sent order.
   ///
   /// Do not set this parameter to `true` if you need the receiver to receive the data immediately.
-  @JsonKey(includeIfNull: false)
   bool ordered;
 
   /// Constructs a [DataStreamConfig]
-  DataStreamConfig({this.syncWithAudio, this.ordered});
+  DataStreamConfig(
+    this.syncWithAudio,
+    this.ordered,
+  );
 
   /// @nodoc
   factory DataStreamConfig.fromJson(Map<String, dynamic> json) =>
@@ -1270,7 +1459,17 @@ class DataStreamConfig {
 
 ///  Configurations for the RtcEngineConfig instance.
 @JsonSerializable(explicitToJson: true)
-class RtcEngineConfig {
+@deprecated
+class RtcEngineConfig extends RtcEngineContext {
+  /// Constructs a [RtcEngineConfig]
+  RtcEngineConfig(String appId,
+      {List<AreaCode>? areaCode, LogConfig? logConfig})
+      : super(appId, areaCode: areaCode, logConfig: logConfig);
+}
+
+///  Configurations for the RtcEngineContext instance.
+@JsonSerializable(explicitToJson: true)
+class RtcEngineContext {
   /// The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
   /// Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
   /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithConfig`
@@ -1280,8 +1479,8 @@ class RtcEngineConfig {
   /// The region for connection. This advanced feature applies to scenarios that have regional restrictions.
   ///
   /// For the regions that Agora supports, see [AreaCode]. After specifying the region, the SDK connects to the Agora servers within that region.
-  @JsonKey(includeIfNull: false)
-  AreaCode areaCode;
+  @JsonKey(includeIfNull: false, toJson: _$AreaCodeListToJson)
+  List<AreaCode>? areaCode;
 
   /// The configuration of the log files that the SDK outputs. See [LogConfig].
   ///
@@ -1289,17 +1488,30 @@ class RtcEngineConfig {
   /// These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification
   /// time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
   @JsonKey(includeIfNull: false)
-  LogConfig logConfig;
+  LogConfig? logConfig;
 
-  /// Constructs a [RtcEngineConfig]
-  RtcEngineConfig(this.appId, {this.areaCode, this.logConfig});
+  /// Constructs a [RtcEngineContext]
+  RtcEngineContext(
+    this.appId, {
+    this.areaCode,
+    this.logConfig,
+  });
 
   /// @nodoc
-  factory RtcEngineConfig.fromJson(Map<String, dynamic> json) =>
-      _$RtcEngineConfigFromJson(json);
+  factory RtcEngineContext.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineContextFromJson(json);
 
   /// @nodoc
-  Map<String, dynamic> toJson() => _$RtcEngineConfigToJson(this);
+  Map<String, dynamic> toJson() => _$RtcEngineContextToJson(this);
+
+  static int? _$AreaCodeListToJson(List<AreaCode>? instance) {
+    if (instance == null) return null;
+    var areaCode = 0;
+    instance.forEach((element) {
+      areaCode |= AreaCodeConverter(element).value();
+    });
+    return areaCode;
+  }
 }
 
 /// The metronome configuration, which is set in [RtcEngine.startRhythmPlayer] or [RtcEngine.configRhythmPlayer].
@@ -1307,20 +1519,24 @@ class RtcEngineConfig {
 class RhythmPlayerConfig {
   /// The number of beats per measure. The range is 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
   @JsonKey(includeIfNull: false)
-  int beatsPerMeasure;
+  int? beatsPerMeasure;
 
   /// Tempo (beats per minute). The range is 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
   @JsonKey(includeIfNull: false)
-  int beatsPerMinute;
+  int? beatsPerMinute;
 
   /// Whether to publish the sound of the metronome to remote users:
   /// - `true`: (Default) Publish. Both the local user and remote users can hear the metronome.
   /// - `false`: Do not publish. Only the local user can hear the metronome.
   @JsonKey(includeIfNull: false)
-  bool publish;
+  bool? publish;
 
   /// Constructs a [RhythmPlayerConfig]
-  RhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute, this.publish});
+  RhythmPlayerConfig({
+    this.beatsPerMeasure,
+    this.beatsPerMinute,
+    this.publish,
+  });
 
   /// @nodoc
   factory RhythmPlayerConfig.fromJson(Map<String, dynamic> json) =>
@@ -1338,11 +1554,11 @@ class AudioRecordingConfiguration {
 
   /// Audio recording quality. For details, see [AudioRecordingQuality]. This parameter applies to AAC files only.
   @JsonKey(includeIfNull: false)
-  AudioRecordingQuality recordingQuality;
+  AudioRecordingQuality? recordingQuality;
 
   /// Recording content. For details, see [AudioRecordingPosition].
   @JsonKey(includeIfNull: false)
-  AudioRecordingPosition recordingPosition;
+  AudioRecordingPosition? recordingPosition;
 
   /// Recording sample rate (Hz). The following values are supported:
   /// - 16000
@@ -1354,13 +1570,15 @@ class AudioRecordingConfiguration {
   /// - If this parameter is set to 44100 or 48000, for better recording effects, Agora recommends recording WAV files or AAC files whose `recordingQuality`
   /// is `Medium` or `High`.
   @JsonKey(includeIfNull: false)
-  AudioSampleRateType recordingSampleRate;
+  AudioSampleRateType? recordingSampleRate;
 
   /// Constructs a [AudioRecordingConfiguration]
-  AudioRecordingConfiguration(this.filePath,
-      {this.recordingQuality,
-      this.recordingPosition,
-      this.recordingSampleRate});
+  AudioRecordingConfiguration(
+    this.filePath, {
+    this.recordingQuality,
+    this.recordingPosition,
+    this.recordingSampleRate,
+  });
 
   /// @nodoc
   factory AudioRecordingConfiguration.fromJson(Map<String, dynamic> json) =>
