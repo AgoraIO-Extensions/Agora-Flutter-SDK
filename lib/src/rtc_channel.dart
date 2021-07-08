@@ -539,7 +539,22 @@ mixin RtcAudioInterface {
   /// - 100: The original volume.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
-  /// TODO(doc)
+  /// Stops or resumes publishing the local audio stream.
+  ///
+  /// As of v3.4.5, this method only sets the publishing state of the audio stream in the channel of [RtcEngine].
+  ///
+  /// A successful method call triggers the `userMuteAudio` callback on the remote client.
+  ///
+  /// You can only publish the local stream in one channel at a time. If you create multiple channels, ensure that you only call `muteLocalAudioStream`(false) in one channel; otherwise, the method call fails.
+  ///
+  /// **Note**
+  ///
+  /// - This method does not change the usage state of the audio-capturing device.
+  /// - Whether this method call takes effect is affected by the [RtcEngine.joinChannel] and [RtcEngine.setClientRole] methods.
+  ///
+  /// **Parameter** [muted] Sets whether to stop publishing the local audio stream.
+  /// - `true`: Stop publishing the local audio stream.
+  /// - `false`: Resume publishing the local audio stream.
   Future<void> muteLocalAudioStream(bool muted);
 
   /// Stops/Resumes receiving the audio stream of the specified user.
@@ -574,7 +589,22 @@ mixin RtcAudioInterface {
 
 /// @nodoc
 mixin RtcVideoInterface {
-  /// TODO(doc)
+  /// Stops or resumes publishing the local video stream.
+  ///
+  /// As of v3.4.5, this method only sets the publishing state of the video stream in the channel of [RtcEngine].
+  ///
+  /// A successful method call triggers the `userMuteVideo` callback on the remote client.
+  ///
+  /// You can only publish the local stream in one channel at a time. If you create multiple channels, ensure that you only call `muteLocalVideoStream`(false) in one channel; otherwise, the method call fails.
+  ///
+  /// **Note**
+  ///
+  /// - This method does not change the usage state of the video-capturing device.
+  /// - Whether this method call takes effect is affected by the [RtcEngine.joinChannel] and [RtcEngine.setClientRole] methods. For details, see Set the Publishing State.
+  ///
+  /// **Parameter** [muted] Sets whether to stop publishing the local video stream.
+  /// - `true`: Stop publishing the local video stream.
+  /// - `false`: Resume publishing the local video stream.
   Future<void> muteLocalVideoStream(bool muted);
 
   /// Stops/Resumes receiving the video stream of the specified user.

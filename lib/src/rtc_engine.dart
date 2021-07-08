@@ -54,7 +54,7 @@ class RtcEngine with RtcEngineInterface {
   ///
   /// Since v3.3.1
   ///
-  /// **Parameter** [code] The warning or error code that the `Warning` or `Error` callback returns.
+  /// **Parameter** [error] The warning or error code that the `Warning` or `Error` callback returns.
   ///
   /// **Returns**
   ///
@@ -101,7 +101,7 @@ class RtcEngine with RtcEngineInterface {
   ///
   /// **Parameter** [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions.
   ///
-  /// For details, see [IPAreaCode].
+  /// For details, see [AreaCode].
   ///
   /// After specifying the area of connection:
   /// - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
@@ -117,7 +117,7 @@ class RtcEngine with RtcEngineInterface {
     return createWithContext(RtcEngineContext(appId, areaCode: areaCode));
   }
 
-  /// Creates an [RtcEngine] instance.
+  /// Creates an [RtcEngine] instance and specifies the connection area.
   ///
   /// Since v3.3.1
   ///
@@ -139,15 +139,14 @@ class RtcEngine with RtcEngineInterface {
     return createWithContext(config);
   }
 
-  /// Creates an [RtcEngine] instance.
+  /// Creates an [RtcEngine] instance and specifies one or multiple connection areas.
   ///
-  /// Since v3.3.1
+  /// Since v4.0.5
   ///
   /// Unless otherwise specified, all the methods provided by the [RtcEngine] instance are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
   /// - You must create the [RtcEngine] instance before calling any other method.
-  /// - You can create an [RtcEngine] instance either by calling this method or by calling [create]. The difference between [create] and this method is that this method enables you to specify the region for connection.
   /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
   ///
   /// **Parameter**[context] Configurations for the [RtcEngine] instance. For details, see [RtcEngineContext].
@@ -1918,8 +1917,8 @@ mixin RtcVideoInterface {
   /// - This method supports both Android and iOS. For Android, this method applies to Android 4.4 or later.
   ///
   /// **Parameter** [enabled] Sets whether or not to enable image enhancement:
-  /// - enables image enhancement.
-  /// - disables image enhancement.
+  /// - `true`: Enables image enhancement.
+  /// - `false`: Disables image enhancement.
   ///
   /// **Parameter** [options] The image enhancement options. See [BeautyOptions].
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
