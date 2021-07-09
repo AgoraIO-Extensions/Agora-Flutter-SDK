@@ -38,8 +38,10 @@ protocol RtcChannelInterface:
 
     func getConnectionState(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func publish(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func unpublish(_ params: NSDictionary, _ callback: Callback)
 
     func getCallId(_ params: NSDictionary, _ callback: Callback)
@@ -47,6 +49,8 @@ protocol RtcChannelInterface:
 
 protocol RtcChannelAudioInterface {
     func adjustUserPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback)
+
+    func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback)
 
     func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback)
 
@@ -57,6 +61,8 @@ protocol RtcChannelAudioInterface {
 }
 
 protocol RtcChannelVideoInterface {
+    func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback)
+
     func muteRemoteVideoStream(_ params: NSDictionary, _ callback: Callback)
 
     func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
@@ -368,5 +374,13 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
 
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enable"] as! Bool))
+    }
+
+    func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.muteLocalAudioStream(params["muted"] as! Bool))
+    }
+
+    func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.muteLocalVideoStream(params["muted"] as! Bool))
     }
 }

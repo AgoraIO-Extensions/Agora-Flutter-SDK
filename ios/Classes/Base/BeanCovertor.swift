@@ -304,6 +304,12 @@ func mapToChannelMediaOptions(_ map: [String: Any]) -> AgoraRtcChannelMediaOptio
     if let autoSubscribeVideo = map["autoSubscribeVideo"] as? Bool {
         options.autoSubscribeVideo = autoSubscribeVideo
     }
+    if let publishLocalAudio = map["publishLocalAudio"] as? Bool {
+        options.publishLocalAudio = publishLocalAudio
+    }
+    if let publishLocalVideo = map["publishLocalVideo"] as? Bool {
+        options.publishLocalVideo = publishLocalVideo
+    }
     return options
 }
 
@@ -349,6 +355,15 @@ func mapToEncryptionConfig(_ map: [String: Any]) -> AgoraEncryptionConfig {
     }
     if let encryptionKey = map["encryptionKey"] as? String {
         config.encryptionKey = encryptionKey
+    }
+    if let list = map["encryptionKdfSalt"] as? [Any] {
+        var encryptionKdfSalt: [UInt8] = []
+        for i in list.indices {
+            if let item = list[i] as? NSNumber {
+                encryptionKdfSalt[i] = item.uint8Value
+            }
+        }
+        config.encryptionKdfSalt = Data(bytes: encryptionKdfSalt)
     }
     return config
 }
