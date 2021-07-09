@@ -140,7 +140,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> destroy() {
     RtcChannel.destroyAll();
-    _handler = null;
+    _engine._handler = null;
     _engine = null;
     return _invokeMethod('destroy');
   }
@@ -156,7 +156,7 @@ class RtcEngine with RtcEngineInterface {
       final eventMap = Map<dynamic, dynamic>.from(event);
       final methodName = eventMap['methodName'] as String;
       final data = List<dynamic>.from(eventMap['data']);
-      _handler?.process(methodName, data);
+      _engine._handler?.process(methodName, data);
     });
   }
 
