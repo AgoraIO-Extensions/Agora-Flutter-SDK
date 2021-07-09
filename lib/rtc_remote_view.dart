@@ -11,24 +11,24 @@ class SurfaceView extends RtcSurfaceView {
   SurfaceView({
     Key key,
     @required int uid,
-    bool zOrderMediaOverlay = false,
-    bool zOrderOnTop = false,
-    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     String channelId,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    bool zOrderOnTop = false,
+    bool zOrderMediaOverlay = false,
     PlatformViewCreatedCallback onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   })  : assert(uid != 0),
         super(
           key: key,
           uid: uid,
-          zOrderMediaOverlay: zOrderMediaOverlay,
-          zOrderOnTop: zOrderOnTop,
-          renderMode: renderMode,
           channelId: channelId,
+          renderMode: renderMode,
           mirrorMode: mirrorMode,
-          gestureRecognizers: gestureRecognizers,
+          zOrderOnTop: zOrderOnTop,
+          zOrderMediaOverlay: zOrderMediaOverlay,
           onPlatformViewCreated: onPlatformViewCreated,
+          gestureRecognizers: gestureRecognizers,
         );
 }
 
@@ -38,19 +38,19 @@ class TextureView extends RtcTextureView {
   TextureView({
     Key key,
     @required int uid,
-    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     String channelId,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   })  : assert(uid != 0),
         super(
           key: key,
           uid: uid,
-          renderMode: renderMode,
           channelId: channelId,
+          renderMode: renderMode,
           mirrorMode: mirrorMode,
-          gestureRecognizers: gestureRecognizers,
           onPlatformViewCreated: onPlatformViewCreated,
+          gestureRecognizers: gestureRecognizers,
         );
 }

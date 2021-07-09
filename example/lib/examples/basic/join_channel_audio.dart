@@ -119,8 +119,8 @@ class _State extends State<JoinChannelAudio> {
       widget._engine
           ?.playEffect(
               1,
-              await RtcEngineExtension.getAssetAbsolutePath(
-                  "assets/Sound_Horizon.mp3"),
+              await widget._engine
+                  .getAssetAbsolutePath("assets/Sound_Horizon.mp3"),
               -1,
               1,
               1,
