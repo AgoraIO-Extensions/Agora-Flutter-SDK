@@ -22,7 +22,7 @@ fun LocalAudioStats.toMap(): Map<String, Any?> {
 
 fun RtcStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "totalDuration" to totalDuration,
+    "duration" to totalDuration,
     "txBytes" to txBytes,
     "rxBytes" to rxBytes,
     "txAudioBytes" to txAudioBytes,
@@ -35,7 +35,7 @@ fun RtcStats.toMap(): Map<String, Any?> {
     "rxAudioKBitRate" to rxAudioKBitRate,
     "txVideoKBitRate" to txVideoKBitRate,
     "rxVideoKBitRate" to rxVideoKBitRate,
-    "users" to users,
+    "userCount" to users,
     "lastmileDelay" to lastmileDelay,
     "txPacketLossRate" to txPacketLossRate,
     "rxPacketLossRate" to rxPacketLossRate,
