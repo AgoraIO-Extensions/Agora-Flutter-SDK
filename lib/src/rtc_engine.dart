@@ -1208,6 +1208,16 @@ class RtcEngine with RtcEngineInterface {
       'preset': VoiceConversionPresetConverter(preset).value(),
     });
   }
+
+  @override
+  Future<void> pauseAllChannelMediaRelay() {
+    return _invokeMethod('pauseAllChannelMediaRelay');
+  }
+
+  @override
+  Future<void> resumeAllChannelMediaRelay() {
+    return _invokeMethod('resumeAllChannelMediaRelay');
+  }
 }
 
 /// @nodoc
@@ -2579,6 +2589,12 @@ mixin RtcMediaRelayInterface {
   /// **Note**
   /// - If the method call fails, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] error code. You can leave the channel by calling the [RtcEngine.leaveChannel] method, and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
+
+  /// TODO(doc)
+  Future<void> pauseAllChannelMediaRelay();
+
+  /// TODO(doc)
+  Future<void> resumeAllChannelMediaRelay();
 }
 
 /// @nodoc

@@ -261,6 +261,10 @@ protocol RtcEngineMediaRelayInterface {
     func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
     func stopChannelMediaRelay(_ callback: Callback)
+    
+    func pauseAllChannelMediaRelay(_ callback: Callback)
+    
+    func resumeAllChannelMediaRelay(_ callback: Callback)
 }
 
 protocol RtcEngineAudioRouteInterface {
@@ -1123,5 +1127,13 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enabled"] as! Bool))
+    }
+    
+    func pauseAllChannelMediaRelay(_ callback: Callback) {
+        callback.code(engine?.pauseAllChannelMediaRelay())
+    }
+    
+    func resumeAllChannelMediaRelay(_ callback: Callback) {
+        callback.code(engine?.resumeAllChannelMediaRelay())
     }
 }

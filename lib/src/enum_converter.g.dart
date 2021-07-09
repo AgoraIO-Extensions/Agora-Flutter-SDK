@@ -548,6 +548,10 @@ const _$ChannelMediaRelayEventEnumMap = {
   ChannelMediaRelayEvent.UpdateDestinationChannelNotChange: 9,
   ChannelMediaRelayEvent.UpdateDestinationChannelIsNil: 10,
   ChannelMediaRelayEvent.VideoProfileUpdate: 11,
+  ChannelMediaRelayEvent.PauseSendPacketToDestChannelSuccess: 12,
+  ChannelMediaRelayEvent.PauseSendPacketToDestChannelFailed: 13,
+  ChannelMediaRelayEvent.ResumeSendPacketToDestChannelSuccess: 14,
+  ChannelMediaRelayEvent.ResumeSendPacketToDestChannelFailed: 15,
 };
 
 ChannelMediaRelayStateConverter _$ChannelMediaRelayStateConverterFromJson(

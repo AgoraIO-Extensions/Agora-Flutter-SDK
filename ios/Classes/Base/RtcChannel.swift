@@ -91,6 +91,10 @@ protocol RtcChannelMediaRelayInterface {
     func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
     func stopChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
+    
+    func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
+    
+    func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcChannelDualStreamInterface {
@@ -382,5 +386,13 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
 
     func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.muteLocalVideoStream(params["muted"] as! Bool))
+    }
+    
+    func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.pauseAllChannelMediaRelay())
+    }
+    
+    func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.resumeAllChannelMediaRelay())
     }
 }

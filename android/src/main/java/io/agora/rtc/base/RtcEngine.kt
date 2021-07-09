@@ -242,6 +242,10 @@ class IRtcEngine {
     fun updateChannelMediaRelay(params: Map<String, *>, callback: Callback)
 
     fun stopChannelMediaRelay(callback: Callback)
+
+    fun pauseAllChannelMediaRelay(callback: Callback)
+
+    fun resumeAllChannelMediaRelay(callback: Callback)
   }
 
   interface RtcAudioRouteInterface {
@@ -996,6 +1000,14 @@ class RtcEngineManager(
 
   override fun stopChannelMediaRelay(callback: Callback) {
     callback.code(engine?.stopChannelMediaRelay())
+  }
+
+  override fun pauseAllChannelMediaRelay(callback: Callback) {
+    callback.code(engine?.pauseAllChannelMediaRelay())
+  }
+
+  override fun resumeAllChannelMediaRelay(callback: Callback) {
+    callback.code(engine?.resumeAllChannelMediaRelay())
   }
 
   override fun setDefaultAudioRoutetoSpeakerphone(params: Map<String, *>, callback: Callback) {
