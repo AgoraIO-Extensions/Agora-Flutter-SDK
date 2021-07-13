@@ -111,7 +111,7 @@ enum AudioLocalError {
   @JsonValue(5)
   EncodeFailure,
 
-  /// TODO(doc)
+  /// The local audio capturing is interrupted by the system call.
   @JsonValue(8)
   Interrupted,
 }
@@ -888,7 +888,8 @@ enum DegradationPreference {
   /// (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
   ///
   /// **Note**
-  /// - In the `COMMUNICATION` channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
+  ///
+  /// In the `COMMUNICATION` channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(0)
   MaintainQuality,
 
@@ -899,7 +900,8 @@ enum DegradationPreference {
   /// Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. `Balenced` has a lower reduction than `MaintainQuality` and `MaintainFramerate`, and this preference is suitable for scenarios where both smoothness and video quality are a priority.
   ///
   /// **Note**
-  /// - the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
+  ///
+  /// The resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(2)
   MaintainBalanced
 }
@@ -935,11 +937,11 @@ enum EncryptionMode {
   @JsonValue(6)
   AES256GCM,
 
-  /// TODO(doc)
+  /// 128-bit AES encryption, GCM mode. Compared to `AES128GCM` encryption mode, `AES128GCM2` encryption mode is more secure and requires you to set the salt (`encryptionKdfSalt`).
   @JsonValue(7)
   AES128GCM2,
 
-  /// TODO(doc)
+  /// 256-bit AES encryption, GCM mode. Compared to `AES256GCM` encryption mode, `AES256GCM2` encryption mode is more secure and requires you to set the salt (`encryptionKdfSalt`).
   @JsonValue(8)
   AES256GCM2,
 }
@@ -1565,7 +1567,7 @@ enum RtmpStreamingErrorCode {
   @JsonValue(10)
   FormatNotSupported,
 
-  /// TODO(doc)
+  /// The streaming has been stopped normally. After you call [RtcEngine.removePublishStreamUrl] to stop streaming, the SDK returns this value.
   @JsonValue(100)
   UnPublishOK,
 }
@@ -2079,7 +2081,7 @@ enum StreamPublishState {
   Idle,
 
   /// Fails to publish the local stream. Possible reasons:
-  /// - The local user calls [RtcEngine.muteLocalAudioStream] (`true`) or [muteLocalVideoStream] (`true`) to stop sending local streams.
+  /// - The local user calls [RtcEngine.muteLocalAudioStream] (`true`) or [RtcEngine.muteLocalVideoStream] (`true`) to stop sending local streams.
   /// - The local user calls [RtcEngine.disableAudio] or [RtcEngine.disableVideo] to disable the entire audio or video module.
   /// - The local user calls [RtcEngine.enableLocalAudio] (`false`) or [RtcEngine.enableLocalVideo] (`false`) to disable the local audio sampling or video capturing.
   /// - The role of the local user is `Audience`.
@@ -2128,7 +2130,7 @@ enum RtmpStreamingEvent {
   @JsonValue(1)
   FailedLoadImage,
 
-  /// TODO(doc)
+  /// The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
   @JsonValue(2)
   UrlAlreadyInUse,
 }
