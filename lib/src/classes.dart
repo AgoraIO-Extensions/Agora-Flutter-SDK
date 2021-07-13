@@ -710,11 +710,19 @@ class ChannelMediaOptions {
   @JsonKey(includeIfNull: false)
   bool? autoSubscribeVideo;
 
-  /// TODO(doc)
+  /// Determines whether to publish the local audio stream when the user joins a channel
+  /// - `true`: (Default) Publish.
+  /// - `false`: Do not publish.
+  ///
+  /// This member serves a similar function to the [RtcEngine.muteLocalAudioStream] method. After the user joins the channel, you can call the [RtcEngine.muteLocalAudioStream] method to set whether to publish the local audio stream in the channel.
   @JsonKey(includeIfNull: false)
   bool? publishLocalAudio;
 
-  /// TODO(doc)
+  /// Determines whether to publish the local video stream when the user joins a channel:
+  /// - `true`: (Default) Publish.
+  /// - `false`: Do not publish.
+  ///
+  /// This member serves a similar function to the [RtcEngine.muteLocalVideoStream] method. After the user joins the channel, you can call the [RtcEngine.muteLocalVideoStream] method to set whether to publish the local video stream in the channel.
   @JsonKey(includeIfNull: false)
   bool? publishLocalVideo;
 
@@ -749,7 +757,7 @@ class EncryptionConfig {
   @JsonKey(includeIfNull: false)
   String? encryptionKey;
 
-  /// TODO(doc)
+  /// The salt. Agora recommends using OpenSSL to generate the salt on your server. For details, see *Channel Encryption*.
   @JsonKey(includeIfNull: false)
   List<int>? encryptionKdfSalt;
 
@@ -1179,10 +1187,10 @@ class RemoteAudioStats {
   /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
   int publishDuration;
 
-  /// Quality of experience (QoE) of the local user when receiving a remote audio stream. See [ExperienceQuality].
+  /// Quality of experience (QoE) of the local user when receiving a remote audio stream. See [qoeQuality].
   ExperienceQualityType qoeQuality;
 
-  /// The reason for poor QoE of the local user when receiving a remote audio stream. See [ExperiencePoorReason].
+  /// The reason for poor QoE of the local user when receiving a remote audio stream. See [qualityChangedReason].
   ExperiencePoorReason qualityChangedReason;
 
   /// The [quality] of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval.
@@ -1472,7 +1480,7 @@ class RtcEngineConfig extends RtcEngineContext {
 class RtcEngineContext {
   /// The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
   /// Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
-  /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithConfig`
+  /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithContext`
   /// to create an `RtcEngine` instance with the new App ID.
   String appId;
 
@@ -1546,7 +1554,7 @@ class RhythmPlayerConfig {
   Map<String, dynamic> toJson() => _$RhythmPlayerConfigToJson(this);
 }
 
-/// Recording configuration, which is set in [RtcEngine.setAudioRecording].
+/// Recording configuration, which is set in [RtcEngine.startAudioRecordingWithConfig].
 @JsonSerializable(explicitToJson: true)
 class AudioRecordingConfiguration {
   /// The absolute path (including the filename extensions) of the recording file. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Ensure that the path you specify exists and is writable.
