@@ -60,11 +60,6 @@ class _State extends State<JoinChannelAudio> {
         setState(() {
           isJoined = false;
         });
-        await _engine
-            .joinChannel(config.token, config.channelId, null, config.uid)
-            .catchError((err) {
-          print('error ${err.toString()}');
-        });
       },
     ));
   }
