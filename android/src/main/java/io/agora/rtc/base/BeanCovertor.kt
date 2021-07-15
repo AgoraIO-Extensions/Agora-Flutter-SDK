@@ -217,7 +217,7 @@ fun mapToAudioRecordingConfiguration(map: Map<*, *>): AudioRecordingConfiguratio
     (map["filePath"] as? String)?.let { filePath = it }
     (map["recordingQuality"] as? Number)?.let { recordingQuality = it.toInt() }
     (map["recordingPosition"] as? Number)?.let { recordingPosition = it.toInt() }
-    (map["recordingQuality"] as? Number)?.let { recordingSampleRate = it.toInt() }
+    (map["recordingSampleRate"] as? Number)?.let { recordingSampleRate = it.toInt() }
   }
 }
 
