@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/config/agora.config.dart'
+    as config;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

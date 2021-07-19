@@ -1,56 +1,103 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-import 'examples/advanced/index.dart';
-import 'examples/basic/index.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 
-void main() => runApp(MyApp());
+const appId = "<-- Insert App Id -->";
+const token = "<-- Insert Token -->";
 
-/// This widget is the root of your application.
-class MyApp extends StatelessWidget {
-  final _DATA = [...Basic, ...Advanced];
+void main() => runApp(MaterialApp(home: MyApp()));
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int? _remoteUid;
+  bool _localUserJoined = false;
+  late RtcEngine _engine;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('APIExample'),
-        ),
-        body: ListView.builder(
-          itemCount: _DATA.length,
-          itemBuilder: (context, index) {
-            return _DATA[index]['widget'] == null
-                ? Ink(
-                    color: Colors.grey,
-                    child: ListTile(
-                      title: Text(_DATA[index]['name'] as String,
-                          style: TextStyle(fontSize: 24, color: Colors.white)),
-                    ),
-                  )
-                : ListTile(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Scaffold(
-                                    appBar: AppBar(
-                                      title:
-                                          Text(_DATA[index]['name'] as String),
-                                    ),
-                                    body: _DATA[index]['widget'] as Widget?,
-                                  )));
-                    },
-                    title: Text(
-                      _DATA[index]['name'] as String,
-                      style: TextStyle(fontSize: 24, color: Colors.black),
-                    ),
-                  );
-          },
-        ),
+  void initState() {
+    super.initState();
+    initAgora();
+  }
+
+  Future<void> initAgora() async {
+    // retrieve permissions
+    await [Permission.microphone, Permission.camera].request();
+
+    //create the engine
+    _engine = await RtcEngine.create(appId);
+    await _engine.enableVideo();
+    _engine.setEventHandler(
+      RtcEngineEventHandler(
+        joinChannelSuccess: (String channel, int uid, int elapsed) {
+          print("local user $uid joined");
+          setState(() {
+            _localUserJoined = true;
+          });
+        },
+        userJoined: (int uid, int elapsed) {
+          print("remote user $uid joined");
+          setState(() {
+            _remoteUid = uid;
+          });
+        },
+        userOffline: (int uid, UserOfflineReason reason) {
+          print("remote user $uid left channel");
+          setState(() {
+            _remoteUid = null;
+          });
+        },
       ),
     );
+
+    await _engine.joinChannel(token, "test", null, 0);
+  }
+
+  // Create UI with local view and remote view
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Agora Video Call'),
+      ),
+      body: Stack(
+        children: [
+          Center(
+            child: _remoteVideo(),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              width: 100,
+              height: 150,
+              child: Center(
+                child: _localUserJoined
+                    ? RtcLocalView.SurfaceView()
+                    : CircularProgressIndicator(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Display remote user's video
+  Widget _remoteVideo() {
+    if (_remoteUid != null) {
+      return RtcRemoteView.SurfaceView(uid: _remoteUid!);
+    } else {
+      return Text(
+        'Please wait for remote user to join',
+        textAlign: TextAlign.center,
+      );
+    }
   }
 }
