@@ -734,7 +734,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getEffectDuration(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.getEffectDuration(params["filePath"] as? String)) {
+        callback.code(engine?.getEffectDuration(params["filePath"] as! String)) {
             $0
         }
     }
