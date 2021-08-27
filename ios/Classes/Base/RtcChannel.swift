@@ -91,9 +91,9 @@ protocol RtcChannelMediaRelayInterface {
     func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
     func stopChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
-    
+
     func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
-    
+
     func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 }
 
@@ -380,19 +380,19 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
         callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enable"] as! Bool))
     }
 
-    func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
+    @objc func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.muteLocalAudioStream(params["muted"] as! Bool))
     }
 
-    func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback) {
+    @objc func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.muteLocalVideoStream(params["muted"] as! Bool))
     }
-    
-    func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+
+    @objc func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.pauseAllChannelMediaRelay())
     }
-    
-    func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+
+    @objc func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.resumeAllChannelMediaRelay())
     }
 }
