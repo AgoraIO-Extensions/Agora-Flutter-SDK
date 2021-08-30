@@ -21,14 +21,14 @@ abstract class EnumConverter<E, T> {
 }
 
 @JsonSerializable()
-class IPAreaCodeConverter extends EnumConverter<IPAreaCode, int> {
-  IPAreaCodeConverter(IPAreaCode e) : super(e);
+class AreaCodeConverter extends EnumConverter<AreaCode, int> {
+  AreaCodeConverter(AreaCode e) : super(e);
 
-  IPAreaCodeConverter.fromValue(int value)
-      : super.fromValue(_$IPAreaCodeEnumMap, value);
+  AreaCodeConverter.fromValue(int value)
+      : super.fromValue(_$AreaCodeEnumMap, value);
 
   int value() {
-    return super.toValue(_$IPAreaCodeEnumMap);
+    return super.toValue(_$AreaCodeEnumMap);
   }
 }
 
@@ -362,13 +362,13 @@ class DegradationPreferenceConverter
 }
 
 @JsonSerializable()
-class EncryptionModeConverter extends EnumConverter<EncryptionMode, String> {
+class EncryptionModeConverter extends EnumConverter<EncryptionMode, int> {
   EncryptionModeConverter(EncryptionMode e) : super(e);
 
-  EncryptionModeConverter.fromValue(String value)
+  EncryptionModeConverter.fromValue(int value)
       : super.fromValue(_$EncryptionModeEnumMap, value);
 
-  String value() {
+  int value() {
     return super.toValue(_$EncryptionModeEnumMap);
   }
 }
@@ -707,6 +707,45 @@ class VideoCodecTypeConverter extends EnumConverter<VideoCodecType, int> {
 
   int value() {
     return super.toValue(_$VideoCodecTypeEnumMap);
+  }
+}
+
+@JsonSerializable()
+class StreamPublishStateConverter
+    extends EnumConverter<StreamPublishState, int> {
+  StreamPublishStateConverter(StreamPublishState e) : super(e);
+
+  StreamPublishStateConverter.fromValue(int value)
+      : super.fromValue(_$StreamPublishStateEnumMap, value);
+
+  int value() {
+    return super.toValue(_$StreamPublishStateEnumMap);
+  }
+}
+
+@JsonSerializable()
+class StreamSubscribeStateConverter
+    extends EnumConverter<StreamSubscribeState, int> {
+  StreamSubscribeStateConverter(StreamSubscribeState e) : super(e);
+
+  StreamSubscribeStateConverter.fromValue(int value)
+      : super.fromValue(_$StreamSubscribeStateEnumMap, value);
+
+  int value() {
+    return super.toValue(_$StreamSubscribeStateEnumMap);
+  }
+}
+
+@JsonSerializable()
+class RtmpStreamingEventConverter
+    extends EnumConverter<RtmpStreamingEvent, int> {
+  RtmpStreamingEventConverter(RtmpStreamingEvent e) : super(e);
+
+  RtmpStreamingEventConverter.fromValue(int value)
+      : super.fromValue(_$RtmpStreamingEventEnumMap, value);
+
+  int value() {
+    return super.toValue(_$RtmpStreamingEventEnumMap);
   }
 }
 

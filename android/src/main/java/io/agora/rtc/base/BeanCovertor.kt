@@ -2,6 +2,7 @@ package io.agora.rtc.base
 
 import android.graphics.Color
 import io.agora.rtc.RtcEngineConfig
+import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.internal.LastmileProbeConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
@@ -175,5 +176,12 @@ fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
   return RtcEngineConfig().apply {
     mAppId = map["appId"] as String
     (map["areaCode"] as? Number)?.toInt()?.let { mAreaCode = it }
+  }
+}
+
+fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
+  return EncryptionConfig().apply {
+    (map["encryptionMode"] as? Number)?.let { encryptionMode = intToEncryptionMode(it.toInt()) }
+    (map["encryptionKey"] as? String)?.let { encryptionKey = it }
   }
 }

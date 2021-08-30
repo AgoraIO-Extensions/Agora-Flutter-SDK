@@ -52,7 +52,7 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> create(String appId) {
-    return createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL);
+    return createWithAreaCode(appId, AreaCode.GLOB);
   }
 
   /// Creates an [RtcEngine] instance.
@@ -79,12 +79,12 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   static Future<RtcEngine> createWithAreaCode(
-      String appId, IPAreaCode areaCode) async {
+      String appId, AreaCode areaCode) async {
     if (_engine != null) return _engine;
     await _methodChannel.invokeMethod('create', {
       'config': {
         'appId': appId,
-        'areaCode': IPAreaCodeConverter(areaCode).value()
+        'areaCode': AreaCodeConverter(areaCode).value(),
       },
       'appType': 4
     });
@@ -639,12 +639,14 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
     return _invokeMethod('setEncryptionMode',
         {'encryptionMode': EncryptionModeConverter(encryptionMode).value()});
   }
 
   @override
+  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('setEncryptionSecret', {'secret': secret});
   }
@@ -836,6 +838,12 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> setAudioMixingPitch(int pitch) {
     return _invokeMethod('setAudioMixingPitch', {'pitch': pitch});
+  }
+
+  @override
+  Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
+    return _invokeMethod(
+        'enableEncryption', {'enabled': enabled, 'config': config.toJson()});
   }
 
   @override
@@ -2095,6 +2103,10 @@ mixin RtcWatermarkInterface {
 mixin RtcEncryptionInterface {
   /// Enables built-in encryption with an encryption password before joining a channel.
   ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
+  ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
   /// **Note**
@@ -2102,9 +2114,14 @@ mixin RtcEncryptionInterface {
   /// - Do not use this method for CDN live streaming.
   ///
   /// **Parameter** [secret] The encryption password.
+  @deprecated
   Future<void> setEncryptionSecret(String secret);
 
   /// Sets the built-in encryption mode.
+  ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
   ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   ///
@@ -2114,7 +2131,27 @@ mixin RtcEncryptionInterface {
   /// - Call the [RtcEngine.setEncryptionSecret] method before calling this method.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
+  @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
+
+  /// Enables/Disables the built-in encryption.
+  ///
+  /// @since v3.1.2.
+  ///
+  /// In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
+  ///
+  /// All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+  ///
+  /// **Note**
+  /// - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+  /// - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
+  ///
+  ///
+  /// **Parameter** [enabled] Whether to enable the built-in encryption.
+  /// - `true`: Enable the built-in encryption.
+  /// - `false`: Disable the built-in encryption.
+  /// **Parameter** [config] Configurations of built-in encryption schemas. See [EncryptionConfig].
+  Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
 
 /// @nodoc

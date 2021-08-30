@@ -6,16 +6,15 @@ part of 'enum_converter.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-IPAreaCodeConverter _$IPAreaCodeConverterFromJson(Map<String, dynamic> json) {
-  return IPAreaCodeConverter(
-    _$enumDecodeNullable(_$IPAreaCodeEnumMap, json['e']),
+AreaCodeConverter _$AreaCodeConverterFromJson(Map<String, dynamic> json) {
+  return AreaCodeConverter(
+    _$enumDecodeNullable(_$AreaCodeEnumMap, json['e']),
   );
 }
 
-Map<String, dynamic> _$IPAreaCodeConverterToJson(
-        IPAreaCodeConverter instance) =>
+Map<String, dynamic> _$AreaCodeConverterToJson(AreaCodeConverter instance) =>
     <String, dynamic>{
-      'e': _$IPAreaCodeEnumMap[instance.e],
+      'e': _$AreaCodeEnumMap[instance.e],
     };
 
 T _$enumDecode<T>(
@@ -50,12 +49,14 @@ T _$enumDecodeNullable<T>(
   return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
 }
 
-const _$IPAreaCodeEnumMap = {
-  IPAreaCode.AREA_CN: 1,
-  IPAreaCode.AREA_NA: 2,
-  IPAreaCode.AREA_EUR: 4,
-  IPAreaCode.AREA_AS: 8,
-  IPAreaCode.AREA_GLOBAL: -1,
+const _$AreaCodeEnumMap = {
+  AreaCode.CN: 1,
+  AreaCode.NA: 2,
+  AreaCode.EU: 4,
+  AreaCode.AS: 8,
+  AreaCode.JP: 16,
+  AreaCode.IN: 32,
+  AreaCode.GLOB: -1,
 };
 
 AudioCodecProfileTypeConverter _$AudioCodecProfileTypeConverterFromJson(
@@ -660,9 +661,11 @@ Map<String, dynamic> _$EncryptionModeConverterToJson(
     };
 
 const _$EncryptionModeEnumMap = {
-  EncryptionMode.AES128XTS: 'aes-128-xts',
-  EncryptionMode.AES256XTS: 'aes-256-xts',
-  EncryptionMode.AES128ECB: 'aes-128-ecb',
+  EncryptionMode.None: 0,
+  EncryptionMode.AES128XTS: 1,
+  EncryptionMode.AES128ECB: 2,
+  EncryptionMode.AES256XTS: 3,
+  EncryptionMode.SM4128ECB: 4,
 };
 
 ErrorCodeConverter _$ErrorCodeConverterFromJson(Map<String, dynamic> json) {
@@ -700,6 +703,7 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.ResourceLimited: 22,
   ErrorCode.InvalidAppId: 101,
   ErrorCode.InvalidChannelId: 102,
+  ErrorCode.NoServerResources: 103,
   ErrorCode.TokenExpired: 109,
   ErrorCode.InvalidToken: 110,
   ErrorCode.ConnectionInterrupted: 111,
@@ -1267,9 +1271,12 @@ const _$WarningCodeEnumMap = {
   WarningCode.AdmPlaybackMalfunction: 1020,
   WarningCode.AdmRecordMalfunction: 1021,
   WarningCode.AdmInterruption: 1025,
+  WarningCode.AdmCategoryNotPlayAndRecord: 1029,
   WarningCode.AdmRecordAudioLowlevel: 1031,
   WarningCode.AdmPlayoutAudioLowlevel: 1032,
   WarningCode.AdmRecordIsOccupied: 1033,
+  WarningCode.AdmNoDataReadyCallback: 1040,
+  WarningCode.AdmInconsistentDevices: 1042,
   WarningCode.ApmHowling: 1051,
   WarningCode.AdmGlitchState: 1052,
   WarningCode.ApmResidualEcho: 1053,
@@ -1315,6 +1322,63 @@ const _$VideoCodecTypeEnumMap = {
   VideoCodecType.H264: 2,
   VideoCodecType.EVP: 3,
   VideoCodecType.E264: 4,
+};
+
+StreamPublishStateConverter _$StreamPublishStateConverterFromJson(
+    Map<String, dynamic> json) {
+  return StreamPublishStateConverter(
+    _$enumDecodeNullable(_$StreamPublishStateEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$StreamPublishStateConverterToJson(
+        StreamPublishStateConverter instance) =>
+    <String, dynamic>{
+      'e': _$StreamPublishStateEnumMap[instance.e],
+    };
+
+const _$StreamPublishStateEnumMap = {
+  StreamPublishState.Idle: 0,
+  StreamPublishState.NoPublished: 1,
+  StreamPublishState.Publishing: 2,
+  StreamPublishState.Published: 3,
+};
+
+StreamSubscribeStateConverter _$StreamSubscribeStateConverterFromJson(
+    Map<String, dynamic> json) {
+  return StreamSubscribeStateConverter(
+    _$enumDecodeNullable(_$StreamSubscribeStateEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$StreamSubscribeStateConverterToJson(
+        StreamSubscribeStateConverter instance) =>
+    <String, dynamic>{
+      'e': _$StreamSubscribeStateEnumMap[instance.e],
+    };
+
+const _$StreamSubscribeStateEnumMap = {
+  StreamSubscribeState.Idle: 0,
+  StreamSubscribeState.NoSubscribed: 1,
+  StreamSubscribeState.Subscribing: 2,
+  StreamSubscribeState.Subscribed: 3,
+};
+
+RtmpStreamingEventConverter _$RtmpStreamingEventConverterFromJson(
+    Map<String, dynamic> json) {
+  return RtmpStreamingEventConverter(
+    _$enumDecodeNullable(_$RtmpStreamingEventEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$RtmpStreamingEventConverterToJson(
+        RtmpStreamingEventConverter instance) =>
+    <String, dynamic>{
+      'e': _$RtmpStreamingEventEnumMap[instance.e],
+    };
+
+const _$RtmpStreamingEventEnumMap = {
+  RtmpStreamingEvent.FailedLoadImage: 1,
 };
 
 AudioSessionOperationRestrictionConverter

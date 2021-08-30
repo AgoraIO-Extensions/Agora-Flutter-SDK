@@ -519,6 +519,27 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(
       'autoSubscribeVideo': instance.autoSubscribeVideo,
     };
 
+EncryptionConfig _$EncryptionConfigFromJson(Map<String, dynamic> json) {
+  return EncryptionConfig(
+    _$enumDecodeNullable(_$EncryptionModeEnumMap, json['encryptionMode']),
+    json['encryptionKey'] as String,
+  );
+}
+
+Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) =>
+    <String, dynamic>{
+      'encryptionMode': _$EncryptionModeEnumMap[instance.encryptionMode],
+      'encryptionKey': instance.encryptionKey,
+    };
+
+const _$EncryptionModeEnumMap = {
+  EncryptionMode.None: 0,
+  EncryptionMode.AES128XTS: 1,
+  EncryptionMode.AES128ECB: 2,
+  EncryptionMode.AES256XTS: 3,
+  EncryptionMode.SM4128ECB: 4,
+};
+
 RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) {
   return RtcStats()
     ..totalDuration = json['totalDuration'] as int
@@ -653,7 +674,8 @@ LocalAudioStats _$LocalAudioStatsFromJson(Map<String, dynamic> json) {
   return LocalAudioStats()
     ..numChannels = json['numChannels'] as int
     ..sentSampleRate = json['sentSampleRate'] as int
-    ..sentBitrate = json['sentBitrate'] as int;
+    ..sentBitrate = json['sentBitrate'] as int
+    ..txPacketLossRate = json['txPacketLossRate'] as int;
 }
 
 Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) =>
@@ -661,6 +683,7 @@ Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) =>
       'numChannels': instance.numChannels,
       'sentSampleRate': instance.sentSampleRate,
       'sentBitrate': instance.sentBitrate,
+      'txPacketLossRate': instance.txPacketLossRate,
     };
 
 LocalVideoStats _$LocalVideoStatsFromJson(Map<String, dynamic> json) {
@@ -678,7 +701,9 @@ LocalVideoStats _$LocalVideoStatsFromJson(Map<String, dynamic> json) {
     ..encodedFrameHeight = json['encodedFrameHeight'] as int
     ..encodedFrameCount = json['encodedFrameCount'] as int
     ..codecType =
-        _$enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']);
+        _$enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType'])
+    ..txPacketLossRate = json['txPacketLossRate'] as int
+    ..captureFrameRate = json['captureFrameRate'] as int;
 }
 
 Map<String, dynamic> _$LocalVideoStatsToJson(LocalVideoStats instance) =>
@@ -696,6 +721,8 @@ Map<String, dynamic> _$LocalVideoStatsToJson(LocalVideoStats instance) =>
       'encodedFrameHeight': instance.encodedFrameHeight,
       'encodedFrameCount': instance.encodedFrameCount,
       'codecType': _$VideoCodecTypeEnumMap[instance.codecType],
+      'txPacketLossRate': instance.txPacketLossRate,
+      'captureFrameRate': instance.captureFrameRate,
     };
 
 const _$VideoQualityAdaptIndicationEnumMap = {
@@ -723,7 +750,8 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) {
     ..receivedBitrate = json['receivedBitrate'] as int
     ..totalFrozenTime = json['totalFrozenTime'] as int
     ..frozenRate = json['frozenRate'] as int
-    ..totalActiveTime = json['totalActiveTime'] as int;
+    ..totalActiveTime = json['totalActiveTime'] as int
+    ..publishDuration = json['publishDuration'] as int;
 }
 
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) =>
@@ -739,6 +767,7 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) =>
       'totalFrozenTime': instance.totalFrozenTime,
       'frozenRate': instance.frozenRate,
       'totalActiveTime': instance.totalActiveTime,
+      'publishDuration': instance.publishDuration,
     };
 
 const _$NetworkQualityEnumMap = {
@@ -767,7 +796,8 @@ RemoteVideoStats _$RemoteVideoStatsFromJson(Map<String, dynamic> json) {
         _$enumDecodeNullable(_$VideoStreamTypeEnumMap, json['rxStreamType'])
     ..totalFrozenTime = json['totalFrozenTime'] as int
     ..frozenRate = json['frozenRate'] as int
-    ..totalActiveTime = json['totalActiveTime'] as int;
+    ..totalActiveTime = json['totalActiveTime'] as int
+    ..publishDuration = json['publishDuration'] as int;
 }
 
 Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) =>
@@ -784,6 +814,7 @@ Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) =>
       'totalFrozenTime': instance.totalFrozenTime,
       'frozenRate': instance.frozenRate,
       'totalActiveTime': instance.totalActiveTime,
+      'publishDuration': instance.publishDuration,
     };
 
 const _$VideoStreamTypeEnumMap = {

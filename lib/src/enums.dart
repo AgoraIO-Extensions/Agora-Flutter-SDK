@@ -3,28 +3,35 @@ import 'package:json_annotation/json_annotation.dart';
 import 'events.dart';
 import 'rtc_engine.dart';
 
-/// IP areas
-/// @enum {number}
-enum IPAreaCode {
+/// The area of connection.
+enum AreaCode {
   /// Mainland China
-  @JsonValue(1 << 0)
-  AREA_CN,
+  @JsonValue(0x00000001)
+  CN,
 
   /// North America
-  @JsonValue(1 << 1)
-  AREA_NA,
+  @JsonValue(0x00000002)
+  NA,
 
-  /// AREA_EUR
-  @JsonValue(1 << 2)
-  AREA_EUR,
+  /// Europe
+  @JsonValue(0x00000004)
+  EU,
 
   /// Asia, excluding Mainland China
-  @JsonValue(1 << 3)
-  AREA_AS,
+  @JsonValue(0x00000008)
+  AS,
+
+  /// Japan
+  @JsonValue(0x00000010)
+  JP,
+
+  /// India
+  @JsonValue(0x00000020)
+  IN,
 
   /// (Default) Global
   @JsonValue(-1)
-  AREA_GLOBAL,
+  GLOB,
 }
 
 /// Self-defined audio codec profile.
@@ -822,17 +829,28 @@ enum DegradationPreference {
 
 /// Encryption mode
 enum EncryptionMode {
+  /// This mode is deprecated.
+  @deprecated
+  @JsonValue(0)
+  None,
+
   /// (Default) 128-bit AES encryption, XTS mode.
-  @JsonValue('aes-128-xts')
+  @JsonValue(1)
   AES128XTS,
 
+  /// 128-bit AES encryption, ECB mode.
+  @JsonValue(2)
+  AES128ECB,
+
   /// 256-bit AES encryption, XTS mode.
-  @JsonValue('aes-256-xts')
+  @JsonValue(3)
   AES256XTS,
 
-  /// 128-bit AES encryption, ECB mode.
-  @JsonValue('aes-128-ecb')
-  AES128ECB,
+  /// 128-bit SM4 encryption, ECB mode.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(4)
+  SM4128ECB,
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
@@ -938,6 +956,12 @@ enum ErrorCode {
   /// The specified channel name is invalid. Please try to rejoin the channel with a valid channel name.
   @JsonValue(102)
   InvalidChannelId,
+
+  /// 103: Fails to get server resources in the specified region. Please try to specify another region.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(103)
+  NoServerResources,
 
   /// The token expired. Agora recommends that you use [ConnectionChangedReason.TokenExpired] in the reason parameter of [RtcEngineEventHandler.connectionStateChanged] instead.
   ///
@@ -1837,6 +1861,12 @@ enum WarningCode {
   @JsonValue(1025)
   AdmInterruption,
 
+  /// During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(1029)
+  AdmCategoryNotPlayAndRecord,
+
   /// Audio Device Module: the recorded audio is too low.
   @JsonValue(1031)
   AdmRecordAudioLowlevel,
@@ -1848,6 +1878,21 @@ enum WarningCode {
   /// Audio Device Module: The recording device is busy.
   @JsonValue(1033)
   AdmRecordIsOccupied,
+
+  /// Audio device module: An error occurs in the audio driver. Solutions:
+  /// - Restart your audio device.
+  /// - Restart your device where the app runs.
+  /// - Upgrade the sound card drive.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(1040)
+  AdmNoDataReadyCallback,
+
+  /// Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
+  ///
+  /// @since v3.1.2.
+  @JsonValue(1042)
+  AdmInconsistentDevices,
 
   /// Audio Device Module: howling is detected.
   @JsonValue(1051)
@@ -1906,6 +1951,67 @@ enum VideoCodecType {
   /// Enhanced H264.
   @JsonValue(4)
   E264,
+}
+
+/// The publishing state.
+///
+/// @since v3.1.2.
+enum StreamPublishState {
+  /// The initial publishing state after joining the channel.
+  @JsonValue(0)
+  Idle,
+
+  /// Fails to publish the local stream. Possible reasons:
+  /// - The local user calls [RtcEngine.muteLocalAudioStream] (`true`) or [muteLocalVideoStream] (`true`) to stop sending local streams.
+  /// - The local user calls [RtcEngine.disableAudio] or [RtcEngine.disableVideo] to disable the entire audio or video module.
+  /// - The local user calls [RtcEngine.enableLocalAudio] (`false`) or [RtcEngine.enableLocalVideo] (`false`) to disable the local audio sampling or video capturing.
+  /// - The role of the local user is `Audience`.
+  @JsonValue(1)
+  NoPublished,
+
+  /// Publishing.
+  @JsonValue(2)
+  Publishing,
+
+  /// Publishes successfully.
+  @JsonValue(3)
+  Published,
+}
+
+/// The subscribing state.
+///
+/// @since v3.1.2.
+enum StreamSubscribeState {
+  /// The initial subscribing state after joining the channel.
+  @JsonValue(0)
+  Idle,
+
+  /// Fails to subscribe to the remote stream. Possible reasons:
+  /// - The remote user:
+  ///   - Calls [RtcEngine.muteLocalAudioStream] (`true`) to stop sending local streams.
+  ///   - The local user calls [RtcEngine.disableAudio] or [RtcEngine.disableVideo] to disable the entire audio or video module.
+  ///   - The local user calls [RtcEngine.enableLocalAudio] (`false`) or [RtcEngine.enableLocalVideo] (`false`) to disable the local audio sampling or video capturing.
+  ///   - The role of the local user is `Audience`.
+  /// - The local user calls the following methods to stop receiving remote streams:
+  ///   - Calls [RtcEngine.muteRemoteAudioStream] (`true`), [RtcEngine.muteAllRemoteAudioStreams] (`true`), or [RtcEngine.setDefaultMuteAllRemoteAudioStreams] (`true`) to stop receiving remote audio streams.
+  ///   - Calls [RtcEngine.muteRemoteVideoStream] (`true`), [RtcEngine.muteAllRemoteVideoStreams] (`true`), or [RtcEngine.setDefaultMuteAllRemoteVideoStreams] (`true`) to stop receiving remote video streams.
+  @JsonValue(1)
+  NoSubscribed,
+
+  /// Subscribing.
+  @JsonValue(2)
+  Subscribing,
+
+  /// Subscribes to and receives the remote stream successfully.
+  @JsonValue(3)
+  Subscribed,
+}
+
+/// Events during the RTMP streaming.
+enum RtmpStreamingEvent {
+  /// An error occurs when you add a background image or a watermark image to the RTMP stream.
+  @JsonValue(1)
+  FailedLoadImage,
 }
 
 /// Audio session restriction.
