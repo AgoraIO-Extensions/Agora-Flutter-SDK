@@ -762,3 +762,41 @@ class AudioSessionOperationRestrictionConverter
     return super.toValue(_$AudioSessionOperationRestrictionEnumMap);
   }
 }
+
+@JsonSerializable()
+class AudioEffectPresetConverter extends EnumConverter<AudioEffectPreset, int> {
+  AudioEffectPresetConverter(AudioEffectPreset e) : super(e);
+
+  AudioEffectPresetConverter.fromValue(int value)
+      : super.fromValue(_$AudioEffectPresetEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioEffectPresetEnumMap);
+  }
+}
+
+@JsonSerializable()
+class VoiceBeautifierPresetConverter
+    extends EnumConverter<VoiceBeautifierPreset, int> {
+  VoiceBeautifierPresetConverter(VoiceBeautifierPreset e) : super(e);
+
+  VoiceBeautifierPresetConverter.fromValue(int value)
+      : super.fromValue(_$VoiceBeautifierPresetEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VoiceBeautifierPresetEnumMap);
+  }
+}
+
+@JsonSerializable()
+class AudienceLatencyLevelTypeConverter
+    extends EnumConverter<AudienceLatencyLevelType, int> {
+  AudienceLatencyLevelTypeConverter(AudienceLatencyLevelType e) : super(e);
+
+  AudienceLatencyLevelTypeConverter.fromValue(int value)
+      : super.fromValue(_$AudienceLatencyLevelTypeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudienceLatencyLevelTypeEnumMap);
+  }
+}

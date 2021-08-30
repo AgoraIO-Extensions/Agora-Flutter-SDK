@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'enums.dart';
@@ -287,28 +289,6 @@ class TranscodingUser {
   Map<String, dynamic> toJson() => _$TranscodingUserToJson(this);
 }
 
-/// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
-@JsonSerializable(explicitToJson: true)
-class Color {
-  /// Red.
-  final int red;
-
-  /// Green.
-  final int green;
-
-  /// Blue.
-  final int blue;
-
-  /// Constructs a [Color]
-  Color(this.red, this.green, this.blue);
-
-  /// @nodoc
-  factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$ColorToJson(this);
-}
-
 /// A class for managing user-specific CDN live audio/video transcoding settings.
 @JsonSerializable(explicitToJson: true)
 class LiveTranscoding {
@@ -328,7 +308,7 @@ class LiveTranscoding {
   @JsonKey(includeIfNull: false)
   int videoBitrate;
 
-  /// The frame rate (fps) of the video. The value range is [0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
+  /// The frame rate (fps) of the video. The value range is (0, 30]. The default value is 15. The Agora server adjusts any value over 30 to 30.
   @JsonKey(includeIfNull: false)
   VideoFrameRate videoFramerate;
 
@@ -375,8 +355,8 @@ class LiveTranscoding {
   VideoCodecProfileType videoCodecProfile;
 
   /// The background color in RGB hex. Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
-  /// See [Color].
-  @JsonKey(includeIfNull: false)
+  @JsonKey(
+      includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
   Color backgroundColor;
 
   /// Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
@@ -412,6 +392,18 @@ class LiveTranscoding {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
+
+  static Color _$ColorFromJson(Map<String, dynamic> json) {
+    return Color.fromRGBO(
+        json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
+  }
+
+  static Map<String, dynamic> _$ColorToJson(Color instance) =>
+      <String, dynamic>{
+        'red': instance.red,
+        'green': instance.green,
+        'blue': instance.blue,
+      };
 }
 
 /// The ChannelMediaInfo class.
@@ -665,8 +657,6 @@ class ChannelMediaOptions {
 }
 
 /// Definition of `EncryptionConfig`.
-///
-/// @since v3.1.2.
 @JsonSerializable(explicitToJson: true)
 class EncryptionConfig {
   /// Encryption mode. The default encryption mode is `AES128XTS`. See [EncryptionMode].
@@ -907,8 +897,6 @@ class LocalAudioStats {
   int sentBitrate;
 
   /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
-  ///
-  /// @since v3.1.2.
   int txPacketLossRate;
 
   /// Constructs a [LocalAudioStats]
@@ -964,13 +952,9 @@ class LocalVideoStats {
   VideoCodecType codecType;
 
   /// The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
-  ///
-  /// @since v3.1.2.
   int txPacketLossRate;
 
   /// The capture frame rate (fps) of the local video.
-  ///
-  /// @since v3.1.2.
   int captureFrameRate;
 
   /// Constructs a [LocalVideoStats]
@@ -998,6 +982,10 @@ class RemoteAudioStats {
   int networkTransportDelay;
 
   /// Network delay (ms) from the receiver to the jitter buffer.
+  ///
+  /// **Note**
+  ///
+  /// When the receiver is an audience member and [AudienceLatencyLevelType] is `1`, this parameter does not take effect.
   int jitterBufferDelay;
 
   /// Packet loss rate in the reported interval.
@@ -1022,8 +1010,6 @@ class RemoteAudioStats {
   int totalActiveTime;
 
   /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
-  ///
-  /// @since v3.1.2.
   int publishDuration;
 
   /// Constructs a [RemoteAudioStats]
@@ -1080,8 +1066,6 @@ class RemoteVideoStats {
   int totalActiveTime;
 
   /// The total publish duration (ms) of the remote video stream.
-  ///
-  /// @since v3.1.2.
   int publishDuration;
 
   /// Constructs a [RemoteVideoStats]
@@ -1122,4 +1106,21 @@ class FacePositionInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$FacePositionInfoToJson(this);
+}
+
+/// The detailed options of a user.
+@JsonSerializable(explicitToJson: true)
+class ClientRoleOptions {
+  /// The latency level of an audience member in a live interactive streaming.
+  AudienceLatencyLevelType audienceLatencyLevel;
+
+  /// Constructs a [ClientRoleOptions]
+  ClientRoleOptions(this.audienceLatencyLevel);
+
+  /// @nodoc
+  factory ClientRoleOptions.fromJson(Map<String, dynamic> json) =>
+      _$ClientRoleOptionsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ClientRoleOptionsToJson(this);
 }

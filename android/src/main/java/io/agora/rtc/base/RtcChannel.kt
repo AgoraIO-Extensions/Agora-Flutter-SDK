@@ -146,6 +146,10 @@ class RtcChannelManager(
 
   override fun setClientRole(params: Map<String, *>, callback: Callback) {
     val role = (params["role"] as Number).toInt()
+    (params["options"] as? Map<*, *>)?.let {
+      callback.code(this[params["channelId"] as String]?.setClientRole(role, mapToClientRoleOptions(it)))
+      return@setClientRole
+    }
     callback.code(this[params["channelId"] as String]?.setClientRole(role))
   }
 
