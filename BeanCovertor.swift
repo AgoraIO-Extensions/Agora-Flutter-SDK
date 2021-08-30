@@ -33,8 +33,8 @@ func mapToSize(_ map: [String: Any]) -> CGSize {
 
 func mapToRect(_ map: [String: Any]) -> CGRect {
     return CGRect(
-        origin: mapToPoint(map),
-        size: mapToSize(map)
+            origin: mapToPoint(map),
+            size: mapToSize(map)
     )
 }
 
@@ -123,10 +123,10 @@ func mapToTranscodingUser(_ map: [String: Any]) -> AgoraLiveTranscodingUser {
 
 func mapToColor(_ map: [String: Any]) -> UIColor {
     return UIColor(
-        red: CGFloat((map["red"] as! NSNumber).intValue),
-        green: CGFloat((map["green"] as! NSNumber).intValue),
-        blue: CGFloat((map["blue"] as! NSNumber).intValue),
-        alpha: 1.0
+            red: CGFloat((map["red"] as! NSNumber).intValue),
+            green: CGFloat((map["green"] as! NSNumber).intValue),
+            blue: CGFloat((map["blue"] as! NSNumber).intValue),
+            alpha: 1.0
     )
 }
 

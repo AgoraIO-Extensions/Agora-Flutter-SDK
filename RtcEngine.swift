@@ -10,28 +10,27 @@ import AgoraRtcKit
 import Foundation
 
 protocol RtcEngineInterface:
-    RtcEngineUserInfoInterface,
-    RtcEngineAudioInterface,
-    RtcEngineVideoInterface,
-    RtcEngineAudioMixingInterface,
-    RtcEngineAudioEffectInterface,
-    RtcEngineVoiceChangerInterface,
-    RtcEngineVoicePositionInterface,
-    RtcEnginePublishStreamInterface,
-    RtcEngineMediaRelayInterface,
-    RtcEngineAudioRouteInterface,
-    RtcEngineEarMonitoringInterface,
-    RtcEngineDualStreamInterface,
-    RtcEngineFallbackInterface,
-    RtcEngineTestInterface,
-    RtcEngineMediaMetadataInterface,
-    RtcEngineWatermarkInterface,
-    RtcEngineEncryptionInterface,
-    RtcEngineAudioRecorderInterface,
-    RtcEngineInjectStreamInterface,
-    RtcEngineCameraInterface,
-    RtcEngineStreamMessageInterface
-{
+        RtcEngineUserInfoInterface,
+        RtcEngineAudioInterface,
+        RtcEngineVideoInterface,
+        RtcEngineAudioMixingInterface,
+        RtcEngineAudioEffectInterface,
+        RtcEngineVoiceChangerInterface,
+        RtcEngineVoicePositionInterface,
+        RtcEnginePublishStreamInterface,
+        RtcEngineMediaRelayInterface,
+        RtcEngineAudioRouteInterface,
+        RtcEngineEarMonitoringInterface,
+        RtcEngineDualStreamInterface,
+        RtcEngineFallbackInterface,
+        RtcEngineTestInterface,
+        RtcEngineMediaMetadataInterface,
+        RtcEngineWatermarkInterface,
+        RtcEngineEncryptionInterface,
+        RtcEngineAudioRecorderInterface,
+        RtcEngineInjectStreamInterface,
+        RtcEngineCameraInterface,
+        RtcEngineStreamMessageInterface {
     func create(_ params: NSDictionary, _ callback: Callback)
 
     func destroy(_ callback: Callback)
@@ -83,6 +82,8 @@ protocol RtcEngineInterface:
     func setCloudProxy(_ params: NSDictionary, _ callback: Callback)
 
     func uploadLogFile(_ callback: Callback)
+
+    func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -259,6 +260,10 @@ protocol RtcEngineMediaRelayInterface {
     func startChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
     func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
+
+    func pauseAllChannelMediaRelay(_ callback: Callback)
+
+    func resumeAllChannelMediaRelay(_ callback: Callback)
 
     func stopChannelMediaRelay(_ callback: Callback)
 }
@@ -1021,7 +1026,9 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func isCameraFocusSupported(_ callback: Callback) {
-        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
+        callback.resolve(engine) {
+            $0.isCameraFocusPositionInPreviewSupported()
+        }
     }
 
     @objc func isCameraExposurePositionSupported(_ callback: Callback) {
@@ -1085,10 +1092,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {
         var streamId = 0
         if let config = params["config"] as? [String: Any] {
-            callback.code(engine?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in streamId }
+            callback.code(engine?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in
+                streamId
+            }
             return
         }
-        callback.code(engine?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in streamId }
+        callback.code(engine?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in
+            streamId
+        }
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
@@ -1123,5 +1134,24 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enabled"] as! Bool))
+    }
+
+    @objc func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback) {
+        let list = params["ips"] as! [Any]
+        var ips: [String] = []
+        for i in list.indices {
+            if let item = list[i] as? String {
+                ips.append(item)
+            }
+        }
+        callback.code(engine?.setLocalAccessPoint(ips, domain: params["domain"] as! String))
+    }
+
+    @objc func pauseAllChannelMediaRelay(_ callback: Callback) {
+        callback.code(engine?.pauseAllChannelMediaRelay())
+    }
+
+    @objc func resumeAllChannelMediaRelay(_ callback: Callback) {
+        callback.code(engine?.resumeAllChannelMediaRelay())
     }
 }
