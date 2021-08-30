@@ -447,6 +447,16 @@ enum AudioScenario {
   /// Gaming scenario.
   @JsonValue(5)
   ChatRoomGaming,
+
+  /// IoT (Internet of Things) scenario where users use IoT devices with low power consumption.
+  @JsonValue(6)
+  IOT,
+
+  /// Meeting scenario that mainly contains the human voice.
+  ///
+  /// Since v3.2.0
+  @JsonValue(8)
+  MEETING,
 }
 
 /// The preset audio voice configuration used to change the voice effect.
@@ -847,8 +857,6 @@ enum EncryptionMode {
   AES256XTS,
 
   /// 128-bit SM4 encryption, ECB mode.
-  ///
-  /// @since v3.1.2.
   @JsonValue(4)
   SM4128ECB,
 }
@@ -958,8 +966,6 @@ enum ErrorCode {
   InvalidChannelId,
 
   /// 103: Fails to get server resources in the specified region. Please try to specify another region.
-  ///
-  /// @since v3.1.2.
   @JsonValue(103)
   NoServerResources,
 
@@ -1412,7 +1418,7 @@ enum NetworkType {
 
 /// The detailed error information for streaming.
 enum RtmpStreamingErrorCode {
-  /// The RTMP streaming publishes successfully.
+  /// The RTMP or RTMPS streaming publishes successfully.
   @JsonValue(0)
   OK,
 
@@ -1420,11 +1426,11 @@ enum RtmpStreamingErrorCode {
   @JsonValue(1)
   InvalidParameters,
 
-  /// The RTMP streaming is encrypted and cannot be published.
+  /// The RTMP or RTMPS streaming is encrypted and cannot be published.
   @JsonValue(2)
   EncryptedStreamNotAllowed,
 
-  /// Timeout for the RTMP streaming. Call the [RtcEngine.addPublishStreamUrl] method to publish the streaming again.
+  /// Timeout for the RTMP or RTMPS streaming. Call the [RtcEngine.addPublishStreamUrl] method to publish the streaming again.
   @JsonValue(3)
   ConnectionTimeout,
 
@@ -1436,7 +1442,7 @@ enum RtmpStreamingErrorCode {
   @JsonValue(5)
   RtmpServerError,
 
-  /// The RTMP streaming publishes too frequently.
+  /// The RTMP or RTMPS streaming publishes too frequently.
   @JsonValue(6)
   TooOften,
 
@@ -1448,18 +1454,18 @@ enum RtmpStreamingErrorCode {
   @JsonValue(8)
   NotAuthorized,
 
-  /// Agora’s server fails to find the RTMP streaming.
+  /// Agora’s server fails to find the RTMP or RTMPS streaming.
   @JsonValue(9)
   StreamNotFound,
 
-  /// The format of the RTMP streaming URL is not supported. Check whether the URL format is correct.
+  /// The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
   @JsonValue(10)
   FormatNotSupported,
 }
 
-/// The RTMP streaming state.
+/// The RTMP or RTMPS streaming state.
 enum RtmpStreamingState {
-  /// The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling [RtcEngine.removePublishStreamUrl].
+  /// The RTMP or RTMPS streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling [RtcEngine.removePublishStreamUrl].
   @JsonValue(0)
   Idle,
 
@@ -1467,17 +1473,17 @@ enum RtmpStreamingState {
   @JsonValue(1)
   Connecting,
 
-  /// The RTMP streaming is being published. The SDK successfully publishes the RTMP streaming and returns this state.
+  /// The RTMP or RTMPS streaming is being published. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
   @JsonValue(2)
   Running,
 
-  /// The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP streaming and returns this state.
+  /// The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP or RTMPS streaming and returns this state.
   /// - If the SDK successfully resumes the streaming, [RtmpStreamingState.Running] returns.
   /// - If the streaming does not resume within 60 seconds or server errors occur, [RtmpStreamingState.Failure] returns. You can also reconnect to the server by calling the [RtcEngine.removePublishStreamUrl] and [RtcEngine.addPublishStreamUrl] methods.
   @JsonValue(3)
   Recovering,
 
-  /// The RTMP streaming fails. See the `errorCode` parameter for the detailed error information. You can also call the [RtcEngine.addPublishStreamUrl] method to publish the RTMP streaming again.
+  /// The RTMP or RTMPS streaming fails. See the `errorCode` parameter for the detailed error information. You can also call the [RtcEngine.addPublishStreamUrl] method to publish the RTMP or RTMPS streaming again.
   @JsonValue(4)
   Failure,
 }
@@ -1862,8 +1868,6 @@ enum WarningCode {
   AdmInterruption,
 
   /// During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
-  ///
-  /// @since v3.1.2.
   @JsonValue(1029)
   AdmCategoryNotPlayAndRecord,
 
@@ -1883,14 +1887,10 @@ enum WarningCode {
   /// - Restart your audio device.
   /// - Restart your device where the app runs.
   /// - Upgrade the sound card drive.
-  ///
-  /// @since v3.1.2.
   @JsonValue(1040)
   AdmNoDataReadyCallback,
 
   /// Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
-  ///
-  /// @since v3.1.2.
   @JsonValue(1042)
   AdmInconsistentDevices,
 
@@ -1905,6 +1905,18 @@ enum WarningCode {
   /// Audio processing module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
   @JsonValue(1053)
   ApmResidualEcho,
+
+  /// Super-resolution warning: the original video dimensions of the remote user exceed 640*480.
+  @JsonValue(1610)
+  SuperResolutionStreamOverLimitation,
+
+  /// Super-resolution warning: another user is using super resolution.
+  @JsonValue(1611)
+  SuperResolutionUserCountOverLimitation,
+
+  /// Super-resolution warning: The device is not supported.
+  @JsonValue(1612)
+  SuperResolutionDeviceNotSupported,
 }
 
 /// The audio channel of the sound.
@@ -1954,8 +1966,6 @@ enum VideoCodecType {
 }
 
 /// The publishing state.
-///
-/// @since v3.1.2.
 enum StreamPublishState {
   /// The initial publishing state after joining the channel.
   @JsonValue(0)
@@ -1979,8 +1989,6 @@ enum StreamPublishState {
 }
 
 /// The subscribing state.
-///
-/// @since v3.1.2.
 enum StreamSubscribeState {
   /// The initial subscribing state after joining the channel.
   @JsonValue(0)
@@ -2007,7 +2015,7 @@ enum StreamSubscribeState {
   Subscribed,
 }
 
-/// Events during the RTMP streaming.
+/// Events during the RTMP or RTMPS streaming.
 enum RtmpStreamingEvent {
   /// An error occurs when you add a background image or a watermark image to the RTMP stream.
   @JsonValue(1)
@@ -2035,4 +2043,231 @@ enum AudioSessionOperationRestriction {
   /// The SDK does not configure the audio session anymore.
   @JsonValue(1 << 7)
   All,
+}
+
+/// The options for SDK preset audio effects.
+enum AudioEffectPreset {
+  /// Turn off audio effects and use the original voice.
+  @JsonValue(0x00000000)
+  AudioEffectOff,
+
+  /// An audio effect typical of a KTV venue.
+  @JsonValue(0x02010100)
+  RoomAcousticsKTV,
+
+  /// An audio effect typical of a concert hall.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02010200)
+  RoomAcousticsVocalConcert,
+
+  /// An audio effect typical of a recording studio.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02010300)
+  RoomAcousticsStudio,
+
+  /// An audio effect typical of a vintage phonograph.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02010400)
+  RoomAcousticsPhonograph,
+
+  /// A virtual stereo effect that renders monophonic audio as stereo audio.
+  ///
+  /// **Note**
+  ///
+  /// Call `setAudioProfile` and set the profile parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)` before setting this enumerator; otherwise, the enumerator setting does not take effect.
+  @JsonValue(0x02010500)
+  RoomAcousticsVirtualStereo,
+
+  /// A more spatial audio effect.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02010600)
+  RoomAcousticsSpacial,
+
+  /// A more ethereal audio effect.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02010700)
+  RoomAcousticsEthereal,
+
+  /// A 3D voice effect that makes the voice appear to be moving around the user. The default cycle period of the 3D voice effect is 10 seconds. To change the cycle period, call [RtcEngine.setAudioEffectParameters] after this method.
+  ///
+  /// **Note**
+  ///
+  /// - Call setAudioProfile and set the profile parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)` before setting this enumerator; otherwise, the enumerator setting does not take effect.
+  /// - If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
+  @JsonValue(0x02010800)
+  RoomAcoustics3DVoice,
+
+  /// The voice of a middle-aged man.
+  ///
+  /// **Note**
+  ///
+  /// - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02020100)
+  VoiceChangerEffectUncle,
+
+  /// The voice of an old man.
+  ///
+  /// **Note**
+  ///
+  /// - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02020200)
+  VoiceChangerEffectOldMan,
+
+  /// The voice of a boy.
+  ///
+  /// **Note**
+  ///
+  /// - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02020300)
+  VoiceChangerEffectBoy,
+
+  /// The voice of a young woman.
+  ///
+  /// **Note**
+  ///
+  /// - Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02020400)
+  VoiceChangerEffectSister,
+
+  /// The voice of a girl.
+  ///
+  /// **Note**
+  ///
+  /// - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02020500)
+  VoiceChangerEffectGirl,
+
+  /// The voice of Pig King, a character in Journey to the West who has a voice like a growling bear.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02020600)
+  VoiceChangerEffectPigKing,
+
+  /// The voice of Hulk.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02020700)
+  VoiceChangerEffectHulk,
+
+  /// An audio effect typical of R&B music.
+  ///
+  /// **Note**
+  ///
+  /// Call [RtcEngine.setAudioProfile] and set the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator; otherwise, the enumerator setting does not take effect.
+  @JsonValue(0x02030100)
+  StyleTransformationRnB,
+
+  /// An audio effect typical of popular music.
+  ///
+  /// **Note**
+  ///
+  /// Call [RtcEngine.setAudioProfile] and set the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator; otherwise, the enumerator setting does not take effect.
+  @JsonValue(0x02030200)
+  StyleTransformationPopular,
+
+  /// A pitch correction effect that corrects the user’s pitch based on the pitch of the natural C major scale. To change the basic mode and tonic pitch, call [RtcEngine.setAudioEffectParameters] after this method.
+  ///
+  /// **Note**
+  ///
+  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+  @JsonValue(0x02040100)
+  PitchCorrection,
+}
+
+/// The options for SDK preset voice beautifier effects.
+enum VoiceBeautifierPreset {
+  /// Turn off voice beautifier effects and use the original voice.
+  @JsonValue(0x00000000)
+  VoiceBeautifierOff,
+
+  /// A more magnetic voice.
+  ///
+  /// **Note**
+  ///
+  /// Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may experience vocal distortion.
+  @JsonValue(0x01010100)
+  ChatBeautifierMagnetic,
+
+  /// A fresher voice.
+  ///
+  /// Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+  @JsonValue(0x01010200)
+  ChatBeautifierFresh,
+
+  /// A more vital voice.
+  ///
+  /// Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+  @JsonValue(0x01010300)
+  ChatBeautifierVitality,
+
+  /// A more vigorous voice.
+  @JsonValue(0x01030100)
+  TimbreTransformationVigorous,
+
+  /// A deeper voice.
+  @JsonValue(0x01030200)
+  TimbreTransformationDeep,
+
+  /// A mellower voice.
+  @JsonValue(0x01030300)
+  TimbreTransformationMellow,
+
+  /// A falsetto voice.
+  @JsonValue(0x01030400)
+  TimbreTransformationFalsetto,
+
+  /// A fuller voice.
+  @JsonValue(0x01030500)
+  TimbreTransformationFull,
+
+  /// A clearer voice.
+  @JsonValue(0x01030600)
+  TimbreTransformationClear,
+
+  /// A more resounding voice.
+  @JsonValue(0x01030700)
+  TimbreTransformationResounding,
+
+  /// A more ringing voice.
+  @JsonValue(0x01030800)
+  TimbreTransformationRinging,
+}
+
+/// The latency level of an audience member in a interactive live streaming.
+///
+/// **Note**
+///
+/// Takes effect only when the user role is `Broadcaster`.
+enum AudienceLatencyLevelType {
+  /// 1: Low latency.
+  @JsonValue(1)
+  LowLatency,
+
+  /// 2: (Default) Ultra low latency.
+  @JsonValue(2)
+  UltraLowLatency,
 }
