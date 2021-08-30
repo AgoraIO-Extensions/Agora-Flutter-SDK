@@ -51,6 +51,7 @@ protocol RtcChannelAudioInterface {
 
     func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 }
 
@@ -59,7 +60,10 @@ protocol RtcChannelVideoInterface {
 
     func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
+
+    func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcChannelVoicePositionInterface {
@@ -103,8 +107,10 @@ protocol RtcChannelMediaMetadataInterface {
 }
 
 protocol RtcChannelEncryptionInterface {
+    @available(*, deprecated)
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
 
     func enableEncryption(_ params: NSDictionary, _ callback: Callback)
@@ -350,10 +356,18 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {
         let channel = self[params["channelId"] as! String]
         var streamId = 0
+        if let config = params["config"] as? Dictionary<String, Any> {
+            callback.code(channel?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in streamId }
+            return
+        }
         callback.code(channel?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in streamId }
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
+    }
+
+    @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enable"] as! Bool))
     }
 }

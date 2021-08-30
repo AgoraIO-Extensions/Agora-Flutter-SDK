@@ -35,7 +35,7 @@ Open the `AndroidManifest.xml` file and add the required device permissions to t
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     ...
@@ -59,7 +59,7 @@ Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` t
 
 ## API
 
-* [Flutter API](https://agoraio.github.io/Flutter-SDK/index.html)
+* [Flutter API](https://docs.agora.io/en/All/api-ref?platform=Flutter)
 * [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 * [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 

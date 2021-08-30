@@ -454,7 +454,7 @@ enum AudioScenario {
 
   /// Meeting scenario that mainly contains the human voice.
   ///
-  /// Since v3.2.0
+  /// Since v3.2.1
   @JsonValue(8)
   MEETING,
 }
@@ -538,7 +538,7 @@ enum AudioVoiceChanger {
   GENERAL_BEAUTY_VOICE_FEMALE_VITALITY,
 }
 
-/// The camera capturer configuration.
+/// The camera capture configuration.
 enum CameraCaptureOutputPreference {
   /// (default) Self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
   @JsonValue(0)
@@ -552,9 +552,9 @@ enum CameraCaptureOutputPreference {
   @JsonValue(2)
   Preview,
 
-  /// Internal use only.
+  /// Capture Dimensions determined by user.
   @JsonValue(3)
-  Unkown,
+  Manual,
 }
 
 /// The camera direction.
@@ -785,6 +785,10 @@ enum ConnectionChangedReason {
   /// - [ConnectionStateType.Reconnecting]
   @JsonValue(14)
   KeepAliveTimeout,
+
+  /// In cloud proxy mode, the proxy server connection interrupted.
+  @JsonValue(15)
+  ProxyServerInterrupted,
 }
 
 /// Connection states.
@@ -856,9 +860,17 @@ enum EncryptionMode {
   @JsonValue(3)
   AES256XTS,
 
-  /// 128-bit SM4 encryption, ECB mode.
+  /// @nodoc 128-bit SM4 encryption, ECB mode.
   @JsonValue(4)
   SM4128ECB,
+
+  /// 128-bit AES encryption, GCM mode.
+  @JsonValue(5)
+  AES128GCM,
+
+  /// 256-bit AES encryption, GCM mode.
+  @JsonValue(6)
+  AES256GCM,
 }
 
 /// Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
@@ -1076,6 +1088,10 @@ enum ErrorCode {
   /// The format of the RTMP stream URL is not supported. Check whether the URL format is correct.
   @JsonValue(156)
   PublishStreamFormatNotSuppported,
+
+  /// The App lack necessary library file. Check whether the dynamic library is loaded.
+  @JsonValue(157)
+  ModuleNotFound,
 
   /// Fails to load the media engine.
   @JsonValue(1001)
@@ -1298,6 +1314,14 @@ enum LocalVideoStreamError {
   /// The local video encoding fails.
   @JsonValue(5)
   EncodeFailure,
+
+  /// (iOS only) The application is in the background.
+  @JsonValue(6)
+  CaptureInBackground,
+
+  /// (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
+  @JsonValue(7)
+  CaptureMultipleForegroundApps,
 }
 
 /// The state of the local video stream.
@@ -2224,6 +2248,10 @@ enum VoiceBeautifierPreset {
   @JsonValue(0x01010300)
   ChatBeautifierVitality,
 
+  ///  Singing beautifier effect.
+  @JsonValue(0x01020100)
+  SingingBeautifier,
+
   /// A more vigorous voice.
   @JsonValue(0x01030100)
   TimbreTransformationVigorous,
@@ -2270,4 +2298,140 @@ enum AudienceLatencyLevelType {
   /// 2: (Default) Ultra low latency.
   @JsonValue(2)
   UltraLowLatency,
+}
+
+///  The output log level of the SDK.
+enum LogLevel {
+  /// Do not output any log.
+  @JsonValue(0x0000)
+  None,
+
+  /// (Default) Output logs of the `Fatal`, `Error`, `Warn`, and `Info` level.
+  /// We recommend setting your log filter as this level.
+  @JsonValue(0x0001)
+  Info,
+
+  /// Output logs of the `Fatal`, `Error`, and `Warn` level.
+  @JsonValue(0x0002)
+  Warn,
+
+  /// Output logs of the `Fatal` and `Error` level.
+  @JsonValue(0x0004)
+  Error,
+
+  /// Output logs of the `Fatal` level.
+  @JsonValue(0x0008)
+  Fatal,
+}
+
+/// The brightness level of the video image captured by the local camera.
+enum CaptureBrightnessLevelType {
+  /// The SDK does not detect the brightness level of the video image.
+  /// Wait a few seconds to get the brightness level from [CaptureBrightnessLevelType] in the next callback.
+  @JsonValue(-1)
+  Invalid,
+  /// The brightness level of the video image is normal.
+  @JsonValue(0)
+  Normal,
+  /// The brightness level of the video image is too bright.
+  @JsonValue(1)
+  Bright,
+  /// The brightness level of the video image is too dark.
+  @JsonValue(2)
+  Dark,
+}
+
+/// The reason why the super-resolution algorithm is not successfully enabled.
+enum SuperResolutionStateReason {
+  /// 0: The super-resolution algorithm is successfully enabled.
+  @JsonValue(0)
+  Success,
+
+  /// 1: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+  @JsonValue(1)
+  StreamOverLimitation,
+
+  /// 2: Another user is already using the super-resolution algorithm.
+  @JsonValue(2)
+  UserCountOverLimitation,
+
+  /// 3: The device does not support the super-resolution algorithm.
+  @JsonValue(3)
+  DeviceNotSupported,
+}
+
+/// @nodoc
+enum UploadErrorReason {
+  @JsonValue(0)
+  Success,
+
+  @JsonValue(1)
+  NetError,
+
+  @JsonValue(2)
+  ServerError,
+}
+
+/// The cloud proxy type.
+enum CloudProxyType {
+  /// Do not use the cloud proxy.
+  @JsonValue(0)
+  None,
+
+  /// The cloud proxy for the UDP protocol.
+  @JsonValue(1)
+  UDP,
+
+  /// @nodoc The cloud proxy for the TCP protocol.
+  @JsonValue(2)
+  TCP,
+}
+
+/// Experience quality types.
+enum ExperienceQualityType {
+  /// 0: Good experience quality.
+  @JsonValue(0)
+  Good,
+
+  /// 1: Bad experience quality.
+  @JsonValue(1)
+  Bad,
+}
+
+/// The reason for poor QoE of the local user when receiving a remote audio stream.
+enum ExperiencePoorReason {
+  /// None, indicating good QoE of the local user.
+  @JsonValue(0)
+  None,
+  /// The remote user’s network quality is poor.
+  @JsonValue(1)
+  RemoteNetworkQualityPoor,
+  /// The local user’s network quality is poor.
+  @JsonValue(2)
+  LocalNetworkQualityPoor,
+  /// The local user’s Wi-Fi or mobile network signal is weak.
+  @JsonValue(4)
+  WirelessSignalPoor,
+  /// The local user enables both Wi-Fi and bluetooth, and their signals interfere with each other. As a result, audio transmission quality is undermined.
+  @JsonValue(8)
+  WifiBluetoothCoexist,
+}
+
+/// The options for SDK preset voice conversion effects.
+enum VoiceConversionPreset {
+  /// Turn off voice conversion effects and use the original voice.
+  @JsonValue(0)
+  Off,
+  /// A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
+  @JsonValue(50397440)
+  Neutral,
+  /// A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
+  @JsonValue(50397696)
+  Sweet,
+  /// A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
+  @JsonValue(50397952)
+  Solid,
+  /// A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
+  @JsonValue(50398208)
+  Bass,
 }

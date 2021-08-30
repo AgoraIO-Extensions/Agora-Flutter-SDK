@@ -60,7 +60,7 @@ SDKは`PlatformView`を使用しますので、 *Info.plist* ファイルで`io.
 
 ## API
 
-* [Flutter API](https://agoraio.github.io/Flutter-SDK/index.html)
+* [Flutter API](https://docs.agora.io/en/All/api-ref?platform=Flutter)
 * [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 * [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 

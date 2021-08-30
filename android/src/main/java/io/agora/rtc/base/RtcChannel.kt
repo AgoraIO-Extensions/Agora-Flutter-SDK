@@ -1,6 +1,5 @@
 package io.agora.rtc.base
 
-import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
@@ -42,6 +41,7 @@ class IRtcChannel {
 
     fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setDefaultMuteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback)
   }
 
@@ -50,7 +50,10 @@ class IRtcChannel {
 
     fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
+
+    fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcVoicePositionInterface {
@@ -94,8 +97,10 @@ class IRtcChannel {
   }
 
   interface RtcEncryptionInterface {
+    @Deprecated("")
     fun setEncryptionSecret(params: Map<String, *>, callback: Callback)
 
+    @Deprecated("")
     fun setEncryptionMode(params: Map<String, *>, callback: Callback)
 
     fun enableEncryption(params: Map<String, *>, callback: Callback)
@@ -213,6 +218,10 @@ class RtcChannelManager(
     callback.code(this[params["channelId"] as String]?.setDefaultMuteAllRemoteVideoStreams(params["muted"] as Boolean))
   }
 
+  override fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback) {
+    callback.code(this[params["channelId"] as String]?.enableRemoteSuperResolution((params["uid"] as Number).toInt(), params["enable"] as Boolean))
+  }
+
   override fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback) {
     callback.code(this[params["channelId"] as String]?.setRemoteVoicePosition((params["uid"] as Number).toInt(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
   }
@@ -313,6 +322,10 @@ class RtcChannelManager(
 
   override fun createDataStream(params: Map<String, *>, callback: Callback) {
     val channel = this[params["channelId"] as String]
+    (params["config"] as? Map<*, *>)?.let { config ->
+      callback.code(channel?.createDataStream(mapToDataStreamConfig(config))) { it }
+      return@createDataStream
+    }
     callback.code(channel?.createDataStream(params["reliable"] as Boolean, params["ordered"] as Boolean)) { it }
   }
 

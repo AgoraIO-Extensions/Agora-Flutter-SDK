@@ -40,7 +40,8 @@ class _State extends State<MultiChannel> {
   }
 
   _initEngine() async {
-    widget._engine = await RtcEngine.create(config.appId);
+    widget._engine =
+        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
 
     await widget._engine.enableVideo();
     await widget._engine.startPreview();

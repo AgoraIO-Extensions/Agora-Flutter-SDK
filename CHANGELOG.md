@@ -1,3 +1,68 @@
+## [3.3.3](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.2...v3.3.3) (2021-04-13)
+
+
+### Bug Fixes
+
+* **change method call:** createDataStream ([6783442](https://github.com/AgoraIO/Flutter-SDK/commit/6783442af2af7273b318aca3aad9ddc88fddca58))
+
+
+### Features
+
+* **add example:** example ([e98d6cc](https://github.com/AgoraIO/Flutter-SDK/commit/e98d6cc1bd2d11c21e2d846ecbd39c502028fbd4))
+
+## [3.3.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1...v3.3.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* iOS selector error ([2d1ac8f](https://github.com/AgoraIO/Flutter-SDK/commit/2d1ac8f1b902f71c06b0b1729579adf396b58c9b))
+
+## [3.3.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.2...v3.3.1) (2021-03-12)
+
+## [3.3.1-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.1...v3.3.1-rc.2) (2021-03-11)
+
+
+### Bug Fixes
+
+* enum ExperienceQualityType value error ([d77ae0a](https://github.com/AgoraIO/Flutter-SDK/commit/d77ae0a2d2d6b953b16a98e855268bedbdce1066))
+
+## [3.3.1-rc.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.1-rc.0...v3.3.1-rc.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* type cast error ([e12781e](https://github.com/AgoraIO/Flutter-SDK/commit/e12781e5d337fc1f85bba5f00d0301696fc9a3e5))
+* type cast error ([98c4331](https://github.com/AgoraIO/Flutter-SDK/commit/98c4331bd97ab1e2dc7216470fc2978c5d4dcd74))
+
+## [3.3.1-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.0-rc.0...v3.3.1-rc.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* rename values of enum VoiceConversionPreset ([1d9e9ef](https://github.com/AgoraIO/Flutter-SDK/commit/1d9e9efdbc908e615731fc07ca74bf4ce11f98ef))
+
+
+### Features
+
+* support 3.3.1 for Android ([cd7a2cd](https://github.com/AgoraIO/Flutter-SDK/commit/cd7a2cdaff747cad9d2e386d79589c7299036ff6))
+* support 3.3.1 for Dart ([35715e0](https://github.com/AgoraIO/Flutter-SDK/commit/35715e042209814ab503e102b110b015cbae4484))
+* support 3.3.1 for iOS ([836f3b4](https://github.com/AgoraIO/Flutter-SDK/commit/836f3b4c87f0c0a478c135a4a6ed0ed4279a446e))
+
+# [3.3.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.1...v3.3.0-rc.0) (2021-01-28)
+
+
+### Bug Fixes
+
+* annotation build warning ([551ebfe](https://github.com/AgoraIO/Flutter-SDK/commit/551ebfe3c8dec34cfdf7e006d38523c60123bc58))
+
+
+### Features
+
+* support 3.3.0 for Android ([9c48594](https://github.com/AgoraIO/Flutter-SDK/commit/9c485942661c0e60c8413f9088b4ed0fa37ae2da))
+* support 3.3.0 for Dart ([b6ee197](https://github.com/AgoraIO/Flutter-SDK/commit/b6ee197b65677b9f47af57d5eec7c6fdf30e28c8))
+* support 3.3.0 for iOS ([b422ce8](https://github.com/AgoraIO/Flutter-SDK/commit/b422ce8e8660067075317e4f0f16a29f5a49b6b7))
+* use flutter `Color` class instead of the `Color` defined ([a09c1f1](https://github.com/AgoraIO/Flutter-SDK/commit/a09c1f17cc4dbbfbafedd496168ff8787f66275b))
+
 ## [3.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.0...v3.2.1) (2020-12-24)
 
 ## [3.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
