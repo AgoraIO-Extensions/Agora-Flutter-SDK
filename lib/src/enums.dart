@@ -725,6 +725,22 @@ enum ChannelMediaRelayEvent {
   /// The video profile is sent to the server.
   @JsonValue(11)
   VideoProfileUpdate,
+
+  /// TODO(doc)
+  @JsonValue(12)
+  PauseSendPacketToDestChannelSuccess,
+
+  /// TODO(doc)
+  @JsonValue(13)
+  PauseSendPacketToDestChannelFailed,
+
+  /// TODO(doc)
+  @JsonValue(14)
+  ResumeSendPacketToDestChannelSuccess,
+
+  /// TODO(doc)
+  @JsonValue(15)
+  ResumeSendPacketToDestChannelFailed,
 }
 
 /// The state code in channel media relay state.

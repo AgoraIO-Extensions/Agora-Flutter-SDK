@@ -388,6 +388,16 @@ class RtcChannel with RtcChannelInterface {
       'muted': muted,
     });
   }
+
+  @override
+  Future<void> pauseAllChannelMediaRelay() {
+    return _invokeMethod('pauseAllChannelMediaRelay');
+  }
+
+  @override
+  Future<void> resumeAllChannelMediaRelay() {
+    return _invokeMethod('resumeAllChannelMediaRelay');
+  }
 }
 
 /// @nodoc
@@ -717,6 +727,12 @@ mixin RtcMediaRelayInterface {
   /// **Note**
   /// - If the method call fails, the SDK triggers the [RtcChannelEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] state code. You can leave the channel using [RtcChannel.leaveChannel], and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
+
+  /// TODO(doc)
+  Future<void> pauseAllChannelMediaRelay();
+
+  /// TODO(doc)
+  Future<void> resumeAllChannelMediaRelay();
 }
 
 /// @nodoc
