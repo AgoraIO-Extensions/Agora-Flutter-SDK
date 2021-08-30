@@ -53,9 +53,11 @@ Your application can still run the voice call when it is switched to the backgro
 
 ## Error handling
 
-### iOS video can't show (Android works fine)
+### Android build error
 
-Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *Info.plist*
+The error log like `Could not find com.github.agorabuilder:native-full-sdk:3.4.2.`
+
+pls refer to https://github.com/AgoraIO/Agora-Flutter-SDK/issues/321#issuecomment-843913064
 
 ## API
 
@@ -63,6 +65,22 @@ Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` t
 * [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 * [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
+## Feedback
+
+If you have any problems or suggestions regarding the sample projects, feel free to file an [issue](https://github.com/AgoraIO/Agora-Flutter-SDK/issues).
+
 ## How to contribute
 
 To help work on this sdk, see our [contributor guide](https://github.com/AgoraIO/Flutter-SDK/blob/master/CONTRIBUTING.md).
+
+## Related resources
+
+- Check our [FAQ](https://docs.agora.io/en/faq) to see if your issue has been recorded.
+- Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
+- Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
+- Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
+- If you encounter problems during integration, feel free to ask questions in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
+
+## License
+
+The sample projects are under the MIT license.

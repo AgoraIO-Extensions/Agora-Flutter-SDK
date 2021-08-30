@@ -8,7 +8,7 @@ part of 'enum_converter.dart';
 
 AreaCodeConverter _$AreaCodeConverterFromJson(Map<String, dynamic> json) {
   return AreaCodeConverter(
-    _$enumDecodeNullable(_$AreaCodeEnumMap, json['e']),
+    _$enumDecode(_$AreaCodeEnumMap, json['e']),
   );
 }
 
@@ -17,36 +17,30 @@ Map<String, dynamic> _$AreaCodeConverterToJson(AreaCodeConverter instance) =>
       'e': _$AreaCodeEnumMap[instance.e],
     };
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$AreaCodeEnumMap = {
@@ -62,7 +56,7 @@ const _$AreaCodeEnumMap = {
 AudioCodecProfileTypeConverter _$AudioCodecProfileTypeConverterFromJson(
     Map<String, dynamic> json) {
   return AudioCodecProfileTypeConverter(
-    _$enumDecodeNullable(_$AudioCodecProfileTypeEnumMap, json['e']),
+    _$enumDecode(_$AudioCodecProfileTypeEnumMap, json['e']),
   );
 }
 
@@ -81,7 +75,7 @@ AudioEqualizationBandFrequencyConverter
     _$AudioEqualizationBandFrequencyConverterFromJson(
         Map<String, dynamic> json) {
   return AudioEqualizationBandFrequencyConverter(
-    _$enumDecodeNullable(_$AudioEqualizationBandFrequencyEnumMap, json['e']),
+    _$enumDecode(_$AudioEqualizationBandFrequencyEnumMap, json['e']),
   );
 }
 
@@ -107,7 +101,7 @@ const _$AudioEqualizationBandFrequencyEnumMap = {
 AudioLocalErrorConverter _$AudioLocalErrorConverterFromJson(
     Map<String, dynamic> json) {
   return AudioLocalErrorConverter(
-    _$enumDecodeNullable(_$AudioLocalErrorEnumMap, json['e']),
+    _$enumDecode(_$AudioLocalErrorEnumMap, json['e']),
   );
 }
 
@@ -130,7 +124,7 @@ const _$AudioLocalErrorEnumMap = {
 AudioLocalStateConverter _$AudioLocalStateConverterFromJson(
     Map<String, dynamic> json) {
   return AudioLocalStateConverter(
-    _$enumDecodeNullable(_$AudioLocalStateEnumMap, json['e']),
+    _$enumDecode(_$AudioLocalStateEnumMap, json['e']),
   );
 }
 
@@ -150,7 +144,7 @@ const _$AudioLocalStateEnumMap = {
 AudioMixingReasonConverter _$AudioMixingReasonConverterFromJson(
     Map<String, dynamic> json) {
   return AudioMixingReasonConverter(
-    _$enumDecodeNullable(_$AudioMixingReasonEnumMap, json['e']),
+    _$enumDecode(_$AudioMixingReasonEnumMap, json['e']),
   );
 }
 
@@ -177,7 +171,7 @@ const _$AudioMixingReasonEnumMap = {
 AudioMixingStateCodeConverter _$AudioMixingStateCodeConverterFromJson(
     Map<String, dynamic> json) {
   return AudioMixingStateCodeConverter(
-    _$enumDecodeNullable(_$AudioMixingStateCodeEnumMap, json['e']),
+    _$enumDecode(_$AudioMixingStateCodeEnumMap, json['e']),
   );
 }
 
@@ -198,7 +192,7 @@ const _$AudioMixingStateCodeEnumMap = {
 AudioOutputRoutingConverter _$AudioOutputRoutingConverterFromJson(
     Map<String, dynamic> json) {
   return AudioOutputRoutingConverter(
-    _$enumDecodeNullable(_$AudioOutputRoutingEnumMap, json['e']),
+    _$enumDecode(_$AudioOutputRoutingEnumMap, json['e']),
   );
 }
 
@@ -221,7 +215,7 @@ const _$AudioOutputRoutingEnumMap = {
 AudioProfileConverter _$AudioProfileConverterFromJson(
     Map<String, dynamic> json) {
   return AudioProfileConverter(
-    _$enumDecodeNullable(_$AudioProfileEnumMap, json['e']),
+    _$enumDecode(_$AudioProfileEnumMap, json['e']),
   );
 }
 
@@ -243,7 +237,7 @@ const _$AudioProfileEnumMap = {
 AudioRecordingQualityConverter _$AudioRecordingQualityConverterFromJson(
     Map<String, dynamic> json) {
   return AudioRecordingQualityConverter(
-    _$enumDecodeNullable(_$AudioRecordingQualityEnumMap, json['e']),
+    _$enumDecode(_$AudioRecordingQualityEnumMap, json['e']),
   );
 }
 
@@ -262,7 +256,7 @@ const _$AudioRecordingQualityEnumMap = {
 AudioRecordingPositionConverter _$AudioRecordingPositionConverterFromJson(
     Map<String, dynamic> json) {
   return AudioRecordingPositionConverter(
-    _$enumDecodeNullable(_$AudioRecordingPositionEnumMap, json['e']),
+    _$enumDecode(_$AudioRecordingPositionEnumMap, json['e']),
   );
 }
 
@@ -281,7 +275,7 @@ const _$AudioRecordingPositionEnumMap = {
 AudioRemoteStateConverter _$AudioRemoteStateConverterFromJson(
     Map<String, dynamic> json) {
   return AudioRemoteStateConverter(
-    _$enumDecodeNullable(_$AudioRemoteStateEnumMap, json['e']),
+    _$enumDecode(_$AudioRemoteStateEnumMap, json['e']),
   );
 }
 
@@ -302,7 +296,7 @@ const _$AudioRemoteStateEnumMap = {
 AudioRemoteStateReasonConverter _$AudioRemoteStateReasonConverterFromJson(
     Map<String, dynamic> json) {
   return AudioRemoteStateReasonConverter(
-    _$enumDecodeNullable(_$AudioRemoteStateReasonEnumMap, json['e']),
+    _$enumDecode(_$AudioRemoteStateReasonEnumMap, json['e']),
   );
 }
 
@@ -326,7 +320,7 @@ const _$AudioRemoteStateReasonEnumMap = {
 AudioReverbPresetConverter _$AudioReverbPresetConverterFromJson(
     Map<String, dynamic> json) {
   return AudioReverbPresetConverter(
-    _$enumDecodeNullable(_$AudioReverbPresetEnumMap, json['e']),
+    _$enumDecode(_$AudioReverbPresetEnumMap, json['e']),
   );
 }
 
@@ -359,7 +353,7 @@ const _$AudioReverbPresetEnumMap = {
 AudioReverbTypeConverter _$AudioReverbTypeConverterFromJson(
     Map<String, dynamic> json) {
   return AudioReverbTypeConverter(
-    _$enumDecodeNullable(_$AudioReverbTypeEnumMap, json['e']),
+    _$enumDecode(_$AudioReverbTypeEnumMap, json['e']),
   );
 }
 
@@ -380,7 +374,7 @@ const _$AudioReverbTypeEnumMap = {
 AudioSampleRateTypeConverter _$AudioSampleRateTypeConverterFromJson(
     Map<String, dynamic> json) {
   return AudioSampleRateTypeConverter(
-    _$enumDecodeNullable(_$AudioSampleRateTypeEnumMap, json['e']),
+    _$enumDecode(_$AudioSampleRateTypeEnumMap, json['e']),
   );
 }
 
@@ -399,7 +393,7 @@ const _$AudioSampleRateTypeEnumMap = {
 AudioScenarioConverter _$AudioScenarioConverterFromJson(
     Map<String, dynamic> json) {
   return AudioScenarioConverter(
-    _$enumDecodeNullable(_$AudioScenarioEnumMap, json['e']),
+    _$enumDecode(_$AudioScenarioEnumMap, json['e']),
   );
 }
 
@@ -423,7 +417,7 @@ const _$AudioScenarioEnumMap = {
 AudioVoiceChangerConverter _$AudioVoiceChangerConverterFromJson(
     Map<String, dynamic> json) {
   return AudioVoiceChangerConverter(
-    _$enumDecodeNullable(_$AudioVoiceChangerEnumMap, json['e']),
+    _$enumDecode(_$AudioVoiceChangerEnumMap, json['e']),
   );
 }
 
@@ -459,7 +453,7 @@ CameraCaptureOutputPreferenceConverter
     _$CameraCaptureOutputPreferenceConverterFromJson(
         Map<String, dynamic> json) {
   return CameraCaptureOutputPreferenceConverter(
-    _$enumDecodeNullable(_$CameraCaptureOutputPreferenceEnumMap, json['e']),
+    _$enumDecode(_$CameraCaptureOutputPreferenceEnumMap, json['e']),
   );
 }
 
@@ -479,7 +473,7 @@ const _$CameraCaptureOutputPreferenceEnumMap = {
 CameraDirectionConverter _$CameraDirectionConverterFromJson(
     Map<String, dynamic> json) {
   return CameraDirectionConverter(
-    _$enumDecodeNullable(_$CameraDirectionEnumMap, json['e']),
+    _$enumDecode(_$CameraDirectionEnumMap, json['e']),
   );
 }
 
@@ -497,7 +491,7 @@ const _$CameraDirectionEnumMap = {
 ChannelMediaRelayErrorConverter _$ChannelMediaRelayErrorConverterFromJson(
     Map<String, dynamic> json) {
   return ChannelMediaRelayErrorConverter(
-    _$enumDecodeNullable(_$ChannelMediaRelayErrorEnumMap, json['e']),
+    _$enumDecode(_$ChannelMediaRelayErrorEnumMap, json['e']),
   );
 }
 
@@ -525,7 +519,7 @@ const _$ChannelMediaRelayErrorEnumMap = {
 ChannelMediaRelayEventConverter _$ChannelMediaRelayEventConverterFromJson(
     Map<String, dynamic> json) {
   return ChannelMediaRelayEventConverter(
-    _$enumDecodeNullable(_$ChannelMediaRelayEventEnumMap, json['e']),
+    _$enumDecode(_$ChannelMediaRelayEventEnumMap, json['e']),
   );
 }
 
@@ -557,7 +551,7 @@ const _$ChannelMediaRelayEventEnumMap = {
 ChannelMediaRelayStateConverter _$ChannelMediaRelayStateConverterFromJson(
     Map<String, dynamic> json) {
   return ChannelMediaRelayStateConverter(
-    _$enumDecodeNullable(_$ChannelMediaRelayStateEnumMap, json['e']),
+    _$enumDecode(_$ChannelMediaRelayStateEnumMap, json['e']),
   );
 }
 
@@ -577,7 +571,7 @@ const _$ChannelMediaRelayStateEnumMap = {
 ChannelProfileConverter _$ChannelProfileConverterFromJson(
     Map<String, dynamic> json) {
   return ChannelProfileConverter(
-    _$enumDecodeNullable(_$ChannelProfileEnumMap, json['e']),
+    _$enumDecode(_$ChannelProfileEnumMap, json['e']),
   );
 }
 
@@ -595,7 +589,7 @@ const _$ChannelProfileEnumMap = {
 
 ClientRoleConverter _$ClientRoleConverterFromJson(Map<String, dynamic> json) {
   return ClientRoleConverter(
-    _$enumDecodeNullable(_$ClientRoleEnumMap, json['e']),
+    _$enumDecode(_$ClientRoleEnumMap, json['e']),
   );
 }
 
@@ -613,7 +607,7 @@ const _$ClientRoleEnumMap = {
 ConnectionChangedReasonConverter _$ConnectionChangedReasonConverterFromJson(
     Map<String, dynamic> json) {
   return ConnectionChangedReasonConverter(
-    _$enumDecodeNullable(_$ConnectionChangedReasonEnumMap, json['e']),
+    _$enumDecode(_$ConnectionChangedReasonEnumMap, json['e']),
   );
 }
 
@@ -645,7 +639,7 @@ const _$ConnectionChangedReasonEnumMap = {
 ConnectionStateTypeConverter _$ConnectionStateTypeConverterFromJson(
     Map<String, dynamic> json) {
   return ConnectionStateTypeConverter(
-    _$enumDecodeNullable(_$ConnectionStateTypeEnumMap, json['e']),
+    _$enumDecode(_$ConnectionStateTypeEnumMap, json['e']),
   );
 }
 
@@ -666,7 +660,7 @@ const _$ConnectionStateTypeEnumMap = {
 DegradationPreferenceConverter _$DegradationPreferenceConverterFromJson(
     Map<String, dynamic> json) {
   return DegradationPreferenceConverter(
-    _$enumDecodeNullable(_$DegradationPreferenceEnumMap, json['e']),
+    _$enumDecode(_$DegradationPreferenceEnumMap, json['e']),
   );
 }
 
@@ -685,7 +679,7 @@ const _$DegradationPreferenceEnumMap = {
 EncryptionModeConverter _$EncryptionModeConverterFromJson(
     Map<String, dynamic> json) {
   return EncryptionModeConverter(
-    _$enumDecodeNullable(_$EncryptionModeEnumMap, json['e']),
+    _$enumDecode(_$EncryptionModeEnumMap, json['e']),
   );
 }
 
@@ -709,7 +703,7 @@ const _$EncryptionModeEnumMap = {
 
 ErrorCodeConverter _$ErrorCodeConverterFromJson(Map<String, dynamic> json) {
   return ErrorCodeConverter(
-    _$enumDecodeNullable(_$ErrorCodeEnumMap, json['e']),
+    _$enumDecode(_$ErrorCodeEnumMap, json['e']),
   );
 }
 
@@ -803,7 +797,7 @@ const _$ErrorCodeEnumMap = {
 InjectStreamStatusConverter _$InjectStreamStatusConverterFromJson(
     Map<String, dynamic> json) {
   return InjectStreamStatusConverter(
-    _$enumDecodeNullable(_$InjectStreamStatusEnumMap, json['e']),
+    _$enumDecode(_$InjectStreamStatusEnumMap, json['e']),
   );
 }
 
@@ -830,7 +824,7 @@ const _$InjectStreamStatusEnumMap = {
 LastmileProbeResultStateConverter _$LastmileProbeResultStateConverterFromJson(
     Map<String, dynamic> json) {
   return LastmileProbeResultStateConverter(
-    _$enumDecodeNullable(_$LastmileProbeResultStateEnumMap, json['e']),
+    _$enumDecode(_$LastmileProbeResultStateEnumMap, json['e']),
   );
 }
 
@@ -849,7 +843,7 @@ const _$LastmileProbeResultStateEnumMap = {
 LighteningContrastLevelConverter _$LighteningContrastLevelConverterFromJson(
     Map<String, dynamic> json) {
   return LighteningContrastLevelConverter(
-    _$enumDecodeNullable(_$LighteningContrastLevelEnumMap, json['e']),
+    _$enumDecode(_$LighteningContrastLevelEnumMap, json['e']),
   );
 }
 
@@ -868,7 +862,7 @@ const _$LighteningContrastLevelEnumMap = {
 LocalVideoStreamErrorConverter _$LocalVideoStreamErrorConverterFromJson(
     Map<String, dynamic> json) {
   return LocalVideoStreamErrorConverter(
-    _$enumDecodeNullable(_$LocalVideoStreamErrorEnumMap, json['e']),
+    _$enumDecode(_$LocalVideoStreamErrorEnumMap, json['e']),
   );
 }
 
@@ -893,7 +887,7 @@ const _$LocalVideoStreamErrorEnumMap = {
 LocalVideoStreamStateConverter _$LocalVideoStreamStateConverterFromJson(
     Map<String, dynamic> json) {
   return LocalVideoStreamStateConverter(
-    _$enumDecodeNullable(_$LocalVideoStreamStateEnumMap, json['e']),
+    _$enumDecode(_$LocalVideoStreamStateEnumMap, json['e']),
   );
 }
 
@@ -912,7 +906,7 @@ const _$LocalVideoStreamStateEnumMap = {
 
 LogFilterConverter _$LogFilterConverterFromJson(Map<String, dynamic> json) {
   return LogFilterConverter(
-    _$enumDecodeNullable(_$LogFilterEnumMap, json['e']),
+    _$enumDecode(_$LogFilterEnumMap, json['e']),
   );
 }
 
@@ -933,7 +927,7 @@ const _$LogFilterEnumMap = {
 NetworkQualityConverter _$NetworkQualityConverterFromJson(
     Map<String, dynamic> json) {
   return NetworkQualityConverter(
-    _$enumDecodeNullable(_$NetworkQualityEnumMap, json['e']),
+    _$enumDecode(_$NetworkQualityEnumMap, json['e']),
   );
 }
 
@@ -957,7 +951,7 @@ const _$NetworkQualityEnumMap = {
 
 NetworkTypeConverter _$NetworkTypeConverterFromJson(Map<String, dynamic> json) {
   return NetworkTypeConverter(
-    _$enumDecodeNullable(_$NetworkTypeEnumMap, json['e']),
+    _$enumDecode(_$NetworkTypeEnumMap, json['e']),
   );
 }
 
@@ -980,7 +974,7 @@ const _$NetworkTypeEnumMap = {
 RtmpStreamingErrorCodeConverter _$RtmpStreamingErrorCodeConverterFromJson(
     Map<String, dynamic> json) {
   return RtmpStreamingErrorCodeConverter(
-    _$enumDecodeNullable(_$RtmpStreamingErrorCodeEnumMap, json['e']),
+    _$enumDecode(_$RtmpStreamingErrorCodeEnumMap, json['e']),
   );
 }
 
@@ -1008,7 +1002,7 @@ const _$RtmpStreamingErrorCodeEnumMap = {
 RtmpStreamingStateConverter _$RtmpStreamingStateConverterFromJson(
     Map<String, dynamic> json) {
   return RtmpStreamingStateConverter(
-    _$enumDecodeNullable(_$RtmpStreamingStateEnumMap, json['e']),
+    _$enumDecode(_$RtmpStreamingStateEnumMap, json['e']),
   );
 }
 
@@ -1029,7 +1023,7 @@ const _$RtmpStreamingStateEnumMap = {
 StreamFallbackOptionsConverter _$StreamFallbackOptionsConverterFromJson(
     Map<String, dynamic> json) {
   return StreamFallbackOptionsConverter(
-    _$enumDecodeNullable(_$StreamFallbackOptionsEnumMap, json['e']),
+    _$enumDecode(_$StreamFallbackOptionsEnumMap, json['e']),
   );
 }
 
@@ -1048,7 +1042,7 @@ const _$StreamFallbackOptionsEnumMap = {
 UserOfflineReasonConverter _$UserOfflineReasonConverterFromJson(
     Map<String, dynamic> json) {
   return UserOfflineReasonConverter(
-    _$enumDecodeNullable(_$UserOfflineReasonEnumMap, json['e']),
+    _$enumDecode(_$UserOfflineReasonEnumMap, json['e']),
   );
 }
 
@@ -1067,7 +1061,7 @@ const _$UserOfflineReasonEnumMap = {
 UserPriorityConverter _$UserPriorityConverterFromJson(
     Map<String, dynamic> json) {
   return UserPriorityConverter(
-    _$enumDecodeNullable(_$UserPriorityEnumMap, json['e']),
+    _$enumDecode(_$UserPriorityEnumMap, json['e']),
   );
 }
 
@@ -1085,7 +1079,7 @@ const _$UserPriorityEnumMap = {
 VideoCodecProfileTypeConverter _$VideoCodecProfileTypeConverterFromJson(
     Map<String, dynamic> json) {
   return VideoCodecProfileTypeConverter(
-    _$enumDecodeNullable(_$VideoCodecProfileTypeEnumMap, json['e']),
+    _$enumDecode(_$VideoCodecProfileTypeEnumMap, json['e']),
   );
 }
 
@@ -1104,7 +1098,7 @@ const _$VideoCodecProfileTypeEnumMap = {
 VideoFrameRateConverter _$VideoFrameRateConverterFromJson(
     Map<String, dynamic> json) {
   return VideoFrameRateConverter(
-    _$enumDecodeNullable(_$VideoFrameRateEnumMap, json['e']),
+    _$enumDecode(_$VideoFrameRateEnumMap, json['e']),
   );
 }
 
@@ -1127,7 +1121,7 @@ const _$VideoFrameRateEnumMap = {
 
 BitRateConverter _$BitRateConverterFromJson(Map<String, dynamic> json) {
   return BitRateConverter(
-    _$enumDecodeNullable(_$BitRateEnumMap, json['e']),
+    _$enumDecode(_$BitRateEnumMap, json['e']),
   );
 }
 
@@ -1144,7 +1138,7 @@ const _$BitRateEnumMap = {
 VideoMirrorModeConverter _$VideoMirrorModeConverterFromJson(
     Map<String, dynamic> json) {
   return VideoMirrorModeConverter(
-    _$enumDecodeNullable(_$VideoMirrorModeEnumMap, json['e']),
+    _$enumDecode(_$VideoMirrorModeEnumMap, json['e']),
   );
 }
 
@@ -1163,7 +1157,7 @@ const _$VideoMirrorModeEnumMap = {
 VideoOutputOrientationModeConverter
     _$VideoOutputOrientationModeConverterFromJson(Map<String, dynamic> json) {
   return VideoOutputOrientationModeConverter(
-    _$enumDecodeNullable(_$VideoOutputOrientationModeEnumMap, json['e']),
+    _$enumDecode(_$VideoOutputOrientationModeEnumMap, json['e']),
   );
 }
 
@@ -1182,7 +1176,7 @@ const _$VideoOutputOrientationModeEnumMap = {
 VideoQualityAdaptIndicationConverter
     _$VideoQualityAdaptIndicationConverterFromJson(Map<String, dynamic> json) {
   return VideoQualityAdaptIndicationConverter(
-    _$enumDecodeNullable(_$VideoQualityAdaptIndicationEnumMap, json['e']),
+    _$enumDecode(_$VideoQualityAdaptIndicationEnumMap, json['e']),
   );
 }
 
@@ -1201,7 +1195,7 @@ const _$VideoQualityAdaptIndicationEnumMap = {
 VideoRemoteStateConverter _$VideoRemoteStateConverterFromJson(
     Map<String, dynamic> json) {
   return VideoRemoteStateConverter(
-    _$enumDecodeNullable(_$VideoRemoteStateEnumMap, json['e']),
+    _$enumDecode(_$VideoRemoteStateEnumMap, json['e']),
   );
 }
 
@@ -1222,7 +1216,7 @@ const _$VideoRemoteStateEnumMap = {
 VideoRemoteStateReasonConverter _$VideoRemoteStateReasonConverterFromJson(
     Map<String, dynamic> json) {
   return VideoRemoteStateReasonConverter(
-    _$enumDecodeNullable(_$VideoRemoteStateReasonEnumMap, json['e']),
+    _$enumDecode(_$VideoRemoteStateReasonEnumMap, json['e']),
   );
 }
 
@@ -1248,7 +1242,7 @@ const _$VideoRemoteStateReasonEnumMap = {
 VideoRenderModeConverter _$VideoRenderModeConverterFromJson(
     Map<String, dynamic> json) {
   return VideoRenderModeConverter(
-    _$enumDecodeNullable(_$VideoRenderModeEnumMap, json['e']),
+    _$enumDecode(_$VideoRenderModeEnumMap, json['e']),
   );
 }
 
@@ -1268,7 +1262,7 @@ const _$VideoRenderModeEnumMap = {
 VideoStreamTypeConverter _$VideoStreamTypeConverterFromJson(
     Map<String, dynamic> json) {
   return VideoStreamTypeConverter(
-    _$enumDecodeNullable(_$VideoStreamTypeEnumMap, json['e']),
+    _$enumDecode(_$VideoStreamTypeEnumMap, json['e']),
   );
 }
 
@@ -1285,7 +1279,7 @@ const _$VideoStreamTypeEnumMap = {
 
 WarningCodeConverter _$WarningCodeConverterFromJson(Map<String, dynamic> json) {
   return WarningCodeConverter(
-    _$enumDecodeNullable(_$WarningCodeEnumMap, json['e']),
+    _$enumDecode(_$WarningCodeEnumMap, json['e']),
   );
 }
 
@@ -1333,7 +1327,7 @@ const _$WarningCodeEnumMap = {
 AudioChannelConverter _$AudioChannelConverterFromJson(
     Map<String, dynamic> json) {
   return AudioChannelConverter(
-    _$enumDecodeNullable(_$AudioChannelEnumMap, json['e']),
+    _$enumDecode(_$AudioChannelEnumMap, json['e']),
   );
 }
 
@@ -1355,7 +1349,7 @@ const _$AudioChannelEnumMap = {
 VideoCodecTypeConverter _$VideoCodecTypeConverterFromJson(
     Map<String, dynamic> json) {
   return VideoCodecTypeConverter(
-    _$enumDecodeNullable(_$VideoCodecTypeEnumMap, json['e']),
+    _$enumDecode(_$VideoCodecTypeEnumMap, json['e']),
   );
 }
 
@@ -1375,7 +1369,7 @@ const _$VideoCodecTypeEnumMap = {
 StreamPublishStateConverter _$StreamPublishStateConverterFromJson(
     Map<String, dynamic> json) {
   return StreamPublishStateConverter(
-    _$enumDecodeNullable(_$StreamPublishStateEnumMap, json['e']),
+    _$enumDecode(_$StreamPublishStateEnumMap, json['e']),
   );
 }
 
@@ -1395,7 +1389,7 @@ const _$StreamPublishStateEnumMap = {
 StreamSubscribeStateConverter _$StreamSubscribeStateConverterFromJson(
     Map<String, dynamic> json) {
   return StreamSubscribeStateConverter(
-    _$enumDecodeNullable(_$StreamSubscribeStateEnumMap, json['e']),
+    _$enumDecode(_$StreamSubscribeStateEnumMap, json['e']),
   );
 }
 
@@ -1415,7 +1409,7 @@ const _$StreamSubscribeStateEnumMap = {
 RtmpStreamingEventConverter _$RtmpStreamingEventConverterFromJson(
     Map<String, dynamic> json) {
   return RtmpStreamingEventConverter(
-    _$enumDecodeNullable(_$RtmpStreamingEventEnumMap, json['e']),
+    _$enumDecode(_$RtmpStreamingEventEnumMap, json['e']),
   );
 }
 
@@ -1434,7 +1428,7 @@ AudioSessionOperationRestrictionConverter
     _$AudioSessionOperationRestrictionConverterFromJson(
         Map<String, dynamic> json) {
   return AudioSessionOperationRestrictionConverter(
-    _$enumDecodeNullable(_$AudioSessionOperationRestrictionEnumMap, json['e']),
+    _$enumDecode(_$AudioSessionOperationRestrictionEnumMap, json['e']),
   );
 }
 
@@ -1455,7 +1449,7 @@ const _$AudioSessionOperationRestrictionEnumMap = {
 AudioEffectPresetConverter _$AudioEffectPresetConverterFromJson(
     Map<String, dynamic> json) {
   return AudioEffectPresetConverter(
-    _$enumDecodeNullable(_$AudioEffectPresetEnumMap, json['e']),
+    _$enumDecode(_$AudioEffectPresetEnumMap, json['e']),
   );
 }
 
@@ -1490,7 +1484,7 @@ const _$AudioEffectPresetEnumMap = {
 VoiceBeautifierPresetConverter _$VoiceBeautifierPresetConverterFromJson(
     Map<String, dynamic> json) {
   return VoiceBeautifierPresetConverter(
-    _$enumDecodeNullable(_$VoiceBeautifierPresetEnumMap, json['e']),
+    _$enumDecode(_$VoiceBeautifierPresetEnumMap, json['e']),
   );
 }
 
@@ -1519,7 +1513,7 @@ const _$VoiceBeautifierPresetEnumMap = {
 AudienceLatencyLevelTypeConverter _$AudienceLatencyLevelTypeConverterFromJson(
     Map<String, dynamic> json) {
   return AudienceLatencyLevelTypeConverter(
-    _$enumDecodeNullable(_$AudienceLatencyLevelTypeEnumMap, json['e']),
+    _$enumDecode(_$AudienceLatencyLevelTypeEnumMap, json['e']),
   );
 }
 
@@ -1536,7 +1530,7 @@ const _$AudienceLatencyLevelTypeEnumMap = {
 
 LogLevelConverter _$LogLevelConverterFromJson(Map<String, dynamic> json) {
   return LogLevelConverter(
-    _$enumDecodeNullable(_$LogLevelEnumMap, json['e']),
+    _$enumDecode(_$LogLevelEnumMap, json['e']),
   );
 }
 
@@ -1556,7 +1550,7 @@ const _$LogLevelEnumMap = {
 CaptureBrightnessLevelTypeConverter
     _$CaptureBrightnessLevelTypeConverterFromJson(Map<String, dynamic> json) {
   return CaptureBrightnessLevelTypeConverter(
-    _$enumDecodeNullable(_$CaptureBrightnessLevelTypeEnumMap, json['e']),
+    _$enumDecode(_$CaptureBrightnessLevelTypeEnumMap, json['e']),
   );
 }
 
@@ -1576,7 +1570,7 @@ const _$CaptureBrightnessLevelTypeEnumMap = {
 SuperResolutionStateReasonConverter
     _$SuperResolutionStateReasonConverterFromJson(Map<String, dynamic> json) {
   return SuperResolutionStateReasonConverter(
-    _$enumDecodeNullable(_$SuperResolutionStateReasonEnumMap, json['e']),
+    _$enumDecode(_$SuperResolutionStateReasonEnumMap, json['e']),
   );
 }
 
@@ -1596,7 +1590,7 @@ const _$SuperResolutionStateReasonEnumMap = {
 UploadErrorReasonConverter _$UploadErrorReasonConverterFromJson(
     Map<String, dynamic> json) {
   return UploadErrorReasonConverter(
-    _$enumDecodeNullable(_$UploadErrorReasonEnumMap, json['e']),
+    _$enumDecode(_$UploadErrorReasonEnumMap, json['e']),
   );
 }
 
@@ -1615,7 +1609,7 @@ const _$UploadErrorReasonEnumMap = {
 CloudProxyTypeConverter _$CloudProxyTypeConverterFromJson(
     Map<String, dynamic> json) {
   return CloudProxyTypeConverter(
-    _$enumDecodeNullable(_$CloudProxyTypeEnumMap, json['e']),
+    _$enumDecode(_$CloudProxyTypeEnumMap, json['e']),
   );
 }
 
@@ -1634,7 +1628,7 @@ const _$CloudProxyTypeEnumMap = {
 ExperienceQualityTypeConverter _$ExperienceQualityTypeConverterFromJson(
     Map<String, dynamic> json) {
   return ExperienceQualityTypeConverter(
-    _$enumDecodeNullable(_$ExperienceQualityTypeEnumMap, json['e']),
+    _$enumDecode(_$ExperienceQualityTypeEnumMap, json['e']),
   );
 }
 
@@ -1652,7 +1646,7 @@ const _$ExperienceQualityTypeEnumMap = {
 ExperiencePoorReasonConverter _$ExperiencePoorReasonConverterFromJson(
     Map<String, dynamic> json) {
   return ExperiencePoorReasonConverter(
-    _$enumDecodeNullable(_$ExperiencePoorReasonEnumMap, json['e']),
+    _$enumDecode(_$ExperiencePoorReasonEnumMap, json['e']),
   );
 }
 
@@ -1673,7 +1667,7 @@ const _$ExperiencePoorReasonEnumMap = {
 VoiceConversionPresetConverter _$VoiceConversionPresetConverterFromJson(
     Map<String, dynamic> json) {
   return VoiceConversionPresetConverter(
-    _$enumDecodeNullable(_$VoiceConversionPresetEnumMap, json['e']),
+    _$enumDecode(_$VoiceConversionPresetEnumMap, json['e']),
   );
 }
 

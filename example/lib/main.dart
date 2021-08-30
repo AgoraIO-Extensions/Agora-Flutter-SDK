@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
                 ? Ink(
                     color: Colors.grey,
                     child: ListTile(
-                      title: Text(_DATA[index]['name'],
+                      title: Text(_DATA[index]['name'] as String,
                           style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
                   )
@@ -37,13 +37,14 @@ class MyApp extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => Scaffold(
                                     appBar: AppBar(
-                                      title: Text(_DATA[index]['name']),
+                                      title:
+                                          Text(_DATA[index]['name'] as String),
                                     ),
-                                    body: _DATA[index]['widget'],
+                                    body: _DATA[index]['widget'] as Widget?,
                                   )));
                     },
                     title: Text(
-                      _DATA[index]['name'],
+                      _DATA[index]['name'] as String,
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   );
