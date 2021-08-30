@@ -37,7 +37,8 @@ class _State extends State<JoinChannelVideo> {
   }
 
   _initEngine() async {
-    widget._engine = await RtcEngine.create(config.appId);
+    widget._engine =
+        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
 
     await widget._engine.enableVideo();

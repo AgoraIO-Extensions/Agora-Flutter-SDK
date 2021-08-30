@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// MultiChannel Example
+/// JoinChannelAudio Example
 class JoinChannelAudio extends StatefulWidget {
   RtcEngine _engine = null;
 
@@ -21,6 +21,8 @@ class _State extends State<JoinChannelAudio> {
       openMicrophone = true,
       enableSpeakerphone = true,
       playEffect = false;
+  bool _enableInEarMonitoring = false;
+  double _recordingVolume = 0, _playbackVolume = 0, _inEarMonitoringVolume = 0;
   TextEditingController _controller;
 
   @override
@@ -37,7 +39,8 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _initEngine() async {
-    widget._engine = await RtcEngine.create(config.appId);
+    widget._engine =
+        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
 
     await widget._engine.enableAudio();
@@ -53,7 +56,7 @@ class _State extends State<JoinChannelAudio> {
           isJoined = true;
         });
       },
-      leaveChannel: (stats) {
+      leaveChannel: (stats) async {
         log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
@@ -66,8 +69,12 @@ class _State extends State<JoinChannelAudio> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
+
     await widget._engine
-        ?.joinChannel(config.token, channelId, null, config.uid);
+        ?.joinChannel(config.token, config.channelId, null, config.uid)
+        ?.catchError((onError) {
+      print('error ${onError.toString()}');
+    });
   }
 
   _leaveChannel() async {
@@ -124,6 +131,20 @@ class _State extends State<JoinChannelAudio> {
     }
   }
 
+  _onChangeInEarMonitoringVolume(double value) {
+    setState(() {
+      _inEarMonitoringVolume = value;
+    });
+    widget._engine?.setInEarMonitoringVolume(value.toInt());
+  }
+
+  _toggleInEarMonitoring(value) {
+    setState(() {
+      _enableInEarMonitoring = value;
+    });
+    widget._engine?.enableInEarMonitoring(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -154,25 +175,95 @@ class _State extends State<JoinChannelAudio> {
           ],
         ),
         Align(
-          alignment: Alignment.bottomRight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RaisedButton(
-                onPressed: this._switchMicrophone,
-                child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  RaisedButton(
+                    onPressed: this._switchMicrophone,
+                    child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
+                  ),
+                  RaisedButton(
+                    onPressed: this._switchSpeakerphone,
+                    child:
+                        Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
+                  ),
+                  RaisedButton(
+                    onPressed: this._switchEffect,
+                    child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('RecordingVolume:'),
+                      Slider(
+                        value: _recordingVolume,
+                        min: 0,
+                        max: 400,
+                        divisions: 5,
+                        label: 'RecordingVolume',
+                        onChanged: (double value) {
+                          setState(() {
+                            _recordingVolume = value;
+                          });
+                          widget._engine
+                              ?.adjustRecordingSignalVolume(value.toInt());
+                        },
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('PlaybackVolume:'),
+                      Slider(
+                        value: _playbackVolume,
+                        min: 0,
+                        max: 400,
+                        divisions: 5,
+                        label: 'PlaybackVolume',
+                        onChanged: (double value) {
+                          setState(() {
+                            _playbackVolume = value;
+                          });
+                          widget._engine
+                              ?.adjustPlaybackSignalVolume(value.toInt());
+                        },
+                      )
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text('InEar Monitoring Volume:'),
+                        Switch(
+                          value: _enableInEarMonitoring,
+                          onChanged: _toggleInEarMonitoring,
+                          activeTrackColor: Colors.grey[350],
+                          activeColor: Colors.white,
+                        )
+                      ]),
+                      if (_enableInEarMonitoring)
+                        Container(
+                            width: 300,
+                            child: Slider(
+                              value: _inEarMonitoringVolume,
+                              min: 0,
+                              max: 100,
+                              divisions: 5,
+                              label: 'InEar Monitoring Volume',
+                              onChanged: _onChangeInEarMonitoringVolume,
+                            ))
+                    ],
+                  ),
+                ],
               ),
-              RaisedButton(
-                onPressed: this._switchSpeakerphone,
-                child: Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
-              ),
-              RaisedButton(
-                onPressed: this._switchEffect,
-                child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
-              ),
-            ],
-          ),
-        )
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+            ))
       ],
     );
   }

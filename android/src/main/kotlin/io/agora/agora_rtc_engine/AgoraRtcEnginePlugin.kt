@@ -12,8 +12,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.jvm.javaMethod
 
 /** AgoraRtcEnginePlugin */
 class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
@@ -53,15 +51,25 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     }
   }
 
-  private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
+  private fun initPlugin(
+    context: Context,
+    binaryMessenger: BinaryMessenger,
+    platformViewRegistry: PlatformViewRegistry
+  ) {
     applicationContext = context.applicationContext
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
     eventChannel.setStreamHandler(this)
 
-    platformViewRegistry.registerViewFactory("AgoraSurfaceView", AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin))
-    platformViewRegistry.registerViewFactory("AgoraTextureView", AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin))
+    platformViewRegistry.registerViewFactory(
+      "AgoraSurfaceView",
+      AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin)
+    )
+    platformViewRegistry.registerViewFactory(
+      "AgoraTextureView",
+      AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin)
+    )
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -102,8 +110,8 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       getAssetAbsolutePath(call, result)
       return
     }
-    manager::class.declaredMemberFunctions.find { it.name == call.method }?.let { function ->
-      function.javaMethod?.let { method ->
+    manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
+      function.let { method ->
         try {
           val parameters = mutableListOf<Any?>()
           call.arguments<Map<*, *>>()?.toMutableMap()?.let {

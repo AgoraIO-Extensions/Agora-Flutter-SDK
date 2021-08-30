@@ -282,6 +282,12 @@ func mapToCameraCapturerConfiguration(_ map: Dictionary<String, Any>) -> AgoraCa
             config.preference = preference
         }
     }
+    if let captureWidth = map["captureWidth"] as? NSNumber {
+        config.captureWidth = captureWidth.int32Value
+    }
+    if let captureHeight = map["captureHeight"] as? NSNumber {
+        config.captureHeight = captureHeight.int32Value
+    }
     if let cameraDirection = map["cameraDirection"] as? NSNumber {
         if let cameraDirection = AgoraCameraDirection(rawValue: cameraDirection.intValue) {
             config.cameraDirection = cameraDirection
@@ -307,6 +313,9 @@ func mapToRtcEngineConfig(_ map: Dictionary<String, Any>) -> AgoraRtcEngineConfi
     if let areaCode = map["areaCode"] as? NSNumber {
         config.areaCode = areaCode.uintValue
     }
+    if let logConfig = map["logConfig"] as? Dictionary<String, Any> {
+        config.logConfig = mapToLogConfig(logConfig)
+    }
     return config
 }
 
@@ -331,4 +340,29 @@ func mapToClientRoleOptions(_ map: Dictionary<String, Any>) -> AgoraClientRoleOp
         }
     }
     return options
+}
+
+func mapToLogConfig(_ map: Dictionary<String, Any>) -> AgoraLogConfig {
+    let config = AgoraLogConfig()
+    config.filePath = map["filePath"] as? String
+    if let fileSize = map["fileSize"] as? NSNumber {
+        config.fileSize = fileSize.intValue
+    }
+    if let level = map["level"] as? NSNumber {
+        if let level = AgoraLogLevel.init(rawValue: level.intValue) {
+            config.level = level;
+        }
+    }
+    return config
+}
+
+func mapToDataStreamConfig(_ map: Dictionary<String, Any>) -> AgoraDataStreamConfig {
+    let config = AgoraDataStreamConfig()
+    if let syncWithAudio = map["syncWithAudio"] as? Bool {
+        config.syncWithAudio = syncWithAudio
+    }
+    if let ordered = map["ordered"] as? Bool {
+        config.ordered = ordered
+    }
+    return config
 }
