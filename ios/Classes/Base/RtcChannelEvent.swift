@@ -6,8 +6,8 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 class RtcChannelEvents {
     static let Warning = "Warning"
@@ -47,7 +47,7 @@ class RtcChannelEvents {
     static let RtmpStreamingEvent = "RtmpStreamingEvent"
     static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
 
-    static func toMap() -> Dictionary<String, String> {
+    static func toMap() -> [String: String] {
         return [
             "Warning": Warning,
             "Error": Error,
@@ -84,7 +84,7 @@ class RtcChannelEvents {
             "AudioSubscribeStateChanged": AudioSubscribeStateChanged,
             "VideoSubscribeStateChanged": VideoSubscribeStateChanged,
             "RtmpStreamingEvent": RtmpStreamingEvent,
-            "UserSuperResolutionEnabled": UserSuperResolutionEnabled
+            "UserSuperResolutionEnabled": UserSuperResolutionEnabled,
         ]
     }
 }
@@ -92,16 +92,16 @@ class RtcChannelEvents {
 class RtcChannelEventHandler: NSObject {
     static let PREFIX = "io.agora.rtc."
 
-    var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
+    var emitter: (_ methodName: String, _ data: [String: Any?]?) -> Void
 
-    init(_ emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+    init(_ emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void) {
         self.emitter = emitter
     }
 
     private func callback(_ methodName: String, _ channel: AgoraRtcChannel, _ data: Any?...) {
         emitter(methodName, [
             "channelId": channel.getId(),
-            "data": data
+            "data": data,
         ])
     }
 }
@@ -242,7 +242,7 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
         callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, eventCode.rawValue)
     }
-    
+
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
         callback(RtcChannelEvents.UserSuperResolutionEnabled, rtcChannel, uid, enabled, reason.rawValue)
     }

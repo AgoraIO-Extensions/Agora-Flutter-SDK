@@ -6,7 +6,7 @@ import io.agora.rtc.models.UserInfo
 
 fun UserInfo.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toUInt().toLong(),
     "userAccount" to userAccount
   )
 }
@@ -22,7 +22,7 @@ fun LocalAudioStats.toMap(): Map<String, Any?> {
 
 fun RtcStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "totalDuration" to totalDuration,
+    "duration" to totalDuration,
     "txBytes" to txBytes,
     "rxBytes" to rxBytes,
     "txAudioBytes" to txAudioBytes,
@@ -35,7 +35,7 @@ fun RtcStats.toMap(): Map<String, Any?> {
     "rxAudioKBitRate" to rxAudioKBitRate,
     "txVideoKBitRate" to txVideoKBitRate,
     "rxVideoKBitRate" to rxVideoKBitRate,
-    "users" to users,
+    "userCount" to users,
     "lastmileDelay" to lastmileDelay,
     "txPacketLossRate" to txPacketLossRate,
     "rxPacketLossRate" to rxPacketLossRate,
@@ -59,7 +59,7 @@ fun Rect.toMap(): Map<String, Any?> {
 
 fun RemoteAudioStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toUInt().toLong(),
     "quality" to quality,
     "networkTransportDelay" to networkTransportDelay,
     "jitterBufferDelay" to jitterBufferDelay,
@@ -99,7 +99,7 @@ fun LocalVideoStats.toMap(): Map<String, Any?> {
 
 fun RemoteVideoStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toUInt().toLong(),
     "delay" to delay,
     "width" to width,
     "height" to height,
@@ -117,7 +117,7 @@ fun RemoteVideoStats.toMap(): Map<String, Any?> {
 
 fun AudioVolumeInfo.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid,
+    "uid" to uid.toUInt().toLong(),
     "volume" to volume,
     "vad" to vad,
     "channelId" to channelId
@@ -157,4 +157,9 @@ fun AgoraFacePositionInfo.toMap(): Map<String, Any?> {
 
 fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
   return List(size) { this[it].toMap() }
+}
+
+@ExperimentalUnsignedTypes
+internal fun Number.toNativeUInt(): Int {
+  return toLong().toUInt().toInt()
 }

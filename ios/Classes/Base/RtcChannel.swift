@@ -6,8 +6,8 @@
 //  Copyright (c) 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 protocol RtcChannelInterface:
         RtcChannelAudioInterface,
@@ -37,8 +37,10 @@ protocol RtcChannelInterface:
 
     func getConnectionState(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func publish(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func unpublish(_ params: NSDictionary, _ callback: Callback)
 
     func getCallId(_ params: NSDictionary, _ callback: Callback)
@@ -46,6 +48,8 @@ protocol RtcChannelInterface:
 
 protocol RtcChannelAudioInterface {
     func adjustUserPlaybackSignalVolume(_ params: NSDictionary, _ callback: Callback)
+
+    func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback)
 
     func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback)
 
@@ -56,6 +60,8 @@ protocol RtcChannelAudioInterface {
 }
 
 protocol RtcChannelVideoInterface {
+    func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback)
+
     func muteRemoteVideoStream(_ params: NSDictionary, _ callback: Callback)
 
     func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
@@ -82,6 +88,10 @@ protocol RtcChannelMediaRelayInterface {
     func startChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
     func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
+
+    func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
+
+    func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
     func stopChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 }
@@ -130,12 +140,12 @@ protocol RtcChannelStreamMessageInterface {
 
 @objc
 class RtcChannelManager: NSObject, RtcChannelInterface {
-    private var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
+    private var emitter: (_ methodName: String, _ data: [String: Any?]?) -> Void
     private var rtcChannelMap = [String: AgoraRtcChannel]()
     private var rtcChannelDelegateMap = [String: RtcChannelEventHandler]()
     private var mediaObserverMap = [String: MediaObserver]()
 
-    init(_ emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+    init(_ emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void) {
         self.emitter = emitter
     }
 
@@ -149,15 +159,13 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     subscript(channelId: String) -> AgoraRtcChannel? {
-        get {
-            return rtcChannelMap[channelId]
-        }
+        return rtcChannelMap[channelId]
     }
 
     @objc func create(_ params: NSDictionary, _ callback: Callback) {
         callback.resolve(params["engine"] as? AgoraRtcEngineKit) { [weak self] in
             if let rtcChannel = $0.createRtcChannel(params["channelId"] as! String) {
-                let delegate = RtcChannelEventHandler() { [weak self] in
+                let delegate = RtcChannelEventHandler { [weak self] in
                     self?.emitter($0, $1)
                 }
                 rtcChannel.setRtcChannelDelegate(delegate)
@@ -169,12 +177,12 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func destroy(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(rtcChannelMap.removeValue(forKey:params["channelId"] as! String)?.destroy())
+        callback.code(rtcChannelMap.removeValue(forKey: params["channelId"] as! String)?.destroy())
     }
 
     @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
         let role = AgoraClientRole(rawValue: (params["role"] as! NSNumber).intValue)!
-        if let options = params["options"] as? Dictionary<String, Any> {
+        if let options = params["options"] as? [String: Any] {
             callback.code(self[params["channelId"] as! String]?.setClientRole(role, options: mapToClientRoleOptions(options)))
             return
         }
@@ -289,7 +297,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
         let channelId = params["channelId"] as! String
         let mediaObserver = MediaObserver { [weak self] in
             if var data = $0 {
-                data["channelId"] = channelId;
+                data["channelId"] = channelId
                 self?.emitter(RtcEngineEvents.MetadataReceived, data)
             }
         }
@@ -356,11 +364,15 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {
         let channel = self[params["channelId"] as! String]
         var streamId = 0
-        if let config = params["config"] as? Dictionary<String, Any> {
-            callback.code(channel?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in streamId }
+        if let config = params["config"] as? [String: Any] {
+            callback.code(channel?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in
+                streamId
+            }
             return
         }
-        callback.code(channel?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in streamId }
+        callback.code(channel?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in
+            streamId
+        }
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
@@ -369,5 +381,21 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
 
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enable"] as! Bool))
+    }
+
+    @objc func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.muteLocalAudioStream(params["muted"] as! Bool))
+    }
+
+    @objc func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.muteLocalVideoStream(params["muted"] as! Bool))
+    }
+
+    @objc func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.pauseAllChannelMediaRelay())
+    }
+
+    @objc func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.resumeAllChannelMediaRelay())
     }
 }

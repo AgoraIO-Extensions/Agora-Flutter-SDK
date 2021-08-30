@@ -86,7 +86,7 @@ typedef RemoteVideoStatsCallback = void Function(RemoteVideoStats stats);
 typedef RemoteAudioStatsCallback = void Function(RemoteAudioStats stats);
 // ignore: public_member_api_docs
 typedef AudioMixingStateCallback = void Function(
-    AudioMixingStateCode state, AudioMixingErrorCode errorCode);
+    AudioMixingStateCode state, AudioMixingReason reason);
 // ignore: public_member_api_docs
 typedef SoundIdCallback = void Function(int soundId);
 // ignore: public_member_api_docs
@@ -581,16 +581,14 @@ class RtcEngineEventHandler {
   @deprecated
   EmptyCallback audioMixingFinished;
 
-  /// Occurs when the state of the local user's audio mixing file changes.
+  /// Occurs when the playback state of the local user's music file changes.
   ///
   /// When you call the [RtcEngine.startAudioMixing] method and the state of audio mixing file changes, the Agora SDK triggers this callback.
-  /// - When the audio mixing file plays, pauses playing, or stops playing, this callback returns 710, 711, or 713 in state, and 0 in the `errorCode` parameter.
-  /// - When exceptions occur during playback, this callback returns 714 in state and an error in the `errorCode` parameter.
-  /// - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [WarningCode.AudioMixingOpenError] = 701.
+  /// When the playback state of the local user's music file changes, the SDK triggers this callback and reports the current playback state and the reason for the change.
   ///
   /// The `AudioMixingStateCallback` typedef includes the following parameters:
-  /// - [AudioMixingStateCode] `state`: The state code.
-  /// - [AudioMixingErrorCode] `errorCode`: The error code.
+  /// - [AudioMixingStateCode] `state`: The current music file playback state.
+  /// - [AudioMixingReason] `reason`: The reason for the change of the music file playback state.
   AudioMixingStateCallback audioMixingStateChanged;
 
   /// Occurs when the audio effect file playback finishes.
@@ -1016,86 +1014,87 @@ class RtcEngineEventHandler {
   UploadLogResultCallback uploadLogResult;
 
   /// Constructs a [RtcEngineEventHandler]
-  RtcEngineEventHandler(
-      {this.warning,
-      this.error,
-      this.apiCallExecuted,
-      this.joinChannelSuccess,
-      this.rejoinChannelSuccess,
-      this.leaveChannel,
-      this.localUserRegistered,
-      this.userInfoUpdated,
-      this.clientRoleChanged,
-      this.userJoined,
-      this.userOffline,
-      this.connectionStateChanged,
-      this.networkTypeChanged,
-      this.connectionLost,
-      this.tokenPrivilegeWillExpire,
-      this.requestToken,
-      this.audioVolumeIndication,
-      this.activeSpeaker,
-      this.firstLocalAudioFrame,
-      this.firstLocalVideoFrame,
-      this.userMuteVideo,
-      this.videoSizeChanged,
-      this.remoteVideoStateChanged,
-      this.localVideoStateChanged,
-      this.remoteAudioStateChanged,
-      this.localAudioStateChanged,
-      this.localPublishFallbackToAudioOnly,
-      this.remoteSubscribeFallbackToAudioOnly,
-      this.audioRouteChanged,
-      this.cameraFocusAreaChanged,
-      this.cameraExposureAreaChanged,
-      this.facePositionChanged,
-      this.rtcStats,
-      this.lastmileQuality,
-      this.networkQuality,
-      this.lastmileProbeResult,
-      this.localVideoStats,
-      this.localAudioStats,
-      this.remoteVideoStats,
-      this.remoteAudioStats,
-      this.audioMixingFinished,
-      this.audioMixingStateChanged,
-      this.audioEffectFinished,
-      this.rtmpStreamingStateChanged,
-      this.transcodingUpdated,
-      this.streamInjectedStatus,
-      this.streamMessage,
-      this.streamMessageError,
-      this.mediaEngineLoadSuccess,
-      this.mediaEngineStartCallSuccess,
-      this.channelMediaRelayStateChanged,
-      this.channelMediaRelayEvent,
-      this.firstRemoteVideoFrame,
-      this.firstRemoteAudioFrame,
-      this.firstRemoteAudioDecoded,
-      this.userMuteAudio,
-      this.streamPublished,
-      this.streamUnpublished,
-      this.remoteAudioTransportStats,
-      this.remoteVideoTransportStats,
-      this.userEnableVideo,
-      this.userEnableLocalVideo,
-      this.firstRemoteVideoDecoded,
-      this.microphoneEnabled,
-      this.connectionInterrupted,
-      this.connectionBanned,
-      this.audioQuality,
-      this.cameraReady,
-      this.videoStopped,
-      this.metadataReceived,
-      this.firstLocalAudioFramePublished,
-      this.firstLocalVideoFramePublished,
-      this.audioPublishStateChanged,
-      this.videoPublishStateChanged,
-      this.audioSubscribeStateChanged,
-      this.videoSubscribeStateChanged,
-      this.rtmpStreamingEvent,
-      this.userSuperResolutionEnabled,
-      this.uploadLogResult});
+  RtcEngineEventHandler({
+    this.warning,
+    this.error,
+    this.apiCallExecuted,
+    this.joinChannelSuccess,
+    this.rejoinChannelSuccess,
+    this.leaveChannel,
+    this.localUserRegistered,
+    this.userInfoUpdated,
+    this.clientRoleChanged,
+    this.userJoined,
+    this.userOffline,
+    this.connectionStateChanged,
+    this.networkTypeChanged,
+    this.connectionLost,
+    this.tokenPrivilegeWillExpire,
+    this.requestToken,
+    this.audioVolumeIndication,
+    this.activeSpeaker,
+    this.firstLocalAudioFrame,
+    this.firstLocalVideoFrame,
+    this.userMuteVideo,
+    this.videoSizeChanged,
+    this.remoteVideoStateChanged,
+    this.localVideoStateChanged,
+    this.remoteAudioStateChanged,
+    this.localAudioStateChanged,
+    this.localPublishFallbackToAudioOnly,
+    this.remoteSubscribeFallbackToAudioOnly,
+    this.audioRouteChanged,
+    this.cameraFocusAreaChanged,
+    this.cameraExposureAreaChanged,
+    this.facePositionChanged,
+    this.rtcStats,
+    this.lastmileQuality,
+    this.networkQuality,
+    this.lastmileProbeResult,
+    this.localVideoStats,
+    this.localAudioStats,
+    this.remoteVideoStats,
+    this.remoteAudioStats,
+    this.audioMixingFinished,
+    this.audioMixingStateChanged,
+    this.audioEffectFinished,
+    this.rtmpStreamingStateChanged,
+    this.transcodingUpdated,
+    this.streamInjectedStatus,
+    this.streamMessage,
+    this.streamMessageError,
+    this.mediaEngineLoadSuccess,
+    this.mediaEngineStartCallSuccess,
+    this.channelMediaRelayStateChanged,
+    this.channelMediaRelayEvent,
+    this.firstRemoteVideoFrame,
+    this.firstRemoteAudioFrame,
+    this.firstRemoteAudioDecoded,
+    this.userMuteAudio,
+    this.streamPublished,
+    this.streamUnpublished,
+    this.remoteAudioTransportStats,
+    this.remoteVideoTransportStats,
+    this.userEnableVideo,
+    this.userEnableLocalVideo,
+    this.firstRemoteVideoDecoded,
+    this.microphoneEnabled,
+    this.connectionInterrupted,
+    this.connectionBanned,
+    this.audioQuality,
+    this.cameraReady,
+    this.videoStopped,
+    this.metadataReceived,
+    this.firstLocalAudioFramePublished,
+    this.firstLocalVideoFramePublished,
+    this.audioPublishStateChanged,
+    this.videoPublishStateChanged,
+    this.audioSubscribeStateChanged,
+    this.videoSubscribeStateChanged,
+    this.rtmpStreamingEvent,
+    this.userSuperResolutionEnabled,
+    this.uploadLogResult,
+  });
 
   // ignore: public_member_api_docs
   void process(String methodName, List<dynamic> data) {
@@ -1269,7 +1268,7 @@ class RtcEngineEventHandler {
       case 'AudioMixingStateChanged':
         audioMixingStateChanged?.call(
           AudioMixingStateCodeConverter.fromValue(data[0]).e,
-          AudioMixingErrorCodeConverter.fromValue(data[1]).e,
+          AudioMixingReasonConverter.fromValue(data[1]).e,
         );
         break;
       case 'AudioEffectFinished':
@@ -1784,43 +1783,44 @@ class RtcChannelEventHandler {
   UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]
-  RtcChannelEventHandler(
-      {this.warning,
-      this.error,
-      this.joinChannelSuccess,
-      this.rejoinChannelSuccess,
-      this.leaveChannel,
-      this.clientRoleChanged,
-      this.userJoined,
-      this.userOffline,
-      this.connectionStateChanged,
-      this.connectionLost,
-      this.tokenPrivilegeWillExpire,
-      this.requestToken,
-      this.activeSpeaker,
-      this.videoSizeChanged,
-      this.remoteVideoStateChanged,
-      this.remoteAudioStateChanged,
-      this.localPublishFallbackToAudioOnly,
-      this.remoteSubscribeFallbackToAudioOnly,
-      this.rtcStats,
-      this.networkQuality,
-      this.remoteVideoStats,
-      this.remoteAudioStats,
-      this.rtmpStreamingStateChanged,
-      this.transcodingUpdated,
-      this.streamInjectedStatus,
-      this.streamMessage,
-      this.streamMessageError,
-      this.channelMediaRelayStateChanged,
-      this.channelMediaRelayEvent,
-      this.metadataReceived,
-      this.audioPublishStateChanged,
-      this.videoPublishStateChanged,
-      this.audioSubscribeStateChanged,
-      this.videoSubscribeStateChanged,
-      this.rtmpStreamingEvent,
-      this.userSuperResolutionEnabled});
+  RtcChannelEventHandler({
+    this.warning,
+    this.error,
+    this.joinChannelSuccess,
+    this.rejoinChannelSuccess,
+    this.leaveChannel,
+    this.clientRoleChanged,
+    this.userJoined,
+    this.userOffline,
+    this.connectionStateChanged,
+    this.connectionLost,
+    this.tokenPrivilegeWillExpire,
+    this.requestToken,
+    this.activeSpeaker,
+    this.videoSizeChanged,
+    this.remoteVideoStateChanged,
+    this.remoteAudioStateChanged,
+    this.localPublishFallbackToAudioOnly,
+    this.remoteSubscribeFallbackToAudioOnly,
+    this.rtcStats,
+    this.networkQuality,
+    this.remoteVideoStats,
+    this.remoteAudioStats,
+    this.rtmpStreamingStateChanged,
+    this.transcodingUpdated,
+    this.streamInjectedStatus,
+    this.streamMessage,
+    this.streamMessageError,
+    this.channelMediaRelayStateChanged,
+    this.channelMediaRelayEvent,
+    this.metadataReceived,
+    this.audioPublishStateChanged,
+    this.videoPublishStateChanged,
+    this.audioSubscribeStateChanged,
+    this.videoSubscribeStateChanged,
+    this.rtmpStreamingEvent,
+    this.userSuperResolutionEnabled,
+  });
 
   // ignore: public_member_api_docs
   void process(String methodName, List<dynamic> data) {

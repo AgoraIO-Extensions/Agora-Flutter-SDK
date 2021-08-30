@@ -149,15 +149,16 @@ class VideoEncoderConfiguration {
   VideoMirrorMode mirrorMode;
 
   /// Constructs a [VideoEncoderConfiguration]
-  VideoEncoderConfiguration(
-      {this.dimensions,
-      this.frameRate,
-      this.minFrameRate,
-      this.bitrate,
-      this.minBitrate,
-      this.orientationMode,
-      this.degradationPrefer,
-      this.mirrorMode});
+  VideoEncoderConfiguration({
+    this.dimensions,
+    this.frameRate,
+    this.minFrameRate,
+    this.bitrate,
+    this.minBitrate,
+    this.orientationMode,
+    this.degradationPrefer,
+    this.mirrorMode,
+  });
 
   /// @nodoc
   factory VideoEncoderConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -187,11 +188,12 @@ class BeautyOptions {
   double rednessLevel;
 
   /// Constructs a [BeautyOptions]
-  BeautyOptions(
-      {this.lighteningContrastLevel,
-      this.lighteningLevel,
-      this.smoothnessLevel,
-      this.rednessLevel});
+  BeautyOptions({
+    this.lighteningContrastLevel,
+    this.lighteningLevel,
+    this.smoothnessLevel,
+    this.rednessLevel,
+  });
 
   /// @nodoc
   factory BeautyOptions.fromJson(Map<String, dynamic> json) =>
@@ -220,7 +222,13 @@ class AgoraImage {
   int height;
 
   /// Constructs a [AgoraImage]
-  AgoraImage(this.url, this.x, this.y, this.width, this.height);
+  AgoraImage(
+    this.url,
+    this.x,
+    this.y,
+    this.width,
+    this.height,
+  );
 
   /// @nodoc
   factory AgoraImage.fromJson(Map<String, dynamic> json) =>
@@ -393,10 +401,8 @@ class LiveTranscoding {
   /// @nodoc
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 
-  static Color _$ColorFromJson(Map<String, dynamic> json) {
-    return Color.fromRGBO(
-        json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
-  }
+  static Color _$ColorFromJson(Map<String, dynamic> json) => Color.fromRGBO(
+      json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
 
   static Map<String, dynamic> _$ColorToJson(Color instance) =>
       <String, dynamic>{
@@ -421,7 +427,11 @@ class ChannelMediaInfo {
   int uid;
 
   /// Constructs a [ChannelMediaInfo]
-  ChannelMediaInfo(this.uid, {this.channelName, this.token});
+  ChannelMediaInfo(
+    this.uid, {
+    this.channelName,
+    this.token,
+  });
 
   /// @nodoc
   factory ChannelMediaInfo.fromJson(Map<String, dynamic> json) =>
@@ -452,7 +462,10 @@ class ChannelMediaRelayConfiguration {
   List<ChannelMediaInfo> destInfos;
 
   /// Constructs a [ChannelMediaRelayConfiguration]
-  ChannelMediaRelayConfiguration(this.srcInfo, this.destInfos);
+  ChannelMediaRelayConfiguration(
+    this.srcInfo,
+    this.destInfos,
+  );
 
   /// @nodoc
   factory ChannelMediaRelayConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -478,8 +491,12 @@ class LastmileProbeConfig {
   int expectedDownlinkBitrate;
 
   /// Constructs a [LastmileProbeConfig]
-  LastmileProbeConfig(this.probeUplink, this.probeDownlink,
-      this.expectedUplinkBitrate, this.expectedDownlinkBitrate);
+  LastmileProbeConfig(
+    this.probeUplink,
+    this.probeDownlink,
+    this.expectedUplinkBitrate,
+    this.expectedDownlinkBitrate,
+  );
 
   /// @nodoc
   factory LastmileProbeConfig.fromJson(Map<String, dynamic> json) =>
@@ -505,7 +522,12 @@ class Rectangle {
   int height;
 
   /// Constructs a [Rectangle]
-  Rectangle(this.x, this.y, this.width, this.height);
+  Rectangle(
+    this.x,
+    this.y,
+    this.width,
+    this.height,
+  );
 
   /// @nodoc
   factory Rectangle.fromJson(Map<String, dynamic> json) =>
@@ -533,8 +555,11 @@ class WatermarkOptions {
   Rectangle positionInPortraitMode;
 
   /// Constructs a [WatermarkOptions]
-  WatermarkOptions(this.positionInLandscapeMode, this.positionInPortraitMode,
-      {this.visibleInPreview});
+  WatermarkOptions(
+    this.positionInLandscapeMode,
+    this.positionInPortraitMode, {
+    this.visibleInPreview,
+  });
 
   /// @nodoc
   factory WatermarkOptions.fromJson(Map<String, dynamic> json) =>
@@ -586,15 +611,16 @@ class LiveInjectStreamConfig {
   AudioChannel audioChannels;
 
   /// Constructs a [LiveInjectStreamConfig]
-  LiveInjectStreamConfig(
-      {this.width,
-      this.height,
-      this.videoGop,
-      this.videoFramerate,
-      this.videoBitrate,
-      this.audioSampleRate,
-      this.audioBitrate,
-      this.audioChannels});
+  LiveInjectStreamConfig({
+    this.width,
+    this.height,
+    this.videoGop,
+    this.videoFramerate,
+    this.videoBitrate,
+    this.audioSampleRate,
+    this.audioBitrate,
+    this.audioChannels,
+  });
 
   /// @nodoc
   factory LiveInjectStreamConfig.fromJson(Map<String, dynamic> json) =>
@@ -626,8 +652,12 @@ class CameraCapturerConfiguration {
   CameraDirection cameraDirection;
 
   /// Constructs a [CameraCapturerConfiguration]
-  CameraCapturerConfiguration(this.preference, this.cameraDirection,
-      {this.captureWidth, this.captureHeight});
+  CameraCapturerConfiguration(
+    this.preference,
+    this.cameraDirection, {
+    this.captureWidth,
+    this.captureHeight,
+  });
 
   /// @nodoc
   factory CameraCapturerConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -656,8 +686,21 @@ class ChannelMediaOptions {
   /// After joining the channel, you can call `muteAllRemoteVideoStreams` to set whether to subscribe to video streams in the channel.
   bool autoSubscribeVideo;
 
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  bool publishLocalAudio;
+
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  bool publishLocalVideo;
+
   /// Constructs a [ChannelMediaOptions]
-  ChannelMediaOptions(this.autoSubscribeAudio, this.autoSubscribeVideo);
+  ChannelMediaOptions(
+    this.autoSubscribeAudio,
+    this.autoSubscribeVideo, {
+    this.publishLocalAudio,
+    this.publishLocalVideo,
+  });
 
   /// @nodoc
   factory ChannelMediaOptions.fromJson(Map<String, dynamic> json) =>
@@ -680,8 +723,16 @@ class EncryptionConfig {
   /// If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [ErrorCode.InvalidArgument].
   String encryptionKey;
 
+  /// TODO(doc)
+  @JsonKey(includeIfNull: false)
+  List<int> encryptionKdfSalt;
+
   /// Constructs a [EncryptionConfig]
-  EncryptionConfig(this.encryptionMode, this.encryptionKey);
+  EncryptionConfig(
+    this.encryptionMode,
+    this.encryptionKey, {
+    this.encryptionKdfSalt,
+  });
 
   /// @nodoc
   factory EncryptionConfig.fromJson(Map<String, dynamic> json) =>
@@ -695,7 +746,7 @@ class EncryptionConfig {
 @JsonSerializable(explicitToJson: true)
 class RtcStats {
   /// Call duration in seconds, represented by an aggregate value.
-  int totalDuration;
+  int duration;
 
   /// Total number of bytes transmitted, represented by an aggregate value.
   int txBytes;
@@ -738,7 +789,7 @@ class RtcStats {
   /// - Live Broadcast profile:
   ///   - If the local user is an audience: The number of users in the channel = The number of hosts in the channel + 1.
   ///   - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
-  int users;
+  int userCount;
 
   /// Client-server latency.
   int lastmileDelay;
@@ -1184,7 +1235,9 @@ class ClientRoleOptions {
   AudienceLatencyLevelType audienceLatencyLevel;
 
   /// Constructs a [ClientRoleOptions]
-  ClientRoleOptions(this.audienceLatencyLevel);
+  ClientRoleOptions(
+    this.audienceLatencyLevel,
+  );
 
   /// @nodoc
   factory ClientRoleOptions.fromJson(Map<String, dynamic> json) =>
@@ -1216,7 +1269,11 @@ class LogConfig {
   LogLevel level;
 
   /// Constructs a [LogConfig]
-  LogConfig({this.filePath, this.fileSize, this.level});
+  LogConfig({
+    this.filePath,
+    this.fileSize,
+    this.level,
+  });
 
   /// @nodoc
   factory LogConfig.fromJson(Map<String, dynamic> json) =>
@@ -1258,7 +1315,10 @@ class DataStreamConfig {
   bool ordered;
 
   /// Constructs a [DataStreamConfig]
-  DataStreamConfig({this.syncWithAudio, this.ordered});
+  DataStreamConfig({
+    this.syncWithAudio,
+    this.ordered,
+  });
 
   /// @nodoc
   factory DataStreamConfig.fromJson(Map<String, dynamic> json) =>
@@ -1292,7 +1352,11 @@ class RtcEngineConfig {
   LogConfig logConfig;
 
   /// Constructs a [RtcEngineConfig]
-  RtcEngineConfig(this.appId, {this.areaCode, this.logConfig});
+  RtcEngineConfig(
+    this.appId, {
+    this.areaCode,
+    this.logConfig,
+  });
 
   /// @nodoc
   factory RtcEngineConfig.fromJson(Map<String, dynamic> json) =>
@@ -1300,4 +1364,78 @@ class RtcEngineConfig {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$RtcEngineConfigToJson(this);
+}
+
+/// The metronome configuration, which is set in [RtcEngine.startRhythmPlayer] or [RtcEngine.configRhythmPlayer].
+@JsonSerializable(explicitToJson: true)
+class RhythmPlayerConfig {
+  /// The number of beats per measure. The range is 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
+  @JsonKey(includeIfNull: false)
+  int beatsPerMeasure;
+
+  /// Tempo (beats per minute). The range is 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
+  @JsonKey(includeIfNull: false)
+  int beatsPerMinute;
+
+  /// Whether to publish the sound of the metronome to remote users:
+  /// - `true`: (Default) Publish. Both the local user and remote users can hear the metronome.
+  /// - `false`: Do not publish. Only the local user can hear the metronome.
+  @JsonKey(includeIfNull: false)
+  bool publish;
+
+  /// Constructs a [RhythmPlayerConfig]
+  RhythmPlayerConfig({
+    this.beatsPerMeasure,
+    this.beatsPerMinute,
+    this.publish,
+  });
+
+  /// @nodoc
+  factory RhythmPlayerConfig.fromJson(Map<String, dynamic> json) =>
+      _$RhythmPlayerConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$RhythmPlayerConfigToJson(this);
+}
+
+/// Recording configuration, which is set in [RtcEngine.setAudioRecording].
+@JsonSerializable(explicitToJson: true)
+class AudioRecordingConfiguration {
+  /// The absolute path (including the filename extensions) of the recording file. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Ensure that the path you specify exists and is writable.
+  String filePath;
+
+  /// Audio recording quality. For details, see [AudioRecordingQuality]. This parameter applies to AAC files only.
+  @JsonKey(includeIfNull: false)
+  AudioRecordingQuality recordingQuality;
+
+  /// Recording content. For details, see [AudioRecordingPosition].
+  @JsonKey(includeIfNull: false)
+  AudioRecordingPosition recordingPosition;
+
+  /// Recording sample rate (Hz). The following values are supported:
+  /// - 16000
+  /// - (Default) 32000
+  /// - 44100
+  /// - 48000
+  ///
+  /// **Note**
+  /// - If this parameter is set to 44100 or 48000, for better recording effects, Agora recommends recording WAV files or AAC files whose `recordingQuality`
+  /// is `Medium` or `High`.
+  @JsonKey(includeIfNull: false)
+  AudioSampleRateType recordingSampleRate;
+
+  /// Constructs a [AudioRecordingConfiguration]
+  AudioRecordingConfiguration(
+    this.filePath, {
+    this.recordingQuality,
+    this.recordingPosition,
+    this.recordingSampleRate,
+  });
+
+  /// @nodoc
+  factory AudioRecordingConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$AudioRecordingConfigurationFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }

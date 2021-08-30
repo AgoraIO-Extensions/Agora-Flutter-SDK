@@ -82,6 +82,7 @@ public class Annotations {
     Constants.LOCAL_AUDIO_STREAM_ERROR_DEVICE_BUSY,
     Constants.LOCAL_AUDIO_STREAM_ERROR_CAPTURE_FAILURE,
     Constants.LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE,
+    Constants.LOCAL_AUDIO_STREAM_ERROR_INTERRUPTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioLocalError {
@@ -98,19 +99,27 @@ public class Annotations {
   }
 
   @IntDef({
-    Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_OPEN,
-    Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_TOO_FREQUENT,
-    Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_INTERRUPTED_EOF,
-    AgoraAudioMixingErrorCode.MEDIA_ENGINE_AUDIO_ERROR_OK,
+    Constants.AUDIO_MIXING_REASON_CAN_NOT_OPEN,
+    Constants.AUDIO_MIXING_REASON_TOO_FREQUENT_CALL,
+    Constants.AUDIO_MIXING_REASON_INTERRUPTED_EOF,
+    Constants.AUDIO_MIXING_REASON_STARTED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_ONE_LOOP_COMPLETED,
+    Constants.AUDIO_MIXING_REASON_START_NEW_LOOP,
+    Constants.AUDIO_MIXING_REASON_ALL_LOOPS_COMPLETED,
+    Constants.AUDIO_MIXING_REASON_STOPPED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_PAUSED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_RESUMED_BY_USER,
+    AgoraAudioMixingReason.MEDIA_ENGINE_AUDIO_ERROR_OK,
   })
   @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraAudioMixingErrorCode {
+  public @interface AgoraAudioMixingReason {
     int MEDIA_ENGINE_AUDIO_ERROR_OK = 0;
   }
 
   @IntDef({
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_PLAY,
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_PAUSED,
+    Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_RESTART,
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_STOPPED,
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_ERROR,
   })
@@ -317,6 +326,10 @@ public class Annotations {
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE,
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL,
     Constants.RELAY_EVENT_VIDEO_PROFILE_UPDATE,
+    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
+    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraChannelMediaRelayEvent {
@@ -402,6 +415,8 @@ public class Annotations {
     AgoraEncryptionMode.SM4128ECB,
     AgoraEncryptionMode.AES128GCM,
     AgoraEncryptionMode.AES256GCM,
+    AgoraEncryptionMode.AES128GCM2,
+    AgoraEncryptionMode.AES256GCM2,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraEncryptionMode {
@@ -412,6 +427,8 @@ public class Annotations {
     int SM4128ECB = 4;
     int AES128GCM = 5;
     int AES256GCM = 6;
+    int AES128GCM2 = 7;
+    int AES256GCM2 = 8;
   }
 
   @IntDef({
@@ -461,6 +478,7 @@ public class Annotations {
     Constants.ERR_PUBLISH_STREAM_NOT_FOUND,
     Constants.ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED,
     Constants.ERR_MODULE_NOT_FOUND,
+    Constants.ERR_ALREADY_IN_RECORDING,
     Constants.ERR_LOAD_MEDIA_ENGINE,
     Constants.ERR_START_CALL,
     Constants.ERR_START_CAMERA,
@@ -534,6 +552,7 @@ public class Annotations {
     Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY,
     Constants.LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE,
     Constants.LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE,
+    Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_NOT_FOUND
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraLocalVideoStreamError {
@@ -601,6 +620,7 @@ public class Annotations {
     Constants.RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED,
     Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND,
     Constants.RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED,
+    Constants.RTMP_STREAM_UNPUBLISH_ERROR_OK,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingErrorCode {
@@ -818,6 +838,7 @@ public class Annotations {
 
   @IntDef({
     Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
+    Constants.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingEvent {

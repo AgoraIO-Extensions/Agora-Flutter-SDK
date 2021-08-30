@@ -1,3 +1,22 @@
+## [3.4.6](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.3...v3.4.6) (2021-08-25)
+
+
+### Bug Fixes
+
+* Android build error ([3af4476](https://github.com/AgoraIO/Flutter-SDK/commit/3af44762ad765cde99024e2b080d4c88f34cfc09))
+* enum type cast bug ([9ff389d](https://github.com/AgoraIO/Flutter-SDK/commit/9ff389d55ec096e111e48c94ec74945277501179))
+* function.parameters may cause error ([927f8d6](https://github.com/AgoraIO/Flutter-SDK/commit/927f8d61962c486c33bb5dfad7ca5a369aa94199))
+* **uid compatible:** int to uint ([ddaa354](https://github.com/AgoraIO/Flutter-SDK/commit/ddaa3544a126d39f58184e8ed98e7031fa2d3991))
+
+
+### Features
+
+* support 3.4.5 ([9329b67](https://github.com/AgoraIO/Flutter-SDK/commit/9329b6709a4e1ff4a04969dd3c1b96fac131a8ce))
+* support 3.4.6 ([77f8abd](https://github.com/AgoraIO/Flutter-SDK/commit/77f8abdcffd34d5c20779415c6ac65ca74aea641))
+* support native 3.4.2 ([e792d26](https://github.com/AgoraIO/Flutter-SDK/commit/e792d263f271b2ec1aae2c7970471527d7dc5c1b))
+* support native 3.4.2 ([ca658b2](https://github.com/AgoraIO/Flutter-SDK/commit/ca658b2893174f9b71a6a6b704da55d6e4617267))
+* **upgrade:** 3.4.1 ([11cef0f](https://github.com/AgoraIO/Flutter-SDK/commit/11cef0f052783e0a8eec0e5da8b461588f03a78d))
+
 ## [3.3.3](https://github.com/AgoraIO/Flutter-SDK/compare/v3.3.2...v3.3.3) (2021-04-13)
 
 
