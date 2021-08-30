@@ -52,6 +52,8 @@ protocol RtcEngineInterface:
 
     func getConnectionState(_ callback: Callback)
 
+    func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback)
+
     func getCallId(_ callback: Callback)
 
     func rate(_ params: NSDictionary, _ callback: Callback)
@@ -283,6 +285,8 @@ protocol RtcEngineEncryptionInterface {
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
+
+    func enableEncryption(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioRecorderInterface {
@@ -404,6 +408,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.resolve(engine) {
             $0.getConnectionState().rawValue
         }
+    }
+
+    @objc func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.sendCustomReportMessage(params["id"] as! String, category: params["category"] as! String, event: params["event"] as! String, label: params["label"] as! String, value: (params["value"] as! NSNumber).intValue))
     }
 
     @objc func getCallId(_ callback: Callback) {
@@ -841,7 +849,21 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setEncryptionMode(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setEncryptionMode(params["encryptionMode"] as? String))
+        var encryptionMode = ""
+        switch (params["encryptionMode"] as! NSNumber).intValue {
+        case AgoraEncryptionMode.AES128XTS.rawValue:
+            encryptionMode = "aes-128-xts"
+        case AgoraEncryptionMode.AES128ECB.rawValue:
+            encryptionMode = "aes-128-ecb"
+        case AgoraEncryptionMode.AES256XTS.rawValue:
+            encryptionMode = "aes-256-xts"
+        default: encryptionMode = ""
+        }
+        callback.code(engine?.setEncryptionMode(encryptionMode))
+    }
+
+    @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
     }
 
     @objc func startAudioRecording(_ params: NSDictionary, _ callback: Callback) {

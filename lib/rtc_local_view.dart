@@ -35,14 +35,16 @@ class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
     Key key,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
     String channelId,
-    bool mirror = false,
+    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(
             key: key,
+            renderMode: renderMode,
             channelId: channelId,
-            mirror: mirror,
+            mirrorMode: mirrorMode,
             gestureRecognizers: gestureRecognizers,
             onPlatformViewCreated: onPlatformViewCreated,
             uid: 0);
