@@ -125,7 +125,7 @@ const _$VideoOutputOrientationModeEnumMap = {
 const _$DegradationPreferenceEnumMap = {
   DegradationPreference.MaintainQuality: 0,
   DegradationPreference.MaintainFramerate: 1,
-  DegradationPreference.Balanced: 2,
+  DegradationPreference.MaintainBalanced: 2,
 };
 
 const _$VideoMirrorModeEnumMap = {
@@ -508,28 +508,52 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) {
   return ChannelMediaOptions(
     json['autoSubscribeAudio'] as bool,
     json['autoSubscribeVideo'] as bool,
+    publishLocalAudio: json['publishLocalAudio'] as bool,
+    publishLocalVideo: json['publishLocalVideo'] as bool,
   );
 }
 
-Map<String, dynamic> _$ChannelMediaOptionsToJson(
-        ChannelMediaOptions instance) =>
-    <String, dynamic>{
-      'autoSubscribeAudio': instance.autoSubscribeAudio,
-      'autoSubscribeVideo': instance.autoSubscribeVideo,
-    };
+Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
+  final val = <String, dynamic>{
+    'autoSubscribeAudio': instance.autoSubscribeAudio,
+    'autoSubscribeVideo': instance.autoSubscribeVideo,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('publishLocalAudio', instance.publishLocalAudio);
+  writeNotNull('publishLocalVideo', instance.publishLocalVideo);
+  return val;
+}
 
 EncryptionConfig _$EncryptionConfigFromJson(Map<String, dynamic> json) {
   return EncryptionConfig(
     _$enumDecodeNullable(_$EncryptionModeEnumMap, json['encryptionMode']),
     json['encryptionKey'] as String,
+    encryptionKdfSalt:
+        (json['encryptionKdfSalt'] as List)?.map((e) => e as int)?.toList(),
   );
 }
 
-Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) =>
-    <String, dynamic>{
-      'encryptionMode': _$EncryptionModeEnumMap[instance.encryptionMode],
-      'encryptionKey': instance.encryptionKey,
-    };
+Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) {
+  final val = <String, dynamic>{
+    'encryptionMode': _$EncryptionModeEnumMap[instance.encryptionMode],
+    'encryptionKey': instance.encryptionKey,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('encryptionKdfSalt', instance.encryptionKdfSalt);
+  return val;
+}
 
 const _$EncryptionModeEnumMap = {
   EncryptionMode.None: 0,
@@ -539,11 +563,13 @@ const _$EncryptionModeEnumMap = {
   EncryptionMode.SM4128ECB: 4,
   EncryptionMode.AES128GCM: 5,
   EncryptionMode.AES256GCM: 6,
+  EncryptionMode.AES128GCM2: 7,
+  EncryptionMode.AES256GCM2: 8,
 };
 
 RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) {
   return RtcStats()
-    ..totalDuration = json['totalDuration'] as int
+    ..duration = json['duration'] as int
     ..txBytes = json['txBytes'] as int
     ..rxBytes = json['rxBytes'] as int
     ..txAudioBytes = json['txAudioBytes'] as int
@@ -556,7 +582,7 @@ RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) {
     ..rxAudioKBitRate = json['rxAudioKBitRate'] as int
     ..txVideoKBitRate = json['txVideoKBitRate'] as int
     ..rxVideoKBitRate = json['rxVideoKBitRate'] as int
-    ..users = json['users'] as int
+    ..userCount = json['userCount'] as int
     ..lastmileDelay = json['lastmileDelay'] as int
     ..txPacketLossRate = json['txPacketLossRate'] as int
     ..rxPacketLossRate = json['rxPacketLossRate'] as int
@@ -569,7 +595,7 @@ RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$RtcStatsToJson(RtcStats instance) => <String, dynamic>{
-      'totalDuration': instance.totalDuration,
+      'duration': instance.duration,
       'txBytes': instance.txBytes,
       'rxBytes': instance.rxBytes,
       'txAudioBytes': instance.txAudioBytes,
@@ -582,7 +608,7 @@ Map<String, dynamic> _$RtcStatsToJson(RtcStats instance) => <String, dynamic>{
       'rxAudioKBitRate': instance.rxAudioKBitRate,
       'txVideoKBitRate': instance.txVideoKBitRate,
       'rxVideoKBitRate': instance.rxVideoKBitRate,
-      'users': instance.users,
+      'userCount': instance.userCount,
       'lastmileDelay': instance.lastmileDelay,
       'txPacketLossRate': instance.txPacketLossRate,
       'rxPacketLossRate': instance.rxPacketLossRate,
@@ -978,4 +1004,73 @@ const _$AreaCodeEnumMap = {
   AreaCode.JP: 16,
   AreaCode.IN: 32,
   AreaCode.GLOB: -1,
+};
+
+RhythmPlayerConfig _$RhythmPlayerConfigFromJson(Map<String, dynamic> json) {
+  return RhythmPlayerConfig(
+    beatsPerMeasure: json['beatsPerMeasure'] as int,
+    beatsPerMinute: json['beatsPerMinute'] as int,
+    publish: json['publish'] as bool,
+  );
+}
+
+Map<String, dynamic> _$RhythmPlayerConfigToJson(RhythmPlayerConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('beatsPerMeasure', instance.beatsPerMeasure);
+  writeNotNull('beatsPerMinute', instance.beatsPerMinute);
+  writeNotNull('publish', instance.publish);
+  return val;
+}
+
+AudioRecordingConfiguration _$AudioRecordingConfigurationFromJson(
+    Map<String, dynamic> json) {
+  return AudioRecordingConfiguration(
+    json['filePath'] as String,
+    recordingQuality: _$enumDecodeNullable(
+        _$AudioRecordingQualityEnumMap, json['recordingQuality']),
+    recordingPosition: _$enumDecodeNullable(
+        _$AudioRecordingPositionEnumMap, json['recordingPosition']),
+    recordingSampleRate: _$enumDecodeNullable(
+        _$AudioSampleRateTypeEnumMap, json['recordingSampleRate']),
+  );
+}
+
+Map<String, dynamic> _$AudioRecordingConfigurationToJson(
+    AudioRecordingConfiguration instance) {
+  final val = <String, dynamic>{
+    'filePath': instance.filePath,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('recordingQuality',
+      _$AudioRecordingQualityEnumMap[instance.recordingQuality]);
+  writeNotNull('recordingPosition',
+      _$AudioRecordingPositionEnumMap[instance.recordingPosition]);
+  writeNotNull('recordingSampleRate',
+      _$AudioSampleRateTypeEnumMap[instance.recordingSampleRate]);
+  return val;
+}
+
+const _$AudioRecordingQualityEnumMap = {
+  AudioRecordingQuality.Low: 0,
+  AudioRecordingQuality.Medium: 1,
+  AudioRecordingQuality.High: 2,
+};
+
+const _$AudioRecordingPositionEnumMap = {
+  AudioRecordingPosition.PositionMixedRecordingAndPlayback: 0,
+  AudioRecordingPosition.PositionRecording: 1,
+  AudioRecordingPosition.PositionMixedPlayback: 2,
 };
