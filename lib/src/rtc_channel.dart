@@ -614,7 +614,7 @@ mixin RtcVideoInterface {
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
-  ///  @nodoc
+  /// @nodoc
   Future<void> enableRemoteSuperResolution(int uid, bool enable);
 }
 

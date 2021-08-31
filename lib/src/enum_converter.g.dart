@@ -1690,3 +1690,43 @@ const _$VoiceConversionPresetEnumMap = {
   VoiceConversionPreset.Solid: 50397952,
   VoiceConversionPreset.Bass: 50398208,
 };
+
+VirtualBackgroundSourceTypeConverter
+    _$VirtualBackgroundSourceTypeConverterFromJson(Map<String, dynamic> json) {
+  return VirtualBackgroundSourceTypeConverter(
+    _$enumDecodeNullable(_$VirtualBackgroundSourceTypeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$VirtualBackgroundSourceTypeConverterToJson(
+        VirtualBackgroundSourceTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$VirtualBackgroundSourceTypeEnumMap[instance.e],
+    };
+
+const _$VirtualBackgroundSourceTypeEnumMap = {
+  VirtualBackgroundSourceType.Color: 1,
+  VirtualBackgroundSourceType.Img: 2,
+};
+
+VirtualBackgroundSourceStateReasonConverter
+    _$VirtualBackgroundSourceStateReasonConverterFromJson(
+        Map<String, dynamic> json) {
+  return VirtualBackgroundSourceStateReasonConverter(
+    _$enumDecodeNullable(
+        _$VirtualBackgroundSourceStateReasonEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$VirtualBackgroundSourceStateReasonConverterToJson(
+        VirtualBackgroundSourceStateReasonConverter instance) =>
+    <String, dynamic>{
+      'e': _$VirtualBackgroundSourceStateReasonEnumMap[instance.e],
+    };
+
+const _$VirtualBackgroundSourceStateReasonEnumMap = {
+  VirtualBackgroundSourceStateReason.Success: 0,
+  VirtualBackgroundSourceStateReason.ImageNotExist: 1,
+  VirtualBackgroundSourceStateReason.ColorFormatNotSupported: 2,
+  VirtualBackgroundSourceStateReason.DeviceNotSupported: 3,
+};

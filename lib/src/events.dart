@@ -151,6 +151,9 @@ typedef UserSuperResolutionEnabledCallback = void Function(
 // ignore: public_member_api_docs
 typedef UploadLogResultCallback = void Function(
     String requestId, bool success, UploadErrorReason reason);
+// ignore: public_member_api_docs
+typedef VirtualBackgroundSourceEnabledCallback = void Function(
+    bool enabled, VirtualBackgroundSourceStateReason reason);
 
 /// The SDK uses the [RtcEngineEventHandler] class to send callbacks to the application, and the application inherits the methods of this class to retrieve these callbacks.
 ///
@@ -1007,11 +1010,17 @@ class RtcEngineEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
-  ///  @nodoc
+  /// @nodoc
   UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
 
-  ///  @nodoc
+  /// @nodoc
   UploadLogResultCallback uploadLogResult;
+
+  /// TODO:(doc)
+  EmptyCallback airPlayIsConnected;
+
+  /// TODO:(doc)
+  VirtualBackgroundSourceEnabledCallback virtualBackgroundSourceEnabled;
 
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler({
@@ -1094,6 +1103,8 @@ class RtcEngineEventHandler {
     this.rtmpStreamingEvent,
     this.userSuperResolutionEnabled,
     this.uploadLogResult,
+    this.airPlayIsConnected,
+    this.virtualBackgroundSourceEnabled,
   });
 
   // ignore: public_member_api_docs
@@ -1411,6 +1422,13 @@ class RtcEngineEventHandler {
       case 'UploadLogResult':
         uploadLogResult?.call(
             data[0], data[1], UploadErrorReasonConverter.fromValue(data[2]).e);
+        break;
+      case 'AirPlayIsConnected':
+        airPlayIsConnected?.call();
+        break;
+      case 'VirtualBackgroundSourceEnabled':
+        virtualBackgroundSourceEnabled?.call(data[0],
+            VirtualBackgroundSourceStateReasonConverter.fromValue(data[1]).e);
         break;
     }
   }
@@ -1779,7 +1797,7 @@ class RtcChannelEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback rtmpStreamingEvent;
 
-  ///  @nodoc
+  /// @nodoc
   UserSuperResolutionEnabledCallback userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]

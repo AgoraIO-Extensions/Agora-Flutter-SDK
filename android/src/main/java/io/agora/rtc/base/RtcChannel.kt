@@ -1,5 +1,6 @@
 package io.agora.rtc.base
 
+import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
@@ -345,11 +346,13 @@ class RtcChannelManager(
   }
 
   override fun pauseAllChannelMediaRelay(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.pauseAllChannelMediaRelay())
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(this[params["channelId"] as String]?.pauseAllChannelMediaRelay())
   }
 
   override fun resumeAllChannelMediaRelay(params: Map<String, *>, callback: Callback) {
-    callback.code(this[params["channelId"] as String]?.resumeAllChannelMediaRelay())
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(this[params["channelId"] as String]?.resumeAllChannelMediaRelay())
   }
 
   override fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback) {
