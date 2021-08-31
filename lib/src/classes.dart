@@ -10,11 +10,13 @@ part 'classes.g.dart';
 Color _$ColorFromJson(Map<String, dynamic> json) => Color.fromRGBO(
     json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
 
-Map<String, dynamic> _$ColorToJson(Color instance) => <String, dynamic>{
-      'red': instance.red,
-      'green': instance.green,
-      'blue': instance.blue,
-    };
+Map<String, dynamic>? _$ColorToJson(Color? instance) => instance != null
+    ? <String, dynamic>{
+        'red': instance.red,
+        'green': instance.green,
+        'blue': instance.blue,
+      }
+    : null;
 
 /// The UserInfo class.
 @JsonSerializable(explicitToJson: true)
@@ -1597,14 +1599,14 @@ class AudioRecordingConfiguration {
 @JsonSerializable(explicitToJson: true)
 class VirtualBackgroundSource {
   @JsonKey(includeIfNull: false)
-  VirtualBackgroundSourceType backgroundSourceType;
+  VirtualBackgroundSourceType? backgroundSourceType;
 
   @JsonKey(
       includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
-  Color color;
+  Color? color;
 
   @JsonKey(includeIfNull: false)
-  String source;
+  String? source;
 
   /// Constructs a [VirtualBackgroundSource]
   VirtualBackgroundSource({this.backgroundSourceType, this.color, this.source});
