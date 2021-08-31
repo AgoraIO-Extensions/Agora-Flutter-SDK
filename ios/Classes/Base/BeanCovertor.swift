@@ -416,3 +416,19 @@ func mapToDataStreamConfig(_ map: [String: Any]) -> AgoraDataStreamConfig {
     }
     return config
 }
+
+func mapToVirtualBackgroundSource(_ map: [String: Any]) -> AgoraVirtualBackgroundSource {
+    let backgroundSource = AgoraVirtualBackgroundSource()
+    if let backgroundSourceType = map["backgroundSourceType"] as? NSNumber {
+        if let backgroundSourceType = AgoraVirtualBackgroundSourceType(rawValue: backgroundSourceType.uintValue) {
+            backgroundSource.backgroundSourceType = backgroundSourceType
+        }
+    }
+    if let color = map["color"] as? [String: Any] {
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+        mapToColor(color).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        backgroundSource.color = UInt(red * 255.0) << 16 + UInt(green * 255.0) << 8 + UInt(blue * 255.0)
+    }
+    backgroundSource.source = map["source"] as? String
+    return backgroundSource
+}

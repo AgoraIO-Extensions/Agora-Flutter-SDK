@@ -7,6 +7,15 @@ import 'enums.dart';
 
 part 'classes.g.dart';
 
+Color _$ColorFromJson(Map<String, dynamic> json) => Color.fromRGBO(
+    json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
+
+Map<String, dynamic> _$ColorToJson(Color instance) => <String, dynamic>{
+      'red': instance.red,
+      'green': instance.green,
+      'blue': instance.blue,
+    };
+
 /// The UserInfo class.
 @JsonSerializable(explicitToJson: true)
 class UserInfo {
@@ -47,7 +56,7 @@ class VideoDimensions {
     this.height,
   });
 
-  /// @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory VideoDimensions.fromJson(Map<String, dynamic> json) =>
       _$VideoDimensionsFromJson(json);
 
@@ -413,18 +422,6 @@ class LiveTranscoding {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
-
-  static Color _$ColorFromJson(Map<String, dynamic> json) => Color.fromRGBO(
-      json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
-
-  static Map<String, dynamic>? _$ColorToJson(Color? instance) =>
-      instance != null
-          ? <String, dynamic>{
-              'red': instance.red,
-              'green': instance.green,
-              'blue': instance.blue,
-            }
-          : null;
 }
 
 /// The ChannelMediaInfo class.
@@ -1594,4 +1591,28 @@ class AudioRecordingConfiguration {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
+}
+
+/// TODO:(doc)
+@JsonSerializable(explicitToJson: true)
+class VirtualBackgroundSource {
+  @JsonKey(includeIfNull: false)
+  VirtualBackgroundSourceType backgroundSourceType;
+
+  @JsonKey(
+      includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
+  Color color;
+
+  @JsonKey(includeIfNull: false)
+  String source;
+
+  /// Constructs a [VirtualBackgroundSource]
+  VirtualBackgroundSource({this.backgroundSourceType, this.color, this.source});
+
+  /// @nodoc
+  factory VirtualBackgroundSource.fromJson(Map<String, dynamic> json) =>
+      _$VirtualBackgroundSourceFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$VirtualBackgroundSourceToJson(this);
 }
