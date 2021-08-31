@@ -911,3 +911,32 @@ class VoiceConversionPresetConverter
     return super.toValue(_$VoiceConversionPresetEnumMap);
   }
 }
+
+@JsonSerializable()
+class VirtualBackgroundSourceTypeConverter
+    extends EnumConverter<VirtualBackgroundSourceType, int> {
+  VirtualBackgroundSourceTypeConverter(VirtualBackgroundSourceType e)
+      : super(e);
+
+  VirtualBackgroundSourceTypeConverter.fromValue(int value)
+      : super.fromValue(_$VirtualBackgroundSourceTypeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VirtualBackgroundSourceTypeEnumMap);
+  }
+}
+
+@JsonSerializable()
+class VirtualBackgroundSourceStateReasonConverter
+    extends EnumConverter<VirtualBackgroundSourceStateReason, int> {
+  VirtualBackgroundSourceStateReasonConverter(
+      VirtualBackgroundSourceStateReason e)
+      : super(e);
+
+  VirtualBackgroundSourceStateReasonConverter.fromValue(int value)
+      : super.fromValue(_$VirtualBackgroundSourceStateReasonEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VirtualBackgroundSourceStateReasonEnumMap);
+  }
+}
