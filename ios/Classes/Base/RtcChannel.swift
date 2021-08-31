@@ -190,11 +190,11 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.join(byToken: params["token"] as? String, info: params["optionalInfo"] as? String, uid: (params["optionalUid"] as! NSNumber).uintValue, options: mapToChannelMediaOptions(params["options"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.join(byToken: params["token"] as? String, info: params["optionalInfo"] as? String, uid: (params["optionalUid"] as! NSNumber).uintValue, options: mapToChannelMediaOptions(params["options"] as! [String: Any])))
     }
 
     @objc func joinChannelWithUserAccount(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.join(byUserAccount: params["userAccount"] as! String, token: params["token"] as? String, options: mapToChannelMediaOptions(params["options"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.join(byUserAccount: params["userAccount"] as! String, token: params["token"] as? String, options: mapToChannelMediaOptions(params["options"] as! [String: Any])))
     }
 
     @objc func leaveChannel(_ params: NSDictionary, _ callback: Callback) {
@@ -258,7 +258,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setLiveTranscoding(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.setLiveTranscoding(mapToLiveTranscoding(params["transcoding"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.setLiveTranscoding(mapToLiveTranscoding(params["transcoding"] as! [String: Any])))
     }
 
     @objc func addPublishStreamUrl(_ params: NSDictionary, _ callback: Callback) {
@@ -270,11 +270,11 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func startChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.startMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.startMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! [String: Any])))
     }
 
     @objc func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.updateMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.updateMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! [String: Any])))
     }
 
     @objc func stopChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
@@ -350,11 +350,11 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! [String: Any])))
     }
 
     @objc func addInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.addInjectStreamUrl(params["url"] as! String, config: mapToLiveInjectStreamConfig(params["config"] as! Dictionary)))
+        callback.code(self[params["channelId"] as! String]?.addInjectStreamUrl(params["url"] as! String, config: mapToLiveInjectStreamConfig(params["config"] as! [String: Any])))
     }
 
     @objc func removeInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {
@@ -392,10 +392,12 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.pauseAllChannelMediaRelay())
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
+//        callback.code(self[params["channelId"] as! String]?.pauseAllChannelMediaRelay())
     }
 
     @objc func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.resumeAllChannelMediaRelay())
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
+//        callback.code(self[params["channelId"] as! String]?.resumeAllChannelMediaRelay())
     }
 }

@@ -86,6 +86,7 @@ class RtcEngineEvents {
     const val RtmpStreamingEvent = "RtmpStreamingEvent"
     const val UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     const val UploadLogResult = "UploadLogResult"
+    const val VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -167,7 +168,8 @@ class RtcEngineEvents {
         "VideoSubscribeStateChanged" to VideoSubscribeStateChanged,
         "RtmpStreamingEvent" to RtmpStreamingEvent,
         "UserSuperResolutionEnabled" to UserSuperResolutionEnabled,
-        "UploadLogResult" to UploadLogResult
+        "UploadLogResult" to UploadLogResult,
+        "VirtualBackgroundSourceEnabled" to VirtualBackgroundSourceEnabled
       )
     }
   }
@@ -678,5 +680,12 @@ class RtcEngineEventHandler(
     @Annotations.AgoraUploadErrorReason reason: Int
   ) {
     callback(RtcEngineEvents.UploadLogResult, requestId, success, reason)
+  }
+
+  override fun onVirtualBackgroundSourceEnabled(
+    enabled: Boolean,
+    @Annotations.AgoraVirtualBackgroundSourceStateReason reason: Int
+  ) {
+    callback(RtcEngineEvents.VirtualBackgroundSourceEnabled, enabled, reason)
   }
 }

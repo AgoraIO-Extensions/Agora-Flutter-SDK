@@ -941,7 +941,7 @@ enum EncryptionMode {
   @JsonValue(3)
   AES256XTS,
 
-  /// @nodoc 128-bit SM4 encryption, ECB mode.
+  /// 128-bit SM4 encryption, ECB mode.
   @JsonValue(4)
   SM4128ECB,
 
@@ -2468,14 +2468,19 @@ enum SuperResolutionStateReason {
   DeviceNotSupported,
 }
 
-/// @nodoc
+/// The reason for the upload failure.
+///
+/// @since v3.3.0.
 enum UploadErrorReason {
+  /// 0: The log file is successfully uploaded.
   @JsonValue(0)
   Success,
 
+  /// 1: Network error. Check the network connection and call [`uploadLogFile`]{@link uploadLogFile} again to upload the log file.
   @JsonValue(1)
   NetError,
 
+  /// 2: An error occurs in the Agora server. Try uploading the log files later.
   @JsonValue(2)
   ServerError,
 }
@@ -2490,7 +2495,7 @@ enum CloudProxyType {
   @JsonValue(1)
   UDP,
 
-  /// @nodoc The cloud proxy for the TCP protocol.
+  /// The cloud proxy for the TCP protocol.
   @JsonValue(2)
   TCP,
 }
@@ -2550,4 +2555,28 @@ enum VoiceConversionPreset {
   /// A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50398208)
   Bass,
+}
+
+/// TODO:(doc)
+enum VirtualBackgroundSourceType {
+  @JsonValue(1)
+  Color,
+
+  @JsonValue(2)
+  Img,
+}
+
+/// TODO:(doc)
+enum VirtualBackgroundSourceStateReason {
+  @JsonValue(0)
+  Success,
+
+  @JsonValue(1)
+  ImageNotExist,
+
+  @JsonValue(2)
+  ColorFormatNotSupported,
+
+  @JsonValue(3)
+  DeviceNotSupported,
 }
