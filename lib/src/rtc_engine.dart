@@ -1226,6 +1226,15 @@ class RtcEngine with RtcEngineInterface {
       'domain': domain,
     });
   }
+
+  @override
+  Future<void> enableVirtualBackground(
+      bool enabled, VirtualBackgroundSource backgroundSource) {
+    return _invokeMethod('enableVirtualBackground', {
+      'enabled': enabled,
+      'backgroundSource': backgroundSource.toJson(),
+    });
+  }
 }
 
 /// @nodoc
@@ -1455,7 +1464,9 @@ mixin RtcEngineInterface
   @deprecated
   Future<void> setLogFileSize(int fileSizeInKBytes);
 
-  /// @nodoc Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
+  /// @nodoc
+  ///
+  /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
   ///
   /// The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
   ///
@@ -1515,11 +1526,15 @@ mixin RtcEngineInterface
   /// - When you use the cloud proxy for the UDP protocol, the services for pushing streams to CDN and co-hosting across channels are not available.
   Future<void> setCloudProxy(CloudProxyType proxyType);
 
-  ///  @nodoc
+  /// @nodoc
   Future<String> uploadLogFile();
 
-  ///  @nodoc
+  /// @nodoc
   Future<void> setLocalAccessPoint(List<String> ips, String domain);
+
+  /// TODO:(doc)
+  Future<void> enableVirtualBackground(
+      bool enabled, VirtualBackgroundSource backgroundSource);
 }
 
 /// @nodoc
@@ -1916,7 +1931,7 @@ mixin RtcVideoInterface {
   /// **Parameter** [options] The image enhancement options. See [BeautyOptions].
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
-  ///  @nodoc
+  /// @nodoc
   Future<void> enableRemoteSuperResolution(int uid, bool enable);
 }
 

@@ -259,8 +259,8 @@ LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) {
         _$AudioCodecProfileTypeEnumMap, json['audioCodecProfile']),
     videoCodecProfile: _$enumDecodeNullable(
         _$VideoCodecProfileTypeEnumMap, json['videoCodecProfile']),
-    backgroundColor: LiveTranscoding._$ColorFromJson(
-        json['backgroundColor'] as Map<String, dynamic>),
+    backgroundColor:
+        _$ColorFromJson(json['backgroundColor'] as Map<String, dynamic>),
     userConfigExtraInfo: json['userConfigExtraInfo'] as String,
   );
 }
@@ -291,8 +291,7 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
       _$AudioCodecProfileTypeEnumMap[instance.audioCodecProfile]);
   writeNotNull('videoCodecProfile',
       _$VideoCodecProfileTypeEnumMap[instance.videoCodecProfile]);
-  writeNotNull('backgroundColor',
-      LiveTranscoding._$ColorToJson(instance.backgroundColor));
+  writeNotNull('backgroundColor', _$ColorToJson(instance.backgroundColor));
   writeNotNull('userConfigExtraInfo', instance.userConfigExtraInfo);
   val['transcodingUsers'] =
       instance.transcodingUsers?.map((e) => e?.toJson())?.toList();
@@ -1073,4 +1072,36 @@ const _$AudioRecordingPositionEnumMap = {
   AudioRecordingPosition.PositionMixedRecordingAndPlayback: 0,
   AudioRecordingPosition.PositionRecording: 1,
   AudioRecordingPosition.PositionMixedPlayback: 2,
+};
+
+VirtualBackgroundSource _$VirtualBackgroundSourceFromJson(
+    Map<String, dynamic> json) {
+  return VirtualBackgroundSource(
+    backgroundSourceType: _$enumDecodeNullable(
+        _$VirtualBackgroundSourceTypeEnumMap, json['backgroundSourceType']),
+    color: _$ColorFromJson(json['color'] as Map<String, dynamic>),
+    source: json['source'] as String,
+  );
+}
+
+Map<String, dynamic> _$VirtualBackgroundSourceToJson(
+    VirtualBackgroundSource instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('backgroundSourceType',
+      _$VirtualBackgroundSourceTypeEnumMap[instance.backgroundSourceType]);
+  writeNotNull('color', _$ColorToJson(instance.color));
+  writeNotNull('source', instance.source);
+  return val;
+}
+
+const _$VirtualBackgroundSourceTypeEnumMap = {
+  VirtualBackgroundSourceType.Color: 1,
+  VirtualBackgroundSourceType.Img: 2,
 };

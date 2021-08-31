@@ -66,6 +66,8 @@ class IRtcEngine {
     fun uploadLogFile(callback: Callback)
 
     fun setLocalAccessPoint(params: Map<String, *>, callback: Callback)
+
+    fun enableVirtualBackground(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcUserInfoInterface {
@@ -538,6 +540,15 @@ class RtcEngineManager(
           }
         },
         params["domain"] as String
+      )
+    )
+  }
+
+  override fun enableVirtualBackground(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.enableVirtualBackground(
+        params["enabled"] as Boolean,
+        mapToVirtualBackgroundSource(params["backgroundSource"] as Map<*, *>)
       )
     )
   }
@@ -1022,11 +1033,13 @@ class RtcEngineManager(
   }
 
   override fun pauseAllChannelMediaRelay(callback: Callback) {
-    callback.code(engine?.pauseAllChannelMediaRelay())
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(engine?.pauseAllChannelMediaRelay())
   }
 
   override fun resumeAllChannelMediaRelay(callback: Callback) {
-    callback.code(engine?.resumeAllChannelMediaRelay())
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(engine?.resumeAllChannelMediaRelay())
   }
 
   override fun setDefaultAudioRoutetoSpeakerphone(params: Map<String, *>, callback: Callback) {

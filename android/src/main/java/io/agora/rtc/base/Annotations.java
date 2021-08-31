@@ -10,6 +10,7 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoCanvas;
+import io.agora.rtc.video.VirtualBackgroundSource;
 
 @SuppressWarnings("deprecation")
 public class Annotations {
@@ -326,10 +327,10 @@ public class Annotations {
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE,
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL,
     Constants.RELAY_EVENT_VIDEO_PROFILE_UPDATE,
-    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
-    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
-    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
-    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
+//    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+//    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
+//    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+//    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraChannelMediaRelayEvent {
@@ -967,5 +968,23 @@ public class Annotations {
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraSuperResolutionStateReason {
+  }
+
+  @IntDef({
+    VirtualBackgroundSource.BACKGROUND_COLOR,
+    VirtualBackgroundSource.BACKGROUND_IMG,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraVirtualBackgroundSourceType {
+  }
+
+  @IntDef({
+    Constants.VBS_STATE_REASON_SUCCESS,
+    Constants.VBS_STATE_REASON_IMAGE_NOT_EXIST,
+    Constants.VBS_STATE_REASON_COLOR_FORMAT_NOT_SUPPORTED,
+    Constants.VBS_STATE_REASON_DEVICE_NOT_SUPPORTED,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraVirtualBackgroundSourceStateReason {
   }
 }
