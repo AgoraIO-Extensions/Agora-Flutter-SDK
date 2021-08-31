@@ -89,6 +89,8 @@ class RtcEngineEvents {
     static let RtmpStreamingEvent = "RtmpStreamingEvent"
     static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     static let UploadLogResult = "UploadLogResult"
+    static let AirPlayIsConnected = "AirPlayIsConnected"
+    static let VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
 
     static func toMap() -> [String: String] {
         return [
@@ -171,6 +173,8 @@ class RtcEngineEvents {
             "RtmpStreamingEvent": RtmpStreamingEvent,
             "UserSuperResolutionEnabled": UserSuperResolutionEnabled,
             "UploadLogResult": UploadLogResult,
+            "AirPlayIsConnected": AirPlayIsConnected,
+            "VirtualBackgroundSourceEnabled": VirtualBackgroundSourceEnabled,
         ]
     }
 }
@@ -508,5 +512,13 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
 
     func rtcEngine(_: AgoraRtcEngineKit, uploadLogResultRequestId requestId: String, success: Bool, reason: AgoraUploadErrorReason) {
         callback(RtcEngineEvents.UploadLogResult, requestId, success, reason.rawValue)
+    }
+
+    func rtcEngineAirPlayIsConnected(_ engine: AgoraRtcEngineKit) {
+        callback(RtcEngineEvents.AirPlayIsConnected)
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, virtualBackgroundSourceEnabled enabled: Bool, reason: AgoraVirtualBackgroundSourceStateReason) {
+        callback(RtcEngineEvents.VirtualBackgroundSourceEnabled, enabled, reason.rawValue)
     }
 }
