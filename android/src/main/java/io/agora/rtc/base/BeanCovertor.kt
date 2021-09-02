@@ -255,3 +255,11 @@ fun mapToDataStreamConfig(map: Map<*, *>): DataStreamConfig {
     (map["ordered"] as? Boolean)?.let { ordered = it }
   }
 }
+
+fun mapToVirtualBackgroundSource(map: Map<*, *>): VirtualBackgroundSource {
+  return VirtualBackgroundSource().apply {
+    (map["backgroundSourceType"] as? Number)?.let { backgroundSourceType = it.toInt() }
+    (map["color"] as? Map<*, *>)?.let { color = mapToColor(it) }
+    (map["source"] as? String)?.let { source = it }
+  }
+}
