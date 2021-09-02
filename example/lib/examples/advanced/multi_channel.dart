@@ -15,15 +15,14 @@ const _channelId1 = 'channel1';
 
 /// MultiChannel Example
 class MultiChannel extends StatefulWidget {
-  RtcEngine _engine = null;
-  RtcChannel _channel0 = null, _channel1 = null;
-
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<MultiChannel> {
-  String renderChannelId;
+  late final RtcEngine _engine;
+  late final RtcChannel _channel0, _channel1;
+  String? renderChannelId;
   bool isJoined0 = false, isJoined1 = false;
   List<int> remoteUid0 = [], remoteUid1 = [];
 
@@ -36,17 +35,16 @@ class _State extends State<MultiChannel> {
   @override
   void dispose() {
     super.dispose();
-    widget._engine?.destroy();
+    _engine.destroy();
   }
 
   _initEngine() async {
-    widget._engine =
-        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
 
-    await widget._engine.enableVideo();
-    await widget._engine.startPreview();
-    await widget._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await widget._engine.setClientRole(ClientRole.Broadcaster);
+    await _engine.enableVideo();
+    await _engine.startPreview();
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(ClientRole.Broadcaster);
   }
 
   _joinChannel0() async {
@@ -54,12 +52,18 @@ class _State extends State<MultiChannel> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    widget._channel0 = await RtcChannel.create(_channelId0);
-    this._addListener(widget._channel0);
+    _channel0 = await RtcChannel.create(_channelId0);
+    this._addListener(_channel0);
 
-    await widget._channel0.setClientRole(ClientRole.Broadcaster);
-    await widget._channel0
-        .joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel0.setClientRole(ClientRole.Broadcaster);
+    await _channel0.joinChannel(
+        null,
+        null,
+        0,
+        ChannelMediaOptions(
+          publishLocalAudio: false,
+          publishLocalVideo: false,
+        ));
   }
 
   _joinChannel1() async {
@@ -67,12 +71,18 @@ class _State extends State<MultiChannel> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    widget._channel1 = await RtcChannel.create(_channelId1);
-    this._addListener(widget._channel1);
+    _channel1 = await RtcChannel.create(_channelId1);
+    this._addListener(_channel1);
 
-    await widget._channel1.setClientRole(ClientRole.Broadcaster);
-    await widget._channel1
-        .joinChannel(null, null, 0, ChannelMediaOptions(true, true));
+    await _channel1.setClientRole(ClientRole.Broadcaster);
+    await _channel1.joinChannel(
+        null,
+        null,
+        0,
+        ChannelMediaOptions(
+          publishLocalAudio: false,
+          publishLocalVideo: false,
+        ));
   }
 
   _addListener(RtcChannel channel) {
@@ -133,21 +143,21 @@ class _State extends State<MultiChannel> {
   }
 
   _publishChannel0() async {
-    await widget._channel1?.unpublish();
-    await widget._channel0?.publish();
+    await _channel1.unpublish();
+    await _channel0.publish();
   }
 
   _publishChannel1() async {
-    await widget._channel0?.unpublish();
-    await widget._channel1?.publish();
+    await _channel0.unpublish();
+    await _channel1.publish();
   }
 
   _leaveChannel0() async {
-    await widget._channel0?.leaveChannel();
+    await _channel0.leaveChannel();
   }
 
   _leaveChannel1() async {
-    await widget._channel1?.leaveChannel();
+    await _channel1.leaveChannel();
   }
 
   @override
@@ -160,7 +170,7 @@ class _State extends State<MultiChannel> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       if (isJoined0) {
                         this._leaveChannel0();
@@ -177,7 +187,7 @@ class _State extends State<MultiChannel> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       if (isJoined1) {
                         this._leaveChannel1();
@@ -198,11 +208,11 @@ class _State extends State<MultiChannel> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._publishChannel0,
                 child: Text('Publish ${_channelId0}'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   setState(() {
                     renderChannelId = _channelId0;
@@ -210,11 +220,11 @@ class _State extends State<MultiChannel> {
                 },
                 child: Text('Render ${_channelId0}'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: this._publishChannel1,
                 child: Text('Publish ${_channelId1}'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   setState(() {
                     renderChannelId = _channelId1;
@@ -230,7 +240,7 @@ class _State extends State<MultiChannel> {
   }
 
   _renderVideo() {
-    List<int> remoteUid = null;
+    List<int>? remoteUid = null;
     if (renderChannelId == _channelId0) {
       remoteUid = remoteUid0;
     } else if (renderChannelId == _channelId1) {

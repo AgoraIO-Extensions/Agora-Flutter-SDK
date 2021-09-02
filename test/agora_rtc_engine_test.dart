@@ -15,7 +15,7 @@ void main() {
   });
 
   test('LiveTranscoding', () {
-    var transcoding = LiveTranscoding(null, backgroundColor: Colors.red);
+    var transcoding = LiveTranscoding([], backgroundColor: Colors.red);
     print(transcoding.backgroundColor);
     print(transcoding.toJson());
   });
