@@ -1154,7 +1154,7 @@ VirtualBackgroundSource _$VirtualBackgroundSourceFromJson(
     backgroundSourceType: _$enumDecodeNullable(
         _$VirtualBackgroundSourceTypeEnumMap, json['backgroundSourceType']),
     color: _$ColorFromJson(json['color'] as Map<String, dynamic>),
-    source: json['source'] as String,
+    source: json['source'] as String?,
   );
 }
 
