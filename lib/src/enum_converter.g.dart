@@ -1688,7 +1688,7 @@ const _$VoiceConversionPresetEnumMap = {
 VirtualBackgroundSourceTypeConverter
     _$VirtualBackgroundSourceTypeConverterFromJson(Map<String, dynamic> json) {
   return VirtualBackgroundSourceTypeConverter(
-    _$enumDecodeNullable(_$VirtualBackgroundSourceTypeEnumMap, json['e']),
+    _$enumDecode(_$VirtualBackgroundSourceTypeEnumMap, json['e']),
   );
 }
 
@@ -1707,8 +1707,7 @@ VirtualBackgroundSourceStateReasonConverter
     _$VirtualBackgroundSourceStateReasonConverterFromJson(
         Map<String, dynamic> json) {
   return VirtualBackgroundSourceStateReasonConverter(
-    _$enumDecodeNullable(
-        _$VirtualBackgroundSourceStateReasonEnumMap, json['e']),
+    _$enumDecode(_$VirtualBackgroundSourceStateReasonEnumMap, json['e']),
   );
 }
 
