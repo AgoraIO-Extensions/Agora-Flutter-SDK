@@ -1017,10 +1017,10 @@ class RtcEngineEventHandler {
   UploadLogResultCallback? uploadLogResult;
 
   /// TODO:(doc)
-  EmptyCallback airPlayIsConnected;
+  EmptyCallback? airPlayIsConnected;
 
   /// TODO:(doc)
-  VirtualBackgroundSourceEnabledCallback virtualBackgroundSourceEnabled;
+  VirtualBackgroundSourceEnabledCallback? virtualBackgroundSourceEnabled;
 
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler({
