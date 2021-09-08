@@ -1,3 +1,12 @@
+## [4.0.7-rc.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v4.0.6-rc.0...v4.0.7-rc.0) (2021-09-08)
+
+
+### Features
+
+* null-safety for 3.5.0.2 ([892054e](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/892054e3902335d42a8c954002f89b68693f5bb6))
+* support native 3.5.0.2 ([e5f42b2](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/e5f42b227423b6e519869d172ef99961f2071577))
+* support native 3.5.0.3 ([1826112](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/1826112596f33c466717d3c88b427474bb09bd02))
+
 ## [4.0.6](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.5...v4.0.6) (2021-07-23)
 
 
