@@ -111,7 +111,7 @@ enum AudioLocalError {
   @JsonValue(5)
   EncodeFailure,
 
-  /// TODO(doc)
+  /// The local audio capturing is interrupted by the system call.
   @JsonValue(8)
   Interrupted,
 }
@@ -726,19 +726,19 @@ enum ChannelMediaRelayEvent {
   @JsonValue(11)
   VideoProfileUpdate,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(12)
   PauseSendPacketToDestChannelSuccess,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(13)
   PauseSendPacketToDestChannelFailed,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(14)
   ResumeSendPacketToDestChannelSuccess,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(15)
   ResumeSendPacketToDestChannelFailed,
 }
@@ -951,11 +951,13 @@ enum EncryptionMode {
   @JsonValue(6)
   AES256GCM,
 
-  /// TODO(doc)
+  /// (Default) 128-bit AES encryption, GCM mode.
+  /// Compared to AES128GCM encryption mode, AES128GCM2 encryption mode is more secure and requires you to set the salt (encryptionKdfSalt).
   @JsonValue(7)
   AES128GCM2,
 
-  /// TODO(doc)
+  /// 256-bit AES encryption, GCM mode.
+  /// Compared to AES256GCM encryption mode, AES256GCM2 encryption mode is more secure and requires you to set the salt (encryptionKdfSalt).
   @JsonValue(8)
   AES256GCM2,
 }
@@ -1581,7 +1583,7 @@ enum RtmpStreamingErrorCode {
   @JsonValue(10)
   FormatNotSupported,
 
-  /// TODO(doc)
+  /// The streaming has been stopped normally. After you call `removePublishStreamUrl` to stop streaming, the SDK returns this value.
   @JsonValue(100)
   UnPublishOK,
 }
@@ -2144,7 +2146,7 @@ enum RtmpStreamingEvent {
   @JsonValue(1)
   FailedLoadImage,
 
-  /// TODO(doc)
+  /// The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
   @JsonValue(2)
   UrlAlreadyInUse,
 }
@@ -2555,26 +2557,32 @@ enum VoiceConversionPreset {
   Bass,
 }
 
-/// TODO:(doc)
+/// The type of the custom background image.
 enum VirtualBackgroundSourceType {
+  /// (Default) The background image is a solid color.
   @JsonValue(1)
   Color,
 
+  /// The background image is a file in PNG or JPG format.
   @JsonValue(2)
   Img,
 }
 
-/// TODO:(doc)
+/// The reason why the virtual background is not successfully enabled or the message that confirms success:
 enum VirtualBackgroundSourceStateReason {
+  /// The virtual background is successfully enabled.
   @JsonValue(0)
   Success,
 
+  /// The custom background image does not exist. Please check the value of source in VirtualBackgroundSource.
   @JsonValue(1)
   ImageNotExist,
 
+  /// The color format of the custom background image is invalid. Please check the value of color in VirtualBackgroundSource.
   @JsonValue(2)
   ColorFormatNotSupported,
 
+  /// The device does not support using the virtual background.
   @JsonValue(3)
   DeviceNotSupported,
 }

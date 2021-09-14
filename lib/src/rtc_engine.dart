@@ -1532,7 +1532,45 @@ mixin RtcEngineInterface
   /// @nodoc
   Future<void> setLocalAccessPoint(List<String> ips, String domain);
 
-  /// TODO:(doc)
+  /// Enables/Disables the virtual background. (beta function).
+  ///
+  ///
+  /// **Parameter** [enabled] Sets whether to enable the virtual background:
+  /// - `true`: Enable.
+  /// - `false`: Disable.
+  ///
+  /// **Parameter** [backgroundSource] The custom background image. See [VirtualBackgroundSource].
+  ///
+  /// **Note**
+  ///
+  /// To adapt the resolution of the custom background image to the resolution of the SDK capturing video, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
+  ///
+  /// **Note**
+  ///
+  /// - Call this method after enableVideo.
+  /// - This function requires a high-performance device. Agora recommends that you use this function on devices with an i5 CPU and better.
+  ///
+  /// Agora recommends that you use this function in scenarios that meet the following conditions:
+  /// - A high-definition camera device is used, and the environment is uniformly lit.
+  /// - The captured video image is uncluttered, the user's portrait is half-length and largely unobstructed, and the background is a single color that differs from the color of the user's clothing.
+  ///
+  /// This function requires a high-performance device. Agora recommends that you use this function on the following devices:
+  ///
+  /// iOS devices with an A9 chip and better, as follows:
+  ///
+  /// - iPhone 6S and later
+  /// - iPad Air (3rd generation) and later
+  /// - iPad (5th generation) and later
+  /// - iPad Pro (1st generation) and later
+  /// - iPad mini (5th generation) and later
+  ///
+  /// Android devices with the following chips:
+  ///
+  /// - Snapdragon 700 series 750G and later
+  /// - Snapdragon 800 series 835 and later
+  /// - Dimensity 700 series 720 and later
+  /// - Kirin 800 series 810 and later
+  /// - Kirin 900 series 980 and later
   Future<void> enableVirtualBackground(
       bool enabled, VirtualBackgroundSource backgroundSource);
 }
@@ -2616,10 +2654,10 @@ mixin RtcMediaRelayInterface {
   /// - If the method call fails, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] error code. You can leave the channel by calling the [RtcEngine.leaveChannel] method, and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 
-  /// TODO(doc)
+  /// @nodoc
   Future<void> pauseAllChannelMediaRelay();
 
-  /// TODO(doc)
+  /// @nodoc
   Future<void> resumeAllChannelMediaRelay();
 }
 

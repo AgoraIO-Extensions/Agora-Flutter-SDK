@@ -1016,10 +1016,17 @@ class RtcEngineEventHandler {
   /// @nodoc
   UploadLogResultCallback uploadLogResult;
 
-  /// TODO:(doc)
+  /// @nodoc
   EmptyCallback airPlayIsConnected;
 
-  /// TODO:(doc)
+  /// Reports whether the virtual background is successfully enabled. (beta function)
+  ///
+  /// The `VirtualBackgroundSourceEnabledCallback` typedef includes the following parameters:
+  ///
+  /// - [bool] `enabled`: Whether the virtual background is successfully enabled:
+  ///     - `true`: The virtual background is successfully enabled.
+  ///     - `false`: The virtual background is not successfully enabled.
+  /// - [VirtualBackgroundSourceStateReason] `reason`: The reason why the virtual background is not successfully enabled or the message that confirms success. See [VirtualBackgroundSourceStateReason].
   VirtualBackgroundSourceEnabledCallback virtualBackgroundSourceEnabled;
 
   /// Constructs a [RtcEngineEventHandler]
