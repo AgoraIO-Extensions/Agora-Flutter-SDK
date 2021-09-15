@@ -1272,7 +1272,7 @@ mixin RtcEngineInterface
 
   /// Sets the channel profile of the Agora RtcEngine.
   ///
-  /// The Agora RtcEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
+  /// After initialization, the SDK uses the communication channel profile by default. You can call setChannelProfile to set the channel profile.
   ///
   /// **Parameter** [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
   Future<void> setChannelProfile(ChannelProfile profile);
@@ -1725,9 +1725,10 @@ mixin RtcAudioInterface {
   ///
   /// **Parameter** [uid] ID of the remote user.
   ///
-  /// **Parameter** [volume] The playback volume of the specified remote user. The value ranges from 0 to 100:
+  /// **Parameter** [volume] Recording volume. The value ranges between 0 and 400:
   /// - 0: Mute.
-  /// - 100: The original volume.
+  /// - 100: Original volume.
+  /// - 400: (Maximum) Four times the original volume with signal-clipping protection.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
   /// Adjusts the playback volume of all remote users.
@@ -1888,7 +1889,11 @@ mixin RtcVideoInterface {
 
   /// Stops the local video preview and the video.
   ///
-  /// Call this method before joining a channel.
+  /// After calling `startPreview`, if you want to stop the local video preview, call `stopPreview`.
+  ///
+  /// **Note**
+  ///
+  /// Call this method before you join the channel or after you leave the channel.
   Future<void> stopPreview();
 
   /// Disables/Re-enables the local video capture.
@@ -2097,7 +2102,7 @@ mixin RtcAudioMixingInterface {
   /// - Error code, if this method call fails.
   Future<int> getAudioMixingDuration([String filePath]);
 
-  /// Gets the playback position (ms) of the music file.
+  /// Gets the playback position of the audio file.
   ///
   /// Call this method when you are in a channel.
   ///
@@ -2106,7 +2111,7 @@ mixin RtcAudioMixingInterface {
   /// Call this method after calling [startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
   ///
   /// **Returns**
-  /// - The current playback position of the audio mixing file, if this method call is successful.
+  /// - - The current playback position (ms) of the audio file, if this method call succeeds. 0 represents that the current audio file does not start playing
   /// - Error code, if this method call fails.
   Future<int> getAudioMixingCurrentPosition();
 
@@ -3198,6 +3203,10 @@ mixin RtcCameraInterface {
   /// - The position of the human face in the local video.
   /// - The distance between the human face and the device screen.
   ///
+  /// **Note**
+  ///
+  /// You can call this method either before or after joining a channel.
+  ///
   /// **Parameter** [enable] Determines whether to enable the face detection function for the local user:
   /// - `true`: Enable face detection.
   /// - `false`: (Default) Disable face detection.
@@ -3210,11 +3219,17 @@ mixin RtcCameraInterface {
   /// - `false`: Disable the camera flash function.
   Future<void> setCameraTorchOn(bool isOn);
 
-  /// Enables the camera auto-face focus function.
+  /// Sets whether to enable face autofocus.
+  ///
+  /// The SDK disables face autofocus by default. To set face autofocus, call this method.
+  ///
+  /// **Note**
+  ///
+  /// Call this method after the camera is started.
   ///
   /// **Parameter** [enabled] Sets whether to enable/disable the camera auto-face focus function:
-  /// - `true`: Enable the camera auto-face focus function.
-  /// - `false`: (Default) Disable the camera auto-face focus function.
+  /// - `true`: Enable face autofocus.
+  /// - `false`: Disable face autofocus.
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled);
 
   /// Sets The camera capture configuration.
