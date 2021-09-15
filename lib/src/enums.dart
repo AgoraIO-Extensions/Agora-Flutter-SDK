@@ -249,7 +249,7 @@ enum AudioOutputRouting {
 enum AudioProfile {
   /// Default audio profile.
   /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 64 Kbps.
+  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, audio encoding, mono, and a bitrate of up to 64 Kbps.
   @JsonValue(0)
   Default,
 
@@ -764,7 +764,7 @@ enum ChannelMediaRelayState {
 
 /// Channel profile.
 enum ChannelProfile {
-  /// (Default) The Communication profile.
+  /// The Communication profile.
   ///
   /// Use this profile in one-on-one calls or group calls, where all users can talk freely.
   @JsonValue(0)
@@ -820,7 +820,7 @@ enum ConnectionChangedReason {
   @JsonValue(5)
   LeaveChannel,
 
-  /// The specified App ID is invalid. Try to rejoin the channel with a valid App ID.
+  /// The specified App ID or Token is invalid. Try to rejoin the channel with a valid App ID or Token.
   @JsonValue(6)
   InvalidAppId,
 
