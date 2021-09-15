@@ -2668,36 +2668,34 @@ mixin RtcMediaRelayInterface {
 
 /// @nodoc
 mixin RtcAudioRouteInterface {
-  /// Sets the default audio playback route.
+  /// Sets the default audio route.
   ///
-  /// This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the [RtcEngine.setEnableSpeakerphone] method.
-  /// The default audio route for each scenario:
-  /// - In the [ChannelProfile.Communication] profile:
-  ///   - For a voice call, the default audio route is the earpiece.
-  ///   - For a video call, the default audio route is the speaker. If the user disables the video using [RtcEngine.disableVideo], or [RtcEngine.muteLocalVideoStream] and [RtcEngine.muteAllRemoteVideoStreams], the default audio route automatically switches back to the earpiece.
-  /// - In the [ChannelProfile.LiveBroadcasting] profile: The default audio route is the speaker.
-  /// See [ChannelProfile.LiveBroadcasting]
+  /// If the default audio route of the SDK (see *Set the Audio Route*) cannot meet your requirements,
+  /// you can call this method to switch the default audio route. After successfully switching the audio route, the SDK triggers the [audioRouteChanged] callback to indicate the changes.
   ///
   /// **Note**
-  /// - This method applies to the [ChannelProfile.Communication] profile only.
-  /// - Call this method before the user joins a channel.
+  /// - Call this method before calling [joinChannel]. If you need to switch the audio route after joining a channel, call [setEnableSpeakerphone].
+  /// - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
   ///
-  /// **Parameter** [defaultToSpeaker] Sets the default audio route:
-  /// - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
-  /// - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
+  /// **Parameter** [defaultToSpeaker] Sets the default audio route as follows:
+  /// - `true`: Set to the speakerphone.
+  /// - `false`: Set to the earpiece.
   Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio playback route to the speakerphone.
   ///
-  /// This method sets whether the audio is routed to the speakerphone or earpiece. After calling this method, the SDK returns the [RtcEngineEventHandler.audioRouteChanged] callback to indicate the changes.
+  /// If the default audio route of the SDK (see *Set the Audio Route*) or the setting in [setDefaultAudioRoutetoSpeakerphone] cannot meet your requirements, you can call this method to switch the current audio route.
+  /// After successfully switching the audio route, the SDK triggers the [audioRouteChanged] callback to indicate the changes.
+  ///
+  /// This method only sets the audio route in the current channel and does not influence the default audio route. If the user leaves the current channel and joins another channel, the default audio route is used.
   ///
   /// **Note**
-  /// - Ensure that you have successfully called the [RtcEngine.joinChannel] method before calling this method.
-  /// - This method is invalid for audience users in the [ChannelProfile.LiveBroadcasting] profile.
+  /// - Call this method after calling [joinChannel].
+  /// - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
   ///
-  /// **Parameter** [enabled] Sets whether to route the audio to the speakerphone or earpiece:
-  /// - `true`: Route the audio to the speakerphone. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the speakerphone.
-  /// - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
+  /// **Parameter** [enabled] Sets whether to enable the speakerphone or earpiece:
+  /// - `true`: Enable the speakerphone. The audio route is the speakerphone.
+  /// - `false`: Disable the speakerphone. The audio route is the earpiece.
   Future<void> setEnableSpeakerphone(bool enabled);
 
   /// Checks whether the speakerphone is enabled.
