@@ -864,7 +864,7 @@ class AudioVolumeInfo {
   /// - 1: The local user is speaking.
   ///
   /// **Note**
-  /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
+  /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 1.
   /// - Ensure that you set `report_vad`(true) in the [RtcEngine.enableAudioVolumeIndication] method to enable the voice activity
   /// detection of the local user.
   int vad;
