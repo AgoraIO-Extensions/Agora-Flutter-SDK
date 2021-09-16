@@ -376,22 +376,23 @@ class RtcEngineEventHandler {
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered. If [RtcEngine.startPreview] is called before [RtcEngine.joinChannel], elapsed is the time elapsed (ms) from the local user calling [RtcEngine.startPreview] until this callback is triggered.
   VideoFrameCallback firstLocalVideoFrame;
 
-  /// Occurs when a remote user stops/resumes sending the video stream.
+  /// Occurs when a remote user stops or resumes publishing the video stream.
   ///
   /// **Deprecated** This callback is deprecated. Use the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters for the same function:
   /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
   /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
-  /// The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [RtcEngine.muteLocalVideoStream] method.
+  /// When a remote user calls `muteLocalVideoStream` to stop or resume publishing the video stream, the SDK triggers this callback to report the state of the remote user's publishing stream to the local user.
+  ///
   ///
   /// **Note**
-  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 17.
+  /// This callback can be inaccurate when the number of users in a channel exceeds 17.
   ///
   /// The `UidWithMutedCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the remote user.
-  /// - [bool] `muted`: Whether the remote user's video stream playback pauses/resumes:
-  ///    - `true`: Pause.
-  ///    - `false`: Resume.
+  /// - [bool] `muted`: Whether the remote user stops publishing the video stream:
+  ///    - `true`: Stop publishing the video stream.
+  ///    - `false`: Publish the video stream.
   @deprecated
   UidWithMutedCallback userMuteVideo;
 
@@ -1016,10 +1017,17 @@ class RtcEngineEventHandler {
   /// @nodoc
   UploadLogResultCallback uploadLogResult;
 
-  /// TODO:(doc)
+  /// @nodoc
   EmptyCallback airPlayIsConnected;
 
-  /// TODO:(doc)
+  /// Reports whether the virtual background is successfully enabled. (beta function)
+  ///
+  /// The `VirtualBackgroundSourceEnabledCallback` typedef includes the following parameters:
+  ///
+  /// - [bool] `enabled`: Whether the virtual background is successfully enabled:
+  ///     - `true`: The virtual background is successfully enabled.
+  ///     - `false`: The virtual background is not successfully enabled.
+  /// - [VirtualBackgroundSourceStateReason] `reason`: The reason why the virtual background is not successfully enabled or the message that confirms success. See [VirtualBackgroundSourceStateReason].
   VirtualBackgroundSourceEnabledCallback virtualBackgroundSourceEnabled;
 
   /// Constructs a [RtcEngineEventHandler]

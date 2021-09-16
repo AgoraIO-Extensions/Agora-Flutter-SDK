@@ -685,11 +685,18 @@ class ChannelMediaOptions {
   /// After joining the channel, you can call `muteAllRemoteVideoStreams` to set whether to subscribe to video streams in the channel.
   bool autoSubscribeVideo;
 
-  /// TODO(doc)
-  @JsonKey(includeIfNull: false)
+  /// Determines whether to publish the local audio stream when the user joins a channel
+  /// - `true`: (Default) Publish.
+  /// - `false`: Do not publish.
+  ///
+  /// This member serves a similar function to the [RtcEngine.muteLocalAudioStream] method. After the user joins the channel, you can call the [RtcEngine.muteLocalAudioStream] method to set whether to publish the local audio stream in the channel.
   bool publishLocalAudio;
 
-  /// TODO(doc)
+  /// Determines whether to publish the local video stream when the user joins a channel:
+  /// - `true`: (Default) Publish.
+  /// - `false`: Do not publish.
+  ///
+  /// This member serves a similar function to the [RtcEngine.muteLocalVideoStream] method. After the user joins the channel, you can call the [RtcEngine.muteLocalVideoStream] method to set whether to publish the local video stream in the channel.
   @JsonKey(includeIfNull: false)
   bool publishLocalVideo;
 
@@ -722,7 +729,7 @@ class EncryptionConfig {
   /// If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [ErrorCode.InvalidArgument].
   String encryptionKey;
 
-  /// TODO(doc)
+  /// The salt. Agora recommends using OpenSSL to generate the salt on your server. For details, see *Channel Encryption*.
   @JsonKey(includeIfNull: false)
   List<int> encryptionKdfSalt;
 
@@ -857,7 +864,7 @@ class AudioVolumeInfo {
   /// - 1: The local user is speaking.
   ///
   /// **Note**
-  /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
+  /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 1.
   /// - Ensure that you set `report_vad`(true) in the [RtcEngine.enableAudioVolumeIndication] method to enable the voice activity
   /// detection of the local user.
   int vad;
@@ -1439,16 +1446,34 @@ class AudioRecordingConfiguration {
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }
 
-/// TODO:(doc)
+/// The custom background image.
 @JsonSerializable(explicitToJson: true)
 class VirtualBackgroundSource {
+  /// The type of the custom background image.
   @JsonKey(includeIfNull: false)
   VirtualBackgroundSourceType backgroundSourceType;
 
+  /// The color of the custom background image.
+  /// The format is a hexadecimal integer defined by RGB, without the # sign,
+  /// such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF,
+  /// which signifies white. The value range is [0x000000,0xffffff].
+  /// If the value is invalid, the SDK replaces the original background image
+  /// with a white background image.
+  ///
+  /// **Note**
+  ///
+  /// This parameter takes effect only when the type of the custom background image is `color`.
   @JsonKey(
       includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
   Color color;
 
+  /// The local absolute path of the custom background image.
+  /// PNG and JPG formats are supported. If the path is invalid,
+  /// the SDK replaces the original background image with a white background image.
+  ///
+  /// **Note**
+  ///
+  /// This parameter takes effect only when the type of the custom background image is `image`.
   @JsonKey(includeIfNull: false)
   String source;
 
