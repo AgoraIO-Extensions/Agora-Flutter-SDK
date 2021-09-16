@@ -1,3 +1,10 @@
+## [4.0.7](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.7-rc.0...v4.0.7) (2021-09-16)
+
+
+### Features
+
+* support native 3.5.0.2 ([7c9ed81](https://github.com/AgoraIO/Flutter-SDK/commit/7c9ed819193cc02732af5193335b38d5f6880328))
+
 ## [4.0.7-rc.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v4.0.6-rc.0...v4.0.7-rc.0) (2021-09-08)
 
 
