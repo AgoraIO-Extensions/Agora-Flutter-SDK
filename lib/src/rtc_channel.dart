@@ -543,9 +543,10 @@ mixin RtcAudioInterface {
   ///
   /// **Parameter** [uid] ID of the remote user.
   ///
-  /// **Parameter** [volume] The playback volume of the specified remote user. The value ranges from 0 to 100:
+  /// **Parameter** [volume] The playback volume of the specified remote user. The value ranges from 0 to 400:
   /// - 0: Mute.
   /// - 100: The original volume.
+  /// - 400: Four times the original volume with signal-clipping protection.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
   /// Stops or resumes publishing the local audio stream.
