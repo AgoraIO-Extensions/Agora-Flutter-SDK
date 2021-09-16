@@ -249,7 +249,7 @@ enum AudioOutputRouting {
 enum AudioProfile {
   /// Default audio profile.
   /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 64 Kbps.
+  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, audio encoding, mono, and a bitrate of up to 64 Kbps.
   @JsonValue(0)
   Default,
 
@@ -726,19 +726,19 @@ enum ChannelMediaRelayEvent {
   @JsonValue(11)
   VideoProfileUpdate,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(12)
   PauseSendPacketToDestChannelSuccess,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(13)
   PauseSendPacketToDestChannelFailed,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(14)
   ResumeSendPacketToDestChannelSuccess,
 
-  /// TODO(doc)
+  /// @nodoc
   @JsonValue(15)
   ResumeSendPacketToDestChannelFailed,
 }
@@ -764,7 +764,7 @@ enum ChannelMediaRelayState {
 
 /// Channel profile.
 enum ChannelProfile {
-  /// (Default) The Communication profile.
+  /// The Communication profile.
   ///
   /// Use this profile in one-on-one calls or group calls, where all users can talk freely.
   @JsonValue(0)
@@ -820,7 +820,7 @@ enum ConnectionChangedReason {
   @JsonValue(5)
   LeaveChannel,
 
-  /// The specified App ID is invalid. Try to rejoin the channel with a valid App ID.
+  /// The specified App ID or Token is invalid. Try to rejoin the channel with a valid App ID or Token.
   @JsonValue(6)
   InvalidAppId,
 
@@ -953,11 +953,13 @@ enum EncryptionMode {
   @JsonValue(6)
   AES256GCM,
 
-  /// 128-bit AES encryption, GCM mode. Compared to `AES128GCM` encryption mode, `AES128GCM2` encryption mode is more secure and requires you to set the salt (`encryptionKdfSalt`).
+  /// (Default) 128-bit AES encryption, GCM mode.
+  /// Compared to AES128GCM encryption mode, AES128GCM2 encryption mode is more secure and requires you to set the salt (encryptionKdfSalt).
   @JsonValue(7)
   AES128GCM2,
 
-  /// 256-bit AES encryption, GCM mode. Compared to `AES256GCM` encryption mode, `AES256GCM2` encryption mode is more secure and requires you to set the salt (`encryptionKdfSalt`).
+  /// 256-bit AES encryption, GCM mode.
+  /// Compared to AES256GCM encryption mode, AES256GCM2 encryption mode is more secure and requires you to set the salt (encryptionKdfSalt).
   @JsonValue(8)
   AES256GCM2,
 }
@@ -1583,7 +1585,7 @@ enum RtmpStreamingErrorCode {
   @JsonValue(10)
   FormatNotSupported,
 
-  /// The streaming has been stopped normally. After you call [RtcEngine.removePublishStreamUrl] to stop streaming, the SDK returns this value.
+  /// The streaming has been stopped normally. After you call `removePublishStreamUrl` to stop streaming, the SDK returns this value.
   @JsonValue(100)
   UnPublishOK,
 }
@@ -2557,26 +2559,32 @@ enum VoiceConversionPreset {
   Bass,
 }
 
-/// TODO:(doc)
+/// The type of the custom background image.
 enum VirtualBackgroundSourceType {
+  /// (Default) The background image is a solid color.
   @JsonValue(1)
   Color,
 
+  /// The background image is a file in PNG or JPG format.
   @JsonValue(2)
   Img,
 }
 
-/// TODO:(doc)
+/// The reason why the virtual background is not successfully enabled or the message that confirms success:
 enum VirtualBackgroundSourceStateReason {
+  /// The virtual background is successfully enabled.
   @JsonValue(0)
   Success,
 
+  /// The custom background image does not exist. Please check the value of source in VirtualBackgroundSource.
   @JsonValue(1)
   ImageNotExist,
 
+  /// The color format of the custom background image is invalid. Please check the value of color in VirtualBackgroundSource.
   @JsonValue(2)
   ColorFormatNotSupported,
 
+  /// The device does not support using the virtual background.
   @JsonValue(3)
   DeviceNotSupported,
 }
