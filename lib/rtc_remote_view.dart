@@ -32,7 +32,7 @@ class SurfaceView extends RtcSurfaceView {
         );
 }
 
-/// (Android only) TextureView.
+/// TextureView.
 class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
