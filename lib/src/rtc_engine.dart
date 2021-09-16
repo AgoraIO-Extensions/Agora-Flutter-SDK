@@ -1272,7 +1272,7 @@ mixin RtcEngineInterface
 
   /// Sets the channel profile of the Agora RtcEngine.
   ///
-  /// The Agora RtcEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
+  /// After initialization, the SDK uses the communication channel profile by default. You can call setChannelProfile to set the channel profile.
   ///
   /// **Parameter** [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
   Future<void> setChannelProfile(ChannelProfile profile);
@@ -1532,7 +1532,45 @@ mixin RtcEngineInterface
   /// @nodoc
   Future<void> setLocalAccessPoint(List<String> ips, String domain);
 
-  /// TODO:(doc)
+  /// Enables/Disables the virtual background. (beta function).
+  ///
+  ///
+  /// **Parameter** [enabled] Sets whether to enable the virtual background:
+  /// - `true`: Enable.
+  /// - `false`: Disable.
+  ///
+  /// **Parameter** [backgroundSource] The custom background image. See [VirtualBackgroundSource].
+  ///
+  /// **Note**
+  ///
+  /// To adapt the resolution of the custom background image to the resolution of the SDK capturing video, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
+  ///
+  /// **Note**
+  ///
+  /// - Call this method after enableVideo.
+  /// - This function requires a high-performance device. Agora recommends that you use this function on devices with an i5 CPU and better.
+  ///
+  /// Agora recommends that you use this function in scenarios that meet the following conditions:
+  /// - A high-definition camera device is used, and the environment is uniformly lit.
+  /// - The captured video image is uncluttered, the user's portrait is half-length and largely unobstructed, and the background is a single color that differs from the color of the user's clothing.
+  ///
+  /// This function requires a high-performance device. Agora recommends that you use this function on the following devices:
+  ///
+  /// iOS devices with an A9 chip and better, as follows:
+  ///
+  /// - iPhone 6S and later
+  /// - iPad Air (3rd generation) and later
+  /// - iPad (5th generation) and later
+  /// - iPad Pro (1st generation) and later
+  /// - iPad mini (5th generation) and later
+  ///
+  /// Android devices with the following chips:
+  ///
+  /// - Snapdragon 700 series 750G and later
+  /// - Snapdragon 800 series 835 and later
+  /// - Dimensity 700 series 720 and later
+  /// - Kirin 800 series 810 and later
+  /// - Kirin 900 series 980 and later
   Future<void> enableVirtualBackground(
       bool enabled, VirtualBackgroundSource backgroundSource);
 }
@@ -1687,9 +1725,10 @@ mixin RtcAudioInterface {
   ///
   /// **Parameter** [uid] ID of the remote user.
   ///
-  /// **Parameter** [volume] The playback volume of the specified remote user. The value ranges from 0 to 100:
+  /// **Parameter** [volume] Recording volume. The value ranges between 0 and 400:
   /// - 0: Mute.
-  /// - 100: The original volume.
+  /// - 100: Original volume.
+  /// - 400: (Maximum) Four times the original volume with signal-clipping protection.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
   /// Adjusts the playback volume of all remote users.
@@ -1850,7 +1889,11 @@ mixin RtcVideoInterface {
 
   /// Stops the local video preview and the video.
   ///
-  /// Call this method before joining a channel.
+  /// After calling `startPreview`, if you want to stop the local video preview, call `stopPreview`.
+  ///
+  /// **Note**
+  ///
+  /// Call this method before you join the channel or after you leave the channel.
   Future<void> stopPreview();
 
   /// Disables/Re-enables the local video capture.
@@ -2059,7 +2102,7 @@ mixin RtcAudioMixingInterface {
   /// - Error code, if this method call fails.
   Future<int> getAudioMixingDuration([String filePath]);
 
-  /// Gets the playback position (ms) of the music file.
+  /// Gets the playback position of the audio file.
   ///
   /// Call this method when you are in a channel.
   ///
@@ -2068,7 +2111,7 @@ mixin RtcAudioMixingInterface {
   /// Call this method after calling [startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
   ///
   /// **Returns**
-  /// - The current playback position of the audio mixing file, if this method call is successful.
+  /// - - The current playback position (ms) of the audio file, if this method call succeeds. 0 represents that the current audio file does not start playing
   /// - Error code, if this method call fails.
   Future<int> getAudioMixingCurrentPosition();
 
@@ -2616,45 +2659,43 @@ mixin RtcMediaRelayInterface {
   /// - If the method call fails, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] error code. You can leave the channel by calling the [RtcEngine.leaveChannel] method, and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 
-  /// TODO(doc)
+  /// @nodoc
   Future<void> pauseAllChannelMediaRelay();
 
-  /// TODO(doc)
+  /// @nodoc
   Future<void> resumeAllChannelMediaRelay();
 }
 
 /// @nodoc
 mixin RtcAudioRouteInterface {
-  /// Sets the default audio playback route.
+  /// Sets the default audio route.
   ///
-  /// This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the [RtcEngine.setEnableSpeakerphone] method.
-  /// The default audio route for each scenario:
-  /// - In the [ChannelProfile.Communication] profile:
-  ///   - For a voice call, the default audio route is the earpiece.
-  ///   - For a video call, the default audio route is the speaker. If the user disables the video using [RtcEngine.disableVideo], or [RtcEngine.muteLocalVideoStream] and [RtcEngine.muteAllRemoteVideoStreams], the default audio route automatically switches back to the earpiece.
-  /// - In the [ChannelProfile.LiveBroadcasting] profile: The default audio route is the speaker.
-  /// See [ChannelProfile.LiveBroadcasting]
+  /// If the default audio route of the SDK (see *Set the Audio Route*) cannot meet your requirements,
+  /// you can call this method to switch the default audio route. After successfully switching the audio route, the SDK triggers the [audioRouteChanged] callback to indicate the changes.
   ///
   /// **Note**
-  /// - This method applies to the [ChannelProfile.Communication] profile only.
-  /// - Call this method before the user joins a channel.
+  /// - Call this method before calling [joinChannel]. If you need to switch the audio route after joining a channel, call [setEnableSpeakerphone].
+  /// - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
   ///
-  /// **Parameter** [defaultToSpeaker] Sets the default audio route:
-  /// - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
-  /// - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
+  /// **Parameter** [defaultToSpeaker] Sets the default audio route as follows:
+  /// - `true`: Set to the speakerphone.
+  /// - `false`: Set to the earpiece.
   Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio playback route to the speakerphone.
   ///
-  /// This method sets whether the audio is routed to the speakerphone or earpiece. After calling this method, the SDK returns the [RtcEngineEventHandler.audioRouteChanged] callback to indicate the changes.
+  /// If the default audio route of the SDK (see *Set the Audio Route*) or the setting in [setDefaultAudioRoutetoSpeakerphone] cannot meet your requirements, you can call this method to switch the current audio route.
+  /// After successfully switching the audio route, the SDK triggers the [audioRouteChanged] callback to indicate the changes.
+  ///
+  /// This method only sets the audio route in the current channel and does not influence the default audio route. If the user leaves the current channel and joins another channel, the default audio route is used.
   ///
   /// **Note**
-  /// - Ensure that you have successfully called the [RtcEngine.joinChannel] method before calling this method.
-  /// - This method is invalid for audience users in the [ChannelProfile.LiveBroadcasting] profile.
+  /// - Call this method after calling [joinChannel].
+  /// - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
   ///
-  /// **Parameter** [enabled] Sets whether to route the audio to the speakerphone or earpiece:
-  /// - `true`: Route the audio to the speakerphone. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the speakerphone.
-  /// - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
+  /// **Parameter** [enabled] Sets whether to enable the speakerphone or earpiece:
+  /// - `true`: Enable the speakerphone. The audio route is the speakerphone.
+  /// - `false`: Disable the speakerphone. The audio route is the earpiece.
   Future<void> setEnableSpeakerphone(bool enabled);
 
   /// Checks whether the speakerphone is enabled.
@@ -3160,6 +3201,10 @@ mixin RtcCameraInterface {
   /// - The position of the human face in the local video.
   /// - The distance between the human face and the device screen.
   ///
+  /// **Note**
+  ///
+  /// You can call this method either before or after joining a channel.
+  ///
   /// **Parameter** [enable] Determines whether to enable the face detection function for the local user:
   /// - `true`: Enable face detection.
   /// - `false`: (Default) Disable face detection.
@@ -3172,11 +3217,17 @@ mixin RtcCameraInterface {
   /// - `false`: Disable the camera flash function.
   Future<void> setCameraTorchOn(bool isOn);
 
-  /// Enables the camera auto-face focus function.
+  /// Sets whether to enable face autofocus.
+  ///
+  /// The SDK disables face autofocus by default. To set face autofocus, call this method.
+  ///
+  /// **Note**
+  ///
+  /// Call this method after the camera is started.
   ///
   /// **Parameter** [enabled] Sets whether to enable/disable the camera auto-face focus function:
-  /// - `true`: Enable the camera auto-face focus function.
-  /// - `false`: (Default) Disable the camera auto-face focus function.
+  /// - `true`: Enable face autofocus.
+  /// - `false`: Disable face autofocus.
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled);
 
   /// Sets The camera capture configuration.
