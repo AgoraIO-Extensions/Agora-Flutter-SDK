@@ -1404,7 +1404,7 @@ class RhythmPlayerConfig {
   Map<String, dynamic> toJson() => _$RhythmPlayerConfigToJson(this);
 }
 
-/// Recording configuration, which is set in [RtcEngine.setAudioRecording].
+/// Recording configuration, which is set in [RtcEngine.startAudioRecordingWithConfig].
 @JsonSerializable(explicitToJson: true)
 class AudioRecordingConfiguration {
   /// The absolute path (including the filename extensions) of the recording file. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Ensure that the path you specify exists and is writable.
