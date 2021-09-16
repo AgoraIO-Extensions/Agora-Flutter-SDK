@@ -1,6 +1,6 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint agora_rtc_engine.podspec' to validate before publishing.
+# Run `pod lib lint agora_rtc_engine.podspec` to validate before publishing.
 #
 require "yaml"
 require "ostruct"
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.dependency 'AgoraRtcEngine_iOS', '3.5.0.3'
   s.platform = :ios, '8.0'
 
-  # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
-  s.swift_version = '4.0'
+  # Flutter.framework does not contain a i386 slice.
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  s.swift_version = '5.0'
 end
