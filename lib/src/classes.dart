@@ -7,6 +7,17 @@ import 'enums.dart';
 
 part 'classes.g.dart';
 
+Color _$ColorFromJson(Map<String, dynamic> json) => Color.fromRGBO(
+    json['red'] as int, json['green'] as int, json['blue'] as int, 1.0);
+
+Map<String, dynamic>? _$ColorToJson(Color? instance) => instance != null
+    ? <String, dynamic>{
+        'red': instance.red,
+        'green': instance.green,
+        'blue': instance.blue,
+      }
+    : null;
+
 /// The UserInfo class.
 @JsonSerializable(explicitToJson: true)
 class UserInfo {
@@ -47,7 +58,7 @@ class VideoDimensions {
     this.height,
   });
 
-  /// @nodoc ignore: public_member_api_docs
+  /// @nodoc
   factory VideoDimensions.fromJson(Map<String, dynamic> json) =>
       _$VideoDimensionsFromJson(json);
 
@@ -710,11 +721,19 @@ class ChannelMediaOptions {
   @JsonKey(includeIfNull: false)
   bool? autoSubscribeVideo;
 
-  /// TODO(doc)
+  /// Determines whether to publish the local audio stream when the user joins a channel
+  /// - `true`: (Default) Publish.
+  /// - `false`: Do not publish.
+  ///
+  /// This member serves a similar function to the [RtcEngine.muteLocalAudioStream] method. After the user joins the channel, you can call the [RtcEngine.muteLocalAudioStream] method to set whether to publish the local audio stream in the channel.
   @JsonKey(includeIfNull: false)
   bool? publishLocalAudio;
 
-  /// TODO(doc)
+  /// Determines whether to publish the local video stream when the user joins a channel:
+  /// - `true`: (Default) Publish.
+  /// - `false`: Do not publish.
+  ///
+  /// This member serves a similar function to the [RtcEngine.muteLocalVideoStream] method. After the user joins the channel, you can call the [RtcEngine.muteLocalVideoStream] method to set whether to publish the local video stream in the channel.
   @JsonKey(includeIfNull: false)
   bool? publishLocalVideo;
 
@@ -749,7 +768,7 @@ class EncryptionConfig {
   @JsonKey(includeIfNull: false)
   String? encryptionKey;
 
-  /// TODO(doc)
+  /// The salt. Agora recommends using OpenSSL to generate the salt on your server. For details, see *Channel Encryption*.
   @JsonKey(includeIfNull: false)
   List<int>? encryptionKdfSalt;
 
@@ -908,7 +927,7 @@ class AudioVolumeInfo {
   /// - 1: The local user is speaking.
   ///
   /// **Note**
-  /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
+  /// - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 1.
   /// - Ensure that you set `report_vad`(true) in the [RtcEngine.enableAudioVolumeIndication] method to enable the voice activity
   /// detection of the local user.
   int vad;
@@ -1179,10 +1198,10 @@ class RemoteAudioStats {
   /// The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
   int publishDuration;
 
-  /// Quality of experience (QoE) of the local user when receiving a remote audio stream. See [ExperienceQuality].
+  /// Quality of experience (QoE) of the local user when receiving a remote audio stream. See [qoeQuality].
   ExperienceQualityType qoeQuality;
 
-  /// The reason for poor QoE of the local user when receiving a remote audio stream. See [ExperiencePoorReason].
+  /// The reason for poor QoE of the local user when receiving a remote audio stream. See [qualityChangedReason].
   ExperiencePoorReason qualityChangedReason;
 
   /// The [quality] of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval.
@@ -1472,7 +1491,7 @@ class RtcEngineConfig extends RtcEngineContext {
 class RtcEngineContext {
   /// The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
   /// Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
-  /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithConfig`
+  /// one `RtcEngine` instance. To change your App ID, call `destroy` to destroy the current `RtcEngine` instance and then call `createWithContext`
   /// to create an `RtcEngine` instance with the new App ID.
   String appId;
 
@@ -1546,7 +1565,7 @@ class RhythmPlayerConfig {
   Map<String, dynamic> toJson() => _$RhythmPlayerConfigToJson(this);
 }
 
-/// Recording configuration, which is set in [RtcEngine.setAudioRecording].
+/// Recording configuration, which is set in [RtcEngine.startAudioRecordingWithConfig].
 @JsonSerializable(explicitToJson: true)
 class AudioRecordingConfiguration {
   /// The absolute path (including the filename extensions) of the recording file. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Ensure that the path you specify exists and is writable.
@@ -1586,4 +1605,46 @@ class AudioRecordingConfiguration {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
+}
+
+/// The custom background image.
+@JsonSerializable(explicitToJson: true)
+class VirtualBackgroundSource {
+  /// The type of the custom background image.
+  @JsonKey(includeIfNull: false)
+  VirtualBackgroundSourceType? backgroundSourceType;
+
+  /// The color of the custom background image.
+  /// The format is a hexadecimal integer defined by RGB, without the # sign,
+  /// such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF,
+  /// which signifies white. The value range is [0x000000,0xffffff].
+  /// If the value is invalid, the SDK replaces the original background image
+  /// with a white background image.
+  ///
+  /// **Note**
+  ///
+  /// This parameter takes effect only when the type of the custom background image is `color`.
+  @JsonKey(
+      includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
+  Color? color;
+
+  /// The local absolute path of the custom background image.
+  /// PNG and JPG formats are supported. If the path is invalid,
+  /// the SDK replaces the original background image with a white background image.
+  ///
+  /// **Note**
+  ///
+  /// This parameter takes effect only when the type of the custom background image is `image`.
+  @JsonKey(includeIfNull: false)
+  String? source;
+
+  /// Constructs a [VirtualBackgroundSource]
+  VirtualBackgroundSource({this.backgroundSourceType, this.color, this.source});
+
+  /// @nodoc
+  factory VirtualBackgroundSource.fromJson(Map<String, dynamic> json) =>
+      _$VirtualBackgroundSourceFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$VirtualBackgroundSourceToJson(this);
 }

@@ -151,6 +151,9 @@ typedef UserSuperResolutionEnabledCallback = void Function(
 // ignore: public_member_api_docs
 typedef UploadLogResultCallback = void Function(
     String requestId, bool success, UploadErrorReason reason);
+// ignore: public_member_api_docs
+typedef VirtualBackgroundSourceEnabledCallback = void Function(
+    bool enabled, VirtualBackgroundSourceStateReason reason);
 
 /// The SDK uses the [RtcEngineEventHandler] class to send callbacks to the application, and the application inherits the methods of this class to retrieve these callbacks.
 ///
@@ -264,13 +267,13 @@ class RtcEngineEventHandler {
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
   ///   - [userJoined]: ID of the user or host who joins the channel.
-  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioFrame]: User ID of the remote user.
   ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
   ///   - [joinChannelSuccess]: User ID.
   ///   - [rejoinChannelSuccess]: User ID.
   /// - [int] `elapsed`:
   ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
-  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
@@ -373,22 +376,23 @@ class RtcEngineEventHandler {
   /// - [int] `elapsed`: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered. If [RtcEngine.startPreview] is called before [RtcEngine.joinChannel], elapsed is the time elapsed (ms) from the local user calling [RtcEngine.startPreview] until this callback is triggered.
   VideoFrameCallback? firstLocalVideoFrame;
 
-  /// Occurs when a remote user stops/resumes sending the video stream.
+  /// Occurs when a remote user stops or resumes publishing the video stream.
   ///
   /// **Deprecated** This callback is deprecated. Use the [RtcEngineEventHandler.remoteVideoStateChanged] callback with the following parameters for the same function:
   /// - [VideoRemoteState.Stopped] and [VideoRemoteStateReason.RemoteMuted].
   /// - [VideoRemoteState.Decoding] and [VideoRemoteStateReason.RemoteUnmuted].
   ///
-  /// The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [RtcEngine.muteLocalVideoStream] method.
+  /// When a remote user calls `muteLocalVideoStream` to stop or resume publishing the video stream, the SDK triggers this callback to report the state of the remote user's publishing stream to the local user.
+  ///
   ///
   /// **Note**
-  /// - This callback is invalid when the number of users or broadcasters in the channel exceeds 17.
+  /// This callback can be inaccurate when the number of users in a channel exceeds 17.
   ///
   /// The `UidWithMutedCallback` typedef includes the following parameters:
   /// - [int] `uid`: ID of the remote user.
-  /// - [bool] `muted`: Whether the remote user's video stream playback pauses/resumes:
-  ///    - `true`: Pause.
-  ///    - `false`: Resume.
+  /// - [bool] `muted`: Whether the remote user stops publishing the video stream:
+  ///    - `true`: Stop publishing the video stream.
+  ///    - `false`: Publish the video stream.
   @deprecated
   UidWithMutedCallback? userMuteVideo;
 
@@ -696,13 +700,13 @@ class RtcEngineEventHandler {
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
   ///   - [userJoined]: ID of the user or host who joins the channel.
-  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioFrame]: User ID of the remote user.
   ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
   ///   - [joinChannelSuccess]: User ID.
   ///   - [rejoinChannelSuccess]: User ID.
   /// - [int] `elapsed`:
   ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
-  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
@@ -724,13 +728,13 @@ class RtcEngineEventHandler {
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
   ///   - [userJoined]: ID of the user or host who joins the channel.
-  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioFrame]: User ID of the remote user.
   ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
   ///   - [joinChannelSuccess]: User ID.
   ///   - [rejoinChannelSuccess]: User ID.
   /// - [int] `elapsed`:
   ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
-  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
@@ -939,7 +943,7 @@ class RtcEngineEventHandler {
   /// The SDK triggers this callback under one of the following circumstances:
   /// - The local client enables the audio module and calls [RtcEngine.joinChannel] successfully.
   /// - The local client calls [RtcEngine.muteLocalAudioStream] (`true`) and [RtcEngine.muteLocalAudioStream] (`false`) in sequence.
-  /// - The local client calls [RtcEngine.disableAudio] (`true`) and [`enableAudio`] in sequence.
+  /// - The local client calls [RtcEngine.disableAudio] (`true`) and [RtcEngine.enableAudio] in sequence.
   ///
   /// The `ElapsedCallback` typedef includes the following parameters:
   /// - [int] `Elapsed`: Time elapsed (ms) from the local user calling the [RtcEngine.joinChannel] until this callback is triggered.
@@ -1007,11 +1011,24 @@ class RtcEngineEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback? rtmpStreamingEvent;
 
-  ///  @nodoc
+  /// @nodoc
   UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
-  ///  @nodoc
+  /// @nodoc
   UploadLogResultCallback? uploadLogResult;
+
+  /// @nodoc
+  EmptyCallback? airPlayIsConnected;
+
+  /// Reports whether the virtual background is successfully enabled. (beta function)
+  ///
+  /// The `VirtualBackgroundSourceEnabledCallback` typedef includes the following parameters:
+  ///
+  /// - [bool] `enabled`: Whether the virtual background is successfully enabled:
+  ///     - `true`: The virtual background is successfully enabled.
+  ///     - `false`: The virtual background is not successfully enabled.
+  /// - [VirtualBackgroundSourceStateReason] `reason`: The reason why the virtual background is not successfully enabled or the message that confirms success. See [VirtualBackgroundSourceStateReason].
+  VirtualBackgroundSourceEnabledCallback? virtualBackgroundSourceEnabled;
 
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler({
@@ -1094,6 +1111,8 @@ class RtcEngineEventHandler {
     this.rtmpStreamingEvent,
     this.userSuperResolutionEnabled,
     this.uploadLogResult,
+    this.airPlayIsConnected,
+    this.virtualBackgroundSourceEnabled,
   });
 
   // ignore: public_member_api_docs
@@ -1412,6 +1431,13 @@ class RtcEngineEventHandler {
         uploadLogResult?.call(
             data[0], data[1], UploadErrorReasonConverter.fromValue(data[2]).e);
         break;
+      case 'AirPlayIsConnected':
+        airPlayIsConnected?.call();
+        break;
+      case 'VirtualBackgroundSourceEnabled':
+        virtualBackgroundSourceEnabled?.call(data[0],
+            VirtualBackgroundSourceStateReasonConverter.fromValue(data[1]).e);
+        break;
     }
   }
 }
@@ -1437,13 +1463,13 @@ class RtcChannelEventHandler {
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
   ///   - [userJoined]: ID of the user or host who joins the channel.
-  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioFrame]: User ID of the remote user.
   ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
   ///   - [joinChannelSuccess]: User ID.
   ///   - [rejoinChannelSuccess]: User ID.
   /// - [int] `elapsed`:
   ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
-  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
@@ -1456,13 +1482,13 @@ class RtcChannelEventHandler {
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
   ///   - [userJoined]: ID of the user or host who joins the channel.
-  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioFrame]: User ID of the remote user.
   ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
   ///   - [joinChannelSuccess]: User ID.
   ///   - [rejoinChannelSuccess]: User ID.
   /// - [int] `elapsed`:
   ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
-  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
@@ -1500,13 +1526,13 @@ class RtcChannelEventHandler {
   /// The `UidWithElapsedCallback` typedef includes the following parameters:
   /// - [int] `uid`: This parameter has the following definitions in different events:
   ///   - [userJoined]: ID of the user or host who joins the channel.
-  ///   - [firsRemoteAudioFrame]: User ID of the remote user.
+  ///   - [firstRemoteAudioFrame]: User ID of the remote user.
   ///   - [firstRemoteAudioDecoded]: User ID of the remote user sending the audio stream.
   ///   - [joinChannelSuccess]: User ID.
   ///   - [rejoinChannelSuccess]: User ID.
   /// - [int] `elapsed`:
   ///   - [userJoined]: Time delay (ms) from the local user calling [RtcEngine.joinChannel] or [RtcEngine.setClientRole] until this callback is triggered.
-  ///   - [firsRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
+  ///   - [firstRemoteAudioFrame]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until this callback is triggered.
   ///   - [firstRemoteAudioDecoded]: Time elapsed (ms) from the local user calling [RtcEngine.joinChannel] until the SDK triggers this callback.
   ///   - [joinChannelSuccess]: Time elapsed (ms) from the local user calling [RtcChannel.joinChannel] until this callback is triggered.
   ///   - [rejoinChannelSuccess]: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
@@ -1779,7 +1805,7 @@ class RtcChannelEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback? rtmpStreamingEvent;
 
-  ///  @nodoc
+  /// @nodoc
   UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]

@@ -217,7 +217,7 @@ fun mapToAudioRecordingConfiguration(map: Map<*, *>): AudioRecordingConfiguratio
     (map["filePath"] as? String)?.let { filePath = it }
     (map["recordingQuality"] as? Number)?.let { recordingQuality = it.toInt() }
     (map["recordingPosition"] as? Number)?.let { recordingPosition = it.toInt() }
-    (map["recordingQuality"] as? Number)?.let { recordingSampleRate = it.toInt() }
+    (map["recordingSampleRate"] as? Number)?.let { recordingSampleRate = it.toInt() }
   }
 }
 
@@ -253,5 +253,13 @@ fun mapToDataStreamConfig(map: Map<*, *>): DataStreamConfig {
   return DataStreamConfig().apply {
     (map["syncWithAudio"] as? Boolean)?.let { syncWithAudio = it }
     (map["ordered"] as? Boolean)?.let { ordered = it }
+  }
+}
+
+fun mapToVirtualBackgroundSource(map: Map<*, *>): VirtualBackgroundSource {
+  return VirtualBackgroundSource().apply {
+    (map["backgroundSourceType"] as? Number)?.let { backgroundSourceType = it.toInt() }
+    (map["color"] as? Map<*, *>)?.let { color = mapToColor(it) }
+    (map["source"] as? String)?.let { source = it }
   }
 }

@@ -80,6 +80,10 @@ class IRtcChannel {
     fun updateChannelMediaRelay(params: Map<String, *>, callback: Callback)
 
     fun stopChannelMediaRelay(params: Map<String, *>, callback: Callback)
+
+    fun pauseAllChannelMediaRelay(params: Map<String, *>, callback: Callback)
+
+    fun resumeAllChannelMediaRelay(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcDualStreamInterface {
@@ -338,6 +342,16 @@ class RtcChannelManager(
 
   override fun stopChannelMediaRelay(params: Map<String, *>, callback: Callback) {
     callback.code(this[params["channelId"] as String]?.stopChannelMediaRelay())
+  }
+
+  override fun pauseAllChannelMediaRelay(params: Map<String, *>, callback: Callback) {
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(this[params["channelId"] as String]?.pauseAllChannelMediaRelay())
+  }
+
+  override fun resumeAllChannelMediaRelay(params: Map<String, *>, callback: Callback) {
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(this[params["channelId"] as String]?.resumeAllChannelMediaRelay())
   }
 
   override fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback) {

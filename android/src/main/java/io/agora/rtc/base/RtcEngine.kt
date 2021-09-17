@@ -64,6 +64,10 @@ class IRtcEngine {
     fun setCloudProxy(params: Map<String, *>, callback: Callback)
 
     fun uploadLogFile(callback: Callback)
+
+    fun setLocalAccessPoint(params: Map<String, *>, callback: Callback)
+
+    fun enableVirtualBackground(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcUserInfoInterface {
@@ -242,6 +246,10 @@ class IRtcEngine {
     fun updateChannelMediaRelay(params: Map<String, *>, callback: Callback)
 
     fun stopChannelMediaRelay(callback: Callback)
+
+    fun pauseAllChannelMediaRelay(callback: Callback)
+
+    fun resumeAllChannelMediaRelay(callback: Callback)
   }
 
   interface RtcAudioRouteInterface {
@@ -517,6 +525,32 @@ class RtcEngineManager(
 
   override fun uploadLogFile(callback: Callback) {
     callback.resolve(engine) { it.uploadLogFile() }
+  }
+
+  override fun setLocalAccessPoint(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.setLocalAccessPoint(
+        arrayListOf<String>().apply {
+          (params["ips"] as? List<*>)?.let { list ->
+            list.forEach { item ->
+              (item as? String)?.let {
+                add(it)
+              }
+            }
+          }
+        },
+        params["domain"] as String
+      )
+    )
+  }
+
+  override fun enableVirtualBackground(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.enableVirtualBackground(
+        params["enabled"] as Boolean,
+        mapToVirtualBackgroundSource(params["backgroundSource"] as Map<*, *>)
+      )
+    )
   }
 
   override fun registerLocalUserAccount(params: Map<String, *>, callback: Callback) {
@@ -996,6 +1030,16 @@ class RtcEngineManager(
 
   override fun stopChannelMediaRelay(callback: Callback) {
     callback.code(engine?.stopChannelMediaRelay())
+  }
+
+  override fun pauseAllChannelMediaRelay(callback: Callback) {
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(engine?.pauseAllChannelMediaRelay())
+  }
+
+  override fun resumeAllChannelMediaRelay(callback: Callback) {
+    callback.code(-Constants.ERR_NOT_SUPPORTED)
+//    callback.code(engine?.resumeAllChannelMediaRelay())
   }
 
   override fun setDefaultAudioRoutetoSpeakerphone(params: Map<String, *>, callback: Callback) {

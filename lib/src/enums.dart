@@ -111,7 +111,7 @@ enum AudioLocalError {
   @JsonValue(5)
   EncodeFailure,
 
-  /// TODO(doc)
+  /// The local audio capturing is interrupted by the system call.
   @JsonValue(8)
   Interrupted,
 }
@@ -249,7 +249,7 @@ enum AudioOutputRouting {
 enum AudioProfile {
   /// Default audio profile.
   /// - In the [ChannelProfile.Communication] profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 64 Kbps.
+  /// - In the [ChannelProfile.LiveBroadcasting] profile: A sample rate of 48 KHz, audio encoding, mono, and a bitrate of up to 64 Kbps.
   @JsonValue(0)
   Default,
 
@@ -725,6 +725,22 @@ enum ChannelMediaRelayEvent {
   /// The video profile is sent to the server.
   @JsonValue(11)
   VideoProfileUpdate,
+
+  /// @nodoc
+  @JsonValue(12)
+  PauseSendPacketToDestChannelSuccess,
+
+  /// @nodoc
+  @JsonValue(13)
+  PauseSendPacketToDestChannelFailed,
+
+  /// @nodoc
+  @JsonValue(14)
+  ResumeSendPacketToDestChannelSuccess,
+
+  /// @nodoc
+  @JsonValue(15)
+  ResumeSendPacketToDestChannelFailed,
 }
 
 /// The state code in channel media relay state.
@@ -748,7 +764,7 @@ enum ChannelMediaRelayState {
 
 /// Channel profile.
 enum ChannelProfile {
-  /// (Default) The Communication profile.
+  /// The Communication profile.
   ///
   /// Use this profile in one-on-one calls or group calls, where all users can talk freely.
   @JsonValue(0)
@@ -804,7 +820,7 @@ enum ConnectionChangedReason {
   @JsonValue(5)
   LeaveChannel,
 
-  /// The specified App ID is invalid. Try to rejoin the channel with a valid App ID.
+  /// The specified App ID or Token is invalid. Try to rejoin the channel with a valid App ID or Token.
   @JsonValue(6)
   InvalidAppId,
 
@@ -888,7 +904,8 @@ enum DegradationPreference {
   /// (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
   ///
   /// **Note**
-  /// - In the `COMMUNICATION` channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
+  ///
+  /// In the `COMMUNICATION` channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(0)
   MaintainQuality,
 
@@ -899,7 +916,8 @@ enum DegradationPreference {
   /// Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. `Balenced` has a lower reduction than `MaintainQuality` and `MaintainFramerate`, and this preference is suitable for scenarios where both smoothness and video quality are a priority.
   ///
   /// **Note**
-  /// - the resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
+  ///
+  /// The resolution of the video sent may change, so remote users need to handle this issue. See [RtcEngineEventHandler.videoSizeChanged].
   @JsonValue(2)
   MaintainBalanced
 }
@@ -923,7 +941,7 @@ enum EncryptionMode {
   @JsonValue(3)
   AES256XTS,
 
-  /// @nodoc 128-bit SM4 encryption, ECB mode.
+  /// 128-bit SM4 encryption, ECB mode.
   @JsonValue(4)
   SM4128ECB,
 
@@ -935,11 +953,13 @@ enum EncryptionMode {
   @JsonValue(6)
   AES256GCM,
 
-  /// TODO(doc)
+  /// (Default) 128-bit AES encryption, GCM mode.
+  /// Compared to AES128GCM encryption mode, AES128GCM2 encryption mode is more secure and requires you to set the salt (encryptionKdfSalt).
   @JsonValue(7)
   AES128GCM2,
 
-  /// TODO(doc)
+  /// 256-bit AES encryption, GCM mode.
+  /// Compared to AES256GCM encryption mode, AES256GCM2 encryption mode is more secure and requires you to set the salt (encryptionKdfSalt).
   @JsonValue(8)
   AES256GCM2,
 }
@@ -1565,7 +1585,7 @@ enum RtmpStreamingErrorCode {
   @JsonValue(10)
   FormatNotSupported,
 
-  /// TODO(doc)
+  /// The streaming has been stopped normally. After you call `removePublishStreamUrl` to stop streaming, the SDK returns this value.
   @JsonValue(100)
   UnPublishOK,
 }
@@ -2079,7 +2099,7 @@ enum StreamPublishState {
   Idle,
 
   /// Fails to publish the local stream. Possible reasons:
-  /// - The local user calls [RtcEngine.muteLocalAudioStream] (`true`) or [muteLocalVideoStream] (`true`) to stop sending local streams.
+  /// - The local user calls [RtcEngine.muteLocalAudioStream] (`true`) or [RtcEngine.muteLocalVideoStream] (`true`) to stop sending local streams.
   /// - The local user calls [RtcEngine.disableAudio] or [RtcEngine.disableVideo] to disable the entire audio or video module.
   /// - The local user calls [RtcEngine.enableLocalAudio] (`false`) or [RtcEngine.enableLocalVideo] (`false`) to disable the local audio sampling or video capturing.
   /// - The role of the local user is `Audience`.
@@ -2128,7 +2148,7 @@ enum RtmpStreamingEvent {
   @JsonValue(1)
   FailedLoadImage,
 
-  /// TODO(doc)
+  /// The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
   @JsonValue(2)
   UrlAlreadyInUse,
 }
@@ -2450,14 +2470,19 @@ enum SuperResolutionStateReason {
   DeviceNotSupported,
 }
 
-/// @nodoc
+/// The reason for the upload failure.
+///
+/// @since v3.3.0.
 enum UploadErrorReason {
+  /// 0: The log file is successfully uploaded.
   @JsonValue(0)
   Success,
 
+  /// 1: Network error. Check the network connection and call [`uploadLogFile`]{@link uploadLogFile} again to upload the log file.
   @JsonValue(1)
   NetError,
 
+  /// 2: An error occurs in the Agora server. Try uploading the log files later.
   @JsonValue(2)
   ServerError,
 }
@@ -2472,7 +2497,7 @@ enum CloudProxyType {
   @JsonValue(1)
   UDP,
 
-  /// @nodoc The cloud proxy for the TCP protocol.
+  /// The cloud proxy for the TCP protocol.
   @JsonValue(2)
   TCP,
 }
@@ -2532,4 +2557,34 @@ enum VoiceConversionPreset {
   /// A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
   @JsonValue(50398208)
   Bass,
+}
+
+/// The type of the custom background image.
+enum VirtualBackgroundSourceType {
+  /// (Default) The background image is a solid color.
+  @JsonValue(1)
+  Color,
+
+  /// The background image is a file in PNG or JPG format.
+  @JsonValue(2)
+  Img,
+}
+
+/// The reason why the virtual background is not successfully enabled or the message that confirms success:
+enum VirtualBackgroundSourceStateReason {
+  /// The virtual background is successfully enabled.
+  @JsonValue(0)
+  Success,
+
+  /// The custom background image does not exist. Please check the value of source in VirtualBackgroundSource.
+  @JsonValue(1)
+  ImageNotExist,
+
+  /// The color format of the custom background image is invalid. Please check the value of color in VirtualBackgroundSource.
+  @JsonValue(2)
+  ColorFormatNotSupported,
+
+  /// The device does not support using the virtual background.
+  @JsonValue(3)
+  DeviceNotSupported,
 }
