@@ -988,6 +988,7 @@ class RtcEngineEventHandler {
   ///
   /// The `StreamSubscribeStateCallback` typedef includes the following parameters:
   /// - [String] `channel`: The channel name.
+  /// - [int] `uid`: The ID of the user.
   /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
@@ -999,6 +1000,7 @@ class RtcEngineEventHandler {
   ///
   /// The `StreamSubscribeStateCallback` typedef includes the following parameters:
   /// - [String] `channel`: The channel name.
+  /// - [int] `uid`: The ID of the user.
   /// - [StreamSubscribeState] `oldState`: The previous publishing state. See [StreamPublishState].
   /// - [StreamSubscribeState] `newState`: The current publishing state. See [StreamPublishState].
   /// - [int] `elapseSinceLastState`: The time elapsed (ms) from the previous state to the current state.
