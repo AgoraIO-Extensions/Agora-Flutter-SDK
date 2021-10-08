@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/create_stream_data.da
 import 'package:agora_rtc_engine_example/examples/advanced/live_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/media_channel_relay.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/multi_channel.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/raw_data.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/voice_change.dart';
 
 /// Data source for advanced examples
@@ -18,4 +19,5 @@ final Advanced = [
     'widget': MediaChannelRelay(),
   },
   {'name': 'VoiceChange', 'widget': VoiceChange()},
+  {'name': 'RawData', 'widget': RawData()},
 ];
