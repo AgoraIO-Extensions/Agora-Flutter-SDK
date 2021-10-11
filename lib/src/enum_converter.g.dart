@@ -1684,3 +1684,41 @@ const _$VoiceConversionPresetEnumMap = {
   VoiceConversionPreset.Solid: 50397952,
   VoiceConversionPreset.Bass: 50398208,
 };
+
+ContentInspectTypeConverter _$ContentInspectTypeConverterFromJson(
+    Map<String, dynamic> json) {
+  return ContentInspectTypeConverter(
+    _$enumDecode(_$ContentInspectTypeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$ContentInspectTypeConverterToJson(
+        ContentInspectTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$ContentInspectTypeEnumMap[instance.e],
+    };
+
+const _$ContentInspectTypeEnumMap = {
+  ContentInspectType.Invalid: 0,
+  ContentInspectType.Moderation: 1,
+  ContentInspectType.Supervise: 2,
+};
+
+ContentInspectResultConverter _$ContentInspectResultConverterFromJson(
+    Map<String, dynamic> json) {
+  return ContentInspectResultConverter(
+    _$enumDecode(_$ContentInspectResultEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$ContentInspectResultConverterToJson(
+        ContentInspectResultConverter instance) =>
+    <String, dynamic>{
+      'e': _$ContentInspectResultEnumMap[instance.e],
+    };
+
+const _$ContentInspectResultEnumMap = {
+  ContentInspectResult.Neutral: 1,
+  ContentInspectResult.Sexy: 2,
+  ContentInspectResult.Porn: 3,
+};

@@ -360,7 +360,7 @@ func mapToEncryptionConfig(_ map: [String: Any]) -> AgoraEncryptionConfig {
         var encryptionKdfSalt: [UInt8] = []
         for i in list.indices {
             if let item = list[i] as? NSNumber {
-                encryptionKdfSalt[i] = item.uint8Value
+                encryptionKdfSalt.append(item.uint8Value)
             }
         }
         config.encryptionKdfSalt = Data(bytes: encryptionKdfSalt)
@@ -413,6 +413,36 @@ func mapToDataStreamConfig(_ map: [String: Any]) -> AgoraDataStreamConfig {
     }
     if let ordered = map["ordered"] as? Bool {
         config.ordered = ordered
+    }
+    return config
+}
+
+func mapToContentInspectModule(_ map: [String: Any]) -> AgoraContentInspectModule {
+    let module = AgoraContentInspectModule()
+    if let type = map["type"] as? NSNumber {
+        if let type = AgoraContentInspectType(rawValue: type.intValue) {
+            module.type = type
+        }
+    }
+    if let frequency = map["frequency"] as? NSNumber {
+        module.frequency = frequency.intValue
+    }
+    return module
+}
+
+func mapToContentInspectConfig(_ map: [String: Any]) -> AgoraContentInspectConfig {
+    let config = AgoraContentInspectConfig()
+    if let extraInfo = map["extraInfo"] as? String {
+        config.extraInfo = extraInfo
+    }
+    if let list = map["modules"] as? [Any] {
+        var modules: [AgoraContentInspectModule] = []
+        for i in list.indices {
+            if let item = list[i] as? [String: Any] {
+                modules.append(mapToContentInspectModule(item))
+            }
+        }
+        config.modules = modules
     }
     return config
 }

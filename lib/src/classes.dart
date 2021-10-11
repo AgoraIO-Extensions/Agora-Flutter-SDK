@@ -1595,3 +1595,37 @@ class AudioRecordingConfiguration {
   /// @nodoc
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }
+
+@JsonSerializable(explicitToJson: true)
+class ContentInspectModule {
+  ContentInspectType? type;
+
+  int? frequency;
+
+  /// Constructs a [ContentInspectModule]
+  ContentInspectModule({this.type, this.frequency});
+
+  /// @nodoc
+  factory ContentInspectModule.fromJson(Map<String, dynamic> json) =>
+      _$ContentInspectModuleFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class ContentInspectConfig {
+  String? extraInfo;
+
+  List<ContentInspectModule>? modules;
+
+  /// Constructs a [ContentInspectConfig]
+  ContentInspectConfig({this.extraInfo, this.modules});
+
+  /// @nodoc
+  factory ContentInspectConfig.fromJson(Map<String, dynamic> json) =>
+      _$ContentInspectConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
+}

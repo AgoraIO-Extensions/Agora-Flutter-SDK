@@ -1148,3 +1148,39 @@ const _$AudioRecordingPositionEnumMap = {
   AudioRecordingPosition.PositionRecording: 1,
   AudioRecordingPosition.PositionMixedPlayback: 2,
 };
+
+ContentInspectModule _$ContentInspectModuleFromJson(Map<String, dynamic> json) {
+  return ContentInspectModule(
+    type: _$enumDecodeNullable(_$ContentInspectTypeEnumMap, json['type']),
+    frequency: json['frequency'] as int?,
+  );
+}
+
+Map<String, dynamic> _$ContentInspectModuleToJson(
+        ContentInspectModule instance) =>
+    <String, dynamic>{
+      'type': _$ContentInspectTypeEnumMap[instance.type],
+      'frequency': instance.frequency,
+    };
+
+const _$ContentInspectTypeEnumMap = {
+  ContentInspectType.Invalid: 0,
+  ContentInspectType.Moderation: 1,
+  ContentInspectType.Supervise: 2,
+};
+
+ContentInspectConfig _$ContentInspectConfigFromJson(Map<String, dynamic> json) {
+  return ContentInspectConfig(
+    extraInfo: json['extraInfo'] as String?,
+    modules: (json['modules'] as List<dynamic>?)
+        ?.map((e) => ContentInspectModule.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
+}
+
+Map<String, dynamic> _$ContentInspectConfigToJson(
+        ContentInspectConfig instance) =>
+    <String, dynamic>{
+      'extraInfo': instance.extraInfo,
+      'modules': instance.modules?.map((e) => e.toJson()).toList(),
+    };

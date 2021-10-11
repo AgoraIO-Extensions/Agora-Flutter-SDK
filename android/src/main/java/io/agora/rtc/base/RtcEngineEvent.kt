@@ -86,6 +86,8 @@ class RtcEngineEvents {
     const val RtmpStreamingEvent = "RtmpStreamingEvent"
     const val UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     const val UploadLogResult = "UploadLogResult"
+    const val ContentInspectResult = "ContentInspectResult"
+    const val SnapshotTaken = "SnapshotTaken"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -678,5 +680,20 @@ class RtcEngineEventHandler(
     @Annotations.AgoraUploadErrorReason reason: Int
   ) {
     callback(RtcEngineEvents.UploadLogResult, requestId, success, reason)
+  }
+
+  override fun onContentInspectResult(result: Int) {
+    callback(RtcEngineEvents.ContentInspectResult, result)
+  }
+
+  override fun onSnapshotTaken(
+    channel: String?,
+    uid: Int,
+    filePath: String?,
+    width: Int,
+    height: Int,
+    errCode: Int
+  ) {
+    callback(RtcEngineEvents.SnapshotTaken, channel, uid, filePath, width, height, errCode)
   }
 }

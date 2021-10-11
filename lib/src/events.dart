@@ -151,6 +151,12 @@ typedef UserSuperResolutionEnabledCallback = void Function(
 // ignore: public_member_api_docs
 typedef UploadLogResultCallback = void Function(
     String requestId, bool success, UploadErrorReason reason);
+// ignore: public_member_api_docs
+typedef ContentInspectResultCallback = void Function(
+    ContentInspectResult result);
+// ignore: public_member_api_docs
+typedef SnapshotTakenCallback = void Function(String channel, int uid,
+    String filePath, int width, int height, int errCode);
 
 /// The SDK uses the [RtcEngineEventHandler] class to send callbacks to the application, and the application inherits the methods of this class to retrieve these callbacks.
 ///
@@ -1007,11 +1013,17 @@ class RtcEngineEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback? rtmpStreamingEvent;
 
-  ///  @nodoc
+  /// @nodoc
   UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
-  ///  @nodoc
+  /// @nodoc
   UploadLogResultCallback? uploadLogResult;
+
+  /// @nodoc
+  ContentInspectResultCallback? contentInspectResult;
+
+  /// @nodoc
+  SnapshotTakenCallback? snapshotTaken;
 
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler({
@@ -1412,6 +1424,14 @@ class RtcEngineEventHandler {
         uploadLogResult?.call(
             data[0], data[1], UploadErrorReasonConverter.fromValue(data[2]).e);
         break;
+      case 'ContentInspectResult':
+        contentInspectResult
+            ?.call(ContentInspectResultConverter.fromValue(data[0]).e);
+        break;
+      case 'SnapshotTaken':
+        snapshotTaken?.call(
+            data[0], data[1], data[2], data[3], data[4], data[5]);
+        break;
     }
   }
 }
@@ -1779,7 +1799,7 @@ class RtcChannelEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback? rtmpStreamingEvent;
 
-  ///  @nodoc
+  /// @nodoc
   UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]

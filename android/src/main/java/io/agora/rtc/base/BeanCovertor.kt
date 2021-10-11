@@ -11,6 +11,7 @@ import io.agora.rtc.live.LiveTranscoding
 import io.agora.rtc.live.LiveTranscoding.TranscodingUser
 import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.rtc.models.ClientRoleOptions
+import io.agora.rtc.models.ContentInspectConfig
 import io.agora.rtc.models.DataStreamConfig
 import io.agora.rtc.video.*
 
@@ -253,5 +254,26 @@ fun mapToDataStreamConfig(map: Map<*, *>): DataStreamConfig {
   return DataStreamConfig().apply {
     (map["syncWithAudio"] as? Boolean)?.let { syncWithAudio = it }
     (map["ordered"] as? Boolean)?.let { ordered = it }
+  }
+}
+
+fun mapToContentInspectModule(map: Map<*, *>): ContentInspectConfig.ContentInspectModule {
+  return ContentInspectConfig.ContentInspectModule().apply {
+    (map["type"] as? Number)?.let { type = it.toInt() }
+    (map["frequency"] as? Number)?.let { frequency = it.toInt() }
+  }
+}
+
+fun mapToContentInspectConfig(map: Map<*, *>): ContentInspectConfig {
+  return ContentInspectConfig().apply {
+    (map["extraInfo"] as? String)?.let { extraInfo = it }
+    (map["modules"] as? List<*>)?.let { list ->
+      for (i in list.indices) {
+        (list[i] as? Map<*, *>)?.let {
+          modules[i] = mapToContentInspectModule(it)
+        }
+      }
+      moduleCount = list.size
+    }
   }
 }

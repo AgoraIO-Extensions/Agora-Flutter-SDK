@@ -2551,3 +2551,29 @@ enum VoiceConversionPreset {
   @JsonValue(50398208)
   Bass,
 }
+
+/// Content inspect type. */
+enum ContentInspectType {
+  /// default type is invalid
+  @JsonValue(0)
+  Invalid,
+
+  /// content inspect type moderation
+  @JsonValue(1)
+  Moderation,
+
+  /// content inspect type supervise
+  @JsonValue(2)
+  Supervise,
+}
+
+enum ContentInspectResult {
+  @JsonValue(1)
+  Neutral,
+// background image does not exist
+  @JsonValue(2)
+  Sexy,
+// color format is not supported
+  @JsonValue(3)
+  Porn,
+}

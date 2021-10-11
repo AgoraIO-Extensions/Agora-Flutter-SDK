@@ -89,6 +89,8 @@ class RtcEngineEvents {
     static let RtmpStreamingEvent = "RtmpStreamingEvent"
     static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     static let UploadLogResult = "UploadLogResult"
+    static let ContentInspectResult = "ContentInspectResult"
+    static let SnapshotTaken = "SnapshotTaken"
 
     static func toMap() -> [String: String] {
         return [
@@ -171,6 +173,8 @@ class RtcEngineEvents {
             "RtmpStreamingEvent": RtmpStreamingEvent,
             "UserSuperResolutionEnabled": UserSuperResolutionEnabled,
             "UploadLogResult": UploadLogResult,
+            "ContentInspectResult": ContentInspectResult,
+            "SnapshotTaken": SnapshotTaken,
         ]
     }
 }
@@ -508,5 +512,13 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
 
     func rtcEngine(_: AgoraRtcEngineKit, uploadLogResultRequestId requestId: String, success: Bool, reason: AgoraUploadErrorReason) {
         callback(RtcEngineEvents.UploadLogResult, requestId, success, reason.rawValue)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, contentInspectResult result: AgoraContentInspectResult) {
+        callback(RtcEngineEvents.ContentInspectResult, result.rawValue)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, snapshotTaken channel: String, uid: UInt, filePath: String, width: Int, height: Int, errCode: Int) {
+        callback(RtcEngineEvents.SnapshotTaken, channel, uid, filePath, width, height, errCode)
     }
 }

@@ -911,3 +911,29 @@ class VoiceConversionPresetConverter
     return super.toValue(_$VoiceConversionPresetEnumMap);
   }
 }
+
+@JsonSerializable()
+class ContentInspectTypeConverter
+    extends EnumConverter<ContentInspectType, int> {
+  ContentInspectTypeConverter(ContentInspectType e) : super(e);
+
+  ContentInspectTypeConverter.fromValue(int value)
+      : super.fromValue(_$ContentInspectTypeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$ContentInspectTypeEnumMap);
+  }
+}
+
+@JsonSerializable()
+class ContentInspectResultConverter
+    extends EnumConverter<ContentInspectResult, int> {
+  ContentInspectResultConverter(ContentInspectResult e) : super(e);
+
+  ContentInspectResultConverter.fromValue(int value)
+      : super.fromValue(_$ContentInspectResultEnumMap, value);
+
+  int value() {
+    return super.toValue(_$ContentInspectResultEnumMap);
+  }
+}

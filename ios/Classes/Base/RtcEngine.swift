@@ -84,6 +84,10 @@ protocol RtcEngineInterface:
     func uploadLogFile(_ callback: Callback)
 
     func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback)
+    
+    func takeSnapshot(_ params: NSDictionary, _ callback: Callback)
+    
+    func enableContentInspect(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -1153,5 +1157,17 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func resumeAllChannelMediaRelay(_ callback: Callback) {
         callback.code(engine?.resumeAllChannelMediaRelay())
+    }
+    
+    @objc func takeSnapshot(_ params: NSDictionary, _ callback: Callback) {
+        var code: Int32?
+        if let ret = engine?.takeSnapshot(params["channel"] as! String, uid: (params["uid"] as! NSNumber).intValue, filePath: params["filePath"] as! String) {
+            code = Int32(ret)
+        }
+        callback.code(code)
+    }
+    
+    @objc func enableContentInspect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableContentInspect(params["enabled"] as! Bool, config: mapToContentInspectConfig(params["config"] as! Dictionary)))
     }
 }

@@ -66,6 +66,10 @@ class IRtcEngine {
     fun uploadLogFile(callback: Callback)
 
     fun setLocalAccessPoint(params: Map<String, *>, callback: Callback)
+
+    fun takeSnapshot(params: Map<String, *>, callback: Callback)
+
+    fun enableContentInspect(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcUserInfoInterface {
@@ -389,7 +393,7 @@ class RtcEngineManager(
         emit(methodName, data)
       }
     })
-    callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
+    callback.code((engine as? RtcEngineEx)?.setAppType((params["appType"] as Number).toInt()))
   }
 
   override fun destroy(callback: Callback) {
@@ -538,6 +542,25 @@ class RtcEngineManager(
           }
         },
         params["domain"] as String
+      )
+    )
+  }
+
+  override fun takeSnapshot(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.takeSnapshot(
+        params["channel"] as String,
+        (params["uid"] as Number).toNativeUInt(),
+        params["filePath"] as String
+      )
+    )
+  }
+
+  override fun enableContentInspect(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.enableContentInspect(
+        params["enabled"] as Boolean,
+        mapToContentInspectConfig(params["config"] as Map<*, *>)
       )
     )
   }

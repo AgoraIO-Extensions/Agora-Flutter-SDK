@@ -1254,6 +1254,23 @@ class RtcEngine with RtcEngineInterface {
       'domain': domain,
     });
   }
+
+  @override
+  Future<void> enableContentInspect(bool enabled, ContentInspectConfig config) {
+    return _invokeMethod('enableContentInspect', {
+      'enabled': enabled,
+      'config': config.toJson(),
+    });
+  }
+
+  @override
+  Future<void> takeSnapshot(String channel, int uid, String filePath) {
+    return _invokeMethod('takeSnapshot', {
+      'channel': channel,
+      'uid': uid,
+      'filePath': filePath,
+    });
+  }
 }
 
 /// @nodoc
@@ -1543,11 +1560,17 @@ mixin RtcEngineInterface
   /// - When you use the cloud proxy for the UDP protocol, the services for pushing streams to CDN and co-hosting across channels are not available.
   Future<void> setCloudProxy(CloudProxyType proxyType);
 
-  ///  @nodoc
+  /// @nodoc
   Future<String?> uploadLogFile();
 
-  ///  @nodoc
+  /// @nodoc
   Future<void> setLocalAccessPoint(List<String> ips, String domain);
+
+  /// @nodoc
+  Future<void> enableContentInspect(bool enabled, ContentInspectConfig config);
+
+  /// @nodoc
+  Future<void> takeSnapshot(String channel, int uid, String filePath);
 }
 
 /// @nodoc
@@ -1944,7 +1967,7 @@ mixin RtcVideoInterface {
   /// **Parameter** [options] The image enhancement options. See [BeautyOptions].
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
-  ///  @nodoc
+  /// @nodoc
   Future<void> enableRemoteSuperResolution(int uid, bool enable);
 }
 
