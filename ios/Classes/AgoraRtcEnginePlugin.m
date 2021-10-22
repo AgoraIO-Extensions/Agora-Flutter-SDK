@@ -13,3 +13,20 @@
   [SwiftAgoraRtcEnginePlugin registerWithRegistrar:registrar];
 }
 @end
+
+//@implementation RtcEnginePluginRegistrant : NSObject
+//
+//+ (void)register:(NSObject<RtcEnginePlugin> *)plugin {
+////    RtcEngineRegistry *instance = [RtcEngineRegistry shared];
+////    [instance add:plugin];
+//    [[RtcEngineRegistry shared] add:plugin];
+////    [RtcEnginePluginRegistrantInternal register:plugin];
+//}
+//
+//+ (void)unregister:(NSObject<RtcEnginePlugin> *)plugin {
+////    RtcEngineRegistry *instance = [RtcEngineRegistry shared];
+////    [instance remove:plugin];
+//    [[RtcEngineRegistry shared] remove:plugin];
+////    [RtcEnginePluginRegistrantInternal unregister:plugin];
+//}
+//@end

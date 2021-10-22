@@ -1,11 +1,3 @@
-//
-//  RtcSurfaceView.swift
-//  RCTAgora
-//
-//  Created by LXH on 2020/4/15.
-//  Copyright © 2020 Syan. All rights reserved.
-//
-
 import AgoraRtcKit
 import Foundation
 import UIKit

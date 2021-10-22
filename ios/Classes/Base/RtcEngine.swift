@@ -388,15 +388,28 @@ protocol RtcEngineStreamMessageInterface {
     func sendStreamMessage(_ params: NSDictionary, _ callback: Callback)
 }
 
+internal class AgoraRtcEngineKitFactory {
+  func create(_ params: NSDictionary, _ delegate: RtcEngineEventHandler) -> AgoraRtcEngineKit? {
+    let engine = AgoraRtcEngineKit.sharedEngine(
+        with: mapToRtcEngineConfig(params["config"] as! [String: Any]),
+        delegate: delegate)
+
+    return engine
+  }
+}
+
 @objc
 class RtcEngineManager: NSObject, RtcEngineInterface {
     private var emitter: (_ methodName: String, _ data: [String: Any?]?) -> Void
+    private var agoraRtcEngineKitFactory: AgoraRtcEngineKitFactory
     private(set) var engine: AgoraRtcEngineKit?
     private var delegate: RtcEngineEventHandler?
     private var mediaObserver: MediaObserver?
 
-    init(_ emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void) {
+    init(_ emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void,
+         _ agoraRtcEngineKitFactory: AgoraRtcEngineKitFactory = AgoraRtcEngineKitFactory()) {
         self.emitter = emitter
+        self.agoraRtcEngineKitFactory = agoraRtcEngineKitFactory
     }
 
     func Release() {
@@ -410,13 +423,18 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         delegate = RtcEngineEventHandler { [weak self] in
             self?.emitter($0, $1)
         }
-        engine = AgoraRtcEngineKit.sharedEngine(with: mapToRtcEngineConfig(params["config"] as! [String: Any]), delegate: delegate)
-        callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: (params["appType"] as! NSNumber).uintValue)!))
+        engine = agoraRtcEngineKitFactory.create(params, delegate!)
+        callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: (params["appType"] as! NSNumber).uintValue)!)) {
+            RtcEngineRegistry.shared.onRtcEngineCreated(self.engine)
+            return $0
+        }
     }
 
     @objc func destroy(_ callback: Callback) {
         callback.resolve(engine) { [weak self] _ in
             self?.Release()
+            RtcEngineRegistry.shared.onRtcEngineDestroyed()
+            return Void.self
         }
     }
 

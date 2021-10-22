@@ -11,7 +11,7 @@ import AgoraRtcKit
 class ResultCallback: NSObject, Callback {
     private var result: FlutterResult?
 
-    init(_ result: FlutterResult?) {
+    init(_ result: FlutterResult? = nil) {
         self.result = result
     }
 

@@ -371,8 +371,20 @@ class IRtcEngine {
   }
 }
 
-class RtcEngineManager(
-  private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit
+open class RtcEngineFactory {
+  open fun create(params: Map<String, *>, rtcEngineEventHandler: RtcEngineEventHandler): RtcEngine? {
+    val engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
+      mContext = params["context"] as Context
+      mEventHandler = rtcEngineEventHandler
+    })
+
+    return engine
+  }
+}
+
+open class RtcEngineManager(
+  private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit,
+  private val rtcEngineFactory: RtcEngineFactory = RtcEngineFactory()
 ) : IRtcEngine.RtcEngineInterface {
   var engine: RtcEngine? = null
     private set
@@ -385,17 +397,20 @@ class RtcEngineManager(
   }
 
   override fun create(params: Map<String, *>, callback: Callback) {
-    engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
-      mContext = params["context"] as Context
-      mEventHandler = RtcEngineEventHandler { methodName, data ->
-        emit(methodName, data)
-      }
+    engine = rtcEngineFactory.create(params, RtcEngineEventHandler { methodName, data ->
+      emit(methodName, data)
     })
-    callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
+    callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt())) {
+      RtcEngineRegistry.instance.onRtcEngineCreated(engine)
+      it
+    }
   }
 
   override fun destroy(callback: Callback) {
-    callback.resolve(engine) { release() }
+    callback.resolve(engine) {
+      release()
+      RtcEngineRegistry.instance.onRtcEngineDestroyed()
+    }
   }
 
   override fun setChannelProfile(params: Map<String, *>, callback: Callback) {
