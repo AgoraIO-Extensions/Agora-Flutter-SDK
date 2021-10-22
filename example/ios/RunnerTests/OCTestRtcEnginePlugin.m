@@ -1,10 +1,3 @@
-//
-//  OCTestRtcEnginePlugin.m
-//  RunnerTests
-//
-//  Created by fenglang on 2021/10/22.
-//
-
 #import <Foundation/Foundation.h>
 #import "OCTestRtcEnginePlugin.h"
 #import "RtcEnginePluginRegistrant.h"
