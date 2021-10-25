@@ -29,7 +29,7 @@ class AgoraSurfaceViewFactory(
   }
 }
 
-class AgoraSurfaceView(
+internal class AgoraSurfaceView(
   context: Context,
   messenger: BinaryMessenger,
   viewId: Int,
