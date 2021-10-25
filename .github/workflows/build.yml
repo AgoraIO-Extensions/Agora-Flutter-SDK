@@ -46,5 +46,33 @@ jobs:
         with:
           flutter-version: '2.5.3'
       - run: flutter pub get
-      # - run: bundle check || bundle config set --local path 'vendor/bundle'
       - run: bash ci/run_ios_test.sh
+
+  build_android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.5.3'
+      - run: flutter pub get
+      - name: Run flutter build apk
+        run: flutter build apk
+        working-directory: example
+
+  build_ios:
+    name: Build iOS
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.5.3'
+      - run: flutter pub get
+      - name: Run flutter build ios --no-codesign
+        run: flutter build ios --no-codesign
+        working-directory: example
