@@ -6,6 +6,7 @@ import android.os.Looper
 import androidx.annotation.NonNull
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
+import io.agora.rtc.base.RtcEngineRegistry
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -27,7 +28,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private lateinit var eventChannel: EventChannel
 
   private var eventSink: EventChannel.EventSink? = null
-  private val manager = RtcEngineManager { methodName, data -> emit(methodName, data) }
+  private val manager = RtcEngineManager(emit = { methodName, data -> emit(methodName, data) })
   private val handler = Handler(Looper.getMainLooper())
   private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
 
