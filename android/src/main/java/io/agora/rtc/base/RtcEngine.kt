@@ -161,6 +161,8 @@ class IRtcEngine {
 
     fun getAudioMixingDuration(params: Map<String, *>, callback: Callback)
 
+    fun getAudioFileInfo(params: Map<String, *>, callback: Callback)
+
     fun getAudioMixingCurrentPosition(callback: Callback)
 
     fun setAudioMixingPosition(params: Map<String, *>, callback: Callback)
@@ -817,11 +819,14 @@ open class RtcEngineManager(
   }
 
   override fun getAudioMixingDuration(params: Map<String, *>, callback: Callback) {
-    (params["filePath"] as? String)?.let { file ->
-      callback.code(engine?.getAudioMixingDuration(file)) { it }
-      return@getAudioMixingDuration
-    }
     callback.code(engine?.audioMixingDuration) { it }
+  }
+
+  override fun getAudioFileInfo(params: Map<String, *>, callback: Callback) {
+    (params["filePath"] as? String)?.let { file ->
+      callback.code(engine?.getAudioFileInfo(file)) { it }
+      return@getAudioFileInfo
+    }
   }
 
   override fun getAudioMixingCurrentPosition(callback: Callback) {
