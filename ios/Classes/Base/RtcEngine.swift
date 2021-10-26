@@ -178,6 +178,8 @@ protocol RtcEngineAudioMixingInterface {
     func getAudioMixingPublishVolume(_ callback: Callback)
 
     func getAudioMixingDuration(_ params: NSDictionary, _ callback: Callback)
+    
+    func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback)
 
     func getAudioMixingCurrentPosition(_ callback: Callback)
 
@@ -707,14 +709,17 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getAudioMixingDuration(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.getAudioMixingDuration()) {
+            $0
+        }
+    }
+    
+    @objc func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback) {
         if let filePath = (params["filePath"] as? String) {
-            callback.code(engine?.getAudioMixingDuration(filePath)) {
+            callback.code(engine?.getAudioFileInfo(filePath)) {
                 $0
             }
             return
-        }
-        callback.code(engine?.getAudioMixingDuration()) {
-            $0
         }
     }
 
