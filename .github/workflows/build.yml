@@ -60,6 +60,7 @@ jobs:
         with:
           flutter-version: '2.5.3'
       - run: flutter pub get
+      - run: unset ANDROID_NDK_HOME
       - name: Run flutter build apk
         run: flutter build apk --debug
         working-directory: example
