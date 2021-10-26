@@ -56,13 +56,15 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '11'
+      - uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r20b
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.5.3'
       - run: flutter pub get
-      - run: unset ANDROID_NDK_HOME
       - name: Run flutter build apk
-        run: flutter build apk --debug
+        run: flutter build apk
         working-directory: example
 
   build_ios:
