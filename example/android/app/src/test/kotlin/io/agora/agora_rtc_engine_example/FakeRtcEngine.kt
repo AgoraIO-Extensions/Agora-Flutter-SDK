@@ -326,6 +326,22 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
+  override fun selectAudioTrack(audioIndex: Int): Int {
+    return 0
+  }
+
+  override fun getAudioTrackCount(): Int {
+    return 0
+  }
+
+  override fun setAudioMixingDualMonoMode(mode: Int): Int {
+    return 0
+  }
+
+  override fun setAudioMixingPlaybackSpeed(speed: Int): Int {
+    return 0
+  }
+
   override fun stopAudioMixing(): Int {
     return 0
   }
@@ -362,10 +378,6 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun getAudioMixingDuration(filePath: String?): Int {
-    return 0
-  }
-
   override fun getAudioMixingCurrentPosition(): Int {
     return 0
   }
@@ -380,6 +392,10 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
 
   override fun getAudioEffectManager(): IAudioEffectManager {
     return this
+  }
+
+  override fun getAudioFileInfo(filePath: String?): Int {
+    return 0
   }
 
   override fun startAudioRecording(filePath: String?, quality: Int): Int {
@@ -451,6 +467,14 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
   }
 
   override fun pushExternalAudioFrame(data: ByteArray?, timestamp: Long): Int {
+    return 0
+  }
+
+  override fun pushExternalAudioFrame(data: ByteArray?, timestamp: Long, sampleRate: Int, channels: Int, bytesPerSample: Int, sourcePos: Int): Int {
+    return 0
+  }
+
+  override fun setExternalAudioSourceVolume(sourcePos: Int, volume: Int): Int {
     return 0
   }
 
@@ -703,6 +727,14 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
   }
 
   override fun updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration?): Int {
+    return 0
+  }
+
+  override fun pauseAllChannelMediaRelay(): Int {
+    return 0
+  }
+
+  override fun resumeAllChannelMediaRelay(): Int {
     return 0
   }
 
@@ -1021,6 +1053,14 @@ class FakeRtcChannel : RtcChannel() {
   }
 
   override fun updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration?): Int {
+    return 0
+  }
+
+  override fun pauseAllChannelMediaRelay(): Int {
+    return 0
+  }
+
+  override fun resumeAllChannelMediaRelay(): Int {
     return 0
   }
 
