@@ -537,6 +537,13 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  Future<int?> getAudioFileInfo(String filePath) {
+    return _invokeMethod('getAudioFileInfo', {
+      'filePath': filePath,
+    });
+  }
+
+  @override
   Future<int?> getAudioMixingPlayoutVolume() {
     return _invokeMethod('getAudioMixingPlayoutVolume');
   }
@@ -2128,7 +2135,35 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The total duration (ms) of the specified music file, if this method call succeeds.
   /// - Error code, if this method call fails.
+  @Deprecated(
+      'This method is deprecated as of v4.1.0. Use getAudioFileInfo instead.')
   Future<int?> getAudioMixingDuration([String? filePath]);
+
+  /// Gets the information of a specified audio file.
+  ///
+  /// **Since** v3.5.1
+  ///
+  /// After calling this method successfully, the SDK triggers the [onRequestAudioFileInfo](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler.html#a3e1191735cd197815f4001b89825220a)
+  /// callback to report the information of an audio file, such as audio duration.
+  /// You can call this method multiple times to get the information of multiple audio files.
+  ///
+  /// > **Note**
+  /// > * Call this method after joining a channel.
+  /// > * For the audio file formats supported by this method, see
+  /// [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+  ///
+  /// **Parameters**
+  /// - filePath	The file path, including the filename extensions. To access an
+  /// online file, Agora supports using a URL address; to access a local file,
+  /// Agora supports using a URI address, an absolute path, or a path that starts
+  /// with `/assets/`. You might encounter permission issues if you use an absolute
+  /// path to access a local file, so Agora recommends using a URI address instead.
+  /// For example: `content://com.android.providers.media.documents/document/audio%3A14441`.
+  ///
+  /// **Returns**
+  /// - 0: Success.
+  /// - < 0: Failure.
+  Future<int?> getAudioFileInfo(String filePath);
 
   /// Gets the playback position of the audio file.
   ///
