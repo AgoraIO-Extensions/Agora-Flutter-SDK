@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine_example/examples/advanced/create_stream_data.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/custom_audio/custom_audio_source.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/live_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/media_channel_relay.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/multi_channel.dart';
@@ -18,4 +19,5 @@ final Advanced = [
     'widget': MediaChannelRelay(),
   },
   {'name': 'VoiceChange', 'widget': VoiceChange()},
+  {'name': 'CustomAudioSource', 'widget': CustomAudioSource()},
 ];
