@@ -61,7 +61,7 @@ jobs:
           flutter-version: '2.5.3'
       - run: flutter pub get
       - name: Run flutter build apk
-        run: flutter build apk
+        run: flutter build apk --debug
         working-directory: example
 
   build_ios:
