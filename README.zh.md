@@ -51,6 +51,14 @@ Agora 视频 SDK 需要 `摄像头` 和 `麦克风` 权限来开始视频通话�
 
 您的程序可以在后台运行音视频通话，前提是您开启了后台模式。在 Xcode 中选择您的 app target，点击 **Capabilities** 标签，开启 **Background Modes**，并且检查 **Audio、AirPlay 和 Picture in Picture**。
 
+## 在Android/iOS中与[RtcEngine](https://docs.agora.io/cn/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html)/[AgoraRtcEngineKit](https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html)交互
+
+由于性能原因，`agora_rtc_engine`暂时没有实现agora native(Android/iOS) sdk的所有功能，如[自定义音频采集和渲染](hhttps://docs.agora.io/cn/Video/custom_audio_android?platform=Android)，[自定义视频采集和渲染](https://docs.agora.io/cn/Video/custom_video_android?platform=Android)，[原始音频数据](https://docs.agora.io/cn/Video/raw_data_audio_android?platform=Android)等功能，`agora_rtc_engine`提供[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/android/src/main/java/io/agora/rtc/base/RtcEnginePlugin.kt)/[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/ios/Classes/Base/RtcEnginePlugin.h)，允许你在Android/iOS代码中与Flutter端创建的[RtcEngine](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/lib/src/rtc_engine.dart)交互，你可以继承[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/android/src/main/java/io/agora/rtc/base/RtcEnginePlugin.kt)/[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/ios/Classes/Base/RtcEnginePlugin.h)实现自己的插件，在`onRtcEngineCreated`回调中获取[RtcEngine](https://docs.agora.io/cn/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html)/[AgoraRtcEngineKit](https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html)，请注意不要在Android/iOS中调用[RtcEngine.destroy](https://docs.agora.io/cn/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#afb808cdc9025a77af7dd2bce98311bfe)/[AgoraRtcEngineKit.destroy](https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/destroy)方法，因为这会影响Flutter端的[RtcEngine](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/lib/src/rtc_engine.dart)功能。如何使用`RtcEnginePlugin`，请查看我们提供的音频自采集demo:
+
+Android：[CustomAudioPlugin.kt](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/android/app/src/main/kotlin/io/agora/agora_rtc_engine_example/custom_audio_source/CustomAudioPlugin.kt)
+
+iOS：[CustmoAudioSourcePlugin.swift](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/ios/Runner/CustomAudioSource/CustmoAudioSourcePlugin.swift)
+
 ## 常见问题
 
 ### iOS 无法显示视频（Android 是好的）
