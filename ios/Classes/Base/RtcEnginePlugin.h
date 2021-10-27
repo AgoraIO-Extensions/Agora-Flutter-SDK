@@ -13,8 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
  * This callback will be called when the `RtcEngine` is created by
  [RtcEngine.createWithContext](https://docs.agora.io/cn/Video/API%20Reference/flutter/agora_rtc_engine/RtcEngine/createWithContext.html)
  * function from flutter.
+
+ * NOTE that you should not call `AgoraRtcEngineKit.destroy`, because it will also destroy the `RtcEngine` 
+ * used by flutter side.
  *
- * @param rtcEngine The same [RtcEngine] used by flutter side
+ * @param rtcEngine The same `AgoraRtcEngineKit` used by flutter side
  */
 - (void)onRtcEngineCreated:(AgoraRtcEngineKit *_Nullable)rtcEngine;
 
