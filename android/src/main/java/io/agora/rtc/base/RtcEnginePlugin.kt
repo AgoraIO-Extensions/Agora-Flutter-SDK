@@ -12,6 +12,9 @@ interface RtcEnginePlugin {
    * This callback will be called when the [RtcEngine] is created by
    * [RtcEngine.createWithContext](https://docs.agora.io/cn/Video/API%20Reference/flutter/agora_rtc_engine/RtcEngine/createWithContext.html)
    * function from flutter.
+   *   
+   * NOTE that you should not call [RtcEngine.destroy], because it will also destroy the `RtcEngine` 
+   * used by flutter side.
    *
    * @param rtcEngine The same [RtcEngine] used by flutter side
    */
