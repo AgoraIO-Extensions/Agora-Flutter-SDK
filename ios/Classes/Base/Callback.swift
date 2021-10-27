@@ -25,11 +25,7 @@ extension Callback {
         }
 
         let res = runnable?(code)
-        if res is Void {
-            success(nil)
-        } else {
-            success(res)
-        }
+        success(res)
     }
 
     func resolve<T>(_ source: T?, _ runnable: (T) -> Any?) {
@@ -40,10 +36,6 @@ extension Callback {
         }
 
         let res = runnable(source)
-        if res is Void {
-            success(nil)
-        } else {
-            success(res)
-        }
+        success(res)
     }
 }
