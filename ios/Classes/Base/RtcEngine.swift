@@ -436,7 +436,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.resolve(engine) { [weak self] _ in
             self?.Release()
             RtcEngineRegistry.shared.onRtcEngineDestroyed()
-            return Void.self
+            return nil
         }
     }
 
