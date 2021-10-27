@@ -116,10 +116,10 @@ class _CustomAudioSourceState extends State<CustomAudioSource> {
     await _engine.joinChannel(config.token, config.channelId, null, 0, option);
   }
 
-  void _destroyEngine() {
-    _api.stopAudioRecord();
-    _engine.leaveChannel();
-    _engine.destroy();
+  void _destroyEngine() async {
+    await _api.stopAudioRecord();
+    await _engine.leaveChannel();
+    await _engine.destroy();
   }
 
   void _sourcePosChanged() {
