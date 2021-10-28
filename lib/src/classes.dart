@@ -1626,8 +1626,29 @@ class VirtualBackgroundSource {
   @JsonKey(includeIfNull: false)
   String? source;
 
+  /// The degree of blurring applied to the custom background image:
+  ///
+  /// * [VirtualBackgroundBlurDegree.Low]: The degree of blurring applied to the
+  /// custom background image is low. The user can almost see the background clearly.
+  /// * [VirtualBackgroundBlurDegree.Medium]: The degree of blurring applied to
+  /// the custom background image is medium. It is difficult for the user to
+  /// recognize details in the background.
+  /// * [VirtualBackgroundBlurDegree.High]: (Default) The degree of blurring applied
+  /// to the custom background image is high. The user can barely see any
+  /// distinguishing features in the background.
+  ///
+  /// **Note**: This parameter takes effect only when the type of the custom
+  /// background image is [VirtualBackgroundSourceType.Blur].
+  @JsonKey(name: 'blur_degree')
+  VirtualBackgroundBlurDegree blurDegree;
+
   /// Constructs a [VirtualBackgroundSource]
-  VirtualBackgroundSource({this.backgroundSourceType, this.color, this.source});
+  VirtualBackgroundSource({
+    this.backgroundSourceType,
+    this.color,
+    this.source,
+    this.blurDegree = VirtualBackgroundBlurDegree.High,
+  });
 
   /// @nodoc
   factory VirtualBackgroundSource.fromJson(Map<String, dynamic> json) =>
@@ -1635,4 +1656,25 @@ class VirtualBackgroundSource {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$VirtualBackgroundSourceToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioFileInfo {
+  AudioFileInfo({
+    required this.filePath,
+    required this.durationMs,
+  });
+
+  @JsonKey()
+  String filePath;
+
+  @JsonKey()
+  int durationMs;
+
+  /// @nodoc
+  factory AudioFileInfo.fromJson(Map<String, dynamic> json) =>
+      _$AudioFileInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$AudioFileInfoToJson(this);
 }

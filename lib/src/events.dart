@@ -1,6 +1,7 @@
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
+import 'rtc_engine.dart';
 
 // ignore: public_member_api_docs
 typedef EmptyCallback = void Function();
@@ -60,6 +61,16 @@ typedef RemoteAudioStateCallback = void Function(int uid,
 // ignore: public_member_api_docs
 typedef LocalAudioStateCallback = void Function(
     AudioLocalState state, AudioLocalError error);
+/// Reports the information of an audio file.
+/// 
+/// **Parameters**
+/// 
+/// * [info]	The information of an audio file. See AudioFileInfo.
+/// * [error]	The information acquisition state:
+///   - [AudioFileInfoError.Ok] : Successfully get the information of an audio file.
+///   - [AudioFileInfoError.Failure] : Fail to get the information of an audio file.
+typedef RequestAudioFileInfoCallback = void Function(
+    AudioFileInfo info, AudioFileInfoError error);
 // ignore: public_member_api_docs
 typedef FallbackCallback = void Function(bool isFallbackOrRecover);
 // ignore: public_member_api_docs
@@ -448,6 +459,12 @@ class RtcEngineEventHandler {
   /// - [AudioLocalState] `state`: State of the local audio.
   /// - [AudioLocalError] `error`: The error information of the local audio.
   LocalAudioStateCallback? localAudioStateChanged;
+
+  /// Reports the information of an audio file.
+  /// 
+  /// After successfully calling [RtcEngine.getAudioFileInfo], the SDK triggers this callback 
+  /// to report the information of the audio file, such as the file path and duration.
+  RequestAudioFileInfoCallback? requestAudioFileInfoCallback;
 
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
   ///

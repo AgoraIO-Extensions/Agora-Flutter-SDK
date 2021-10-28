@@ -33,6 +33,7 @@ class RtcEngineEvents {
     const val LocalVideoStateChanged = "LocalVideoStateChanged"
     const val RemoteAudioStateChanged = "RemoteAudioStateChanged"
     const val LocalAudioStateChanged = "LocalAudioStateChanged"
+    const val RequestAudioFileInfo = "RequestAudioFileInfo"
     const val LocalPublishFallbackToAudioOnly = "LocalPublishFallbackToAudioOnly"
     const val RemoteSubscribeFallbackToAudioOnly = "RemoteSubscribeFallbackToAudioOnly"
     const val AudioRouteChanged = "AudioRouteChanged"
@@ -116,6 +117,7 @@ class RtcEngineEvents {
         "LocalVideoStateChanged" to LocalVideoStateChanged,
         "RemoteAudioStateChanged" to RemoteAudioStateChanged,
         "LocalAudioStateChanged" to LocalAudioStateChanged,
+        "RequestAudioFileInfo" to RequestAudioFileInfo,
         "LocalPublishFallbackToAudioOnly" to LocalPublishFallbackToAudioOnly,
         "RemoteSubscribeFallbackToAudioOnly" to RemoteSubscribeFallbackToAudioOnly,
         "AudioRouteChanged" to AudioRouteChanged,
@@ -323,6 +325,10 @@ class RtcEngineEventHandler(
     @Annotations.AgoraAudioLocalError error: Int
   ) {
     callback(RtcEngineEvents.LocalAudioStateChanged, state, error)
+  }
+
+  override fun onRequestAudioFileInfo(info: AudioFileInfo?, error: Int) {
+    callback(RtcEngineEvents.RequestAudioFileInfo, info?.toMap(), error)
   }
 
   override fun onLocalPublishFallbackToAudioOnly(isFallbackOrRecover: Boolean) {

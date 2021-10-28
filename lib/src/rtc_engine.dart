@@ -1136,6 +1136,32 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  Future<void> setAudioMixingPlaybackSpeed(int speed) {
+    return _invokeMethod('setAudioMixingPlaybackSpeed', {
+      'speed': speed,
+    });
+  }
+
+  @override
+  Future<int?> getAudioTrackCount() {
+    return _invokeMethod('getAudioTrackCount');
+  }
+
+  @override
+  Future<void> selectAudioTrack(int audioIndex) {
+    return _invokeMethod('selectAudioTrack', {
+      'audioIndex': audioIndex,
+    });
+  }
+
+    @override
+  Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode) {
+    return _invokeMethod('setAudioMixingDualMonoMode', {
+      'mode': mode,
+    });
+  }
+
+  @override
   Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
     return _invokeMethod('enableEncryption', {
       'enabled': enabled,
@@ -2197,6 +2223,67 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Parameter** [pitch] Sets the pitch of the local music file by chromatic scale. The default value is 0, which means keep the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
   Future<void> setAudioMixingPitch(int pitch);
+
+  /// Sets the playback [speed] of the current music file.
+  ///
+  /// Agora recommends that you limit the [speed] value to between 50 and 400, defined as follows:
+  /// * 50: Half the original speed.
+  /// * 100: The original speed.
+  /// * 400: 4 times the original speed.
+  ///
+  /// **Note**: Call this method after calling [startAudioMixing] and receiving the
+  /// [RtcEngineEventHandler.audioMixingStateChanged] event callback with state
+  /// code [AudioMixingStateCode.Playing].
+  Future<void> setAudioMixingPlaybackSpeed(int speed);
+
+  /// Gets the audio track index of the current music file.
+  ///
+  /// **Note**:
+  /// - Call this method after calling [startAudioMixing] and receiving the
+  /// [RtcEngineEventHandler.audioMixingStateChanged] event callback with state
+  /// code [AudioMixingStateCode.Playing].
+  /// - For the audio file formats supported by this method, see
+  /// [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+  ///
+  /// **Returns**
+  /// - ≥ 0: The audio track index of the current music file, if this method call succeeds.
+  /// - < 0: Failure.
+  Future<int?> getAudioTrackCount();
+
+  /// Specifies the playback track [audioIndex] of the current music file. The
+  /// [audioIndex] must be less than or equal to the return value of [getAudioTrackCount].
+  ///
+  /// After getting the audio track index of the current music file, call this
+  /// method to specify any audio track to play. For example, if different tracks
+  /// of a multitrack file store songs in different languages, you can call this
+  /// method to set the language of the music file to play.
+  ///
+  /// **Note**:
+  /// - Call this method after calling [startAudioMixing] and receiving the
+  /// [RtcEngineEventHandler.audioMixingStateChanged] event callback with state
+  /// code [AudioMixingStateCode.Playing].
+  /// - For the audio file formats supported by this method, see
+  /// [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+  Future<void> selectAudioTrack(int audioIndex);
+
+  /// Sets the channel [mode] of the current music file.
+  /// 
+  /// In a stereo music file, the left and right channels can store different 
+  /// audio data. According to your needs, you can set the channel mode to original 
+  /// mode, left channel mode, right channel mode, or mixed channel mode. For example, 
+  /// in the KTV scenario, the left channel of the music file stores the musical 
+  /// accompaniment, and the right channel stores the singing voice. If you only 
+  /// need to listen to the accompaniment, call this method to set the channel 
+  /// mode of the music file to left channel mode; if you need to listen to the 
+  /// accompaniment and the singing voice at the same time, call this method to 
+  /// set the channel mode to mixed channel mode.
+  /// 
+  /// **Note**:
+  /// - Call this method after calling [startAudioMixing] and receiving the
+  /// [RtcEngineEventHandler.audioMixingStateChanged] event callback with state
+  /// code [AudioMixingStateCode.Playing].
+  /// - This method only applies to stereo audio files.
+  Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode);
 }
 
 /// @nodoc
@@ -2722,10 +2809,27 @@ mixin RtcMediaRelayInterface {
   /// - If the method call fails, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] error code. You can leave the channel by calling the [RtcEngine.leaveChannel] method, and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 
-  /// @nodoc
+  /// Pauses the media stream relay to all destination channels.
+  /// 
+  /// After the cross-channel media stream relay starts, you can call this method 
+  /// to pause relaying media streams to all destination channels; after the pause, 
+  /// if you want to resume the relay, call [resumeAllChannelMediaRelay].
+  ///
+  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] 
+  /// callback to report whether the media stream relay is successfully paused.
+  /// 
+  /// **Note**: Call this method after the [startChannelMediaRelay] method.
   Future<void> pauseAllChannelMediaRelay();
 
-  /// @nodoc
+  /// Resumes the media stream relay to all destination channels.
+  /// 
+  /// After calling the [pauseAllChannelMediaRelay] method, you can call this 
+  /// method to resume relaying media streams to all destination channels.
+  /// 
+  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent]
+  ///  callback to report whether the media stream relay is successfully resumed.
+  /// 
+  /// **Note**: Call this method after the [pauseAllChannelMediaRelay] method.
   Future<void> resumeAllChannelMediaRelay();
 }
 

@@ -1701,6 +1701,7 @@ Map<String, dynamic> _$VirtualBackgroundSourceTypeConverterToJson(
 const _$VirtualBackgroundSourceTypeEnumMap = {
   VirtualBackgroundSourceType.Color: 1,
   VirtualBackgroundSourceType.Img: 2,
+  VirtualBackgroundSourceType.Blur: 3,
 };
 
 VirtualBackgroundSourceStateReasonConverter

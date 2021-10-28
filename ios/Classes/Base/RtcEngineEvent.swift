@@ -36,6 +36,7 @@ class RtcEngineEvents {
     static let LocalVideoStateChanged = "LocalVideoStateChanged"
     static let RemoteAudioStateChanged = "RemoteAudioStateChanged"
     static let LocalAudioStateChanged = "LocalAudioStateChanged"
+    static let RequestAudioFileInfo = "RequestAudioFileInfo"
     static let LocalPublishFallbackToAudioOnly = "LocalPublishFallbackToAudioOnly"
     static let RemoteSubscribeFallbackToAudioOnly = "RemoteSubscribeFallbackToAudioOnly"
     static let AudioRouteChanged = "AudioRouteChanged"
@@ -120,6 +121,7 @@ class RtcEngineEvents {
             "LocalVideoStateChanged": LocalVideoStateChanged,
             "RemoteAudioStateChanged": RemoteAudioStateChanged,
             "LocalAudioStateChanged": LocalAudioStateChanged,
+            "RequestAudioFileInfo": RequestAudioFileInfo,
             "LocalPublishFallbackToAudioOnly": LocalPublishFallbackToAudioOnly,
             "RemoteSubscribeFallbackToAudioOnly": RemoteSubscribeFallbackToAudioOnly,
             "AudioRouteChanged": AudioRouteChanged,
@@ -296,6 +298,10 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
 
     public func rtcEngine(_: AgoraRtcEngineKit, localAudioStateChange state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
         callback(RtcEngineEvents.LocalAudioStateChanged, state.rawValue, error.rawValue)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didRequest info: AgoraRtcAudioFileInfo, error: AgoraAudioFileInfoError) {
+        callback(RtcEngineEvents.RequestAudioFileInfo, info.toMap(), error.rawValue)
     }
 
     public func rtcEngine(_: AgoraRtcEngineKit, didLocalPublishFallbackToAudioOnly isFallbackOrRecover: Bool) {
