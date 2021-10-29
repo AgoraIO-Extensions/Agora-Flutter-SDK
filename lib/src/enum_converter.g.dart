@@ -1746,7 +1746,7 @@ const _$VirtualBackgroundSourceTypeEnumMap = {
 VirtualBackgroundBlurDegreeConverter
     _$VirtualBackgroundBlurDegreeConverterFromJson(Map<String, dynamic> json) {
   return VirtualBackgroundBlurDegreeConverter(
-    _$enumDecode(_$VirtualBackgroundSourceTypeEnumMap, json['e']),
+    _$enumDecode(_$VirtualBackgroundBlurDegreeEnumMap, json['e']),
   );
 }
 
