@@ -61,10 +61,11 @@ typedef RemoteAudioStateCallback = void Function(int uid,
 // ignore: public_member_api_docs
 typedef LocalAudioStateCallback = void Function(
     AudioLocalState state, AudioLocalError error);
+
 /// Reports the information of an audio file.
-/// 
+///
 /// **Parameters**
-/// 
+///
 /// * [info]	The information of an audio file. See AudioFileInfo.
 /// * [error]	The information acquisition state:
 ///   - [AudioFileInfoError.Ok] : Successfully get the information of an audio file.
@@ -461,8 +462,8 @@ class RtcEngineEventHandler {
   LocalAudioStateCallback? localAudioStateChanged;
 
   /// Reports the information of an audio file.
-  /// 
-  /// After successfully calling [RtcEngine.getAudioFileInfo], the SDK triggers this callback 
+  ///
+  /// After successfully calling [RtcEngine.getAudioFileInfo], the SDK triggers this callback
   /// to report the information of the audio file, such as the file path and duration.
   RequestAudioFileInfoCallback? requestAudioFileInfoCallback;
 
@@ -1075,6 +1076,7 @@ class RtcEngineEventHandler {
     this.localVideoStateChanged,
     this.remoteAudioStateChanged,
     this.localAudioStateChanged,
+    this.requestAudioFileInfoCallback,
     this.localPublishFallbackToAudioOnly,
     this.remoteSubscribeFallbackToAudioOnly,
     this.audioRouteChanged,
@@ -1237,6 +1239,10 @@ class RtcEngineEventHandler {
         localAudioStateChanged?.call(
             AudioLocalStateConverter.fromValue(data[0]).e,
             AudioLocalErrorConverter.fromValue(data[1]).e);
+        break;
+      case 'RequestAudioFileInfo':
+        requestAudioFileInfoCallback?.call(AudioFileInfo.fromJson(data[0]),
+            AudioFileInfoErrorConverter.fromValue(data[1]).e);
         break;
       case 'LocalPublishFallbackToAudioOnly':
         localPublishFallbackToAudioOnly?.call(data[0]);

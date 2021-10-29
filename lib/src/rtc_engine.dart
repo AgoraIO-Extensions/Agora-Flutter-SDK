@@ -1154,10 +1154,10 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-    @override
+  @override
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode) {
     return _invokeMethod('setAudioMixingDualMonoMode', {
-      'mode': mode,
+      'mode': AudioMixingDualMonoModeConverter(mode).value(),
     });
   }
 
@@ -2267,17 +2267,17 @@ mixin RtcAudioMixingInterface {
   Future<void> selectAudioTrack(int audioIndex);
 
   /// Sets the channel [mode] of the current music file.
-  /// 
-  /// In a stereo music file, the left and right channels can store different 
-  /// audio data. According to your needs, you can set the channel mode to original 
-  /// mode, left channel mode, right channel mode, or mixed channel mode. For example, 
-  /// in the KTV scenario, the left channel of the music file stores the musical 
-  /// accompaniment, and the right channel stores the singing voice. If you only 
-  /// need to listen to the accompaniment, call this method to set the channel 
-  /// mode of the music file to left channel mode; if you need to listen to the 
-  /// accompaniment and the singing voice at the same time, call this method to 
+  ///
+  /// In a stereo music file, the left and right channels can store different
+  /// audio data. According to your needs, you can set the channel mode to original
+  /// mode, left channel mode, right channel mode, or mixed channel mode. For example,
+  /// in the KTV scenario, the left channel of the music file stores the musical
+  /// accompaniment, and the right channel stores the singing voice. If you only
+  /// need to listen to the accompaniment, call this method to set the channel
+  /// mode of the music file to left channel mode; if you need to listen to the
+  /// accompaniment and the singing voice at the same time, call this method to
   /// set the channel mode to mixed channel mode.
-  /// 
+  ///
   /// **Note**:
   /// - Call this method after calling [startAudioMixing] and receiving the
   /// [RtcEngineEventHandler.audioMixingStateChanged] event callback with state
@@ -2810,25 +2810,25 @@ mixin RtcMediaRelayInterface {
   Future<void> stopChannelMediaRelay();
 
   /// Pauses the media stream relay to all destination channels.
-  /// 
-  /// After the cross-channel media stream relay starts, you can call this method 
-  /// to pause relaying media streams to all destination channels; after the pause, 
+  ///
+  /// After the cross-channel media stream relay starts, you can call this method
+  /// to pause relaying media streams to all destination channels; after the pause,
   /// if you want to resume the relay, call [resumeAllChannelMediaRelay].
   ///
-  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] 
+  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent]
   /// callback to report whether the media stream relay is successfully paused.
-  /// 
+  ///
   /// **Note**: Call this method after the [startChannelMediaRelay] method.
   Future<void> pauseAllChannelMediaRelay();
 
   /// Resumes the media stream relay to all destination channels.
-  /// 
-  /// After calling the [pauseAllChannelMediaRelay] method, you can call this 
+  ///
+  /// After calling the [pauseAllChannelMediaRelay] method, you can call this
   /// method to resume relaying media streams to all destination channels.
-  /// 
+  ///
   /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent]
   ///  callback to report whether the media stream relay is successfully resumed.
-  /// 
+  ///
   /// **Note**: Call this method after the [pauseAllChannelMediaRelay] method.
   Future<void> resumeAllChannelMediaRelay();
 }

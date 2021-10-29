@@ -2,6 +2,7 @@ import 'dart:ui' show Color;
 
 import 'package:agora_rtc_engine/src/enum_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'events.dart';
 
 import 'enums.dart';
 
@@ -1658,16 +1659,20 @@ class VirtualBackgroundSource {
   Map<String, dynamic> toJson() => _$VirtualBackgroundSourceToJson(this);
 }
 
+/// The information of an audio file, which is reported in [RtcEngineEventHandler.requestAudioFileInfoCallback].
 @JsonSerializable(explicitToJson: true)
 class AudioFileInfo {
+  /// Construct the [AudioFileInfo]
   AudioFileInfo({
     required this.filePath,
     required this.durationMs,
   });
 
+  /// The file path.
   @JsonKey()
   String filePath;
 
+  /// The file duration (ms).
   @JsonKey()
   int durationMs;
 
