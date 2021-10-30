@@ -82,6 +82,19 @@ class AudioLocalStateConverter extends EnumConverter<AudioLocalState, int> {
 }
 
 @JsonSerializable()
+class AudioFileInfoErrorConverter
+    extends EnumConverter<AudioFileInfoError, int> {
+  AudioFileInfoErrorConverter(AudioFileInfoError e) : super(e);
+
+  AudioFileInfoErrorConverter.fromValue(int value)
+      : super.fromValue(_$AudioFileInfoErrorEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioFileInfoErrorEnumMap);
+  }
+}
+
+@JsonSerializable()
 class AudioMixingReasonConverter extends EnumConverter<AudioMixingReason, int> {
   AudioMixingReasonConverter(AudioMixingReason e) : super(e);
 
@@ -103,6 +116,19 @@ class AudioMixingStateCodeConverter
 
   int value() {
     return super.toValue(_$AudioMixingStateCodeEnumMap);
+  }
+}
+
+@JsonSerializable()
+class AudioMixingDualMonoModeConverter
+    extends EnumConverter<AudioMixingDualMonoMode, int> {
+  AudioMixingDualMonoModeConverter(AudioMixingDualMonoMode e) : super(e);
+
+  AudioMixingDualMonoModeConverter.fromValue(int value)
+      : super.fromValue(_$AudioMixingDualMonoModeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$AudioMixingDualMonoModeEnumMap);
   }
 }
 
@@ -923,6 +949,20 @@ class VirtualBackgroundSourceTypeConverter
 
   int value() {
     return super.toValue(_$VirtualBackgroundSourceTypeEnumMap);
+  }
+}
+
+@JsonSerializable()
+class VirtualBackgroundBlurDegreeConverter
+    extends EnumConverter<VirtualBackgroundBlurDegree, int> {
+  VirtualBackgroundBlurDegreeConverter(VirtualBackgroundBlurDegree e)
+      : super(e);
+
+  VirtualBackgroundBlurDegreeConverter.fromValue(int value)
+      : super.fromValue(_$VirtualBackgroundBlurDegreeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VirtualBackgroundBlurDegreeEnumMap);
   }
 }
 

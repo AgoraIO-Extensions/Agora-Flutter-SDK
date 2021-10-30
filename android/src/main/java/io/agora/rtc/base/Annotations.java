@@ -327,10 +327,10 @@ public class Annotations {
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE,
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL,
     Constants.RELAY_EVENT_VIDEO_PROFILE_UPDATE,
-//    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
-//    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
-//    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
-//    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
+    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
+    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraChannelMediaRelayEvent {
@@ -973,6 +973,7 @@ public class Annotations {
   @IntDef({
     VirtualBackgroundSource.BACKGROUND_COLOR,
     VirtualBackgroundSource.BACKGROUND_IMG,
+    VirtualBackgroundSource.BACKGROUND_BLUR,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraVirtualBackgroundSourceType {

@@ -168,6 +168,14 @@ class IRtcEngine {
     fun setAudioMixingPosition(params: Map<String, *>, callback: Callback)
 
     fun setAudioMixingPitch(params: Map<String, *>, callback: Callback)
+
+    fun setAudioMixingPlaybackSpeed(params: Map<String, *>, callback: Callback)
+
+    fun getAudioTrackCount(callback: Callback)
+
+    fun selectAudioTrack(params: Map<String, *>, callback: Callback)
+
+    fun setAudioMixingDualMonoMode(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcAudioEffectInterface {
@@ -841,6 +849,22 @@ open class RtcEngineManager(
     callback.code(engine?.setAudioMixingPitch((params["pitch"] as Number).toInt()))
   }
 
+  override fun setAudioMixingPlaybackSpeed(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioMixingPlaybackSpeed((params["speed"] as Number).toInt()))
+  }
+
+  override fun getAudioTrackCount(callback: Callback) {
+    callback.code(engine?.audioTrackCount) { it }
+  }
+
+  override fun selectAudioTrack(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.selectAudioTrack((params["audioIndex"] as Number).toInt()))
+  }
+
+  override fun setAudioMixingDualMonoMode(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioMixingDualMonoMode((params["mode"] as Number).toInt()))
+  }
+
   override fun getEffectsVolume(callback: Callback) {
     callback.resolve(engine) { it.audioEffectManager.effectsVolume }
   }
@@ -1053,13 +1077,11 @@ open class RtcEngineManager(
   }
 
   override fun pauseAllChannelMediaRelay(callback: Callback) {
-    callback.code(-Constants.ERR_NOT_SUPPORTED)
-//    callback.code(engine?.pauseAllChannelMediaRelay())
+    callback.code(engine?.pauseAllChannelMediaRelay())
   }
 
   override fun resumeAllChannelMediaRelay(callback: Callback) {
-    callback.code(-Constants.ERR_NOT_SUPPORTED)
-//    callback.code(engine?.resumeAllChannelMediaRelay())
+    callback.code(engine?.resumeAllChannelMediaRelay())
   }
 
   override fun setDefaultAudioRoutetoSpeakerphone(params: Map<String, *>, callback: Callback) {

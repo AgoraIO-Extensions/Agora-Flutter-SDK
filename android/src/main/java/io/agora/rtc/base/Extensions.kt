@@ -155,6 +155,13 @@ fun AgoraFacePositionInfo.toMap(): Map<String, Any?> {
   )
 }
 
+fun AudioFileInfo.toMap(): Map<String, Any?> {
+  return hashMapOf(
+    "filePath" to filePath,
+    "durationMs" to durationMs
+  )
+}
+
 fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
   return List(size) { this[it].toMap() }
 }

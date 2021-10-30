@@ -1155,6 +1155,8 @@ VirtualBackgroundSource _$VirtualBackgroundSourceFromJson(
         _$VirtualBackgroundSourceTypeEnumMap, json['backgroundSourceType']),
     color: _$ColorFromJson(json['color'] as Map<String, dynamic>),
     source: json['source'] as String?,
+    blurDegree:
+        _$enumDecode(_$VirtualBackgroundBlurDegreeEnumMap, json['blur_degree']),
   );
 }
 
@@ -1172,10 +1174,32 @@ Map<String, dynamic> _$VirtualBackgroundSourceToJson(
       _$VirtualBackgroundSourceTypeEnumMap[instance.backgroundSourceType]);
   writeNotNull('color', _$ColorToJson(instance.color));
   writeNotNull('source', instance.source);
+  val['blur_degree'] =
+      _$VirtualBackgroundBlurDegreeEnumMap[instance.blurDegree];
   return val;
 }
 
 const _$VirtualBackgroundSourceTypeEnumMap = {
   VirtualBackgroundSourceType.Color: 1,
   VirtualBackgroundSourceType.Img: 2,
+  VirtualBackgroundSourceType.Blur: 3,
 };
+
+const _$VirtualBackgroundBlurDegreeEnumMap = {
+  VirtualBackgroundBlurDegree.Low: 1,
+  VirtualBackgroundBlurDegree.Medium: 2,
+  VirtualBackgroundBlurDegree.High: 3,
+};
+
+AudioFileInfo _$AudioFileInfoFromJson(Map<String, dynamic> json) {
+  return AudioFileInfo(
+    filePath: json['filePath'] as String,
+    durationMs: json['durationMs'] as int,
+  );
+}
+
+Map<String, dynamic> _$AudioFileInfoToJson(AudioFileInfo instance) =>
+    <String, dynamic>{
+      'filePath': instance.filePath,
+      'durationMs': instance.durationMs,
+    };

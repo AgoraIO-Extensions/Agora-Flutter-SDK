@@ -141,6 +141,24 @@ const _$AudioLocalStateEnumMap = {
   AudioLocalState.Failed: 3,
 };
 
+AudioFileInfoErrorConverter _$AudioFileInfoErrorConverterFromJson(
+    Map<String, dynamic> json) {
+  return AudioFileInfoErrorConverter(
+    _$enumDecode(_$AudioFileInfoErrorEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$AudioFileInfoErrorConverterToJson(
+        AudioFileInfoErrorConverter instance) =>
+    <String, dynamic>{
+      'e': _$AudioFileInfoErrorEnumMap[instance.e],
+    };
+
+const _$AudioFileInfoErrorEnumMap = {
+  AudioFileInfoError.Ok: 0,
+  AudioFileInfoError.Failure: 1,
+};
+
 AudioMixingReasonConverter _$AudioMixingReasonConverterFromJson(
     Map<String, dynamic> json) {
   return AudioMixingReasonConverter(
@@ -187,6 +205,26 @@ const _$AudioMixingStateCodeEnumMap = {
   AudioMixingStateCode.Restart: 712,
   AudioMixingStateCode.Stopped: 713,
   AudioMixingStateCode.Failed: 714,
+};
+
+AudioMixingDualMonoModeConverter _$AudioMixingDualMonoModeConverterFromJson(
+    Map<String, dynamic> json) {
+  return AudioMixingDualMonoModeConverter(
+    _$enumDecode(_$AudioMixingDualMonoModeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$AudioMixingDualMonoModeConverterToJson(
+        AudioMixingDualMonoModeConverter instance) =>
+    <String, dynamic>{
+      'e': _$AudioMixingDualMonoModeEnumMap[instance.e],
+    };
+
+const _$AudioMixingDualMonoModeEnumMap = {
+  AudioMixingDualMonoMode.Auto: 0,
+  AudioMixingDualMonoMode.L: 1,
+  AudioMixingDualMonoMode.R: 2,
+  AudioMixingDualMonoMode.MIX: 3,
 };
 
 AudioOutputRoutingConverter _$AudioOutputRoutingConverterFromJson(
@@ -969,6 +1007,7 @@ const _$NetworkTypeEnumMap = {
   NetworkType.Mobile2G: 3,
   NetworkType.Mobile3G: 4,
   NetworkType.Mobile4G: 5,
+  NetworkType.Mobile5G: 6,
 };
 
 RtmpStreamingErrorCodeConverter _$RtmpStreamingErrorCodeConverterFromJson(
@@ -1701,6 +1740,26 @@ Map<String, dynamic> _$VirtualBackgroundSourceTypeConverterToJson(
 const _$VirtualBackgroundSourceTypeEnumMap = {
   VirtualBackgroundSourceType.Color: 1,
   VirtualBackgroundSourceType.Img: 2,
+  VirtualBackgroundSourceType.Blur: 3,
+};
+
+VirtualBackgroundBlurDegreeConverter
+    _$VirtualBackgroundBlurDegreeConverterFromJson(Map<String, dynamic> json) {
+  return VirtualBackgroundBlurDegreeConverter(
+    _$enumDecode(_$VirtualBackgroundBlurDegreeEnumMap, json['e']),
+  );
+}
+
+Map<String, dynamic> _$VirtualBackgroundBlurDegreeConverterToJson(
+        VirtualBackgroundBlurDegreeConverter instance) =>
+    <String, dynamic>{
+      'e': _$VirtualBackgroundBlurDegreeEnumMap[instance.e],
+    };
+
+const _$VirtualBackgroundBlurDegreeEnumMap = {
+  VirtualBackgroundBlurDegree.Low: 1,
+  VirtualBackgroundBlurDegree.Medium: 2,
+  VirtualBackgroundBlurDegree.High: 3,
 };
 
 VirtualBackgroundSourceStateReasonConverter
