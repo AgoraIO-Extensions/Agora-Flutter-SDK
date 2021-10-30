@@ -261,5 +261,6 @@ fun mapToVirtualBackgroundSource(map: Map<*, *>): VirtualBackgroundSource {
     (map["backgroundSourceType"] as? Number)?.let { backgroundSourceType = it.toInt() }
     (map["color"] as? Map<*, *>)?.let { color = mapToColor(it) }
     (map["source"] as? String)?.let { source = it }
+    (map["blur_degree"] as? Int)?.let { blur_degree = it }
   }
 }

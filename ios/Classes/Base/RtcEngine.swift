@@ -186,6 +186,14 @@ protocol RtcEngineAudioMixingInterface {
     func setAudioMixingPosition(_ params: NSDictionary, _ callback: Callback)
 
     func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback)
+    
+    func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback)
+    
+    func getAudioTrackCount(_ callback: Callback)
+    
+    func selectAudioTrack(_ params: NSDictionary, _ callback: Callback)
+    
+    func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioEffectInterface {
@@ -736,6 +744,25 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setAudioMixingPitch((params["pitch"] as! NSNumber).intValue))
     }
+    
+    @objc func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioMixingPlaybackSpeed(Int32((params["speed"] as! NSNumber).intValue)))
+    }
+    
+    @objc func getAudioTrackCount(_ callback: Callback) {
+        callback.code(engine?.getAudioTrackCount()) {
+            $0
+        }
+    }
+    
+    @objc func selectAudioTrack(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.selectAudioTrack((params["audioIndex"] as! NSNumber).intValue))
+    }
+    
+    @objc func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback) {
+        let mode = AgoraAudioMixingDualMonoMode(rawValue: UInt((params["mode"] as! NSNumber).intValue))
+        callback.code(engine?.setAudioMixingDualMonoMode(mode!))
+    }
 
     @objc func getEffectsVolume(_ callback: Callback) {
         callback.resolve(engine) {
@@ -1173,13 +1200,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func pauseAllChannelMediaRelay(_ callback: Callback) {
-        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
-//        callback.code(engine?.pauseAllChannelMediaRelay())
+        callback.code(engine?.pauseAllChannelMediaRelay())
     }
 
     @objc func resumeAllChannelMediaRelay(_ callback: Callback) {
-        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
-//        callback.code(engine?.resumeAllChannelMediaRelay())
+        callback.code(engine?.resumeAllChannelMediaRelay())
     }
 
     @objc func enableVirtualBackground(_ params: NSDictionary, _ callback: Callback) {
