@@ -8,15 +8,15 @@ import 'custom_capture_audio/custom_capture_audio.dart';
 /// Data source for advanced examples
 final Advanced = [
   {'name': 'Advanced'},
-  {'name': 'MultiChannel', 'widget': JoinMultiChannel()},
+  {'name': 'JoinMultiChannel', 'widget': JoinMultiChannel()},
   {
-    'name': 'CreateStreamData',
+    'name': 'StreamMessage',
     'widget': StreamMessage(),
   },
   {
     'name': 'MediaChannelRelay',
     'widget': MediaChannelRelay(),
   },
-  {'name': 'VoiceChange', 'widget': VoiceChanger()},
-  {'name': 'CustomAudioSource', 'widget': CustomCaptureAudio()},
+  {'name': 'VoiceChanger', 'widget': VoiceChanger()},
+  {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
 ];
