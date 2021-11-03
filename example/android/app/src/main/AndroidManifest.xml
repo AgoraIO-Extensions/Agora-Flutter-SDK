@@ -47,7 +47,7 @@
             android:value="2" />
 
       <service
-        android:name="io.agora.agora_rtc_engine_example.custom_audio_source.AudioRecordService"
+        android:name="io.agora.agora_rtc_engine_example.custom_capture_audio.AudioRecordService"
         android:exported="false" />
     </application>
 </manifest>

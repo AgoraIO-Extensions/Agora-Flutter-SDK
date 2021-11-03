@@ -1,7 +1,7 @@
 import Foundation
 import agora_rtc_engine
 
-class CustomAudioPlugin : NSObject, RtcEnginePlugin, CustomAudioSourceApi {
+class CustomCaptureAudioPlugin : NSObject, RtcEnginePlugin, CustomCaptureAudioApi {
 
     private var agoraRtcEngineKit: AgoraRtcEngineKit? = nil
 

@@ -13,13 +13,13 @@ import 'package:permission_handler/permission_handler.dart';
 const _channelId0 = 'channel0';
 const _channelId1 = 'channel1';
 
-/// MultiChannel Example
-class MultiChannel extends StatefulWidget {
+/// JoinMultiChannel Example
+class JoinMultiChannel extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<MultiChannel> {
+class _State extends State<JoinMultiChannel> {
   late final RtcEngine _engine;
   late final RtcChannel _channel0, _channel1;
   String? renderChannelId;
