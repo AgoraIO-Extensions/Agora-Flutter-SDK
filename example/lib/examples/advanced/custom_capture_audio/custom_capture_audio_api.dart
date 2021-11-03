@@ -1,8 +1,8 @@
 import 'package:pigeon/pigeon.dart';
 
-/// CustomAudioSource API definition
+/// CustomCaptureAudio API definition
 @HostApi()
-abstract class CustomAudioSourceApi {
+abstract class CustomCaptureAudioApi {
 
   /// A binding function for setExternalAudioSource on Android/iOS
   void setExternalAudioSource(bool enabled, int sampleRate, int channels);

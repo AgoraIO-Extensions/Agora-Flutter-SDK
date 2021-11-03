@@ -9,13 +9,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// CreateStreamData Example
-class CreateStreamData extends StatefulWidget {
+/// StreamMessage Example
+class StreamMessage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<CreateStreamData> {
+class _State extends State<StreamMessage> {
   late final RtcEngine _engine;
   bool isJoined = false;
   int? remoteUid;

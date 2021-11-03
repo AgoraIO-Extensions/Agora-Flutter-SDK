@@ -11,11 +11,11 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		5E9D826C4B1F29399F8A7742 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CEF344452C45083E367B0C /* Pods_Runner.framework */; };
 		6D48449932DC5CD432350C00 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CA39DDEDE840FF44D1F750 /* Pods_RunnerTests.framework */; };
-		7110181B2727DA66003816A9 /* CustomAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7110181A2727DA66003816A9 /* CustomAudioSource.m */; };
 		711018242727DE9A003816A9 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7110181E2727DE9A003816A9 /* ExternalAudio.mm */; };
 		711018252727DE9A003816A9 /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 711018222727DE9A003816A9 /* AudioWriteToFile.m */; };
 		711018262727DE9A003816A9 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 711018232727DE9A003816A9 /* AudioController.m */; };
-		711018282727E05A003816A9 /* CustmoAudioSourcePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711018272727E05A003816A9 /* CustmoAudioSourcePlugin.swift */; };
+		711018282727E05A003816A9 /* CustomCaptureAudioPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711018272727E05A003816A9 /* CustomCaptureAudioPlugin.swift */; };
+		715C838B273012A30080FA35 /* CustomCaptureAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C8389273012A30080FA35 /* CustomCaptureAudio.m */; };
 		71E2A2A22722C75F00C7B7BC /* OCTestRtcEnginePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E2A29E2722C75F00C7B7BC /* OCTestRtcEnginePlugin.m */; };
 		71E2A2A32722C75F00C7B7BC /* FakeAgoraRtcEngineKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E2A2A02722C75F00C7B7BC /* FakeAgoraRtcEngineKit.swift */; };
 		71E2A2A52722C80800C7B7BC /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E2A2A42722C80800C7B7BC /* RunnerTests.swift */; };
@@ -56,8 +56,6 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		43CA39DDEDE840FF44D1F750 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		592BF9E1006B18851CF75B6B /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
-		711018192727DA66003816A9 /* CustomAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAudioSource.h; sourceTree = "<group>"; };
-		7110181A2727DA66003816A9 /* CustomAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAudioSource.m; sourceTree = "<group>"; };
 		7110181D2727DE9A003816A9 /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
 		7110181E2727DE9A003816A9 /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
 		7110181F2727DE9A003816A9 /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
@@ -65,7 +63,9 @@
 		711018212727DE9A003816A9 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
 		711018222727DE9A003816A9 /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
 		711018232727DE9A003816A9 /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
-		711018272727E05A003816A9 /* CustmoAudioSourcePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustmoAudioSourcePlugin.swift; sourceTree = "<group>"; };
+		711018272727E05A003816A9 /* CustomCaptureAudioPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCaptureAudioPlugin.swift; sourceTree = "<group>"; };
+		715C8389273012A30080FA35 /* CustomCaptureAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCaptureAudio.m; sourceTree = "<group>"; };
+		715C838A273012A30080FA35 /* CustomCaptureAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCaptureAudio.h; sourceTree = "<group>"; };
 		71E2A2932722C73000C7B7BC /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71E2A29E2722C75F00C7B7BC /* OCTestRtcEnginePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCTestRtcEnginePlugin.m; sourceTree = "<group>"; };
 		71E2A29F2722C75F00C7B7BC /* OCTestRtcEnginePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCTestRtcEnginePlugin.h; sourceTree = "<group>"; };
@@ -130,9 +130,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		711018292727FFF1003816A9 /* CustomAudioSource */ = {
+		711018292727FFF1003816A9 /* CustomCaptureAudio */ = {
 			isa = PBXGroup;
 			children = (
+				715C838A273012A30080FA35 /* CustomCaptureAudio.h */,
+				715C8389273012A30080FA35 /* CustomCaptureAudio.m */,
 				711018212727DE9A003816A9 /* AudioController.h */,
 				711018232727DE9A003816A9 /* AudioController.m */,
 				7110181D2727DE9A003816A9 /* AudioOptions.h */,
@@ -140,11 +142,9 @@
 				711018222727DE9A003816A9 /* AudioWriteToFile.m */,
 				7110181F2727DE9A003816A9 /* ExternalAudio.h */,
 				7110181E2727DE9A003816A9 /* ExternalAudio.mm */,
-				711018192727DA66003816A9 /* CustomAudioSource.h */,
-				7110181A2727DA66003816A9 /* CustomAudioSource.m */,
-				711018272727E05A003816A9 /* CustmoAudioSourcePlugin.swift */,
+				711018272727E05A003816A9 /* CustomCaptureAudioPlugin.swift */,
 			);
-			path = CustomAudioSource;
+			path = CustomCaptureAudio;
 			sourceTree = "<group>";
 		};
 		71E2A2942722C73000C7B7BC /* RunnerTests */ = {
@@ -194,7 +194,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				711018292727FFF1003816A9 /* CustomAudioSource */,
+				711018292727FFF1003816A9 /* CustomCaptureAudio */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -427,11 +427,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				715C838B273012A30080FA35 /* CustomCaptureAudio.m in Sources */,
 				711018262727DE9A003816A9 /* AudioController.m in Sources */,
-				7110181B2727DA66003816A9 /* CustomAudioSource.m in Sources */,
 				711018252727DE9A003816A9 /* AudioWriteToFile.m in Sources */,
 				711018242727DE9A003816A9 /* ExternalAudio.mm in Sources */,
-				711018282727E05A003816A9 /* CustmoAudioSourcePlugin.swift in Sources */,
+				711018282727E05A003816A9 /* CustomCaptureAudioPlugin.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);

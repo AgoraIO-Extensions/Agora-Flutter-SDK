@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'custom_audio_source_api.generated.dart';
+import 'custom_capture_audio_api.generated.dart';
 
 const int _defaultSampleRate = 16000;
 const int _defaultChannelCount = 1;
@@ -42,14 +42,14 @@ extension AudioExternalSourcePosExt on AudioExternalSourcePos {
   }
 }
 
-/// CustomAudioSource Example
-class CustomAudioSource extends StatefulWidget {
+/// CustomCaptureAudio Example
+class CustomCaptureAudio extends StatefulWidget {
   @override
-  _CustomAudioSourceState createState() => _CustomAudioSourceState();
+  _CustomCaptureAudioState createState() => _CustomCaptureAudioState();
 }
 
-class _CustomAudioSourceState extends State<CustomAudioSource> {
-  final CustomAudioSourceApi _api = CustomAudioSourceApi();
+class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
+  final CustomCaptureAudioApi _api = CustomCaptureAudioApi();
   bool _isJoined = false;
   bool _isMute = false;
   double _playoutSliderValue = 100.0;
