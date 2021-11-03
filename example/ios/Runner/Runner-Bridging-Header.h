@@ -7,7 +7,7 @@
 #import <agora_rtc_engine/RtcEnginePluginRegistrant.h>
 #endif
 
-#import "CustomAudioSource.h"
+#import "CustomCaptureAudio.h"
 #import "ExternalAudio.h"
 
 

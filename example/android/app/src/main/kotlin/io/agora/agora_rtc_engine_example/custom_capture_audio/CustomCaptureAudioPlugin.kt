@@ -1,4 +1,4 @@
-package io.agora.agora_rtc_engine_example.custom_audio_source
+package io.agora.agora_rtc_engine_example.custom_capture_audio
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -11,9 +11,9 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEnginePlugin
 import java.lang.ref.WeakReference
 
-class CustomAudioPlugin(private val activity: WeakReference<Activity>) :
+class CustomCaptureAudioPlugin(private val activity: WeakReference<Activity>) :
   RtcEnginePlugin,
-  CustomAudioSource.CustomAudioSourceApi {
+  CustomCaptureAudio.CustomCaptureAudioApi {
 
   private var rtcEngine: RtcEngine? = null
 
