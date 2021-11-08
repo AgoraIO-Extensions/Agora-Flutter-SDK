@@ -9,13 +9,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// MediaChannelRelay Example
-class MediaChannelRelay extends StatefulWidget {
+/// ChannelMediaRelay Example
+class ChannelMediaRelay extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<MediaChannelRelay> {
+class _State extends State<ChannelMediaRelay> {
   late final RtcEngine _engine;
   bool isJoined = false;
   int? remoteUid;
