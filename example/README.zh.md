@@ -1,4 +1,4 @@
-# Android 示例项目
+# 示例项目
 
 _[English](README.md) | 中文_
 
