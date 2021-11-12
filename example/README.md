@@ -28,6 +28,7 @@ Any scene of this project can run successfully alone.
 | [VoiceChanger](./lib/examples/advanced/voice_changer) | Voice effects | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
 | [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | Channel media relay | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
 | [StreamMessage](./lib/examples/advanced/stream_message) | Send data stream  | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [CustomCaptureAudio](./lib/examples/advanced/custom_capture_audio)| Custom audio capture | |
 
 ## How to run the sample project
 

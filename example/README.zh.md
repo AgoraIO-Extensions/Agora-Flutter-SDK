@@ -28,6 +28,7 @@
 | [VoiceChanger](./lib/examples/advanced/voice_changer) | 音频效果 | SetOnCaptureVideoFrameCallback, SetOnRenderVideoFrameCallback, OnRenderVideoFrameHandler, OnCaptureVideoFrameHandler |
 | [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | 频道媒体流转发 | RegisterAudioRawDataObserver, SetOnPlaybackAudioFrameCallback, OnPlaybackAudioFrameHandler |
 | [StreamMessage](./lib/examples/advanced/stream_message) | 发送数据流 | SetVideoEncoderConfiguration, SetLiveTranscoding, AddPublishStreamUrl, RemovePublishStreamUrl |
+| [CustomCaptureAudio](./lib/examples/advanced/custom_capture_audio)| 音频自采集 | |
 
 ## 如何运行示例程序
 
