@@ -1,37 +1,42 @@
-# API Example
+# API-Example-Flutter
 
-_English | [中文](README.zh.md)_
+*__其他语言版本：__  [__简体中文__](README.zh.md)*
 
 ## Overview
 
-This repository contains sample projects using the Agora RTC Flutter SDK .
+The API-Example-ReactNative project is an open-source demo that will show you different scenes on how to integrate Agora SDK APIs into your project.
 
-*image_of_a_running_project*
+Any scene of this project can run successfully alone.
 
 ![img.png](img.png)
 
 ## Project structure
 
-The project uses a single app to combine a variety of functionalities.
+* **Basic demos:**
 
-| Function                                                                        | Location                                                                                                                                 |
-| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Audio live streaming                                                            | [join_channel_audio.dart](./lib/examples/basic/join_channel_audio/join_channel_audio.dart)                  |
-| Video live streaming                                                            | [join_channel_video.dart](./lib/examples/basic/join_channel_video/join_channel_video.dart)                  |
-| String user ID                                                                  | [string_uid.dart](./lib/examples/basic/string_uid/string_uid.dart)                  |
-| Join multiple channels                                                          | [join_multiple_channel.dart](./lib/examples/advanced/join_multiple_channel/join_multiple_channel.dart)                  |
-| Voice effects                                                                   | [voice_changer.dart](./lib/examples/advanced/voice_changer/voice_changer.dart)                  |
-| Channel media relay                                                             | [channel_media_relay.dart](./lib/examples/advanced/channel_media_relay/channel_media_relay.dart)                  |
-| Send data stream                                                                | [stream_message.dart](./lib/examples/advanced/stream_message/stream_message.dart)                  |
-| ...                                                            | ...                  |
+| Demo                                                         | Description                                        | APIs                                                         |
+| ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ |
+| [JoinChannelAudio](./lib/examples/basic/join_channel_audio) | Audio live streaming | GetEngine, JoinChannelByKey, LeaveChannel |
+| [JoinChannelVideo](./lib/examples/basic/join_channel_video) | Video live streaming | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+| [StringUid](./lib/examples/basic/string_uid) | String user ID | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+
+* **Advanced demos:**
+
+| Demo                                                         | Description                                                  | APIs                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [JoinMultipleChannel](./lib/examples/advanced/join_multiple_channel) | Join multiple channels | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [VoiceChanger](./lib/examples/advanced/voice_changer) | Voice effects | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | Channel media relay | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [StreamMessage](./lib/examples/advanced/stream_message) | Send data stream  | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [CustomCaptureAudio](./lib/examples/advanced/custom_capture_audio)| Custom audio capture | |
 
 ## How to run the sample project
 
-### Prerequisites
+#### Developer Environment Requirements
 
 - [Flutter](https://flutter.dev/docs/get-started/install)
 
-### Steps to run
+#### Steps to run
 
 *Steps from cloning the code to running the project*
 

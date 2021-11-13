@@ -1,37 +1,40 @@
-# 示例项目
+# API-Example-Flutter
 
-_[English](README.md) | 中文_
+*Read this in other languages: [English](README.md)*
 
 ## 简介
 
-该仓库包含了使用 RTC Flutter SDK 的示例项目。
+这个开源示例项目演示了不同场景下，Agora SDK 的基本集成逻辑。 项目中每个 Scene 都是一个独立的场景，都可以成功独立运行。
 
-*项目运行效果图*
+在这个示例项目中包含的所有场景都可以独立运行：
 
 ![img.png](img.png)
 
 ## 项目结构
 
-此项目使用一个单独的 app 实现了多种功能。
+* **基础案例:**
 
-| 功能                                             | 位置                                                                                                                    |
-| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 音频直播                                         | [join_channel_audio.dart](./lib/examples/basic/join_channel_audio/join_channel_audio.dart)                  |
-| 视频直播                                         | [join_channel_video.dart](./lib/examples/basic/join_channel_video/join_channel_video.dart)                  |
-| 视频直播                                         | [string_uid.dart](./lib/examples/basic/string_uid/string_uid.dart)                  |
-| 加入多频道                                        | [join_multiple_channel.dart](./lib/examples/advanced/join_multiple_channel/join_multiple_channel.dart)                  |
-| 音频效果                                         | [voice_changer.dart](./lib/examples/advanced/voice_changer/voice_changer.dart)                  |
-| 频道媒体流转发                                    | [channel_media_relay.dart](./lib/examples/advanced/channel_media_relay/channel_media_relay.dart)                  |
-| 发送数据流                                        | [stream_message.dart](./lib/examples/advanced/stream_message/stream_message.dart)                  |
-| ...                                             | ...                  |
+| Demo                                                         | Description                                        | APIs                                                         |
+| ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ |
+| [JoinChannelAudio](./lib/examples/basic/join_channel_audio) | 音频直播 | GetEngine, JoinChannelByKey, LeaveChannel |
+| [JoinChannelVideo](./lib/examples/basic/join_channel_video) | 视频直播 | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+| [StringUid](./lib/examples/basic/string_uid) | 字符串用户ID | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
 
-## 如何运行示例项目
+* **进阶案例:**
 
-### 前提条件
+| Demo                                                         | Description                                                  | APIs                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [JoinMultipleChannel](./lib/examples/advanced/join_multiple_channel) | 加入多频道 | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [VoiceChanger](./lib/examples/advanced/voice_changer) | 音频效果 | SetOnCaptureVideoFrameCallback, SetOnRenderVideoFrameCallback, OnRenderVideoFrameHandler, OnCaptureVideoFrameHandler |
+| [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | 频道媒体流转发 | RegisterAudioRawDataObserver, SetOnPlaybackAudioFrameCallback, OnPlaybackAudioFrameHandler |
+| [StreamMessage](./lib/examples/advanced/stream_message) | 发送数据流 | SetVideoEncoderConfiguration, SetLiveTranscoding, AddPublishStreamUrl, RemovePublishStreamUrl |
+| [CustomCaptureAudio](./lib/examples/advanced/custom_capture_audio)| 音频自采集 | |
+
+## 如何运行示例程序
 
 - [Flutter](https://flutter.dev/docs/get-started/install)
 
-### 运行步骤
+#### 运行步骤
 
 *从拉取仓库到成功运行的全部步骤*
 
@@ -67,7 +70,7 @@ _[English](README.md) | 中文_
 - 如果你想了解声网 SDK 在复杂场景下的应用，可以参考[官方场景案例](https://github.com/AgoraIO-usecase)
 - 如果你想了解声网的一些社区开发者维护的项目，可以查看[社区](https://github.com/AgoraIO-Community)
 - 若遇到问题需要开发者帮助，你可以到[开发者社区](https://rtcdeveloper.com/)提问
-- 如果需要售后技术支持, 你可以在[Agora Dashboard](https://dashboard.agora.io)提交工单
+- 如果需要售后技术支持, 你可以在[Agora Dashboard](https://dashboard.agora.io/)提交工单
 
 ## 代码许可
 
