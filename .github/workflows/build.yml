@@ -6,7 +6,6 @@ on:
       - master
       # Temporarily allow check on dev/flutter2-iris branch
       - 'dev/flutter2-iris'
-      - 'littlegnal/flutter-iris3'
   pull_request:
     branches: 
       - master
