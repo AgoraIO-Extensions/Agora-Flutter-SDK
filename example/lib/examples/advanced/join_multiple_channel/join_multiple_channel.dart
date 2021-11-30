@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:agora_rtc_engine/rtc_channel.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,15 +44,18 @@ class _State extends State<JoinMultipleChannel> {
     await _engine.startPreview();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
+
+    _channel0 = await RtcChannel.create(_channelId0);
+    this._addListener(_channel0);
+
+    _channel1 = await RtcChannel.create(_channelId1);
+    this._addListener(_channel1);
   }
 
   _joinChannel0() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-
-    _channel0 = await RtcChannel.create(_channelId0);
-    this._addListener(_channel0);
 
     await _channel0.setClientRole(ClientRole.Broadcaster);
     await _channel0.joinChannel(
@@ -71,9 +73,6 @@ class _State extends State<JoinMultipleChannel> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    _channel1 = await RtcChannel.create(_channelId1);
-    this._addListener(_channel1);
-
     await _channel1.setClientRole(ClientRole.Broadcaster);
     await _channel1.joinChannel(
         null,
@@ -87,38 +86,27 @@ class _State extends State<JoinMultipleChannel> {
 
   _addListener(RtcChannel channel) {
     String channelId = channel.channelId;
-    channel.setEventHandler(
-        RtcChannelEventHandler(joinChannelSuccess: (channel, uid, elapsed) {
-      log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      if (channelId == _channelId0) {
-        setState(() {
-          isJoined0 = true;
-        });
-      } else if (channelId == _channelId1) {
-        setState(() {
-          isJoined1 = true;
-        });
-      }
-    }, userJoined: (uid, elapsed) {
-      log('userJoined ${channel.channelId} $uid $elapsed');
-    }, userOffline: (uid, reason) {
-      log('userOffline ${channel.channelId} $uid $reason');
-    }, leaveChannel: (stats) {
-      log('leaveChannel ${channel.channelId} ${stats.toJson()}');
-      if (channelId == _channelId0) {
-        this.setState(() {
-          isJoined0 = false;
-          remoteUid0.clear();
-        });
-      } else if (channelId == _channelId1) {
-        this.setState(() {
-          isJoined1 = false;
-          remoteUid1.clear();
-        });
-      }
-    }, remoteVideoStateChanged: (uid, state, reason, elapsed) {
-      log('remoteVideoStateChanged ${uid} ${state} ${reason} ${elapsed}');
-      if (state == VideoRemoteState.Starting) {
+    channel.setEventHandler(RtcChannelEventHandler(
+      warning: (warningCode) {
+        logSink.log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        logSink.log('error ${errorCode}');
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        if (channelId == _channelId0) {
+          setState(() {
+            isJoined0 = true;
+          });
+        } else if (channelId == _channelId1) {
+          setState(() {
+            isJoined1 = true;
+          });
+        }
+      },
+      userJoined: (uid, elapsed) {
+        logSink.log('userJoined ${channel.channelId} $uid $elapsed');
         if (channelId == _channelId0) {
           this.setState(() {
             remoteUid0.add(uid);
@@ -128,7 +116,9 @@ class _State extends State<JoinMultipleChannel> {
             remoteUid1.add(uid);
           });
         }
-      } else if (state == VideoRemoteState.Stopped) {
+      },
+      userOffline: (uid, reason) {
+        logSink.log('userOffline ${channel.channelId} $uid $reason');
         if (channelId == _channelId0) {
           this.setState(() {
             remoteUid0.removeWhere((element) => element == uid);
@@ -138,18 +128,32 @@ class _State extends State<JoinMultipleChannel> {
             remoteUid1.removeWhere((element) => element == uid);
           });
         }
-      }
-    }));
+      },
+      leaveChannel: (stats) {
+        logSink.log('leaveChannel ${channel.channelId} ${stats.toJson()}');
+        if (channelId == _channelId0) {
+          this.setState(() {
+            isJoined0 = false;
+            remoteUid0.clear();
+          });
+        } else if (channelId == _channelId1) {
+          this.setState(() {
+            isJoined1 = false;
+            remoteUid1.clear();
+          });
+        }
+      },
+    ));
   }
 
   _publishChannel0() async {
-    await _channel1.unpublish();
-    await _channel0.publish();
+    await _channel1.muteLocalVideoStream(true);
+    await _channel0.muteLocalVideoStream(false);
   }
 
   _publishChannel1() async {
-    await _channel0.unpublish();
-    await _channel1.publish();
+    await _channel0.muteLocalVideoStream(true);
+    await _channel1.muteLocalVideoStream(false);
   }
 
   _leaveChannel0() async {
@@ -240,7 +244,7 @@ class _State extends State<JoinMultipleChannel> {
   }
 
   _renderVideo() {
-    List<int>? remoteUid = null;
+    List<int> remoteUid = [];
     if (renderChannelId == _channelId0) {
       remoteUid = remoteUid0;
     } else if (renderChannelId == _channelId1) {
@@ -249,25 +253,30 @@ class _State extends State<JoinMultipleChannel> {
     return Expanded(
       child: Stack(
         children: [
-          RtcLocalView.SurfaceView(
-            channelId: renderChannelId,
-          ),
-          if (remoteUid != null)
+          kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
+          if (remoteUid.isNotEmpty)
             Align(
               alignment: Alignment.topLeft,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.of(remoteUid.map(
-                    (e) => Container(
-                      width: 120,
-                      height: 120,
-                      child: RtcRemoteView.SurfaceView(
-                        uid: e,
-                        channelId: renderChannelId,
-                      ),
-                    ),
-                  )),
+                  children: remoteUid
+                      .map(
+                        (e) => Container(
+                          width: 120,
+                          height: 120,
+                          child: kIsWeb
+                              ? RtcRemoteView.SurfaceView(
+                                  uid: e,
+                                  channelId: renderChannelId!,
+                                )
+                              : RtcRemoteView.TextureView(
+                                  uid: e,
+                                  channelId: renderChannelId!,
+                                ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             )

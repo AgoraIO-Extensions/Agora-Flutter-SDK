@@ -11,4 +11,4 @@ PRODUCT_NAME = agora_rtc_engine_example
 PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 io.agora. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2021 io.agora. All rights reserved.

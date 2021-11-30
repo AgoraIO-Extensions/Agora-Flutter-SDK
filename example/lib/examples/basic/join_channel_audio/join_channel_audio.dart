@@ -1,12 +1,10 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../log_sink.dart';
 
 /// JoinChannelAudio Example
 class JoinChannelAudio extends StatefulWidget {
@@ -22,8 +20,10 @@ class _State extends State<JoinChannelAudio> {
       enableSpeakerphone = true,
       playEffect = false;
   bool _enableInEarMonitoring = false;
-  double _recordingVolume = 0, _playbackVolume = 0, _inEarMonitoringVolume = 0;
-  TextEditingController? _controller;
+  double _recordingVolume = 100,
+      _playbackVolume = 100,
+      _inEarMonitoringVolume = 100;
+  late TextEditingController _controller;
 
   @override
   void initState() {
@@ -49,14 +49,20 @@ class _State extends State<JoinChannelAudio> {
 
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        logSink.log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        logSink.log('error ${errorCode}');
+      },
       joinChannelSuccess: (channel, uid, elapsed) {
-        log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       leaveChannel: (stats) async {
-        log('leaveChannel ${stats.toJson()}');
+        logSink.log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
         });
@@ -70,23 +76,34 @@ class _State extends State<JoinChannelAudio> {
     }
 
     await _engine
-        .joinChannel(config.token, config.channelId, null, config.uid)
+        .joinChannel(config.token, _controller.text, null, config.uid)
         .catchError((onError) {
-      print('error ${onError.toString()}');
+      logSink.log('error ${onError.toString()}');
     });
   }
 
   _leaveChannel() async {
     await _engine.leaveChannel();
+    setState(() {
+      isJoined = false;
+      openMicrophone = true;
+      enableSpeakerphone = true;
+      playEffect = false;
+      _enableInEarMonitoring = false;
+      _recordingVolume = 100;
+      _playbackVolume = 100;
+      _inEarMonitoringVolume = 100;
+    });
   }
 
-  _switchMicrophone() {
-    _engine.enableLocalAudio(!openMicrophone).then((value) {
+  _switchMicrophone() async {
+    // await _engine.muteLocalAudioStream(!openMicrophone);
+    await _engine.enableLocalAudio(!openMicrophone).then((value) {
       setState(() {
         openMicrophone = !openMicrophone;
       });
     }).catchError((err) {
-      log('enableLocalAudio $err');
+      logSink.log('enableLocalAudio $err');
     });
   }
 
@@ -96,7 +113,7 @@ class _State extends State<JoinChannelAudio> {
         enableSpeakerphone = !enableSpeakerphone;
       });
     }).catchError((err) {
-      log('setEnableSpeakerphone $err');
+      logSink.log('setEnableSpeakerphone $err');
     });
   }
 
@@ -107,41 +124,31 @@ class _State extends State<JoinChannelAudio> {
           playEffect = false;
         });
       }).catchError((err) {
-        log('stopEffect $err');
+        logSink.log('stopEffect $err');
       });
     } else {
-      _engine
-          .playEffect(
-              1,
-              await (_engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3")
-                  as FutureOr<String>),
-              -1,
-              1,
-              1,
-              100,
-              true)
-          .then((value) {
+      final path =
+          (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!;
+      _engine.playEffect(1, path, 0, 1, 1, 100, openMicrophone).then((value) {
         setState(() {
           playEffect = true;
         });
       }).catchError((err) {
-        log('playEffect $err');
+        logSink.log('playEffect $err');
       });
     }
   }
 
-  _onChangeInEarMonitoringVolume(double value) {
-    setState(() {
-      _inEarMonitoringVolume = value;
-    });
-    _engine.setInEarMonitoringVolume(value.toInt());
+  _onChangeInEarMonitoringVolume(double value) async {
+    _inEarMonitoringVolume = value;
+    await _engine.setInEarMonitoringVolume(_inEarMonitoringVolume.toInt());
+    setState(() {});
   }
 
-  _toggleInEarMonitoring(value) {
-    setState(() {
-      _enableInEarMonitoring = value;
-    });
-    _engine.enableInEarMonitoring(value);
+  _toggleInEarMonitoring(value) async {
+    _enableInEarMonitoring = value;
+    await _engine.enableInEarMonitoring(_enableInEarMonitoring);
+    setState(() {});
   }
 
   @override
@@ -153,11 +160,6 @@ class _State extends State<JoinChannelAudio> {
             TextField(
               controller: _controller,
               decoration: InputDecoration(hintText: 'Channel ID'),
-              onChanged: (text) {
-                setState(() {
-                  channelId = text;
-                });
-              },
             ),
             Row(
               children: [
@@ -185,14 +187,15 @@ class _State extends State<JoinChannelAudio> {
                     child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
                   ),
                   ElevatedButton(
-                    onPressed: this._switchSpeakerphone,
+                    onPressed: isJoined ? this._switchSpeakerphone : null,
                     child:
                         Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
                   ),
-                  ElevatedButton(
-                    onPressed: this._switchEffect,
-                    child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
-                  ),
+                  if (!kIsWeb)
+                    ElevatedButton(
+                      onPressed: isJoined ? this._switchEffect : null,
+                      child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
+                    ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -203,12 +206,15 @@ class _State extends State<JoinChannelAudio> {
                         max: 400,
                         divisions: 5,
                         label: 'RecordingVolume',
-                        onChanged: (double value) {
-                          setState(() {
-                            _recordingVolume = value;
-                          });
-                          _engine.adjustRecordingSignalVolume(value.toInt());
-                        },
+                        onChanged: isJoined
+                            ? (double value) {
+                                setState(() {
+                                  _recordingVolume = value;
+                                });
+                                _engine
+                                    .adjustRecordingSignalVolume(value.toInt());
+                              }
+                            : null,
                       )
                     ],
                   ),
@@ -222,12 +228,15 @@ class _State extends State<JoinChannelAudio> {
                         max: 400,
                         divisions: 5,
                         label: 'PlaybackVolume',
-                        onChanged: (double value) {
-                          setState(() {
-                            _playbackVolume = value;
-                          });
-                          _engine.adjustPlaybackSignalVolume(value.toInt());
-                        },
+                        onChanged: isJoined
+                            ? (double value) {
+                                setState(() {
+                                  _playbackVolume = value;
+                                });
+                                _engine
+                                    .adjustPlaybackSignalVolume(value.toInt());
+                              }
+                            : null,
                       )
                     ],
                   ),
@@ -239,7 +248,7 @@ class _State extends State<JoinChannelAudio> {
                         Text('InEar Monitoring Volume:'),
                         Switch(
                           value: _enableInEarMonitoring,
-                          onChanged: _toggleInEarMonitoring,
+                          onChanged: isJoined ? _toggleInEarMonitoring : null,
                           activeTrackColor: Colors.grey[350],
                           activeColor: Colors.white,
                         )
@@ -252,8 +261,11 @@ class _State extends State<JoinChannelAudio> {
                               min: 0,
                               max: 100,
                               divisions: 5,
-                              label: 'InEar Monitoring Volume',
-                              onChanged: _onChangeInEarMonitoringVolume,
+                              label:
+                                  'InEar Monitoring Volume $_inEarMonitoringVolume',
+                              onChanged: isJoined
+                                  ? _onChangeInEarMonitoringVolume
+                                  : null,
                             ))
                     ],
                   ),

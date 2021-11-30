@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 import 'examples/advanced/index.dart';
 import 'examples/basic/index.dart';
 import 'config/agora.config.dart' as config;
+import 'examples/log_sink.dart';
 
 void main() => runApp(MyApp());
 
 /// This widget is the root of your application.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final _DATA = [...Basic, ...Advanced];
 
   bool _isConfigInvalid() {
     return config.appId == '<YOUR_APP_ID>' ||
-        config.token == '<YOUR_TOEKN>' ||
+        config.token == '<YOUR_TOKEN>' ||
         config.channelId == '<YOUR_CHANNEL_ID>';
   }
 
@@ -49,6 +55,7 @@ class MyApp extends StatelessWidget {
                                           appBar: AppBar(
                                             title: Text(
                                                 _DATA[index]['name'] as String),
+                                            actions: [LogActionWidget()],
                                           ),
                                           body:
                                               _DATA[index]['widget'] as Widget?,

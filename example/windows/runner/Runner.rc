@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "Demonstrates how to use the agora_rtc_engine plugin." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "agora_rtc_engine_example" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2020 io.agora. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2021 io.agora. All rights reserved." "\0"
             VALUE "OriginalFilename", "agora_rtc_engine_example.exe" "\0"
             VALUE "ProductName", "agora_rtc_engine_example" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
