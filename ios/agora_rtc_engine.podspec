@@ -15,12 +15,15 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Agora' => 'developer@agora.io' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'Classes/**/*.{h,mm}'
+#  s.exclude_files = 'Classes/CallApiMethodCallHandler.h', 'Classes/FlutterIrisEventHandler.h'
   s.dependency 'Flutter'
   s.dependency 'AgoraRtcEngine_iOS', '3.5.1'
-  s.platform = :ios, '8.0'
+  s.platform = :ios, '9.0'
+  s.swift_version = '5.0'
+  s.dependency 'AgoraRtcWrapper'
+   s.libraries = 'stdc++'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
-  s.swift_version = '5.0'
 end
