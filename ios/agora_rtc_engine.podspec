@@ -16,7 +16,6 @@ Pod::Spec.new do |s|
   s.author           = { 'Agora' => 'developer@agora.io' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*.{h,mm}'
-#  s.exclude_files = 'Classes/CallApiMethodCallHandler.h', 'Classes/FlutterIrisEventHandler.h'
   s.dependency 'Flutter'
   s.dependency 'AgoraRtcEngine_iOS', '3.5.1'
   s.platform = :ios, '9.0'

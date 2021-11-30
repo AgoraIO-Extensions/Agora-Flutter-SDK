@@ -8,7 +8,6 @@
 
 @implementation CallApiMethodCallHandler
 
-// agora::iris::rtc::IrisRtcEngine
 - (instancetype)initWith:(void *)engine {
     self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)engine;
     return self;
@@ -26,12 +25,8 @@
             if (buffer == nil || buffer == [NSNull null]) {
                 
                 ret = [self callApi:apiType _:params _:res]; //self.irisRtcEngine->CallApi(
-                  //(ApiTypeEngine)[apiType unsignedIntValue], [params UTF8String], res);
             } else {
                 ret = [self callApiWithBuffer:apiType _:params _:(void *)[[buffer data] bytes] _:res];
-      //        ret = self.irisRtcEngine->CallApi(
-      //            (ApiTypeEngine)[apiType unsignedIntValue], [params UTF8String],
-      //            (void *)[[buffer data] bytes], res);
             }
             if (ret == 0) {
               if (strlen(res) == 0) {
@@ -42,11 +37,6 @@
             } else if (ret > 0) {
               result(@(ret));
             } else {
-      //        char description[kBasicResultLength];
-      //        self.irisRtcEngine->CallApi(
-      //            ApiTypeEngine::kEngineGetErrorDescription,
-      //            [[NSString stringWithFormat:@"{\"code\":%d}", abs(ret)] UTF8String],
-      //            description);
                 NSString *des = [self callApiError:ret];
               result([FlutterError
                   errorWithCode:[@(ret) stringValue]

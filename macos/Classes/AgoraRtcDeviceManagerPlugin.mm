@@ -44,39 +44,6 @@ using namespace agora::iris::rtc;
                   result:(FlutterResult)result {
     // TODO(littlegnal): Should handle self.engine->device_manager()->CallApi
     [[self callApiMethodCallHandler] onMethodCall:call _:result];
-//  if ([@"callApi" isEqualToString:call.method]) {
-//    NSNumber *apiType = call.arguments[@"apiType"];
-//    NSString *params = call.arguments[@"params"];
-//    char res[kMaxResultLength] = "";
-//
-//    int ret = 0;
-//    if (self.audio) {
-//      ret = self.engine->device_manager()->CallApi(
-//          (ApiTypeAudioDeviceManager)[apiType unsignedIntValue],
-//          [params UTF8String], res);
-//    } else {
-//      ret = self.engine->device_manager()->CallApi(
-//          (ApiTypeVideoDeviceManager)[apiType unsignedIntValue],
-//          [params UTF8String], res);
-//    }
-//
-//    if (ret == 0) {
-//      std::string res_str(res);
-//      if (res_str.empty()) {
-//        result(nil);
-//      } else {
-//        result([NSString stringWithUTF8String:res]);
-//      }
-//    } else if (ret > 0) {
-//      result(@(ret));
-//    } else {
-//      result([FlutterError errorWithCode:[NSString stringWithFormat:@"%d", ret]
-//                                 message:nil
-//                                 details:nil]);
-//    }
-//  } else {
-//    result(FlutterMethodNotImplemented);
-//  }
 }
 
 + (void)registerWithRegistrar:(nonnull id<FlutterPluginRegistrar>)registrar {

@@ -10,26 +10,11 @@ public:
   void OnEvent(const char *event, const char *data) override {
     @autoreleasepool {
         if (eventSink_) {
-//            NSDictionary *dictionary = @{
-//                @"methodName" : [NSString stringWithUTF8String:event],
-//                @"data" : [NSString stringWithUTF8String:data],
-//            };
-            
             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event], @"methodName", [NSString stringWithUTF8String:data], @"data", nil];
             
-//            NSMutableDictionary *dic = @{
-//                @"methodName" : [NSString stringWithUTF8String:event],
-//                @"data" : [NSString stringWithUTF8String:data],
-//            };
-            //@"subProcess" : @(sub_process_)
             if (shouldHandleSubProcess_) {
                 [dic setObject:@(sub_process_) forKey:@"subProcess"];
             }
-            
-//            eventSink_(@{
-//              @"methodName" : [NSString stringWithUTF8String:event],
-//              @"data" : [NSString stringWithUTF8String:data],
-//            });
             
             eventSink_(dic);
         }
@@ -45,22 +30,11 @@ public:
         if (eventSink_) {
             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event], @"methodName", [NSString stringWithUTF8String:data], @"data", bufferApple, @"buffer", nil];
             
-//            NSMutableDictionary *dic = @{
-//                @"methodName" : [NSString stringWithUTF8String:event],
-//                @"data" : [NSString stringWithUTF8String:data],
-//            };
-            //@"subProcess" : @(sub_process_)
             if (shouldHandleSubProcess_) {
                 [dic setObject:@(sub_process_) forKey:@"subProcess"];
             }
             
             eventSink_(dic);
-            
-//            eventSink_(@{
-//              @"methodName" : [NSString stringWithUTF8String:event],
-//              @"data" : [NSString stringWithUTF8String:data],
-//              @"buffer" : bufferApple
-//            });
         }
     }
   }
@@ -119,7 +93,6 @@ private:
 - (FlutterError *)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events {
     self.eventSink = events;
     if (!self.eventHandler) {
-//        BOOL shouldHandleSubProcess = self.irisRtcEngineSub != nil;
         self.eventHandler = new EventHandler(self.eventSink, self.irisRtcEngineSub != nil, false);
         [self setUpEventHandler:self.irisRtcEngine eventHandler:self.eventHandler];
         if (self.irisRtcEngineSub != nil) {
@@ -137,12 +110,8 @@ private:
 }
 
 - (void)resetEventHandler:(void *)engine {
-//    self.eventSink = nil;
     agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
     e->SetEventHandler(nil);
-//    if (self.irisRtcEngineSub) {
-//        self.irisRtcEngineSub->SetEventHandler(nil);
-//    }
 }
 
 @end
@@ -153,21 +122,9 @@ private:
     e->channel()->SetEventHandler((EventHandler *)eventHandler);
 }
 
-//- (void)setUpEventHandler:(void *)eventHandler {
-//    self.irisRtcEngine->channel()->SetEventHandler((EventHandler *)eventHandler);
-//}
-
 - (void)resetEventHandler:(void *)engine {
-//    self.eventSink = nil;
     agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
     e->channel()->SetEventHandler(nil);
-//    if (self.irisRtcEngineSub) {
-//        self.irisRtcEngineSub->SetEventHandler(nil);
-//    }
 }
-
-//- (void)resetEventHandler {
-//    self.irisRtcEngine->channel()->SetEventHandler(nil);
-//}
 
 @end

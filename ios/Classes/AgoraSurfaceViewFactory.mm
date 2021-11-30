@@ -90,31 +90,6 @@
 
 - (void)onMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
     [[self callApiMethodCallHandler] onMethodCall:call _:result];
-//  if ([@"callApi" isEqualToString:call.method]) {
-//    NSNumber *apiType = call.arguments[@"apiType"];
-//    NSString *params = call.arguments[@"params"];
-//    char res[kBasicResultLength];
-//    int ret = self.engine->CallApi((ApiTypeEngine)[apiType unsignedIntValue],
-//                                   [params UTF8String],
-//                                   (__bridge void *)self.surfaceView, res);
-//    if (ret < 0) {
-//      char description[kBasicResultLength];
-//      self.engine->CallApi(
-//          ApiTypeEngine::kEngineGetErrorDescription,
-//          [[NSString stringWithFormat:@"{\"code\":%d}}", abs(ret)] UTF8String],
-//          description);
-//      if (result != nil) {
-//        result([FlutterError
-//            errorWithCode:[@(ret) stringValue]
-//                  message:[NSString stringWithUTF8String:description]
-//                  details:nil]);
-//      }
-//    } else {
-//      if (result != nil) {
-//        result(nil);
-//      }
-//    }
-//  }
 }
 
 @end

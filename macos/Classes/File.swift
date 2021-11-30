@@ -1,8 +1,2 @@
-//
-//  File.swift
-//  agora_rtc_engine
-//
-//  Created by fenglang on 2021/11/12.
-//
-
+/// This file is created to make macos project can be compiled.
 import Foundation

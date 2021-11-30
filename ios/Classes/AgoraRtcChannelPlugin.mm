@@ -20,26 +20,9 @@
 
 @implementation AgoraRtcChannelPlugin
 
-//+ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
-////  [SwiftAgoraRtcEnginePlugin registerWithRegistrar:registrar];
-//
-//    FlutterMethodChannel *methodChannel =
-//        [FlutterMethodChannel methodChannelWithName:@"agora_rtc_channel"
-//                                    binaryMessenger:[registrar messenger]];
-//    FlutterEventChannel *eventChannel =
-//        [FlutterEventChannel eventChannelWithName:@"agora_rtc_channel/events"
-//                                  binaryMessenger:[registrar messenger]];
-//    AgoraRtcEnginePlugin *instance = [[AgoraRtcEnginePlugin alloc] init];
-//    [registrar addMethodCallDelegate:instance channel:methodChannel];
-//    [eventChannel setStreamHandler:instance];
-//
-//}
-
 - (instancetype)initWith:(void *)irisRtcEngine binaryMessenger:(NSObject<FlutterBinaryMessenger>*)messenger {
     self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)irisRtcEngine;
     
-//    self.eventHandler = new EventHandler(_eventSink);
-//    self.irisRtcEngine->channel()->SetEventHandler(self.eventHandler);
     self.eventHandler = [[RtcChannelFlutterIrisEventHandler alloc] initWith:self.irisRtcEngine];
     self.callApiMethodCallHandler = [[RtcChannelCallApiMethodCallHandler alloc] initWith:self.irisRtcEngine];
     
@@ -57,21 +40,7 @@
         
     }];
     
-    
-//    AgoraRtcEnginePlugin *instance = [[AgoraRtcEnginePlugin alloc] init];
-//    [registrar addMethodCallDelegate:instance channel:methodChannel];
-    
-    
-    
-    
     [eventChannel setStreamHandler:self.eventHandler];
-    
-    
-    
-//  self.irisRtcEngine = new agora::iris::rtc::IrisRtcEngine;
-//      self.eventHandler = new agora::iris::EventHandler(_eventSink);
-    
-//  self.irisRtcEngine->SetEventHandler(self.eventHandler);
     
   return self;
 }
@@ -89,9 +58,7 @@
 }
 
 - (void)dealloc {
-//  delete self.irisRtcEngine;
     self.irisRtcEngine->channel()->SetEventHandler(NULL);
-//  delete self.eventHandler;
 }
 
 @end

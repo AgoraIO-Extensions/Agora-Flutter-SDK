@@ -89,8 +89,6 @@ namespace
       PluginRegistrar *registrar, IrisRtcEngine *engine)
       : engine_(engine)
   {
-    // callApiMethodCallHandler_ = std::make_unique<RtcDeviceManagerCallApiMethodCallHandler>(engine_);
-
     callApiMethodCallHandler_ = std::make_unique<RtcDeviceManagerCallApiMethodCallHandler>(engine_.get());
   }
 
@@ -108,52 +106,6 @@ namespace
     }
 
     callApiMethodCallHandler_.get()->HandleMethodCall(method_call, std::move(result));
-
-    // if (method.compare("callApi") == 0)
-    // {
-    //   auto arguments = std::get<EncodableMap>(*method_call.arguments());
-    //   auto api_type = std::get<int32_t>(arguments[EncodableValue("apiType")]);
-    //   auto &params = std::get<std::string>(arguments[EncodableValue("params")]);
-    //   char res[kMaxResultLength] = "";
-    //   int ret = 0;
-    //   if (audio)
-    //   {
-    //     ret = engine_->device_manager()->CallApi(
-    //         static_cast<ApiTypeAudioDeviceManager>(api_type), params.c_str(),
-    //         res);
-    //   }
-    //   else
-    //   {
-    //     ret = engine_->device_manager()->CallApi(
-    //         static_cast<ApiTypeVideoDeviceManager>(api_type), params.c_str(),
-    //         res);
-    //   }
-
-    //   if (ret == 0)
-    //   {
-    //     std::string res_str(res);
-    //     if (res_str.empty())
-    //     {
-    //       result->Success();
-    //     }
-    //     else
-    //     {
-    //       result->Success(EncodableValue(res_str));
-    //     }
-    //   }
-    //   else if (ret > 0)
-    //   {
-    //     result->Success(EncodableValue(ret));
-    //   }
-    //   else
-    //   {
-    //     result->Error(std::to_string(ret));
-    //   }
-    // }
-    // else
-    // {
-    //   result->NotImplemented();
-    // }
   }
 } // namespace
 
