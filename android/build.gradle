@@ -42,6 +42,7 @@ android {
 
   sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
+    main.jniLibs.srcDirs += 'libs'
   }
 
   lintOptions {
@@ -51,6 +52,6 @@ android {
 
 dependencies {
   api 'com.github.agorabuilder:native-full-sdk:3.5.1'
-
+  implementation files('libs/AgoraRtcWrapper.jar')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', '1.3.72')}"
 }

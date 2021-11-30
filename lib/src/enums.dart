@@ -137,7 +137,6 @@ enum AudioLocalState {
 
 /// The information acquisition state
 enum AudioFileInfoError {
-
   /// Successfully get the information of an audio file.
   @JsonValue(0)
   Ok,
@@ -145,6 +144,27 @@ enum AudioFileInfoError {
   /// Fail to get the information of an audio file.
   @JsonValue(1)
   Failure,
+}
+
+/// The error codes of the local user's audio mixing file.
+/// Deprecated from v3.4.0. Use AUDIO_MIXING_REASON_TYPE instead.
+@Deprecated('This enum is deprecated, pls use AudioMixingReason instead.')
+enum AudioMixingErrorType {
+  /// The SDK cannot open the audio mixing file.
+  @JsonValue(701)
+  CanNotOpen,
+
+  /// The SDK opens the audio mixing file too frequently.
+  @JsonValue(702)
+  TooFrequentCall,
+
+  /// The audio mixing file playback is interrupted.
+  @JsonValue(702)
+  InterruptedEOF,
+
+  /// The SDK can open the audio mixing file.
+  @JsonValue(0)
+  OK,
 }
 
 /// The reason for the change of the music file playback state, reported in the [RtcEngineEventHandler.audioMixingStateChanged].
@@ -232,20 +252,20 @@ enum AudioMixingDualMonoMode {
   @JsonValue(0)
   Auto,
 
-  /// 1: Left channel mode. This mode replaces the audio of the right channel 
-  /// with the audio of the left channel, which means the user can only hear the 
+  /// 1: Left channel mode. This mode replaces the audio of the right channel
+  /// with the audio of the left channel, which means the user can only hear the
   /// audio of the left channel.
   @JsonValue(1)
   L,
 
-  /// 2: Right channel mode. This mode replaces the audio of the left channel 
-  /// with the audio of the right channel, which means the user can only hear the 
+  /// 2: Right channel mode. This mode replaces the audio of the left channel
+  /// with the audio of the right channel, which means the user can only hear the
   /// audio of the right channel.
   @JsonValue(2)
   R,
 
-  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the 
-  /// right channel, which means the user can hear the audio of the left channel 
+  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the
+  /// right channel, which means the user can hear the audio of the left channel
   /// and the right channel at the same time.
   @JsonValue(3)
   MIX,
@@ -280,6 +300,22 @@ enum AudioOutputRouting {
   /// Bluetooth headset.
   @JsonValue(5)
   HeadsetBluetooth,
+
+  /// (macOS only) The audio route is a USB peripheral device.
+  @JsonValue(6)
+  USB,
+
+  /// (macOS only) The audio route is an HDMI peripheral device.
+  @JsonValue(7)
+  HDMI,
+
+  /// (macOS only) The audio route is a DisplayPort peripheral device.
+  @JsonValue(8)
+  DisplayPort,
+
+  /// (iOS and macOS only) The audio route is Apple AirPlay.
+  @JsonValue(9)
+  AirPlay,
 }
 
 /// Audio profile.
@@ -476,6 +512,15 @@ enum AudioReverbPreset {
   /// The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the `profile` parameter in [RtcEngine.setAudioProfile] as [AudioProfile.MusicHighQualityStereo].
   @JsonValue(0x00200001)
   VIRTUAL_STEREO,
+
+  /// A pitch correction effect that corrects the user's pitch based on the pitch
+  /// of the natural C major scale.
+  @JsonValue(0x00300001)
+  AUDIO_ELECTRONIC_VOICE,
+
+  /// A 3D voice effect that makes the voice appear to be moving around the user.
+  @JsonValue(0x00400001)
+  AUDIO_THREEDIM_VOICE,
 }
 
 /// Audio reverberation type.
@@ -1458,6 +1503,26 @@ enum LocalVideoStreamError {
   /// The SDK cannot find the local video capture device.
   @JsonValue(8)
   DeviceNotFound,
+
+  /// The shared window is minimized when you call `startScreenCaptureByWindowId` to share a window.
+  @JsonValue(11)
+  ScreenCaptureWindowMinmized,
+
+  /// The error code indicates that a window shared by the window ID has been closed,
+  /// or a full-screen window shared by the window ID has exited full-screen mode.
+  /// After exiting full-screen mode, remote users cannot see the shared window.
+  /// To prevent remote users from seeing a black screen, Agora recommends that you
+  /// immediately stop screen sharing.
+  /// Common scenarios for reporting this error code:
+  /// * When the local user closes the shared window, the SDK reports this error code.
+  /// * The local user shows some slides in full-screen mode first, and then shares
+  /// the windows of the slides. After the user exits full-screen mode, the SDK reports
+  /// this error code.
+  /// * The local user watches web video or reads web document in full-screen mode
+  /// first, and then shares the window of the web video or document. After the user
+  /// exits full-screen mode, the SDK reports this error code.
+  @JsonValue(12)
+  ScreenCaptureWindowClosed,
 }
 
 /// The state of the local video stream.
@@ -2133,6 +2198,17 @@ enum VideoCodecType {
   E264,
 }
 
+/// The video codec type of the output video stream.
+enum VideoCodecTypeForStream {
+  /// (Default) H.264
+  @JsonValue(1)
+  H264,
+
+  /// H.265
+  @JsonValue(2)
+  H265,
+}
+
 /// The publishing state.
 enum StreamPublishState {
   /// The initial publishing state after joining the channel.
@@ -2617,17 +2693,17 @@ enum VirtualBackgroundSourceType {
 
 /// The degree of blurring applied to the custom background image
 enum VirtualBackgroundBlurDegree {
-  /// The degree of blurring applied to the custom background image is low. The 
+  /// The degree of blurring applied to the custom background image is low. The
   /// user can almost see the background clearly.
   @JsonValue(1)
   Low,
 
-  /// The degree of blurring applied to the custom background image is medium. 
+  /// The degree of blurring applied to the custom background image is medium.
   /// It is difficult for the user to recognize details in the background.
   @JsonValue(2)
   Medium,
 
-  /// (Default) The degree of blurring applied to the custom background image is 
+  /// (Default) The degree of blurring applied to the custom background image is
   /// high. The user can barely see any distinguishing features in the background.
   @JsonValue(3)
   High,
@@ -2650,4 +2726,74 @@ enum VirtualBackgroundSourceStateReason {
   /// The device does not support using the virtual background.
   @JsonValue(3)
   DeviceNotSupported,
+}
+
+/// TODO(doc)
+enum VideoContentHint {
+  @JsonValue(0)
+  None,
+
+  @JsonValue(1)
+  Motion,
+
+  @JsonValue(2)
+  Details,
+}
+
+/// Media device types.
+enum MediaDeviceType {
+  /// -1: Unknown device type.
+  @JsonValue(-1)
+  UnknownAudioDevice,
+
+  /// 0: Audio playback device.
+  @JsonValue(0)
+  AudioPlayoutDevice,
+
+  /// 1: Audio capturing device.
+  @JsonValue(1)
+  AudioRecordingDevice,
+
+  /// 2: Video renderer.
+  @JsonValue(2)
+  VideoRenderDevice,
+
+  /// 3: Video capturer.
+  @JsonValue(3)
+  VideoCaptureDevice,
+
+  /// 4: Application audio playback device.
+  @JsonValue(4)
+  AudioApplicationPlayoutDevice,
+}
+
+/// Media device states.
+enum MediaDeviceStateType {
+  /// 0: The device is ready for use.
+  ///
+  /// **Since** v3.4.5
+  @JsonValue(0)
+  MediaDeviceStateIdle,
+
+  /// 1: The device is in use.
+  /// **Since**
+  /// v3.4.5
+  @JsonValue(1)
+  MediaDeviceStateActive,
+
+  /// 2: The device is disabled.
+  @JsonValue(2)
+  MediaDeviceStateDisabled,
+
+  /// 4: The device is not present.
+  @JsonValue(4)
+  MediaDeviceStateNotPresent,
+
+  /// 8: The device is unplugged.
+  @JsonValue(8)
+  MediaDeviceStateUnplugged,
+
+  /// 16: The device is not recommended.
+  @JsonValue(16)
+  MediaDeviceStateUnrecommended,
 }

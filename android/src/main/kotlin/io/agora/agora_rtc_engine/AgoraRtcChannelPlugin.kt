@@ -3,9 +3,8 @@ package io.agora.agora_rtc_engine
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
-import io.agora.rtc.RtcChannel
-import io.agora.rtc.RtcEngine
-import io.agora.rtc.base.RtcChannelManager
+import io.agora.iris.rtc.IrisRtcEngine
+import io.agora.iris.rtc.base.ApiTypeChannel
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
@@ -14,9 +13,22 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
+private class ApiTypeChannelCallApiMethodCallHandler(
+  irisRtcEngine: IrisRtcEngine
+) : CallApiMethodCallHandler(irisRtcEngine) {
+  override fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
+    return irisRtcEngine.channel.callApi(ApiTypeChannel.fromInt(apiType), params, sb)
+  }
+
+  override fun callApiWithBuffer(apiType: Int, params: String?, buffer: ByteArray?, sb: StringBuffer): Int {
+    return irisRtcEngine.channel.callApi(ApiTypeChannel.fromInt(apiType), params, buffer, sb)
+  }
+}
+
 /** AgoraRtcChannelPlugin */
 class AgoraRtcChannelPlugin(
-  private val rtcEnginePlugin: AgoraRtcEnginePlugin
+//  private val rtcEnginePlugin: AgoraRtcEnginePlugin
+  private val irisRtcEngine: IrisRtcEngine
 ) : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -25,14 +37,20 @@ class AgoraRtcChannelPlugin(
   private lateinit var methodChannel: MethodChannel
   private lateinit var eventChannel: EventChannel
   private var eventSink: EventChannel.EventSink? = null
-  private val manager = RtcChannelManager { methodName, data -> emit(methodName, data) }
+//  private val manager = RtcChannelManager { methodName, data -> emit(methodName, data) }
   private val handler = Handler(Looper.getMainLooper())
+
+  private lateinit var callApiMethodCallHandler: CallApiMethodCallHandler
 
   fun initPlugin(binaryMessenger: BinaryMessenger) {
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_channel")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_channel/events")
     eventChannel.setStreamHandler(this)
+
+    callApiMethodCallHandler = ApiTypeChannelCallApiMethodCallHandler(irisRtcEngine)
+
+
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -42,51 +60,22 @@ class AgoraRtcChannelPlugin(
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     methodChannel.setMethodCallHandler(null)
     eventChannel.setStreamHandler(null)
-    manager.release()
+
+    irisRtcEngine.destroy()
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
     eventSink = events
+    irisRtcEngine.channel.setEventHandler(EventHandler(eventSink))
   }
 
   override fun onCancel(arguments: Any?) {
+    irisRtcEngine.channel.setEventHandler(null)
     eventSink = null
   }
 
-  private fun emit(methodName: String, data: Map<String, Any?>?) {
-    handler.post {
-      val event: MutableMap<String, Any?> = mutableMapOf("methodName" to methodName)
-      data?.let { event.putAll(it) }
-      eventSink?.success(event)
-    }
-  }
-
-  private fun engine(): RtcEngine? {
-    return rtcEnginePlugin.engine()
-  }
-
-  fun channel(channelId: String): RtcChannel? {
-    return manager[channelId]
-  }
-
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
-      function.let { method ->
-        try {
-          val parameters = mutableListOf<Any?>()
-          call.arguments<Map<*, *>>()?.toMutableMap()?.let {
-            if (call.method == "create") {
-              it["engine"] = engine()
-            }
-            parameters.add(it)
-          }
-          method.invoke(manager, *parameters.toTypedArray(), ResultCallback(result))
-          return@onMethodCall
-        } catch (e: Exception) {
-          e.printStackTrace()
-        }
-      }
-    }
-    result.notImplemented()
+    // Iris supported
+    callApiMethodCallHandler.onMethodCall(call, result)
   }
 }

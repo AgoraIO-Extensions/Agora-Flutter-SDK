@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:flutter/cupertino.dart';
@@ -44,14 +42,20 @@ class _State extends State<StringUid> {
 
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        print('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        print('error ${errorCode}');
+      },
       joinChannelSuccess: (channel, uid, elapsed) {
-        log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        print('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       leaveChannel: (stats) {
-        log('leaveChannel ${stats.toJson()}');
+        print('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
         });
@@ -73,12 +77,12 @@ class _State extends State<StringUid> {
 
   _getUserInfo() {
     _engine.getUserInfoByUserAccount(stringUid).then((userInfo) {
-      log('getUserInfoByUserAccount ${userInfo.toJson()}');
+      print('getUserInfoByUserAccount ${userInfo.toJson()}');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${userInfo.toJson()}'),
       ));
     }).catchError((err) {
-      log('getUserInfoByUserAccount ${err}');
+      print('getUserInfoByUserAccount ${err}');
     });
   }
 

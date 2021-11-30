@@ -888,6 +888,31 @@ class UploadErrorReasonConverter extends EnumConverter<UploadErrorReason, int> {
 }
 
 @JsonSerializable()
+class MediaDeviceTypeConverter extends EnumConverter<MediaDeviceType, int> {
+  MediaDeviceTypeConverter(MediaDeviceType e) : super(e);
+
+  MediaDeviceTypeConverter.fromValue(int value)
+      : super.fromValue(_$MediaDeviceTypeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$MediaDeviceTypeEnumMap);
+  }
+}
+
+@JsonSerializable()
+class MediaDeviceStateTypeConverter
+    extends EnumConverter<MediaDeviceStateType, int> {
+  MediaDeviceStateTypeConverter(MediaDeviceStateType e) : super(e);
+
+  MediaDeviceStateTypeConverter.fromValue(int value)
+      : super.fromValue(_$MediaDeviceStateTypeEnumMap, value);
+
+  int value() {
+    return super.toValue(_$MediaDeviceStateTypeEnumMap);
+  }
+}
+
+@JsonSerializable()
 class CloudProxyTypeConverter extends EnumConverter<CloudProxyType, int> {
   CloudProxyTypeConverter(CloudProxyType e) : super(e);
 
@@ -978,5 +1003,17 @@ class VirtualBackgroundSourceStateReasonConverter
 
   int value() {
     return super.toValue(_$VirtualBackgroundSourceStateReasonEnumMap);
+  }
+}
+
+@JsonSerializable()
+class VideoContentHintConverter extends EnumConverter<VideoContentHint, int> {
+  VideoContentHintConverter(VideoContentHint e) : super(e);
+
+  VideoContentHintConverter.fromValue(int value)
+      : super.fromValue(_$VideoContentHintEnumMap, value);
+
+  int value() {
+    return super.toValue(_$VideoContentHintEnumMap);
   }
 }
