@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'events.dart';
+import 'api_types.dart';
 
 /// The RtcChannel class.
 class RtcChannel with RtcChannelInterface {
@@ -48,18 +53,31 @@ class RtcChannel with RtcChannelInterface {
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   static Future<RtcChannel> create(String channelId) async {
     if (_channels.containsKey(channelId)) return _channels[channelId]!;
-    await _methodChannel.invokeMethod('create', {
-      'channelId': channelId,
+
+    await _methodChannel.invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelCreateChannel.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
     });
-    _channels[channelId] = RtcChannel._(channelId);
-    return _channels[channelId]!;
+    // TODO(littlegnal): Fill test for _channels (maybe unit test)
+    final channel = RtcChannel._(channelId);
+    _channels[channelId] = channel;
+    return channel;
   }
 
   /// Destroys all [RtcChannel] instance.
+  // TODO(littlegnal): Fill test
   static void destroyAll() {
+    // TODO(littlegnal): Check that if the release should call synchronously
     _channels.forEach((key, value) async {
       value._handler = null;
-      await value._invokeMethod('destroy');
+      await value._invokeMethod('callApi', {
+        'apiType': ApiTypeChannel.kChannelRelease.index,
+        'params': jsonEncode({
+          'channelId': value.channelId,
+        }),
+      });
     });
     _channels.clear();
   }
@@ -68,7 +86,12 @@ class RtcChannel with RtcChannelInterface {
   Future<void> destroy() {
     _handler = null;
     _channels.remove(channelId);
-    return _invokeMethod('destroy');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelRelease.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   /// Sets the channel event handler.
@@ -80,57 +103,92 @@ class RtcChannel with RtcChannelInterface {
     _handler = handler;
     _subscription ??= _stream.listen((event) {
       final eventMap = Map<dynamic, dynamic>.from(event);
-      final channelId = eventMap['channelId'];
       final methodName = eventMap['methodName'] as String;
-      final data = List<dynamic>.from(eventMap['data']);
-      _channels[channelId]?._handler?.process(methodName, data);
+      var data = eventMap['data'];
+      final buffer = eventMap['buffer'];
+      String channelId;
+      // if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+
+      // } else {
+      //   channelId = eventMap['channelId'];
+      // }
+      final map = Map<String, dynamic>.from(jsonDecode(data));
+      channelId = map.remove('channelId');
+      data = jsonEncode(map);
+      _channels[channelId]?._handler?.process(channelId, methodName, data, buffer);
     });
   }
 
   @override
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
-    return _invokeMethod('setClientRole', {
-      'role': ClientRoleConverter(role).value(),
-      'options': options?.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetClientRole.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'role': ClientRoleConverter(role).value(),
+        'options': options?.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> joinChannel(String? token, String? optionalInfo, int optionalUid,
       ChannelMediaOptions options) {
-    return _invokeMethod('joinChannel', {
-      'token': token,
-      'optionalInfo': optionalInfo,
-      'optionalUid': optionalUid,
-      'options': options.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelJoinChannel.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'token': token,
+        'info': optionalInfo,
+        'uid': optionalUid,
+        'options': options.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> joinChannelWithUserAccount(
       String? token, String userAccount, ChannelMediaOptions options) {
-    return _invokeMethod('joinChannelWithUserAccount', {
-      'token': token,
-      'userAccount': userAccount,
-      'options': options.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelJoinChannelWithUserAccount.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'token': token,
+        'userAccount': userAccount,
+        'options': options.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> leaveChannel() {
-    return _invokeMethod('leaveChannel');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelLeaveChannel.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   Future<void> renewToken(String token) {
-    return _invokeMethod('renewToken', {
-      'token': token,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelRenewToken.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'token': token,
+      }),
     });
   }
 
   @override
   Future<ConnectionStateType> getConnectionState() {
-    return _invokeMethod('getConnectionState').then((value) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelGetConnectionState.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    }).then((value) {
       return ConnectionStateTypeConverter.fromValue(value).e;
     });
   }
@@ -138,266 +196,438 @@ class RtcChannel with RtcChannelInterface {
   @override
   @deprecated
   Future<void> publish() {
-    return _invokeMethod('publish');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelPublish.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   @deprecated
   Future<void> unpublish() {
-    return _invokeMethod('unpublish');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelUnPublish.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   Future<String?> getCallId() {
-    return _invokeMethod('getCallId');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelGetCallId.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume) {
-    return _invokeMethod('adjustUserPlaybackSignalVolume', {
-      'uid': uid,
-      'volume': volume,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelAdjustUserPlaybackSignalVolume.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'uid': uid,
+        'volume': volume,
+      }),
     });
   }
 
   @override
   Future<void> muteAllRemoteAudioStreams(bool muted) {
-    return _invokeMethod('muteAllRemoteAudioStreams', {
-      'muted': muted,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelMuteAllRemoteAudioStreams.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'mute': muted,
+      }),
     });
   }
 
   @override
   Future<void> muteRemoteAudioStream(int uid, bool muted) {
-    return _invokeMethod('muteRemoteAudioStream', {
-      'uid': uid,
-      'muted': muted,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelMuteRemoteAudioStream.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'uid': uid,
+        'mute': muted,
+      }),
     });
   }
 
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted) {
-    return _invokeMethod('setDefaultMuteAllRemoteAudioStreams', {
-      'muted': muted,
+    return _invokeMethod('callApi', {
+      'apiType':
+          ApiTypeChannel.kChannelSetDefaultMuteAllRemoteAudioStreams.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'mute': muted,
+      }),
     });
   }
 
   @override
   Future<void> muteAllRemoteVideoStreams(bool muted) {
-    return _invokeMethod('muteAllRemoteVideoStreams', {
-      'muted': muted,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelMuteAllRemoteVideoStreams.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'mute': muted,
+      }),
     });
   }
 
   @override
   Future<void> muteRemoteVideoStream(int uid, bool muted) {
-    return _invokeMethod('muteRemoteVideoStream', {
-      'uid': uid,
-      'muted': muted,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelMuteRemoteVideoStream.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'uid': uid,
+        'mute': muted,
+      }),
     });
   }
 
   @override
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) {
-    return _invokeMethod('setDefaultMuteAllRemoteVideoStreams', {
-      'muted': muted,
+    return _invokeMethod('callApi', {
+      'apiType':
+          ApiTypeChannel.kChannelSetDefaultMuteAllRemoteVideoStreams.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'mute': muted,
+      }),
     });
   }
 
   @override
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config) {
-    return _invokeMethod('addInjectStreamUrl', {
-      'url': url,
-      'config': config.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelAddInjectStreamUrl.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'url': url,
+        'config': config.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled) {
-    return _invokeMethod('addPublishStreamUrl', {
-      'url': url,
-      'transcodingEnabled': transcodingEnabled,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelAddPublishStreamUrl.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'url': url,
+        'transcodingEnabled': transcodingEnabled,
+      }),
     });
   }
 
   @override
   @deprecated
   Future<int?> createDataStream(bool reliable, bool ordered) {
-    return _invokeMethod('createDataStream', {
-      'reliable': reliable,
-      'ordered': ordered,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelCreateDataStream.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'reliable': reliable,
+        'ordered': ordered,
+      }),
     });
   }
 
   @override
   Future<void> registerMediaMetadataObserver() {
-    return _invokeMethod('registerMediaMetadataObserver');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelRegisterMediaMetadataObserver.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   Future<void> removeInjectStreamUrl(String url) {
-    return _invokeMethod('removeInjectStreamUrl', {
-      'url': url,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelRemoveInjectStreamUrl.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'url': url,
+      }),
     });
   }
 
   @override
   Future<void> removePublishStreamUrl(String url) {
-    return _invokeMethod('removePublishStreamUrl', {
-      'url': url,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelRemovePublishStreamUrl.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'url': url,
+      }),
     });
   }
 
   @override
-  Future<void> sendMetadata(String metadata) {
-    return _invokeMethod('sendMetadata', {
-      'metadata': metadata,
+  Future<void> sendMetadata(Uint8List metadata) {
+    return _invokeMethod('callApiWithBuffer', {
+      'apiType': ApiTypeChannel.kChannelSendMetadata.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'metadata': {
+          'size': metadata.length,
+        },
+      }),
+      'buffer': metadata
     });
   }
 
   @override
-  Future<void> sendStreamMessage(int streamId, String message) {
-    return _invokeMethod('sendStreamMessage', {
-      'streamId': streamId,
-      'message': message,
+  Future<void> sendStreamMessage(int streamId, Uint8List message) {
+    return _invokeMethod('callApiWithBuffer', {
+      'apiType': ApiTypeChannel.kChannelSendStreamMessage.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'streamId': streamId,
+        'length': message.length,
+      }),
+      'buffer': message,
     });
   }
 
   @override
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
-    return _invokeMethod('setEncryptionMode', {
-      'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetEncryptionMode.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
+      }),
     });
   }
 
   @override
   @deprecated
   Future<void> setEncryptionSecret(String secret) {
-    return _invokeMethod('setEncryptionSecret', {
-      'secret': secret,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetEncryptionSecret.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'secret': secret,
+      }),
     });
   }
 
   @override
   Future<void> setLiveTranscoding(LiveTranscoding transcoding) {
-    return _invokeMethod('setLiveTranscoding', {
-      'transcoding': transcoding.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetLiveTranscoding.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'transcoding': transcoding.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> setMaxMetadataSize(int size) {
-    return _invokeMethod('setMaxMetadataSize', {
-      'size': size,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetMaxMetadataSize.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'size': size,
+      }),
     });
   }
 
   @override
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType) {
-    return _invokeMethod('setRemoteDefaultVideoStreamType', {
-      'streamType': VideoStreamTypeConverter(streamType).value(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetRemoteDefaultVideoStreamType.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'streamType': VideoStreamTypeConverter(streamType).value(),
+      }),
     });
   }
 
   @override
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority) {
-    return _invokeMethod('setRemoteUserPriority', {
-      'uid': uid,
-      'userPriority': UserPriorityConverter(userPriority).value(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetRemoteUserPriority.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'uid': uid,
+        'userPriority': UserPriorityConverter(userPriority).value(),
+      }),
     });
   }
 
   @override
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType) {
-    return _invokeMethod('setRemoteVideoStreamType', {
-      'uid': uid,
-      'streamType': VideoStreamTypeConverter(streamType).value(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetRemoteVideoStreamType.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'uid': uid,
+        'streamType': VideoStreamTypeConverter(streamType).value(),
+      }),
     });
   }
 
   @override
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain) {
-    return _invokeMethod('setRemoteVoicePosition', {
-      'uid': uid,
-      'pan': pan,
-      'gain': gain,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelSetRemoteVoicePosition.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'uid': uid,
+        'pan': pan,
+        'gain': gain,
+      }),
     });
   }
 
   @override
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
-    return _invokeMethod('startChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelStartChannelMediaRelay.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'configuration': channelMediaRelayConfiguration.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> stopChannelMediaRelay() {
-    return _invokeMethod('stopChannelMediaRelay');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelStopChannelMediaRelay.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   Future<void> unregisterMediaMetadataObserver() {
-    return _invokeMethod('unregisterMediaMetadataObserver');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelUnRegisterMediaMetadataObserver.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
-    return _invokeMethod('updateChannelMediaRelay', {
-      'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelUpdateChannelMediaRelay.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'configuration': channelMediaRelayConfiguration.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> enableEncryption(bool enabled, EncryptionConfig config) {
-    return _invokeMethod('enableEncryption', {
-      'enabled': enabled,
-      'config': config.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelEnableEncryption.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'enabled': enabled,
+        'config': config.toJson(),
+      }),
     });
   }
 
   @override
   Future<int?> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod('createDataStream', {
-      'config': config.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelCreateDataStream.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'config': config.toJson(),
+      }),
     });
   }
 
   @override
   Future<void> enableRemoteSuperResolution(int uid, bool enable) {
-    return _invokeMethod('enableRemoteSuperResolution', {
-      'uid': uid,
-      'enable': enable,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelEnableRemoteSuperResolution.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'uid': uid,
+        'enable': enable,
+      }),
     });
   }
 
   @override
   Future<void> muteLocalAudioStream(bool muted) {
-    return _invokeMethod('muteLocalAudioStream', {
-      'muted': muted,
+    // return _invokeMethod('muteLocalAudioStream', {
+    //   'muted': muted,
+    // });
+
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelMuteLocalAudioStream.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'muted': muted,
+      }),
     });
   }
 
   @override
   Future<void> muteLocalVideoStream(bool muted) {
-    return _invokeMethod('muteLocalVideoStream', {
-      'muted': muted,
+    // return _invokeMethod('muteLocalVideoStream', {
+    //   'muted': muted,
+    // });
+
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelMuteLocalVideoStream.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+        'muted': muted,
+      }),
     });
   }
 
   @override
   Future<void> pauseAllChannelMediaRelay() {
-    return _invokeMethod('pauseAllChannelMediaRelay');
+    // return _invokeMethod('pauseAllChannelMediaRelay');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelPauseAllChannelMediaRelay.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 
   @override
   Future<void> resumeAllChannelMediaRelay() {
-    return _invokeMethod('resumeAllChannelMediaRelay');
+    // return _invokeMethod('resumeAllChannelMediaRelay');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannel.kChannelResumeAllChannelMediaRelay.index,
+      'params': jsonEncode({
+        'channelId': channelId,
+      }),
+    });
   }
 }
 
@@ -834,7 +1064,7 @@ mixin RtcMediaMetadataInterface {
   /// **Note**
   ///
   /// Ensure that the size of the metadata does not exceed the value set in the [setMaxMetadataSize] method.
-  Future<void> sendMetadata(String metadata);
+  Future<void> sendMetadata(Uint8List metadata);
 }
 
 /// @nodoc
@@ -981,5 +1211,5 @@ mixin RtcStreamMessageInterface {
   /// **Parameter** [streamId] ID of the sent data stream returned by the [RtcChannel.createDataStream] method.
   ///
   /// **Parameter** [message] The message data.
-  Future<void> sendStreamMessage(int streamId, String message);
+  Future<void> sendStreamMessage(int streamId, Uint8List message);
 }

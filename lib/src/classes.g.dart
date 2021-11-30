@@ -282,6 +282,8 @@ LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) {
         _$VideoCodecProfileTypeEnumMap, json['videoCodecProfile']),
     backgroundColor:
         _$ColorFromJson(json['backgroundColor'] as Map<String, dynamic>),
+    videoCodecType: _$enumDecodeNullable(
+        _$VideoCodecTypeForStreamEnumMap, json['videoCodecType']),
     userConfigExtraInfo: json['userConfigExtraInfo'] as String?,
   );
 }
@@ -313,6 +315,8 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
   writeNotNull('videoCodecProfile',
       _$VideoCodecProfileTypeEnumMap[instance.videoCodecProfile]);
   writeNotNull('backgroundColor', _$ColorToJson(instance.backgroundColor));
+  writeNotNull('videoCodecType',
+      _$VideoCodecTypeForStreamEnumMap[instance.videoCodecType]);
   writeNotNull('userConfigExtraInfo', instance.userConfigExtraInfo);
   val['transcodingUsers'] =
       instance.transcodingUsers.map((e) => e.toJson()).toList();
@@ -334,6 +338,11 @@ const _$VideoCodecProfileTypeEnumMap = {
   VideoCodecProfileType.BaseLine: 66,
   VideoCodecProfileType.Main: 77,
   VideoCodecProfileType.High: 100,
+};
+
+const _$VideoCodecTypeForStreamEnumMap = {
+  VideoCodecTypeForStream.H264: 1,
+  VideoCodecTypeForStream.H265: 2,
 };
 
 ChannelMediaInfo _$ChannelMediaInfoFromJson(Map<String, dynamic> json) {
@@ -671,6 +680,10 @@ Map<String, dynamic> _$AudioVolumeInfoToJson(AudioVolumeInfo instance) =>
 
 Rect _$RectFromJson(Map<String, dynamic> json) {
   return Rect(
+    x: json['x'] as int,
+    y: json['y'] as int,
+    width: json['width'] as int,
+    height: json['height'] as int,
     left: json['left'] as int?,
     top: json['top'] as int?,
     right: json['right'] as int?,
@@ -691,6 +704,10 @@ Map<String, dynamic> _$RectToJson(Rect instance) {
   writeNotNull('top', instance.top);
   writeNotNull('right', instance.right);
   writeNotNull('bottom', instance.bottom);
+  val['x'] = instance.x;
+  val['y'] = instance.y;
+  val['width'] = instance.width;
+  val['height'] = instance.height;
   return val;
 }
 
@@ -1202,4 +1219,64 @@ Map<String, dynamic> _$AudioFileInfoToJson(AudioFileInfo instance) =>
     <String, dynamic>{
       'filePath': instance.filePath,
       'durationMs': instance.durationMs,
+    };
+
+MediaDeviceInfo _$MediaDeviceInfoFromJson(Map<String, dynamic> json) {
+  return MediaDeviceInfo(
+    json['deviceId'] as String,
+    json['deviceName'] as String,
+  );
+}
+
+Map<String, dynamic> _$MediaDeviceInfoToJson(MediaDeviceInfo instance) =>
+    <String, dynamic>{
+      'deviceId': instance.deviceId,
+      'deviceName': instance.deviceName,
+    };
+
+ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
+    Map<String, dynamic> json) {
+  return ScreenCaptureParameters(
+    dimensions: json['dimensions'] == null
+        ? null
+        : VideoDimensions.fromJson(json['dimensions'] as Map<String, dynamic>),
+    frameRate: json['frameRate'] as int?,
+    bitrate: json['bitrate'] as int?,
+    captureMouseCursor: json['captureMouseCursor'] as bool?,
+    windowFocus: json['windowFocus'] as bool?,
+    excludeWindowList: (json['excludeWindowList'] as List<dynamic>?)
+        ?.map((e) => e as int)
+        .toList(),
+  );
+}
+
+Map<String, dynamic> _$ScreenCaptureParametersToJson(
+    ScreenCaptureParameters instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('dimensions', instance.dimensions?.toJson());
+  writeNotNull('frameRate', instance.frameRate);
+  writeNotNull('bitrate', instance.bitrate);
+  writeNotNull('captureMouseCursor', instance.captureMouseCursor);
+  writeNotNull('windowFocus', instance.windowFocus);
+  writeNotNull('excludeWindowList', instance.excludeWindowList);
+  return val;
+}
+
+Metadata _$MetadataFromJson(Map<String, dynamic> json) {
+  return Metadata(
+    json['uid'] as int,
+    json['timeStampMs'] as int,
+  );
+}
+
+Map<String, dynamic> _$MetadataToJson(Metadata instance) => <String, dynamic>{
+      'uid': instance.uid,
+      'timeStampMs': instance.timeStampMs,
     };

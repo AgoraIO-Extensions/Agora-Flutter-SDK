@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
@@ -47,26 +45,32 @@ class _State extends State<JoinChannelVideo> {
 
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        debugPrint('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        debugPrint('error ${errorCode}');
+      },
       joinChannelSuccess: (channel, uid, elapsed) {
-        log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        debugPrint('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
-        log('userJoined  ${uid} ${elapsed}');
+        debugPrint('userJoined  ${uid} ${elapsed}');
         setState(() {
           remoteUid.add(uid);
         });
       },
       userOffline: (uid, reason) {
-        log('userOffline  ${uid} ${reason}');
+        debugPrint('userOffline  ${uid} ${reason}');
         setState(() {
           remoteUid.removeWhere((element) => element == uid);
         });
       },
       leaveChannel: (stats) {
-        log('leaveChannel ${stats.toJson()}');
+        debugPrint('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
           remoteUid.clear();
@@ -92,7 +96,7 @@ class _State extends State<JoinChannelVideo> {
         switchCamera = !switchCamera;
       });
     }).catchError((err) {
-      log('switchCamera $err');
+      print('switchCamera $err');
     });
   }
 
@@ -133,18 +137,20 @@ class _State extends State<JoinChannelVideo> {
             _renderVideo(),
           ],
         ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: this._switchCamera,
-                child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
-              ),
-            ],
-          ),
-        )
+        if (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: this._switchCamera,
+                  child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
+                ),
+              ],
+            ),
+          )
       ],
     );
   }
@@ -153,7 +159,8 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          RtcLocalView.SurfaceView(),
+          // TODO(littlegnal): Irirs not support set channelId=null at this time
+          Container(child: kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(), color: Colors.red,),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(
@@ -163,11 +170,18 @@ class _State extends State<JoinChannelVideo> {
                   (e) => GestureDetector(
                     onTap: this._switchRender,
                     child: Container(
+                      color: Colors.yellow,
                       width: 120,
                       height: 120,
-                      child: RtcRemoteView.SurfaceView(
-                        uid: e,
-                      ),
+                      child: kIsWeb
+                          ? RtcRemoteView.SurfaceView(
+                              uid: e,
+                              channelId: channelId,
+                            )
+                          : RtcRemoteView.TextureView(
+                              uid: e,
+                              channelId: channelId,
+                            ),
                     ),
                   ),
                 )),

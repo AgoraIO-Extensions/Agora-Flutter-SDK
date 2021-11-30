@@ -4,6 +4,8 @@ analyzer:
     # Ignore generated files
     - '**/*.g.dart'
     - 'lib/src/generated/*.dart'
+  errors:
+    undefined_prefixed_name: ignore
 linter:
   rules:
     - public_member_api_docs

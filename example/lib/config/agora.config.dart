@@ -10,5 +10,8 @@ const String channelId = '<YOUR_CHANNEL_ID>';
 /// Your int user ID
 const int uid = 0;
 
+/// Your user ID for the screen sharing
+const int screenSharingUid = 0;
+
 /// Your string user ID
 const String stringUid = '0';

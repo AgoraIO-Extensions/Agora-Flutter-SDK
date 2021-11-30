@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui' show Color;
 
 import 'package:agora_rtc_engine/src/enum_converter.dart';
@@ -392,6 +393,9 @@ class LiveTranscoding {
       includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
   Color? backgroundColor;
 
+  @JsonKey(includeIfNull: false)
+  VideoCodecTypeForStream? videoCodecType;
+
   /// Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
   @JsonKey(includeIfNull: false)
   String? userConfigExtraInfo;
@@ -416,6 +420,7 @@ class LiveTranscoding {
     this.audioCodecProfile,
     this.videoCodecProfile,
     this.backgroundColor,
+    this.videoCodecType,
     this.userConfigExtraInfo,
   });
 
@@ -945,22 +950,38 @@ class AudioVolumeInfo {
 class Rect {
   /// The X coordinate of the left side of the rectangle.
   @JsonKey(includeIfNull: false)
+  @Deprecated('This property is deprecated, pls use x instead.')
   int? left;
 
   /// The Y coordinate of the top side of the rectangle.
   @JsonKey(includeIfNull: false)
+  @Deprecated('This property is deprecated, pls use y instead.')
   int? top;
 
   /// The X coordinate of the right side of the rectangle.
   @JsonKey(includeIfNull: false)
+  @Deprecated('This property is deprecated, pls use x + width instead.')
   int? right;
 
   /// The Y coordinate of the bottom side of the rectangle.
   @JsonKey(includeIfNull: false)
+  @Deprecated('This property is deprecated, pls use y + height instead.')
   int? bottom;
+
+  int x;
+
+  int y;
+
+  int width;
+
+  int height;
 
   /// Constructs a [Rect]
   Rect({
+    this.x = 0,
+    this.y = 0,
+    this.width = 0,
+    this.height = 0,
     this.left,
     this.top,
     this.right,
@@ -1682,4 +1703,84 @@ class AudioFileInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$AudioFileInfoToJson(this);
+}
+
+/// TODO(doc)
+@JsonSerializable(explicitToJson: true)
+class MediaDeviceInfo {
+  String deviceId;
+
+  String deviceName;
+
+  /// Constructs a [MediaDeviceInfo]
+  MediaDeviceInfo(
+    this.deviceId,
+    this.deviceName,
+  );
+
+  /// @nodoc
+  factory MediaDeviceInfo.fromJson(Map<String, dynamic> json) =>
+      _$MediaDeviceInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$MediaDeviceInfoToJson(this);
+}
+
+/// TODO(doc)
+@JsonSerializable(explicitToJson: true)
+class ScreenCaptureParameters {
+  @JsonKey(includeIfNull: false)
+  VideoDimensions? dimensions;
+
+  @JsonKey(includeIfNull: false)
+  int? frameRate;
+
+  @JsonKey(includeIfNull: false)
+  int? bitrate;
+
+  @JsonKey(includeIfNull: false)
+  bool? captureMouseCursor;
+
+  @JsonKey(includeIfNull: false)
+  bool? windowFocus;
+
+  @JsonKey(includeIfNull: false)
+  List<int>? excludeWindowList;
+
+  /// Constructs a [ScreenCaptureParameters]
+  ScreenCaptureParameters({
+    this.dimensions,
+    this.frameRate,
+    this.bitrate,
+    this.captureMouseCursor,
+    this.windowFocus,
+    this.excludeWindowList,
+  });
+
+  /// @nodoc
+  factory ScreenCaptureParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenCaptureParametersFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ScreenCaptureParametersToJson(this);
+}
+
+/// TODO(doc)
+@JsonSerializable(explicitToJson: true)
+class Metadata {
+  int uid;
+
+  @JsonKey(ignore: true)
+  Uint8List? buffer;
+
+  int timeStampMs;
+
+  Metadata(this.uid, this.timeStampMs);
+
+  /// @nodoc
+  factory Metadata.fromJson(Map<String, dynamic> json) =>
+      _$MetadataFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$MetadataToJson(this);
 }

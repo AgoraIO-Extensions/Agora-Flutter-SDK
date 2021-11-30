@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/advanced/voice_changer/voice_changer.config.dart';
@@ -58,9 +56,6 @@ class _State extends State<VoiceChanger> {
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
 
-    // Set audio route to speaker
-    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
-
     // start joining channel
     // 1. Users can only see each other after they join the
     // same channel successfully using the same app id.
@@ -71,28 +66,33 @@ class _State extends State<VoiceChanger> {
   }
 
   _addListener() {
-    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
-      log('Warning ${warningCode}');
-    }, error: (errorCode) {
-      log('Warning ${errorCode}');
-    }, joinChannelSuccess: (channel, uid, elapsed) {
-      log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      ;
-      setState(() {
-        isJoined = true;
-        uidMySelf = uid;
-      });
-    }, userJoined: (uid, elapsed) {
-      log('userJoined $uid $elapsed');
-      this.setState(() {
-        remoteUids.add(uid);
-      });
-    }, userOffline: (uid, reason) {
-      log('userOffline $uid $reason');
-      this.setState(() {
-        remoteUids.remove(uid);
-      });
-    }));
+    _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        print('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        print('error ${errorCode}');
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        print('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        setState(() {
+          isJoined = true;
+          uidMySelf = uid;
+        });
+      },
+      userJoined: (uid, elapsed) {
+        print('userJoined $uid $elapsed');
+        this.setState(() {
+          remoteUids.add(uid);
+        });
+      },
+      userOffline: (uid, reason) {
+        print('userOffline $uid $reason');
+        this.setState(() {
+          remoteUids.remove(uid);
+        });
+      },
+    ));
   }
 
   _onPressBFButton(dynamic type, int index) async {

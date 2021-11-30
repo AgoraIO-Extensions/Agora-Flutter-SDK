@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
@@ -45,9 +45,6 @@ class _State extends State<StreamMessage> {
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
 
-    // Set audio route to speaker
-    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
-
     // start joining channel
     // 1. Users can only see each other after they join the
     // same channel successfully using the same app id.
@@ -83,33 +80,40 @@ class _State extends State<StreamMessage> {
   }
 
   _addListener() {
-    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
-      log('Warning ${warningCode}');
-    }, error: (errorCode) {
-      log('Warning ${errorCode}');
-    }, joinChannelSuccess: (channel, uid, elapsed) {
-      log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      ;
-      setState(() {
-        isJoined = true;
-      });
-    }, userJoined: (uid, elapsed) {
-      log('userJoined $uid $elapsed');
-      this.setState(() {
-        remoteUid = uid;
-      });
-    }, userOffline: (uid, reason) {
-      log('userOffline $uid $reason');
-      this.setState(() {
-        remoteUid = null;
-      });
-    }, streamMessage: (int uid, int streamId, String data) {
-      _showMyDialog(uid, streamId, data);
-      log('streamMessage $uid $streamId $data');
-    }, streamMessageError:
-        (int uid, int streamId, ErrorCode error, int missed, int cached) {
-      log('streamMessage $uid $streamId $error $missed $cached');
-    }));
+    _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        print('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        print('error ${errorCode}');
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        print('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        setState(() {
+          isJoined = true;
+        });
+      },
+      userJoined: (uid, elapsed) {
+        print('userJoined $uid $elapsed');
+        this.setState(() {
+          remoteUid = uid;
+        });
+      },
+      userOffline: (uid, reason) {
+        print('userOffline $uid $reason');
+        this.setState(() {
+          remoteUid = null;
+        });
+      },
+      streamMessage: (int uid, int streamId, Uint8List data) {
+        _showMyDialog(uid, streamId, String.fromCharCodes(data));
+        print('streamMessage $uid $streamId $data');
+      },
+      streamMessageError:
+          (int uid, int streamId, ErrorCode error, int missed, int cached) {
+        print('streamMessage $uid $streamId $error $missed $cached');
+      },
+    ));
   }
 
   _onPressSend() async {
@@ -120,7 +124,8 @@ class _State extends State<StreamMessage> {
     var streamId = await _engine
         .createDataStreamWithConfig(DataStreamConfig(false, false));
     if (streamId != null) {
-      _engine.sendStreamMessage(streamId, _controller.text);
+      _engine.sendStreamMessage(
+          streamId, Uint8List.fromList(_controller.text.codeUnits));
     }
     _controller.clear();
   }
@@ -173,15 +178,21 @@ class _State extends State<StreamMessage> {
       Expanded(
           child: AspectRatio(
         aspectRatio: 1,
-        child: RtcLocalView.SurfaceView(),
+        child: kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
       )),
       Expanded(
         child: AspectRatio(
           aspectRatio: 1,
           child: remoteUid != null
-              ? RtcRemoteView.SurfaceView(
-                  uid: remoteUid!,
-                )
+              ? (kIsWeb
+                  ? RtcRemoteView.SurfaceView(
+                      uid: remoteUid!,
+                      channelId: config.channelId,
+                    )
+                  : RtcRemoteView.TextureView(
+                      uid: remoteUid!,
+                      channelId: config.channelId,
+                    ))
               : Container(
                   color: Colors.grey[200],
                 ),
