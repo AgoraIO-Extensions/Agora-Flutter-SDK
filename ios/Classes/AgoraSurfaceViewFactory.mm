@@ -3,6 +3,7 @@
 #import "CallApiMethodCallHandler.h"
 
 @interface SurfaceViewCallApiMethodCallHandler : CallApiMethodCallHandler
+@property(nonatomic) agora::iris::rtc::IrisRtcEngine *irisRtcEngine;
 @property(nonatomic) NSObject<FlutterPlatformView> *platformView;
 - (instancetype)initWith:(agora::iris::rtc::IrisRtcEngine *)irisRtcEngine platformView:(NSObject<FlutterPlatformView>*) platformView;
 @end

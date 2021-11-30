@@ -186,6 +186,20 @@ enum ApiTypeEngine {
   kMediaPullAudioFrame,
   kMediaSetExternalVideoSource,
   kMediaPushVideoFrame,
+
+  kEngineSetAudioMixingPlaybackSpeed,
+  kEngineSelectAudioTrack,
+  kEngineGetAudioTrackCount,
+  kEngineSetAudioMixingDualMonoMode,
+  kEngineGetAudioFileInfo,
+  kEngineSetVideoProfileEx,
+  kEngineSetExternalAudioSourceVolume,
+  kEngineSetLogWriter,
+  kEngineReleaseLogWriter,
+  kEngineSetLocalVideoRenderer,
+  kEngineSetRemoteVideoRenderer,
+  kEngineSetCameraTorchOn,
+  kEngineIsCameraTorchSupported
 };
 
 enum ApiTypeChannel {

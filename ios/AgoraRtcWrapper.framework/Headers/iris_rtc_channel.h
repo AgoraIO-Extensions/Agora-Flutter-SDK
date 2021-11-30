@@ -17,15 +17,11 @@ namespace iris {
 class IrisProxy;
 
 namespace rtc {
-#if defined(IRIS_DEBUG)
-namespace test {
-class IrisRtcTester;
-}
-#endif
+class IrisRtcChannelImpl;
 
 class IRIS_CPP_API IrisRtcChannel {
  public:
-  IrisRtcChannel();
+  explicit IrisRtcChannel(IrisRtcChannelImpl *impl = nullptr);
   virtual ~IrisRtcChannel();
 
   void Initialize(agora::rtc::IRtcEngine *engine);
@@ -41,10 +37,6 @@ class IRIS_CPP_API IrisRtcChannel {
 
   void SetProxy(IrisProxy *proxy);
 
-#if defined(IRIS_DEBUG)
-  void EnableTest(test::IrisRtcTester *tester);
-#endif
-
   int CallApi(ApiTypeChannel api_type, const char *params,
               char result[kBasicResultLength]);
 
@@ -53,8 +45,7 @@ class IRIS_CPP_API IrisRtcChannel {
 
  private:
   IrisProxy *proxy_;
-  class Impl;
-  Impl *impl_;
+  IrisRtcChannelImpl *impl_;
 };
 }// namespace rtc
 }// namespace iris

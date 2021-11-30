@@ -14,7 +14,7 @@
 }
 
 - (void)onMethodCall:(FlutterMethodCall *)call _:(FlutterResult)result {
-    if ([@"callApi" isEqualToString:call.method] || [@"callApiWithBuffer" isEqualToString:call.method]) {d
+    if ([@"callApi" isEqualToString:call.method] || [@"callApiWithBuffer" isEqualToString:call.method]) {
         @try {
             NSDictionary<NSString *, id> *arguments = call.arguments;
             NSNumber *apiType = arguments[@"apiType"];

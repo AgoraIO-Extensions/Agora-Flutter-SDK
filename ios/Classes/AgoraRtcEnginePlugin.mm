@@ -73,6 +73,13 @@
 
 - (void)handleMethodCall:(FlutterMethodCall *)call
                   result:(FlutterResult)result {
+#if DEBUG
+    if ([@"getIrisRtcEngineIntPtr" isEqualToString:call.method]) {
+        result(@((intptr_t)self.irisRtcEngine));
+        return;
+    }
+#endif
+    
     if ([@"createTextureRender" isEqualToString:call.method]) {
         int64_t textureId = [self.factory
             createTextureRenderer:[self videoFrameBufferManager]];

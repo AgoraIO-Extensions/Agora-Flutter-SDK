@@ -16,15 +16,11 @@ namespace iris {
 class IrisProxy;
 
 namespace rtc {
-#if defined(IRIS_DEBUG)
-namespace test {
-class IrisRtcTester;
-}
-#endif
+class IrisRtcDeviceManagerImpl;
 
 class IRIS_CPP_API IrisRtcDeviceManager {
  public:
-  IrisRtcDeviceManager();
+  explicit IrisRtcDeviceManager(IrisRtcDeviceManagerImpl *impl = nullptr);
   virtual ~IrisRtcDeviceManager();
 
   void Initialize(agora::rtc::IRtcEngine *engine);
@@ -35,10 +31,6 @@ class IRIS_CPP_API IrisRtcDeviceManager {
 
   void SetVideoDeviceManagerProxy(IrisProxy *proxy);
 
-#if defined(IRIS_DEBUG)
-  void EnableTest(test::IrisRtcTester *tester);
-#endif
-
   int CallApi(ApiTypeAudioDeviceManager api_type, const char *params,
               char result[kMaxResultLength]);
 
@@ -48,8 +40,7 @@ class IRIS_CPP_API IrisRtcDeviceManager {
  private:
   IrisProxy *adm_proxy_;
   IrisProxy *vdm_proxy_;
-  class Impl;
-  Impl *impl_;
+  IrisRtcDeviceManagerImpl *impl_;
 };
 }// namespace rtc
 }// namespace iris

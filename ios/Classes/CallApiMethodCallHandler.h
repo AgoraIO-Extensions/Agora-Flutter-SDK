@@ -8,6 +8,7 @@
 #endif
 
 @interface CallApiMethodCallHandler : NSObject
+//@property(nonatomic) agora::iris::rtc::IrisRtcEngine *irisRtcEngine;
 - (instancetype)initWith:(void *)engine;
 - (void)onMethodCall:(FlutterMethodCall *)call _:(FlutterResult)result;
 - (int)callApi:(NSNumber *) apiType _:(NSString *)params _:(char *) result;
