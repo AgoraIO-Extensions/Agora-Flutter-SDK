@@ -56,10 +56,10 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.5.3'
-        - uses: futureware-tech/simulator-action@v1
-          with:
-            model: 'iPhone 13 Pro Max'
-        - run: bash ci/run_flutter_integration_test.sh
+      - uses: futureware-tech/simulator-action@v1
+        with:
+          model: 'iPhone 13 Pro Max'
+      - run: bash ci/run_flutter_integration_test.sh
 
   unittest_android:
     name: Run Android Unit Test
