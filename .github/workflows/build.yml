@@ -46,7 +46,20 @@ jobs:
           api-level: 31
           arch: x86_64
           profile: Nexus 6
-          script: bash ci/run_flutter_android_integration_test.sh
+          script: bash ci/run_flutter_integration_test.sh
+
+  integration_test_ios:
+    name: Run Flutter iOS Integration Tests
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.5.3'
+        - uses: futureware-tech/simulator-action@v1
+          with:
+            model: 'iPhone 13 Pro Max'
+        - run: bash ci/run_flutter_integration_test.sh
 
   unittest_android:
     name: Run Android Unit Test
