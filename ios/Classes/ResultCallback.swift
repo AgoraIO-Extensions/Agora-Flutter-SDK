@@ -1,10 +1,3 @@
-//
-//  ResultCallback.swift
-//  agora_rtc_engine
-//
-//  Created by LXH on 2020/6/24.
-//
-
 import Foundation
 import AgoraRtcKit
 
