@@ -15,25 +15,18 @@ namespace iris {
 class IrisProxy;
 
 namespace rtc {
-#if defined(IRIS_DEBUG)
-namespace test {
-class IrisRtcTester;
-}
-#endif
+class IrisRtcEngineImpl;
 
 class IRIS_CPP_API IrisRtcEngine {
  public:
   explicit IrisRtcEngine(EngineType type = kEngineTypeNormal,
-                         const char *executable_path = nullptr);
+                         const char *executable_path = nullptr,
+                         IrisRtcEngineImpl *impl = nullptr);
   virtual ~IrisRtcEngine();
 
   void SetEventHandler(IrisEventHandler *event_handler);
 
   void SetProxy(IrisProxy *proxy);
-
-#if defined(IRIS_DEBUG)
-  void EnableTest(test::IrisRtcTester *tester);
-#endif
 
   int CallApi(ApiTypeEngine api_type, const char *params,
               char result[kBasicResultLength]);
@@ -49,9 +42,9 @@ class IRIS_CPP_API IrisRtcEngine {
 
  private:
   IrisProxy *proxy_;
-  class Impl;
-  Impl *impl_;
+  IrisRtcEngineImpl *impl_;
 };
+
 }// namespace rtc
 }// namespace iris
 }// namespace agora

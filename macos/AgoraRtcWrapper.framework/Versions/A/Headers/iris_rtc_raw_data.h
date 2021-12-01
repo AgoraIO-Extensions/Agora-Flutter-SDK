@@ -64,6 +64,8 @@ class IrisRtcVideoFrameObserver : public IrisVideoFrameObserver {
   };
 };
 
+class IrisRtcPacketObserver : public IrisPacketObserver {};
+
 class IRIS_CPP_API IrisRtcRawData : public IrisMediaFrameObserverManager {
  public:
   IrisRtcRawData();
