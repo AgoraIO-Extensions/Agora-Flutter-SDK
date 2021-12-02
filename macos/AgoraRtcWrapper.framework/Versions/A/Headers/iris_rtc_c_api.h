@@ -53,9 +53,6 @@ typedef void *IrisRtcDeviceManagerPtr;
 typedef void *IrisRtcChannelPtr;
 typedef void *IrisRtcRawDataPtr;
 typedef void *IrisRtcRawDataPluginManagerPtr;
-#if defined(IRIS_DEBUG)
-typedef void *IrisRtcTesterPtr;
-#endif
 
 /// IrisRtcEngine
 IRIS_API IrisRtcEnginePtr CreateIrisRtcEngine(
@@ -68,11 +65,6 @@ IRIS_API IrisEventHandlerHandle SetIrisRtcEngineEventHandler(
 
 IRIS_API void UnsetIrisRtcEngineEventHandler(IrisRtcEnginePtr engine_ptr,
                                              IrisEventHandlerHandle handle);
-
-#if defined(IRIS_DEBUG)
-IRIS_DEBUG_API void EnableIrisRtcEngineTest(IrisRtcEnginePtr engine_ptr,
-                                            IrisRtcTesterPtr tester_ptr);
-#endif
 
 IRIS_API int CallIrisRtcEngineApi(IrisRtcEnginePtr engine_ptr,
                                   enum ApiTypeEngine api_type,
@@ -90,12 +82,6 @@ IRIS_API IrisRtcChannelPtr GetIrisRtcChannel(IrisRtcEnginePtr engine_ptr);
 IRIS_API IrisRtcRawDataPtr GetIrisRtcRawData(IrisRtcEnginePtr engine_ptr);
 
 /// IrisRtcDeviceManager
-#if defined(IRIS_DEBUG)
-IRIS_DEBUG_API void
-EnableIrisRtcDeviceManagerTest(IrisRtcDeviceManagerPtr device_manager_ptr,
-                               IrisRtcTesterPtr tester_ptr);
-#endif
-
 IRIS_API int
 CallIrisRtcAudioDeviceManagerApi(IrisRtcDeviceManagerPtr device_manager_ptr,
                                  enum ApiTypeAudioDeviceManager api_type,
@@ -121,11 +107,6 @@ IRIS_API void
 UnRegisterIrisRtcChannelEventHandler(IrisRtcChannelPtr channel_ptr,
                                      IrisEventHandlerHandle handle,
                                      const char *channel_id);
-
-#if defined(IRIS_DEBUG)
-IRIS_DEBUG_API void EnableIrisRtcChannelTest(IrisRtcChannelPtr channel_ptr,
-                                             IrisRtcTesterPtr tester_ptr);
-#endif
 
 IRIS_API int CallIrisRtcChannelApi(IrisRtcChannelPtr channel_ptr,
                                    enum ApiTypeChannel api_type,
@@ -169,32 +150,6 @@ IRIS_API int CallIrisRtcRawDataPluginManagerApi(
     IrisRtcRawDataPluginManagerPtr plugin_manager_ptr,
     enum ApiTypeRawDataPluginManager api_type, const char *params,
     char *result);
-
-/// IrisRtcTester
-#if defined(IRIS_DEBUG)
-IRIS_DEBUG_API IrisRtcTesterPtr CreateIrisRtcTester(const char *dump_file_path);
-
-IRIS_DEBUG_API void DestroyIrisRtcTester(IrisRtcTesterPtr tester_ptr);
-
-IRIS_DEBUG_API void BeginApiTestByFile(IrisRtcTesterPtr tester_ptr,
-                                       const char *case_file_path,
-                                       IrisCEventHandler *event_handler);
-
-IRIS_DEBUG_API void BeginApiTest(IrisRtcTesterPtr tester_ptr,
-                                 const char *case_content,
-                                 IrisCEventHandler *event_handler);
-
-IRIS_DEBUG_API void BeginEventTestByFile(IrisRtcTesterPtr tester_ptr,
-                                         const char *case_file_path,
-                                         IrisCEventHandler *event_handler);
-
-IRIS_DEBUG_API void BeginEventTest(IrisRtcTesterPtr tester_ptr,
-                                   const char *case_content,
-                                   IrisCEventHandler *event_handler);
-
-IRIS_DEBUG_API void OnEventReceived(IrisRtcTesterPtr tester_ptr,
-                                    const char *event, const char *data);
-#endif
 
 #ifdef __cplusplus
 }

@@ -15,7 +15,8 @@ namespace rtc {
 static const int kMaxPluginIdLength = 512;
 
 class IRIS_CPP_API IrisRtcRawDataPlugin : public IrisRtcAudioFrameObserver,
-                                          public IrisRtcVideoFrameObserver {
+                                          public IrisRtcVideoFrameObserver,
+                                          public IrisRtcPacketObserver {
  public:
   explicit IrisRtcRawDataPlugin(const char plugin_id[kMaxPluginIdLength],
                                 const char *plugin_path);
@@ -43,6 +44,14 @@ class IRIS_CPP_API IrisRtcRawDataPlugin : public IrisRtcAudioFrameObserver,
 
   bool OnRenderVideoFrame(unsigned int uid,
                           IrisVideoFrame &video_frame) override;
+
+  bool OnSendAudioPacket(IrisPacket &packet) override;
+
+  bool OnSendVideoPacket(IrisPacket &packet) override;
+
+  bool OnReceiveAudioPacket(IrisPacket &packet) override;
+
+  bool OnReceiveVideoPacket(IrisPacket &packet) override;
 
  private:
   char plugin_id_[kMaxPluginIdLength];

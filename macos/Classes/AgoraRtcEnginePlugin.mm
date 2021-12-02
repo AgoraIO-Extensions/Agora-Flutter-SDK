@@ -85,6 +85,13 @@ using namespace agora::iris::rtc;
 
 - (void)handleMethodCall:(FlutterMethodCall *)call
                   result:(FlutterResult)result {
+#if DEBUG
+    if ([@"getIrisRtcEngineIntPtr" isEqualToString:call.method]) {
+        result(@((intptr_t)self.engine_main));
+        return;
+    }
+#endif
+    
     if ([@"createTextureRender" isEqualToString:call.method]) {
     int64_t textureId = [self.factory
         createTextureRenderer:[self engine:call.arguments]->raw_data()
