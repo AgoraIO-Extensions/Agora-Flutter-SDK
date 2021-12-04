@@ -2,6 +2,7 @@ package io.agora.agora_rtc_engine
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.NonNull
 import io.agora.iris.rtc.IrisRtcEngine
 import io.agora.iris.rtc.base.ApiTypeChannel
@@ -60,13 +61,14 @@ class AgoraRtcChannelPlugin(
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     methodChannel.setMethodCallHandler(null)
     eventChannel.setStreamHandler(null)
-
-    irisRtcEngine.destroy()
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+
     eventSink = events
+
     irisRtcEngine.channel.setEventHandler(EventHandler(eventSink))
+    Log.e("MainActivity", "channel onListen: $eventSink")
   }
 
   override fun onCancel(arguments: Any?) {

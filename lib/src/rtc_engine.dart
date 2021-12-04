@@ -1008,7 +1008,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish,
+      double pitch, double pan, int gain, bool publish,
       [int? startPos]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEnginePlayEffect.index,
@@ -1080,7 +1080,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> registerMediaMetadataObserver() {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineRegisterMediaMetadataObserver.index,
-      'params': jsonEncode({}),
+      'params': jsonEncode({'type': 0}),
     });
   }
 
@@ -1228,7 +1228,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setEffectsVolume(double volume) {
+  Future<void> setEffectsVolume(int volume) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEffectsVolume.index,
       'params': jsonEncode({
@@ -1238,11 +1238,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setEnableSpeakerphone(bool enabled) {
+  Future<void> setEnableSpeakerphone(bool defaultToSpeaker) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEnableSpeakerPhone.index,
       'params': jsonEncode({
-        'enabled': enabled,
+        'defaultToSpeaker': defaultToSpeaker,
       }),
     });
   }
@@ -1397,11 +1397,12 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType) {
+  Future<void> setRemoteVideoStreamType(
+      int userId, VideoStreamType streamType) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetRemoteVideoStreamType.index,
       'params': jsonEncode({
-        'uid': uid,
+        'userId': userId,
         'streamType': VideoStreamTypeConverter(streamType).value(),
       }),
     });
@@ -1420,7 +1421,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setVolumeOfEffect(int soundId, double volume) {
+  Future<void> setVolumeOfEffect(int soundId, int volume) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetVolumeOfEffect.index,
       'params': jsonEncode({
@@ -1592,7 +1593,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> unregisterMediaMetadataObserver() {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineUnRegisterMediaMetadataObserver.index,
-      'params': jsonEncode({}),
+      'params': jsonEncode({'type': 0}),
     });
   }
 
@@ -1744,21 +1745,21 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableDeepLearningDenoise(bool enabled) {
+  Future<void> enableDeepLearningDenoise(bool enable) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableDeepLearningDenoise.index,
       'params': jsonEncode({
-        'enabled': enabled,
+        'enable': enable,
       }),
     });
   }
 
   @override
-  Future<void> enableRemoteSuperResolution(int uid, bool enable) {
+  Future<void> enableRemoteSuperResolution(int userId, bool enable) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableRemoteSuperResolution.index,
       'params': jsonEncode({
-        'uid': uid,
+        'userId': userId,
         'enable': enable,
       }),
     });
@@ -2204,7 +2205,7 @@ mixin RtcEngineInterface
   ///
   /// - Agora recommends calling this method before joining a channel.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
-  Future<void> enableDeepLearningDenoise(bool enabled);
+  Future<void> enableDeepLearningDenoise(bool enable);
 
   ///  Sets the Agora cloud proxy service.
   ///
@@ -2676,7 +2677,7 @@ mixin RtcVideoInterface {
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
   /// @nodoc
-  Future<void> enableRemoteSuperResolution(int uid, bool enable);
+  Future<void> enableRemoteSuperResolution(int userId, bool enable);
 }
 
 /// @nodoc
@@ -2940,14 +2941,16 @@ mixin RtcAudioEffectInterface {
   /// Sets the volume of the audio effects.
   ///
   /// **Parameter** [volume] Volume of the audio effects. The value ranges between 0.0 and 100.0 (default).
-  Future<void> setEffectsVolume(double volume);
+  // TODO(littlegnal): Doc break change volume type double -> int
+  Future<void> setEffectsVolume(int volume);
 
   /// Sets the volume of a specified audio effect.
   ///
   /// **Parameter** [soundId] ID of the audio effect. Each audio effect has a unique ID.
   ///
   /// **Parameter** [volume] Volume of the audio effect. The value ranges between 0.0 and 100.0 (default).
-  Future<void> setVolumeOfEffect(int soundId, double volume);
+  // TODO(littlegnal): Doc break change volume type double -> int
+  Future<void> setVolumeOfEffect(int soundId, int volume);
 
   /// Plays a specified local or online audio effect file.
   ///
@@ -2986,8 +2989,9 @@ mixin RtcAudioEffectInterface {
   /// - `false`: Do not publish. Only the local user can hear the audio effect.
   ///
   /// **Parameter** [startPos] The playback position (ms) of the audio effect file.
+  // TODO(littlegnal): Doc a break change: gain double -> int
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish,
+      double pitch, double pan, int gain, bool publish,
       [int? startPos]);
 
   /// Sets the playback position of an audio effect file.
@@ -3503,7 +3507,7 @@ mixin RtcAudioRouteInterface {
   /// **Parameter** [enabled] Sets whether to enable the speakerphone or earpiece:
   /// - `true`: Enable the speakerphone. The audio route is the speakerphone.
   /// - `false`: Disable the speakerphone. The audio route is the earpiece.
-  Future<void> setEnableSpeakerphone(bool enabled);
+  Future<void> setEnableSpeakerphone(bool defaultToSpeaker);
 
   /// Checks whether the speakerphone is enabled.
   ///
@@ -3556,7 +3560,7 @@ mixin RtcDualStreamInterface {
   /// **Parameter** [uid] ID of the remote user sending the video stream.
   ///
   /// **Parameter** [streamType] Sets the video-stream type. See [VideoStreamType].
-  Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType);
+  Future<void> setRemoteVideoStreamType(int userId, VideoStreamType streamType);
 
   /// Sets the default video-stream type of the remotely subscribed video stream when the remote user sends dual streams.
   ///

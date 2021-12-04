@@ -12,35 +12,35 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   late RtcEngine rtcEngine;
-  late FakeIrisRtcEngine nireHandler;
+  late FakeIrisRtcEngine fakeIrisEngine;
 
-  setUp(() async {
-    nireHandler = FakeIrisRtcEngine();
-    await nireHandler.initialize();
+  setUpAll(() async {
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
   });
 
   tearDown(() async {
     await rtcEngine.destroy();
-    nireHandler.dispose();
+    fakeIrisEngine.dispose();
   });
 
   group('createWithContext', () {
     testWidgets('with `appId`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       final context = RtcEngineContext('123');
 
       rtcEngine = await RtcEngine.createWithContext(context);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineInitialize.index,
         jsonEncode({
           'context': context.toJson(),
         }),
       );
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSetAppType.index,
         jsonEncode({
           'appType': 4,
@@ -49,21 +49,21 @@ void main() {
     });
 
     testWidgets('with `appId` and `areaCode`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       final context = RtcEngineContext('123', areaCode: const [AreaCode.CN]);
 
       rtcEngine = await RtcEngine.createWithContext(context);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineInitialize.index,
         jsonEncode({
           'context': context.toJson(),
         }),
       );
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSetAppType.index,
         jsonEncode({
           'appType': 4,
@@ -73,8 +73,8 @@ void main() {
 
     testWidgets('with `appId`, `areaCode` and `logConfig`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       final context = RtcEngineContext(
         '123',
@@ -84,14 +84,14 @@ void main() {
 
       rtcEngine = await RtcEngine.createWithContext(context);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineInitialize.index,
         jsonEncode({
           'context': context.toJson(),
         }),
       );
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSetAppType.index,
         jsonEncode({
           'appType': 4,
@@ -101,19 +101,19 @@ void main() {
   });
 
   testWidgets('create', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineInitialize.index,
       jsonEncode({
         'context': RtcEngineContext('123').toJson(),
       }),
     );
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetAppType.index,
       jsonEncode({
         'appType': 4,
@@ -122,15 +122,15 @@ void main() {
   });
 
   testWidgets('setChannelProfile', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     const channelProfile = ChannelProfile.LiveBroadcasting;
     await rtcEngine.setChannelProfile(channelProfile);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetChannelProfile.index,
       jsonEncode({
         'profile': 1,
@@ -140,13 +140,13 @@ void main() {
 
   group('setClientRole', () {
     testWidgets('with `role`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
 
       await rtcEngine.setClientRole(ClientRole.Broadcaster);
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSetClientRole.index,
         jsonEncode({
           'role': 1,
@@ -156,8 +156,8 @@ void main() {
     });
 
     testWidgets('with `role` and `options`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
 
@@ -166,7 +166,7 @@ void main() {
       );
       await rtcEngine.setClientRole(ClientRole.Broadcaster, options);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSetClientRole.index,
         jsonEncode({
           'role': 1,
@@ -179,13 +179,13 @@ void main() {
   group('joinChannel', () {
     testWidgets('with `token`, `channelName`, `optionalInfo` and `optionalUid`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.joinChannel(null, 'testapi', null, 1);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineJoinChannel.index,
         jsonEncode({
           'token': null,
@@ -200,15 +200,15 @@ void main() {
     testWidgets(
         'with `token`, `channelName`, `optionalInfo`, `optionalUid` and `options`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final ChannelMediaOptions options =
           ChannelMediaOptions(autoSubscribeAudio: true);
       await rtcEngine.joinChannel(null, 'testapi', null, 1, options);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineJoinChannel.index,
         jsonEncode({
           'token': null,
@@ -223,13 +223,13 @@ void main() {
 
   group('switchChannel', () {
     testWidgets('with `token`, `channelName`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.switchChannel(null, 'testapi');
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSwitchChannel.index,
         jsonEncode({
           'token': null,
@@ -241,15 +241,15 @@ void main() {
 
     testWidgets('with `token`, `channelName`, `options`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final ChannelMediaOptions options =
           ChannelMediaOptions(autoSubscribeAudio: true);
       await rtcEngine.switchChannel(null, 'testapi', options);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSwitchChannel.index,
         jsonEncode({
           'token': null,
@@ -261,26 +261,26 @@ void main() {
   });
 
   testWidgets('leaveChannel', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.leaveChannel();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineLeaveChannel.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('renewToken', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.renewToken('123');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineRenewToken.index,
       jsonEncode({
         'token': '123',
@@ -289,10 +289,10 @@ void main() {
   });
 
   testWidgets('getConnectionState', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiReturnCode(
+    fakeIrisEngine.mockCallApiReturnCode(
       ApiTypeEngine.kEngineGetConnectionState.index,
       jsonEncode({}),
       3,
@@ -301,7 +301,7 @@ void main() {
     rtcEngine = await _createEngine();
     final ret = await rtcEngine.getConnectionState();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetConnectionState.index,
       jsonEncode({}),
     );
@@ -310,10 +310,10 @@ void main() {
   });
 
   testWidgets('getCallId', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiResult(
+    fakeIrisEngine.mockCallApiResult(
       ApiTypeEngine.kEngineGetCallId.index,
       jsonEncode({}),
       '2',
@@ -322,7 +322,7 @@ void main() {
     rtcEngine = await _createEngine();
     final ret = await rtcEngine.getCallId();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetCallId.index,
       jsonEncode({}),
     );
@@ -332,13 +332,13 @@ void main() {
 
   group('rate', () {
     testWidgets('with `callId`, `rating`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.rate('123', 5);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineRate.index,
         jsonEncode({
           'callId': '123',
@@ -350,13 +350,13 @@ void main() {
 
     testWidgets('with `callId`, `rating`, `description`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.rate('123', 5, description: 'des');
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineRate.index,
         jsonEncode({
           'callId': '123',
@@ -368,13 +368,13 @@ void main() {
   });
 
   testWidgets('complain', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.complain('123', 'des');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineComplain.index,
       jsonEncode({
         'callId': '123',
@@ -384,13 +384,13 @@ void main() {
   });
 
   testWidgets('setParameters', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setParameters('params');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetParameters.index,
       jsonEncode({
         'parameters': 'params',
@@ -399,12 +399,12 @@ void main() {
   });
 
   testWidgets('getUserInfoByUid', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     final expectedUserInfo = UserInfo(10, 'user1');
 
-    nireHandler.mockCallApiResult(
+    fakeIrisEngine.mockCallApiResult(
       ApiTypeEngine.kEngineGetUserInfoByUid.index,
       jsonEncode({
         'uid': 10,
@@ -415,7 +415,7 @@ void main() {
     rtcEngine = await _createEngine();
     final ret = await rtcEngine.getUserInfoByUid(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetUserInfoByUid.index,
       jsonEncode({
         'uid': 10,
@@ -426,12 +426,12 @@ void main() {
   });
 
   testWidgets('getUserInfoByUserAccount', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     final expectedUserInfo = UserInfo(10, 'user1');
 
-    nireHandler.mockCallApiResult(
+    fakeIrisEngine.mockCallApiResult(
       ApiTypeEngine.kEngineGetUserInfoByUserAccount.index,
       jsonEncode({
         'userAccount': 'user1',
@@ -442,7 +442,7 @@ void main() {
     rtcEngine = await _createEngine();
     final ret = await rtcEngine.getUserInfoByUserAccount('user1');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetUserInfoByUserAccount.index,
       jsonEncode({
         'userAccount': 'user1',
@@ -455,13 +455,13 @@ void main() {
   group('joinChannelWithUserAccount', () {
     testWidgets('with `token`, `channelName`, `userAccount`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.joinChannelWithUserAccount(null, 'testapi', 'user1');
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineJoinChannelWithUserAccount.index,
         jsonEncode({
           'token': null,
@@ -474,8 +474,8 @@ void main() {
 
     testWidgets('with `token`, `channelName`, `userAccount`, `options`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final ChannelMediaOptions options = ChannelMediaOptions(
@@ -484,7 +484,7 @@ void main() {
       await rtcEngine.joinChannelWithUserAccount(
           null, 'testapi', 'user1', options);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineJoinChannelWithUserAccount.index,
         jsonEncode({
           'token': null,
@@ -497,13 +497,13 @@ void main() {
   });
 
   testWidgets('registerLocalUserAccount', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.registerLocalUserAccount('123', 'user1');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineRegisterLocalUserAccount.index,
       jsonEncode({
         'appId': '123',
@@ -513,13 +513,13 @@ void main() {
   });
 
   testWidgets('adjustPlaybackSignalVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.adjustPlaybackSignalVolume(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAdjustPlaybackSignalVolume.index,
       jsonEncode({
         'volume': 10,
@@ -528,13 +528,13 @@ void main() {
   });
 
   testWidgets('adjustRecordingSignalVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.adjustRecordingSignalVolume(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAdjustRecordingSignalVolume.index,
       jsonEncode({
         'volume': 10,
@@ -543,13 +543,13 @@ void main() {
   });
 
   testWidgets('adjustUserPlaybackSignalVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.adjustUserPlaybackSignalVolume(123, 10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAdjustUserPlaybackSignalVolume.index,
       jsonEncode({
         'uid': 123,
@@ -559,39 +559,39 @@ void main() {
   });
 
   testWidgets('disableAudio', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.disableAudio();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineDisableAudio.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('enableAudio', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.enableAudio();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableAudio.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('enableAudioVolumeIndication', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.enableAudioVolumeIndication(10, 10, true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableAudioVolumeIndication.index,
       jsonEncode({
         'interval': 10,
@@ -602,13 +602,13 @@ void main() {
   });
 
   testWidgets('enableLocalAudio', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.enableLocalAudio(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableLocalAudio.index,
       jsonEncode({
         'enabled': true,
@@ -617,13 +617,13 @@ void main() {
   });
 
   testWidgets('muteAllRemoteAudioStreams', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.muteAllRemoteAudioStreams(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineMuteAllRemoteAudioStreams.index,
       jsonEncode({
         'mute': true,
@@ -632,13 +632,13 @@ void main() {
   });
 
   testWidgets('muteLocalAudioStream', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.muteLocalAudioStream(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineMuteLocalAudioStream.index,
       jsonEncode({
         'mute': true,
@@ -647,13 +647,13 @@ void main() {
   });
 
   testWidgets('muteRemoteAudioStream', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.muteRemoteAudioStream(10, true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineMuteRemoteAudioStream.index,
       jsonEncode({
         'userId': 10,
@@ -663,8 +663,8 @@ void main() {
   });
 
   testWidgets('setAudioProfile', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setAudioProfile(
@@ -672,7 +672,7 @@ void main() {
       AudioScenario.Default,
     );
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetAudioProfile.index,
       jsonEncode({
         'profile': 0,
@@ -682,26 +682,26 @@ void main() {
   });
 
   testWidgets('disableVideo', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.disableVideo();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineDisableVideo.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('enableLocalVideo', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.enableLocalVideo(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableLocalVideo.index,
       jsonEncode({
         'enabled': true,
@@ -710,26 +710,26 @@ void main() {
   });
 
   testWidgets('enableVideo', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.enableVideo();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableVideo.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('muteAllRemoteVideoStreams', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.muteAllRemoteVideoStreams(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineMuteAllRemoteVideoStreams.index,
       jsonEncode({
         'mute': true,
@@ -738,13 +738,13 @@ void main() {
   });
 
   testWidgets('muteLocalVideoStream', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.muteLocalVideoStream(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineMuteLocalVideoStream.index,
       jsonEncode({
         'mute': true,
@@ -753,13 +753,13 @@ void main() {
   });
 
   testWidgets('muteRemoteVideoStream', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.muteRemoteVideoStream(10, true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineMuteRemoteVideoStream.index,
       jsonEncode({
         'userId': 10,
@@ -769,15 +769,15 @@ void main() {
   });
 
   testWidgets('setBeautyEffectOptions', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     BeautyOptions options =
         BeautyOptions(lighteningContrastLevel: LighteningContrastLevel.High);
     await rtcEngine.setBeautyEffectOptions(true, options);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetBeautyEffectOptions.index,
       jsonEncode({
         'enabled': true,
@@ -787,15 +787,15 @@ void main() {
   });
 
   testWidgets('setVideoEncoderConfiguration', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     VideoEncoderConfiguration config = VideoEncoderConfiguration(
         dimensions: VideoDimensions(width: 10, height: 10));
     await rtcEngine.setVideoEncoderConfiguration(config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetVideoEncoderConfiguration.index,
       jsonEncode({
         'config': config.toJson(),
@@ -804,42 +804,42 @@ void main() {
   });
 
   testWidgets('startPreview', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.startPreview();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStartPreview.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('stopPreview', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopPreview();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopPreview.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('adjustAudioMixingPlayoutVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.adjustAudioMixingPlayoutVolume(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAdjustAudioMixingPlayoutVolume.index,
       jsonEncode({
         'volume': 10,
@@ -848,14 +848,14 @@ void main() {
   });
 
   testWidgets('adjustAudioMixingPublishVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.adjustAudioMixingPublishVolume(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAdjustAudioMixingPublishVolume.index,
       jsonEncode({
         'volume': 10,
@@ -864,14 +864,14 @@ void main() {
   });
 
   testWidgets('adjustAudioMixingVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.adjustAudioMixingVolume(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAdjustAudioMixingVolume.index,
       jsonEncode({
         'volume': 10,
@@ -880,10 +880,10 @@ void main() {
   });
 
   testWidgets('getAudioMixingCurrentPosition', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiReturnCode(
+    fakeIrisEngine.mockCallApiReturnCode(
         ApiTypeEngine.kEngineGetAudioMixingCurrentPosition.index,
         jsonEncode({}),
         10);
@@ -892,7 +892,7 @@ void main() {
 
     final ret = await rtcEngine.getAudioMixingCurrentPosition();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetAudioMixingCurrentPosition.index,
       jsonEncode({}),
     );
@@ -901,17 +901,17 @@ void main() {
   });
 
   testWidgets('getAudioMixingDuration', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiReturnCode(
+    fakeIrisEngine.mockCallApiReturnCode(
         ApiTypeEngine.kEngineGetAudioMixingDuration.index, jsonEncode({}), 10);
 
     rtcEngine = await _createEngine();
 
     final ret = await rtcEngine.getAudioMixingDuration();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetAudioMixingDuration.index,
       jsonEncode({}),
     );
@@ -920,10 +920,10 @@ void main() {
   });
 
   testWidgets('getAudioMixingPlayoutVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiReturnCode(
+    fakeIrisEngine.mockCallApiReturnCode(
         ApiTypeEngine.kEngineGetAudioMixingPlayoutVolume.index,
         jsonEncode({}),
         10);
@@ -932,7 +932,7 @@ void main() {
 
     final ret = await rtcEngine.getAudioMixingPlayoutVolume();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetAudioMixingPlayoutVolume.index,
       jsonEncode({}),
     );
@@ -941,10 +941,10 @@ void main() {
   });
 
   testWidgets('getAudioMixingPublishVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiReturnCode(
+    fakeIrisEngine.mockCallApiReturnCode(
         ApiTypeEngine.kEngineGetAudioMixingPublishVolume.index,
         jsonEncode({}),
         10);
@@ -953,7 +953,7 @@ void main() {
 
     final ret = await rtcEngine.getAudioMixingPublishVolume();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetAudioMixingPublishVolume.index,
       jsonEncode({}),
     );
@@ -962,42 +962,42 @@ void main() {
   });
 
   testWidgets('pauseAudioMixing', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.pauseAudioMixing();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEnginePauseAudioMixing.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('resumeAudioMixing', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.resumeAudioMixing();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineResumeAudioMixing.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('setAudioMixingPosition', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.setAudioMixingPosition(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetAudioMixingPosition.index,
       jsonEncode({
         'pos': 10,
@@ -1008,14 +1008,14 @@ void main() {
   group('startAudioMixing', () {
     testWidgets('with `filePath`, `loopback`, `replace`, `cycle`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
 
       await rtcEngine.startAudioMixing('/path', true, true, 10);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartAudioMixing.index,
         jsonEncode({
           'filePath': '/path',
@@ -1028,14 +1028,14 @@ void main() {
 
     testWidgets('with `filePath`, `loopback`, `replace`, `cycle`, `startPos`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
 
       await rtcEngine.startAudioMixing('/path', true, true, 10, 20);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartAudioMixing.index,
         jsonEncode({
           'filePath': '/path',
@@ -1048,22 +1048,22 @@ void main() {
   });
 
   testWidgets('stopAudioMixing', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopAudioMixing();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopAudioMixing.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('addInjectStreamUrl', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
@@ -1072,7 +1072,7 @@ void main() {
 
     await rtcEngine.addInjectStreamUrl('https://example.com', config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAddInjectStreamUrl.index,
       jsonEncode({
         'url': 'https://example.com',
@@ -1082,14 +1082,14 @@ void main() {
   });
 
   testWidgets('addPublishStreamUrl', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.addPublishStreamUrl('https://example.com', true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAddPublishStreamUrl.index,
       jsonEncode({
         'url': 'https://example.com',
@@ -1099,15 +1099,15 @@ void main() {
   });
 
   testWidgets('addVideoWatermark', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     final WatermarkOptions options = WatermarkOptions(visibleInPreview: true);
     await rtcEngine.addVideoWatermark('https://example.com', options);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineAddVideoWaterMark.index,
       jsonEncode({
         'watermarkUrl': 'https://example.com',
@@ -1117,24 +1117,24 @@ void main() {
   });
 
   testWidgets('clearVideoWatermarks', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.clearVideoWatermarks();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineClearVideoWaterMarks.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('createDataStream', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiReturnCode(
+    fakeIrisEngine.mockCallApiReturnCode(
         ApiTypeEngine.kEngineCreateDataStream.index,
         jsonEncode({
           'reliable': true,
@@ -1146,7 +1146,7 @@ void main() {
 
     final ret = await rtcEngine.createDataStream(true, true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineCreateDataStream.index,
       jsonEncode({
         'reliable': true,
@@ -1158,28 +1158,28 @@ void main() {
   });
 
   testWidgets('disableLastmileTest', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.disableLastmileTest();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineDisableLastMileTest.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('enableDualStreamMode', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.enableDualStreamMode(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableDualStreamMode.index,
       jsonEncode({
         'enabled': true,
@@ -1188,14 +1188,14 @@ void main() {
   });
 
   testWidgets('enableInEarMonitoring', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.enableInEarMonitoring(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableInEarMonitoring.index,
       jsonEncode({
         'enabled': true,
@@ -1204,28 +1204,28 @@ void main() {
   });
 
   testWidgets('enableLastmileTest', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.enableLastmileTest();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableLastMileTest.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('enableSoundPositionIndication', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.enableSoundPositionIndication(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableSoundPositionIndication.index,
       jsonEncode({
         'enabled': true,
@@ -1234,10 +1234,10 @@ void main() {
   });
 
   testWidgets('isSpeakerphoneEnabled', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiReturnCode(
+    fakeIrisEngine.mockCallApiReturnCode(
       ApiTypeEngine.kEngineIsSpeakerPhoneEnabled.index,
       jsonEncode({}),
       1,
@@ -1247,7 +1247,7 @@ void main() {
 
     final ret = await rtcEngine.isSpeakerphoneEnabled();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineIsSpeakerPhoneEnabled.index,
       jsonEncode({}),
     );
@@ -1256,28 +1256,28 @@ void main() {
   });
 
   testWidgets('pauseAllEffects', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.pauseAllEffects();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEnginePauseAllEffects.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('pauseEffect', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.pauseEffect(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEnginePauseEffect.index,
       jsonEncode({
         'soundId': 10,
@@ -1289,14 +1289,14 @@ void main() {
     testWidgets(
         'with `soundId`, `filePath`, `loopCount`, `pitch`, `pan`, `gain`, `publish`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
 
-      await rtcEngine.playEffect(10, '/path', 10, 1.0, 2.0, 3.0, true);
+      await rtcEngine.playEffect(10, '/path', 10, 1.0, 2.0, 3, true);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEnginePlayEffect.index,
         jsonEncode({
           'soundId': 10,
@@ -1304,7 +1304,7 @@ void main() {
           'loopCount': 10,
           'pitch': 1.0,
           'pan': 2.0,
-          'gain': 3.0,
+          'gain': 3,
           'publish': true,
           'startPos': null,
         }),
@@ -1314,14 +1314,14 @@ void main() {
     testWidgets(
         'with `soundId`, `filePath`, `loopCount`, `pitch`, `pan`, `gain`, `publish`, `startPos`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
 
-      await rtcEngine.playEffect(10, '/path', 10, 1.0, 2.0, 3.0, true, 20);
+      await rtcEngine.playEffect(10, '/path', 10, 1.0, 2.0, 3, true, 20);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEnginePlayEffect.index,
         jsonEncode({
           'soundId': 10,
@@ -1329,7 +1329,7 @@ void main() {
           'loopCount': 10,
           'pitch': 1.0,
           'pan': 2.0,
-          'gain': 3.0,
+          'gain': 3,
           'publish': true,
           'startPos': 20,
         }),
@@ -1338,14 +1338,14 @@ void main() {
   });
 
   testWidgets('setEffectPosition', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.setEffectPosition(10, 20);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetEffectPosition.index,
       jsonEncode({
         'soundId': 10,
@@ -1355,14 +1355,14 @@ void main() {
   });
 
   testWidgets('getEffectDuration', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.getEffectDuration('/path');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetEffectDuration.index,
       jsonEncode({
         'filePath': '/path',
@@ -1371,14 +1371,14 @@ void main() {
   });
 
   testWidgets('getEffectCurrentPosition', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.getEffectCurrentPosition(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetEffectCurrentPosition.index,
       jsonEncode({
         'soundId': 10,
@@ -1387,14 +1387,14 @@ void main() {
   });
 
   testWidgets('preloadEffect', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.preloadEffect(10, '/path');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEnginePreloadEffect.index,
       jsonEncode({
         'soundId': 10,
@@ -1404,14 +1404,14 @@ void main() {
   });
 
   testWidgets('preloadEffect', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.preloadEffect(10, '/path');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEnginePreloadEffect.index,
       jsonEncode({
         'soundId': 10,
@@ -1421,28 +1421,28 @@ void main() {
   });
 
   testWidgets('registerMediaMetadataObserver', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.registerMediaMetadataObserver();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineRegisterMediaMetadataObserver.index,
-      jsonEncode({}),
+      jsonEncode({'type': 0}),
     );
   });
 
   testWidgets('removeInjectStreamUrl', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.removeInjectStreamUrl('https://example.com');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineRemoveInjectStreamUrl.index,
       jsonEncode({
         'url': 'https://example.com',
@@ -1451,14 +1451,14 @@ void main() {
   });
 
   testWidgets('removePublishStreamUrl', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.removePublishStreamUrl('https://example.com');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineRemovePublishStreamUrl.index,
       jsonEncode({
         'url': 'https://example.com',
@@ -1467,28 +1467,28 @@ void main() {
   });
 
   testWidgets('resumeAllEffects', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.resumeAllEffects();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineResumeAllEffects.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('resumeEffect', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.resumeEffect(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineResumeEffect.index,
       jsonEncode({
         'soundId': 10,
@@ -1497,12 +1497,12 @@ void main() {
   });
 
   testWidgets('sendMetadata', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     final bytes = Uint8List.fromList([1, 1, 1, 1, 1]);
 
-    nireHandler.setExplicitBufferSize(
+    fakeIrisEngine.setExplicitBufferSize(
         ApiTypeEngine.kEngineResumeEffect.index,
         jsonEncode({
           'metadata': {
@@ -1515,7 +1515,7 @@ void main() {
 
     await rtcEngine.sendMetadata(bytes);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSendMetadata.index,
       jsonEncode({
         'metadata': {
@@ -1528,12 +1528,12 @@ void main() {
   });
 
   testWidgets('sendStreamMessage', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     final bytes = Uint8List.fromList([1, 1, 1, 1, 1]);
 
-    nireHandler.setExplicitBufferSize(
+    fakeIrisEngine.setExplicitBufferSize(
         ApiTypeEngine.kEngineSendStreamMessage.index,
         jsonEncode({
           'streamId': 10,
@@ -1545,7 +1545,7 @@ void main() {
 
     await rtcEngine.sendStreamMessage(10, bytes);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSendStreamMessage.index,
       jsonEncode({
         'streamId': 10,
@@ -1556,34 +1556,38 @@ void main() {
     );
   });
 
-  testWidgets('setCameraCapturerConfiguration', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+  testWidgets(
+    'setCameraCapturerConfiguration',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
 
-    rtcEngine = await _createEngine();
+      rtcEngine = await _createEngine();
 
-    final CameraCapturerConfiguration config = CameraCapturerConfiguration(
-        preference: CameraCaptureOutputPreference.Performance);
-    await rtcEngine.setCameraCapturerConfiguration(config);
+      final CameraCapturerConfiguration config = CameraCapturerConfiguration(
+          preference: CameraCaptureOutputPreference.Performance);
+      await rtcEngine.setCameraCapturerConfiguration(config);
 
-    nireHandler.expectCalledApi(
-      ApiTypeEngine.kEngineSetCameraCapturerConfiguration.index,
-      jsonEncode({
-        'config': config.toJson(),
-      }),
-    );
-  });
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineSetCameraCapturerConfiguration.index,
+        jsonEncode({
+          'config': config.toJson(),
+        }),
+      );
+    },
+    skip: true, // TODO(littlegnal): Wait for iris fix it
+  );
 
   testWidgets('setDefaultAudioRoutetoSpeakerphone',
       (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.setDefaultAudioRoutetoSpeakerphone(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetDefaultAudioRouteToSpeakerPhone.index,
       jsonEncode({
         'defaultToSpeaker': true,
@@ -1592,46 +1596,46 @@ void main() {
   });
 
   testWidgets('setEffectsVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
-    await rtcEngine.setEffectsVolume(10.0);
+    await rtcEngine.setEffectsVolume(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetEffectsVolume.index,
       jsonEncode({
-        'volume': 10.0,
+        'volume': 10,
       }),
     );
   });
 
   testWidgets('setEnableSpeakerphone', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.setEnableSpeakerphone(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetEnableSpeakerPhone.index,
       jsonEncode({
-        'enabled': true,
+        'defaultToSpeaker': true,
       }),
     );
   });
 
   testWidgets('setInEarMonitoringVolume', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.setInEarMonitoringVolume(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetInEarMonitoringVolume.index,
       jsonEncode({
         'volume': 10,
@@ -1640,15 +1644,15 @@ void main() {
   });
 
   testWidgets('setLiveTranscoding', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final LiveTranscoding transcoding =
         LiveTranscoding([TranscodingUser(100)], width: 10, height: 10);
     await rtcEngine.setLiveTranscoding(transcoding);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetLiveTranscoding.index,
       jsonEncode({
         'transcoding': transcoding.toJson(),
@@ -1657,14 +1661,14 @@ void main() {
   });
 
   testWidgets('setLocalPublishFallbackOption', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine
         .setLocalPublishFallbackOption(StreamFallbackOptions.AudioOnly);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetLocalPublishFallbackOption.index,
       jsonEncode({
         'option': 2,
@@ -1673,8 +1677,8 @@ void main() {
   });
 
   testWidgets('setLocalVoiceEqualization', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setLocalVoiceEqualization(
@@ -1682,7 +1686,7 @@ void main() {
       10,
     );
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetLocalVoiceEqualization.index,
       jsonEncode({
         'bandFrequency': 7,
@@ -1692,13 +1696,13 @@ void main() {
   });
 
   testWidgets('setLocalVoicePitch', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setLocalVoicePitch(10.0);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetLocalVoicePitch.index,
       jsonEncode({
         'pitch': 10.0,
@@ -1707,13 +1711,13 @@ void main() {
   });
 
   testWidgets('setLocalVoiceReverb', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setLocalVoiceReverb(AudioReverbType.RoomSize, 10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetLocalVoiceReverb.index,
       jsonEncode({
         'reverbKey': 2,
@@ -1723,13 +1727,13 @@ void main() {
   });
 
   testWidgets('setMaxMetadataSize', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setMaxMetadataSize(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetMaxMetadataSize.index,
       jsonEncode({
         'size': 10,
@@ -1738,13 +1742,13 @@ void main() {
   });
 
   testWidgets('setRemoteDefaultVideoStreamType', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setRemoteDefaultVideoStreamType(VideoStreamType.High);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetRemoteDefaultVideoStreamType.index,
       jsonEncode({
         'streamType': 0,
@@ -1753,14 +1757,14 @@ void main() {
   });
 
   testWidgets('setRemoteSubscribeFallbackOption', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine
         .setRemoteSubscribeFallbackOption(StreamFallbackOptions.AudioOnly);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetRemoteSubscribeFallbackOption.index,
       jsonEncode({
         'option': 2,
@@ -1769,13 +1773,13 @@ void main() {
   });
 
   testWidgets('setRemoteUserPriority', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setRemoteUserPriority(10, UserPriority.High);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetRemoteUserPriority.index,
       jsonEncode({
         'uid': 10,
@@ -1785,29 +1789,29 @@ void main() {
   });
 
   testWidgets('setRemoteVideoStreamType', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setRemoteVideoStreamType(10, VideoStreamType.High);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetRemoteVideoStreamType.index,
       jsonEncode({
-        'uid': 10,
+        'userId': 10,
         'streamType': 0,
       }),
     );
   });
 
   testWidgets('setRemoteVoicePosition', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setRemoteVoicePosition(10, 1.0, 2.0);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetRemoteVoicePosition.index,
       jsonEncode({
         'uid': 10,
@@ -1818,31 +1822,31 @@ void main() {
   });
 
   testWidgets('setVolumeOfEffect', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
-    await rtcEngine.setVolumeOfEffect(10, 10.0);
+    await rtcEngine.setVolumeOfEffect(10, 10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetVolumeOfEffect.index,
       jsonEncode({
         'soundId': 10,
-        'volume': 10.0,
+        'volume': 10,
       }),
     );
   });
 
   testWidgets('startAudioRecordingWithConfig', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final AudioRecordingConfiguration config =
         AudioRecordingConfiguration('/path');
     await rtcEngine.startAudioRecordingWithConfig(config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStartAudioRecording.index,
       jsonEncode({
         'config': config.toJson(),
@@ -1851,8 +1855,8 @@ void main() {
   });
 
   testWidgets('startChannelMediaRelay', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final ChannelMediaRelayConfiguration config =
@@ -1862,7 +1866,7 @@ void main() {
     );
     await rtcEngine.startChannelMediaRelay(config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStartChannelMediaRelay.index,
       jsonEncode({
         'configuration': config.toJson(),
@@ -1871,14 +1875,14 @@ void main() {
   });
 
   testWidgets('startEchoTest', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.startEchoTest(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStartEchoTest.index,
       jsonEncode({
         'intervalInSeconds': 10,
@@ -1887,8 +1891,8 @@ void main() {
   });
 
   testWidgets('startLastmileProbeTest', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
@@ -1896,7 +1900,7 @@ void main() {
 
     await rtcEngine.startLastmileProbeTest(config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStartLastMileProbeTest.index,
       jsonEncode({
         'config': config.toJson(),
@@ -1905,70 +1909,70 @@ void main() {
   });
 
   testWidgets('stopAllEffects', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopAllEffects();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopAllEffects.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('stopAudioRecording', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopAudioRecording();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopAudioRecording.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('stopChannelMediaRelay', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopChannelMediaRelay();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopChannelMediaRelay.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('stopEchoTest', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopEchoTest();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopEchoTest.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('stopEffect', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopEffect(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopEffect.index,
       jsonEncode({
         'soundId': 10,
@@ -1977,42 +1981,42 @@ void main() {
   });
 
   testWidgets('stopLastmileProbeTest', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.stopLastmileProbeTest();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopLastMileProbeTest.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('switchCamera', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.switchCamera();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSwitchCamera.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('unloadEffect', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.unloadEffect(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineUnloadEffect.index,
       jsonEncode({
         'soundId': 10,
@@ -2021,22 +2025,22 @@ void main() {
   });
 
   testWidgets('unregisterMediaMetadataObserver', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.unregisterMediaMetadataObserver();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineUnRegisterMediaMetadataObserver.index,
-      jsonEncode({}),
+      jsonEncode({'type': 0}),
     );
   });
 
   testWidgets('updateChannelMediaRelay', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final ChannelMediaRelayConfiguration config =
@@ -2046,7 +2050,7 @@ void main() {
     );
     await rtcEngine.updateChannelMediaRelay(config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineUpdateChannelMediaRelay.index,
       jsonEncode({
         'configuration': config.toJson(),
@@ -2055,14 +2059,14 @@ void main() {
   });
 
   testWidgets('enableFaceDetection', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.enableFaceDetection(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableFaceDetection.index,
       jsonEncode({
         'enable': true,
@@ -2071,14 +2075,14 @@ void main() {
   });
 
   testWidgets('setAudioMixingPitch', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
 
     await rtcEngine.setAudioMixingPitch(10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetAudioMixingPitch.index,
       jsonEncode({
         'pitch': 10,
@@ -2087,15 +2091,15 @@ void main() {
   });
 
   testWidgets('enableEncryption', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final EncryptionConfig config =
         EncryptionConfig(encryptionMode: EncryptionMode.AES128ECB);
     await rtcEngine.enableEncryption(true, config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableEncryption.index,
       jsonEncode({
         'enabled': true,
@@ -2105,14 +2109,14 @@ void main() {
   });
 
   testWidgets('sendCustomReportMessage', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.sendCustomReportMessage(
         '123', 'category', 'event', 'label', 10);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSendCustomReportMessage.index,
       jsonEncode({
         'id': '123',
@@ -2126,14 +2130,14 @@ void main() {
 
   testWidgets('setAudioSessionOperationRestriction',
       (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setAudioSessionOperationRestriction(
         AudioSessionOperationRestriction.All);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetAudioSessionOperationRestriction.index,
       jsonEncode({
         'restriction': 1 << 7,
@@ -2142,14 +2146,14 @@ void main() {
   });
 
   testWidgets('setAudioEffectParameters', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setAudioEffectParameters(
         AudioEffectPreset.AudioEffectOff, 1, 2);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetAudioEffectParameters.index,
       jsonEncode({
         'preset': 0x00000000,
@@ -2160,13 +2164,13 @@ void main() {
   });
 
   testWidgets('setAudioEffectPreset', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setAudioEffectPreset(AudioEffectPreset.PitchCorrection);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetAudioEffectPreset.index,
       jsonEncode({
         'preset': 0x02040100,
@@ -2175,14 +2179,14 @@ void main() {
   });
 
   testWidgets('setVoiceBeautifierPreset', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine
         .setVoiceBeautifierPreset(VoiceBeautifierPreset.SingingBeautifier);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetVoiceBeautifierPreset.index,
       jsonEncode({
         'preset': 0x01020100,
@@ -2191,14 +2195,14 @@ void main() {
   });
 
   testWidgets('createDataStreamWithConfig', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final DataStreamConfig config = DataStreamConfig(true, true);
     await rtcEngine.createDataStreamWithConfig(config);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineCreateDataStream.index,
       jsonEncode({
         'config': config.toJson(),
@@ -2207,44 +2211,44 @@ void main() {
   });
 
   testWidgets('enableDeepLearningDenoise', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.enableDeepLearningDenoise(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableDeepLearningDenoise.index,
       jsonEncode({
-        'enabled': true,
+        'enable': true,
       }),
     );
   });
 
   testWidgets('enableRemoteSuperResolution', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.enableRemoteSuperResolution(10, true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableRemoteSuperResolution.index,
       jsonEncode({
-        'uid': 10,
+        'userId': 10,
         'enable': true,
       }),
     );
   });
 
   testWidgets('setCloudProxy', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setCloudProxy(CloudProxyType.TCP);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetCloudProxy.index,
       jsonEncode({
         'proxyType': 2,
@@ -2253,10 +2257,10 @@ void main() {
   });
 
   testWidgets('uploadLogFile', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
-    nireHandler.mockCallApiResult(
+    fakeIrisEngine.mockCallApiResult(
       ApiTypeEngine.kEngineUploadLogFile.index,
       jsonEncode({}),
       '1',
@@ -2265,7 +2269,7 @@ void main() {
     rtcEngine = await _createEngine();
     final ret = await rtcEngine.uploadLogFile();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineUploadLogFile.index,
       jsonEncode({}),
     );
@@ -2274,14 +2278,14 @@ void main() {
   });
 
   testWidgets('setVoiceBeautifierParameters', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setVoiceBeautifierParameters(
         VoiceBeautifierPreset.SingingBeautifier, 1, 2);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetVoiceBeautifierParameters.index,
       jsonEncode({
         'preset': 0x01020100,
@@ -2292,13 +2296,13 @@ void main() {
   });
 
   testWidgets('setVoiceConversionPreset', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setVoiceConversionPreset(VoiceConversionPreset.Sweet);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetVoiceConversionPreset.index,
       jsonEncode({
         'preset': 50397696,
@@ -2307,39 +2311,39 @@ void main() {
   });
 
   testWidgets('pauseAllChannelMediaRelay', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.pauseAllChannelMediaRelay();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEnginePauseAllChannelMediaRelay.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('resumeAllChannelMediaRelay', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.resumeAllChannelMediaRelay();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineResumeAllChannelMediaRelay.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('setLocalAccessPoint', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setLocalAccessPoint(['127.0.0.1'], 'example.com');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetLocalAccessPoint.index,
       jsonEncode({
         'ips': ['127.0.0.1'],
@@ -2349,13 +2353,13 @@ void main() {
   });
 
   testWidgets('setScreenCaptureContentHint', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.setScreenCaptureContentHint(VideoContentHint.Motion);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetScreenCaptureContentHint.index,
       jsonEncode({
         'contentHint': 1,
@@ -2365,15 +2369,15 @@ void main() {
 
   group('startScreenCaptureByDisplayId', () {
     testWidgets('with `displayId`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.startScreenCaptureByDisplayId(
         10,
       );
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByDisplayId.index,
         jsonEncode({
           'displayId': 10,
@@ -2384,14 +2388,14 @@ void main() {
     });
 
     testWidgets('with `displayId`, `regionRect`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final rect = Rectangle(x: 10, y: 10);
       await rtcEngine.startScreenCaptureByDisplayId(10, rect);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByDisplayId.index,
         jsonEncode({
           'displayId': 10,
@@ -2403,8 +2407,8 @@ void main() {
 
     testWidgets('with `displayId`, `regionRect`, `captureParams`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final rect = Rectangle(x: 10, y: 10);
@@ -2412,7 +2416,7 @@ void main() {
           dimensions: VideoDimensions(width: 10, height: 10));
       await rtcEngine.startScreenCaptureByDisplayId(10, rect, params);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByDisplayId.index,
         jsonEncode({
           'displayId': 10,
@@ -2425,8 +2429,8 @@ void main() {
 
   group('startScreenCaptureByScreenRect', () {
     testWidgets('with `screenRect`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final rect = Rectangle(x: 10, y: 10);
@@ -2434,7 +2438,7 @@ void main() {
           dimensions: VideoDimensions(width: 10, height: 10));
       await rtcEngine.startScreenCaptureByScreenRect(rect);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByScreenRect.index,
         jsonEncode({
           'screenRect': rect.toJson(),
@@ -2445,8 +2449,8 @@ void main() {
     });
 
     testWidgets('with `screenRect`, `regionRect`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final screenRect = Rectangle(x: 10, y: 10);
@@ -2454,7 +2458,7 @@ void main() {
 
       await rtcEngine.startScreenCaptureByScreenRect(screenRect, regionRect);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByScreenRect.index,
         jsonEncode({
           'screenRect': screenRect.toJson(),
@@ -2466,8 +2470,8 @@ void main() {
 
     testWidgets('with `screenRect`, `regionRect`, `captureParams`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final screenRect = Rectangle(x: 10, y: 10);
@@ -2477,7 +2481,7 @@ void main() {
       await rtcEngine.startScreenCaptureByScreenRect(
           screenRect, regionRect, params);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByScreenRect.index,
         jsonEncode({
           'screenRect': screenRect.toJson(),
@@ -2490,8 +2494,8 @@ void main() {
 
   group('startScreenCaptureByWindowId', () {
     testWidgets('with `windowId`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final screenRect = Rectangle(x: 10, y: 10);
@@ -2500,7 +2504,7 @@ void main() {
           dimensions: VideoDimensions(width: 10, height: 10));
       await rtcEngine.startScreenCaptureByWindowId(10);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
         jsonEncode({
           'windowId': 10,
@@ -2511,8 +2515,8 @@ void main() {
     });
 
     testWidgets('with `windowId`, `regionRect`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final regionRect = Rectangle(x: 20, y: 20);
@@ -2520,7 +2524,7 @@ void main() {
           dimensions: VideoDimensions(width: 10, height: 10));
       await rtcEngine.startScreenCaptureByWindowId(10, regionRect);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
         jsonEncode({
           'windowId': 10,
@@ -2532,8 +2536,8 @@ void main() {
 
     testWidgets('with `windowId`, `regionRect`, `captureParams`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final regionRect = Rectangle(x: 20, y: 20);
@@ -2541,7 +2545,7 @@ void main() {
           dimensions: VideoDimensions(width: 10, height: 10));
       await rtcEngine.startScreenCaptureByWindowId(10, regionRect, params);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCaptureByWindowId.index,
         jsonEncode({
           'windowId': 10,
@@ -2553,28 +2557,28 @@ void main() {
   });
 
   testWidgets('stopScreenCapture', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     await rtcEngine.stopScreenCapture();
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineStopScreenCapture.index,
       jsonEncode({}),
     );
   });
 
   testWidgets('updateScreenCaptureParameters', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final ScreenCaptureParameters params = ScreenCaptureParameters(
         dimensions: VideoDimensions(width: 10, height: 10));
     await rtcEngine.updateScreenCaptureParameters(params);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineUpdateScreenCaptureParameters.index,
       jsonEncode({
         'captureParams': params.toJson(),
@@ -2583,14 +2587,14 @@ void main() {
   });
 
   testWidgets('updateScreenCaptureRegion', (WidgetTester tester) async {
-    // app.main();
-    // await tester.pumpAndSettle();
+    app.main();
+    await tester.pumpAndSettle();
 
     rtcEngine = await _createEngine();
     final Rectangle rect = Rectangle(width: 10, height: 10);
     await rtcEngine.updateScreenCaptureRegion(rect);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineUpdateScreenCaptureRegion.index,
       jsonEncode({
         'regionRect': rect.toJson(),
@@ -2600,13 +2604,13 @@ void main() {
 
   group('startScreenCapture', () {
     testWidgets('with `windowId`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.startScreenCapture(10);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCapture.index,
         jsonEncode({
           'windowId': 10,
@@ -2618,13 +2622,13 @@ void main() {
     });
 
     testWidgets('with `windowId`, `captureFreq`', (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       await rtcEngine.startScreenCapture(10, 20);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCapture.index,
         jsonEncode({
           'windowId': 10,
@@ -2637,14 +2641,14 @@ void main() {
 
     testWidgets('with `windowId`, `captureFreq`, `rect`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final rect = Rect(left: 10, right: 10);
       await rtcEngine.startScreenCapture(10, 20, rect);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCapture.index,
         jsonEncode({
           'windowId': 10,
@@ -2657,14 +2661,14 @@ void main() {
 
     testWidgets('with `windowId`, `captureFreq`, `rect`, `bitrate`',
         (WidgetTester tester) async {
-      // app.main();
-      // await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
       rtcEngine = await _createEngine();
       final rect = Rect(left: 10, right: 10);
       await rtcEngine.startScreenCapture(10, 20, rect, 30);
 
-      nireHandler.expectCalledApi(
+      fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineStartScreenCapture.index,
         jsonEncode({
           'windowId': 10,

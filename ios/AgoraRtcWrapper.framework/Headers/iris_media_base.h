@@ -83,6 +83,7 @@ typedef struct IrisPacket {
 
 namespace agora {
 namespace iris {
+
 class IrisVideoFrameBufferManager;
 
 class IrisAudioFrameObserver {
@@ -167,14 +168,15 @@ class IRIS_CPP_API IrisPacketObserverManager {
   Impl *impl_;
 };
 
-class IRIS_CPP_API IrisMediaFrameObserverManager
+class IRIS_CPP_API IrisCommonObserverManager
     : public IrisAudioFrameObserverManager,
       public IrisVideoFrameObserverManager,
       public IrisPacketObserverManager {
  public:
-  IrisMediaFrameObserverManager();
-  virtual ~IrisMediaFrameObserverManager();
+  IrisCommonObserverManager();
+  virtual ~IrisCommonObserverManager();
 };
+
 }// namespace iris
 }// namespace agora
 

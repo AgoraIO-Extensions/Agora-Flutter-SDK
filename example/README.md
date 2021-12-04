@@ -4,7 +4,8 @@
 
 ## Overview
 
-The API-Example-ReactNative project is an open-source demo that will show you different scenes on how to integrate Agora SDK APIs into your project.
+The API-Example-ReactNative project is an open-source demo that will show you different scenes on
+how to integrate Agora SDK APIs into your project.
 
 Any scene of this project can run successfully alone.
 
@@ -16,19 +17,24 @@ Any scene of this project can run successfully alone.
 
 | Demo                                                         | Description                                        | APIs                                                         |
 | ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ |
-| [JoinChannelAudio](./lib/examples/basic/join_channel_audio) | Audio live streaming | GetEngine, JoinChannelByKey, LeaveChannel |
-| [JoinChannelVideo](./lib/examples/basic/join_channel_video) | Video live streaming | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
-| [StringUid](./lib/examples/basic/string_uid) | String user ID | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+| [JoinChannelAudio](./lib/examples/basic/join_channel_audio) | Audio live streaming | |
+| [JoinChannelVideo](./lib/examples/basic/join_channel_video) | Video live streaming | |
+| [StringUid](./lib/examples/basic/string_uid) | String user ID | |
 
 * **Advanced demos:**
 
 | Demo                                                         | Description                                                  | APIs                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [JoinMultipleChannel](./lib/examples/advanced/join_multiple_channel) | Join multiple channels | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
-| [VoiceChanger](./lib/examples/advanced/voice_changer) | Voice effects | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
-| [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | Channel media relay | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
-| [StreamMessage](./lib/examples/advanced/stream_message) | Send data stream  | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [AudioMixing](./lib/examples/advanced/audio_mixing) | Audio mixing |
+| [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | Channel media relay | |
 | [CustomCaptureAudio](./lib/examples/advanced/custom_capture_audio)| Custom audio capture | |
+| [JoinMultipleChannel](./lib/examples/advanced/join_multiple_channel) | Join multiple channels | |
+| [RTMPStreaming](./lib/examples/advanced/rtmp_streaming)| RTMP streaming | |
+| [ScreenSharing](./lib/examples/advanced/screen_sharing)| Screen sharing | |
+| [SetEncryption](./lib/examples/advanced/set_encryption)| Set encryption | |
+| [SetVideoEncoderConfiguration](./lib/examples/advanced/set_video_encoder_configuration)| Set video encoder configuration | |
+| [StreamMessage](./lib/examples/advanced/stream_message) | Send data stream  | |
+| [VoiceChanger](./lib/examples/advanced/voice_changer) | Voice effects | |
 
 ## How to run the sample project
 
@@ -54,8 +60,8 @@ Any scene of this project can run successfully alone.
 
 4. Make the project and run the app in the simulator or connected physical device.
 
-You are all set! Feel free to play with this sample project and explore features of the Agora RTC SDK.
-
+You are all set! Feel free to play with this sample project and explore features of the Agora RTC
+SDK.
 
 ## Feedback
 
@@ -70,9 +76,12 @@ If you have any problems or suggestions regarding the sample projects, feel free
 
 - Check our [FAQ](https://docs.agora.io/en/faq) to see if your issue has been recorded.
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
-- Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
-- Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
-- If you encounter problems during integration, feel free to ask questions in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
+- Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use
+  case
+- Repositories managed by developer communities can be found
+  at [Agora Community](https://github.com/AgoraIO-Community)
+- If you encounter problems during integration, feel free to ask questions
+  in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
 
 ## License
 

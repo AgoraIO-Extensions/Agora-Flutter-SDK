@@ -5,7 +5,6 @@
 #ifndef IRIS_RTC_C_API_H_
 #define IRIS_RTC_C_API_H_
 
-#include "iris_event_handler.h"
 #include "iris_rtc_base.h"
 #include "iris_video_processor.h"
 
@@ -68,12 +67,14 @@ IRIS_API void UnsetIrisRtcEngineEventHandler(IrisRtcEnginePtr engine_ptr,
 
 IRIS_API int CallIrisRtcEngineApi(IrisRtcEnginePtr engine_ptr,
                                   enum ApiTypeEngine api_type,
-                                  const char *params, char *result);
+                                  const char *params,
+                                  char result[kBasicResultLength]);
 
 IRIS_API int CallIrisRtcEngineApiWithBuffer(IrisRtcEnginePtr engine_ptr,
                                             enum ApiTypeEngine api_type,
                                             const char *params, void *buffer,
-                                            char *result);
+                                            char result[kBasicResultLength]);
+
 IRIS_API IrisRtcDeviceManagerPtr
 GetIrisRtcDeviceManager(IrisRtcEnginePtr engine_ptr);
 
@@ -85,12 +86,14 @@ IRIS_API IrisRtcRawDataPtr GetIrisRtcRawData(IrisRtcEnginePtr engine_ptr);
 IRIS_API int
 CallIrisRtcAudioDeviceManagerApi(IrisRtcDeviceManagerPtr device_manager_ptr,
                                  enum ApiTypeAudioDeviceManager api_type,
-                                 const char *params, char *result);
+                                 const char *params,
+                                 char result[kMaxResultLength]);
 
 IRIS_API int
 CallIrisRtcVideoDeviceManagerApi(IrisRtcDeviceManagerPtr device_manager_ptr,
                                  enum ApiTypeVideoDeviceManager api_type,
-                                 const char *params, char *result);
+                                 const char *params,
+                                 char result[kMaxResultLength]);
 
 /// IrisRtcChannel
 IRIS_API IrisEventHandlerHandle SetIrisRtcChannelEventHandler(
@@ -149,7 +152,7 @@ GetIrisRtcRawDataPluginManager(IrisRtcRawDataPtr raw_data_ptr);
 IRIS_API int CallIrisRtcRawDataPluginManagerApi(
     IrisRtcRawDataPluginManagerPtr plugin_manager_ptr,
     enum ApiTypeRawDataPluginManager api_type, const char *params,
-    char *result);
+    char result[kBasicResultLength]);
 
 #ifdef __cplusplus
 }

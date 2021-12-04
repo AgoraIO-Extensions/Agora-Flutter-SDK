@@ -3,6 +3,7 @@ package io.agora.agora_rtc_engine
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.NonNull
 import io.agora.iris.base.IrisEventHandler
 import io.agora.iris.rtc.IrisRtcEngine
@@ -105,7 +106,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var applicationContext: Context
 
-  private val irisRtcEngine = IrisRtcEngine()
+  private lateinit var irisRtcEngine: IrisRtcEngine
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -117,7 +118,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private var eventSink: EventChannel.EventSink? = null
 //  private val managerAgoraTextureView = RtcEngineManager { methodName, data -> emit(methodName, data) }
   private val handler = Handler(Looper.getMainLooper())
-  private val rtcChannelPlugin = AgoraRtcChannelPlugin(irisRtcEngine)
+  private lateinit var rtcChannelPlugin: AgoraRtcChannelPlugin;// = AgoraRtcChannelPlugin(irisRtcEngine)
   private lateinit var callApiMethodCallHandler: CallApiMethodCallHandler
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -134,7 +135,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     fun registerWith(registrar: Registrar) {
       AgoraRtcEnginePlugin().apply {
         this.registrar = registrar
-        rtcChannelPlugin.initPlugin(registrar.messenger())
+
         initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
       }
     }
@@ -146,6 +147,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     platformViewRegistry: PlatformViewRegistry
   ) {
     applicationContext = context.applicationContext
+    irisRtcEngine = IrisRtcEngine(applicationContext)
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
@@ -161,11 +163,14 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       "AgoraTextureView",
       AgoraTextureViewFactory(binaryMessenger, irisRtcEngine)
     )
+
+    rtcChannelPlugin = AgoraRtcChannelPlugin(irisRtcEngine)
+    rtcChannelPlugin.initPlugin(binaryMessenger)
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     this.binding = binding
-    rtcChannelPlugin.onAttachedToEngine(binding)
+//    rtcChannelPlugin.onAttachedToEngine(binding)
     initPlugin(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
   }
 
@@ -178,8 +183,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+
     eventSink = events
     irisRtcEngine.setEventHandler(EventHandler(eventSink))
+    Log.e("MainActivity", "eventSink: $eventSink")
   }
 
   override fun onCancel(arguments: Any?) {
@@ -187,17 +194,17 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     eventSink = null
   }
 
-  private fun emit(methodName: String, data: Map<String, Any?>?) {
-    handler.post {
-      val event: MutableMap<String, Any?> = mutableMapOf("methodName" to methodName)
-      data?.let { event.putAll(it) }
-      eventSink?.success(event)
-    }
-  }
+//  private fun emit(methodName: String, data: Map<String, Any?>?) {
+//    handler.post {
+//      val event: MutableMap<String, Any?> = mutableMapOf("methodName" to methodName)
+//      data?.let { event.putAll(it) }
+//      eventSink?.success(event)
+//    }
+//  }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
-    val messenger = registrar?.messenger() ?: binding?.binaryMessenger
+//    val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
+//    val messenger = registrar?.messenger() ?: binding?.binaryMessenger
 
     // Iris supported
     when (call.method) {

@@ -16,19 +16,22 @@
 
 | Demo                                                         | Description                                        | APIs                                                         |
 | ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ |
-| [JoinChannelAudio](./lib/examples/basic/join_channel_audio) | 音频直播 | GetEngine, JoinChannelByKey, LeaveChannel |
-| [JoinChannelVideo](./lib/examples/basic/join_channel_video) | 视频直播 | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
-| [StringUid](./lib/examples/basic/string_uid) | 字符串用户ID | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+| [JoinChannelAudio](./lib/examples/basic/join_channel_audio) | 音频直播 | |
+| [JoinChannelVideo](./lib/examples/basic/join_channel_video) | 视频直播 | |
+| [StringUid](./lib/examples/basic/string_uid) | 字符串用户ID | |
 
 * **进阶案例:**
 
 | Demo                                                         | Description                                                  | APIs                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [JoinMultipleChannel](./lib/examples/advanced/join_multiple_channel) | 加入多频道 | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
-| [VoiceChanger](./lib/examples/advanced/voice_changer) | 音频效果 | SetOnCaptureVideoFrameCallback, SetOnRenderVideoFrameCallback, OnRenderVideoFrameHandler, OnCaptureVideoFrameHandler |
-| [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | 频道媒体流转发 | RegisterAudioRawDataObserver, SetOnPlaybackAudioFrameCallback, OnPlaybackAudioFrameHandler |
-| [StreamMessage](./lib/examples/advanced/stream_message) | 发送数据流 | SetVideoEncoderConfiguration, SetLiveTranscoding, AddPublishStreamUrl, RemovePublishStreamUrl |
+| [AudioMixing](./lib/examples/advanced/audio_mixing) | 混音 | |
+| [ChannelMediaRelay](./lib/examples/advanced/channel_media_relay) | 频道媒体流转发 | |
 | [CustomCaptureAudio](./lib/examples/advanced/custom_capture_audio)| 音频自采集 | |
+| [JoinMultipleChannel](./lib/examples/advanced/join_multiple_channel) | 加入多频道 | |
+| [RTMPStreaming](./lib/examples/advanced/rtmp_streaming)| RTMP推流 | |
+| [ScreenSharing](./lib/examples/advanced/screen_sharing)| 屏幕共享 | |
+| [SetEncryption](./lib/examples/advanced/set_encryption)| 开启加密 | |
+| [SetVideoEncoderConfiguration](./lib/examples/advanced/set_video_encoder_configuration)| 设置视频编码参数 | |
 
 ## 如何运行示例程序
 

@@ -13,24 +13,27 @@ import 'package:integration_test_app/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  late RtcEngine rtcEngine;
   late RtcChannel rtcChannel;
   late FakeIrisRtcEngine fakeIrisRtcEngine;
 
-  Future<RtcChannel> _createChannel() {
+  Future<RtcChannel> _createChannel() async {
+    rtcEngine = await RtcEngine.create('123');
     return RtcChannel.create('testapi');
   }
 
   setUpAll(() async {
     fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
-    await fakeIrisRtcEngine.initForEventHandlerTest();
+    await fakeIrisRtcEngine.initialize();
   });
 
   tearDown(() async {
     await rtcChannel.destroy();
+    await rtcEngine.destroy();
   });
 
   tearDownAll(() {
-    fakeIrisRtcEngine.disposeForEventHandlerTest();
+    fakeIrisRtcEngine.dispose();
   });
 
   testEventCall('warning', (

@@ -31,6 +31,7 @@
 #define IRIS_CPP_API
 #define IRIS_CALL
 #endif
+#define IRIS_DEPRECATED __attribute__((deprecated))
 
 #if defined(IRIS_DEBUG)
 #define IRIS_DEBUG_API IRIS_API
