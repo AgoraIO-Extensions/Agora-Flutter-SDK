@@ -1913,7 +1913,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startScreenCapture(int windowId,
-      [int? captureFreq, Rect? rect, int? bitrate]) {
+      [int captureFreq = 0, Rect? rect, int bitrate = 0]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
       'params': jsonEncode({
@@ -4139,6 +4139,8 @@ mixin RtcScreenSharingInterface {
 
   Future<void> stopScreenCapture();
 
+  // TODO(littlegnal): Doc breack change captureFreq type int? -> int, bitrate type 
+  // int? -> int
   Future<void> startScreenCapture(int windowId,
-      [int? captureFreq, Rect? rect, int? bitrate]);
+      [int captureFreq, Rect? rect, int bitrate]);
 }

@@ -2614,9 +2614,9 @@ void main() {
         ApiTypeEngine.kEngineStartScreenCapture.index,
         jsonEncode({
           'windowId': 10,
-          'captureFreq': null,
+          'captureFreq': 0,
           'rect': null,
-          'bitrate': null,
+          'bitrate': 0,
         }),
       );
     });
@@ -2634,7 +2634,7 @@ void main() {
           'windowId': 10,
           'captureFreq': 20,
           'rect': null,
-          'bitrate': null,
+          'bitrate': 0,
         }),
       );
     });
@@ -2654,7 +2654,7 @@ void main() {
           'windowId': 10,
           'captureFreq': 20,
           'rect': rect.toJson(),
-          'bitrate': null,
+          'bitrate': 0,
         }),
       );
     });
