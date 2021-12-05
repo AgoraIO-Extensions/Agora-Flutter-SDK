@@ -64,7 +64,7 @@ jobs:
       - run: bash ci/run_flutter_macos_integration_test.sh
 
   integration_test_macos:
-    name: Run Flutter MacOS Integration Tests
+    name: Run Flutter macOS Integration Tests
     runs-on: macos-11
     timeout-minutes: 60
     steps:
