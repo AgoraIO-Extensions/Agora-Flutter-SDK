@@ -447,7 +447,6 @@ void main() {
     );
   });
 
-  // TODO(littlegnal): Re-enable it later
   testWidgets('sendMetadata', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
@@ -707,7 +706,6 @@ void main() {
     );
   });
 
-  // TODO(littlegnal): Check the EncryptionConfig encryptionKdfSalt is option or not
   testWidgets('enableEncryption', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();

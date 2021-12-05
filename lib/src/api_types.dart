@@ -169,6 +169,22 @@ enum ApiTypeEngine {
   kMediaPullAudioFrame,
   kMediaSetExternalVideoSource,
   kMediaPushVideoFrame,
+  
+  
+  
+    kEngineGetCameraMaxZoomFactor,
+  kEngineIsCameraAutoFocusFaceModeSupported,
+  kEngineIsCameraExposurePositionSupported,
+  kEngineIsCameraFocusSupported,
+  kEngineIsCameraZoomSupported,
+  kEngineSetCameraAutoFocusFaceModeEnabled,
+  kEngineSetCameraExposurePosition,
+  kEngineSetCameraFocusPositionInPreview,
+  kEngineSetCameraZoomFactor,
+  kEngineStartRhythmPlayer,
+  kEngineStopRhythmPlayer,
+  kEngineConfigRhythmPlayer,
+  kEngineGetNativeHandle,
 }
 
 enum ApiTypeChannel {

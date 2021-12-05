@@ -918,13 +918,12 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<double?> getCameraMaxZoomFactor() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('getCameraMaxZoomFactor');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineEnableSoundPositionIndication.index,
+      'params': jsonEncode({}),
+    });
   }
 
   @override
@@ -935,31 +934,28 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraAutoFocusFaceModeSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraAutoFocusFaceModeSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraExposurePositionSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraExposurePositionSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraFocusSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraFocusSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraFocusSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
   // TODO(littlegnal): Iris not supported
@@ -971,13 +967,12 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('isCameraTorchSupported');
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraZoomSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraZoomSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraZoomSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
   @override
@@ -1147,14 +1142,11 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraAutoFocusFaceModeEnabled', {
-      'enabled': enabled,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraAutoFocusFaceModeEnabled.index,
+      'params': jsonEncode({'enabled ': enabled}),
     });
   }
 
@@ -1169,29 +1161,27 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraExposurePosition(
       double positionXinView, double positionYinView) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraExposurePosition', {
-      'positionXinView': positionXinView,
-      'positionYinView': positionYinView,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraExposurePosition.index,
+      'params': jsonEncode({
+        'positionXinView': positionXinView,
+        'positionYinView': positionYinView,
+      }),
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraFocusPositionInPreview(
       double positionX, double positionY) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraFocusPositionInPreview', {
-      'positionX': positionX,
-      'positionY': positionY,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraFocusPositionInPreview.index,
+      'params': jsonEncode({
+        'positionX': positionX,
+        'positionY': positionY,
+      }),
     });
   }
 
@@ -1206,14 +1196,13 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraZoomFactor(double factor) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraZoomFactor', {
-      'factor': factor,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraZoomFactor.index,
+      'params': jsonEncode({
+        'factor': factor,
+      }),
     });
   }
 
@@ -1467,37 +1456,34 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> startRhythmPlayer(
       String sound1, String sound2, RhythmPlayerConfig config) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('startRhythmPlayer', {
-      'sound1': sound1,
-      'sound2': sound2,
-      'config': config.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartRhythmPlayer.index,
+      'params': jsonEncode({
+        'sound1': sound1,
+        'sound2': sound2,
+        'config': config.toJson(),
+      }),
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> stopRhythmPlayer() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('stopRhythmPlayer');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStopRhythmPlayer.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> configRhythmPlayer(RhythmPlayerConfig config) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('configRhythmPlayer', {
-      'config': config.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineConfigRhythmPlayer.index,
+      'params': jsonEncode({
+        'config': config.toJson(),
+      }),
     });
   }
 
@@ -1692,13 +1678,12 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<int?> getNativeHandle() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('getNativeHandle');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineGetNativeHandle.index,
+      'params': jsonEncode({}),
+    });
   }
 
   @override
@@ -4139,7 +4124,7 @@ mixin RtcScreenSharingInterface {
 
   Future<void> stopScreenCapture();
 
-  // TODO(littlegnal): Doc breack change captureFreq type int? -> int, bitrate type 
+  // TODO(littlegnal): Doc breack change captureFreq type int? -> int, bitrate type
   // int? -> int
   Future<void> startScreenCapture(int windowId,
       [int captureFreq, Rect? rect, int bitrate]);
