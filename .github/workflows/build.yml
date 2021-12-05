@@ -61,7 +61,7 @@ jobs:
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
-      - run: bash ci/run_flutter_integration_test.sh
+      - run: bash ci/run_flutter_macos_integration_test.sh
 
   integration_test_macos:
     name: Run Flutter MacOS Integration Tests
