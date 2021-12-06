@@ -44,8 +44,8 @@ class IRIS_CPP_API IIrisRtcVideoDeviceManager
               void *buffer, unsigned int length, char *result) override;
 };
 
-class IIrisRtcDeviceManager : public IIrisRtcAudioDeviceManager,
-                              public IIrisRtcVideoDeviceManager {
+class IRIS_CPP_API IIrisRtcDeviceManager : public IIrisRtcAudioDeviceManager,
+                                           public IIrisRtcVideoDeviceManager {
  public:
   virtual void Initialize(agora::rtc::IRtcEngine *rtc_engine) = 0;
 
