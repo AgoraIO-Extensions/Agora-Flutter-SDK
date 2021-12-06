@@ -161,18 +161,32 @@ enum ApiTypeEngine {
   kEngineRegisterMediaMetadataObserver,
   kEngineSetParameters,
   kEngineSetLocalAccessPoint,
+
   kEngineUnRegisterMediaMetadataObserver,
   kEngineSetMaxMetadataSize,
   kEngineSendMetadata,
   kEngineSetAppType,
+
   kMediaPushAudioFrame,
   kMediaPullAudioFrame,
   kMediaSetExternalVideoSource,
   kMediaPushVideoFrame,
-  
-  
-  
-    kEngineGetCameraMaxZoomFactor,
+
+  kEngineSetAudioMixingPlaybackSpeed,
+  kEngineSelectAudioTrack,
+  kEngineGetAudioTrackCount,
+  kEngineSetAudioMixingDualMonoMode,
+  kEngineGetAudioFileInfo,
+  kEngineSetVideoProfileEx,
+  kEngineSetExternalAudioSourceVolume,
+  kEngineSetLogWriter,
+  kEngineReleaseLogWriter,
+  kEngineSetLocalVideoRenderer,
+  kEngineSetRemoteVideoRenderer,
+  kEngineSetCameraTorchOn,
+  kEngineIsCameraTorchSupported,
+
+  kEngineGetCameraMaxZoomFactor,
   kEngineIsCameraAutoFocusFaceModeSupported,
   kEngineIsCameraExposurePositionSupported,
   kEngineIsCameraFocusSupported,

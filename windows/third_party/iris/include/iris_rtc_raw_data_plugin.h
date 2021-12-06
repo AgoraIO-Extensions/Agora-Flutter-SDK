@@ -42,6 +42,21 @@ struct VideoPluginFrame {
   int64_t renderTimeMs;
   int avsync_type;
 };
+
+struct PluginPacket {
+  /**
+   * Buffer address of the sent or received data.
+   *
+   * @note Agora recommends that the value of buffer is more than 2048 bytes,
+   * otherwise, you may meet undefined behaviors such as a crash.
+   */
+  const unsigned char *buffer;
+  /**
+   * Buffer size of the sent or received data.
+   */
+  unsigned int size;
+};
+
 class IAVFramePluginCallback {
  public:
   virtual bool onPluginCaptureVideoFrame(VideoPluginFrame *videoFrame) = 0;
@@ -54,6 +69,10 @@ class IAVFramePluginCallback {
   virtual bool
   onPluginPlaybackAudioFrameBeforeMixing(unsigned int uid,
                                          AudioPluginFrame *audioFrame) = 0;
+  virtual bool onPluginSendAudioPacket(PluginPacket *packet) = 0;
+  virtual bool onPluginSendVideoPacket(PluginPacket *packet) = 0;
+  virtual bool onPluginReceiveAudioPacket(PluginPacket *packet) = 0;
+  virtual bool onPluginReceiveVideoPacket(PluginPacket *packet) = 0;
 };
 class IAVFramePlugin : public IAVFramePluginCallback {
  public:

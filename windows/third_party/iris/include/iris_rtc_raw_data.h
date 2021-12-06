@@ -7,18 +7,18 @@
 
 #include "iris_event_handler.h"
 #include "iris_rtc_base.h"
+#include "iris_rtc_raw_data_plugin_manager.h"
 #include <cstdint>
 
 namespace agora {
 namespace rtc {
+
 class IRtcEngine;
+
 }
 
 namespace iris {
-class IrisVideoFrameBufferManager;
-
 namespace rtc {
-class IrisRtcRawDataPluginManager;
 
 class IrisRtcAudioFrameObserver : public IrisAudioFrameObserver {
  public:
@@ -64,9 +64,12 @@ class IrisRtcVideoFrameObserver : public IrisVideoFrameObserver {
   };
 };
 
-class IRIS_CPP_API IrisRtcRawData : public IrisMediaFrameObserverManager {
+class IrisRtcPacketObserver : public IrisPacketObserver {};
+
+class IRIS_CPP_API IrisRtcRawData : public IrisCommonObserverManager {
  public:
-  IrisRtcRawData();
+  explicit IrisRtcRawData(
+      IrisRtcRawDataPluginManager *plugin_manager = nullptr);
   ~IrisRtcRawData() override;
 
   void Initialize(agora::rtc::IRtcEngine *rtc_engine);
@@ -80,6 +83,7 @@ class IRIS_CPP_API IrisRtcRawData : public IrisMediaFrameObserverManager {
   Impl *impl_;
   IrisRtcRawDataPluginManager *plugin_manager_;
 };
+
 }// namespace rtc
 }// namespace iris
 }// namespace agora

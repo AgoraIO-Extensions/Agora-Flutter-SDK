@@ -32,6 +32,12 @@
 #define IRIS_CALL
 #endif
 
+#if defined(_WIN32)
+#define IRIS_DEPRECATED __declspec(deprecated)
+#else
+#define IRIS_DEPRECATED __attribute__((deprecated))
+#endif
+
 #if defined(IRIS_DEBUG)
 #define IRIS_DEBUG_API IRIS_API
 #define IRIS_DEBUG_CPP_API IRIS_CPP_API

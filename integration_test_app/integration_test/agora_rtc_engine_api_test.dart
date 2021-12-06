@@ -2679,6 +2679,224 @@ void main() {
       );
     });
   });
+
+  testWidgets('getCameraMaxZoomFactor', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    rtcEngine = await _createEngine();
+    await rtcEngine.getCameraMaxZoomFactor();
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineGetCameraMaxZoomFactor.index,
+      jsonEncode({}),
+    );
+  });
+
+  testWidgets('isCameraAutoFocusFaceModeSupported',
+      (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    rtcEngine = await _createEngine();
+    await rtcEngine.isCameraAutoFocusFaceModeSupported();
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
+      jsonEncode({}),
+    );
+  });
+
+  testWidgets('isCameraExposurePositionSupported', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    rtcEngine = await _createEngine();
+    await rtcEngine.isCameraExposurePositionSupported();
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineIsCameraExposurePositionSupported.index,
+      jsonEncode({}),
+    );
+  });
+
+  testWidgets('isCameraFocusSupported', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    rtcEngine = await _createEngine();
+    await rtcEngine.isCameraFocusSupported();
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineIsCameraFocusSupported.index,
+      jsonEncode({}),
+    );
+  });
+
+  testWidgets('isCameraZoomSupported', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    fakeIrisEngine.mockCallApiReturnCode(
+        ApiTypeEngine.kEngineIsCameraZoomSupported.index, jsonEncode({}), 1);
+    rtcEngine = await _createEngine();
+
+    final ret = await rtcEngine.isCameraZoomSupported();
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineIsCameraZoomSupported.index,
+      jsonEncode({}),
+    );
+
+    expect(ret, true);
+  });
+
+  testWidgets(
+    'setCameraAutoFocusFaceModeEnabled',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      rtcEngine = await _createEngine();
+      await rtcEngine.setCameraAutoFocusFaceModeEnabled(true);
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineSetCameraAutoFocusFaceModeEnabled.index,
+        jsonEncode({
+          'enabled ': true,
+        }),
+      );
+    },
+    // TODO(littlegnal): Can't not run this test without java object mock at this time
+    skip: true,
+  );
+
+  testWidgets(
+    'setCameraExposurePosition',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      rtcEngine = await _createEngine();
+      await rtcEngine.setCameraExposurePosition(10, 10);
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineSetCameraExposurePosition.index,
+        jsonEncode({
+          'positionXinView': 10.0,
+          'positionYinView': 10.0,
+        }),
+      );
+    },
+  );
+
+  testWidgets(
+    'setCameraFocusPositionInPreview',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      rtcEngine = await _createEngine();
+      await rtcEngine.setCameraFocusPositionInPreview(10.0, 10.0);
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineSetCameraFocusPositionInPreview.index,
+        jsonEncode({
+          'positionX': 10,
+          'positionY': 10,
+        }),
+      );
+    },
+    // TODO(littlegnal): Can't not run this test without java object mock at this time
+    skip: true,
+  );
+
+  testWidgets(
+    'startRhythmPlayer',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      rtcEngine = await _createEngine();
+      RhythmPlayerConfig config = RhythmPlayerConfig(
+          beatsPerMeasure: 10, beatsPerMinute: 10, publish: true);
+      await rtcEngine.startRhythmPlayer('10', '10', config);
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineStartRhythmPlayer.index,
+        jsonEncode({
+          'sound1': '10',
+          'sound2': '10',
+          'config': config.toJson(),
+        }),
+      );
+    },
+    // TODO(littlegnal): Can't not run this test without java object mock at this time
+    skip: true,
+  );
+
+  testWidgets(
+    'stopRhythmPlayer',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      rtcEngine = await _createEngine();
+      await rtcEngine.stopRhythmPlayer();
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineStopRhythmPlayer.index,
+        jsonEncode({}),
+      );
+    },
+    // TODO(littlegnal): Can't not run this test without java object mock at this time
+    skip: true,
+  );
+
+  testWidgets(
+    'configRhythmPlayer',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      rtcEngine = await _createEngine();
+      RhythmPlayerConfig config = RhythmPlayerConfig(
+          beatsPerMeasure: 10, beatsPerMinute: 10, publish: true);
+      await rtcEngine.configRhythmPlayer(config);
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineConfigRhythmPlayer.index,
+        jsonEncode({
+          'config': config.toJson(),
+        }),
+      );
+    },
+    // TODO(littlegnal): Can't not run this test without java object mock at this time
+    skip: true,
+  );
+
+  testWidgets(
+    'getNativeHandle',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      rtcEngine = await _createEngine();
+      fakeIrisEngine.mockCallApiReturnCode(
+        ApiTypeEngine.kEngineGetNativeHandle.index,
+        jsonEncode({}),
+        10000,
+      );
+      final ret = await rtcEngine.getNativeHandle();
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineGetNativeHandle.index,
+        jsonEncode({}),
+      );
+
+      expect(ret, 10000);
+    },
+  );
 }
 
 Future<RtcEngine> _createEngine() async {

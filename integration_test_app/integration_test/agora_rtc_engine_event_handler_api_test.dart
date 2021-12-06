@@ -30,23 +30,6 @@ void main() {
     return RtcEngine.create('123');
   }
 
-  // Future<void> nireHandler.triggerWaitEvent(
-  //   WidgetTester tester,
-  //   String event,
-  //   String data, {
-  //   Uint8List? buffer,
-  //   int bufferSize = 0,
-  // }) async {
-  //   nireHandler.triggerEvent(
-  //     event,
-  //     data,
-  //     buffer: buffer,
-  //     bufferSize: bufferSize,
-  //   );
-  //   // Wait for the `EventChannel` event be sent from Android/iOS side
-  //   await tester.pump(const Duration(milliseconds: 500));
-  // }
-
   testWidgets('warning', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
@@ -900,7 +883,8 @@ void main() {
         called = true;
       },
     ));
-    await fakeIrisEngine.fireAndWaitEvent(tester, 'onAudioMixingFinished', '{}');
+    await fakeIrisEngine.fireAndWaitEvent(
+        tester, 'onAudioMixingFinished', '{}');
     expect(called, true);
   });
 
@@ -1619,7 +1603,8 @@ void main() {
         called = true;
       },
     ));
-    await fakeIrisEngine.fireAndWaitEvent(tester, 'onRemoteAudioMixingEnd', '{}');
+    await fakeIrisEngine.fireAndWaitEvent(
+        tester, 'onRemoteAudioMixingEnd', '{}');
     expect(called, true);
   });
 }

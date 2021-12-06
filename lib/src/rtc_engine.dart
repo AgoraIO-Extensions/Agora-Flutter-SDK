@@ -921,7 +921,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<double?> getCameraMaxZoomFactor() {
     return _invokeMethod('callApi', {
-      'apiType': ApiTypeEngine.kEngineEnableSoundPositionIndication.index,
+      'apiType': ApiTypeEngine.kEngineGetCameraMaxZoomFactor.index,
       'params': jsonEncode({}),
     });
   }
@@ -945,7 +945,7 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<bool?> isCameraExposurePositionSupported() {
     return _invokeMethod('callApi', {
-      'apiType': ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
+      'apiType': ApiTypeEngine.kEngineIsCameraExposurePositionSupported.index,
       'params': jsonEncode({}),
     });
   }
@@ -958,13 +958,12 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraTorchSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraTorchSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraTorchSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
   @override
@@ -972,7 +971,7 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineIsCameraZoomSupported.index,
       'params': jsonEncode({}),
-    });
+    }).then((v) => v == 1 ? true : false);
   }
 
   @override
@@ -1146,7 +1145,9 @@ class RtcEngine with RtcEngineInterface {
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetCameraAutoFocusFaceModeEnabled.index,
-      'params': jsonEncode({'enabled ': enabled}),
+      'params': jsonEncode({
+        'enabled ': enabled,
+      }),
     });
   }
 
@@ -1185,14 +1186,13 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraTorchOn(bool isOn) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraTorchOn', {
-      'isOn': isOn,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraTorchOn.index,
+      'params': jsonEncode({
+        'isOn': isOn,
+      }),
     });
   }
 
