@@ -104,7 +104,12 @@ namespace
     bool sub_process_;
   };
 
-  // static
+  bool isSubProcess(EncodableMap &arguments)
+  {
+    auto subProcess = std::get<bool>(arguments[EncodableValue("subProcess")]);
+    return subProcess;
+  }
+
   void AgoraRtcEnginePlugin::RegisterWithRegistrar(
       PluginRegistrarWindows *registrar)
   {
@@ -150,19 +155,22 @@ namespace
 
   AgoraRtcEnginePlugin::AgoraRtcEnginePlugin(PluginRegistrar *registrar)
       : engine_main_(new IrisRtcEngine),
-        engine_sub_(new IrisRtcEngine(kEngineTypeSubProcess)),
+        engine_sub_(new IrisRtcEngine(nullptr, kEngineTypeSubProcess)),
         handler_main_(new EventHandler(this)),
         handler_sub_(new EventHandler(this, true)),
         factory_(new AgoraTextureViewFactory(registrar)),
         videoFrameBufferManagerMain_(new IrisVideoFrameBufferManager()),
         videoFrameBufferManagerSub_(new IrisVideoFrameBufferManager())
   {
+    engine_main_.get()->Initialize(nullptr);
+    engine_sub_.get()->Initialize(nullptr);
+
     engine_main_->SetEventHandler(handler_main_.get());
     engine_sub_->SetEventHandler(handler_sub_.get());
     engine_main_->raw_data()->Attach(videoFrameBufferManagerMain_.get());
     engine_sub_->raw_data()->Attach(videoFrameBufferManagerSub_.get());
-    callApiMethodCallHandlerMain_ = std::make_unique<CallApiMethodCallHandler>(engine_main_);
-    callApiMethodCallHandlerSub_ = std::make_unique<CallApiMethodCallHandler>(engine_sub_);
+    callApiMethodCallHandlerMain_ = std::make_unique<CallApiMethodCallHandler>(engine_main_.get());
+    callApiMethodCallHandlerSub_ = std::make_unique<CallApiMethodCallHandler>(engine_sub_.get());
   }
 
   AgoraRtcEnginePlugin::~AgoraRtcEnginePlugin() {}
@@ -182,12 +190,6 @@ namespace
     {
       return engine_main_.get();
     }
-  }
-
-  bool isSubProcess(EncodableMap &arguments)
-  {
-    auto subProcess = std::get<bool>(arguments[EncodableValue("subProcess")]);
-    return subProcess;
   }
 
   void AgoraRtcEnginePlugin::HandleMethodCall(

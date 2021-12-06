@@ -4,6 +4,7 @@
 // This must be included before many other Windows headers.
 #include <string>
 #include <windows.h>
+#include <memory>
 
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
@@ -15,25 +16,19 @@ namespace
   using namespace agora::iris;
   using namespace agora::iris::rtc;
 
-  class RtcDeviceManagerCallApiMethodCallHandler : CallApiMethodCallHandler
+  class RtcDeviceManagerCallApiMethodCallHandler : public CallApiMethodCallHandler
   {
 
   public:
-    RtcDeviceManagerCallApiMethodCallHandler(agora::iris::rtc::IrisRtcEngine *engine);
+    RtcDeviceManagerCallApiMethodCallHandler(
+        agora::iris::rtc::IrisRtcEngine *engine) : CallApiMethodCallHandler(engine) {}
+
     int32_t CallApi(int32_t api_type, const char *params,
-                    char *result) override;
+                    char *result) override
+    {
+      return reinterpret_cast<IrisRtcDeviceManager *>(irisRtcEngine_->device_manager())->CallApi(static_cast<ApiTypeAudioDeviceManager>(api_type), params, result);
+    }
   };
-
-  RtcDeviceManagerCallApiMethodCallHandler::RtcDeviceManagerCallApiMethodCallHandler(
-      agora::iris::rtc::IrisRtcEngine *engine) : CallApiMethodCallHandler(engine) {}
-
-  int32_t RtcDeviceManagerCallApiMethodCallHandler::CallApi(int32_t api_type, const char *params,
-                                                            char *result)
-  {
-    irisRtcEngine_->device_manager()->CallApi(
-        static_cast<ApiTypeAudioDeviceManager>(api_type), params,
-        result);
-  }
 
   class AgoraRtcDeviceManagerPlugin : public Plugin
   {
@@ -89,7 +84,7 @@ namespace
       PluginRegistrar *registrar, IrisRtcEngine *engine)
       : engine_(engine)
   {
-    callApiMethodCallHandler_ = std::make_unique<RtcDeviceManagerCallApiMethodCallHandler>(engine_.get());
+    callApiMethodCallHandler_ = std::make_unique<RtcDeviceManagerCallApiMethodCallHandler>(engine_);
   }
 
   AgoraRtcDeviceManagerPlugin::~AgoraRtcDeviceManagerPlugin() {}
