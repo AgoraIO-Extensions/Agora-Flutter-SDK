@@ -45,7 +45,7 @@ class IRIS_CPP_API IIrisRtcVideoDeviceManager
 };
 
 class IRIS_CPP_API IIrisRtcDeviceManager : public IIrisRtcAudioDeviceManager,
-                              public IIrisRtcVideoDeviceManager {
+                                           public IIrisRtcVideoDeviceManager {
  public:
   virtual void Initialize(agora::rtc::IRtcEngine *rtc_engine) = 0;
 

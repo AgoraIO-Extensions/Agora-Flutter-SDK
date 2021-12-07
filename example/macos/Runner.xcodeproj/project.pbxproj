@@ -577,7 +577,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/agora_rtc_engine_exampleDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 56S4B84HA8;
+				DEVELOPMENT_TEAM = SKNR67U6GB;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -18,7 +18,6 @@ void main() {
     fakeIrisEngine = FakeIrisRtcEngine();
     await fakeIrisEngine.initialize();
   });
-
   tearDown(() async {
     await rtcEngine.destroy();
     fakeIrisEngine.dispose();

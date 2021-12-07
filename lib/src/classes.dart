@@ -1557,6 +1557,7 @@ class RhythmPlayerConfig {
   /// Whether to publish the sound of the metronome to remote users:
   /// - `true`: (Default) Publish. Both the local user and remote users can hear the metronome.
   /// - `false`: Do not publish. Only the local user can hear the metronome.
+  // TODO(littlegnal): This should be optional in iris
   @JsonKey(includeIfNull: false)
   bool? publish;
 

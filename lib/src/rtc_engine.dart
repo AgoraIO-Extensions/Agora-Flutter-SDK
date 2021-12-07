@@ -1146,7 +1146,7 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetCameraAutoFocusFaceModeEnabled.index,
       'params': jsonEncode({
-        'enabled ': enabled,
+        'enabled': enabled,
       }),
     });
   }
