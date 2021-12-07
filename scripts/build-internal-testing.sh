@@ -19,5 +19,7 @@ cp -r $EXAMPLE_PATH/build/app/outputs/flutter-apk/app-release.apk $EXAMPLE_PATH/
 
 bash $ROOT_PATH/scripts/build-internal-testing-ios.sh
 
-dt=$(date '+%d/%m/%Y %H:%M:%S')
-zip -r -y "$EXAMPLE_PATH/build/internal_testing_artifacts_${dt}.zip" "$EXAMPLE_PATH/build/internal_testing_artifacts"
+bash $ROOT_PATH/scripts/build-internal-testing-macos.sh
+
+# dt=$(date '+%d/%m/%Y %H:%M:%S')
+# zip -r -y "$EXAMPLE_PATH/build/internal_testing_artifacts_${dt}.zip" "$EXAMPLE_PATH/build/internal_testing_artifacts"
