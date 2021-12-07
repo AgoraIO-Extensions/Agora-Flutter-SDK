@@ -210,5 +210,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    // TODO(littlegnal): Wait for iris fix
+    skip: true,
   );
 }

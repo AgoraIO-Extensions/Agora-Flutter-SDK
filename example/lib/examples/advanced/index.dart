@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:agora_rtc_engine_example/examples/advanced/audio_mixing/audio_mixing.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/channel_media_relay/channel_media_relay.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/custom_capture_audio/custom_capture_audio.dart';
@@ -16,10 +18,12 @@ final Advanced = [
   {'name': 'AudioMixing', 'widget': AudioMixing()},
   {'name': 'ChannelMediaRelay', 'widget': ChannelMediaRelay()},
   {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
-  {'name': 'DeviceManager', 'widget': DeviceManager()},
+  if (!(Platform.isAndroid || Platform.isIOS))
+    {'name': 'DeviceManager', 'widget': DeviceManager()},
   {'name': 'JoinMultipleChannel', 'widget': JoinMultipleChannel()},
   {'name': 'RtmpStreaming', 'widget': RtmpStreaming()},
-  {'name': 'ScreenSharing', 'widget': ScreenSharing()},
+  if (!(Platform.isAndroid || Platform.isIOS))
+    {'name': 'ScreenSharing', 'widget': ScreenSharing()},
   {'name': 'SetEncryption', 'widget': SetEncryption()},
   {
     'name': 'SetVideoEncoderConfiguration',

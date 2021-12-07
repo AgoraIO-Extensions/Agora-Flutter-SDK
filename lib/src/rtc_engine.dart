@@ -31,17 +31,19 @@ class RtcEngine with RtcEngineInterface {
   static RtcEngine? get instance => _instance;
 
   final bool _subProcess;
+  static const String _kDefaultAppGroup = 'io.agora';
+  final String _appGroup;
   RtcEngine? _screenShareHelper;
 
   /// TODO(doc)
-  RtcEngine getScreenShareHelper() {
+  RtcEngine getScreenShareHelper({String? appGroup}) {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     if (_subProcess) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
-    _screenShareHelper ??= RtcEngine._(true);
+    _screenShareHelper ??= RtcEngine._(true, appGroup: appGroup);
     return _screenShareHelper!;
   }
 
@@ -57,7 +59,8 @@ class RtcEngine with RtcEngineInterface {
 
   RtcEngineEventHandler? _handler;
 
-  RtcEngine._(this._subProcess);
+  RtcEngine._(this._subProcess, {String? appGroup})
+      : _appGroup = appGroup ?? _kDefaultAppGroup;
 
   Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
@@ -206,9 +209,8 @@ class RtcEngine with RtcEngineInterface {
   Future<void> initialize(RtcEngineContext context) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineInitialize.index,
-      'params': jsonEncode({
-        'context': context.toJson(),
-      }),
+      'params':
+          jsonEncode({'context': context.toJson(), 'appGroup': 'io.agora'}),
     }).then((value) => _invokeMethod('callApi', {
           'apiType': ApiTypeEngine.kEngineSetAppType.index,
           'params': jsonEncode({
@@ -807,6 +809,7 @@ class RtcEngine with RtcEngineInterface {
         'loopback': loopback,
         'replace': replace,
         'cycle': cycle,
+        'startPos': startPos,
       }),
     });
   }
