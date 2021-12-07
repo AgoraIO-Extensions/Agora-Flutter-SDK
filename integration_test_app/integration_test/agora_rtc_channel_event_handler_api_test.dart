@@ -13,24 +13,27 @@ import 'package:integration_test_app/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  late RtcEngine rtcEngine;
   late RtcChannel rtcChannel;
   late FakeIrisRtcEngine fakeIrisRtcEngine;
 
-  Future<RtcChannel> _createChannel() {
+  Future<RtcChannel> _createChannel() async {
+    rtcEngine = await RtcEngine.create('123');
     return RtcChannel.create('testapi');
   }
 
   setUpAll(() async {
     fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
-    await fakeIrisRtcEngine.initForEventHandlerTest();
+    await fakeIrisRtcEngine.initialize();
   });
 
   tearDown(() async {
     await rtcChannel.destroy();
+    await rtcEngine.destroy();
   });
 
   tearDownAll(() {
-    fakeIrisRtcEngine.disposeForEventHandlerTest();
+    fakeIrisRtcEngine.dispose();
   });
 
   testEventCall('warning', (
@@ -730,35 +733,35 @@ void main() {
   });
 
   // TODO(littlegnal): Re-enable after iris fixed this issue
-  // testEventCall('metadataReceived', (
-  //   WidgetTester tester,
-  //   EventHandlerTester eventHandlerTester,
-  // ) async {
-  //   app.main();
-  //   await tester.pumpAndSettle();
-  //   rtcChannel = await _createChannel();
+  testEventCall('metadataReceived', (
+    WidgetTester tester,
+    EventHandlerTester eventHandlerTester,
+  ) async {
+    app.main();
+    await tester.pumpAndSettle();
+    rtcChannel = await _createChannel();
 
-  //   final buffer = Uint8List.fromList([1, 1]);
-  //   final Metadata expectSyncedMetadata = Metadata(10, 1000);
+    final buffer = Uint8List.fromList([1, 1]);
+    final Metadata expectSyncedMetadata = Metadata(10, 1000);
 
-  //   rtcChannel.setEventHandler(RtcChannelEventHandler(
-  //     metadataReceived: (Metadata metadata) {
-  //       expectSync(metadata.uid, expectSyncedMetadata.uid);
-  //       expectSync(metadata.timeStampMs, expectSyncedMetadata.timeStampMs);
-  //       expectSync(metadata.buffer, buffer);
+    rtcChannel.setEventHandler(RtcChannelEventHandler(
+      metadataReceived: (Metadata metadata) {
+        expectSync(metadata.uid, expectSyncedMetadata.uid);
+        expectSync(metadata.timeStampMs, expectSyncedMetadata.timeStampMs);
+        expectSync(metadata.buffer, buffer);
 
-  //       eventHandlerTester.markEventCalled();
-  //     },
-  //   ));
+        eventHandlerTester.markEventCalled();
+      },
+    ));
 
-  //   await fakeIrisRtcEngine.triggerAndWaitEvent(
-  //     tester,
-  //     'onMetadataReceived',
-  //     '{"metadata":${jsonEncode(expectSyncedMetadata.toJson())}}',
-  //     buffer: buffer,
-  //     bufferSize: 2,
-  //   );
-  // });
+    await fakeIrisRtcEngine.fireAndWaitEvent(
+      tester,
+      'onMetadataReceived',
+      '{"channelId":"testapi","metadata":${jsonEncode(expectSyncedMetadata.toJson())}}',
+      buffer: buffer,
+      bufferSize: 2,
+    );
+  });
 
   testEventCall('audioPublishStateChanged', (
     WidgetTester tester,

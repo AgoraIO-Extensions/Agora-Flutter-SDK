@@ -1,6 +1,6 @@
 #import "AgoraRtcDeviceManagerPlugin.h"
-#import <AgoraRtcWrapper/iris_rtc_engine.h>
 #import "CallApiMethodCallHandler.h"
+#import <AgoraRtcWrapper/iris_rtc_engine.h>
 #import <string>
 
 using namespace agora::iris;
@@ -20,7 +20,8 @@ using namespace agora::iris::rtc;
   AgoraRtcDeviceManagerPlugin *audioInstance =
       [[AgoraRtcDeviceManagerPlugin alloc] initWithType:YES];
   audioInstance.engine = (IrisRtcEngine *)engine;
-    audioInstance.callApiMethodCallHandler = [[CallApiMethodCallHandler alloc] initWith:engine];
+  audioInstance.callApiMethodCallHandler =
+      [[RtcADMCallApiMethodCallHandler alloc] initWith:engine];
   [registrar addMethodCallDelegate:audioInstance channel:audioMethodChannel];
   FlutterMethodChannel *videoMethodChannel = [FlutterMethodChannel
       methodChannelWithName:@"agora_rtc_video_device_manager"
@@ -28,7 +29,8 @@ using namespace agora::iris::rtc;
   AgoraRtcDeviceManagerPlugin *videoInstance =
       [[AgoraRtcDeviceManagerPlugin alloc] initWithType:NO];
   videoInstance.engine = (IrisRtcEngine *)engine;
-    videoInstance.callApiMethodCallHandler = [[CallApiMethodCallHandler alloc] initWith:engine];
+  videoInstance.callApiMethodCallHandler =
+      [[RtcVDMCallApiMethodCallHandler alloc] initWith:engine];
   [registrar addMethodCallDelegate:videoInstance channel:videoMethodChannel];
 }
 
@@ -42,8 +44,7 @@ using namespace agora::iris::rtc;
 
 - (void)handleMethodCall:(FlutterMethodCall *)call
                   result:(FlutterResult)result {
-    // TODO(littlegnal): Should handle self.engine->device_manager()->CallApi
-    [[self callApiMethodCallHandler] onMethodCall:call _:result];
+  [[self callApiMethodCallHandler] onMethodCall:call _:result];
 }
 
 + (void)registerWithRegistrar:(nonnull id<FlutterPluginRegistrar>)registrar {

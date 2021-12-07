@@ -72,12 +72,18 @@ IRIS_API void CopyVideoFrame(IrisVideoFrame *dst, const IrisVideoFrame *src);
 IRIS_API IrisVideoFrame ConvertVideoFrame(const IrisVideoFrame *src,
                                           VideoFrameType format);
 
+typedef struct IrisPacket {
+  const unsigned char *buffer;
+  unsigned int size;
+} IrisPacket;
+
 #ifdef __cplusplus
 }
 #endif
 
 namespace agora {
 namespace iris {
+
 class IrisVideoFrameBufferManager;
 
 class IrisAudioFrameObserver {
@@ -88,6 +94,14 @@ class IrisAudioFrameObserver {
 class IrisVideoFrameObserver {
  public:
   virtual bool OnCaptureVideoFrame(IrisVideoFrame &video_frame) = 0;
+};
+
+class IrisPacketObserver {
+ public:
+  virtual bool OnSendAudioPacket(IrisPacket &packet) = 0;
+  virtual bool OnSendVideoPacket(IrisPacket &packet) = 0;
+  virtual bool OnReceiveAudioPacket(IrisPacket &packet) = 0;
+  virtual bool OnReceiveVideoPacket(IrisPacket &packet) = 0;
 };
 
 class IRIS_CPP_API IrisAudioFrameObserverManager {
@@ -134,13 +148,35 @@ class IRIS_CPP_API IrisVideoFrameObserverManager {
   Impl *impl_;
 };
 
-class IRIS_CPP_API IrisMediaFrameObserverManager
-    : public IrisAudioFrameObserverManager,
-      public IrisVideoFrameObserverManager {
+class IRIS_CPP_API IrisPacketObserverManager {
  public:
-  IrisMediaFrameObserverManager();
-  virtual ~IrisMediaFrameObserverManager();
+  IrisPacketObserverManager();
+  ~IrisPacketObserverManager();
+
+ public:
+  void RegisterPacketObserver(IrisPacketObserver *observer, int order,
+                              const char *identifier);
+
+  void UnRegisterPacketObserver(const char *identifier = nullptr);
+
+  unsigned int GetPacketObserverCount();
+
+  IrisPacketObserver *GetPacketObserver(unsigned int index);
+
+ private:
+  class Impl;
+  Impl *impl_;
 };
+
+class IRIS_CPP_API IrisCommonObserverManager
+    : public IrisAudioFrameObserverManager,
+      public IrisVideoFrameObserverManager,
+      public IrisPacketObserverManager {
+ public:
+  IrisCommonObserverManager();
+  virtual ~IrisCommonObserverManager();
+};
+
 }// namespace iris
 }// namespace agora
 

@@ -120,7 +120,8 @@ class _State extends State<ScreenSharing> {
     await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await helper.setClientRole(ClientRole.Broadcaster);
     var windowId = 0;
-    if (!kIsWeb && (Platform.isWindows || Platform.isMacOS || Platform.isAndroid)) {
+    if (!kIsWeb &&
+        (Platform.isWindows || Platform.isMacOS || Platform.isAndroid)) {
       final windows = _engine.enumerateWindows();
       if (windows.isNotEmpty) {
         windowId = windows[0].id;

@@ -3,181 +3,134 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class ApiCallNative extends Struct {
-  @Uint32()
-  external int apiType;
-  external Pointer<Utf8> params;
-  // external Pointer<Utf8> result;
-  external Pointer<NativeType> buffer;
-  @Int32()
-  external int bufferSize;
-}
-
-class ApiCallQueueNative extends Struct {
-  external Pointer<ApiCallNative> apiCallQueue;
-  @Int32()
-  external int len;
-}
-
-typedef OnCallApi = int Function(int apiType, String params, String result);
-typedef OnCallApiWithBuffer = int Function(
-  int apiType,
-  String params,
-  Pointer<NativeType> buffer,
-  String result,
-);
-
-class IrisCallApiCallback {
-  IrisCallApiCallback({this.onCallApi, this.onCallApiWithBuffer});
-  final OnCallApi? onCallApi;
-  final OnCallApiWithBuffer? onCallApiWithBuffer;
-}
-
-typedef CallApiNative = Int32 Function(
-  Uint32 apiType,
-  Pointer<Utf8> params,
-  Pointer<Utf8> result,
-);
-
-typedef CallApiWithBufferNative = Int32 Function(
-  Uint32 apiType,
-  Pointer<Utf8> params,
-  Pointer<NativeType> buffer,
-  Pointer<Utf8> result,
-);
-
-class IrisCCallApiCallbackNative extends Struct {
-  external Pointer<NativeFunction<CallApiNative>> onCallApi;
-  external Pointer<NativeFunction<CallApiWithBufferNative>> onCallApiWithBuffer;
-}
-
-typedef GetIrisRtcEngineFromAndroidNativeHandleNative = Pointer<NativeType>
-    Function(Pointer<NativeType> androidIrisEngineNativeHandle);
-typedef GetIrisRtcEngineFromAndroidNativeHandle = Pointer<NativeType> Function(
-    Pointer<NativeType> androidIrisEngineNativeHandle);
-
-typedef SetIrisProxyCallApiNative = Pointer<NativeType> Function(
+typedef SetIrisRtcEngineCallApiRecorderNative = Pointer<NativeType> Function(
   Pointer<NativeType> enginePtr,
   Int32 isMockChannel,
   // Pointer<IrisCCallApiCallbackNative> callApiCallback,
 );
-typedef SetIrisProxyCallApi = Pointer<NativeType> Function(
+typedef SetIrisRtcEngineCallApiRecorder = Pointer<NativeType> Function(
   Pointer<NativeType> enginePtr,
   int isMockChannel,
   // Pointer<IrisCCallApiCallbackNative> callApiCallback,
 );
 
-typedef CallIrisProxyEventHandlerOnEventNative = Void Function(
-  Pointer<NativeType> irisProxyPtr,
-  Pointer<Utf8> event,
-  Pointer<Utf8> data,
+typedef ClearCallApiRecorderNative = Void Function(
+  Pointer<NativeType> callApiRecorderPtr,
 );
-typedef CallIrisProxyEventHandlerOnEvent = void Function(
-  Pointer<NativeType> irisProxyPtr,
-  Pointer<Utf8> event,
-  Pointer<Utf8> data,
+typedef ClearCallApiRecorder = void Function(
+  Pointer<NativeType> callApiRecorderPtr,
 );
 
-typedef CallIrisProxyEventHandlerOnEventWithBufferNative = Void Function(
-  Pointer<NativeType> irisProxyPtr,
-  Pointer<Utf8> event,
-  Pointer<NativeType> data,
-  Pointer<NativeType> buffer,
-  Uint32 length,
-);
-typedef CallIrisProxyEventHandlerOnEventWithBuffer = void Function(
-  Pointer<NativeType> irisProxyPtr,
-  Pointer<Utf8> event,
-  Pointer<NativeType> data,
-  Pointer<NativeType> buffer,
-  int length,
-);
-
-typedef DestroyIrisProxyCallApiNative = Void Function(
-  Pointer<NativeType> enginePtr,
-  Int32 isMockChannel,
-  Pointer<NativeType> irisProxyPtr,
-);
-typedef DestroyIrisProxyCallApi = void Function(
-  Pointer<NativeType> enginePtr,
-  int isMockChannel,
-  Pointer<NativeType> irisProxyPtr,
-);
-
-typedef GetIrisProxyApiCallQueueNative = Pointer<ApiCallQueueNative> Function(
-    Pointer<NativeType> irisProxyPtr);
-
-typedef IrisProxyMockCallApiResultNative = Void Function(
-    Pointer<NativeType> irisProxyPtr,
+typedef MockCallApiResultNative = Void Function(
+    Pointer<NativeType> callApiRecorderPtr,
     Uint32 apiType,
     Pointer<Utf8> params,
     Pointer<Utf8> mockResult);
-typedef IrisProxyMockCallApiResult = void Function(
-    Pointer<NativeType> irisProxyPtr,
+typedef MockCallApiResult = void Function(
+    Pointer<NativeType> callApiRecorderPtr,
     int apiType,
     Pointer<Utf8> params,
     Pointer<Utf8> mockResult);
 
-typedef IrisProxyMockCallApiReturnCodeNative = Void Function(
-    Pointer<NativeType> irisProxyPtr,
+typedef MockCallApiReturnCodeNative = Void Function(
+    Pointer<NativeType> callApiRecorderPtr,
     Uint32 apiType,
     Pointer<Utf8> params,
     Int32 mockReturnCode);
-typedef IrisProxyMockCallApiReturnCode = void Function(
-    Pointer<NativeType> irisProxyPtr,
+typedef MockCallApiReturnCode = void Function(
+    Pointer<NativeType> callApiRecorderPtr,
     int apiType,
     Pointer<Utf8> params,
     int mockReturnCode);
 
-typedef IrisProxySetExplicitBufferSizeNative = Void Function(
-    Pointer<NativeType> irisProxyPtr,
+typedef SetExplicitBufferSizeNative = Void Function(
+    Pointer<NativeType> callApiRecorderPtr,
     Uint32 apiType,
     Pointer<Utf8> params,
     Int32 bufferSize);
-typedef IrisProxySetExplicitBufferSize = void Function(
-    Pointer<NativeType> irisProxyPtr,
+typedef SetExplicitBufferSize = void Function(
+    Pointer<NativeType> callApiRecorderPtr,
     int apiType,
     Pointer<Utf8> params,
     int bufferSize);
 
-typedef IrisProxyExpectCalledApiNative = Int32 Function(
-  Pointer<NativeType> irisProxyPtr,
+typedef ExpectCalledApiNative = Int32 Function(
+  Pointer<NativeType> callApiRecorderPtr,
   Uint32 apiType,
   Pointer<Utf8> params,
   Pointer<NativeType> buffer,
   Int32 bufferSize,
 );
-typedef IrisProxyExpectCalledApi = int Function(
-  Pointer<NativeType> irisProxyPtr,
+typedef ExpectCalledApi = int Function(
+  Pointer<NativeType> callApiRecorderPtr,
   int apiType,
   Pointer<Utf8> params,
   Pointer<NativeType> buffer,
   int bufferSize,
 );
 
-typedef SetIrisProxyEventHandlerNative = Pointer<NativeType> Function(
+// typedef SetIrisProxyEventHandlerNative = Pointer<NativeType> Function(
+//   Pointer<NativeType> enginePtr,
+//   Int32 isMockChannel,
+// );
+// typedef SetIrisProxyEventHandler = Pointer<NativeType> Function(
+//   Pointer<NativeType> enginePtr,
+//   int isMockChannel,
+// );
+
+// typedef DestroyIrisProxyEventHandlerNative = Void Function(
+//   Pointer<NativeType> enginePtr,
+//   Int32 isMockChannel,
+//   Pointer<NativeType> irisProxyPtr,
+// );
+// typedef DestroyIrisProxyEventHandler = void Function(
+//   Pointer<NativeType> enginePtr,
+//   int isMockChannel,
+//   Pointer<NativeType> irisProxyPtr,
+// );
+
+typedef CallIrisEventHandlerOnEventNative = Void Function(
   Pointer<NativeType> enginePtr,
   Int32 isMockChannel,
+  Pointer<Utf8> event,
+  Pointer<Utf8> data,
 );
-typedef SetIrisProxyEventHandler = Pointer<NativeType> Function(
+typedef CallIrisEventHandlerOnEvent = void Function(
   Pointer<NativeType> enginePtr,
   int isMockChannel,
+  Pointer<Utf8> event,
+  Pointer<Utf8> data,
 );
 
-typedef DestroyIrisProxyEventHandlerNative = Void Function(
+typedef CallIrisEventHandlerOnEventWithBufferNative = Void Function(
   Pointer<NativeType> enginePtr,
   Int32 isMockChannel,
-  Pointer<NativeType> irisProxyPtr,
+  Pointer<Utf8> event,
+  Pointer<NativeType> data,
+  Pointer<NativeType> buffer,
+  Uint32 length,
 );
-typedef DestroyIrisProxyEventHandler = void Function(
+typedef CallIrisEventHandlerOnEventWithBuffer = void Function(
   Pointer<NativeType> enginePtr,
   int isMockChannel,
-  Pointer<NativeType> irisProxyPtr,
+  Pointer<Utf8> event,
+  Pointer<NativeType> data,
+  Pointer<NativeType> buffer,
+  int length,
 );
+
+typedef CallRtcEngineEventNative = Void Function(
+    Pointer<NativeType> enginePtr, Pointer<Utf8> eventName);
+typedef CallRtcEngineEvent = void Function(
+    Pointer<NativeType> enginePtr, Pointer<Utf8> eventName);
+
+typedef CallRtcChannelEventNative = Void Function(
+    Pointer<NativeType> enginePtr, Pointer<Utf8> eventName);
+typedef CallRtcChannelEvent = void Function(
+    Pointer<NativeType> enginePtr, Pointer<Utf8> eventName);
 
 class _NativeIrisProxyBinding {
   _NativeIrisProxyBinding(int irisRtcEngineIntPtr) {
@@ -188,15 +141,17 @@ class _NativeIrisProxyBinding {
     );
   }
 
-  static const int _callApiExceptionalReturn = -1;
+  // static const int _callApiExceptionalReturn = -1;
 
   late final DynamicLibrary _agoraRtcWrapperLib;
 
   late final Pointer<NativeType> _irisRtcEnginePtr;
 
-  late final Pointer<NativeType> _irisProxyPtr;
+  late final Pointer<NativeType> _callApiRecorderPtr;
 
-  static IrisCallApiCallback? _irisCallApiCallback;
+  // late final Pointer<NativeType> _irisEventHandlerPtr;
+
+  // static IrisCallApiCallback? _irisCallApiCallback;
 
   static DynamicLibrary _loadAgoraRtcWrapperLib() {
     return Platform.isAndroid
@@ -206,47 +161,49 @@ class _NativeIrisProxyBinding {
 
   static Pointer<NativeType> _getIrisRtcEnginePtr(
       DynamicLibrary agoraRtcWrapperLib, int irisRtcEngineIntPtr) {
-    if (!Platform.isAndroid) {
-      return Pointer.fromAddress(irisRtcEngineIntPtr);
-    }
+    return Pointer.fromAddress(irisRtcEngineIntPtr);
+    // if (!Platform.isAndroid) {
 
-    final fp = agoraRtcWrapperLib.lookupFunction<
-            GetIrisRtcEngineFromAndroidNativeHandleNative,
-            GetIrisRtcEngineFromAndroidNativeHandle>(
-        'GetIrisRtcEngineFromAndroidNativeHandle');
-    return fp(Pointer.fromAddress(irisRtcEngineIntPtr));
+    // }
+
+    // final fp = agoraRtcWrapperLib.lookupFunction<
+    //         GetIrisRtcEngineFromAndroidNativeHandleNative,
+    //         GetIrisRtcEngineFromAndroidNativeHandle>(
+    //     'GetIrisRtcEngineFromAndroidNativeHandle');
+    // return fp(Pointer.fromAddress(irisRtcEngineIntPtr));
   }
 
-  static int _onCallApiHandle(
-      int apiType, Pointer<Utf8> param, Pointer<Utf8> result) {
-    return _irisCallApiCallback?.onCallApi?.call(
-          apiType,
-          param.toDartString(),
-          result.toDartString(),
-        ) ??
-        0;
-  }
+  // static int _onCallApiHandle(
+  //     int apiType, Pointer<Utf8> param, Pointer<Utf8> result) {
+  //   return _irisCallApiCallback?.onCallApi?.call(
+  //         apiType,
+  //         param.toDartString(),
+  //         result.toDartString(),
+  //       ) ??
+  //       0;
+  // }
 
-  static int _onCallApiWithBufferHandle(
-    int apiType,
-    Pointer<Utf8> param,
-    Pointer<NativeType> buffer,
-    Pointer<Utf8> result,
-  ) {
-    return _irisCallApiCallback?.onCallApiWithBuffer?.call(
-          apiType,
-          param.toDartString(),
-          buffer,
-          result.toDartString(),
-        ) ??
-        0;
-  }
+  // static int _onCallApiWithBufferHandle(
+  //   int apiType,
+  //   Pointer<Utf8> param,
+  //   Pointer<NativeType> buffer,
+  //   Pointer<Utf8> result,
+  // ) {
+  //   return _irisCallApiCallback?.onCallApiWithBuffer?.call(
+  //         apiType,
+  //         param.toDartString(),
+  //         buffer,
+  //         result.toDartString(),
+  //       ) ??
+  //       0;
+  // }
 
-  void setIrisProxyCallApi(bool isMockChannel) {
+  void setIrisRtcEngineCallApiRecorder(bool isMockChannel) {
     // _irisCallApiCallback = irisCallApiCallback;
 
-    final fp = _agoraRtcWrapperLib.lookupFunction<SetIrisProxyCallApiNative,
-        SetIrisProxyCallApi>('SetIrisProxyCallApi');
+    final fp = _agoraRtcWrapperLib.lookupFunction<
+        SetIrisRtcEngineCallApiRecorderNative,
+        SetIrisRtcEngineCallApiRecorder>('SetIrisRtcEngineCallApiRecorder');
 
     // final Pointer<NativeFunction<CallApiNative>> onCallApiPtr =
     //     Pointer.fromFunction<CallApiNative>(
@@ -261,31 +218,36 @@ class _NativeIrisProxyBinding {
     //   ..ref.onCallApi = onCallApiPtr
     //   ..ref.onCallApiWithBuffer = onCallApiWithBufferPtr;
 
-    _irisProxyPtr = fp(_irisRtcEnginePtr, isMockChannel ? 1 : 0);
+    _callApiRecorderPtr = fp(_irisRtcEnginePtr, isMockChannel ? 1 : 0);
   }
 
-  void callIrisProxyEventHandlerOnEvent(String event, String data) {
+  void callIrisProxyEventHandlerOnEvent(
+    bool isMockChannel,
+    String event,
+    String data,
+  ) {
     final fp = _agoraRtcWrapperLib.lookupFunction<
-        CallIrisProxyEventHandlerOnEventNative,
-        CallIrisProxyEventHandlerOnEvent>('CallIrisProxyEventHandlerOnEvent');
+        CallIrisEventHandlerOnEventNative,
+        CallIrisEventHandlerOnEvent>('CallIrisEventHandlerOnEvent');
     final eventN = event.toNativeUtf8();
     final dataN = data.toNativeUtf8();
-    fp(_irisProxyPtr, eventN, dataN);
+    fp(_irisRtcEnginePtr, isMockChannel ? 1 : 0, eventN, dataN);
 
     // calloc.free(eventN);
     // calloc.free(dataN);
   }
 
   void callIrisProxyEventHandlerOnEventWithBuffer(
+    bool isMockChannel,
     String event,
     String data,
     Uint8List buffer,
     int bufferSize,
   ) {
     final fp = _agoraRtcWrapperLib.lookupFunction<
-            CallIrisProxyEventHandlerOnEventWithBufferNative,
-            CallIrisProxyEventHandlerOnEventWithBuffer>(
-        'CallIrisProxyEventHandlerOnEventWithBuffer');
+            CallIrisEventHandlerOnEventWithBufferNative,
+            CallIrisEventHandlerOnEventWithBuffer>(
+        'CallIrisEventHandlerOnEventWithBuffer');
     final eventN = event.toNativeUtf8();
     final dataN = data.toNativeUtf8();
     // final bufferN = calloc.allocate<Uint8>(bufferSize);
@@ -294,83 +256,80 @@ class _NativeIrisProxyBinding {
     final pointerList = bufferN.asTypedList(buffer.length);
     pointerList.setAll(0, buffer);
 
-    fp(_irisProxyPtr, eventN, dataN, bufferN, bufferSize);
+    fp(_irisRtcEnginePtr, isMockChannel ? 1 : 0, eventN, dataN, bufferN,
+        bufferSize);
 
     // calloc.free(eventN);
     // calloc.free(dataN);
     // calloc.free(bufferN);
   }
 
-  void destroyIrisProxyCallApi(bool isMockChannel) {
-    final fp = _agoraRtcWrapperLib.lookupFunction<DestroyIrisProxyCallApiNative,
-        DestroyIrisProxyCallApi>('DestroyIrisProxyCallApi');
-    fp(_irisRtcEnginePtr, isMockChannel ? 1 : 0, _irisProxyPtr);
+  void clearCallApiRecorder() {
+    final fp = _agoraRtcWrapperLib.lookupFunction<ClearCallApiRecorderNative,
+        ClearCallApiRecorder>('ClearCallApiRecorder');
+    fp(_callApiRecorderPtr);
   }
 
-  Pointer<ApiCallQueueNative> getIrisProxyApiCallQueue() {
-    final fp = _agoraRtcWrapperLib.lookupFunction<
-        GetIrisProxyApiCallQueueNative,
-        GetIrisProxyApiCallQueueNative>('GetIrisProxyApiCallQueue');
-    final p = fp(_irisProxyPtr);
+  // Pointer<ApiCallQueueNative> getIrisProxyApiCallQueue() {
+  //   final fp = _agoraRtcWrapperLib.lookupFunction<
+  //       GetIrisProxyApiCallQueueNative,
+  //       GetIrisProxyApiCallQueueNative>('GetIrisProxyApiCallQueue');
+  //   final p = fp(_irisProxyPtr);
 
-    return p;
-  }
+  //   return p;
+  // }
 
-  void irisProxyMockCallApiResult(
+  void mockCallApiResult(
     int apiType,
     String params,
     String mockResult,
   ) {
-    final fp = _agoraRtcWrapperLib.lookupFunction<
-        IrisProxyMockCallApiResultNative,
-        IrisProxyMockCallApiResult>('IrisProxyMockCallApiResult');
+    final fp = _agoraRtcWrapperLib.lookupFunction<MockCallApiResultNative,
+        MockCallApiResult>('MockCallApiResult');
     final paramsN = params.toNativeUtf8();
     final mockResultN = mockResult.toNativeUtf8();
-    fp(_irisProxyPtr, apiType, paramsN, mockResultN);
+    fp(_callApiRecorderPtr, apiType, paramsN, mockResultN);
 
     calloc.free(paramsN);
     calloc.free(mockResultN);
   }
 
-  void irisProxyMockCallApiReturnCode(
+  void mockCallApiReturnCode(
     int apiType,
     String params,
     int mockReturnCode,
   ) {
-    final fp = _agoraRtcWrapperLib.lookupFunction<
-        IrisProxyMockCallApiReturnCodeNative,
-        IrisProxyMockCallApiReturnCode>('IrisProxyMockCallApiReturnCode');
+    final fp = _agoraRtcWrapperLib.lookupFunction<MockCallApiReturnCodeNative,
+        MockCallApiReturnCode>('MockCallApiReturnCode');
     final paramsN = params.toNativeUtf8();
 
-    fp(_irisProxyPtr, apiType, paramsN, mockReturnCode);
+    fp(_callApiRecorderPtr, apiType, paramsN, mockReturnCode);
 
     calloc.free(paramsN);
   }
 
-  void irisProxySetExplicitBufferSize(
+  void setExplicitBufferSize(
     int apiType,
     String params,
     int bufferSize,
   ) {
-    final fp = _agoraRtcWrapperLib.lookupFunction<
-        IrisProxySetExplicitBufferSizeNative,
-        IrisProxySetExplicitBufferSize>('IrisProxySetExplicitBufferSize');
+    final fp = _agoraRtcWrapperLib.lookupFunction<SetExplicitBufferSizeNative,
+        SetExplicitBufferSize>('SetExplicitBufferSize');
     final paramsN = params.toNativeUtf8();
 
-    fp(_irisProxyPtr, apiType, paramsN, bufferSize);
+    fp(_callApiRecorderPtr, apiType, paramsN, bufferSize);
 
     calloc.free(paramsN);
   }
 
-  bool irisProxyExpectCalledApi(
+  bool expectCalledApi(
     int apiType,
     String params, {
     Uint8List? buffer,
     int bufferSize = 0,
   }) {
-    final fp = _agoraRtcWrapperLib.lookupFunction<
-        IrisProxyExpectCalledApiNative,
-        IrisProxyExpectCalledApi>('IrisProxyExpectCalledApi');
+    final fp = _agoraRtcWrapperLib.lookupFunction<ExpectCalledApiNative,
+        ExpectCalledApi>('ExpectCalledApi');
     final paramsN = params.toNativeUtf8();
 
 // 'data' is a Uint8List created by concatenating the planes received from the CameraImage the camera puts out.
@@ -385,30 +344,42 @@ class _NativeIrisProxyBinding {
       bufferN = Pointer.fromAddress(0);
     }
 
-    final ret = fp(_irisProxyPtr, apiType, paramsN, bufferN, bufferSize);
+    final ret = fp(_callApiRecorderPtr, apiType, paramsN, bufferN, bufferSize);
 
     calloc.free(paramsN);
     calloc.free(bufferN);
     return ret == 1;
   }
 
-  void setIrisProxyEventHandler(bool isMockChannel) {
-    final fp = _agoraRtcWrapperLib.lookupFunction<
-        SetIrisProxyEventHandlerNative,
-        SetIrisProxyEventHandler>('SetIrisProxyEventHandler');
+  // void setIrisProxyEventHandler(bool isMockChannel) {
+  //   final fp = _agoraRtcWrapperLib.lookupFunction<
+  //       SetIrisProxyEventHandlerNative,
+  //       SetIrisProxyEventHandler>('SetIrisProxyEventHandler');
 
-    _irisProxyPtr = fp(_irisRtcEnginePtr, isMockChannel ? 1 : 0);
+  //   _irisEventHandlerPtr = fp(_irisRtcEnginePtr, isMockChannel ? 1 : 0);
+  // }
+
+  // void destroyIrisProxyEventHandler(bool isMockChannel) {
+  //   final fp = _agoraRtcWrapperLib.lookupFunction<
+  //       DestroyIrisProxyEventHandlerNative,
+  //       DestroyIrisProxyEventHandler>('DestroyIrisProxyEventHandler');
+  //   fp(
+  //     _irisRtcEnginePtr,
+  //     isMockChannel ? 1 : 0,
+  //     _callApiRecorderPtr,
+  //   );
+  // }
+
+  void callRtcEngineEvent() {
+    final fp = _agoraRtcWrapperLib.lookupFunction<CallRtcEngineEventNative,
+        CallRtcEngineEvent>('CallRtcEngineEvents');
+    fp(_irisRtcEnginePtr, Pointer.fromAddress(0));
   }
 
-  void destroyIrisProxyEventHandler(bool isMockChannel) {
-    final fp = _agoraRtcWrapperLib.lookupFunction<
-        DestroyIrisProxyEventHandlerNative,
-        DestroyIrisProxyEventHandler>('DestroyIrisProxyEventHandler');
-    fp(
-      _irisRtcEnginePtr,
-      isMockChannel ? 1 : 0,
-      _irisProxyPtr,
-    );
+  void callRtcChannelEvent() {
+    final fp = _agoraRtcWrapperLib.lookupFunction<CallRtcChannelEventNative,
+        CallRtcChannelEvent>('CallRtcChannelEvents');
+    fp(_irisRtcEnginePtr, Pointer.fromAddress(0));
   }
 }
 
@@ -443,7 +414,7 @@ class FakeIrisRtcEngine {
 
   Future<void> initialize() async {
     await _initialize();
-    _nativeIrisProxyBinding.setIrisProxyCallApi(_isMockChannel
+    _nativeIrisProxyBinding.setIrisRtcEngineCallApiRecorder(_isMockChannel
         // IrisCallApiCallback(
         //   onCallApi: (int apiType, String params, String result) {
         //     final apiCall = ApiCall(
@@ -480,10 +451,11 @@ class FakeIrisRtcEngine {
     int bufferSize = 0,
   }) {
     if (buffer == null) {
-      _nativeIrisProxyBinding.callIrisProxyEventHandlerOnEvent(event, data);
+      _nativeIrisProxyBinding.callIrisProxyEventHandlerOnEvent(
+          _isMockChannel, event, data);
     } else {
       _nativeIrisProxyBinding.callIrisProxyEventHandlerOnEventWithBuffer(
-          event, data, buffer, bufferSize);
+          _isMockChannel, event, data, buffer, bufferSize);
     }
   }
 
@@ -503,22 +475,22 @@ class FakeIrisRtcEngine {
 
   void dispose() {
     // _callApiQueue.clear();
-    _nativeIrisProxyBinding.destroyIrisProxyCallApi(_isMockChannel);
+    _nativeIrisProxyBinding.clearCallApiRecorder();
   }
 
-  List<ApiCallNative> _getCallApiQueue() {
-    final queueN = _nativeIrisProxyBinding.getIrisProxyApiCallQueue();
+  // List<ApiCallNative> _getCallApiQueue() {
+  //   final queueN = _nativeIrisProxyBinding.getIrisProxyApiCallQueue();
 
-    final queue = queueN.ref.apiCallQueue;
-    final len = queueN.ref.len;
+  //   final queue = queueN.ref.apiCallQueue;
+  //   final len = queueN.ref.len;
 
-    final output = <ApiCallNative>[];
-    for (int i = 0; i < len; i++) {
-      output.add(queue[i]);
-    }
+  //   final output = <ApiCallNative>[];
+  //   for (int i = 0; i < len; i++) {
+  //     output.add(queue[i]);
+  //   }
 
-    return output;
-  }
+  //   return output;
+  // }
 
   bool calledApi(
     int apiType,
@@ -526,7 +498,7 @@ class FakeIrisRtcEngine {
     Uint8List? buffer,
     int bufferSize = 0,
   }) {
-    return _nativeIrisProxyBinding.irisProxyExpectCalledApi(
+    return _nativeIrisProxyBinding.expectCalledApi(
       apiType,
       params,
       buffer: buffer,
@@ -539,7 +511,7 @@ class FakeIrisRtcEngine {
     String params,
     String mockResult,
   ) {
-    _nativeIrisProxyBinding.irisProxyMockCallApiResult(
+    _nativeIrisProxyBinding.mockCallApiResult(
       apiType,
       params,
       mockResult,
@@ -551,7 +523,7 @@ class FakeIrisRtcEngine {
     String params,
     int mockReturnCode,
   ) {
-    _nativeIrisProxyBinding.irisProxyMockCallApiReturnCode(
+    _nativeIrisProxyBinding.mockCallApiReturnCode(
       apiType,
       params,
       mockReturnCode,
@@ -563,31 +535,39 @@ class FakeIrisRtcEngine {
     String params,
     int bufferSize,
   ) {
-    _nativeIrisProxyBinding.irisProxySetExplicitBufferSize(
+    _nativeIrisProxyBinding.setExplicitBufferSize(
       apiType,
       params,
       bufferSize,
     );
   }
 
-  Future<void> initForCallApiTest() async {
-    await _initialize();
-    _nativeIrisProxyBinding.setIrisProxyCallApi(
-      _isMockChannel,
-    );
+  // Future<void> initForCallApiTest() async {
+  //   await _initialize();
+  //   _nativeIrisProxyBinding.setIrisRtcEngineCallApiRecorder(
+  //     _isMockChannel,
+  //   );
+  // }
+
+  // void disposeForCallApiTest() {
+  //   _nativeIrisProxyBinding.clearCallApiRecorder(_isMockChannel);
+  // }
+
+  // Future<void> initForEventHandlerTest() async {
+  //   await initialize();
+  //   _nativeIrisProxyBinding.setIrisProxyEventHandler(_isMockChannel);
+  // }
+
+  // void disposeForEventHandlerTest() {
+  //   _nativeIrisProxyBinding.destroyIrisProxyEventHandler(_isMockChannel);
+  // }
+
+  void fireAllEngineEvents() {
+    _nativeIrisProxyBinding.callRtcEngineEvent();
   }
 
-  void disposeForCallApiTest() {
-    _nativeIrisProxyBinding.destroyIrisProxyCallApi(_isMockChannel);
-  }
-
-  Future<void> initForEventHandlerTest() async {
-    await _initialize();
-    _nativeIrisProxyBinding.setIrisProxyEventHandler(_isMockChannel);
-  }
-
-  void disposeForEventHandlerTest() {
-    _nativeIrisProxyBinding.destroyIrisProxyEventHandler(_isMockChannel);
+  void fireAllChannelEvents() {
+    _nativeIrisProxyBinding.callRtcChannelEvent();
   }
 }
 

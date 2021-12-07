@@ -5,53 +5,67 @@
 #ifndef IRIS_RTC_ENGINE_H_
 #define IRIS_RTC_ENGINE_H_
 
-#include "iris_rtc_base.h"
 #include "iris_rtc_channel.h"
 #include "iris_rtc_device_manager.h"
 #include "iris_rtc_raw_data.h"
 
 namespace agora {
 namespace iris {
-class IrisProxy;
-
 namespace rtc {
-#if defined(IRIS_DEBUG)
-namespace test {
-class IrisRtcTester;
-}
-#endif
 
-class IRIS_CPP_API IrisRtcEngine {
+class IRIS_CPP_API IIrisRtcEngine : public IrisDelegate<ApiTypeEngine> {
  public:
-  explicit IrisRtcEngine(EngineType type = kEngineTypeNormal,
+  using IrisDelegate::CallApi;
+
+  virtual void Initialize(agora::rtc::IRtcEngine *rtc_engine) = 0;
+
+  virtual int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
+                      char result[kBasicResultLength]) = 0;
+
+  virtual IIrisRtcDeviceManager *device_manager() = 0;
+
+  virtual IIrisRtcChannel *channel() = 0;
+
+  virtual IrisRtcRawData *raw_data() = 0;
+};
+
+class IRIS_CPP_API IrisRtcEngine : public IIrisRtcEngine {
+ public:
+  explicit IrisRtcEngine(IIrisRtcEngine *delegate = nullptr,
+                         EngineType type = kEngineTypeNormal,
                          const char *executable_path = nullptr);
-  virtual ~IrisRtcEngine();
+  ~IrisRtcEngine() override;
 
-  void SetEventHandler(IrisEventHandler *event_handler);
+  void Initialize(agora::rtc::IRtcEngine *rtc_engine) override;
 
-  void SetProxy(IrisProxy *proxy);
+  void SetDelegate(IIrisRtcEngine *delegate);
 
-#if defined(IRIS_DEBUG)
-  void EnableTest(test::IrisRtcTester *tester);
-#endif
+  IIrisRtcEngine *GetDelegate();
+
+  void SetEventHandler(IrisEventHandler *event_handler) override;
+
+  IrisEventHandler *GetEventHandler() override;
 
   int CallApi(ApiTypeEngine api_type, const char *params,
-              char result[kBasicResultLength]);
+              char result[kBasicResultLength]) override;
+
+  IRIS_DEPRECATED
+  int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
+              char result[kBasicResultLength]) override;
 
   int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
-              char result[kBasicResultLength]);
+              unsigned int length, char result[kBasicResultLength]) override;
 
-  IrisRtcDeviceManager *device_manager();
+  IIrisRtcDeviceManager *device_manager() override;
 
-  IrisRtcChannel *channel();
+  IIrisRtcChannel *channel() override;
 
-  IrisRtcRawData *raw_data();
+  IrisRtcRawData *raw_data() override;
 
  private:
-  IrisProxy *proxy_;
-  class Impl;
-  Impl *impl_;
+  IIrisRtcEngine *delegate_;
 };
+
 }// namespace rtc
 }// namespace iris
 }// namespace agora

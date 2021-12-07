@@ -31,17 +31,19 @@ class RtcEngine with RtcEngineInterface {
   static RtcEngine? get instance => _instance;
 
   final bool _subProcess;
+  static const String _kDefaultAppGroup = 'io.agora';
+  final String _appGroup;
   RtcEngine? _screenShareHelper;
 
   /// TODO(doc)
-  RtcEngine getScreenShareHelper() {
+  RtcEngine getScreenShareHelper({String? appGroup}) {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     if (_subProcess) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
-    _screenShareHelper ??= RtcEngine._(true);
+    _screenShareHelper ??= RtcEngine._(true, appGroup: appGroup);
     return _screenShareHelper!;
   }
 
@@ -57,7 +59,8 @@ class RtcEngine with RtcEngineInterface {
 
   RtcEngineEventHandler? _handler;
 
-  RtcEngine._(this._subProcess);
+  RtcEngine._(this._subProcess, {String? appGroup})
+      : _appGroup = appGroup ?? _kDefaultAppGroup;
 
   Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
@@ -206,9 +209,8 @@ class RtcEngine with RtcEngineInterface {
   Future<void> initialize(RtcEngineContext context) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineInitialize.index,
-      'params': jsonEncode({
-        'context': context.toJson(),
-      }),
+      'params':
+          jsonEncode({'context': context.toJson(), 'appGroup': 'io.agora'}),
     }).then((value) => _invokeMethod('callApi', {
           'apiType': ApiTypeEngine.kEngineSetAppType.index,
           'params': jsonEncode({
@@ -807,6 +809,7 @@ class RtcEngine with RtcEngineInterface {
         'loopback': loopback,
         'replace': replace,
         'cycle': cycle,
+        'startPos': startPos,
       }),
     });
   }
@@ -918,13 +921,12 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<double?> getCameraMaxZoomFactor() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('getCameraMaxZoomFactor');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineGetCameraMaxZoomFactor.index,
+      'params': jsonEncode({}),
+    });
   }
 
   @override
@@ -935,49 +937,44 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraAutoFocusFaceModeSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraAutoFocusFaceModeSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraExposurePositionSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraExposurePositionSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraExposurePositionSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraFocusSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraFocusSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraFocusSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraTorchSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraTorchSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraTorchSupported.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<bool?> isCameraZoomSupported() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('isCameraZoomSupported');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineIsCameraZoomSupported.index,
+      'params': jsonEncode({}),
+    }).then((v) => v == 1 ? true : false);
   }
 
   @override
@@ -1008,7 +1005,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish,
+      double pitch, double pan, int gain, bool publish,
       [int? startPos]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEnginePlayEffect.index,
@@ -1080,7 +1077,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> registerMediaMetadataObserver() {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineRegisterMediaMetadataObserver.index,
-      'params': jsonEncode({}),
+      'params': jsonEncode({'type': 0}),
     });
   }
 
@@ -1147,14 +1144,13 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraAutoFocusFaceModeEnabled', {
-      'enabled': enabled,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraAutoFocusFaceModeEnabled.index,
+      'params': jsonEncode({
+        'enabled': enabled,
+      }),
     });
   }
 
@@ -1169,51 +1165,47 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraExposurePosition(
       double positionXinView, double positionYinView) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraExposurePosition', {
-      'positionXinView': positionXinView,
-      'positionYinView': positionYinView,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraExposurePosition.index,
+      'params': jsonEncode({
+        'positionXinView': positionXinView,
+        'positionYinView': positionYinView,
+      }),
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraFocusPositionInPreview(
       double positionX, double positionY) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraFocusPositionInPreview', {
-      'positionX': positionX,
-      'positionY': positionY,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraFocusPositionInPreview.index,
+      'params': jsonEncode({
+        'positionX': positionX,
+        'positionY': positionY,
+      }),
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraTorchOn(bool isOn) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraTorchOn', {
-      'isOn': isOn,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraTorchOn.index,
+      'params': jsonEncode({
+        'isOn': isOn,
+      }),
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> setCameraZoomFactor(double factor) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('setCameraZoomFactor', {
-      'factor': factor,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetCameraZoomFactor.index,
+      'params': jsonEncode({
+        'factor': factor,
+      }),
     });
   }
 
@@ -1228,7 +1220,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setEffectsVolume(double volume) {
+  Future<void> setEffectsVolume(int volume) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEffectsVolume.index,
       'params': jsonEncode({
@@ -1238,11 +1230,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setEnableSpeakerphone(bool enabled) {
+  Future<void> setEnableSpeakerphone(bool defaultToSpeaker) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEnableSpeakerPhone.index,
       'params': jsonEncode({
-        'enabled': enabled,
+        'defaultToSpeaker': defaultToSpeaker,
       }),
     });
   }
@@ -1397,11 +1389,12 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType) {
+  Future<void> setRemoteVideoStreamType(
+      int userId, VideoStreamType streamType) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetRemoteVideoStreamType.index,
       'params': jsonEncode({
-        'uid': uid,
+        'userId': userId,
         'streamType': VideoStreamTypeConverter(streamType).value(),
       }),
     });
@@ -1420,7 +1413,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setVolumeOfEffect(int soundId, double volume) {
+  Future<void> setVolumeOfEffect(int soundId, int volume) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetVolumeOfEffect.index,
       'params': jsonEncode({
@@ -1466,37 +1459,34 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> startRhythmPlayer(
       String sound1, String sound2, RhythmPlayerConfig config) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('startRhythmPlayer', {
-      'sound1': sound1,
-      'sound2': sound2,
-      'config': config.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartRhythmPlayer.index,
+      'params': jsonEncode({
+        'sound1': sound1,
+        'sound2': sound2,
+        'config': config.toJson(),
+      }),
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> stopRhythmPlayer() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('stopRhythmPlayer');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStopRhythmPlayer.index,
+      'params': jsonEncode({}),
+    });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<void> configRhythmPlayer(RhythmPlayerConfig config) {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('configRhythmPlayer', {
-      'config': config.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineConfigRhythmPlayer.index,
+      'params': jsonEncode({
+        'config': config.toJson(),
+      }),
     });
   }
 
@@ -1592,7 +1582,7 @@ class RtcEngine with RtcEngineInterface {
   Future<void> unregisterMediaMetadataObserver() {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineUnRegisterMediaMetadataObserver.index,
-      'params': jsonEncode({}),
+      'params': jsonEncode({'type': 0}),
     });
   }
 
@@ -1691,13 +1681,12 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Iris not supported
   @override
   Future<int?> getNativeHandle() {
-    if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
-    }
-    return _invokeMethod('getNativeHandle');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineGetNativeHandle.index,
+      'params': jsonEncode({}),
+    });
   }
 
   @override
@@ -1744,21 +1733,21 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableDeepLearningDenoise(bool enabled) {
+  Future<void> enableDeepLearningDenoise(bool enable) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableDeepLearningDenoise.index,
       'params': jsonEncode({
-        'enabled': enabled,
+        'enable': enable,
       }),
     });
   }
 
   @override
-  Future<void> enableRemoteSuperResolution(int uid, bool enable) {
+  Future<void> enableRemoteSuperResolution(int userId, bool enable) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableRemoteSuperResolution.index,
       'params': jsonEncode({
-        'uid': uid,
+        'userId': userId,
         'enable': enable,
       }),
     });
@@ -1912,7 +1901,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> startScreenCapture(int windowId,
-      [int? captureFreq, Rect? rect, int? bitrate]) {
+      [int captureFreq = 0, Rect? rect, int bitrate = 0]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
       'params': jsonEncode({
@@ -2204,7 +2193,7 @@ mixin RtcEngineInterface
   ///
   /// - Agora recommends calling this method before joining a channel.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
-  Future<void> enableDeepLearningDenoise(bool enabled);
+  Future<void> enableDeepLearningDenoise(bool enable);
 
   ///  Sets the Agora cloud proxy service.
   ///
@@ -2676,7 +2665,7 @@ mixin RtcVideoInterface {
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
   /// @nodoc
-  Future<void> enableRemoteSuperResolution(int uid, bool enable);
+  Future<void> enableRemoteSuperResolution(int userId, bool enable);
 }
 
 /// @nodoc
@@ -2940,14 +2929,16 @@ mixin RtcAudioEffectInterface {
   /// Sets the volume of the audio effects.
   ///
   /// **Parameter** [volume] Volume of the audio effects. The value ranges between 0.0 and 100.0 (default).
-  Future<void> setEffectsVolume(double volume);
+  // TODO(littlegnal): Doc break change volume type double -> int
+  Future<void> setEffectsVolume(int volume);
 
   /// Sets the volume of a specified audio effect.
   ///
   /// **Parameter** [soundId] ID of the audio effect. Each audio effect has a unique ID.
   ///
   /// **Parameter** [volume] Volume of the audio effect. The value ranges between 0.0 and 100.0 (default).
-  Future<void> setVolumeOfEffect(int soundId, double volume);
+  // TODO(littlegnal): Doc break change volume type double -> int
+  Future<void> setVolumeOfEffect(int soundId, int volume);
 
   /// Plays a specified local or online audio effect file.
   ///
@@ -2986,8 +2977,9 @@ mixin RtcAudioEffectInterface {
   /// - `false`: Do not publish. Only the local user can hear the audio effect.
   ///
   /// **Parameter** [startPos] The playback position (ms) of the audio effect file.
+  // TODO(littlegnal): Doc a break change: gain double -> int
   Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish,
+      double pitch, double pan, int gain, bool publish,
       [int? startPos]);
 
   /// Sets the playback position of an audio effect file.
@@ -3503,7 +3495,7 @@ mixin RtcAudioRouteInterface {
   /// **Parameter** [enabled] Sets whether to enable the speakerphone or earpiece:
   /// - `true`: Enable the speakerphone. The audio route is the speakerphone.
   /// - `false`: Disable the speakerphone. The audio route is the earpiece.
-  Future<void> setEnableSpeakerphone(bool enabled);
+  Future<void> setEnableSpeakerphone(bool defaultToSpeaker);
 
   /// Checks whether the speakerphone is enabled.
   ///
@@ -3556,7 +3548,7 @@ mixin RtcDualStreamInterface {
   /// **Parameter** [uid] ID of the remote user sending the video stream.
   ///
   /// **Parameter** [streamType] Sets the video-stream type. See [VideoStreamType].
-  Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType);
+  Future<void> setRemoteVideoStreamType(int userId, VideoStreamType streamType);
 
   /// Sets the default video-stream type of the remotely subscribed video stream when the remote user sends dual streams.
   ///
@@ -4135,6 +4127,8 @@ mixin RtcScreenSharingInterface {
 
   Future<void> stopScreenCapture();
 
+  // TODO(littlegnal): Doc breack change captureFreq type int? -> int, bitrate type
+  // int? -> int
   Future<void> startScreenCapture(int windowId,
-      [int? captureFreq, Rect? rect, int? bitrate]);
+      [int captureFreq, Rect? rect, int bitrate]);
 }

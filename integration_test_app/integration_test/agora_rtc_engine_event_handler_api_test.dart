@@ -11,54 +11,37 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   late RtcEngine rtcEngine;
-  late FakeIrisRtcEngine nireHandler;
+  late FakeIrisRtcEngine fakeIrisEngine;
 
   setUpAll(() async {
-    nireHandler = FakeIrisRtcEngine();
-    await nireHandler.initForEventHandlerTest();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
   });
 
   tearDown(() async {
     await rtcEngine.destroy();
-    // nireHandler.dispose();
   });
 
   tearDownAll(() {
-    nireHandler.disposeForEventHandlerTest();
+    fakeIrisEngine.dispose();
   });
 
   Future<RtcEngine> _createRtcEngine() {
     return RtcEngine.create('123');
   }
 
-  // Future<void> nireHandler.triggerWaitEvent(
-  //   WidgetTester tester,
-  //   String event,
-  //   String data, {
-  //   Uint8List? buffer,
-  //   int bufferSize = 0,
-  // }) async {
-  //   nireHandler.triggerEvent(
-  //     event,
-  //     data,
-  //     buffer: buffer,
-  //     bufferSize: bufferSize,
-  //   );
-  //   // Wait for the `EventChannel` event be sent from Android/iOS side
-  //   await tester.pump(const Duration(milliseconds: 500));
-  // }
-
   testWidgets('warning', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
     rtcEngine = await _createRtcEngine();
     WarningCode? code;
-    rtcEngine
-        .setEventHandler(RtcEngineEventHandler(warning: (WarningCode warn) {
-      code = warn;
-    }));
+    rtcEngine.setEventHandler(RtcEngineEventHandler(
+      warning: (WarningCode warn) {
+        code = warn;
+      },
+    ));
 
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onWarning', '{"warn":16,"msg":"warning"}');
     expect(code == WarningCode.InitVideo, isTrue);
   });
@@ -72,7 +55,7 @@ void main() {
       errorCode = err;
     }));
 
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onError', '{"err":11,"msg":"error"}');
     expect(errorCode == ErrorCode.Canceled, isTrue);
   });
@@ -92,7 +75,7 @@ void main() {
       },
     ));
 
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onJoinChannelSuccess',
       '{"channel":"testapi","uid":10, "elapsed":100}',
@@ -117,7 +100,7 @@ void main() {
       },
     ));
 
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onApiCallExecuted',
       '{"err":1,"api":"joinChannel", "result":"failed"}',
@@ -142,7 +125,7 @@ void main() {
       },
     ));
 
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRejoinChannelSuccess',
       '{"channel":"testapi","uid":10, "elapsed":100}',
@@ -166,7 +149,7 @@ void main() {
     final expectedStats = RtcStats(10, 20, 20, 100, 100, 200, 200, 10, 10, 20,
         20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);
 
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLeaveChannel',
       '{"stats":${jsonEncode(expectedStats.toJson())}}',
@@ -187,7 +170,7 @@ void main() {
       },
     ));
 
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLocalUserRegistered',
       '{"uid":10,"userAccount":"user1"}',
@@ -209,7 +192,7 @@ void main() {
       },
     ));
     final expectedUserInfo = UserInfo(10, 'user1');
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onUserInfoUpdated',
       '{"uid":10,"info":${jsonEncode(expectedUserInfo.toJson())}}',
@@ -230,7 +213,7 @@ void main() {
         newRoleRet = newRole;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onClientRoleChanged',
       '{"oldRole":1,"newRole":2}',
@@ -251,7 +234,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onUserJoined',
       '{"uid":10,"elapsed":100}',
@@ -272,7 +255,7 @@ void main() {
         reasonRet = reason;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onUserOffline',
       '{"uid":10,"reason":2}',
@@ -294,7 +277,7 @@ void main() {
         reasonRet = reason;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onConnectionStateChanged',
       '{"state":3,"reason":1}',
@@ -313,7 +296,7 @@ void main() {
         typeRet = type;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onNetworkTypeChanged', '{"type":2}');
     expect(typeRet, NetworkType.WIFI);
   });
@@ -328,7 +311,7 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(tester, 'onConnectionLost', '{}');
+    await fakeIrisEngine.fireAndWaitEvent(tester, 'onConnectionLost', '{}');
     expect(called, isTrue);
   });
 
@@ -342,7 +325,7 @@ void main() {
         tokenRet = token;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onTokenPrivilegeWillExpire', '{"token":"t"}');
     expect(tokenRet, 't');
   });
@@ -357,7 +340,7 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(tester, 'onRequestToken', '{}');
+    await fakeIrisEngine.fireAndWaitEvent(tester, 'onRequestToken', '{}');
     expect(called, isTrue);
   });
 
@@ -377,7 +360,7 @@ void main() {
       },
     ));
     final expectedSpeakers = [AudioVolumeInfo(10, 100, 20, 'testapi')];
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioVolumeIndication',
       '{"speakers":${jsonEncode(expectedSpeakers)},"speakerNumber":1,"totalVolume":10}',
@@ -396,7 +379,7 @@ void main() {
         uidRet = uid;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onActiveSpeaker',
       '{"uid":10}',
@@ -414,7 +397,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onFirstLocalAudioFrame', '{"elapsed":100}');
     expect(elapsedRet, 100);
   });
@@ -433,7 +416,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onFirstLocalVideoFrame',
       '{"width":10,"height":10,"elapsed":100}',
@@ -459,7 +442,7 @@ void main() {
         rotationRet = rotation;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onVideoSizeChanged',
       '{"uid":10,"width":20,"height":20,"rotation":30}',
@@ -487,7 +470,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRemoteVideoStateChanged',
       '{"uid":10,"state":1,"reason":1,"elapsed":100}',
@@ -511,7 +494,7 @@ void main() {
         errorRet = error;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLocalVideoStateChanged',
       '{"localVideoState":1,"error":2}',
@@ -537,7 +520,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRemoteAudioStateChanged',
       '{"uid":10,"state":1,"reason":2,"elapsed":100}',
@@ -561,7 +544,7 @@ void main() {
         errorRet = error;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLocalAudioStateChanged',
       '{"state":2,"error":8}',
@@ -581,7 +564,7 @@ void main() {
         isFallbackOrRecoverRet = isFallbackOrRecover;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLocalPublishFallbackToAudioOnly',
       '{"isFallbackOrRecover":true}',
@@ -603,7 +586,7 @@ void main() {
         isFallbackOrRecoverRet = isFallbackOrRecover;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRemoteSubscribeFallbackToAudioOnly',
       '{"uid":10,"isFallbackOrRecover":true}',
@@ -622,7 +605,7 @@ void main() {
         routingRet = routing;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioRouteChanged',
       '{"routing":7}',
@@ -650,7 +633,7 @@ void main() {
       right: 20,
       bottom: 20,
     );
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onCameraFocusAreaChanged',
       '{"x":10,"y":10,"width":10,"height":10}',
@@ -678,7 +661,7 @@ void main() {
       right: 20,
       bottom: 20,
     );
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onCameraExposureAreaChanged',
       '{"x":10,"y":10,"width":10,"height":10}',
@@ -702,7 +685,7 @@ void main() {
       },
     ));
     final expectedFaces = [FacePositionInfo(10, 10, 10, 10, 10)];
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onFacePositionChanged',
       '{"imageWidth":10,"imageHeight":10,"vecRectangle":[{"x":10,"y":10,"width":10,"height":10}],"vecDistance":[10]}',
@@ -724,7 +707,7 @@ void main() {
     ));
     final expectedStats = RtcStats(10, 20, 20, 100, 100, 200, 200, 10, 10, 20,
         20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRtcStats',
       '{"stats":${jsonEncode(expectedStats.toJson())}}',
@@ -747,7 +730,7 @@ void main() {
         rxQualityRet = rxQuality;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onNetworkQuality',
       '{"uid":10,"txQuality":2,"rxQuality":4}',
@@ -773,7 +756,7 @@ void main() {
       LastmileProbeOneWayResult(1, 2, 3),
       LastmileProbeOneWayResult(1, 2, 3),
     );
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLastmileProbeResult',
       '{"result":${jsonEncode(expectLastmileProbeResult.toJson())}}',
@@ -808,7 +791,7 @@ void main() {
       10,
       CaptureBrightnessLevelType.Bright,
     );
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLocalVideoStats',
       '{"stats":${jsonEncode(expectLocalVideoStats.toJson())}}',
@@ -827,7 +810,7 @@ void main() {
       },
     ));
     final expectLocalAudioStats = LocalAudioStats(10, 10, 10, 10);
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onLocalAudioStats',
       '{"stats":${jsonEncode(expectLocalAudioStats.toJson())}}',
@@ -847,7 +830,7 @@ void main() {
     ));
     final expectRemoteVideoStats = RemoteVideoStats(
         10, 10, 10, 10, 10, 10, 10, 10, VideoStreamType.High, 10, 10, 10, 10);
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRemoteVideoStats',
       '{"stats":${jsonEncode(expectRemoteVideoStats.toJson())}}',
@@ -882,7 +865,7 @@ void main() {
       ExperiencePoorReason.LocalNetworkQualityPoor,
       10,
     );
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRemoteAudioStats',
       '{"stats":${jsonEncode(expectRemoteAudioStats.toJson())}}',
@@ -900,7 +883,8 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(tester, 'onAudioMixingFinished', '{}');
+    await fakeIrisEngine.fireAndWaitEvent(
+        tester, 'onAudioMixingFinished', '{}');
     expect(called, true);
   });
 
@@ -917,7 +901,7 @@ void main() {
         reasonRet = reason;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioMixingStateChanged',
       '{"state":711,"reason":725}',
@@ -936,7 +920,7 @@ void main() {
         soundIdRet = soundId;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioEffectFinished',
       '{"soundId":10}',
@@ -959,7 +943,7 @@ void main() {
         errCodeRet = errCode;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRtmpStreamingStateChanged',
       '{"url":"https://example.com","state":3,"errCode":2}',
@@ -979,7 +963,7 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(tester, 'onTranscodingUpdated', '{}');
+    await fakeIrisEngine.fireAndWaitEvent(tester, 'onTranscodingUpdated', '{}');
     expect(called, isTrue);
   });
 
@@ -997,7 +981,7 @@ void main() {
         statusRet = status;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onStreamInjectedStatus',
       '{"url":"https://example.com","uid":10,"status":0}',
@@ -1022,7 +1006,7 @@ void main() {
       },
     ));
     final buffer = Uint8List.fromList([1, 1]);
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onStreamMessage',
       '{"uid":10,"uid":10,"streamId":20,"length":2}',
@@ -1053,7 +1037,7 @@ void main() {
         cachedRet = cached;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onStreamMessageError',
       '{"uid":10,"streamId":20,"code":1022,"missed":2,"cached":3}',
@@ -1075,7 +1059,7 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onMediaEngineLoadSuccess', '{}');
     expect(called, isTrue);
   });
@@ -1090,7 +1074,7 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onMediaEngineStartCallSuccess', '{}');
     expect(called, isTrue);
   });
@@ -1108,7 +1092,7 @@ void main() {
         codeRet = code;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onChannelMediaRelayStateChanged',
       '{"state":1,"code":9}',
@@ -1127,7 +1111,7 @@ void main() {
         codeRet = code;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onChannelMediaRelayEvent',
       '{"code":2}',
@@ -1151,7 +1135,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onFirstRemoteVideoFrame',
       '{"uid":10,"width":100,"height":100,"elapsed":50}',
@@ -1174,7 +1158,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onFirstRemoteAudioFrame',
       '{"uid":10,"elapsed":50}',
@@ -1195,7 +1179,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onFirstRemoteAudioDecoded',
       '{"uid":10,"elapsed":50}',
@@ -1216,7 +1200,7 @@ void main() {
         mutedRet = muted;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onUserMuteAudio',
       '{"uid":10,"muted":true}',
@@ -1237,7 +1221,7 @@ void main() {
         errorRet = error;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onStreamPublished',
       '{"url":"https://example.com","error":1027}',
@@ -1256,7 +1240,7 @@ void main() {
         urlRet = url;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onStreamUnpublished',
       '{"url":"https://example.com"}',
@@ -1276,7 +1260,7 @@ void main() {
     ));
     final buffer = Uint8List.fromList([1, 1]);
     final Metadata expectedMetadata = Metadata(10, 1000);
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onMetadataReceived',
       '{"metadata":${jsonEncode(expectedMetadata.toJson())}}',
@@ -1298,7 +1282,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onFirstLocalAudioFramePublished',
       '{"elapsed":100}',
@@ -1316,7 +1300,7 @@ void main() {
         elapsedRet = elapsed;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onFirstLocalVideoFramePublished',
       '{"elapsed":100}',
@@ -1341,7 +1325,7 @@ void main() {
         elapseSinceLastStateRet = elapseSinceLastState;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioPublishStateChanged',
       '{"channel":"testapi","oldState":3,"newState":1,"elapseSinceLastState":10}',
@@ -1369,7 +1353,7 @@ void main() {
         elapseSinceLastStateRet = elapseSinceLastState;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onVideoPublishStateChanged',
       '{"channel":"testapi","oldState":3,"newState":1,"elapseSinceLastState":10}',
@@ -1402,7 +1386,7 @@ void main() {
         elapseSinceLastStateRet = elapseSinceLastState;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioSubscribeStateChanged',
       '{"channel":"testapi","uid":10,"oldState":1,"newState":2,"elapseSinceLastState":10}',
@@ -1436,7 +1420,7 @@ void main() {
         elapseSinceLastStateRet = elapseSinceLastState;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onVideoSubscribeStateChanged',
       '{"channel":"testapi","uid":10,"oldState":1,"newState":2,"elapseSinceLastState":10}',
@@ -1460,7 +1444,7 @@ void main() {
         eventCodeRet = eventCode;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onRtmpStreamingEvent',
       '{"url":"https://example.com","eventCode":1}',
@@ -1484,7 +1468,7 @@ void main() {
         reasonRet = reason;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onUserSuperResolutionEnabled',
       '{"uid":10,"enabled":true,"reason":1}',
@@ -1509,7 +1493,7 @@ void main() {
         reasonRet = reason;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onUploadLogResult',
       '{"requestId":"10","success":true,"reason":2}',
@@ -1534,7 +1518,7 @@ void main() {
         deviceStateRet = deviceState;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onVideoDeviceStateChanged',
       '{"deviceId":"10","deviceType":4,"deviceState":0}',
@@ -1559,7 +1543,7 @@ void main() {
         mutedRet = muted;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioDeviceVolumeChanged',
       '{"deviceType":3,"volume":20,"muted":true}',
@@ -1584,7 +1568,7 @@ void main() {
         deviceStateRet = deviceState;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
       tester,
       'onAudioDeviceStateChanged',
       '{"deviceId":"20","deviceType":1,"deviceState":8}',
@@ -1604,7 +1588,7 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(
+    await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onRemoteAudioMixingBegin', '{}');
     expect(called, true);
   });
@@ -1619,7 +1603,8 @@ void main() {
         called = true;
       },
     ));
-    await nireHandler.fireAndWaitEvent(tester, 'onRemoteAudioMixingEnd', '{}');
+    await fakeIrisEngine.fireAndWaitEvent(
+        tester, 'onRemoteAudioMixingEnd', '{}');
     expect(called, true);
   });
 }

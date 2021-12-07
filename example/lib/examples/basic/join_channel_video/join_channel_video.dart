@@ -159,7 +159,6 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          // TODO(littlegnal): Irirs not support set channelId=null at this time
           Container(child: kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(), color: Colors.red,),
           Align(
             alignment: Alignment.topLeft,

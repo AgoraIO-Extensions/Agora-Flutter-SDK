@@ -53,8 +53,7 @@ class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
     Key? key,
-    // TODO(littlegnal): Remove when iris supported channelId to be null
-    String? channelId = '',
+    String? channelId,
     renderMode = VideoRenderMode.Hidden,
     mirrorMode = VideoMirrorMode.Auto,
     PlatformViewCreatedCallback? onPlatformViewCreated,

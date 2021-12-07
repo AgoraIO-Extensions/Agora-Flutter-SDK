@@ -11,6 +11,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 enum EngineType {
   kEngineTypeNormal,
   kEngineTypeSubProcess,
@@ -199,7 +200,21 @@ enum ApiTypeEngine {
   kEngineSetLocalVideoRenderer,
   kEngineSetRemoteVideoRenderer,
   kEngineSetCameraTorchOn,
-  kEngineIsCameraTorchSupported
+  kEngineIsCameraTorchSupported,
+
+  kEngineGetCameraMaxZoomFactor,
+  kEngineIsCameraAutoFocusFaceModeSupported,
+  kEngineIsCameraExposurePositionSupported,
+  kEngineIsCameraFocusSupported,
+  kEngineIsCameraZoomSupported,
+  kEngineSetCameraAutoFocusFaceModeEnabled,
+  kEngineSetCameraExposurePosition,
+  kEngineSetCameraFocusPositionInPreview,
+  kEngineSetCameraZoomFactor,
+  kEngineStartRhythmPlayer,
+  kEngineStopRhythmPlayer,
+  kEngineConfigRhythmPlayer,
+  kEngineGetNativeHandle,
 };
 
 enum ApiTypeChannel {

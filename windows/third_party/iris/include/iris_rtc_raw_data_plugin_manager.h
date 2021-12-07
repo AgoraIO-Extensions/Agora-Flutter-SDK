@@ -5,67 +5,46 @@
 #ifndef IRIS_RTC_RAW_DATA_PLUGIN_MANAGER_H_
 #define IRIS_RTC_RAW_DATA_PLUGIN_MANAGER_H_
 
-#include "iris_proxy.h"
-#include "iris_rtc_raw_data.h"
-#include "iris_rtc_raw_data_plugin.h"
+#include "iris_delegate.h"
+#include "iris_rtc_base.h"
 
 namespace agora {
 namespace iris {
 namespace rtc {
-static const int kMaxPluginIdLength = 512;
 
-class IRIS_CPP_API IrisRtcRawDataPlugin : public IrisRtcAudioFrameObserver,
-                                          public IrisRtcVideoFrameObserver {
+class IrisRtcRawData;
+
+class IRIS_CPP_API IIrisRtcRawDataPluginManager
+    : public IrisDelegate<ApiTypeRawDataPluginManager> {
  public:
-  explicit IrisRtcRawDataPlugin(const char plugin_id[kMaxPluginIdLength],
-                                const char *plugin_path);
-  virtual ~IrisRtcRawDataPlugin();
+  using IrisDelegate::CallApi;
 
-  const char *plugin_id();
+  virtual void Initialize(IrisRtcRawData *raw_data) = 0;
 
-  int Enable(bool enabled);
+  void SetEventHandler(IrisEventHandler *event_handler) override;
 
-  int SetParameter(const char *parameter);
-
-  const char *GetParameter(const char *key);
-
- public:
-  bool OnRecordAudioFrame(IrisAudioFrame &audio_frame) override;
-
-  bool OnPlaybackAudioFrame(IrisAudioFrame &audio_frame) override;
-
-  bool OnMixedAudioFrame(IrisAudioFrame &audio_frame) override;
-
-  bool OnPlaybackAudioFrameBeforeMixing(unsigned int uid,
-                                        IrisAudioFrame &audio_frame) override;
-
-  bool OnCaptureVideoFrame(IrisVideoFrame &video_frame) override;
-
-  bool OnRenderVideoFrame(unsigned int uid,
-                          IrisVideoFrame &video_frame) override;
-
- private:
-  char plugin_id_[kMaxPluginIdLength];
-  void *plugin_dynamic_lib_;
-  IAVFramePlugin *plugin_;
-  bool enabled_;
-};
-
-class IRIS_CPP_API IrisRtcRawDataPluginManager {
- public:
-  explicit IrisRtcRawDataPluginManager(IrisRtcRawData *raw_data);
-  virtual ~IrisRtcRawDataPluginManager();
-
-  void SetProxy(IrisProxy *proxy);
+  IrisEventHandler *GetEventHandler() override;
 
   int CallApi(ApiTypeRawDataPluginManager api_type, const char *params,
-              char result[kMaxResultLength]);
+              void *buffer, unsigned int length, char *result) override;
+};
+
+class IRIS_CPP_API IrisRtcRawDataPluginManager
+    : public IIrisRtcRawDataPluginManager {
+ public:
+  explicit IrisRtcRawDataPluginManager(
+      IIrisRtcRawDataPluginManager *delegate = nullptr);
+  ~IrisRtcRawDataPluginManager() override;
+
+  int CallApi(ApiTypeRawDataPluginManager api_type, const char *params,
+              char result[kMaxResultLength]) override;
+
+  void Initialize(IrisRtcRawData *raw_data) override;
 
  private:
-  IrisProxy *proxy_;
-  class Impl;
-  Impl *impl_;
+  IIrisRtcRawDataPluginManager *delegate_;
 };
+
 }// namespace rtc
 }// namespace iris
 }// namespace agora

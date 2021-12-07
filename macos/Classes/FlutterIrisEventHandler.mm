@@ -1,23 +1,29 @@
-#import <Foundation/Foundation.h>
 #import "FlutterIrisEventHandler.h"
 #import <AgoraRtcWrapper/iris_rtc_engine.h>
+#import <Foundation/Foundation.h>
 
 class EventHandler : public agora::iris::IrisEventHandler {
 public:
-    EventHandler(FlutterEventSink eventSink, bool shouldHandleSubProcess = false, bool sub_process = false) : eventSink_(eventSink), sub_process_(sub_process), shouldHandleSubProcess_(shouldHandleSubProcess) {
-  }
+  EventHandler(FlutterEventSink eventSink, bool shouldHandleSubProcess = false,
+               bool sub_process = false)
+      : eventSink_(eventSink), sub_process_(sub_process),
+        shouldHandleSubProcess_(shouldHandleSubProcess) {}
 
   void OnEvent(const char *event, const char *data) override {
     @autoreleasepool {
-        if (eventSink_) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event], @"methodName", [NSString stringWithUTF8String:data], @"data", nil];
-            
-            if (shouldHandleSubProcess_) {
-                [dic setObject:@(sub_process_) forKey:@"subProcess"];
-            }
-            
-            eventSink_(dic);
+      if (eventSink_) {
+        NSMutableDictionary *dic = [NSMutableDictionary
+            dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event],
+                                         @"methodName",
+                                         [NSString stringWithUTF8String:data],
+                                         @"data", nil];
+
+        if (shouldHandleSubProcess_) {
+          [dic setObject:@(sub_process_) forKey:@"subProcess"];
         }
+
+        eventSink_(dic);
+      }
     }
   }
 
@@ -27,22 +33,26 @@ public:
       FlutterStandardTypedData *bufferApple = [FlutterStandardTypedData
           typedDataWithBytes:[[NSData alloc] initWithBytes:buffer
                                                     length:length]];
-        if (eventSink_) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event], @"methodName", [NSString stringWithUTF8String:data], @"data", bufferApple, @"buffer", nil];
-            
-            if (shouldHandleSubProcess_) {
-                [dic setObject:@(sub_process_) forKey:@"subProcess"];
-            }
-            
-            eventSink_(dic);
+      if (eventSink_) {
+        NSMutableDictionary *dic = [NSMutableDictionary
+            dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event],
+                                         @"methodName",
+                                         [NSString stringWithUTF8String:data],
+                                         @"data", bufferApple, @"buffer", nil];
+
+        if (shouldHandleSubProcess_) {
+          [dic setObject:@(sub_process_) forKey:@"subProcess"];
         }
+
+        eventSink_(dic);
+      }
     }
   }
 
 private:
-    FlutterEventSink eventSink_;
-    bool sub_process_;
-    bool shouldHandleSubProcess_;
+  FlutterEventSink eventSink_;
+  bool sub_process_;
+  bool shouldHandleSubProcess_;
 };
 
 @interface FlutterIrisEventHandler ()
@@ -56,75 +66,82 @@ private:
 @implementation FlutterIrisEventHandler
 
 - (instancetype)initWith:(void *)engine {
-    self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)engine;
-    return self;
+  self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)engine;
+  return self;
 }
 
 - (instancetype)initWith:(void *)mainEngine subEngine:(void *)subEngine {
-    self = [super init];
-    if (self) {
-        self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)mainEngine;
-        self.irisRtcEngineSub = (agora::iris::rtc::IrisRtcEngine *)subEngine;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)mainEngine;
+    self.irisRtcEngineSub = (agora::iris::rtc::IrisRtcEngine *)subEngine;
+  }
+  return self;
 }
 
 - (void)dealloc {
-    if (self.eventHandler) {
-        delete self.eventHandler;
-    }
-    if (self.eventHandlerSub) {
-        delete self.eventHandlerSub;
-    }
+  if (self.eventHandler) {
+    delete self.eventHandler;
+  }
+  if (self.eventHandlerSub) {
+    delete self.eventHandlerSub;
+  }
 }
 
 - (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
-    self.eventSink = nil;
-//    self.irisRtcEngine->SetEventHandler(nil);
-    
-    [self resetEventHandler:self.irisRtcEngine];
-    if (self.irisRtcEngineSub) {
-        [self resetEventHandler:self.irisRtcEngineSub];
-    }
-    
+  self.eventSink = nil;
+  //    self.irisRtcEngine->SetEventHandler(nil);
+
+  [self resetEventHandler:self.irisRtcEngine];
+  if (self.irisRtcEngineSub) {
+    [self resetEventHandler:self.irisRtcEngineSub];
+  }
+
   return nil;
 }
 
-- (FlutterError *)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events {
-    self.eventSink = events;
-    if (!self.eventHandler) {
-        self.eventHandler = new EventHandler(self.eventSink, self.irisRtcEngineSub != nil, false);
-        [self setUpEventHandler:self.irisRtcEngine eventHandler:self.eventHandler];
-        if (self.irisRtcEngineSub != nil) {
-            self.eventHandlerSub = new EventHandler(self.eventSink, true, true);
-            [self setUpEventHandler:self.irisRtcEngineSub eventHandler:self.eventHandler];
-        }
+- (FlutterError *)onListenWithArguments:(id)arguments
+                              eventSink:(FlutterEventSink)events {
+  self.eventSink = events;
+  if (!self.eventHandler) {
+    self.eventHandler =
+        new EventHandler(self.eventSink, self.irisRtcEngineSub != nil, false);
+    [self setUpEventHandler:self.irisRtcEngine eventHandler:self.eventHandler];
+    if (self.irisRtcEngineSub != nil) {
+      self.eventHandlerSub = new EventHandler(self.eventSink, true, true);
+      [self setUpEventHandler:self.irisRtcEngineSub
+                 eventHandler:self.eventHandlerSub];
     }
-    
-    return nil;
+  }
+
+  return nil;
 }
 
 - (void)setUpEventHandler:(void *)engine eventHandler:(void *)eventHandler {
-    agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
-    e->SetEventHandler((EventHandler *)eventHandler);
+  agora::iris::rtc::IrisRtcEngine *e =
+      (agora::iris::rtc::IrisRtcEngine *)engine;
+  e->SetEventHandler((EventHandler *)eventHandler);
 }
 
 - (void)resetEventHandler:(void *)engine {
-    agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
-    e->SetEventHandler(nil);
+  agora::iris::rtc::IrisRtcEngine *e =
+      (agora::iris::rtc::IrisRtcEngine *)engine;
+  e->SetEventHandler(nil);
 }
 
 @end
 
 @implementation RtcChannelFlutterIrisEventHandler
 - (void)setUpEventHandler:(void *)engine eventHandler:(void *)eventHandler {
-    agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
-    e->channel()->SetEventHandler((EventHandler *)eventHandler);
+  agora::iris::rtc::IrisRtcEngine *e =
+      (agora::iris::rtc::IrisRtcEngine *)engine;
+  e->channel()->SetEventHandler((EventHandler *)eventHandler);
 }
 
 - (void)resetEventHandler:(void *)engine {
-    agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
-    e->channel()->SetEventHandler(nil);
+  agora::iris::rtc::IrisRtcEngine *e =
+      (agora::iris::rtc::IrisRtcEngine *)engine;
+  e->channel()->SetEventHandler(nil);
 }
 
 @end

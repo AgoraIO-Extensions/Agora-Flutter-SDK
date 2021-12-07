@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'classes.dart';
 import 'enum_converter.dart';
@@ -1646,9 +1647,13 @@ class RtcEngineEventHandler {
         airPlayIsConnected?.call();
         break;
       case 'VirtualBackgroundSourceEnabled':
-        virtualBackgroundSourceEnabled?.call(newData[0],
-            VirtualBackgroundSourceStateReasonConverter.fromValue(newData[1]).e);
+        virtualBackgroundSourceEnabled?.call(
+            newData[0],
+            VirtualBackgroundSourceStateReasonConverter.fromValue(newData[1])
+                .e);
         break;
+      default:
+        throw ArgumentError('Not Supported Event: $methodName');
     }
   }
 }
@@ -2252,6 +2257,8 @@ class RtcChannelEventHandler {
         userSuperResolutionEnabled?.call(newData[0], newData[1],
             SuperResolutionStateReasonConverter.fromValue(newData[2]).e);
         break;
+      default:
+        throw ArgumentError('Not Supported Event: $methodName');
     }
   }
 }

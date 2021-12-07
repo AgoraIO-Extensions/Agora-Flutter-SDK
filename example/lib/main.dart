@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   bool _isConfigInvalid() {
     return config.appId == '<YOUR_APP_ID>' ||
-        config.token == '<YOUR_TOEKN>' ||
+        config.token == '<YOUR_TOKEN>' ||
         config.channelId == '<YOUR_CHANNEL_ID>';
   }
 

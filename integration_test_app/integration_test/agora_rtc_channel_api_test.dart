@@ -12,24 +12,30 @@ import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  late RtcEngine rtcEngine;
   late RtcChannel rtcChannel;
   late FakeIrisRtcEngine fakeIrisEngine;
 
-  Future<RtcChannel> _createChannel() {
+  Future<RtcChannel> _createChannel() async {
+    rtcEngine = await RtcEngine.create('123');
     return RtcChannel.create('testapi');
   }
 
-  setUp(() async {
+  setUpAll(() async {
     fakeIrisEngine = FakeIrisRtcEngine(isMockChannel: true);
-    await fakeIrisEngine.initForCallApiTest();
+    await fakeIrisEngine.initialize();
   });
 
   tearDown(() async {
     await rtcChannel.destroy();
-    fakeIrisEngine.disposeForCallApiTest();
+    await rtcEngine.destroy();
+    fakeIrisEngine.dispose();
   });
 
   testWidgets('create', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelCreateChannel.index,
@@ -40,6 +46,9 @@ void main() {
   });
 
   testWidgets('create', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelCreateChannel.index,
@@ -51,6 +60,9 @@ void main() {
 
   group('setClientRole', () {
     testWidgets('with `role`', (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
       rtcChannel = await _createChannel();
       await rtcChannel.setClientRole(ClientRole.Broadcaster);
       fakeIrisEngine.expectCalledApi(
@@ -64,6 +76,9 @@ void main() {
     });
 
     testWidgets('with `role`, `options`', (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
       rtcChannel = await _createChannel();
       final ClientRoleOptions options = ClientRoleOptions(
           audienceLatencyLevel: AudienceLatencyLevelType.LowLatency);
@@ -80,6 +95,9 @@ void main() {
   });
 
   testWidgets('joinChannel', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final ChannelMediaOptions options =
         ChannelMediaOptions(autoSubscribeAudio: true);
@@ -97,6 +115,9 @@ void main() {
   });
 
   testWidgets('joinChannelWithUserAccount', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final ChannelMediaOptions options =
         ChannelMediaOptions(autoSubscribeAudio: true);
@@ -113,6 +134,9 @@ void main() {
   });
 
   testWidgets('leaveChannel', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.leaveChannel();
     fakeIrisEngine.expectCalledApi(
@@ -124,6 +148,9 @@ void main() {
   });
 
   testWidgets('renewToken', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.renewToken('t');
     fakeIrisEngine.expectCalledApi(
@@ -136,6 +163,9 @@ void main() {
   });
 
   testWidgets('getConnectionState', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     fakeIrisEngine.mockCallApiReturnCode(
       ApiTypeChannel.kChannelGetConnectionState.index,
       jsonEncode({
@@ -156,6 +186,9 @@ void main() {
   });
 
   testWidgets('publish', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.publish();
@@ -168,6 +201,9 @@ void main() {
   });
 
   testWidgets('unpublish', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.unpublish();
@@ -180,6 +216,9 @@ void main() {
   });
 
   testWidgets('getCallId', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     fakeIrisEngine.mockCallApiResult(
       ApiTypeChannel.kChannelGetCallId.index,
       jsonEncode({
@@ -200,6 +239,9 @@ void main() {
   });
 
   testWidgets('adjustUserPlaybackSignalVolume', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.adjustUserPlaybackSignalVolume(10, 20);
     fakeIrisEngine.expectCalledApi(
@@ -213,6 +255,9 @@ void main() {
   });
 
   testWidgets('muteAllRemoteAudioStreams', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.muteAllRemoteAudioStreams(true);
     fakeIrisEngine.expectCalledApi(
@@ -225,13 +270,16 @@ void main() {
   });
 
   testWidgets('muteRemoteAudioStream', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.muteRemoteAudioStream(10, true);
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelMuteRemoteAudioStream.index,
       jsonEncode({
         'channelId': 'testapi',
-        'uid': 10,
+        'userId': 10,
         'mute': true,
       }),
     );
@@ -239,6 +287,9 @@ void main() {
 
   testWidgets('setDefaultMuteAllRemoteAudioStreams',
       (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.setDefaultMuteAllRemoteAudioStreams(true);
@@ -252,6 +303,9 @@ void main() {
   });
 
   testWidgets('muteAllRemoteVideoStreams', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.muteAllRemoteVideoStreams(true);
@@ -265,6 +319,9 @@ void main() {
   });
 
   testWidgets('muteRemoteVideoStream', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
 
     await rtcChannel.muteRemoteVideoStream(10, true);
@@ -272,7 +329,7 @@ void main() {
       ApiTypeChannel.kChannelMuteRemoteVideoStream.index,
       jsonEncode({
         'channelId': 'testapi',
-        'uid': 10,
+        'userId': 10,
         'mute': true,
       }),
     );
@@ -280,6 +337,9 @@ void main() {
 
   testWidgets('setDefaultMuteAllRemoteVideoStreams',
       (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.setDefaultMuteAllRemoteVideoStreams(true);
@@ -293,6 +353,9 @@ void main() {
   });
 
   testWidgets('addInjectStreamUrl', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final LiveInjectStreamConfig config =
         LiveInjectStreamConfig(width: 10, height: 10);
@@ -308,6 +371,9 @@ void main() {
   });
 
   testWidgets('addPublishStreamUrl', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.addPublishStreamUrl('https://example.com', true);
     fakeIrisEngine.expectCalledApi(
@@ -321,6 +387,9 @@ void main() {
   });
 
   testWidgets('createDataStream', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.createDataStream(true, true);
@@ -335,6 +404,9 @@ void main() {
   });
 
   testWidgets('registerMediaMetadataObserver', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.registerMediaMetadataObserver();
     fakeIrisEngine.expectCalledApi(
@@ -346,6 +418,9 @@ void main() {
   });
 
   testWidgets('removeInjectStreamUrl', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.removeInjectStreamUrl('https://example.com');
     fakeIrisEngine.expectCalledApi(
@@ -358,6 +433,9 @@ void main() {
   });
 
   testWidgets('removePublishStreamUrl', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.removePublishStreamUrl('https://example.com');
     fakeIrisEngine.expectCalledApi(
@@ -370,6 +448,9 @@ void main() {
   });
 
   testWidgets('sendMetadata', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     final Uint8List metadata = Uint8List.fromList([1, 1]);
     fakeIrisEngine.setExplicitBufferSize(
       ApiTypeChannel.kChannelSendMetadata.index,
@@ -384,6 +465,7 @@ void main() {
 
     rtcChannel = await _createChannel();
 
+    //  Json object has no member: uid
     await rtcChannel.sendMetadata(metadata);
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelSendMetadata.index,
@@ -399,6 +481,9 @@ void main() {
   });
 
   testWidgets('sendStreamMessage', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     final Uint8List message = Uint8List.fromList([1, 1]);
     fakeIrisEngine.setExplicitBufferSize(
       ApiTypeChannel.kChannelSendStreamMessage.index,
@@ -425,7 +510,11 @@ void main() {
     );
   });
 
+  // TODO(littlegnal): Check if change the encryptionMode from int -> string is ok or not
   testWidgets('setEncryptionMode', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.setEncryptionMode(EncryptionMode.AES128GCM);
@@ -439,6 +528,9 @@ void main() {
   });
 
   testWidgets('setEncryptionSecret', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     // ignore: deprecated_member_use
     await rtcChannel.setEncryptionSecret('s');
@@ -452,6 +544,9 @@ void main() {
   });
 
   testWidgets('setLiveTranscoding', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final LiveTranscoding transcoding = LiveTranscoding([TranscodingUser(10)]);
     await rtcChannel.setLiveTranscoding(transcoding);
@@ -465,6 +560,9 @@ void main() {
   });
 
   testWidgets('setMaxMetadataSize', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.setMaxMetadataSize(10);
     fakeIrisEngine.expectCalledApi(
@@ -477,6 +575,9 @@ void main() {
   });
 
   testWidgets('setRemoteDefaultVideoStreamType', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.setRemoteDefaultVideoStreamType(VideoStreamType.High);
     fakeIrisEngine.expectCalledApi(
@@ -489,6 +590,9 @@ void main() {
   });
 
   testWidgets('setRemoteUserPriority', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.setRemoteUserPriority(10, UserPriority.High);
     fakeIrisEngine.expectCalledApi(
@@ -502,19 +606,25 @@ void main() {
   });
 
   testWidgets('setRemoteVideoStreamType', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.setRemoteVideoStreamType(10, VideoStreamType.Low);
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelSetRemoteVideoStreamType.index,
       jsonEncode({
         'channelId': 'testapi',
-        'uid': 10,
+        'userId': 10,
         'streamType': 1,
       }),
     );
   });
 
   testWidgets('setRemoteVoicePosition', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.setRemoteVoicePosition(10, 1.0, 2.0);
     fakeIrisEngine.expectCalledApi(
@@ -529,6 +639,9 @@ void main() {
   });
 
   testWidgets('startChannelMediaRelay', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final ChannelMediaRelayConfiguration config =
         ChannelMediaRelayConfiguration(
@@ -546,6 +659,9 @@ void main() {
   });
 
   testWidgets('stopChannelMediaRelay', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.stopChannelMediaRelay();
     fakeIrisEngine.expectCalledApi(
@@ -557,6 +673,9 @@ void main() {
   });
 
   testWidgets('unregisterMediaMetadataObserver', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.unregisterMediaMetadataObserver();
     fakeIrisEngine.expectCalledApi(
@@ -568,6 +687,9 @@ void main() {
   });
 
   testWidgets('updateChannelMediaRelay', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final ChannelMediaRelayConfiguration config =
         ChannelMediaRelayConfiguration(
@@ -585,6 +707,9 @@ void main() {
   });
 
   testWidgets('enableEncryption', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final EncryptionConfig config = EncryptionConfig(
       encryptionMode: EncryptionMode.AES128GCM2,
@@ -601,6 +726,9 @@ void main() {
   });
 
   testWidgets('createDataStreamWithConfig', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     final DataStreamConfig config = DataStreamConfig(true, true);
     await rtcChannel.createDataStreamWithConfig(config);
@@ -614,43 +742,55 @@ void main() {
   });
 
   testWidgets('enableRemoteSuperResolution', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.enableRemoteSuperResolution(10, true);
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelEnableRemoteSuperResolution.index,
       jsonEncode({
         'channelId': 'testapi',
-        'uid': 10,
+        'userId': 10,
         'enable': true,
       }),
     );
   });
 
   testWidgets('muteLocalAudioStream', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.muteLocalAudioStream(true);
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelMuteLocalAudioStream.index,
       jsonEncode({
         'channelId': 'testapi',
-        'muted': true,
+        'mute': true,
       }),
     );
   });
 
   testWidgets('muteLocalVideoStream', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.muteLocalVideoStream(true);
     fakeIrisEngine.expectCalledApi(
       ApiTypeChannel.kChannelMuteLocalVideoStream.index,
       jsonEncode({
         'channelId': 'testapi',
-        'muted': true,
+        'mute': true,
       }),
     );
   });
 
   testWidgets('pauseAllChannelMediaRelay', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.pauseAllChannelMediaRelay();
     fakeIrisEngine.expectCalledApi(
@@ -662,6 +802,9 @@ void main() {
   });
 
   testWidgets('resumeAllChannelMediaRelay', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     rtcChannel = await _createChannel();
     await rtcChannel.resumeAllChannelMediaRelay();
     fakeIrisEngine.expectCalledApi(

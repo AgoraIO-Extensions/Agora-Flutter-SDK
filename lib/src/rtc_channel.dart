@@ -51,6 +51,7 @@ class RtcChannel with RtcChannelInterface {
   /// - All numeric characters: 0 to 9.
   /// - The space character.
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
+  // TODO(littlegnal): Should create RtcChannel through RtcEngine
   static Future<RtcChannel> create(String channelId) async {
     if (_channels.containsKey(channelId)) return _channels[channelId]!;
 
@@ -115,7 +116,9 @@ class RtcChannel with RtcChannelInterface {
       final map = Map<String, dynamic>.from(jsonDecode(data));
       channelId = map.remove('channelId');
       data = jsonEncode(map);
-      _channels[channelId]?._handler?.process(channelId, methodName, data, buffer);
+      _channels[channelId]
+          ?._handler
+          ?.process(channelId, methodName, data, buffer);
     });
   }
 
@@ -249,12 +252,12 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> muteRemoteAudioStream(int uid, bool muted) {
+  Future<void> muteRemoteAudioStream(int userId, bool muted) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeChannel.kChannelMuteRemoteAudioStream.index,
       'params': jsonEncode({
         'channelId': channelId,
-        'uid': uid,
+        'userId': userId,
         'mute': muted,
       }),
     });
@@ -285,12 +288,12 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> muteRemoteVideoStream(int uid, bool muted) {
+  Future<void> muteRemoteVideoStream(int userId, bool muted) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeChannel.kChannelMuteRemoteVideoStream.index,
       'params': jsonEncode({
         'channelId': channelId,
-        'uid': uid,
+        'userId': userId,
         'mute': muted,
       }),
     });
@@ -475,12 +478,13 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType) {
+  Future<void> setRemoteVideoStreamType(
+      int userId, VideoStreamType streamType) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeChannel.kChannelSetRemoteVideoStreamType.index,
       'params': jsonEncode({
         'channelId': channelId,
-        'uid': uid,
+        'userId': userId,
         'streamType': VideoStreamTypeConverter(streamType).value(),
       }),
     });
@@ -567,19 +571,19 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> enableRemoteSuperResolution(int uid, bool enable) {
+  Future<void> enableRemoteSuperResolution(int userId, bool enable) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeChannel.kChannelEnableRemoteSuperResolution.index,
       'params': jsonEncode({
         'channelId': channelId,
-        'uid': uid,
+        'userId': userId,
         'enable': enable,
       }),
     });
   }
 
   @override
-  Future<void> muteLocalAudioStream(bool muted) {
+  Future<void> muteLocalAudioStream(bool mute) {
     // return _invokeMethod('muteLocalAudioStream', {
     //   'muted': muted,
     // });
@@ -588,13 +592,13 @@ class RtcChannel with RtcChannelInterface {
       'apiType': ApiTypeChannel.kChannelMuteLocalAudioStream.index,
       'params': jsonEncode({
         'channelId': channelId,
-        'muted': muted,
+        'mute': mute,
       }),
     });
   }
 
   @override
-  Future<void> muteLocalVideoStream(bool muted) {
+  Future<void> muteLocalVideoStream(bool mute) {
     // return _invokeMethod('muteLocalVideoStream', {
     //   'muted': muted,
     // });
@@ -603,7 +607,7 @@ class RtcChannel with RtcChannelInterface {
       'apiType': ApiTypeChannel.kChannelMuteLocalVideoStream.index,
       'params': jsonEncode({
         'channelId': channelId,
-        'muted': muted,
+        'mute': mute,
       }),
     });
   }
@@ -798,7 +802,7 @@ mixin RtcAudioInterface {
   /// - This method does not change the usage status of the audio-capturing device.
   /// - Whether this method call takes effect is affected by the `joinChannel` and `setClientRole` methods. For details, see Set the Publishing State.
   ///
-  Future<void> muteLocalAudioStream(bool muted);
+  Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops/Resumes receiving the audio stream of the specified user.
   ///
@@ -807,7 +811,7 @@ mixin RtcAudioInterface {
   /// **Parameter** [muted] Determines whether to receive/stop receiving the audio stream of the specified user:
   /// - `true`: Stop receiving the audio stream of the user.
   /// - `false`: (Default) Receive the audio stream of the user.
-  Future<void> muteRemoteAudioStream(int uid, bool muted);
+  Future<void> muteRemoteAudioStream(int userId, bool muted);
 
   /// Stops/Resumes receiving all remote audio streams.
   ///
@@ -858,7 +862,7 @@ mixin RtcVideoInterface {
   /// **Parameter** [muted] Determines whether to receive/stop receiving the video stream of the specified user:
   /// - `true`: Stop receiving the video stream of the user.
   /// - `false`: (Default) Receive the video stream of the user.
-  Future<void> muteRemoteVideoStream(int uid, bool muted);
+  Future<void> muteRemoteVideoStream(int userId, bool muted);
 
   /// Stops/Resumes receiving all remote video streams.
   ///
@@ -880,7 +884,7 @@ mixin RtcVideoInterface {
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
   /// @nodoc
-  Future<void> enableRemoteSuperResolution(int uid, bool enable);
+  Future<void> enableRemoteSuperResolution(int userId, bool enable);
 }
 
 /// @nodoc
@@ -1012,7 +1016,7 @@ mixin RtcDualStreamInterface {
   /// **Parameter** [uid] ID of the remote user sending the video stream.
   ///
   /// **Parameter** [streamType] Sets the video-stream type. See [VideoStreamType].
-  Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType);
+  Future<void> setRemoteVideoStreamType(int userId, VideoStreamType streamType);
 
   /// Sets the default video-stream type of the remote video stream when the remote user sends dual streams.
   ///
