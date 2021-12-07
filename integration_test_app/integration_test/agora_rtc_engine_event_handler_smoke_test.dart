@@ -1,4 +1,4 @@
-// TODO(littlegnal): Temporary disable somke test for iOS/macOS, because it is not stable 
+// TODO(littlegnal): Temporary disable somke test for iOS/macOS, because it is not stable
 // to run somke test on CI at this time
 @Skip('currently failing')
 
