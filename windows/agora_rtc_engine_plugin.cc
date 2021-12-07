@@ -162,9 +162,6 @@ namespace
         videoFrameBufferManagerMain_(new IrisVideoFrameBufferManager()),
         videoFrameBufferManagerSub_(new IrisVideoFrameBufferManager())
   {
-    engine_main_.get()->Initialize(nullptr);
-    engine_sub_.get()->Initialize(nullptr);
-
     engine_main_->SetEventHandler(handler_main_.get());
     engine_sub_->SetEventHandler(handler_sub_.get());
     engine_main_->raw_data()->Attach(videoFrameBufferManagerMain_.get());

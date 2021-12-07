@@ -8,50 +8,45 @@
 #include "iris_delegate.h"
 #include "iris_rtc_base.h"
 
-namespace agora
-{
-    namespace iris
-    {
-        namespace rtc
-        {
+namespace agora {
+namespace iris {
+namespace rtc {
 
-            class IrisRtcRawData;
+class IrisRtcRawData;
 
-            class IRIS_CPP_API IIrisRtcRawDataPluginManager
-                : public IrisDelegate<ApiTypeRawDataPluginManager>
-            {
-            public:
-                using IrisDelegate::CallApi;
+class IRIS_CPP_API IIrisRtcRawDataPluginManager
+    : public IrisDelegate<ApiTypeRawDataPluginManager> {
+ public:
+  using IrisDelegate::CallApi;
 
-                virtual void Initialize(IrisRtcRawData *raw_data) = 0;
+  virtual void Initialize(IrisRtcRawData *raw_data) = 0;
 
-                void SetEventHandler(IrisEventHandler *event_handler) override;
+  void SetEventHandler(IrisEventHandler *event_handler) override;
 
-                IrisEventHandler *GetEventHandler() override;
+  IrisEventHandler *GetEventHandler() override;
 
-                int CallApi(ApiTypeRawDataPluginManager api_type, const char *params, void *buffer,
-                            unsigned int length, char result[kBasicResultLength]) override;
-            };
+  int CallApi(ApiTypeRawDataPluginManager api_type, const char *params,
+              void *buffer, unsigned int length, char *result) override;
+};
 
-            class IRIS_CPP_API IrisRtcRawDataPluginManager
-                : public IIrisRtcRawDataPluginManager
-            {
-            public:
-                explicit IrisRtcRawDataPluginManager(
-                    IIrisRtcRawDataPluginManager *delegate = nullptr);
-                ~IrisRtcRawDataPluginManager() override;
+class IRIS_CPP_API IrisRtcRawDataPluginManager
+    : public IIrisRtcRawDataPluginManager {
+ public:
+  explicit IrisRtcRawDataPluginManager(
+      IIrisRtcRawDataPluginManager *delegate = nullptr);
+  ~IrisRtcRawDataPluginManager() override;
 
-                int CallApi(ApiTypeRawDataPluginManager api_type, const char *params,
-                            char result[kMaxResultLength]) override;
+  int CallApi(ApiTypeRawDataPluginManager api_type, const char *params,
+              char result[kMaxResultLength]) override;
 
-                void Initialize(IrisRtcRawData *raw_data) override;
+  void Initialize(IrisRtcRawData *raw_data) override;
 
-            private:
-                IIrisRtcRawDataPluginManager *delegate_;
-            };
+ private:
+  IIrisRtcRawDataPluginManager *delegate_;
+};
 
-        } // namespace rtc
-    }     // namespace iris
-} // namespace agora
+}// namespace rtc
+}// namespace iris
+}// namespace agora
 
-#endif // IRIS_RTC_RAW_DATA_PLUGIN_MANAGER_H_
+#endif//IRIS_RTC_RAW_DATA_PLUGIN_MANAGER_H_
