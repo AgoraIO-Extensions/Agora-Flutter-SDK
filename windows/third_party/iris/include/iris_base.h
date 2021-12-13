@@ -61,9 +61,6 @@ IRIS_API void UseJsonObject();
 
 IRIS_API void UseJsonArray();
 
-IRIS_API bool StrCpy_S(char *dst, const char *src,
-                       int max_len = kBasicResultLength);
-
 typedef struct IrisRect {
   double x;
   double y;

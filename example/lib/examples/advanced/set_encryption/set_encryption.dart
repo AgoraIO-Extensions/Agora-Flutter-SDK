@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +23,16 @@ class _SetEncryptionState extends State<SetEncryption> {
       enableSpeakerphone = true,
       playEffect = false;
   TextEditingController? _controller;
+  EncryptionMode _selectedEncryptionMode = EncryptionMode.None;
+  TextEditingController _encryptionKey = TextEditingController();
+  late final TextEditingController _encryptionKdfSalt;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: channelId);
+    _encryptionKdfSalt =
+        TextEditingController(text: 'EncryptionKdfSaltInBase64Strings');
     _initEngine();
   }
 
@@ -38,8 +44,12 @@ class _SetEncryptionState extends State<SetEncryption> {
 
   @override
   void dispose() {
-    super.dispose();
+    _controller?.dispose();
+    _encryptionKey.dispose();
+    _encryptionKdfSalt.dispose();
     _destroy();
+
+    super.dispose();
   }
 
   Future<void> _initEngine() async {
@@ -54,20 +64,20 @@ class _SetEncryptionState extends State<SetEncryption> {
   void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        debugPrint('warning ${warningCode}');
+        logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
-        debugPrint('error ${errorCode}');
+        logSink.log('error ${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        debugPrint(
+        logSink.log(
             'joinChannelSuccess channel: ${channel}, uid: ${uid}, elapsed: ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       leaveChannel: (stats) async {
-        debugPrint('leaveChannel ${stats.toJson()}');
+        logSink.log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
         });
@@ -84,17 +94,18 @@ class _SetEncryptionState extends State<SetEncryption> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
+
     final EncryptionConfig encryptionConfig = EncryptionConfig(
-      encryptionMode: EncryptionMode.AES128GCM2,
-      encryptionKey: 'EncryptionKey',
-      encryptionKdfSalt: utf8.encode('EncryptionKdfSaltInBase64Strings'),
+      encryptionMode: _selectedEncryptionMode,
+      encryptionKey: _encryptionKey.text,
+      encryptionKdfSalt: utf8.encode(_encryptionKdfSalt.text),
     );
     await _engine.enableEncryption(true, encryptionConfig);
 
     await _engine
         .joinChannel(config.token, config.channelId, null, config.uid)
         .catchError((onError) {
-      debugPrint('error ${onError.toString()}');
+      logSink.log('error ${onError.toString()}');
     });
   }
 
@@ -104,6 +115,14 @@ class _SetEncryptionState extends State<SetEncryption> {
 
   @override
   Widget build(BuildContext context) {
+    final dropDownMenus = <DropdownMenuItem<EncryptionMode>>[];
+    for (var v in EncryptionMode.values) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('$v'),
+        value: v,
+      ));
+    }
+
     return Column(
       children: [
         TextField(
@@ -114,6 +133,45 @@ class _SetEncryptionState extends State<SetEncryption> {
               channelId = text;
             });
           },
+        ),
+        Row(
+          children: [
+            Text('Encryption Mode: '),
+            DropdownButton<EncryptionMode>(
+              items: dropDownMenus,
+              value: _selectedEncryptionMode,
+              onChanged: isJoined
+                  ? null
+                  : (v) {
+                      setState(() {
+                        _selectedEncryptionMode = v!;
+                      });
+                    },
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text('Input Encryption Key: '),
+            Expanded(
+              child: TextField(
+                controller: _encryptionKey,
+                readOnly: isJoined,
+              ),
+            )
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Input EncryptionKdfSalt: '),
+            Expanded(
+              child: TextField(
+                controller: _encryptionKdfSalt,
+                readOnly: isJoined,
+              ),
+            ),
+          ],
         ),
         Row(
           children: [

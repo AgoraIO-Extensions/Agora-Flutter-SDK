@@ -123,7 +123,7 @@ void main() {
   testWidgets('getErrorDescription', (WidgetTester tester) async {
     rtcEngine = await _createEngine();
 
-    nireHandler.mockCallApiResult(
+    fakeIrisEngine.mockCallApiResult(
       ApiTypeEngine.kEngineGetErrorDescription.index,
       jsonEncode({
         'code': 1,
@@ -133,7 +133,7 @@ void main() {
 
     final ret = await RtcEngine.getErrorDescription(1);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetErrorDescription.index,
       jsonEncode({
         'code': 1,
@@ -586,7 +586,7 @@ void main() {
     rtcEngine = await _createEngine();
     await rtcEngine.enableLoopbackRecording(true);
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineEnableLoopBackRecording.index,
       jsonEncode({
         'enabled': true,
@@ -2939,7 +2939,7 @@ void main() {
     rtcEngine = await _createEngine();
     await rtcEngine.takeSnapshot('testapi', 20, '/path');
 
-    nireHandler.expectCalledApi(
+    fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineTakeSnapshot.index,
       jsonEncode({
         'channel': 'testapi',
