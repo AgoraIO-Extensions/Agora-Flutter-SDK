@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.agora.agora_rtc_engine_example">
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -44,5 +45,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+      <service
+        android:name="io.agora.agora_rtc_engine_example.custom_capture_audio.AudioRecordService"
+        android:exported="false" />
     </application>
 </manifest>

@@ -135,6 +135,18 @@ enum AudioLocalState {
   Failed,
 }
 
+/// The information acquisition state
+enum AudioFileInfoError {
+
+  /// Successfully get the information of an audio file.
+  @JsonValue(0)
+  Ok,
+
+  /// Fail to get the information of an audio file.
+  @JsonValue(1)
+  Failure,
+}
+
 /// The reason for the change of the music file playback state, reported in the [RtcEngineEventHandler.audioMixingStateChanged].
 enum AudioMixingReason {
   /// The SDK cannot open the music file. Possible causes include the local music file does not exist, the SDK does not support the file format, or the SDK cannot access the music file URL.
@@ -212,6 +224,31 @@ enum AudioMixingStateCode {
   /// - `InterruptedEOF(703)`
   @JsonValue(714)
   Failed,
+}
+
+/// The channel mode. Set in [setAudioMixingDualMonoMode].
+enum AudioMixingDualMonoMode {
+  /// 0: Original mode.
+  @JsonValue(0)
+  Auto,
+
+  /// 1: Left channel mode. This mode replaces the audio of the right channel 
+  /// with the audio of the left channel, which means the user can only hear the 
+  /// audio of the left channel.
+  @JsonValue(1)
+  L,
+
+  /// 2: Right channel mode. This mode replaces the audio of the left channel 
+  /// with the audio of the right channel, which means the user can only hear the 
+  /// audio of the right channel.
+  @JsonValue(2)
+  R,
+
+  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the 
+  /// right channel, which means the user can hear the audio of the left channel 
+  /// and the right channel at the same time.
+  @JsonValue(3)
+  MIX,
 }
 
 /// Audio output routing.
@@ -1537,6 +1574,10 @@ enum NetworkType {
   /// The network type is mobile 4G.
   @JsonValue(5)
   Mobile4G,
+
+  /// The network type is mobile 5G.
+  @JsonValue(6)
+  Mobile5G,
 }
 
 /// The detailed error information for streaming.
@@ -2568,6 +2609,28 @@ enum VirtualBackgroundSourceType {
   /// The background image is a file in PNG or JPG format.
   @JsonValue(2)
   Img,
+
+  /// The degree of blurring applied to the custom background image
+  @JsonValue(3)
+  Blur,
+}
+
+/// The degree of blurring applied to the custom background image
+enum VirtualBackgroundBlurDegree {
+  /// The degree of blurring applied to the custom background image is low. The 
+  /// user can almost see the background clearly.
+  @JsonValue(1)
+  Low,
+
+  /// The degree of blurring applied to the custom background image is medium. 
+  /// It is difficult for the user to recognize details in the background.
+  @JsonValue(2)
+  Medium,
+
+  /// (Default) The degree of blurring applied to the custom background image is 
+  /// high. The user can barely see any distinguishing features in the background.
+  @JsonValue(3)
+  High,
 }
 
 /// The reason why the virtual background is not successfully enabled or the message that confirms success:
