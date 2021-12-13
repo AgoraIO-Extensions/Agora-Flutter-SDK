@@ -430,5 +430,10 @@ func mapToVirtualBackgroundSource(_ map: [String: Any]) -> AgoraVirtualBackgroun
         backgroundSource.color = UInt(red * 255.0) << 16 + UInt(green * 255.0) << 8 + UInt(blue * 255.0)
     }
     backgroundSource.source = map["source"] as? String
+    if let blurDegree = map["blur_degree"] as? NSNumber {
+        if let blurDegree = AgoraBlurDegree(rawValue: blurDegree.uintValue) {
+            backgroundSource.blur_degree = blurDegree
+        }
+    }
     return backgroundSource
 }

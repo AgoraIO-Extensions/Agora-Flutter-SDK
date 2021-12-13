@@ -188,6 +188,15 @@ extension AgoraFacePositionInfo {
     }
 }
 
+extension AgoraRtcAudioFileInfo {
+    func toMap() -> [String: Any?] {
+        return [
+            "filePath": filePath,
+            "durationMs": durationMs,
+        ]
+    }
+}
+
 extension Array where Element: AgoraFacePositionInfo {
     func toMapList() -> [[String: Any?]] {
         var list = [[String: Any?]]()
