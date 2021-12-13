@@ -1662,12 +1662,6 @@ class VirtualBackgroundSource {
 /// The information of an audio file, which is reported in [RtcEngineEventHandler.requestAudioFileInfoCallback].
 @JsonSerializable(explicitToJson: true)
 class AudioFileInfo {
-  /// Construct the [AudioFileInfo]
-  AudioFileInfo({
-    required this.filePath,
-    required this.durationMs,
-  });
-
   /// The file path.
   @JsonKey()
   String filePath;
@@ -1676,10 +1670,63 @@ class AudioFileInfo {
   @JsonKey()
   int durationMs;
 
+  /// Construct the [AudioFileInfo]
+  AudioFileInfo({
+    required this.filePath,
+    required this.durationMs,
+  });
+
   /// @nodoc
   factory AudioFileInfo.fromJson(Map<String, dynamic> json) =>
       _$AudioFileInfoFromJson(json);
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$AudioFileInfoToJson(this);
+}
+
+/// The configuration of the audio and video call loop test.
+///
+/// @since v3.5.2
+@JsonSerializable(explicitToJson: true)
+class EchoTestConfiguration {
+  /// Whether to enable the audio device for the call loop test:
+  /// - true: (Default) Enables the audio device. To test the audio device, set this parameter as `true`.
+  /// - false: Disables the audio device.
+  @JsonKey(includeIfNull: false)
+  bool? enableAudio;
+
+  /// Whether to enable the video device for the call loop test:
+  /// - true: (Default) Enables the video device. To test the video device, set this parameter as `true`.
+  /// - false: Disables the video device.
+  @JsonKey(includeIfNull: false)
+  bool? enableVideo;
+
+  /// The token used to secure the audio and video call loop test. If you do not enable App Certificate in Agora
+  /// Console, you do not need to pass a value in this parameter; if you have enabled App Certificate in Agora Console,
+  /// you must pass a token in this parameter, the `uid` used when you generate the token must be 0xFFFFFFFF, and the
+  /// channel name used must be the channel name that identifies each audio and video call loop tested. For server-side
+  /// token generation, see [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
+  @JsonKey(includeIfNull: false)
+  String? token;
+
+  /// The channel name that identifies each audio and video call loop. To ensure proper loop test functionality, the
+  /// channel name passed in to identify each loop test cannot be the same when users of the same project (App ID)
+  /// perform audio and video call loop tests on different devices.
+  @JsonKey(includeIfNull: false)
+  String? channelId;
+
+  /// Construct the [EchoTestConfiguration]
+  EchoTestConfiguration({
+    this.enableAudio,
+    this.enableVideo,
+    this.token,
+    this.channelId,
+  });
+
+  /// @nodoc
+  factory EchoTestConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$EchoTestConfigurationFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$EchoTestConfigurationToJson(this);
 }

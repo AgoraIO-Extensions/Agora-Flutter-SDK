@@ -86,6 +86,8 @@ protocol RtcEngineInterface:
     func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback)
 
     func enableVirtualBackground(_ params: NSDictionary, _ callback: Callback)
+    
+    func takeSnapshot(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -423,8 +425,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     func Release() {
-        AgoraRtcEngineKit.destroy()
-        engine = nil
+        if (engine != nil) {
+            AgoraRtcEngineKit.destroy()
+            engine = nil
+        }
         delegate = nil
         mediaObserver = nil
     }
@@ -955,7 +959,15 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func startEchoTest(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.startEchoTest(withInterval: (params["intervalInSeconds"] as! NSNumber).intValue))
+        if let intervalInSeconds = (params["intervalInSeconds"] as? NSNumber) {
+            callback.code(engine?.startEchoTest(withInterval: intervalInSeconds.intValue))
+            return
+        }
+        if let config = (params["config"] as? [String: Any]) {
+            callback.code(engine?.startEchoTest(withConfig: mapToEchoTestConfiguration(config)))
+            return
+        }
+        callback.code(engine?.startEchoTest())
     }
 
     @objc func stopEchoTest(_ callback: Callback) {
@@ -1209,5 +1221,13 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func enableVirtualBackground(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableVirtualBackground(params["enabled"] as! Bool, backData: mapToVirtualBackgroundSource(params["backgroundSource"] as! [String: Any])))
+    }
+    
+    @objc func takeSnapshot(_ params: NSDictionary, _ callback: Callback) {
+        var code: Int32?
+        if let ret = engine?.takeSnapshot(params["channel"] as! String, uid: (params["uid"] as! NSNumber).intValue, filePath: params["filePath"] as! String) {
+            code = Int32(ret);
+        }
+        callback.code(code)
     }
 }

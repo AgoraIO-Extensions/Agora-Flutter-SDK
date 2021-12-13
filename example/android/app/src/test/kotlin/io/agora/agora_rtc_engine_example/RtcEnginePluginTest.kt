@@ -8,7 +8,10 @@ import org.junit.Before
 import org.junit.Test
 
 class FakeRtcEngineFactory(private val engine: RtcEngine) : RtcEngineFactory() {
-  override fun create(params: Map<String, *>, rtcEngineEventHandler: RtcEngineEventHandler): RtcEngine? {
+  override fun create(
+    params: Map<String, *>,
+    rtcEngineEventHandler: RtcEngineEventHandler
+  ): RtcEngine? {
     return engine
   }
 }
@@ -21,8 +24,9 @@ class RtcEnginePluginTest {
   fun setUp() {
     rtcEngine = FakeRtcEngine()
     rtcChannelManager = RtcEngineManager(
-      emit = {_: String, _: Map<String, Any?>? -> },
-      rtcEngineFactory = FakeRtcEngineFactory(rtcEngine))
+      emit = { _: String, _: Map<String, Any?>? -> },
+      rtcEngineFactory = FakeRtcEngineFactory(rtcEngine)
+    )
   }
 
   @Test

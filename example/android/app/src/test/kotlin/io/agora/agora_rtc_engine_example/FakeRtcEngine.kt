@@ -9,10 +9,7 @@ import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
 import io.agora.rtc.mediaio.IVideoSink
 import io.agora.rtc.mediaio.IVideoSource
-import io.agora.rtc.models.ChannelMediaOptions
-import io.agora.rtc.models.ClientRoleOptions
-import io.agora.rtc.models.DataStreamConfig
-import io.agora.rtc.models.UserInfo
+import io.agora.rtc.models.*
 import io.agora.rtc.video.*
 import java.util.*
 import javax.microedition.khronos.egl.EGLContext
@@ -30,15 +27,32 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun sendCustomReportMessage(id: String?, category: String?, event: String?, label: String?, value: Int): Int {
+  override fun sendCustomReportMessage(
+    id: String?,
+    category: String?,
+    event: String?,
+    label: String?,
+    value: Int
+  ): Int {
     return 0
   }
 
-  override fun joinChannel(token: String?, channelName: String?, optionalInfo: String?, optionalUid: Int): Int {
+  override fun joinChannel(
+    token: String?,
+    channelName: String?,
+    optionalInfo: String?,
+    optionalUid: Int
+  ): Int {
     return 0
   }
 
-  override fun joinChannel(token: String?, channelName: String?, optionalInfo: String?, optionalUid: Int, options: ChannelMediaOptions?): Int {
+  override fun joinChannel(
+    token: String?,
+    channelName: String?,
+    optionalInfo: String?,
+    optionalUid: Int,
+    options: ChannelMediaOptions?
+  ): Int {
     return 0
   }
 
@@ -46,7 +60,11 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun switchChannel(token: String?, channelName: String?, options: ChannelMediaOptions?): Int {
+  override fun switchChannel(
+    token: String?,
+    channelName: String?,
+    options: ChannelMediaOptions?
+  ): Int {
     return 0
   }
 
@@ -62,11 +80,20 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun joinChannelWithUserAccount(token: String?, channelName: String?, userAccount: String?): Int {
+  override fun joinChannelWithUserAccount(
+    token: String?,
+    channelName: String?,
+    userAccount: String?
+  ): Int {
     return 0
   }
 
-  override fun joinChannelWithUserAccount(token: String?, channelName: String?, userAccount: String?, options: ChannelMediaOptions?): Int {
+  override fun joinChannelWithUserAccount(
+    token: String?,
+    channelName: String?,
+    userAccount: String?,
+    options: ChannelMediaOptions?
+  ): Int {
     return 0
   }
 
@@ -114,7 +141,11 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun setHighQualityAudioParameters(fullband: Boolean, stereo: Boolean, fullBitrate: Boolean): Int {
+  override fun setHighQualityAudioParameters(
+    fullband: Boolean,
+    stereo: Boolean,
+    fullBitrate: Boolean
+  ): Int {
     return 0
   }
 
@@ -238,7 +269,10 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun enableVirtualBackground(enabled: Boolean, backgroundSource: VirtualBackgroundSource?): Int {
+  override fun enableVirtualBackground(
+    enabled: Boolean,
+    backgroundSource: VirtualBackgroundSource?
+  ): Int {
     return 0
   }
 
@@ -318,11 +352,22 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun startAudioMixing(filePath: String?, loopback: Boolean, replace: Boolean, cycle: Int): Int {
+  override fun startAudioMixing(
+    filePath: String?,
+    loopback: Boolean,
+    replace: Boolean,
+    cycle: Int
+  ): Int {
     return 0
   }
 
-  override fun startAudioMixing(filePath: String?, loopback: Boolean, replace: Boolean, cycle: Int, startPos: Int): Int {
+  override fun startAudioMixing(
+    filePath: String?,
+    loopback: Boolean,
+    replace: Boolean,
+    cycle: Int,
+    startPos: Int
+  ): Int {
     return 0
   }
 
@@ -422,6 +467,10 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
+  override fun startEchoTest(config: EchoTestConfiguration?): Int {
+    return 0
+  }
+
   override fun stopEchoTest(): Int {
     return 0
   }
@@ -470,7 +519,14 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun pushExternalAudioFrame(data: ByteArray?, timestamp: Long, sampleRate: Int, channels: Int, bytesPerSample: Int, sourcePos: Int): Int {
+  override fun pushExternalAudioFrame(
+    data: ByteArray?,
+    timestamp: Long,
+    sampleRate: Int,
+    channels: Int,
+    bytesPerSample: Int,
+    sourcePos: Int
+  ): Int {
     return 0
   }
 
@@ -501,11 +557,21 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun setRecordingAudioFrameParameters(sampleRate: Int, channel: Int, mode: Int, samplesPerCall: Int): Int {
+  override fun setRecordingAudioFrameParameters(
+    sampleRate: Int,
+    channel: Int,
+    mode: Int,
+    samplesPerCall: Int
+  ): Int {
     return 0
   }
 
-  override fun setPlaybackAudioFrameParameters(sampleRate: Int, channel: Int, mode: Int, samplesPerCall: Int): Int {
+  override fun setPlaybackAudioFrameParameters(
+    sampleRate: Int,
+    channel: Int,
+    mode: Int,
+    samplesPerCall: Int
+  ): Int {
     return 0
   }
 
@@ -754,6 +820,14 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
+  override fun takeSnapshot(channel: String?, uid: Int, filePath: String?): Int {
+    return 0
+  }
+
+  override fun enableContentInspect(enabled: Boolean, config: ContentInspectConfig?): Int {
+    return 0
+  }
+
   override fun setProfile(profile: String?, merge: Boolean): Int {
     return 0
   }
@@ -778,7 +852,12 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return ""
   }
 
-  override fun makeQualityReportUrl(channel: String?, listenerUid: Int, speakerUid: Int, format: Int): String {
+  override fun makeQualityReportUrl(
+    channel: String?,
+    listenerUid: Int,
+    speakerUid: Int,
+    format: Int
+  ): String {
     return ""
   }
 
@@ -790,11 +869,23 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun setTextureId(id: Int, eglContext: EGLContext?, width: Int, height: Int, ts: Long): Int {
+  override fun setTextureId(
+    id: Int,
+    eglContext: EGLContext?,
+    width: Int,
+    height: Int,
+    ts: Long
+  ): Int {
     return 0
   }
 
-  override fun setTextureId(id: Int, eglContext: android.opengl.EGLContext?, width: Int, height: Int, ts: Long): Int {
+  override fun setTextureId(
+    id: Int,
+    eglContext: android.opengl.EGLContext?,
+    width: Int,
+    height: Int,
+    ts: Long
+  ): Int {
     return 0
   }
 
@@ -818,15 +909,39 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun playEffect(soundId: Int, filePath: String?, loop: Int, pitch: Double, pan: Double, gain: Double): Int {
+  override fun playEffect(
+    soundId: Int,
+    filePath: String?,
+    loop: Int,
+    pitch: Double,
+    pan: Double,
+    gain: Double
+  ): Int {
     return 0
   }
 
-  override fun playEffect(soundId: Int, filePath: String?, loopCount: Int, pitch: Double, pan: Double, gain: Double, publish: Boolean): Int {
+  override fun playEffect(
+    soundId: Int,
+    filePath: String?,
+    loopCount: Int,
+    pitch: Double,
+    pan: Double,
+    gain: Double,
+    publish: Boolean
+  ): Int {
     return 0
   }
 
-  override fun playEffect(soundId: Int, filePath: String?, loopCount: Int, pitch: Double, pan: Double, gain: Double, publish: Boolean, startPos: Int): Int {
+  override fun playEffect(
+    soundId: Int,
+    filePath: String?,
+    loopCount: Int,
+    pitch: Double,
+    pan: Double,
+    gain: Double,
+    publish: Boolean,
+    startPos: Int
+  ): Int {
     return 0
   }
 
@@ -874,7 +989,11 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
-  override fun startRhythmPlayer(sound1: String?, sound2: String?, config: AgoraRhythmPlayerConfig?): Int {
+  override fun startRhythmPlayer(
+    sound1: String?,
+    sound2: String?,
+    config: AgoraRhythmPlayerConfig?
+  ): Int {
     return 0
   }
 
@@ -908,11 +1027,20 @@ class FakeRtcChannel : RtcChannel() {
     return 0
   }
 
-  override fun joinChannel(token: String?, optionalInfo: String?, optionalUid: Int, options: ChannelMediaOptions?): Int {
+  override fun joinChannel(
+    token: String?,
+    optionalInfo: String?,
+    optionalUid: Int,
+    options: ChannelMediaOptions?
+  ): Int {
     return 0
   }
 
-  override fun joinChannelWithUserAccount(token: String?, userAccount: String?, options: ChannelMediaOptions?): Int {
+  override fun joinChannelWithUserAccount(
+    token: String?,
+    userAccount: String?,
+    options: ChannelMediaOptions?
+  ): Int {
     return 0
   }
 
