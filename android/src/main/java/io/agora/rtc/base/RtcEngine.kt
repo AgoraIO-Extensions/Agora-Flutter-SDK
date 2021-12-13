@@ -848,10 +848,7 @@ open class RtcEngineManager(
   }
 
   override fun getAudioFileInfo(params: Map<String, *>, callback: Callback) {
-    (params["filePath"] as? String)?.let { file ->
-      callback.code(engine?.getAudioFileInfo(file)) { it }
-      return@getAudioFileInfo
-    }
+    callback.code(engine?.getAudioFileInfo(params["filePath"] as String))
   }
 
   override fun getAudioMixingCurrentPosition(callback: Callback) {
@@ -875,7 +872,7 @@ open class RtcEngineManager(
   }
 
   override fun selectAudioTrack(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.selectAudioTrack((params["audioIndex"] as Number).toInt()))
+    callback.code(engine?.selectAudioTrack((params["index"] as Number).toInt()))
   }
 
   override fun setAudioMixingDualMonoMode(params: Map<String, *>, callback: Callback) {
