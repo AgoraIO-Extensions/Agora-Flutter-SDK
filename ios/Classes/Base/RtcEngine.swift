@@ -764,25 +764,6 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.setAudioMixingDualMonoMode(mode!))
     }
 
-    @objc func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setAudioMixingPlaybackSpeed(Int32((params["speed"] as! NSNumber).intValue)))
-    }
-
-    @objc func getAudioTrackCount(_ callback: Callback) {
-        callback.code(engine?.getAudioTrackCount()) {
-            $0
-        }
-    }
-
-    @objc func selectAudioTrack(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.selectAudioTrack((params["audioIndex"] as! NSNumber).intValue))
-    }
-
-    @objc func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback) {
-        let mode = AgoraAudioMixingDualMonoMode(rawValue: UInt((params["mode"] as! NSNumber).intValue))
-        callback.code(engine?.setAudioMixingDualMonoMode(mode!))
-    }
-
     @objc func getEffectsVolume(_ callback: Callback) {
         callback.resolve(engine) {
             $0.getEffectsVolume()
