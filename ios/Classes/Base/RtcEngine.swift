@@ -186,13 +186,13 @@ protocol RtcEngineAudioMixingInterface {
     func setAudioMixingPosition(_ params: NSDictionary, _ callback: Callback)
 
     func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback)
-    
+
     func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback)
-    
+
     func getAudioTrackCount(_ callback: Callback)
-    
+
     func selectAudioTrack(_ params: NSDictionary, _ callback: Callback)
-    
+
     func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback)
 }
 
