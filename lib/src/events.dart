@@ -193,6 +193,12 @@ typedef AudioDeviceStateChanged = void Function(
 typedef RemoteAudioMixingBegin = void Function();
 // ignore: public_member_api_docs
 typedef RemoteAudioMixingEnd = void Function();
+// ignore: public_member_api_docs
+typedef RecorderStateChangedCallback = void Function(
+    RecorderState state, RecorderError error);
+// ignore: public_member_api_docs
+typedef SnapshotTakenCallback = void Function(String channel, int uid,
+    String filePath, int width, int height, int errCode);
 
 /// The SDK uses the [RtcEngineEventHandler] class to send callbacks to the application, and the application inherits the methods of this class to retrieve these callbacks.
 ///
@@ -1120,6 +1126,29 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user finishes audio mixing.
   EmptyCallback? remoteAudioMixingEnd;
 
+  /// Reports the result of taking a video snapshot.
+  ///
+  /// Since
+  /// v3.5.2
+  /// After a successful takeSnapshot method call, the SDK triggers this callback 
+  /// to report whether the snapshot is successfully taken as well as the details 
+  /// for the snapshot taken.
+  ///
+  /// Parameters
+  /// - channel	The channel name.
+  /// - uid	The user ID of the user. A uid of 0 indicates the local user.
+  /// - filePath	The local path of the snapshot.
+  /// - width	The width (px) of the snapshot.
+  /// - height	The height (px) of the snapshot.
+  /// - errCode	The message that confirms success or the reason why the snapshot 
+  /// is not successfully taken:
+  ///     - 0: Success.
+  ///     - < 0: Failure.
+  ///     - -1: The SDK fails to write data to a file or encode a JPEG image.
+  ///     - -2: The SDK does not find the video stream of the specified user within 
+  /// one second after the takeSnapshot method call succeeds.
+  SnapshotTakenCallback? snapshotTaken;
+
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler({
     this.warning,
@@ -1209,6 +1238,7 @@ class RtcEngineEventHandler {
     this.audioDeviceStateChanged,
     this.remoteAudioMixingBegin,
     this.remoteAudioMixingEnd,
+    this.snapshotTaken,
   });
 
   // ignore: public_member_api_docs
@@ -1651,6 +1681,10 @@ class RtcEngineEventHandler {
             newData[0],
             VirtualBackgroundSourceStateReasonConverter.fromValue(newData[1])
                 .e);
+        break;
+      case 'SnapshotTaken':
+        snapshotTaken?.call(newData[0], newData[1], newData[2], newData[3],
+            newData[4], newData[5]);
         break;
       default:
         throw ArgumentError('Not Supported Event: $methodName');

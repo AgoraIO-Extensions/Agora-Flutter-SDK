@@ -1523,6 +1523,29 @@ enum LocalVideoStreamError {
   /// exits full-screen mode, the SDK reports this error code.
   @JsonValue(12)
   ScreenCaptureWindowClosed,
+
+  /// 10: (macOS and Windows only) The SDK cannot find the video device in the video
+  /// device list. Check whether the ID of the video device is valid.
+  ///
+  /// Since
+  /// v3.5.2
+  @JsonValue(10)
+  LocalVideoStreamErrorDeviceInvalidId,
+
+  /// 13: (Windows only) The window being shared is overlapped by another window,
+  /// so the overlapped area is blacked out by the SDK during window sharing.
+  ///
+  /// Since
+  /// v3.5.2
+  @JsonValue(13)
+  LocalVideoStreamErrorScreenCaptureWindowOccluded,
+
+  /// 20: (Windows only) The SDK does not support sharing this type of window.
+  ///
+  /// Since
+  /// v3.5.2
+  @JsonValue(20)
+  LocalVideoStreamErrorScreenCaptureWindowNotSupported,
 }
 
 /// The state of the local video stream.
@@ -2796,4 +2819,66 @@ enum MediaDeviceStateType {
   /// 16: The device is not recommended.
   @JsonValue(16)
   MediaDeviceStateUnrecommended,
+}
+
+enum RecorderState {
+  /// -1: An error occurs during the recording. See error message for the reason.
+  @JsonValue(-1)
+  Error,
+
+  /// 2: The audio and video recording is started.
+  @JsonValue(2)
+  Start,
+
+  /// 3: The audio and video recording is stopped.
+  @JsonValue(3)
+  Stop,
+}
+
+enum RecorderError {
+  /// 0: No error occurs.
+  @JsonValue(0)
+  RECORDER_ERROR_NONE,
+
+  /// 1: The SDK fails to write the recorded data to a file.
+  @JsonValue(1)
+  RECORDER_ERROR_WRITE_FAILED,
+
+  /// 2: The SDK does not detect audio and video streams to be recorded, or audio
+  /// and video streams are interrupted for more than five seconds during recording.
+  @JsonValue(2)
+  RECORDER_ERROR_NO_STREAM,
+
+  /// 3: The recording duration exceeds the upper limit.
+  @JsonValue(3)
+  RECORDER_ERROR_OVER_MAX_DURATION,
+
+  /// 4: The recording configuration changes.
+  @JsonValue(4)
+  RECORDER_ERROR_CONFIG_CHANGED,
+
+  /// 5: The SDK detects audio and video streams from users using versions of the
+  /// SDK earlier than v3.0.0 in the COMMUNICATION channel profile.
+  @JsonValue(5)
+  RECORDER_ERROR_CUSTOM_STREAM_DETECTED,
+}
+
+enum AgoraMediaRecorderContainerFormat {
+  /// 1: MP4 format.
+  @JsonValue(1)
+  MP4,
+}
+
+enum AgoraMediaRecorderStreamType {
+  /// 1: Record audio only.
+  @JsonValue(1)
+  Audio,
+
+  /// 2: Record video only.
+  @JsonValue(2)
+  Video,
+
+  /// 3: Record both audio and video.
+  @JsonValue(3)
+  Both,
 }
