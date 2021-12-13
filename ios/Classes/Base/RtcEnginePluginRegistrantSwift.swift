@@ -1,6 +1,7 @@
 import Foundation
 
-@objc public class RtcEnginePluginRegistrantSwift: NSObject {
+@objc(RtcEnginePluginRegistrant)
+class RtcEnginePluginRegistrantSwift: NSObject {
     @objc public static func register(_ plugin: RtcEnginePlugin) {
         RtcEngineRegistry.shared.add(plugin)
     }
