@@ -68,6 +68,8 @@ class IRtcEngine {
     fun setLocalAccessPoint(params: Map<String, *>, callback: Callback)
 
     fun enableVirtualBackground(params: Map<String, *>, callback: Callback)
+
+    fun takeSnapshot(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcUserInfoInterface {
@@ -382,7 +384,10 @@ class IRtcEngine {
 }
 
 open class RtcEngineFactory {
-  open fun create(params: Map<String, *>, rtcEngineEventHandler: RtcEngineEventHandler): RtcEngine? {
+  open fun create(
+    params: Map<String, *>,
+    rtcEngineEventHandler: RtcEngineEventHandler
+  ): RtcEngine? {
     val engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
       mContext = params["context"] as Context
       mEventHandler = rtcEngineEventHandler
@@ -401,8 +406,10 @@ open class RtcEngineManager(
   private var mediaObserver: MediaObserver? = null
 
   fun release() {
-    RtcEngine.destroy()
-    engine = null
+    if (engine != null) {
+      RtcEngine.destroy()
+      engine = null
+    }
     mediaObserver = null
   }
 
@@ -574,6 +581,16 @@ open class RtcEngineManager(
       engine?.enableVirtualBackground(
         params["enabled"] as Boolean,
         mapToVirtualBackgroundSource(params["backgroundSource"] as Map<*, *>)
+      )
+    )
+  }
+
+  override fun takeSnapshot(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.takeSnapshot(
+        params["channel"] as String,
+        (params["uid"] as Number).toNativeUInt(),
+        params["filePath"] as String
       )
     )
   }
@@ -1139,7 +1156,15 @@ open class RtcEngineManager(
   }
 
   override fun startEchoTest(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.startEchoTest((params["intervalInSeconds"] as Number).toInt()))
+    (params["intervalInSeconds"] as? Number)?.let { intervalInSeconds ->
+      callback.code(engine?.startEchoTest(intervalInSeconds.toInt()))
+      return@startEchoTest
+    }
+    (params["config"] as? Map<*, *>)?.let { config ->
+      callback.code(engine?.startEchoTest(mapToEchoTestConfiguration(config)))
+      return@startEchoTest
+    }
+    callback.code(engine?.startEchoTest())
   }
 
   override fun stopEchoTest(callback: Callback) {
