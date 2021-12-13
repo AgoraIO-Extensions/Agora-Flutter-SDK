@@ -304,10 +304,6 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.RequestAudioFileInfo, info.toMap(), error.rawValue)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didRequest info: AgoraRtcAudioFileInfo, error: AgoraAudioFileInfoError) {
-        callback(RtcEngineEvents.RequestAudioFileInfo, info.toMap(), error.rawValue)
-    }
-
     public func rtcEngine(_: AgoraRtcEngineKit, didLocalPublishFallbackToAudioOnly isFallbackOrRecover: Bool) {
         callback(RtcEngineEvents.LocalPublishFallbackToAudioOnly, isFallbackOrRecover)
     }
