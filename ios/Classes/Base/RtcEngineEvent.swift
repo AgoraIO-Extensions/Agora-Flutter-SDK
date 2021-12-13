@@ -299,6 +299,10 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     public func rtcEngine(_: AgoraRtcEngineKit, localAudioStateChange state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
         callback(RtcEngineEvents.LocalAudioStateChanged, state.rawValue, error.rawValue)
     }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didRequest info: AgoraRtcAudioFileInfo, error: AgoraAudioFileInfoError) {
+        callback(RtcEngineEvents.RequestAudioFileInfo, info.toMap(), error.rawValue)
+    }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didRequest info: AgoraRtcAudioFileInfo, error: AgoraAudioFileInfoError) {
         callback(RtcEngineEvents.RequestAudioFileInfo, info.toMap(), error.rawValue)

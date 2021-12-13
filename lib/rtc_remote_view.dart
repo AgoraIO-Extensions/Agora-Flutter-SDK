@@ -9,15 +9,15 @@ import 'src/rtc_render_view.dart';
 class SurfaceView extends RtcSurfaceView {
   /// Constructs a [SurfaceView]
   SurfaceView({
-    Key key,
-    @required int uid,
-    String channelId,
-    VideoRenderMode renderMode = VideoRenderMode.Hidden,
-    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    bool zOrderOnTop = false,
-    bool zOrderMediaOverlay = false,
-    PlatformViewCreatedCallback onPlatformViewCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    Key? key,
+    required int uid,
+    String? channelId,
+    renderMode = VideoRenderMode.Hidden,
+    mirrorMode = VideoMirrorMode.Auto,
+    zOrderOnTop = false,
+    zOrderMediaOverlay = false,
+    PlatformViewCreatedCallback? onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   })  : assert(uid != 0),
         super(
           key: key,
@@ -36,13 +36,13 @@ class SurfaceView extends RtcSurfaceView {
 class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
-    Key key,
-    @required int uid,
-    String channelId,
-    VideoRenderMode renderMode = VideoRenderMode.Hidden,
-    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    PlatformViewCreatedCallback onPlatformViewCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    Key? key,
+    required int uid,
+    String? channelId,
+    renderMode = VideoRenderMode.Hidden,
+    mirrorMode = VideoMirrorMode.Auto,
+    PlatformViewCreatedCallback? onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   })  : assert(uid != 0),
         super(
           key: key,

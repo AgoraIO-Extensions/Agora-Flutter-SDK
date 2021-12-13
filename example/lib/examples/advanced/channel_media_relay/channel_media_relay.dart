@@ -9,19 +9,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// CreateStreamData Example
-class CreateStreamData extends StatefulWidget {
-  RtcEngine _engine = null;
-
+/// ChannelMediaRelay Example
+class ChannelMediaRelay extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<CreateStreamData> {
+class _State extends State<ChannelMediaRelay> {
+  late final RtcEngine _engine;
   bool isJoined = false;
-  ClientRole role;
-  int remoteUid;
-  bool isLowAudio = true;
+  int? remoteUid;
+  bool isRelaying = false;
 
   @override
   void initState() {
@@ -31,26 +29,25 @@ class _State extends State<CreateStreamData> {
   @override
   void dispose() {
     super.dispose();
-    widget._engine?.destroy();
+    _engine.destroy();
   }
 
   _initEngine() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
-    widget._engine =
-        await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
     this._addListener();
 
     // enable video module and set up video encoding configs
-    await widget._engine?.enableVideo();
+    await _engine.enableVideo();
 
     // make this room live broadcasting room
-    await widget._engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await this._updateClientRole(ClientRole.Broadcaster);
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(ClientRole.Broadcaster);
 
     // Set audio route to speaker
-    await widget._engine?.setDefaultAudioRoutetoSpeakerphone(true);
+    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
 
     // start joining channel
     // 1. Users can only see each other after they join the
@@ -58,38 +55,11 @@ class _State extends State<CreateStreamData> {
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    await widget._engine
-        ?.joinChannel(config.token, config.channelId, null, 0, null);
-  }
-
-  Future<void> _showMyDialog(int uid, int streamId, String data) async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Receive from uid:${uid}'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[Text('StreamId ${streamId}:${data}')],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    await _engine.joinChannel(config.token, config.channelId, null, 0, null);
   }
 
   _addListener() {
-    widget._engine?.setEventHandler(RtcEngineEventHandler(
-        warning: (warningCode) {
+    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
       log('Warning ${warningCode}');
     }, error: (errorCode) {
       log('Warning ${errorCode}');
@@ -109,44 +79,50 @@ class _State extends State<CreateStreamData> {
       this.setState(() {
         remoteUid = null;
       });
-    }, streamMessage: (int uid, int streamId, String data) {
-      _showMyDialog(uid, streamId, data);
-      log('streamMessage $uid $streamId $data');
-    }, streamMessageError:
-            (int uid, int streamId, ErrorCode error, int missed, int cached) {
-      log('streamMessage $uid $streamId $error $missed $cached');
+    }, channelMediaRelayStateChanged:
+        (ChannelMediaRelayState state, ChannelMediaRelayError code) {
+      switch (state) {
+        case ChannelMediaRelayState.Idle:
+          log('ChannelMediaRelayState.Idle $code');
+          this.setState(() {
+            isRelaying = false;
+          });
+          break;
+        case ChannelMediaRelayState.Connecting:
+          log('ChannelMediaRelayState.Connecting $code)');
+          break;
+        case ChannelMediaRelayState.Running:
+          log('ChannelMediaRelayState.Running $code)');
+          this.setState(() {
+            isRelaying = true;
+          });
+          break;
+        case ChannelMediaRelayState.Failure:
+          log('ChannelMediaRelayState.Failure $code)');
+          this.setState(() {
+            isRelaying = false;
+          });
+          break;
+        default:
+          log('default $code)');
+          break;
+      }
     }));
   }
 
-  _updateClientRole(ClientRole role) async {
-    var option;
-    if (role == ClientRole.Broadcaster) {
-      await widget._engine?.setVideoEncoderConfiguration(
-          VideoEncoderConfiguration(
-              dimensions: VideoDimensions(640, 360),
-              frameRate: VideoFrameRate.Fps30,
-              orientationMode: VideoOutputOrientationMode.Adaptative));
-      // enable camera/mic, this will bring up permission dialog for first time
-      await widget._engine?.enableLocalAudio(true);
-      await widget._engine?.enableLocalVideo(true);
-    } else {
-      // You have to provide client role options if set to audience
-      option = ClientRoleOptions(isLowAudio
-          ? AudienceLatencyLevelType.LowLatency
-          : AudienceLatencyLevelType.UltraLowLatency);
+  _onPressRelayOrStop() async {
+    if (isRelaying) {
+      await _engine.stopChannelMediaRelay();
+      return;
     }
-    await widget._engine?.setClientRole(role, option);
-  }
-
-  _onPressSend() async {
     if (_controller.text.length == 0) {
       return;
     }
 
-    var streamId = await widget._engine?.createDataStreamWithConfig(
-        DataStreamConfig(syncWithAudio: false, ordered: false));
+    await _engine.startChannelMediaRelay(ChannelMediaRelayConfiguration(
+        ChannelMediaInfo(config.channelId, 0, token: config.token),
+        [ChannelMediaInfo('', 0, token: '')]));
 
-    widget._engine?.sendStreamMessage(streamId, _controller.text);
     _controller.clear();
   }
 
@@ -163,7 +139,7 @@ class _State extends State<CreateStreamData> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _initEngine,
                           child: Text('Join channel'),
                         ),
@@ -179,11 +155,11 @@ class _State extends State<CreateStreamData> {
                       child: TextField(
                           controller: _controller,
                           decoration: InputDecoration(
-                            hintText: 'Input Message',
+                            hintText: 'Enter target relay channel name',
                           ))),
                   ElevatedButton(
-                    onPressed: _onPressSend,
-                    child: Text('Send'),
+                    onPressed: _onPressRelayOrStop,
+                    child: Text(!isRelaying ? 'Relay' : 'Stop'),
                   ),
                 ],
               )
@@ -205,7 +181,7 @@ class _State extends State<CreateStreamData> {
           aspectRatio: 1,
           child: remoteUid != null
               ? RtcRemoteView.SurfaceView(
-                  uid: remoteUid,
+                  uid: remoteUid!,
                 )
               : Container(
                   color: Colors.grey[200],

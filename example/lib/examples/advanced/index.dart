@@ -1,21 +1,22 @@
-import 'package:agora_rtc_engine_example/examples/advanced/create_stream_data.dart';
-import 'package:agora_rtc_engine_example/examples/advanced/live_streaming.dart';
-import 'package:agora_rtc_engine_example/examples/advanced/media_channel_relay.dart';
-import 'package:agora_rtc_engine_example/examples/advanced/multi_channel.dart';
-import 'package:agora_rtc_engine_example/examples/advanced/voice_change.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/channel_media_relay/channel_media_relay.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/join_multiple_channel/join_multiple_channel.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/voice_changer/voice_changer.dart';
+
+import 'custom_capture_audio/custom_capture_audio.dart';
 
 /// Data source for advanced examples
 final Advanced = [
   {'name': 'Advanced'},
-  {'name': 'MultiChannel', 'widget': MultiChannel()},
-  {'name': 'LiveStreaming', 'widget': LiveStreaming()},
+  {'name': 'JoinMultipleChannel', 'widget': JoinMultipleChannel()},
   {
-    'name': 'CreateStreamData',
-    'widget': CreateStreamData(),
+    'name': 'StreamMessage',
+    'widget': StreamMessage(),
   },
   {
-    'name': 'MediaChannelRelay',
-    'widget': MediaChannelRelay(),
+    'name': 'ChannelMediaRelay',
+    'widget': ChannelMediaRelay(),
   },
-  {'name': 'VoiceChange', 'widget': VoiceChange()},
+  {'name': 'VoiceChanger', 'widget': VoiceChanger()},
+  {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
 ];
