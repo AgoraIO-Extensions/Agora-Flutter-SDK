@@ -360,7 +360,7 @@ func mapToEncryptionConfig(_ map: [String: Any]) -> AgoraEncryptionConfig {
         var encryptionKdfSalt: [UInt8] = []
         for i in list.indices {
             if let item = list[i] as? NSNumber {
-                encryptionKdfSalt[i] = item.uint8Value
+                encryptionKdfSalt.append(item.uint8Value)
             }
         }
         config.encryptionKdfSalt = Data(bytes: encryptionKdfSalt)
