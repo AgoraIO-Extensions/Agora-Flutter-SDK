@@ -137,7 +137,6 @@ enum AudioLocalState {
 
 /// The information acquisition state
 enum AudioFileInfoError {
-
   /// Successfully get the information of an audio file.
   @JsonValue(0)
   Ok,
@@ -232,20 +231,20 @@ enum AudioMixingDualMonoMode {
   @JsonValue(0)
   Auto,
 
-  /// 1: Left channel mode. This mode replaces the audio of the right channel 
-  /// with the audio of the left channel, which means the user can only hear the 
+  /// 1: Left channel mode. This mode replaces the audio of the right channel
+  /// with the audio of the left channel, which means the user can only hear the
   /// audio of the left channel.
   @JsonValue(1)
   L,
 
-  /// 2: Right channel mode. This mode replaces the audio of the left channel 
-  /// with the audio of the right channel, which means the user can only hear the 
+  /// 2: Right channel mode. This mode replaces the audio of the left channel
+  /// with the audio of the right channel, which means the user can only hear the
   /// audio of the right channel.
   @JsonValue(2)
   R,
 
-  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the 
-  /// right channel, which means the user can hear the audio of the left channel 
+  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the
+  /// right channel, which means the user can hear the audio of the left channel
   /// and the right channel at the same time.
   @JsonValue(3)
   MIX,
@@ -2617,17 +2616,17 @@ enum VirtualBackgroundSourceType {
 
 /// The degree of blurring applied to the custom background image
 enum VirtualBackgroundBlurDegree {
-  /// The degree of blurring applied to the custom background image is low. The 
+  /// The degree of blurring applied to the custom background image is low. The
   /// user can almost see the background clearly.
   @JsonValue(1)
   Low,
 
-  /// The degree of blurring applied to the custom background image is medium. 
+  /// The degree of blurring applied to the custom background image is medium.
   /// It is difficult for the user to recognize details in the background.
   @JsonValue(2)
   Medium,
 
-  /// (Default) The degree of blurring applied to the custom background image is 
+  /// (Default) The degree of blurring applied to the custom background image is
   /// high. The user can barely see any distinguishing features in the background.
   @JsonValue(3)
   High,
