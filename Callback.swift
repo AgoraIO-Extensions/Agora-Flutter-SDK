@@ -6,8 +6,8 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 @objc
 protocol Callback: class {
@@ -25,25 +25,17 @@ extension Callback {
         }
 
         let res = runnable?(code)
-        if res is Void {
-            success(nil)
-        } else {
-            success(res)
-        }
+        success(res)
     }
 
     func resolve<T>(_ source: T?, _ runnable: (T) -> Any?) {
-        guard let `source` = source else {
+        guard let source = source else {
             let code = AgoraErrorCode.notInitialized.rawValue
             failure(String(code), AgoraRtcEngineKit.getErrorDescription(code) ?? "")
             return
         }
 
         let res = runnable(source)
-        if res is Void {
-            success(nil)
-        } else {
-            success(res)
-        }
+        success(res)
     }
 }
