@@ -1,3 +1,22 @@
+# [4.1.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.7...v4.1.0-rc.0) (2021-12-13)
+
+
+### Bug Fixes
+
+* fix return type not supported error on iOS ([#480](https://github.com/AgoraIO/Flutter-SDK/issues/480)) ([e403f32](https://github.com/AgoraIO/Flutter-SDK/commit/e403f32242c52bcf5e492bedca261522a1193d49))
+
+
+### Features
+
+* [Android] Implement custom audio source example ([#475](https://github.com/AgoraIO/Flutter-SDK/issues/475)) ([7b5e8e5](https://github.com/AgoraIO/Flutter-SDK/commit/7b5e8e56c20c2ffaa8689daecce3f984e16587eb))
+* [iOS] Implement custom audio source example ([#481](https://github.com/AgoraIO/Flutter-SDK/issues/481)) ([044ae81](https://github.com/AgoraIO/Flutter-SDK/commit/044ae8100e12ee3f59bb9ab3b3618683dc743488))
+* add missing flutter implementation for native sdk 3.5.1 ([#477](https://github.com/AgoraIO/Flutter-SDK/issues/477)) ([17a4493](https://github.com/AgoraIO/Flutter-SDK/commit/17a449387c7b686d60e8a37bc9d5e87124065509))
+* Adjust example structure ([#488](https://github.com/AgoraIO/Flutter-SDK/issues/488)) ([04d95c1](https://github.com/AgoraIO/Flutter-SDK/commit/04d95c1f34b060cdd198fd7ff11d49c472d0c5cc))
+* Basic setup ci to run unit test for Android/iOS ([#471](https://github.com/AgoraIO/Flutter-SDK/issues/471)) ([11d24f9](https://github.com/AgoraIO/Flutter-SDK/commit/11d24f91d70dab50233a5da2fd1e6c67d1fac27b))
+* Full support for native sdk 3.5.1 ([#484](https://github.com/AgoraIO/Flutter-SDK/issues/484)) ([227cade](https://github.com/AgoraIO/Flutter-SDK/commit/227cade38727f4a6060efc1e9181eb528cde82dd))
+* Implement RtcEngine plugin feature ([#470](https://github.com/AgoraIO/Flutter-SDK/issues/470)) ([9230a55](https://github.com/AgoraIO/Flutter-SDK/commit/9230a555cfafe8f1bc7da794507c70700fac92ca))
+* support native sdk 3.5.1 ([#472](https://github.com/AgoraIO/Flutter-SDK/issues/472)) ([170783f](https://github.com/AgoraIO/Flutter-SDK/commit/170783fb5be4f6f13355e68c2847a5de1bc94e4a))
+
 ## [4.0.7](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.7-rc.0...v4.0.7) (2021-09-16)
 
 
