@@ -6,8 +6,8 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 class RtcChannelEvents {
     static let Warning = "Warning"
@@ -40,8 +40,14 @@ class RtcChannelEvents {
     static let ChannelMediaRelayStateChanged = "ChannelMediaRelayStateChanged"
     static let ChannelMediaRelayEvent = "ChannelMediaRelayEvent"
     static let MetadataReceived = "MetadataReceived"
+    static let AudioPublishStateChanged = "AudioPublishStateChanged"
+    static let VideoPublishStateChanged = "VideoPublishStateChanged"
+    static let AudioSubscribeStateChanged = "AudioSubscribeStateChanged"
+    static let VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
+    static let RtmpStreamingEvent = "RtmpStreamingEvent"
+    static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
 
-    static func toMap() -> Dictionary<String, String> {
+    static func toMap() -> [String: String] {
         return [
             "Warning": Warning,
             "Error": Error,
@@ -73,6 +79,12 @@ class RtcChannelEvents {
             "ChannelMediaRelayStateChanged": ChannelMediaRelayStateChanged,
             "ChannelMediaRelayEvent": ChannelMediaRelayEvent,
             "MetadataReceived": MetadataReceived,
+            "AudioPublishStateChanged": AudioPublishStateChanged,
+            "VideoPublishStateChanged": VideoPublishStateChanged,
+            "AudioSubscribeStateChanged": AudioSubscribeStateChanged,
+            "VideoSubscribeStateChanged": VideoSubscribeStateChanged,
+            "RtmpStreamingEvent": RtmpStreamingEvent,
+            "UserSuperResolutionEnabled": UserSuperResolutionEnabled,
         ]
     }
 }
@@ -80,16 +92,16 @@ class RtcChannelEvents {
 class RtcChannelEventHandler: NSObject {
     static let PREFIX = "io.agora.rtc."
 
-    var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
+    var emitter: (_ methodName: String, _ data: [String: Any?]?) -> Void
 
-    init(_ emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+    init(_ emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void) {
         self.emitter = emitter
     }
 
     private func callback(_ methodName: String, _ channel: AgoraRtcChannel, _ data: Any?...) {
         emitter(methodName, [
             "channelId": channel.getId(),
-            "data": data
+            "data": data,
         ])
     }
 }
@@ -209,5 +221,29 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, didReceive event: AgoraChannelMediaRelayEvent) {
         callback(RtcChannelEvents.ChannelMediaRelayEvent, rtcChannel, event.rawValue)
+    }
+
+    public func rtcChannel(_ rtcChannel: AgoraRtcChannel, didAudioPublishStateChange oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+        callback(RtcChannelEvents.AudioPublishStateChanged, rtcChannel, rtcChannel.getId(), oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+
+    public func rtcChannel(_ rtcChannel: AgoraRtcChannel, didVideoPublishStateChange oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+        callback(RtcChannelEvents.VideoPublishStateChanged, rtcChannel, rtcChannel.getId(), oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+
+    public func rtcChannel(_ rtcChannel: AgoraRtcChannel, didAudioSubscribeStateChange uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+        callback(RtcChannelEvents.AudioSubscribeStateChanged, rtcChannel, rtcChannel.getId(), uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+
+    public func rtcChannel(_ rtcChannel: AgoraRtcChannel, didVideoSubscribeStateChange uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+        callback(RtcChannelEvents.VideoSubscribeStateChanged, rtcChannel, rtcChannel.getId(), uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+
+    public func rtcChannel(_ rtcChannel: AgoraRtcChannel, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
+        callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, eventCode.rawValue)
+    }
+
+    public func rtcChannel(_ rtcChannel: AgoraRtcChannel, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+        callback(RtcChannelEvents.UserSuperResolutionEnabled, rtcChannel, uid, enabled, reason.rawValue)
     }
 }
