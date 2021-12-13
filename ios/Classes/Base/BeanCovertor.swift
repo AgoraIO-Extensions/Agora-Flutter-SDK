@@ -437,3 +437,20 @@ func mapToVirtualBackgroundSource(_ map: [String: Any]) -> AgoraVirtualBackgroun
     }
     return backgroundSource
 }
+
+func mapToEchoTestConfiguration(_ map: [String: Any]) -> AgoraEchoTestConfiguration {
+    let config = AgoraEchoTestConfiguration()
+    if let enableAudio = map["enableAudio"] as? NSNumber {
+        config.enableAudio = enableAudio.boolValue
+    }
+    if let enableVideo = map["enableVideo"] as? NSNumber {
+        config.enableVideo = enableVideo.boolValue
+    }
+    if let token = map["token"] as? String {
+        config.token = token
+    }
+    if let channelId = map["channelId"] as? String {
+        config.channelId = channelId
+    }
+    return config
+}

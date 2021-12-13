@@ -92,6 +92,7 @@ class RtcEngineEvents {
     static let UploadLogResult = "UploadLogResult"
     static let AirPlayIsConnected = "AirPlayIsConnected"
     static let VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
+    static let SnapshotTaken = "SnapshotTaken"
 
     static func toMap() -> [String: String] {
         return [
@@ -177,6 +178,7 @@ class RtcEngineEvents {
             "UploadLogResult": UploadLogResult,
             "AirPlayIsConnected": AirPlayIsConnected,
             "VirtualBackgroundSourceEnabled": VirtualBackgroundSourceEnabled,
+            "SnapshotTaken": SnapshotTaken,
         ]
     }
 }
@@ -208,7 +210,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.ApiCallExecuted, error, api, result)
     }
 
-    public func rtcEngine(_: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+public func rtcEngine(_: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         callback(RtcEngineEvents.JoinChannelSuccess, channel, uid, elapsed)
     }
 
@@ -526,5 +528,9 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, virtualBackgroundSourceEnabled enabled: Bool, reason: AgoraVirtualBackgroundSourceStateReason) {
         callback(RtcEngineEvents.VirtualBackgroundSourceEnabled, enabled, reason.rawValue)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, snapshotTaken channel: String, uid: UInt, filePath: String, width: Int, height: Int, errCode: Int) {
+        callback(RtcEngineEvents.SnapshotTaken, channel, uid, filePath, width, height, errCode)
     }
 }
