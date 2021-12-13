@@ -537,7 +537,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<int?> getAudioFileInfo(String filePath) {
+  Future<void> getAudioFileInfo(String filePath) {
     return _invokeMethod('getAudioFileInfo', {
       'filePath': filePath,
     });
@@ -1152,9 +1152,9 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> selectAudioTrack(int audioIndex) {
+  Future<void> selectAudioTrack(int index) {
     return _invokeMethod('selectAudioTrack', {
-      'audioIndex': audioIndex,
+      'index': index,
     });
   }
 
@@ -2225,7 +2225,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - 0: Success.
   /// - < 0: Failure.
-  Future<int?> getAudioFileInfo(String filePath);
+  Future<void> getAudioFileInfo(String filePath);
 
   /// Gets the playback position of the audio file.
   ///
@@ -2286,8 +2286,8 @@ mixin RtcAudioMixingInterface {
   /// - < 0: Failure.
   Future<int?> getAudioTrackCount();
 
-  /// Specifies the playback track [audioIndex] of the current music file. The
-  /// [audioIndex] must be less than or equal to the return value of [getAudioTrackCount].
+  /// Specifies the playback track [index] of the current music file. The
+  /// [index] must be less than or equal to the return value of [getAudioTrackCount].
   ///
   /// After getting the audio track index of the current music file, call this
   /// method to specify any audio track to play. For example, if different tracks
@@ -2300,7 +2300,7 @@ mixin RtcAudioMixingInterface {
   /// code [AudioMixingStateCode.Playing].
   /// - For the audio file formats supported by this method, see
   /// [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
-  Future<void> selectAudioTrack(int audioIndex);
+  Future<void> selectAudioTrack(int index);
 
   /// Sets the channel [mode] of the current music file.
   ///
