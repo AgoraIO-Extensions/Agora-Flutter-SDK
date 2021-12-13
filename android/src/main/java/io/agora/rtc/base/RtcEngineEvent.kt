@@ -88,6 +88,7 @@ class RtcEngineEvents {
     const val UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     const val UploadLogResult = "UploadLogResult"
     const val VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
+    const val SnapshotTaken = "SnapshotTaken"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -171,7 +172,8 @@ class RtcEngineEvents {
         "RtmpStreamingEvent" to RtmpStreamingEvent,
         "UserSuperResolutionEnabled" to UserSuperResolutionEnabled,
         "UploadLogResult" to UploadLogResult,
-        "VirtualBackgroundSourceEnabled" to VirtualBackgroundSourceEnabled
+        "VirtualBackgroundSourceEnabled" to VirtualBackgroundSourceEnabled,
+        "SnapshotTaken" to SnapshotTaken
       )
     }
   }
@@ -693,5 +695,24 @@ class RtcEngineEventHandler(
     @Annotations.AgoraVirtualBackgroundSourceStateReason reason: Int
   ) {
     callback(RtcEngineEvents.VirtualBackgroundSourceEnabled, enabled, reason)
+  }
+
+  override fun onSnapshotTaken(
+    channel: String?,
+    uid: Int,
+    filePath: String?,
+    width: Int,
+    height: Int,
+    errCode: Int
+  ) {
+    callback(
+      RtcEngineEvents.SnapshotTaken,
+      channel,
+      uid.toUInt().toLong(),
+      filePath,
+      width,
+      height,
+      errCode
+    )
   }
 }

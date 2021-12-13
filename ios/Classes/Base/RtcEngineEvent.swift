@@ -92,6 +92,7 @@ class RtcEngineEvents {
     static let UploadLogResult = "UploadLogResult"
     static let AirPlayIsConnected = "AirPlayIsConnected"
     static let VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
+    static let SnapshotTaken = "SnapshotTaken"
 
     static func toMap() -> [String: String] {
         return [
@@ -177,6 +178,7 @@ class RtcEngineEvents {
             "UploadLogResult": UploadLogResult,
             "AirPlayIsConnected": AirPlayIsConnected,
             "VirtualBackgroundSourceEnabled": VirtualBackgroundSourceEnabled,
+            "SnapshotTaken": SnapshotTaken,
         ]
     }
 }
@@ -299,8 +301,8 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     public func rtcEngine(_: AgoraRtcEngineKit, localAudioStateChange state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
         callback(RtcEngineEvents.LocalAudioStateChanged, state.rawValue, error.rawValue)
     }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didRequest info: AgoraRtcAudioFileInfo, error: AgoraAudioFileInfoError) {
+
+    public func rtcEngine(_ engine: AgoraRtcEngineKit, didRequest info: AgoraRtcAudioFileInfo, error: AgoraAudioFileInfoError) {
         callback(RtcEngineEvents.RequestAudioFileInfo, info.toMap(), error.rawValue)
     }
 
@@ -324,7 +326,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.CameraExposureAreaChanged, rect.toMap())
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, facePositionDidChangeWidth width: Int32, previewHeight height: Int32, faces: [AgoraFacePositionInfo]?) {
+    public func rtcEngine(_: AgoraRtcEngineKit, facePositionDidChangeWidth width: Int32, previewHeight height: Int32, faces: [AgoraFacePositionInfo]?) {
         callback(RtcEngineEvents.FacePositionChanged, width, height, faces?.toMapList())
     }
 
@@ -364,7 +366,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.AudioMixingFinished)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, reason: AgoraAudioMixingReasonCode) {
+    public func rtcEngine(_: AgoraRtcEngineKit, localAudioMixingStateDidChanged state: AgoraAudioMixingStateCode, reason: AgoraAudioMixingReasonCode) {
         callback(RtcEngineEvents.AudioMixingStateChanged, state.rawValue, reason.rawValue)
     }
 
@@ -484,47 +486,51 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
         callback(RtcEngineEvents.VideoStopped)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, firstLocalAudioFramePublished elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstLocalAudioFramePublished elapsed: Int) {
         callback(RtcEngineEvents.FirstLocalAudioFramePublished, elapsed)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, firstLocalVideoFramePublished elapsed: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, firstLocalVideoFramePublished elapsed: Int) {
         callback(RtcEngineEvents.FirstLocalVideoFramePublished, elapsed)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, didAudioPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didAudioPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.AudioPublishStateChanged, channel, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, didVideoPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didVideoPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.VideoPublishStateChanged, channel, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, didAudioSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didAudioSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.AudioSubscribeStateChanged, channel, uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, didVideoSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+    public func rtcEngine(_: AgoraRtcEngineKit, didVideoSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
         callback(RtcEngineEvents.VideoSubscribeStateChanged, channel, uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
+    public func rtcEngine(_: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
         callback(RtcEngineEvents.RtmpStreamingEvent, url, eventCode.rawValue)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+    public func rtcEngine(_: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
         callback(RtcEngineEvents.UserSuperResolutionEnabled, uid, enabled, reason.rawValue)
     }
 
-    func rtcEngine(_: AgoraRtcEngineKit, uploadLogResultRequestId requestId: String, success: Bool, reason: AgoraUploadErrorReason) {
+    public func rtcEngine(_: AgoraRtcEngineKit, uploadLogResultRequestId requestId: String, success: Bool, reason: AgoraUploadErrorReason) {
         callback(RtcEngineEvents.UploadLogResult, requestId, success, reason.rawValue)
     }
 
-    func rtcEngineAirPlayIsConnected(_ engine: AgoraRtcEngineKit) {
+    public func rtcEngineAirPlayIsConnected(_ engine: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.AirPlayIsConnected)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, virtualBackgroundSourceEnabled enabled: Bool, reason: AgoraVirtualBackgroundSourceStateReason) {
+    public func rtcEngine(_ engine: AgoraRtcEngineKit, virtualBackgroundSourceEnabled enabled: Bool, reason: AgoraVirtualBackgroundSourceStateReason) {
         callback(RtcEngineEvents.VirtualBackgroundSourceEnabled, enabled, reason.rawValue)
+    }
+
+    public func rtcEngine(_ engine: AgoraRtcEngineKit, snapshotTaken channel: String, uid: UInt, filePath: String, width: Int, height: Int, errCode: Int) {
+        callback(RtcEngineEvents.SnapshotTaken, channel, uid, filePath, width, height, errCode)
     }
 }

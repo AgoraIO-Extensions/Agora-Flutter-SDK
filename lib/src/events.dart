@@ -166,6 +166,9 @@ typedef UploadLogResultCallback = void Function(
 // ignore: public_member_api_docs
 typedef VirtualBackgroundSourceEnabledCallback = void Function(
     bool enabled, VirtualBackgroundSourceStateReason reason);
+// ignore: public_member_api_docs
+typedef SnapshotTakenCallback = void Function(String channel, int uid,
+    String filePath, int width, int height, int errCode);
 
 /// The SDK uses the [RtcEngineEventHandler] class to send callbacks to the application, and the application inherits the methods of this class to retrieve these callbacks.
 ///
@@ -1048,6 +1051,29 @@ class RtcEngineEventHandler {
   /// - [VirtualBackgroundSourceStateReason] `reason`: The reason why the virtual background is not successfully enabled or the message that confirms success. See [VirtualBackgroundSourceStateReason].
   VirtualBackgroundSourceEnabledCallback? virtualBackgroundSourceEnabled;
 
+  /// Reports the result of taking a video snapshot.
+  ///
+  /// Since
+  /// v3.5.2
+  /// After a successful takeSnapshot method call, the SDK triggers this callback
+  /// to report whether the snapshot is successfully taken as well as the details
+  /// for the snapshot taken.
+  ///
+  /// Parameters
+  /// - channel	The channel name.
+  /// - uid	The user ID of the user. A uid of 0 indicates the local user.
+  /// - filePath	The local path of the snapshot.
+  /// - width	The width (px) of the snapshot.
+  /// - height	The height (px) of the snapshot.
+  /// - errCode	The message that confirms success or the reason why the snapshot
+  /// is not successfully taken:
+  ///     - 0: Success.
+  ///     - < 0: Failure.
+  ///     - -1: The SDK fails to write data to a file or encode a JPEG image.
+  ///     - -2: The SDK does not find the video stream of the specified user within
+  /// one second after the takeSnapshot method call succeeds.
+  SnapshotTakenCallback? snapshotTaken;
+
   /// Constructs a [RtcEngineEventHandler]
   RtcEngineEventHandler({
     this.warning,
@@ -1132,6 +1158,7 @@ class RtcEngineEventHandler {
     this.uploadLogResult,
     this.airPlayIsConnected,
     this.virtualBackgroundSourceEnabled,
+    this.snapshotTaken,
   });
 
   // ignore: public_member_api_docs
@@ -1460,6 +1487,10 @@ class RtcEngineEventHandler {
       case 'VirtualBackgroundSourceEnabled':
         virtualBackgroundSourceEnabled?.call(data[0],
             VirtualBackgroundSourceStateReasonConverter.fromValue(data[1]).e);
+        break;
+      case 'SnapshotTaken':
+        snapshotTaken?.call(
+            data[0], data[1], data[2], data[3], data[4], data[5]);
         break;
     }
   }

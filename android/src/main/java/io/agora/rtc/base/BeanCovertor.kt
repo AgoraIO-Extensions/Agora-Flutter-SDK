@@ -12,6 +12,7 @@ import io.agora.rtc.live.LiveTranscoding.TranscodingUser
 import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.rtc.models.ClientRoleOptions
 import io.agora.rtc.models.DataStreamConfig
+import io.agora.rtc.models.EchoTestConfiguration
 import io.agora.rtc.video.*
 
 fun mapToVideoDimensions(map: Map<*, *>): VideoEncoderConfiguration.VideoDimensions {
@@ -262,5 +263,14 @@ fun mapToVirtualBackgroundSource(map: Map<*, *>): VirtualBackgroundSource {
     (map["color"] as? Map<*, *>)?.let { color = mapToColor(it) }
     (map["source"] as? String)?.let { source = it }
     (map["blur_degree"] as? Int)?.let { blur_degree = it }
+  }
+}
+
+fun mapToEchoTestConfiguration(map: Map<*, *>): EchoTestConfiguration {
+  return EchoTestConfiguration().apply {
+    (map["enableAudio"] as? Boolean)?.let { enableAudio = it }
+    (map["enableVideo"] as? Boolean)?.let { enableVideo = it }
+    (map["token"] as? String)?.let { token = it }
+    (map["channelId"] as? String)?.let { channelId = it }
   }
 }
