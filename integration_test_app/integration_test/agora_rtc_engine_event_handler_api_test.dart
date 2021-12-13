@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:integration_test_app/src/event_handler_tester.dart';
 import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
 import 'package:integration_test_app/main.dart' as app;
 
@@ -1606,5 +1607,30 @@ void main() {
     await fakeIrisEngine.fireAndWaitEvent(
         tester, 'onRemoteAudioMixingEnd', '{}');
     expect(called, true);
+  });
+
+  testEventCall('snapshotTaken', (
+    WidgetTester tester,
+    EventHandlerTester eventHandlerTester,
+  ) async {
+    app.main();
+    await tester.pumpAndSettle();
+    rtcEngine = await _createRtcEngine();
+    rtcEngine.setEventHandler(RtcEngineEventHandler(
+      snapshotTaken: (String channel, int uid, String filePath, int width,
+          int height, int errCode) {
+        expectSync(channel, 'testapi');
+        expectSync(uid, 10);
+        expectSync(filePath, '/path');
+        expectSync(width, 10);
+        expectSync(height, 10);
+        expectSync(errCode, 0);
+      },
+    ));
+    await fakeIrisEngine.fireAndWaitEvent(
+      tester,
+      'onSnapshotTaken',
+      '{"channel":"testapi","uid":10,"filePath":"/path","width":10,"height":10,"errCode":0}',
+    );
   });
 }

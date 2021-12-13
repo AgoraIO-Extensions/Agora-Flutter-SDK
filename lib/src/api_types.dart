@@ -199,6 +199,7 @@ enum ApiTypeEngine {
   kEngineStopRhythmPlayer,
   kEngineConfigRhythmPlayer,
   kEngineGetNativeHandle,
+  kEngineTakeSnapshot,
 }
 
 enum ApiTypeChannel {

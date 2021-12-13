@@ -1684,12 +1684,6 @@ class VirtualBackgroundSource {
 /// The information of an audio file, which is reported in [RtcEngineEventHandler.requestAudioFileInfoCallback].
 @JsonSerializable(explicitToJson: true)
 class AudioFileInfo {
-  /// Construct the [AudioFileInfo]
-  AudioFileInfo({
-    required this.filePath,
-    required this.durationMs,
-  });
-
   /// The file path.
   @JsonKey()
   String filePath;
@@ -1697,6 +1691,12 @@ class AudioFileInfo {
   /// The file duration (ms).
   @JsonKey()
   int durationMs;
+
+  /// Construct the [AudioFileInfo]
+  AudioFileInfo({
+    required this.filePath,
+    required this.durationMs,
+  });
 
   /// @nodoc
   factory AudioFileInfo.fromJson(Map<String, dynamic> json) =>
@@ -1784,4 +1784,44 @@ class Metadata {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$MetadataToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaRecorderConfiguration {
+  String storagePath;
+  AgoraMediaRecorderContainerFormat containerFormat; // = CONTAINER_MP4;
+  AgoraMediaRecorderStreamType streamType; // = STREAM_TYPE_BOTH;
+  int maxDurationMs; // = 120000;
+  int recorderInfoUpdateInterval; // = 0;
+
+  MediaRecorderConfiguration(
+    this.storagePath,
+    this.containerFormat,
+    this.streamType,
+    this.maxDurationMs,
+    this.recorderInfoUpdateInterval,
+  );
+
+  /// @nodoc
+  factory MediaRecorderConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$MediaRecorderConfigurationFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RecorderInfo {
+  String fileName;
+  int durationMs;
+  int fileSize;
+
+  RecorderInfo(this.fileName, this.durationMs, this.fileSize);
+
+  /// @nodoc
+  factory RecorderInfo.fromJson(Map<String, dynamic> json) =>
+      _$RecorderInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
 }

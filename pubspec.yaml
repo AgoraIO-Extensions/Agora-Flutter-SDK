@@ -12,8 +12,8 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   js: ^0.6.3
-  json_annotation: ^4.0.0
-  ffi: ^1.1.2
+  json_annotation: ^4.4.0
+  
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -23,7 +23,7 @@ dev_dependencies:
     sdk: flutter
   pedantic: ^1.11.0
   build_runner: ^1.11.5
-  json_serializable: ^4.0.2
+  json_serializable: ^6.1.1
 flutter:
   plugin:
     platforms:

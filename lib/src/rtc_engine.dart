@@ -506,6 +506,16 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  Future<void> enableLoopbackRecording(bool enabled) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineEnableLoopBackRecording.index,
+      'params': jsonEncode({
+        'enabled': enabled,
+      }),
+    });
+  }
+
+  @override
   Future<void> disableAudio() {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineDisableAudio.index,
@@ -1913,12 +1923,25 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
+  // TODO(littlegnal): Check iris supported or not
   @override
   Future<void> enableVirtualBackground(
       bool enabled, VirtualBackgroundSource backgroundSource) {
     return _invokeMethod('enableVirtualBackground', {
       'enabled': enabled,
       'backgroundSource': backgroundSource.toJson(),
+    });
+  }
+
+  @override
+  Future<void> takeSnapshot(String channel, int uid, String filePath) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineTakeSnapshot.index,
+      'params': jsonEncode({
+        'channel': channel,
+        'uid': uid,
+        'filePath': filePath,
+      }),
     });
   }
 }
@@ -2263,6 +2286,29 @@ mixin RtcEngineInterface
   /// - Kirin 900 series 980 and later
   Future<void> enableVirtualBackground(
       bool enabled, VirtualBackgroundSource backgroundSource);
+
+  /// Takes a snapshot of a video stream.
+  ///
+  /// Since
+  /// v3.5.2
+  ///
+  /// This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+  ///
+  /// The method is asynchronous, and the SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken as well as the details of the snapshot taken.
+  ///
+  /// Note
+  /// - Call this method after joining a channel.
+  /// - If the video of the specified user is pre-processed, for example, added with watermarks or image enhancement effects, the generated snapshot also includes the pre-processing effects.
+  ///
+  /// Parameters
+  /// - channel	The channel name.
+  /// - uid	The user ID of the user. Set uid as 0 if you want to take a snapshot of the local user's video.
+  /// - filePath	The local path (including the filename extensions) for the snapshot. For example, /storage/emulated/0/Android/data/<package name>/files/example.jpg. Ensure that the path you specify exists and is writable.
+  ///
+  /// Returns
+  /// - 0: Success.
+  /// - < 0: Failure.
+  Future<void> takeSnapshot(String channel, int uid, String filePath);
 }
 
 /// @nodoc
@@ -2420,6 +2466,9 @@ mixin RtcAudioInterface {
   /// - 100: Original volume.
   /// - 400: (Maximum) Four times the original volume with signal-clipping protection.
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
+
+  // TODO: doc
+  Future<void> enableLoopbackRecording(bool enabled);
 
   /// Adjusts the playback volume of all remote users.
   ///
