@@ -1,5 +1,6 @@
 #import <Flutter/Flutter.h>
-#import <RtcEnginePlugin.h>
+
+@import agora_rtc_engine;
 
 @interface OCTestRtcEnginePlugin : NSObject<RtcEnginePlugin>
 @property bool isRtcEngineCreated;
