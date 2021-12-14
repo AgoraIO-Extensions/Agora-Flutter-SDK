@@ -1,7 +1,5 @@
 #import <Foundation/Foundation.h>
 #import "OCTestRtcEnginePlugin.h"
-#import "RtcEnginePluginRegistrant.h"
-#import "RtcEnginePlugin.h"
 
 @implementation OCTestRtcEnginePlugin
 
