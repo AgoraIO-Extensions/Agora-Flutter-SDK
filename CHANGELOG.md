@@ -1,3 +1,10 @@
+# [4.2.0-rc.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.0...v4.2.0-rc.1) (2021-12-14)
+
+
+### Bug Fixes
+
+* optimize `getAudioFileInfo` & `selectAudioTrack` ([#526](https://github.com/AgoraIO/Flutter-SDK/issues/526)) ([6697f78](https://github.com/AgoraIO/Flutter-SDK/commit/6697f78fc17f09e2959da9e1d9876bcd92dc6539)), closes [#4](https://github.com/AgoraIO/Flutter-SDK/issues/4) [#3](https://github.com/AgoraIO/Flutter-SDK/issues/3) [#2](https://github.com/AgoraIO/Flutter-SDK/issues/2) [#6](https://github.com/AgoraIO/Flutter-SDK/issues/6) [#5](https://github.com/AgoraIO/Flutter-SDK/issues/5) [#4](https://github.com/AgoraIO/Flutter-SDK/issues/4) [#3](https://github.com/AgoraIO/Flutter-SDK/issues/3) [#2](https://github.com/AgoraIO/Flutter-SDK/issues/2)
+
 # [4.2.0-rc.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.1.0-rc.0...v4.2.0-rc.0) (2021-12-13)
 
 
