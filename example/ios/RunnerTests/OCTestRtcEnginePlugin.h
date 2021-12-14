@@ -1,8 +1,6 @@
 #import <Flutter/Flutter.h>
-#if __has_include(<agora_rtc_engine/agora_rtc_engine-Swift.h>)
-#import <agora_rtc_engine/agora_rtc_engine-Swift.h>
-#endif
-#import <agora_rtc_engine/RtcEnginePlugin.h>
+
+@import agora_rtc_engine;
 
 @interface OCTestRtcEnginePlugin : NSObject<RtcEnginePlugin>
 @property bool isRtcEngineCreated;
