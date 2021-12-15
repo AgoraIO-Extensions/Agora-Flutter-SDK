@@ -9,10 +9,7 @@ import io.agora.rtc.live.LiveInjectStreamConfig
 import io.agora.rtc.live.LiveTranscoding
 import io.agora.rtc.mediaio.IVideoSink
 import io.agora.rtc.mediaio.IVideoSource
-import io.agora.rtc.models.ChannelMediaOptions
-import io.agora.rtc.models.ClientRoleOptions
-import io.agora.rtc.models.DataStreamConfig
-import io.agora.rtc.models.UserInfo
+import io.agora.rtc.models.*
 import io.agora.rtc.video.*
 import java.util.*
 import javax.microedition.khronos.egl.EGLContext
@@ -422,6 +419,10 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
     return 0
   }
 
+  override fun startEchoTest(config: EchoTestConfiguration?): Int {
+    return 0
+  }
+
   override fun stopEchoTest(): Int {
     return 0
   }
@@ -751,6 +752,14 @@ class FakeRtcEngine : RtcEngineEx(), IAudioEffectManager {
   }
 
   override fun setLocalAccessPoint(ips: ArrayList<String>?, domain: String?): Int {
+    return 0
+  }
+
+  override fun takeSnapshot(channel: String?, uid: Int, filePath: String?): Int {
+    return 0
+  }
+
+  override fun enableContentInspect(enabled: Boolean, config: ContentInspectConfig?): Int {
     return 0
   }
 

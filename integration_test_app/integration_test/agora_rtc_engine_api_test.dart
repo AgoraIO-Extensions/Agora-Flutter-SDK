@@ -120,6 +120,28 @@ void main() {
     );
   });
 
+  testWidgets('getErrorDescription', (WidgetTester tester) async {
+    rtcEngine = await _createEngine();
+
+    fakeIrisEngine.mockCallApiResult(
+      ApiTypeEngine.kEngineGetErrorDescription.index,
+      jsonEncode({
+        'code': 1,
+      }),
+      'Fail',
+    );
+
+    final ret = await RtcEngine.getErrorDescription(1);
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineGetErrorDescription.index,
+      jsonEncode({
+        'code': 1,
+      }),
+    );
+    expect(ret, 'Fail');
+  });
+
   testWidgets('setChannelProfile', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
@@ -553,6 +575,21 @@ void main() {
       jsonEncode({
         'uid': 123,
         'volume': 10,
+      }),
+    );
+  });
+
+  testWidgets('enableLoopbackRecording', (WidgetTester tester) async {
+    // app.main();
+    // await tester.pumpAndSettle();
+
+    rtcEngine = await _createEngine();
+    await rtcEngine.enableLoopbackRecording(true);
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineEnableLoopBackRecording.index,
+      jsonEncode({
+        'enabled': true,
       }),
     );
   });
@@ -1021,6 +1058,7 @@ void main() {
           'loopback': true,
           'replace': true,
           'cycle': 10,
+          'startPos': null,
         }),
       );
     });
@@ -1041,6 +1079,7 @@ void main() {
           'loopback': true,
           'replace': true,
           'cycle': 10,
+          'startPos': 20,
         }),
       );
     });
@@ -2896,6 +2935,19 @@ void main() {
       expect(ret, 10000);
     },
   );
+  testWidgets('takeSnapshot', (WidgetTester tester) async {
+    rtcEngine = await _createEngine();
+    await rtcEngine.takeSnapshot('testapi', 20, '/path');
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineTakeSnapshot.index,
+      jsonEncode({
+        'channel': 'testapi',
+        'uid': 20,
+        'filePath': '/path',
+      }),
+    );
+  });
 }
 
 Future<RtcEngine> _createEngine() async {

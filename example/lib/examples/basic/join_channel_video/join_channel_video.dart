@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,31 +47,31 @@ class _State extends State<JoinChannelVideo> {
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        debugPrint('warning ${warningCode}');
+        logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
-        debugPrint('error ${errorCode}');
+        logSink.log('error ${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        debugPrint('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
-        debugPrint('userJoined  ${uid} ${elapsed}');
+        logSink.log('userJoined  ${uid} ${elapsed}');
         setState(() {
           remoteUid.add(uid);
         });
       },
       userOffline: (uid, reason) {
-        debugPrint('userOffline  ${uid} ${reason}');
+        logSink.log('userOffline  ${uid} ${reason}');
         setState(() {
           remoteUid.removeWhere((element) => element == uid);
         });
       },
       leaveChannel: (stats) {
-        debugPrint('leaveChannel ${stats.toJson()}');
+        logSink.log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
           remoteUid.clear();
@@ -96,7 +97,7 @@ class _State extends State<JoinChannelVideo> {
         switchCamera = !switchCamera;
       });
     }).catchError((err) {
-      print('switchCamera $err');
+      logSink.log('switchCamera $err');
     });
   }
 

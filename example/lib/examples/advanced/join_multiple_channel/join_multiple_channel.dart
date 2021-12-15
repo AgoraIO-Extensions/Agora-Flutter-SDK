@@ -3,6 +3,7 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -87,13 +88,13 @@ class _State extends State<JoinMultipleChannel> {
     String channelId = channel.channelId;
     channel.setEventHandler(RtcChannelEventHandler(
       warning: (warningCode) {
-        print('warning ${warningCode}');
+        logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
-        print('error ${errorCode}');
+        logSink.log('error ${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        print('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         if (channelId == _channelId0) {
           setState(() {
             isJoined0 = true;
@@ -105,7 +106,7 @@ class _State extends State<JoinMultipleChannel> {
         }
       },
       userJoined: (uid, elapsed) {
-        print('userJoined ${channel.channelId} $uid $elapsed');
+        logSink.log('userJoined ${channel.channelId} $uid $elapsed');
         if (channelId == _channelId0) {
           this.setState(() {
             remoteUid0.add(uid);
@@ -117,7 +118,7 @@ class _State extends State<JoinMultipleChannel> {
         }
       },
       userOffline: (uid, reason) {
-        print('userOffline ${channel.channelId} $uid $reason');
+        logSink.log('userOffline ${channel.channelId} $uid $reason');
         if (channelId == _channelId0) {
           this.setState(() {
             remoteUid0.removeWhere((element) => element == uid);
@@ -129,7 +130,7 @@ class _State extends State<JoinMultipleChannel> {
         }
       },
       leaveChannel: (stats) {
-        print('leaveChannel ${channel.channelId} ${stats.toJson()}');
+        logSink.log('leaveChannel ${channel.channelId} ${stats.toJson()}');
         if (channelId == _channelId0) {
           this.setState(() {
             isJoined0 = false;
