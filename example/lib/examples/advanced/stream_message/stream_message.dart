@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -82,36 +83,36 @@ class _State extends State<StreamMessage> {
   _addListener() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        print('warning ${warningCode}');
+        logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
-        print('error ${errorCode}');
+        logSink.log('error ${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        print('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
-        print('userJoined $uid $elapsed');
+        logSink.log('userJoined $uid $elapsed');
         this.setState(() {
           remoteUid = uid;
         });
       },
       userOffline: (uid, reason) {
-        print('userOffline $uid $reason');
+        logSink.log('userOffline $uid $reason');
         this.setState(() {
           remoteUid = null;
         });
       },
       streamMessage: (int uid, int streamId, Uint8List data) {
         _showMyDialog(uid, streamId, String.fromCharCodes(data));
-        print('streamMessage $uid $streamId $data');
+        logSink.log('streamMessage $uid $streamId $data');
       },
       streamMessageError:
           (int uid, int streamId, ErrorCode error, int missed, int cached) {
-        print('streamMessage $uid $streamId $error $missed $cached');
+        logSink.log('streamMessage $uid $streamId $error $missed $cached');
       },
     ));
   }

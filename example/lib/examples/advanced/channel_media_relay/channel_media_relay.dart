@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +19,12 @@ class _State extends State<ChannelMediaRelay> {
   bool isJoined = false;
   int? remoteUid;
   bool isRelaying = false;
+  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _channelController;
 
   @override
   void initState() {
+    _channelController = TextEditingController(text: config.channelId);
     super.initState();
   }
 
@@ -50,31 +54,32 @@ class _State extends State<ChannelMediaRelay> {
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    await _engine.joinChannel(config.token, config.channelId, null, 0, null);
+    await _engine.joinChannel(
+        config.token, _channelController.text, null, 0, null);
   }
 
   _addListener() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        print('warning ${warningCode}');
+        logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
-        print('error ${errorCode}');
+        logSink.log('error ${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        print('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
-        print('userJoined $uid $elapsed');
+        logSink.log('userJoined $uid $elapsed');
         this.setState(() {
           remoteUid = uid;
         });
       },
       userOffline: (uid, reason) {
-        print('userOffline $uid $reason');
+        logSink.log('userOffline $uid $reason');
         this.setState(() {
           remoteUid = null;
         });
@@ -83,28 +88,28 @@ class _State extends State<ChannelMediaRelay> {
           (ChannelMediaRelayState state, ChannelMediaRelayError code) {
         switch (state) {
           case ChannelMediaRelayState.Idle:
-            print('ChannelMediaRelayState.Idle $code');
+            logSink.log('ChannelMediaRelayState.Idle $code');
             this.setState(() {
               isRelaying = false;
             });
             break;
           case ChannelMediaRelayState.Connecting:
-            print('ChannelMediaRelayState.Connecting $code)');
+            logSink.log('ChannelMediaRelayState.Connecting $code)');
             break;
           case ChannelMediaRelayState.Running:
-            print('ChannelMediaRelayState.Running $code)');
+            logSink.log('ChannelMediaRelayState.Running $code)');
             this.setState(() {
               isRelaying = true;
             });
             break;
           case ChannelMediaRelayState.Failure:
-            print('ChannelMediaRelayState.Failure $code)');
+            logSink.log('ChannelMediaRelayState.Failure $code)');
             this.setState(() {
               isRelaying = false;
             });
             break;
           default:
-            print('default $code)');
+            logSink.log('default $code)');
             break;
         }
       },
@@ -122,12 +127,10 @@ class _State extends State<ChannelMediaRelay> {
 
     await _engine.startChannelMediaRelay(ChannelMediaRelayConfiguration(
         ChannelMediaInfo(config.channelId, 0, token: config.token),
-        [ChannelMediaInfo('', 0, token: '')]));
+        [ChannelMediaInfo(_controller.text, 0, token: '')]));
 
-    _controller.clear();
+    // _controller.clear();
   }
-
-  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -136,15 +139,23 @@ class _State extends State<ChannelMediaRelay> {
         Column(
           children: [
             !isJoined
-                ? Row(
+                ? Column(
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          onPressed: _initEngine,
-                          child: Text('Join channel'),
-                        ),
-                      )
+                      TextField(
+                        controller: _channelController,
+                        readOnly: isJoined,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: _initEngine,
+                              child: Text('Join channel'),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   )
                 : _renderVideo(),

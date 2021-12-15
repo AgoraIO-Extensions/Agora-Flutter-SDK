@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,11 @@ class _SetVideoEncoderConfigurationState
   bool switchCamera = true;
   TextEditingController? _channelIdController;
   int _remoteUid = 0;
+  int _selectedDimensionIndex = 0;
   List<VideoDimensions> dimensions = [
     VideoDimensions(width: 640, height: 480),
     VideoDimensions(width: 480, height: 480),
-    VideoDimensions(width: 480, height: 240)
+    VideoDimensions(width: 480, height: 240),
   ];
   @override
   void initState() {
@@ -52,19 +54,19 @@ class _SetVideoEncoderConfigurationState
   void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        debugPrint('warning ${warningCode}');
+        logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
         debugPrint('error ${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        debugPrint('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
-        debugPrint('userJoined  ${uid} ${elapsed}');
+        logSink.log('userJoined  ${uid} ${elapsed}');
         if (_remoteUid == 0) {
           setState(() {
             _remoteUid = uid;
@@ -72,24 +74,24 @@ class _SetVideoEncoderConfigurationState
         }
       },
       userOffline: (uid, reason) {
-        debugPrint('userOffline  ${uid} ${reason}');
+        logSink.log('userOffline  ${uid} ${reason}');
         setState(() {
           _remoteUid = 0;
         });
       },
       leaveChannel: (stats) {
-        debugPrint('leaveChannel ${stats.toJson()}');
+        logSink.log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
         });
       },
       rtmpStreamingStateChanged: (String url, RtmpStreamingState state,
           RtmpStreamingErrorCode errCode) {
-        debugPrint(
+        logSink.log(
             'rtmpStreamingStateChanged url: $url, state: $state, errCode: $errCode');
       },
       rtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {
-        debugPrint(
+        logSink.log(
             'rtmpStreamingEvent url: $url, eventCode: ${eventCode.toString()}');
       },
     ));
@@ -100,7 +102,7 @@ class _SetVideoEncoderConfigurationState
       await [Permission.microphone, Permission.camera].request();
     }
     await _engine.joinChannel(config.token, channelId, null, config.uid);
-    await setVideoEncoderConfiguration();
+    await setVideoEncoderConfiguration(dim: _selectedDimensionIndex);
   }
 
   Future<void> _leaveChannel() async {
@@ -109,7 +111,7 @@ class _SetVideoEncoderConfigurationState
 
   Future<void> setVideoEncoderConfiguration({int dim = 0}) async {
     if (dim >= dimensions.length) {
-      debugPrint("Invalid dimension choice!");
+      logSink.log("Invalid dimension choice!");
       return;
     }
 
@@ -132,12 +134,18 @@ class _SetVideoEncoderConfigurationState
         switchCamera = !switchCamera;
       });
     }).catchError((err) {
-      print('switchCamera $err');
+      logSink.log('switchCamera $err');
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final dimesionsMenus = <DropdownMenuItem<int>>[];
+    for (int i = 0; i < dimensions.length; i++) {
+      final e = dimensions[i];
+      dimesionsMenus.add(DropdownMenuItem<int>(
+          value: i, child: Text('width: ${e.width}, height: ${e.height}')));
+    }
     return Stack(
       children: [
         Column(
@@ -161,6 +169,22 @@ class _SetVideoEncoderConfigurationState
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
+              ],
+            ),
+            Row(
+              children: [
+                Text('Video dimensions: '),
+                DropdownButton<int>(
+                  value: _selectedDimensionIndex,
+                  items: dimesionsMenus,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedDimensionIndex = value!;
+                    });
+
+                    setVideoEncoderConfiguration(dim: _selectedDimensionIndex);
+                  },
+                ),
               ],
             ),
             _renderVideo(),

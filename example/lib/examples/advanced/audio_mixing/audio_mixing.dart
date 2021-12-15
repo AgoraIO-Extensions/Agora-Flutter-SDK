@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _AudioMixingState extends State<AudioMixing> {
   bool _loopback = false;
   bool _replace = false;
   double _cycle = 1.0;
-  double _startPos = 0;
+  double _startPos = 1000;
 
   @override
   void initState() {
@@ -59,39 +60,39 @@ class _AudioMixingState extends State<AudioMixing> {
   void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        debugPrint('warning ${warningCode}');
+        logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
-        debugPrint('error ${errorCode}');
+        logSink.log('error ${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        debugPrint(
+        logSink.log(
             'joinChannelSuccess channel: ${channel}, uid: ${uid}, elapsed: ${elapsed}');
         setState(() {
           isJoined = true;
         });
       },
       leaveChannel: (stats) async {
-        debugPrint('leaveChannel ${stats.toJson()}');
+        logSink.log('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
         });
       },
       audioMixingFinished: () {
-        debugPrint('audioMixingFinished');
+        logSink.log('audioMixingFinished');
       },
       audioMixingStateChanged: (
         AudioMixingStateCode state,
         AudioMixingReason reason,
       ) {
-        debugPrint(
+        logSink.log(
             'audioMixingStateChanged state:${state.toString()}, reason: ${reason.toString()}}');
       },
       remoteAudioMixingBegin: () {
-        debugPrint('remoteAudioMixingBegin');
+        logSink.log('remoteAudioMixingBegin');
       },
       remoteAudioMixingEnd: () {
-        debugPrint('remoteAudioMixingEnd');
+        logSink.log('remoteAudioMixingEnd');
       },
     ));
   }
@@ -109,7 +110,7 @@ class _AudioMixingState extends State<AudioMixing> {
     await _engine
         .joinChannel(config.token, config.channelId, null, config.uid)
         .catchError((onError) {
-      debugPrint('error ${onError.toString()}');
+      logSink.log('error ${onError.toString()}');
     });
   }
 
@@ -210,10 +211,10 @@ class _AudioMixingState extends State<AudioMixing> {
                   Text('cycle:'),
                   Slider(
                     value: _cycle,
-                    min: 0,
-                    max: 100,
-                    divisions: 5,
-                    label: 'cycle value',
+                    min: 0.0,
+                    max: 10.0,
+                    divisions: 10,
+                    label: 'cycle value ${_cycle.toInt()}',
                     onChanged: _isStartedAudioMixing
                         ? null
                         : (double value) {
@@ -230,10 +231,10 @@ class _AudioMixingState extends State<AudioMixing> {
                   Text('startPos:'),
                   Slider(
                     value: _startPos,
-                    min: 0,
-                    max: 100,
-                    divisions: 5,
-                    label: 'startPos value',
+                    min: 1000,
+                    max: 5000,
+                    divisions: 100,
+                    label: 'startPos value ${_startPos / 1000.0}s',
                     onChanged: (double value) {
                       setState(() {
                         _startPos = value;

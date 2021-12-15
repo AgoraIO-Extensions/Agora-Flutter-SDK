@@ -557,6 +557,23 @@ class FakeRtcEngine : public IRtcEngine3 {
   int setCameraTorchOn(bool isOn) override { return 0; }
   bool isCameraTorchSupported() override { return 0; }
 #endif
+  int startEchoTest(const EchoTestConfiguration &config) override { return 0; }
+#if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)                 \
+    || defined(_WIN32)
+  IScreenCaptureSourceList *
+  getScreenCaptureSources(const SIZE &thumbSize, const SIZE &iconSize,
+                          const bool includeScreen) override {
+    return nullptr;
+  }
+#endif
+  int takeSnapshot(const char *channel, uid_t uid,
+                   const char *filePath) override {
+    return 0;
+  }
+  int enableContentInspect(bool enabled,
+                           const ContentInspectConfig &config) override {
+    return 0;
+  }
 };
 
 }// namespace rtc
