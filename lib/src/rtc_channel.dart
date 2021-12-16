@@ -355,6 +355,7 @@ class RtcChannel with RtcChannelInterface {
       'apiType': ApiTypeChannel.kChannelRegisterMediaMetadataObserver.index,
       'params': jsonEncode({
         'channelId': channelId,
+        'type': 0, // VIDEO_METADATA
       }),
     });
   }

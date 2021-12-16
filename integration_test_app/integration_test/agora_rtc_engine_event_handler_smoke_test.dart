@@ -1,6 +1,6 @@
 // TODO(littlegnal): Temporary disable somke test for iOS/macOS, because it is not stable
 // to run somke test on CI at this time
-@Skip('currently failing')
+// @Skip('currently failing')
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,12 +13,12 @@ void main() {
 
   late FakeIrisRtcEngine fakeIrisEngine;
 
-  setUpAll(() async {
+  setUp(() async {
     fakeIrisEngine = FakeIrisRtcEngine();
     await fakeIrisEngine.initialize();
   });
 
-  tearDownAll(() {
+  tearDown(() {
     fakeIrisEngine.dispose();
   });
 

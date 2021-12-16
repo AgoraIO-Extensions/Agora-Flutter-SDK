@@ -2,7 +2,6 @@
 #define IRIS_RTC_ENGINE_DELEGATE_MOCKS_H_
 
 #include "IAgoraRtcEngine.h"
-#include "internal/log/iris_logger.h"
 #include "iris_delegate.h"
 #include "iris_event_handler.h"
 #include "iris_rtc_engine.h"
