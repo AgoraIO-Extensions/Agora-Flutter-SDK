@@ -25,7 +25,7 @@ String get channelId {
 const int uid = 0;
 
 /// Your user ID for the screen sharing
-const int screenSharingUid = 0;
+const int screenSharingUid = 10;
 
 /// Your string user ID
 const String stringUid = '0';

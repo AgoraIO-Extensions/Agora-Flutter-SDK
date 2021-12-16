@@ -7,9 +7,10 @@ using namespace flutter;
 CallApiMethodCallHandler::CallApiMethodCallHandler(
     agora::iris::rtc::IrisRtcEngine *engine) : irisRtcEngine_(engine) {}
 
-void CallApiMethodCallHandler::HandleMethodCall(
-    const flutter::MethodCall<flutter::EncodableValue> &method_call,
-    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
+CallApiMethodCallHandler::~CallApiMethodCallHandler() {}
+
+void CallApiMethodCallHandler::HandleMethodCall(const flutter::MethodCall<flutter::EncodableValue> &method_call,
+                                                std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
 {
     auto method = method_call.method_name();
     if (!method_call.arguments())
@@ -17,6 +18,13 @@ void CallApiMethodCallHandler::HandleMethodCall(
         result->Error("Bad Arguments", "Null arguments received");
         return;
     }
+#if DEBUG
+    if (method.compare("getIrisRtcEngineIntPtr") == 0)
+    {
+        result->Success((intptr_t)irisRtcEngine_);
+        return;
+    }
+#endif
     if (method.compare("callApi") == 0 || method.compare("callApiWithBuffer") == 0)
     {
         try
@@ -58,7 +66,7 @@ void CallApiMethodCallHandler::HandleMethodCall(
             else
             {
                 auto des = CallApiError(ret);
-                result->Error(CallApiError(ret));
+                result->Error(des);
             }
         }
         catch (std::exception &e)
@@ -72,10 +80,8 @@ void CallApiMethodCallHandler::HandleMethodCall(
     }
 }
 
-int32_t CallApiMethodCallHandler::CallApi(
-    int32_t api_type,
-    const char *params,
-    char *result)
+int32_t CallApiMethodCallHandler::CallApi(int32_t api_type, const char *params,
+                                          char *result)
 {
     return irisRtcEngine_->CallApi(static_cast<ApiTypeEngine>(api_type),
                                    params, result);
@@ -84,6 +90,8 @@ int32_t CallApiMethodCallHandler::CallApi(
 int32_t CallApiMethodCallHandler::CallApi(int32_t api_type, const char *params, void *buffer,
                                           char *result)
 {
+    // TODO(littlegnal): Remove this after we migrate not deprecated CallApi
+    #pragma warning( disable : 4996 )
     return irisRtcEngine_->CallApi(static_cast<ApiTypeEngine>(api_type),
                                    params, buffer, result);
 }
@@ -94,5 +102,5 @@ const char *CallApiMethodCallHandler::CallApiError(int32_t ret)
     irisRtcEngine_->CallApi(ApiTypeEngine::kEngineGetErrorDescription,
                             ("{\"code\":" + std::to_string(ret) + "}").c_str(),
                             res);
-    return res;
+    return std::string(res).c_str();
 }
