@@ -19,6 +19,7 @@ using namespace agora::iris::rtc;
 @property(nonatomic) FlutterIrisEventHandler *eventHandler;
 @property(nonatomic) FlutterEventSink events;
 @property(nonatomic, strong) AgoraTextureViewFactory *factory;
+@property(nonatomic) NSObject<FlutterPluginRegistrar> *registrar;
 @end
 
 @implementation AgoraRtcEnginePlugin
@@ -36,7 +37,7 @@ using namespace agora::iris::rtc;
   instance.eventHandler =
       [[FlutterIrisEventHandler alloc] initWith:instance.engine_main
                                       subEngine:instance.engine_sub];
-
+  instance.registrar = registrar;
   [registrar addMethodCallDelegate:instance channel:methodChannel];
   [eventChannel setStreamHandler:instance.eventHandler];
 
@@ -105,12 +106,42 @@ using namespace agora::iris::rtc;
     NSNumber *textureId = call.arguments[@"id"];
     [self.factory destroyTextureRenderer:[textureId integerValue]];
     result(nil);
-  } else {
+  }
+  else if ([@"getAssetAbsolutePath" isEqualToString:call.method]) {
+      [self getAssetAbsolutePath:call result:result];
+  }
+  else {
     if ([self isSubProcess:call.arguments]) {
       [[self callApiMethodCallHandlerSub] onMethodCall:call _:result];
     } else {
       [[self callApiMethodCallHandlerMain] onMethodCall:call _:result];
     }
   }
+}
+
+- (void)getAssetAbsolutePath:(FlutterMethodCall *)call
+                      result:(FlutterResult)result {
+    NSString *assetPath = (NSString *)[call arguments];
+    if (assetPath) {
+        NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+        // Temporary workaround for loop up flutter asset in macOS
+        // https://github.com/flutter/flutter/issues/47681#issuecomment-958111474
+        NSString *realPath =  [NSString stringWithFormat:@"%@%@%@", bundlePath, @"/Contents/Frameworks/App.framework/Resources/flutter_assets/", assetPath];
+        
+        if (realPath) {
+            result(realPath);
+            return;
+        }
+        
+        result([FlutterError
+            errorWithCode:@"FileNotFoundException"
+                  message:nil
+                  details:nil]);
+        return;
+    }
+    result([FlutterError
+        errorWithCode:@"IllegalArgumentException"
+              message:nil
+              details:nil]);
 }
 @end

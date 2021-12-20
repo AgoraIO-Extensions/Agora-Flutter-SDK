@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../log_sink.dart';
 
 /// JoinChannelAudio Example
 class JoinChannelAudio extends StatefulWidget {
@@ -20,15 +22,7 @@ class _State extends State<JoinChannelAudio> {
       enableSpeakerphone = true,
       playEffect = false;
   bool _enableInEarMonitoring = false;
-  double _recordingVolume = 0, _playbackVolume = 0, _inEarMonitoringVolume = 0;
-  String _soundId = '1';
-  bool _isEditSoundId = false;
-  double _loopCount = -1;
-  double _pitch = 0.5;
-  double _pan = 0;
-  double _gain = 0;
-  bool _isPublish = true;
-
+  double _recordingVolume = 100, _playbackVolume = 100, _inEarMonitoringVolume = 0;
   TextEditingController? _controller;
 
   @override
@@ -92,6 +86,26 @@ class _State extends State<JoinChannelAudio> {
     await _engine.leaveChannel();
   }
 
+  _switchMicrophone() {
+    _engine.enableLocalAudio(!openMicrophone).then((value) {
+      setState(() {
+        openMicrophone = !openMicrophone;
+      });
+    }).catchError((err) {
+      logSink.log('enableLocalAudio $err');
+    });
+  }
+
+  _switchSpeakerphone() {
+    _engine.setEnableSpeakerphone(!enableSpeakerphone).then((value) {
+      setState(() {
+        enableSpeakerphone = !enableSpeakerphone;
+      });
+    }).catchError((err) {
+      logSink.log('setEnableSpeakerphone $err');
+    });
+  }
+
   _switchEffect() async {
     if (playEffect) {
       _engine.stopEffect(1).then((value) {
@@ -102,15 +116,17 @@ class _State extends State<JoinChannelAudio> {
         logSink.log('stopEffect $err');
       });
     } else {
+      final path = (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!;
+      logSink.log('path: $path');
       _engine
           .playEffect(
               1,
-              (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!,
-              _loopCount.toInt(),
-              _pitch,
-              _pan,
-              _gain.toInt(),
-              _isPublish)
+              path,
+              -1,
+              1,
+              1,
+              100,
+              true)
           .then((value) {
         setState(() {
           playEffect = true;
@@ -137,306 +153,131 @@ class _State extends State<JoinChannelAudio> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Column(
-            children: [
-              TextField(
-                controller: _controller,
-                decoration: InputDecoration(hintText: 'Channel ID'),
-                onChanged: (text) {
-                  setState(() {
-                    channelId = text;
-                  });
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          if (isJoined) {
-                            await _leaveChannel();
-                          } else {
-                            await _joinChannel();
-                          }
-                        } catch (e) {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Text(
-                                    '${isJoined ? 'Leave' : 'Join'} channel with error:\n${e.toString()}');
-                              });
-                        }
-                      },
-                      child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-          if (isJoined)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+      children: [
+        Column(
+          children: [
+            TextField(
+              controller: _controller,
+              decoration: InputDecoration(hintText: 'Channel ID'),
+              onChanged: (text) {
+                setState(() {
+                  channelId = text;
+                });
+              },
+            ),
+            Row(
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
-                    Switch(
-                      value: openMicrophone,
-                      onChanged: (value) {
-                        setState(() {
-                          openMicrophone = value;
-                        });
-                        _engine
-                            .enableLocalAudio(openMicrophone)
-                            .catchError((err) {
-                          logSink.log('enableLocalAudio $err');
-                        });
-                      },
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
-                    Switch(
-                      value: enableSpeakerphone,
-                      onChanged: (value) {
-                        setState(() {
-                          enableSpeakerphone = value;
-                        });
-                        _engine
-                            .setEnableSpeakerphone(enableSpeakerphone)
-                            .catchError((err) {
-                          logSink.log('setEnableSpeakerphone $err');
-                        });
-                      },
-                    )
-                  ],
-                ),
-                if (!kIsWeb)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed:
+                        isJoined ? this._leaveChannel : this._joinChannel,
+                    child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+        Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: this._switchMicrophone,
+                    child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
+                  ),
+                  ElevatedButton(
+                    onPressed: isJoined ? this._switchSpeakerphone : null,
+                    child:
+                        Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
+                  ),
+                  if (!kIsWeb)
+                    ElevatedButton(
+                      onPressed: isJoined ? this._switchEffect : null,
+                      child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'Play Effect',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      Text(
-                        'file path: assets/Sound_Horizon.mp3',
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'sound id: ',
-                          ),
-
-                          Slider(
-                            value: _loopCount,
-                            min: -1,
-                            max: 10,
-                            divisions: 11,
-                            label: 'loop count $_loopCount',
-                            onChanged: playEffect
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _loopCount = value;
-                                    });
-                                  },
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'loop count: ',
-                          ),
-                          Slider(
-                            value: _loopCount,
-                            min: -1,
-                            max: 10,
-                            divisions: 11,
-                            label: 'loop count $_loopCount',
-                            onChanged: playEffect
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _loopCount = value;
-                                    });
-                                  },
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'pitch: ',
-                          ),
-                          Slider(
-                            // The pitch of the audio effect. The range is [0.5,2.0]. The default value is 1.0, which means the original pitch.
-                            value: _pitch,
-                            min: 0.5,
-                            max: 2.0,
-                            divisions: 5,
-                            label: 'pitch $_pitch',
-                            onChanged: playEffect
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _pitch = value;
-                                    });
-                                  },
-                          )
-                        ],
-                      ),
-                      // _pan
-                      Row(
-                        children: [
-                          Text(
-                            'pan: ',
-                          ),
-                          Slider(
-                            // The spatial position of the audio effect. The range is [-1.0,1.0]
-                            value: _pan,
-                            min: -1.0,
-                            max: 1.0,
-                            divisions: 3,
-                            label: 'pan $_pan',
-                            onChanged: playEffect
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _pan = value;
-                                    });
-                                  },
-                          )
-                        ],
-                      ),
-                      // _gain
-                      Row(
-                        children: [
-                          Text(
-                            'gain: ',
-                          ),
-                          Slider(
-                            // The volume of the audio effect. The range is [0.0,100.0]
-                            value: _gain,
-                            min: 0.0,
-                            max: 100.0,
-                            divisions: 100,
-                            label: 'gain $_gain',
-                            onChanged: playEffect
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _gain = value;
-                                    });
-                                  },
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Is publish: ',
-                          ),
-                          Switch(
-                            value: _isPublish,
-                            onChanged: playEffect
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _isPublish = value;
-                                    });
-                                  },
-                          ),
-                        ],
-                      ),
-                      ElevatedButton(
-                        onPressed: this._switchEffect,
-                        child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
-                      ),
+                      Text('RecordingVolume:'),
+                      Slider(
+                        value: _recordingVolume,
+                        min: 0,
+                        max: 400,
+                        divisions: 5,
+                        label: 'RecordingVolume',
+                        onChanged: isJoined
+                            ? (double value) {
+                                setState(() {
+                                  _recordingVolume = value;
+                                });
+                                _engine
+                                    .adjustRecordingSignalVolume(value.toInt());
+                              }
+                            : null,
+                      )
                     ],
                   ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('RecordingVolume:'),
-                    Slider(
-                      value: _recordingVolume,
-                      min: 0,
-                      max: 400,
-                      divisions: 5,
-                      label: 'RecordingVolume',
-                      onChanged: (double value) {
-                        setState(() {
-                          _recordingVolume = value;
-                        });
-                        _engine.adjustRecordingSignalVolume(value.toInt());
-                      },
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('PlaybackVolume:'),
-                    Slider(
-                      value: _playbackVolume,
-                      min: 0,
-                      max: 400,
-                      divisions: 5,
-                      label: 'PlaybackVolume',
-                      onChanged: (double value) {
-                        setState(() {
-                          _playbackVolume = value;
-                        });
-                        _engine.adjustPlaybackSignalVolume(value.toInt());
-                      },
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('PlaybackVolume:'),
+                      Slider(
+                        value: _playbackVolume,
+                        min: 0,
+                        max: 400,
+                        divisions: 5,
+                        label: 'PlaybackVolume',
+                        onChanged: isJoined
+                            ? (double value) {
+                                setState(() {
+                                  _playbackVolume = value;
+                                });
+                                _engine
+                                    .adjustPlaybackSignalVolume(value.toInt());
+                              }
+                            : null,
+                      )
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
                         Text('InEar Monitoring Volume:'),
                         Switch(
                           value: _enableInEarMonitoring,
-                          onChanged: _toggleInEarMonitoring,
+                          onChanged: isJoined ? _toggleInEarMonitoring : null,
+                          activeTrackColor: Colors.grey[350],
+                          activeColor: Colors.white,
                         )
-                      ],
-                    ),
-                    if (_enableInEarMonitoring)
-                      Container(
-                          width: 300,
-                          child: Slider(
-                            // Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
-                            value: _inEarMonitoringVolume,
-                            min: 0,
-                            max: 100,
-                            divisions: 5,
-                            label:
-                                'InEar Monitoring Volume $_inEarMonitoringVolume',
-                            onChanged: _onChangeInEarMonitoringVolume,
-                          ))
-                  ],
-                ),
-              ],
-            ),
-        ],
-      ),
+                      ]),
+                      if (_enableInEarMonitoring)
+                        Container(
+                            width: 300,
+                            child: Slider(
+                              value: _inEarMonitoringVolume,
+                              min: 0,
+                              max: 100,
+                              divisions: 5,
+                              label: 'InEar Monitoring Volume $_inEarMonitoringVolume',
+                              onChanged: isJoined
+                                  ? _onChangeInEarMonitoringVolume
+                                  : null,
+                            ))
+                    ],
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+            ))
+      ],
     );
   }
 }

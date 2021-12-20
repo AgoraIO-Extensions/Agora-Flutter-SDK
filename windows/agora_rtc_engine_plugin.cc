@@ -15,6 +15,8 @@
 #include <memory>
 #include <sstream>
 #include <vector>
+#include <string>
+#include <filesystem>
 
 #include "include/agora_rtc_engine/agora_rtc_channel_plugin.h"
 #include "include/agora_rtc_engine/agora_rtc_device_manager_plugin.h"
@@ -162,6 +164,7 @@ namespace
         videoFrameBufferManagerMain_(new IrisVideoFrameBufferManager()),
         videoFrameBufferManagerSub_(new IrisVideoFrameBufferManager())
   {
+
     engine_main_->SetEventHandler(handler_main_.get());
     engine_sub_->SetEventHandler(handler_sub_.get());
     engine_main_->raw_data()->Attach(videoFrameBufferManagerMain_.get());
@@ -213,6 +216,19 @@ namespace
       auto texture_id = std::get<int64_t>(arguments[EncodableValue("id")]);
       factory_->DestoryTextureRenderer(texture_id);
       result->Success();
+    }
+    else if (method.compare("getAssetAbsolutePath") == 0)
+    {
+      auto asset_path = std::get<std::string>(*method_call.arguments());
+      char exe_path[MAX_PATH];
+      GetModuleFileNameA(NULL, exe_path, MAX_PATH);
+
+      if (exe_path)
+      {
+        // The real asset path: <exe path>/data/flutter_assets/<asset_path>
+        auto realPath = std::filesystem::path(exe_path).parent_path() / std::filesystem::path("data") / std::filesystem::path("flutter_assets") / std::filesystem::path(asset_path);
+        result->Success(EncodableValue(realPath.u8string()));
+      }
     }
     else
     {
