@@ -23,13 +23,22 @@ class _SetEncryptionState extends State<SetEncryption> {
       enableSpeakerphone = true,
       playEffect = false;
   TextEditingController? _controller;
-  EncryptionMode _selectedEncryptionMode = EncryptionMode.None;
+
+  // Only take 3 EncryptionMode for demo purpose
+  final List<EncryptionMode> encryptionModes = [
+    EncryptionMode.AES128GCM2,
+    EncryptionMode.AES128XTS,
+    EncryptionMode.AES256GCM,
+  ];
+
+  late final EncryptionMode _selectedEncryptionMode;
   TextEditingController _encryptionKey = TextEditingController();
   late final TextEditingController _encryptionKdfSalt;
 
   @override
   void initState() {
     super.initState();
+    _selectedEncryptionMode = encryptionModes[0];
     _controller = TextEditingController(text: channelId);
     _encryptionKdfSalt =
         TextEditingController(text: 'EncryptionKdfSaltInBase64Strings');
@@ -116,7 +125,7 @@ class _SetEncryptionState extends State<SetEncryption> {
   @override
   Widget build(BuildContext context) {
     final dropDownMenus = <DropdownMenuItem<EncryptionMode>>[];
-    for (var v in EncryptionMode.values) {
+    for (var v in encryptionModes) {
       dropDownMenus.add(DropdownMenuItem(
         child: Text('$v'),
         value: v,

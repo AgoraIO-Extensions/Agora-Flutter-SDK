@@ -4,7 +4,7 @@ version: 4.1.0-alpha.2
 homepage: 'https://www.agora.io'
 repository: 'https://github.com/AgoraIO/Flutter-SDK'
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
   flutter: '>=1.12.13+hotfix.6'
 dependencies:
   flutter:
@@ -22,7 +22,7 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   pedantic: ^1.11.0
-  build_runner: ^1.11.5
+  build_runner: ^2.1.7
   json_serializable: ^6.1.1
 flutter:
   plugin:

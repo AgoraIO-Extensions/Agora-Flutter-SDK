@@ -83,6 +83,8 @@ class _State extends State<VoiceChanger> {
 
   late double _selectedAudioEqualizationBandFrequencyValue;
 
+  bool _setVoiceBeautifierPresetOnly = false;
+
   @override
   void initState() {
     super.initState();
@@ -168,31 +170,34 @@ class _State extends State<VoiceChanger> {
   }
 
   Widget _presets() {
+    if (_setVoiceBeautifierPresetOnly) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Select VoiceBeautifierPreset: '),
+          _createDropdownButton<VoiceBeautifierPreset>(
+            _voiceBeautifierPresets,
+            () => _selectedVoiceBeautifierPreset,
+            (v) async {
+              setState(() {
+                _selectedVoiceBeautifierPreset = v!;
+              });
+            },
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await _engine
+                  .setVoiceBeautifierPreset(_selectedVoiceBeautifierPreset);
+            },
+            child: Text('setVoiceBeautifierPreset'),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Select VoiceBeautifierPreset: '),
-            _createDropdownButton<VoiceBeautifierPreset>(
-              _voiceBeautifierPresets,
-              () => _selectedVoiceBeautifierPreset,
-              (v) async {
-                setState(() {
-                  _selectedVoiceBeautifierPreset = v!;
-                });
-              },
-            ),
-          ],
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            await _engine
-                .setVoiceBeautifierPreset(_selectedVoiceBeautifierPreset);
-          },
-          child: Text('setVoiceBeautifierPreset'),
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -373,10 +378,24 @@ class _State extends State<VoiceChanger> {
           children: [
             if (!isJoined)
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
                     controller: _channelId,
                   ),
+                  Row(mainAxisSize: MainAxisSize.min, children: [
+                    Text('setVoiceBeautifierPreset Only'),
+                    Switch(
+                      value: _setVoiceBeautifierPresetOnly,
+                      onChanged: !isJoined
+                          ? (v) {
+                              setState(() {
+                                _setVoiceBeautifierPresetOnly = v;
+                              });
+                            }
+                          : null,
+                    )
+                  ]),
                   Row(
                     children: [
                       Expanded(
