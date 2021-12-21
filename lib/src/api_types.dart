@@ -178,7 +178,7 @@ enum ApiTypeEngine {
   kEngineSetAudioMixingDualMonoMode,
   kEngineGetAudioFileInfo,
   kEngineSetVideoProfileEx,
-  kEngineSetExternalAudioSourceVolume,
+  kMediaSetExternalAudioSourceVolume,
   kEngineSetLogWriter,
   kEngineReleaseLogWriter,
   kEngineSetLocalVideoRenderer,
@@ -199,7 +199,10 @@ enum ApiTypeEngine {
   kEngineStopRhythmPlayer,
   kEngineConfigRhythmPlayer,
   kEngineGetNativeHandle,
+
+  kEngineGetScreenCaptureSources,
   kEngineTakeSnapshot,
+  kEngineEnableContentInspect,
 }
 
 enum ApiTypeChannel {

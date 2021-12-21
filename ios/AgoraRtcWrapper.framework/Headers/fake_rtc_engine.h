@@ -172,6 +172,7 @@ class FakeRtcEngine : public IRtcEngine3 {
   int getUserInfoByUid(uid_t uid, UserInfo *userInfo) override { return 0; }
   int startEchoTest() override { return 0; }
   int startEchoTest(int intervalInSeconds) override { return 0; }
+  int startEchoTest(const EchoTestConfiguration &config) override { return 0; }
   int stopEchoTest() override { return 0; }
   int setCloudProxy(CLOUD_PROXY_TYPE proxyType) override { return 0; }
   int enableVideo() override { return 0; }
@@ -411,16 +412,16 @@ class FakeRtcEngine : public IRtcEngine3 {
   int enableLoopbackRecording(bool enabled, const char *deviceName) override {
     return 0;
   }
-#if ((defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE))               \
-    || defined(_WIN32)
-#if ((defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE))
+  IScreenCaptureSourceList *
+  getScreenCaptureSources(const SIZE &thumbSize, const SIZE &iconSize,
+                          const bool includeScreen) override {
+    return nullptr;
+  }
   int startScreenCaptureByDisplayId(
       unsigned int displayId, const Rectangle &regionRect,
       const ScreenCaptureParameters &captureParams) override {
     return 0;
   }
-#endif
-#endif
 #if defined(_WIN32)
   int startScreenCaptureByScreenRect(
       const Rectangle &screenRect, const Rectangle &regionRect,
@@ -556,15 +557,6 @@ class FakeRtcEngine : public IRtcEngine3 {
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
   int setCameraTorchOn(bool isOn) override { return 0; }
   bool isCameraTorchSupported() override { return 0; }
-#endif
-  int startEchoTest(const EchoTestConfiguration &config) override { return 0; }
-#if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)                 \
-    || defined(_WIN32)
-  IScreenCaptureSourceList *
-  getScreenCaptureSources(const SIZE &thumbSize, const SIZE &iconSize,
-                          const bool includeScreen) override {
-    return nullptr;
-  }
 #endif
   int takeSnapshot(const char *channel, uid_t uid,
                    const char *filePath) override {

@@ -155,7 +155,7 @@ class _NativeIrisProxyBinding {
 
   static DynamicLibrary _loadAgoraRtcWrapperLib() {
     return Platform.isAndroid
-        ? DynamicLibrary.open("libAgoraRtcWrapper.so")
+        ? DynamicLibrary.open("libiris_integration_test.so")
         : DynamicLibrary.process();
   }
 

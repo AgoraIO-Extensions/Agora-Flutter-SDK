@@ -12,6 +12,7 @@ add_executable(${BINARY_NAME} WIN32
 )
 apply_standard_settings(${BINARY_NAME})
 target_compile_definitions(${BINARY_NAME} PRIVATE "NOMINMAX")
-target_link_libraries(${BINARY_NAME} PRIVATE flutter flutter_wrapper_app)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../../iris_integration_test" iris_integration_test)
+target_link_libraries(${BINARY_NAME} PRIVATE flutter flutter_wrapper_app iris_integration_test)
 target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 add_dependencies(${BINARY_NAME} flutter_assemble)

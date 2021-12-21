@@ -209,8 +209,10 @@ class RtcEngine with RtcEngineInterface {
   Future<void> initialize(RtcEngineContext context) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineInitialize.index,
-      'params':
-          jsonEncode({'context': context.toJson(), 'appGroup': 'io.agora'}),
+      'params': jsonEncode({
+        'context': context.toJson(),
+        'appGroup': 'io.agora',
+      }),
     }).then((value) => _invokeMethod('callApi', {
           'apiType': ApiTypeEngine.kEngineSetAppType.index,
           'params': jsonEncode({
@@ -506,11 +508,12 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableLoopbackRecording(bool enabled) {
+  Future<void> enableLoopbackRecording(bool enabled, {String? deviceName}) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableLoopBackRecording.index,
       'params': jsonEncode({
         'enabled': enabled,
+        'deviceName': deviceName,
       }),
     });
   }
@@ -2467,7 +2470,7 @@ mixin RtcAudioInterface {
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
   // TODO: doc
-  Future<void> enableLoopbackRecording(bool enabled);
+  Future<void> enableLoopbackRecording(bool enabled, {String? deviceName});
 
   /// Adjusts the playback volume of all remote users.
   ///
