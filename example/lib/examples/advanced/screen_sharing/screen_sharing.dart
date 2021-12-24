@@ -97,10 +97,11 @@ class _State extends State<ScreenSharing> {
   }
 
   _startScreenShare() async {
-    final helper = _engine.getScreenShareHelper();
+    final helper = await _engine.getScreenShareHelper();
     helper.setEventHandler(RtcEngineEventHandler(
       joinChannelSuccess: (String channel, int uid, int elapsed) {
-        logSink.log('ScreenSharing joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log(
+            'ScreenSharing joinChannelSuccess ${channel} ${uid} ${elapsed}');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               'ScreenSharing joinChannelSuccess ${channel} ${uid} ${elapsed}'),
@@ -115,7 +116,7 @@ class _State extends State<ScreenSharing> {
         }
       },
     ));
-    await helper.initialize(RtcEngineContext(config.appId));
+
     await helper.disableAudio();
     await helper.enableVideo();
     await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
@@ -137,7 +138,7 @@ class _State extends State<ScreenSharing> {
   }
 
   _stopScreenShare() async {
-    final helper = _engine.getScreenShareHelper();
+    final helper = await _engine.getScreenShareHelper();
     await helper.destroy().then((value) {
       setState(() {
         screenSharing = false;
