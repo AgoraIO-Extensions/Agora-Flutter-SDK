@@ -1,3 +1,10 @@
+# [4.2.0-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.1...v4.2.0-rc.2) (2021-12-24)
+
+
+### Bug Fixes
+
+* enable to enabled ([b9d5af1](https://github.com/AgoraIO/Flutter-SDK/commit/b9d5af1f3b0ea4d68ab5f7b0432b796547a6303a))
+
 # [4.2.0-rc.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.0...v4.2.0-rc.1) (2021-12-14)
 
 
