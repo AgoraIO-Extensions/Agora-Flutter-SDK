@@ -1126,9 +1126,9 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableFaceDetection(bool enable) {
+  Future<void> enableFaceDetection(bool enabled) {
     return _invokeMethod('enableFaceDetection', {
-      'enable': enable,
+      'enabled': enabled,
     });
   }
 
@@ -1238,10 +1238,10 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableRemoteSuperResolution(int uid, bool enable) {
+  Future<void> enableRemoteSuperResolution(int uid, bool enabled) {
     return _invokeMethod('enableRemoteSuperResolution', {
       'uid': uid,
-      'enable': enable,
+      'enabled': enabled,
     });
   }
 
@@ -2072,7 +2072,7 @@ mixin RtcVideoInterface {
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
   /// @nodoc
-  Future<void> enableRemoteSuperResolution(int uid, bool enable);
+  Future<void> enableRemoteSuperResolution(int uid, bool enabled);
 }
 
 /// @nodoc
@@ -3411,10 +3411,10 @@ mixin RtcCameraInterface {
   ///
   /// You can call this method either before or after joining a channel.
   ///
-  /// **Parameter** [enable] Determines whether to enable the face detection function for the local user:
+  /// **Parameter** [enabled] Determines whether to enable the face detection function for the local user:
   /// - `true`: Enable face detection.
   /// - `false`: (Default) Disable face detection.
-  Future<void> enableFaceDetection(bool enable);
+  Future<void> enableFaceDetection(bool enabled);
 
   /// Enables the camera flash function.
   ///

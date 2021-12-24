@@ -1128,7 +1128,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func enableFaceDetection(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.enableFaceDetection(params["enable"] as! Bool))
+        callback.code(engine?.enableFaceDetection(params["enabled"] as! Bool))
     }
 
     @objc func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback) {
