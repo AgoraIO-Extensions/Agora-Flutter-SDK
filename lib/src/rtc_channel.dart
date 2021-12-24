@@ -369,10 +369,10 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
-  Future<void> enableRemoteSuperResolution(int uid, bool enable) {
+  Future<void> enableRemoteSuperResolution(int uid, bool enabled) {
     return _invokeMethod('enableRemoteSuperResolution', {
       'uid': uid,
-      'enable': enable,
+      'enabled': enabled,
     });
   }
 
@@ -650,7 +650,7 @@ mixin RtcVideoInterface {
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
   /// @nodoc
-  Future<void> enableRemoteSuperResolution(int uid, bool enable);
+  Future<void> enableRemoteSuperResolution(int uid, bool enabled);
 }
 
 /// @nodoc

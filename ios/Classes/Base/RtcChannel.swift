@@ -380,7 +380,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enable"] as! Bool))
+        callback.code(self[params["channelId"] as! String]?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enabled"] as! Bool))
     }
 
     @objc func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {

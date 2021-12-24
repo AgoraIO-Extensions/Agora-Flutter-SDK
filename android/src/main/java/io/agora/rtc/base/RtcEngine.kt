@@ -783,7 +783,7 @@ open class RtcEngineManager(
     callback.code(
       engine?.enableRemoteSuperResolution(
         (params["uid"] as Number).toNativeUInt(),
-        params["enable"] as Boolean
+        params["enabled"] as Boolean
       )
     )
   }
@@ -1340,7 +1340,7 @@ open class RtcEngineManager(
   }
 
   override fun enableFaceDetection(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.enableFaceDetection(params["enable"] as Boolean))
+    callback.code(engine?.enableFaceDetection(params["enabled"] as Boolean))
   }
 
   override fun setCameraTorchOn(params: Map<String, *>, callback: Callback) {

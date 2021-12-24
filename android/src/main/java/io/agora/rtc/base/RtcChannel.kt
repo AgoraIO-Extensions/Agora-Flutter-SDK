@@ -287,7 +287,7 @@ class RtcChannelManager(
     callback.code(
       this[params["channelId"] as String]?.enableRemoteSuperResolution(
         (params["uid"] as Number).toNativeUInt(),
-        params["enable"] as Boolean
+        params["enabled"] as Boolean
       )
     )
   }
