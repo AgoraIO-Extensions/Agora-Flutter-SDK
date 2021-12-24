@@ -218,19 +218,35 @@ enum AudioFileInfoError {
   Failure,
 }
 
-/* enum-AudioMixingErrorType */
+///
+/// Errors that might occur when playing a music
+/// file.
+/// 
+///
 @Deprecated('This enum is deprecated, pls use AudioMixingReason instead.')
 enum AudioMixingErrorType {
   @JsonValue(701)
+  ///
+  /// The SDK cannot open the music file.
+  ///
   CanNotOpen,
 
   @JsonValue(702)
+  ///
+  /// The SDK opens the music file too frequently.
+  ///
   TooFrequentCall,
 
   @JsonValue(702)
+  ///
+  /// The playback of the music file is interrupted.
+  ///
   InterruptedEOF,
 
   @JsonValue(0)
+  ///
+  /// The music file is playing.
+  ///
   OK,
 }
 
@@ -355,18 +371,35 @@ enum AudioMixingStateCode {
   Failed,
 }
 
-/* enum-AudioMixingDualMonoMode */
+///
+/// The channel mode. Set in 
+/// setAudioMixingDualMonoMode
+/// .
+/// 
+///
 enum AudioMixingDualMonoMode {
   @JsonValue(0)
+  ///
+  /// 0: Original mode.
+  ///
   Auto,
 
   @JsonValue(1)
+  ///
+  /// 1: Left channel mode. This mode replaces the audio of the right channel with the audio of the left channel, which means the user can only hear the audio of the left channel.
+  ///
   L,
 
   @JsonValue(2)
+  ///
+  /// 2: Right channel mode. This mode replaces the audio of the left channel with the audio of the right channel, which means the user can only hear the audio of the right channel.
+  ///
   R,
 
   @JsonValue(3)
+  ///
+  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the right channel, which means the user can hear the audio of the left channel and the right channel at the same time.
+  ///
   MIX,
 }
 
@@ -630,8 +663,7 @@ enum AudioRemoteStateReason {
 
 ///
 /// Voice reverb presets.
-/// Deprecated:
-/// Deprecated as of v3.2.0.
+/// 
 ///
 enum AudioReverbPreset {
   @JsonValue(0x00000000)
@@ -792,9 +824,6 @@ enum AudioSampleRateType {
 /// Audio application scenarios.
 /// 
 ///
-  ///
-  /// The number of elements in the enumeration.
-  ///
 enum AudioScenario {
   @JsonValue(0)
   ///
@@ -840,12 +869,6 @@ enum AudioScenario {
 
   @JsonValue(8)
   ///
-  /// 
-  /// 
-  ///  
-  /// Since
-  /// v3.2.0
-  ///  
   /// 
   /// 8: Meeting scenario that mainly contains the human voice.
   ///   
@@ -1235,7 +1258,7 @@ enum ChannelProfile {
 
   @JsonValue(1)
   ///
-  /// 1: Live streaming. In this profile, you can set the role of users as the host or audience by calling . A host both publishes and subscribes to streams, while an audience subscribes to streams only. This profile applies to scenarios such as a chat room or interactive video streaming.
+  /// 1: Live streaming. In this profile, you can set the role of users as the host or audience by calling setClientRole. A host both publishes and subscribes to streams, while an audience subscribes to streams only. This profile applies to scenarios such as a chat room or interactive video streaming.
   ///
   LiveBroadcasting,
 
@@ -1336,7 +1359,7 @@ enum ConnectionChangedReason {
   ///
   /// 10: The connection is rejected by server. Typical reasons include:
   /// The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.
-  /// The user tries to join the channel when calling  for a call test. The user needs to call the channel after the call test ends.
+  /// The user tries to join the channel when conducting  a pre-call test. The user needs to call the channel after the call test ends.
   ///   
   ///   
   ///
@@ -1452,9 +1475,6 @@ enum DegradationPreference {
 /// The built-in encryption mode.
 /// Agora recommends using AES128GCM2 or AES256GCM2 encrypted mode. These two modes support the use of salt for higher security.
 ///
-  ///
-  /// 9: Enumerator boundary.
-  ///
 enum EncryptionMode {
   @deprecated
   @JsonValue(0)
@@ -3294,12 +3314,21 @@ enum SuperResolutionStateReason {
   Success,
 
   @JsonValue(1)
+  ///
+  /// 1: The original resolution of the remote video is beyond the range where super resolution can be applied.
+  ///
   StreamOverLimitation,
 
   @JsonValue(2)
+  ///
+  /// 2: Super resolution is already being used to boost another remote user’s video.
+  ///
   UserCountOverLimitation,
 
   @JsonValue(3)
+  ///
+  /// 3: The device does not support using super resolution.
+  ///
   DeviceNotSupported,
 }
 
@@ -3438,27 +3467,52 @@ enum VoiceConversionPreset {
   Bass,
 }
 
-/* enum-VirtualBackgroundSourceType */
+///
+///  
+/// The type of the custom background image.
+/// 
+///
 enum VirtualBackgroundSourceType {
   @JsonValue(1)
+  ///
+  /// 1: (Default) The background image is a solid color.
+  ///
   Color,
 
   @JsonValue(2)
+  ///
+  /// The background image is a file in PNG or JPG format.
+  ///
   Img,
 
   @JsonValue(3)
+  ///
+  /// The background image is blurred.
+  ///
   Blur,
 }
 
-/* enum-VirtualBackgroundBlurDegree */
+///
+/// The degree of blurring applied to the custom background image.
+/// 
+///
 enum VirtualBackgroundBlurDegree {
   @JsonValue(1)
+  ///
+  /// 1: The degree of blurring applied to the custom background image is low. The user can almost see the background clearly.
+  ///
   Low,
 
   @JsonValue(2)
+  ///
+  /// The degree of blurring applied to the custom background image is medium. It is difficult for the user to recognize details in the background.
+  ///
   Medium,
 
   @JsonValue(3)
+  ///
+  /// The degree of blurring applied to the custom background image is high. The user can barely see any distinguishing features in the background.
+  ///
   High,
 }
 
@@ -3518,42 +3572,78 @@ enum VideoContentHint {
   Details,
 }
 
-/* enum-MediaDeviceType */
+///
+/// Media device types.
+/// 
+///
 enum MediaDeviceType {
   @JsonValue(-1)
+  ///
+  /// -1: Unknown device type.
+  ///
   UnknownAudioDevice,
 
   @JsonValue(0)
+  ///
+  /// 0: Audio playback device.
+  ///
   AudioPlayoutDevice,
 
   @JsonValue(1)
+  ///
+  /// 1: Audio capturing device.
+  ///
   AudioRecordingDevice,
 
   @JsonValue(2)
+  ///
+  /// 2: Video renderer.
+  ///
   VideoRenderDevice,
 
   @JsonValue(3)
+  ///
+  /// 3: Video capturer.
+  ///
   VideoCaptureDevice,
 
   @JsonValue(4)
+  ///
+  /// 4: Application audio playback device.
+  ///
   AudioApplicationPlayoutDevice,
 }
 
-/* enum-MediaDeviceStateType */
+///
+/// Media device states.
+/// 
+///
 enum MediaDeviceStateType {
   @JsonValue(0)
   MediaDeviceStateIdle,
 
   @JsonValue(1)
+  ///
+  /// 1: The device is in use.
+  ///
   MediaDeviceStateActive,
 
   @JsonValue(2)
+  ///
+  /// 2: The device is disabled.
+  ///
   MediaDeviceStateDisabled,
 
   @JsonValue(4)
+  ///
+  /// 4: The device is not found.
+  ///
   MediaDeviceStateNotPresent,
 
   @JsonValue(8)
+  ///
+  /// 8: The device is unplugged.
+  ///
   MediaDeviceStateUnplugged,
 
   @JsonValue(16)

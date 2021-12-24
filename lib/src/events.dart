@@ -193,12 +193,6 @@ typedef AudioDeviceStateChanged = void Function(
 typedef RemoteAudioMixingBegin = void Function();
 // ignore: public_member_api_docs
 typedef RemoteAudioMixingEnd = void Function();
-// ignore: public_member_api_docs
-typedef RecorderStateChangedCallback = void Function(
-    RecorderState state, RecorderError error);
-// ignore: public_member_api_docs
-typedef SnapshotTakenCallback = void Function(String channel, int uid,
-    String filePath, int width, int height, int errCode);
 
 ///
 ///  The SDK uses the 
@@ -288,7 +282,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The ID of the remote user.
   ///
-  /// Param [info] The UserInfo object that contains the user ID and user account of the remote user. See UserInfo for details.
+  /// Param [userInfo] The UserInfo object that contains the user ID and user account of the remote user. See UserInfo for details.
   ///
   UserInfoCallback? userInfoUpdated;
 
@@ -1217,7 +1211,7 @@ class RtcEngineEventHandler {
   ///
   /// Reports the statistics of the audio stream from each remote user.
   /// Deprecated:
-  /// This method is deprecated. Please use remoteAudioStats instead.
+  /// remoteAudioStats instead.
   ///   
   /// 
   /// 
@@ -1250,7 +1244,7 @@ class RtcEngineEventHandler {
   /// Occurs when the camera turns on and is ready to capture the video.
   /// Deprecated:
   /// 
-  /// This callback is deprecated. Please use Capturing(1) in 
+  /// Please use Capturing(1) in 
   /// instead.
   /// 
   /// 
@@ -1279,9 +1273,11 @@ class RtcEngineEventHandler {
   /// Occurs when the local user receives the metadata.
   /// 
   ///
-  /// Param [uid] User ID
+  /// Param [buffer] The data received.
   ///
-  /// Param [timestamp] The timestamp.
+  /// Param [uid] The user ID.
+  ///
+  /// Param [timeStampMs] The timestamp.
   ///
   MetadataCallback? metadataReceived;
 
@@ -1370,11 +1366,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Reports whether the super resolution feature is successfully enabled.
-  /// Since
-  /// v3.5.1
-  /// 
-  /// 
-  /// After calling , the SDK triggers the callback to report whether super resolution is successfully enabled. If it is not successfully enabled, use reason for troubleshooting.
+  /// After calling enableRemoteSuperResolution, the SDK triggers the callback to report whether super resolution is successfully enabled. If it is not successfully enabled, use reason for troubleshooting.
   ///
   /// Param [uid] The ID of the remote user.
   ///
@@ -1433,15 +1425,9 @@ class RtcEngineEventHandler {
   ///
   /// Param [deviceId] The device ID.
   ///
-  /// Param [deviceType] Media device types. For details, see //TODO
-  /// 
-  /// 
-  /// MEDIA_DEVICE_TYPE.
+  /// Param [deviceType] Media device types. For details, see MediaDeviceType.
   ///
-  /// Param [deviceState] Media device states. For details, see //TODO
-  /// 
-  /// 
-  /// MEDIA_DEVICE_STATE_TYPE.
+  /// Param [deviceState] Media device states. For details, see MediaDeviceStateType.
   ///
   VideoDeviceStateChanged? videoDeviceStateChanged;
 
@@ -1449,10 +1435,7 @@ class RtcEngineEventHandler {
   /// Occurs when the volume on the playback or audio capture device, or the volume in the application changes.
   /// 
   ///
-  /// Param [deviceType] The device type. For details, see //TODO
-  /// 
-  /// 
-  /// MEDIA_DEVICE_TYPE.
+  /// Param [deviceType] The device type. For details, see MediaDeviceType.
   ///
   /// Param [volume] The volume value. The range is [0, 255].
   ///
@@ -1470,31 +1453,55 @@ class RtcEngineEventHandler {
   ///
   /// Param [deviceId] The device ID.
   ///
-  /// Param [deviceType] The device type. For details, see //TODO
-  /// 
-  /// 
-  /// MEDIA_DEVICE_TYPE.
+  /// Param [deviceType] The device type. For details, see MediaDeviceType.
   ///
   /// Param [deviceState] The device state.
   /// on macOS: 
   /// 0: The device is ready for use.
   /// 8: The device is not connected.
   /// 
-  /// On Windows: //TODO
-  /// 
-  /// 
-  /// MEDIA_DEVICE_STATE_TYPE.
+  /// On Windows: MediaDeviceStateType.
   ///   
   ///
   AudioDeviceStateChanged? audioDeviceStateChanged;
 
-  /* callback-engine-remoteAudioMixingBegin */
+  ///
+  /// Occurs when a remote user starts audio mixing.
+  /// When a remote user calls startAudioMixing to play the background music, the SDK reports this callback.
+  ///
   EmptyCallback? remoteAudioMixingBegin;
 
-  /* callback-engine-remoteAudioMixingEnd */
+  ///
+  /// Occurs when a remote user finishes audio mixing.
+  /// The SDK triggers this callback when a remote user finishes audio mixing.
+  ///
   EmptyCallback? remoteAudioMixingEnd;
 
-  /* callback-engine-snapshotTaken */
+  ///
+  /// Reports the result of taking a video snapshot.
+  /// After a successful takeSnapshot method call, the SDK triggers this callback to report whether the snapshot is successfully taken
+  /// as well as the details for the snapshot taken.
+  ///
+  /// Param [channel] The channel name.
+  ///
+  /// Param [uid] The user ID of the user. A uid of 0 indicates the local user.
+  ///
+  /// Param [filePath] The local path of the snapshot.
+  ///
+  /// Param [width] The width (px) pf the snapshot.
+  ///
+  /// Param [height] The height (px) pf the snapshot.
+  ///
+  /// Param [errCode] The message that confirms success or the reason why the snapshot is not successfully taken:
+  /// 
+  /// 0: Success.
+  /// < 0: Failure.
+  /// 
+  /// -1: The SDK fails to write data to a file or encode a JPEG image.
+  /// -2: The SDK does not find the video stream of the specified user within one second after the takeSnapshot method call succeeds.
+  /// 
+  /// 
+  ///
   SnapshotTakenCallback? snapshotTaken;
 
   /// Constructs a [RtcEngineEventHandler]
@@ -2739,7 +2746,25 @@ class RtcChannelEventHandler {
   ///
   RtmpStreamingEventCallback? rtmpStreamingEvent;
 
-  /* callback-channel-userSuperResolutionEnabled */
+  ///
+  /// Reports whether the super resolution feature is successfully enabled.
+  /// Since
+  /// v3.5.1
+  /// 
+  /// 
+  /// After calling enableRemoteSuperResolution, the SDK triggers the callback to report whether super resolution is successfully enabled. If it is not successfully enabled, use reason for troubleshooting.
+  ///
+  /// Param [reason] The reason why super resolution algorithm is not successfully enabled. For details, see SuperResolutionStateReason.
+  ///
+  /// Param [enabled] Whether super resolution is successfully enabled:
+  /// true: Super resolution is successfully enabled.
+  /// false: Super resolution is not successfully enabled.
+  /// 
+  ///
+  /// Param [uid] The ID of the remote user.
+  ///
+  /// Param [rtcChannel] RtcChannel.
+  ///
   UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]

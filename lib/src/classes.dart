@@ -93,33 +93,7 @@ class VideoEncoderConfiguration {
   @JsonKey(includeIfNull: false)
   ///
   /// 
-  /// The dimensions of the encoded video (px). This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value, or select from the following list:
-  /// AgoraVideoDimension120x120
-  /// AgoraVideoDimension160x120
-  /// AgoraVideoDimension180x180
-  /// AgoraVideoDimension180x180
-  /// AgoraVideoDimension320x180
-  /// AgoraVideoDimension240x240
-  /// AgoraVideoDimension320x240
-  /// AgoraVideoDimension424x240
-  /// AgoraVideoDimension360x360
-  /// AgoraVideoDimension480x360
-  /// AgoraVideoDimension640x360
-  /// AgoraVideoDimension480x480
-  /// AgoraVideoDimension640x480
-  /// AgoraVideoDimension840x480
-  /// AgoraVideoDimension960x720
-  /// AgoraVideoDimension1280x720
-  /// AgoraVideoDimension1920x1080 (macOS only)
-  /// AgoraVideoDimension2540x1440 (macOS only)
-  /// AgoraVideoDimension3840x2160 (macOS only)
-  /// 
-  /// 
-  /// 
-  /// Whether the 720p resolution or above can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the set value.
-  /// iPhones do not support video frame dimensions above 720p.
-  /// 
-  /// 
+  /// The dimensions of the encoded video (px). See VideoDimensions. This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
   /// 
   ///
   VideoDimensions? dimensions;
@@ -254,6 +228,9 @@ class BeautyOptions {
 /// Image properties.
 /// This class sets the properties of the watermark and background images in the live video.
 ///
+  ///
+  /// The x coordinate (pixel) of the image on the video frame (taking the upper left corner of the video frame as the origin).
+  ///
 @JsonSerializable(explicitToJson: true)
 class AgoraImage {
   ///
@@ -270,6 +247,9 @@ class AgoraImage {
   @JsonKey(includeIfNull: false)
   int? y;
 
+  ///
+  /// The width (pixel) of the image on the video frame.
+  ///
   int? width;
 
   ///
@@ -298,6 +278,13 @@ class AgoraImage {
 /// Transcoding configurations of each host.
 /// 
 ///
+  ///
+  /// 
+  ///
+  /// The width (pixel) of the host's video.
+  ///
+  ///   The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the LiveTranscodingwidth set in .
+  ///
 @JsonSerializable(explicitToJson: true)
 class TranscodingUser {
   ///
@@ -607,8 +594,34 @@ class ChannelMediaInfo {
 ///
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaRelayConfiguration {
+  ///
+  /// 
+  /// The information of the source channel ChannelMediaInfo. It contains the following members:
+  /// channelName: The name of the source channel. The default value is , which means the SDK applies the name of the current channel.NULL
+  /// uid: The unique ID to identify the relay stream in the source channel. The default value is 0, which means the SDK generates a random UID. You must set it as 0.
+  /// token: The token for joining the source channel. It is generated with the channelName and uid you set in srcInfo.
+  /// If you have not enabled the App Certificate, set this parameter as the default value NULL , which means the SDK applies the App ID.
+  /// If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.
+  /// 
+  /// 
+  /// 
+  /// 
+  ///
   ChannelMediaInfo srcInfo;
 
+  ///
+  /// 
+  /// The information of the destination channel ChannelMediaInfo. It contains the following members:
+  /// channelName: The name of the destination channel.
+  /// uid: The unique ID to identify the relay stream in the destination channel. The value ranges from 0 to (232-1). To avoid UID conflicts, this `UID` must be different from any other `UID` in the destination channel. The default value is 0, which means the SDK generates a random `UID`. Do not set this parameter as the `UID` of the host in the destination channel, and ensure that this `UID` is different from any other `UID` in the channel.
+  /// token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos.
+  /// If you have not enabled the App Certificate, set this parameter as the default value NULL , which means the SDK applies the App ID.
+  /// If you have enabled the App Certificate, you must use the token generated with the channelName and uid.
+  /// 
+  /// 
+  /// 
+  /// 
+  ///
   List<ChannelMediaInfo> destInfos;
 
   /// Constructs a [ChannelMediaRelayConfiguration]
@@ -938,9 +951,23 @@ class ChannelMediaOptions {
   bool? autoSubscribeVideo;
 
   @JsonKey(includeIfNull: false)
+  ///
+  /// Whether to publish the local audio stream when the user joins a channel.
+  /// true: (Default) Publish the local audio.
+  /// false: Do not publish the local audio.
+  /// 
+  /// This member serves a similar function to the muteLocalAudioStream method. After the user joins the channel, you can call the muteLocalAudioStream method to set whether to publish the local audio stream in the channel.
+  ///
   bool? publishLocalAudio;
 
   @JsonKey(includeIfNull: false)
+  ///
+  /// Whether to publish the local video stream when the user joins a channel.
+  /// true: (Default) Publish the local video.
+  /// false: Do not publish the local video.
+  /// 
+  /// This member serves a similar function to the muteLocalVideoStream method. After the user joins the channel, you can call the muteLocalVideoStream method to set whether to publish the local audio stream in the channel.
+  ///
   bool? publishLocalVideo;
 
   /// Constructs a [ChannelMediaOptions]
@@ -1016,6 +1043,9 @@ class EncryptionConfig {
 ///
 @JsonSerializable(explicitToJson: true)
 class RtcStats {
+  ///
+  /// Call duration of the local user in seconds, represented by an aggregate value.
+  ///
   int duration;
 
   ///
@@ -2169,32 +2199,34 @@ class AudioRecordingConfiguration {
 }
 
 ///
-/// Since
-/// v3.5.0
+/// 
 ///
 @JsonSerializable(explicitToJson: true)
 class VirtualBackgroundSource {
   @JsonKey(includeIfNull: false)
+  ///
+  /// The type of the custom background image. See VirtualBackgroundSourceType.
+  ///
   VirtualBackgroundSourceType? backgroundSourceType;
 
   @JsonKey(
       includeIfNull: false, fromJson: _$ColorFromJson, toJson: _$ColorToJson)
   ///
   /// The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink.The default value is 0xFFFFFF, which signifies white. 
-  /// The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is .
+  /// The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is Color.
   ///
   Color? color;
 
   @JsonKey(includeIfNull: false)
   ///
-  /// The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is .
+  /// The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is Img.
   ///
   String? source;
 
-  ///
-  /// The degree of blurring applied to the custom background image. See . The default degree of blurring is .This parameter takes effect only when the type of the custom background image is .
-  ///
   @JsonKey(name: 'blur_degree')
+  ///
+  /// The degree of blurring applied to the custom background image. See VirtualBackgroundBlurDegree. The default degree of blurring is High.This parameter takes effect only when the type of the custom background image is Blur.
+  ///
   VirtualBackgroundBlurDegree blurDegree;
 
   /// Constructs a [VirtualBackgroundSource]

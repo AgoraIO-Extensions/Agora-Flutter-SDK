@@ -355,7 +355,6 @@ class RtcChannel with RtcChannelInterface {
       'apiType': ApiTypeChannel.kChannelRegisterMediaMetadataObserver.index,
       'params': jsonEncode({
         'channelId': channelId,
-        'type': 0, // VIDEO_METADATA
       }),
     });
   }
@@ -656,12 +655,6 @@ mixin RtcChannelInterface
   ///  instance.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// -7(ERR_NOT_INITIALIZED): The SDK is not initialized before calling this method. Create and
-  /// initialize the RtcChannel instance before calling this
-  /// method.
-  ///
   Future<void> destroy();
 
   ///
@@ -678,13 +671,6 @@ mixin RtcChannelInterface
   /// Param [role] The user role in the interactive live streaming. For details, see ClientRole.
   ///
   /// Param [options] The detailed options of a user, including the user level. For details, see ClientRoleOptions.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///   -1: A general error occurs (no specified reason).
-  ///   -2: The parameter is invalid.
-  /// -5: The request is rejected.
-  ///   -7: The SDK is not initialized.- 0: The SDK is initializing.
   ///
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]);
 
@@ -709,15 +695,6 @@ mixin RtcChannelInterface
   /// 
   ///
   /// Param [optionalUid] User ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer with a value ranging from 1 to 232 -1. If the user ID is not assigned (or set as 0), the SDK assigns a user ID and reports it in the joinChannelSuccess callback. Your app must maintain this user ID.
-  ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  ///   -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  ///   -3(ERR_NOT_READY): The SDK fails to be initialized. You can try re-initializing the SDK.
-  ///   -5(ERR_REFUSED): The request is rejected. This may be caused by the following:
-  /// You have created an RtcChannel object with the same channel name.
-  /// You have joined a channel by using RtcChannel and published a stream in the RtcChannel channel.
-  ///   -7(ERR_NOT_INITIALIZED): The SDK is not initialized before calling this method. Initialize the RtcEngine instance before calling this method.
   ///
   Future<void> joinChannel(String? token, String? optionalInfo, int optionalUid,
       ChannelMediaOptions options);
@@ -748,15 +725,6 @@ mixin RtcChannelInterface
   /// Ensure that the App ID used for creating the token is the same App ID used by the createWithContext method for initializing the RTC engine.
   /// 
   ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  ///   -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  ///   -3(ERR_NOT_READY): The SDK fails to be initialized. You can try re-initializing the SDK.
-  ///   -5(ERR_REFUSED): The request is rejected. This may be caused by the following:
-  /// You have created an RtcChannel object with the same channel name.
-  /// You have joined a channel by using RtcChannel and published a stream in the RtcChannel channel.
-  ///   -7(ERR_NOT_INITIALIZED): The SDK is not initialized before calling this method. Initialize the RtcEngine instance before calling this method.
-  ///
   Future<void> joinChannelWithUserAccount(
       String? token, String userAccount, ChannelMediaOptions options);
 
@@ -775,12 +743,6 @@ mixin RtcChannelInterface
   /// 
   ///   If you call the leaveChannel method immediately after calling destroy, the SDK will not be able to trigger the leaveChannel callback.
   ///   If you call the leaveChannel method during a CDN live streaming, the SDK automatically calls the removePublishStreamUrl method.
-  ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  /// -1(ERR_FAILED): A general error occurs (no specified reason).
-  /// -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  /// -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
   ///
   Future<void> leaveChannel();
 
@@ -811,10 +773,6 @@ mixin RtcChannelInterface
   ///   In the interactive live streaming channel, only a host can call this method. To switch the client role, call setClientRole of the current RtcChannel object.
   ///   You can publish a stream to only one channel at a time. For details on joining multiple channels, see the advanced guide Join Multiple Channels.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// -5 (ERR_REFUSED): The request is rejected.
-  ///
   @deprecated
   Future<void> publish();
 
@@ -822,10 +780,6 @@ mixin RtcChannelInterface
   /// Stops publishing a stream to the channel.
   /// If you call this method in a channel where you are not publishing streams, the SDK returns
   /// -5 (ERR_REFUSED).
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// -5 (ERR_REFUSED): The request is rejected.
   ///
   @deprecated
   Future<void> unpublish();
@@ -861,9 +815,6 @@ mixin RtcAudioInterface {
   ///
   /// Param [uid] The ID of the remote user.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
   /* api-channel-muteLocalAudioStream */
@@ -883,9 +834,6 @@ mixin RtcAudioInterface {
   /// 
   ///   
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> muteRemoteAudioStream(int uid, bool muted);
 
   ///
@@ -902,9 +850,6 @@ mixin RtcAudioInterface {
   /// 
   /// 
   ///   
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> muteAllRemoteAudioStreams(bool muted);
 
@@ -930,9 +875,6 @@ mixin RtcAudioInterface {
   /// 
   ///   
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 }
@@ -944,20 +886,16 @@ mixin RtcVideoInterface {
 
   ///
   /// Stops or resumes subscribing to the video stream of a specified user.
-  /// 
+  /// Call this method after joining a channel.
+  ///   See recommended settings in Set the Subscribing State.
   ///
-  /// Param [uid] 
-  /// The ID of the specified user.
-  ///   
+  /// Param [userId] The ID of the specified user.
   ///
   /// Param [muted] Whether to stop subscribing to the video stream of the specified user.
   /// true: Stop subscribing to the video streams of the specified user.
   /// false: (Default) Subscribe to the video stream of the specified user.
   ///   
   /// 
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> muteRemoteVideoStream(int uid, bool muted);
 
@@ -976,9 +914,6 @@ mixin RtcVideoInterface {
   ///  
   /// 
   ///   
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> muteAllRemoteVideoStreams(bool muted);
 
@@ -1005,14 +940,63 @@ mixin RtcVideoInterface {
   ///  
   ///   
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
   ///
   /// Enables/Disables the super-resolution algorithm for a remote user's video stream.
+  /// Since
+  /// v3.5.1
+  /// 
+  /// 
+  /// This feature effectively boosts the resolution of a remote user's video seen by the local user. If the original resolution of a remote user's video is a × b, the local user's device can render the remote video at a resolution of 2a × 2b
+  /// after you enable this feature.
+  /// After you call this method, the SDK triggers the userSuperResolutionEnabled callback to report whether you have successfully enabled super resolution.
+  /// The super resolution feature requires extra system resources. To balance the visual experience and system usage, the SDK poses the following restrictions: This feature can only be enabled for a single remote user.
+  /// On Android, the original resolution of the remote video must not exceed 640 × 360 pixels. On iOS, the original resolution of the remote video must not exceed 640 × 480 pixels. If you exceed these limitations, the SDK triggers the warning callback and returns the corresponding warning codes:
+  /// SuperResolutionStreamOverLimitation: 1610. The origin resolution of the remote video is beyond the range where the super resolution can be applied.
+  /// SuperResolutionUserCountOverLimitation: 1611. Super resolution is already being used on another remote user's video.
+  /// SuperResolutionDeviceNotSupported: 1612. The device does not support using super resolution.
+  /// 
+  /// 
+  /// 
+  /// This method is for Android and iOS only.
+  /// Before calling this method, ensure that you have integrated the following dynamic libraries:
+  /// Android: libagora_super_resolution_extension.so
+  /// iOS: AgoraSuperResolutionExtension.xcframework
+  /// 
+  /// 
+  /// Because this method has certain system performance requirements, Agora recommends that you use the following devices or better:
+  /// Android:
+  /// VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 Pro
+  /// OPPO: PCCM00, Find X3
+  /// OnePlus: A6000
+  /// Xiaomi: Mi 8, Mi 9, Mi 10, Mi 11, MIX3, Redmi K20 Pro
+  /// SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, SM-G9750, S20, S21
+  /// HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, EVR-AN00, nova 4, nova 5 Pro, nova 6 5G, nova 7 5G, Mate 30, Mate 30 Pro, Mate 40, Mate 40 Pro, P40, P40 Pro, Huawei M6, MatePad 10.8
+  /// 
+  /// iOS:
+  /// iPhone XR
+  /// iPhone XS
+  /// iPhone XS Max
+  /// iPhone 11
+  /// iPhone 11 Pro
+  /// iPhone 11 Pro Max
+  /// iPhone 12
+  /// iPhone 12 mini
+  /// iPhone 12 Pro
+  /// iPhone 12 Pro Max
+  /// iPhone 12 SE (2nd generation)
+  /// iPad Pro 11-inch (3rd generation)
+  /// iPad Pro 12.9-inch (3rd generation)
+  /// iPad Air 3 (3rd generation)
+  /// iPad Air 3 (4th generation)
+  ///
+  /// Param [userId] The ID of the remote user.
+  ///
+  /// Param [enable] Whether to enable super resolution for the remote user’s video:
+  /// true: Enable virtual background.
+  /// false: Do not enable virtual background.
   /// 
   ///
   Future<void> enableRemoteSuperResolution(int uid, bool enable);
@@ -1041,9 +1025,6 @@ mixin RtcVoicePositionInterface {
   ///
   /// Param [gain] The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain);
 }
 
@@ -1062,9 +1043,6 @@ mixin RtcPublishStreamInterface {
   ///
   /// Param [transcoding] 
   /// The transcoding configurations for CDN live streaming. For details, see LiveTranscoding.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
@@ -1088,11 +1066,6 @@ mixin RtcPublishStreamInterface {
   /// If you set this parameter as true , ensure that you call the setLiveTranscoding method before this method.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// ERR_INVALID_ARGUMENT(-2): Invalid argument, usually because the URL address is null or the string length is 0.
-  /// ERR_NOT_INITIALIZED(-7): You have not initialized the RTC engine when publishing the stream.
-  ///
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   ///
@@ -1106,9 +1079,6 @@ mixin RtcPublishStreamInterface {
   /// After a successful method call, the SDK triggers rtmpStreamingStateChanged on the local client to report the result of deleting the address.
   ///
   /// Param [url] The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes. The CDN streaming URL must not contain special characters, such as Chinese characters.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> removePublishStreamUrl(String url);
 }
@@ -1132,9 +1102,6 @@ mixin RtcMediaRelayInterface {
   ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay. For details, see ChannelMediaRelayConfiguration.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
@@ -1146,9 +1113,6 @@ mixin RtcMediaRelayInterface {
   ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay. For more details, see ChannelMediaRelayConfiguration.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
@@ -1156,9 +1120,6 @@ mixin RtcMediaRelayInterface {
   /// Stops the media stream relay. Once the relay stops, the host quits all the destination channels.
   /// After a successful method call, the SDK triggers the channelMediaRelayStateChanged callback. If the callback reports Idle(0) and None(0), the host successfully stops the relay.
   /// If the method call fails, the SDK triggers the channelMediaRelayStateChanged callback with the ServerNoResponse(2) or ServerConnectionLost(8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopChannelMediaRelay();
 
@@ -1180,7 +1141,7 @@ mixin RtcDualStreamInterface {
   /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode(false), the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or the low-quality video stream (the low resolution, and low bitrate video stream). The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.
   /// Call this method after joining a channel. If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType, the setting of setRemoteVideoStreamType takes effect.
   ///
-  /// Param [uid] User ID
+  /// Param [uid] User ID.
   ///
   /// Param [streamType] 
   /// The video stream type: VideoStreamType.
@@ -1190,9 +1151,6 @@ mixin RtcDualStreamInterface {
   /// 
   /// 
   /// 
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setRemoteVideoStreamType(int uid, VideoStreamType streamType);
 
@@ -1210,9 +1168,6 @@ mixin RtcDualStreamInterface {
   /// 1: Low-quality video stream.
   /// 
   /// 
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 }
@@ -1235,9 +1190,6 @@ mixin RtcFallbackInterface {
   ///
   /// Param [userPriority] The priority of the remote user. See UserPriority.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority);
 }
 
@@ -1257,10 +1209,6 @@ mixin RtcMediaMetadataInterface {
   /// Unregisters the media metadata observer.
   /// 
   ///
-  /// Param [observer] The metadata observer. See .
-  ///
-  /// Param [type] The metadata type. The SDK currently only supports . For details, see .
-  ///
   /// **return** 0: Success.
   /// < 0: Failure.
   ///
@@ -1272,20 +1220,13 @@ mixin RtcMediaMetadataInterface {
   ///
   /// Param [size] The maximum size of media metadata.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setMaxMetadataSize(int size);
 
   ///
   /// Sends media metadata.
-  /// After a successful method call of registerMediaMetadataObserver, the SDK triggers the  callback, and then you can call this method to send media metadata.
   /// If the metadata is sent successfully, the SDK triggers the metadataReceived callback on the receiver.
   ///
   /// Param [metadata] Media metadata. See Metadata.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> sendMetadata(Uint8List metadata);
 }
@@ -1305,9 +1246,6 @@ mixin RtcEncryptionInterface {
   ///   Please use the enableEncryption method instead.
   ///
   /// Param [secret] The encryption password.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   @deprecated
   Future<void> setEncryptionSecret(String secret);
@@ -1333,9 +1271,6 @@ mixin RtcEncryptionInterface {
   /// 
   ///   
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
@@ -1358,13 +1293,6 @@ mixin RtcEncryptionInterface {
   /// 
   ///
   /// Param [config] Configurations of built-in encryption. For details, see EncryptionConfig.
-  ///
-  /// **return** 0: Success.
-  /// 
-  /// < 0: Failure.
-  /// -2(ERR_INVALID_ARGUMENT): An invalid parameter is used. Set the parameter with a valid value.
-  /// -4(ERR_NOT_SUPPORTED): The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
-  /// -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the RtcEngine instance before calling this method.
   ///
   Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
@@ -1402,15 +1330,6 @@ mixin RtcInjectStreamInterface {
   ///
   /// Param [config] The configuration information for the added voice or video stream: LiveInjectStreamConfig.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// ERR_INVALID_ARGUMENT (-2): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
-  /// ERR_NOT_READY (-3): The user is not in the channel.
-  /// ERR_NOT_SUPPORTED (-4): The channel is not a live streaming channel. Call
-  /// setChannelProfile and set the channel profile to
-  /// live streaming before calling this method.
-  /// ERR_NOT_INITIALIZED (-7): The SDK is not initialized. Ensure that the RtcEngine object is initialized before using this method.
-  ///
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config);
 
   ///
@@ -1419,9 +1338,6 @@ mixin RtcInjectStreamInterface {
   /// with the uid of 666.
   ///
   /// Param [url] The URL address of the injected stream to be removed.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> removeInjectStreamUrl(String url);
 }
@@ -1488,9 +1404,6 @@ mixin RtcStreamMessageInterface {
   /// Param [message] The message to be sent.
   ///
   /// Param [length] The length of the data.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> sendStreamMessage(int streamId, Uint8List message);
 }

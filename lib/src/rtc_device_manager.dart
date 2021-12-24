@@ -274,9 +274,6 @@ class RtcDeviceManager {
   /// Param [deviceId] The device ID. You can get the device ID by calling enumerateVideoDevices.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setVideoDevice(String deviceId) {
     return _invokeVideoMethod('callApi', {
       'apiType': _ApiTypeVideoDeviceManager.kVDMSetDevice.index,

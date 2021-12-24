@@ -135,12 +135,18 @@ class RtcEngine with RtcEngineInterface {
   }
 
   ///
+  /// Initializes the 
+  /// RtcEngine
+  ///  object.
   /// Deprecated:
   /// This method is deprecated. Use createWithContext instead.
   ///
   /// Param [appId] The App ID of your Agora project.
   ///
   /// Param [areaCode] The area code. For details, see AreaCode.
+  ///
+  /// **return** The RtcEngine instance, if the method call succeeds.
+  /// An error code, if the call fails.
   ///
   @deprecated
   static Future<RtcEngine> createWithAreaCode(
@@ -149,10 +155,13 @@ class RtcEngine with RtcEngineInterface {
   }
 
   ///
+  /// Initializes the 
+  /// RtcEngine
+  ///  object.
   /// Deprecated:
   /// This method is deprecated. Use createWithContext instead.
   ///
-  /// Param [null]
+  /// Param [config] The RtcEngine configuraiton. For details, see RtcEngineContext.
   ///
   @deprecated
   static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
@@ -1973,11 +1982,6 @@ mixin RtcEngineInterface
   /// The channel profile. For details, see ChannelProfile.
   ///
   ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  /// -2(ERR_INVALID_ARGUMENT): The parameter is invalid.
-  /// -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
-  ///
   Future<void> setChannelProfile(ChannelProfile profile);
 
   ///
@@ -1992,13 +1996,6 @@ mixin RtcEngineInterface
   /// Param [role] The user role in the interactive live streaming. For details, see ClientRole.
   ///
   /// Param [options] The detailed options of a user, including the user level. For details, see ClientRoleOptions.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///   -1: A general error occurs (no specified reason).
-  ///   -2: The parameter is invalid.
-  /// -5: The request is rejected.
-  ///   -7: The SDK is not initialized.- 0: The SDK is initializing.
   ///
   Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]);
 
@@ -2032,15 +2029,6 @@ mixin RtcEngineInterface
   ///
   /// Param [options] The channel media options. For details, see ChannelMediaOptions.
   ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  ///   -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  ///   -3(ERR_NOT_READY): The SDK fails to be initialized. You can try re-initializing the SDK.
-  ///   -5(ERR_REFUSED): The request is rejected. This may be caused by the following:
-  /// You have created an RtcChannel object with the same channel name.
-  /// You have joined a channel by using RtcChannel and published a stream in the RtcChannel channel.
-  ///   -7(ERR_NOT_INITIALIZED): The SDK is not initialized before calling this method. Initialize the RtcEngine instance before calling this method.
-  ///
   Future<void> joinChannel(
       String? token, String channelName, String? optionalInfo, int optionalUid,
       [ChannelMediaOptions? options]);
@@ -2069,15 +2057,6 @@ mixin RtcEngineInterface
   ///
   ///
   /// Param [options] The channel media options. See ChannelMediaOptions.
-  ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  ///   -1(ERR_FAILED): A general error occurs (no specified reason).
-  ///   -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  ///   -5(ERR_REFUSED): The request is rejected. The role of the remote user is not AUDIENCE.
-  ///   -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
-  ///   -102(ERR_INVALID CHANNEL_NAME): The channel name is invalid. Please use a valid channel name.
-  ///   -113(ERR_NOT_IN_CHANNEL): The user is not in the channel.
   ///
   Future<void> switchChannel(String? token, String channelName,
       [ChannelMediaOptions? options]);
@@ -2111,12 +2090,6 @@ mixin RtcEngineInterface
   ///
   /// Param [token] The new token.
   ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  ///   -1(ERR_FAILED): A general error occurs (no specified reason).
-  ///   -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  ///   -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
-  ///
   Future<void> renewToken(String token);
 
   ///
@@ -2132,9 +2105,6 @@ mixin RtcEngineInterface
   /// true: Enable interoperability.
   /// false: (Default) Disable interoperability.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   @deprecated
   Future<void> enableWebSdkInteroperability(bool enabled);
@@ -2176,11 +2146,6 @@ mixin RtcEngineInterface
   ///
   /// Param [description] (Optional) A description of the call. The string length should be less than 800 bytes.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///   -2 (ERR_INVALID_ARGUMENT).
-  ///   -3 (ERR_NOT_READY)。
-  ///
   Future<void> rate(String callId, int rating, {String? description});
 
   ///
@@ -2190,11 +2155,6 @@ mixin RtcEngineInterface
   /// Param [callId] The current call ID. You can get the call ID by calling getCallId.
   ///
   /// Param [description] (Optional) A description of the call. The string length should be less than 800 bytes.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///   -2 (ERR_INVALID_ARGUMENT).
-  ///   -3 (ERR_NOT_READY)。
   ///
   Future<void> complain(String callId, String description);
 
@@ -2208,9 +2168,6 @@ mixin RtcEngineInterface
   /// The absolute path of the log files. The default file path is C: \Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log. Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setLogFile(String filePath);
 
@@ -2221,9 +2178,6 @@ mixin RtcEngineInterface
   ///
   /// Param [filter] The output log level of the SDK. For details, see LogFilter.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setLogFilter(LogFilter filter);
 
@@ -2233,9 +2187,6 @@ mixin RtcEngineInterface
   /// If you want to set the size of the log file, you need to call this method before setLogFile, otherwise, the log will be cleared.
   ///
   /// Param [fileSizeInKBytes] The size (KB) of a log file. The default value is 1024 KB. If you set fileSizeInKByte to 1024 KB, the maximum aggregate size of the log files output by the SDK is 5 MB. if you set fileSizeInKByte to less than 1024 KB, the setting is invalid, and the maximum size of a log file is still 1024 KB.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   @deprecated
   Future<void> setLogFileSize(int fileSizeInKBytes);
@@ -2270,14 +2221,10 @@ mixin RtcEngineInterface
   /// This method dynamically loads the library, so Agora recommends calling this method before joining a channel.
   /// This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   ///
-  /// Param [enabled] Whether to enable deep-learning noise reduction.
+  /// Param [enable] Whether to enable deep-learning noise reduction.
   /// true: (Default) Enable deep-learning noise reduction.
   /// false: Disable deep-learning noise reduction.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///   -157 (ERR_MODULE_NOT_FOUND): The dynamic library for enabling deep-learning noise reduction is not integrated.
   ///
   Future<void> enableDeepLearningDenoise(bool enable);
 
@@ -2293,12 +2240,6 @@ mixin RtcEngineInterface
   /// Cloud proxy for the UDP protocol does not apply to pushing streams to CDN or co-hosting across channels.
   ///
   /// Param [proxyType] The type of the cloud proxy. See CloudProxyType . This parameter is mandatory. The SDK reports an error if you do not pass in a value.
-  ///
-  /// **return** 0: Success.
-  ///
-  /// < 0: Failure.
-  /// -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  /// -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
   ///
   Future<void> setCloudProxy(CloudProxyType proxyType);
 
@@ -2357,9 +2298,6 @@ mixin RtcEngineInterface
   ///
   /// Param [backgroundSource] The custom background image. See VirtualBackgroundSource.To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableVirtualBackground(
       bool enabled, VirtualBackgroundSource backgroundSource);
 
@@ -2393,9 +2331,6 @@ mixin RtcUserInfoInterface {
   /// Space
   /// "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> registerLocalUserAccount(String appId, String userAccount);
 
@@ -2433,15 +2368,6 @@ mixin RtcUserInfoInterface {
   /// "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   ///
   ///
-  ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  ///   -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  ///   -3(ERR_NOT_READY): The SDK fails to be initialized. You can try re-initializing the SDK.
-  ///   -5(ERR_REFUSED): The request is rejected. This may be caused by the following:
-  /// You have created an RtcChannel object with the same channel name.
-  /// You have joined a channel by using RtcChannel and published a stream in the RtcChannel channel.
-  ///   -7(ERR_NOT_INITIALIZED): The SDK is not initialized before calling this method. Initialize the RtcEngine instance before calling this method.
   ///
   Future<void> joinChannelWithUserAccount(
       String? token, String channelName, String userAccount,
@@ -2515,12 +2441,21 @@ mixin RtcAudioInterface {
   ///   muteRemoteAudioStream: Whether to subscribe and play the remote audio stream.
   ///   muteAllRemoteAudioStreams: Whether to subscribe to and play all remote audio streams.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableAudio();
 
-  /* api-engine-enableLoopbackRecording */
+  ///
+  /// Enables loopback audio capturing.
+  /// If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
+  /// 
+  ///   
+  /// This method applies to macOS and Windows only.
+  /// You can call this method either before or after joining a channel.
+  ///
+  /// Param [enabled] Sets whether to enable loopback capturing.
+  ///  true: Enable loopback audio capturing.
+  ///  false: (Default) Disable loopback capturing.
+  /// 
+  ///
   Future<void> enableLoopbackRecording(bool enabled, {String? deviceName});
 
   ///
@@ -2531,9 +2466,6 @@ mixin RtcAudioInterface {
   /// muteLocalAudioStream: Whether to publish the local audio stream.
   /// muteRemoteAudioStream: Whether to subscribe and play the remote audio stream.
   /// muteAllRemoteAudioStreams: Whether to subscribe to and play all remote audio streams.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> disableAudio();
 
@@ -2547,9 +2479,6 @@ mixin RtcAudioInterface {
   ///
   ///
   /// Param [scenario] The audio scenario. For more details, see AudioScenario. Under different audio scenarios, the device uses different volume types.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setAudioProfile(AudioProfile profile, AudioScenario scenario);
 
@@ -2565,9 +2494,6 @@ mixin RtcAudioInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> adjustRecordingSignalVolume(int volume);
 
   ///
@@ -2581,9 +2507,6 @@ mixin RtcAudioInterface {
   /// Param [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, the original volume.
   ///
   /// Param [uid] The ID of the remote user.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> adjustUserPlaybackSignalVolume(int uid, int volume);
 
@@ -2599,9 +2522,6 @@ mixin RtcAudioInterface {
   /// 400: Four times the original volume (amplifying the audio signals by four times).
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> adjustPlaybackSignalVolume(int volume);
 
@@ -2623,9 +2543,6 @@ mixin RtcAudioInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableLocalAudio(bool enabled);
 
   ///
@@ -2639,9 +2556,6 @@ mixin RtcAudioInterface {
   /// false: (Default) Resumes publishing the local audio stream.
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> muteLocalAudioStream(bool muted);
 
@@ -2659,9 +2573,6 @@ mixin RtcAudioInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> muteRemoteAudioStream(int uid, bool muted);
 
   ///
@@ -2677,9 +2588,6 @@ mixin RtcAudioInterface {
   ///
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> muteAllRemoteAudioStreams(bool muted);
 
@@ -2697,9 +2605,6 @@ mixin RtcAudioInterface {
   ///
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
@@ -2723,9 +2628,6 @@ mixin RtcAudioInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableAudioVolumeIndication(
       int interval, int smooth, bool report_vad);
 }
@@ -2743,9 +2645,6 @@ mixin RtcVideoInterface {
   /// muteRemoteVideoStream: Whether to subscribe to and play the remote video stream.
   /// muteAllRemoteVideoStreams: Whether to subscribe to and play all remote video streams.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableVideo();
 
   ///
@@ -2759,9 +2658,6 @@ mixin RtcVideoInterface {
   /// muteRemoteVideoStream: Whether to subscribe to and play the remote video stream.
   /// muteAllRemoteVideoStreams: Whether to subscribe to and play all remote video streams.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> disableVideo();
 
   ///
@@ -2770,9 +2666,6 @@ mixin RtcVideoInterface {
   /// You can call this method either before or after joining a channel. If the user does not need to reset the video encoding properties after joining the channel, Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.
   ///
   /// Param [config] Video profile. For details, see VideoEncoderConfiguration.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
 
@@ -2788,17 +2681,11 @@ mixin RtcVideoInterface {
   /// The local preview enables the mirror mode by default.
   /// After the local video preview is enabled, if you call leaveChannel to exit the channel, the local preview remains until you call stopPreview to disable it.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startPreview();
 
   ///
   /// Stops the local video preview.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopPreview();
 
@@ -2820,9 +2707,6 @@ mixin RtcVideoInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableLocalVideo(bool enabled);
 
   ///
@@ -2841,27 +2725,20 @@ mixin RtcVideoInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> muteLocalVideoStream(bool muted);
 
   ///
   /// Stops or resumes subscribing to the video stream of a specified user.
+  /// Call this method after joining a channel.
+  ///   See recommended settings in Set the Subscribing State.
   ///
-  ///
-  /// Param [uid]
-  /// The ID of the specified user.
-  ///
+  /// Param [uid] The ID of the specified user.
   ///
   /// Param [muted] Whether to stop subscribing to the video stream of the specified user.
   /// true: Stop subscribing to the video streams of the specified user.
   /// false: (Default) Subscribe to the video stream of the specified user.
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> muteRemoteVideoStream(int uid, bool muted);
 
@@ -2880,9 +2757,6 @@ mixin RtcVideoInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> muteAllRemoteVideoStreams(bool muted);
 
   ///
@@ -2899,9 +2773,6 @@ mixin RtcVideoInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
@@ -2917,12 +2788,60 @@ mixin RtcVideoInterface {
   ///
   /// Param [options] The image enhancement options. See BeautyOptions.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
-  /* api-engine-enableRemoteSuperResolution */
+  ///
+  /// Enables/Disables the super-resolution algorithm for a remote user's video stream.
+  /// This feature effectively boosts the resolution of a remote user's video seen by the local user. If the original resolution of a remote user's video is a × b, the local user's device can render the remote video at a resolution of 2a × 2b
+  /// after you enable this feature.
+  /// After you call this method, the SDK triggers the userSuperResolutionEnabled callback to report whether you have successfully enabled super resolution.
+  /// The super resolution feature requires extra system resources. To balance the visual experience and system usage, the SDK poses the following restrictions: This feature can only be enabled for a single remote user.
+  /// On Android, the original resolution of the remote video must not exceed 640 × 360 pixels. On iOS, the original resolution of the remote video must not exceed 640 × 480 pixels. If you exceed these limitations, the SDK triggers the warning callback and returns the corresponding warning codes:
+  /// SuperResolutionStreamOverLimitation: 1610. The origin resolution of the remote video is beyond the range where the super resolution can be applied.
+  /// SuperResolutionUserCountOverLimitation: 1611. Super resolution is already being used on another remote user's video.
+  /// SuperResolutionDeviceNotSupported: 1612. The device does not support using super resolution.
+  /// 
+  /// 
+  /// 
+  /// This method is for Android and iOS only.
+  /// Before calling this method, ensure that you have integrated the following dynamic libraries:
+  /// Android: libagora_super_resolution_extension.so
+  /// iOS: AgoraSuperResolutionExtension.xcframework
+  /// 
+  /// 
+  /// Because this method has certain system performance requirements, Agora recommends that you use the following devices or better:
+  /// Android:
+  /// VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 Pro
+  /// OPPO: PCCM00, Find X3
+  /// OnePlus: A6000
+  /// Xiaomi: Mi 8, Mi 9, Mi 10, Mi 11, MIX3, Redmi K20 Pro
+  /// SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, SM-G9750, S20, S21
+  /// HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, EVR-AN00, nova 4, nova 5 Pro, nova 6 5G, nova 7 5G, Mate 30, Mate 30 Pro, Mate 40, Mate 40 Pro, P40, P40 Pro, Huawei M6, MatePad 10.8
+  /// 
+  /// iOS:
+  /// iPhone XR
+  /// iPhone XS
+  /// iPhone XS Max
+  /// iPhone 11
+  /// iPhone 11 Pro
+  /// iPhone 11 Pro Max
+  /// iPhone 12
+  /// iPhone 12 mini
+  /// iPhone 12 Pro
+  /// iPhone 12 Pro Max
+  /// iPhone 12 SE (2nd generation)
+  /// iPad Pro 11-inch (3rd generation)
+  /// iPad Pro 12.9-inch (3rd generation)
+  /// iPad Air 3 (3rd generation)
+  /// iPad Air 3 (4th generation)
+  ///
+  /// Param [userId] The ID of the remote user.
+  ///
+  /// Param [enable] Whether to enable super resolution for the remote user’s video:
+  /// true: Enable virtual background.
+  /// false: Do not enable virtual background.
+  /// 
+  ///
   Future<void> enableRemoteSuperResolution(int userId, bool enable);
 }
 
@@ -2956,9 +2875,6 @@ mixin RtcAudioMixingInterface {
   ///
   /// Param [startPos] The playback position (ms) of the music file.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startAudioMixing(
       String filePath, bool loopback, bool replace, int cycle,
       [int? startPos]);
@@ -2967,26 +2883,17 @@ mixin RtcAudioMixingInterface {
   /// Stops playing and mixing the music file.
   /// This method stops the audio mixing. Call this method when you are in a channel.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> stopAudioMixing();
 
   ///
   /// Pauses playing and mixing the music file.
   /// Call this method when you are in a channel.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> pauseAudioMixing();
 
   ///
   /// Resumes playing and mixing the music file.
   /// This method resumes playing and mixing the music file. Call this method when you are in a channel.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> resumeAudioMixing();
 
@@ -3000,9 +2907,6 @@ mixin RtcAudioMixingInterface {
   ///
   /// Param [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, the original volume.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> adjustAudioMixingVolume(int volume);
 
   ///
@@ -3010,9 +2914,6 @@ mixin RtcAudioMixingInterface {
   /// You need to call this method after calling startAudioMixing and receiving the audioMixingStateChanged(PLAY) callback.
   ///
   /// Param [volume] Audio mixing volume for local playback. The value range is [0,100]. The default value is 100, the original volume.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> adjustAudioMixingPlayoutVolume(int volume);
 
@@ -3022,9 +2923,6 @@ mixin RtcAudioMixingInterface {
   /// You need to call this method after calling startAudioMixing and receiving the audioMixingStateChanged(PLAY) callback.
   ///
   /// Param [volume] Audio mixing volume. The value range is [0,100]. The default value is 100, the original volume.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> adjustAudioMixingPublishVolume(int volume);
 
@@ -3050,10 +2948,11 @@ mixin RtcAudioMixingInterface {
 
   ///
   /// Retrieves the duration (ms) of the music file.
-  /// Retrieves the total duration (ms) of the audio.
-  /// You need to call this method after calling  and receivingaudioMixingStateChanged the (PlayingPLAY) callback.
+  /// Call this method after joining a channel.
   ///
-  /// **return** ≥ 0: The audio mixing duration, if this method call succeeds.
+  /// Param [filePath] The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. See supported audio formats.
+  ///
+  /// **return** ≥ 0: A successful method call. Returns the total duration (ms) of the specified music file.
   /// < 0: Failure.
   ///
   @Deprecated(
@@ -3080,9 +2979,6 @@ mixin RtcAudioMixingInterface {
   ///
   /// Param [pos] Integer. The playback position (ms).
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setAudioMixingPosition(int pos);
 
   ///
@@ -3092,9 +2988,6 @@ mixin RtcAudioMixingInterface {
   ///
   /// Param [pitch] Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setAudioMixingPitch(int pitch);
 
   /* api-engine-setAudioMixingPlaybackSpeed */
@@ -3103,10 +2996,23 @@ mixin RtcAudioMixingInterface {
   /* api-engine-getAudioTrackCount */
   Future<int?> getAudioTrackCount();
 
-  /* api-engine-selectAudioTrack */
+  ///
+  /// Selects the audio track used during playback.
+  /// If the media file has multiple audio tracks, you can call this method to select the audio track used during playback.
+  ///
+  /// Param [audioIndex] The index of the audio track.
+  ///
   Future<void> selectAudioTrack(int audioIndex);
 
-  /* api-engine-setAudioMixingDualMonoMode */
+  ///
+  /// Sets the channel mode of the current audio file.
+  /// In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.
+  /// 
+  /// Call this method after calling .
+  /// This method only applies to stereo audio files.
+  ///
+  /// Param [mode] The channel mode. For details, see AudioMixingDualMonoMode.
+  ///
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode);
 }
 
@@ -3127,9 +3033,6 @@ mixin RtcAudioEffectInterface {
   ///
   /// Param [volume] The playback volume. The value ranges from 0 to 100. The default value is 100, which represents the original volume.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setEffectsVolume(int volume);
 
   ///
@@ -3139,9 +3042,6 @@ mixin RtcAudioEffectInterface {
   /// Param [soundId] The ID of the audio effect. Each audio effect has a unique ID.
   ///
   /// Param [volume] The playback volume. The value ranges from 0 to 100. The default value is 100, which represents the original volume.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setVolumeOfEffect(int soundId, int volume);
 
@@ -3185,9 +3085,6 @@ mixin RtcAudioEffectInterface {
   /// The playback position (ms) of the audio effect file.
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> playEffect(int soundId, String filePath, int loopCount,
       double pitch, double pan, int gain, bool publish,
       [int? startPos]);
@@ -3200,9 +3097,6 @@ mixin RtcAudioEffectInterface {
   /// Param [soundId] The ID of the audio effect. Each audio effect has a unique ID.
   ///
   /// Param [pos] The playback position (ms) of the audio effect file.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setEffectPosition(int soundId, int pos);
 
@@ -3235,17 +3129,11 @@ mixin RtcAudioEffectInterface {
   ///
   /// Param [soundId] The ID of the audio effect. Each audio effect has a unique ID.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> stopEffect(int soundId);
 
   ///
   /// Stops playing all audio effects.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopAllEffects();
 
@@ -3259,9 +3147,6 @@ mixin RtcAudioEffectInterface {
   /// Param [filePath] The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. See supported audio formats.
   ///
   ///
-  /// **return** 0: Success.
-  ///   < 0: Failure.
-  ///
   Future<void> preloadEffect(int soundId, String filePath);
 
   ///
@@ -3269,9 +3154,6 @@ mixin RtcAudioEffectInterface {
   ///
   ///
   /// Param [soundId] The ID of the audio effect. Each audio effect has a unique ID.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> unloadEffect(int soundId);
 
@@ -3281,17 +3163,11 @@ mixin RtcAudioEffectInterface {
   ///
   /// Param [soundId] The ID of the audio effect. Each audio effect has a unique ID.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> pauseEffect(int soundId);
 
   ///
   /// Pauses all audio effects.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> pauseAllEffects();
 
@@ -3301,17 +3177,11 @@ mixin RtcAudioEffectInterface {
   ///
   /// Param [soundId] The ID of the audio effect. Each audio effect has a unique ID.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> resumeEffect(int soundId);
 
   ///
   /// Resumes playing all audio effects.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> resumeAllEffects();
 
@@ -3324,9 +3194,6 @@ mixin RtcAudioEffectInterface {
   /// This method does not restrict the operational permission of the app on the audio session.
   ///
   /// Param [restriction] The operational permission of the SDK on the audio session. See AudioSessionOperationRestriction. This parameter is in bit mask format, and each bit corresponds to a permission.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction);
@@ -3362,9 +3229,6 @@ mixin RtcVoiceChangerInterface {
   /// The local voice changer option. The default value is Off , which means the original voice. For more details, see AudioVoiceChanger. The gender-based beatification effect works best only when assigned a proper gender. Use GENERAL_BEAUTY_VOICE_MALE_MAGNETIC for male and use GENERAL_BEAUTY_VOICE_FEMALE_FRESH and GENERAL_BEAUTY_VOICE_FEMALE_VITALITY for female. Failure to do so can lead to voice distortion.
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger);
 
@@ -3381,9 +3245,6 @@ mixin RtcVoiceChangerInterface {
   ///
   /// Param [reverbPreset] The local voice reverberation option. The default value is Off, which means the original voice. For more details, see AudioReverbPreset. To achieve better voice effects, Agora recommends the enumeration whose name begins with AUDIO_REVERB_FX.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset);
 
@@ -3392,9 +3253,6 @@ mixin RtcVoiceChangerInterface {
   /// You can call this method either before or after joining a channel.
   ///
   /// Param [pitch] The local voice pitch. The value range is [0.5,2.0]. The lower the value, the lower the pitch. The default value is 1 (no change to the pitch).
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setLocalVoicePitch(double pitch);
 
@@ -3406,9 +3264,6 @@ mixin RtcVoiceChangerInterface {
   ///
   /// Param [bandGain] The gain of each band in dB. The value ranges between -15 and 15. The default value is 0.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setLocalVoiceEqualization(
       AudioEqualizationBandFrequency bandFrequency, int bandGain);
 
@@ -3419,9 +3274,6 @@ mixin RtcVoiceChangerInterface {
   /// Param [reverbKey] The reverberation key. Agora provides 5 reverberation keys: AudioReverbType.
   ///
   /// Param [value] The value of the reverberation key.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setLocalVoiceReverb(AudioReverbType reverbKey, int value);
 
@@ -3447,9 +3299,6 @@ mixin RtcVoiceChangerInterface {
   /// setVoiceConversionPreset
   ///
   /// Param [preset] The options for SDK preset audio effects. See AudioEffectPreset.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setAudioEffectPreset(AudioEffectPreset preset);
 
@@ -3477,9 +3326,6 @@ mixin RtcVoiceChangerInterface {
   /// The preset voice beautifier effect options: VoiceBeautifierPreset.
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
 
   ///
@@ -3504,9 +3350,6 @@ mixin RtcVoiceChangerInterface {
   ///
   /// Param [preset] The options for the preset voice beautifier effects: VoiceConversionPreset.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset);
 
@@ -3578,9 +3421,6 @@ mixin RtcVoiceChangerInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setAudioEffectParameters(
       AudioEffectPreset preset, int param1, int param2);
 
@@ -3622,9 +3462,6 @@ mixin RtcVoiceChangerInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setVoiceBeautifierParameters(
       VoiceBeautifierPreset preset, int param1, int param2);
 }
@@ -3640,9 +3477,6 @@ mixin RtcVoicePositionInterface {
   ///  false: Disable stereo panning.
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> enableSoundPositionIndication(bool enabled);
 
@@ -3667,9 +3501,6 @@ mixin RtcVoicePositionInterface {
   ///
   /// Param [gain] The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setRemoteVoicePosition(int uid, double pan, double gain);
 }
 
@@ -3688,9 +3519,6 @@ mixin RtcPublishStreamInterface {
   ///
   /// Param [transcoding]
   /// The transcoding configurations for CDN live streaming. For details, see LiveTranscoding.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
@@ -3715,11 +3543,6 @@ mixin RtcPublishStreamInterface {
   /// If you set this parameter as true, ensure that you call the setLiveTranscoding method before this method.
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// ERR_INVALID_ARGUMENT(-2): Invalid argument, usually because the URL address is null or the string length is 0.
-  /// ERR_NOT_INITIALIZED(-7): You have not initialized the RTC engine when publishing the stream.
-  ///
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   ///
@@ -3733,9 +3556,6 @@ mixin RtcPublishStreamInterface {
   /// This method removes only one CDN streaming URL each time it is called. To remove multiple URLs, call this method multiple times.
   ///
   /// Param [url] The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes. The CDN streaming URL must not contain special characters, such as Chinese characters.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> removePublishStreamUrl(String url);
 }
@@ -3759,9 +3579,6 @@ mixin RtcMediaRelayInterface {
   ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay. For details, see ChannelMediaRelayConfiguration.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
@@ -3773,9 +3590,6 @@ mixin RtcMediaRelayInterface {
   ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay. For more details, see ChannelMediaRelayConfiguration.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
@@ -3783,9 +3597,6 @@ mixin RtcMediaRelayInterface {
   /// Stops the media stream relay. Once the relay stops, the host quits all the destination channels.
   /// After a successful method call, the SDK triggers the channelMediaRelayStateChanged callback. If the callback reports Idle (0) and None (0), the host successfully stops the relay.
   /// If the method call fails, the SDK triggers the channelMediaRelayStateChanged callback with the ServerNoResponse (2) or ServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopChannelMediaRelay();
 
@@ -3814,9 +3625,6 @@ mixin RtcAudioRouteInterface {
   /// false: Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setEnableSpeakerphone(bool defaultToSpeaker);
 
@@ -3848,9 +3656,6 @@ mixin RtcEarMonitoringInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableInEarMonitoring(bool enabled);
 
   ///
@@ -3860,9 +3665,6 @@ mixin RtcEarMonitoringInterface {
   /// You can call this method either before or after joining a channel.
   ///
   /// Param [volume] The volume of the in-ear monitor. The value ranges between 0 and 100. The default value is 100.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setInEarMonitoringVolume(int volume);
 }
@@ -3886,9 +3688,6 @@ mixin RtcDualStreamInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableDualStreamMode(bool enabled);
 
   /* api-engine-setRemoteVideoStreamType */
@@ -3905,9 +3704,6 @@ mixin RtcDualStreamInterface {
   /// The default stream type of the remote video, see VideoStreamType.
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 }
 
@@ -3923,9 +3719,6 @@ mixin RtcFallbackInterface {
   ///
   /// Param [option] The stream fallback option. For details, see StreamFallbackOptions.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setLocalPublishFallbackOption(StreamFallbackOptions option);
 
   ///
@@ -3934,9 +3727,6 @@ mixin RtcFallbackInterface {
   /// Ensure that you call this method before joining a channel.
   ///
   /// Param [option] See StreamFallbackOptions. The default value is VideoStreamLow(1).
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
 
@@ -3951,9 +3741,6 @@ mixin RtcFallbackInterface {
   /// Param [uid] The ID of the remote user.
   ///
   /// Param [userPriority] The priority of the remote user. See UserPriority.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setRemoteUserPriority(int uid, UserPriority userPriority);
 }
@@ -3971,19 +3758,11 @@ mixin RtcTestInterface {
   ///
   /// Param [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startEchoTest(int intervalInSeconds);
 
   ///
   /// Stops the audio call test.
   ///
-  ///
-  /// **return** 0: Success.
-  ///
-  /// < 0: Failure.
-  /// -5(ERR_REFUSED): Failed to stop the echo test. The echo test may not be running.
   ///
   Future<void> stopEchoTest();
 
@@ -4002,17 +3781,11 @@ mixin RtcTestInterface {
   /// A host should not call this method after joining a channel (when in a call).
   /// If you call this method to test the last mile network quality, the SDK consumes the bandwidth of a video stream, whose bitrate corresponds to the bitrate you set in setVideoEncoderConfiguration. After joining a channel, whether you have called disableLastmileTest or not, the SDK automatically stops consuming the bandwidth.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> enableLastmileTest();
 
   ///
   /// Disables the network connection quality test.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> disableLastmileTest();
 
@@ -4036,17 +3809,11 @@ mixin RtcTestInterface {
   ///
   /// Param [config] The configurations of the last-mile network probe test. See LastmileProbeConfig.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startLastmileProbeTest(LastmileProbeConfig config);
 
   ///
   /// Stops the last mile network probe test.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopLastmileProbeTest();
 }
@@ -4072,8 +3839,6 @@ mixin RtcMediaMetadataInterface {
   /// Unregisters the specified metadata observer.
   ///
   ///
-  /// Param [type] The metadata type. The SDK currently only supports . For details, see .
-  ///
   /// **return** 0: Success.
   /// < 0: Failure.
   ///
@@ -4085,20 +3850,13 @@ mixin RtcMediaMetadataInterface {
   ///
   /// Param [size] The maximum size of media metadata.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setMaxMetadataSize(int size);
 
   ///
   /// Sends media metadata.
-  /// After a successful method call of registerMediaMetadataObserver, the SDK triggers the  callback, and then you can call this method to send media metadata.
   /// If the metadata is sent successfully, the SDK triggers the metadataReceived callback on the receiver.
   ///
   /// Param [metadata] Media metadata See Metadata.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> sendMetadata(Uint8List metadata);
 }
@@ -4127,17 +3885,11 @@ mixin RtcWatermarkInterface {
   ///
   /// Param [options] The options of the watermark image to be added. For details, see WatermarkOptions.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> addVideoWatermark(String watermarkUrl, WatermarkOptions options);
 
   ///
   /// Removes the watermark image from the video stream.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> clearVideoWatermarks();
 }
@@ -4157,9 +3909,6 @@ mixin RtcEncryptionInterface {
   ///   For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
   ///
   /// Param [secret] The encryption password.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   @deprecated
   Future<void> setEncryptionSecret(String secret);
@@ -4183,9 +3932,6 @@ mixin RtcEncryptionInterface {
   ///
   ///
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
@@ -4204,13 +3950,6 @@ mixin RtcEncryptionInterface {
   ///
   ///
   /// Param [config] Configurations of built-in encryption. For details, see EncryptionConfig.
-  ///
-  /// **return** 0: Success.
-  ///
-  /// < 0: Failure.
-  /// -2(ERR_INVALID_ARGUMENT): An invalid parameter is used. Set the parameter with a valid value.
-  /// -4(ERR_NOT_SUPPORTED): The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
-  /// -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the RtcEngine instance before calling this method.
   ///
   Future<void> enableEncryption(bool enabled, EncryptionConfig config);
 }
@@ -4251,9 +3990,6 @@ mixin RtcAudioRecorderInterface {
   ///
   /// Param [quality] Recording quality. For more details, see AudioRecordingQuality.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   @deprecated
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality);
@@ -4268,9 +4004,6 @@ mixin RtcAudioRecorderInterface {
   /// Call this method after joining a channel.
   ///
   /// Param [config] Recording configuration. See AudioRecordingConfiguration.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> startAudioRecordingWithConfig(
       AudioRecordingConfiguration config);
@@ -4292,19 +4025,12 @@ mixin RtcAudioRecorderInterface {
   ///
   /// Param [config] The metronome configuration. See RhythmPlayerConfig.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// -22: Cannot find audio effect files. Please set the correct paths for sound1 and sound2.
-  ///
   Future<void> startRhythmPlayer(
       String sound1, String sound2, RhythmPlayerConfig config);
 
   ///
   /// Disables the virtual metronome.
   /// After calling startRhythmPlayer, you can call this method to reconfigure the virtual metronome.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopRhythmPlayer();
 
@@ -4315,18 +4041,12 @@ mixin RtcAudioRecorderInterface {
   ///
   /// Param [config] The metronome configuration. See RhythmPlayerConfig.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> configRhythmPlayer(RhythmPlayerConfig config);
 
   ///
   /// Stops the audio recording on the client.
   /// If you call startAudioRecordingWithConfig to start recording, you can call this method to stop the recording.
   /// Once the user leaves the channel, the recording automatically stops.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopAudioRecording();
 }
@@ -4363,15 +4083,6 @@ mixin RtcInjectStreamInterface {
   ///
   /// Param [config] The configuration information for the added voice or video stream: LiveInjectStreamConfig.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// ERR_INVALID_ARGUMENT (-2): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
-  /// ERR_NOT_READY (-3): The user is not in the channel.
-  /// ERR_NOT_SUPPORTED (-4): The channel is not a live streaming channel. Call
-  /// setChannelProfile and set the channel profile to
-  /// live streaming before calling this method.
-  /// ERR_NOT_INITIALIZED (-7): The SDK is not initialized. Ensure that the RtcEngine object is initialized before using this method.
-  ///
   Future<void> addInjectStreamUrl(String url, LiveInjectStreamConfig config);
 
   ///
@@ -4382,9 +4093,6 @@ mixin RtcInjectStreamInterface {
   ///
   /// Param [url] The URL address of the injected stream to be removed.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> removeInjectStreamUrl(String url);
 }
 
@@ -4392,10 +4100,7 @@ mixin RtcInjectStreamInterface {
 mixin RtcCameraInterface {
   ///
   /// Switches between front and rear cameras.
-  /// This method needs to be called after the camera is started (for example, by calling startPreview or ).
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
+  /// This method needs to be called after the camera is started (for example, by calling startPreview or joinChannel).
   ///
   Future<void> switchCamera();
 
@@ -4410,7 +4115,7 @@ mixin RtcCameraInterface {
 
   ///
   /// Checks whether the device supports camera flash.
-  /// This method needs to be called after the camera is started (for example, by calling startPreview or ).
+  /// This method needs to be called after the camera is started (for example, by calling startPreview or joinChannel).
   ///
   ///
   /// The app enables the front camera by default. If your front camera does not support flash, this method returns false.
@@ -4441,7 +4146,7 @@ mixin RtcCameraInterface {
 
   ///
   /// Checks whether the device supports the face auto-focus function.
-  /// This method needs to be called after the camera is started (for example, by calling startPreview or ).
+  /// This method needs to be called after the camera is started (for example, by calling startPreview or joinChannel).
   ///
   /// **return** true: The device supports the face auto-focus function.
   /// false: The device does not support the face auto-focus function.
@@ -4452,10 +4157,7 @@ mixin RtcCameraInterface {
   /// Sets the camera zoom ratio.
   /// Call this method before calling joinChannel, enableVideo, or enableLocalVideo, depending on which method you use to turn on your local camera.
   ///
-  /// Param [zoomFactor] The camera zoom ratio. The value ranges between 1.0 and the maximum zoom supported by the device. You can get the maximum zoom ratio supported by the device by calling the getCameraMaxZoomFactor method.
-  ///
-  /// **return** The camera zoom factor value, if successful.
-  /// < 0: if the method if failed.
+  /// Param [factor] The camera zoom ratio. The value ranges between 1.0 and the maximum zoom supported by the device. You can get the maximum zoom ratio supported by the device by calling the getCameraMaxZoomFactor method.
   ///
   Future<void> setCameraZoomFactor(double factor);
 
@@ -4477,9 +4179,6 @@ mixin RtcCameraInterface {
   ///
   /// Param [positionY] The vertical coordinate of the touchpoint in the view.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setCameraFocusPositionInPreview(
       double positionX, double positionY);
 
@@ -4492,9 +4191,6 @@ mixin RtcCameraInterface {
   /// Param [positionXinView] The horizontal coordinate of the touchpoint in the view.
   ///
   /// Param [positionYinView] The vertical coordinate of the touchpoint in the view.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setCameraExposurePosition(
       double positionXinView, double positionYinView);
@@ -4516,9 +4212,6 @@ mixin RtcCameraInterface {
   /// false: (Default) Disable face detection.
   ///
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> enableFaceDetection(bool enable);
 
@@ -4556,9 +4249,6 @@ mixin RtcCameraInterface {
   /// Call this method before calling joinChannel, enableVideo, or enableLocalVideo, depending on which method you use to turn on your local camera.
   ///
   /// Param [config] The camera capturer configuration. See CameraCapturerConfiguration.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> setCameraCapturerConfiguration(
       CameraCapturerConfiguration config);
@@ -4614,9 +4304,6 @@ mixin RtcStreamMessageInterface {
   ///
   /// Param [message] The message to be sent.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> sendStreamMessage(int streamId, Uint8List message);
 }
 
@@ -4636,9 +4323,6 @@ mixin RtcScreenSharingInterface {
   ///
   /// Param [captureParams] Screen sharing configurations. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. For details, see ScreenCaptureParameters.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startScreenCaptureByDisplayId(int displayId,
       [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);
 
@@ -4652,9 +4336,6 @@ mixin RtcScreenSharingInterface {
   /// Param [regionRect] (Optional) Sets the relative location of the region to the screen. If you do not set this parameter, the SDK shares the whole screen. See Rectangle. If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
   ///
   /// Param [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> startScreenCaptureByScreenRect(Rectangle screenRect,
       [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);
@@ -4673,9 +4354,6 @@ mixin RtcScreenSharingInterface {
   ///
   /// Param [captureParams] Screen sharing configurations. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. For details, see ScreenCaptureParameters.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> startScreenCaptureByWindowId(int windowId,
       [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);
 
@@ -4686,9 +4364,6 @@ mixin RtcScreenSharingInterface {
   ///
   /// Param [contentHint] The content hint for screen sharing. For details, see VideoContentHint.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> setScreenCaptureContentHint(VideoContentHint contentHint);
 
   ///
@@ -4696,9 +4371,6 @@ mixin RtcScreenSharingInterface {
   ///
   ///
   /// Param [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. For details, see ScreenCaptureParameters.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> updateScreenCaptureParameters(
       ScreenCaptureParameters captureParams);
@@ -4709,18 +4381,11 @@ mixin RtcScreenSharingInterface {
   ///
   /// Param [regionRect] The relative location of the screen-shared area to the screen or window. If you do not set this parameter, the SDK shares the whole screen or window. See Rectangle. If the specified region overruns the screen or window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen or window.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///   -3(ERR_NOT_READY): No screen or window is being shared.
-  ///
   Future<void> updateScreenCaptureRegion(Rectangle regionRect);
 
   ///
   /// Stops screen sharing.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> stopScreenCapture();
 
@@ -4747,9 +4412,6 @@ mixin RtcScreenSharingInterface {
   /// Param [rect] Specifies the screen-sharing region: Rect. This parameter is valid when windowsId is set as 0. When rect is set as NULL, the whole screen is shared.
   ///
   /// Param [bitrate] The bitrate of the screen share.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> startScreenCapture(int windowId,
       [int captureFreq, Rect? rect, int bitrate]);
