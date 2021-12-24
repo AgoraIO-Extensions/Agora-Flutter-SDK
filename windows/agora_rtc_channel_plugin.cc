@@ -117,7 +117,7 @@ namespace
       : engine_(engine)
   {
     engine_->channel()->SetEventHandler(this);
-    callApiMethodCallHandler_ = std::make_unique<CallApiMethodCallHandler>(engine_);
+    callApiMethodCallHandler_ = std::make_unique<RtcChannelCallApiMethodCallHandler>(engine_);
   }
 
   AgoraRtcChannelPlugin::~AgoraRtcChannelPlugin() {}

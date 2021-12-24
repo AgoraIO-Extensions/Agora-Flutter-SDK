@@ -22,8 +22,8 @@ public:
 
   int64_t texture_id();
 
-  virtual void OnVideoFrameReceived(const IrisVideoFrame&video_frame,
-                                    unsigned int uid, const char *channel_id,
+  virtual void OnVideoFrameReceived(const IrisVideoFrame &video_frame,
+                                    const IrisVideoFrameBufferConfig *config,
                                     bool resize) override;
 
 private:

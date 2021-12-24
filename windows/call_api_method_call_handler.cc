@@ -1,6 +1,7 @@
 #include "include/agora_rtc_engine/call_api_method_call_handler.h"
 
 #include <flutter/standard_method_codec.h>
+#include <string>
 
 using namespace flutter;
 
@@ -18,7 +19,12 @@ void CallApiMethodCallHandler::HandleMethodCall(const flutter::MethodCall<flutte
         result->Error("Bad Arguments", "Null arguments received");
         return;
     }
-#if DEBUG
+// #if DEBUG
+
+// #endif
+#ifdef NDEBUG
+    // nondebug
+#else
     if (method.compare("getIrisRtcEngineIntPtr") == 0)
     {
         result->Success((intptr_t)irisRtcEngine_);
@@ -47,6 +53,8 @@ void CallApiMethodCallHandler::HandleMethodCall(const flutter::MethodCall<flutte
                               params.c_str(), buffer.data(), res);
             }
 
+            std::printf("api type: %s, param: %s, ret: %s, res: %s", std::to_string(api_type).c_str(), params.c_str(), std::to_string(ret).c_str(), std::string(res).c_str());
+
             if (ret == 0)
             {
                 std::string res_str(res);
@@ -66,12 +74,12 @@ void CallApiMethodCallHandler::HandleMethodCall(const flutter::MethodCall<flutte
             else
             {
                 auto des = CallApiError(ret);
-                result->Error(des);
+                result->Error(std::to_string(ret), des);
             }
         }
         catch (std::exception &e)
         {
-            result->Error("", e.what());
+            result->Error("-1", e.what());
         }
     }
     else
@@ -90,17 +98,17 @@ int32_t CallApiMethodCallHandler::CallApi(int32_t api_type, const char *params,
 int32_t CallApiMethodCallHandler::CallApi(int32_t api_type, const char *params, void *buffer,
                                           char *result)
 {
-    // TODO(littlegnal): Remove this after we migrate not deprecated CallApi
-    #pragma warning( disable : 4996 )
+// TODO(littlegnal): Remove this after we migrate not deprecated CallApi
+#pragma warning(disable : 4996)
     return irisRtcEngine_->CallApi(static_cast<ApiTypeEngine>(api_type),
                                    params, buffer, result);
 }
 
-const char *CallApiMethodCallHandler::CallApiError(int32_t ret)
+std::string CallApiMethodCallHandler::CallApiError(int32_t ret)
 {
     char res[kMaxResultLength] = "";
     irisRtcEngine_->CallApi(ApiTypeEngine::kEngineGetErrorDescription,
                             ("{\"code\":" + std::to_string(ret) + "}").c_str(),
                             res);
-    return std::string(res).c_str();
+    return std::string(res);
 }

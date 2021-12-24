@@ -14,16 +14,10 @@ function(DownloadSDK platform version download_dir)
       set(SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/${SDK_DOWNLOAD_FILENAME}")
       string(REPLACE "+" "%2B" SDK_DOWNLOAD_URL_ESCAPED ${SDK_DOWNLOAD_URL})
 
-      # Download the SHA1 hash for the binary distribution.
-      message(STATUS "Downloading ${SDK_DOWNLOAD_PATH}.sha1 from ${SDK_DOWNLOAD_URL_ESCAPED}...")
-      file(DOWNLOAD "${SDK_DOWNLOAD_URL_ESCAPED}.sha1" "${SDK_DOWNLOAD_PATH}.sha1")
-      file(READ "${SDK_DOWNLOAD_PATH}.sha1" SDK_SHA1)
-
       # Download the binary distribution and verify the hash.
       message(STATUS "Downloading ${SDK_DOWNLOAD_PATH}...")
       file(
         DOWNLOAD "${SDK_DOWNLOAD_URL_ESCAPED}" "${SDK_DOWNLOAD_PATH}"
-        EXPECTED_HASH SHA1=${SDK_SHA1}
         SHOW_PROGRESS
         )
     endif()

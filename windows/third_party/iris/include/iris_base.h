@@ -5,6 +5,7 @@
 #ifndef IRIS_BASE_H_
 #define IRIS_BASE_H_
 
+#include <cstddef>
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
 #endif
@@ -52,6 +53,24 @@ extern "C" {
 
 const int kBasicResultLength = 512;
 const int kMaxResultLength = 2048;
+
+enum IrisAppType {
+  kAppTypeNative = 0,
+  kAppTypeCocos = 1,
+  kAppTypeUnity = 2,
+  kAppTypeElectron = 3,
+  kAppTypeFlutter = 4,
+  kAppTypeUnreal = 5,
+  kAppTypeXamarin = 6,
+  kAppTypeApiCloud = 7,
+  kAppTypeReactNative = 8,
+  kAppTypePython = 9,
+  kAppTypeCocosCreator = 10,
+  kAppTypeRust = 11,
+  kAppTypeCSharp = 12,
+  kAppTypeCef = 13,
+  kAppTypeUniApp = 14,
+};
 
 IRIS_API unsigned int kValueType;
 

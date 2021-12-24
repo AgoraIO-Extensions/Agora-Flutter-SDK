@@ -27,7 +27,7 @@ enum AreaCode {
   IN,
 
   /// (Default) Global
-  @JsonValue(-1)
+  @JsonValue(0xffffffff)
   GLOB,
 }
 

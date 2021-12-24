@@ -31,19 +31,21 @@ class RtcEngine with RtcEngineInterface {
   static RtcEngine? get instance => _instance;
 
   final bool _subProcess;
+  RtcEngineContext? _rtcEngineContext;
   static const String _kDefaultAppGroup = 'io.agora';
   final String _appGroup;
   RtcEngine? _screenShareHelper;
 
   /// TODO(doc)
-  RtcEngine getScreenShareHelper({String? appGroup}) {
+  Future<RtcEngine> getScreenShareHelper({String? appGroup}) async {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
     if (_subProcess) {
-      throw PlatformException(code: ErrorCode.NotSupported.toString());
+      throw PlatformException(code: ErrorCode.TooOften.toString());
     }
     _screenShareHelper ??= RtcEngine._(true, appGroup: appGroup);
+    await _screenShareHelper?.initialize(_rtcEngineContext!);
     return _screenShareHelper!;
   }
 
@@ -99,6 +101,7 @@ class RtcEngine with RtcEngineInterface {
   /// **Returns**
   ///
   /// [WarningCode] or [ErrorCode].
+  // TODO(littlegnal): Can not be static
   static Future<String?> getErrorDescription(int error) {
     return RtcEngine.methodChannel.invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetErrorDescription.index,
@@ -207,11 +210,12 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> initialize(RtcEngineContext context) {
+    _rtcEngineContext = context;
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineInitialize.index,
       'params': jsonEncode({
         'context': context.toJson(),
-        'appGroup': 'io.agora',
+        'appGroup': _appGroup,
       }),
     }).then((value) => _invokeMethod('callApi', {
           'apiType': ApiTypeEngine.kEngineSetAppType.index,
@@ -224,7 +228,9 @@ class RtcEngine with RtcEngineInterface {
   // TODO(littlegnal): Fill test
   @override
   Future<void> destroy() {
+    _rtcEngineContext = null;
     if (_subProcess) {
+      _handler = null;
       instance?._screenShareHelper = null;
     } else {
       _screenShareHelper?.destroy();
@@ -344,6 +350,9 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<ConnectionStateType> getConnectionState() {
+    if (_subProcess) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetConnectionState.index,
       'params': jsonEncode({}),
@@ -428,6 +437,9 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<UserInfo> getUserInfoByUid(int uid) {
+    if (_subProcess) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetUserInfoByUid.index,
       'params': jsonEncode({
@@ -440,6 +452,9 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<UserInfo> getUserInfoByUserAccount(String userAccount) {
+    if (_subProcess) {
+      throw PlatformException(code: ErrorCode.NotSupported.toString());
+    }
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetUserInfoByUserAccount.index,
       'params': jsonEncode({
@@ -691,6 +706,10 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config) {
+    assert(
+      config.frameRate != VideoFrameRate.Min,
+      'frameRate must be not be VideoFrameRate.Min',
+    );
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetVideoEncoderConfiguration.index,
       'params': jsonEncode({
@@ -763,8 +782,11 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<int?> getAudioFileInfo(String filePath) {
-    return _invokeMethod('getAudioFileInfo', {
-      'filePath': filePath,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineGetAudioFileInfo.index,
+      'params': jsonEncode({
+        'filePath': filePath,
+      }),
     });
   }
 
@@ -1251,13 +1273,14 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
+  // TODO(littlegnal): The encryptionMode in iris is String
   @override
   @deprecated
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEncryptionMode.index,
       'params': jsonEncode({
-        'encryptionMode': encryptionMode,
+        'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
       }),
     });
   }
@@ -1350,11 +1373,11 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   @deprecated
-  Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset) {
+  Future<void> setLocalVoiceReverbPreset(AudioReverbPreset reverbPreset) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetLocalVoiceReverbPreset.index,
       'params': jsonEncode({
-        'preset': AudioReverbPresetConverter(preset).value(),
+        'reverbPreset': AudioReverbPresetConverter(reverbPreset).value(),
       }),
     });
   }
@@ -1631,27 +1654,39 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   Future<void> setAudioMixingPlaybackSpeed(int speed) {
-    return _invokeMethod('setAudioMixingPlaybackSpeed', {
-      'speed': speed,
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetAudioMixingPlaybackSpeed.index,
+      'params': jsonEncode({
+        'speed': speed,
+      }),
     });
   }
 
   @override
   Future<int?> getAudioTrackCount() {
-    return _invokeMethod('getAudioTrackCount');
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineGetAudioTrackCount.index,
+      'params': jsonEncode({}),
+    });
   }
 
   @override
-  Future<void> selectAudioTrack(int audioIndex) {
-    return _invokeMethod('selectAudioTrack', {
-      'audioIndex': audioIndex,
+  Future<void> selectAudioTrack(int index) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSelectAudioTrack.index,
+      'params': jsonEncode({
+        'index': index,
+      }),
     });
   }
 
   @override
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode) {
-    return _invokeMethod('setAudioMixingDualMonoMode', {
-      'mode': AudioMixingDualMonoModeConverter(mode).value(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineSetAudioMixingDualMonoMode.index,
+      'params': jsonEncode({
+        'mode': AudioMixingDualMonoModeConverter(mode).value(),
+      }),
     });
   }
 
@@ -1929,9 +1964,12 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> enableVirtualBackground(
       bool enabled, VirtualBackgroundSource backgroundSource) {
-    return _invokeMethod('enableVirtualBackground', {
-      'enabled': enabled,
-      'backgroundSource': backgroundSource.toJson(),
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineEnableVirtualBackground.index,
+      'params': jsonEncode({
+        'enabled': enabled,
+        'backgroundSource': backgroundSource.toJson(),
+      }),
     });
   }
 
@@ -2944,7 +2982,7 @@ mixin RtcAudioMixingInterface {
   /// code [AudioMixingStateCode.Playing].
   /// - For the audio file formats supported by this method, see
   /// [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
-  Future<void> selectAudioTrack(int audioIndex);
+  Future<void> selectAudioTrack(int index);
 
   /// Sets the channel [mode] of the current music file.
   ///
@@ -3221,7 +3259,7 @@ mixin RtcVoiceChangerInterface {
   ///     - [RtcEngine.setLocalVoiceReverb]
   ///
   /// **Parameter** [preset] The options for SDK preset audio effects. See [AudioEffectPreset].
-  Future<void> setAudioEffectPreset(AudioEffectPreset preset);
+  Future<void> setAudioEffectPreset(AudioEffectPreset reverbPreset);
 
   /// Sets an SDK preset voice beautifier effect.
   ///
