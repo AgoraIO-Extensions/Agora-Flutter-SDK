@@ -92,7 +92,12 @@ using namespace agora::iris::rtc;
                   result:(FlutterResult)result {
 #if DEBUG
   if ([@"getIrisRtcEngineIntPtr" isEqualToString:call.method]) {
-    result(@((intptr_t)self.engine_main));
+      if ([self isSubProcess:call.arguments]) {
+          result(@((intptr_t)self.engine_sub));
+      } else {
+          result(@((intptr_t)self.engine_main));
+      }
+      
     return;
   }
 #endif

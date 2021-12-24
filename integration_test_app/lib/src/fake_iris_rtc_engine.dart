@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart' as path;
+import 'package:flutter/widgets.dart';
 
 typedef SetIrisRtcEngineCallApiRecorderNative = Pointer<NativeType> Function(
   Pointer<NativeType> enginePtr,
@@ -154,6 +156,9 @@ class _NativeIrisProxyBinding {
   // static IrisCallApiCallback? _irisCallApiCallback;
 
   static DynamicLibrary _loadAgoraRtcWrapperLib() {
+    if (Platform.isWindows) {
+      return DynamicLibrary.open('iris_integration_test.dll');
+    }
     return Platform.isAndroid
         ? DynamicLibrary.open("libiris_integration_test.so")
         : DynamicLibrary.process();
@@ -397,18 +402,22 @@ class ApiCall {
 }
 
 class FakeIrisRtcEngine {
-  FakeIrisRtcEngine({bool isMockChannel = false})
-      : _isMockChannel = isMockChannel;
+  FakeIrisRtcEngine({
+    bool isMockChannel = false,
+    bool isSubProcess = false,
+  })  : _isMockChannel = isMockChannel,
+        _isSubProcess = isSubProcess;
 
   final bool _isMockChannel;
+  final bool _isSubProcess;
   late final int _irisRtcEngineIntPtr;
   late final _NativeIrisProxyBinding _nativeIrisProxyBinding;
   final MethodChannel _methodChannel = const MethodChannel('agora_rtc_engine');
   // final List<ApiCall> _callApiQueue = [];
 
   Future<void> _initialize() async {
-    _irisRtcEngineIntPtr =
-        await _methodChannel.invokeMethod('getIrisRtcEngineIntPtr');
+    _irisRtcEngineIntPtr = await _methodChannel
+        .invokeMethod('getIrisRtcEngineIntPtr', {'subProcess': _isSubProcess});
     _nativeIrisProxyBinding = _NativeIrisProxyBinding(_irisRtcEngineIntPtr);
   }
 

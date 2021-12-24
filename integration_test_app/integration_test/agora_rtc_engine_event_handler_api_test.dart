@@ -14,16 +14,8 @@ void main() {
   late RtcEngine rtcEngine;
   late FakeIrisRtcEngine fakeIrisEngine;
 
-  setUpAll(() async {
-    fakeIrisEngine = FakeIrisRtcEngine();
-    await fakeIrisEngine.initialize();
-  });
-
   tearDown(() async {
     await rtcEngine.destroy();
-  });
-
-  tearDownAll(() {
     fakeIrisEngine.dispose();
   });
 
@@ -34,6 +26,8 @@ void main() {
   testWidgets('warning', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     WarningCode? code;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -50,6 +44,8 @@ void main() {
   testWidgets('error', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     ErrorCode? errorCode;
     rtcEngine.setEventHandler(RtcEngineEventHandler(error: (ErrorCode err) {
@@ -64,6 +60,8 @@ void main() {
   testWidgets('joinChannelSuccess', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String channelRet = '';
     int uidRet = 0;
@@ -89,6 +87,8 @@ void main() {
   testWidgets('apiCallExecuted', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     ErrorCode? errorRet;
     String apiRet = '';
@@ -114,6 +114,8 @@ void main() {
   testWidgets('rejoinChannelSuccess', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String channelRet = '';
     int uidRet = 0;
@@ -139,6 +141,8 @@ void main() {
   testWidgets('leaveChannel', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     RtcStats? statsRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -161,6 +165,8 @@ void main() {
   testWidgets('localUserRegistered', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     String userAccountRet = '';
@@ -183,6 +189,8 @@ void main() {
   testWidgets('userInfoUpdated', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     UserInfo? userInfoRet;
@@ -205,6 +213,8 @@ void main() {
   testWidgets('clientRoleChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     ClientRole? oldRoleRet;
     ClientRole? newRoleRet;
@@ -226,6 +236,8 @@ void main() {
   testWidgets('userJoined', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     int elapsedRet = 0;
@@ -247,6 +259,8 @@ void main() {
   testWidgets('userOffline', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     UserOfflineReason? reasonRet;
@@ -268,6 +282,8 @@ void main() {
   testWidgets('connectionStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     ConnectionStateType? stateRet;
     ConnectionChangedReason? reasonRet;
@@ -290,6 +306,8 @@ void main() {
   testWidgets('networkTypeChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     NetworkType? typeRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -305,6 +323,8 @@ void main() {
   testWidgets('connectionLost', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -319,6 +339,8 @@ void main() {
   testWidgets('tokenPrivilegeWillExpire', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String tokenRet = '';
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -334,6 +356,8 @@ void main() {
   testWidgets('requestToken', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -348,6 +372,8 @@ void main() {
   testWidgets('audioVolumeIndication', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     List<AudioVolumeInfo> speakersRet = [];
     int totalVolumeRet = 0;
@@ -373,6 +399,8 @@ void main() {
   testWidgets('activeSpeaker', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -391,6 +419,8 @@ void main() {
   testWidgets('firstLocalAudioFrame', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int elapsedRet = 0;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -406,6 +436,8 @@ void main() {
   testWidgets('firstLocalVideoFrame', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int widthRet = 0;
     int heightRet = 0;
@@ -430,6 +462,8 @@ void main() {
   testWidgets('videoSizeChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     int widthRet = 0;
@@ -457,6 +491,8 @@ void main() {
   testWidgets('remoteVideoStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     VideoRemoteState? stateRet;
@@ -485,6 +521,8 @@ void main() {
   testWidgets('localVideoStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     LocalVideoStreamState? localVideoStateRet;
     LocalVideoStreamError? errorRet;
@@ -507,6 +545,8 @@ void main() {
   testWidgets('remoteAudioStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     AudioRemoteState? stateRet;
@@ -536,6 +576,8 @@ void main() {
   testWidgets('localAudioStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     AudioLocalState? stateRet;
     AudioLocalError? errorRet;
@@ -558,6 +600,8 @@ void main() {
   testWidgets('onLocalPublishFallbackToAudioOnly', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool isFallbackOrRecoverRet = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -578,6 +622,8 @@ void main() {
       (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     bool isFallbackOrRecoverRet = false;
@@ -599,6 +645,8 @@ void main() {
   testWidgets('audioRouteChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     AudioOutputRouting? routingRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -617,6 +665,8 @@ void main() {
   testWidgets('cameraFocusAreaChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     Rect? rectRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -645,6 +695,8 @@ void main() {
   testWidgets('cameraExposureAreaChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     Rect? rectRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -673,6 +725,8 @@ void main() {
   testWidgets('facePositionChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int imageWidthRet = 0;
     int imageHeightRet = 0;
@@ -699,6 +753,8 @@ void main() {
   testWidgets('rtcStats', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     RtcStats? statsRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -719,6 +775,8 @@ void main() {
   testWidgets('networkQuality', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     NetworkQuality? txQualityRet;
@@ -744,6 +802,8 @@ void main() {
   testWidgets('lastmileProbeResult', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     LastmileProbeResult? resultRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -768,6 +828,8 @@ void main() {
   testWidgets('localVideoStats', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     LocalVideoStats? statsRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -803,6 +865,8 @@ void main() {
   testWidgets('localAudioStats', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     LocalAudioStats? statsRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -822,6 +886,8 @@ void main() {
   testWidgets('remoteVideoStats', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     RemoteVideoStats? statsRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -842,6 +908,8 @@ void main() {
   testWidgets('remoteAudioStats', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     RemoteAudioStats? statsRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -877,6 +945,8 @@ void main() {
   testWidgets('audioMixingFinished', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -892,6 +962,8 @@ void main() {
   testWidgets('audioMixingStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     AudioMixingStateCode? stateRet;
     AudioMixingReason? reasonRet;
@@ -914,6 +986,8 @@ void main() {
   testWidgets('audioEffectFinished', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int soundIdRet = 0;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -932,6 +1006,8 @@ void main() {
   testWidgets('rtmpStreamingStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String urlRet = '';
     RtmpStreamingState? stateRet;
@@ -957,6 +1033,8 @@ void main() {
   testWidgets('transcodingUpdated', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -971,6 +1049,8 @@ void main() {
   testWidgets('streamInjectedStatus', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String urlRet = '';
     int uidRet = 0;
@@ -995,6 +1075,8 @@ void main() {
   testWidgets('streamMessage', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     int streamIdRet = 0;
@@ -1022,6 +1104,8 @@ void main() {
   testWidgets('streamMessageError', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     int streamIdRet = 0;
@@ -1053,6 +1137,8 @@ void main() {
   testWidgets('mediaEngineLoadSuccess', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1068,6 +1154,8 @@ void main() {
   testWidgets('mediaEngineStartCallSuccess', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1083,6 +1171,8 @@ void main() {
   testWidgets('channelMediaRelayStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     ChannelMediaRelayState? stateRet;
     ChannelMediaRelayError? codeRet;
@@ -1105,6 +1195,8 @@ void main() {
   testWidgets('channelMediaRelayEvent', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     ChannelMediaRelayEvent? codeRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1123,6 +1215,8 @@ void main() {
   testWidgets('firstRemoteVideoFrame', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     int widthRet = 0;
@@ -1150,6 +1244,8 @@ void main() {
   testWidgets('firstRemoteAudioFrame', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     int elapsedRet = 0;
@@ -1171,6 +1267,8 @@ void main() {
   testWidgets('firstRemoteAudioDecoded', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     int elapsedRet = 0;
@@ -1192,6 +1290,8 @@ void main() {
   testWidgets('userMuteAudio', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     bool mutedRet = false;
@@ -1213,6 +1313,8 @@ void main() {
   testWidgets('streamPublished', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String urlRet = '';
     ErrorCode? errorRet;
@@ -1234,6 +1336,8 @@ void main() {
   testWidgets('streamUnpublished', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String urlRet = '';
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1252,6 +1356,8 @@ void main() {
   testWidgets('metadataReceived', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     Metadata? metadataRet;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1276,6 +1382,8 @@ void main() {
   testWidgets('firstLocalAudioFramePublished', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int elapsedRet = 0;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1294,6 +1402,8 @@ void main() {
   testWidgets('firstLocalVideoFramePublished', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int elapsedRet = 0;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1312,6 +1422,8 @@ void main() {
   testWidgets('audioPublishStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String channelRet = '';
     StreamPublishState? oldStateRet;
@@ -1340,6 +1452,8 @@ void main() {
   testWidgets('videoPublishStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String channelRet = '';
     StreamPublishState? oldStateRet;
@@ -1368,6 +1482,8 @@ void main() {
   testWidgets('audioSubscribeStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String channelRet = '';
     int uidRet = 0;
@@ -1402,6 +1518,8 @@ void main() {
   testWidgets('videoSubscribeStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String channelRet = '';
     int uidRet = 0;
@@ -1436,6 +1554,8 @@ void main() {
   testWidgets('rtmpStreamingEvent', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String urlRet = '';
     RtmpStreamingEvent? eventCodeRet;
@@ -1457,6 +1577,8 @@ void main() {
   testWidgets('userSuperResolutionEnabled', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     int uidRet = 0;
     bool enabledRet = false;
@@ -1482,6 +1604,8 @@ void main() {
   testWidgets('uploadLogResult', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String requestIdRet = '';
     bool successRet = false;
@@ -1507,6 +1631,8 @@ void main() {
   testWidgets('videoDeviceStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String deviceIdRet = '';
     MediaDeviceType? deviceTypeRet;
@@ -1532,6 +1658,8 @@ void main() {
   testWidgets('audioDeviceVolumeChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     MediaDeviceType? deviceTypeRet;
     int volumeRet = 0;
@@ -1557,6 +1685,8 @@ void main() {
   testWidgets('audioDeviceStateChanged', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     String deviceIdRet = '';
     MediaDeviceType? deviceTypeRet;
@@ -1582,6 +1712,8 @@ void main() {
   testWidgets('remoteAudioMixingBegin', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1597,6 +1729,8 @@ void main() {
   testWidgets('remoteAudioMixingEnd', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     bool called = false;
     rtcEngine.setEventHandler(RtcEngineEventHandler(
@@ -1615,6 +1749,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
     rtcEngine = await _createRtcEngine();
     rtcEngine.setEventHandler(RtcEngineEventHandler(
       snapshotTaken: (String channel, int uid, String filePath, int width,
@@ -1625,6 +1761,7 @@ void main() {
         expectSync(width, 10);
         expectSync(height, 10);
         expectSync(errCode, 0);
+        eventHandlerTester.markEventCalled();
       },
     ));
     await fakeIrisEngine.fireAndWaitEvent(

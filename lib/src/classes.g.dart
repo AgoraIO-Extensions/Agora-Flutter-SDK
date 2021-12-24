@@ -994,7 +994,7 @@ const _$AreaCodeEnumMap = {
   AreaCode.AS: 8,
   AreaCode.JP: 16,
   AreaCode.IN: 32,
-  AreaCode.GLOB: -1,
+  AreaCode.GLOB: 4294967295,
 };
 
 RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>

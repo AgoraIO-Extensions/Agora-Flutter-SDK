@@ -73,10 +73,10 @@ class FakeChannelInternal : public agora::rtc::IChannel {
       REMOTE_VIDEO_STREAM_TYPE streamType) override {
     return 0;
   }
-  int createDataStream(int *streamId, bool reliable, bool ordered) override {
+  virtual int createDataStream(int *streamId, bool reliable, bool ordered) override {
     return 0;
   }
-  int createDataStream(int *streamId, DataStreamConfig &config) override {
+  virtual int createDataStream(int *streamId, DataStreamConfig &config) override {
     return 0;
   }
   int sendStreamMessage(int streamId, const char *data,
@@ -476,10 +476,10 @@ class FakeRtcEngineInternal : public IRtcEngine3 {
     return 0;
   }
   int registerPacketObserver(IPacketObserver *observer) override { return 0; }
-  int createDataStream(int *streamId, bool reliable, bool ordered) override {
+  virtual int createDataStream(int *streamId, bool reliable, bool ordered) override {
     return 0;
   }
-  int createDataStream(int *streamId, DataStreamConfig &config) override {
+  virtual int createDataStream(int *streamId, DataStreamConfig &config) override {
     return 0;
   }
   int sendStreamMessage(int streamId, const char *data,

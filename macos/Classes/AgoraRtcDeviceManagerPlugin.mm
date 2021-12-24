@@ -23,6 +23,7 @@ using namespace agora::iris::rtc;
   audioInstance.callApiMethodCallHandler =
       [[RtcADMCallApiMethodCallHandler alloc] initWith:engine];
   [registrar addMethodCallDelegate:audioInstance channel:audioMethodChannel];
+    
   FlutterMethodChannel *videoMethodChannel = [FlutterMethodChannel
       methodChannelWithName:@"agora_rtc_video_device_manager"
             binaryMessenger:[registrar messenger]];
@@ -44,7 +45,7 @@ using namespace agora::iris::rtc;
 
 - (void)handleMethodCall:(FlutterMethodCall *)call
                   result:(FlutterResult)result {
-  [[self callApiMethodCallHandler] onMethodCall:call _:result];
+    [[self callApiMethodCallHandler] onMethodCall:call _:result];
 }
 
 + (void)registerWithRegistrar:(nonnull id<FlutterPluginRegistrar>)registrar {

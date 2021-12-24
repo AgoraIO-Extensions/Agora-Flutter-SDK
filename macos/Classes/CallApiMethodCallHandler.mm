@@ -103,9 +103,8 @@
 @implementation RtcADMCallApiMethodCallHandler
 
 - (int)callApi:(NSNumber *)apiType _:(NSString *)params _:(char *)result {
-  return static_cast<agora::iris::rtc::IIrisRtcAudioDeviceManager *>(
-             self.irisRtcEngine->device_manager())
-      ->CallApi((ApiTypeAudioDeviceManager)[apiType unsignedIntValue],
+    agora::iris::rtc::IrisRtcDeviceManager * deviceManager = (agora::iris::rtc::IrisRtcDeviceManager *) self.irisRtcEngine->device_manager();
+  return deviceManager->CallApi((ApiTypeAudioDeviceManager)[apiType unsignedIntValue],
                 [params UTF8String], result);
 }
 
@@ -114,9 +113,8 @@
 @implementation RtcVDMCallApiMethodCallHandler
 
 - (int)callApi:(NSNumber *)apiType _:(NSString *)params _:(char *)result {
-  return static_cast<agora::iris::rtc::IIrisRtcVideoDeviceManager *>(
-             self.irisRtcEngine->device_manager())
-      ->CallApi((ApiTypeVideoDeviceManager)[apiType unsignedIntValue],
+    agora::iris::rtc::IrisRtcDeviceManager * deviceManager = (agora::iris::rtc::IrisRtcDeviceManager *) self.irisRtcEngine->device_manager();
+  return deviceManager->CallApi((ApiTypeVideoDeviceManager)[apiType unsignedIntValue],
                 [params UTF8String], result);
 }
 

@@ -24,8 +24,6 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    debugPrint('config.appId: ${config.appId}');
-    // RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
     RtcEngine rtcEngine = await RtcEngine.create(config.appId);
     await rtcEngine.enableVideo();
     await rtcEngine.destroy();

@@ -26,16 +26,11 @@ target_include_directories(${LIBRARY_NAME} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/iris"
 )
 
-message(STATUS "333333333333 ")
-message(STATUS "CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
-
 if (CMAKE_SYSTEM_NAME STREQUAL "Android") 
 # if(UNIX AND NOT APPLE)
 # if (PLATFORM STREQUAL "ANDROID") 
-    message(STATUS "444444 ")
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../android/libs/${ANDROID_ABI}")
     set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../android/libs/${ANDROID_ABI}")
-    message(STATUS "11111111111111 ${LIBS_DIR}")
     else()
     # set(LIBS_DIR
     #     "<Pods path>"
@@ -49,13 +44,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Android")
         ${LIBS_DIR}/libAgoraRtcWrapper.so
     )
 
-
-    # set_target_properties(${LIBRARY_NAME} PROPERTIES
-    #         ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR_REAL}"
-    #         LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_DIR_REAL}"
-    #         RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_DIR_REAL}"
-    #         PDB_OUTPUT_DIRECTORY "${OUTPUT_DIR_REAL}"
-    #         )
     target_link_libraries(${LIBRARY_NAME}
         PRIVATE
         libAgoraRtcWrapper
@@ -66,7 +54,6 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "iOS")
         set(LIBS_DIR
             "${CMAKE_CURRENT_SOURCE_DIR}/../../ios/"
             )
-            message(STATUS "2222222222 ${LIBS_DIR}")
         else()
         # set(LIBS_DIR
         #     "<Pods path>"
@@ -95,7 +82,6 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         set(LIBS_DIR
             "${CMAKE_CURRENT_SOURCE_DIR}/../../macos/"
             )
-            message(STATUS "2222222222 ${LIBS_DIR}")
     else()
     # set(LIBS_DIR
     #     "<Pods path>"
@@ -121,10 +107,12 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 else()
     # /Users/fenglang/codes/aw/Agora-Flutter/integration_test_app/
     set(LIBS_DIR
-    "${CMAKE_CURRENT_SOURCE_DIR}/../../windows/flutter/ephemeral/.plugin_symlinks/agora_rtc_engine/windows/third_party/iris/AgoraRtcWrapper.lib"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../windows/flutter/ephemeral/.plugin_symlinks/agora_rtc_engine/windows/third_party/iris/AgoraRtcWrapper.lib"
         )
     target_link_libraries(${LIBRARY_NAME} PRIVATE 
-                          ${LIBS_DIR})
+                          ${LIBS_DIR}
+                          )
+
 endif()
 
 if (APPLE)

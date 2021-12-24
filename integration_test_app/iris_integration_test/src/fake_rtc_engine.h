@@ -23,6 +23,17 @@ namespace agora
                 channel_event_handler_ = channelEh;
                 return 0;
             }
+
+            int createDataStream(int *streamId, bool reliable, bool ordered) override
+            {
+                *streamId = 100;
+                return 0;
+            }
+            int createDataStream(int *streamId, DataStreamConfig &config) override
+            {
+                *streamId = 100;
+                return 0;
+            }
         };
 
         class FakeRtcEngine : public agora::rtc::FakeRtcEngineInternal
@@ -52,6 +63,17 @@ namespace agora
             bool registerEventHandler(IRtcEngineEventHandler *eventHandler) override
             {
                 event_handler_ = eventHandler;
+                return 0;
+            }
+
+            int createDataStream(int *streamId, bool reliable, bool ordered) override
+            {
+                *streamId = 100;
+                return 0;
+            }
+            int createDataStream(int *streamId, DataStreamConfig &config) override
+            {
+                *streamId = 100;
                 return 0;
             }
         };

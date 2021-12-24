@@ -10,8 +10,9 @@
 
 using namespace agora::iris::rtc;
 
-IRIS_API void *SetIrisRtcEngineCallApiRecorder(IrisRtcEnginePtr engine_ptr,
-                                               bool isMockChannel) {
+void *SetIrisRtcEngineCallApiRecorder(IrisRtcEnginePtr engine_ptr,
+                                      bool isMockChannel)
+{
   IrisRtcEngine *originEngine = reinterpret_cast<IrisRtcEngine *>(engine_ptr);
   IIrisRtcEngine *originDelegate = originEngine->GetDelegate();
 
@@ -19,10 +20,13 @@ IRIS_API void *SetIrisRtcEngineCallApiRecorder(IrisRtcEnginePtr engine_ptr,
       new IrisRtcEngineCallApiRecoder();
 
   IIrisRtcEngine *delegate;
-  if (isMockChannel) {
+  if (isMockChannel)
+  {
     delegate = new IrisRtcEngineIntegrationTestDelegate(originDelegate, nullptr,
                                                         callApiRecorder);
-  } else {
+  }
+  else
+  {
     delegate = new IrisRtcEngineIntegrationTestDelegate(
         originDelegate, callApiRecorder, nullptr);
   }
@@ -34,64 +38,76 @@ IRIS_API void *SetIrisRtcEngineCallApiRecorder(IrisRtcEnginePtr engine_ptr,
   return callApiRecorder;
 }
 
-IRIS_API void ClearCallApiRecorder(void *call_api_recorder_ptr) {
+void ClearCallApiRecorder(void *call_api_recorder_ptr)
+{
   auto *apiRecoder =
       reinterpret_cast<IrisRtcEngineCallApiRecoder *>(call_api_recorder_ptr);
   apiRecoder->Clear();
 }
 
-IRIS_API void MockCallApiResult(void *call_api_recorder_ptr,
-                                unsigned int api_type, const char *params,
-                                const char *mockResult) {
+void MockCallApiResult(void *call_api_recorder_ptr,
+                       unsigned int api_type, const char *params,
+                       const char *mockResult)
+{
   IrisRtcEngineCallApiRecoder *apiRecoder =
       reinterpret_cast<IrisRtcEngineCallApiRecoder *>(call_api_recorder_ptr);
   apiRecoder->MockCallApiResult(api_type, params, mockResult);
 }
 
-IRIS_API void MockCallApiReturnCode(void *call_api_recorder_ptr,
-                                    unsigned int api_type, const char *params,
-                                    int mockReturnCode) {
+void MockCallApiReturnCode(void *call_api_recorder_ptr,
+                           unsigned int api_type, const char *params,
+                           int mockReturnCode)
+{
   IrisRtcEngineCallApiRecoder *apiRecoder =
       reinterpret_cast<IrisRtcEngineCallApiRecoder *>(call_api_recorder_ptr);
   apiRecoder->MockCallApiReturnCode(api_type, params, mockReturnCode);
 }
 
-IRIS_API void SetExplicitBufferSize(void *call_api_recorder_ptr,
-                                    unsigned int api_type, const char *params,
-                                    int size) {
+void SetExplicitBufferSize(void *call_api_recorder_ptr,
+                           unsigned int api_type, const char *params,
+                           int size)
+{
   IrisRtcEngineCallApiRecoder *apiRecoder =
       reinterpret_cast<IrisRtcEngineCallApiRecoder *>(call_api_recorder_ptr);
   apiRecoder->SetExplicitBufferSize(api_type, params, size);
 }
 
-IRIS_API bool ExpectCalledApi(void *call_api_recorder_ptr,
-                              unsigned int api_type, const char *params,
-                              void *buffer, int buffer_size) {
+bool ExpectCalledApi(void *call_api_recorder_ptr,
+                     unsigned int api_type, const char *params,
+                     void *buffer, int buffer_size)
+{
   IrisRtcEngineCallApiRecoder *apiRecoder =
       reinterpret_cast<IrisRtcEngineCallApiRecoder *>(call_api_recorder_ptr);
   return apiRecoder->ExpectCalledApi(api_type, params, buffer, buffer_size);
 }
 
-IRIS_API void CallIrisEventHandlerOnEvent(void *engine_ptr, bool isMockChannel,
-                                          const char *event, const char *data) {
+void CallIrisEventHandlerOnEvent(void *engine_ptr, bool isMockChannel,
+                                 const char *event, const char *data)
+{
   IrisRtcEngine *engine = reinterpret_cast<IrisRtcEngine *>(engine_ptr);
-  if (isMockChannel) {
+  if (isMockChannel)
+  {
     engine->channel()->GetEventHandler()->OnEvent(event, data);
-  } else {
+  }
+  else
+  {
     engine->GetEventHandler()->OnEvent(event, data);
   }
 }
 
-IRIS_API void
-CallIrisEventHandlerOnEventWithBuffer(void *engine_ptr, bool isMockChannel,
-                                      const char *event, const char *data,
-                                      const void *buffer, unsigned int length) {
+void CallIrisEventHandlerOnEventWithBuffer(void *engine_ptr, bool isMockChannel,
+                                           const char *event, const char *data,
+                                           const void *buffer, unsigned int length)
+{
   IrisRtcEngine *engine = reinterpret_cast<IrisRtcEngine *>(engine_ptr);
 
-  if (isMockChannel) {
+  if (isMockChannel)
+  {
 
     engine->channel()->GetEventHandler()->OnEvent(event, data, buffer, length);
-  } else {
+  }
+  else
+  {
 
     engine->GetEventHandler()->OnEvent(event, data, buffer, length);
   }

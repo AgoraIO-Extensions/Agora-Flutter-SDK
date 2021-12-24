@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_channel.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:integration_test_app/main.dart' as app;
 import 'package:integration_test_app/src/event_handler_tester.dart';
 import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
-import 'package:integration_test_app/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -22,17 +21,9 @@ void main() {
     return RtcChannel.create('testapi');
   }
 
-  setUpAll(() async {
-    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
-    await fakeIrisRtcEngine.initialize();
-  });
-
   tearDown(() async {
     await rtcChannel.destroy();
     await rtcEngine.destroy();
-  });
-
-  tearDownAll(() {
     fakeIrisRtcEngine.dispose();
   });
 
@@ -42,6 +33,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       warning: (WarningCode warn) {
@@ -63,6 +56,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       error: (ErrorCode err) {
@@ -84,6 +79,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       joinChannelSuccess: (String channel, int uid, int elapsed) {
@@ -107,6 +104,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       rejoinChannelSuccess: (String channel, int uid, int elapsed) {
@@ -131,6 +130,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     final expectSyncedStats = RtcStats(10, 20, 20, 100, 100, 200, 200, 10, 10,
         20, 20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);
@@ -155,6 +156,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       clientRoleChanged: (ClientRole oldRole, ClientRole newRole) {
@@ -178,6 +181,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       userJoined: (int uid, int elapsed) {
@@ -201,6 +206,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       userOffline: (int uid, UserOfflineReason reason) {
@@ -224,6 +231,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       connectionStateChanged:
@@ -248,6 +257,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       connectionLost: () {
@@ -268,6 +279,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       tokenPrivilegeWillExpire: (String token) {
@@ -289,6 +302,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       requestToken: () {
@@ -309,6 +324,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       activeSpeaker: (int uid) {
@@ -330,6 +347,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       videoSizeChanged: (int uid, int width, int height, int rotation) {
@@ -354,6 +373,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       remoteVideoStateChanged: (
@@ -383,6 +404,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       remoteAudioStateChanged: (
@@ -412,6 +435,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       localPublishFallbackToAudioOnly: (bool isFallbackOrRecover) {
@@ -433,6 +458,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       remoteSubscribeFallbackToAudioOnly: (int uid, bool isFallbackOrRecover) {
@@ -455,6 +482,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     final expectSyncedStats = RtcStats(10, 20, 20, 100, 100, 200, 200, 10, 10,
         20, 20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);
@@ -479,6 +508,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       networkQuality:
@@ -504,6 +535,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     final expectSyncedRemoteVideoStats = RemoteVideoStats(
         10, 10, 10, 10, 10, 10, 10, 10, VideoStreamType.High, 10, 10, 10, 10);
@@ -528,6 +561,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     final expectSyncedRemoteAudioStats = RemoteAudioStats(
       10,
@@ -567,6 +602,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       rtmpStreamingStateChanged: (String url, RtmpStreamingState state,
@@ -592,6 +629,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       transcodingUpdated: () {
@@ -612,6 +651,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       streamInjectedStatus: (String url, int uid, InjectStreamStatus status) {
@@ -635,6 +676,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     final buffer = Uint8List.fromList([1, 1]);
 
@@ -662,6 +705,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
     final buffer = Uint8List.fromList([1, 1]);
 
@@ -690,6 +735,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
@@ -715,6 +762,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
@@ -739,6 +788,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     final buffer = Uint8List.fromList([1, 1]);
@@ -769,6 +820,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
@@ -795,6 +848,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
@@ -821,6 +876,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
@@ -853,6 +910,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
@@ -885,6 +944,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
@@ -909,6 +970,8 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle();
+    fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(

@@ -18,7 +18,7 @@ public:
   virtual int32_t CallApi(int32_t api_type, const char *params, void *buffer,
                           char *result);
 
-  virtual const char *CallApiError(int32_t ret);
+  virtual std::string CallApiError(int32_t ret);
 
 protected:
   agora::iris::rtc::IrisRtcEngine *irisRtcEngine_;
