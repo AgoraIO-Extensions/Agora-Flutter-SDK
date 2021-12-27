@@ -21,7 +21,7 @@ using namespace agora::iris::rtc;
       [[AgoraRtcDeviceManagerPlugin alloc] initWithType:YES];
   audioInstance.engine = (IrisRtcEngine *)engine;
   audioInstance.callApiMethodCallHandler =
-      [[RtcADMCallApiMethodCallHandler alloc] initWith:engine];
+      [[RtcADMCallApiMethodCallHandler alloc] initWith:engine maxResultLength:kMaxResultLength];
   [registrar addMethodCallDelegate:audioInstance channel:audioMethodChannel];
     
   FlutterMethodChannel *videoMethodChannel = [FlutterMethodChannel
@@ -31,7 +31,7 @@ using namespace agora::iris::rtc;
       [[AgoraRtcDeviceManagerPlugin alloc] initWithType:NO];
   videoInstance.engine = (IrisRtcEngine *)engine;
   videoInstance.callApiMethodCallHandler =
-      [[RtcVDMCallApiMethodCallHandler alloc] initWith:engine];
+      [[RtcVDMCallApiMethodCallHandler alloc] initWith:engine maxResultLength:kMaxResultLength];
   [registrar addMethodCallDelegate:videoInstance channel:videoMethodChannel];
 }
 

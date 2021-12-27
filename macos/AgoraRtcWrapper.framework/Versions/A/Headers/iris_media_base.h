@@ -36,15 +36,30 @@ IRIS_API void ClearAudioFrame(IrisAudioFrame *audio_frame);
 
 IRIS_API void CopyAudioFrame(IrisAudioFrame *dst, const IrisAudioFrame *src);
 
-enum VideoFrameType {
+enum IrisVideoFrameType {
   kVideoFrameTypeYUV420,
   kVideoFrameTypeYUV422,
   kVideoFrameTypeRGBA,
   kVideoFrameTypeBGRA,
 };
 
+enum IrisVideoSourceType {
+  kVideoSourceTypeCameraPrimary,
+  kVideoSourceTypeCameraSecondary,
+  kVideoSourceTypeScreenPrimary,
+  kVideoSourceTypeScreenSecondary,
+  kVideoSourceTypeCustom,
+  kVideoSourceTypeMediaPlayer,
+  kVideoSourceTypeRtcImagePng,
+  kVideoSourceTypeRtcImageJpeg,
+  kVideoSourceTypeRtcImageGif,
+  kVideoSourceTypeRemote,
+  kVideoSourceTypeTranscoded,
+  kVideoSourceTypeUnknown,
+};
+
 typedef struct IrisVideoFrame {
-  VideoFrameType type;
+  IrisVideoFrameType type;
   int width;
   int height;
   int y_stride;
@@ -70,7 +85,7 @@ IRIS_API void ClearVideoFrame(IrisVideoFrame *video_frame);
 IRIS_API void CopyVideoFrame(IrisVideoFrame *dst, const IrisVideoFrame *src);
 
 IRIS_API IrisVideoFrame ConvertVideoFrame(const IrisVideoFrame *src,
-                                          VideoFrameType format);
+                                          IrisVideoFrameType format);
 
 typedef struct IrisPacket {
   const unsigned char *buffer;
@@ -179,24 +194,5 @@ class IRIS_CPP_API IrisCommonObserverManager
 
 }// namespace iris
 }// namespace agora
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef void(IRIS_CALL *Func_VideoFrame)(const IrisVideoFrame *video_frame,
-                                         unsigned int uid,
-                                         const char *channel_id, bool resize);
-typedef struct IrisCVideoFrameBuffer {
-  VideoFrameType type;
-  Func_VideoFrame OnVideoFrameReceived;
-  int resize_width;
-  int resize_height;
-} IrisCVideoFrameBuffer;
-typedef void *IrisVideoFrameBufferDelegateHandle;
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif//IRIS_MEDIA_BASE_H_

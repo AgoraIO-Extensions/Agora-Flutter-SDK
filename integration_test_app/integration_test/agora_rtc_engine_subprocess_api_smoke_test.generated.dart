@@ -2294,6 +2294,33 @@ void rtcEngineSubProcessSmokeTestCases() {
   );
 
   testWidgets(
+    'setEncryptionMode',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
+        engineAppId,
+        areaCode: [AreaCode.NA, AreaCode.GLOB],
+      ));
+
+      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+
+      const EncryptionMode encryptionMode = EncryptionMode.None;
+      await screenShareHelper.setEncryptionMode(
+        encryptionMode,
+      );
+
+      await screenShareHelper.destroy();
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
     'setEncryptionSecret',
     (WidgetTester tester) async {
       app.main();

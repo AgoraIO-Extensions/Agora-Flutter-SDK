@@ -33,10 +33,19 @@
 #define IRIS_CALL
 #endif
 
-#if defined(_WIN32)
-#define IRIS_DEPRECATED __declspec(deprecated)
+#ifdef __GNUC__
+#define AGORA_GCC_VERSION_AT_LEAST(x, y)                                       \
+  (__GNUC__ > (x) || __GNUC__ == (x) && __GNUC_MINOR__ >= (y))
 #else
+#define AGORA_GCC_VERSION_AT_LEAST(x, y) 0
+#endif
+
+#if AGORA_GCC_VERSION_AT_LEAST(3, 1)
 #define IRIS_DEPRECATED __attribute__((deprecated))
+#elif defined(_MSC_VER)
+#define IRIS_DEPRECATED
+#else
+#define IRIS_DEPRECATED
 #endif
 
 #if defined(IRIS_DEBUG)

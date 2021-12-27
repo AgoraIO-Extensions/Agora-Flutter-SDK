@@ -49,9 +49,8 @@ class IRIS_CPP_API IrisRtcEngine : public IIrisRtcEngine {
   int CallApi(ApiTypeEngine api_type, const char *params,
               char result[kBasicResultLength]) override;
 
-  IRIS_DEPRECATED
   int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
-              char result[kBasicResultLength]) override;
+              char result[kBasicResultLength]) override IRIS_DEPRECATED;
 
   int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
               unsigned int length, char result[kBasicResultLength]) override;

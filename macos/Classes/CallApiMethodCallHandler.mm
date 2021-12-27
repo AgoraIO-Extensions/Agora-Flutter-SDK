@@ -5,13 +5,23 @@
 
 @interface CallApiMethodCallHandler ()
 @property(nonatomic) agora::iris::rtc::IrisRtcEngine *irisRtcEngine;
+@property(nonatomic) int maxResultLength;
 @end
 
 @implementation CallApiMethodCallHandler
 
 - (instancetype)initWith:(void *)engine {
-  self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)engine;
-  return self;
+    return [self initWith:engine maxResultLength:kBasicResultLength];
+}
+
+- (instancetype)initWith:(void *)engine maxResultLength:(int)maxResultLength {
+    self = [super init];
+    if (self) {
+        self.irisRtcEngine = (agora::iris::rtc::IrisRtcEngine *)engine;
+        self.maxResultLength = maxResultLength;
+    }
+    return self;
+    
 }
 
 - (void)onMethodCall:(FlutterMethodCall *)call _:(FlutterResult)result {
@@ -22,7 +32,9 @@
       NSNumber *apiType = arguments[@"apiType"];
       NSString *params = arguments[@"params"];
       FlutterStandardTypedData *buffer = arguments[@"buffer"];
-      char res[kBasicResultLength] = "";
+      const int length = [self maxResultLength];
+      char res[length];
+      res[length] = {'\0'};
       int ret;
       if (buffer == nil || buffer == [NSNull null]) {
 

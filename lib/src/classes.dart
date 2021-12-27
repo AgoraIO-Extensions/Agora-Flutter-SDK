@@ -656,6 +656,7 @@ class LiveInjectStreamConfig {
 }
 
 /// The configuration of camera capturer.
+// TODO(littlegnal): [MS-102785]
 @JsonSerializable(explicitToJson: true)
 class CameraCapturerConfiguration {
   /// The camera capture configuration.

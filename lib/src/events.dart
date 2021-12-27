@@ -1252,6 +1252,7 @@ class RtcEngineEventHandler {
     if (methodName.startsWith('on')) {
       methodName = methodName.substring(2);
     }
+
     newData = List<dynamic>.from(
         Map<String, dynamic>.from(jsonDecode(data as String)).values);
     switch (methodName) {

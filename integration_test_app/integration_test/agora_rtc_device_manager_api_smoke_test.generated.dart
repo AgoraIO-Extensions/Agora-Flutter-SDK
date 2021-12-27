@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test_app/main.dart' as app;
@@ -17,7 +18,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.enumerateAudioPlaybackDevices();
+      try {
+        await deviceManager.enumerateAudioPlaybackDevices();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -36,10 +44,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const String deviceId = "hello";
-      await deviceManager.setAudioPlaybackDevice(
-        deviceId,
-      );
+      try {
+        const String deviceId = "hello";
+        await deviceManager.setAudioPlaybackDevice(
+          deviceId,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -58,7 +73,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioPlaybackDevice();
+      try {
+        await deviceManager.getAudioPlaybackDevice();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -77,7 +99,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioPlaybackDeviceInfo();
+      try {
+        await deviceManager.getAudioPlaybackDeviceInfo();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -96,10 +125,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const int volume = 10;
-      await deviceManager.setAudioPlaybackDeviceVolume(
-        volume,
-      );
+      try {
+        const int volume = 10;
+        await deviceManager.setAudioPlaybackDeviceVolume(
+          volume,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -118,7 +154,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioPlaybackDeviceVolume();
+      try {
+        await deviceManager.getAudioPlaybackDeviceVolume();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -137,10 +180,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const bool mute = true;
-      await deviceManager.setAudioPlaybackDeviceMute(
-        mute,
-      );
+      try {
+        const bool mute = true;
+        await deviceManager.setAudioPlaybackDeviceMute(
+          mute,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -159,7 +209,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioPlaybackDeviceMute();
+      try {
+        await deviceManager.getAudioPlaybackDeviceMute();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -178,10 +235,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const String testAudioFilePath = "hello";
-      await deviceManager.startAudioPlaybackDeviceTest(
-        testAudioFilePath,
-      );
+      try {
+        const String testAudioFilePath = "hello";
+        await deviceManager.startAudioPlaybackDeviceTest(
+          testAudioFilePath,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -200,7 +264,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.stopAudioPlaybackDeviceTest();
+      try {
+        await deviceManager.stopAudioPlaybackDeviceTest();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -219,7 +290,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.enumerateAudioRecordingDevices();
+      try {
+        await deviceManager.enumerateAudioRecordingDevices();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -238,10 +316,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const String deviceId = "hello";
-      await deviceManager.setAudioRecordingDevice(
-        deviceId,
-      );
+      try {
+        const String deviceId = "hello";
+        await deviceManager.setAudioRecordingDevice(
+          deviceId,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -260,7 +345,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioRecordingDevice();
+      try {
+        await deviceManager.getAudioRecordingDevice();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -279,7 +371,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioRecordingDeviceInfo();
+      try {
+        await deviceManager.getAudioRecordingDeviceInfo();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -298,10 +397,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const int volume = 10;
-      await deviceManager.setAudioRecordingDeviceVolume(
-        volume,
-      );
+      try {
+        const int volume = 10;
+        await deviceManager.setAudioRecordingDeviceVolume(
+          volume,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -320,7 +426,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioRecordingDeviceVolume();
+      try {
+        await deviceManager.getAudioRecordingDeviceVolume();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -339,10 +452,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const bool mute = true;
-      await deviceManager.setAudioRecordingDeviceMute(
-        mute,
-      );
+      try {
+        const bool mute = true;
+        await deviceManager.setAudioRecordingDeviceMute(
+          mute,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -361,7 +481,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.getAudioRecordingDeviceMute();
+      try {
+        await deviceManager.getAudioRecordingDeviceMute();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -380,10 +507,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const String testAudioFilePath = "hello";
-      await deviceManager.startAudioRecordingDeviceTest(
-        testAudioFilePath,
-      );
+      try {
+        const int indicationInterval = 10;
+        await deviceManager.startAudioRecordingDeviceTest(
+          indicationInterval,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -402,7 +536,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.stopAudioRecordingDeviceTest();
+      try {
+        await deviceManager.stopAudioRecordingDeviceTest();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -421,10 +562,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const int indicationInterval = 10;
-      await deviceManager.startAudioDeviceLoopbackTest(
-        indicationInterval,
-      );
+      try {
+        const int indicationInterval = 10;
+        await deviceManager.startAudioDeviceLoopbackTest(
+          indicationInterval,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -443,7 +591,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.stopAudioDeviceLoopbackTest();
+      try {
+        await deviceManager.stopAudioDeviceLoopbackTest();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -462,7 +617,14 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      await deviceManager.enumerateVideoDevices();
+      try {
+        await deviceManager.enumerateVideoDevices();
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },
@@ -481,70 +643,17 @@ void rtcDeviceManagerSmokeTestCases() {
       RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
       final deviceManager = rtcEngine.deviceManager;
 
-      const String deviceId = "hello";
-      await deviceManager.setVideoDevice(
-        deviceId,
-      );
-
-      await rtcEngine.destroy();
-    },
-    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
-  );
-
-  testWidgets(
-    'getVideoDevice',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
-      final deviceManager = rtcEngine.deviceManager;
-
-      await deviceManager.getVideoDevice();
-
-      await rtcEngine.destroy();
-    },
-    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
-  );
-
-  testWidgets(
-    'startVideoDeviceTest',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
-      final deviceManager = rtcEngine.deviceManager;
-
-      const int hwnd = 10;
-      await deviceManager.startVideoDeviceTest(
-        hwnd,
-      );
-
-      await rtcEngine.destroy();
-    },
-    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
-  );
-
-  testWidgets(
-    'stopVideoDeviceTest',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
-      final deviceManager = rtcEngine.deviceManager;
-
-      await deviceManager.stopVideoDeviceTest();
+      try {
+        const String deviceId = "hello";
+        await deviceManager.setVideoDevice(
+          deviceId,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-7', isTrue);
+      }
 
       await rtcEngine.destroy();
     },

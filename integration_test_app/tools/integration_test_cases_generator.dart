@@ -133,6 +133,11 @@ class Method {
   late Type returnType;
 }
 
+class Field {
+  late Type type;
+  late String name;
+}
+
 class Constructor {
   late String name;
   List<Parameter> parameters = [];
@@ -143,6 +148,7 @@ class Clazz {
   late String name;
   List<Constructor> constructors = [];
   List<Method> methods = [];
+  List<Field> fields = [];
 }
 
 class EnumConstant {
@@ -160,8 +166,8 @@ class ParseResult {
   late Map<String, Enumz> enumMap;
 
   // TODO(littlegnal): Optimize this later.
-  late Map<String, List<String>> classFieldsMap;
-  late Map<String, String> fieldsTypeMap;
+  // late Map<String, List<String>> classFieldsMap;
+  // late Map<String, String> fieldsTypeMap;
   late Map<String, List<String>> genericTypeAliasParametersMap;
 }
 
@@ -178,16 +184,27 @@ class _RootBuilder extends dart_ast_visitor.RecursiveAstVisitor<Object?> {
     stdout.writeln(
         'variables: ${node.fields.variables}, type: ${node.fields.type}');
 
+    final clazz = _getClazz(node);
+    if (clazz == null) return null;
+
     final dart_ast.TypeAnnotation? type = node.fields.type;
     if (type is dart_ast.NamedType) {
       final fieldName = node.fields.variables[0].name.name;
-      if (node.parent is dart_ast.ClassDeclaration) {
-        final fieldList = classFieldsMap.putIfAbsent(
-            (node.parent as dart_ast.ClassDeclaration).name.name,
-            () => <String>[]);
-        fieldList.add(fieldName);
-      }
-      fieldsTypeMap[fieldName] = type.name.name;
+
+      Field field = Field()..name = fieldName;
+
+      // if (node.parent is dart_ast.ClassDeclaration) {
+      //   final fieldList = classFieldsMap.putIfAbsent(
+      //       (node.parent as dart_ast.ClassDeclaration).name.name,
+      //       () => <String>[]);
+      //   fieldList.add(fieldName);
+      // }
+      // fieldsTypeMap[fieldName] = type.name.name;
+
+      Type t = Type()..type = type.name.name;
+      field.type = t;
+
+      clazz.fields.add(field);
     }
 
     return null;
@@ -804,63 +821,81 @@ class RtcEngineEventHandlerSomkeTestGenerator implements Generator {
 
   @override
   void generate(StringSink sink, ParseResult parseResult) {
-    final Map<String, List<String>> classFieldsMap = parseResult.classFieldsMap;
-    final Map<String, String> fieldsTypeMap = parseResult.fieldsTypeMap;
+    final clazz = parseResult.classMap['RtcEngineEventHandler'];
+    stdout.writeln('clazz: $clazz');
+    if (clazz == null) return;
+
+    // final Map<String, List<String>> classFieldsMap = parseResult.classFieldsMap;
+    // final Map<String, String> fieldsTypeMap = parseResult.fieldsTypeMap;
+
+    final fields = clazz.fields;
+
     final Map<String, List<String>> genericTypeAliasParametersMap =
         parseResult.genericTypeAliasParametersMap;
 
-    final callbackImpl = <String>[];
-    final fieldList = classFieldsMap[''] ?? [];
+    // final callbackImpl = <String>[];
+    // final fieldList = classFieldsMap[''] ?? [];
 
-    for (final field in fieldList) {
-      final fieldType = fieldsTypeMap[field]?.replaceAll('?', '');
+    final testCases = <String>[];
+
+    const testCaseTemplate = '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+  app.main();
+  await tester.pumpAndSettle();
+
+  FakeIrisRtcEngine fakeIrisEngine = FakeIrisRtcEngine();
+  await fakeIrisEngine.initialize();
+  final rtcEngine = await RtcEngine.create('123');
+  {{TEST_CASE_BODY}}
+
+  // Wait for the `EventChannel` event be sent from Android/iOS side
+  await tester.pump(const Duration(milliseconds: 500));
+
+  rtcEngine.destroy();
+  fakeIrisEngine.dispose();
+});
+    
+    ''';
+
+    for (final field in fields) {
+      final fieldType = field.type.type;
       final paramsOfFieldType = genericTypeAliasParametersMap[fieldType]
           ?.map((e) => e.split(' ')[1])
           .toList();
       final paramsOfFieldTypeList = paramsOfFieldType?.join(',');
-      callbackImpl.add('$field: ($paramsOfFieldTypeList) {},');
+
+      final eventName =
+          'on${field.name.substring(0, 1).toUpperCase()}${field.name.substring(1)}';
+
+      final t = '''
+rtcEngine.setEventHandler(RtcEngineEventHandler(
+  ${field.name}: ($paramsOfFieldTypeList) {},
+));
+  
+fakeIrisEngine.fireRtcEngineEvent('$eventName');
+      ''';
+
+      String testCase =
+          testCaseTemplate.replaceAll('{{TEST_CASE_NAME}}', eventName);
+      testCase = testCase.replaceAll('{{TEST_CASE_BODY}}', t);
+
+      testCases.add(testCase);
     }
 
-    final output = '''
-// TODO(littlegnal): Temporary disable somke test for iOS/macOS, because it is not stable 
-// to run somke test on CI at this time
-@Skip('currently failing')
-
+    const testCasesContentTemplate = '''
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
 import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  late FakeIrisRtcEngine fakeIrisEngine;
-
-  setUpAll(() async {
-    fakeIrisEngine = FakeIrisRtcEngine();
-    await fakeIrisEngine.initialize();
-  });
-
-  tearDownAll(() {
-    fakeIrisEngine.dispose();
-  });
-
-  testWidgets('RtcEngineEventHander smoke test', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
-
-    final rtcEngine = await RtcEngine.create('123');
-    rtcEngine.setEventHandler(RtcEngineEventHandler(
-      ${callbackImpl.join("")}
-    ));
-
-    fakeIrisEngine.fireAllEngineEvents();
-
-    rtcEngine.destroy();
-  });
-}    
+void rtcEngineEventHandlerSomkeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
 ''';
+
+    final output = testCasesContentTemplate.replaceAll(
+        '{{TEST_CASES_CONTENT}}', testCases.join(""));
+
     sink.writeln(output);
   }
 
@@ -872,6 +907,99 @@ void main() {
           'integration_test_app',
           'integration_test',
           'agora_rtc_engine_event_handler_smoke_test.generated.dart'));
+    }
+
+    return null;
+  }
+}
+
+class RtcChannelEventHandlerSomkeTestGenerator implements Generator {
+  const RtcChannelEventHandlerSomkeTestGenerator();
+
+  @override
+  void generate(StringSink sink, ParseResult parseResult) {
+    final clazz = parseResult.classMap['RtcChannelEventHandler'];
+
+    if (clazz == null) return;
+
+    final fields = clazz.fields;
+
+    final Map<String, List<String>> genericTypeAliasParametersMap =
+        parseResult.genericTypeAliasParametersMap;
+
+    final testCases = <String>[];
+
+    const testCaseTemplate = '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+  app.main();
+  await tester.pumpAndSettle();
+
+  FakeIrisRtcEngine fakeIrisEngine = FakeIrisRtcEngine();
+  await fakeIrisEngine.initialize();
+  final rtcEngine = await RtcEngine.create('123');
+  final rtcChannel = await RtcChannel.create('testapi');
+  {{TEST_CASE_BODY}}
+
+  // Wait for the `EventChannel` event be sent from Android/iOS side
+  await tester.pump(const Duration(milliseconds: 500));
+
+  await rtcChannel.destroy();
+  await rtcEngine.destroy();
+  fakeIrisEngine.dispose();
+});
+    ''';
+
+    for (final field in fields) {
+      final fieldType = field.type.type;
+      final paramsOfFieldType = genericTypeAliasParametersMap[fieldType]
+          ?.map((e) => e.split(' ')[1])
+          .toList();
+      final paramsOfFieldTypeList = paramsOfFieldType?.join(',');
+
+      final eventName =
+          'on${field.name.substring(0, 1).toUpperCase()}${field.name.substring(1)}';
+
+      final t = '''
+rtcChannel.setEventHandler(RtcChannelEventHandler(
+  ${field.name}: ($paramsOfFieldTypeList) {},
+));
+  
+fakeIrisEngine.fireRtcChannelEvent('$eventName');
+      ''';
+
+      String testCase =
+          testCaseTemplate.replaceAll('{{TEST_CASE_NAME}}', eventName);
+      testCase = testCase.replaceAll('{{TEST_CASE_BODY}}', t);
+
+      testCases.add(testCase);
+    }
+
+    const testCasesContentTemplate = '''
+import 'package:agora_rtc_engine/rtc_channel.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test_app/main.dart' as app;
+import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
+
+void rtcChannelEventHandlerSomkeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''';
+
+    final output = testCasesContentTemplate.replaceAll(
+        '{{TEST_CASES_CONTENT}}', testCases.join(""));
+
+    sink.writeln(output);
+  }
+
+  @override
+  IOSink? shouldGenerate(ParseResult parseResult) {
+    if (parseResult.classMap.containsKey('RtcChannelEventHandler')) {
+      return _openSink(path.join(
+          fileSystem.currentDirectory.absolute.path,
+          'integration_test_app',
+          'integration_test',
+          'agora_rtc_channel_event_handler_smoke_test.generated.dart'));
     }
 
     return null;
@@ -929,8 +1057,6 @@ class RtcEngineSubProcessSmokeTestGenerator extends DefaultGenerator {
 
 // TODO(littlegnal): Re-enable it later
     GeneratorConfig(name: 'takeSnapshot', donotGenerate: true),
-    // TODO(littlegnal): Re-enable it later
-    GeneratorConfig(name: 'setEncryptionMode', donotGenerate: true),
 
     // Destop only
     GeneratorConfig(
@@ -1042,6 +1168,10 @@ void rtcEngineSubProcessSmokeTestCases() {
 class RtcDeviceManagerSmokeTestGenerator extends DefaultGenerator {
   const RtcDeviceManagerSmokeTestGenerator();
 
+  static const List<GeneratorConfig> configs = [
+    GeneratorConfig(name: 'getVideoDevice', donotGenerate: true),
+  ];
+
   @override
   void generate(StringSink sink, ParseResult parseResult) {
     final clazz = parseResult.classMap['RtcDeviceManager'];
@@ -1058,7 +1188,14 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
     final deviceManager = rtcEngine.deviceManager;
 
-    {{TEST_CASE_BODY}}
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! PlatformException) {
+        rethrow;
+      }
+      expect(e.code != '-7', isTrue);
+    }
 
     await rtcEngine.destroy();
   },
@@ -1069,6 +1206,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     const testCasesContentTemplate = '''
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test_app/main.dart' as app;
@@ -1084,7 +1222,7 @@ void rtcDeviceManagerSmokeTestCases() {
       testCaseTemplate: testCaseTemplate,
       testCasesContentTemplate: testCasesContentTemplate,
       methodInvokeObjectName: 'deviceManager',
-      configs: [],
+      configs: configs,
       supportedPlatformsOverride: desktopPlatforms,
     );
 
@@ -1109,6 +1247,7 @@ final List<Generator> generators = [
   const RtcEngineSubProcessSmokeTestGenerator(),
   const RtcEngineEventHandlerSomkeTestGenerator(),
   const RtcDeviceManagerSmokeTestGenerator(),
+  const RtcChannelEventHandlerSomkeTestGenerator(),
 ];
 
 const file.FileSystem fileSystem = LocalFileSystem();
@@ -1124,6 +1263,7 @@ void main(List<String> args) {
     path.join(srcDir, 'enums.dart'),
     path.join(srcDir, 'classes.dart'),
     path.join(srcDir, 'rtc_device_manager.dart'),
+    path.join(srcDir, 'events.dart'),
   ];
   final AnalysisContextCollection collection = AnalysisContextCollection(
     includedPaths: includedPaths,
@@ -1149,8 +1289,8 @@ void main(List<String> args) {
   final parseResult = ParseResult()
     ..classMap = rootBuilder.classMap
     ..enumMap = rootBuilder.enumMap
-    ..classFieldsMap = rootBuilder.classFieldsMap
-    ..fieldsTypeMap = rootBuilder.fieldsTypeMap
+    // ..classFieldsMap = rootBuilder.classFieldsMap
+    // ..fieldsTypeMap = rootBuilder.fieldsTypeMap
     ..genericTypeAliasParametersMap = rootBuilder.genericTypeAliasParametersMap;
 
   for (final generator in generators) {

@@ -101,7 +101,7 @@ class RtcEngine with RtcEngineInterface {
   /// **Returns**
   ///
   /// [WarningCode] or [ErrorCode].
-  // TODO(littlegnal): Can not be static
+  // TODO(littlegnal): [MS-99444] Can not be static
   static Future<String?> getErrorDescription(int error) {
     return RtcEngine.methodChannel.invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetErrorDescription.index,
@@ -1273,14 +1273,27 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): The encryptionMode in iris is String
-  @override
   @deprecated
+  @override
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
+    var encryption = '';
+    switch (encryptionMode) {
+      case EncryptionMode.AES128XTS:
+        encryption = 'aes-128-xts';
+        break;
+      case EncryptionMode.AES128ECB:
+        encryption = 'aes-128-ecb';
+        break;
+      case EncryptionMode.AES256XTS:
+        encryption = 'aes-256-xts';
+        break;
+      default:
+        break;
+    }
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEncryptionMode.index,
       'params': jsonEncode({
-        'encryptionMode': EncryptionModeConverter(encryptionMode).value(),
+        'encryptionMode': encryption,
       }),
     });
   }
@@ -1960,7 +1973,6 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  // TODO(littlegnal): Check iris supported or not
   @override
   Future<void> enableVirtualBackground(
       bool enabled, VirtualBackgroundSource backgroundSource) {
@@ -3018,7 +3030,7 @@ mixin RtcAudioEffectInterface {
   /// Sets the volume of the audio effects.
   ///
   /// **Parameter** [volume] Volume of the audio effects. The value ranges between 0.0 and 100.0 (default).
-  // TODO(littlegnal): Doc break change volume type double -> int
+  // TODO(littlegnal): [MS-99447] Doc break change volume type double -> int
   Future<void> setEffectsVolume(int volume);
 
   /// Sets the volume of a specified audio effect.
@@ -3026,7 +3038,7 @@ mixin RtcAudioEffectInterface {
   /// **Parameter** [soundId] ID of the audio effect. Each audio effect has a unique ID.
   ///
   /// **Parameter** [volume] Volume of the audio effect. The value ranges between 0.0 and 100.0 (default).
-  // TODO(littlegnal): Doc break change volume type double -> int
+  // TODO(littlegnal): [MS-99451] Doc break change volume type double -> int
   Future<void> setVolumeOfEffect(int soundId, int volume);
 
   /// Plays a specified local or online audio effect file.
@@ -3066,7 +3078,7 @@ mixin RtcAudioEffectInterface {
   /// - `false`: Do not publish. Only the local user can hear the audio effect.
   ///
   /// **Parameter** [startPos] The playback position (ms) of the audio effect file.
-  // TODO(littlegnal): Doc a break change: gain double -> int
+  // TODO(littlegnal): [MS-99452] Doc a break change: gain double -> int
   Future<void> playEffect(int soundId, String filePath, int loopCount,
       double pitch, double pan, int gain, bool publish,
       [int? startPos]);
@@ -3763,6 +3775,7 @@ mixin RtcMediaMetadataInterface {
   /// **Note**
   ///
   /// Ensure that the size of the metadata does not exceed the value set in the [setMaxMetadataSize] method.
+  // TODO(littlegnal): [MS-102404] Doc break change metadata type String -> Uint8List
   Future<void> sendMetadata(Uint8List metadata);
 }
 
@@ -4193,6 +4206,7 @@ mixin RtcStreamMessageInterface {
   /// **Parameter** [streamId] ID of the sent data stream returned by the [RtcEngine.createDataStream] method.
   ///
   /// **Parameter** [message] Sent data.
+  // TODO(littlegnal): [MS-102405] Doc break change message type String -> Uint8List
   Future<void> sendStreamMessage(int streamId, Uint8List message);
 }
 
@@ -4216,7 +4230,7 @@ mixin RtcScreenSharingInterface {
 
   Future<void> stopScreenCapture();
 
-  // TODO(littlegnal): Doc breack change captureFreq type int? -> int, bitrate type
+  // TODO(littlegnal): [MS-99459] Doc breack change captureFreq type int? -> int, bitrate type
   // int? -> int
   Future<void> startScreenCapture(int windowId,
       [int captureFreq, Rect? rect, int bitrate]);

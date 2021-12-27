@@ -781,7 +781,6 @@ void main() {
     );
   });
 
-  // TODO(littlegnal): Re-enable after iris fixed this issue
   testEventCall('metadataReceived', (
     WidgetTester tester,
     EventHandlerTester eventHandlerTester,

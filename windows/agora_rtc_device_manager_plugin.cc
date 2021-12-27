@@ -16,17 +16,31 @@ namespace
   using namespace agora::iris;
   using namespace agora::iris::rtc;
 
-  class RtcDeviceManagerCallApiMethodCallHandler : public CallApiMethodCallHandler
+  class RtcDeviceManagerAudioCallApiMethodCallHandler : public CallApiMethodCallHandler
   {
 
   public:
-    RtcDeviceManagerCallApiMethodCallHandler(
+    RtcDeviceManagerAudioCallApiMethodCallHandler(
         agora::iris::rtc::IrisRtcEngine *engine) : CallApiMethodCallHandler(engine) {}
 
     int32_t CallApi(int32_t api_type, const char *params,
                     char *result) override
     {
       return reinterpret_cast<IrisRtcDeviceManager *>(irisRtcEngine_->device_manager())->CallApi(static_cast<ApiTypeAudioDeviceManager>(api_type), params, result);
+    }
+  };
+
+  class RtcDeviceManagerVideoCallApiMethodCallHandler : public CallApiMethodCallHandler
+  {
+
+  public:
+    RtcDeviceManagerVideoCallApiMethodCallHandler(
+        agora::iris::rtc::IrisRtcEngine *engine) : CallApiMethodCallHandler(engine) {}
+
+    int32_t CallApi(int32_t api_type, const char *params,
+                    char *result) override
+    {
+      return reinterpret_cast<IrisRtcDeviceManager *>(irisRtcEngine_->device_manager())->CallApi(static_cast<ApiTypeVideoDeviceManager>(api_type), params, result);
     }
   };
 
@@ -49,7 +63,8 @@ namespace
 
   private:
     IrisRtcEngine *engine_;
-    std::unique_ptr<CallApiMethodCallHandler> callApiMethodCallHandler_;
+    std::unique_ptr<CallApiMethodCallHandler> audioCallApiMethodCallHandler_;
+    std::unique_ptr<CallApiMethodCallHandler> videoCallApiMethodCallHandler_;
   };
 
   // static
@@ -84,7 +99,8 @@ namespace
       PluginRegistrar *registrar, IrisRtcEngine *engine)
       : engine_(engine)
   {
-    callApiMethodCallHandler_ = std::make_unique<RtcDeviceManagerCallApiMethodCallHandler>(engine_);
+    audioCallApiMethodCallHandler_ = std::make_unique<RtcDeviceManagerAudioCallApiMethodCallHandler>(engine_);
+    videoCallApiMethodCallHandler_ = std::make_unique<RtcDeviceManagerVideoCallApiMethodCallHandler>(engine_);
   }
 
   AgoraRtcDeviceManagerPlugin::~AgoraRtcDeviceManagerPlugin() {}
@@ -100,7 +116,14 @@ namespace
       return;
     }
 
-    callApiMethodCallHandler_.get()->HandleMethodCall(method_call, std::move(result));
+    if (audio)
+    {
+      audioCallApiMethodCallHandler_.get()->HandleMethodCall(method_call, std::move(result));
+    }
+    else
+    {
+      videoCallApiMethodCallHandler_.get()->HandleMethodCall(method_call, std::move(result));
+    }
   }
 } // namespace
 

@@ -7,6 +7,7 @@
 #include "iris_rtc_channel.h"
 #include "iris_rtc_engine.h"
 #include "iris_rtc_engine_integration_test_delegate.h"
+#include <string>
 
 using namespace agora::rtc;
 using namespace agora::iris::rtc;
@@ -18,12 +19,9 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     FakeRtcEngine *fakeRtcEngine = reinterpret_cast<FakeRtcEngine *>(delegate->fakeRtcEngine_);
     agora::rtc::IRtcEngineEventHandler *handler = fakeRtcEngine->event_handler_;
 
-    //   agora::iris::rtc::RtcEngineEventHandler handler;
-    // handler.SetEventHandler(
-    //     reinterpret_cast<IrisRtcEngine *>(engine_ptr)->GetEventHandler());
     if (event_name == nullptr || strcmp(event_name, "onWarning") == 0)
     {
-        handler->onWarning(0, "123");
+        handler->onWarning(8, "123");
     }
     if (event_name == nullptr || strcmp(event_name, "onError") == 0)
     {
@@ -45,7 +43,7 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     if (event_name == nullptr || strcmp(event_name, "onClientRoleChanged") == 0)
     {
         handler->onClientRoleChanged(CLIENT_ROLE_TYPE::CLIENT_ROLE_AUDIENCE,
-                                    CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
+                                     CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
     }
     if (event_name == nullptr || strcmp(event_name, "onUserJoined") == 0)
     {
@@ -58,11 +56,12 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     }
     if (event_name == nullptr || strcmp(event_name, "onLastmileQuality") == 0)
     {
-        handler->onLastmileQuality(123);
+        handler->onLastmileQuality(0);
     }
     if (event_name == nullptr || strcmp(event_name, "onLastmileProbeResult") == 0)
     {
         LastmileProbeResult result{};
+        result.state = LASTMILE_PROBE_RESULT_STATE::LASTMILE_PROBE_RESULT_COMPLETE;
         handler->onLastmileProbeResult(result);
     }
     if (event_name == nullptr || strcmp(event_name, "onConnectionInterrupted") == 0)
@@ -100,11 +99,14 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     }
     if (event_name == nullptr || strcmp(event_name, "onNetworkQuality") == 0)
     {
-        handler->onNetworkQuality(123, 123, 123);
+        handler->onNetworkQuality(123, 0, 0);
     }
     if (event_name == nullptr || strcmp(event_name, "onLocalVideoStats") == 0)
     {
         LocalVideoStats stats{};
+        stats.qualityAdaptIndication = QUALITY_ADAPT_INDICATION::ADAPT_NONE;
+        stats.codecType = VIDEO_CODEC_TYPE::VIDEO_CODEC_H264;
+        stats.captureBrightnessLevel = CAPTURE_BRIGHTNESS_LEVEL_TYPE::CAPTURE_BRIGHTNESS_LEVEL_DARK;
         handler->onLocalVideoStats(stats);
     }
     if (event_name == nullptr || strcmp(event_name, "onRemoteVideoStats") == 0)
@@ -166,7 +168,7 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
         info.vad = 123;
         info.volume = 123;
         AudioVolumeInfo speakers[1] = {info};
-        handler->onAudioVolumeIndication(speakers, sizeof(speakers), 123);
+        handler->onAudioVolumeIndication(speakers, 1, 123);
     }
     if (event_name == nullptr || strcmp(event_name, "onActiveSpeaker") == 0)
     {
@@ -206,7 +208,7 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     }
     if (event_name == nullptr || strcmp(event_name, "onAudioDeviceStateChanged") == 0)
     {
-        handler->onAudioDeviceStateChanged("123", true, 123);
+        handler->onAudioDeviceStateChanged("123", MEDIA_DEVICE_TYPE::AUDIO_PLAYOUT_DEVICE, MEDIA_DEVICE_STATE_TYPE::MEDIA_DEVICE_STATE_IDLE);
     }
     if (event_name == nullptr || strcmp(event_name, "onAudioDeviceVolumeChanged") == 0)
     {
@@ -262,7 +264,7 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     }
     if (event_name == nullptr || strcmp(event_name, "onVideoDeviceStateChanged") == 0)
     {
-        handler->onVideoDeviceStateChanged("123", 123, 123);
+        handler->onVideoDeviceStateChanged("123", MEDIA_DEVICE_TYPE::AUDIO_PLAYOUT_DEVICE, MEDIA_DEVICE_STATE_TYPE::MEDIA_DEVICE_STATE_IDLE);
     }
     if (event_name == nullptr || strcmp(event_name, "onLocalVideoStateChanged") == 0)
     {
@@ -357,7 +359,7 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     }
     if (event_name == nullptr || strcmp(event_name, "onStreamInjectedStatus") == 0)
     {
-        handler->onStreamInjectedStatus("123", 123, 123);
+        handler->onStreamInjectedStatus("123", 123, INJECT_STREAM_STATUS::INJECT_STREAM_STATUS_START_FAILED);
     }
     if (event_name == nullptr || strcmp(event_name, "onAudioRouteChanged") == 0)
     {
@@ -401,7 +403,7 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     if (event_name == nullptr || strcmp(event_name, "onUploadLogResult") == 0)
     {
         handler->onUploadLogResult("123", true,
-                                  UPLOAD_ERROR_REASON::UPLOAD_NET_ERROR);
+                                   UPLOAD_ERROR_REASON::UPLOAD_NET_ERROR);
     }
     if (event_name == nullptr || strcmp(event_name, "onAirPlayConnected") == 0)
     {
@@ -490,7 +492,7 @@ void CallRtcChannelEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     }
     if (event_name == nullptr || strcmp(event_name, "onNetworkQuality") == 0)
     {
-        handler->onNetworkQuality(rtcChannel, 123, 123, 123);
+        handler->onNetworkQuality(rtcChannel, 123, 0, 0);
     }
     if (event_name == nullptr || strcmp(event_name, "onRemoteVideoStats") == 0)
     {
@@ -593,7 +595,7 @@ void CallRtcChannelEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     }
     if (event_name == nullptr || strcmp(event_name, "onStreamInjectedStatus") == 0)
     {
-        handler->onStreamInjectedStatus(rtcChannel, "123", 123, 123);
+        handler->onStreamInjectedStatus(rtcChannel, "123", 123, INJECT_STREAM_STATUS::INJECT_STREAM_STATUS_START_SUCCESS);
     }
     if (event_name == nullptr || strcmp(event_name, "onLocalPublishFallbackToAudioOnly") == 0)
     {

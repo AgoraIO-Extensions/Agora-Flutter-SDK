@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
+
+TEST_APP_ID=$1
 
 flutter packages get
 

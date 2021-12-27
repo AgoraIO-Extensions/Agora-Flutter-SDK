@@ -72,7 +72,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
           });
         }
 
-        _startTranscoding(isRemoteUser: true);
+        // _startTranscoding(isRemoteUser: true);
       },
       userOffline: (uid, reason) {
         logSink.log('userOffline  ${uid} ${reason}');
@@ -126,6 +126,8 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
       await _engine.removePublishStreamUrl(streamUrl);
     }
 
+    _isStreaming = true;
+
     final List<TranscodingUser> transcodingUsers = [
       TranscodingUser(
         0,
@@ -170,9 +172,10 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
       audioCodecProfile: AudioCodecProfileType.LCAAC,
     );
 
-    await _engine.setLiveTranscoding(lt);
+    // await _engine.setLiveTranscoding(lt);
+    // await _engine.enableEncryption(false, EncryptionConfig());
     try {
-      await _engine.addPublishStreamUrl(streamUrl, true);
+      await _engine.addPublishStreamUrl(streamUrl, false);
     } catch (e) {
       logSink.log('addPublishStreamUrl error: ${e.toString()}');
     }

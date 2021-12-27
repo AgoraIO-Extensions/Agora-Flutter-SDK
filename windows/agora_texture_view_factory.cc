@@ -103,8 +103,8 @@ void TextureRenderer::HandleMethodCall(
 }
 
 void TextureRenderer::OnVideoFrameReceived(const IrisVideoFrame &video_frame,
-                                           const IrisVideoFrameBufferConfig *config,
-                                           bool resize)
+                            const IrisVideoFrameBufferConfig *config,
+                            bool resize)
 {
   std::lock_guard<std::mutex> lock_guard(mutex_);
   if (pixel_buffer_->width != video_frame.width ||

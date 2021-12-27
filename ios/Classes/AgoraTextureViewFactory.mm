@@ -29,7 +29,7 @@ public:
   RendererDelegate(void *renderer) : renderer_(renderer) {}
 
   void OnVideoFrameReceived(const IrisVideoFrame &video_frame,
-                            unsigned int uid, const char *channel_id,
+                            const IrisVideoFrameBufferConfig *config,
                             bool resize) override {
     @autoreleasepool {
       TextureRenderer *renderer = (__bridge TextureRenderer *)renderer_;
