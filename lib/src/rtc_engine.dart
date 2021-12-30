@@ -44,8 +44,11 @@ class RtcEngine with RtcEngineInterface {
     if (_subProcess) {
       throw PlatformException(code: ErrorCode.TooOften.toString());
     }
-    _screenShareHelper ??= RtcEngine._(true, appGroup: appGroup);
-    await _screenShareHelper?.initialize(_rtcEngineContext!);
+    _screenShareHelper ??= () {
+      var engine = RtcEngine._(true, appGroup: appGroup);
+      engine.initialize(_rtcEngineContext!);
+      return engine;
+    }();
     return _screenShareHelper!;
   }
 
