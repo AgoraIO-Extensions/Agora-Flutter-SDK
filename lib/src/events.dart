@@ -61,15 +61,7 @@ typedef RemoteAudioStateCallback = void Function(int uid,
 // ignore: public_member_api_docs
 typedef LocalAudioStateCallback = void Function(
     AudioLocalState state, AudioLocalError error);
-
-/// Reports the information of an audio file.
-///
-/// **Parameters**
-///
-/// * [info]	The information of an audio file. See AudioFileInfo.
-/// * [error]	The information acquisition state:
-///   - [AudioFileInfoError.Ok] : Successfully get the information of an audio file.
-///   - [AudioFileInfoError.Failure] : Fail to get the information of an audio file.
+// ignore: public_member_api_docs
 typedef RequestAudioFileInfoCallback = void Function(
     AudioFileInfo info, AudioFileInfoError error);
 // ignore: public_member_api_docs
@@ -468,6 +460,14 @@ class RtcEngineEventHandler {
   ///
   /// After successfully calling [RtcEngine.getAudioFileInfo], the SDK triggers this callback
   /// to report the information of the audio file, such as the file path and duration.
+  ///
+  /// The `RequestAudioFileInfoCallback` typedef includes the following parameters:
+  ///
+  /// **Parameter** [info]	The information of an audio file. See [AudioFileInfo].
+  ///
+  /// **Parameter** [error]	The information acquisition state:
+  ///   - [AudioFileInfoError.Ok] : Successfully get the information of an audio file.
+  ///   - [AudioFileInfoError.Failure] : Fail to get the information of an audio file.
   RequestAudioFileInfoCallback? requestAudioFileInfoCallback;
 
   /// Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
@@ -1032,7 +1032,19 @@ class RtcEngineEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback? rtmpStreamingEvent;
 
-  /// @nodoc
+  /// Reports whether the super resolution feature is successfully enabled. (beta feature)
+  ///
+  /// After calling [RtcEngine.enableRemoteSuperResolution], the SDK triggers this callback to report whether super resolution is successfully enabled. If it is not successfully enabled, use reason for troubleshooting.
+  ///
+  /// The `UserSuperResolutionEnabledCallback` typedef includes the following parameters:
+  ///
+  /// **Parameter** [uid] The user ID of the remote user.
+  ///
+  /// **Parameter** [enabled] Whether super resolution is successfully enabled:
+  /// - `true`: Super resolution is successfully enabled.
+  /// - `false`: Super resolution is not successfully enabled.
+  ///
+  /// **Parameter** [reason] The reason why super resolution is not successfully enabled or the message that confirms success.
   UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
   /// @nodoc
@@ -1054,24 +1066,33 @@ class RtcEngineEventHandler {
   /// Reports the result of taking a video snapshot.
   ///
   /// Since
-  /// v3.5.2
-  /// After a successful takeSnapshot method call, the SDK triggers this callback
+  /// v4.2.0
+  ///
+  /// After a successful [RtcEngine.takeSnapshot] method call, the SDK triggers this callback
   /// to report whether the snapshot is successfully taken as well as the details
   /// for the snapshot taken.
   ///
-  /// Parameters
-  /// - channel	The channel name.
-  /// - uid	The user ID of the user. A uid of 0 indicates the local user.
-  /// - filePath	The local path of the snapshot.
-  /// - width	The width (px) of the snapshot.
-  /// - height	The height (px) of the snapshot.
-  /// - errCode	The message that confirms success or the reason why the snapshot
+  /// The `SnapshotTakenCallback` typedef includes the following parameters:
+  ///
+  ///
+  ///
+  /// **Parameter** [channel]	The channel name.
+  ///
+  /// **Parameter** [uid]	The user ID of the user. A uid of 0 indicates the local user.
+  ///
+  /// **Parameter** [filePath]	The local path of the snapshot.
+  ///
+  /// **Parameter** [width]	The width (px) of the snapshot.
+  ///
+  /// **Parameter** [height]	The height (px) of the snapshot.
+  ///
+  /// **Parameter** [errCode]	The message that confirms success or the reason why the snapshot
   /// is not successfully taken:
-  ///     - 0: Success.
-  ///     - < 0: Failure.
+  ///  - 0: Success.
+  ///  - < 0: Failure.
   ///     - -1: The SDK fails to write data to a file or encode a JPEG image.
   ///     - -2: The SDK does not find the video stream of the specified user within
-  /// one second after the takeSnapshot method call succeeds.
+  /// one second after the [RtcEngine.takeSnapshot] method call succeeds.
   SnapshotTakenCallback? snapshotTaken;
 
   /// Constructs a [RtcEngineEventHandler]
@@ -1859,7 +1880,13 @@ class RtcChannelEventHandler {
   /// - [RtmpStreamingEvent] `eventCode`: The event code. See [RtmpStreamingEvent].
   RtmpStreamingEventCallback? rtmpStreamingEvent;
 
-  /// @nodoc
+  /// Reports whether the super resolution feature is successfully enabled. (beta feature)
+  ///
+  /// After calling [RtcEngine.enableRemoteSuperResolution], the SDK triggers this callback to report whether super resolution is successfully enabled. If it is not successfully enabled, use reason for troubleshooting.
+  ///
+  /// **Parameters**
+  ///
+  /// [uid] The user ID of the remote user.
   UserSuperResolutionEnabledCallback? userSuperResolutionEnabled;
 
   /// Constructs a [RtcChannelEventHandler]

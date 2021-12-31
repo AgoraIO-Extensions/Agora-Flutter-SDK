@@ -1651,24 +1651,23 @@ mixin RtcEngineInterface
   /// Takes a snapshot of a video stream.
   ///
   /// Since
-  /// v3.5.2
+  /// v4.2.0
   ///
   /// This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
   ///
-  /// The method is asynchronous, and the SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken as well as the details of the snapshot taken.
+  /// The method is asynchronous, and the SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the [RtcEngineEventHandler.snapshotTaken] callback to report whether the snapshot is successfully taken as well as the details of the snapshot taken.
   ///
-  /// Note
+  /// **Note**
+  ///
   /// - Call this method after joining a channel.
   /// - If the video of the specified user is pre-processed, for example, added with watermarks or image enhancement effects, the generated snapshot also includes the pre-processing effects.
   ///
-  /// Parameters
-  /// - channel	The channel name.
-  /// - uid	The user ID of the user. Set uid as 0 if you want to take a snapshot of the local user's video.
-  /// - filePath	The local path (including the filename extensions) for the snapshot. For example, /storage/emulated/0/Android/data/<package name>/files/example.jpg. Ensure that the path you specify exists and is writable.
+  /// **Parameter** [channel]	The channel name.
   ///
-  /// Returns
-  /// - 0: Success.
-  /// - < 0: Failure.
+  /// **Parameter**  [uid]	The user ID of the user. Set uid as 0 if you want to take a snapshot of the local user's video.
+  ///
+  /// **Parameter** [filePath]	The local path (including the filename extensions) for the snapshot. For example, `/storage/emulated/0/Android/data/<package name>/files/example.jpg` for Android and `/App Sandbox/Library/Caches/example.jpg` for iOS. Ensure that the path you specify exists and is writable.
+  ///
   Future<void> takeSnapshot(String channel, int uid, String filePath);
 }
 
@@ -2071,7 +2070,63 @@ mixin RtcVideoInterface {
   /// **Parameter** [options] The image enhancement options. See [BeautyOptions].
   Future<void> setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
-  /// @nodoc
+  /// Enables/Disables the super resolution feature for a remote user’s video. (beta feature)
+  ///
+  /// This feature effectively boosts the resolution of a remote user’s video seen by the local user. If the original resolution of a remote user’s video is a × b, the local user’s device can render the remote video at a resolution of 2a × 2b after you enable this feature.
+  /// After calling this method, the SDK triggers the [RtcEngineEventHandler.userSuperResolutionEnabled] callback to report whether you have successfully enabled super resolution.
+  ///
+  /// Since
+  /// v4.2.0
+  ///
+  /// **Parameter** [uid] The user ID of the remote user.
+  ///
+  /// **Parameter** [enabled] Determines whether to enable super resolution for the remote user’s video:
+  /// - `true`: Enable super-resolution.
+  /// - `false`: Do not enable super resolution.
+  ///
+  ///
+  /// **Warning**
+  ///
+  /// The super resolution feature requires extra system resources. To balance the visual experience and system consumption, the SDK poses the following restrictions:
+  ///
+  /// - This feature can only be enabled for a single remote user.
+  /// - The original resolution of the remote user’s video cannot exceed 640 × 480 pixels.
+  /// - If you exceed these limitations, the SDK triggers the `WarningCallback` callback and returns the corresponding warning codes:
+  ///
+  /// - `SuperResolutionStreamOverLimitation(1610)`: The original resolution of the remote user’s video is beyond the range where super resolution can be applied.
+  /// - `SuperResolutionUserCountOverLimitation(1611)`: Super resolution is already being used to boost another remote user’s video.
+  /// - `SuperResolutionDeviceNotSupported(1612)`: The device does not support using super resolution.
+  ///
+  /// **Notes**
+  ///
+  /// Because this method has certain system performance requirements, Agora recommends that you use the following Android and iOS devices (iOS 12.0 or later) or better:
+  ///
+  /// **Android**
+  /// - VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 Pro
+  /// - OPPO: PCCM00, Find X3
+  /// - OnePlus: A6000
+  /// - Xiaomi: Mi 8, Mi 9, Mi 10, Mi 11, MIX3, Redmi K20 Pro
+  /// - SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, SM-G9750, S20, S21
+  /// - HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, EVR-AN00, nova 4, nova 5 Pro, nova 6 5G, nova 7 5G, Mate 30, Mate 30 Pro, Mate 40, Mate 40 Pro, P40 P40 Pro, HUAWEI MediaPad M6, MatePad 10.8
+  ///
+  /// **iOS**
+  /// - iPhone XR
+  /// - iPhone XS
+  /// - iPhone XS Max
+  /// - iPhone 11
+  /// - iPhone 11 Pro
+  /// - iPhone 11 Pro Max
+  /// - iPhone 12
+  /// - iPhone 12 mini
+  /// - iPhone 12 Pro
+  /// - iPhone 12 Pro Max
+  /// - iPhone 12 SE (2nd generation)
+  /// - iPad Pro 11-inch (3rd generation)
+  /// - iPad Pro 12.9-inch (3rd generation)
+  /// - iPad Air (3rd generation)
+  /// - iPad Air (4th generation)
+  ///
+  ///
   Future<void> enableRemoteSuperResolution(int uid, bool enabled);
 }
 
@@ -2176,7 +2231,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// **Note**
   ///
-  /// Call this method after calling [startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
+  /// Call this method after calling [RtcEngine.startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
   ///
   /// **Returns**
   /// - The audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
@@ -2184,6 +2239,10 @@ mixin RtcAudioMixingInterface {
   Future<int?> getAudioMixingPublishVolume();
 
   /// Gets the total duration (ms) of the music file.
+  ///
+  /// **Deprecated**
+  ///
+  /// This method is deprecated. Use [RtcEngine.getAudioFileInfo] instead.
   ///
   /// **Note**
   /// - Call this method after joining a channel.
@@ -2203,28 +2262,24 @@ mixin RtcAudioMixingInterface {
 
   /// Gets the information of a specified audio file.
   ///
-  /// **Since** v3.5.1
+  /// **Since** v4.2.0
   ///
-  /// After calling this method successfully, the SDK triggers the [onRequestAudioFileInfo](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler.html#a3e1191735cd197815f4001b89825220a)
+  /// After calling this method successfully, the SDK triggers the [RtcEngineEventHandler.requestAudioFileInfoCallback]
   /// callback to report the information of an audio file, such as audio duration.
   /// You can call this method multiple times to get the information of multiple audio files.
   ///
-  /// > **Note**
-  /// > * Call this method after joining a channel.
-  /// > * For the audio file formats supported by this method, see
+  /// **Note**
+  ///  - Call this method after joining a channel.
+  ///  - For the audio file formats supported by this method, see
   /// [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
   ///
-  /// **Parameters**
-  /// - filePath	The file path, including the filename extensions. To access an
+  ///
+  /// **Parameter** [filePath]	The file path, including the filename extensions. To access an
   /// online file, Agora supports using a URL address; to access a local file,
   /// Agora supports using a URI address, an absolute path, or a path that starts
   /// with `/assets/`. You might encounter permission issues if you use an absolute
   /// path to access a local file, so Agora recommends using a URI address instead.
   /// For example: `content://com.android.providers.media.documents/document/audio%3A14441`.
-  ///
-  /// **Returns**
-  /// - 0: Success.
-  /// - < 0: Failure.
   Future<void> getAudioFileInfo(String filePath);
 
   /// Gets the playback position of the audio file.
@@ -2260,12 +2315,15 @@ mixin RtcAudioMixingInterface {
   /// **Parameter** [pitch] Sets the pitch of the local music file by chromatic scale. The default value is 0, which means keep the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
   Future<void> setAudioMixingPitch(int pitch);
 
-  /// Sets the playback [speed] of the current music file.
+  /// Sets the playback speed of the current music file.
   ///
-  /// Agora recommends that you limit the [speed] value to between 50 and 400, defined as follows:
-  /// * 50: Half the original speed.
-  /// * 100: The original speed.
-  /// * 400: 4 times the original speed.
+  /// **Since** v4.2.0
+  ///
+  /// **Parameter** [speed] The playback speed. Agora recommends that you limit this value to between `50` and `400`, defined as follows:
+  /// - `50`: Half the original speed.
+  /// - `100`: The original speed.
+  /// - `400`: 4 times the original speed.
+  ///
   ///
   /// **Note**: Call this method after calling [startAudioMixing] and receiving the
   /// [RtcEngineEventHandler.audioMixingStateChanged] event callback with state
@@ -2273,6 +2331,8 @@ mixin RtcAudioMixingInterface {
   Future<void> setAudioMixingPlaybackSpeed(int speed);
 
   /// Gets the audio track index of the current music file.
+  ///
+  /// **Since** v4.2.0
   ///
   /// **Note**:
   /// - Call this method after calling [startAudioMixing] and receiving the
@@ -2286,13 +2346,16 @@ mixin RtcAudioMixingInterface {
   /// - < 0: Failure.
   Future<int?> getAudioTrackCount();
 
-  /// Specifies the playback track [index] of the current music file. The
-  /// [index] must be less than or equal to the return value of [getAudioTrackCount].
+  /// Specifies the playback track [index] of the current music file.
+  ///
+  /// **Since** v4.2.0
   ///
   /// After getting the audio track index of the current music file, call this
   /// method to specify any audio track to play. For example, if different tracks
   /// of a multitrack file store songs in different languages, you can call this
   /// method to set the language of the music file to play.
+  ///
+  /// **Parameter** [index] The specified playback track. This parameter must be less than or equal to the return value of [getAudioTrackCount].
   ///
   /// **Note**:
   /// - Call this method after calling [startAudioMixing] and receiving the
@@ -2313,6 +2376,8 @@ mixin RtcAudioMixingInterface {
   /// mode of the music file to left channel mode; if you need to listen to the
   /// accompaniment and the singing voice at the same time, call this method to
   /// set the channel mode to mixed channel mode.
+  ///
+  /// **Parameter** [mode] The channel mode. See [AudioMixingDualMonoMode].
   ///
   /// **Note**:
   /// - Call this method after calling [startAudioMixing] and receiving the

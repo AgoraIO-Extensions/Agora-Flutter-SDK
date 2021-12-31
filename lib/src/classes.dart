@@ -1686,7 +1686,7 @@ class AudioFileInfo {
 
 /// The configuration of the audio and video call loop test.
 ///
-/// @since v3.5.2
+/// @since v4.2.0
 @JsonSerializable(explicitToJson: true)
 class EchoTestConfiguration {
   /// Whether to enable the audio device for the call loop test:
