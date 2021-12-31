@@ -1074,25 +1074,25 @@ class RtcEngineEventHandler {
   ///
   /// The `SnapshotTakenCallback` typedef includes the following parameters:
   ///
-  /// **Parameters**
   ///
-  /// [channel]	The channel name.
   ///
-  /// [uid]	The user ID of the user. A uid of 0 indicates the local user.
+  /// **Parameter** [channel]	The channel name.
   ///
-  /// [filePath]	The local path of the snapshot.
+  /// **Parameter** [uid]	The user ID of the user. A uid of 0 indicates the local user.
   ///
-  /// [width]	The width (px) of the snapshot.
+  /// **Parameter** [filePath]	The local path of the snapshot.
   ///
-  /// [height]	The height (px) of the snapshot.
+  /// **Parameter** [width]	The width (px) of the snapshot.
   ///
-  /// [errCode]	The message that confirms success or the reason why the snapshot
+  /// **Parameter** [height]	The height (px) of the snapshot.
+  ///
+  /// **Parameter** [errCode]	The message that confirms success or the reason why the snapshot
   /// is not successfully taken:
-  ///     - 0: Success.
-  ///     - < 0: Failure.
-  ///       - -1: The SDK fails to write data to a file or encode a JPEG image.
-  ///       - -2: The SDK does not find the video stream of the specified user within
-  /// one second after the takeSnapshot method call succeeds.
+  ///  - 0: Success.
+  ///  - < 0: Failure.
+  ///     - -1: The SDK fails to write data to a file or encode a JPEG image.
+  ///     - -2: The SDK does not find the video stream of the specified user within
+  /// one second after the [RtcEngine.takeSnapshot] method call succeeds.
   SnapshotTakenCallback? snapshotTaken;
 
   /// Constructs a [RtcEngineEventHandler]
