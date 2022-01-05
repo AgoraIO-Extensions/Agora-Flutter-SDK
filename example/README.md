@@ -4,7 +4,7 @@
 
 ## Overview
 
-The API-Example-ReactNative project is an open-source demo that will show you different scenes on how to integrate Agora SDK APIs into your project.
+This project is an open-source demo that will show you different scenes on how to integrate Agora SDK APIs into your project.
 
 Any scene of this project can run successfully alone.
 
