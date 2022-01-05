@@ -1,23 +1,23 @@
 name: CI
 
 on:
-  pull_request_target:
-    types: [opened, synchronize]
-    branches: 
-      - master
-      # Temporarily allow check on dev/flutter2-iris branch
-      - 'dev/flutter2-iris'
+  # pull_request_target:
+  #   types: [opened, synchronize]
+  #   branches: 
+  #     - master
+  #     # Temporarily allow check on dev/flutter2-iris branch
+  #     - 'dev/flutter2-iris'
     
   push:
     branches: 
       - master
       # Temporarily allow check on dev/flutter2-iris branch
       - 'dev/flutter2-iris'
-  # pull_request:
-  #   branches: 
-  #     - master
-  #     # Temporarily allow check on dev/flutter2-iris branch
-  #     - 'dev/flutter2-iris'
+  pull_request:
+    branches: 
+      - master
+      # Temporarily allow check on dev/flutter2-iris branch
+      - 'dev/flutter2-iris'
 
 jobs:
   # DO NOT run flutter test as this time, because the unit test is broken, will re-enable it 
