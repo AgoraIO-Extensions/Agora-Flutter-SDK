@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request_target:
-    types: [opened]
+    types: [opened, synchronize]
     
   push:
     branches: 
@@ -21,7 +21,7 @@ jobs:
     runs-on: macos-11
     timeout-minutes: 60
     env:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
@@ -36,14 +36,14 @@ jobs:
           api-level: 31
           arch: x86_64
           profile: Nexus 6
-          script: bash ci/run_flutter_integration_test.sh "$MY_APP_ID"
+          script: bash ci/run_flutter_integration_test.sh
 
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
     runs-on: macos-11
     timeout-minutes: 60
     env:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
@@ -52,35 +52,34 @@ jobs:
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
-      - run: bash ci/run_flutter_integration_test.sh "$MY_APP_ID"
+      - run: bash ci/run_flutter_integration_test.sh
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
     runs-on: macos-11
     timeout-minutes: 60
     env:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.5.3'   
       - run: flutter config --enable-macos-desktop 
-      - run: bash ci/run_flutter_macos_integration_test.sh "$MY_APP_ID"
-
+      - run: bash ci/run_flutter_macos_integration_test.sh
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
     runs-on: windows-2019
     timeout-minutes: 60
     env:
-      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.5.3'
       - run: flutter config --enable-windows-desktop
-      - run: bash ci/run_flutter_macos_integration_test.sh "$MY_APP_ID"
+      - run: bash ci/run_flutter_macos_integration_test.sh
 
   unittest_android:
     name: Run Android Unit Test
