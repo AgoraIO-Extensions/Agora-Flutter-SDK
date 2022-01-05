@@ -375,16 +375,19 @@ class _NativeIrisProxyBinding {
   //   );
   // }
 
-  void callRtcEngineEvent() {
+  void callRtcEngineEvent(String event) {
     final fp = _agoraRtcWrapperLib.lookupFunction<CallRtcEngineEventNative,
         CallRtcEngineEvent>('CallRtcEngineEvents');
-    fp(_irisRtcEnginePtr, Pointer.fromAddress(0));
+        final pN = event.toNativeUtf8();
+    fp(_irisRtcEnginePtr, pN);
+    calloc.free(pN);
   }
 
-  void callRtcChannelEvent() {
+  void callRtcChannelEvent(String event) {
     final fp = _agoraRtcWrapperLib.lookupFunction<CallRtcChannelEventNative,
         CallRtcChannelEvent>('CallRtcChannelEvents');
-    fp(_irisRtcEnginePtr, Pointer.fromAddress(0));
+        final pN = event.toNativeUtf8();
+    fp(_irisRtcEnginePtr, pN);
   }
 }
 
@@ -572,11 +575,19 @@ class FakeIrisRtcEngine {
   // }
 
   void fireAllEngineEvents() {
-    _nativeIrisProxyBinding.callRtcEngineEvent();
+    _nativeIrisProxyBinding.callRtcEngineEvent('');
+  }
+
+  void fireRtcEngineEvent(String event) {
+    _nativeIrisProxyBinding.callRtcEngineEvent(event);
   }
 
   void fireAllChannelEvents() {
-    _nativeIrisProxyBinding.callRtcChannelEvent();
+    _nativeIrisProxyBinding.callRtcChannelEvent('');
+  }
+
+  void fireRtcChannelEvent(String event) {
+    _nativeIrisProxyBinding.callRtcChannelEvent(event);
   }
 }
 

@@ -1,61 +1,36 @@
-// TODO(littlegnal): Temporary disable somke test for iOS/macOS, because it is not stable 
-// to run somke test on CI at this time
-@Skip('currently failing')
-
-import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/src/api_types.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
-import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
 import 'package:integration_test_app/src/configs.dart' as config;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('can create a RtcEngine after destroy multiple times',
-      (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
-
-    RtcEngine rtcEngine = await RtcEngine.create(config.appId);
-    await rtcEngine.enableVideo();
-    await rtcEngine.destroy();
-
-    rtcEngine = await RtcEngine.create(config.appId);
-    await rtcEngine.enableVideo();
-    await rtcEngine.destroy();
-
-    rtcEngine = await RtcEngine.create(config.appId);
-    await rtcEngine.enableVideo();
-    await rtcEngine.destroy();
-  });
-
   testWidgets(
-    'getCameraMaxZoomFactor',
+    'can create a RtcEngine after destroy multiple times',
     (WidgetTester tester) async {
-      RtcEngine rtcEngine = await RtcEngine.create(config.appId);
-      await rtcEngine.startPreview();
-      try {
-        await rtcEngine.getCameraMaxZoomFactor();
-      } catch (e) {
-        final exception = e as PlatformException;
-        // -4 = ErrorCode.NotSupported
-        // It's allow this function return -4
-        if ('-4' != exception.code) {
-          rethrow;
-        }
-      }
+      app.main();
+      await tester.pumpAndSettle();
 
+      RtcEngine rtcEngine = await RtcEngine.create(config.appId);
+      await rtcEngine.enableVideo();
+      await rtcEngine.destroy();
+
+      rtcEngine = await RtcEngine.create(config.appId);
+      await rtcEngine.enableVideo();
+      await rtcEngine.destroy();
+
+      rtcEngine = await RtcEngine.create(config.appId);
+      await rtcEngine.enableVideo();
       await rtcEngine.destroy();
     },
-    skip: defaultTargetPlatform != TargetPlatform.iOS,
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -76,7 +51,28 @@ void main() {
 
       await rtcEngine.destroy();
     },
-    skip: defaultTargetPlatform != TargetPlatform.iOS,
+    skip: !(Platform.isAndroid || Platform.isIOS),
+  );
+
+  testWidgets(
+    'getCameraMaxZoomFactor',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = await RtcEngine.create(config.appId);
+      await rtcEngine.startPreview();
+      try {
+        await rtcEngine.getCameraMaxZoomFactor();
+      } catch (e) {
+        final exception = e as PlatformException;
+        // -4 = ErrorCode.NotSupported
+        // It's allow this function return -4
+        if ('-4' != exception.code) {
+          rethrow;
+        }
+      }
+
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -88,6 +84,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -99,6 +96,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -110,6 +108,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -121,6 +120,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -132,6 +132,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -143,6 +144,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -154,6 +156,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -165,6 +168,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -178,7 +182,9 @@ void main() {
 
       await rtcEngine.destroy();
     },
-    // TODO(littlegnal): Add soundId later
+
+    // skip: !(Platform.isAndroid || Platform.isIOS),
+    // TODO(littlegnal): [MS-99386] Wait for iris fix.
     skip: true,
   );
 
@@ -192,18 +198,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
-  );
-
-  testWidgets(
-    'stopRhythmPlayer',
-    (WidgetTester tester) async {
-      RtcEngine rtcEngine = await RtcEngine.create(config.appId);
-      await rtcEngine.startPreview();
-
-      await rtcEngine.stopRhythmPlayer();
-
-      await rtcEngine.destroy();
-    },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -218,6 +213,7 @@ void main() {
 
       await rtcEngine.destroy();
     },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 
   testWidgets(
@@ -231,7 +227,12 @@ void main() {
 
       await rtcEngine.destroy();
     },
-    // TODO(littlegnal): Wait for iris fix
+
+    // skip: !(Platform.isAndroid || Platform.isIOS),
+    // TODO(littlegnal): [MS-99379] Wait for iris fix
     skip: true,
   );
+  
+
+
 }

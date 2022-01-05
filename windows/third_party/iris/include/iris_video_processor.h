@@ -57,19 +57,18 @@ class IRIS_CPP_API IrisVideoFrameBufferManager {
    * @param uid The user ID you want to cache.
    * @param channel_id The channel ID.
    */
-  IRIS_DEPRECATED
   void EnableVideoFrameBuffer(const IrisVideoFrameBuffer &buffer,
-                              unsigned int uid, const char *channel_id = "");
+                              unsigned int uid,
+                              const char *channel_id = "") IRIS_DEPRECATED;
 
   void DisableVideoFrameBuffer(const IrisVideoFrameBufferDelegate *delegate);
 
-  IRIS_DEPRECATED
   void DisableVideoFrameBuffer(const unsigned int *uid = nullptr,
-                               const char *channel_id = "");
+                               const char *channel_id = "") IRIS_DEPRECATED;
 
-  IRIS_DEPRECATED
   bool GetVideoFrame(IrisVideoFrame &video_frame, bool &is_new_frame,
-                     unsigned int uid, const char *channel_id = "");
+                     unsigned int uid,
+                     const char *channel_id = "") IRIS_DEPRECATED;
 
  public:
   /**
@@ -131,10 +130,9 @@ IRIS_API IrisEventHandlerHandle SetIrisVideoFrameBufferManagerEventHandler(
 IRIS_API void UnsetIrisVideoFrameBufferManagerEventHandler(
     IrisVideoFrameBufferManagerPtr manager_ptr, IrisEventHandlerHandle handle);
 
-IRIS_DEPRECATED
 IRIS_API IrisVideoFrameBufferDelegateHandle EnableVideoFrameBuffer(
     IrisVideoFrameBufferManagerPtr manager_ptr, IrisCVideoFrameBuffer *buffer,
-    unsigned int uid, const char *channel_id = "");
+    unsigned int uid, const char *channel_id = "") IRIS_DEPRECATED;
 
 IRIS_API IrisVideoFrameBufferDelegateHandle EnableVideoFrameBufferByConfig(
     IrisVideoFrameBufferManagerPtr manager_ptr, IrisCVideoFrameBuffer *buffer,
@@ -144,10 +142,10 @@ IRIS_API void DisableVideoFrameBufferByDelegate(
     IrisVideoFrameBufferManagerPtr manager_ptr,
     IrisVideoFrameBufferDelegateHandle handle = nullptr);
 
-IRIS_DEPRECATED
 IRIS_API void
 DisableVideoFrameBufferByUid(IrisVideoFrameBufferManagerPtr manager_ptr,
-                             unsigned int uid, const char *channel_id = "");
+                             unsigned int uid,
+                             const char *channel_id = "") IRIS_DEPRECATED;
 
 IRIS_API void
 DisableVideoFrameBufferByConfig(IrisVideoFrameBufferManagerPtr manager_ptr,
@@ -156,10 +154,10 @@ DisableVideoFrameBufferByConfig(IrisVideoFrameBufferManagerPtr manager_ptr,
 IRIS_API void
 DisableAllVideoFrameBuffer(IrisVideoFrameBufferManagerPtr manager_ptr);
 
-IRIS_DEPRECATED
 IRIS_API bool GetVideoFrame(IrisVideoFrameBufferManagerPtr manager_ptr,
                             IrisVideoFrame *video_frame, bool *is_new_frame,
-                            unsigned int uid, const char *channel_id = "");
+                            unsigned int uid,
+                            const char *channel_id = "") IRIS_DEPRECATED;
 
 IRIS_API bool GetVideoFrameByConfig(IrisVideoFrameBufferManagerPtr manager_ptr,
                                     IrisVideoFrame *video_frame,

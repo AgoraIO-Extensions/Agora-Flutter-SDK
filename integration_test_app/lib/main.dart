@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'src/fake_iris_rtc_engine.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -48,7 +48,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   int _counter = 0;
 
   void _incrementCounter() {
@@ -64,8 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    FakeIrisRtcEngine fakeIrisRtcEngine = FakeIrisRtcEngine();
-    fakeIrisRtcEngine.initialize();
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //

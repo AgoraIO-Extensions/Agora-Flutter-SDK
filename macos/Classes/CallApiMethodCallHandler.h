@@ -10,6 +10,7 @@
 @interface CallApiMethodCallHandler : NSObject
 //@property(nonatomic) agora::iris::rtc::IrisRtcEngine *irisRtcEngine;
 - (instancetype)initWith:(void *)engine;
+- (instancetype)initWith:(void *)engine maxResultLength:(int)maxResultLength;
 - (void)onMethodCall:(FlutterMethodCall *)call _:(FlutterResult)result;
 - (int)callApi:(NSNumber *)apiType _:(NSString *)params _:(char *)result;
 

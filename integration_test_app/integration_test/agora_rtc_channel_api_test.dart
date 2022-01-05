@@ -427,8 +427,7 @@ void main() {
           'ordered': true,
         }),
       );
-    },
-    skip: true, // TODO(littlegnal): Wait for iris fix
+    }
   );
 
   testWidgets('registerMediaMetadataObserver', (WidgetTester tester) async {
@@ -569,7 +568,7 @@ void main() {
         }),
       );
     },
-    skip: true, // TODO(littlegnal): Need comfirm how to deal with this function
+    skip: true, // TODO(littlegnal): [MS-99372] Need comfirm how to deal with this function
   );
 
   testWidgets('setEncryptionSecret', (WidgetTester tester) async {
@@ -752,7 +751,7 @@ void main() {
         }),
       );
     },
-    skip: true, // TODO(littlegnal): Enable after iris fixed
+    skip: true, // TODO(littlegnal): [MS-99374] Enable after iris fixed
   );
 
   testWidgets('updateChannelMediaRelay', (WidgetTester tester) async {

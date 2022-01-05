@@ -106,7 +106,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager.kADMGetPlaybackDeviceVolume.index,
       'params': jsonEncode({}),
-    });
+    }).then((value) => int.tryParse(value));
   }
 
   /// TODO(doc)
@@ -124,7 +124,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager.kADMGetPlaybackDeviceMute.index,
       'params': jsonEncode({}),
-    });
+    }).then((value) => value == 'true');
   }
 
   /// TODO(doc)
@@ -179,7 +179,8 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager.kADMGetRecordingDeviceInfo.index,
       'params': jsonEncode({}),
-    }).then((value) => MediaDeviceInfo.fromJson(jsonDecode(value)));
+    }).then((value) =>
+        value != null ? MediaDeviceInfo.fromJson(jsonDecode(value)) : null);
   }
 
   /// TODO(doc)
@@ -197,7 +198,7 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager.kADMGetRecordingDeviceVolume.index,
       'params': jsonEncode({}),
-    });
+    }).then((value) => int.tryParse(value));
   }
 
   /// TODO(doc)
@@ -215,15 +216,15 @@ class RtcDeviceManager {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager.kADMGetRecordingDeviceMute.index,
       'params': jsonEncode({}),
-    });
+    }).then((value) => value == 'true');
   }
 
   /// TODO(doc)
-  Future<void> startAudioRecordingDeviceTest(String testAudioFilePath) {
+  Future<void> startAudioRecordingDeviceTest(int indicationInterval) {
     return _invokeAudioMethod('callApi', {
       'apiType': _ApiTypeAudioDeviceManager.kADMStartRecordingDeviceTest.index,
       'params': jsonEncode({
-        'testAudioFilePath': testAudioFilePath,
+        'indicationInterval': indicationInterval,
       }),
     });
   }
@@ -278,24 +279,6 @@ class RtcDeviceManager {
   Future<String?> getVideoDevice() {
     return _invokeVideoMethod('callApi', {
       'apiType': _ApiTypeVideoDeviceManager.kVDMGetDevice.index,
-      'params': jsonEncode({}),
-    });
-  }
-
-  /// TODO(doc)
-  Future<void> startVideoDeviceTest(int hwnd) {
-    return _invokeVideoMethod('callApi', {
-      'apiType': _ApiTypeVideoDeviceManager.kVDMStartDeviceTest.index,
-      'params': jsonEncode({
-        'hwnd': hwnd,
-      }),
-    });
-  }
-
-  /// TODO(doc)
-  Future<void> stopVideoDeviceTest() {
-    return _invokeVideoMethod('callApi', {
-      'apiType': _ApiTypeVideoDeviceManager.kVDMStopDeviceTest.index,
       'params': jsonEncode({}),
     });
   }
