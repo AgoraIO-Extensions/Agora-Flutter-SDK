@@ -916,6 +916,11 @@ void rtcEngineEventHandlerSomkeTestCases() {
 class RtcChannelEventHandlerSomkeTestGenerator implements Generator {
   const RtcChannelEventHandlerSomkeTestGenerator();
 
+  static const Map<String, String> _functionNameToEventNameMap = {
+    'warning': 'ChannelWarning',
+    'error': 'ChannelError',
+  };
+
   @override
   void generate(StringSink sink, ParseResult parseResult) {
     final clazz = parseResult.classMap['RtcChannelEventHandler'];
@@ -956,8 +961,10 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
           .toList();
       final paramsOfFieldTypeList = paramsOfFieldType?.join(',');
 
+      final baseEventName =
+          _functionNameToEventNameMap[field.name] ?? field.name;
       final eventName =
-          'on${field.name.substring(0, 1).toUpperCase()}${field.name.substring(1)}';
+          'on${baseEventName.substring(0, 1).toUpperCase()}${baseEventName.substring(1)}';
 
       final t = '''
 rtcChannel.setEventHandler(RtcChannelEventHandler(

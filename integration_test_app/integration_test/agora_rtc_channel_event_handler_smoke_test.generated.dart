@@ -5,7 +5,7 @@ import 'package:integration_test_app/main.dart' as app;
 import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
 
 void rtcChannelEventHandlerSomkeTestCases() {
-  testWidgets('onWarning', (WidgetTester tester) async {
+  testWidgets('onChannelWarning', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
 
@@ -17,7 +17,7 @@ void rtcChannelEventHandlerSomkeTestCases() {
       warning: (warn) {},
     ));
 
-    fakeIrisEngine.fireRtcChannelEvent('onWarning');
+    fakeIrisEngine.fireRtcChannelEvent('onChannelWarning');
 
     // Wait for the `EventChannel` event be sent from Android/iOS side
     await tester.pump(const Duration(milliseconds: 500));
@@ -26,7 +26,7 @@ void rtcChannelEventHandlerSomkeTestCases() {
     await rtcEngine.destroy();
     fakeIrisEngine.dispose();
   });
-  testWidgets('onError', (WidgetTester tester) async {
+  testWidgets('onChannelError', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
 
@@ -38,7 +38,7 @@ void rtcChannelEventHandlerSomkeTestCases() {
       error: (err) {},
     ));
 
-    fakeIrisEngine.fireRtcChannelEvent('onError');
+    fakeIrisEngine.fireRtcChannelEvent('onChannelError');
 
     // Wait for the `EventChannel` event be sent from Android/iOS side
     await tester.pump(const Duration(milliseconds: 500));
