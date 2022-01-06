@@ -3,8 +3,6 @@
 set -e
 set -x
 
-TEST_APP_ID=$1
-
 flutter packages get
 
 cd integration_test_app

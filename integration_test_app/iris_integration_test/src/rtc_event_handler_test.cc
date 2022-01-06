@@ -426,10 +426,6 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
 
 void CallRtcChannelEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
 {
-    // agora::iris::rtc::RtcChannelEventHandler handler;
-    // auto *engine = reinterpret_cast<IrisRtcEngine *>(engine_ptr);
-    // handler.SetEventHandler(engine->channel()->GetEventHandler());
-
     IrisRtcEngine *irisRtcEngine = reinterpret_cast<IrisRtcEngine *>(engine_ptr);
     IrisRtcEngineIntegrationTestDelegate *delegate = reinterpret_cast<IrisRtcEngineIntegrationTestDelegate *>(irisRtcEngine->GetDelegate());
     FakeRtcEngine *fakeRtcEngine = reinterpret_cast<FakeRtcEngine *>(delegate->fakeRtcEngine_);
@@ -438,11 +434,11 @@ void CallRtcChannelEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     IChannel *rtcChannel = fakeRtcEngine->channel_;
     if (event_name == nullptr || strcmp(event_name, "onChannelWarning") == 0)
     {
-        handler->onChannelWarning(rtcChannel, 123, "123");
+        handler->onChannelWarning(rtcChannel, 8, "123");
     }
     if (event_name == nullptr || strcmp(event_name, "onChannelError") == 0)
     {
-        handler->onChannelError(rtcChannel, 123, "123");
+        handler->onChannelError(rtcChannel, 0, "123");
     }
     if (event_name == nullptr || strcmp(event_name, "onJoinChannelSuccess") == 0)
     {

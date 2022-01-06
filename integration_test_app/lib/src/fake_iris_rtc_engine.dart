@@ -380,7 +380,7 @@ class _NativeIrisProxyBinding {
         CallRtcEngineEvent>('CallRtcEngineEvents');
         final pN = event.toNativeUtf8();
     fp(_irisRtcEnginePtr, pN);
-    calloc.free(pN);
+    // calloc.free(pN);
   }
 
   void callRtcChannelEvent(String event) {
@@ -388,6 +388,7 @@ class _NativeIrisProxyBinding {
         CallRtcChannelEvent>('CallRtcChannelEvents');
         final pN = event.toNativeUtf8();
     fp(_irisRtcEnginePtr, pN);
+    
   }
 }
 

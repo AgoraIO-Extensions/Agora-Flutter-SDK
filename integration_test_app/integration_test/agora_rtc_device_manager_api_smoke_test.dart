@@ -31,10 +31,7 @@ void main() {
         await rtcEngine.enableVideo();
         await deviceManager.getVideoDevice();
       } catch (e) {
-        if (e is! PlatformException) {
-          rethrow;
-        }
-        expect(e.code != '-7', isTrue);
+        expect(e is PlatformException, isTrue);
       }
 
       await rtcEngine.destroy();
