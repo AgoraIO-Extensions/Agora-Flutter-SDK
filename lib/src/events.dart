@@ -68,15 +68,7 @@ typedef RemoteAudioStateCallback = void Function(int uid,
 // ignore: public_member_api_docs
 typedef LocalAudioStateCallback = void Function(
     AudioLocalState state, AudioLocalError error);
-
-/// Reports the information of an audio file.
-///
-/// **Parameters**
-///
-/// * [info]	The information of an audio file. See AudioFileInfo.
-/// * [error]	The information acquisition state:
-///   - [AudioFileInfoError.Ok] : Successfully get the information of an audio file.
-///   - [AudioFileInfoError.Failure] : Fail to get the information of an audio file.
+// ignore: public_member_api_docs
 typedef RequestAudioFileInfoCallback = void Function(
     AudioFileInfo info, AudioFileInfoError error);
 // ignore: public_member_api_docs
@@ -1130,8 +1122,8 @@ class RtcEngineEventHandler {
   ///
   /// Since
   /// v3.5.2
-  /// After a successful takeSnapshot method call, the SDK triggers this callback 
-  /// to report whether the snapshot is successfully taken as well as the details 
+  /// After a successful takeSnapshot method call, the SDK triggers this callback
+  /// to report whether the snapshot is successfully taken as well as the details
   /// for the snapshot taken.
   ///
   /// Parameters
@@ -1140,12 +1132,12 @@ class RtcEngineEventHandler {
   /// - filePath	The local path of the snapshot.
   /// - width	The width (px) of the snapshot.
   /// - height	The height (px) of the snapshot.
-  /// - errCode	The message that confirms success or the reason why the snapshot 
+  /// - errCode	The message that confirms success or the reason why the snapshot
   /// is not successfully taken:
   ///     - 0: Success.
   ///     - < 0: Failure.
   ///     - -1: The SDK fails to write data to a file or encode a JPEG image.
-  ///     - -2: The SDK does not find the video stream of the specified user within 
+  ///     - -2: The SDK does not find the video stream of the specified user within
   /// one second after the takeSnapshot method call succeeds.
   SnapshotTakenCallback? snapshotTaken;
 

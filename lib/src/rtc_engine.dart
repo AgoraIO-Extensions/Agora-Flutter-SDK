@@ -1247,7 +1247,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker) {
+  Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetDefaultAudioRouteToSpeakerPhone.index,
       'params': jsonEncode({
@@ -2026,7 +2026,7 @@ mixin RtcEngineInterface
         RtcCameraInterface,
         RtcStreamMessageInterface,
         RtcScreenSharingInterface {
-  /// TODO(doc)
+  /// @nodoc
   Future<void> initialize(RtcEngineContext config);
 
   /// Destroys the [RtcEngine] instance and releases all resources used by the Agora SDK.
@@ -3583,7 +3583,7 @@ mixin RtcAudioRouteInterface {
   /// **Parameter** [defaultToSpeaker] Sets the default audio route as follows:
   /// - `true`: Set to the speakerphone.
   /// - `false`: Set to the earpiece.
-  Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker);
+  Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio playback route to the speakerphone.
   ///
@@ -4213,7 +4213,7 @@ mixin RtcStreamMessageInterface {
   Future<void> sendStreamMessage(int streamId, Uint8List message);
 }
 
-/// TODO(doc)
+/// @nodoc
 mixin RtcScreenSharingInterface {
   Future<void> startScreenCaptureByDisplayId(int displayId,
       [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);

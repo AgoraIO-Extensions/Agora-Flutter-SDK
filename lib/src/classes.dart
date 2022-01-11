@@ -1777,6 +1777,7 @@ class Metadata {
 
   int timeStampMs;
 
+  /// Constructs a [Metadata]
   Metadata(this.uid, this.timeStampMs);
 
   /// @nodoc
@@ -1795,6 +1796,7 @@ class MediaRecorderConfiguration {
   int maxDurationMs; // = 120000;
   int recorderInfoUpdateInterval; // = 0;
 
+  /// Constructs a [MediaRecorderConfiguration]
   MediaRecorderConfiguration(
     this.storagePath,
     this.containerFormat,
@@ -1817,6 +1819,7 @@ class RecorderInfo {
   int durationMs;
   int fileSize;
 
+  /// Constructs a [RecorderInfo]
   RecorderInfo(this.fileName, this.durationMs, this.fileSize);
 
   /// @nodoc
