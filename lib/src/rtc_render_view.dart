@@ -26,59 +26,68 @@ ApiTypeEngine _getSetupVideoApiType(int uid) {
 
 final Map<int, MethodChannel> _channels = {};
 
-/// Use SurfaceView on Android.
-/// Use UIView on iOS.
-/// Use DivElement on Web.
-/// Not support Mac/Windows.
+///
+/// The RtcSurfaceView class, which is used for rendering the local and remote video.
+/// This class corresponds to different classes on different platforms:
+/// 
+/// Android: SurfaceView (https://developer.android.com/reference/android/view/SurfaceView).
+/// iOS: UIView (https://developer.apple.com/documentation/uikit/uiview).
+/// Web: DivElement (https://api.dart.dev/stable/2.15.0/dart-html/DivElement-class.html).
+/// Does not apply to macOS or Windows.
+///
 class RtcSurfaceView extends StatefulWidget {
-  /// User ID.
+  ///
+  /// The user ID.
+  ///
   final int uid;
 
-  /// The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
-  /// - All lowercase English letters: a to z.
-  /// - All uppercase English letters: A to Z.
-  /// - All numeric characters: 0 to 9.
-  /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
-  /// **Note**
-  /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
-  /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
+  /// The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
+  /// The 26 lowercase English letters: a to z.
+  /// The 26 uppercase English letters: A to Z.
+  /// The 10 numeric characters: 0 to 9.
+  /// Space
+  /// "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  ///  
+  ///   
+  ///
   final String? channelId;
 
-  /// The rendering mode of the video view.
+  ///
+  /// The video render mode. For details, see VideoRenderMode.
+  ///
   final VideoRenderMode renderMode;
 
-  /// The video mirror mode.
+  ///
+  /// The video mirror mode. For details, see VideoMirrorMode.
+  ///
   final VideoMirrorMode mirrorMode;
 
-  /// Control whether the surface view's surface is placed on top of its window.
   ///
-  /// Only support [TargetPlatform.android].
+  /// Whether to place the surface on top of another surface view in the window, but still behind the window itsellf.
+  /// This parameter is for Android only.
+  ///
   final bool zOrderOnTop;
 
-  /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
-  ///
-  /// Only support [TargetPlatform.android].
   final bool zOrderMediaOverlay;
 
-  /// Callback signature for when a platform view was created.
   ///
-  /// `id` is the platform view's unique identifier.
+  /// Occurs when a platform view is created.
+  ///
   final PlatformViewCreatedCallback? onPlatformViewCreated;
 
-  /// Which gestures should be consumed by the web view.
   ///
-  /// It is possible for other gesture recognizers to be competing with the web view on pointer
-  /// events, e.g if the web view is inside a [ListView] the [ListView] will want to handle
-  /// vertical drags. The web view will claim gestures that are recognized by any of the
-  /// recognizers on this list.
+  /// The gesture object that should be consumed by the Web view. It is possible for other gesture recognizers to be competing
+  /// with the web view on pointer events, e.g if the web view is inside a [ListView] the [ListView] will want to handle vertical
+  /// drags. The web view will claim gestures that are recognized by any of the recognizers on this list.
+  /// When this set is empty or null, the web view will only handle pointer events for gestures that were not claimed by any 
+  /// other gesture recognizer.
   ///
-  /// When this set is empty or null, the web view will only handle pointer events for gestures that
-  /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  /// TODO(doc)
+  ///
+  /// Whether to create a sub process.
+  ///
   final bool subProcess;
 
   /// Constructs a [RtcSurfaceView]
@@ -385,51 +394,59 @@ class _HtmlElementViewController extends PlatformViewController
   }
 }
 
-/// Use TextureView or FlutterTexture on Android.
-/// Use FlutterTexture on iOS/Mac/Windows.
-/// Not support Web.
+///
+/// The RtcTextureView class, which is used for rendering
+/// the local and remote video.
+/// This class corresponds to different classes in on different platforms:
+/// 
+/// Android: TextureView (https://developer.android.com/reference/android/view/TextureView)
+/// or FlutterTexture (https://api.flutter.dev/objcdoc/Protocols/FlutterTexture.html).
+/// iOS/macOS/Windows: FlutterTexture (https://api.flutter.dev/objcdoc/Protocols/FlutterTexture.html).
+/// Does not apply to Web.
+///
 class RtcTextureView extends StatefulWidget {
-  /// User ID.
+  ///
+  /// The user ID.
+  ///
   final int uid;
 
-  /// The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
-  /// - All lowercase English letters: a to z.
-  /// - All uppercase English letters: A to Z.
-  /// - All numeric characters: 0 to 9.
-  /// - The space character.
-  /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
-  /// **Note**
-  /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
-  /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
+  /// 
+  ///
   final String? channelId;
 
-  /// The rendering mode of the video view.
+  ///
+  /// The video render mode. For details, see VideoRenderMode.
+  ///
   final VideoRenderMode renderMode;
 
-  /// The video mirror mode.
+  ///
+  /// The video mirror mode. For details, see VideoMirrorMode.
+  ///
   final VideoMirrorMode mirrorMode;
 
-  /// Callback signature for when a platform view was created.
   ///
-  /// `id` is the platform view's unique identifier.
+  /// Occurs when a platform view is created.
+  ///
   final PlatformViewCreatedCallback? onPlatformViewCreated;
 
-  /// Which gestures should be consumed by the web view.
   ///
-  /// It is possible for other gesture recognizers to be competing with the web view on pointer
-  /// events, e.g if the web view is inside a [ListView] the [ListView] will want to handle
-  /// vertical drags. The web view will claim gestures that are recognized by any of the
-  /// recognizers on this list.
+  /// The gesture object that should be consumed by the Web view. It is possible for other gesture recognizers to be competing
+  /// with the web view on pointer events, e.g if the web view is inside a [ListView] the [ListView] will want to handle vertical
+  /// drags. The web view will claim gestures that are recognized by any of the recognizers on this list.
+  /// When this set is empty or null, the web view will only handle pointer events for gestures that were not claimed by any 
+  /// other gesture recognizer.
   ///
-  /// When this set is empty or null, the web view will only handle pointer events for gestures that
-  /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  /// Use Flutter Texture to render.
+  ///
+  /// Whether to use FlutterTexture for rendering the view.
+  ///
   final bool useFlutterTexture;
 
-  /// TODO(doc)
+  ///
+  /// Whether to create a sub process.
+  ///
   final bool subProcess;
 
   /// Constructs a [RtcTextureView]
