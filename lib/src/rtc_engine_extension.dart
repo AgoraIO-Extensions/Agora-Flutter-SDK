@@ -127,17 +127,30 @@ final void Function(Pointer<_WindowCollection>) _FreeWindowCollection =
             'FreeIrisWindowCollection')
         .asFunction();
 
-/// Extension for RtcEngine
+///
+/// The RtcEngineExtension class.
+/// 
+///
 extension RtcEngineExtension on RtcEngine {
-  /// Get the actual absolute path of the asset through the relative path of the asset
   ///
-  /// - [assetPath] The resource path configured in the `flutter` -> `assets` field of pubspec.yaml, for example: assets/Sound_Horizon.mp3
-  /// - Returns the actual absolute path of the asset
+  /// Gets the actual absolute path of the asset through the relative path of the asset.
+  /// 
+  ///
+  /// Param [assetPath] The resource path configured in the flutter -> assets field of pubspec.yaml, for example: assets/Sound_Horizon.mp3.
+  ///
+  /// **return** The actual path of the asset.
+  ///
   Future<String?> getAssetAbsolutePath(String assetPath) {
     return RtcEngine.methodChannel
         .invokeMethod('getAssetAbsolutePath', assetPath);
   }
 
+  ///
+  /// Enumerates the information of all the screens in the system.
+  /// 
+  ///
+  /// **return** The information of the screen for screen-sharing.
+  ///
   List<Display> enumerateDisplays() {
     final list = <Display>[];
     final collection = _EnumerateDisplays();
@@ -149,6 +162,12 @@ extension RtcEngineExtension on RtcEngine {
     return list;
   }
 
+  ///
+  /// Enumerates the information of all the windows in the system.
+  /// 
+  ///
+  /// **return** The information of the window for screen-sharing.
+  ///
   List<Window> enumerateWindows() {
     final list = <Window>[];
     final collection = _EnumerateWindows();
