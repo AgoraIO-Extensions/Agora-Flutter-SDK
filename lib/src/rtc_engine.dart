@@ -1247,7 +1247,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker) {
+  Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetDefaultAudioRouteToSpeakerPhone.index,
       'params': jsonEncode({
@@ -3583,7 +3583,7 @@ mixin RtcAudioRouteInterface {
   /// **Parameter** [defaultToSpeaker] Sets the default audio route as follows:
   /// - `true`: Set to the speakerphone.
   /// - `false`: Set to the earpiece.
-  Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker);
+  Future<void> setDefaultAudioRoutetoSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio playback route to the speakerphone.
   ///
