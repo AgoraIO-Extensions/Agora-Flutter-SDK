@@ -98,13 +98,23 @@ public:
         NSNumber *uid = data[@"uid"];
         NSString *channelId = data[@"channelId"];
 
-        IrisVideoFrameBuffer config(kVideoFrameTypeBGRA,
+        IrisVideoFrameBuffer buffer(kVideoFrameTypeBGRA,
                                           weakSelf.delegate);
-        renderer->EnableVideoFrameBuffer(
-            config, [uid unsignedIntValue],
-            (channelId && (NSNull *)channelId != [NSNull null])
-                ? [channelId UTF8String]
-                : "");
+          IrisVideoFrameBufferConfig config;
+          
+          config.id = [uid unsignedIntValue];
+          if (config.id == 0) {
+              config.type = IrisVideoSourceType::kVideoSourceTypeCameraPrimary;
+          } else {
+              config.type = IrisVideoSourceType::kVideoSourceTypeRemote;
+          }
+          if (channelId && (NSNull *)channelId != [NSNull null]) {
+              strcpy(config.key, [channelId UTF8String]);
+              
+          } else {
+              strcpy(config.key, "");
+          }
+          renderer->EnableVideoFrameBuffer(buffer, &config);
       }
     }];
   }
