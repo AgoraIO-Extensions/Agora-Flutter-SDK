@@ -160,7 +160,11 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          Container(child: kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(), color: Colors.red,),
+          Container(
+            child: kIsWeb
+                ? RtcLocalView.SurfaceView()
+                : RtcLocalView.TextureView(),
+          ),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(

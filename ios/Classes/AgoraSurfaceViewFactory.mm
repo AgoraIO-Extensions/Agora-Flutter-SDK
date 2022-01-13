@@ -75,7 +75,9 @@
       [self onMethodCall:[FlutterMethodCall
                              methodCallWithMethodName:key
                                             arguments:[args objectForKey:key]]
-                  result:nil];
+                  result:^(id _Nullable result) {
+          // Do nothing
+      }];
     }
   }
   return self;
