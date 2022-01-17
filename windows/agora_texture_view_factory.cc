@@ -88,10 +88,29 @@ void TextureRenderer::HandleMethodCall(
     {
       channel_id_ = "";
     }
-    IrisVideoFrameBuffer config(kVideoFrameTypeRGBA, this);
-    // TODO(littlegnal): Remove this after we migrate not deprecated CallApi
-#pragma warning(disable : 4996)
-    renderer_->EnableVideoFrameBuffer(config, uid_, channel_id_.c_str());
+    
+    IrisVideoFrameBuffer buffer(kVideoFrameTypeRGBA, this);
+    IrisVideoFrameBufferConfig config;
+
+    config.id = uid_;
+    if (config.id == 0)
+    {
+      config.type = IrisVideoSourceType::kVideoSourceTypeCameraPrimary;
+    }
+    else
+    {
+      config.type = IrisVideoSourceType::kVideoSourceTypeRemote;
+    }
+    if (!channel_id_.empty())
+    {
+      strcpy_s(config.key, channel_id_.c_str());
+    }
+    else
+    {
+      strcpy_s(config.key, "");
+    }
+    renderer_->EnableVideoFrameBuffer(buffer, &config);
+
     result->Success();
   }
   else if (method.compare("setRenderMode") == 0)
@@ -103,8 +122,8 @@ void TextureRenderer::HandleMethodCall(
 }
 
 void TextureRenderer::OnVideoFrameReceived(const IrisVideoFrame &video_frame,
-                            const IrisVideoFrameBufferConfig *config,
-                            bool resize)
+                                           const IrisVideoFrameBufferConfig *config,
+                                           bool resize)
 {
   std::lock_guard<std::mutex> lock_guard(mutex_);
   if (pixel_buffer_->width != video_frame.width ||
