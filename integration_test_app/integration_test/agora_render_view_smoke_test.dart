@@ -47,6 +47,16 @@ class _RenderViewWidgetState extends State<_RenderViewWidget> {
   }
 
   @override
+  void dispose() {
+    _destroy();
+    super.dispose();
+  }
+
+  Future<void> _destroy() async {
+    await _rtcEngine.destroy();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -62,7 +72,11 @@ void main() {
   testWidgets('Show Local SurfaceView', (WidgetTester tester) async {
     runApp(_RenderViewWidget(
       builder: (context) {
-        return SurfaceView();
+        return SizedBox(
+          height: 100,
+          width: 100,
+          child: SurfaceView(),
+        );
       },
     ));
 
@@ -74,7 +88,11 @@ void main() {
   testWidgets('Show Local TextureView', (WidgetTester tester) async {
     runApp(_RenderViewWidget(
       builder: (context) {
-        return TextureView();
+        return SizedBox(
+          height: 100,
+          width: 100,
+          child: TextureView(),
+        );
       },
     ));
 

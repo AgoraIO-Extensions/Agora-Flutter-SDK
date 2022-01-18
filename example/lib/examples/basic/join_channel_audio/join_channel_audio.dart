@@ -53,7 +53,7 @@ class _State extends State<JoinChannelAudio> {
         logSink.log('warning ${warningCode}');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error q${errorCode}');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
         logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
