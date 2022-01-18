@@ -1874,7 +1874,7 @@ void main() {
       fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSetEnableSpeakerPhone.index,
         jsonEncode({
-          'defaultToSpeaker': true,
+          'speakerOn': true,
         }),
       );
     },
