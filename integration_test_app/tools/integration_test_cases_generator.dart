@@ -823,6 +823,10 @@ class RtcEngineEventHandlerSomkeTestGenerator implements Generator {
     'onMetadataReceived',
   ];
 
+  static const Map<String, List<GeneratorConfigPlatform>> _restrictPlatforms = {
+    'onFacePositionChanged': mobilePlatforms,
+  };
+
   @override
   void generate(StringSink sink, ParseResult parseResult) {
     final clazz = parseResult.classMap['RtcEngineEventHandler'];
@@ -848,7 +852,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
   rtcEngine.destroy();
   fakeIrisEngine.dispose();
-});
+}, 
+{{TEST_CASE_SKIP}}
+);
     
     ''';
 
@@ -879,15 +885,22 @@ fakeIrisEngine.fireRtcEngineEvent('$eventName');
 await tester.pump(const Duration(milliseconds: 500));
 expect(${field.name}Called, isTrue);
 ''';
+      String skipExpression = '';
+      if (_restrictPlatforms.containsKey(eventName)) {
+        skipExpression =
+            'skip: !(${_restrictPlatforms[eventName]!.map((e) => e.toPlatformExpression()).join(' || ')}),';
+      }
 
       String testCase =
           testCaseTemplate.replaceAll('{{TEST_CASE_NAME}}', eventName);
       testCase = testCase.replaceAll('{{TEST_CASE_BODY}}', t);
+      testCase = testCase.replaceAll('{{TEST_CASE_SKIP}}', skipExpression);
 
       testCases.add(testCase);
     }
 
     const testCasesContentTemplate = '''
+import 'dart:io';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test_app/main.dart' as app;
