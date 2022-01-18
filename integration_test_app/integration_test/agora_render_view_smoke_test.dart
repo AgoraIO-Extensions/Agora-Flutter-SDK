@@ -80,7 +80,7 @@ void main() {
       },
     ));
 
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(Duration(milliseconds: 5000));
 
     expect(find.byType(SurfaceView), findsOneWidget);
   });
@@ -96,7 +96,7 @@ void main() {
       },
     ));
 
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(Duration(milliseconds: 5000));
 
     expect(find.byType(TextureView), findsOneWidget);
   });
