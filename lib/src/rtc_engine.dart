@@ -1241,11 +1241,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setEnableSpeakerphone(bool defaultToSpeaker) {
+  Future<void> setEnableSpeakerphone(bool speakerOn) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEnableSpeakerPhone.index,
       'params': jsonEncode({
-        'defaultToSpeaker': defaultToSpeaker,
+        'speakerOn': speakerOn,
       }),
     });
   }
@@ -3745,7 +3745,7 @@ mixin RtcAudioRouteInterface {
   /// 
   /// 
   ///
-  Future<void> setEnableSpeakerphone(bool defaultToSpeaker);
+  Future<void> setEnableSpeakerphone(bool speakerOn);
 
   ///
   /// Checks whether the speakerphone is enabled.
