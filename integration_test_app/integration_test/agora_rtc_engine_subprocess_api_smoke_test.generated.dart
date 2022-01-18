@@ -2282,9 +2282,9 @@ void rtcEngineSubProcessSmokeTestCases() {
 
       final screenShareHelper = await rtcEngine.getScreenShareHelper();
 
-      const bool defaultToSpeaker = true;
+      const bool speakerOn = true;
       await screenShareHelper.setEnableSpeakerphone(
-        defaultToSpeaker,
+        speakerOn,
       );
 
       await screenShareHelper.destroy();
