@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/src/api_types.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
@@ -151,7 +150,7 @@ void main() {
         'Fail',
       );
 
-      final ret = await RtcEngine.getErrorDescription(1);
+      final ret = await rtcEngine.getErrorDescription(1);
 
       fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineGetErrorDescription.index,
