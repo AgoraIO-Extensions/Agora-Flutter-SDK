@@ -100,21 +100,19 @@ public:
 
         IrisVideoFrameBuffer buffer(kVideoFrameTypeBGRA,
                                           weakSelf.delegate);
-          IrisVideoFrameBufferConfig config;
-          
-          config.id = [uid unsignedIntValue];
-          if (config.id == 0) {
-              config.type = IrisVideoSourceType::kVideoSourceTypeCameraPrimary;
-          } else {
-              config.type = IrisVideoSourceType::kVideoSourceTypeRemote;
-          }
-          if (channelId && (NSNull *)channelId != [NSNull null]) {
-              strcpy(config.key, [channelId UTF8String]);
-              
-          } else {
-              strcpy(config.key, "");
-          }
-          renderer->EnableVideoFrameBuffer(buffer, &config);
+        IrisVideoFrameBufferConfig config;
+        config.id = [uid unsignedIntValue];
+        if (config.id == 0) {
+            config.type = IrisVideoSourceType::kVideoSourceTypeCameraPrimary;
+        } else {
+            config.type = IrisVideoSourceType::kVideoSourceTypeRemote;
+        }
+        if (channelId && (NSNull *)channelId != [NSNull null]) {
+            strcpy(config.key, [channelId UTF8String]);
+        } else {
+            strcpy(config.key, "");
+        }
+        renderer->EnableVideoFrameBuffer(buffer, &config);
       }
     }];
   }

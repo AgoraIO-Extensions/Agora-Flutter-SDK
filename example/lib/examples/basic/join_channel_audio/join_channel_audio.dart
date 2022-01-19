@@ -22,8 +22,10 @@ class _State extends State<JoinChannelAudio> {
       enableSpeakerphone = true,
       playEffect = false;
   bool _enableInEarMonitoring = false;
-  double _recordingVolume = 100, _playbackVolume = 100, _inEarMonitoringVolume = 0;
-  TextEditingController? _controller;
+  double _recordingVolume = 100,
+      _playbackVolume = 100,
+      _inEarMonitoringVolume = 100;
+  late TextEditingController _controller;
 
   @override
   void initState() {
@@ -76,14 +78,25 @@ class _State extends State<JoinChannelAudio> {
     }
 
     await _engine
-        .joinChannel(config.token, config.channelId, null, config.uid)
+        .joinChannel(config.token, _controller.text, null, config.uid)
         .catchError((onError) {
       logSink.log('error ${onError.toString()}');
     });
   }
 
   _leaveChannel() async {
+    
     await _engine.leaveChannel();
+    setState(() {
+      isJoined = false;
+      openMicrophone = true;
+      enableSpeakerphone = true;
+      playEffect = false;
+   _enableInEarMonitoring = false;
+   _recordingVolume = 100;
+      _playbackVolume = 100;
+      _inEarMonitoringVolume = 100;
+    });
   }
 
   _switchMicrophone() {
@@ -116,18 +129,10 @@ class _State extends State<JoinChannelAudio> {
         logSink.log('stopEffect $err');
       });
     } else {
-      final path = (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!;
+      final path =
+          (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!;
       logSink.log('path: $path');
-      _engine
-          .playEffect(
-              1,
-              path,
-              -1,
-              1,
-              1,
-              100,
-              true)
-          .then((value) {
+      _engine.playEffect(1, path, -1, 1, 1, 100, true).then((value) {
         setState(() {
           playEffect = true;
         });
@@ -141,7 +146,7 @@ class _State extends State<JoinChannelAudio> {
     setState(() {
       _inEarMonitoringVolume = value;
     });
-    _engine.setInEarMonitoringVolume(value.toInt());
+    _engine.setInEarMonitoringVolume(_inEarMonitoringVolume.toInt());
   }
 
   _toggleInEarMonitoring(value) {
@@ -160,11 +165,6 @@ class _State extends State<JoinChannelAudio> {
             TextField(
               controller: _controller,
               decoration: InputDecoration(hintText: 'Channel ID'),
-              onChanged: (text) {
-                setState(() {
-                  channelId = text;
-                });
-              },
             ),
             Row(
               children: [
@@ -266,7 +266,8 @@ class _State extends State<JoinChannelAudio> {
                               min: 0,
                               max: 100,
                               divisions: 5,
-                              label: 'InEar Monitoring Volume $_inEarMonitoringVolume',
+                              label:
+                                  'InEar Monitoring Volume $_inEarMonitoringVolume',
                               onChanged: isJoined
                                   ? _onChangeInEarMonitoringVolume
                                   : null,
