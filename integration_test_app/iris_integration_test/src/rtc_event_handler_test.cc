@@ -416,11 +416,24 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
             VIRTUAL_BACKGROUND_SOURCE_STATE_REASON::
                 VIRTUAL_BACKGROUND_SOURCE_STATE_REASON_COLOR_FORMAT_NOT_SUPPORTED);
     }
-    if (event_name == nullptr || strcmp(event_name, "onAirPlayConnected") == 0)
+    if (event_name == nullptr || strcmp(event_name, "onRequestAudioFileInfo") == 0)
     {
         AudioFileInfo info{};
+        info.filePath = "path";
         handler->onRequestAudioFileInfo(
             info, AUDIO_FILE_INFO_ERROR::AUDIO_FILE_INFO_ERROR_FAILURE);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onRemoteVideoTransportStats") == 0)
+    {
+        handler->onRemoteVideoTransportStats(123, 123, 123, 123);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onAirPlayConnected") == 0)
+    {
+        handler->onAirPlayConnected();
+    }
+    if (event_name == nullptr || strcmp(event_name, "onSnapshotTaken") == 0)
+    {
+        handler->onSnapshotTaken("123", 123, "path", 10, 10, 0);
     }
 }
 

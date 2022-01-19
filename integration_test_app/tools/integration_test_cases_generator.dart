@@ -1,24 +1,18 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/dart/element/type_visitor.dart';
-import 'package:path/path.dart' as path;
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart'
     show AnalysisContextCollection;
-import 'dart:convert';
-import 'dart:io';
-import 'package:file/file.dart' as file;
-
 import 'package:analyzer/dart/analysis/results.dart' show ParsedUnitResult;
 import 'package:analyzer/dart/analysis/session.dart' show AnalysisSession;
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/ast.dart' as dart_ast;
-import 'package:analyzer/dart/ast/syntactic_entity.dart'
-    as dart_ast_syntactic_entity;
 import 'package:analyzer/dart/ast/visitor.dart' as dart_ast_visitor;
+import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/error/error.dart' show AnalysisError;
+import 'package:file/file.dart' as file;
 import 'package:file/local.dart';
+import 'package:path/path.dart' as path;
 
 class CallApiInvoke {
   late String apiType;
@@ -819,22 +813,30 @@ abstract class DefaultGenerator implements Generator {
 class RtcEngineEventHandlerSomkeTestGenerator implements Generator {
   const RtcEngineEventHandlerSomkeTestGenerator();
 
+  static const Map<String, String> _eventFieldMap = {
+    'requestAudioFileInfoCallback': 'RequestAudioFileInfo',
+    'airPlayIsConnected': 'AirPlayConnected',
+  };
+
+// TODO(littlegnal): Re-implement later
+  static const List<String> _skipEvent = [
+    'onMetadataReceived',
+  ];
+
+  static const Map<String, List<GeneratorConfigPlatform>> _restrictPlatforms = {
+    'onFacePositionChanged': mobilePlatforms,
+  };
+
   @override
   void generate(StringSink sink, ParseResult parseResult) {
     final clazz = parseResult.classMap['RtcEngineEventHandler'];
     stdout.writeln('clazz: $clazz');
     if (clazz == null) return;
 
-    // final Map<String, List<String>> classFieldsMap = parseResult.classFieldsMap;
-    // final Map<String, String> fieldsTypeMap = parseResult.fieldsTypeMap;
-
     final fields = clazz.fields;
 
     final Map<String, List<String>> genericTypeAliasParametersMap =
         parseResult.genericTypeAliasParametersMap;
-
-    // final callbackImpl = <String>[];
-    // final fieldList = classFieldsMap[''] ?? [];
 
     final testCases = <String>[];
 
@@ -848,12 +850,11 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
   final rtcEngine = await RtcEngine.create('123');
   {{TEST_CASE_BODY}}
 
-  // Wait for the `EventChannel` event be sent from Android/iOS side
-  await tester.pump(const Duration(milliseconds: 500));
-
   rtcEngine.destroy();
   fakeIrisEngine.dispose();
-});
+}, 
+{{TEST_CASE_SKIP}}
+);
     
     ''';
 
@@ -864,25 +865,42 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
           .toList();
       final paramsOfFieldTypeList = paramsOfFieldType?.join(',');
 
+      final eventSuffix = _eventFieldMap[field.name] ?? field.name;
+
       final eventName =
-          'on${field.name.substring(0, 1).toUpperCase()}${field.name.substring(1)}';
+          'on${eventSuffix.substring(0, 1).toUpperCase()}${eventSuffix.substring(1)}';
+
+      if (_skipEvent.contains(eventName)) continue;
 
       final t = '''
+bool ${field.name}Called = false;
 rtcEngine.setEventHandler(RtcEngineEventHandler(
-  ${field.name}: ($paramsOfFieldTypeList) {},
+  ${field.name}: ($paramsOfFieldTypeList) {
+    ${field.name}Called = true;
+  },
 ));
   
 fakeIrisEngine.fireRtcEngineEvent('$eventName');
-      ''';
+// Wait for the `EventChannel` event be sent from Android/iOS side
+await tester.pump(const Duration(milliseconds: 500));
+expect(${field.name}Called, isTrue);
+''';
+      String skipExpression = '';
+      if (_restrictPlatforms.containsKey(eventName)) {
+        skipExpression =
+            'skip: !(${_restrictPlatforms[eventName]!.map((e) => e.toPlatformExpression()).join(' || ')}),';
+      }
 
       String testCase =
           testCaseTemplate.replaceAll('{{TEST_CASE_NAME}}', eventName);
       testCase = testCase.replaceAll('{{TEST_CASE_BODY}}', t);
+      testCase = testCase.replaceAll('{{TEST_CASE_SKIP}}', skipExpression);
 
       testCases.add(testCase);
     }
 
     const testCasesContentTemplate = '''
+import 'dart:io';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test_app/main.dart' as app;
@@ -921,6 +939,9 @@ class RtcChannelEventHandlerSomkeTestGenerator implements Generator {
     'error': 'ChannelError',
   };
 
+  // TODO(littlegnal): Re-implement later
+  static const List<String> _skipEvent = ['onMetadataReceived'];
+
   @override
   void generate(StringSink sink, ParseResult parseResult) {
     final clazz = parseResult.classMap['RtcChannelEventHandler'];
@@ -945,9 +966,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
   final rtcChannel = await RtcChannel.create('testapi');
   {{TEST_CASE_BODY}}
 
-  // Wait for the `EventChannel` event be sent from Android/iOS side
-  await tester.pump(const Duration(milliseconds: 500));
-
   await rtcChannel.destroy();
   await rtcEngine.destroy();
   fakeIrisEngine.dispose();
@@ -966,12 +984,20 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       final eventName =
           'on${baseEventName.substring(0, 1).toUpperCase()}${baseEventName.substring(1)}';
 
+      if (_skipEvent.contains(eventName)) continue;
+
       final t = '''
+bool ${field.name}Called = false;
 rtcChannel.setEventHandler(RtcChannelEventHandler(
-  ${field.name}: ($paramsOfFieldTypeList) {},
+  ${field.name}: ($paramsOfFieldTypeList) {
+    ${field.name}Called = true;
+  },
 ));
   
 fakeIrisEngine.fireRtcChannelEvent('$eventName');
+// Wait for the `EventChannel` event be sent from Android/iOS side
+await tester.pump(const Duration(milliseconds: 500));
+expect(${field.name}Called, isTrue);
       ''';
 
       String testCase =

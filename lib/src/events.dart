@@ -194,7 +194,7 @@ typedef SnapshotTakenCallback = void Function(String channel, int uid,
 
 ///
 ///  The SDK uses the RtcEngineEventHandler interface to send event notifications to your app. Your app can get those notifications through methods that inherit this interface.
-/// 
+///
 ///
 class RtcEngineEventHandler {
   ///
@@ -217,7 +217,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when a method is executed by the SDK.
-  /// 
+  ///
   ///
   /// Param [err] The error code returned by the SDK when the method call fails. For detailed error information and troubleshooting methods, see Error Code and Warning Code.If the SDK returns 0, then the method call is successful.
   ///
@@ -285,8 +285,8 @@ class RtcEngineEventHandler {
   /// The SDK triggers this callback when the local user switches the user role after joining the channel.
   ///
   /// Param [oldRole] Role that the user switches from: ClientRole.
-  /// 
-  /// 
+  ///
+  ///
   ///
   /// Param [newRole] Role that the user switches to: ClientRole.
   ///
@@ -296,7 +296,7 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) joins the channel.
   /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.
   /// In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17.
-  /// 
+  ///
   ///   The SDK triggers this callback under one of the following circumstances:
   /// A remote user/host joins the channel by calling the joinChannel method.
   /// A remote user switches the user role to the host after joining the channel.
@@ -317,7 +317,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The ID of the user who leaves the channel or goes offline.
   ///
-  /// Param [reason] Reasons why the user goes offline: UserOfflineReason. 
+  /// Param [reason] Reasons why the user goes offline: UserOfflineReason.
   ///
   UserOfflineCallback? userOffline;
 
@@ -326,18 +326,18 @@ class RtcEngineEventHandler {
   /// When the network connection state changes, the SDK triggers this callback and reports the current connection state and the reason for the change.
   ///
   /// Param [state] The current connection state. For details, see ConnectionStateType.
-  /// 
+  ///
   /// Disconnected (1): The SDK is disconnected from Agora's edge server.
   /// Connecting (2): The SDK is connecting to Agora's edge server.
   /// Connected (3): The SDK is connected to Agora's edge server and has joined a channel.
   /// Reconnecting (4): The SDK keeps reconnecting to the Agora edge server.
   /// Failed 5: The SDK fails to connect to Agora's edge server or join the channel.
-  /// 
-  ///   
+  ///
+  ///
   ///
   /// Param [reason] The reason for a connection state change.
-  /// 
-  /// 
+  ///
+  ///
   ///
   ConnectionStateCallback? connectionStateChanged;
 
@@ -360,7 +360,7 @@ class RtcEngineEventHandler {
   /// 3G.
   /// Mobile4G (5): The network type is mobile
   /// 4G.
-  /// 
+  ///
   ///
   NetworkTypeCallback? networkTypeChanged;
 
@@ -400,13 +400,13 @@ class RtcEngineEventHandler {
   ///
   /// Param [speakers] The volume information of the users, see AudioVolumeInfo. An empty speakers array in the callback indicates that no remote user is in the channel or sending a stream at the moment.
   ///
-  /// Param [totalVolume] 
+  /// Param [totalVolume]
   /// The volume of the speaker. The value range is [0,255].
   /// In the callback for the local user, totalVolume is the volume of the local user who sends a stream.
   /// In the callback for remote users, totalVolume is the sum of the volume of all remote users (up to three) whose instantaneous volumes are the highest. If the user calls startAudioMixing, then totalVolume is the volume after audio mixing.
-  ///  
-  /// 
-  ///   
+  ///
+  ///
+  ///
   ///
   AudioVolumeCallback? audioVolumeIndication;
 
@@ -424,7 +424,7 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the engine sends the first local audio frame.
   /// Deprecated:
-  ///   Please use 
+  ///   Please use
   /// instead.
   ///
   /// Param [elapsed] The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
@@ -459,14 +459,14 @@ class RtcEngineEventHandler {
   /// Param [muted] Whether the remote user's video stream playback is paused/resumed:
   /// true: Paused.
   /// false: Resumed.
-  /// 
+  ///
   ///
   @deprecated
   UidWithMutedCallback? userMuteVideo;
 
   ///
   /// Occurs when the video size or rotation of a specified user changes.
-  /// 
+  ///
   ///
   /// Param [uid] The ID of the user whose video size or rotation changes.
   /// uid is 0 for the local user.
@@ -486,10 +486,10 @@ class RtcEngineEventHandler {
   /// Param [uid] The ID of the remote user whose video state changes.
   ///
   /// Param [state]  The state of the remote video, see
-  /// VideoRemoteState. 
+  /// VideoRemoteState.
   ///
   /// Param [reason]  The reason for the remote video state
-  /// change, see VideoRemoteStateReason. 
+  /// change, see VideoRemoteStateReason.
   ///
   /// Param [elapsed] Time elapsed (ms) from the local user calling the joinChannel method until the SDK triggers this
   /// callback.
@@ -502,25 +502,25 @@ class RtcEngineEventHandler {
   /// The SDK triggers the localVideoStateChanged callback with the state code Failed and error code CaptureFailure in the following situations:
   /// The app switches to the background, and the system gets the camera resource.
   /// The camera starts normally, but does not output video for four consecutive seconds.
-  /// 
+  ///
   /// When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers the localVideoStateChanged callback with the state code Capturing and error code CaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
   /// For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
   ///
-  /// Param [state] 
+  /// Param [state]
   /// The state of the local video, see LocalVideoStreamState.
-  /// 
-  /// 
+  ///
+  ///
   /// Stopped (0): The local video is in the initial state.
   /// Capturing (1): The local video capturing device starts successfully.
   /// Encoding (2): The first video frame is successfully encoded.
   /// Failed (3): The local video fails to start.
-  /// 
-  /// 
-  /// 
   ///
-  /// Param [error] 
+  ///
+  ///
+  ///
+  /// Param [error]
   /// The detailed error information, see LocalVideoStreamError.
-  /// 
+  ///
   ///
   LocalVideoStateCallback? localVideoStateChanged;
 
@@ -557,22 +557,31 @@ class RtcEngineEventHandler {
   /// Param [info] The information of an audio file. See AudioFileInfo.
   ///
   /// Param [error] The information acquisition state. See AudioFileInfoError.
-  ///
+  @Deprecated('Use requestAudioFileInfo instead')
   RequestAudioFileInfoCallback? requestAudioFileInfoCallback;
+
+  ///
+  /// Reports the information of an audio file.
+  /// After successfully calling getAudioFileInfo, the SDK triggers this callback to report the information of the audio file, such as the file path and duration.
+  ///
+  /// Param [info] The information of an audio file. See AudioFileInfo.
+  ///
+  /// Param [error] The information acquisition state. See AudioFileInfoError.
+  RequestAudioFileInfoCallback? requestAudioFileInfo;
 
   ///
   /// Occurs when the published media stream falls back to an audio-only stream.
   /// If you call setLocalPublishFallbackOption and set option as AudioOnly, the SDK triggers this callback when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
   /// If the local stream falls back to the audio-only stream, the remote user receives the userMuteVideo callback.
   ///
-  /// Param [isFallbackOrRecover] 
-  /// 
+  /// Param [isFallbackOrRecover]
+  ///
   /// true: The published stream falls
   /// back to audio-only due to poor network conditions.
   /// false: The published stream switches
   /// back to the video after the network conditions improve.
-  /// 
-  /// 
+  ///
+  ///
   ///
   FallbackCallback? localPublishFallbackToAudioOnly;
 
@@ -583,18 +592,18 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The ID of the remote user.
   ///
-  /// Param [isFallbackOrRecover] 
-  /// 
+  /// Param [isFallbackOrRecover]
+  ///
   ///  true: The remotely subscribed media stream falls back to audio-only due to poor network conditions.
   ///  false: The remotely subscribed media stream switches back to the video stream after the network conditions improved.
-  /// 
-  ///   
+  ///
+  ///
   ///
   FallbackWithUidCallback? remoteSubscribeFallbackToAudioOnly;
 
   ///
   /// Occurs when the local audio route changes.
-  /// 
+  ///
   ///
   /// Param [routing] The current audio routing. For details, see AudioOutputRouting.
   /// The current audio routing. For details, see AudioOutputRouting.
@@ -605,7 +614,7 @@ class RtcEngineEventHandler {
   /// 3: The audio route is the speaker that comes with the device.
   /// 4: The audio route is an external speaker.
   /// 5：The audio route is a Bluetooth headset.
-  /// 
+  ///
   /// The current audio routing.
   /// Default (-1): The default audio route.
   /// Headset (0): The headset.
@@ -614,9 +623,9 @@ class RtcEngineEventHandler {
   /// Speakerphone (3): The built-in speaker on a mobile device.
   /// Loudspeaker (4): The external speaker.
   /// HeadsetBluetooth (5): The bluetooth headset.
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
   ///
   AudioRouteCallback? audioRouteChanged;
 
@@ -648,11 +657,11 @@ class RtcEngineEventHandler {
   ///   The width and height of the local video.
   ///   The position of the human face in the local video.
   ///   The distance between the human face and the screen.
-  /// 
-  /// 
+  ///
+  ///
   /// The distance between the human face and the screen is based on the fitting calculation of the local video size and the position of the human face captured by the camera.
-  /// 
-  /// 
+  ///
+  ///
   /// If the SDK does not detect a face, it reduces the frequency of this callback to reduce power consumption on the local device.
   ///   The SDK stops triggering this callback when a human face is in close proximity to the screen.
   ///
@@ -673,10 +682,10 @@ class RtcEngineEventHandler {
   /// Reports the statistics of the current call.
   /// The SDK triggers this callback once every two seconds after the user joins the channel.
   ///
-  /// Param [stats] 
+  /// Param [stats]
   /// Statistics of the RTC engine, see RtcStats for
   /// details.
-  /// 
+  ///
   ///
   RtcStatsCallback? rtcStats;
 
@@ -693,9 +702,9 @@ class RtcEngineEventHandler {
   /// Bad (4): Users cannot communicate smoothly.
   /// VBad (5): The quality is so bad that users can barely communicate.
   /// Down (6): The network is down, and users cannot communicate at all.
-  /// 
+  ///
   /// See
-  /// NetworkQuality. 
+  /// NetworkQuality.
   ///
   NetworkQualityCallback? lastmileQuality;
 
@@ -704,11 +713,11 @@ class RtcEngineEventHandler {
   /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server.
   /// The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times.
   ///
-  /// Param [uid] 
+  /// Param [uid]
   /// User ID. The network quality of the user with this user ID is
   /// reported.
   /// If the uid is 0, the local network quality is reported.
-  /// 
+  ///
   ///
   /// Param [txQuality] Uplink network quality rating of the user in terms of the transmission bit
   /// rate, packet loss rate, average RTT (Round-Trip Time) and jitter of the
@@ -725,8 +734,8 @@ class RtcEngineEventHandler {
   /// Bad (4): Users cannot communicate smoothly.
   /// VBad (5): The quality is so bad that users can barely communicate.
   /// Down (6): The network is down, and users cannot communicate at all.
-  /// 
-  /// 
+  ///
+  ///
   ///
   /// Param [rxQuality] Downlink network quality rating of the user in terms of packet loss rate,
   /// average RTT, and jitter of the downlink network.
@@ -737,8 +746,8 @@ class RtcEngineEventHandler {
   /// Bad (4): Users cannot communicate smoothly.
   /// VBad (5): The quality is so bad that users can barely communicate.
   /// Down (6): The network is down, and users cannot communicate at all.
-  /// 
-  /// 
+  ///
+  ///
   ///
   NetworkQualityWithUidCallback? networkQuality;
 
@@ -787,8 +796,8 @@ class RtcEngineEventHandler {
   /// Occurs when the playback of the local music file finishes.
   /// Deprecated:
   /// This method is deprecated as of v2.4.0. Use audioMixingStateChanged instead.
-  /// 
-  /// 
+  ///
+  ///
   /// After you call startAudioMixing to play a local music
   /// file, this callback occurs when the playback finishes. If the call of startAudioMixing fails, the callback returns the error code
   /// WARN_AUDIO_MIXING_OPEN_ERROR.
@@ -801,7 +810,7 @@ class RtcEngineEventHandler {
   /// This callback occurs when the playback state of the music file changes, and reports the current state and error code.
   ///
   /// Param [state] The playback state of the music file. For details, see AudioMixingStateCode.
-  /// 
+  ///
   /// Playing (710): The music file is playing.
   /// Paused (711): The music file pauses playing.
   /// Stopped (713): The music file stops playing.
@@ -811,11 +820,11 @@ class RtcEngineEventHandler {
   /// The music file is played once.
   /// (716):
   /// The music file is all played out.
-  /// 
-  /// 
   ///
-  /// Param [reason] The reason why the playback state of the music file changes. 
-  /// 
+  ///
+  ///
+  /// Param [reason] The reason why the playback state of the music file changes.
+  ///
   /// CanNotOpen 701: The SDK cannot open the music file. For example, the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL.
   /// TooFrequentCall 702: The SDK opens the music file too frequently. If you need to call this method multiple times, ensure that the time interval between calling this method is more than 500 ms.
   /// InterruptedEOF (703): The music file playback is interrupted.
@@ -826,9 +835,9 @@ class RtcEngineEventHandler {
   /// StoppedByUser (724): The music file stops playing by calling stopAudioMixing. .
   /// PausedByUser (725): The music file pauses playing by calling pauseAudioMixing. .
   /// ResumedByUser (726): The music file resumes playing by calling resumeAudioMixing. .
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
   ///
   AudioMixingStateCallback? audioMixingStateChanged;
 
@@ -903,13 +912,13 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the media engine loads.
-  /// 
+  ///
   ///
   EmptyCallback? mediaEngineLoadSuccess;
 
   ///
   /// Occurs when the media engine call starts.
-  /// 
+  ///
   ///
   EmptyCallback? mediaEngineStartCallSuccess;
 
@@ -925,16 +934,16 @@ class RtcEngineEventHandler {
   /// media stream to the destination channel.
   /// Failure (3): An error occurs. See `code` for
   /// the error code.
-  /// 
+  ///
   ///
   /// Param [code]  The error code of the channel media
-  /// replay. For details, see ChannelMediaRelayError. 
+  /// replay. For details, see ChannelMediaRelayError.
   ///
   MediaRelayStateCallback? channelMediaRelayStateChanged;
 
   ///
   /// Reports events during the media stream relay.
-  /// 
+  ///
   ///
   /// Param [code] The event code of channel media relay. See ChannelMediaRelayEvent.
   /// The event code of channel media relay:
@@ -954,9 +963,9 @@ class RtcEngineEventHandler {
   /// PauseSendPacketToDestChannelFailed(13): The SDK fails to pause relaying the media stream to destination channels.
   /// ResumeSendPacketToDestChannelSuccess(14): The SDK successfully resumes relaying the media stream to destination channels.
   /// ResumeSendPacketToDestChannelFailed(15): The SDK fails to resume relaying the media stream to destination channels.
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
   ///
   MediaRelayEventCallback? channelMediaRelayEvent;
 
@@ -991,9 +1000,9 @@ class RtcEngineEventHandler {
   /// Occurs when the SDK decodes the first remote audio frame for playback.
   /// Deprecated:
   ///   Please use remoteAudioStateChanged instead.
-  /// 
-  /// 
-  /// The SDK triggers this callback under one of the following circumstances: 
+  ///
+  ///
+  /// The SDK triggers this callback under one of the following circumstances:
   /// The remote user joins the channel and sends the audio stream for the first time.
   /// The remote user's audio is offline and then goes online to re-send audio. It means the local user cannot receive audio in 15 seconds. Reasons for such an interruption include:
   /// The remote user leaves channel.
@@ -1018,8 +1027,8 @@ class RtcEngineEventHandler {
   /// Param [muted] Whether the remote user's audio stream is muted/unmuted:
   /// true: Muted.
   /// false: Unmuted.
-  ///   
-  ///   
+  ///
+  ///
   ///
   @deprecated
   UidWithMutedCallback? userMuteAudio;
@@ -1028,13 +1037,13 @@ class RtcEngineEventHandler {
   /// Occurs when an RTMP or RTMPS stream is published.
   /// Deprecated:
   ///   Please use rtmpStreamingStateChanged instead.
-  /// 
-  /// 
+  ///
+  ///
   /// Reports the result of publishing an RTMP or RTMPS stream.
   ///
   /// Param [url] The CDN streaming URL.
   ///
-  /// Param [errorCode] 
+  /// Param [errorCode]
   /// Error codes of the RTMP or RTMPS streaming.
   /// ERR_OK (0): The publishing succeeds.
   /// ERR_FAILED (1): The publishing fails.
@@ -1061,8 +1070,8 @@ class RtcEngineEventHandler {
   /// ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED (156): The
   /// format of the CDN streaming URL is not supported. Check whether the
   /// URL format is correct.
-  /// 
-  /// 
+  ///
+  ///
   ///
   @deprecated
   UrlWithErrorCallback? streamPublished;
@@ -1081,9 +1090,9 @@ class RtcEngineEventHandler {
   /// Reports the transport-layer statistics of each remote audio stream.
   /// Deprecated:
   /// Please use remoteAudioStats instead.
-  ///   
-  /// 
-  /// 
+  ///
+  ///
+  ///
   /// This callback reports the transport-layer statistics, such as the packet loss rate and network time delay, once every two seconds after the local user receives an audio packet from a remote user. During a call, when the user receives the audio packet sent by the remote user/host, the callback is triggered every 2 seconds.
   ///
   /// Param [uid] The ID of the remote user sending the audio streams.
@@ -1102,8 +1111,8 @@ class RtcEngineEventHandler {
   /// Reports the transport-layer statistics of each remote video stream.
   /// Deprecated:
   ///   Please use remoteVideoStats instead.
-  /// 
-  /// 
+  ///
+  ///
   /// This callback reports the transport-layer statistics, such as the packet loss rate and network time delay, once every two seconds after the local user receives a video packet from a remote user.
   /// During a call, when the user receives the video packet sent by the remote user/host, the callback is triggered every 2 seconds.
   ///
@@ -1125,12 +1134,12 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The user ID of the remote user.
   ///
-  /// Param [enabled] 
-  /// 
+  /// Param [enabled]
+  ///
   /// true: Enable.
   /// false: Disable.
-  /// 
-  /// 
+  ///
+  ///
   ///
   @deprecated
   UidWithEnabledCallback? userEnableVideo;
@@ -1141,7 +1150,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The user ID of the remote user.
   ///
-  /// Param [enabled] 
+  /// Param [enabled]
   /// Whether the specified remote user enables/disables the local video
   /// capturing function:
   /// true: Enable. Other users in the
@@ -1150,8 +1159,8 @@ class RtcEngineEventHandler {
   /// channel can no longer receive the video stream from this remote
   /// user, while this remote user can still receive the video streams
   /// from other users.
-  /// 
-  /// 
+  ///
+  ///
   ///
   @deprecated
   UidWithEnabledCallback? userEnableLocalVideo;
@@ -1162,10 +1171,10 @@ class RtcEngineEventHandler {
   ///   Please use the remoteVideoStateChanged callback with the following parameters:
   /// Starting (1).
   /// Decoding (2).
-  ///   
-  ///   
-  /// 
-  /// 
+  ///
+  ///
+  ///
+  ///
   /// The SDK triggers this callback under one of the following circumstances:
   /// The remote user joins the channel and sends the video stream.
   /// The remote user stops sending the video stream and re-sends it after 15 seconds. Reasons for such an interruption include:
@@ -1190,22 +1199,22 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the microphone is enabled/disabled.
   /// Deprecated:
-  /// 
+  ///
   /// Please use the localAudioStateChanged callback:
   /// Stopped(0).
   /// Recording(1).
-  /// 
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
+  ///
   /// The SDK triggers this callback when the local userenableLocalAudio resumes or stops capturing the local audio stream by calling the method.
   ///
-  /// Param [enabled] 
+  /// Param [enabled]
   /// Whether the microphone is enabled/disabled:
   /// true: The microphone is enabled.
   /// false: The microphone is disabled.
-  /// 
-  /// 
+  ///
+  ///
   ///
   @deprecated
   EnabledCallback? microphoneEnabled;
@@ -1214,8 +1223,8 @@ class RtcEngineEventHandler {
   /// Occurs when the connection between the SDK and the server is interrupted.
   /// Deprecated:
   ///   Please use connectionStateChanged instead.
-  /// 
-  /// 
+  ///
+  ///
   /// The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. The difference between this callback and connectionLost is:
   /// The SDK triggers the connectionInterrupted callback when it loses connection with the server for more than four seconds after it successfully joins the channel.
   /// The SDK triggers the connectionLost callback when it loses connection with the server for more than 10 seconds, whether or not it joins the channel.
@@ -1236,14 +1245,14 @@ class RtcEngineEventHandler {
   /// Reports the statistics of the audio stream from each remote user.
   /// Deprecated:
   /// remoteAudioStats instead.
-  ///   
-  /// 
-  /// 
+  ///
+  ///
+  ///
   /// The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple users/hosts sending audio streams, the SDK triggers this callback as many times.
   ///
   /// Param [uid] The user ID of the remote user sending the audio stream.
   ///
-  /// Param [quality] Audio quality of the user. 
+  /// Param [quality] Audio quality of the user.
   /// Unknown (0): The quality is unknown.
   /// Excellent (1): The quality is excellent.
   /// Good (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent.
@@ -1251,8 +1260,8 @@ class RtcEngineEventHandler {
   /// Bad (4): Users cannot communicate smoothly.
   /// VBad (5): The quality is so bad that users can barely communicate.
   /// Down (6): The network is down, and users cannot communicate at all.
-  /// 
-  /// 
+  ///
+  ///
   ///
   /// Param [delay] The network delay (ms) from the sender to the receiver, including the delay
   /// caused by audio sampling pre-processing, network transmission, and network
@@ -1267,12 +1276,12 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the camera turns on and is ready to capture the video.
   /// Deprecated:
-  /// 
-  /// Please use Capturing(1) in 
+  ///
+  /// Please use Capturing(1) in
   /// instead.
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
   /// This callback indicates that the camera has been successfully turned on and
   /// you can start to capture video.
   ///
@@ -1282,10 +1291,10 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the video stops playing.
   /// Deprecated:
-  /// Please use Stopped(0) in the 
+  /// Please use Stopped(0) in the
   /// callback instead.
-  /// 
-  /// 
+  ///
+  ///
   /// The application can use this callback to change the configuration of the
   /// view (for example, displaying other pictures in the view) after
   /// the video stops playing.
@@ -1295,7 +1304,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the local user receives the metadata.
-  /// 
+  ///
   ///
   /// Param [buffer] The data received.
   ///
@@ -1307,7 +1316,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the first audio frame is published.
-  /// The SDK triggers this callback under one of the following circumstances: 
+  /// The SDK triggers this callback under one of the following circumstances:
   /// The local client enables the audio module and calls joinChannel successfully.
   /// The local client calls muteLocalAudioStream(true) and muteLocalAudioStream(false) in sequence.
   /// The local client calls disableAudio and enableAudio in sequence.
@@ -1332,7 +1341,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the audio publishing state changes.
-  /// 
+  ///
   ///
   /// Param [channel] The name of the channel.
   ///
@@ -1346,7 +1355,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the video publishing state changes.
-  /// 
+  ///
   ///
   /// Param [channel] The name of the channel.
   ///
@@ -1360,7 +1369,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the audio subscribing state changes.
-  /// 
+  ///
   ///
   /// Param [channel] The name of the channel.
   ///
@@ -1375,7 +1384,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the video subscribing state changes.
-  /// 
+  ///
   ///
   /// Param [channel] The name of the channel.
   ///
@@ -1390,7 +1399,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Reports events during the RTMP or RTMPS streaming.
-  /// 
+  ///
   ///
   /// Param [url] The RTMP or RTMPS streaming URL.
   ///
@@ -1407,7 +1416,7 @@ class RtcEngineEventHandler {
   /// Param [enabled] Whether super resolution is successfully enabled:
   /// true: Super resolution is successfully enabled.
   /// false: Super resolution is not successfully enabled.
-  /// 
+  ///
   ///
   /// Param [reason] The reason why super resolution algorithm is not successfully enabled. For details, see SuperResolutionStateReason.
   ///
@@ -1417,8 +1426,8 @@ class RtcEngineEventHandler {
   /// Reports the result of uploading the SDK log files.
   /// Since
   ///   v3.3.0
-  /// 
-  /// 
+  ///
+  ///
   /// After uploadLogFile is called, the SDK triggers the callback to report the result of uploading the SDK log files. If the upload fails, refer to the reason parameter to troubleshoot.
   ///
   /// Param [requestId] The request ID. The request ID is the same as the requestId returned in uploadLogFile. You can use the requestId to match a specific upload with a callback.
@@ -1426,14 +1435,17 @@ class RtcEngineEventHandler {
   /// Param [success] Whether the log file is uploaded successfully:
   /// true: Successfully upload the log files.
   /// false: Fails to upload the log files. For details, see the reason parameter.
-  ///   
+  ///
   ///
   /// Param [reason] The reason for the upload failure. For details, see UploadErrorReason.
   ///
   UploadLogResultCallback? uploadLogResult;
 
   /* callback-engine-airPlayIsConnected */
+  @Deprecated('Use airPlayConnected instead')
   EmptyCallback? airPlayIsConnected;
+
+  EmptyCallback? airPlayConnected;
 
   ///
   /// Reports whether virtual background is successfully enabled. (Beta feature)
@@ -1443,7 +1455,7 @@ class RtcEngineEventHandler {
   /// Param [enabled] Whether virtual background is successfully enabled:
   /// true: Virtual background is successfully enabled.
   /// false: Virtual background is not successfully enabled.
-  /// 
+  ///
   ///
   /// Param [reason] The reason why virtual background is not successfully enabled. See VirtualBackgroundSourceStateReason.
   ///
@@ -1463,7 +1475,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the volume on the playback or audio capture device, or the volume in the application changes.
-  /// 
+  ///
   ///
   /// Param [deviceType] The device type. For details, see MediaDeviceType.
   ///
@@ -1472,7 +1484,7 @@ class RtcEngineEventHandler {
   /// Param [muted] Whether the audio device is muted:
   /// true: The audio device is muted.
   /// false: The audio device is not muted.
-  ///   
+  ///
   ///
   AudioDeviceVolumeChanged? audioDeviceVolumeChanged;
 
@@ -1486,12 +1498,12 @@ class RtcEngineEventHandler {
   /// Param [deviceType] The device type. For details, see MediaDeviceType.
   ///
   /// Param [deviceState] The device state.
-  /// on macOS: 
+  /// on macOS:
   /// 0: The device is ready for use.
   /// 8: The device is not connected.
-  /// 
+  ///
   /// On Windows: MediaDeviceStateType.
-  ///   
+  ///
   ///
   AudioDeviceStateChanged? audioDeviceStateChanged;
 
@@ -1526,8 +1538,8 @@ class RtcEngineEventHandler {
   /// < 0: Failure:
   /// -1: The SDK fails to write data to a file or encode a JPEG image.
   /// -2: The SDK does not find the video stream of the specified user within one second after the takeSnapshot method call succeeds.
-  /// 
-  /// 
+  ///
+  ///
   ///
   /// Since
   /// v3.5.2
@@ -1579,6 +1591,7 @@ class RtcEngineEventHandler {
     this.remoteAudioStateChanged,
     this.localAudioStateChanged,
     this.requestAudioFileInfoCallback,
+    this.requestAudioFileInfo,
     this.localPublishFallbackToAudioOnly,
     this.remoteSubscribeFallbackToAudioOnly,
     this.audioRouteChanged,
@@ -1633,6 +1646,7 @@ class RtcEngineEventHandler {
     this.userSuperResolutionEnabled,
     this.uploadLogResult,
     this.airPlayIsConnected,
+    this.airPlayConnected,
     this.virtualBackgroundSourceEnabled,
     this.videoDeviceStateChanged,
     this.audioDeviceVolumeChanged,
@@ -1769,6 +1783,9 @@ class RtcEngineEventHandler {
         break;
       case 'RequestAudioFileInfo':
         requestAudioFileInfoCallback?.call(AudioFileInfo.fromJson(newData[0]),
+            AudioFileInfoErrorConverter.fromValue(newData[1]).e);
+
+        requestAudioFileInfo?.call(AudioFileInfo.fromJson(newData[0]),
             AudioFileInfoErrorConverter.fromValue(newData[1]).e);
         break;
       case 'LocalPublishFallbackToAudioOnly':
@@ -2075,8 +2092,10 @@ class RtcEngineEventHandler {
       case 'RemoteAudioMixingEnd':
         remoteAudioMixingEnd?.call();
         break;
-      case 'AirPlayIsConnected':
+      case 'AirPlayConnected':
         airPlayIsConnected?.call();
+
+        airPlayConnected?.call();
         break;
       case 'VirtualBackgroundSourceEnabled':
         virtualBackgroundSourceEnabled?.call(
@@ -2096,12 +2115,12 @@ class RtcEngineEventHandler {
 
 ///
 /// The SDK uses RtcChannelEventHandler to send RtcChannel event notifications to your app.
-/// 
+///
 ///
 class RtcChannelEventHandler {
   ///
   /// Reports the warning code of RtcChannel.
-  /// 
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2113,7 +2132,7 @@ class RtcChannelEventHandler {
 
   ///
   /// The error code RtcChannel reported.
-  /// 
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2163,12 +2182,12 @@ class RtcChannelEventHandler {
   /// The SDK triggers this callback when the local user changes the user role after joining the channel.
   ///
   /// Param [newRole] Role that the user switches to: ClientRole.
-  /// 
-  /// 
+  ///
+  ///
   ///
   /// Param [oldRole] Role that the user switches from: ClientRole.
-  /// 
-  /// 
+  ///
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2178,7 +2197,7 @@ class RtcChannelEventHandler {
   /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) joins the channel.
   /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.
   /// In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17.
-  /// 
+  ///
   ///   The SDK triggers this callback under one of the following circumstances:
   ///   A remote user/host joins the channel by calling the joinChannel method.
   ///   A remote user switches the user role to the host after joining the channel.
@@ -2212,7 +2231,7 @@ class RtcChannelEventHandler {
   /// detection.
   /// BecomeAudience (2): The user switches the
   /// user role from a broadcaster to an audience.
-  /// 
+  ///
   ///
   /// Param [uid] The ID of the user who leaves the channel or goes offline.
   ///
@@ -2225,8 +2244,8 @@ class RtcChannelEventHandler {
   /// When the network connection state changes, the SDK triggers this callback and reports the current connection state and the reason for the change.
   ///
   /// Param [reason] The reason for a connection state change. For details, see ConnectionChangedReason.
-  /// 
-  /// 
+  ///
+  ///
   /// Connecting (0): The SDK is connecting to Agora's edge server.
   /// JoinSuccess (1): The SDK has joined the channel successfully.
   /// Interrupted (2): The connection between the SDK and Agora's edge server is interrupted.
@@ -2238,8 +2257,8 @@ class RtcChannelEventHandler {
   /// InvalidToken (8): The connection failed because the token is not valid. Typical reasons include:
   /// The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
   /// The uid specified when calling  to join the channel is inconsistent with the uid passed in when generating the token.
-  /// 
-  /// 
+  ///
+  ///
   /// TokenExpired (9): The token has expired. You need to generate a new token from your server.
   /// RejectedByServer (10): The user is banned by the server.
   /// SettingProxyServer (11): The SDK tries to reconnect after setting a proxy server.
@@ -2249,19 +2268,19 @@ class RtcChannelEventHandler {
   /// (15): The SDK has rejoined the channel successfully.
   /// (16): The connection between the SDK and the server is lost.
   /// (17): The connection state changes due to the echo test.
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
   ///
   /// Param [state] The current connection state. For details, see ConnectionStateType.
-  /// 
+  ///
   /// Disconnected (1): The SDK is disconnected from Agora's edge server.
   /// Connecting (2): The SDK is connecting to Agora's edge server.
   /// Connected (3): The SDK is connected to Agora's edge server and has joined a channel.
   /// Reconnecting (4): The SDK keeps reconnecting to the Agora edge server.
   /// Failed 5: The SDK fails to connect to Agora's edge server or join the channel.
-  /// 
-  ///   
+  ///
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2305,7 +2324,7 @@ class RtcChannelEventHandler {
 
   ///
   /// Occurs when the video size or rotation of a specified user changes.
-  /// 
+  ///
   ///
   /// Param [rotation] The rotation information. The value range is [0,360).
   ///
@@ -2324,8 +2343,8 @@ class RtcChannelEventHandler {
   /// Occurs when the remote video state changes.
   /// Since
   /// v2.9.0
-  /// 
-  /// 
+  ///
+  ///
   /// This callback does not work properly when the number of users (in the voice/video call channel) or hosts (in the live streaming channel) in the channel exceeds 17.
   ///
   /// Param [reason]  The reason for the remote video state
@@ -2356,7 +2375,7 @@ class RtcChannelEventHandler {
   /// AudioFallbackRecovery
   /// (9): The remote media stream switches back to the video stream
   /// after the network conditions improve.
-  /// 
+  ///
   ///
   /// Param [state]  The state of the remote video, see
   /// VideoRemoteState. The state
@@ -2384,7 +2403,7 @@ class RtcChannelEventHandler {
   /// Failed (4): The remote video
   /// fails to start. The remote video fails to start, probably due to
   /// REMOTE_VIDEO_STATE_REASON_INTERNAL (0).
-  /// 
+  ///
   ///
   /// Param [uid] The ID of the remote user whose video state changes.
   ///
@@ -2398,8 +2417,8 @@ class RtcChannelEventHandler {
   /// Occurs when the remote audio state changes.
   /// Since
   /// v2.9.0
-  /// 
-  /// 
+  ///
+  ///
   /// When the audio state of a remote user (in the voice/video call channel) or host (in the live streaming channel) changes, the SDK triggers this callback to report the current state of the remote audio stream.
   /// This callback does not work properly when the number of users (in the voice/video call channel) or hosts (in the live streaming channel) in the channel exceeds 17.
   ///
@@ -2420,14 +2439,14 @@ class RtcChannelEventHandler {
   /// If you call setLocalPublishFallbackOption and set option as AudioOnly, the SDK triggers this callback when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
   /// If the local stream falls back to the audio-only stream, the remote user receives the userMuteVideo callback.
   ///
-  /// Param [isFallbackOrRecover] 
-  /// 
+  /// Param [isFallbackOrRecover]
+  ///
   /// true: The published stream falls
   /// back to audio-only due to poor network conditions.
   /// false: The published stream switches
   /// back to the video after the network conditions improve.
-  /// 
-  /// 
+  ///
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2438,12 +2457,12 @@ class RtcChannelEventHandler {
   /// If you call setRemoteSubscribeFallbackOption and set option as AudioOnly, the SDK triggers this callback when the remote media stream falls back to audio-only mode due to poor downlink conditions, or when the remote media stream switches back to the video after the downlink network condition improves.
   /// Once the remote media stream switches to the low stream due to poor network conditions, you can monitor the stream switch between a high and low stream in the RemoteVideoStats callback.
   ///
-  /// Param [isFallbackOrRecover] 
-  /// 
+  /// Param [isFallbackOrRecover]
+  ///
   ///  true: The remotely subscribed media stream falls back to audio-only due to poor network conditions.
   ///  false: The remotely subscribed media stream switches back to the video stream after the network conditions improved.
-  /// 
-  ///   
+  ///
+  ///
   ///
   /// Param [uid] The ID of the remote user.
   ///
@@ -2455,10 +2474,10 @@ class RtcChannelEventHandler {
   /// Reports the statistics of the current call.
   /// The SDK triggers this callback once every two seconds after the user joins the channel.
   ///
-  /// Param [stats] 
+  /// Param [stats]
   /// Statistics of the RTC engine, see RtcStats for
   /// details.
-  /// 
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2470,9 +2489,9 @@ class RtcChannelEventHandler {
   /// The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times.
   ///
   /// Param [rxQuality] Downlink network quality rating of the user in terms of packet loss rate,
-  /// average RTT, and jitter of the downlink network. For details, see NetworkQuality. 
-  /// 
-  /// 
+  /// average RTT, and jitter of the downlink network. For details, see NetworkQuality.
+  ///
+  ///
   ///
   /// Param [txQuality] Uplink network quality rating of the user in terms of the transmission bit
   /// rate, packet loss rate, average RTT (Round-Trip Time) and jitter of the
@@ -2481,15 +2500,15 @@ class RtcChannelEventHandler {
   /// video encoder configuration. For example, a 1000 Kbps uplink network may be
   /// adequate for video frames with a resolution of 640 × 480 and a frame rate of
   /// 15 fps in the LIVE_BROADCASTING profile, but might be inadequate for
-  /// resolutions higher than 1280 × 720. For details, see NetworkQuality. 
-  /// 
-  /// 
+  /// resolutions higher than 1280 × 720. For details, see NetworkQuality.
   ///
-  /// Param [uid] 
+  ///
+  ///
+  /// Param [uid]
   /// User ID. The network quality of the user with this user ID is
   /// reported.
   /// If the uid is 0, the local network quality is reported.
-  /// 
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2540,7 +2559,7 @@ class RtcChannelEventHandler {
 
   ///
   /// Occurs when a media stream URL address is added to the interactive live streaming.
-  /// 
+  ///
   ///
   /// Param [status] State of the externally injected stream: InjectStreamStatus.
   ///
@@ -2616,7 +2635,7 @@ class RtcChannelEventHandler {
   /// source channel has expired.
   /// DestinationTokenExpired (11): The token of the
   /// destination channel has expired.
-  /// 
+  ///
   ///
   /// Param [state]  The state code. For details, see ChannelMediaRelayState. The state code:
   /// Idle (0): The SDK is initializing.
@@ -2626,7 +2645,7 @@ class RtcChannelEventHandler {
   /// media stream to the destination channel.
   /// Failure (3): An error occurs. See `code` for
   /// the error code.
-  /// 
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2634,7 +2653,7 @@ class RtcChannelEventHandler {
 
   ///
   /// Reports events during the media stream relay.
-  /// 
+  ///
   ///
   /// Param [code] The event code of channel media relay. See ChannelMediaRelayEvent.
   /// The event code of channel media relay:
@@ -2654,9 +2673,9 @@ class RtcChannelEventHandler {
   /// PauseSendPacketToDestChannelFailed(13): The SDK fails to pause relaying the media stream to destination channels.
   /// ResumeSendPacketToDestChannelSuccess(14): The SDK successfully resumes relaying the media stream to destination channels.
   /// ResumeSendPacketToDestChannelFailed(15): The SDK fails to resume relaying the media stream to destination channels.
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
   ///
   /// Param [rtcChannel] RtcChannel.
   ///
@@ -2664,7 +2683,7 @@ class RtcChannelEventHandler {
 
   ///
   /// Occurs when the local user receives Metadata.
-  /// 
+  ///
   ///
   /// Param [buffer] The recevied metadata.
   ///
@@ -2696,7 +2715,7 @@ class RtcChannelEventHandler {
   /// Since
   ///   v3.1.0
   ///
-  /// Param [null] 
+  /// Param [null]
   ///
   /// Param [channel] The channel name.
   ///
@@ -2725,7 +2744,7 @@ class RtcChannelEventHandler {
   /// Since
   ///   v3.1.0
   ///
-  /// Param [null] 
+  /// Param [null]
   ///
   /// Param [channel] The channel name.
   ///
@@ -2748,8 +2767,8 @@ class RtcChannelEventHandler {
   /// Reports whether the super resolution feature is successfully enabled.
   /// Since
   /// v3.5.1
-  /// 
-  /// 
+  ///
+  ///
   /// After calling enableRemoteSuperResolution, the SDK triggers the callback to report whether super resolution is successfully enabled. If it is not successfully enabled, use reason for troubleshooting.
   ///
   /// Param [reason] The reason why super resolution algorithm is not successfully enabled. For details, see SuperResolutionStateReason.
@@ -2757,7 +2776,7 @@ class RtcChannelEventHandler {
   /// Param [enabled] Whether super resolution is successfully enabled:
   /// true: Super resolution is successfully enabled.
   /// false: Super resolution is not successfully enabled.
-  /// 
+  ///
   ///
   /// Param [uid] The ID of the remote user.
   ///
