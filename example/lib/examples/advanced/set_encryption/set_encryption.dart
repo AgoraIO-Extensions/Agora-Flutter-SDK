@@ -31,7 +31,7 @@ class _SetEncryptionState extends State<SetEncryption> {
     EncryptionMode.AES256GCM,
   ];
 
-  late final EncryptionMode _selectedEncryptionMode;
+  late EncryptionMode _selectedEncryptionMode;
   TextEditingController _encryptionKey = TextEditingController();
   late final TextEditingController _encryptionKdfSalt;
 
