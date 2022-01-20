@@ -17,8 +17,7 @@ final Advanced = [
   {'name': 'Advanced'},
   {'name': 'AudioMixing', 'widget': AudioMixing()},
   {'name': 'ChannelMediaRelay', 'widget': ChannelMediaRelay()},
-  // TODO(littlegnal): Temporary disable this example
-  // {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
+  {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
   if (!(Platform.isAndroid || Platform.isIOS))
     {'name': 'DeviceManager', 'widget': DeviceManager()},
   {'name': 'JoinMultipleChannel', 'widget': JoinMultipleChannel()},

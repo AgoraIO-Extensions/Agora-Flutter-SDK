@@ -174,7 +174,6 @@ class _State extends State<JoinChannelVideo> {
                   (e) => GestureDetector(
                     onTap: this._switchRender,
                     child: Container(
-                      color: Colors.yellow,
                       width: 120,
                       height: 120,
                       child: kIsWeb

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
@@ -19,7 +20,7 @@ class StreamMessage extends StatefulWidget {
 class _State extends State<StreamMessage> {
   late final RtcEngine _engine;
   bool isJoined = false;
-  int? remoteUid;
+  List<int> remoteUids = [];
 
   @override
   void initState() {
@@ -96,18 +97,16 @@ class _State extends State<StreamMessage> {
       },
       userJoined: (uid, elapsed) {
         logSink.log('userJoined $uid $elapsed');
-        this.setState(() {
-          remoteUid = uid;
-        });
+        remoteUids.add(uid);
+        this.setState(() {});
       },
       userOffline: (uid, reason) {
         logSink.log('userOffline $uid $reason');
-        this.setState(() {
-          remoteUid = null;
-        });
+        remoteUids.remove(uid);
+        this.setState(() {});
       },
       streamMessage: (int uid, int streamId, Uint8List data) {
-        _showMyDialog(uid, streamId, String.fromCharCodes(data));
+        _showMyDialog(uid, streamId, utf8.decode(data));
         logSink.log('streamMessage $uid $streamId $data');
       },
       streamMessageError:
@@ -126,7 +125,7 @@ class _State extends State<StreamMessage> {
         .createDataStreamWithConfig(DataStreamConfig(false, false));
     if (streamId != null) {
       _engine.sendStreamMessage(
-          streamId, Uint8List.fromList(_controller.text.codeUnits));
+          streamId, Uint8List.fromList(utf8.encode(_controller.text)));
     }
     _controller.clear();
   }
@@ -138,6 +137,8 @@ class _State extends State<StreamMessage> {
     return Stack(
       children: [
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             !isJoined
                 ? Row(
@@ -175,30 +176,38 @@ class _State extends State<StreamMessage> {
   }
 
   _renderVideo() {
-    return Row(children: [
-      Expanded(
-          child: AspectRatio(
-        aspectRatio: 1,
+    final views = [
+      Container(
+        height: 120,
+        width: 120,
         child: kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
-      )),
-      Expanded(
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: remoteUid != null
-              ? (kIsWeb
-                  ? RtcRemoteView.SurfaceView(
-                      uid: remoteUid!,
-                      channelId: config.channelId,
-                    )
-                  : RtcRemoteView.TextureView(
-                      uid: remoteUid!,
-                      channelId: config.channelId,
-                    ))
-              : Container(
-                  color: Colors.grey[200],
+      ),
+    ];
+    if (remoteUids.isNotEmpty) {
+      views.addAll(remoteUids.map((uid) {
+        return (kIsWeb
+            ? Container(
+                height: 120,
+                width: 120,
+                child: RtcRemoteView.SurfaceView(
+                  uid: uid,
+                  channelId: config.channelId,
                 ),
-        ),
-      )
-    ]);
+              )
+            : Container(
+                height: 120,
+                width: 120,
+                child: RtcRemoteView.TextureView(
+                  uid: uid,
+                  channelId: config.channelId,
+                ),
+              ));
+      }));
+    } else {
+      views.add(Container(
+        color: Colors.grey[200],
+      ));
+    }
+    return Wrap(children: views);
   }
 }

@@ -1,7 +1,6 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import io.agora.iris.rtc.IrisRtcEngine
 import io.agora.iris.rtc.base.ApiTypeEngine
@@ -16,9 +15,7 @@ private class PlatformViewApiTypeCallApiMethodCallHandler(
   private val platformView: PlatformView
 ) : CallApiMethodCallHandler(irisRtcEngine) {
   override fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
-    val ret = irisRtcEngine.callApi(ApiTypeEngine.fromInt(apiType), params, platformView.view, sb)
-    Log.e("TextureView", "callApi apiType: $apiType, params: $params, res: ${sb.toString()}, ret: $ret, platformView: ${platformView.view}")
-    return ret
+    return irisRtcEngine.callApi(ApiTypeEngine.fromInt(apiType), params, platformView.view, sb)
   }
 }
 

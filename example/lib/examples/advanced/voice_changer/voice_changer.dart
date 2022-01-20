@@ -123,7 +123,7 @@ class _State extends State<VoiceChanger> {
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    await _engine.joinChannel(config.token, config.channelId, null, 0, null);
+    await _engine.joinChannel(config.token, _channelId.text, null, 0, null);
   }
 
   _addListener() {
@@ -270,9 +270,11 @@ class _State extends State<VoiceChanger> {
             _createDropdownButton<AudioReverbType>(
               _audioReverbTypes,
               () => _selectedAudioReverbType,
-              (v) async {
+              (v) {
                 setState(() {
                   _selectedAudioReverbType = v!;
+                  _selectedAudioReverbTypeValue =
+                      _audioReverbTypeRanges[_selectedAudioReverbType]![2];
                 });
               },
             ),
