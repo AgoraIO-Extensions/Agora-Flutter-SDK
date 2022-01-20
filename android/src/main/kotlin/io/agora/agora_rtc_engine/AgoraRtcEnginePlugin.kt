@@ -8,6 +8,8 @@ import androidx.annotation.NonNull
 import io.agora.iris.base.IrisEventHandler
 import io.agora.iris.rtc.IrisRtcEngine
 import io.agora.iris.rtc.base.ApiTypeEngine
+import io.agora.rtc.RtcEngine
+import io.agora.rtc.base.RtcEngineRegistry
 import io.flutter.BuildConfig
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
@@ -32,12 +34,21 @@ internal class EventHandler(private val eventSink: EventChannel.EventSink?) : Ir
   }
 }
 
-internal open class CallApiMethodCallHandler(
+open class CallApiMethodCallHandler(
   protected val irisRtcEngine: IrisRtcEngine
 ) : MethodCallHandler {
 
   protected open fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
-    return irisRtcEngine.callApi(ApiTypeEngine.fromInt(apiType), params, sb)
+    val type = ApiTypeEngine.fromInt(apiType)
+    val ret = irisRtcEngine.callApi(type, params, sb)
+    if (type == ApiTypeEngine.kEngineInitialize) {
+      RtcEngineRegistry.instance.onRtcEngineCreated(irisRtcEngine.rtcEngine as RtcEngine?)
+    }
+    if (type == ApiTypeEngine.kEngineRelease) {
+      RtcEngineRegistry.instance.onRtcEngineDestroyed()
+    }
+
+    return ret
   }
 
   protected open fun callApiWithBuffer(
@@ -89,6 +100,7 @@ internal open class CallApiMethodCallHandler(
             result.success(sb.toString())
           }
         } else if (ret > 0) {
+          (irisRtcEngine.rtcEngine as RtcEngine).nativeHandle
           result.success(ret)
         } else {
           val errorMsg = callApiError(ret)

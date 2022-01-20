@@ -4,7 +4,7 @@ set -e
 
 AGORA_FLUTTER_PROJECT_PATH=$(pwd)
 IRIS_PROJECT_PATH="$AGORA_FLUTTER_PROJECT_PATH/../iris/"
-BUILD_TYPE="Debug"
+BUILD_TYPE=$1
 ABIS="arm64-v8a armeabi-v7a x86_64"
 
 bash $IRIS_PROJECT_PATH/rtc/ci/build-android.sh

@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "CallApiMethodCallHandler.h"
 #import <AgoraRtcWrapper/iris_rtc_engine.h>
+#import "Base/RtcEngineRegistry.h"
 
 @interface CallApiMethodCallHandler ()
 @property(nonatomic) agora::iris::rtc::IrisRtcEngine *irisRtcEngine;
@@ -24,7 +25,7 @@
             int ret;
             if (buffer == nil || buffer == [NSNull null]) {
                 
-                ret = [self callApi:apiType _:params _:res]; //self.irisRtcEngine->CallApi(
+                ret = [self callApi:apiType _:params _:res];
             } else {
                 ret = [self callApiWithBuffer:apiType _:params _:(void *)[[buffer data] bytes] _:res];
             }
@@ -54,7 +55,18 @@
     }
 }
 - (int)callApi:(NSNumber *) apiType _:(NSString *)params _:(char *) result {
-    return self.irisRtcEngine->CallApi((ApiTypeEngine)[apiType unsignedIntValue], [params UTF8String], result);
+    ApiTypeEngine apiTypeEngine = (ApiTypeEngine)[apiType unsignedIntValue];
+    int ret = self.irisRtcEngine->CallApi(apiTypeEngine, [params UTF8String], result);
+    
+    if (apiTypeEngine == ApiTypeEngine::kEngineInitialize) {
+        [[RtcEngineRegistry shared] onRtcEngineCreated:(__bridge  AgoraRtcEngineKit *) self.irisRtcEngine->rtc_engine()];
+    }
+    
+    if (apiTypeEngine == ApiTypeEngine::kEngineRelease) {
+        [[RtcEngineRegistry shared] onRtcEngineDestroyed];
+    }
+    
+    return ret;
     
 }
 

@@ -1723,7 +1723,7 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetNativeHandle.index,
       'params': jsonEncode({}),
-    });
+    }).then((value) => int.tryParse(value) ?? -1);
   }
 
   @override
