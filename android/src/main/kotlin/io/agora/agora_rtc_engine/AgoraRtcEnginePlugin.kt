@@ -79,33 +79,32 @@ open class CallApiMethodCallHandler(
       return
     }
     try {
-        val ret = when (call.method) {
-          "callApi" -> {
-            callApi(apiType!!, params, sb)
-          }
-          "callApiWithBuffer" -> {
-            val buffer = call.argument<ByteArray>("buffer")
-            callApiWithBuffer(apiType!!, params, buffer, sb)
-          }
-          else -> {
-            // This should not occur
-            -1
-          }
+      val ret = when (call.method) {
+        "callApi" -> {
+          callApi(apiType!!, params, sb)
         }
+        "callApiWithBuffer" -> {
+          val buffer = call.argument<ByteArray>("buffer")
+          callApiWithBuffer(apiType!!, params, buffer, sb)
+        }
+        else -> {
+          // This should not occur
+          -1
+        }
+      }
 
-        if (ret == 0) {
-          if (sb.isEmpty()) {
-            result.success(null)
-          } else {
-            result.success(sb.toString())
-          }
-        } else if (ret > 0) {
-          (irisRtcEngine.rtcEngine as RtcEngine).nativeHandle
-          result.success(ret)
+      if (ret == 0) {
+        if (sb.isEmpty()) {
+          result.success(null)
         } else {
-          val errorMsg = callApiError(ret)
-          result.error(ret.toString(), errorMsg, null)
+          result.success(sb.toString())
         }
+      } else if (ret > 0) {
+        result.success(ret)
+      } else {
+        val errorMsg = callApiError(ret)
+        result.error(ret.toString(), errorMsg, null)
+      }
     } catch (e: Exception) {
       result.error("", e.message ?: "", null)
     }

@@ -58,13 +58,13 @@
     ApiTypeEngine apiTypeEngine = (ApiTypeEngine)[apiType unsignedIntValue];
     int ret = self.irisRtcEngine->CallApi(apiTypeEngine, [params UTF8String], result);
     
-    if (apiTypeEngine == ApiTypeEngine::kEngineInitialize) {
-        [[RtcEngineRegistry shared] onRtcEngineCreated:(__bridge  AgoraRtcEngineKit *) self.irisRtcEngine->rtc_engine()];
-    }
+     if (apiTypeEngine == ApiTypeEngine::kEngineInitialize) {
+         [[RtcEngineRegistry shared] onRtcEngineCreated:(__bridge AgoraRtcEngineKit *) self.irisRtcEngine->rtc_engine()];
+     }
     
-    if (apiTypeEngine == ApiTypeEngine::kEngineRelease) {
-        [[RtcEngineRegistry shared] onRtcEngineDestroyed];
-    }
+     if (apiTypeEngine == ApiTypeEngine::kEngineRelease) {
+         [[RtcEngineRegistry shared] onRtcEngineDestroyed];
+     }
     
     return ret;
     
