@@ -12,68 +12,75 @@ void main() {
   const MethodChannel methodChannel =
       MethodChannel('agora_rtc_engine/integration_test/rtc_engine_plugin');
 
-  testWidgets('RtcEnginePlugin callbacks called', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+  testWidgets(
+    'RtcEnginePlugin callbacks called',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
 
-    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-        defaultValue: '<YOUR_APP_ID>');
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
 
-    final context = RtcEngineContext(
-      engineAppId,
-      areaCode: const [AreaCode.GLOB],
-    );
+      final context = RtcEngineContext(
+        engineAppId,
+        areaCode: const [AreaCode.GLOB],
+      );
 
-    await methodChannel.invokeMethod('registerRtcEnginePlugin');
+      await methodChannel.invokeMethod('registerRtcEnginePlugin');
 
-    final rtcEngine = await RtcEngine.createWithContext(context);
+      final rtcEngine = await RtcEngine.createWithContext(context);
 
-    final isRtcEngineCreated =
-        await methodChannel.invokeMethod('isRtcEngineCreated');
-    expect(isRtcEngineCreated, isTrue);
+      final isRtcEngineCreated =
+          await methodChannel.invokeMethod('isRtcEngineCreated');
+      expect(isRtcEngineCreated, isTrue);
 
-    final rtcEngineNativeHandleFromPlugin =
-        await methodChannel.invokeMethod('getRtcEngineNativeHandleFromPlugin');
+      final rtcEngineNativeHandleFromPlugin = await methodChannel
+          .invokeMethod('getRtcEngineNativeHandleFromPlugin');
 
-    final rtcEngineNativeHandle = await rtcEngine.getNativeHandle();
-    expect(rtcEngineNativeHandle == rtcEngineNativeHandleFromPlugin, isTrue);
+      final rtcEngineNativeHandle = await rtcEngine.getNativeHandle();
+      expect(rtcEngineNativeHandle == rtcEngineNativeHandleFromPlugin, isTrue);
 
-    await rtcEngine.destroy();
+      await rtcEngine.destroy();
 
-    final isRtcEngineDestroyed =
-        await methodChannel.invokeMethod('isRtcEngineDestroyed');
+      final isRtcEngineDestroyed =
+          await methodChannel.invokeMethod('isRtcEngineDestroyed');
 
-    expect(isRtcEngineDestroyed, isTrue);
+      expect(isRtcEngineDestroyed, isTrue);
 
-    await methodChannel.invokeMethod('unregisterRtcEnginePlugin');
-  });
+      await methodChannel.invokeMethod('unregisterRtcEnginePlugin');
+    },
+    skip: !(Platform.isAndroid || Platform.isIOS),
+  );
 
-  testWidgets('should not call RtcEnginePlugin callbacks  after unregister',
-      (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+  testWidgets(
+    'should not call RtcEnginePlugin callbacks  after unregister',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
 
-    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-        defaultValue: '<YOUR_APP_ID>');
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
 
-    final context = RtcEngineContext(
-      engineAppId,
-      areaCode: const [AreaCode.GLOB],
-    );
+      final context = RtcEngineContext(
+        engineAppId,
+        areaCode: const [AreaCode.GLOB],
+      );
 
-    await methodChannel.invokeMethod('registerRtcEnginePlugin');
-    await methodChannel.invokeMethod('unregisterRtcEnginePlugin');
+      await methodChannel.invokeMethod('registerRtcEnginePlugin');
+      await methodChannel.invokeMethod('unregisterRtcEnginePlugin');
 
-    final rtcEngine = await RtcEngine.createWithContext(context);
-    final isRtcEngineCreated =
-        await methodChannel.invokeMethod('isRtcEngineCreated');
-    expect(isRtcEngineCreated, isFalse);
+      final rtcEngine = await RtcEngine.createWithContext(context);
+      final isRtcEngineCreated =
+          await methodChannel.invokeMethod('isRtcEngineCreated');
+      expect(isRtcEngineCreated, isFalse);
 
-    await rtcEngine.destroy();
+      await rtcEngine.destroy();
 
-    final isRtcEngineDestroyed =
-        await methodChannel.invokeMethod('isRtcEngineDestroyed');
+      final isRtcEngineDestroyed =
+          await methodChannel.invokeMethod('isRtcEngineDestroyed');
 
-    expect(isRtcEngineDestroyed, isFalse);
-  });
+      expect(isRtcEngineDestroyed, isFalse);
+    },
+    skip: !(Platform.isAndroid || Platform.isIOS),
+  );
 }
