@@ -28,7 +28,9 @@ class IRIS_CPP_API IIrisRtcEngine : public IrisDelegate<ApiTypeEngine> {
 
   virtual IrisRtcRawData *raw_data() = 0;
 
-  virtual const char *log_path() = 0;
+  virtual const char *log_path() { return ""; }
+
+  virtual void *rtc_engine() { return nullptr; }
 };
 
 class IRIS_CPP_API IrisRtcEngine : public IIrisRtcEngine {
@@ -63,7 +65,7 @@ class IRIS_CPP_API IrisRtcEngine : public IIrisRtcEngine {
 
   IrisRtcRawData *raw_data() override;
 
-  const char *log_path() override;
+  void *rtc_engine() override;
 
  private:
   IIrisRtcEngine *delegate_;
