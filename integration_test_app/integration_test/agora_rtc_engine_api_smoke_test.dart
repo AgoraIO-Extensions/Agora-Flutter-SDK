@@ -227,12 +227,5 @@ void main() {
 
       await rtcEngine.destroy();
     },
-
-    // skip: !(Platform.isAndroid || Platform.isIOS),
-    // TODO(littlegnal): [MS-99379] Wait for iris fix
-    skip: true,
   );
-  
-
-
 }

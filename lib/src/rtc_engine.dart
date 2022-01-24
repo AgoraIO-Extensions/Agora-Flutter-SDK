@@ -1723,7 +1723,7 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetNativeHandle.index,
       'params': jsonEncode({}),
-    });
+    }).then((value) => int.tryParse(value) ?? -1);
   }
 
   @override
@@ -3387,7 +3387,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// Param [preset] The options for SDK preset audio effects. See AudioEffectPreset.
   ///
-  Future<void> setAudioEffectPreset(AudioEffectPreset reverbPreset);
+  Future<void> setAudioEffectPreset(AudioEffectPreset preset);
 
   ///
   /// Sets a preset voice beautifier effect.
