@@ -94,8 +94,6 @@ class BanubaRtcSurfaceView(
 
   private fun configureSdkManager() {
     banubaSdkManager = BanubaSdkManager(context)
-    //val banubaTouchListener = BanubaSdkTouchListener(context.applicationContext, banubaSdkManager?.effectPlayer!!)
-    //surface.setOnTouchListener(banubaTouchListener)
     val effectUri = Uri.parse(BanubaSdkManager.getResourcesBase())
       .buildUpon()
       .appendPath("effects")
@@ -114,41 +112,6 @@ class BanubaRtcSurfaceView(
       banubaSdkManager?.openCamera()
     }
   }
-
-//  override fun onRequestPermissionsResult(
-//    requestCode: Int,
-//    permissions: Array<String>,
-//    results: IntArray
-//  ) {
-//    if (checkAllPermissionsGranted()) {
-//      banubaSdkManager.openCamera()
-//    } else {
-//      Toast.makeText(applicationContext, "Please grant permission.", Toast.LENGTH_LONG).show()
-//      finish()
-//    }
-//  }
-
-//  override fun onResume() {
-//    super.onResume()
-//    banubaSdkManager.effectPlayer.effectManager()?.setEffectVolume(0F)
-//    banubaSdkManager.effectPlayer.playbackPlay()
-//    banubaSdkManager.startForwardingFrames()
-//  }
-//
-//  override fun onPause() {
-//    super.onPause()
-//    banubaSdkManager.effectPlayer.playbackPause()
-//    banubaSdkManager.stopForwardingFrames()
-//  }
-//
-//  override fun onStop() {
-//    super.onStop()
-//    banubaSdkManager.releaseSurface()
-//    banubaSdkManager.closeCamera()
-//  }
-//  override fun onDestroy() {
-//    super.onDestroy()
-//  }
 
   override fun setZOrderOnTop(onTop: Boolean) {
     this.onTop = onTop

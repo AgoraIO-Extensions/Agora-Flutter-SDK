@@ -48,6 +48,7 @@ android {
     disable 'InvalidPackage'
   }
 
+  // During modules merge conflicts have been encountered, they were solved via the following options
   packagingOptions {
     merge "classes.jar"
     merge "AndroidManifest.xml"
@@ -63,7 +64,4 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', '1.3.72')}"
   // The aar modules must be without DebugInfo else crash on Heap error.
   implementation fileTree(dir: "libs", include: ["*.aar"])
-  // implementation project(":banuba_sdk-release")
-  // implementation project(":banuba_effect_player-release")
-
 }
