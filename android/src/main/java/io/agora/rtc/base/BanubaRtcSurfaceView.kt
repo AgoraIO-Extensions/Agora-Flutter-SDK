@@ -143,11 +143,8 @@ class BanubaRtcSurfaceView(
   }
 
   private fun setupVideoCanvas(engine: RtcEngine) {
-    // removeAllViews()
-    // surface = RtcEngine.CreateRendererView(context.applicationContext)
     surface.setZOrderMediaOverlay(isMediaOverlay)
     surface.setZOrderOnTop(onTop)
-    // addView(surface)
     surface.layout(0, 0, width, height)
     canvas.view = surface
     engine.setupLocalVideo(canvas)
