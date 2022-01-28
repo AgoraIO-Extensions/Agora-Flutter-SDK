@@ -30,13 +30,6 @@ class RtcSurfaceView: UIView {
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
     }
 
-    func setData(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?, _ uid: UInt) {
-        self.channel = channel
-        canvas.channelId = channel?.getId()
-        canvas.uid = uid
-        setupVideoCanvas(engine)
-    }
-
     func resetVideoCanvas(_ engine: AgoraRtcEngineKit) {
         let canvas = AgoraRtcVideoCanvas()
         canvas.view = nil
@@ -66,16 +59,6 @@ class RtcSurfaceView: UIView {
         }
     }
 
-    func setRenderMode(_ engine: AgoraRtcEngineKit, _ renderMode: UInt) {
-        canvas.renderMode = AgoraVideoRenderMode(rawValue: renderMode)!
-        setupRenderMode(engine)
-    }
-
-    func setMirrorMode(_ engine: AgoraRtcEngineKit, _ mirrorMode: UInt) {
-        canvas.mirrorMode = AgoraVideoMirrorMode(rawValue: mirrorMode)!
-        setupRenderMode(engine)
-    }
-
     private func setupRenderMode(_ engine: AgoraRtcEngineKit) {
         if canvas.uid == 0 {
             engine.setLocalRenderMode(canvas.renderMode, mirrorMode: canvas.mirrorMode)
@@ -94,5 +77,24 @@ class RtcSurfaceView: UIView {
                 surface.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: rect.size)
             }
         }
+    }
+}
+
+extension RtcSurfaceView : SurfaceViewProtocol {
+    func setData(_ engine: AgoraRtcEngineKit, _ channel: AgoraRtcChannel?, _ uid: UInt) {
+        self.channel = channel
+        canvas.channelId = channel?.getId()
+        canvas.uid = uid
+        setupVideoCanvas(engine)
+    }
+
+    func setRenderMode(_ engine: AgoraRtcEngineKit, _ renderMode: UInt) {
+        canvas.renderMode = AgoraVideoRenderMode(rawValue: renderMode)!
+        setupRenderMode(engine)
+    }
+
+    func setMirrorMode(_ engine: AgoraRtcEngineKit, _ mirrorMode: UInt) {
+        canvas.mirrorMode = AgoraVideoMirrorMode(rawValue: mirrorMode)!
+        setupRenderMode(engine)
     }
 }

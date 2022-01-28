@@ -24,6 +24,12 @@ class _State extends State<JoinChannelVideo> {
 
   @override
   void initState() {
+    // Request camera permission since the video capturing started immediately
+    // TODO: Make it right via widget
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      [Permission.microphone, Permission.camera].request().whenComplete( () => { } );
+    }
+
     super.initState();
     _controller = TextEditingController(text: channelId);
     this._initEngine();
@@ -40,7 +46,8 @@ class _State extends State<JoinChannelVideo> {
     this._addListeners();
 
     await _engine.enableVideo();
-    await _engine.startPreview();
+    // Our code does not assume that
+    // await _engine.startPreview();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
   }

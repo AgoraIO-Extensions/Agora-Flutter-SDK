@@ -5,6 +5,8 @@ import android.view.View
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcSurfaceView
+import io.agora.rtc.base.BanubaRtcSurfaceView
+import io.agora.rtc.base.SurfaceViewProtocol
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -37,10 +39,16 @@ internal class AgoraSurfaceView(
   private val rtcEnginePlugin: AgoraRtcEnginePlugin,
   private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformView, MethodChannel.MethodCallHandler {
-  private val view = RtcSurfaceView(context)
+  private var view : SurfaceViewProtocol? = null
   private val channel = MethodChannel(messenger, "agora_rtc_engine/surface_view_$viewId")
 
   init {
+    // TODO: Depending on UID create either RtcBanubaSurfaceView or RtcSurfaceView
+    args?.let { map ->
+      val data = map["data"]  as? Map<*, *>
+      data?.let {
+        view = if (it["uid"] == 0) BanubaRtcSurfaceView(context) else RtcSurfaceView(context)
+    } }
     args?.let { map ->
       (map["data"] as? Map<*, *>)?.let { setData(it) }
       (map["renderMode"] as? Number)?.let { setRenderMode(it.toInt()) }
@@ -52,7 +60,7 @@ internal class AgoraSurfaceView(
   }
 
   override fun getView(): View {
-    return view
+    return view as View
   }
 
   override fun dispose() {
@@ -83,23 +91,23 @@ internal class AgoraSurfaceView(
 
   private fun setData(data: Map<*, *>) {
     val channel = (data["channelId"] as? String)?.let { getChannel(it) }
-    getEngine()?.let { view.setData(it, channel, (data["uid"] as Number).toInt()) }
+    getEngine()?.let { view?.setData(it, channel, (data["uid"] as Number).toInt()) }
   }
 
   private fun setRenderMode(renderMode: Int) {
-    getEngine()?.let { view.setRenderMode(it, renderMode) }
+    getEngine()?.let { view?.setRenderMode(it, renderMode) }
   }
 
   private fun setMirrorMode(mirrorMode: Int) {
-    getEngine()?.let { view.setMirrorMode(it, mirrorMode) }
+    getEngine()?.let { view?.setMirrorMode(it, mirrorMode) }
   }
 
   private fun setZOrderOnTop(onTop: Boolean) {
-    view.setZOrderOnTop(onTop)
+    view?.setZOrderOnTop(onTop)
   }
 
   private fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
-    view.setZOrderMediaOverlay(isMediaOverlay)
+    view?.setZOrderMediaOverlay(isMediaOverlay)
   }
 
   private fun getEngine(): RtcEngine? {

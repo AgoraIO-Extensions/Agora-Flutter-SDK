@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference
 
 class RtcSurfaceView(
   context: Context
-) : FrameLayout(context) {
+) : FrameLayout(context), SurfaceViewProtocol {
   private var surface: SurfaceView
   private var canvas: VideoCanvas
   private var isMediaOverlay = false
@@ -27,7 +27,7 @@ class RtcSurfaceView(
     addView(surface)
   }
 
-  fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
+  override fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
     this.isMediaOverlay = isMediaOverlay
     try {
       removeView(surface)
@@ -38,7 +38,7 @@ class RtcSurfaceView(
     }
   }
 
-  fun setZOrderOnTop(onTop: Boolean) {
+  override fun setZOrderOnTop(onTop: Boolean) {
     this.onTop = onTop
     try {
       removeView(surface)
@@ -49,7 +49,7 @@ class RtcSurfaceView(
     }
   }
 
-  fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Number) {
+  override fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Number) {
     this.channel = if (channel != null) WeakReference(channel) else null
     canvas.channelId = this.channel?.get()?.channelId()
     canvas.uid = uid.toNativeUInt()
@@ -81,12 +81,12 @@ class RtcSurfaceView(
     }
   }
 
-  fun setRenderMode(engine: RtcEngine, @Annotations.AgoraVideoRenderMode renderMode: Int) {
+  override fun setRenderMode(engine: RtcEngine, @Annotations.AgoraVideoRenderMode renderMode: Int) {
     canvas.renderMode = renderMode
     setupRenderMode(engine)
   }
 
-  fun setMirrorMode(engine: RtcEngine, @Annotations.AgoraVideoMirrorMode mirrorMode: Int) {
+  override fun setMirrorMode(engine: RtcEngine, @Annotations.AgoraVideoMirrorMode mirrorMode: Int) {
     canvas.mirrorMode = mirrorMode
     setupRenderMode(engine)
   }

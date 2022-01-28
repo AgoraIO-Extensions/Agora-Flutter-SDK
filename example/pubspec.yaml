@@ -52,6 +52,8 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/Sound_Horizon.mp3
+  # NOTE: Stupid flutter unable to pick whole folder as asset:https://stackoverflow.com/questions/54783842/assets-does-not-see-subfolders
+  # that is why effects are referenced in ios as a folder from android tree
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

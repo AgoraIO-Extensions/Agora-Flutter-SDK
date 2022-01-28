@@ -92,3 +92,27 @@ To help work on this sdk, see our [contributor guide](https://github.com/AgoraIO
 ## License
 
 The sample projects are under the MIT license.
+
+# Banuba SDK Integration
+
+The sample demonstrates integration of the Banuba SDK as a separate view in the Agora Flutter SDK. The view is used as local view with applied Afro effect. For the integration is used BanubaSdkManager with its camera support.
+
+## iOS
+
+1. Get the latest Banuba SDK archive for iOS and the client token. Please fill in our form on [form on banuba.com](https://www.banuba.com/face-filters-sdk) website, or contact us via [info@banuba.com](mailto:info@banuba.com).
+2. Copy `BanubaEffectPlayer.xcframework` project folder from the Banuba SDK archive into `Frameworks` dir:
+    `BNBEffectPlayer/bin/BanubaEffectPlayer.xcframework` => `Agora-Flutter-SDK/ios/Frameworks/`
+3. Copy and Paste your client token into appropriate section of `Agora-Flutter-SDK/ios/Classes/Base/BanubaRtcSurfaceView.swift`. See placeholder <#SET_BANUBA_SDK_TOKEN#>.
+4. Visit agora.io to sign up and get token, app and channel ID. Update `Agora-Flutter-SDK/example/lib/config/agora.config.dart`.
+5. Open project in Android studio with installed Flutter plugin.
+6. Execute 'flutter pub get'.
+7. Select iPhone as a target device and run main.dart target.
+
+## Android
+1. Get the latest Banuba SDK archive for Android and the client token. Please fill in our form on [form on banuba.com](https://www.banuba.com/face-filters-sdk) website, or contact us via [info@banuba.com](mailto:info@banuba.com). NOTE: Banuba SDK for android should exclude debug symbols to minimize size of `aar` modules, else gradle under flutter will fail to configure project.
+2. Copy `aar` files from the Banuba SDK archive into `libs` dir:
+    `BNBEffectPlayer/bin/banuba_sdk/banuba_sdk-release.aar` => `Agora-Flutter-SDK/android/libs/`
+    `BNBEffectPlayer/banuba_effect_player-release.aar` => `Agora-Flutter-SDK/android/libs/`
+3. Copy and Paste your banuba client token into appropriate section of `Agora-Flutter-SDK/android/src/main/java/io/agora/rtc/base/BanubaRtcSurfaceView.kt`. See constant SDK_TOKEN.
+4. Visit agora.io to sign up and get token, app and channel ID. Update `Agora-Flutter-SDK/example/lib/config/agora.config.dart`.
+5. Open the project in Android Studio and run the main.dart target on Android device.

@@ -30,16 +30,24 @@ class AgoraSurfaceViewFactory: NSObject, FlutterPlatformViewFactory {
 class AgoraSurfaceView: NSObject, FlutterPlatformView {
     private final weak var rtcEnginePlugin: SwiftAgoraRtcEnginePlugin?
     private final weak var rtcChannelPlugin: AgoraRtcChannelPlugin?
-    private let _view: RtcSurfaceView
+    private var _view: (UIView & SurfaceViewProtocol)?
     private let channel: FlutterMethodChannel
 
     init(_ messager: FlutterBinaryMessenger, _ frame: CGRect, _ viewId: Int64, _ args: Dictionary<String, Any?>?, _ rtcEnginePlugin: SwiftAgoraRtcEnginePlugin, _ rtcChannelPlugin: AgoraRtcChannelPlugin) {
         self.rtcEnginePlugin = rtcEnginePlugin
         self.rtcChannelPlugin = rtcChannelPlugin
-        self._view = RtcSurfaceView(frame: frame)
+
         self.channel = FlutterMethodChannel(name: "agora_rtc_engine/surface_view_\(viewId)", binaryMessenger: messager)
         super.init()
         if let map = args {
+            let data = map["data"] as! NSDictionary
+            if (data["uid"] as! NSInteger == 0) {
+                self._view = BanubaRtcSurfaceView(frame: frame)
+            }
+            else {
+                self._view = RtcSurfaceView(frame: frame)
+            }
+
             setData(map["data"] as! NSDictionary)
             setRenderMode((map["renderMode"] as! NSNumber).uintValue)
             setMirrorMode((map["mirrorMode"] as! NSNumber).uintValue)
@@ -63,7 +71,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
     }
 
     func view() -> UIView {
-        return _view
+        return _view! as UIView
     }
 
     deinit {
@@ -76,19 +84,19 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
             channel = getChannel(channelId)
         }
         if let `engine` = engine {
-            _view.setData(engine, channel, (data["uid"] as! NSNumber).uintValue)
+            _view?.setData(engine, channel, (data["uid"] as! NSNumber).uintValue)
         }
     }
 
     func setRenderMode(_ renderMode: UInt) {
         if let `engine` = engine {
-            _view.setRenderMode(engine, renderMode)
+            _view?.setRenderMode(engine, renderMode)
         }
     }
 
     func setMirrorMode(_ mirrorMode: UInt) {
         if let `engine` = engine {
-            _view.setMirrorMode(engine, mirrorMode)
+            _view?.setMirrorMode(engine, mirrorMode)
         }
     }
 
