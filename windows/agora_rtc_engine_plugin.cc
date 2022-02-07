@@ -108,6 +108,9 @@ namespace
 
   bool isSubProcess(EncodableMap &arguments)
   {
+    if (arguments.find(EncodableValue("subProcess")) == arguments.end()) {
+      return false;
+    }
     auto subProcess = std::get<bool>(arguments[EncodableValue("subProcess")]);
     return subProcess;
   }
