@@ -208,7 +208,7 @@ void main() {
         },
       ));
 
-      await tester.pumpAndSettle(const Duration(milliseconds: 10000));
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
       expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
 
@@ -250,7 +250,7 @@ void main() {
         },
       ));
 
-      await tester.pumpAndSettle(const Duration(milliseconds: 10000));
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
       expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
 
