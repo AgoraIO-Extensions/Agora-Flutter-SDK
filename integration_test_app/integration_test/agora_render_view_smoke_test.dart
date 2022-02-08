@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart';
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -69,35 +70,210 @@ class _RenderViewWidgetState extends State<_RenderViewWidget> {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Show Local SurfaceView', (WidgetTester tester) async {
-    runApp(_RenderViewWidget(
-      builder: (context) {
-        return SizedBox(
-          height: 100,
-          width: 100,
-          child: SurfaceView(),
-        );
-      },
-    ));
+  group('SurfaceView', () {
+    testWidgets('Show Local SurfaceView', (WidgetTester tester) async {
+      runApp(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_local_view.SurfaceView(),
+          );
+        },
+      ));
 
-    await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-    expect(find.byType(SurfaceView), findsOneWidget);
+      expect(find.byType(rtc_local_view.SurfaceView), findsOneWidget);
+
+      // Pump a empty Container to trigger dispose() of the SurfaceView/TextureView
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle();
+    });
   });
 
-  testWidgets('Show Local TextureView', (WidgetTester tester) async {
-    runApp(_RenderViewWidget(
-      builder: (context) {
-        return SizedBox(
-          height: 100,
-          width: 100,
-          child: TextureView(),
-        );
-      },
-    ));
+  group('TextureView', () {
+    testWidgets('Show Local TextureView', (WidgetTester tester) async {
+      runApp(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_local_view.TextureView(),
+          );
+        },
+      ));
 
-    await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-    expect(find.byType(TextureView), findsOneWidget);
+      expect(find.byType(rtc_local_view.TextureView), findsOneWidget);
+
+      // Pump a empty Container to trigger dispose() of the SurfaceView/TextureView
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('Change uid', (WidgetTester tester) async {
+      runApp(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 10,
+              channelId: '100',
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      await tester.pumpWidget(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 100,
+              channelId: '100',
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      // Pump a empty Container to trigger dispose() of the SurfaceView/TextureView
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('Change channel id', (WidgetTester tester) async {
+      runApp(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 10,
+              channelId: '100',
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      await tester.pumpWidget(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 10,
+              channelId: '10',
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      // Pump a empty Container to trigger dispose() of the SurfaceView/TextureView
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('Change renderMode', (WidgetTester tester) async {
+      runApp(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 10,
+              channelId: '100',
+              renderMode: VideoRenderMode.Hidden,
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      await tester.pumpWidget(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 10,
+              channelId: '100',
+              renderMode: VideoRenderMode.FILL,
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      // Pump a empty Container to trigger dispose() of the SurfaceView/TextureView
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('Change mirrorMode', (WidgetTester tester) async {
+      runApp(_RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 10,
+              channelId: '100',
+              mirrorMode: VideoMirrorMode.Auto,
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      final w = _RenderViewWidget(
+        builder: (context) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: rtc_remote_view.TextureView(
+              uid: 10,
+              channelId: '100',
+              mirrorMode: VideoMirrorMode.Enabled,
+            ),
+          );
+        },
+      );
+      await tester.pumpWidget(w);
+
+      expect(find.byType(rtc_remote_view.TextureView), findsOneWidget);
+
+      // Pump a empty Container to trigger dispose() of the SurfaceView/TextureView
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle();
+    });
   });
 }

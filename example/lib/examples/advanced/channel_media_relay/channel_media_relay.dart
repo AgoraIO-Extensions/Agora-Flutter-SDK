@@ -3,7 +3,6 @@ import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,11 +18,12 @@ class _State extends State<ChannelMediaRelay> {
   bool isJoined = false;
   int? remoteUid;
   bool isRelaying = false;
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _channelMediaRelayController;
   late final TextEditingController _channelController;
 
   @override
   void initState() {
+    _channelMediaRelayController = TextEditingController();
     _channelController = TextEditingController(text: config.channelId);
     super.initState();
   }
@@ -121,15 +121,13 @@ class _State extends State<ChannelMediaRelay> {
       await _engine.stopChannelMediaRelay();
       return;
     }
-    if (_controller.text.length == 0) {
+    if (_channelMediaRelayController.text.length == 0) {
       return;
     }
 
     await _engine.startChannelMediaRelay(ChannelMediaRelayConfiguration(
-        ChannelMediaInfo(config.channelId, 0, token: config.token),
-        [ChannelMediaInfo(_controller.text, 0, token: '')]));
-
-    // _controller.clear();
+        ChannelMediaInfo(_channelController.text, 0, token: config.token),
+        [ChannelMediaInfo(_channelMediaRelayController.text, 0, token: '')]));
   }
 
   @override
@@ -165,7 +163,7 @@ class _State extends State<ChannelMediaRelay> {
                 children: [
                   Expanded(
                       child: TextField(
-                          controller: _controller,
+                          controller: _channelMediaRelayController,
                           decoration: InputDecoration(
                             hintText: 'Enter target relay channel name',
                           ))),
@@ -197,11 +195,11 @@ class _State extends State<ChannelMediaRelay> {
               ? (kIsWeb
                   ? RtcRemoteView.SurfaceView(
                       uid: remoteUid!,
-                      channelId: config.channelId,
+                      channelId: _channelController.text,
                     )
                   : RtcRemoteView.TextureView(
                       uid: remoteUid!,
-                      channelId: config.channelId,
+                      channelId: _channelController.text,
                     ))
               : Container(
                   color: Colors.grey[200],

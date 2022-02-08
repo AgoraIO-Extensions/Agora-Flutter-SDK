@@ -66,22 +66,29 @@ class IrisRtcVideoFrameObserver : public IrisVideoFrameObserver {
 
 class IrisRtcPacketObserver : public IrisPacketObserver {};
 
-class IRIS_CPP_API IrisRtcRawData : public IrisCommonObserverManager {
+class IIrisRtcRawData {
  public:
-  explicit IrisRtcRawData(
-      IrisRtcRawDataPluginManager *plugin_manager = nullptr);
+  virtual void Initialize(agora::rtc::IRtcEngine *rtc_engine) = 0;
+
+  virtual void Release() = 0;
+
+  virtual IIrisRtcRawDataPluginManager *plugin_manager() = 0;
+};
+
+class IRIS_CPP_API IrisRtcRawData : public IIrisRtcRawData,
+                                    public IrisCommonObserverManager {
+ public:
+  explicit IrisRtcRawData(IIrisRtcRawData *delegate = nullptr);
   ~IrisRtcRawData() override;
 
-  void Initialize(agora::rtc::IRtcEngine *rtc_engine);
+  void Initialize(agora::rtc::IRtcEngine *rtc_engine) override;
 
-  void Release();
+  void Release() override;
 
-  IrisRtcRawDataPluginManager *plugin_manager();
+  IIrisRtcRawDataPluginManager *plugin_manager() override;
 
  private:
-  class Impl;
-  Impl *impl_;
-  IrisRtcRawDataPluginManager *plugin_manager_;
+  IIrisRtcRawData *delegate_;
 };
 
 }// namespace rtc

@@ -19,7 +19,7 @@ class IRIS_CPP_API IIrisRtcRawDataPluginManager
  public:
   using IrisDelegate::CallApi;
 
-  virtual void Initialize(IrisRtcRawData *raw_data) = 0;
+  virtual void Initialize(IrisCommonObserverManager *manager) = 0;
 
   void SetEventHandler(IrisEventHandler *event_handler) override;
 
@@ -39,7 +39,7 @@ class IRIS_CPP_API IrisRtcRawDataPluginManager
   int CallApi(ApiTypeRawDataPluginManager api_type, const char *params,
               char result[kMaxResultLength]) override;
 
-  void Initialize(IrisRtcRawData *raw_data) override;
+  void Initialize(IrisCommonObserverManager *manager) override;
 
  private:
   IIrisRtcRawDataPluginManager *delegate_;
