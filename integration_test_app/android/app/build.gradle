@@ -63,6 +63,8 @@ android {
         }
     }
 
+    ndkVersion '21.1.6352462'
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
