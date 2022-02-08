@@ -279,6 +279,10 @@ enum AudioOutputRouting {
   /// Bluetooth headset.
   @JsonValue(5)
   HeadsetBluetooth,
+
+  /// Apple AirPlay.
+  @JsonValue(9)
+  AirPlay,
 }
 
 /// Audio profile.

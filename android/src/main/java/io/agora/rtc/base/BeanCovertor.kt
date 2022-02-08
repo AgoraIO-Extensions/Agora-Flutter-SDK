@@ -1,6 +1,5 @@
 package io.agora.rtc.base
 
-import android.graphics.Color
 import io.agora.rtc.RtcEngineConfig
 import io.agora.rtc.audio.AgoraRhythmPlayerConfig
 import io.agora.rtc.audio.AudioRecordingConfiguration
@@ -70,11 +69,7 @@ fun mapToTranscodingUser(map: Map<*, *>): TranscodingUser {
 }
 
 fun mapToColor(map: Map<*, *>): Int {
-  return Color.rgb(
-    (map["red"] as Number).toInt(),
-    (map["green"] as Number).toInt(),
-    (map["blue"] as Number).toInt()
-  )
+  return ((map["red"] as Number).toInt() shl 16) + ((map["green"] as Number).toInt() shl 8) + (map["blue"] as Number).toInt()
 }
 
 fun mapToLiveTranscoding(map: Map<*, *>): LiveTranscoding {
