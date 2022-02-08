@@ -1,15 +1,16 @@
 package io.agora.rtc.base;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import io.agora.rtc.Constants;
+import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoCanvas;
+import io.agora.rtc.video.VirtualBackgroundSource;
 
 @SuppressWarnings("deprecation")
 public class Annotations {
@@ -82,6 +83,7 @@ public class Annotations {
     Constants.LOCAL_AUDIO_STREAM_ERROR_DEVICE_BUSY,
     Constants.LOCAL_AUDIO_STREAM_ERROR_CAPTURE_FAILURE,
     Constants.LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE,
+    Constants.LOCAL_AUDIO_STREAM_ERROR_INTERRUPTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioLocalError {
@@ -98,19 +100,27 @@ public class Annotations {
   }
 
   @IntDef({
-    Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_OPEN,
-    Constants.MEDIA_ENGINE_AUDIO_ERROR_MIXING_TOO_FREQUENT,
-    Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_INTERRUPTED_EOF,
-    AgoraAudioMixingErrorCode.MEDIA_ENGINE_AUDIO_ERROR_OK,
+    Constants.AUDIO_MIXING_REASON_CAN_NOT_OPEN,
+    Constants.AUDIO_MIXING_REASON_TOO_FREQUENT_CALL,
+    Constants.AUDIO_MIXING_REASON_INTERRUPTED_EOF,
+    Constants.AUDIO_MIXING_REASON_STARTED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_ONE_LOOP_COMPLETED,
+    Constants.AUDIO_MIXING_REASON_START_NEW_LOOP,
+    Constants.AUDIO_MIXING_REASON_ALL_LOOPS_COMPLETED,
+    Constants.AUDIO_MIXING_REASON_STOPPED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_PAUSED_BY_USER,
+    Constants.AUDIO_MIXING_REASON_RESUMED_BY_USER,
+    AgoraAudioMixingReason.MEDIA_ENGINE_AUDIO_ERROR_OK,
   })
   @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraAudioMixingErrorCode {
+  public @interface AgoraAudioMixingReason {
     int MEDIA_ENGINE_AUDIO_ERROR_OK = 0;
   }
 
   @IntDef({
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_PLAY,
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_PAUSED,
+    Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_RESTART,
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_STOPPED,
     Constants.MEDIA_ENGINE_AUDIO_EVENT_MIXING_ERROR,
   })
@@ -230,6 +240,8 @@ public class Annotations {
     Constants.AUDIO_SCENARIO_GAME_STREAMING,
     Constants.AUDIO_SCENARIO_SHOWROOM,
     Constants.AUDIO_SCENARIO_CHATROOM_GAMING,
+    Constants.AUDIO_SCENARIO_IOT,
+    Constants.AUDIO_SCENARIO_MEETING,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioScenario {
@@ -264,12 +276,14 @@ public class Annotations {
     AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_AUTO,
     AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE,
     AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_PREVIEW,
+    AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_MANUAL,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraCameraCaptureOutputPreference {
     int CAPTURER_OUTPUT_PREFERENCE_AUTO = 0;
     int CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE = 1;
     int CAPTURER_OUTPUT_PREFERENCE_PREVIEW = 2;
+    int CAPTURER_OUTPUT_PREFERENCE_MANUAL = 3;
   }
 
   @IntDef({
@@ -313,6 +327,10 @@ public class Annotations {
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE,
     Constants.RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL,
     Constants.RELAY_EVENT_VIDEO_PROFILE_UPDATE,
+    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+    Constants.RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
+    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS,
+    Constants.RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraChannelMediaRelayEvent {
@@ -361,6 +379,7 @@ public class Annotations {
     Constants.CONNECTION_CHANGED_RENEW_TOKEN,
     Constants.CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED,
     Constants.CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT,
+    Constants.CONNECTION_CHANGED_PROXY_SERVER_INTERRUPTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraConnectionChangedReason {
@@ -389,16 +408,28 @@ public class Annotations {
     int MAINTAIN_BALANCED = 2;
   }
 
-  @StringDef({
+  @IntDef({
+    AgoraEncryptionMode.NONE,
     AgoraEncryptionMode.AES128XTS,
-    AgoraEncryptionMode.AES256XTS,
     AgoraEncryptionMode.AES128ECB,
+    AgoraEncryptionMode.AES256XTS,
+    AgoraEncryptionMode.SM4128ECB,
+    AgoraEncryptionMode.AES128GCM,
+    AgoraEncryptionMode.AES256GCM,
+    AgoraEncryptionMode.AES128GCM2,
+    AgoraEncryptionMode.AES256GCM2,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraEncryptionMode {
-    String AES128XTS = "aes-128-xts";
-    String AES256XTS = "aes-256-xts";
-    String AES128ECB = "aes-128-ecb";
+    int NONE = 0;
+    int AES128XTS = 1;
+    int AES128ECB = 2;
+    int AES256XTS = 3;
+    int SM4128ECB = 4;
+    int AES128GCM = 5;
+    int AES256GCM = 6;
+    int AES128GCM2 = 7;
+    int AES256GCM2 = 8;
   }
 
   @IntDef({
@@ -422,6 +453,7 @@ public class Annotations {
     Constants.ERR_ALREADY_IN_USE,
     Constants.ERR_INVALID_APP_ID,
     Constants.ERR_INVALID_CHANNEL_NAME,
+    Constants.ERR_NO_SERVER_RESOURCES,
     Constants.ERR_TOKEN_EXPIRED,
     Constants.ERR_INVALID_TOKEN,
     Constants.ERR_CONNECTION_INTERRUPTED,
@@ -446,6 +478,8 @@ public class Annotations {
     Constants.ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR,
     Constants.ERR_PUBLISH_STREAM_NOT_FOUND,
     Constants.ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED,
+    Constants.ERR_MODULE_NOT_FOUND,
+    Constants.ERR_ALREADY_IN_RECORDING,
     Constants.ERR_LOAD_MEDIA_ENGINE,
     Constants.ERR_START_CALL,
     Constants.ERR_START_CAMERA,
@@ -519,6 +553,7 @@ public class Annotations {
     Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY,
     Constants.LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE,
     Constants.LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE,
+    Constants.LOCAL_VIDEO_STREAM_ERROR_DEVICE_NOT_FOUND
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraLocalVideoStreamError {
@@ -586,6 +621,7 @@ public class Annotations {
     Constants.RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED,
     Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND,
     Constants.RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED,
+    Constants.RTMP_STREAM_UNPUBLISH_ERROR_OK,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingErrorCode {
@@ -622,7 +658,7 @@ public class Annotations {
 
   @IntDef({
     Constants.USER_PRIORITY_HIGH,
-    Constants.USER_PRIORITY_NORANL,
+    Constants.USER_PRIORITY_NORMAL,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraUserPriority {
@@ -751,26 +787,205 @@ public class Annotations {
     Constants.WARN_ADM_RUNTIME_PLAYOUT_WARNING,
     Constants.WARN_ADM_RUNTIME_RECORDING_WARNING,
     Constants.WARN_ADM_RECORD_AUDIO_SILENCE,
+    Constants.WARN_ADM_PLAYOUT_ABNORMAL_FREQUENCY,
+    Constants.WARN_ADM_RECORD_ABNORMAL_FREQUENCY,
     Constants.WARN_ADM_CALL_INTERRUPTION,
     Constants.WARN_ADM_RECORD_AUDIO_LOWLEVEL,
     Constants.WARN_ADM_PLAYOUT_AUDIO_LOWLEVEL,
     Constants.WARN_ADM_RECORD_IS_OCCUPIED,
     Constants.WARN_APM_HOWLING,
     Constants.WARN_ADM_GLITCH_STATE,
-    Constants.WARN_ADM_IMPROPER_SETTINGS,
+    Constants.WARN_APM_RESIDUAL_ECHO,
+    Constants.WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION,
+    Constants.WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION,
+    Constants.WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraWarningCode {
   }
 
   @IntDef({
-    RtcEngineConfig.IPAreaCode.AREA_CN,
-    RtcEngineConfig.IPAreaCode.AREA_NA,
-    RtcEngineConfig.IPAreaCode.AREA_EUR,
-    RtcEngineConfig.IPAreaCode.AREA_AS,
-    RtcEngineConfig.IPAreaCode.AREA_GLOBAL,
+    RtcEngineConfig.AreaCode.AREA_CODE_CN,
+    RtcEngineConfig.AreaCode.AREA_CODE_NA,
+    RtcEngineConfig.AreaCode.AREA_CODE_EU,
+    RtcEngineConfig.AreaCode.AREA_CODE_AS,
+    RtcEngineConfig.AreaCode.AREA_CODE_JP,
+    RtcEngineConfig.AreaCode.AREA_CODE_IN,
+    RtcEngineConfig.AreaCode.AREA_CODE_GLOB,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAreaCode {
+  }
+
+  @IntDef({
+    Constants.SUB_STATE_IDLE,
+    Constants.SUB_STATE_NO_SUBSCRIBED,
+    Constants.SUB_STATE_SUBSCRIBING,
+    Constants.SUB_STATE_SUBSCRIBED,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraStreamSubscribeState {
+  }
+
+  @IntDef({
+    Constants.PUB_STATE_IDLE,
+    Constants.PUB_STATE_NO_PUBLISHED,
+    Constants.PUB_STATE_PUBLISHING,
+    Constants.PUB_STATE_PUBLISHED,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraStreamPublishState {
+  }
+
+  @IntDef({
+    Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
+    Constants.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraRtmpStreamingEvent {
+  }
+
+  @IntDef({
+    Constants.AUDIO_EFFECT_OFF,
+    Constants.ROOM_ACOUSTICS_KTV,
+    Constants.ROOM_ACOUSTICS_VOCAL_CONCERT,
+    Constants.ROOM_ACOUSTICS_STUDIO,
+    Constants.ROOM_ACOUSTICS_PHONOGRAPH,
+    Constants.ROOM_ACOUSTICS_VIRTUAL_STEREO,
+    Constants.ROOM_ACOUSTICS_SPACIAL,
+    Constants.ROOM_ACOUSTICS_ETHEREAL,
+    Constants.ROOM_ACOUSTICS_3D_VOICE,
+    Constants.VOICE_CHANGER_EFFECT_UNCLE,
+    Constants.VOICE_CHANGER_EFFECT_OLDMAN,
+    Constants.VOICE_CHANGER_EFFECT_BOY,
+    Constants.VOICE_CHANGER_EFFECT_SISTER,
+    Constants.VOICE_CHANGER_EFFECT_GIRL,
+    Constants.VOICE_CHANGER_EFFECT_PIGKING,
+    Constants.VOICE_CHANGER_EFFECT_HULK,
+    Constants.STYLE_TRANSFORMATION_RNB,
+    Constants.STYLE_TRANSFORMATION_POPULAR,
+    Constants.PITCH_CORRECTION,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraAudioEffectPreset {
+  }
+
+  @IntDef({
+    Constants.VOICE_BEAUTIFIER_OFF,
+    Constants.CHAT_BEAUTIFIER_MAGNETIC,
+    Constants.CHAT_BEAUTIFIER_FRESH,
+    Constants.CHAT_BEAUTIFIER_VITALITY,
+    Constants.SINGING_BEAUTIFIER,
+    Constants.TIMBRE_TRANSFORMATION_VIGOROUS,
+    Constants.TIMBRE_TRANSFORMATION_DEEP,
+    Constants.TIMBRE_TRANSFORMATION_MELLOW,
+    Constants.TIMBRE_TRANSFORMATION_FALSETTO,
+    Constants.TIMBRE_TRANSFORMATION_FULL,
+    Constants.TIMBRE_TRANSFORMATION_CLEAR,
+    Constants.TIMBRE_TRANSFORMATION_RESOUNDING,
+    Constants.TIMBRE_TRANSFORMATION_RINGING,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraVoiceBeautifierPreset {
+  }
+
+  @IntDef({
+    Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY,
+    Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraAudienceLatencyLevelType {
+  }
+
+  @IntDef({
+    Constants.TRANSPORT_TYPE_NONE_PROXY,
+    Constants.TRANSPORT_TYPE_UDP_PROXY,
+    Constants.TRANSPORT_TYPE_TCP_PROXY,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraCloudProxyType {
+  }
+
+  @IntDef({
+    AgoraLogLevel.LOG_LEVEL_NONE,
+    AgoraLogLevel.LOG_LEVEL_INFO,
+    AgoraLogLevel.LOG_LEVEL_WARN,
+    AgoraLogLevel.LOG_LEVEL_ERROR,
+    AgoraLogLevel.LOG_LEVEL_FATAL,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraLogLevel {
+    int LOG_LEVEL_NONE = 0;
+    int LOG_LEVEL_INFO = 1;
+    int LOG_LEVEL_WARN = 2;
+    int LOG_LEVEL_ERROR = 4;
+    int LOG_LEVEL_FATAL = 8;
+  }
+
+  @IntDef({
+    Constants.CAPTURE_BRIGHTNESS_LEVEL_INVALID,
+    Constants.CAPTURE_BRIGHTNESS_LEVEL_NORMAL,
+    Constants.CAPTURE_BRIGHTNESS_LEVEL_BRIGHT,
+    Constants.CAPTURE_BRIGHTNESS_LEVEL_DARK,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraCaptureBrightnessLevelType {
+  }
+
+  @IntDef({
+    IRtcEngineEventHandler.UploadErrorReason.UPLOAD_SUCCESS,
+    IRtcEngineEventHandler.UploadErrorReason.UPLOAD_NET_ERROR,
+    IRtcEngineEventHandler.UploadErrorReason.UPLOAD_SERVER_ERROR,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraUploadErrorReason {
+  }
+
+  @IntDef({
+    IRtcEngineEventHandler.ExperienceQuality.EXPERIENCE_GOOD,
+    IRtcEngineEventHandler.ExperienceQuality.EXPERIENCE_BAD,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraExperienceQualityType {
+  }
+
+  @IntDef({
+    IRtcEngineEventHandler.ExperiencePoorReason.EXPERIENCE_REASON_NONE,
+    IRtcEngineEventHandler.ExperiencePoorReason.REMOTE_NETWORK_QUALITY_POOR,
+    IRtcEngineEventHandler.ExperiencePoorReason.LOCAL_NETWORK_QUALITY_POOR,
+    IRtcEngineEventHandler.ExperiencePoorReason.WIRELESS_SIGNAL_POOR,
+    IRtcEngineEventHandler.ExperiencePoorReason.WIFI_BLUETOOTH_COEXIST,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraExperiencePoorReason {
+  }
+
+  @IntDef({
+    Constants.SR_STATE_REASON_SUCCESS,
+    Constants.SR_STATE_REASON_STREAM_OVER_LIMITATION,
+    Constants.SR_STATE_REASON_USER_COUNT_OVER_LIMITATION,
+    Constants.SR_STATE_REASON_DEVICE_NOT_SUPPORTED,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraSuperResolutionStateReason {
+  }
+
+  @IntDef({
+    VirtualBackgroundSource.BACKGROUND_COLOR,
+    VirtualBackgroundSource.BACKGROUND_IMG,
+    VirtualBackgroundSource.BACKGROUND_BLUR,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraVirtualBackgroundSourceType {
+  }
+
+  @IntDef({
+    Constants.VBS_STATE_REASON_SUCCESS,
+    Constants.VBS_STATE_REASON_IMAGE_NOT_EXIST,
+    Constants.VBS_STATE_REASON_COLOR_FORMAT_NOT_SUPPORTED,
+    Constants.VBS_STATE_REASON_DEVICE_NOT_SUPPORTED,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraVirtualBackgroundSourceStateReason {
   }
 }
