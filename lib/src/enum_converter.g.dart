@@ -212,6 +212,7 @@ const _$AudioOutputRoutingEnumMap = {
   AudioOutputRouting.Speakerphone: 3,
   AudioOutputRouting.Loudspeaker: 4,
   AudioOutputRouting.HeadsetBluetooth: 5,
+  AudioOutputRouting.AirPlay: 9,
 };
 
 AudioProfileConverter _$AudioProfileConverterFromJson(
