@@ -1,3 +1,5 @@
+## [4.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0...v4.2.1) (2022-02-08)
+
 # [4.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.2...v4.2.0) (2022-01-11)
 
 # [4.2.0-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.1...v4.2.0-rc.2) (2021-12-24)
