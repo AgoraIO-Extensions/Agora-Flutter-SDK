@@ -6,8 +6,8 @@
 //  Copyright (c) 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
 protocol RtcEngineInterface:
         RtcEngineUserInfoInterface,
@@ -52,21 +52,42 @@ protocol RtcEngineInterface:
 
     func getConnectionState(_ callback: Callback)
 
+    func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback)
+
     func getCallId(_ callback: Callback)
 
     func rate(_ params: NSDictionary, _ callback: Callback)
 
     func complain(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLogFile(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLogFilter(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLogFileSize(_ params: NSDictionary, _ callback: Callback)
 
     func setParameters(_ params: NSDictionary, _ callback: Callback)
 
+    func getSdkVersion(_ callback: Callback)
+
+    func getErrorDescription(_ params: NSDictionary, _ callback: Callback)
+
     func getNativeHandle(_ callback: Callback)
+
+    func enableDeepLearningDenoise(_ params: NSDictionary, _ callback: Callback)
+
+    func setCloudProxy(_ params: NSDictionary, _ callback: Callback)
+
+    func uploadLogFile(_ callback: Callback)
+
+    func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback)
+
+    func enableVirtualBackground(_ params: NSDictionary, _ callback: Callback)
+
+    func takeSnapshot(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -100,9 +121,16 @@ protocol RtcEngineAudioInterface {
 
     func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
 
     func enableAudioVolumeIndication(_ params: NSDictionary, _ callback: Callback)
+
+    func startRhythmPlayer(_ params: NSDictionary, _ callback: Callback)
+
+    func stopRhythmPlayer(_ callback: Callback)
+
+    func configRhythmPlayer(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVideoInterface {
@@ -124,9 +152,12 @@ protocol RtcEngineVideoInterface {
 
     func muteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setDefaultMuteAllRemoteVideoStreams(_ params: NSDictionary, _ callback: Callback)
 
     func setBeautyEffectOptions(_ params: NSDictionary, _ callback: Callback)
+
+    func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioMixingInterface {
@@ -148,13 +179,23 @@ protocol RtcEngineAudioMixingInterface {
 
     func getAudioMixingPublishVolume(_ callback: Callback)
 
-    func getAudioMixingDuration(_ callback: Callback)
+    func getAudioMixingDuration(_ params: NSDictionary, _ callback: Callback)
+
+    func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback)
 
     func getAudioMixingCurrentPosition(_ callback: Callback)
 
     func setAudioMixingPosition(_ params: NSDictionary, _ callback: Callback)
 
     func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback)
+
+    func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback)
+
+    func getAudioTrackCount(_ callback: Callback)
+
+    func selectAudioTrack(_ params: NSDictionary, _ callback: Callback)
+
+    func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioEffectInterface {
@@ -165,6 +206,12 @@ protocol RtcEngineAudioEffectInterface {
     func setVolumeOfEffect(_ params: NSDictionary, _ callback: Callback)
 
     func playEffect(_ params: NSDictionary, _ callback: Callback)
+
+    func setEffectPosition(_ params: NSDictionary, _ callback: Callback)
+
+    func getEffectDuration(_ params: NSDictionary, _ callback: Callback)
+
+    func getEffectCurrentPosition(_ params: NSDictionary, _ callback: Callback)
 
     func stopEffect(_ params: NSDictionary, _ callback: Callback)
 
@@ -186,8 +233,10 @@ protocol RtcEngineAudioEffectInterface {
 }
 
 protocol RtcEngineVoiceChangerInterface {
+    @available(*, deprecated)
     func setLocalVoiceChanger(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setLocalVoiceReverbPreset(_ params: NSDictionary, _ callback: Callback)
 
     func setLocalVoicePitch(_ params: NSDictionary, _ callback: Callback)
@@ -195,6 +244,16 @@ protocol RtcEngineVoiceChangerInterface {
     func setLocalVoiceEqualization(_ params: NSDictionary, _ callback: Callback)
 
     func setLocalVoiceReverb(_ params: NSDictionary, _ callback: Callback)
+
+    func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback)
+
+    func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
+
+    func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoicePositionInterface {
@@ -215,6 +274,10 @@ protocol RtcEngineMediaRelayInterface {
     func startChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
     func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
+
+    func pauseAllChannelMediaRelay(_ callback: Callback)
+
+    func resumeAllChannelMediaRelay(_ callback: Callback)
 
     func stopChannelMediaRelay(_ callback: Callback)
 }
@@ -280,9 +343,13 @@ protocol RtcEngineWatermarkInterface {
 }
 
 protocol RtcEngineEncryptionInterface {
+    @available(*, deprecated)
     func setEncryptionSecret(_ params: NSDictionary, _ callback: Callback)
 
+    @available(*, deprecated)
     func setEncryptionMode(_ params: NSDictionary, _ callback: Callback)
+
+    func enableEncryption(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioRecorderInterface {
@@ -333,35 +400,55 @@ protocol RtcEngineStreamMessageInterface {
     func sendStreamMessage(_ params: NSDictionary, _ callback: Callback)
 }
 
+internal class AgoraRtcEngineKitFactory {
+  func create(_ params: NSDictionary, _ delegate: RtcEngineEventHandler) -> AgoraRtcEngineKit? {
+    let engine = AgoraRtcEngineKit.sharedEngine(
+        with: mapToRtcEngineConfig(params["config"] as! [String: Any]),
+        delegate: delegate)
+
+    return engine
+  }
+}
+
 @objc
 class RtcEngineManager: NSObject, RtcEngineInterface {
-    private var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
+    private var emitter: (_ methodName: String, _ data: [String: Any?]?) -> Void
+    private var agoraRtcEngineKitFactory: AgoraRtcEngineKitFactory
     private(set) var engine: AgoraRtcEngineKit?
     private var delegate: RtcEngineEventHandler?
     private var mediaObserver: MediaObserver?
 
-    init(_ emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+    init(_ emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void,
+         _ agoraRtcEngineKitFactory: AgoraRtcEngineKitFactory = AgoraRtcEngineKitFactory()) {
         self.emitter = emitter
+        self.agoraRtcEngineKitFactory = agoraRtcEngineKitFactory
     }
 
     func Release() {
-        AgoraRtcEngineKit.destroy()
-        engine = nil
+        if (engine != nil) {
+            AgoraRtcEngineKit.destroy()
+            engine = nil
+        }
         delegate = nil
         mediaObserver = nil
     }
 
     @objc func create(_ params: NSDictionary, _ callback: Callback) {
-        delegate = RtcEngineEventHandler() { [weak self] in
+        delegate = RtcEngineEventHandler { [weak self] in
             self?.emitter($0, $1)
         }
-        engine = AgoraRtcEngineKit.sharedEngine(with: mapToRtcEngineConfig(params["config"] as! Dictionary), delegate: delegate)
-        callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: (params["appType"] as! NSNumber).uintValue)!))
+        engine = agoraRtcEngineKitFactory.create(params, delegate!)
+        callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: (params["appType"] as! NSNumber).uintValue)!)) {
+            RtcEngineRegistry.shared.onRtcEngineCreated(self.engine)
+            return $0
+        }
     }
 
     @objc func destroy(_ callback: Callback) {
         callback.resolve(engine) { [weak self] _ in
             self?.Release()
+            RtcEngineRegistry.shared.onRtcEngineDestroyed()
+            return nil
         }
     }
 
@@ -371,6 +458,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setClientRole(_ params: NSDictionary, _ callback: Callback) {
         let role = AgoraClientRole(rawValue: (params["role"] as! NSNumber).intValue)!
+        if let options = params["options"] as? [String: Any] {
+            callback.code(engine?.setClientRole(role, options: mapToClientRoleOptions(options)))
+            return
+        }
         callback.code(engine?.setClientRole(role))
     }
 
@@ -379,12 +470,20 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         let channelName = params["channelName"] as! String
         let optionalInfo = params["optionalInfo"] as? String
         let optionalUid = params["optionalUid"] as! NSNumber
+        if let options = params["options"] as? [String: Any] {
+            callback.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: optionalUid.uintValue, options: mapToChannelMediaOptions(options)))
+            return
+        }
         callback.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: optionalUid.uintValue))
     }
 
     @objc func switchChannel(_ params: NSDictionary, _ callback: Callback) {
         let token = params["token"] as? String
         let channelName = params["channelName"] as! String
+        if let options = params["options"] as? [String: Any] {
+            callback.code(engine?.switchChannel(byToken: token, channelId: channelName, options: mapToChannelMediaOptions(options)))
+            return
+        }
         callback.code(engine?.switchChannel(byToken: token, channelId: channelName))
     }
 
@@ -404,6 +503,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.resolve(engine) {
             $0.getConnectionState().rawValue
         }
+    }
+
+    @objc func sendCustomReportMessage(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.sendCustomReportMessage(params["id"] as! String, category: params["category"] as! String, event: params["event"] as! String, label: params["label"] as! String, value: (params["value"] as! NSNumber).intValue))
     }
 
     @objc func getCallId(_ callback: Callback) {
@@ -450,6 +553,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         let userAccount = params["userAccount"] as! String
         let token = params["token"] as? String
         let channelName = params["channelName"] as! String
+        if let options = params["options"] as? [String: Any] {
+            callback.code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName, options: mapToChannelMediaOptions(options)))
+            return
+        }
         callback.code(engine?.joinChannel(byUserAccount: userAccount, token: token, channelId: channelName))
     }
 
@@ -513,6 +620,18 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.enableAudioVolumeIndication((params["interval"] as! NSNumber).intValue, smooth: (params["smooth"] as! NSNumber).intValue, report_vad: params["report_vad"] as! Bool))
     }
 
+    @objc func startRhythmPlayer(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startRhythmPlayer(params["sound1"] as! String, sound2: params["sound2"] as! String, config: mapToRhythmPlayerConfig(params["config"] as! [String: Any])))
+    }
+
+    @objc func stopRhythmPlayer(_ callback: Callback) {
+        callback.code(engine?.stopRhythmPlayer())
+    }
+
+    @objc func configRhythmPlayer(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.configRhythmPlayer(mapToRhythmPlayerConfig(params as! [String: Any])))
+    }
+
     @objc func enableVideo(_ callback: Callback) {
         callback.code(engine?.enableVideo())
     }
@@ -522,7 +641,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setVideoEncoderConfiguration(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(params["config"] as! Dictionary)))
+        callback.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(params["config"] as! [String: Any])))
     }
 
     @objc func startPreview(_ callback: Callback) {
@@ -554,10 +673,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setBeautyEffectOptions(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setBeautyEffectOptions(params["enabled"] as! Bool, options: mapToBeautyOptions(params["options"] as! Dictionary)))
+        callback.code(engine?.setBeautyEffectOptions(params["enabled"] as! Bool, options: mapToBeautyOptions(params["options"] as! [String: Any])))
     }
 
     @objc func startAudioMixing(_ params: NSDictionary, _ callback: Callback) {
+        if let startPos = params["startPos"] as? NSNumber {
+            callback.code(engine?.startAudioMixing(params["filePath"] as! String, loopback: params["loopback"] as! Bool, replace: params["replace"] as! Bool, cycle: (params["cycle"] as! NSNumber).intValue, startPos: startPos.intValue))
+            return
+        }
         callback.code(engine?.startAudioMixing(params["filePath"] as! String, loopback: params["loopback"] as! Bool, replace: params["replace"] as! Bool, cycle: (params["cycle"] as! NSNumber).intValue))
     }
 
@@ -597,10 +720,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         }
     }
 
-    @objc func getAudioMixingDuration(_ callback: Callback) {
+    @objc func getAudioMixingDuration(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.getAudioMixingDuration()) {
             $0
         }
+    }
+
+    @objc func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.getAudioFileInfo(params["filePath"] as! String))
     }
 
     @objc func getAudioMixingCurrentPosition(_ callback: Callback) {
@@ -615,6 +742,25 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setAudioMixingPitch((params["pitch"] as! NSNumber).intValue))
+    }
+
+    @objc func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioMixingPlaybackSpeed(Int32((params["speed"] as! NSNumber).intValue)))
+    }
+
+    @objc func getAudioTrackCount(_ callback: Callback) {
+        callback.code(engine?.getAudioTrackCount()) {
+            $0
+        }
+    }
+
+    @objc func selectAudioTrack(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.selectAudioTrack((params["index"] as! NSNumber).intValue))
+    }
+
+    @objc func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback) {
+        let mode = AgoraAudioMixingDualMonoMode(rawValue: UInt((params["mode"] as! NSNumber).intValue))
+        callback.code(engine?.setAudioMixingDualMonoMode(mode!))
     }
 
     @objc func getEffectsVolume(_ callback: Callback) {
@@ -632,7 +778,27 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func playEffect(_ params: NSDictionary, _ callback: Callback) {
+        if let startPos = (params["startPos"] as? NSNumber) {
+            callback.code(engine?.playEffect((params["soundId"] as! NSNumber).int32Value, filePath: params["filePath"] as? String, loopCount: (params["loopCount"] as! NSNumber).int32Value, pitch: (params["pitch"] as! NSNumber).doubleValue, pan: (params["pan"] as! NSNumber).doubleValue, gain: (params["gain"] as! NSNumber).doubleValue, publish: params["publish"] as! Bool, startPos: startPos.int32Value))
+            return
+        }
         callback.code(engine?.playEffect((params["soundId"] as! NSNumber).int32Value, filePath: params["filePath"] as? String, loopCount: (params["loopCount"] as! NSNumber).int32Value, pitch: (params["pitch"] as! NSNumber).doubleValue, pan: (params["pan"] as! NSNumber).doubleValue, gain: (params["gain"] as! NSNumber).doubleValue, publish: params["publish"] as! Bool))
+    }
+
+    @objc func setEffectPosition(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setEffectPosition((params["soundId"] as! NSNumber).int32Value, pos: (params["pos"] as! NSNumber).intValue))
+    }
+
+    @objc func getEffectDuration(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.getEffectDuration(params["filePath"] as! String)) {
+            $0
+        }
+    }
+
+    @objc func getEffectCurrentPosition(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.getEffectCurrentPosition((params["soundId"] as! NSNumber).int32Value)) {
+            $0
+        }
     }
 
     @objc func stopEffect(_ params: NSDictionary, _ callback: Callback) {
@@ -693,6 +859,22 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.setLocalVoiceReverbOf(AgoraAudioReverbType(rawValue: (params["reverbKey"] as! NSNumber).intValue)!, withValue: (params["value"] as! NSNumber).intValue))
     }
 
+    @objc func setAudioEffectPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectPreset(AgoraAudioEffectPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setVoiceBeautifierPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceBeautifierPreset(AgoraVoiceBeautifierPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setVoiceConversionPreset(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceConversionPreset(AgoraVoiceConversionPreset(rawValue: (params["preset"] as! NSNumber).intValue)!))
+    }
+
+    @objc func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAudioEffectParameters(AgoraAudioEffectPreset(rawValue: (params["preset"] as! NSNumber).intValue)!, param1: (params["param1"] as! NSNumber).int32Value, param2: (params["param2"] as! NSNumber).int32Value))
+    }
+
     @objc func enableSoundPositionIndication(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableSoundPositionIndication(params["enabled"] as! Bool))
     }
@@ -702,7 +884,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setLiveTranscoding(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setLiveTranscoding(mapToLiveTranscoding(params["transcoding"] as! Dictionary)))
+        callback.code(engine?.setLiveTranscoding(mapToLiveTranscoding(params["transcoding"] as! [String: Any])))
     }
 
     @objc func addPublishStreamUrl(_ params: NSDictionary, _ callback: Callback) {
@@ -714,11 +896,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func startChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! Dictionary)))
+        callback.code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! [String: Any])))
     }
 
     @objc func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! Dictionary)))
+        callback.code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(params["channelMediaRelayConfiguration"] as! [String: Any])))
     }
 
     @objc func stopChannelMediaRelay(_ callback: Callback) {
@@ -772,7 +954,15 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func startEchoTest(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.startEchoTest(withInterval: (params["intervalInSeconds"] as! NSNumber).intValue))
+        if let intervalInSeconds = (params["intervalInSeconds"] as? NSNumber) {
+            callback.code(engine?.startEchoTest(withInterval: intervalInSeconds.intValue))
+            return
+        }
+        if let config = (params["config"] as? [String: Any]) {
+            callback.code(engine?.startEchoTest(withConfig: mapToEchoTestConfiguration(config)))
+            return
+        }
+        callback.code(engine?.startEchoTest())
     }
 
     @objc func stopEchoTest(_ callback: Callback) {
@@ -788,7 +978,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func startLastmileProbeTest(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(params["config"] as! Dictionary)))
+        callback.code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(params["config"] as! [String: Any])))
     }
 
     @objc func stopLastmileProbeTest(_ callback: Callback) {
@@ -829,7 +1019,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func addVideoWatermark(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.addVideoWatermark(URL(string: params["watermarkUrl"] as! String)!, options: mapToWatermarkOptions(params["options"] as! Dictionary)))
+        callback.code(engine?.addVideoWatermark(URL(string: params["watermarkUrl"] as! String)!, options: mapToWatermarkOptions(params["options"] as! [String: Any])))
     }
 
     @objc func clearVideoWatermarks(_ callback: Callback) {
@@ -841,10 +1031,28 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setEncryptionMode(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setEncryptionMode(params["encryptionMode"] as? String))
+        var encryptionMode = ""
+        switch (params["encryptionMode"] as! NSNumber).intValue {
+        case AgoraEncryptionMode.AES128XTS.rawValue:
+            encryptionMode = "aes-128-xts"
+        case AgoraEncryptionMode.AES128ECB.rawValue:
+            encryptionMode = "aes-128-ecb"
+        case AgoraEncryptionMode.AES256XTS.rawValue:
+            encryptionMode = "aes-256-xts"
+        default: encryptionMode = ""
+        }
+        callback.code(engine?.setEncryptionMode(encryptionMode))
+    }
+
+    @objc func enableEncryption(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableEncryption(params["enabled"] as! Bool, encryptionConfig: mapToEncryptionConfig(params["config"] as! [String: Any])))
     }
 
     @objc func startAudioRecording(_ params: NSDictionary, _ callback: Callback) {
+        if let config = params["config"] as? [String: Any] {
+            callback.code(engine?.startAudioRecording(withConfig: mapToAudioRecordingConfiguration(config)))
+            return
+        }
         callback.code(engine?.startAudioRecording(params["filePath"] as! String, sampleRate: (params["sampleRate"] as! NSNumber).intValue, quality: AgoraAudioRecordingQuality(rawValue: (params["quality"] as! NSNumber).intValue)!))
     }
 
@@ -853,7 +1061,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func addInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.addInjectStreamUrl(params["url"] as! String, config: mapToLiveInjectStreamConfig(params["config"] as! Dictionary)))
+        callback.code(engine?.addInjectStreamUrl(params["url"] as! String, config: mapToLiveInjectStreamConfig(params["config"] as! [String: Any])))
     }
 
     @objc func removeInjectStreamUrl(_ params: NSDictionary, _ callback: Callback) {
@@ -877,7 +1085,9 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func isCameraFocusSupported(_ callback: Callback) {
-        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
+        callback.resolve(engine) {
+            $0.isCameraFocusPositionInPreviewSupported()
+        }
     }
 
     @objc func isCameraExposurePositionSupported(_ callback: Callback) {
@@ -918,7 +1128,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func enableFaceDetection(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.enableFaceDetection(params["enable"] as! Bool))
+        callback.code(engine?.enableFaceDetection(params["enabled"] as! Bool))
     }
 
     @objc func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback) {
@@ -935,15 +1145,84 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setCameraCapturerConfiguration(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(params["config"] as! Dictionary)))
+        callback.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(params["config"] as! [String: Any])))
     }
 
     @objc func createDataStream(_ params: NSDictionary, _ callback: Callback) {
         var streamId = 0
-        callback.code(engine?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in streamId }
+        if let config = params["config"] as? [String: Any] {
+            callback.code(engine?.createDataStream(&streamId, config: mapToDataStreamConfig(config))) { _ in
+                streamId
+            }
+            return
+        }
+        callback.code(engine?.createDataStream(&streamId, reliable: params["reliable"] as! Bool, ordered: params["ordered"] as! Bool)) { _ in
+            streamId
+        }
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
+    }
+
+    @objc func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVoiceBeautifierParameters(AgoraVoiceBeautifierPreset(rawValue: (params["preset"] as! NSNumber).intValue)!, param1: (params["param1"] as! NSNumber).int32Value, param2: (params["param2"] as! NSNumber).int32Value))
+    }
+
+    @objc func getSdkVersion(_ callback: Callback) {
+        callback.success(AgoraRtcEngineKit.getSdkVersion())
+    }
+
+    @objc func getErrorDescription(_ params: NSDictionary, _ callback: Callback) {
+        callback.success(AgoraRtcEngineKit.getErrorDescription((params["error"] as! NSNumber).intValue))
+    }
+
+    @objc func enableDeepLearningDenoise(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableDeepLearningDenoise(params["enabled"] as! Bool))
+    }
+
+    @objc func setCloudProxy(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setCloudProxy(AgoraCloudProxyType(rawValue: (params["proxyType"] as! NSNumber).uintValue)!))
+    }
+
+    @objc func uploadLogFile(_ callback: Callback) {
+        callback.resolve(engine) {
+            $0.uploadLogFile()
+        }
+    }
+
+    @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enabled"] as! Bool))
+    }
+
+    @objc func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback) {
+        let list = params["ips"] as! [Any]
+        var ips: [String] = []
+        for i in list.indices {
+            if let item = list[i] as? String {
+                ips.append(item)
+            }
+        }
+        callback.code(engine?.setLocalAccessPoint(ips, domain: params["domain"] as! String))
+    }
+
+    @objc func pauseAllChannelMediaRelay(_ callback: Callback) {
+        callback.code(engine?.pauseAllChannelMediaRelay())
+    }
+
+    @objc func resumeAllChannelMediaRelay(_ callback: Callback) {
+        callback.code(engine?.resumeAllChannelMediaRelay())
+    }
+
+    @objc func enableVirtualBackground(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableVirtualBackground(params["enabled"] as! Bool, backData: mapToVirtualBackgroundSource(params["backgroundSource"] as! [String: Any])))
+    }
+
+    @objc func takeSnapshot(_ params: NSDictionary, _ callback: Callback) {
+        var code: Int32?
+        if let ret = engine?.takeSnapshot(params["channel"] as! String, uid: (params["uid"] as! NSNumber).intValue, filePath: params["filePath"] as! String) {
+            code = Int32(ret);
+        }
+        callback.code(code)
     }
 }
