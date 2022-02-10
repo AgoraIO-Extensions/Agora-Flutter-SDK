@@ -61,9 +61,9 @@ class RtcDeviceManager {
   /// Enumerates the audio playback devices.
   /// 
   ///
-  /// **return** Success: Returns a DeviceInfo array that contains the device ID and device name of all the audio plauback devices.
-  /// Success: Returns a MediaDeviceInfo list that contains the device ID and device name of all the audio plauback devices.
-  /// Failure: NULL.
+  /// **return** Success: Returns a MediaDeviceInfo list that contains
+  /// the device ID and device name of all the audio playback devices.
+  /// Failure: null.
   ///
   Future<List<MediaDeviceInfo>> enumerateAudioPlaybackDevices() {
     return _invokeAudioMethod('callApi', {
@@ -95,11 +95,7 @@ class RtcDeviceManager {
   /// Retrieves the audio playback device associated with the device ID.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// The audio playback device. See .
-  /// The current audio playback device.
+  /// **return** The current audio playback device.
   ///
   Future<String?> getAudioPlaybackDevice() {
     return _invokeAudioMethod('callApi', {
@@ -112,11 +108,7 @@ class RtcDeviceManager {
   /// Retrieves the audio playback device information associated with the device ID and device name.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// The information of the audio playback device, which includes the device ID and the device name.
-  /// A MediaDeviceInfo class, which includes the device ID and the device name.
+  /// **return** A MediaDeviceInfo class, which includes the device ID and the device name.
   ///
   Future<MediaDeviceInfo?> getAudioPlaybackDeviceInfo() {
     return _invokeAudioMethod('callApi', {
@@ -144,10 +136,7 @@ class RtcDeviceManager {
   /// Retrieves the volume of the audio playback device.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// The volume of the audio playback device. The value ranges between 0 (lowest volume) and 255 (highest volume).
+  /// **return** The volume of the audio playback device. The value ranges between 0 (lowest volume) and 255 (highest volume).
   ///
   Future<int?> getAudioPlaybackDeviceVolume() {
     return _invokeAudioMethod('callApi', {
@@ -178,11 +167,7 @@ class RtcDeviceManager {
   /// Retrieves whether the audio playback device is muted.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// 
-  /// true: The audio playback device is muted.
+  /// **return** true: The audio playback device is muted.
   /// false: The audio playback device is unmuted.
   ///
   Future<bool?> getAudioPlaybackDeviceMute() {
@@ -228,9 +213,8 @@ class RtcDeviceManager {
   /// Enumerates the audio capture devices.
   /// 
   ///
-  /// **return** Success: Returns a DeviceInfo array that contains the device ID and device name of all the audio recording devices.
-  /// Success: Returns a MediaDeviceInfo list that contains the device ID and device name of all the audio recording devices.
-  /// Failure: NULL.
+  /// **return** Success: Returns a MediaDeviceInfo list that contains the device ID and device name of all the audio recording devices.
+  /// Failure: null.
   ///
   Future<List<MediaDeviceInfo>> enumerateAudioRecordingDevices() {
     return _invokeAudioMethod('callApi', {
@@ -262,11 +246,7 @@ class RtcDeviceManager {
   /// Gets the current audio recording device.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// The audio recording device. See .
-  /// The current audio recording device.
+  /// **return** The current audio recording device.
   ///
   Future<String?> getAudioRecordingDevice() {
     return _invokeAudioMethod('callApi', {
@@ -279,11 +259,7 @@ class RtcDeviceManager {
   /// Retrieves the audio capture device information associated with the device ID and device name.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// A DeviceInfo array that contains the device ID and device name of all the audio recording devices.
-  /// A MediaDeviceInfo class that contains the device ID and device name of all the audio recording devices.
+  /// **return** A MediaDeviceInfo class that contains the device ID and device name of all the audio recording devices.
   ///
   Future<MediaDeviceInfo?> getAudioRecordingDeviceInfo() {
     return _invokeAudioMethod('callApi', {
@@ -312,10 +288,7 @@ class RtcDeviceManager {
   /// Retrieves the volume of the audio recording device.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// The volume of the audio recording device. The value ranges between 0 (lowest volume) and 255 (highest volume).
+  /// **return** The volume of the audio recording device. The value ranges between 0 (lowest volume) and 255 (highest volume).
   ///
   Future<int?> getAudioRecordingDeviceVolume() {
     return _invokeAudioMethod('callApi', {
@@ -346,11 +319,7 @@ class RtcDeviceManager {
   /// Gets the microphone's mute status.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// 
-  /// true: The microphone is muted.
+  /// **return** true: The microphone is muted.
   /// false: The microphone is unmuted.
   ///
   Future<bool?> getAudioRecordingDeviceMute() {
@@ -365,10 +334,7 @@ class RtcDeviceManager {
   /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the audioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capture device.
   /// Ensure that you call this method before joining a channel.
   ///
-  /// Param [testAudioFilePath] The path of the audio file for the audio playback device test in UTF-8.
-  /// Supported file formats: wav, mp3, m4a, and aac.
-  /// Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
-  ///   
+  /// Param [indicationInterval] The time interval (ms) at which the SDK triggers the audioVolumeIndication callback. Agora recommends a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the audioVolumeIndication callback.
   ///
   Future<void> startAudioRecordingDeviceTest(int indicationInterval) {
     return _invokeAudioMethod('callApi', {
@@ -427,9 +393,8 @@ class RtcDeviceManager {
   /// Enumerates the video devices.
   /// 
   ///
-  /// **return** Success: Returns a DeviceInfo array that contains all the video devices.
-  /// Success: Returns a MediaDeviceInfo that contains all the video devices.
-  /// Failure: NULL.
+  /// **return** Success: Returns a MediaDeviceInfo that contains all the video devices.
+  /// Failure: null.
   ///
   Future<List<MediaDeviceInfo>> enumerateVideoDevices() {
     return _invokeVideoMethod('callApi', {
@@ -461,11 +426,7 @@ class RtcDeviceManager {
   /// Retrieves the current video capture device.
   /// 
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  /// 
-  /// The video capture device. See .
-  /// The video capture device.
+  /// **return** The video capture device.
   ///
   Future<String?> getVideoDevice() {
     return _invokeVideoMethod('callApi', {
