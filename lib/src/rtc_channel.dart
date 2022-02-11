@@ -84,7 +84,7 @@ class RtcChannel with RtcChannelInterface {
   }
 
   ///
-  /// Desctroys all RtcChannel instance.
+  /// Destroys all RtcChannel instance.
   /// 
   ///
   // TODO(littlegnal): Fill test
@@ -692,10 +692,6 @@ mixin RtcChannelInterface
   ///
   /// Param [role] The user role in the interactive live streaming. See ClientRole.
   /// 
-  /// Broadcaster (1): Host. A host can both send and receive streams.
-  /// Audience (2): (Default) Audience. An audience member can only receive streams.
-  /// 
-  /// 
   ///
   /// Param [options] The detailed options of a user, including the user level. See ClientRoleOptions.
   ///
@@ -712,12 +708,7 @@ mixin RtcChannelInterface
   ///
   /// Param [options] The channel media options. For details, see ChannelMediaOptions.
   ///
-  /// Param [info] 
-  /// Reserved for future use.
-  ///   
-  ///
-  /// Param [token] 
-  /// The token generated on your server for authentication. See Authenticate Your Users with Token.
+  /// Param [token] The token generated on your server for authentication. See Authenticate Your Users with Token.
   /// Ensure that the App ID used for creating the token is the same App ID used by the createWithContext method for initializing the RTC engine.
   /// 
   ///
@@ -737,8 +728,7 @@ mixin RtcChannelInterface
   ///
   /// Param [options] The channel media options. For details, see ChannelMediaOptions.
   ///
-  /// Param [userAccount] 
-  /// The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique.The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
+  /// Param [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique.The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported characters are (89 in total):
   /// The 26 lowercase English letters: a to z.
   /// The 26 uppercase English letters: A to Z.
   /// All numeric characters: 0 to 9.
@@ -747,8 +737,7 @@ mixin RtcChannelInterface
   /// 
   /// 
   ///
-  /// Param [token] 
-  /// The token generated on your server for authentication. See Authenticate Your Users with Token.
+  /// Param [token] The token generated on your server for authentication. See Authenticate Your Users with Token.
   /// Ensure that the App ID used for creating the token is the same App ID used by the createWithContext method for initializing the RTC engine.
   /// 
   ///
@@ -785,10 +774,6 @@ mixin RtcChannelInterface
 
   ///
   /// Gets the current connection state of the SDK.
-  /// Since
-  /// v2.3.2
-  /// 
-  /// 
   /// You can call this method either before or after joining a channel.
   ///
   Future<ConnectionStateType> getConnectionState();
@@ -817,9 +802,6 @@ mixin RtcChannelInterface
   /// Call this method after joining a channel.
   ///
   /// **return** The current call ID.
-  /// 
-  /// 0: Success.
-  /// < 0: Failure.
   ///
   Future<String?> getCallId();
 }
@@ -828,10 +810,6 @@ mixin RtcChannelInterface
 mixin RtcAudioInterface {
   ///
   /// Adjusts the playback signal volume of a specified remote user.
-  /// Since
-  ///   v3.0.0
-  /// 
-  /// 
   /// You can call this method to adjust the playback volume of a specified remote user. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.
   /// 
   /// 
@@ -879,7 +857,6 @@ mixin RtcAudioInterface {
   /// 
   /// 
   ///   Call this method after joining a channel.
-  /// See recommended settings in Set the Subscribing State.
   ///
   /// Param [muted] Whether to subscribe to the audio streams of all remote users:
   /// true: Do not subscribe to the audio streams of all remote users.
@@ -922,8 +899,7 @@ mixin RtcVideoInterface {
   /// Stops or resumes publishing the local video stream.
   /// 
   ///
-  /// Param [mute] 
-  /// Whether to stop publishing the local video stream.
+  /// Param [mute] Whether to stop publishing the local video stream.
   /// true: Stop publishing the local video stream.
   /// false: (Default) Publish the local video stream.
   /// 
@@ -953,10 +929,8 @@ mixin RtcVideoInterface {
   /// 
   /// 
   ///   Call this method after joining a channel.
-  ///   See recommended settings in Set the Subscribing State.
   ///
-  /// Param [muted] 
-  /// Whether to stop subscribing to the video streams of all remote users.
+  /// Param [muted] Whether to stop subscribing to the video streams of all remote users.
   /// true: Stop subscribing to the video streams of all remote users.
   /// false: (Default) Subscribe to the audio streams of all remote users by default.
   ///  
@@ -980,8 +954,7 @@ mixin RtcVideoInterface {
   ///   If you need to resume subscribing to a single user, call muteRemoteVideoStream(false) and specify the ID of the remote user you want to subscribe to.
   ///   If you want to resume subscribing to multiple users, call muteRemoteVideoStream(false) multiple times.
   ///
-  /// Param [muted] 
-  /// Whether to stop subscribing to the audio streams of all remote users by default.
+  /// Param [muted] Whether to stop subscribing to the audio streams of all remote users by default.
   /// true: Stop subscribing to the audio streams of all remote users by default.
   /// false: (Default) Resume subscribing to the audio streams of all remote users by default.
   ///  
@@ -993,10 +966,6 @@ mixin RtcVideoInterface {
 
   ///
   /// Enables/Disables the super-resolution algorithm for a remote user's video stream.
-  /// Since
-  /// v3.5.1
-  /// 
-  /// 
   /// This feature effectively boosts the resolution of a remote user's video seen by the local user. If the original resolution of a remote user's video is a × b, the local user's device can render the remote video at a resolution of 2a × 2b
   /// after you enable this feature.
   /// After you call this method, the SDK triggers the userSuperResolutionEnabled callback to report whether you have successfully enabled super resolution.
@@ -1089,15 +1058,14 @@ mixin RtcPublishStreamInterface {
   /// 
   /// This method sets the video layout and audio settings for CDN live streaming. The SDK triggers the transcodingUpdated callback when you call this method to update the transcoding setting.
   ///
-  /// Param [transcoding] 
-  /// The transcoding configurations for CDN live streaming. For details, see LiveTranscoding.
+  /// Param [transcoding] The transcoding configurations for CDN live streaming. For details, see LiveTranscoding.
   ///
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
   ///
   /// Publishes the local stream to a specified CDN live streaming URL.
   /// Call this method after joining a channel.
-  /// Ensure that you enable the RTMP Converter service before using this function. See the advanced guide Push Streams to CDN in Prerequisites.
+  /// Ensure that you enable the RTMP Converter service before using this function. 
   ///   This method takes effect only when you are a host in live interactive streaming.
   ///   This method adds only one stream CDN streaming URL each time it is called. To push multiple URLs, call this method multiple times.
   ///   Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
@@ -1118,7 +1086,7 @@ mixin RtcPublishStreamInterface {
 
   ///
   /// Removes an RTMP or RTMPS stream from the CDN.
-  /// Ensure that you enable the RTMP Converter service before using this function. See Push Streams to CDN in Prerequisites.
+  /// Ensure that you enable the RTMP Converter service before using this function.
   /// This method takes effect only when you are a host in live interactive streaming.
   /// Call this method after joining a channel.
   /// This method removes only one CDN streaming URL each time it is called. To remove multiple URLs, call this method multiple times.
@@ -1173,10 +1141,6 @@ mixin RtcMediaRelayInterface {
 
   ///
   /// Pauses the media stream relay to all destination channels.
-  /// Since
-  /// v3.5.1
-  /// 
-  /// 
   /// After the cross-channel media stream relay starts, you can call this method to pause relaying media streams to all destination channels; after the pause, if you want to resume the relay, call resumeAllChannelMediaRelay.
   /// After a successful method call, the SDK triggers the channelMediaRelayEvent callback to report whether the media stream relay is successfully paused.
   /// Call this method after startChannelMediaRelay.
@@ -1185,10 +1149,6 @@ mixin RtcMediaRelayInterface {
 
   ///
   /// Resumes the media stream relay to all destination channels.
-  /// Since
-  /// v3.5.1
-  /// 
-  /// 
   /// After calling the pauseAllChannelMediaRelay method, you can call this method to resume relaying media streams to all destination channels.
   /// After a successful method call, the SDK triggers the channelMediaRelayEvent callback to report whether the media stream relay is successfully resumed.
   /// Call this method after the pauseAllChannelMediaRelay method.
@@ -1206,15 +1166,7 @@ mixin RtcDualStreamInterface {
   /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode(false), the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or the low-quality video stream (the low resolution, and low bitrate video stream). The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.
   /// Call this method after joining a channel. If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType, the setting of setRemoteVideoStreamType takes effect.
   ///
-  /// Param [uid] User ID.
-  ///
-  /// Param [streamType] 
-  /// The video stream type: VideoStreamType.
-  /// The video stream type:
-  /// 0: High-quality video stream.
-  /// 1: Low-quality video stream.
-  /// 
-  /// 
+  /// Param [streamType] The video stream type: VideoStreamType.
   /// 
   ///
   Future<void> setRemoteVideoStreamType(int userId, VideoStreamType streamType);
@@ -1226,12 +1178,7 @@ mixin RtcDualStreamInterface {
   /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using (),the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.enableDualStreamModefalse
   /// Call this method after joining a channel. If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType, the setting of setRemoteVideoStreamType takes effect.
   ///
-  /// Param [streamType] 
-  /// The default stream type of the remote video, see VideoStreamType.
-  /// The default stream type of the remote video.
-  /// 0: High-quality video stream.
-  /// 1: Low-quality video stream.
-  /// 
+  /// Param [streamType] The default stream type of the remote video, see VideoStreamType.
   /// 
   ///
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
@@ -1241,10 +1188,6 @@ mixin RtcDualStreamInterface {
 mixin RtcFallbackInterface {
   ///
   /// Prioritizes a remote user's stream.
-  /// Since
-  /// v2.4.0
-  /// 
-  /// 
   /// Prioritizes a remote user's stream. The SDK ensures the high-priority user gets the best possible stream quality. The SDK ensures the high-priority user gets the best possible stream quality.
   /// 
   /// 
@@ -1265,17 +1208,11 @@ mixin RtcMediaMetadataInterface {
   /// Call this method before joinChannel.
   ///   This method applies only to interactive live streaming.
   ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
-  ///
   Future<void> registerMediaMetadataObserver();
 
   ///
   /// Unregisters the media metadata observer.
   /// 
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> unregisterMediaMetadataObserver();
 
@@ -1326,8 +1263,7 @@ mixin RtcEncryptionInterface {
   /// 
   /// Before calling this method, please call setEncryptionSecret to enable the built-in encryption function.
   ///
-  /// Param [encryptionMode] 
-  /// Encryption mode.
+  /// Param [encryptionMode] Encryption mode.
   /// "aes-128-xts": (Default) 128-bit AES encryption, XTS mode.
   /// "aes-128-ecb": 128-bit AES encryption, ECB mode.
   /// "aes-256-xts": 256-bit AES encryption, XTS mode.
@@ -1341,16 +1277,11 @@ mixin RtcEncryptionInterface {
 
   ///
   /// Enables/Disables the built-in encryption.
-  /// Since
-  /// v3.1.0
-  /// 
-  /// 
   /// In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.
   /// All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
   /// If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
   ///
-  /// Param [enabled] 
-  /// Whether to enable built-in encryption:
+  /// Param [enabled] Whether to enable built-in encryption:
   /// true: Enable the built-in encryption.
   /// false: Disable the built-in encryption.
   /// 
@@ -1370,7 +1301,6 @@ mixin RtcInjectStreamInterface {
   /// 
   ///   
   /// Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in Push Streams to CDN.
-  /// This method applies to the Native SDK v2.4.1 and later.
   /// This method takes effect only when you are a host in a live streaming channel.
   /// Only one online media stream can be injected into the same channel at the same time.
   /// Call this method after joining a channel.
@@ -1385,8 +1315,7 @@ mixin RtcInjectStreamInterface {
   /// the userJoined callback, where uid is
   /// 666.
   ///
-  /// Param [url] 
-  /// The URL address to be added to the ongoing streaming. Valid protocols are RTMP, HLS, and HTTP-FLV.
+  /// Param [url] The URL address to be added to the ongoing streaming. Valid protocols are RTMP, HLS, and HTTP-FLV.
   /// Supported audio codec type: AAC.
   /// Supported video codec type: H264 (AVC).
   ///  
@@ -1426,8 +1355,7 @@ mixin RtcStreamMessageInterface {
   /// false: The recipients do not receive the data in the sent order.
   ///   
   ///
-  /// Param [reliable] 
-  /// Whether or not the data stream is reliable:
+  /// Param [reliable] Whether or not the data stream is reliable:
   /// true: The recipients receive the
   /// data from the sender within five seconds. If the recipient does not
   /// receive the data within five seconds, the SDK triggers the streamMessageError callback and returns an
@@ -1446,13 +1374,10 @@ mixin RtcStreamMessageInterface {
   /// Compared with createDataStream[1/2], this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
   /// Creates a data stream. Each user can create up to five data streams in a single channel.
   ///
-  /// Param [streamId] Output parameter. Pointer to the ID of the created data stream.
-  ///
   /// Param [config] The configurations for the data stream. For details, see DataStreamConfig.
   ///
-  /// **return** 0: The data stream is successfully created.
-  /// ID of the created data stream, if the method call succeeds.
-  /// < 0: Failure. You can refer to Error Codes and Warning Codes for troubleshooting.
+  /// **return** ID of the created data stream, if the method call succeeds.
+  /// < 0: Failure.
   ///
   Future<int?> createDataStreamWithConfig(DataStreamConfig config);
 
@@ -1467,8 +1392,6 @@ mixin RtcStreamMessageInterface {
   /// Param [streamId] The data stream ID. You can get the data stream ID by calling createDataStreamWithConfig.
   ///
   /// Param [message] The message to be sent.
-  ///
-  /// Param [length] The length of the data.
   ///
   Future<void> sendStreamMessage(int streamId, Uint8List message);
 }

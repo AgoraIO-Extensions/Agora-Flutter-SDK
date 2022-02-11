@@ -338,13 +338,9 @@ enum AudioMixingReason {
 /// The playback state of the music file.
 /// 
 ///
-  ///
-  /// (716): The music file is all played out.
-  ///
 enum AudioMixingStateCode {
   @JsonValue(710)
   ///
-  /// 
   /// 710: The music file is playing.
   /// 
   ///
@@ -352,7 +348,6 @@ enum AudioMixingStateCode {
 
   @JsonValue(711)
   ///
-  /// 
   /// 711: The music file pauses playing.
   /// 
   ///
@@ -363,7 +358,6 @@ enum AudioMixingStateCode {
 
   @JsonValue(713)
   ///
-  /// 
   /// 713: The music file stops playing.
   /// 
   ///
@@ -371,7 +365,6 @@ enum AudioMixingStateCode {
 
   @JsonValue(714)
   ///
-  /// 
   /// 714: An error occurs during the playback of the audio mixing file.
   /// 
   ///
@@ -472,20 +465,12 @@ enum AudioOutputRouting {
 /// The audio profile.
 /// 
 ///
-  ///
-  /// Enumerator boundary.
-  ///
 enum AudioProfile {
   @JsonValue(0)
   ///
-  /// 
   /// 0: The default audio profile.
   /// For the LIVE_BROADCASTING profile: A sampling rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
   /// For the COMMUNICATION profile: 
-  /// Windows: A sampling rate of 16 kHz, music encoding, mono, and a bitrate of up to 16 Kbps.
-  /// Android/macOS/iOS:macOS: A sampling rate of 32 kHz, music encoding, mono, and a bitrate of up to 18 Kbps.
-  /// 
-  /// 
   /// 
   /// 
   ///   
@@ -679,9 +664,6 @@ enum AudioReverbPreset {
   Popular,
 
   @JsonValue(0x00000002)
-  ///
-  /// The voice effect typical of R&B music.
-  ///
   RnB,
 
   @JsonValue(0x00000003)
@@ -694,9 +676,6 @@ enum AudioReverbPreset {
   VocalConcert,
 
   @JsonValue(0x00000006)
-  ///
-  /// The voice effect typical of a KTV venue.
-  ///
   KTV,
 
   @JsonValue(0x00000007)
@@ -872,7 +851,6 @@ enum AudioScenario {
 
   @JsonValue(8)
   ///
-  /// 
   /// 8: Meeting scenario that mainly contains the human voice.
   ///   
   ///
@@ -1024,7 +1002,6 @@ enum CameraCaptureOutputPreference {
 
   @JsonValue(3)
   ///
-  /// 
   /// 3: Allows you to customize the width and height of the video image captured by the local camera.
   /// 
   ///
@@ -1068,7 +1045,6 @@ enum ChannelMediaRelayError {
 
   @JsonValue(2)
   ///
-  /// 
   /// 2: No server response.
   /// You can call leaveChannel to leave the channel.
   /// This error can also occur if your project has not enabled co-host token authentication. Contact support@agora.io to enable the co-host token authentication service before starting a channel media relay.
@@ -1198,7 +1174,7 @@ enum ChannelMediaRelayEvent {
 
   @JsonValue(10)
   ///
-  /// 10: The destination channel name is NULL.
+  /// 10: The destination channel name is null.
   ///
   UpdateDestinationChannelIsNil,
 
@@ -1481,7 +1457,6 @@ enum DegradationPreference {
 
   @JsonValue(2)
   ///
-  /// 
   /// 2: Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.
   /// The resolution of the video sent may change, so remote users need to handle this issue. See videoSizeChanged.
   /// 
@@ -1502,9 +1477,6 @@ enum EncryptionMode {
   AES128XTS,
 
   @JsonValue(2)
-  ///
-  /// 2: 128-bit AES encryption, ECB mode.
-  ///
   AES128ECB,
 
   @JsonValue(3)
@@ -1517,16 +1489,6 @@ enum EncryptionMode {
   SM4128ECB,
 
   @JsonValue(5)
-  ///
-  /// 
-  /// 
-  /// 
-  /// Since
-  /// v3.3.1
-  /// 
-  /// 
-  /// 5: 128-bit AES encryption, GCM mode.
-  ///
   AES128GCM,
 
   @JsonValue(6)
@@ -1913,9 +1875,6 @@ enum LighteningContrastLevel {
 /// Local video state error codes.
 /// 
 ///
-  ///
-  /// 8: The local video capturing device temporarily being made unavailable due to system pressure.
-  ///
 enum LocalVideoStreamError {
   @JsonValue(0)
   ///
@@ -1954,27 +1913,58 @@ enum LocalVideoStreamError {
   EncodeFailure,
 
   @JsonValue(6)
+  ///
+  /// 6: The local video capturing device not available due to app did enter background.
+  ///
   CaptureInBackground,
 
   @JsonValue(7)
+  ///
+  /// 7: The local video capturing device not available because the app is running in a multi-app layout (generally on the pad).
+  ///
   CaptureMultipleForegroundApps,
 
   @JsonValue(8)
+  ///
+  /// 8: Fails to find a local video capture device.
+  /// 
+  ///
   DeviceNotFound,
 
   @JsonValue(11)
+  ///
+  /// startScreenCaptureByWindowId11: When calling to share the window, the shared window is in a minimized state.
+  ///
   ScreenCaptureWindowMinmized,
 
   @JsonValue(12)
+  ///
+  /// 12: The error code indicates that a window shared by the window ID has been closed, or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing.
+  /// Common scenarios for reporting this error code:
+  ///  When the local user closes the shared window, the SDK reports this error code.
+  /// The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
+  /// The local user watches web video or reads web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
+  /// 
+  ///   
+  ///
   ScreenCaptureWindowClosed,
 
   @JsonValue(10)
+  ///
+  /// 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
+  ///
   LocalVideoStreamErrorDeviceInvalidId,
 
   @JsonValue(13)
+  ///
+  /// 13: (Windows only) The window being shared is overlapped by another window, so the overlapped area is blacked out by the SDK during window sharing.
+  ///
   LocalVideoStreamErrorScreenCaptureWindowOccluded,
 
   @JsonValue(20)
+  ///
+  /// 20: (Windows only) The SDK does not support sharing this type of window.
+  ///
   LocalVideoStreamErrorScreenCaptureWindowNotSupported,
 }
 
@@ -2261,7 +2251,6 @@ enum RtmpStreamingState {
 
   @JsonValue(3)
   ///
-  /// 
   /// The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.
   /// 
   ///  If the SDK successfully resumes the streaming, Running(2) returns.
@@ -2457,7 +2446,6 @@ enum VideoMirrorMode {
 enum VideoOutputOrientationMode {
   @JsonValue(0)
   ///
-  /// 
   /// 0: (Default) The output video always follows the orientation of the captured video. The receiver takes the rotational information passed on from the video encoder. This mode applies to scenarios where video orientation can be adjusted on the receiver.
   /// 
   ///  If the captured video is in landscape mode, the output video is in landscape mode.
@@ -2627,7 +2615,6 @@ enum VideoRenderMode {
   @JsonValue(3)
   ///
   /// 
-  /// 
   ///  
   /// Deprecated:
   /// 3: This mode is deprecated.
@@ -2783,9 +2770,6 @@ enum AudioChannel {
 /// Video codec types.
 /// 
 ///
-  ///
-  /// Standard VP9.
-  ///
 enum VideoCodecType {
   @JsonValue(1)
   ///
@@ -2803,9 +2787,6 @@ enum VideoCodecType {
   EVP,
 
   @JsonValue(4)
-  ///
-  /// Enhanced H.264.
-  ///
   E264,
 }
 
@@ -2831,7 +2812,6 @@ enum StreamPublishState {
 
   @JsonValue(1)
   ///
-  /// 
   /// 1: Fails to publish the local stream. Possible reasons:
   ///  The local user calls muteLocalAudioStream(true) or muteLocalVideoStream(true) to stop sending the local media stream.
   ///  The local user calls disableAudio or disableVideo to disable the local audio or video module.
@@ -2868,7 +2848,6 @@ enum StreamSubscribeState {
 
   @JsonValue(1)
   ///
-  /// 
   /// 1: Fails to subscribe to the remote stream. Possible reasons:
   /// The remote user:
   /// Calls muteLocalAudioStream(true) or muteLocalVideoStream(true) to stop sending local media stream.
@@ -3013,7 +2992,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02010500)
   ///
-  /// 
   /// The virtual stereo effect, which renders monophonic audio as stereo audio.
   /// Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo. Otherwise, the preset setting is invalid.
   ///   
@@ -3034,7 +3012,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02010800)
   ///
-  /// 
   /// A 3D voice effect that makes the voice appear to be moving around the user. The default movement cycle is 10 seconds. After setting this effect, you can call setAudioEffectParameters to modify the movement period.
   /// 
   /// 
@@ -3048,7 +3025,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02020100)
   ///
-  /// 
   /// A middle-aged man's voice.
   /// Agora recommends using this preset to process a male-sounding voice;
   /// otherwise, you might not hear the anticipated voice effect.
@@ -3067,7 +3043,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02020300)
   ///
-  /// 
   /// A boy's voice.
   /// Agora recommends using this preset to process a male-sounding voice;
   /// otherwise, you might not hear the anticipated voice effect.
@@ -3077,7 +3052,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02020400)
   ///
-  /// 
   /// A young woman's voice.
   /// Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
   ///   
@@ -3086,7 +3060,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02020500)
   ///
-  /// 
   /// A girl's voice.
   /// Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
   ///   
@@ -3107,7 +3080,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02030100)
   ///
-  /// 
   /// The voice effect typical of R&B music.
   /// Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo. Otherwise, the preset setting is invalid.
   ///   
@@ -3116,7 +3088,6 @@ enum AudioEffectPreset {
 
   @JsonValue(0x02030200)
   ///
-  /// 
   /// The voice effect typical of popular music.
   /// Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo. Otherwise, the preset setting is invalid.
   ///   
@@ -3150,7 +3121,6 @@ enum VoiceBeautifierPreset {
 
   @JsonValue(0x01010200)
   ///
-  /// 
   /// A fresher voice.
   /// Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
   ///   
@@ -3159,7 +3129,6 @@ enum VoiceBeautifierPreset {
 
   @JsonValue(0x01010300)
   ///
-  /// 
   /// A more vital voice.
   /// Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
   ///   
@@ -3168,7 +3137,6 @@ enum VoiceBeautifierPreset {
 
   @JsonValue(0x01020100)
   ///
-  /// 
   /// Singing beautifier effect.
   /// 
   ///  If you call setVoiceBeautifierPreset(SingingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.

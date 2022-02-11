@@ -170,11 +170,9 @@ class RtcEngine with RtcEngineInterface {
   ///
   ///
   /// Before calling other APIs, you must call create and createWithContext to create and initialize an RtcEngine object.
-  /// You can create an RtcEngine instance either by calling this method or by calling . The difference between  and this method is that this method supports more configurations when creating the RtcEngine instance, for example, specifying the region for connection and setting the log files.
   /// The SDK supports creating only one RtcEngine instance for an app.
   ///
-  /// Param [config]
-  /// Configurations for the RtcEngine instance. For details, see RtcEngineContext.
+  /// Param [config] Configurations for the RtcEngine instance. For details, see RtcEngineContext.
   ///
   ///
   static Future<RtcEngine> createWithContext(RtcEngineContext config) async {
@@ -2006,7 +2004,6 @@ mixin RtcEngineInterface
   ///
   /// Releases the RtcEngine instance.
   /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations.
-  /// After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createWithContext to create a new RtcEngine instance.
   /// If you want to create a new RtcEngine instance after destroying the current one, ensure that you wait till the destroy method execution to complete.
   ///
   Future<void> destroy();
@@ -2019,8 +2016,7 @@ mixin RtcEngineInterface
   ///   To ensure the quality of real-time communication, Agora recommends that all users in a channel use the same channel profile.
   ///   This method must be called and set before joinChannel, and cannot be set again after entering the channel.
   ///
-  /// Param [profile]
-  /// The channel profile. For details, see ChannelProfile.
+  /// Param [profile] The channel profile. For details, see ChannelProfile.
   ///
   ///
   Future<void> setChannelProfile(ChannelProfile profile);
@@ -2051,13 +2047,11 @@ mixin RtcEngineInterface
   ///
   /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the rejoinChannelSuccess callback on the local client.
   ///
-  /// Param [token]
-  /// The token generated on your server for authentication. See Authenticate Your Users with Token.
+  /// Param [token] The token generated on your server for authentication. See Authenticate Your Users with Token.
   /// Ensure that the App ID used for creating the token is the same App ID used by the createWithContext method for initializing the RTC engine.
   ///
   ///
-  /// Param [channelName]
-  /// The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
+  /// Param [null] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
   /// The 26 lowercase English letters: a to z.
   /// The 26 uppercase English letters: A to Z.
   /// The 10 numeric characters: 0 to 9.
@@ -2083,14 +2077,13 @@ mixin RtcEngineInterface
   /// Once the user switches to another channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the mute methods accordingly.
   ///
   /// Param [token] The token generated at your server.
-  /// In scenarios with low security requirements, token is optional and can be set as NULL.
+  /// In scenarios with low security requirements, token is optional and can be set as null.
   /// In scenarios with high security requirements, set the value to the token generated from your server. If you enable the App Certificate, you must use a token to join the channel.
   ///
   /// Ensure that the App ID used for creating the token is the same App ID used by the createWithContext method for initializing the RTC engine.
   ///
   ///
-  /// Param [channelName]
-  /// The name of the channel. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channelId enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
+  /// Param [channelName] The name of the channel. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channelId enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
   ///  All numeric characters: 0 to 9.
@@ -2107,7 +2100,6 @@ mixin RtcEngineInterface
   ///
   /// Leaves a channel.
   /// This method releases all resources related to the session. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
-  /// After joining the channel, you must call this method or  to end the call; otherwise, you cannot join the next call.
   /// A successful call of this method triggers the following callbacks:
   /// The local client: leaveChannel.
   /// The remote client: userOffline, if the user joining the channel is in the Communication profile, or is a host in the Live-broadcasting profile.
@@ -2116,12 +2108,6 @@ mixin RtcEngineInterface
   ///
   /// If you call destroy immediately after calling this method, the SDK does not trigger the leaveChannel callback.
   /// If you call this method during a CDN live streaming, the SDK automatically calls the removePublishStreamUrl method.
-  ///
-  /// **return** 0(ERR_OK): Success.
-  /// < 0: Failure.
-  /// -1(ERR_FAILED): A general error occurs (no specified reason).
-  /// -2 (ERR_INVALID_ARGUMENT): The parameter is invalid.
-  /// -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
   ///
   Future<void> leaveChannel();
 
@@ -2156,7 +2142,7 @@ mixin RtcEngineInterface
   /// Gets the current connection state of the SDK.
   /// You can call this method either before or after joining a channel.
   ///
-  /// **return** The current connection state. For details, see ConnectionStateType.
+  /// **return** The current connection state.
   ///
   Future<ConnectionStateType> getConnectionState();
 
@@ -2173,9 +2159,6 @@ mixin RtcEngineInterface
   /// Call this method after joining a channel.
   ///
   /// **return** The current call ID.
-  ///
-  /// 0: Success.
-  /// < 0: Failure.
   ///
   Future<String?> getCallId();
 
@@ -2203,12 +2186,10 @@ mixin RtcEngineInterface
 
   ///
   /// Sets the log files that the SDK outputs.
-  /// This method sets the log files of the Native layer.
   /// By default, the SDK outputs five log files: agorasdk.log, agorasdk_1.log, agorasdk_2.log, agorasdk_3.log, and agorasdk_4.log. Each log file has a default size of 512 KB. These log files are encoded in UTF-8. The SDK writes the latest log in agorasdk.log. When agorasdk.log is full, the SDK deletes the log file with the earliest modification time among the other four, renames agorasdk.log to the name of the deleted log file, and create a new agorasdk.log to record the latest logs.
   /// Ensure that you call this method immediately after initializing RtcEngine, otherwise, the output log may not be complete.
   ///
-  /// Param [filePath]
-  /// The absolute path of the log files. The default file path is C: \Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log. Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
+  /// Param [filePath] The absolute path of the log files. The default file path is C: \Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log. Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
   ///
   ///
   @deprecated
@@ -2293,11 +2274,7 @@ mixin RtcEngineInterface
   ///
   ///
   /// Uploads all SDK log files from the client to the Agora server. After calling this method successfully, the SDK triggers the uploadLogResult callback to report whether the log file is successfully uploaded to the Agora server.
-  /// This method cannot be called more than once per minute; otherwise, the SDK returns NULL.
   /// For easier debugging, Agora recommends that you bind the uploadLogFile method to the UI element of your app, to instruct the user to upload a log file when a quality issue occurs.
-  ///
-  /// **return** The method call succeeds: Return the request ID. The request ID is the same as the requestId in the uploadLogResult callback. You can use the requestId to match a specific upload with a callback.
-  /// The method callI fails: Returns NULL. Probably because the method call frequency exceeds the limit.
   ///
   Future<String?> uploadLogFile();
 
@@ -2311,8 +2288,6 @@ mixin RtcEngineInterface
   /// Before calling this method, ensure that you have integrated the dynamic library.
   /// Android: libagora_segmentation_extension.so
   /// iOS: AgoraVideoSegmentationExtension.xcframework
-  /// macOS: AgoraVideoSegmentationExtension.framework
-  /// Windows: libagora_segmentation_extension.dll
   ///
   /// Call this method after enableVideo.
   /// This function requires a high-performance device. Agora recommends that you use this function on devices with the following chips:
@@ -2321,7 +2296,6 @@ mixin RtcEngineInterface
   /// Dimensity 700 series 720 and later
   /// Kirin 800 series 810 and later
   /// Kirin 900 series 980 and later
-  /// Devices with an i5 CPU and better
   /// Devices with an A9 chip and better, as follows:
   /// iPhone 6S and later
   /// iPad Air 3rd generation and later
@@ -2387,7 +2361,7 @@ mixin RtcUserInfoInterface {
   ///
   /// Param [appId] The App ID of your project on Agora Console.
   ///
-  /// Param [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique.  The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
+  /// Param [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique.  The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported characters are (89 in total):
   /// The 26 lowercase English letters: a to z.
   /// The 26 uppercase English letters: A to Z.
   /// All numeric characters: 0 to 9.
@@ -2409,21 +2383,8 @@ mixin RtcUserInfoInterface {
   /// Param [options] The channel media options. For details, see ChannelMediaOptions.
   ///
   /// Param [token]
-  /// The token generated on your server for authentication. See Authenticate Your Users with Token.
-  /// Ensure that the App ID used for creating the token is the same App ID used by the createWithContext method for initializing the RTC engine.
   ///
-  ///
-  /// Param [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
-  /// The 26 lowercase English letters: a to z.
-  /// The 26 uppercase English letters: A to Z.
-  /// The 10 numeric characters: 0 to 9.
-  /// Space
-  /// "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  ///
-  ///
-  ///
-  /// Param [userAccount]
-  /// The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique.The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
+  /// Param [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique.The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported characters are (89 in total):
   /// The 26 lowercase English letters: a to z.
   /// The 26 uppercase English letters: A to Z.
   /// All numeric characters: 0 to 9.
@@ -2440,25 +2401,12 @@ mixin RtcUserInfoInterface {
   /// Gets the user information by passing in the user account.
   /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the userInfoUpdated callback on the local client. After receiving the callback, you can call this method to get the user account of the remote user from the UserInfo object by passing in the user ID.
   ///
-  /// Param [error] Error code.
-  ///
-  /// Param [channelId]
-  ///
   /// Param [userAccount] The user account.
   ///
   /// **return** The UserInfo object that identifies the user information.
   ///
   /// Not null: Success.
   /// Null: Failure.
-  ///
-  ///
-  /// The UserInfo instance, if the method call succeeds.
-  /// If the call fails, returns NULL.
-  /// If the call fails, returns the error code（errCode.
-  ///
-  ///
-  /// 0: Success.
-  /// < 0: Failure.
   ///
   Future<UserInfo> getUserInfoByUserAccount(String userAccount);
 
@@ -2468,25 +2416,10 @@ mixin RtcUserInfoInterface {
   ///
   /// Param [uid] User ID.
   ///
-  /// Param [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
-  /// The 26 lowercase English letters: a to z.
-  /// The 26 uppercase English letters: A to Z.
-  /// The 10 numeric characters: 0 to 9.
-  /// Space
-  /// "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  ///
-  ///
-  ///
-  /// Param [error] Error code.
-  ///
   /// **return** The UserInfo object that identifies the user information.
   ///
   /// Not null: Success.
   /// Null: Failure.
-  ///
-  ///
-  /// 0: Success.
-  /// < 0: Failure.
   ///
   Future<UserInfo> getUserInfoByUid(int uid);
 }
@@ -2519,11 +2452,9 @@ mixin RtcAudioInterface {
 
   ///
   /// Sets the audio profile and audio scenario.
-  /// Ensure that you call this method before joining a channel.
   /// In scenarios requiring high-quality audio, such as online music tutoring, Agora recommends you set profile as MusicHighQuality (4), and scenario as GameStreaming (3)
   ///
-  /// Param [profile]
-  /// The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfile.
+  /// Param [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfile.
   ///
   ///
   /// Param [scenario] The audio scenario. See AudioScenario. Under different audio scenarios, the device uses different volume types.
@@ -2534,8 +2465,7 @@ mixin RtcAudioInterface {
   /// Adjusts the capturing signal volume.
   /// You can call this method either before or after joining a channel.
   ///
-  /// Param [volume]
-  /// Integer only. The value range is [0,400].
+  /// Param [volume] Integer only. The value range is [0,400].
   /// 0: Mute.
   /// 100: (Default) The original volume.
   /// 400: Four times the original volume (amplifying the audio signals by four times).
@@ -2563,8 +2493,7 @@ mixin RtcAudioInterface {
   /// This method adjusts the playback volume that is the mixed volume of all remote users.
   ///   You can call this method either before or after joining a channel.
   ///
-  /// Param [volume]
-  /// Integer only. The value range is [0,400].
+  /// Param [volume] Integer only. The value range is [0,400].
   /// 0: Mute.
   /// 100: (Default) The original volume.
   /// 400: Four times the original volume (amplifying the audio signals by four times).
@@ -2585,8 +2514,7 @@ mixin RtcAudioInterface {
   ///
   /// You can call this method either before or after joining a channel.
   ///
-  /// Param [enabled]
-  /// true: (Default) Re-enable the local audio function, that is, to start the local audio capturing device (for example, the microphone).
+  /// Param [enabled] true: (Default) Re-enable the local audio function, that is, to start the local audio capturing device (for example, the microphone).
   /// false: Disable the local audio function, that is, to stop local audio capturing.
   ///
   ///
@@ -2596,7 +2524,6 @@ mixin RtcAudioInterface {
   ///
   /// Stops or resumes publishing the local audio stream.
   /// This method does not affect any ongoing audio recording, because it does not disable the microphone.
-  ///   You can call this method either before or after joining a channel. If you call the setChannelProfile method after this method, the SDK resets whether or not to stop publishing the local audio according to the channel profile and user role. Therefore, Agora recommends calling this method after the setChannelProfile method.
   ///
   /// Param [muted] Whether to stop publishing the local audio stream.
   ///
@@ -2667,14 +2594,7 @@ mixin RtcAudioInterface {
   /// > 0: Time interval (ms) between two consecutive volume indications. We recommend a setting greater than 200 ms. Do not set this parameter to less than 10 milliseconds, otherwise the audioVolumeIndication callback will not be triggered.
   ///
   ///
-  /// Param [smooth] The smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
-  ///
-  /// Param [reportVad]
-  ///
-  ///  true: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the audioVolumeIndication callback reports the voice activity status of the local user.
-  ///  false: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the audioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
-  ///
-  ///
+  /// Param [smooth] 
   ///
   Future<void> enableAudioVolumeIndication(
       int interval, int smooth, bool report_vad);
@@ -2721,7 +2641,6 @@ mixin RtcVideoInterface {
   /// Enables the local video preview.
   /// This method starts the local video preview before joining the channel. Before calling this method, ensure that you do the following:
   ///
-  /// Call  to set the local preview window.
   /// Call enableVideo to enable the video.
   ///
   ///
@@ -2747,8 +2666,7 @@ mixin RtcVideoInterface {
   ///   You can call this method either before or after joining a channel.
   ///   This method enables the internal engine and is valid after .
   ///
-  /// Param [enabled]
-  /// Whether to enable the local video capture.
+  /// Param [enabled] Whether to enable the local video capture.
   ///
   ///  true: (Default) Enable the local video capture.
   ///  false: Disables the local video capture. Once the local video is disabled, the remote users can no longer receive the video stream of this user, while this user can still receive the video streams of the other remote users. When set to false, this method does not require a local camera.
@@ -2765,8 +2683,7 @@ mixin RtcVideoInterface {
   /// This method executes faster than the enableLocalVideo(false) method, which controls the sending of the local video stream.
   /// This method does not affect any ongoing video recording, because it does not disable the camera.
   ///
-  /// Param [muted]
-  /// Whether to stop publishing the local video stream.
+  /// Param [muted] Whether to stop publishing the local video stream.
   /// true: Stop publishing the local video stream.
   /// false: (Default) Publish the local video stream.
   ///
@@ -2780,7 +2697,7 @@ mixin RtcVideoInterface {
   /// Call this method after joining a channel.
   ///   See recommended settings in Set the Subscribing State.
   ///
-  /// Param [uid] The ID of the specified user.
+  /// Param [userId] The ID of the specified user.
   ///
   /// Param [muted] Whether to stop subscribing to the video stream of the specified user.
   /// true: Stop subscribing to the video streams of the specified user.
@@ -2797,8 +2714,7 @@ mixin RtcVideoInterface {
   ///
   ///   Call this method after joining a channel.
   ///
-  /// Param [muted]
-  /// Whether to stop subscribing to the video streams of all remote users.
+  /// Param [muted] Whether to stop subscribing to the video streams of all remote users.
   /// true: Stop subscribing to the video streams of all remote users.
   /// false: (Default) Subscribe to the audio streams of all remote users by default.
   ///
@@ -2813,8 +2729,7 @@ mixin RtcVideoInterface {
   /// If you need to resume subscribing to the audio streams of remote users in the channel after calling this method, do the following:To resume subscribing to the audio stream of a specified user, call muteRemoteVideoStream(false), and specify the user ID.
   /// To resume subscribing to the audio streams of multiple remote users, call muteRemoteVideoStream(false)multiple times.
   ///
-  /// Param [muted]
-  /// Whether to stop subscribing to the audio streams of all remote users by default.
+  /// Param [muted] Whether to stop subscribing to the audio streams of all remote users by default.
   /// true: Stop subscribing to the audio streams of all remote users by default.
   /// false: (Default) Resume subscribing to the audio streams of all remote users by default.
   ///
@@ -2902,7 +2817,6 @@ mixin RtcAudioMixingInterface {
   ///
   /// Call this method after joining a channel. If you need to call startAudioMixing multiple times, ensure that the time interval between calling this method is more than 500 ms.
   /// If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns WARN_AUDIO_MIXING_OPEN_ERROR (701).
-  /// If you need to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
   ///
   /// Param [filePath] The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: Android: /sdcard/emulated/0/audio.mp4, iOS: /var/mobile/Containers/Data/audio.mp4. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. See supported audio formats.
   ///
@@ -3088,7 +3002,7 @@ mixin RtcAudioMixingInterface {
   /// Selects the audio track used during playback.
   /// If the media file has multiple audio tracks, you can call this method to select the audio track used during playback.
   ///
-  /// Param [audioIndex] The index of the audio track.
+  /// Param [index] The index of the audio track.
   ///
   Future<void> selectAudioTrack(int index);
 
@@ -3167,8 +3081,7 @@ mixin RtcAudioEffectInterface {
   ///
   ///
   ///
-  /// Param [startPos]
-  /// The playback position (ms) of the audio effect file.
+  /// Param [startPos] The playback position (ms) of the audio effect file.
   ///
   ///
   Future<void> playEffect(int soundId, String filePath, int loopCount,
@@ -3313,8 +3226,7 @@ mixin RtcVoiceChangerInterface {
   ///   Do not use this method with setLocalVoiceReverbPreset, because the method called later overrides the one called earlier. For detailed considerations, see the advanced guide Set the Voice Effect.
   ///   You can call this method either before or after joining a channel.
   ///
-  /// Param [voiceChanger]
-  /// The local voice changer option. The default value is Off , which means the original voice. For more details, see AudioVoiceChanger. The gender-based beatification effect works best only when assigned a proper gender. Use GENERAL_BEAUTY_VOICE_MALE_MAGNETIC for male and use GENERAL_BEAUTY_VOICE_FEMALE_FRESH and GENERAL_BEAUTY_VOICE_FEMALE_VITALITY for female. Failure to do so can lead to voice distortion.
+  /// Param [voiceChanger] The local voice changer option. The default value is Off , which means the original voice. For more details, see AudioVoiceChanger. The gender-based beatification effect works best only when assigned a proper gender. Use GENERAL_BEAUTY_VOICE_MALE_MAGNETIC for male and use GENERAL_BEAUTY_VOICE_FEMALE_FRESH and GENERAL_BEAUTY_VOICE_FEMALE_VITALITY for female. Failure to do so can lead to voice distortion.
   ///
   ///
   @deprecated
@@ -3391,7 +3303,7 @@ mixin RtcVoiceChangerInterface {
 
   ///
   /// Sets a preset voice beautifier effect.
-  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. For the applicable scenarios of each voice beautifier effect, refer to Set the Voice Effect.
+  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. 
   /// For better voice effects, Agora recommends that you call setAudioProfile and set scenario to GameStreaming (3) and profile to MusicHighQuality (4) or MusicHighQualityStereo (5) before calling this method.
   ///
   ///
@@ -3409,8 +3321,7 @@ mixin RtcVoiceChangerInterface {
   ///  setVoiceBeautifierParameters
   /// setVoiceConversionPreset
   ///
-  /// Param [preset]
-  /// The preset voice beautifier effect options: VoiceBeautifierPreset.
+  /// Param [preset] The preset voice beautifier effect options: VoiceBeautifierPreset.
   ///
   ///
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
@@ -3476,7 +3387,6 @@ mixin RtcVoiceChangerInterface {
   ///
   ///
   /// Param [param1]
-  ///
   ///  If you set preset to RoomAcoustics3DVoice , param1 sets the cycle period of the 3D voice effect. The value range is [1,60] and the unit is seconds. The default value is 10, indicating that the voice moves around you every 10 seconds.
   ///  If you set preset to PitchCorrection , param1 sets the basic mode of the pitch correction effect:
   /// 1: (Default) Natural major scale.
@@ -3488,7 +3398,6 @@ mixin RtcVoiceChangerInterface {
   ///
   ///
   /// Param [param2]
-  ///
   ///  If you set preset to RoomAcoustics3DVoice, you need to set param2 to 0.
   ///  If you set preset to PitchCorrection, param2 sets the tonic pitch of the pitch correction effect:
   /// 1: A
@@ -3604,8 +3513,7 @@ mixin RtcPublishStreamInterface {
   ///   Call this method after joining a channel.
   ///   Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
   ///
-  /// Param [transcoding]
-  /// The transcoding configurations for CDN live streaming. For details, see LiveTranscoding.
+  /// Param [transcoding] The transcoding configurations for CDN live streaming. For details, see LiveTranscoding.
   ///
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
@@ -3622,8 +3530,7 @@ mixin RtcPublishStreamInterface {
   ///
   /// Param [url] The CDN streaming URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
   ///
-  /// Param [transcodingEnabled]
-  /// Whether to enable transcoding. Transcoding in a CDN live streaming converts the audio and video streams before pushing them to the CDN server. It applies to scenarios where a channel has multiple broadcasters and composite layout is needed
+  /// Param [transcodingEnabled] Whether to enable transcoding. Transcoding in a CDN live streaming converts the audio and video streams before pushing them to the CDN server. It applies to scenarios where a channel has multiple broadcasters and composite layout is needed
   /// true: Enable transcoding.
   /// false: Disable transcoding.
   ///
@@ -3720,7 +3627,6 @@ mixin RtcAudioRouteInterface {
   ///
   ///
   /// This method is for Android and iOS only.
-  /// For iOS, this method only works in a voice call.
   /// This method needs to be set before joining a channel, otherwise, it will not take effect.
   ///
   /// Param [defaultToSpeaker] The default audio playback route.
@@ -3736,10 +3642,9 @@ mixin RtcAudioRouteInterface {
   /// This method sets whether the audio is routed to the speakerphone or earpiece. After a successful method call, the SDK triggers the audioRouteChanged callback.
   ///
   ///
-  /// This method is for Android and iOS only.
   /// Ensure that you have joined a channel before calling this method.
   ///
-  /// Param [enabled] Whether the audio is routed to the speakerphone or earpiece.
+  /// Param [speakerOn] Whether the audio is routed to the speakerphone or earpiece.
   /// true: Route the audio to the speakerphone. If the device connects to the earpiece or Bluetooth, the audio cannot be routed to the speakerphone.
   /// false: Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
   ///
@@ -3800,8 +3705,7 @@ mixin RtcDualStreamInterface {
   ///
   /// You can call this method either before or after joining a channel.
   ///
-  /// Param [enabled]
-  /// Enables dual-stream mode.
+  /// Param [enabled] Enables dual-stream mode.
   ///  true: Enables dual-stream mode.
   ///  false: Disables dual-stream mode.
   ///
@@ -3819,10 +3723,7 @@ mixin RtcDualStreamInterface {
   ///
   /// You can call this method either before or after joining a channel. If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType, the setting of setRemoteVideoStreamType takes effect.
   ///
-  /// Param [uid] User ID.
-  ///
-  /// Param [streamType]
-  /// The video stream type: VideoStreamType.
+  /// Param [streamType] The video stream type: VideoStreamType.
   ///
   ///
   Future<void> setRemoteVideoStreamType(int userId, VideoStreamType streamType);
@@ -3834,8 +3735,7 @@ mixin RtcDualStreamInterface {
   /// The result of this method returns in the apiCallExecuted callback.
   /// You can call this method either before or after joining a channel. If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType, the settings in setRemoteVideoStreamType take effect.
   ///
-  /// Param [streamType]
-  /// The default stream type of the remote video, see VideoStreamType.
+  /// Param [streamType] The default stream type of the remote video, see VideoStreamType.
   ///
   ///
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
@@ -3956,25 +3856,14 @@ mixin RtcTestInterface {
 mixin RtcMediaMetadataInterface {
   ///
   /// Registers the metadata observer.
-  /// You need to implement the  class and specify the metadata type in this method. This method enables you to add synchronized metadata in the video stream for more diversified
-  ///  live interactive streaming, such as sending shopping links, digital coupons, and online quizzes.
-  ///
-  ///
-  ///
   /// Call this method before joinChannel.
   /// This method applies only to interactive live streaming.
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> registerMediaMetadataObserver();
 
   ///
   /// Unregisters the specified metadata observer.
   ///
-  ///
-  /// **return** 0: Success.
-  /// < 0: Failure.
   ///
   Future<void> unregisterMediaMetadataObserver();
 
@@ -4056,8 +3945,7 @@ mixin RtcEncryptionInterface {
   /// The Agora SDK supports built-in encryption. The default encryption is AES-128-XTS. Call this method to use other encryption modes. All users in the same channel must use the same encryption mode and secret. Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
   /// Before calling this method, please call setEncryptionSecret to enable the built-in encryption function.
   ///
-  /// Param [encryptionMode]
-  /// Encryption mode.
+  /// Param [encryptionMode] Encryption mode.
   /// "aes-128-xts": (Default) 128-bit AES encryption, XTS mode.
   /// "aes-128-ecb": 128-bit AES encryption, ECB mode.
   /// "aes-256-xts": 256-bit AES encryption, XTS mode.
@@ -4075,8 +3963,7 @@ mixin RtcEncryptionInterface {
   /// All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
   /// If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
   ///
-  /// Param [enabled]
-  /// Whether to enable built-in encryption:
+  /// Param [enabled] Whether to enable built-in encryption:
   /// true: Enable the built-in encryption.
   /// false: Disable the built-in encryption.
   ///
@@ -4107,13 +3994,11 @@ mixin RtcAudioRecorderInterface {
   ///   This method should be called after the joinChannel method. The recording automatically stops when you call the leaveChannel method.
   ///   For better recording effects, set quality to Medium or High when sampleRate is 44.1 kHz or 48 kHz.
   ///
-  /// Param [filePath]
-  /// The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.aac.
+  /// Param [filePath] The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.aac.
   /// Ensure that the directory for the log files exists and is writable.
   ///
   ///
-  /// Param [sampleRate]
-  /// The sample rate (kHz) of the recording file. Supported values are as follows:
+  /// Param [sampleRate] The sample rate (kHz) of the recording file. Supported values are as follows:
   /// 16000
   /// (Default) 32000
   /// 44100
@@ -4166,7 +4051,6 @@ mixin RtcAudioRecorderInterface {
 
   ///
   /// Configures the virtual metronome.
-  /// This method is for Android and iOS only.
   /// After enabling the virtual metronome, the SDK plays the specified audio effect file from the beginning, and controls the playback duration of each file according to beatsPerMinute you set in RhythmPlayerConfig. For example, if you set beatsPerMinute as 60, the SDK plays one beat every second. If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
   ///
   /// After calling startRhythmPlayer, you can call this method to reconfigure the virtual metronome.
@@ -4205,8 +4089,7 @@ mixin RtcInjectStreamInterface {
   /// the userJoined callback, where uid is
   /// 666.
   ///
-  /// Param [url]
-  /// The URL address to be added to the ongoing streaming. Valid protocols are RTMP, HLS, and HTTP-FLV.
+  /// Param [url] The URL address to be added to the ongoing streaming. Valid protocols are RTMP, HLS, and HTTP-FLV.
   /// Supported audio codec type: AAC.
   /// Supported video codec type: H264 (AVC).
   ///
@@ -4365,10 +4248,7 @@ mixin RtcCameraInterface {
   /// Enables the camera auto-face focus function.
   /// Call this method before calling joinChannel, enableVideo, or enableLocalVideo, depending on which method you use to turn on your local camera.
   ///
-  /// Param [enable] Whether to enable the camera auto-face focus function:
-  /// true: Enable the camera auto-face focus function.
-  /// false: (Default) Disable the camera auto-face focus function.
-  ///
+  /// Param [] 
   ///
   /// **return** 0: Success.
   /// < 0: Failure.
@@ -4377,7 +4257,6 @@ mixin RtcCameraInterface {
 
   ///
   /// Sets the camera capture configuration.
-  /// This method is for Android and iOS only.
   /// Call this method before calling joinChannel, enableVideo, or enableLocalVideo, depending on which method you use to turn on your local camera.
   ///
   /// Param [config] The camera capturer configuration. See CameraCapturerConfiguration.
@@ -4406,9 +4285,8 @@ mixin RtcStreamMessageInterface {
   /// false: The recipients do not receive the data in the sent order.
   ///
   ///
-  /// **return** 0: The data stream is successfully created.
-  /// ID of the created data stream, if the method call succeeds.
-  /// < 0: Failure. You can refer to Error Codes and Warning Codes for troubleshooting.
+  /// **return** ID of the created data stream, if the method call succeeds.
+  /// < 0: Failure.
   ///
   Future<int?> createDataStream(bool reliable, bool ordered);
 
@@ -4531,9 +4409,9 @@ mixin RtcScreenSharingInterface {
   ///
   ///
   /// This method shares the whole screen, a specified window, or the specified region:
-  /// Whole screen: Set windowId as 0 and rect as NULL.
+  /// Whole screen: Set windowId as 0 and rect as null.
   /// A specified window: Set windowId as a value other than 0. Each window has a windowId that is not 0.
-  /// The specified region: Set windowId as 0 and rect as a value other than NULL. In this case, you can share the specified region, for example by dragging the mouse or implementing your own logic. The specified region is a region on the whole screen. Currently, sharing a specified region in a specific window is not supported.
+  /// The specified region: Set windowId as 0 and rect as a value other than null. In this case, you can share the specified region, for example by dragging the mouse or implementing your own logic. The specified region is a region on the whole screen. Currently, sharing a specified region in a specific window is not supported.
   ///
   /// captureFreq is the captured frame rate once the screen-sharing function is enabled. The mandatory value ranges between 1 fps and 15 fps. No matter which of the above functions you enable, the SDK returns 0 when the execution succeeds, and an error code when the execution fails.
   ///
@@ -4541,7 +4419,7 @@ mixin RtcScreenSharingInterface {
   ///
   /// Param [captureFreq] (Mandatory) The captured frame rate. The value ranges between 1 fps and 15 fps.
   ///
-  /// Param [rect] Specifies the screen-sharing region: Rect. This parameter is valid when windowsId is set as 0. When rect is set as NULL, the whole screen is shared.
+  /// Param [rect] Specifies the screen-sharing region: Rect. This parameter is valid when windowsId is set as 0. When rect is set as null, the whole screen is shared.
   ///
   /// Param [bitrate] The bitrate of the screen share.
   ///
