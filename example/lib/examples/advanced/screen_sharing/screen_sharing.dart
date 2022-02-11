@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
@@ -122,11 +123,14 @@ class _State extends State<ScreenSharing> {
     await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await helper.setClientRole(ClientRole.Broadcaster);
     var windowId = 0;
+    var random = Random();
     if (!kIsWeb &&
         (Platform.isWindows || Platform.isMacOS || Platform.isAndroid)) {
       final windows = _engine.enumerateWindows();
       if (windows.isNotEmpty) {
-        windowId = windows[0].id;
+        final index = random.nextInt(windows.length - 1);
+        logSink.log('ScreenSharing window with index $index');
+        windowId = windows[index].id;
       }
     }
     await helper.startScreenCaptureByWindowId(windowId);

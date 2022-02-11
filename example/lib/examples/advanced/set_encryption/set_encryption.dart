@@ -22,7 +22,7 @@ class _SetEncryptionState extends State<SetEncryption> {
       openMicrophone = true,
       enableSpeakerphone = true,
       playEffect = false;
-  TextEditingController? _controller;
+  late TextEditingController _controller;
 
   // Only take 3 EncryptionMode for demo purpose
   final List<EncryptionMode> encryptionModes = [
@@ -112,7 +112,7 @@ class _SetEncryptionState extends State<SetEncryption> {
     await _engine.enableEncryption(true, encryptionConfig);
 
     await _engine
-        .joinChannel(config.token, config.channelId, null, config.uid)
+        .joinChannel(config.token, _controller.text, null, config.uid)
         .catchError((onError) {
       logSink.log('error ${onError.toString()}');
     });
