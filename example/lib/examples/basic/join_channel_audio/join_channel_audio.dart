@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 import '../../log_sink.dart';
 
 /// JoinChannelAudio Example
@@ -98,8 +96,9 @@ class _State extends State<JoinChannelAudio> {
     });
   }
 
-  _switchMicrophone() {
-    _engine.enableLocalAudio(!openMicrophone).then((value) {
+  _switchMicrophone() async {
+    // await _engine.muteLocalAudioStream(!openMicrophone);
+    await _engine.enableLocalAudio(!openMicrophone).then((value) {
       setState(() {
         openMicrophone = !openMicrophone;
       });
@@ -130,8 +129,7 @@ class _State extends State<JoinChannelAudio> {
     } else {
       final path =
           (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!;
-      logSink.log('path: $path');
-      _engine.playEffect(1, path, -1, 1, 1, 100, true).then((value) {
+      _engine.playEffect(1, path, 0, 1, 1, 100, openMicrophone).then((value) {
         setState(() {
           playEffect = true;
         });
