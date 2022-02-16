@@ -272,7 +272,7 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineJoinChannel.index,
       'params': jsonEncode({
-        'token': token,
+        'token': token?.isEmpty == true ? null : token,
         'channelId': channelName,
         'info': optionalInfo,
         'uid': optionalUid,
