@@ -21,9 +21,9 @@
 #include "include/agora_rtc_engine/agora_rtc_channel_plugin.h"
 #include "include/agora_rtc_engine/agora_rtc_device_manager_plugin.h"
 #include "include/agora_rtc_engine/agora_texture_view_factory.h"
-#include "third_party/iris/include/iris_rtc_engine.h"
-#include "third_party/iris/include/iris_rtc_raw_data.h"
-#include "third_party/iris/include/iris_video_processor.h"
+#include "iris_rtc_engine.h"
+#include "iris_rtc_raw_data.h"
+#include "iris_video_processor.h"
 
 namespace
 {

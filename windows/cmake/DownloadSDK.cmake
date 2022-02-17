@@ -1,6 +1,6 @@
 function(DownloadSDK platform version download_dir)
   # Specify the binary distribution type and download directory.
-  set(SDK_DISTRIBUTION "Agora_Native_SDK_for_${platform}_${version}_FULL")
+  set(SDK_DISTRIBUTION "Agora_Native_SDK_for_${platform}_${version}_IRIS")
   set(SDK_DOWNLOAD_DIR "${download_dir}")
 
   # The location where we expect the extracted binary distribution.

@@ -2,9 +2,9 @@
 
 #include <functional>
 
-#include "third_party/iris/include/iris_rtc_raw_data.h"
-#include "third_party/iris/include/iris_rtc_raw_data.h"
-#include "third_party/iris/include/iris_video_processor.h"
+#include "iris_rtc_raw_data.h"
+#include "iris_rtc_raw_data.h"
+#include "iris_video_processor.h"
 
 using namespace flutter;
 using namespace agora::iris;
