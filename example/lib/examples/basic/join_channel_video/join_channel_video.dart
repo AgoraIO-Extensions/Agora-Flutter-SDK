@@ -16,15 +16,16 @@ class JoinChannelVideo extends StatefulWidget {
 
 class _State extends State<JoinChannelVideo> {
   late final RtcEngine _engine;
-  String channelId = config.channelId;
+
   bool isJoined = false, switchCamera = true, switchRender = true;
   List<int> remoteUid = [];
-  TextEditingController? _controller;
+  late TextEditingController _controller;
+  bool _isRenderSurfaceView = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: channelId);
+    _controller = TextEditingController(text: config.channelId);
     this._initEngine();
   }
 
@@ -84,7 +85,7 @@ class _State extends State<JoinChannelVideo> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    await _engine.joinChannel(config.token, channelId, null, config.uid);
+    await _engine.joinChannel(config.token, _controller.text, null, config.uid);
   }
 
   _leaveChannel() async {
@@ -113,16 +114,33 @@ class _State extends State<JoinChannelVideo> {
     return Stack(
       children: [
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: _controller,
               decoration: InputDecoration(hintText: 'Channel ID'),
-              onChanged: (text) {
-                setState(() {
-                  channelId = text;
-                });
-              },
             ),
+            if (!kIsWeb &&
+                (defaultTargetPlatform == TargetPlatform.android ||
+                    defaultTargetPlatform == TargetPlatform.iOS))
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text('Rendered by SurfaceView \n(default TextureView): '),
+                  Switch(
+                    value: _isRenderSurfaceView,
+                    onChanged: isJoined
+                        ? null
+                        : (changed) {
+                            setState(() {
+                              _isRenderSurfaceView = changed;
+                            });
+                          },
+                  )
+                ],
+              ),
             Row(
               children: [
                 Expanded(
@@ -161,7 +179,7 @@ class _State extends State<JoinChannelVideo> {
       child: Stack(
         children: [
           Container(
-            child: kIsWeb
+            child: (kIsWeb || _isRenderSurfaceView)
                 ? RtcLocalView.SurfaceView()
                 : RtcLocalView.TextureView(),
           ),
@@ -176,14 +194,14 @@ class _State extends State<JoinChannelVideo> {
                     child: Container(
                       width: 120,
                       height: 120,
-                      child: kIsWeb
+                      child: (kIsWeb || _isRenderSurfaceView)
                           ? RtcRemoteView.SurfaceView(
                               uid: e,
-                              channelId: channelId,
+                              channelId: _controller.text,
                             )
                           : RtcRemoteView.TextureView(
                               uid: e,
-                              channelId: channelId,
+                              channelId: _controller.text,
                             ),
                     ),
                   ),

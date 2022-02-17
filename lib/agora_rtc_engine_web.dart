@@ -12,6 +12,7 @@ import 'dart:html';
 import 'dart:ui' as ui;
 
 import 'package:agora_rtc_engine/src/enums.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js.dart';
@@ -191,15 +192,15 @@ class AgoraRtcEngineWeb {
 
   // ignore: public_member_api_docs
   Future<dynamic> handleViewMethodCall(MethodCall call, Element element) async {
-    var args = <String, dynamic>{};
+    var data = <String, dynamic>{};
     if (call.arguments != null) {
-      args = Map<String, dynamic>.from(call.arguments);
+      data = Map<String, dynamic>.from(call.arguments);
     }
     if (call.method == 'setData') {
-      var data = Map<String, dynamic>.from(args['data']);
-      if (data['uid'] == 0) {
+      final uid = data['userId'];
+      if (uid == 0) {
         final kEngineSetupLocalVideo = 20;
-        return promiseToFuture(_engine(args).callApi(
+        return promiseToFuture(_engine(data).callApi(
             kEngineSetupLocalVideo,
             jsonEncode({
               'canvas': {
@@ -212,11 +213,11 @@ class AgoraRtcEngineWeb {
             element));
       } else {
         final kEngineSetupRemoteVideo = 21;
-        return promiseToFuture(_engine(args).callApi(
+        return promiseToFuture(_engine(data).callApi(
             kEngineSetupRemoteVideo,
             jsonEncode({
               'canvas': {
-                'uid': data['uid'],
+                'uid': uid,
                 'channelId': data['channelId'],
                 'renderMode': data['renderMode'],
                 'mirrorMode': data['mirrorMode'],

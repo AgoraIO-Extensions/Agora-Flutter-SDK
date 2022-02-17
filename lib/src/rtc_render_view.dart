@@ -247,12 +247,14 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
     params['mirrorMode'] = _mirrorMode;
 
-    _channels[_id]?.invokeMethod('setData', params);
-
-    RtcEngine.methodChannel.invokeMethod('callApi', {
-      'apiType': _getSetRenderModeApiType(widget.uid).index,
-      'params': jsonEncode(params),
-    });
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      RtcEngine.methodChannel.invokeMethod('callApi', {
+        'apiType': _getSetRenderModeApiType(widget.uid).index,
+        'params': jsonEncode(params),
+      });
+    } else {
+      _channels[_id]?.invokeMethod('setData', params);
+    }
   }
 
   void setRenderMode() {
@@ -261,6 +263,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
     RtcEngine.methodChannel.invokeMethod('callApi', {
       'apiType': _getSetRenderModeApiType(widget.uid).index,
       'params': jsonEncode({
+        'userId': widget.uid,
         'renderMode': _renderMode,
         'mirrorMode': _mirrorMode,
       }),
@@ -272,6 +275,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
     RtcEngine.methodChannel.invokeMethod('callApi', {
       'apiType': _getSetRenderModeApiType(widget.uid).index,
       'params': jsonEncode({
+        'userId': widget.uid,
         'renderMode': _renderMode,
         'mirrorMode': _mirrorMode,
       }),

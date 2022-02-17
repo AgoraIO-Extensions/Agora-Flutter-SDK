@@ -11,6 +11,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/set_encryption/set_en
 import 'package:agora_rtc_engine_example/examples/advanced/set_video_encoder_configuration/set_video_encoder_configuration.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/voice_changer/voice_changer.dart';
+import 'package:flutter/foundation.dart';
 
 /// Data source for advanced examples
 final Advanced = [
@@ -18,11 +19,11 @@ final Advanced = [
   {'name': 'AudioMixing', 'widget': AudioMixing()},
   {'name': 'ChannelMediaRelay', 'widget': ChannelMediaRelay()},
   {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
-  if (!(Platform.isAndroid || Platform.isIOS))
+  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'DeviceManager', 'widget': DeviceManager()},
   {'name': 'JoinMultipleChannel', 'widget': JoinMultipleChannel()},
   {'name': 'RtmpStreaming', 'widget': RtmpStreaming()},
-  if (!(Platform.isAndroid || Platform.isIOS))
+  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'ScreenSharing', 'widget': ScreenSharing()},
   {'name': 'SetEncryption', 'widget': SetEncryption()},
   {
