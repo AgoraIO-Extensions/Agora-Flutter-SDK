@@ -69,8 +69,7 @@
     self.surfaceView = [[UIView alloc] initWithFrame: cgRect];
     [[self parentView] addSubview:self.surfaceView];
       
-      [self addObserver:self.parentView forKeyPath:[self observerForKeyPath] options:NSKeyValueObservingOptionNew context:nil];
-      
+      [self.parentView addObserver:self forKeyPath:[self observerForKeyPath] options:NSKeyValueObservingOptionNew context:nil];
       
     self.methodChannel = [FlutterMethodChannel
         methodChannelWithName:

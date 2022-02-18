@@ -180,7 +180,7 @@ class _State extends State<JoinChannelVideo> {
         children: [
           Container(
             child: (kIsWeb || _isRenderSurfaceView)
-                ? RtcLocalView.SurfaceView()
+                ? RtcLocalView.SurfaceView(zOrderMediaOverlay: true, zOrderOnTop: true,)
                 : RtcLocalView.TextureView(),
           ),
           Align(

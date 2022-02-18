@@ -3,6 +3,7 @@ package io.agora.agora_rtc_engine
 import android.content.Context
 import android.view.SurfaceView
 import android.view.View
+import android.widget.FrameLayout
 import io.agora.iris.rtc.IrisRtcEngine
 import io.agora.rtc.RtcEngine
 import io.flutter.plugin.common.BinaryMessenger
@@ -43,11 +44,19 @@ class AgoraPlatformViewSurface(
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
       "setZOrderOnTop" -> {
-        (view as SurfaceView).setZOrderOnTop((call.argument<Boolean>("onTop"))!!)
+        val surfaceView = getIrisRenderView() as SurfaceView
+        val parentView = view as FrameLayout
+        parentView.removeView(surfaceView)
+        surfaceView.setZOrderOnTop((call.argument<Boolean>("onTop"))!!)
+        parentView.addView(surfaceView)
         result.success(null)
       }
       "setZOrderMediaOverlay" -> {
-        (view as SurfaceView).setZOrderMediaOverlay((call.argument<Boolean>("isMediaOverlay"))!!)
+        val surfaceView = getIrisRenderView() as SurfaceView
+        val parentView = view as FrameLayout
+        parentView.removeView(surfaceView)
+        surfaceView.setZOrderMediaOverlay((call.argument<Boolean>("isMediaOverlay"))!!)
+        parentView.addView(surfaceView)
         result.success(null)
       }
       else -> {
