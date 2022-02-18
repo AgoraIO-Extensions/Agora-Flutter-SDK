@@ -34,7 +34,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
   "${IRIS_SDK_PATH}/include"
   )
-target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ${IRIS_SDK_PATH}/AgoraRtcWrapper.lib)
+target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ${IRIS_SDK_BIN_PATH}/AgoraRtcWrapper.lib)
 
 # List of absolute paths to libraries that should be bundled with the plugin
 set(agora_rtc_engine_bundled_libraries
