@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import agora_rtc_engine
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {

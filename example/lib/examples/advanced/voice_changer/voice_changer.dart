@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/advanced/voice_changer/voice_changer.config.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,13 +31,73 @@ class _State extends State<VoiceChanger> {
   Map selectedFreq = FreqOptions[0];
   Map selectedReverbKey = ReverbKeyOptions[0];
 
-  double voicePitchValue = 0.5;
+  double _voicePitchValue = 0.5;
   double bandGainValue = 0;
   double reverbValue = 1;
+
+  late final TextEditingController _channelId;
+  VoiceBeautifierPreset _selectedVoiceBeautifierPreset =
+      VoiceBeautifierPreset.VoiceBeautifierOff;
+
+  AudioEffectPreset _selectedAudioEffectPreset =
+      AudioEffectPreset.AudioEffectOff;
+
+  AudioReverbType _selectedAudioReverbType = AudioReverbType.DryLevel;
+
+  double _audioEffectPresetParam1 = 0;
+  double _audioEffectPresetParam2 = 0;
+
+  List<VoiceBeautifierPreset> _voiceBeautifierPresets = [
+    VoiceBeautifierPreset.VoiceBeautifierOff,
+    VoiceBeautifierPreset.ChatBeautifierMagnetic,
+    VoiceBeautifierPreset.ChatBeautifierFresh,
+  ];
+
+  List<AudioEffectPreset> _audioEffectPresets = [
+    AudioEffectPreset.AudioEffectOff,
+    AudioEffectPreset.RoomAcousticsKTV,
+    AudioEffectPreset.RoomAcousticsVocalConcert,
+  ];
+
+  List<AudioReverbType> _audioReverbTypes = [
+    AudioReverbType.DryLevel,
+    AudioReverbType.WetLevel,
+    AudioReverbType.RoomSize,
+  ];
+
+  Map<AudioReverbType, List<double>> _audioReverbTypeRanges = {
+    AudioReverbType.DryLevel: [-20.0, 10.0, 0.0],
+    AudioReverbType.WetLevel: [-20.0, 10.0, 0.0],
+    AudioReverbType.RoomSize: [0.0, 100.0, 0.0],
+  };
+
+  late double _selectedAudioReverbTypeValue;
+
+  List<AudioEqualizationBandFrequency> _audioEqualizationBandFrequencys = [
+    AudioEqualizationBandFrequency.Band31,
+    AudioEqualizationBandFrequency.Band62,
+    AudioEqualizationBandFrequency.Band125,
+  ];
+
+  late AudioEqualizationBandFrequency _selectedAudioEqualizationBandFrequencys;
+
+  late double _selectedAudioEqualizationBandFrequencyValue;
+
+  bool _setVoiceBeautifierPresetOnly = false;
 
   @override
   void initState() {
     super.initState();
+    _channelId = TextEditingController(text: config.channelId);
+
+    _selectedVoiceBeautifierPreset = _voiceBeautifierPresets[0];
+    _selectedAudioEffectPreset = _audioEffectPresets[0];
+    _selectedAudioReverbType = _audioReverbTypes[0];
+    _selectedAudioReverbTypeValue =
+        _audioReverbTypeRanges[_selectedAudioReverbType]![2];
+    _selectedAudioEqualizationBandFrequencys =
+        _audioEqualizationBandFrequencys[0];
+    _selectedAudioEqualizationBandFrequencyValue = 0.0;
   }
 
   @override
@@ -58,315 +117,259 @@ class _State extends State<VoiceChanger> {
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
 
-    // Set audio route to speaker
-    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
-
     // start joining channel
     // 1. Users can only see each other after they join the
     // same channel successfully using the same app id.
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    await _engine.joinChannel(config.token, config.channelId, null, 0, null);
+    await _engine.joinChannel(config.token, _channelId.text, null, 0, null);
   }
 
   _addListener() {
-    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
-      log('Warning ${warningCode}');
-    }, error: (errorCode) {
-      log('Warning ${errorCode}');
-    }, joinChannelSuccess: (channel, uid, elapsed) {
-      log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      ;
-      setState(() {
-        isJoined = true;
-        uidMySelf = uid;
-      });
-    }, userJoined: (uid, elapsed) {
-      log('userJoined $uid $elapsed');
-      this.setState(() {
-        remoteUids.add(uid);
-      });
-    }, userOffline: (uid, reason) {
-      log('userOffline $uid $reason');
-      this.setState(() {
-        remoteUids.remove(uid);
-      });
-    }));
+    _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        logSink.log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        logSink.log('error ${errorCode}');
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        setState(() {
+          isJoined = true;
+          uidMySelf = uid;
+        });
+      },
+      userJoined: (uid, elapsed) {
+        logSink.log('userJoined $uid $elapsed');
+        setState(() {
+          remoteUids.add(uid);
+        });
+      },
+      userOffline: (uid, reason) {
+        logSink.log('userOffline $uid $reason');
+        setState(() {
+          remoteUids.remove(uid);
+        });
+      },
+    ));
   }
 
-  _onPressBFButton(dynamic type, int index) async {
-    switch (index) {
-      case 0:
-      case 1:
-        await _engine.setVoiceBeautifierPreset(type as VoiceBeautifierPreset);
-        this._updateSliderUI(AudioEffectPreset.AudioEffectOff);
-        break;
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-        await _engine.setAudioEffectPreset(type as AudioEffectPreset);
-        this._updateSliderUI(type);
-        break;
-      default:
-        break;
+  DropdownButton _createDropdownButton<T>(
+      List<T> enums, ValueGetter value, ValueChanged<T?> onChanged) {
+    return DropdownButton<T>(
+        items: enums.map((e) {
+          return DropdownMenuItem(
+            value: e,
+            child: Text('$e'),
+          );
+        }).toList(),
+        value: value(),
+        onChanged: onChanged);
+  }
+
+  Widget _presets() {
+    if (_setVoiceBeautifierPresetOnly) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Select VoiceBeautifierPreset: '),
+          _createDropdownButton<VoiceBeautifierPreset>(
+            _voiceBeautifierPresets,
+            () => _selectedVoiceBeautifierPreset,
+            (v) async {
+              setState(() {
+                _selectedVoiceBeautifierPreset = v!;
+              });
+            },
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await _engine
+                  .setVoiceBeautifierPreset(_selectedVoiceBeautifierPreset);
+            },
+            child: Text('setVoiceBeautifierPreset'),
+          ),
+        ],
+      );
     }
-  }
 
-  _updateSliderUI(AudioEffectPreset type) {
-    this.setState(() {
-      currentAudioEffectPreset = type;
-      switch (type) {
-        case AudioEffectPreset.RoomAcoustics3DVoice:
-          isEnableSlider1 = true;
-          isEnableSlider2 = false;
-          sliderTitle1 = 'Cycle';
-          minimumValue1 = 1;
-          sliderValue1 = 1;
-          maximumValue1 = 3;
-          break;
-        case AudioEffectPreset.PitchCorrection:
-          isEnableSlider1 = true;
-          isEnableSlider2 = true;
-          sliderTitle1 = 'Tonic Mode';
-          sliderTitle2 = 'Tonic Pitch';
-          minimumValue1 = 1;
-          sliderValue1 = 1;
-          maximumValue1 = 3;
-          minimumValue2 = 1;
-          sliderValue2 = 1;
-          maximumValue2 = 12;
-          break;
-        default:
-          isEnableSlider1 = false;
-          isEnableSlider2 = false;
-          break;
-      }
-    });
-  }
-
-  _onAudioEffectUpdate({
-    double? value1,
-    double? value2,
-  }) async {
-    this.setState(() {
-      if (value1 != null) {
-        sliderValue1 = value1;
-      }
-      if (value2 != null) {
-        sliderValue2 = value2;
-      }
-      _engine.setAudioEffectParameters(
-          currentAudioEffectPreset,
-          (isEnableSlider1 ? sliderValue1 ?? minimumValue1 : 0).toInt(),
-          (isEnableSlider2 ? sliderValue2 ?? minimumValue2 : 0).toInt());
-    });
-  }
-
-  _onPressChangeFreq() {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Set Band Frequency'),
-          actions: <Widget>[
-            for (var freqOpt in FreqOptions)
-              TextButton(
-                child: Text(freqOpt['text'] as String),
-                onPressed: () {
-                  setState(() {
-                    selectedFreq = freqOpt;
-                    _engine.setLocalVoiceEqualization(
-                        freqOpt['type'] as AudioEqualizationBandFrequency,
-                        bandGainValue.toInt());
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-          ],
-        );
-      },
-    );
-  }
-
-  _onPressChangeReverbKey() {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Set Reverb Key'),
-          actions: <Widget>[
-            for (var reverbKey in ReverbKeyOptions)
-              TextButton(
-                child: Text(reverbKey['text'] as String),
-                onPressed: () {
-                  setState(() {
-                    selectedReverbKey = reverbKey;
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-          ],
-        );
-      },
-    );
-  }
-
-  _renderToolBar() {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        child: Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(children: [
-              Text('Voice Beautifier & Effects Preset',
-                  style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                child: Wrap(children: [
-                  for (var i = 0; i < VoiceChangeConfig.length; i++)
-                    _renderBtnItem(VoiceChangeConfig[i], i)
-                ])),
-            if (isEnableSlider1)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Text(sliderTitle1),
-                    flex: 1,
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: sliderValue1!,
-                      min: minimumValue1,
-                      max: maximumValue1,
-                      divisions: 5,
-                      label: sliderTitle1,
-                      onChanged: (double value) {
-                        _onAudioEffectUpdate(value1: value);
-                      },
-                    ),
-                    flex: 2,
-                  )
-                ],
-              ),
-            if (isEnableSlider2)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(child: Text(sliderTitle2), flex: 1),
-                  Expanded(
-                      child: Slider(
-                        value: sliderValue2!,
-                        min: minimumValue2,
-                        max: maximumValue2,
-                        divisions: 5,
-                        label: sliderTitle1,
-                        onChanged: (double value) {
-                          _onAudioEffectUpdate(value2: value);
-                        },
-                      ),
-                      flex: 2)
-                ],
-              ),
-            Row(children: [
-              Text('Customize Voice Effects',
-                  style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Pitch:'),
-                Slider(
-                  value: voicePitchValue,
-                  min: 0.5,
-                  max: 2,
-                  divisions: 5,
-                  onChanged: (double value) {
-                    setState(() {
-                      voicePitchValue = value;
-                    });
-                    _engine.setLocalVoicePitch(value);
-                  },
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('BandFreq'),
-                TextButton(
-                  child: Text(selectedFreq['text']),
-                  onPressed: _onPressChangeFreq,
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('BandGain:'),
-                Slider(
-                  value: bandGainValue,
-                  min: 0,
-                  max: 9,
-                  divisions: 5,
-                  onChanged: (double value) async {
-                    this.setState(() {
-                      bandGainValue = value;
-                    });
-                    _engine.setLocalVoiceEqualization(
-                        selectedFreq['type'], value.toInt());
-                  },
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('BandKey'),
-                TextButton(
-                  child: Text(selectedReverbKey['text']),
-                  onPressed: _onPressChangeReverbKey,
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('ReverbValue:'),
-                Slider(
-                  value: reverbValue,
-                  min: selectedReverbKey['min'],
-                  max: selectedReverbKey['max'],
-                  divisions: 5,
-                  onChanged: (double value) async {
-                    setState(() {
-                      reverbValue = value;
-                    });
-                    await _engine.setLocalVoiceReverb(
-                        selectedReverbKey['type'], value.toInt());
-                  },
-                )
-              ],
+            Text('Select AudioEffectPreset: '),
+            _createDropdownButton<AudioEffectPreset>(
+              _audioEffectPresets,
+              () => _selectedAudioEffectPreset,
+              (v) async {
+                setState(() {
+                  _selectedAudioEffectPreset = v!;
+                });
+              },
             ),
           ],
-        ));
-  }
-
-  _renderBtnItem(Map<String, dynamic> config, int index) {
-    return _CusBtn(
-        config['alertTitle'], selectedVoiceToolBtn != index, config['options'],
-        (type) {
-      setState(() {
-        selectedVoiceToolBtn = index;
-      });
-      _onPressBFButton(type, index);
-    });
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            await _engine.setAudioEffectPreset(_selectedAudioEffectPreset);
+          },
+          child: Text('setAudioEffectPreset'),
+        ),
+        Row(
+          children: [
+            Text('param1'),
+            Slider(
+              value: _audioEffectPresetParam1,
+              min: 0.0,
+              max: 10.0,
+              divisions: 10,
+              label: 'param1 $_audioEffectPresetParam1',
+              onChanged: (double value) {
+                setState(() {
+                  _audioEffectPresetParam1 = value;
+                });
+              },
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text('param2'),
+            Slider(
+              value: _audioEffectPresetParam2,
+              min: 0.0,
+              max: 10.0,
+              divisions: 10,
+              label: 'param2 $_audioEffectPresetParam2',
+              onChanged: (double value) {
+                setState(() {
+                  _audioEffectPresetParam2 = value;
+                });
+              },
+            ),
+          ],
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            await _engine.setAudioEffectParameters(
+              _selectedAudioEffectPreset,
+              _audioEffectPresetParam1.toInt(),
+              _audioEffectPresetParam2.toInt(),
+            );
+          },
+          child: Text('setAudioEffectParameters'),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Select AudioReverbType: '),
+            _createDropdownButton<AudioReverbType>(
+              _audioReverbTypes,
+              () => _selectedAudioReverbType,
+              (v) {
+                setState(() {
+                  _selectedAudioReverbType = v!;
+                  _selectedAudioReverbTypeValue =
+                      _audioReverbTypeRanges[_selectedAudioReverbType]![2];
+                });
+              },
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Select Local Voice Reverb Value: '),
+            Slider(
+              value: _selectedAudioReverbTypeValue,
+              min: _audioReverbTypeRanges[_selectedAudioReverbType]![0],
+              max: _audioReverbTypeRanges[_selectedAudioReverbType]![1],
+              divisions: 10,
+              label: 'AudioReverbType Value $_selectedAudioReverbTypeValue',
+              onChanged: (double value) {
+                setState(() {
+                  _selectedAudioReverbTypeValue = value;
+                });
+              },
+            ),
+          ],
+        ),
+        ElevatedButton(
+            onPressed: () async {
+              await _engine.setLocalVoiceReverb(_selectedAudioReverbType,
+                  _selectedAudioReverbTypeValue.toInt());
+            },
+            child: Text('setLocalVoiceReverb')),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Select AudioEqualizationBandFrequency: '),
+            _createDropdownButton<AudioEqualizationBandFrequency>(
+              _audioEqualizationBandFrequencys,
+              () => _selectedAudioEqualizationBandFrequencys,
+              (v) async {
+                setState(() {
+                  _selectedAudioEqualizationBandFrequencys = v!;
+                });
+              },
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Select AudioEqualizationBandFrequency Value:'),
+            Slider(
+              value: _selectedAudioEqualizationBandFrequencyValue,
+              min: -15.0,
+              max: 15.0,
+              divisions: 10,
+              label:
+                  'AudioEqualizationBandFrequency Value: $_selectedAudioEqualizationBandFrequencyValue',
+              onChanged: (double value) {
+                setState(() {
+                  _selectedAudioEqualizationBandFrequencyValue = value;
+                });
+              },
+            ),
+          ],
+        ),
+        ElevatedButton(
+            onPressed: () async {
+              await _engine.setLocalVoiceEqualization(
+                  _selectedAudioEqualizationBandFrequencys,
+                  _selectedAudioEqualizationBandFrequencyValue.toInt());
+            },
+            child: Text('setLocalVoiceEqualization')),
+        Row(
+          children: [
+            Text('Pitch:'),
+            Slider(
+              value: _voicePitchValue,
+              min: 0.5,
+              max: 2,
+              divisions: 10,
+              label: 'Pitch $_voicePitchValue',
+              onChanged: (double value) {
+                setState(() {
+                  _voicePitchValue = value;
+                });
+              },
+            )
+          ],
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            _engine.setLocalVoicePitch(_voicePitchValue);
+          },
+          child: Text('setLocalVoicePitch'),
+        ),
+      ],
+    );
   }
 
   @override
@@ -375,8 +378,27 @@ class _State extends State<VoiceChanger> {
       children: [
         Column(
           children: [
-            !isJoined
-                ? Row(
+            if (!isJoined)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: _channelId,
+                  ),
+                  Row(mainAxisSize: MainAxisSize.min, children: [
+                    Text('setVoiceBeautifierPreset Only'),
+                    Switch(
+                      value: _setVoiceBeautifierPresetOnly,
+                      onChanged: !isJoined
+                          ? (v) {
+                              setState(() {
+                                _setVoiceBeautifierPresetOnly = v;
+                              });
+                            }
+                          : null,
+                    )
+                  ]),
+                  Row(
                     children: [
                       Expanded(
                         flex: 1,
@@ -386,96 +408,17 @@ class _State extends State<VoiceChanger> {
                         ),
                       )
                     ],
-                  )
-                : _renderUserUid(),
-            if (isJoined) _renderToolBar()
+                  ),
+                ],
+              ),
+            if (isJoined)
+              Expanded(
+                  child: SingleChildScrollView(
+                child: _presets(),
+              )),
           ],
         ),
       ],
-    );
-  }
-
-  _renderUserUid() {
-    final size = MediaQuery.of(context).size;
-    var list = [uidMySelf, ...remoteUids];
-    return Container(
-      width: size.width,
-      height: 200,
-      child: ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          return Center(
-            child: Padding(
-              child: Text(
-                'AUDIO ONLY ${index == 0 ? 'LOCAL' : 'REMOTE'} UID: ${list[index]}',
-                style: TextStyle(fontSize: 14, color: Colors.black),
-              ),
-              padding: EdgeInsets.all(4.0),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _CusBtn extends StatefulWidget {
-  String alertTitle;
-  dynamic options;
-  bool isOff = false;
-  void Function(dynamic type) onPressed;
-
-  _CusBtn(this.alertTitle, this.isOff, this.options, this.onPressed);
-
-  @override
-  State<StatefulWidget> createState() => _CusBtnState(isOff);
-}
-
-class _CusBtnState extends State<_CusBtn> {
-  String title = "Off";
-  bool isEnable;
-
-  _CusBtnState(this.isEnable);
-
-  @override
-  void didUpdateWidget(covariant _CusBtn oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    this.setState(() {
-      isEnable = !widget.isOff;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      child: Text(isEnable ? title : 'Off'),
-      onPressed: _showMyDialog,
-    );
-  }
-
-  Future<void> _showMyDialog() async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(widget.alertTitle),
-          actions: <Widget>[
-            for (var option in widget.options)
-              TextButton(
-                child: Text(option['text']),
-                onPressed: () {
-                  setState(() {
-                    isEnable = true;
-                    title = option['text'];
-                    widget.onPressed(option['type']);
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-          ],
-        );
-      },
     );
   }
 }

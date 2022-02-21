@@ -23,7 +23,7 @@ const _$AreaCodeEnumMap = {
   AreaCode.AS: 8,
   AreaCode.JP: 16,
   AreaCode.IN: 32,
-  AreaCode.GLOB: -1,
+  AreaCode.GLOB: 4294967295,
 };
 
 AudioCodecProfileTypeConverter _$AudioCodecProfileTypeConverterFromJson(
@@ -212,6 +212,9 @@ const _$AudioOutputRoutingEnumMap = {
   AudioOutputRouting.Speakerphone: 3,
   AudioOutputRouting.Loudspeaker: 4,
   AudioOutputRouting.HeadsetBluetooth: 5,
+  AudioOutputRouting.USB: 6,
+  AudioOutputRouting.HDMI: 7,
+  AudioOutputRouting.DisplayPort: 8,
   AudioOutputRouting.AirPlay: 9,
 };
 
@@ -345,6 +348,8 @@ const _$AudioReverbPresetEnumMap = {
   AudioReverbPreset.FX_RNB: 1048583,
   AudioReverbPreset.FX_PHONOGRAPH: 1048584,
   AudioReverbPreset.VIRTUAL_STEREO: 2097153,
+  AudioReverbPreset.AUDIO_ELECTRONIC_VOICE: 3145729,
+  AudioReverbPreset.AUDIO_THREEDIM_VOICE: 4194305,
 };
 
 AudioReverbTypeConverter _$AudioReverbTypeConverterFromJson(
@@ -859,6 +864,12 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.CaptureInBackground: 6,
   LocalVideoStreamError.CaptureMultipleForegroundApps: 7,
   LocalVideoStreamError.DeviceNotFound: 8,
+  LocalVideoStreamError.ScreenCaptureWindowMinmized: 11,
+  LocalVideoStreamError.ScreenCaptureWindowClosed: 12,
+  LocalVideoStreamError.LocalVideoStreamErrorDeviceInvalidId: 10,
+  LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowOccluded: 13,
+  LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowNotSupported:
+      20,
 };
 
 LocalVideoStreamStateConverter _$LocalVideoStreamStateConverterFromJson(
@@ -1553,6 +1564,48 @@ const _$UploadErrorReasonEnumMap = {
   UploadErrorReason.ServerError: 2,
 };
 
+MediaDeviceTypeConverter _$MediaDeviceTypeConverterFromJson(
+        Map<String, dynamic> json) =>
+    MediaDeviceTypeConverter(
+      $enumDecode(_$MediaDeviceTypeEnumMap, json['e']),
+    );
+
+Map<String, dynamic> _$MediaDeviceTypeConverterToJson(
+        MediaDeviceTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$MediaDeviceTypeEnumMap[instance.e],
+    };
+
+const _$MediaDeviceTypeEnumMap = {
+  MediaDeviceType.UnknownAudioDevice: -1,
+  MediaDeviceType.AudioPlayoutDevice: 0,
+  MediaDeviceType.AudioRecordingDevice: 1,
+  MediaDeviceType.VideoRenderDevice: 2,
+  MediaDeviceType.VideoCaptureDevice: 3,
+  MediaDeviceType.AudioApplicationPlayoutDevice: 4,
+};
+
+MediaDeviceStateTypeConverter _$MediaDeviceStateTypeConverterFromJson(
+        Map<String, dynamic> json) =>
+    MediaDeviceStateTypeConverter(
+      $enumDecode(_$MediaDeviceStateTypeEnumMap, json['e']),
+    );
+
+Map<String, dynamic> _$MediaDeviceStateTypeConverterToJson(
+        MediaDeviceStateTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$MediaDeviceStateTypeEnumMap[instance.e],
+    };
+
+const _$MediaDeviceStateTypeEnumMap = {
+  MediaDeviceStateType.MediaDeviceStateIdle: 0,
+  MediaDeviceStateType.MediaDeviceStateActive: 1,
+  MediaDeviceStateType.MediaDeviceStateDisabled: 2,
+  MediaDeviceStateType.MediaDeviceStateNotPresent: 4,
+  MediaDeviceStateType.MediaDeviceStateUnplugged: 8,
+  MediaDeviceStateType.MediaDeviceStateUnrecommended: 16,
+};
+
 CloudProxyTypeConverter _$CloudProxyTypeConverterFromJson(
         Map<String, dynamic> json) =>
     CloudProxyTypeConverter(
@@ -1682,4 +1735,22 @@ const _$VirtualBackgroundSourceStateReasonEnumMap = {
   VirtualBackgroundSourceStateReason.ImageNotExist: 1,
   VirtualBackgroundSourceStateReason.ColorFormatNotSupported: 2,
   VirtualBackgroundSourceStateReason.DeviceNotSupported: 3,
+};
+
+VideoContentHintConverter _$VideoContentHintConverterFromJson(
+        Map<String, dynamic> json) =>
+    VideoContentHintConverter(
+      $enumDecode(_$VideoContentHintEnumMap, json['e']),
+    );
+
+Map<String, dynamic> _$VideoContentHintConverterToJson(
+        VideoContentHintConverter instance) =>
+    <String, dynamic>{
+      'e': _$VideoContentHintEnumMap[instance.e],
+    };
+
+const _$VideoContentHintEnumMap = {
+  VideoContentHint.None: 0,
+  VideoContentHint.Motion: 1,
+  VideoContentHint.Details: 2,
 };
