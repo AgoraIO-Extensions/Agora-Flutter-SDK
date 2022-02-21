@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
  [RtcEngine.createWithContext](https://docs.agora.io/cn/Video/API%20Reference/flutter/agora_rtc_engine/RtcEngine/createWithContext.html)
  * function from flutter.
 
- * NOTE that you should not call `AgoraRtcEngineKit.destroy`, because it will also destroy the `RtcEngine` 
+ * NOTE that you should not call `AgoraRtcEngineKit.destroy`, because it will also destroy the `RtcEngine`
  * used by flutter side.
  *
  * @param rtcEngine The same `AgoraRtcEngineKit` used by flutter side

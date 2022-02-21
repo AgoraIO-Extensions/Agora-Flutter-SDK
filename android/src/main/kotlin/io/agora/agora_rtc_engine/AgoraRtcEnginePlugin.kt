@@ -3,22 +3,121 @@ package io.agora.agora_rtc_engine
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.NonNull
+import io.agora.iris.base.IrisEventHandler
+import io.agora.iris.rtc.IrisRtcEngine
+import io.agora.iris.rtc.base.ApiTypeEngine
 import io.agora.rtc.RtcEngine
-import io.agora.rtc.base.RtcEngineManager
 import io.agora.rtc.base.RtcEngineRegistry
+import io.flutter.BuildConfig
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
+import kotlin.math.abs
+
+internal class EventHandler(private val eventSink: EventChannel.EventSink?) : IrisEventHandler {
+  private val handler = Handler(Looper.getMainLooper())
+  override fun OnEvent(event: String?, data: String?) {
+    handler.post {
+      eventSink?.success(mapOf("methodName" to event, "data" to data))
+    }
+  }
+
+  override fun OnEvent(event: String?, data: String?, buffer: ByteArray?) {
+    handler.post {
+      eventSink?.success(mapOf("methodName" to event, "data" to data, "buffer" to buffer))
+    }
+  }
+}
+
+open class CallApiMethodCallHandler(
+  protected val irisRtcEngine: IrisRtcEngine
+) : MethodCallHandler {
+
+  protected open fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
+    val type = ApiTypeEngine.fromInt(apiType)
+    val ret = irisRtcEngine.callApi(type, params, sb)
+    if (type == ApiTypeEngine.kEngineInitialize) {
+      RtcEngineRegistry.instance.onRtcEngineCreated(irisRtcEngine.rtcEngine as RtcEngine?)
+    }
+    if (type == ApiTypeEngine.kEngineRelease) {
+      RtcEngineRegistry.instance.onRtcEngineDestroyed()
+    }
+
+    return ret
+  }
+
+  protected open fun callApiWithBuffer(
+    apiType: Int,
+    params: String?,
+    buffer: ByteArray?,
+    sb: StringBuffer): Int {
+    return irisRtcEngine.callApi(ApiTypeEngine.fromInt(apiType), params, buffer, sb)
+  }
+
+  protected open fun callApiError(ret: Int): String {
+    val description = StringBuffer()
+    irisRtcEngine.callApi(
+      ApiTypeEngine.kEngineGetErrorDescription,
+      "{\"code\":" + abs(ret) + "}",
+      description
+    )
+    return description.toString()
+  }
+
+  override fun onMethodCall(call: MethodCall, result: Result) {
+    val apiType = call.argument<Int>("apiType")
+    val params = call.argument<String>("params")
+    val sb = StringBuffer()
+
+    if (BuildConfig.DEBUG && "getIrisRtcEngineIntPtr" == call.method) {
+      result.success(irisRtcEngine.nativeHandle)
+      return
+    }
+    try {
+      val ret = when (call.method) {
+        "callApi" -> {
+          callApi(apiType!!, params, sb)
+        }
+        "callApiWithBuffer" -> {
+          val buffer = call.argument<ByteArray>("buffer")
+          callApiWithBuffer(apiType!!, params, buffer, sb)
+        }
+        else -> {
+          // This should not occur
+          -1
+        }
+      }
+
+      if (ret == 0) {
+        if (sb.isEmpty()) {
+          result.success(null)
+        } else {
+          result.success(sb.toString())
+        }
+      } else if (ret > 0) {
+        result.success(ret)
+      } else {
+        val errorMsg = callApiError(ret)
+        result.error(ret.toString(), errorMsg, null)
+      }
+    } catch (e: Exception) {
+      result.error("", e.message ?: "", null)
+    }
+  }
+}
 
 /** AgoraRtcEnginePlugin */
 class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var applicationContext: Context
+
+  private lateinit var irisRtcEngine: IrisRtcEngine
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -28,9 +127,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private lateinit var eventChannel: EventChannel
 
   private var eventSink: EventChannel.EventSink? = null
-  private val manager = RtcEngineManager(emit = { methodName, data -> emit(methodName, data) })
+//  private val managerAgoraTextureView = RtcEngineManager { methodName, data -> emit(methodName, data) }
   private val handler = Handler(Looper.getMainLooper())
-  private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
+  private lateinit var rtcChannelPlugin: AgoraRtcChannelPlugin;// = AgoraRtcChannelPlugin(irisRtcEngine)
+  private lateinit var callApiMethodCallHandler: CallApiMethodCallHandler
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -46,7 +146,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     fun registerWith(registrar: Registrar) {
       AgoraRtcEnginePlugin().apply {
         this.registrar = registrar
-        rtcChannelPlugin.initPlugin(registrar.messenger())
+
         initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
       }
     }
@@ -58,24 +158,30 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     platformViewRegistry: PlatformViewRegistry
   ) {
     applicationContext = context.applicationContext
+    irisRtcEngine = IrisRtcEngine(applicationContext)
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
     eventChannel.setStreamHandler(this)
 
+    callApiMethodCallHandler = CallApiMethodCallHandler(irisRtcEngine)
+
     platformViewRegistry.registerViewFactory(
       "AgoraSurfaceView",
-      AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin)
+      AgoraSurfaceViewFactory(binaryMessenger, irisRtcEngine)
     )
     platformViewRegistry.registerViewFactory(
       "AgoraTextureView",
-      AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin)
+      AgoraTextureViewFactory(binaryMessenger, irisRtcEngine)
     )
+
+    rtcChannelPlugin = AgoraRtcChannelPlugin(irisRtcEngine)
+    rtcChannelPlugin.initPlugin(binaryMessenger)
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     this.binding = binding
-    rtcChannelPlugin.onAttachedToEngine(binding)
+//    rtcChannelPlugin.onAttachedToEngine(binding)
     initPlugin(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
   }
 
@@ -83,52 +189,53 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     rtcChannelPlugin.onDetachedFromEngine(binding)
     methodChannel.setMethodCallHandler(null)
     eventChannel.setStreamHandler(null)
-    manager.release()
+
+    irisRtcEngine.destroy()
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+
     eventSink = events
+    irisRtcEngine.setEventHandler(EventHandler(eventSink))
+    Log.e("MainActivity", "eventSink: $eventSink")
   }
 
   override fun onCancel(arguments: Any?) {
+    irisRtcEngine.setEventHandler(null)
     eventSink = null
   }
 
-  private fun emit(methodName: String, data: Map<String, Any?>?) {
-    handler.post {
-      val event: MutableMap<String, Any?> = mutableMapOf("methodName" to methodName)
-      data?.let { event.putAll(it) }
-      eventSink?.success(event)
-    }
-  }
-
-  fun engine(): RtcEngine? {
-    return manager.engine
-  }
+//  private fun emit(methodName: String, data: Map<String, Any?>?) {
+//    handler.post {
+//      val event: MutableMap<String, Any?> = mutableMapOf("methodName" to methodName)
+//      data?.let { event.putAll(it) }
+//      eventSink?.success(event)
+//    }
+//  }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getAssetAbsolutePath") {
-      getAssetAbsolutePath(call, result)
-      return
-    }
-    manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
-      function.let { method ->
-        try {
-          val parameters = mutableListOf<Any?>()
-          call.arguments<Map<*, *>>()?.toMutableMap()?.let {
-            if (call.method == "create") {
-              it["context"] = applicationContext
-            }
-            parameters.add(it)
-          }
-          method.invoke(manager, *parameters.toTypedArray(), ResultCallback(result))
-          return@onMethodCall
-        } catch (e: Exception) {
-          e.printStackTrace()
+//    val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
+//    val messenger = registrar?.messenger() ?: binding?.binaryMessenger
+
+    // Iris supported
+    when (call.method) {
+        "createTextureRender" -> {
+          result.notImplemented()
+          return
         }
-      }
+        "destroyTextureRender" -> {
+          result.notImplemented()
+          return
+        }
+        "getAssetAbsolutePath" -> {
+          getAssetAbsolutePath(call, result)
+          return
+        }
+        else -> {
+          callApiMethodCallHandler.onMethodCall(call, result)
+        }
     }
-    result.notImplemented()
+
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {

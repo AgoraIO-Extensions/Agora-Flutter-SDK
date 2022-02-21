@@ -1,0 +1,6 @@
+[submodule "web"]
+	path = web
+	url = https://github.com/AgoraIO-Community/Iris-Rtc-Web.git
+[submodule "integration_test_app/iris_integration_test/third_party/googletest"]
+	path = integration_test_app/iris_integration_test/third_party/googletest
+	url = https://github.com/google/googletest.git

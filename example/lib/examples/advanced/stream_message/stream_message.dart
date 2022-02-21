@@ -1,9 +1,11 @@
-import 'dart:developer';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class StreamMessage extends StatefulWidget {
 class _State extends State<StreamMessage> {
   late final RtcEngine _engine;
   bool isJoined = false;
-  int? remoteUid;
+  List<int> remoteUids = [];
 
   @override
   void initState() {
@@ -44,9 +46,6 @@ class _State extends State<StreamMessage> {
     // make this room live broadcasting room
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
-
-    // Set audio route to speaker
-    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
 
     // start joining channel
     // 1. Users can only see each other after they join the
@@ -83,33 +82,38 @@ class _State extends State<StreamMessage> {
   }
 
   _addListener() {
-    _engine.setEventHandler(RtcEngineEventHandler(warning: (warningCode) {
-      log('Warning ${warningCode}');
-    }, error: (errorCode) {
-      log('Warning ${errorCode}');
-    }, joinChannelSuccess: (channel, uid, elapsed) {
-      log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
-      ;
-      setState(() {
-        isJoined = true;
-      });
-    }, userJoined: (uid, elapsed) {
-      log('userJoined $uid $elapsed');
-      this.setState(() {
-        remoteUid = uid;
-      });
-    }, userOffline: (uid, reason) {
-      log('userOffline $uid $reason');
-      this.setState(() {
-        remoteUid = null;
-      });
-    }, streamMessage: (int uid, int streamId, String data) {
-      _showMyDialog(uid, streamId, data);
-      log('streamMessage $uid $streamId $data');
-    }, streamMessageError:
-        (int uid, int streamId, ErrorCode error, int missed, int cached) {
-      log('streamMessage $uid $streamId $error $missed $cached');
-    }));
+    _engine.setEventHandler(RtcEngineEventHandler(
+      warning: (warningCode) {
+        logSink.log('warning ${warningCode}');
+      },
+      error: (errorCode) {
+        logSink.log('error ${errorCode}');
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        setState(() {
+          isJoined = true;
+        });
+      },
+      userJoined: (uid, elapsed) {
+        logSink.log('userJoined $uid $elapsed');
+        remoteUids.add(uid);
+        this.setState(() {});
+      },
+      userOffline: (uid, reason) {
+        logSink.log('userOffline $uid $reason');
+        remoteUids.remove(uid);
+        this.setState(() {});
+      },
+      streamMessage: (int uid, int streamId, Uint8List data) {
+        _showMyDialog(uid, streamId, utf8.decode(data));
+        logSink.log('streamMessage $uid $streamId $data');
+      },
+      streamMessageError:
+          (int uid, int streamId, ErrorCode error, int missed, int cached) {
+        logSink.log('streamMessage $uid $streamId $error $missed $cached');
+      },
+    ));
   }
 
   _onPressSend() async {
@@ -120,7 +124,8 @@ class _State extends State<StreamMessage> {
     var streamId = await _engine
         .createDataStreamWithConfig(DataStreamConfig(false, false));
     if (streamId != null) {
-      _engine.sendStreamMessage(streamId, _controller.text);
+      _engine.sendStreamMessage(
+          streamId, Uint8List.fromList(utf8.encode(_controller.text)));
     }
     _controller.clear();
   }
@@ -132,6 +137,8 @@ class _State extends State<StreamMessage> {
     return Stack(
       children: [
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             !isJoined
                 ? Row(
@@ -169,24 +176,38 @@ class _State extends State<StreamMessage> {
   }
 
   _renderVideo() {
-    return Row(children: [
-      Expanded(
-          child: AspectRatio(
-        aspectRatio: 1,
-        child: RtcLocalView.SurfaceView(),
-      )),
-      Expanded(
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: remoteUid != null
-              ? RtcRemoteView.SurfaceView(
-                  uid: remoteUid!,
-                )
-              : Container(
-                  color: Colors.grey[200],
+    final views = [
+      Container(
+        height: 120,
+        width: 120,
+        child: kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
+      ),
+    ];
+    if (remoteUids.isNotEmpty) {
+      views.addAll(remoteUids.map((uid) {
+        return (kIsWeb
+            ? Container(
+                height: 120,
+                width: 120,
+                child: RtcRemoteView.SurfaceView(
+                  uid: uid,
+                  channelId: config.channelId,
                 ),
-        ),
-      )
-    ]);
+              )
+            : Container(
+                height: 120,
+                width: 120,
+                child: RtcRemoteView.TextureView(
+                  uid: uid,
+                  channelId: config.channelId,
+                ),
+              ));
+      }));
+    } else {
+      views.add(Container(
+        color: Colors.grey[200],
+      ));
+    }
+    return Wrap(children: views);
   }
 }

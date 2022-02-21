@@ -240,6 +240,8 @@ LiveTranscoding _$LiveTranscodingFromJson(Map<String, dynamic> json) =>
           _$VideoCodecProfileTypeEnumMap, json['videoCodecProfile']),
       backgroundColor:
           _$ColorFromJson(json['backgroundColor'] as Map<String, dynamic>),
+      videoCodecType: $enumDecodeNullable(
+          _$VideoCodecTypeForStreamEnumMap, json['videoCodecType']),
       userConfigExtraInfo: json['userConfigExtraInfo'] as String?,
     );
 
@@ -270,6 +272,8 @@ Map<String, dynamic> _$LiveTranscodingToJson(LiveTranscoding instance) {
   writeNotNull('videoCodecProfile',
       _$VideoCodecProfileTypeEnumMap[instance.videoCodecProfile]);
   writeNotNull('backgroundColor', _$ColorToJson(instance.backgroundColor));
+  writeNotNull('videoCodecType',
+      _$VideoCodecTypeForStreamEnumMap[instance.videoCodecType]);
   writeNotNull('userConfigExtraInfo', instance.userConfigExtraInfo);
   val['transcodingUsers'] =
       instance.transcodingUsers.map((e) => e.toJson()).toList();
@@ -291,6 +295,11 @@ const _$VideoCodecProfileTypeEnumMap = {
   VideoCodecProfileType.BaseLine: 66,
   VideoCodecProfileType.Main: 77,
   VideoCodecProfileType.High: 100,
+};
+
+const _$VideoCodecTypeForStreamEnumMap = {
+  VideoCodecTypeForStream.H264: 1,
+  VideoCodecTypeForStream.H265: 2,
 };
 
 ChannelMediaInfo _$ChannelMediaInfoFromJson(Map<String, dynamic> json) =>
@@ -614,6 +623,10 @@ Map<String, dynamic> _$AudioVolumeInfoToJson(AudioVolumeInfo instance) =>
     };
 
 Rect _$RectFromJson(Map<String, dynamic> json) => Rect(
+      x: json['x'] as int? ?? 0,
+      y: json['y'] as int? ?? 0,
+      width: json['width'] as int? ?? 0,
+      height: json['height'] as int? ?? 0,
       left: json['left'] as int?,
       top: json['top'] as int?,
       right: json['right'] as int?,
@@ -633,6 +646,10 @@ Map<String, dynamic> _$RectToJson(Rect instance) {
   writeNotNull('top', instance.top);
   writeNotNull('right', instance.right);
   writeNotNull('bottom', instance.bottom);
+  val['x'] = instance.x;
+  val['y'] = instance.y;
+  val['width'] = instance.width;
+  val['height'] = instance.height;
   return val;
 }
 
@@ -977,7 +994,7 @@ const _$AreaCodeEnumMap = {
   AreaCode.AS: 8,
   AreaCode.JP: 16,
   AreaCode.IN: 32,
-  AreaCode.GLOB: -1,
+  AreaCode.GLOB: 4294967295,
 };
 
 RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
@@ -1155,3 +1172,105 @@ Map<String, dynamic> _$EchoTestConfigurationToJson(
   writeNotNull('channelId', instance.channelId);
   return val;
 }
+
+MediaDeviceInfo _$MediaDeviceInfoFromJson(Map<String, dynamic> json) =>
+    MediaDeviceInfo(
+      json['deviceId'] as String,
+      json['deviceName'] as String,
+    );
+
+Map<String, dynamic> _$MediaDeviceInfoToJson(MediaDeviceInfo instance) =>
+    <String, dynamic>{
+      'deviceId': instance.deviceId,
+      'deviceName': instance.deviceName,
+    };
+
+ScreenCaptureParameters _$ScreenCaptureParametersFromJson(
+        Map<String, dynamic> json) =>
+    ScreenCaptureParameters(
+      dimensions: json['dimensions'] == null
+          ? null
+          : VideoDimensions.fromJson(
+              json['dimensions'] as Map<String, dynamic>),
+      frameRate: json['frameRate'] as int?,
+      bitrate: json['bitrate'] as int?,
+      captureMouseCursor: json['captureMouseCursor'] as bool?,
+      windowFocus: json['windowFocus'] as bool?,
+      excludeWindowList: (json['excludeWindowList'] as List<dynamic>?)
+          ?.map((e) => e as int)
+          .toList(),
+    );
+
+Map<String, dynamic> _$ScreenCaptureParametersToJson(
+    ScreenCaptureParameters instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('dimensions', instance.dimensions?.toJson());
+  writeNotNull('frameRate', instance.frameRate);
+  writeNotNull('bitrate', instance.bitrate);
+  writeNotNull('captureMouseCursor', instance.captureMouseCursor);
+  writeNotNull('windowFocus', instance.windowFocus);
+  writeNotNull('excludeWindowList', instance.excludeWindowList);
+  return val;
+}
+
+Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
+      json['uid'] as int,
+      json['timeStampMs'] as int,
+    );
+
+Map<String, dynamic> _$MetadataToJson(Metadata instance) => <String, dynamic>{
+      'uid': instance.uid,
+      'timeStampMs': instance.timeStampMs,
+    };
+
+MediaRecorderConfiguration _$MediaRecorderConfigurationFromJson(
+        Map<String, dynamic> json) =>
+    MediaRecorderConfiguration(
+      json['storagePath'] as String,
+      $enumDecode(
+          _$AgoraMediaRecorderContainerFormatEnumMap, json['containerFormat']),
+      $enumDecode(_$AgoraMediaRecorderStreamTypeEnumMap, json['streamType']),
+      json['maxDurationMs'] as int,
+      json['recorderInfoUpdateInterval'] as int,
+    );
+
+Map<String, dynamic> _$MediaRecorderConfigurationToJson(
+        MediaRecorderConfiguration instance) =>
+    <String, dynamic>{
+      'storagePath': instance.storagePath,
+      'containerFormat':
+          _$AgoraMediaRecorderContainerFormatEnumMap[instance.containerFormat],
+      'streamType': _$AgoraMediaRecorderStreamTypeEnumMap[instance.streamType],
+      'maxDurationMs': instance.maxDurationMs,
+      'recorderInfoUpdateInterval': instance.recorderInfoUpdateInterval,
+    };
+
+const _$AgoraMediaRecorderContainerFormatEnumMap = {
+  AgoraMediaRecorderContainerFormat.MP4: 1,
+};
+
+const _$AgoraMediaRecorderStreamTypeEnumMap = {
+  AgoraMediaRecorderStreamType.Audio: 1,
+  AgoraMediaRecorderStreamType.Video: 2,
+  AgoraMediaRecorderStreamType.Both: 3,
+};
+
+RecorderInfo _$RecorderInfoFromJson(Map<String, dynamic> json) => RecorderInfo(
+      json['fileName'] as String,
+      json['durationMs'] as int,
+      json['fileSize'] as int,
+    );
+
+Map<String, dynamic> _$RecorderInfoToJson(RecorderInfo instance) =>
+    <String, dynamic>{
+      'fileName': instance.fileName,
+      'durationMs': instance.durationMs,
+      'fileSize': instance.fileSize,
+    };

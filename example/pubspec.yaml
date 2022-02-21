@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  permission_handler: ^6.0.1
+  permission_handler: ^8.3.0
 
 dev_dependencies:
   integration_test:
@@ -52,6 +52,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/Sound_Horizon.mp3
+    - assets/audio_mixing/Agora.io-Interactions.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
