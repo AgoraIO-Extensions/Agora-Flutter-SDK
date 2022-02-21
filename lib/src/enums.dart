@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 ///
 /// The region for connection, which is the region where
 /// the server the SDK connects to is located.
-/// 
+///
 ///
 enum AreaCode {
   @JsonValue(0x00000001)
@@ -52,7 +52,7 @@ enum AreaCode {
 ///
 /// The codec type of the output audio stream for CDN live
 /// streaming. The default value is LC-ACC.
-/// 
+///
 ///
 enum AudioCodecProfileType {
   @JsonValue(0)
@@ -70,7 +70,7 @@ enum AudioCodecProfileType {
 
 ///
 /// The midrange frequency for audio equalization.
-/// 
+///
 ///
 enum AudioEqualizationBandFrequency {
   @JsonValue(0)
@@ -136,7 +136,7 @@ enum AudioEqualizationBandFrequency {
 
 ///
 /// Local audio state error codes.
-/// 
+///
 ///
 enum AudioLocalError {
   @JsonValue(0)
@@ -181,7 +181,7 @@ enum AudioLocalError {
 
 ///
 /// Local audio states.
-/// 
+///
 ///
 enum AudioLocalState {
   @JsonValue(0)
@@ -211,7 +211,7 @@ enum AudioLocalState {
 
 ///
 /// The information acquisition state. This enum is reported in requestAudioFileInfoCallback.
-/// 
+///
 ///
 enum AudioFileInfoError {
   @JsonValue(0)
@@ -230,7 +230,7 @@ enum AudioFileInfoError {
 ///
 /// Errors that might occur when playing a music
 /// file.
-/// 
+///
 ///
 @Deprecated('This enum is deprecated, pls use AudioMixingReason instead.')
 enum AudioMixingErrorType {
@@ -261,7 +261,7 @@ enum AudioMixingErrorType {
 
 ///
 /// The reason why the playback state of the music file changes. Reported in the audioMixingStateChanged callback.
-/// 
+///
 ///
 enum AudioMixingReason {
   @JsonValue(701)
@@ -336,20 +336,20 @@ enum AudioMixingReason {
 
 ///
 /// The playback state of the music file.
-/// 
+///
 ///
 enum AudioMixingStateCode {
   @JsonValue(710)
   ///
   /// 710: The music file is playing.
-  /// 
+  ///
   ///
   Playing,
 
   @JsonValue(711)
   ///
   /// 711: The music file pauses playing.
-  /// 
+  ///
   ///
   Paused,
 
@@ -359,21 +359,21 @@ enum AudioMixingStateCode {
   @JsonValue(713)
   ///
   /// 713: The music file stops playing.
-  /// 
+  ///
   ///
   Stopped,
 
   @JsonValue(714)
   ///
   /// 714: An error occurs during the playback of the audio mixing file.
-  /// 
+  ///
   ///
   Failed,
 }
 
 ///
 /// The channel mode. Set in setAudioMixingDualMonoMode.
-/// 
+///
 ///
 enum AudioMixingDualMonoMode {
   @JsonValue(0)
@@ -403,7 +403,7 @@ enum AudioMixingDualMonoMode {
 
 ///
 /// The type of the audio route.
-/// 
+///
 ///
 enum AudioOutputRouting {
   @JsonValue(-1)
@@ -463,17 +463,17 @@ enum AudioOutputRouting {
 
 ///
 /// The audio profile.
-/// 
+///
 ///
 enum AudioProfile {
   @JsonValue(0)
   ///
   /// 0: The default audio profile.
   /// For the LIVE_BROADCASTING profile: A sampling rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
-  /// For the COMMUNICATION profile: 
-  /// 
-  /// 
-  ///   
+  /// For the COMMUNICATION profile:
+  ///
+  ///
+  ///
   ///
   Default,
 
@@ -510,7 +510,7 @@ enum AudioProfile {
 
 ///
 /// Recording quality.
-/// 
+///
 ///
 enum AudioRecordingQuality {
   @JsonValue(0)
@@ -537,7 +537,7 @@ enum AudioRecordingQuality {
 
 ///
 /// Recording content. Set in startAudioRecordingWithConfig.
-/// 
+///
 ///
 enum AudioRecordingPosition {
   @JsonValue(0)
@@ -561,7 +561,7 @@ enum AudioRecordingPosition {
 
 ///
 /// Remote audio states.
-/// 
+///
 ///
 enum AudioRemoteState {
   @JsonValue(0)
@@ -597,7 +597,7 @@ enum AudioRemoteState {
 
 ///
 /// The reason for the remote audio state change.
-/// 
+///
 ///
 enum AudioRemoteStateReason {
   @JsonValue(0)
@@ -651,7 +651,7 @@ enum AudioRemoteStateReason {
 
 ///
 /// Voice reverb presets.
-/// 
+///
 ///
 enum AudioReverbPreset {
   @JsonValue(0x00000000)
@@ -744,7 +744,7 @@ enum AudioReverbPreset {
 
 ///
 /// Audio reverberation types.
-/// 
+///
 ///
 enum AudioReverbType {
   @JsonValue(0)
@@ -780,7 +780,7 @@ enum AudioReverbType {
 
 ///
 /// The audio sampling rate of the stream to be pushed to the CDN.
-/// 
+///
 ///
 enum AudioSampleRateType {
   @JsonValue(32000)
@@ -804,7 +804,7 @@ enum AudioSampleRateType {
 
 ///
 /// Audio application scenarios.
-/// 
+///
 ///
 enum AudioScenario {
   @JsonValue(0)
@@ -852,14 +852,14 @@ enum AudioScenario {
   @JsonValue(8)
   ///
   /// 8: Meeting scenario that mainly contains the human voice.
-  ///   
+  ///
   ///
   MEETING,
 }
 
 ///
 /// Local voice changer options.
-/// 
+///
 ///
 enum AudioVoiceChanger {
   @JsonValue(0x00000000)
@@ -979,7 +979,7 @@ enum AudioVoiceChanger {
 
 ///
 /// Camera capture preference.
-/// 
+///
 ///
 enum CameraCaptureOutputPreference {
   @JsonValue(0)
@@ -1003,14 +1003,14 @@ enum CameraCaptureOutputPreference {
   @JsonValue(3)
   ///
   /// 3: Allows you to customize the width and height of the video image captured by the local camera.
-  /// 
+  ///
   ///
   Manual,
 }
 
 ///
 /// The camera direction.
-/// 
+///
 ///
 enum CameraDirection {
   @JsonValue(0)
@@ -1028,7 +1028,7 @@ enum CameraDirection {
 
 ///
 /// The error code of the channel media replay.
-/// 
+///
 ///
 enum ChannelMediaRelayError {
   @JsonValue(0)
@@ -1048,7 +1048,7 @@ enum ChannelMediaRelayError {
   /// 2: No server response.
   /// You can call leaveChannel to leave the channel.
   /// This error can also occur if your project has not enabled co-host token authentication. Contact support@agora.io to enable the co-host token authentication service before starting a channel media relay.
-  ///   
+  ///
   ///
   ServerNoResponse,
 
@@ -1109,7 +1109,7 @@ enum ChannelMediaRelayError {
 
 ///
 /// The event code of channel media relay.
-/// 
+///
 ///
 enum ChannelMediaRelayEvent {
   @JsonValue(0)
@@ -1211,7 +1211,7 @@ enum ChannelMediaRelayEvent {
 
 ///
 /// The state code of the channel media relay.
-/// 
+///
 ///
 enum ChannelMediaRelayState {
   @JsonValue(0)
@@ -1241,7 +1241,7 @@ enum ChannelMediaRelayState {
 
 ///
 /// The channel profile.
-/// 
+///
 ///
 enum ChannelProfile {
   @JsonValue(0)
@@ -1265,7 +1265,7 @@ enum ChannelProfile {
 
 ///
 /// The user role in the interactive live streaming.
-/// 
+///
 ///
 enum ClientRole {
   @JsonValue(1)
@@ -1283,7 +1283,7 @@ enum ClientRole {
 
 ///
 /// Reasons causing the change of the connection state.
-/// 
+///
 ///
 enum ConnectionChangedReason {
   @JsonValue(0)
@@ -1339,7 +1339,7 @@ enum ConnectionChangedReason {
   /// 8: The connection failed because the token is not valid. Typical reasons include:
   /// The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
   /// The uid specified when calling joinChannel to join the channel is inconsistent with the uid passed in when generating the token.
-  ///   
+  ///
   ///
   InvalidToken,
 
@@ -1354,8 +1354,8 @@ enum ConnectionChangedReason {
   /// 10: The connection is rejected by server. Typical reasons include:
   /// The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.
   /// The user tries to join the channel when conducting  a pre-call test. The user needs to call the channel after the call test ends.
-  ///   
-  ///   
+  ///
+  ///
   ///
   RejectedByServer,
 
@@ -1389,7 +1389,7 @@ enum ConnectionChangedReason {
 
 ///
 /// Connection states.
-/// 
+///
 ///
 enum ConnectionStateType {
   @JsonValue(1)
@@ -1397,8 +1397,8 @@ enum ConnectionStateType {
   /// 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases:
   /// The initial state before calling the joinChannel method.
   /// The app calls the leaveChannel method.
-  ///   
-  ///   
+  ///
+  ///
   ///
   Disconnected,
 
@@ -1413,17 +1413,17 @@ enum ConnectionStateType {
   /// 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel.
   /// You can call joinChannel to rejoin the channel.
   /// If the SDK is banned from joining the channel by the Agora edge server through the RESTful API, the SDK triggers the connectionStateChanged callback.
-  ///   
+  ///
   ///
   /// If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the connectionStateChanged callback, switches to the Failed state, and stops rejoining the channel.
-  ///   
+  ///
   ///
   /// 3: The SDK is connected to the Agora edge server. This state also indicates that the user has joined a channel and can now publish or subscribe to a media stream in the channel. If the connection to the Agora edge server is lost because, for example, the network is down or switched, the SDK automatically tries to reconnect and triggers connectionStateChanged that indicates the connection state switches to Reconnecting.
   ///
   /// If the SDK successfully joins the channel, it triggers the connectionStateChanged callback and the connection state switches to Connected.
   /// After the connection is established, the SDK also initializes the media and triggers joinChannelSuccess when everything is ready.
-  ///   
-  ///   
+  ///
+  ///
   ///
   Connecting,
 
@@ -1439,7 +1439,7 @@ enum ConnectionStateType {
 
 ///
 /// Video degradation preferences when the bandwidth is a constraint.
-/// 
+///
 ///
 enum DegradationPreference {
   @JsonValue(0)
@@ -1459,7 +1459,7 @@ enum DegradationPreference {
   ///
   /// 2: Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.
   /// The resolution of the video sent may change, so remote users need to handle this issue. See videoSizeChanged.
-  /// 
+  ///
   ///
   MaintainBalanced
 }
@@ -1753,7 +1753,7 @@ enum ErrorCode {
 
 ///
 /// States of importing an external video stream in the interactive live streaming.
-/// 
+///
 ///
 enum InjectStreamStatus {
   @JsonValue(0)
@@ -1825,7 +1825,7 @@ enum InjectStreamStatus {
 
 ///
 /// The status of the last-mile network tests.
-/// 
+///
 ///
 enum LastmileProbeResultState {
   @JsonValue(1)
@@ -1849,7 +1849,7 @@ enum LastmileProbeResultState {
 
 ///
 /// The contrast level.
-/// 
+///
 ///
 enum LighteningContrastLevel {
   @JsonValue(0)
@@ -1873,7 +1873,7 @@ enum LighteningContrastLevel {
 
 ///
 /// Local video state error codes.
-/// 
+///
 ///
 enum LocalVideoStreamError {
   @JsonValue(0)
@@ -1927,7 +1927,7 @@ enum LocalVideoStreamError {
   @JsonValue(8)
   ///
   /// 8: Fails to find a local video capture device.
-  /// 
+  ///
   ///
   DeviceNotFound,
 
@@ -1944,8 +1944,8 @@ enum LocalVideoStreamError {
   ///  When the local user closes the shared window, the SDK reports this error code.
   /// The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
   /// The local user watches web video or reads web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
-  /// 
-  ///   
+  ///
+  ///
   ///
   ScreenCaptureWindowClosed,
 
@@ -1970,7 +1970,7 @@ enum LocalVideoStreamError {
 
 ///
 /// Local video state types
-/// 
+///
 ///
 enum LocalVideoStreamState {
   @JsonValue(0)
@@ -1981,7 +1981,7 @@ enum LocalVideoStreamState {
 
   @JsonValue(1)
   ///
-  /// 1: The local video capturing device starts successfully. 
+  /// 1: The local video capturing device starts successfully.
   ///
   Capturing,
 
@@ -2000,7 +2000,7 @@ enum LocalVideoStreamState {
 
 ///
 /// The output log level of the SDK.
-/// 
+///
 ///
 enum LogFilter {
   @JsonValue(0)
@@ -2042,7 +2042,7 @@ enum LogFilter {
 
 ///
 /// Network quality types.
-/// 
+///
 ///
 enum NetworkQuality {
   @JsonValue(0)
@@ -2102,7 +2102,7 @@ enum NetworkQuality {
 
 ///
 /// Network type.
-/// 
+///
 ///
 enum NetworkType {
   @JsonValue(-1)
@@ -2153,7 +2153,7 @@ enum NetworkType {
 
 ///
 /// Error codes of the RTMP or RTMPS streaming.
-/// 
+///
 ///
 enum RtmpStreamingErrorCode {
   @JsonValue(0)
@@ -2228,7 +2228,7 @@ enum RtmpStreamingErrorCode {
 
 ///
 /// States of the RTMP or RTMPS streaming.
-/// 
+///
 ///
 enum RtmpStreamingState {
   @JsonValue(0)
@@ -2252,14 +2252,14 @@ enum RtmpStreamingState {
   @JsonValue(3)
   ///
   /// The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.
-  /// 
+  ///
   ///  If the SDK successfully resumes the streaming, Running(2) returns.
   ///
   /// The RTMP or RTMPS streaming fails. See the error code for the detailed error information. You can also call the addPublishStreamUrl method to publish the RTMP or RTMPS stream again.
   ///
   ///  If the streaming does not resume within 60 seconds or server errors occur, Failure(4) returns. You can also reconnect to the server by calling the removePublishStreamUrl and addPublishStreamUrl methods.
-  /// 
-  ///   
+  ///
+  ///
   ///
   Recovering,
 
@@ -2269,7 +2269,7 @@ enum RtmpStreamingState {
 
 ///
 /// Stream fallback options.
-/// 
+///
 ///
 enum StreamFallbackOptions {
   @JsonValue(0)
@@ -2293,7 +2293,7 @@ enum StreamFallbackOptions {
 
 ///
 /// Reasons for a user being offline.
-/// 
+///
 ///
 enum UserOfflineReason {
   @JsonValue(0)
@@ -2318,7 +2318,7 @@ enum UserOfflineReason {
 
 ///
 /// The priority of the remote user.
-/// 
+///
 ///
 enum UserPriority {
   @JsonValue(50)
@@ -2336,7 +2336,7 @@ enum UserPriority {
 
 ///
 /// Video codec profile types.
-/// 
+///
 ///
 enum VideoCodecProfileType {
   @JsonValue(66)
@@ -2360,7 +2360,7 @@ enum VideoCodecProfileType {
 
 ///
 /// Video frame rate.
-/// 
+///
 ///
 enum VideoFrameRate {
   @JsonValue(-1)
@@ -2417,7 +2417,7 @@ enum BitRate {
 
 ///
 /// Video mirror mode.
-/// 
+///
 ///
 enum VideoMirrorMode {
   @JsonValue(0)
@@ -2441,17 +2441,17 @@ enum VideoMirrorMode {
 
 ///
 /// Video output orientation modes.
-/// 
+///
 ///
 enum VideoOutputOrientationMode {
   @JsonValue(0)
   ///
   /// 0: (Default) The output video always follows the orientation of the captured video. The receiver takes the rotational information passed on from the video encoder. This mode applies to scenarios where video orientation can be adjusted on the receiver.
-  /// 
+  ///
   ///  If the captured video is in landscape mode, the output video is in landscape mode.
   ///  If the captured video is in portrait mode, the output video is in portrait mode.
-  /// 
-  ///   
+  ///
+  ///
   ///
   Adaptative,
 
@@ -2470,7 +2470,7 @@ enum VideoOutputOrientationMode {
 
 ///
 /// Quality change of the local video in terms of target frame rate and target bit rate since last count.
-/// 
+///
 ///
 enum VideoQualityAdaptIndication {
   @JsonValue(0)
@@ -2494,7 +2494,7 @@ enum VideoQualityAdaptIndication {
 
 ///
 /// The state of the remote video.
-/// 
+///
 ///
 enum VideoRemoteState {
   @JsonValue(0)
@@ -2530,7 +2530,7 @@ enum VideoRemoteState {
 
 ///
 /// The reason for the remote video state change.
-/// 
+///
 ///
 enum VideoRemoteStateReason {
   @JsonValue(0)
@@ -2596,7 +2596,7 @@ enum VideoRemoteStateReason {
 
 ///
 /// Video display modes.
-/// 
+///
 ///
 enum VideoRenderMode {
   @JsonValue(1)
@@ -2614,12 +2614,12 @@ enum VideoRenderMode {
   @deprecated
   @JsonValue(3)
   ///
-  /// 
-  ///  
+  ///
+  ///
   /// Deprecated:
   /// 3: This mode is deprecated.
-  ///  
-  /// 
+  ///
+  ///
   ///
   Adaptive,
 
@@ -2629,7 +2629,7 @@ enum VideoRenderMode {
 
 ///
 /// The type of video streams.
-/// 
+///
 ///
 enum VideoStreamType {
   @JsonValue(0)
@@ -2768,7 +2768,7 @@ enum AudioChannel {
 
 ///
 /// Video codec types.
-/// 
+///
 ///
 enum VideoCodecType {
   @JsonValue(1)
@@ -2801,7 +2801,7 @@ enum VideoCodecTypeForStream {
 
 ///
 /// The publishing state.
-/// 
+///
 ///
 enum StreamPublishState {
   @JsonValue(0)
@@ -2817,8 +2817,8 @@ enum StreamPublishState {
   ///  The local user calls disableAudio or disableVideo to disable the local audio or video module.
   ///  The local user calls enableLocalAudio(false) or enableLocalVideo(false) to disable the local audio or video capture.
   /// The role of the local user is audience.
-  ///  
-  ///   
+  ///
+  ///
   ///
   ///
   /// 3: Publishes successfully.
@@ -2837,7 +2837,7 @@ enum StreamPublishState {
 
 ///
 /// The subscribing state.
-/// 
+///
 ///
 enum StreamSubscribeState {
   @JsonValue(0)
@@ -2854,13 +2854,13 @@ enum StreamSubscribeState {
   /// Calls disableAudio or disableVideo to disable the local audio or video module.
   /// Calls enableLocalAudio(false) or enableLocalVideo(false) to disable the local audio or video capture.
   /// The role of the remote user is audience.
-  /// 
+  ///
   /// The local user calls the following methods to stop receiving remote streams:
   /// Calls muteRemoteAudioStream(true), muteAllRemoteAudioStreams(true) or setDefaultMuteAllRemoteAudioStreams(true) to stop receiving the remote audio streams.
   /// Calls muteRemoteVideoStream(true), muteAllRemoteVideoStreams(true) or setDefaultMuteAllRemoteVideoStreams(true) to stop receiving the remote video streams.
-  /// 
-  ///  
-  ///   
+  ///
+  ///
+  ///
   ///
   ///
   /// 3: Subscribes to and receives the remote stream successfully.
@@ -2879,7 +2879,7 @@ enum StreamSubscribeState {
 
 ///
 /// Events during the RTMP or RTMPS streaming.
-/// 
+///
 ///
 enum RtmpStreamingEvent {
   @JsonValue(1)
@@ -2894,7 +2894,7 @@ enum RtmpStreamingEvent {
 
 ///
 /// The operational permission of the SDK on the audio session.
-/// 
+///
 ///
 enum AudioSessionOperationRestriction {
   @JsonValue(0)
@@ -2930,20 +2930,20 @@ enum AudioSessionOperationRestriction {
 
 ///
 /// Voice effect presets.
-/// For better voice effects, Agora recommends setting the profile parameter of setAudioProfile to 
-/// 
-/// 
+/// For better voice effects, Agora recommends setting the profile parameter of setAudioProfile to
+///
+///
 /// MusicHighQuality
-/// 
-/// 
-/// or 
-/// 
-/// 
+///
+///
+/// or
+///
+///
 /// MusicHighQualityStereo
-/// 
-/// 
+///
+///
 /// before using the following presets:
-/// 
+///
 /// RoomAcousticsKTV
 /// RoomAcousticsVocalConcert
 /// RoomAcousticsStudio
@@ -2994,7 +2994,7 @@ enum AudioEffectPreset {
   ///
   /// The virtual stereo effect, which renders monophonic audio as stereo audio.
   /// Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo. Otherwise, the preset setting is invalid.
-  ///   
+  ///
   ///
   RoomAcousticsVirtualStereo,
 
@@ -3013,13 +3013,13 @@ enum AudioEffectPreset {
   @JsonValue(0x02010800)
   ///
   /// A 3D voice effect that makes the voice appear to be moving around the user. The default movement cycle is 10 seconds. After setting this effect, you can call setAudioEffectParameters to modify the movement period.
-  /// 
-  /// 
+  ///
+  ///
   ///  Before using this preset, set the profile parameter of setAudioProfile to MusicStandardStereo or MusicHighQualityStereo. Otherwise, the preset setting is invalid.
   ///  If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
-  /// 
-  /// 
-  ///   
+  ///
+  ///
+  ///
   ///
   RoomAcoustics3DVoice,
 
@@ -3028,7 +3028,7 @@ enum AudioEffectPreset {
   /// A middle-aged man's voice.
   /// Agora recommends using this preset to process a male-sounding voice;
   /// otherwise, you might not hear the anticipated voice effect.
-  ///   
+  ///
   ///
   VoiceChangerEffectUncle,
 
@@ -3037,7 +3037,7 @@ enum AudioEffectPreset {
   /// A senior man's voice.
   /// Agora recommends using this preset to process a male-sounding voice;
   /// otherwise, you might not hear the anticipated voice effect.
-  ///   
+  ///
   ///
   VoiceChangerEffectOldMan,
 
@@ -3046,7 +3046,7 @@ enum AudioEffectPreset {
   /// A boy's voice.
   /// Agora recommends using this preset to process a male-sounding voice;
   /// otherwise, you might not hear the anticipated voice effect.
-  ///   
+  ///
   ///
   VoiceChangerEffectBoy,
 
@@ -3054,7 +3054,7 @@ enum AudioEffectPreset {
   ///
   /// A young woman's voice.
   /// Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
-  ///   
+  ///
   ///
   VoiceChangerEffectSister,
 
@@ -3062,7 +3062,7 @@ enum AudioEffectPreset {
   ///
   /// A girl's voice.
   /// Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
-  ///   
+  ///
   ///
   VoiceChangerEffectGirl,
 
@@ -3082,7 +3082,7 @@ enum AudioEffectPreset {
   ///
   /// The voice effect typical of R&B music.
   /// Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo. Otherwise, the preset setting is invalid.
-  ///   
+  ///
   ///
   StyleTransformationRnB,
 
@@ -3090,7 +3090,7 @@ enum AudioEffectPreset {
   ///
   /// The voice effect typical of popular music.
   /// Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo. Otherwise, the preset setting is invalid.
-  ///   
+  ///
   ///
   StyleTransformationPopular,
 
@@ -3103,7 +3103,7 @@ enum AudioEffectPreset {
 
 ///
 /// The options for SDK preset voice beautifier effects.
-/// 
+///
 ///
 enum VoiceBeautifierPreset {
   @JsonValue(0x00000000)
@@ -3123,7 +3123,7 @@ enum VoiceBeautifierPreset {
   ///
   /// A fresher voice.
   /// Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
-  ///   
+  ///
   ///
   ChatBeautifierFresh,
 
@@ -3131,18 +3131,18 @@ enum VoiceBeautifierPreset {
   ///
   /// A more vital voice.
   /// Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
-  ///   
+  ///
   ///
   ChatBeautifierVitality,
 
   @JsonValue(0x01020100)
   ///
   /// Singing beautifier effect.
-  /// 
+  ///
   ///  If you call setVoiceBeautifierPreset(SingingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.
   ///  If you call setVoiceBeautifierParameters(SingingBeautifier, param1, param2), you can beautify a male- or female-sounding voice and add a reverberation effect.
-  /// 
-  ///   
+  ///
+  ///
   ///
   SingingBeautifier,
 
@@ -3197,7 +3197,7 @@ enum VoiceBeautifierPreset {
 
 ///
 /// The latency level of an audience member in interactive live streaming. This enum takes effect only when the user role is set to Audience.
-/// 
+///
 ///
 enum AudienceLatencyLevelType {
   @JsonValue(1)
@@ -3215,7 +3215,7 @@ enum AudienceLatencyLevelType {
 
 ///
 /// The output log level of the SDK.
-/// 
+///
 ///
 enum LogLevel {
   @JsonValue(0x0000)
@@ -3254,7 +3254,7 @@ enum LogLevel {
 
 ///
 /// The brightness level of the video image captured by the local camera.
-/// 
+///
 ///
   ///
   /// 1: The brightness level of the video image is too bright.
@@ -3315,7 +3315,7 @@ enum SuperResolutionStateReason {
 
 ///
 /// The reason for the upload failure.
-/// 
+///
 ///
 enum UploadErrorReason {
   @JsonValue(0)
@@ -3339,7 +3339,7 @@ enum UploadErrorReason {
 
 ///
 /// The cloud proxy type.
-/// 
+///
 ///
 enum CloudProxyType {
   @JsonValue(0)
@@ -3360,7 +3360,7 @@ enum CloudProxyType {
 
 ///
 /// The Quality of Experience (QoE) of the local user when receiving a remote audio stream.
-/// 
+///
 ///
 enum ExperienceQualityType {
   @JsonValue(0)
@@ -3378,7 +3378,7 @@ enum ExperienceQualityType {
 
 ///
 /// Reasons why the QoE of the local user when receiving a remote audio stream is poor.
-/// 
+///
 ///
 enum ExperiencePoorReason {
   @JsonValue(0)
@@ -3414,7 +3414,7 @@ enum ExperiencePoorReason {
 
 ///
 /// The options for SDK preset voice conversion effects.
-/// 
+///
 ///
 enum VoiceConversionPreset {
   @JsonValue(0)
@@ -3450,7 +3450,7 @@ enum VoiceConversionPreset {
 
 ///
 /// The type of the custom background image.
-/// 
+///
 ///
 enum VirtualBackgroundSourceType {
   @JsonValue(1)
@@ -3474,7 +3474,7 @@ enum VirtualBackgroundSourceType {
 
 ///
 /// The degree of blurring applied to the custom background image.
-/// 
+///
 ///
 enum VirtualBackgroundBlurDegree {
   @JsonValue(1)
@@ -3490,8 +3490,9 @@ enum VirtualBackgroundBlurDegree {
   Medium,
 
   @JsonValue(3)
-  /// (Default) The degree of blurring applied to the custom background image is
-  /// high. The user can barely see any distinguishing features in the background.
+  ///
+  /// (Default) The degree of blurring applied to the custom background image is high. The user can barely see any distinguishing features in the background.
+  ///
   High,
 }
 
@@ -3528,7 +3529,7 @@ enum VirtualBackgroundSourceStateReason {
 
 ///
 /// The content hint for screen sharing.
-/// 
+///
 ///
 enum VideoContentHint {
   @JsonValue(0)
@@ -3553,7 +3554,7 @@ enum VideoContentHint {
 
 ///
 /// Media device types.
-/// 
+///
 ///
 enum MediaDeviceType {
   @JsonValue(-1)
@@ -3595,7 +3596,7 @@ enum MediaDeviceType {
 
 ///
 /// Media device states.
-/// 
+///
 ///
 enum MediaDeviceStateType {
   @JsonValue(0)

@@ -1516,10 +1516,13 @@ class RtcEngine with RtcEngineInterface {
   @override
   Future<void> startEchoTest(
       {int? intervalInSeconds, EchoTestConfiguration? config}) {
+    assert(intervalInSeconds == null || config == null,
+        'Only need one of the params');
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartEchoTest.index,
       'params': jsonEncode({
         'intervalInSeconds': intervalInSeconds,
+        'config': config?.toJson(),
       }),
     });
   }
