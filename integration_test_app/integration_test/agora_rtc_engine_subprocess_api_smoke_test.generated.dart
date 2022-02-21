@@ -2952,45 +2952,6 @@ void rtcEngineSubProcessSmokeTestCases() {
   );
 
   testWidgets(
-    'startEchoTest',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
-        engineAppId,
-        areaCode: [AreaCode.NA, AreaCode.GLOB],
-      ));
-
-      final screenShareHelper =
-          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
-
-      const int intervalInSeconds = 10;
-      const bool configEnableAudio = true;
-      const bool configEnableVideo = true;
-      const String configToken = "hello";
-      const String configChannelId = "hello";
-      final EchoTestConfiguration config = EchoTestConfiguration(
-        enableAudio: configEnableAudio,
-        enableVideo: configEnableVideo,
-        token: configToken,
-        channelId: configChannelId,
-      );
-      await screenShareHelper.startEchoTest(
-        intervalInSeconds: intervalInSeconds,
-        config: config,
-      );
-
-      await screenShareHelper.destroy();
-      await rtcEngine.destroy();
-    },
-    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
-  );
-
-  testWidgets(
     'startLastmileProbeTest',
     (WidgetTester tester) async {
       app.main();

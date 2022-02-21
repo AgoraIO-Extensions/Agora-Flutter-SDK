@@ -1087,6 +1087,7 @@ class RtcEngineSubProcessSmokeTestGenerator extends DefaultGenerator {
     GeneratorConfig(name: 'stopRhythmPlayer', donotGenerate: true),
     GeneratorConfig(name: 'configRhythmPlayer', donotGenerate: true),
     GeneratorConfig(name: 'getNativeHandle', donotGenerate: true),
+    GeneratorConfig(name: 'startEchoTest', donotGenerate: true),
 
 // TODO(littlegnal): Re-enable it later
     GeneratorConfig(name: 'takeSnapshot', donotGenerate: true),
