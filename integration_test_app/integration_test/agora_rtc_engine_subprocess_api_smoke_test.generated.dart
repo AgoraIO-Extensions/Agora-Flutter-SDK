@@ -19,7 +19,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const ChannelProfile profile = ChannelProfile.Communication;
       await screenShareHelper.setChannelProfile(
@@ -46,7 +47,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const ClientRole role = ClientRole.Broadcaster;
       const AudienceLatencyLevelType optionsAudienceLatencyLevel =
@@ -79,7 +81,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String token = "hello";
       const String channelName = "hello";
@@ -123,7 +126,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String token = "hello";
       const String channelName = "hello";
@@ -163,7 +167,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.leaveChannel();
 
@@ -187,7 +192,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String token = "hello";
       await screenShareHelper.renewToken(
@@ -214,7 +220,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       await screenShareHelper.enableWebSdkInteroperability(
@@ -241,7 +248,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.getCallId();
 
@@ -265,7 +273,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String callId = "hello";
       const int rating = 10;
@@ -296,7 +305,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String callId = "hello";
       const String description = "hello";
@@ -325,7 +335,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String filePath = "hello";
       await screenShareHelper.setLogFile(
@@ -352,7 +363,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const LogFilter filter = LogFilter.Off;
       await screenShareHelper.setLogFilter(
@@ -379,7 +391,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int fileSizeInKBytes = 10;
       await screenShareHelper.setLogFileSize(
@@ -406,7 +419,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String parameters = "hello";
       await screenShareHelper.setParameters(
@@ -433,7 +447,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String token = "hello";
       const String channelName = "hello";
@@ -475,7 +490,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String appId = "hello";
       const String userAccount = "hello";
@@ -504,7 +520,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int volume = 10;
       await screenShareHelper.adjustPlaybackSignalVolume(
@@ -531,7 +548,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int volume = 10;
       await screenShareHelper.adjustRecordingSignalVolume(
@@ -558,7 +576,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int uid = 10;
       const int volume = 10;
@@ -587,7 +606,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       const String deviceName = "hello";
@@ -616,7 +636,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.disableAudio();
 
@@ -640,7 +661,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.enableAudio();
 
@@ -664,7 +686,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int interval = 10;
       const int smooth = 10;
@@ -695,7 +718,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       await screenShareHelper.enableLocalAudio(
@@ -722,7 +746,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool muted = true;
       await screenShareHelper.muteAllRemoteAudioStreams(
@@ -749,7 +774,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool muted = true;
       await screenShareHelper.muteLocalAudioStream(
@@ -776,7 +802,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int uid = 10;
       const bool muted = true;
@@ -805,7 +832,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioProfile profile = AudioProfile.Default;
       const AudioScenario scenario = AudioScenario.Default;
@@ -834,7 +862,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool muted = true;
       await screenShareHelper.setDefaultMuteAllRemoteAudioStreams(
@@ -861,7 +890,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.disableVideo();
 
@@ -885,7 +915,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       await screenShareHelper.enableLocalVideo(
@@ -912,7 +943,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.enableVideo();
 
@@ -936,7 +968,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool muted = true;
       await screenShareHelper.muteAllRemoteVideoStreams(
@@ -963,7 +996,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool muted = true;
       await screenShareHelper.muteLocalVideoStream(
@@ -990,7 +1024,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int uid = 10;
       const bool muted = true;
@@ -1019,7 +1054,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       const LighteningContrastLevel optionsLighteningContrastLevel =
@@ -1058,7 +1094,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool muted = true;
       await screenShareHelper.setDefaultMuteAllRemoteVideoStreams(
@@ -1085,7 +1122,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.startPreview();
 
@@ -1109,7 +1147,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopPreview();
 
@@ -1133,7 +1172,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int volume = 10;
       await screenShareHelper.adjustAudioMixingPlayoutVolume(
@@ -1160,7 +1200,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int volume = 10;
       await screenShareHelper.adjustAudioMixingPublishVolume(
@@ -1187,7 +1228,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int volume = 10;
       await screenShareHelper.adjustAudioMixingVolume(
@@ -1214,7 +1256,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.getAudioMixingCurrentPosition();
 
@@ -1238,7 +1281,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String filePath = "hello";
       await screenShareHelper.getAudioMixingDuration(
@@ -1265,7 +1309,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String filePath = "hello";
       await screenShareHelper.getAudioFileInfo(
@@ -1292,7 +1337,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.getAudioMixingPlayoutVolume();
 
@@ -1316,7 +1362,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.getAudioMixingPublishVolume();
 
@@ -1340,7 +1387,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.pauseAudioMixing();
 
@@ -1364,7 +1412,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.resumeAudioMixing();
 
@@ -1388,7 +1437,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int pos = 10;
       await screenShareHelper.setAudioMixingPosition(
@@ -1415,7 +1465,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String filePath = "hello";
       const bool loopback = true;
@@ -1450,7 +1501,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopAudioMixing();
 
@@ -1474,7 +1526,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String url = "hello";
       const VideoFrameRate configVideoFramerate = VideoFrameRate.Min;
@@ -1521,7 +1574,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String url = "hello";
       const bool transcodingEnabled = true;
@@ -1550,7 +1604,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String watermarkUrl = "hello";
       const int positionInLandscapeModeX = 10;
@@ -1604,7 +1659,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.clearVideoWatermarks();
 
@@ -1628,7 +1684,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.disableLastmileTest();
 
@@ -1652,7 +1709,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       await screenShareHelper.enableDualStreamMode(
@@ -1679,7 +1737,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       await screenShareHelper.enableInEarMonitoring(
@@ -1706,7 +1765,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.enableLastmileTest();
 
@@ -1730,7 +1790,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       await screenShareHelper.enableSoundPositionIndication(
@@ -1757,7 +1818,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.getEffectsVolume();
 
@@ -1781,7 +1843,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.isCameraTorchSupported();
 
@@ -1805,7 +1868,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.isSpeakerphoneEnabled();
 
@@ -1829,7 +1893,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.pauseAllEffects();
 
@@ -1853,7 +1918,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       await screenShareHelper.pauseEffect(
@@ -1880,7 +1946,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       const String filePath = "hello";
@@ -1921,7 +1988,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       const int pos = 10;
@@ -1950,7 +2018,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String filePath = "hello";
       await screenShareHelper.getEffectDuration(
@@ -1977,7 +2046,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       await screenShareHelper.getEffectCurrentPosition(
@@ -2004,7 +2074,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       const String filePath = "hello";
@@ -2033,7 +2104,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.registerMediaMetadataObserver();
 
@@ -2057,7 +2129,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String url = "hello";
       await screenShareHelper.removeInjectStreamUrl(
@@ -2084,7 +2157,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String url = "hello";
       await screenShareHelper.removePublishStreamUrl(
@@ -2111,7 +2185,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.resumeAllEffects();
 
@@ -2135,7 +2210,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       await screenShareHelper.resumeEffect(
@@ -2162,7 +2238,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const CameraCaptureOutputPreference configPreference =
           CameraCaptureOutputPreference.Auto;
@@ -2199,7 +2276,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool isOn = true;
       await screenShareHelper.setCameraTorchOn(
@@ -2226,7 +2304,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool defaultToSpeaker = true;
       await screenShareHelper.setDefaultAudioRoutetoSpeakerphone(
@@ -2253,7 +2332,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int volume = 10;
       await screenShareHelper.setEffectsVolume(
@@ -2280,7 +2360,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool speakerOn = true;
       await screenShareHelper.setEnableSpeakerphone(
@@ -2307,7 +2388,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const EncryptionMode encryptionMode = EncryptionMode.None;
       await screenShareHelper.setEncryptionMode(
@@ -2334,7 +2416,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String secret = "hello";
       await screenShareHelper.setEncryptionSecret(
@@ -2361,7 +2444,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int volume = 10;
       await screenShareHelper.setInEarMonitoringVolume(
@@ -2388,7 +2472,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const StreamFallbackOptions option = StreamFallbackOptions.Disabled;
       await screenShareHelper.setLocalPublishFallbackOption(
@@ -2415,7 +2500,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioVoiceChanger voiceChanger = AudioVoiceChanger.Off;
       await screenShareHelper.setLocalVoiceChanger(
@@ -2442,7 +2528,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioEqualizationBandFrequency bandFrequency =
           AudioEqualizationBandFrequency.Band31;
@@ -2472,7 +2559,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const double pitch = 10.0;
       await screenShareHelper.setLocalVoicePitch(
@@ -2499,7 +2587,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioReverbType reverbKey = AudioReverbType.DryLevel;
       const int value = 10;
@@ -2528,7 +2617,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioReverbPreset reverbPreset = AudioReverbPreset.Off;
       await screenShareHelper.setLocalVoiceReverbPreset(
@@ -2555,7 +2645,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int size = 10;
       await screenShareHelper.setMaxMetadataSize(
@@ -2582,7 +2673,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const VideoStreamType streamType = VideoStreamType.High;
       await screenShareHelper.setRemoteDefaultVideoStreamType(
@@ -2609,7 +2701,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const StreamFallbackOptions option = StreamFallbackOptions.Disabled;
       await screenShareHelper.setRemoteSubscribeFallbackOption(
@@ -2636,7 +2729,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int uid = 10;
       const UserPriority userPriority = UserPriority.High;
@@ -2665,7 +2759,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int userId = 10;
       const VideoStreamType streamType = VideoStreamType.High;
@@ -2694,7 +2789,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int uid = 10;
       const double pan = 10.0;
@@ -2725,7 +2821,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       const int volume = 10;
@@ -2754,7 +2851,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String filePath = "hello";
       const AudioSampleRateType sampleRate = AudioSampleRateType.Type32000;
@@ -2785,7 +2883,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioRecordingQuality configRecordingQuality =
           AudioRecordingQuality.Low;
@@ -2824,7 +2923,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String srcInfoChannelName = "hello";
       const int srcInfoUid = 10;
@@ -2865,11 +2965,23 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int intervalInSeconds = 10;
+      const bool configEnableAudio = true;
+      const bool configEnableVideo = true;
+      const String configToken = "hello";
+      const String configChannelId = "hello";
+      final EchoTestConfiguration config = EchoTestConfiguration(
+        enableAudio: configEnableAudio,
+        enableVideo: configEnableVideo,
+        token: configToken,
+        channelId: configChannelId,
+      );
       await screenShareHelper.startEchoTest(
         intervalInSeconds: intervalInSeconds,
+        config: config,
       );
 
       await screenShareHelper.destroy();
@@ -2892,7 +3004,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool configProbeUplink = true;
       const bool configProbeDownlink = true;
@@ -2928,7 +3041,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopAllEffects();
 
@@ -2952,7 +3066,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopAudioRecording();
 
@@ -2976,7 +3091,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopChannelMediaRelay();
 
@@ -3000,7 +3116,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopEchoTest();
 
@@ -3024,7 +3141,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       await screenShareHelper.stopEffect(
@@ -3051,7 +3169,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopLastmileProbeTest();
 
@@ -3075,7 +3194,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.switchCamera();
 
@@ -3099,7 +3219,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int soundId = 10;
       await screenShareHelper.unloadEffect(
@@ -3126,7 +3247,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.unregisterMediaMetadataObserver();
 
@@ -3150,7 +3272,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String srcInfoChannelName = "hello";
       const int srcInfoUid = 10;
@@ -3191,7 +3314,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enable = true;
       await screenShareHelper.enableFaceDetection(
@@ -3218,7 +3342,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int pitch = 10;
       await screenShareHelper.setAudioMixingPitch(
@@ -3245,7 +3370,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int speed = 10;
       await screenShareHelper.setAudioMixingPlaybackSpeed(
@@ -3272,7 +3398,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.getAudioTrackCount();
 
@@ -3296,7 +3423,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int index = 10;
       await screenShareHelper.selectAudioTrack(
@@ -3323,7 +3451,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioMixingDualMonoMode mode = AudioMixingDualMonoMode.Auto;
       await screenShareHelper.setAudioMixingDualMonoMode(
@@ -3350,7 +3479,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enabled = true;
       const EncryptionMode configEncryptionMode = EncryptionMode.None;
@@ -3386,7 +3516,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const String id = "hello";
       const String category = "hello";
@@ -3421,7 +3552,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioSessionOperationRestriction restriction =
           AudioSessionOperationRestriction.None;
@@ -3449,7 +3581,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioEffectPreset preset = AudioEffectPreset.AudioEffectOff;
       const int param1 = 10;
@@ -3480,7 +3613,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const AudioEffectPreset preset = AudioEffectPreset.AudioEffectOff;
       await screenShareHelper.setAudioEffectPreset(
@@ -3507,7 +3641,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const VoiceBeautifierPreset preset =
           VoiceBeautifierPreset.VoiceBeautifierOff;
@@ -3535,7 +3670,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const bool enable = true;
       await screenShareHelper.enableDeepLearningDenoise(
@@ -3562,7 +3698,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int userId = 10;
       const bool enable = true;
@@ -3591,7 +3728,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const CloudProxyType proxyType = CloudProxyType.None;
       await screenShareHelper.setCloudProxy(
@@ -3618,7 +3756,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.uploadLogFile();
 
@@ -3642,7 +3781,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const VoiceBeautifierPreset preset =
           VoiceBeautifierPreset.VoiceBeautifierOff;
@@ -3674,7 +3814,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const VoiceConversionPreset preset = VoiceConversionPreset.Off;
       await screenShareHelper.setVoiceConversionPreset(
@@ -3701,7 +3842,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.pauseAllChannelMediaRelay();
 
@@ -3725,7 +3867,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.resumeAllChannelMediaRelay();
 
@@ -3749,7 +3892,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const List<String> ips = [];
       const String domain = "hello";
@@ -3778,7 +3922,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const VideoContentHint contentHint = VideoContentHint.None;
       await screenShareHelper.setScreenCaptureContentHint(
@@ -3805,7 +3950,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int displayId = 10;
       const int regionRectX = 10;
@@ -3863,7 +4009,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int screenRectX = 10;
       const int screenRectY = 10;
@@ -3930,7 +4077,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int windowId = 10;
       const int regionRectX = 10;
@@ -3988,7 +4136,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       await screenShareHelper.stopScreenCapture();
 
@@ -4012,7 +4161,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int dimensionsWidth = 10;
       const int dimensionsHeight = 10;
@@ -4057,7 +4207,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int regionRectX = 10;
       const int regionRectY = 10;
@@ -4093,7 +4244,8 @@ void rtcEngineSubProcessSmokeTestCases() {
         areaCode: [AreaCode.NA, AreaCode.GLOB],
       ));
 
-      final screenShareHelper = await rtcEngine.getScreenShareHelper();
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
       const int windowId = 10;
       const int captureFreq = 10;

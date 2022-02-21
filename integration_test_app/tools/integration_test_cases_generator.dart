@@ -1148,7 +1148,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     areaCode: [AreaCode.NA, AreaCode.GLOB],
   ));
 
-    final screenShareHelper = await rtcEngine.getScreenShareHelper();
+    final screenShareHelper = await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
 
     {{TEST_CASE_BODY}}
 
