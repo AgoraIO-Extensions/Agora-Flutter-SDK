@@ -18,7 +18,8 @@ final Advanced = [
   {'name': 'Advanced'},
   {'name': 'AudioMixing', 'widget': AudioMixing()},
   {'name': 'ChannelMediaRelay', 'widget': ChannelMediaRelay()},
-  {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+    {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'DeviceManager', 'widget': DeviceManager()},
   {'name': 'JoinMultipleChannel', 'widget': JoinMultipleChannel()},

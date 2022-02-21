@@ -34,9 +34,8 @@ class RtcEngine with RtcEngineInterface {
   static RtcEngine? get instance => _instance;
 
   final bool _subProcess;
+  final String? _appGroup;
   RtcEngineContext? _rtcEngineContext;
-  static const String _kDefaultAppGroup = 'io.agora';
-  final String _appGroup;
   RtcEngine? _screenShareHelper;
 
   ///
@@ -79,8 +78,7 @@ class RtcEngine with RtcEngineInterface {
 
   RtcEngineEventHandler? _handler;
 
-  RtcEngine._(this._subProcess, {String? appGroup})
-      : _appGroup = appGroup ?? _kDefaultAppGroup;
+  RtcEngine._(this._subProcess, {String? appGroup}) : _appGroup = appGroup;
 
   Future<T?> _invokeMethod<T>(String method,
       [Map<String, dynamic>? arguments]) {
@@ -1520,10 +1518,9 @@ class RtcEngine with RtcEngineInterface {
         'Only need one of the params');
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartEchoTest.index,
-      'params': jsonEncode({
-        'intervalInSeconds': intervalInSeconds,
-        'config': config?.toJson(),
-      }),
+      'params': jsonEncode(config == null
+          ? {'intervalInSeconds': intervalInSeconds}
+          : {'config': config.toJson()}),
     });
   }
 

@@ -11,6 +11,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+const String _kDefaultAppGroup = 'io.agora';
+
 /// ScreenSharing Example
 class ScreenSharing extends StatefulWidget {
   @override
@@ -98,7 +100,8 @@ class _State extends State<ScreenSharing> {
   }
 
   _startScreenShare() async {
-    final helper = await _engine.getScreenShareHelper();
+    final helper = await _engine.getScreenShareHelper(
+        appGroup: kIsWeb || Platform.isWindows ? null : _kDefaultAppGroup);
     helper.setEventHandler(RtcEngineEventHandler(
       joinChannelSuccess: (String channel, int uid, int elapsed) {
         logSink.log(
