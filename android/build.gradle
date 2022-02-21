@@ -43,7 +43,6 @@ android {
 
   sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
-    main.jniLibs.srcDirs += 'libs'
   }
 
   lintOptions {
@@ -52,7 +51,6 @@ android {
 }
 
 dependencies {
-  api 'com.github.agorabuilder:native-full-sdk:3.5.2'
-  implementation files('libs/AgoraRtcWrapper.jar')
+  api 'com.github.agorabuilder:iris-rtc:3.5.2'
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', "$agora_rtc_engine_kt_version")}"
 }

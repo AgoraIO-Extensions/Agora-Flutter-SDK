@@ -32,9 +32,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Android")
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../android/libs/${ANDROID_ABI}")
     set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../android/libs/${ANDROID_ABI}")
     else()
-    # set(LIBS_DIR
-    #     "<Pods path>"
-    #     )
+        set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../android/libs/${ANDROID_ABI}")
     endif()
 
     add_library(libAgoraRtcWrapper SHARED IMPORTED)
@@ -58,6 +56,11 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "iOS")
         # set(LIBS_DIR
         #     "<Pods path>"
         #     )
+
+        # /Users/fenglang/codes/aw/Agora-Flutter-SDK/integration_test_app/ios/Pods/AgoraIrisRTC_iOS/AgoraRtcWrapper.framework
+        set(LIBS_DIR
+        "${CMAKE_CURRENT_SOURCE_DIR}/../ios/Pods/AgoraIrisRTC_iOS"
+        )
     endif()
 
     set(FRAMEWORKS
@@ -83,9 +86,9 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
             "${CMAKE_CURRENT_SOURCE_DIR}/../../macos/"
             )
     else()
-    # set(LIBS_DIR
-    #     "<Pods path>"
-    #     )
+        set(LIBS_DIR
+                "${CMAKE_CURRENT_SOURCE_DIR}/../macos/Pods/AgoraIrisRTC_macOS"
+                )
     endif()
 
     set(FRAMEWORKS
@@ -107,9 +110,9 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 else()
     # /Users/fenglang/codes/aw/Agora-Flutter/integration_test_app/
     set(LIBS_DIR
-    "${CMAKE_CURRENT_SOURCE_DIR}/../windows/flutter/ephemeral/.plugin_symlinks/agora_rtc_engine/windows/third_party/iris/AgoraRtcWrapper.lib"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../windows/third_party/iris/Agora_Native_SDK_for_Windows_IRIS/x64/Release/AgoraRtcWrapper.lib"
         )
-    target_link_libraries(${LIBRARY_NAME} PRIVATE 
+    target_link_libraries(${LIBRARY_NAME} PUBLIC 
                           ${LIBS_DIR}
                           )
 

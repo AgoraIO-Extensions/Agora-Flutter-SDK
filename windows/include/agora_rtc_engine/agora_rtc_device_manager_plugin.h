@@ -3,7 +3,7 @@
 
 #include <flutter/plugin_registrar_windows.h>
 
-#include "third_party/iris/include/iris_rtc_engine.h"
+#include "iris_rtc_engine.h"
 
 void AgoraRtcDeviceManagerPluginRegisterWithRegistrar(
     flutter::PluginRegistrarWindows *registrar,
