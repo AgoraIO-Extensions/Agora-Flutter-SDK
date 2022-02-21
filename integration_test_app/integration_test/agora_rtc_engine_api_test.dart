@@ -35,7 +35,7 @@ void main() {
         ApiTypeEngine.kEngineInitialize.index,
         jsonEncode({
           'context': context.toJson(),
-          'appGroup': 'io.agora',
+          'appGroup': null,
         }),
       );
 
@@ -64,7 +64,7 @@ void main() {
         ApiTypeEngine.kEngineInitialize.index,
         jsonEncode({
           'context': context.toJson(),
-          'appGroup': 'io.agora',
+          'appGroup': null,
         }),
       );
 
@@ -95,7 +95,7 @@ void main() {
         ApiTypeEngine.kEngineInitialize.index,
         jsonEncode({
           'context': context.toJson(),
-          'appGroup': 'io.agora',
+          'appGroup': null,
         }),
       );
 
@@ -120,7 +120,7 @@ void main() {
       ApiTypeEngine.kEngineInitialize.index,
       jsonEncode({
         'context': RtcEngineContext('123').toJson(),
-        'appGroup': 'io.agora',
+        'appGroup': null,
       }),
     );
 
