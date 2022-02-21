@@ -41,7 +41,7 @@ abstract class AgoraPlatformView(
     PlatformViewApiTypeCallApiMethodCallHandler(irisRtcEngine, this)
 
   init {
-    platformView = createView(context)
+    platformView = createView(context.applicationContext)
     parentView.addView(platformView)
 
     channel = MethodChannel(messenger, "${channelName}_$viewId")
