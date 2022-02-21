@@ -2179,6 +2179,26 @@ void main() {
     );
   });
 
+  testWidgets('startEchoTest EchoTestConfiguration',
+      (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
+
+    rtcEngine = await _createEngine();
+
+    var config = EchoTestConfiguration(enableAudio: true);
+    await rtcEngine.startEchoTest(config: config);
+
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeEngine.kEngineStartEchoTest.index,
+      jsonEncode({
+        'config': config.toJson(),
+      }),
+    );
+  });
+
   testWidgets('startLastmileProbeTest', (WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
