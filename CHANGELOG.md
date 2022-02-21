@@ -1,3 +1,11 @@
+# [5.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.1...v5.0.0) (2022-02-21)
+
+
+### Features
+
+* Add no-response bot ([#586](https://github.com/AgoraIO/Flutter-SDK/issues/586)) ([52cbacb](https://github.com/AgoraIO/Flutter-SDK/commit/52cbacbb44558cc3625f5839ff9184569a595340))
+* Support flutter desktop ([#600](https://github.com/AgoraIO/Flutter-SDK/issues/600)) ([2c4a133](https://github.com/AgoraIO/Flutter-SDK/commit/2c4a1330ce754797cde552b5dd4beee7fe886f91))
+
 ## [4.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0...v4.2.1) (2022-02-08)
 
 # [4.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.2...v4.2.0) (2022-01-11)
