@@ -1567,7 +1567,7 @@ class RtcEngineEventHandler {
         requestToken?.call();
         break;
       case 'AudioVolumeIndication':
-        final list = List<Map>.from(newData[0]);
+        final list = List<Map>.from(newData[0] ?? []);
         var totalVolume;
         // if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
 
