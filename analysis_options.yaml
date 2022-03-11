@@ -2,10 +2,10 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     # Ignore generated files
-    - 'lib/src/*.g.dart'
-    - 'lib/src/generated/*.dart'
-    - 'integration_test_app/**'
-    - 'test/**'
+    - "**/*.g.dart"
+    - lib/src/generated/*.dart
+    - integration_test_app/**
+    - test/**
     
 linter:
   rules:
