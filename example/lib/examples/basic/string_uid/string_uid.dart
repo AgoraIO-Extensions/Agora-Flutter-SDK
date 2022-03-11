@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
@@ -7,6 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// StringUid Example
 class StringUid extends StatefulWidget {
+  const StringUid({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -21,7 +25,7 @@ class _State extends State<StringUid> {
     super.initState();
     _controller0 = TextEditingController(text: config.channelId);
     _controller1 = TextEditingController(text: config.stringUid);
-    this._initEngine();
+    _initEngine();
   }
 
   @override
@@ -32,7 +36,7 @@ class _State extends State<StringUid> {
 
   _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListeners();
+    _addListeners();
 
     await _engine.enableAudio();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
@@ -42,10 +46,10 @@ class _State extends State<StringUid> {
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
         logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
@@ -93,19 +97,18 @@ class _State extends State<StringUid> {
           children: [
             TextField(
               controller: _controller0,
-              decoration: InputDecoration(hintText: 'Channel ID'),
+              decoration: const InputDecoration(hintText: 'Channel ID'),
             ),
             TextField(
               controller: _controller1,
-              decoration: InputDecoration(hintText: 'String User ID'),
+              decoration: const InputDecoration(hintText: 'String User ID'),
             ),
             Row(
               children: [
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed:
-                        isJoined ? this._leaveChannel : this._joinChannel,
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
@@ -119,8 +122,8 @@ class _State extends State<StringUid> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
-                onPressed: this._getUserInfo,
-                child: Text('Get userInfo'),
+                onPressed: _getUserInfo,
+                child: const Text('Get userInfo'),
               ),
             ],
           ),

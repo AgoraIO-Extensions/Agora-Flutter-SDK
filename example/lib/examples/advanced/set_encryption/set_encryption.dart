@@ -1,15 +1,17 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// SetEncryption Example
+// ignore: use_key_in_widget_constructors
 class SetEncryption extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SetEncryptionState();
@@ -32,7 +34,7 @@ class _SetEncryptionState extends State<SetEncryption> {
   ];
 
   late EncryptionMode _selectedEncryptionMode;
-  TextEditingController _encryptionKey = TextEditingController();
+  final TextEditingController _encryptionKey = TextEditingController();
   late final TextEditingController _encryptionKdfSalt;
 
   @override
@@ -53,7 +55,7 @@ class _SetEncryptionState extends State<SetEncryption> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     _encryptionKey.dispose();
     _encryptionKdfSalt.dispose();
     _destroy();
@@ -63,7 +65,7 @@ class _SetEncryptionState extends State<SetEncryption> {
 
   Future<void> _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListeners();
+    _addListeners();
 
     await _engine.enableAudio();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
@@ -73,10 +75,10 @@ class _SetEncryptionState extends State<SetEncryption> {
   void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
         logSink.log(
@@ -136,7 +138,7 @@ class _SetEncryptionState extends State<SetEncryption> {
       children: [
         TextField(
           controller: _controller,
-          decoration: InputDecoration(hintText: 'Channel ID'),
+          decoration: const InputDecoration(hintText: 'Channel ID'),
           onChanged: (text) {
             setState(() {
               channelId = text;
@@ -145,7 +147,7 @@ class _SetEncryptionState extends State<SetEncryption> {
         ),
         Row(
           children: [
-            Text('Encryption Mode: '),
+            const Text('Encryption Mode: '),
             DropdownButton<EncryptionMode>(
               items: dropDownMenus,
               value: _selectedEncryptionMode,
@@ -161,7 +163,7 @@ class _SetEncryptionState extends State<SetEncryption> {
         ),
         Row(
           children: [
-            Text('Input Encryption Key: '),
+            const Text('Input Encryption Key: '),
             Expanded(
               child: TextField(
                 controller: _encryptionKey,
@@ -173,7 +175,7 @@ class _SetEncryptionState extends State<SetEncryption> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Input EncryptionKdfSalt: '),
+            const Text('Input EncryptionKdfSalt: '),
             Expanded(
               child: TextField(
                 controller: _encryptionKdfSalt,
@@ -187,7 +189,7 @@ class _SetEncryptionState extends State<SetEncryption> {
             Expanded(
               flex: 1,
               child: ElevatedButton(
-                onPressed: isJoined ? this._leaveChannel : this._joinChannel,
+                onPressed: isJoined ? _leaveChannel : _joinChannel,
                 child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
               ),
             )

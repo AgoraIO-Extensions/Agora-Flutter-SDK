@@ -12,7 +12,6 @@ import 'dart:html';
 import 'dart:ui' as ui;
 
 import 'package:agora_rtc_engine/src/enums.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js.dart';
@@ -61,7 +60,7 @@ class AgoraRtcEngineWeb {
 
     final pluginInstance = AgoraRtcEngineWeb();
     methodChannel.setMethodCallHandler(pluginInstance.handleMethodCall);
-    eventChannel.setController(pluginInstance._controller_engine);
+    eventChannel.setController(pluginInstance._controllerEngine);
 
     MethodChannel(
       'agora_rtc_channel',
@@ -70,7 +69,7 @@ class AgoraRtcEngineWeb {
     ).setMethodCallHandler(pluginInstance.handleChannelMethodCall);
     PluginEventChannel(
             'agora_rtc_channel/events', const StandardMethodCodec(), registrar)
-        .setController(pluginInstance._controller_channel);
+        .setController(pluginInstance._controllerChannel);
 
     MethodChannel(
       'agora_rtc_audio_device_manager',
@@ -84,6 +83,7 @@ class AgoraRtcEngineWeb {
       registrar,
     ).setMethodCallHandler(pluginInstance.handleVDMMethodCall);
 
+    // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory('AgoraSurfaceView',
         (int viewId) {
       var element = DivElement();
@@ -95,17 +95,17 @@ class AgoraRtcEngineWeb {
     });
   }
 
-  final _controller_engine = StreamController();
-  final _controller_channel = StreamController();
-  final _IrisRtcEngine _engine_main = _IrisRtcEngine();
-  final _IrisRtcEngine _engine_sub = _IrisRtcEngine();
+  final _controllerEngine = StreamController();
+  final _controllerChannel = StreamController();
+  final _IrisRtcEngine _engineMain = _IrisRtcEngine();
+  final _IrisRtcEngine _engineSub = _IrisRtcEngine();
 
   _IrisRtcEngine _engine(Map<String, dynamic> args) {
     bool subProcess = args['subProcess'];
     if (subProcess) {
-      return _engine_sub;
+      return _engineSub;
     } else {
-      return _engine_main;
+      return _engineMain;
     }
   }
 
@@ -121,16 +121,16 @@ class AgoraRtcEngineWeb {
       int apiType = args['apiType'];
       if (apiType == 0) {
         _engine(args).setEventHandler(allowInterop((String event, String data) {
-          _controller_engine.add({
+          _controllerEngine.add({
             'methodName': event,
             'data': data,
-            'subProcess': _engine(args) == _engine_sub,
+            'subProcess': _engine(args) == _engineSub,
           });
         }));
         _engine(args)
             .channel
             .setEventHandler(allowInterop((String event, String data) {
-          _controller_channel.add({
+          _controllerChannel.add({
             'methodName': event,
             'data': data,
           });
@@ -152,7 +152,7 @@ class AgoraRtcEngineWeb {
     if (call.method == 'callApi') {
       int apiType = args['apiType'];
       String param = args['params'];
-      return promiseToFuture(_engine_main.channel.callApi(apiType, param));
+      return promiseToFuture(_engineMain.channel.callApi(apiType, param));
     } else {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
@@ -168,7 +168,7 @@ class AgoraRtcEngineWeb {
       int apiType = args['apiType'];
       String param = args['params'];
       return promiseToFuture(
-          _engine_main.deviceManager.callApiAudio(apiType, param));
+          _engineMain.deviceManager.callApiAudio(apiType, param));
     } else {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
@@ -184,7 +184,7 @@ class AgoraRtcEngineWeb {
       int apiType = args['apiType'];
       String param = args['params'];
       return promiseToFuture(
-          _engine_main.deviceManager.callApiVideo(apiType, param));
+          _engineMain.deviceManager.callApiVideo(apiType, param));
     } else {
       throw PlatformException(code: ErrorCode.NotSupported.toString());
     }
@@ -199,7 +199,7 @@ class AgoraRtcEngineWeb {
     if (call.method == 'setData') {
       final uid = data['userId'];
       if (uid == 0) {
-        final kEngineSetupLocalVideo = 20;
+        const kEngineSetupLocalVideo = 20;
         return promiseToFuture(_engine(data).callApi(
             kEngineSetupLocalVideo,
             jsonEncode({
@@ -212,7 +212,7 @@ class AgoraRtcEngineWeb {
             }),
             element));
       } else {
-        final kEngineSetupRemoteVideo = 21;
+        const kEngineSetupRemoteVideo = 21;
         return promiseToFuture(_engine(data).callApi(
             kEngineSetupRemoteVideo,
             jsonEncode({

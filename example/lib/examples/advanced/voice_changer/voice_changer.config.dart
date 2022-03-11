@@ -1,6 +1,7 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
 
 /// VoiceChangeConfig
+// ignore: constant_identifier_names
 const VoiceChangeConfig = [
   {
     'alertTitle': 'Set Chat Beautifier',
@@ -121,6 +122,7 @@ const VoiceChangeConfig = [
 ];
 
 /// FreqOptions
+// ignore: constant_identifier_names
 const FreqOptions = [
   {'text': '31Hz', 'type': AudioEqualizationBandFrequency.Band31},
   {'text': '62Hz', 'type': AudioEqualizationBandFrequency.Band62},
@@ -135,6 +137,7 @@ const FreqOptions = [
 ];
 
 /// ReverbKeyOptions
+// ignore: constant_identifier_names
 const ReverbKeyOptions = [
   {
     'text': 'Dry Level',

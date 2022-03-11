@@ -408,27 +408,24 @@ void main() {
     );
   });
 
-  testWidgets(
-    'createDataStream',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-      fakeIrisEngine = FakeIrisRtcEngine(isMockChannel: true);
-      await fakeIrisEngine.initialize();
+  testWidgets('createDataStream', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    fakeIrisEngine = FakeIrisRtcEngine(isMockChannel: true);
+    await fakeIrisEngine.initialize();
 
-      rtcChannel = await _createChannel();
-      // ignore: deprecated_member_use
-      await rtcChannel.createDataStream(true, true);
-      fakeIrisEngine.expectCalledApi(
-        ApiTypeChannel.kChannelCreateDataStream.index,
-        jsonEncode({
-          'channelId': 'testapi',
-          'reliable': true,
-          'ordered': true,
-        }),
-      );
-    }
-  );
+    rtcChannel = await _createChannel();
+    // ignore: deprecated_member_use
+    await rtcChannel.createDataStream(true, true);
+    fakeIrisEngine.expectCalledApi(
+      ApiTypeChannel.kChannelCreateDataStream.index,
+      jsonEncode({
+        'channelId': 'testapi',
+        'reliable': true,
+        'ordered': true,
+      }),
+    );
+  });
 
   testWidgets('registerMediaMetadataObserver', (WidgetTester tester) async {
     app.main();
@@ -568,7 +565,8 @@ void main() {
         }),
       );
     },
-    skip: true, // TODO(littlegnal): [MS-99372] Need comfirm how to deal with this function
+    skip:
+        true, // TODO(littlegnal): [MS-99372] Need comfirm how to deal with this function
   );
 
   testWidgets('setEncryptionSecret', (WidgetTester tester) async {

@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// DeviceManager Example
 class DeviceManager extends StatefulWidget {
+  const DeviceManager({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -51,19 +52,19 @@ class _State extends State<DeviceManager> {
   _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
-        logSink.log('userJoined  ${uid} ${elapsed}');
+        logSink.log('userJoined  $uid $elapsed');
         if (uid == config.screenSharingUid) {
           return;
         }
@@ -72,7 +73,7 @@ class _State extends State<DeviceManager> {
         });
       },
       userOffline: (uid, reason) {
-        logSink.log('userOffline  ${uid} ${reason}');
+        logSink.log('userOffline  $uid $reason');
         setState(() {
           remoteUid.removeWhere((element) => element == uid);
         });
@@ -123,7 +124,7 @@ class _State extends State<DeviceManager> {
           children: [
             TextField(
               controller: _controller,
-              decoration: InputDecoration(hintText: 'Channel ID'),
+              decoration: const InputDecoration(hintText: 'Channel ID'),
               onChanged: (text) {
                 setState(() {
                   channelId = text;
@@ -152,11 +153,11 @@ class _State extends State<DeviceManager> {
               children: [
                 ElevatedButton(
                   onPressed: _enumerateVideoDevices,
-                  child: Text('Enumerate video devices'),
+                  child: const Text('Enumerate video devices'),
                 ),
                 ElevatedButton(
                   onPressed: _setVideoDevice,
-                  child: Text('Set video device'),
+                  child: const Text('Set video device'),
                 ),
               ],
             ),
@@ -170,12 +171,12 @@ class _State extends State<DeviceManager> {
         child: Stack(
       children: [
         Row(
-          children: [
+          children: const [
             Expanded(
                 flex: 1,
                 child: kIsWeb
-                    ? RtcLocalView.SurfaceView()
-                    : RtcLocalView.TextureView()),
+                    ? rtc_local_view.SurfaceView()
+                    : rtc_local_view.TextureView()),
           ],
         ),
         Align(
@@ -184,15 +185,15 @@ class _State extends State<DeviceManager> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.of(remoteUid.map(
-                (e) => Container(
+                (e) => SizedBox(
                   width: 120,
                   height: 120,
                   child: kIsWeb
-                      ? RtcRemoteView.SurfaceView(
+                      ? rtc_remote_view.SurfaceView(
                           uid: e,
                           channelId: channelId,
                         )
-                      : RtcRemoteView.TextureView(
+                      : rtc_remote_view.TextureView(
                           uid: e,
                           channelId: channelId,
                         ),

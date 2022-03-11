@@ -1,15 +1,16 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// SetVideoEncoderConfiguration Example
 class SetVideoEncoderConfiguration extends StatefulWidget {
+  const SetVideoEncoderConfiguration({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _SetVideoEncoderConfigurationState();
 }
@@ -43,7 +44,7 @@ class _SetVideoEncoderConfigurationState
 
   Future<void> _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListeners();
+    _addListeners();
 
     await _engine.enableVideo();
     await _engine.startPreview();
@@ -54,19 +55,19 @@ class _SetVideoEncoderConfigurationState
   void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        debugPrint('error ${errorCode}');
+        debugPrint('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
-        logSink.log('userJoined  ${uid} ${elapsed}');
+        logSink.log('userJoined  $uid $elapsed');
         if (_remoteUid == 0) {
           setState(() {
             _remoteUid = uid;
@@ -74,7 +75,7 @@ class _SetVideoEncoderConfigurationState
         }
       },
       userOffline: (uid, reason) {
-        logSink.log('userOffline  ${uid} ${reason}');
+        logSink.log('userOffline  $uid $reason');
         setState(() {
           _remoteUid = 0;
         });
@@ -152,7 +153,7 @@ class _SetVideoEncoderConfigurationState
           children: [
             TextField(
               controller: _channelIdController,
-              decoration: InputDecoration(hintText: 'Channel ID'),
+              decoration: const InputDecoration(hintText: 'Channel ID'),
               onChanged: (text) {
                 setState(() {
                   channelId = text;
@@ -164,8 +165,7 @@ class _SetVideoEncoderConfigurationState
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed:
-                        isJoined ? this._leaveChannel : this._joinChannel,
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
@@ -173,7 +173,7 @@ class _SetVideoEncoderConfigurationState
             ),
             Row(
               children: [
-                Text('Video dimensions: '),
+                const Text('Video dimensions: '),
                 DropdownButton<int>(
                   value: _selectedDimensionIndex,
                   items: dimesionsMenus,
@@ -198,7 +198,7 @@ class _SetVideoEncoderConfigurationState
               mainAxisSize: MainAxisSize.min,
               children: [
                 ElevatedButton(
-                  onPressed: this._switchCamera,
+                  onPressed: _switchCamera,
                   child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
                 ),
               ],
@@ -214,21 +214,21 @@ class _SetVideoEncoderConfigurationState
         children: [
           Container(
             child: kIsWeb
-                ? RtcLocalView.SurfaceView()
-                : RtcLocalView.TextureView(),
+                ? const rtc_local_view.SurfaceView()
+                : const rtc_local_view.TextureView(),
           ),
           if (_remoteUid != 0)
             Align(
               alignment: Alignment.topLeft,
-              child: Container(
+              child: SizedBox(
                 width: 120,
                 height: 120,
                 child: kIsWeb
-                    ? RtcRemoteView.SurfaceView(
+                    ? rtc_remote_view.SurfaceView(
                         uid: _remoteUid,
                         channelId: channelId,
                       )
-                    : RtcRemoteView.TextureView(
+                    : rtc_remote_view.TextureView(
                         uid: _remoteUid,
                         channelId: channelId,
                       ),

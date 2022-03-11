@@ -11,33 +11,29 @@ on:
   push:
     branches: 
       - master
-      # Temporarily allow check on dev/flutter2-iris branch
-      - 'dev/flutter2-iris'
   pull_request:
     branches: 
       - master
-      # Temporarily allow check on dev/flutter2-iris branch
-      - 'dev/flutter2-iris'
 
 jobs:
-  # DO NOT run flutter test as this time, because the unit test is broken, will re-enable it 
-  # when unit tests being fixed.
-  # unittest_flutter:
-  #   name: Run Flutter Unit Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - uses: actions/setup-java@v1
-  #       with:
-  #         java-version: '11'
-  #     - uses: subosito/flutter-action@v1
-  #       with:
-  #         flutter-version: '2.10.0'
-  #     - run: flutter pub get
-  #     - run: flutter test
+  flutter_codestyle_check:
+    name: Flutter codestyle/analyze check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.10.0'
+      - run: flutter pub get
+      - run: bash ci/dartfmt_check.sh
+      - run: flutter analyze
 
   integration_test_android:
     name: Run Flutter Android Integration Tests
+    needs: flutter_codestyle_check
     runs-on: macos-11
     timeout-minutes: 60
     env:
@@ -60,6 +56,7 @@ jobs:
 
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
+    needs: flutter_codestyle_check
     runs-on: macos-11
     timeout-minutes: 60
     env:
@@ -76,6 +73,7 @@ jobs:
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
+    needs: flutter_codestyle_check
     runs-on: macos-11
     timeout-minutes: 60
     env:
@@ -90,6 +88,7 @@ jobs:
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
+    needs: flutter_codestyle_check
     runs-on: windows-2019
     timeout-minutes: 60
     env:
@@ -104,6 +103,7 @@ jobs:
 
   unittest_android:
     name: Run Android Unit Test
+    needs: flutter_codestyle_check
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -119,6 +119,7 @@ jobs:
 
   unittest_ios:
     name: Run iOS Unit Test
+    needs: flutter_codestyle_check
     runs-on: macos-11
     timeout-minutes: 60
     steps:
@@ -131,6 +132,7 @@ jobs:
   
   build_android:
     name: Build Android
+    needs: flutter_codestyle_check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -147,6 +149,7 @@ jobs:
 
   build_ios:
     name: Build iOS
+    needs: flutter_codestyle_check
     runs-on: macos-11
     timeout-minutes: 60
     steps:

@@ -91,7 +91,7 @@ class RtcSurfaceView extends StatefulWidget {
   final bool subProcess;
 
   /// Constructs a [RtcSurfaceView]
-  RtcSurfaceView({
+  const RtcSurfaceView({
     Key? key,
     required this.uid,
     this.channelId,
@@ -416,7 +416,7 @@ class RtcTextureView extends StatefulWidget {
   final bool subProcess;
 
   /// Constructs a [RtcTextureView]
-  RtcTextureView({
+  const RtcTextureView({
     Key? key,
     required this.uid,
     this.channelId,
@@ -442,7 +442,7 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
-      return Text('Web is not yet supported by the plugin');
+      return const Text('Web is not yet supported by the plugin');
     }
     if (widget.useFlutterTexture &&
         defaultTargetPlatform != TargetPlatform.android) {

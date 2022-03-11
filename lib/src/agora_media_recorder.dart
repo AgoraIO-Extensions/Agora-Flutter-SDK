@@ -1,5 +1,4 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/src/classes.dart';
 
 typedef OnRecorderStateChanged = void Function(
     RecorderState state, RecorderError error);
