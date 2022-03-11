@@ -33,13 +33,15 @@ enum _ApiTypeVideoDeviceManager {
   kVDMEnumerateVideoDevices,
   kVDMSetDevice,
   kVDMGetDevice,
+  // ignore: unused_field
   kVDMStartDeviceTest,
+  // ignore: unused_field
   kVDMStopDeviceTest,
 }
 
 ///
 /// The RTC device manager class, which manages the audio and video devices in the system.
-/// 
+///
 ///
 class RtcDeviceManager {
   static const MethodChannel _audioMethodChannel =
@@ -59,7 +61,7 @@ class RtcDeviceManager {
 
   ///
   /// Enumerates the audio playback devices.
-  /// 
+  ///
   ///
   /// **return** Success: Returns a MediaDeviceInfo list that contains
   /// the device ID and device name of all the audio playback devices.
@@ -77,10 +79,10 @@ class RtcDeviceManager {
 
   ///
   /// Sets the audio playback device.
-  /// 
+  ///
   ///
   /// Param [deviceId] The ID of the audio playback device. You can get the device ID by calling enumerateAudioPlaybackDevices. Plugging or unplugging the audio device does not change the device ID.
-  /// 
+  ///
   ///
   Future<void> setAudioPlaybackDevice(String deviceId) {
     return _invokeAudioMethod('callApi', {
@@ -93,7 +95,7 @@ class RtcDeviceManager {
 
   ///
   /// Retrieves the audio playback device associated with the device ID.
-  /// 
+  ///
   ///
   /// **return** The current audio playback device.
   ///
@@ -106,7 +108,7 @@ class RtcDeviceManager {
 
   ///
   /// Retrieves the audio playback device information associated with the device ID and device name.
-  /// 
+  ///
   ///
   /// **return** A MediaDeviceInfo class, which includes the device ID and the device name.
   ///
@@ -119,7 +121,7 @@ class RtcDeviceManager {
 
   ///
   /// Sets the volume of the audio playback device.
-  /// 
+  ///
   ///
   /// Param [volume] The volume of the audio playback device. The value ranges between 0 (lowest volume) and 255 (highest volume).
   ///
@@ -134,7 +136,7 @@ class RtcDeviceManager {
 
   ///
   /// Retrieves the volume of the audio playback device.
-  /// 
+  ///
   ///
   /// **return** The volume of the audio playback device. The value ranges between 0 (lowest volume) and 255 (highest volume).
   ///
@@ -147,12 +149,12 @@ class RtcDeviceManager {
 
   ///
   /// Mutes the audio playback device.
-  /// 
+  ///
   ///
   /// Param [mute] Whether to mute the audio playback device:
   /// true: Mute the audio playback device.
   /// false: Unmute the audio playback device.
-  ///   
+  ///
   ///
   Future<void> setAudioPlaybackDeviceMute(bool mute) {
     return _invokeAudioMethod('callApi', {
@@ -165,7 +167,7 @@ class RtcDeviceManager {
 
   ///
   /// Retrieves whether the audio playback device is muted.
-  /// 
+  ///
   ///
   /// **return** true: The audio playback device is muted.
   /// false: The audio playback device is unmuted.
@@ -186,7 +188,7 @@ class RtcDeviceManager {
   /// Param [testAudioFilePath] The path of the audio file for the audio playback device test in UTF-8.
   /// Supported file formats: wav, mp3, m4a, and aac.
   /// Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
-  ///   
+  ///
   ///
   Future<void> startAudioPlaybackDeviceTest(String testAudioFilePath) {
     return _invokeAudioMethod('callApi', {
@@ -211,7 +213,7 @@ class RtcDeviceManager {
 
   ///
   /// Enumerates the audio capture devices.
-  /// 
+  ///
   ///
   /// **return** Success: Returns a MediaDeviceInfo list that contains the device ID and device name of all the audio recording devices.
   /// Failure: null.
@@ -228,10 +230,10 @@ class RtcDeviceManager {
 
   ///
   /// Sets the audio capture device.
-  /// 
+  ///
   ///
   /// Param [deviceId] The ID of the audio capture device. You can get the device ID by calling enumerateAudioRecordingDevices. Plugging or unplugging the audio device does not change the device ID.
-  /// 
+  ///
   ///
   Future<void> setAudioRecordingDevice(String deviceId) {
     return _invokeAudioMethod('callApi', {
@@ -244,7 +246,7 @@ class RtcDeviceManager {
 
   ///
   /// Gets the current audio recording device.
-  /// 
+  ///
   ///
   /// **return** The current audio recording device.
   ///
@@ -257,7 +259,7 @@ class RtcDeviceManager {
 
   ///
   /// Retrieves the audio capture device information associated with the device ID and device name.
-  /// 
+  ///
   ///
   /// **return** A MediaDeviceInfo class that contains the device ID and device name of all the audio recording devices.
   ///
@@ -271,7 +273,7 @@ class RtcDeviceManager {
 
   ///
   /// Sets the volume of the audio capture device.
-  /// 
+  ///
   ///
   /// Param [volume] The volume of the audio recording device. The value ranges between 0 (lowest volume) and 255 (highest volume).
   ///
@@ -286,7 +288,7 @@ class RtcDeviceManager {
 
   ///
   /// Retrieves the volume of the audio recording device.
-  /// 
+  ///
   ///
   /// **return** The volume of the audio recording device. The value ranges between 0 (lowest volume) and 255 (highest volume).
   ///
@@ -299,12 +301,12 @@ class RtcDeviceManager {
 
   ///
   /// Sets the mute status of the audio capture device.
-  /// 
+  ///
   ///
   /// Param [mute] Whether to mute the audio capture device:
   /// true: Mute the audio capture device.
   /// false: Unmute the audio capture device.
-  ///   
+  ///
   ///
   Future<void> setAudioRecordingDeviceMute(bool mute) {
     return _invokeAudioMethod('callApi', {
@@ -317,7 +319,7 @@ class RtcDeviceManager {
 
   ///
   /// Gets the microphone's mute status.
-  /// 
+  ///
   ///
   /// **return** true: The microphone is muted.
   /// false: The microphone is unmuted.
@@ -360,7 +362,7 @@ class RtcDeviceManager {
   ///
   /// Starts an audio device loopback test.
   /// This method tests whether the local audio capture device and playback device are working properly. After starting the test, the audio capture device records the local audio, and the audio playback device plays the captured audio. The SDK triggers two independent audioVolumeIndication callbacks at the time interval set in this method, which reports the volume information of the capture device (uid = 0) and the volume information of the playback device (uid = 1) respectively.
-  /// 
+  ///
   /// Ensure that you call this method before joining a channel.
   /// This method tests local audio devices and does not report the network conditions.
   ///
@@ -391,7 +393,7 @@ class RtcDeviceManager {
 
   ///
   /// Enumerates the video devices.
-  /// 
+  ///
   ///
   /// **return** Success: Returns a MediaDeviceInfo that contains all the video devices.
   /// Failure: null.
@@ -411,7 +413,7 @@ class RtcDeviceManager {
   /// Plugging or unplugging a device does not change its device ID.
   ///
   /// Param [deviceId] The device ID. You can get the device ID by calling enumerateVideoDevices.
-  /// 
+  ///
   ///
   Future<void> setVideoDevice(String deviceId) {
     return _invokeVideoMethod('callApi', {
@@ -424,7 +426,7 @@ class RtcDeviceManager {
 
   ///
   /// Retrieves the current video capture device.
-  /// 
+  ///
   ///
   /// **return** The video capture device.
   ///

@@ -14,23 +14,23 @@ import 'package:agora_rtc_engine_example/examples/advanced/voice_changer/voice_c
 import 'package:flutter/foundation.dart';
 
 /// Data source for advanced examples
-final Advanced = [
+final advanced = [
   {'name': 'Advanced'},
-  {'name': 'AudioMixing', 'widget': AudioMixing()},
-  {'name': 'ChannelMediaRelay', 'widget': ChannelMediaRelay()},
+  {'name': 'AudioMixing', 'widget': const AudioMixing()},
+  {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-    {'name': 'CustomCaptureAudio', 'widget': CustomCaptureAudio()},
+    {'name': 'CustomCaptureAudio', 'widget': const CustomCaptureAudio()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
-    {'name': 'DeviceManager', 'widget': DeviceManager()},
-  {'name': 'JoinMultipleChannel', 'widget': JoinMultipleChannel()},
-  {'name': 'RtmpStreaming', 'widget': RtmpStreaming()},
+    {'name': 'DeviceManager', 'widget': const DeviceManager()},
+  {'name': 'JoinMultipleChannel', 'widget': const JoinMultipleChannel()},
+  {'name': 'RtmpStreaming', 'widget': const RtmpStreaming()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
-    {'name': 'ScreenSharing', 'widget': ScreenSharing()},
+    {'name': 'ScreenSharing', 'widget': const ScreenSharing()},
   {'name': 'SetEncryption', 'widget': SetEncryption()},
   {
     'name': 'SetVideoEncoderConfiguration',
-    'widget': SetVideoEncoderConfiguration()
+    'widget': const SetVideoEncoderConfiguration()
   },
-  {'name': 'StreamMessage', 'widget': StreamMessage()},
-  {'name': 'VoiceChanger', 'widget': VoiceChanger()},
+  {'name': 'StreamMessage', 'widget': const StreamMessage()},
+  {'name': 'VoiceChanger', 'widget': const VoiceChanger()},
 ];

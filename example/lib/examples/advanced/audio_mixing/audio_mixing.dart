@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// AudioMixing Example
 class AudioMixing extends StatefulWidget {
+  const AudioMixing({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _AudioMixingState();
 }
@@ -50,7 +51,7 @@ class _AudioMixingState extends State<AudioMixing> {
 
   Future<void> _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListeners();
+    _addListeners();
 
     await _engine.enableAudio();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
@@ -60,14 +61,14 @@ class _AudioMixingState extends State<AudioMixing> {
   void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
         logSink.log(
-            'joinChannelSuccess channel: ${channel}, uid: ${uid}, elapsed: ${elapsed}');
+            'joinChannelSuccess channel: $channel, uid: $uid, elapsed: $elapsed');
         setState(() {
           isJoined = true;
         });
@@ -152,7 +153,7 @@ class _AudioMixingState extends State<AudioMixing> {
       children: [
         TextField(
           controller: _controller,
-          decoration: InputDecoration(hintText: 'Channel ID'),
+          decoration: const InputDecoration(hintText: 'Channel ID'),
           onChanged: (text) {
             setState(() {
               channelId = text;
@@ -164,7 +165,7 @@ class _AudioMixingState extends State<AudioMixing> {
             Expanded(
               flex: 1,
               child: ElevatedButton(
-                onPressed: isJoined ? this._leaveChannel : this._joinChannel,
+                onPressed: isJoined ? _leaveChannel : _joinChannel,
                 child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
               ),
             )
@@ -176,7 +177,7 @@ class _AudioMixingState extends State<AudioMixing> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(mainAxisSize: MainAxisSize.min, children: [
-                Text('loopback: '),
+                const Text('loopback: '),
                 Switch(
                   value: _loopback,
                   onChanged: _isStartedAudioMixing
@@ -191,7 +192,7 @@ class _AudioMixingState extends State<AudioMixing> {
                 )
               ]),
               Row(mainAxisSize: MainAxisSize.min, children: [
-                Text('replace: '),
+                const Text('replace: '),
                 Switch(
                   value: _replace,
                   onChanged: _isStartedAudioMixing
@@ -208,7 +209,7 @@ class _AudioMixingState extends State<AudioMixing> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text('cycle:'),
+                  const Text('cycle:'),
                   Slider(
                     value: _cycle,
                     min: 0.0,
@@ -228,7 +229,7 @@ class _AudioMixingState extends State<AudioMixing> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text('startPos:'),
+                  const Text('startPos:'),
                   Slider(
                     value: _startPos,
                     min: 1000,
@@ -249,8 +250,8 @@ class _AudioMixingState extends State<AudioMixing> {
               ),
               ElevatedButton(
                 onPressed: !_isStartedAudioMixing
-                    ? this._startAudioMixing
-                    : this._stopAudioMixing,
+                    ? _startAudioMixing
+                    : _stopAudioMixing,
                 child: Text(
                     '${_isStartedAudioMixing ? 'Stop' : 'Start'} Audio Mixing'),
               ),

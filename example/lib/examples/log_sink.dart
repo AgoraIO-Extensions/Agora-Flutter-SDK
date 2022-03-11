@@ -56,7 +56,7 @@ class _LogActionWidgetState extends State<LogActionWidget> {
                                 onPressed: () {
                                   logSink.clear();
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Clear log',
                                   style: TextStyle(color: Colors.white),
                                 ),
@@ -70,7 +70,7 @@ class _LogActionWidgetState extends State<LogActionWidget> {
                                         _removeOverlay();
                                         _isOverlayShowed = !_isOverlayShowed;
                                       },
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.close,
                                         color: Colors.white,
                                       )),
@@ -78,7 +78,7 @@ class _LogActionWidgetState extends State<LogActionWidget> {
                               ),
                             ],
                           ),
-                          Expanded(
+                          const Expanded(
                             child: SingleChildScrollView(
                               child: _LogActionInner(),
                             ),
@@ -97,7 +97,7 @@ class _LogActionWidgetState extends State<LogActionWidget> {
 
           // });
         },
-        child: Text(
+        child: const Text(
           'Log',
           style: TextStyle(color: Colors.white),
         ));
@@ -136,11 +136,10 @@ class __LogActionInnerState extends State<_LogActionInner> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Text(
+    return Text(
       logSink.output(),
-      style: TextStyle(fontSize: 15, color: Colors.white),
-    ));
+      style: const TextStyle(fontSize: 15, color: Colors.white),
+    );
   }
 }
 

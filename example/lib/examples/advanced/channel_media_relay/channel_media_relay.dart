@@ -1,6 +1,6 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// ChannelMediaRelay Example
 class ChannelMediaRelay extends StatefulWidget {
+  const ChannelMediaRelay({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -39,7 +41,7 @@ class _State extends State<ChannelMediaRelay> {
       await Permission.microphone.request();
     }
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListener();
+    _addListener();
 
     // enable video module and set up video encoding configs
     await _engine.enableVideo();
@@ -61,26 +63,26 @@ class _State extends State<ChannelMediaRelay> {
   _addListener() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
         });
       },
       userJoined: (uid, elapsed) {
         logSink.log('userJoined $uid $elapsed');
-        this.setState(() {
+        setState(() {
           remoteUid = uid;
         });
       },
       userOffline: (uid, reason) {
         logSink.log('userOffline $uid $reason');
-        this.setState(() {
+        setState(() {
           remoteUid = null;
         });
       },
@@ -89,7 +91,7 @@ class _State extends State<ChannelMediaRelay> {
         switch (state) {
           case ChannelMediaRelayState.Idle:
             logSink.log('ChannelMediaRelayState.Idle $code');
-            this.setState(() {
+            setState(() {
               isRelaying = false;
             });
             break;
@@ -98,13 +100,13 @@ class _State extends State<ChannelMediaRelay> {
             break;
           case ChannelMediaRelayState.Running:
             logSink.log('ChannelMediaRelayState.Running $code)');
-            this.setState(() {
+            setState(() {
               isRelaying = true;
             });
             break;
           case ChannelMediaRelayState.Failure:
             logSink.log('ChannelMediaRelayState.Failure $code)');
-            this.setState(() {
+            setState(() {
               isRelaying = false;
             });
             break;
@@ -121,7 +123,7 @@ class _State extends State<ChannelMediaRelay> {
       await _engine.stopChannelMediaRelay();
       return;
     }
-    if (_channelMediaRelayController.text.length == 0) {
+    if (_channelMediaRelayController.text.isEmpty) {
       return;
     }
 
@@ -149,7 +151,7 @@ class _State extends State<ChannelMediaRelay> {
                             flex: 1,
                             child: ElevatedButton(
                               onPressed: _initEngine,
-                              child: Text('Join channel'),
+                              child: const Text('Join channel'),
                             ),
                           )
                         ],
@@ -164,7 +166,7 @@ class _State extends State<ChannelMediaRelay> {
                   Expanded(
                       child: TextField(
                           controller: _channelMediaRelayController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Enter target relay channel name',
                           ))),
                   ElevatedButton(
@@ -181,11 +183,12 @@ class _State extends State<ChannelMediaRelay> {
 
   _renderVideo() {
     return Row(children: [
-      Expanded(
+      const Expanded(
         child: AspectRatio(
           aspectRatio: 1,
-          child:
-              kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
+          child: kIsWeb
+              ? rtc_local_view.SurfaceView()
+              : rtc_local_view.TextureView(),
         ),
       ),
       Expanded(
@@ -193,11 +196,11 @@ class _State extends State<ChannelMediaRelay> {
           aspectRatio: 1,
           child: remoteUid != null
               ? (kIsWeb
-                  ? RtcRemoteView.SurfaceView(
+                  ? rtc_remote_view.SurfaceView(
                       uid: remoteUid!,
                       channelId: _channelController.text,
                     )
-                  : RtcRemoteView.TextureView(
+                  : rtc_remote_view.TextureView(
                       uid: remoteUid!,
                       channelId: _channelController.text,
                     ))

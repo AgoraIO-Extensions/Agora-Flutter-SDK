@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// StreamMessage Example
 class StreamMessage extends StatefulWidget {
+  const StreamMessage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -38,7 +39,7 @@ class _State extends State<StreamMessage> {
       await Permission.microphone.request();
     }
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListener();
+    _addListener();
 
     // enable video module and set up video encoding configs
     await _engine.enableVideo();
@@ -62,15 +63,15 @@ class _State extends State<StreamMessage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Receive from uid:${uid}'),
+          title: Text('Receive from uid:$uid'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[Text('StreamId ${streamId}:${data}')],
+              children: <Widget>[Text('StreamId $streamId:$data')],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Ok'),
+              child: const Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -84,13 +85,13 @@ class _State extends State<StreamMessage> {
   _addListener() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
         });
@@ -98,12 +99,12 @@ class _State extends State<StreamMessage> {
       userJoined: (uid, elapsed) {
         logSink.log('userJoined $uid $elapsed');
         remoteUids.add(uid);
-        this.setState(() {});
+        setState(() {});
       },
       userOffline: (uid, reason) {
         logSink.log('userOffline $uid $reason');
         remoteUids.remove(uid);
-        this.setState(() {});
+        setState(() {});
       },
       streamMessage: (int uid, int streamId, Uint8List data) {
         _showMyDialog(uid, streamId, utf8.decode(data));
@@ -117,7 +118,7 @@ class _State extends State<StreamMessage> {
   }
 
   _onPressSend() async {
-    if (_controller.text.length == 0) {
+    if (_controller.text.isEmpty) {
       return;
     }
 
@@ -147,7 +148,7 @@ class _State extends State<StreamMessage> {
                         flex: 1,
                         child: ElevatedButton(
                           onPressed: _initEngine,
-                          child: Text('Join channel'),
+                          child: const Text('Join channel'),
                         ),
                       )
                     ],
@@ -160,12 +161,12 @@ class _State extends State<StreamMessage> {
                   Expanded(
                       child: TextField(
                           controller: _controller,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Input Message',
                           ))),
                   ElevatedButton(
                     onPressed: _onPressSend,
-                    child: Text('Send'),
+                    child: const Text('Send'),
                   ),
                 ],
               )
@@ -175,29 +176,31 @@ class _State extends State<StreamMessage> {
     );
   }
 
-  _renderVideo() {
-    final views = [
-      Container(
+  Widget _renderVideo() {
+    final views = <Widget>[
+      const SizedBox(
         height: 120,
         width: 120,
-        child: kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
+        child: kIsWeb
+            ? rtc_local_view.SurfaceView()
+            : rtc_local_view.TextureView(),
       ),
     ];
     if (remoteUids.isNotEmpty) {
       views.addAll(remoteUids.map((uid) {
         return (kIsWeb
-            ? Container(
+            ? SizedBox(
                 height: 120,
                 width: 120,
-                child: RtcRemoteView.SurfaceView(
+                child: rtc_remote_view.SurfaceView(
                   uid: uid,
                   channelId: config.channelId,
                 ),
               )
-            : Container(
+            : SizedBox(
                 height: 120,
                 width: 120,
-                child: RtcRemoteView.TextureView(
+                child: rtc_remote_view.TextureView(
                   uid: uid,
                   channelId: config.channelId,
                 ),

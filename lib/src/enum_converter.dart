@@ -11,7 +11,7 @@ abstract class EnumConverter<E extends Enum, T> {
 
   EnumConverter(this.e);
 
-  EnumConverter.fromValue(Map<E, T> map, T t) : e = $enumDecode<E,T>(map, t);
+  EnumConverter.fromValue(Map<E, T> map, T t) : e = $enumDecode<E, T>(map, t);
 
   T toValue(Map<E, T> map) {
     return map[e] as T;

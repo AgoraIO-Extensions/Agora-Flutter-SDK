@@ -1,14 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
-import 'rtc_engine.dart';
+
+// ignore_for_file: deprecated_member_use_from_same_package
 
 // ignore: public_member_api_docs
 typedef EmptyCallback = void Function();
@@ -405,7 +402,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [elapsed] The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
   ///
-  @deprecated
+  @Deprecated('')
   ElapsedCallback? firstLocalAudioFrame;
 
   ///
@@ -435,7 +432,7 @@ class RtcEngineEventHandler {
   /// false: Resumed.
   ///
   ///
-  @deprecated
+  @Deprecated('')
   UidWithMutedCallback? userMuteVideo;
 
   ///
@@ -736,7 +733,8 @@ class RtcEngineEventHandler {
   /// file, this callback occurs when the playback finishes. If the call of startAudioMixing fails, the callback returns the error code
   /// WARN_AUDIO_MIXING_OPEN_ERROR.
   ///
-  @deprecated
+  @Deprecated(
+      'This method is deprecated as of v2.4.0. Use audioMixingStateChanged instead.')
   EmptyCallback? audioMixingFinished;
 
   ///
@@ -880,7 +878,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [elapsed] Time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
   ///
-  @deprecated
+  @Deprecated('')
   VideoFrameWithUidCallback? firstRemoteVideoFrame;
 
   ///
@@ -892,7 +890,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [elapsed] The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
   ///
-  @deprecated
+  @Deprecated('Please use remoteAudioStateChanged instead.')
   UidWithElapsedCallback? firstRemoteAudioFrame;
 
   ///
@@ -913,7 +911,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [elapsed] The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
   ///
-  @deprecated
+  @Deprecated('Please use remoteAudioStateChanged instead.')
   UidWithElapsedCallback? firstRemoteAudioDecoded;
 
   ///
@@ -929,7 +927,7 @@ class RtcEngineEventHandler {
   ///
   ///
   ///
-  @deprecated
+  @Deprecated('')
   UidWithMutedCallback? userMuteAudio;
 
   ///
@@ -942,7 +940,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [url]
   ///
-  @deprecated
+  @Deprecated('Please use rtmpStreamingStateChanged instead.')
   UrlWithErrorCallback? streamPublished;
 
   ///
@@ -952,7 +950,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [url] The URL of the removed RTMP or RTMPS stream.
   ///
-  @deprecated
+  @Deprecated('Please use rtmpStreamingStateChanged instead.')
   UrlCallback? streamUnpublished;
 
   ///
@@ -973,7 +971,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [rxKBitrate] Bitrate of the received audio (Kbps).
   ///
-  @deprecated
+  @Deprecated('Please use remoteAudioStats instead.')
   TransportStatsCallback? remoteAudioTransportStats;
 
   ///
@@ -993,7 +991,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [rxKBitRate] The bitrate of the received video (Kbps).
   ///
-  @deprecated
+  @Deprecated('Please use remoteVideoStats instead.')
   TransportStatsCallback? remoteVideoTransportStats;
 
   ///
@@ -1009,7 +1007,7 @@ class RtcEngineEventHandler {
   ///
   ///
   ///
-  @deprecated
+  @Deprecated('')
   UidWithEnabledCallback? userEnableVideo;
 
   ///
@@ -1029,7 +1027,7 @@ class RtcEngineEventHandler {
   ///
   ///
   ///
-  @deprecated
+  @Deprecated('')
   UidWithEnabledCallback? userEnableLocalVideo;
 
   ///
@@ -1058,7 +1056,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [elapsed] The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
   ///
-  @deprecated
+  @Deprecated('')
   VideoFrameWithUidCallback? firstRemoteVideoDecoded;
 
   ///
@@ -1080,7 +1078,7 @@ class RtcEngineEventHandler {
   ///
   ///
   ///
-  @deprecated
+  @Deprecated('')
   EnabledCallback? microphoneEnabled;
 
   ///
@@ -1094,7 +1092,7 @@ class RtcEngineEventHandler {
   /// The SDK triggers the connectionLost callback when it loses connection with the server for more than 10 seconds, whether or not it joins the channel.
   /// If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
   ///
-  @deprecated
+  @Deprecated('Please use connectionStateChanged instead.')
   EmptyCallback? connectionInterrupted;
 
   ///
@@ -1102,7 +1100,7 @@ class RtcEngineEventHandler {
   /// Deprecated:
   /// Please use connectionStateChanged instead.
   ///
-  @deprecated
+  @Deprecated('Please use connectionStateChanged instead.')
   EmptyCallback? connectionBanned;
 
   ///
@@ -1134,7 +1132,7 @@ class RtcEngineEventHandler {
   /// Param [lost] Packet loss rate (%) of the audio packet sent from the sender to the
   /// receiver.
   ///
-  @deprecated
+  @Deprecated('')
   AudioQualityCallback? audioQuality;
 
   ///
@@ -1149,7 +1147,7 @@ class RtcEngineEventHandler {
   /// This callback indicates that the camera has been successfully turned on and
   /// you can start to capture video.
   ///
-  @deprecated
+  @Deprecated('')
   EmptyCallback? cameraReady;
 
   ///
@@ -1163,7 +1161,7 @@ class RtcEngineEventHandler {
   /// view (for example, displaying other pictures in the view) after
   /// the video stops playing.
   ///
-  @deprecated
+  @Deprecated('')
   EmptyCallback? videoStopped;
 
   ///
@@ -1567,14 +1565,9 @@ class RtcEngineEventHandler {
         requestToken?.call();
         break;
       case 'AudioVolumeIndication':
-        final list = List<Map>.from(newData[0]);
-        var totalVolume;
-        // if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
+        final list = List<Map>.from(newData[0] ?? []);
 
-        // } else {
-        //   totalVolume = newData[2];
-        // }
-        totalVolume = newData[2];
+        final totalVolume = newData[2];
         audioVolumeIndication?.call(
             List.generate(
                 list.length,
@@ -1641,18 +1634,14 @@ class RtcEngineEventHandler {
       case 'CameraFocusAreaChanged':
         if (cameraFocusAreaChanged != null) {
           // TODO(littlegnal): Optimize this logic
-          final rect = Rect(); // Rect.fromJson(newData[0]);
+          final rect = Rect();
           rect.x = newData[0];
           rect.y = newData[1];
           rect.width = newData[2];
           rect.height = newData[3];
-          // ignore: deprecated_member_use_from_same_package
           rect.left = rect.x;
-          // ignore: deprecated_member_use_from_same_package
           rect.top = rect.y;
-          // ignore: deprecated_member_use_from_same_package
           rect.right = rect.x + rect.width;
-          // ignore: deprecated_member_use_from_same_package
           rect.bottom = rect.y + rect.height;
           cameraFocusAreaChanged!(rect);
         }
@@ -1666,13 +1655,9 @@ class RtcEngineEventHandler {
           rect.y = newData[1];
           rect.width = newData[2];
           rect.height = newData[3];
-          // ignore: deprecated_member_use_from_same_package
           rect.left = rect.x;
-          // ignore: deprecated_member_use_from_same_package
           rect.top = rect.y;
-          // ignore: deprecated_member_use_from_same_package
           rect.right = rect.x + rect.width;
-          // ignore: deprecated_member_use_from_same_package
           rect.bottom = rect.y + rect.height;
           cameraExposureAreaChanged!(rect);
         }

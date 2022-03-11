@@ -1,15 +1,16 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// RtmpStreaming Example
 class RtmpStreaming extends StatefulWidget {
+  const RtmpStreaming({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _RtmpStreamingState();
 }
@@ -40,7 +41,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
 
   Future<void> _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListeners();
+    _addListeners();
 
     await _engine.enableVideo();
     await _engine.startPreview();
@@ -51,13 +52,13 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
   void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
         });
@@ -65,7 +66,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
         _startTranscoding();
       },
       userJoined: (uid, elapsed) {
-        logSink.log('userJoined  ${uid} ${elapsed}');
+        logSink.log('userJoined  $uid $elapsed');
         if (_remoteUid == 0) {
           setState(() {
             _remoteUid = uid;
@@ -75,7 +76,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
         // _startTranscoding(isRemoteUser: true);
       },
       userOffline: (uid, reason) {
-        logSink.log('userOffline  ${uid} ${reason}');
+        logSink.log('userOffline  $uid $reason');
         setState(() {
           _remoteUid = 0;
         });
@@ -115,7 +116,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
         switchCamera = !switchCamera;
       });
     }).catchError((err) {
-      print('switchCamera $err');
+      debugPrint('switchCamera $err');
     });
   }
 
@@ -140,9 +141,6 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
       )
     ];
 
-    int width = 360;
-    int height = 640;
-
     if (isRemoteUser) {
       transcodingUsers.add(TranscodingUser(
         _remoteUid,
@@ -153,27 +151,8 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
         audioChannel: AudioChannel.Channel0,
         alpha: 1.0,
       ));
-      width = 720;
-      height = 640;
     }
 
-    final lt = new LiveTranscoding(
-      transcodingUsers,
-      width: width,
-      height: height,
-      videoBitrate: 400,
-      videoCodecProfile: VideoCodecProfileType.High,
-      videoGop: 30,
-      videoFramerate: VideoFrameRate.Fps24,
-      lowLatency: false,
-      audioSampleRate: AudioSampleRateType.Type44100,
-      audioBitrate: 48,
-      audioChannels: AudioChannel.Channel1,
-      audioCodecProfile: AudioCodecProfileType.LCAAC,
-    );
-
-    // await _engine.setLiveTranscoding(lt);
-    // await _engine.enableEncryption(false, EncryptionConfig());
     try {
       await _engine.addPublishStreamUrl(streamUrl, false);
     } catch (e) {
@@ -189,7 +168,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
           children: [
             TextField(
               controller: _channelIdController,
-              decoration: InputDecoration(hintText: 'Channel ID'),
+              decoration: const InputDecoration(hintText: 'Channel ID'),
               onChanged: (text) {
                 setState(() {
                   channelId = text;
@@ -198,15 +177,14 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
             ),
             TextField(
               controller: _rtmpUrlController,
-              decoration: InputDecoration(hintText: 'Input rtmp url'),
+              decoration: const InputDecoration(hintText: 'Input rtmp url'),
             ),
             Row(
               children: [
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed:
-                        isJoined ? this._leaveChannel : this._joinChannel,
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
@@ -223,7 +201,7 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ElevatedButton(
-                  onPressed: this._switchCamera,
+                  onPressed: _switchCamera,
                   child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
                 ),
               ],
@@ -239,21 +217,21 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
         children: [
           Container(
             child: kIsWeb
-                ? RtcLocalView.SurfaceView()
-                : RtcLocalView.TextureView(),
+                ? const rtc_local_view.SurfaceView()
+                : const rtc_local_view.TextureView(),
           ),
           if (_remoteUid != 0)
             Align(
               alignment: Alignment.topLeft,
-              child: Container(
+              child: SizedBox(
                 width: 120,
                 height: 120,
                 child: kIsWeb
-                    ? RtcRemoteView.SurfaceView(
+                    ? rtc_remote_view.SurfaceView(
                         uid: _remoteUid,
                         channelId: channelId,
                       )
-                    : RtcRemoteView.TextureView(
+                    : rtc_remote_view.TextureView(
                         uid: _remoteUid,
                         channelId: channelId,
                       ),

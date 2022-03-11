@@ -8,7 +8,7 @@ import 'src/rtc_render_view.dart';
 /// SurfaceView.
 class SurfaceView extends RtcSurfaceView {
   /// Constructs a [SurfaceView]
-  SurfaceView({
+  const SurfaceView({
     Key? key,
     required int uid,
     required String channelId,
@@ -35,7 +35,7 @@ class SurfaceView extends RtcSurfaceView {
 /// TextureView.
 class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
-  TextureView({
+  const TextureView({
     Key? key,
     required int uid,
     required String channelId,

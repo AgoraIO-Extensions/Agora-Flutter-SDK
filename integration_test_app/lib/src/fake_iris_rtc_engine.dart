@@ -378,7 +378,7 @@ class _NativeIrisProxyBinding {
   void callRtcEngineEvent(String event) {
     final fp = _agoraRtcWrapperLib.lookupFunction<CallRtcEngineEventNative,
         CallRtcEngineEvent>('CallRtcEngineEvents');
-        final pN = event.toNativeUtf8();
+    final pN = event.toNativeUtf8();
     fp(_irisRtcEnginePtr, pN);
     // calloc.free(pN);
   }
@@ -386,9 +386,8 @@ class _NativeIrisProxyBinding {
   void callRtcChannelEvent(String event) {
     final fp = _agoraRtcWrapperLib.lookupFunction<CallRtcChannelEventNative,
         CallRtcChannelEvent>('CallRtcChannelEvents');
-        final pN = event.toNativeUtf8();
+    final pN = event.toNativeUtf8();
     fp(_irisRtcEnginePtr, pN);
-    
   }
 }
 

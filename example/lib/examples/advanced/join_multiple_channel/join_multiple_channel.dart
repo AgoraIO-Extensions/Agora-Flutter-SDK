@@ -1,10 +1,9 @@
 import 'package:agora_rtc_engine/rtc_channel.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,6 +13,8 @@ const _channelId1 = 'channel1';
 
 /// JoinMultipleChannel Example
 class JoinMultipleChannel extends StatefulWidget {
+  const JoinMultipleChannel({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -28,7 +29,7 @@ class _State extends State<JoinMultipleChannel> {
   @override
   void initState() {
     super.initState();
-    this._initEngine();
+    _initEngine();
   }
 
   @override
@@ -46,10 +47,10 @@ class _State extends State<JoinMultipleChannel> {
     await _engine.setClientRole(ClientRole.Broadcaster);
 
     _channel0 = await RtcChannel.create(_channelId0);
-    this._addListener(_channel0);
+    _addListener(_channel0);
 
     _channel1 = await RtcChannel.create(_channelId1);
-    this._addListener(_channel1);
+    _addListener(_channel1);
   }
 
   _joinChannel0() async {
@@ -88,13 +89,13 @@ class _State extends State<JoinMultipleChannel> {
     String channelId = channel.channelId;
     channel.setEventHandler(RtcChannelEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         if (channelId == _channelId0) {
           setState(() {
             isJoined0 = true;
@@ -108,11 +109,11 @@ class _State extends State<JoinMultipleChannel> {
       userJoined: (uid, elapsed) {
         logSink.log('userJoined ${channel.channelId} $uid $elapsed');
         if (channelId == _channelId0) {
-          this.setState(() {
+          setState(() {
             remoteUid0.add(uid);
           });
         } else if (channelId == _channelId1) {
-          this.setState(() {
+          setState(() {
             remoteUid1.add(uid);
           });
         }
@@ -120,11 +121,11 @@ class _State extends State<JoinMultipleChannel> {
       userOffline: (uid, reason) {
         logSink.log('userOffline ${channel.channelId} $uid $reason');
         if (channelId == _channelId0) {
-          this.setState(() {
+          setState(() {
             remoteUid0.removeWhere((element) => element == uid);
           });
         } else if (channelId == _channelId1) {
-          this.setState(() {
+          setState(() {
             remoteUid1.removeWhere((element) => element == uid);
           });
         }
@@ -132,12 +133,12 @@ class _State extends State<JoinMultipleChannel> {
       leaveChannel: (stats) {
         logSink.log('leaveChannel ${channel.channelId} ${stats.toJson()}');
         if (channelId == _channelId0) {
-          this.setState(() {
+          setState(() {
             isJoined0 = false;
             remoteUid0.clear();
           });
         } else if (channelId == _channelId1) {
-          this.setState(() {
+          setState(() {
             isJoined1 = false;
             remoteUid1.clear();
           });
@@ -177,9 +178,9 @@ class _State extends State<JoinMultipleChannel> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (isJoined0) {
-                        this._leaveChannel0();
+                        _leaveChannel0();
                       } else {
-                        this._joinChannel0();
+                        _joinChannel0();
                       }
                     },
                     child: Text('${isJoined0 ? 'Leave' : 'Join'} $_channelId0'),
@@ -194,9 +195,9 @@ class _State extends State<JoinMultipleChannel> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (isJoined1) {
-                        this._leaveChannel1();
+                        _leaveChannel1();
                       } else {
-                        this._joinChannel1();
+                        _joinChannel1();
                       }
                     },
                     child: Text('${isJoined1 ? 'Leave' : 'Join'} $_channelId1'),
@@ -213,8 +214,8 @@ class _State extends State<JoinMultipleChannel> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
-                onPressed: this._publishChannel0,
-                child: Text('Publish ${_channelId0}'),
+                onPressed: _publishChannel0,
+                child: const Text('Publish $_channelId0'),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -222,11 +223,11 @@ class _State extends State<JoinMultipleChannel> {
                     renderChannelId = _channelId0;
                   });
                 },
-                child: Text('Render ${_channelId0}'),
+                child: const Text('Render $_channelId0'),
               ),
               ElevatedButton(
-                onPressed: this._publishChannel1,
-                child: Text('Publish ${_channelId1}'),
+                onPressed: _publishChannel1,
+                child: const Text('Publish $_channelId1'),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -234,7 +235,7 @@ class _State extends State<JoinMultipleChannel> {
                     renderChannelId = _channelId1;
                   });
                 },
-                child: Text('Render ${_channelId1}'),
+                child: const Text('Render $_channelId1'),
               ),
             ],
           ),
@@ -253,7 +254,9 @@ class _State extends State<JoinMultipleChannel> {
     return Expanded(
       child: Stack(
         children: [
-          kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
+          kIsWeb
+              ? const rtc_local_view.SurfaceView()
+              : const rtc_local_view.TextureView(),
           if (remoteUid.isNotEmpty)
             Align(
               alignment: Alignment.topLeft,
@@ -262,15 +265,15 @@ class _State extends State<JoinMultipleChannel> {
                 child: Row(
                   children: remoteUid
                       .map(
-                        (e) => Container(
+                        (e) => SizedBox(
                           width: 120,
                           height: 120,
                           child: kIsWeb
-                              ? RtcRemoteView.SurfaceView(
+                              ? rtc_remote_view.SurfaceView(
                                   uid: e,
                                   channelId: renderChannelId!,
                                 )
-                              : RtcRemoteView.TextureView(
+                              : rtc_remote_view.TextureView(
                                   uid: e,
                                   channelId: renderChannelId!,
                                 ),
