@@ -220,6 +220,12 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
+  // TODO(littlegnal): Dead code to pass pana analyze, will fix it in 5.1.0
+  // ignore: unused_element
+  void _cancelSubscription() {
+    _subscription?.cancel();
+  }
+
   ///
   /// Adds event handlers
   /// The SDK uses the RtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this interface class have default (empty) implementations. Therefore, the application can only inherit some required events. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method. Otherwise, the SDK may not work properly.
