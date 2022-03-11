@@ -1,12 +1,10 @@
 name: CI
 
 on:
-  # pull_request_target:
-  #   types: [opened, synchronize]
-  #   branches: 
-  #     - master
-  #     # Temporarily allow check on dev/flutter2-iris branch
-  #     - 'dev/flutter2-iris'
+  pull_request_target:
+    types: [opened, synchronize]
+    branches: 
+      - master
     
   push:
     branches: 

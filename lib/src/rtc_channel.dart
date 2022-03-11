@@ -112,6 +112,12 @@ class RtcChannel with RtcChannelInterface {
     });
   }
 
+  // TODO(littlegnal): Dead code to pass pana analyze, will fix it in 5.1.0
+  // ignore: unused_element
+  void _cancelSubscription() {
+    _subscription?.cancel();
+  }
+
   ///
   /// Sets the event handler for the RtcChannel object.
   /// After setting the channel event handler, you can listen for channel events and receive the statistics of the corresponding RtcChannel object.
