@@ -18,16 +18,21 @@ jobs:
     name: Flutter codestyle/analyze check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v2
+      - uses: axel-op/dart-package-analyzer@v3
+        id: analysis
         with:
-          java-version: '11'
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: '2.10.0'
-      - run: flutter pub get
-      - run: bash ci/dartfmt_check.sh
-      - run: flutter analyze
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check scores
+        env:
+          TOTAL: ${{ steps.analysis.outputs.total }}
+          TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
+        run: |
+          if (( $TOTAL < 120 ))
+          then
+            echo Pub Score too low.
+            exit 1
+          fi 
 
   integration_test_android:
     name: Run Flutter Android Integration Tests
