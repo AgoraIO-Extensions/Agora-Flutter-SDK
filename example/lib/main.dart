@@ -5,16 +5,18 @@ import 'examples/basic/index.dart';
 import 'config/agora.config.dart' as config;
 import 'examples/log_sink.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 /// This widget is the root of your application.
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  final _DATA = [...Basic, ...Advanced];
+  final _data = [...basic, ...advanced];
 
   bool _isConfigInvalid() {
     return config.appId == '<YOUR_APP_ID>' ||
@@ -33,16 +35,16 @@ class _MyAppState extends State<MyApp> {
           title: const Text('APIExample'),
         ),
         body: _isConfigInvalid()
-            ? InvalidConfigWidget()
+            ? const InvalidConfigWidget()
             : ListView.builder(
-                itemCount: _DATA.length,
+                itemCount: _data.length,
                 itemBuilder: (context, index) {
-                  return _DATA[index]['widget'] == null
+                  return _data[index]['widget'] == null
                       ? Ink(
                           color: Colors.grey,
                           child: ListTile(
-                            title: Text(_DATA[index]['name'] as String,
-                                style: TextStyle(
+                            title: Text(_data[index]['name'] as String,
+                                style: const TextStyle(
                                     fontSize: 24, color: Colors.white)),
                           ),
                         )
@@ -54,16 +56,18 @@ class _MyAppState extends State<MyApp> {
                                     builder: (context) => Scaffold(
                                           appBar: AppBar(
                                             title: Text(
-                                                _DATA[index]['name'] as String),
-                                            actions: [LogActionWidget()],
+                                                _data[index]['name'] as String),
+                                            // ignore: prefer_const_literals_to_create_immutables
+                                            actions: [const LogActionWidget()],
                                           ),
                                           body:
-                                              _DATA[index]['widget'] as Widget?,
+                                              _data[index]['widget'] as Widget?,
                                         )));
                           },
                           title: Text(
-                            _DATA[index]['name'] as String,
-                            style: TextStyle(fontSize: 24, color: Colors.black),
+                            _data[index]['name'] as String,
+                            style: const TextStyle(
+                                fontSize: 24, color: Colors.black),
                           ),
                         );
                 },
@@ -80,7 +84,7 @@ class InvalidConfigWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.red,
-      child: Text(
+      child: const Text(
           'Make sure you set the correct appId, token, channelId, etc.. in the lib/config/agora.config.dart file.'),
     );
   }

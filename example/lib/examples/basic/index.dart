@@ -3,9 +3,9 @@ import 'package:agora_rtc_engine_example/examples/basic/join_channel_video/join_
 import 'package:agora_rtc_engine_example/examples/basic/string_uid/string_uid.dart';
 
 /// Data source for basic examples
-final Basic = [
+final basic = [
   {'name': 'Basic'},
-  {'name': 'JoinChannelAudio', 'widget': JoinChannelAudio()},
-  {'name': 'JoinChannelVideo', 'widget': JoinChannelVideo()},
-  {'name': 'StringUid', 'widget': StringUid()}
+  {'name': 'JoinChannelAudio', 'widget': const JoinChannelAudio()},
+  {'name': 'JoinChannelVideo', 'widget': const JoinChannelVideo()},
+  {'name': 'StringUid', 'widget': const StringUid()}
 ];

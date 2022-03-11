@@ -2,13 +2,14 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/advanced/voice_changer/voice_changer.config.dart';
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// VoiceChanger Example
 class VoiceChanger extends StatefulWidget {
+  const VoiceChanger({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -47,25 +48,25 @@ class _State extends State<VoiceChanger> {
   double _audioEffectPresetParam1 = 0;
   double _audioEffectPresetParam2 = 0;
 
-  List<VoiceBeautifierPreset> _voiceBeautifierPresets = [
+  final List<VoiceBeautifierPreset> _voiceBeautifierPresets = [
     VoiceBeautifierPreset.VoiceBeautifierOff,
     VoiceBeautifierPreset.ChatBeautifierMagnetic,
     VoiceBeautifierPreset.ChatBeautifierFresh,
   ];
 
-  List<AudioEffectPreset> _audioEffectPresets = [
+  final List<AudioEffectPreset> _audioEffectPresets = [
     AudioEffectPreset.AudioEffectOff,
     AudioEffectPreset.RoomAcousticsKTV,
     AudioEffectPreset.RoomAcousticsVocalConcert,
   ];
 
-  List<AudioReverbType> _audioReverbTypes = [
+  final List<AudioReverbType> _audioReverbTypes = [
     AudioReverbType.DryLevel,
     AudioReverbType.WetLevel,
     AudioReverbType.RoomSize,
   ];
 
-  Map<AudioReverbType, List<double>> _audioReverbTypeRanges = {
+  final Map<AudioReverbType, List<double>> _audioReverbTypeRanges = {
     AudioReverbType.DryLevel: [-20.0, 10.0, 0.0],
     AudioReverbType.WetLevel: [-20.0, 10.0, 0.0],
     AudioReverbType.RoomSize: [0.0, 100.0, 0.0],
@@ -73,7 +74,8 @@ class _State extends State<VoiceChanger> {
 
   late double _selectedAudioReverbTypeValue;
 
-  List<AudioEqualizationBandFrequency> _audioEqualizationBandFrequencys = [
+  final List<AudioEqualizationBandFrequency> _audioEqualizationBandFrequencys =
+      [
     AudioEqualizationBandFrequency.Band31,
     AudioEqualizationBandFrequency.Band62,
     AudioEqualizationBandFrequency.Band125,
@@ -111,7 +113,7 @@ class _State extends State<VoiceChanger> {
       await Permission.microphone.request();
     }
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListener();
+    _addListener();
 
     // make this room live broadcasting room
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
@@ -129,13 +131,13 @@ class _State extends State<VoiceChanger> {
   _addListener() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
           uidMySelf = uid;
@@ -174,7 +176,7 @@ class _State extends State<VoiceChanger> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Select VoiceBeautifierPreset: '),
+          const Text('Select VoiceBeautifierPreset: '),
           _createDropdownButton<VoiceBeautifierPreset>(
             _voiceBeautifierPresets,
             () => _selectedVoiceBeautifierPreset,
@@ -189,7 +191,7 @@ class _State extends State<VoiceChanger> {
               await _engine
                   .setVoiceBeautifierPreset(_selectedVoiceBeautifierPreset);
             },
-            child: Text('setVoiceBeautifierPreset'),
+            child: const Text('setVoiceBeautifierPreset'),
           ),
         ],
       );
@@ -201,7 +203,7 @@ class _State extends State<VoiceChanger> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Select AudioEffectPreset: '),
+            const Text('Select AudioEffectPreset: '),
             _createDropdownButton<AudioEffectPreset>(
               _audioEffectPresets,
               () => _selectedAudioEffectPreset,
@@ -217,11 +219,11 @@ class _State extends State<VoiceChanger> {
           onPressed: () async {
             await _engine.setAudioEffectPreset(_selectedAudioEffectPreset);
           },
-          child: Text('setAudioEffectPreset'),
+          child: const Text('setAudioEffectPreset'),
         ),
         Row(
           children: [
-            Text('param1'),
+            const Text('param1'),
             Slider(
               value: _audioEffectPresetParam1,
               min: 0.0,
@@ -238,7 +240,7 @@ class _State extends State<VoiceChanger> {
         ),
         Row(
           children: [
-            Text('param2'),
+            const Text('param2'),
             Slider(
               value: _audioEffectPresetParam2,
               min: 0.0,
@@ -261,12 +263,12 @@ class _State extends State<VoiceChanger> {
               _audioEffectPresetParam2.toInt(),
             );
           },
-          child: Text('setAudioEffectParameters'),
+          child: const Text('setAudioEffectParameters'),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Select AudioReverbType: '),
+            const Text('Select AudioReverbType: '),
             _createDropdownButton<AudioReverbType>(
               _audioReverbTypes,
               () => _selectedAudioReverbType,
@@ -283,7 +285,7 @@ class _State extends State<VoiceChanger> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Select Local Voice Reverb Value: '),
+            const Text('Select Local Voice Reverb Value: '),
             Slider(
               value: _selectedAudioReverbTypeValue,
               min: _audioReverbTypeRanges[_selectedAudioReverbType]![0],
@@ -303,11 +305,11 @@ class _State extends State<VoiceChanger> {
               await _engine.setLocalVoiceReverb(_selectedAudioReverbType,
                   _selectedAudioReverbTypeValue.toInt());
             },
-            child: Text('setLocalVoiceReverb')),
+            child: const Text('setLocalVoiceReverb')),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Select AudioEqualizationBandFrequency: '),
+            const Text('Select AudioEqualizationBandFrequency: '),
             _createDropdownButton<AudioEqualizationBandFrequency>(
               _audioEqualizationBandFrequencys,
               () => _selectedAudioEqualizationBandFrequencys,
@@ -322,7 +324,7 @@ class _State extends State<VoiceChanger> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Select AudioEqualizationBandFrequency Value:'),
+            const Text('Select AudioEqualizationBandFrequency Value:'),
             Slider(
               value: _selectedAudioEqualizationBandFrequencyValue,
               min: -15.0,
@@ -344,10 +346,10 @@ class _State extends State<VoiceChanger> {
                   _selectedAudioEqualizationBandFrequencys,
                   _selectedAudioEqualizationBandFrequencyValue.toInt());
             },
-            child: Text('setLocalVoiceEqualization')),
+            child: const Text('setLocalVoiceEqualization')),
         Row(
           children: [
-            Text('Pitch:'),
+            const Text('Pitch:'),
             Slider(
               value: _voicePitchValue,
               min: 0.5,
@@ -366,7 +368,7 @@ class _State extends State<VoiceChanger> {
           onPressed: () async {
             _engine.setLocalVoicePitch(_voicePitchValue);
           },
-          child: Text('setLocalVoicePitch'),
+          child: const Text('setLocalVoicePitch'),
         ),
       ],
     );
@@ -386,7 +388,7 @@ class _State extends State<VoiceChanger> {
                     controller: _channelId,
                   ),
                   Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text('setVoiceBeautifierPreset Only'),
+                    const Text('setVoiceBeautifierPreset Only'),
                     Switch(
                       value: _setVoiceBeautifierPresetOnly,
                       onChanged: !isJoined
@@ -404,7 +406,7 @@ class _State extends State<VoiceChanger> {
                         flex: 1,
                         child: ElevatedButton(
                           onPressed: _initEngine,
-                          child: Text('Join channel'),
+                          child: const Text('Join channel'),
                         ),
                       )
                     ],

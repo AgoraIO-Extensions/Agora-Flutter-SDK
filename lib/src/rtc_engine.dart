@@ -14,6 +14,8 @@ import 'rtc_channel.dart';
 import 'rtc_device_manager.dart';
 import 'api_types.dart';
 
+// ignore_for_file: non_constant_identifier_names
+
 ///
 /// The basic interface of the Agora SDK that implements the core functions of real-time communication.
 /// RtcEngine provides the main methods that your app can call.
@@ -144,7 +146,7 @@ class RtcEngine with RtcEngineInterface {
   /// **return** The RtcEngine instance, if the method call succeeds.
   /// An error code, if the call fails.
   ///
-  @deprecated
+  @Deprecated('This method is deprecated. Use createWithContext instead.')
   static Future<RtcEngine> createWithAreaCode(
       String appId, List<AreaCode> areaCode) {
     return createWithContext(RtcEngineContext(appId, areaCode: areaCode));
@@ -157,7 +159,7 @@ class RtcEngine with RtcEngineInterface {
   ///
   /// Param [config] The RtcEngine configuraiton. For details, see RtcEngineContext.
   ///
-  @deprecated
+  @Deprecated('This method is deprecated. Use createWithContext instead.')
   static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
     return createWithContext(config);
   }
@@ -181,12 +183,12 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> initialize(RtcEngineContext context) {
-    _rtcEngineContext = context;
+  Future<void> initialize(RtcEngineContext config) {
+    _rtcEngineContext = config;
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineInitialize.index,
       'params': jsonEncode({
-        'context': context.toJson(),
+        'context': config.toJson(),
         'appGroup': _appGroup,
       }),
     }).then((value) => _invokeMethod('callApi', {
@@ -311,7 +313,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> enableWebSdkInteroperability(bool enabled) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableWebSdkInteroperability.index,
@@ -366,7 +367,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setLogFile(String filePath) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetLogFile.index,
@@ -377,7 +377,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setLogFilter(LogFilter filter) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetLogFilter.index,
@@ -388,7 +387,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setLogFileSize(int fileSizeInKBytes) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetLogFileSize.index,
@@ -496,6 +494,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  // ignore: override_on_non_overriding_member
   Future<void> enableLoopbackRecording(bool enabled, {String? deviceName}) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableLoopBackRecording.index,
@@ -588,7 +587,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetDefaultMuteAllRemoteAudioStreams.index,
@@ -667,7 +665,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetDefaultMuteAllRemoteVideoStreams.index,
@@ -1246,7 +1243,6 @@ class RtcEngine with RtcEngineInterface {
     });
   }
 
-  @deprecated
   @override
   Future<void> setEncryptionMode(EncryptionMode encryptionMode) {
     var encryption = '';
@@ -1272,7 +1268,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setEncryptionSecret(String secret) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetEncryptionSecret.index,
@@ -1313,7 +1308,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetLocalVoiceChanger.index,
@@ -1358,7 +1352,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset reverbPreset) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetLocalVoiceReverbPreset.index,
@@ -1445,7 +1438,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  @deprecated
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
     return _invokeMethod('callApi', {
@@ -2136,7 +2128,8 @@ mixin RtcEngineInterface
   /// false: (Default) Disable interoperability.
   ///
   ///
-  @deprecated
+  @Deprecated(
+      'The SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.')
   Future<void> enableWebSdkInteroperability(bool enabled);
 
   ///
@@ -2193,7 +2186,7 @@ mixin RtcEngineInterface
   /// Param [filePath] The absolute path of the log files. The default file path is C: \Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log. Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
   ///
   ///
-  @deprecated
+  @Deprecated('')
   Future<void> setLogFile(String filePath);
 
   ///
@@ -2203,7 +2196,7 @@ mixin RtcEngineInterface
   ///
   /// Param [filter] The output log level of the SDK. For details, see LogFilter.
   ///
-  @deprecated
+  @Deprecated('')
   Future<void> setLogFilter(LogFilter filter);
 
   ///
@@ -2213,7 +2206,7 @@ mixin RtcEngineInterface
   ///
   /// Param [fileSizeInKBytes] The size (KB) of a log file. The default value is 1024 KB. If you set fileSizeInKByte to 1024 KB, the maximum aggregate size of the log files output by the SDK is 5 MB. if you set fileSizeInKByte to less than 1024 KB, the setting is invalid, and the maximum size of a log file is still 1024 KB.
   ///
-  @deprecated
+  @Deprecated('')
   Future<void> setLogFileSize(int fileSizeInKBytes);
 
   /* api-engine-setParameters */
@@ -2582,7 +2575,7 @@ mixin RtcAudioInterface {
   ///
   ///
   ///
-  @deprecated
+  @Deprecated('')
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 
   ///
@@ -2737,7 +2730,7 @@ mixin RtcVideoInterface {
   ///
   ///
   ///
-  @deprecated
+  @Deprecated('')
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool muted);
 
   ///
@@ -3230,7 +3223,7 @@ mixin RtcVoiceChangerInterface {
   /// Param [voiceChanger] The local voice changer option. The default value is Off , which means the original voice. For more details, see AudioVoiceChanger. The gender-based beatification effect works best only when assigned a proper gender. Use GENERAL_BEAUTY_VOICE_MALE_MAGNETIC for male and use GENERAL_BEAUTY_VOICE_FEMALE_FRESH and GENERAL_BEAUTY_VOICE_FEMALE_VITALITY for female. Failure to do so can lead to voice distortion.
   ///
   ///
-  @deprecated
+  @Deprecated('')
   Future<void> setLocalVoiceChanger(AudioVoiceChanger voiceChanger);
 
   ///
@@ -3246,7 +3239,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// Param [reverbPreset] The local voice reverberation option. The default value is Off, which means the original voice. For more details, see AudioReverbPreset. To achieve better voice effects, Agora recommends the enumeration whose name begins with AUDIO_REVERB_FX.
   ///
-  @deprecated
+  @Deprecated('')
   Future<void> setLocalVoiceReverbPreset(AudioReverbPreset preset);
 
   ///
@@ -3938,7 +3931,8 @@ mixin RtcEncryptionInterface {
   ///
   /// Param [secret] The encryption password.
   ///
-  @deprecated
+  @Deprecated(
+      'This method is deprecated from v3.2.0. Please use enableEncryption instead.')
   Future<void> setEncryptionSecret(String secret);
 
   ///
@@ -3959,7 +3953,8 @@ mixin RtcEncryptionInterface {
   ///
   ///
   ///
-  @deprecated
+  @Deprecated(
+      'This method is deprecated from v3.2.0. Please use enableEncryption instead.')
   Future<void> setEncryptionMode(EncryptionMode encryptionMode);
 
   ///
@@ -4014,7 +4009,8 @@ mixin RtcAudioRecorderInterface {
   ///
   /// Param [quality] Recording quality. For more details, see AudioRecordingQuality.
   ///
-  @deprecated
+  @Deprecated(
+      'This method is deprecated as of v3.4.0. Please use startAudioRecordingWithConfig instead.')
   Future<void> startAudioRecording(String filePath,
       AudioSampleRateType sampleRate, AudioRecordingQuality quality);
 
@@ -4428,8 +4424,6 @@ mixin RtcScreenSharingInterface {
   ///
   /// Param [bitrate] The bitrate of the screen share.
   ///
-  // TODO(littlegnal): [MS-99459] Doc breack change captureFreq type int? -> int, bitrate type
-  // int? -> int
   Future<void> startScreenCapture(int windowId,
       [int captureFreq, Rect? rect, int bitrate]);
 }

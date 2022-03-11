@@ -1,8 +1,6 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'custom_capture_audio_api.generated.dart';
@@ -44,6 +42,8 @@ extension AudioExternalSourcePosExt on AudioExternalSourcePos {
 
 /// CustomCaptureAudio Example
 class CustomCaptureAudio extends StatefulWidget {
+  const CustomCaptureAudio({Key? key}) : super(key: key);
+
   @override
   _CustomCaptureAudioState createState() => _CustomCaptureAudioState();
 }
@@ -143,118 +143,116 @@ class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ElevatedButton(
-            onPressed: !_isJoined ? _joinChannel : null,
-            child: Text('Join Channel'),
-          ),
-          if (_isJoined) ...[
-            ListTile(
-              title: Row(
-                children: [
-                  const Text('PlayOut'),
-                  Expanded(
-                    child: Slider(
-                      value: _playoutSliderValue,
-                      min: 0,
-                      max: 100,
-                      label: _playoutSliderValue.round().toString(),
-                      onChanged: (double value) {
-                        _playoutSliderValue = value;
-                        _sourcePosChanged();
-                        setState(() {});
-                      },
-                    ),
-                  )
-                ],
-              ),
-              leading: Radio<AudioExternalSourcePos>(
-                value: AudioExternalSourcePos.externalPlayoutSource,
-                groupValue: _audioExternalSourcePos,
-                onChanged: (AudioExternalSourcePos? value) {
-                  _audioExternalSourcePos = value!;
-                  _sourcePosChanged();
-                  setState(() {});
-                },
-              ),
-            ),
-            ListTile(
-              title: Row(
-                children: [
-                  const Text('PreProcess'),
-                  Expanded(
-                    child: Slider(
-                      value: _preProcessSliderValue,
-                      min: 0,
-                      max: 100,
-                      divisions: 100,
-                      label: _preProcessSliderValue.round().toString(),
-                      onChanged: (double value) {
-                        _preProcessSliderValue = value;
-                        _sourcePosChanged();
-                        setState(() {});
-                      },
-                    ),
-                  )
-                ],
-              ),
-              leading: Radio<AudioExternalSourcePos>(
-                value: AudioExternalSourcePos.externalRecordSourcePreProcess,
-                groupValue: _audioExternalSourcePos,
-                onChanged: (AudioExternalSourcePos? value) {
-                  _audioExternalSourcePos = value!;
-                  _sourcePosChanged();
-                  setState(() {});
-                },
-              ),
-            ),
-            ListTile(
-              title: Row(
-                children: [
-                  const Text('PostProcess'),
-                  Expanded(
-                    child: Slider(
-                      value: _postProcessSliderValue,
-                      min: 0,
-                      max: 100,
-                      label: _postProcessSliderValue.round().toString(),
-                      onChanged: (double value) {
-                        _postProcessSliderValue = value;
-
-                        _sourcePosChanged();
-                        setState(() {});
-                      },
-                    ),
-                  )
-                ],
-              ),
-              leading: Radio<AudioExternalSourcePos>(
-                value: AudioExternalSourcePos.externalRecordSourcePostProcess,
-                groupValue: _audioExternalSourcePos,
-                onChanged: (AudioExternalSourcePos? value) {
-                  _audioExternalSourcePos = value!;
-                  _sourcePosChanged();
-                  setState(() {});
-                },
-              ),
-            ),
-            ElevatedButton(
-              onPressed: !_isJoined
-                  ? null
-                  : () async {
-                      _isMute = !_isMute;
-                      await _engine.muteLocalAudioStream(_isMute);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ElevatedButton(
+          onPressed: !_isJoined ? _joinChannel : null,
+          child: const Text('Join Channel'),
+        ),
+        if (_isJoined) ...[
+          ListTile(
+            title: Row(
+              children: [
+                const Text('PlayOut'),
+                Expanded(
+                  child: Slider(
+                    value: _playoutSliderValue,
+                    min: 0,
+                    max: 100,
+                    label: _playoutSliderValue.round().toString(),
+                    onChanged: (double value) {
+                      _playoutSliderValue = value;
+                      _sourcePosChanged();
                       setState(() {});
                     },
-              child: Text('${_isMute ? 'Open' : 'Mute'} microphone'),
+                  ),
+                )
+              ],
             ),
-          ],
+            leading: Radio<AudioExternalSourcePos>(
+              value: AudioExternalSourcePos.externalPlayoutSource,
+              groupValue: _audioExternalSourcePos,
+              onChanged: (AudioExternalSourcePos? value) {
+                _audioExternalSourcePos = value!;
+                _sourcePosChanged();
+                setState(() {});
+              },
+            ),
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                const Text('PreProcess'),
+                Expanded(
+                  child: Slider(
+                    value: _preProcessSliderValue,
+                    min: 0,
+                    max: 100,
+                    divisions: 100,
+                    label: _preProcessSliderValue.round().toString(),
+                    onChanged: (double value) {
+                      _preProcessSliderValue = value;
+                      _sourcePosChanged();
+                      setState(() {});
+                    },
+                  ),
+                )
+              ],
+            ),
+            leading: Radio<AudioExternalSourcePos>(
+              value: AudioExternalSourcePos.externalRecordSourcePreProcess,
+              groupValue: _audioExternalSourcePos,
+              onChanged: (AudioExternalSourcePos? value) {
+                _audioExternalSourcePos = value!;
+                _sourcePosChanged();
+                setState(() {});
+              },
+            ),
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                const Text('PostProcess'),
+                Expanded(
+                  child: Slider(
+                    value: _postProcessSliderValue,
+                    min: 0,
+                    max: 100,
+                    label: _postProcessSliderValue.round().toString(),
+                    onChanged: (double value) {
+                      _postProcessSliderValue = value;
+
+                      _sourcePosChanged();
+                      setState(() {});
+                    },
+                  ),
+                )
+              ],
+            ),
+            leading: Radio<AudioExternalSourcePos>(
+              value: AudioExternalSourcePos.externalRecordSourcePostProcess,
+              groupValue: _audioExternalSourcePos,
+              onChanged: (AudioExternalSourcePos? value) {
+                _audioExternalSourcePos = value!;
+                _sourcePosChanged();
+                setState(() {});
+              },
+            ),
+          ),
+          ElevatedButton(
+            onPressed: !_isJoined
+                ? null
+                : () async {
+                    _isMute = !_isMute;
+                    await _engine.muteLocalAudioStream(_isMute);
+                    setState(() {});
+                  },
+            child: Text('${_isMute ? 'Open' : 'Mute'} microphone'),
+          ),
         ],
-      ),
+      ],
     );
   }
 }

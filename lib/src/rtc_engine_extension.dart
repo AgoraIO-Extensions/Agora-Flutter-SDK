@@ -5,6 +5,8 @@ import 'dart:io';
 import 'classes.dart';
 import 'rtc_engine.dart';
 
+// ignore_for_file: non_constant_identifier_names
+
 class _Rect extends Struct {
   @Double()
   external double x;
@@ -129,12 +131,12 @@ final void Function(Pointer<_WindowCollection>) _FreeWindowCollection =
 
 ///
 /// The RtcEngineExtension class.
-/// 
+///
 ///
 extension RtcEngineExtension on RtcEngine {
   ///
   /// Gets the actual absolute path of the asset through the relative path of the asset.
-  /// 
+  ///
   ///
   /// Param [assetPath] The resource path configured in the flutter -> assets field of pubspec.yaml, for example: assets/Sound_Horizon.mp3.
   ///
@@ -147,7 +149,7 @@ extension RtcEngineExtension on RtcEngine {
 
   ///
   /// Enumerates the information of all the screens in the system.
-  /// 
+  ///
   ///
   /// **return** The information of the screen for screen-sharing.
   ///
@@ -164,7 +166,7 @@ extension RtcEngineExtension on RtcEngine {
 
   ///
   /// Enumerates the information of all the windows in the system.
-  /// 
+  ///
   ///
   /// **return** The information of the window for screen-sharing.
   ///

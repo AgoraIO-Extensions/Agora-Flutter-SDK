@@ -3,7 +3,6 @@ import 'dart:ui' show Color;
 
 import 'package:agora_rtc_engine/src/enum_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'events.dart';
 
 import 'enums.dart';
 
@@ -400,7 +399,8 @@ class LiveTranscoding {
   @JsonKey(includeIfNull: false)
   VideoFrameRate? videoFramerate;
 
-  @deprecated
+  @Deprecated(
+      'This attribute is deprecated since v2.8.0, and Agora does not recommend it.')
   @JsonKey(includeIfNull: false)
 
   ///
@@ -1670,7 +1670,8 @@ class RemoteVideoStats {
   ///
   int uid;
 
-  @deprecated
+  @Deprecated(
+      'In scenarios where audio and video are synchronized, you can get the video  delay data from networkTransportDelay and jitterBufferDelay in RemoteAudioStats.')
 
   ///
   ///
@@ -1928,7 +1929,7 @@ class DataStreamConfig {
 
 /* class-RtcEngineConfig */
 @JsonSerializable(explicitToJson: true)
-@deprecated
+@Deprecated('Please use RtcEngineContext instead.')
 class RtcEngineConfig extends RtcEngineContext {
   /// Constructs a [RtcEngineConfig]
   RtcEngineConfig(String appId,
@@ -1985,9 +1986,9 @@ class RtcEngineContext {
   static int? _$AreaCodeListToJson(List<AreaCode>? instance) {
     if (instance == null) return null;
     var areaCode = 0;
-    instance.forEach((element) {
+    for (var element in instance) {
       areaCode |= AreaCodeConverter(element).value();
-    });
+    }
     return areaCode;
   }
 }

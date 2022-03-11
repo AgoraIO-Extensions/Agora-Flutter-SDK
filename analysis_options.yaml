@@ -1,11 +1,12 @@
-include: package:pedantic/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     # Ignore generated files
-    - '**/*.g.dart'
+    - 'lib/src/*.g.dart'
     - 'lib/src/generated/*.dart'
-  errors:
-    undefined_prefixed_name: ignore
+    - 'integration_test_app/**'
+    - 'test/**'
+    
 linter:
   rules:
-    - public_member_api_docs
+    public_member_api_docs: false

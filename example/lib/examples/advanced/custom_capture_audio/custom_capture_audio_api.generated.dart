@@ -16,17 +16,22 @@ class CustomCaptureAudioApi {
   /// Constructor for [CustomCaptureAudioApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  CustomCaptureAudioApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  CustomCaptureAudioApi({BinaryMessenger? binaryMessenger})
+      : _binaryMessenger = binaryMessenger;
 
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _CustomCaptureAudioApiCodec();
 
-  Future<void> setExternalAudioSource(bool arg_enabled, int arg_sampleRate, int arg_channels) async {
+  Future<void> setExternalAudioSource(
+      bool arg_enabled, int arg_sampleRate, int arg_channels) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.CustomCaptureAudioApi.setExternalAudioSource', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.CustomCaptureAudioApi.setExternalAudioSource',
+        codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object>[arg_enabled, arg_sampleRate, arg_channels]) as Map<Object?, Object?>?;
+        await channel.send(<Object>[arg_enabled, arg_sampleRate, arg_channels])
+            as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -34,7 +39,8 @@ class CustomCaptureAudioApi {
         details: null,
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -45,11 +51,14 @@ class CustomCaptureAudioApi {
     }
   }
 
-  Future<void> setExternalAudioSourceVolume(int arg_sourcePos, int arg_volume) async {
+  Future<void> setExternalAudioSourceVolume(
+      int arg_sourcePos, int arg_volume) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.CustomCaptureAudioApi.setExternalAudioSourceVolume', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object>[arg_sourcePos, arg_volume]) as Map<Object?, Object?>?;
+        'dev.flutter.pigeon.CustomCaptureAudioApi.setExternalAudioSourceVolume',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel
+        .send(<Object>[arg_sourcePos, arg_volume]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -57,7 +66,8 @@ class CustomCaptureAudioApi {
         details: null,
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -70,9 +80,10 @@ class CustomCaptureAudioApi {
 
   Future<void> startAudioRecord(int arg_sampleRate, int arg_channels) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.CustomCaptureAudioApi.startAudioRecord', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object>[arg_sampleRate, arg_channels]) as Map<Object?, Object?>?;
+        'dev.flutter.pigeon.CustomCaptureAudioApi.startAudioRecord', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel
+        .send(<Object>[arg_sampleRate, arg_channels]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -80,7 +91,8 @@ class CustomCaptureAudioApi {
         details: null,
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -93,7 +105,8 @@ class CustomCaptureAudioApi {
 
   Future<void> stopAudioRecord() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.CustomCaptureAudioApi.stopAudioRecord', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.CustomCaptureAudioApi.stopAudioRecord', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -103,7 +116,8 @@ class CustomCaptureAudioApi {
         details: null,
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,

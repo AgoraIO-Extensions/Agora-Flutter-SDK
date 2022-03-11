@@ -8,6 +8,8 @@ import '../../log_sink.dart';
 
 /// JoinChannelAudio Example
 class JoinChannelAudio extends StatefulWidget {
+  const JoinChannelAudio({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _State();
 }
@@ -29,7 +31,7 @@ class _State extends State<JoinChannelAudio> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: channelId);
-    this._initEngine();
+    _initEngine();
   }
 
   @override
@@ -40,23 +42,23 @@ class _State extends State<JoinChannelAudio> {
 
   _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
-    this._addListeners();
+    _addListeners();
 
     await _engine.enableAudio();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
   }
 
-  _addListeners() {
+  void _addListeners() {
     _engine.setEventHandler(RtcEngineEventHandler(
       warning: (warningCode) {
-        logSink.log('warning ${warningCode}');
+        logSink.log('warning $warningCode');
       },
       error: (errorCode) {
-        logSink.log('error ${errorCode}');
+        logSink.log('error $errorCode');
       },
       joinChannelSuccess: (channel, uid, elapsed) {
-        logSink.log('joinChannelSuccess ${channel} ${uid} ${elapsed}');
+        logSink.log('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
         });
@@ -159,15 +161,14 @@ class _State extends State<JoinChannelAudio> {
           children: [
             TextField(
               controller: _controller,
-              decoration: InputDecoration(hintText: 'Channel ID'),
+              decoration: const InputDecoration(hintText: 'Channel ID'),
             ),
             Row(
               children: [
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed:
-                        isJoined ? this._leaveChannel : this._joinChannel,
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
                 )
@@ -183,23 +184,23 @@ class _State extends State<JoinChannelAudio> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: this._switchMicrophone,
+                    onPressed: _switchMicrophone,
                     child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
                   ),
                   ElevatedButton(
-                    onPressed: isJoined ? this._switchSpeakerphone : null,
+                    onPressed: isJoined ? _switchSpeakerphone : null,
                     child:
                         Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
                   ),
                   if (!kIsWeb)
                     ElevatedButton(
-                      onPressed: isJoined ? this._switchEffect : null,
+                      onPressed: isJoined ? _switchEffect : null,
                       child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
                     ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('RecordingVolume:'),
+                      const Text('RecordingVolume:'),
                       Slider(
                         value: _recordingVolume,
                         min: 0,
@@ -221,7 +222,7 @@ class _State extends State<JoinChannelAudio> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('PlaybackVolume:'),
+                      const Text('PlaybackVolume:'),
                       Slider(
                         value: _playbackVolume,
                         min: 0,
@@ -245,7 +246,7 @@ class _State extends State<JoinChannelAudio> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Row(mainAxisSize: MainAxisSize.min, children: [
-                        Text('InEar Monitoring Volume:'),
+                        const Text('InEar Monitoring Volume:'),
                         Switch(
                           value: _enableInEarMonitoring,
                           onChanged: isJoined ? _toggleInEarMonitoring : null,
@@ -254,7 +255,7 @@ class _State extends State<JoinChannelAudio> {
                         )
                       ]),
                       if (_enableInEarMonitoring)
-                        Container(
+                        SizedBox(
                             width: 300,
                             child: Slider(
                               value: _inEarMonitoringVolume,
@@ -271,7 +272,7 @@ class _State extends State<JoinChannelAudio> {
                   ),
                 ],
               ),
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
             ))
       ],
     );
