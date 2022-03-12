@@ -1,0 +1,32 @@
+name: Flutter static analysis check
+
+on:
+  push:
+    branches: 
+      - master
+      - littlegnal/try-workflow-run
+  pull_request:
+    branches: 
+      - master
+      - littlegnal/try-workflow-run
+
+jobs:
+  flutter_codestyle_check:
+    name: Flutter codestyle/analyze check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: axel-op/dart-package-analyzer@v3
+        id: analysis
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check scores
+        env:
+          TOTAL: ${{ steps.analysis.outputs.total }}
+          TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
+        run: |
+          if (( $TOTAL < 120 ))
+          then
+            echo Pub Score too low.
+            exit 1
+          fi 
