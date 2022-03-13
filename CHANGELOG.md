@@ -1,4 +1,16 @@
-# [5.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.1...v5.0.0) (2022-02-21)
+
+
+## [5.0.1-rc.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.0...v5.0.1-rc.1) (2022-03-13)
+
+
+### Bug Fixes
+
+* Fix pana static analyze ([981755b](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/981755bd321501c97fcf2e86dcd5ccd9a3143e8c))
+
+
+### Features
+
+* Enhance flutter analyze ([a321374](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/a321374a5725241f697bdfc304457ab4ba5ef540))# [5.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.1...v5.0.0) (2022-02-21)
 
 
 ### Features
