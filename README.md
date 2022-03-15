@@ -1,4 +1,4 @@
-# Agora RTC Engine for Flutter
+# Agora RTC SDK for Flutter
 
 <p align="center">
     <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://badges.bar/agora_rtc_engine/likes" alt="Pub.dev likes"/></a>
