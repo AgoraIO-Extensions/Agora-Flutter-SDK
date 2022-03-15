@@ -128,7 +128,7 @@ Select your **TARGET** in Xcode, and click the `Signing & Capabilities` tab, the
 
 ### [RawData #183](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/183)
 
-Currently supporterd for Android and iOS.
+Currently supported for Android and iOS.
 
 ### [Using flutter assets #181](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/181)
 
