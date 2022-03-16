@@ -1,6 +1,6 @@
 
 
-## [5.0.1-rc.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.0...v5.0.1-rc.1) (2022-03-13)
+## [5.0.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.1-rc.1...v5.0.1) (2022-03-16)## [5.0.1-rc.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.0...v5.0.1-rc.1) (2022-03-13)
 
 
 ### Bug Fixes
