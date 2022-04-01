@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 const appId = "<-- Insert App Id -->";
 const token = "<-- Insert Token -->";
+const channel = "<-- Insert Channel Name -->";
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -60,7 +61,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
 
-    await _engine.joinChannel(token, "test", null, 0);
+    await _engine.joinChannel(token, channel, null, 0);
   }
 
   // Create UI with local view and remote view
@@ -95,7 +96,10 @@ class _MyAppState extends State<MyApp> {
   // Display remote user's video
   Widget _remoteVideo() {
     if (_remoteUid != null) {
-      return RtcRemoteView.SurfaceView(uid: _remoteUid!);
+      return RtcRemoteView.SurfaceView(
+        uid: _remoteUid!,
+        channelId: channel,
+      );
     } else {
       return Text(
         'Please wait for remote user to join',
