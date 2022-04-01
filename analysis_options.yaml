@@ -4,9 +4,7 @@ analyzer:
     # Ignore generated files
     - "**/*.g.dart"
     - lib/src/generated/*.dart
-    - integration_test_app/**
-    - test/**
     
 linter:
   rules:
-    public_member_api_docs: false
+    - public_member_api_docs

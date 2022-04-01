@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:agora_rtc_engine/src/enums.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'enums.dart';
+
 
 part 'enum_converter.g.dart';
 

@@ -13,6 +13,7 @@ const _channelId1 = 'channel1';
 
 /// JoinMultipleChannel Example
 class JoinMultipleChannel extends StatefulWidget {
+  /// Construct the [JoinMultipleChannel]
   const JoinMultipleChannel({Key? key}) : super(key: key);
 
   @override

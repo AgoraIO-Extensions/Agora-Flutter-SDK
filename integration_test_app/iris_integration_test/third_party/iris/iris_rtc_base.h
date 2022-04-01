@@ -214,6 +214,17 @@ enum ApiTypeEngine {
   kEngineGetScreenCaptureSources = 193,
   kEngineTakeSnapshot = 194,
   kEngineEnableContentInspect = 195,
+  kEngineSetAVSyncSource = 196,
+  kEngineStartRtmpStreamWithoutTranscoding = 197,
+  kEngineStartRtmpStreamWithTranscoding = 198,
+  kEngineUpdateRtmpTranscoding = 199,
+  kEngineStopRtmpStream = 200,
+  kEngineSetLowlightEnhanceOptions = 201,
+  kEngineSetVideoDenoiserOptions = 202,
+  kEngineSetColorEnhanceOptions = 203,
+  kEngineEnableWirelessAccelerate = 204,
+  kEngineMediaRecorderStart = 205,
+  kEngineMediaRecorderStop = 206,
 };
 
 enum ApiTypeChannel {
@@ -264,6 +275,11 @@ enum ApiTypeChannel {
   kChannelStopChannelMediaRelay = 44,
   kChannelGetConnectionState = 45,
   kChannelEnableRemoteSuperResolution = 46,
+  kChannelSetAVSyncSource = 47,
+  kChannelStartRtmpStreamWithoutTranscoding = 48,
+  kChannelStartRtmpStreamWithTranscoding = 49,
+  kChannelUpdateRtmpTranscoding = 50,
+  kChannelStopRtmpStream = 51,
 };
 
 enum ApiTypeAudioDeviceManager {
@@ -289,6 +305,8 @@ enum ApiTypeAudioDeviceManager {
   kADMStopRecordingDeviceTest = 19,
   kADMStartAudioDeviceLoopbackTest = 20,
   kADMStopAudioDeviceLoopbackTest = 21,
+  kADMFollowSystemPlaybackDevice = 22,
+  kADMFollowSystemRecordingDevice = 23,
 };
 
 enum ApiTypeVideoDeviceManager {

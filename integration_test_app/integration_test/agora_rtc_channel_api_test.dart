@@ -3,11 +3,11 @@ import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_channel.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/src/api_types.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
 import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
+import 'package:agora_rtc_engine/src/impl/api_types.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

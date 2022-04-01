@@ -53,3 +53,7 @@ example/ios/Podfile.lock.classpath
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 android/gradle/wrapper/gradle-wrapper.properties
+
+macos/AgoraRtcWrapper.framework
+macos/AgoraRtcWrapper.podspec
+macos/libs

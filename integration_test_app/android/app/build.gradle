@@ -51,7 +51,8 @@ android {
 
         ndk {
             // Filter for architectures supported by Flutter.
-            abiFilters 'x86_64'
+            abiFilters 'x86_64', 'arm64-v8a'
+            debugSymbolLevel 'FULL'
         }
     }
 
@@ -60,6 +61,7 @@ android {
         cmake {
             // Provides a relative path to your CMake build script.
             path "../../iris_integration_test/CMakeLists.txt"
+
         }
     }
 

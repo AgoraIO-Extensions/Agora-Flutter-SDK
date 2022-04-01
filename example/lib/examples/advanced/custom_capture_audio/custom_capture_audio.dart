@@ -42,6 +42,7 @@ extension AudioExternalSourcePosExt on AudioExternalSourcePos {
 
 /// CustomCaptureAudio Example
 class CustomCaptureAudio extends StatefulWidget {
+  /// Construct the [CustomCaptureAudio]
   const CustomCaptureAudio({Key? key}) : super(key: key);
 
   @override
@@ -58,10 +59,12 @@ class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
   AudioExternalSourcePos _audioExternalSourcePos =
       AudioExternalSourcePos.externalPlayoutSource;
   late final RtcEngine _engine;
+  late final TextEditingController _channelIdController;
 
   @override
   void initState() {
     super.initState();
+    _channelIdController = TextEditingController(text: config.channelId);
     _initEngine();
   }
 
@@ -75,13 +78,16 @@ class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
 
     _engine.setEventHandler(RtcEngineEventHandler(
-      joinChannelSuccess: (String channel, int uid, int elapsed) async {
-        await _api.startAudioRecord(_defaultSampleRate, _defaultChannelCount);
-        setState(() {
-          _isJoined = true;
-        });
-      },
-    ));
+        joinChannelSuccess: (String channel, int uid, int elapsed) async {
+      await _api.startAudioRecord(_defaultSampleRate, _defaultChannelCount);
+      setState(() {
+        _isJoined = true;
+      });
+    }, leaveChannel: (RtcStats stats) {
+      setState(() {
+        _isJoined = false;
+      });
+    }));
   }
 
   void _joinChannel() async {
@@ -93,7 +99,7 @@ class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
 
-    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
+    await _engine.setDefaultAudioRouteToSpeakerphone(true);
 
     // Sets the external audio source.
     // PS: Ensure that you call this method before the joinChannel method
@@ -101,7 +107,7 @@ class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
         true, _defaultSampleRate, _defaultChannelCount);
 
     // Set audio route to speaker
-    await _engine.setDefaultAudioRoutetoSpeakerphone(true);
+    await _engine.setDefaultAudioRouteToSpeakerphone(true);
 
     final option = ChannelMediaOptions();
     option.autoSubscribeAudio = true;
@@ -113,7 +119,12 @@ class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    await _engine.joinChannel(config.token, config.channelId, null, 0, option);
+    await _engine.joinChannel(
+        config.token, _channelIdController.text, null, 0, option);
+  }
+
+  Future<void> _leaveChannel() async {
+    await _engine.leaveChannel();
   }
 
   void _destroyEngine() async {
@@ -147,9 +158,20 @@ class _CustomCaptureAudioState extends State<CustomCaptureAudio> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ElevatedButton(
-          onPressed: !_isJoined ? _joinChannel : null,
-          child: const Text('Join Channel'),
+        TextField(
+          controller: _channelIdController,
+          decoration: const InputDecoration(hintText: 'Channel ID'),
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: ElevatedButton(
+                onPressed: _isJoined ? _leaveChannel : _joinChannel,
+                child: Text('${_isJoined ? 'Leave' : 'Join'} channel'),
+              ),
+            )
+          ],
         ),
         if (_isJoined) ...[
           ListTile(

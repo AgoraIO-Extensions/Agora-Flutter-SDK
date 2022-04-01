@@ -23,7 +23,6 @@ rootProject.allprojects {
   repositories {
     mavenCentral()
     google()
-    maven { url 'https://www.jitpack.io' }
   }
 }
 
@@ -32,25 +31,33 @@ apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion safeExtGet('compileSdkVersion', 31)
-  buildToolsVersion safeExtGet('buildToolsVersion', '31.0.0')
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 16)
-    targetSdkVersion safeExtGet('targetSdkVersion', 31)
 
     consumerProguardFiles 'consumer-rules.pro'
   }
 
   sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
-  }
 
-  lintOptions {
-    disable 'InvalidPackage'
+    if (isDev(project)) {
+      main.jniLibs.srcDirs += 'libs'
+    }
   }
 }
 
 dependencies {
-  api 'com.github.agorabuilder:iris-rtc:3.5.2'
+  if (isDev(project)) {
+    api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+  } else {
+    api 'com.github.agorabuilder:iris-rtc:3.5.2'
+  }
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', "$agora_rtc_engine_kt_version")}"
+}
+
+static boolean isDev(Project project) {
+  def devFile = project.file('.plugin_dev')
+  return devFile.exists()
 }

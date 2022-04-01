@@ -5,7 +5,6 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.NonNull
 import io.agora.iris.rtc.IrisRtcEngine
-import io.agora.iris.rtc.base.ApiTypeChannel
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
@@ -18,11 +17,11 @@ private class ApiTypeChannelCallApiMethodCallHandler(
   irisRtcEngine: IrisRtcEngine
 ) : CallApiMethodCallHandler(irisRtcEngine) {
   override fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
-    return irisRtcEngine.channel.callApi(ApiTypeChannel.fromInt(apiType), params, sb)
+    return irisRtcEngine.channel.callApi(apiType, params, sb)
   }
 
   override fun callApiWithBuffer(apiType: Int, params: String?, buffer: ByteArray?, sb: StringBuffer): Int {
-    return irisRtcEngine.channel.callApi(ApiTypeChannel.fromInt(apiType), params, buffer, sb)
+    return irisRtcEngine.channel.callApi(apiType, params, buffer, sb)
   }
 }
 

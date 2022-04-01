@@ -35,3 +35,7 @@ Icon?
 
 /Flutter/Generated.xcconfig
 /Flutter/flutter_export_environment.sh
+
+AgoraRtcWrapper.framework
+AgoraRtcWrapper.podspec
+libs

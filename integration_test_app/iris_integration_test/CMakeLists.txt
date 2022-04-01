@@ -35,6 +35,11 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Android")
         set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../android/libs/${ANDROID_ABI}")
     endif()
 
+    find_library(
+        log-lib 
+        log
+    )
+
     add_library(libAgoraRtcWrapper SHARED IMPORTED)
     set_target_properties(
         libAgoraRtcWrapper
@@ -45,7 +50,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Android")
     target_link_libraries(${LIBRARY_NAME}
         PRIVATE
         libAgoraRtcWrapper
-        
+        ${log-lib}
         )
 elseif (CMAKE_SYSTEM_NAME STREQUAL "iOS")
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../ios/AgoraRtcWrapper.podspec")

@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// DeviceManager Example
 class DeviceManager extends StatefulWidget {
+  /// Construct the [DeviceManager]
   const DeviceManager({Key? key}) : super(key: key);
 
   @override
@@ -101,7 +102,7 @@ class _State extends State<DeviceManager> {
 
   _enumerateVideoDevices() async {
     var devices = await _engine.deviceManager.enumerateVideoDevices();
-    logSink.log('_enumerateVideoDevices $devices');
+    logSink.log('_enumerateVideoDevices ${jsonEncode(devices)}');
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('_enumerateVideoDevices ${jsonEncode(devices)}'),
     ));
@@ -112,7 +113,9 @@ class _State extends State<DeviceManager> {
 
   _setVideoDevice() async {
     if (devices.isNotEmpty) {
-      await _engine.deviceManager.setVideoDevice(devices.last.deviceId);
+      final deviceId = devices.last.deviceId;
+      logSink.log('setVideoDevice deviceId: $deviceId');
+      await _engine.deviceManager.setVideoDevice(deviceId);
     }
   }
 

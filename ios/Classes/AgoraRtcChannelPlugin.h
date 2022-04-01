@@ -3,7 +3,7 @@
 
 #import <Flutter/Flutter.h>
 
-@interface AgoraRtcChannelPlugin : NSObject <FlutterStreamHandler>
+@interface AgoraRtcChannelPlugin : NSObject
 - (instancetype)initWith:(void *)irisRtcEngine binaryMessenger:(NSObject<FlutterBinaryMessenger>*)messenger;
 @end
 

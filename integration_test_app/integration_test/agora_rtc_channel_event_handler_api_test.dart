@@ -708,7 +708,6 @@ void main() {
     fakeIrisRtcEngine = FakeIrisRtcEngine(isMockChannel: true);
     await fakeIrisRtcEngine.initialize();
     rtcChannel = await _createChannel();
-    final buffer = Uint8List.fromList([1, 1]);
 
     rtcChannel.setEventHandler(RtcChannelEventHandler(
       streamMessageError:

@@ -203,6 +203,15 @@ enum ApiTypeEngine {
   kEngineGetScreenCaptureSources,
   kEngineTakeSnapshot,
   kEngineEnableContentInspect,
+    kEngineSetAVSyncSource,
+  kEngineStartRtmpStreamWithoutTranscoding,
+  kEngineStartRtmpStreamWithTranscoding,
+  kEngineUpdateRtmpTranscoding ,
+  kEngineStopRtmpStream ,
+  kEngineSetLowlightEnhanceOptions ,
+  kEngineSetVideoDenoiserOptions,
+  kEngineSetColorEnhanceOptions,
+  kEngineEnableWirelessAccelerate,
 }
 
 enum ApiTypeChannel {
@@ -253,4 +262,9 @@ enum ApiTypeChannel {
   kChannelStopChannelMediaRelay,
   kChannelGetConnectionState,
   kChannelEnableRemoteSuperResolution,
+    kChannelSetAVSyncSource,
+  kChannelStartRtmpStreamWithoutTranscoding,
+  kChannelStartRtmpStreamWithTranscoding ,
+  kChannelUpdateRtmpTranscoding ,
+  kChannelStopRtmpStream ,
 }

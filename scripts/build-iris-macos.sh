@@ -19,3 +19,12 @@ fi
 
 echo "Copying $IRIS_PROJECT_PATH/build/mac/MAC/output/rtc/$BUILD_TYPE/AgoraRtcWrapper.framework $AGORA_FLUTTER_PROJECT_PATH/macos/AgoraRtcWrapper.framework"
 cp -RP "$IRIS_PROJECT_PATH/build/mac/MAC/output/rtc/$BUILD_TYPE/AgoraRtcWrapper.framework" "$AGORA_FLUTTER_PROJECT_PATH/macos/"
+
+if [[ -d "${AGORA_FLUTTER_PROJECT_PATH}/macos/libs" ]]; then
+    rm -rf "${AGORA_FLUTTER_PROJECT_PATH}/macos/libs"
+fi
+
+mkdir -p "${AGORA_FLUTTER_PROJECT_PATH}/macos/libs"
+
+echo "Copying Agora RTC engine frameworks"
+cp -RP ${IRIS_PROJECT_PATH}/third_party/agora/rtc/libs/Agora_Native_SDK_for_Mac_FULL/libs/* "${AGORA_FLUTTER_PROJECT_PATH}/macos/libs/"

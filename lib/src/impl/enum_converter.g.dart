@@ -152,7 +152,6 @@ const _$AudioMixingReasonEnumMap = {
   AudioMixingReason.StoppedByUser: 724,
   AudioMixingReason.PausedByUser: 725,
   AudioMixingReason.ResumedByUser: 726,
-  AudioMixingReason.OK: 0,
 };
 
 AudioMixingStateCodeConverter _$AudioMixingStateCodeConverterFromJson(
@@ -170,7 +169,6 @@ Map<String, dynamic> _$AudioMixingStateCodeConverterToJson(
 const _$AudioMixingStateCodeEnumMap = {
   AudioMixingStateCode.Playing: 710,
   AudioMixingStateCode.Paused: 711,
-  AudioMixingStateCode.Restart: 712,
   AudioMixingStateCode.Stopped: 713,
   AudioMixingStateCode.Failed: 714,
 };
@@ -625,7 +623,6 @@ const _$ConnectionChangedReasonEnumMap = {
   ConnectionChangedReason.RenewToken: 12,
   ConnectionChangedReason.ClientIpAddressChanged: 13,
   ConnectionChangedReason.KeepAliveTimeout: 14,
-  ConnectionChangedReason.ProxyServerInterrupted: 15,
 };
 
 ConnectionStateTypeConverter _$ConnectionStateTypeConverterFromJson(
@@ -679,7 +676,6 @@ Map<String, dynamic> _$EncryptionModeConverterToJson(
     };
 
 const _$EncryptionModeEnumMap = {
-  EncryptionMode.None: 0,
   EncryptionMode.AES128XTS: 1,
   EncryptionMode.AES128ECB: 2,
   EncryptionMode.AES256XTS: 3,
@@ -733,6 +729,8 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.SizeTooLarge: 114,
   ErrorCode.BitrateLimit: 115,
   ErrorCode.TooManyDataStreams: 116,
+  ErrorCode.StreamMessageTimeout: 117,
+  ErrorCode.SetClientRoleNotAuthorized: 119,
   ErrorCode.DecryptionFailed: 120,
   ErrorCode.ClientIsBannedByServer: 123,
   ErrorCode.WatermarkParam: 124,
@@ -983,6 +981,10 @@ const _$RtmpStreamingErrorCodeEnumMap = {
   RtmpStreamingErrorCode.NotAuthorized: 8,
   RtmpStreamingErrorCode.StreamNotFound: 9,
   RtmpStreamingErrorCode.FormatNotSupported: 10,
+  RtmpStreamingErrorCode.NotBroadcaster: 11,
+  RtmpStreamingErrorCode.TranscodingNoMixStream: 13,
+  RtmpStreamingErrorCode.NetDown: 14,
+  RtmpStreamingErrorCode.InvalidAppid: 15,
   RtmpStreamingErrorCode.UnPublishOK: 100,
 };
 
@@ -1090,7 +1092,6 @@ Map<String, dynamic> _$VideoFrameRateConverterToJson(
     };
 
 const _$VideoFrameRateEnumMap = {
-  VideoFrameRate.Min: -1,
   VideoFrameRate.Fps1: 1,
   VideoFrameRate.Fps7: 7,
   VideoFrameRate.Fps10: 10,
@@ -1390,6 +1391,8 @@ Map<String, dynamic> _$RtmpStreamingEventConverterToJson(
 const _$RtmpStreamingEventEnumMap = {
   RtmpStreamingEvent.FailedLoadImage: 1,
   RtmpStreamingEvent.UrlAlreadyInUse: 2,
+  RtmpStreamingEvent.AdvancedFeatureNotSupport: 3,
+  RtmpStreamingEvent.RequestTooOften: 4,
 };
 
 AudioSessionOperationRestrictionConverter

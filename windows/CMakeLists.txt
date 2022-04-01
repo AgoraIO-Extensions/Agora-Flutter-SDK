@@ -15,9 +15,11 @@ set(IRIS_SDK_BIN_PATH "${IRIS_SDK_PATH}/Release")
 set(RTC_SDK_PATH "${IRIS_DOWNLOAD_PATH}/Agora_Native_SDK_for_Windows_IRIS/RTC")
 set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/Agora_Native_SDK_for_Windows_FULL/libs/x86_64")
 
-# Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
-include(DownloadSDK)
-DownloadSDK("Windows" "v3_5_2" "${IRIS_DOWNLOAD_PATH}")
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
+    # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
+    include(DownloadSDK)
+    DownloadSDK("Windows" "v3_5_2" "${IRIS_DOWNLOAD_PATH}")   
+endif()
 
 add_library(${PLUGIN_NAME} SHARED
   "agora_rtc_channel_plugin.cc"
@@ -46,9 +48,9 @@ set(agora_rtc_engine_bundled_libraries
   "${RTC_SDK_BIN_PATH}/libagora_ai_denoise_extension.dll"
   "${RTC_SDK_BIN_PATH}/libagora_dav1d_extension.dll"
   "${RTC_SDK_BIN_PATH}/libagora-core.dll"
-  "${RTC_SDK_BIN_PATH}/libagora-fdkaac.dll"
+  "${RTC_SDK_BIN_PATH}/libagora_fdkaac.dll"
   "${RTC_SDK_BIN_PATH}/libagora-ffmpeg.dll"
-  "${RTC_SDK_BIN_PATH}/libagora-mpg123.dll"
+  "${RTC_SDK_BIN_PATH}/libagora_mpg123.dll"
   "${RTC_SDK_BIN_PATH}/libagora-soundtouch.dll"
   "${RTC_SDK_BIN_PATH}/libhwcodec.dll"
   PARENT_SCOPE

@@ -4,7 +4,9 @@ import 'package:agora_rtc_engine_example/examples/advanced/audio_mixing/audio_mi
 import 'package:agora_rtc_engine_example/examples/advanced/channel_media_relay/channel_media_relay.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/custom_capture_audio/custom_capture_audio.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/device_manager/device_manager.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/join_multiple_channel/join_multiple_channel.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/media_recorder/media_recorder.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_encryption/set_encryption.dart';
@@ -33,4 +35,6 @@ final advanced = [
   },
   {'name': 'StreamMessage', 'widget': const StreamMessage()},
   {'name': 'VoiceChanger', 'widget': const VoiceChanger()},
+  {'name': 'EnableVirtualBackground', 'widget': const EnableVirtualBackground()},
+  {'name': 'MediaRecorder', 'widget': const MediaRecorder()},
 ];

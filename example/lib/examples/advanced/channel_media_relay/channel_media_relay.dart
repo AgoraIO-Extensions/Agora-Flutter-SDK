@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// ChannelMediaRelay Example
 class ChannelMediaRelay extends StatefulWidget {
+  /// Construct the [ChannelMediaRelay]
   const ChannelMediaRelay({Key? key}) : super(key: key);
 
   @override
@@ -18,6 +19,7 @@ class ChannelMediaRelay extends StatefulWidget {
 class _State extends State<ChannelMediaRelay> {
   late final RtcEngine _engine;
   bool isJoined = false;
+  int _myUid = 0;
   int? remoteUid;
   bool isRelaying = false;
   late final TextEditingController _channelMediaRelayController;
@@ -70,6 +72,7 @@ class _State extends State<ChannelMediaRelay> {
       },
       joinChannelSuccess: (channel, uid, elapsed) {
         logSink.log('joinChannelSuccess $channel $uid $elapsed');
+        _myUid = uid;
         setState(() {
           isJoined = true;
         });
@@ -128,8 +131,8 @@ class _State extends State<ChannelMediaRelay> {
     }
 
     await _engine.startChannelMediaRelay(ChannelMediaRelayConfiguration(
-        ChannelMediaInfo(_channelController.text, 0, token: config.token),
-        [ChannelMediaInfo(_channelMediaRelayController.text, 0, token: '')]));
+        ChannelMediaInfo(_channelController.text, _myUid, token: config.token),
+        [ChannelMediaInfo(_channelMediaRelayController.text, _myUid, token: '')]));
   }
 
   @override

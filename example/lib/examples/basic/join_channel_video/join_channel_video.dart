@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
+  /// Construct the [JoinChannelVideo]
   const JoinChannelVideo({Key? key}) : super(key: key);
 
   @override
@@ -86,6 +87,7 @@ class _State extends State<JoinChannelVideo> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
+    
     await _engine.joinChannel(config.token, _controller.text, null, config.uid);
   }
 

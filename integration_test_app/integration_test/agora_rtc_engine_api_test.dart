@@ -3,11 +3,13 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:agora_rtc_engine/src/api_types.dart';
+import 'package:agora_rtc_engine/src/impl/api_types.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
 import 'package:integration_test_app/src/fake_iris_rtc_engine.dart';
+
+// ignore_for_file: deprecated_member_use
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -1828,7 +1830,7 @@ void main() {
 
       rtcEngine = await _createEngine();
 
-      await rtcEngine.setDefaultAudioRoutetoSpeakerphone(true);
+      await rtcEngine.setDefaultAudioRouteToSpeakerphone(true);
 
       fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineSetDefaultAudioRouteToSpeakerPhone.index,
@@ -2719,13 +2721,13 @@ void main() {
     await fakeIrisEngine.initialize();
 
     rtcEngine = await _createEngine();
-    await rtcEngine.setLocalAccessPoint(['127.0.0.1'], 'example.com');
+    const config = LocalAccessPointConfiguration();
+    await rtcEngine.setLocalAccessPoint(config);
 
     fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineSetLocalAccessPoint.index,
       jsonEncode({
-        'ips': ['127.0.0.1'],
-        'domain': 'example.com',
+        'config': config.toJson(),
       }),
     );
   });

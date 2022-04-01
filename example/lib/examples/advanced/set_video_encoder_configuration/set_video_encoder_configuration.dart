@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// SetVideoEncoderConfiguration Example
 class SetVideoEncoderConfiguration extends StatefulWidget {
+  /// Construct the [SetVideoEncoderConfiguration]
   const SetVideoEncoderConfiguration({Key? key}) : super(key: key);
 
   @override
@@ -119,11 +120,11 @@ class _SetVideoEncoderConfigurationState
     VideoEncoderConfiguration config = VideoEncoderConfiguration(
       dimensions: dimensions[dim],
       frameRate: VideoFrameRate.Fps15,
-      minFrameRate: VideoFrameRate.Min,
+      minFrameRate: VideoFrameRate.Fps1,
       bitrate: 0,
       minBitrate: 1,
       orientationMode: VideoOutputOrientationMode.Adaptative,
-      degradationPrefer: DegradationPreference.MaintainFramerate,
+      degradationPreference: DegradationPreference.MaintainFramerate,
       mirrorMode: VideoMirrorMode.Auto,
     );
     await _engine.setVideoEncoderConfiguration(config);

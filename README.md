@@ -99,19 +99,6 @@ This wrapper library is the output of the open-source repository [Iris-Rtc-Web](
 
 We have imported it as a Git submodule, you can find it in the [web](web) folder.
 
-## Interact with RtcEngine/AgoraRtcEngineKit on Android/iOS
-
-`agora_rtc_engine` has not implemented all the features of agora native (Android/iOS) sdk, due to performance reasons, such
-as [Custom Audio Source and Renderer](https://docs.agora.io/en/Video/custom_audio_android?platform=Android), [Custom Video Source and Renderer](https://docs.agora.io/en/Video/custom_video_android?platform=Android), [Raw Audio Data](https://docs.agora.io/en/Video/raw_data_audio_android?platform=Android), etc.
-
-`agora_rtc_engine` provides [RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/android/src/main/java/io/agora/rtc/base/RtcEnginePlugin.kt)/[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/ios/Classes/Base/RtcEnginePlugin.h), allowing you to to interact with the [RtcEngine](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/lib/src/rtc_engine.dart) created on the Flutter side in the Android/iOS code, you can implement your own plugin by inheriting [RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/android/src/main/java/io/agora/rtc/base/RtcEnginePlugin.kt)/[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/ios/Classes/Base/RtcEnginePlugin.h), and get the [RtcEngine](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html)/[AgoraRtcEngineKit](https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html) in the `onRtcEngineCreated` callback.
-
-Please note that you should not call the [RtcEngine.destroy](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#afb808cdc9025a77af7dd2bce98311bfe)/[AgoraRtcEngineKit.destroy](https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/destroy) function on Android/iOS code, because it will affect the [RtcEngine](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/lib/src/rtc_engine.dart) on the Flutter side. To see how to use `RtcEnginePlugin`, please check the custom audio source example:
-
-Android: [CustomAudioPlugin.kt](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/android/app/src/main/kotlin/io/agora/agora_rtc_engine_example/custom_audio_source/CustomAudioPlugin.kt)
-
-iOS: [CustmoAudioSourcePlugin.swift](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/ios/Runner/CustomAudioSource/CustmoAudioSourcePlugin.swift)
-
 ## Error handling
 
 Please check **Pinned issues** and search in [Issues](https://github.com/AgoraIO/Agora-Flutter-SDK/issues) first.
@@ -141,6 +128,21 @@ Only supported on Web, macOS and Windows so far. Not yet supported for Android a
 You should set `AppGroup` on macOS and set as parameter before calling `getScreenShareHelper`.
 
 You can refer to [screen_sharing.dart](example/lib/examples/advanced/screen_sharing/screen_sharing.dart) and [Apple doc](https://developer.apple.com/library/archive/documentation/Security/Conceptual/AppSandboxDesignGuide/AppSandboxInDepth/AppSandboxInDepth.html#//apple_ref/doc/uid/TP40011183-CH3-SW21).
+
+## Experimental Features
+
+### Interact with RtcEngine/AgoraRtcEngineKit on Android/iOS
+
+`agora_rtc_engine` has not implemented all the features of agora native (Android/iOS) sdk, due to performance reasons, such
+as [Custom Audio Source and Renderer](https://docs.agora.io/en/Video/custom_audio_android?platform=Android), [Custom Video Source and Renderer](https://docs.agora.io/en/Video/custom_video_android?platform=Android), [Raw Audio Data](https://docs.agora.io/en/Video/raw_data_audio_android?platform=Android), etc.
+
+`agora_rtc_engine` provides [RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/android/src/main/java/io/agora/rtc/base/RtcEnginePlugin.kt)/[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/ios/Classes/Base/RtcEnginePlugin.h), allowing you to to interact with the [RtcEngine](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/lib/src/rtc_engine.dart) created on the Flutter side in the Android/iOS code, you can implement your own plugin by inheriting [RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/android/src/main/java/io/agora/rtc/base/RtcEnginePlugin.kt)/[RtcEnginePlugin](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/ios/Classes/Base/RtcEnginePlugin.h), and get the [RtcEngine](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html)/[AgoraRtcEngineKit](https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html) in the `onRtcEngineCreated` callback.
+
+Please note that you should not call the [RtcEngine.destroy](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#afb808cdc9025a77af7dd2bce98311bfe)/[AgoraRtcEngineKit.destroy](https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/destroy) function on Android/iOS code, because it will affect the [RtcEngine](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/lib/src/rtc_engine.dart) on the Flutter side. To see how to use `RtcEnginePlugin`, please check the custom audio source example:
+
+Android: [CustomAudioPlugin.kt](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/android/app/src/main/kotlin/io/agora/agora_rtc_engine_example/custom_audio_source/CustomAudioPlugin.kt)
+
+iOS: [CustmoAudioSourcePlugin.swift](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/ios/Runner/CustomAudioSource/CustmoAudioSourcePlugin.swift)
 
 ## API Reference Resources
 
