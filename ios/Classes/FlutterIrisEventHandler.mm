@@ -70,17 +70,19 @@ private:
 }
 
 - (void)dealloc {
+    self.eventSink = nil;
     if (self.eventHandler) {
         delete self.eventHandler;
+        self.eventHandler = nil;
     }
     if (self.eventHandlerSub) {
         delete self.eventHandlerSub;
+        self.eventHandlerSub = nil;
     }
 }
 
 - (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
     self.eventSink = nil;
-//    self.irisRtcEngine->SetEventHandler(nil);
     
     [self resetEventHandler:self.irisRtcEngine];
     if (self.irisRtcEngineSub) {
@@ -112,6 +114,7 @@ private:
 - (void)resetEventHandler:(void *)engine {
     agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
     e->SetEventHandler(nil);
+    self.eventSink = nil;
 }
 
 @end

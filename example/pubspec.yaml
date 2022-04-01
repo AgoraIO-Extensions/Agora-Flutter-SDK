@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   permission_handler: ^8.3.0
+  path_provider: ^2.0.8
 
 dev_dependencies:
   integration_test:
@@ -32,9 +33,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
-
   pigeon: ^1.0.7
+  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -54,6 +54,7 @@ flutter:
   assets:
     - assets/Sound_Horizon.mp3
     - assets/audio_mixing/Agora.io-Interactions.mp3
+    - assets/agora-logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path/path.dart' as path;
 
 /// AudioMixing Example
 class AudioMixing extends StatefulWidget {
+  /// Construct the [AudioMixing]
   const AudioMixing({Key? key}) : super(key: key);
 
   @override
@@ -22,7 +27,7 @@ class _AudioMixingState extends State<AudioMixing> {
       openMicrophone = true,
       enableSpeakerphone = true,
       playEffect = false;
-  TextEditingController? _controller;
+  late final TextEditingController _controller;
 
   bool _isStartedAudioMixing = false;
   bool _loopback = false;
@@ -109,7 +114,7 @@ class _AudioMixingState extends State<AudioMixing> {
     }
 
     await _engine
-        .joinChannel(config.token, config.channelId, null, config.uid)
+        .joinChannel(config.token, _controller.text, null, config.uid)
         .catchError((onError) {
       logSink.log('error ${onError.toString()}');
     });
@@ -126,10 +131,21 @@ class _AudioMixingState extends State<AudioMixing> {
   }
 
   Future<void> _startAudioMixing() async {
-    final filePath = await _engine
-        .getAssetAbsolutePath('assets/audio_mixing/Agora.io-Interactions.mp3');
+    ByteData data =
+        await rootBundle.load("assets/audio_mixing/Agora.io-Interactions.mp3");
+    List<int> bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String p = path.join(appDocDir.path, 'Agora.io-Interactions.mp3');
+    final file = File(p);
+    if (!(await file.exists())) {
+      await file.create();
+      await file.writeAsBytes(bytes);
+    }
+
     await _engine.startAudioMixing(
-      filePath!,
+      p,
       _loopback,
       _replace,
       _cycle.toInt(),

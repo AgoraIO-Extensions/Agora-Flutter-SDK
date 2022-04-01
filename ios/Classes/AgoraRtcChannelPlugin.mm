@@ -12,8 +12,6 @@
 
 @property(nonatomic) FlutterIrisEventHandler *eventHandler;
 
-@property(nonatomic) FlutterEventSink eventSink;
-
 @property(nonatomic) CallApiMethodCallHandler *callApiMethodCallHandler;
 
 @end
@@ -43,22 +41,6 @@
     [eventChannel setStreamHandler:self.eventHandler];
     
   return self;
-}
-
-- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
-  self.eventSink = nil;
-  return nil;
-}
-
-- (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments
-                                       eventSink:
-                                           (nonnull FlutterEventSink)events {
-  self.eventSink = events;
-  return nil;
-}
-
-- (void)dealloc {
-    self.irisRtcEngine->channel()->SetEventHandler(NULL);
 }
 
 @end

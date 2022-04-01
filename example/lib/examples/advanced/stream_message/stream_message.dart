@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// StreamMessage Example
 class StreamMessage extends StatefulWidget {
+  /// Construct the [StreamMessage]
   const StreamMessage({Key? key}) : super(key: key);
 
   @override
@@ -21,11 +22,15 @@ class StreamMessage extends StatefulWidget {
 class _State extends State<StreamMessage> {
   late final RtcEngine _engine;
   bool isJoined = false;
-  List<int> remoteUids = [];
+  Set<int> remoteUids = {};
+  late final TextEditingController _channelIdController;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _channelIdController = TextEditingController(text: config.channelId);
+    _initEngine();
   }
 
   @override
@@ -34,7 +39,7 @@ class _State extends State<StreamMessage> {
     _engine.destroy();
   }
 
-  _initEngine() async {
+  Future<void> _initEngine() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await Permission.microphone.request();
     }
@@ -47,14 +52,18 @@ class _State extends State<StreamMessage> {
     // make this room live broadcasting room
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
+  }
 
-    // start joining channel
-    // 1. Users can only see each other after they join the
-    // same channel successfully using the same app id.
-    // 2. If app certificate is turned on at dashboard, token is needed
-    // when joining channel. The channel name and uid used to calculate
-    // the token has to match the ones used for channel join
-    await _engine.joinChannel(config.token, config.channelId, null, 0, null);
+  Future<void> _joinChannel() async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await [Permission.microphone, Permission.camera].request();
+    }
+    await _engine.joinChannel(
+        config.token, _channelIdController.text, null, config.uid);
+  }
+
+  Future<void> _leaveChannel() async {
+    await _engine.leaveChannel();
   }
 
   Future<void> _showMyDialog(int uid, int streamId, String data) async {
@@ -96,6 +105,13 @@ class _State extends State<StreamMessage> {
           isJoined = true;
         });
       },
+      leaveChannel: (RtcStats stats) {
+        logSink.log('leaveChannel ${stats.toString()}');
+        remoteUids.clear();
+        setState(() {
+          isJoined = false;
+        });
+      },
       userJoined: (uid, elapsed) {
         logSink.log('userJoined $uid $elapsed');
         remoteUids.add(uid);
@@ -117,21 +133,23 @@ class _State extends State<StreamMessage> {
     ));
   }
 
-  _onPressSend() async {
+  Future<void> _onPressSend() async {
     if (_controller.text.isEmpty) {
       return;
     }
 
-    var streamId = await _engine
-        .createDataStreamWithConfig(DataStreamConfig(false, false));
-    if (streamId != null) {
-      _engine.sendStreamMessage(
-          streamId, Uint8List.fromList(utf8.encode(_controller.text)));
+    try {
+      var streamId = await _engine
+          .createDataStreamWithConfig(DataStreamConfig(false, false));
+      if (streamId != null) {
+        await _engine.sendStreamMessage(
+            streamId, Uint8List.fromList(utf8.encode(_controller.text)));
+      }
+      _controller.clear();
+    } catch (e) {
+      logSink.log('sendStreamMessage error: ${e.toString()}');
     }
-    _controller.clear();
   }
-
-  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -141,19 +159,22 @@ class _State extends State<StreamMessage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            !isJoined
-                ? Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          onPressed: _initEngine,
-                          child: const Text('Join channel'),
-                        ),
-                      )
-                    ],
-                  )
-                : _renderVideo(),
+            TextField(
+              controller: _channelIdController,
+              decoration: const InputDecoration(hintText: 'Channel ID'),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
+                    child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
+                  ),
+                )
+              ],
+            ),
+            if (isJoined) _renderVideo(),
             if (isJoined)
               Row(
                 mainAxisSize: MainAxisSize.max,

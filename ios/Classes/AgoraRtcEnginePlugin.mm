@@ -67,8 +67,17 @@
 }
 
 - (void)dealloc {
-  delete self.irisRtcEngine;
-    delete self.videoFrameBufferManager;
+    if (self.irisRtcEngine) {
+        self.irisRtcEngine->SetEventHandler(nil);
+        self.irisRtcEngine->channel()->SetEventHandler(nil);
+        delete self.irisRtcEngine;
+        self.irisRtcEngine = nil;
+    }
+    
+    if (self.videoFrameBufferManager) {
+        delete self.videoFrameBufferManager;
+        self.videoFrameBufferManager = nil;
+    }
 }
 
 - (void)handleMethodCall:(FlutterMethodCall *)call

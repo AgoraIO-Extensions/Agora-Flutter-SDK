@@ -65,11 +65,14 @@ using namespace agora::iris::rtc;
 
 - (void)dealloc {
   if (self.engine_main) {
+    self.engine_main->SetEventHandler(nil);
+    self.engine_main->channel()->SetEventHandler(nil);
     delete self.engine_main;
     self.engine_main = nil;
   }
 
   if (self.engine_sub) {
+    self.engine_sub->SetEventHandler(nil);
     delete self.engine_sub;
     self.engine_sub = nil;
   }

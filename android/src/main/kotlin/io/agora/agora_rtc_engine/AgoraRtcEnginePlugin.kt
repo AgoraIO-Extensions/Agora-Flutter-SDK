@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.annotation.NonNull
 import io.agora.iris.base.IrisEventHandler
 import io.agora.iris.rtc.IrisRtcEngine
-import io.agora.iris.rtc.base.ApiTypeEngine
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineRegistry
 import io.flutter.BuildConfig
@@ -39,12 +38,11 @@ open class CallApiMethodCallHandler(
 ) : MethodCallHandler {
 
   protected open fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
-    val type = ApiTypeEngine.fromInt(apiType)
-    val ret = irisRtcEngine.callApi(type, params, sb)
-    if (type == ApiTypeEngine.kEngineInitialize) {
+    val ret = irisRtcEngine.callApi(apiType, params, sb)
+    if (apiType == 0) {
       RtcEngineRegistry.instance.onRtcEngineCreated(irisRtcEngine.rtcEngine as RtcEngine?)
     }
-    if (type == ApiTypeEngine.kEngineRelease) {
+    if (apiType == 1) {
       RtcEngineRegistry.instance.onRtcEngineDestroyed()
     }
 
@@ -56,13 +54,13 @@ open class CallApiMethodCallHandler(
     params: String?,
     buffer: ByteArray?,
     sb: StringBuffer): Int {
-    return irisRtcEngine.callApi(ApiTypeEngine.fromInt(apiType), params, buffer, sb)
+    return irisRtcEngine.callApi(apiType, params, buffer, sb)
   }
 
   protected open fun callApiError(ret: Int): String {
     val description = StringBuffer()
     irisRtcEngine.callApi(
-      ApiTypeEngine.kEngineGetErrorDescription,
+      132,
       "{\"code\":" + abs(ret) + "}",
       description
     )

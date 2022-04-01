@@ -5,8 +5,6 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path/path.dart' as path;
-import 'package:flutter/widgets.dart';
 
 typedef SetIrisRtcEngineCallApiRecorderNative = Pointer<NativeType> Function(
   Pointer<NativeType> enginePtr,
@@ -167,41 +165,7 @@ class _NativeIrisProxyBinding {
   static Pointer<NativeType> _getIrisRtcEnginePtr(
       DynamicLibrary agoraRtcWrapperLib, int irisRtcEngineIntPtr) {
     return Pointer.fromAddress(irisRtcEngineIntPtr);
-    // if (!Platform.isAndroid) {
-
-    // }
-
-    // final fp = agoraRtcWrapperLib.lookupFunction<
-    //         GetIrisRtcEngineFromAndroidNativeHandleNative,
-    //         GetIrisRtcEngineFromAndroidNativeHandle>(
-    //     'GetIrisRtcEngineFromAndroidNativeHandle');
-    // return fp(Pointer.fromAddress(irisRtcEngineIntPtr));
   }
-
-  // static int _onCallApiHandle(
-  //     int apiType, Pointer<Utf8> param, Pointer<Utf8> result) {
-  //   return _irisCallApiCallback?.onCallApi?.call(
-  //         apiType,
-  //         param.toDartString(),
-  //         result.toDartString(),
-  //       ) ??
-  //       0;
-  // }
-
-  // static int _onCallApiWithBufferHandle(
-  //   int apiType,
-  //   Pointer<Utf8> param,
-  //   Pointer<NativeType> buffer,
-  //   Pointer<Utf8> result,
-  // ) {
-  //   return _irisCallApiCallback?.onCallApiWithBuffer?.call(
-  //         apiType,
-  //         param.toDartString(),
-  //         buffer,
-  //         result.toDartString(),
-  //       ) ??
-  //       0;
-  // }
 
   void setIrisRtcEngineCallApiRecorder(bool isMockChannel) {
     // _irisCallApiCallback = irisCallApiCallback;
@@ -424,36 +388,11 @@ class FakeIrisRtcEngine {
     _nativeIrisProxyBinding = _NativeIrisProxyBinding(_irisRtcEngineIntPtr);
   }
 
-  Future<void> initialize() async {
+  Future<void> initialize({bool getIrisRtcEngineIntPtrOnly = false}) async {
     await _initialize();
-    _nativeIrisProxyBinding.setIrisRtcEngineCallApiRecorder(_isMockChannel
-        // IrisCallApiCallback(
-        //   onCallApi: (int apiType, String params, String result) {
-        //     final apiCall = ApiCall(
-        //       apiType: apiType,
-        //       params: params,
-        //       result: result,
-        //     );
-        //     // _callApiQueue.add(apiCall);
-        //     return 0;
-        //   },
-        //   onCallApiWithBuffer: (
-        //     int apiType,
-        //     String params,
-        //     Pointer<NativeType> buffer,
-        //     String result,
-        //   ) {
-        //     final apiCall = ApiCall(
-        //       apiType: apiType,
-        //       params: params,
-        //       result: result,
-        //       buffer: buffer,
-        //     );
-        //     // _callApiQueue.add(apiCall);
-        //     return 0;
-        //   },
-        // ),
-        );
+    if (!getIrisRtcEngineIntPtrOnly) {
+      _nativeIrisProxyBinding.setIrisRtcEngineCallApiRecorder(_isMockChannel);
+    }
   }
 
   void fireEvent(

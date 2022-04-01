@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
@@ -76,7 +74,7 @@ void main() {
     testWidgets('Show Local SurfaceView', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_local_view.SurfaceView(),
@@ -96,7 +94,7 @@ void main() {
     testWidgets('Change uid', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -113,7 +111,7 @@ void main() {
 
       await tester.pumpWidget(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -136,7 +134,7 @@ void main() {
     testWidgets('Change channel id', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -153,7 +151,7 @@ void main() {
 
       await tester.pumpWidget(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -176,7 +174,7 @@ void main() {
     testWidgets('Change renderMode', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -194,7 +192,7 @@ void main() {
 
       await tester.pumpWidget(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -218,7 +216,7 @@ void main() {
     testWidgets('Change mirrorMode', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -236,7 +234,7 @@ void main() {
 
       final w = _RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.SurfaceView(
@@ -261,7 +259,7 @@ void main() {
     testWidgets('Show Local TextureView', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_local_view.TextureView(),
@@ -281,7 +279,7 @@ void main() {
     testWidgets('Change uid', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
@@ -298,7 +296,7 @@ void main() {
 
       await tester.pumpWidget(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
@@ -321,7 +319,7 @@ void main() {
     testWidgets('Change channel id', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
@@ -338,7 +336,7 @@ void main() {
 
       await tester.pumpWidget(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
@@ -361,7 +359,7 @@ void main() {
     testWidgets('Change renderMode', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
@@ -379,7 +377,7 @@ void main() {
 
       await tester.pumpWidget(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
@@ -403,7 +401,7 @@ void main() {
     testWidgets('Change mirrorMode', (WidgetTester tester) async {
       runApp(_RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
@@ -421,7 +419,7 @@ void main() {
 
       final w = _RenderViewWidget(
         builder: (context) {
-          return SizedBox(
+          return const SizedBox(
             height: 100,
             width: 100,
             child: rtc_remote_view.TextureView(
