@@ -93,12 +93,24 @@ class AgoraRtcEngineWeb {
               (call) => pluginInstance.handleViewMethodCall(call, element));
       return element;
     });
+
+    var element = ScriptElement()
+      ..src =
+          'assets/packages/agora_rtc_engine/assets/AgoraRtcWrapper.bundle.js'
+      ..type = 'application/javascript';
+    late StreamSubscription<Event> loadSubscription;
+    loadSubscription = element.onLoad.listen((event) {
+      loadSubscription.cancel();
+      pluginInstance._engineMain = _IrisRtcEngine();
+      pluginInstance._engineSub = _IrisRtcEngine();
+    });
+    document.body!.append(element);
   }
 
   final _controllerEngine = StreamController();
   final _controllerChannel = StreamController();
-  final _IrisRtcEngine _engineMain = _IrisRtcEngine();
-  final _IrisRtcEngine _engineSub = _IrisRtcEngine();
+  late _IrisRtcEngine _engineMain;
+  late _IrisRtcEngine _engineSub;
 
   _IrisRtcEngine _engine(Map<String, dynamic> args) {
     bool subProcess = args['subProcess'];
