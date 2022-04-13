@@ -1,4 +1,11 @@
-## [4.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0...v4.2.1) (2022-02-08)
+
+
+## [4.2.2](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v4.2.1...v4.2.2) (2022-04-13)
+
+
+### Bug Fixes
+
+* native sdk 3.5.2 can not be found on jitpack.io ([ef07a24](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/ef07a24e3ab56a7ecea45280b3e1915493517a16))## [4.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0...v4.2.1) (2022-02-08)
 
 # [4.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.2...v4.2.0) (2022-01-11)
 
