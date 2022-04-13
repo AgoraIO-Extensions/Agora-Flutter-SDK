@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-  api 'com.github.agorabuilder:native-full-sdk:3.4.6'
+  api 'io.agora.rtc:full-sdk:3.4.6' 
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', '1.3.72')}"
 }
