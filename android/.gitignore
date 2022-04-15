@@ -6,3 +6,5 @@
 .DS_Store
 /build
 /captures
+libs/
+.plugin_dev

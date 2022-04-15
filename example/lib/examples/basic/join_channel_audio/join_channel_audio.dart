@@ -8,6 +8,7 @@ import '../../log_sink.dart';
 
 /// JoinChannelAudio Example
 class JoinChannelAudio extends StatefulWidget {
+  /// Construct the [JoinChannelAudio]
   const JoinChannelAudio({Key? key}) : super(key: key);
 
   @override

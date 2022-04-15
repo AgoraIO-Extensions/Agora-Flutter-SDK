@@ -13,6 +13,7 @@ import 'package:analyzer/error/error.dart' show AnalysisError;
 import 'package:file/file.dart' as file;
 import 'package:file/local.dart';
 import 'package:path/path.dart' as path;
+import 'package:dart_style/dart_style.dart';
 
 class CallApiInvoke {
   late String apiType;
@@ -253,8 +254,8 @@ class _RootBuilder extends dart_ast_visitor.RecursiveAstVisitor<Object?> {
           SimpleLiteral simpleLiteral = SimpleLiteral();
           simpleAnnotation.arguments.add(simpleLiteral);
 
-          late String type;
-          late String value;
+          String type = '';
+          String value = '';
 
           if (a is IntegerLiteral) {
             type = 'int';
@@ -465,7 +466,7 @@ class _RootBuilder extends dart_ast_visitor.RecursiveAstVisitor<Object?> {
 
       for (final statement in body.block.statements) {
         if (statement is ReturnStatement) {
-          final returns = statement as ReturnStatement;
+          final returns = statement;
 
           if (returns.expression != null) {
             CallApiInvoke? callApiInvoke =
@@ -505,25 +506,25 @@ class _RootBuilder extends dart_ast_visitor.RecursiveAstVisitor<Object?> {
 }
 
 enum GeneratorConfigPlatform {
-  Android,
+  android,
   iOS,
   macOS,
-  Windows,
-  Linux,
+  windows,
+  linux,
 }
 
 extension GeneratorConfigPlatformExt on GeneratorConfigPlatform {
   String toPlatformExpression() {
     switch (this) {
-      case GeneratorConfigPlatform.Android:
+      case GeneratorConfigPlatform.android:
         return 'Platform.isAndroid';
       case GeneratorConfigPlatform.iOS:
         return 'Platform.isIOS';
       case GeneratorConfigPlatform.macOS:
         return 'Platform.isMacOS';
-      case GeneratorConfigPlatform.Windows:
+      case GeneratorConfigPlatform.windows:
         return 'Platform.isWindows';
-      case GeneratorConfigPlatform.Linux:
+      case GeneratorConfigPlatform.linux:
         return 'Platform.isLinux';
     }
   }
@@ -534,11 +535,11 @@ class GeneratorConfig {
     required this.name,
     this.donotGenerate = false,
     this.supportedPlatforms = const [
-      GeneratorConfigPlatform.Android,
+      GeneratorConfigPlatform.android,
       GeneratorConfigPlatform.iOS,
       GeneratorConfigPlatform.macOS,
-      GeneratorConfigPlatform.Windows,
-      GeneratorConfigPlatform.Linux,
+      GeneratorConfigPlatform.windows,
+      GeneratorConfigPlatform.linux,
     ],
     this.shouldMockResult = false,
     this.shouldMockReturnCode = false,
@@ -552,12 +553,12 @@ class GeneratorConfig {
 
 const List<GeneratorConfigPlatform> desktopPlatforms = [
   GeneratorConfigPlatform.macOS,
-  GeneratorConfigPlatform.Windows,
-  GeneratorConfigPlatform.Linux,
+  GeneratorConfigPlatform.windows,
+  GeneratorConfigPlatform.linux,
 ];
 
 const List<GeneratorConfigPlatform> mobilePlatforms = [
-  GeneratorConfigPlatform.Android,
+  GeneratorConfigPlatform.android,
   GeneratorConfigPlatform.iOS,
 ];
 
@@ -614,7 +615,6 @@ abstract class DefaultGenerator implements Generator {
     Parameter parameter,
     StringBuffer initializerBuilder,
   ) {
-    final bool isClass = parseResult.classMap.containsKey(parameter.type);
     final bool isEnum = parseResult.enumMap.containsKey(parameter.type);
 
     if (isEnum) {
@@ -806,7 +806,7 @@ abstract class DefaultGenerator implements Generator {
       testCases.join('\n'),
     );
 
-    return output;
+    return DartFormatter().format(output);
   }
 }
 
@@ -912,9 +912,9 @@ void rtcEngineEventHandlerSomkeTestCases() {
 ''';
 
     final output = testCasesContentTemplate.replaceAll(
-        '{{TEST_CASES_CONTENT}}', testCases.join(""));
+        '{{TEST_CASES_CONTENT}}', testCases.join("\n"));
 
-    sink.writeln(output);
+    sink.writeln(DartFormatter().format(output));
   }
 
   @override
@@ -1020,9 +1020,9 @@ void rtcChannelEventHandlerSomkeTestCases() {
 ''';
 
     final output = testCasesContentTemplate.replaceAll(
-        '{{TEST_CASES_CONTENT}}', testCases.join(""));
+        '{{TEST_CASES_CONTENT}}', testCases.join("\n"));
 
-    sink.writeln(output);
+    sink.writeln(DartFormatter().format(output));
   }
 
   @override
@@ -1297,7 +1297,9 @@ void main(List<String> args) {
     path.join(srcDir, 'enums.dart'),
     path.join(srcDir, 'classes.dart'),
     path.join(srcDir, 'rtc_device_manager.dart'),
-    path.join(srcDir, 'events.dart'),
+    path.join(srcDir, 'rtc_channel_event_handler.dart'),
+    path.join(srcDir, 'rtc_engine_event_handler.dart'),
+    path.join(srcDir, 'event_types.dart'),
   ];
   final AnalysisContextCollection collection = AnalysisContextCollection(
     includedPaths: includedPaths,

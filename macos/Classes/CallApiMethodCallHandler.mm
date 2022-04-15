@@ -27,7 +27,6 @@
 - (void)onMethodCall:(FlutterMethodCall *)call _:(FlutterResult)result {
   if ([@"callApi" isEqualToString:call.method] ||
       [@"callApiWithBuffer" isEqualToString:call.method]) {
-    @try {
       NSDictionary<NSString *, id> *arguments = call.arguments;
       NSNumber *apiType = arguments[@"apiType"];
       NSString *params = arguments[@"params"];
@@ -61,11 +60,6 @@
                                    message:des
                                    details:nil]);
       }
-    } @catch (NSException *exception) {
-      result([FlutterError errorWithCode:exception.name
-                                 message:exception.reason
-                                 details:nil]);
-    }
   } else {
     result(FlutterMethodNotImplemented);
   }

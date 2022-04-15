@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// VoiceChanger Example
 class VoiceChanger extends StatefulWidget {
+  /// Construct the [VoiceChanger]
   const VoiceChanger({Key? key}) : super(key: key);
 
   @override

@@ -32,6 +32,8 @@ dependencies:
   analyzer: ^2.4.0
   path: ^1.8.0
   ffi: ^1.1.2
+  dart_style: ^2.2.1
+  path_provider: ^2.0.8
   agora_rtc_engine:
     path: ../
 

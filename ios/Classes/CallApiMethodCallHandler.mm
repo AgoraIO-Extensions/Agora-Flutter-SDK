@@ -16,39 +16,32 @@
 
 - (void)onMethodCall:(FlutterMethodCall *)call _:(FlutterResult)result {
     if ([@"callApi" isEqualToString:call.method] || [@"callApiWithBuffer" isEqualToString:call.method]) {
-        @try {
-            NSDictionary<NSString *, id> *arguments = call.arguments;
-            NSNumber *apiType = arguments[@"apiType"];
-            NSString *params = arguments[@"params"];
-            FlutterStandardTypedData *buffer = arguments[@"buffer"];
-            char res[kBasicResultLength] = "";
-            int ret;
-            if (buffer == nil || buffer == [NSNull null]) {
-                
-                ret = [self callApi:apiType _:params _:res];
+        NSDictionary<NSString *, id> *arguments = call.arguments;
+        NSNumber *apiType = arguments[@"apiType"];
+        NSString *params = arguments[@"params"];
+        FlutterStandardTypedData *buffer = arguments[@"buffer"];
+        char res[kBasicResultLength] = "";
+        int ret;
+        if (buffer == nil || buffer == [NSNull null]) {
+            
+            ret = [self callApi:apiType _:params _:res];
+        } else {
+            ret = [self callApiWithBuffer:apiType _:params _:(void *)[[buffer data] bytes] _:res];
+        }
+        if (ret == 0) {
+            if (strlen(res) == 0) {
+            result(nil);
             } else {
-                ret = [self callApiWithBuffer:apiType _:params _:(void *)[[buffer data] bytes] _:res];
+            result([NSString stringWithUTF8String:res]);
             }
-            if (ret == 0) {
-              if (strlen(res) == 0) {
-                result(nil);
-              } else {
-                result([NSString stringWithUTF8String:res]);
-              }
-            } else if (ret > 0) {
-              result(@(ret));
-            } else {
-                NSString *des = [self callApiError:ret];
-              result([FlutterError
-                  errorWithCode:[@(ret) stringValue]
-                        message:des
-                        details:nil]);
-            }
-        } @catch (NSException *exception) {
+        } else if (ret > 0) {
+            result(@(ret));
+        } else {
+            NSString *des = [self callApiError:ret];
             result([FlutterError
-                errorWithCode:exception.name
-                      message:exception.reason
-                      details:nil]);
+                errorWithCode:[@(ret) stringValue]
+                    message:des
+                    details:nil]);
         }
     } else {
       result(FlutterMethodNotImplemented);

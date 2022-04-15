@@ -80,6 +80,7 @@ private:
 }
 
 - (void)dealloc {
+  self.eventSink = nil;
   if (self.eventHandler) {
     delete self.eventHandler;
   }

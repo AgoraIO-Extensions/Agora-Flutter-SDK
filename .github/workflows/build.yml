@@ -48,14 +48,14 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'
+          flutter-version: '2.10.3'
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2.21.0
         with:
           api-level: 31
           arch: x86_64
           profile: Nexus 6
-          script: bash ci/run_flutter_integration_test.sh
+          script: bash ci/run_flutter_integration_test_android.sh
 
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
@@ -68,11 +68,11 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'   
+          flutter-version: '2.10.3'   
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
-      - run: bash ci/run_flutter_integration_test.sh
+      - run: bash ci/run_flutter_integration_test_ios.sh
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'   
+          flutter-version: '2.10.3'   
       - run: flutter config --enable-macos-desktop 
       - run: bash ci/run_flutter_macos_integration_test.sh
 
@@ -100,7 +100,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'
+          flutter-version: '2.10.3'
       - run: flutter config --enable-windows-desktop
       - run: bash ci/run_flutter_macos_integration_test.sh
 
@@ -116,7 +116,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'
+          flutter-version: '2.10.3'
       - run: flutter pub get
       - run: bash ci/run_android_test.sh
 
@@ -129,7 +129,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'
+          flutter-version: '2.10.3'
       - run: flutter pub get
       - run: bash ci/run_ios_test.sh
   
@@ -144,7 +144,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'
+          flutter-version: '2.10.3'
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -159,7 +159,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.0'
+          flutter-version: '2.10.3'
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign
         run: flutter build ios --no-codesign

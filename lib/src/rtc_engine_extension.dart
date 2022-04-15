@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'classes.dart';
+import 'impl/rtc_engine_impl.dart';
 import 'rtc_engine.dart';
 
 // ignore_for_file: non_constant_identifier_names
@@ -38,15 +39,26 @@ class _Display extends Struct {
   external int rotation;
 }
 
+/// @nodoc
 class Display {
+  /// @nodoc
   int id;
+
+  /// @nodoc
   double scale;
+
+  /// @nodoc
   Rectangle bounds;
+
+  /// @nodoc
   Rectangle workArea;
+
+  /// @nodoc
   int rotation;
 
   Display._(this.id, this.scale, this.bounds, this.workArea, this.rotation);
 
+  /// @nodoc
   factory Display.from(_Display _display) => Display._(
       _display.id,
       _display.scale,
@@ -74,15 +86,26 @@ class _Window extends Struct {
   external _Rect work_area;
 }
 
+/// @nodoc
 class Window {
+  /// @nodoc
   int id;
+
+  /// @nodoc
   String name;
+
+  /// @nodoc
   String ownerName;
+
+  /// @nodoc
   Rectangle bounds;
+
+  /// @nodoc
   Rectangle workArea;
 
   Window._(this.id, this.name, this.ownerName, this.bounds, this.workArea);
 
+  /// @nodoc
   factory Window.from(_Window _window) {
     final name =
         utf8.decode(Iterable<int>.generate(_kBasicResultLength, (index) {
@@ -143,7 +166,7 @@ extension RtcEngineExtension on RtcEngine {
   /// **return** The actual path of the asset.
   ///
   Future<String?> getAssetAbsolutePath(String assetPath) {
-    return RtcEngine.methodChannel
+    return RtcEngineImpl.methodChannel
         .invokeMethod('getAssetAbsolutePath', assetPath);
   }
 

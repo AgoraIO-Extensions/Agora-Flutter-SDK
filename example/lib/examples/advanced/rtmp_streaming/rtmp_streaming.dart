@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// RtmpStreaming Example
 class RtmpStreaming extends StatefulWidget {
+  /// Construct the [RtmpStreaming]
   const RtmpStreaming({Key? key}) : super(key: key);
 
   @override

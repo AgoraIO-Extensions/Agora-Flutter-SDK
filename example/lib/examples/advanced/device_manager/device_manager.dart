@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
@@ -12,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// DeviceManager Example
 class DeviceManager extends StatefulWidget {
+  /// Construct the [DeviceManager]
   const DeviceManager({Key? key}) : super(key: key);
 
   @override
@@ -25,6 +23,8 @@ class _State extends State<DeviceManager> {
   List<int> remoteUid = [];
   List<MediaDeviceInfo> devices = [];
   TextEditingController? _controller;
+  late String _selectedDeviceId;
+  bool _isSetVideoDeviceEnabled = false;
 
   @override
   void initState() {
@@ -47,6 +47,7 @@ class _State extends State<DeviceManager> {
     await _engine.startPreview();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
+    await _enumerateVideoDevices();
   }
 
   _addListeners() {
@@ -99,21 +100,41 @@ class _State extends State<DeviceManager> {
     await _engine.leaveChannel();
   }
 
-  _enumerateVideoDevices() async {
-    var devices = await _engine.deviceManager.enumerateVideoDevices();
-    logSink.log('_enumerateVideoDevices $devices');
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('_enumerateVideoDevices ${jsonEncode(devices)}'),
-    ));
+  Future<void> _enumerateVideoDevices() async {
+    _selectedDeviceId = (await _engine.deviceManager.getVideoDevice())!;
+    final devices = await _engine.deviceManager.enumerateVideoDevices();
     setState(() {
       this.devices = devices;
     });
   }
 
-  _setVideoDevice() async {
-    if (devices.isNotEmpty) {
-      await _engine.deviceManager.setVideoDevice(devices.last.deviceId);
+  Widget _devicesDropDown() {
+    if (devices.isEmpty) return Container();
+    final dropDownMenus = <DropdownMenuItem<String>>[];
+    for (var v in devices) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text(v.deviceName),
+        value: v.deviceId,
+      ));
     }
+    return DropdownButton<String>(
+      items: dropDownMenus,
+      value: _selectedDeviceId,
+      onChanged: (v) {
+        setState(() {
+          _isSetVideoDeviceEnabled = _selectedDeviceId != v;
+          _selectedDeviceId = v!;
+        });
+      },
+    );
+  }
+
+  Future<void> _setVideoDevice(String deviceId) async {
+    await _engine.deviceManager.setVideoDevice(deviceId);
+    setState(() {
+      _isSetVideoDeviceEnabled = false;
+    });
+    logSink.log('setVideoDevice deviceId: $deviceId');
   }
 
   @override
@@ -121,6 +142,8 @@ class _State extends State<DeviceManager> {
     return Stack(
       children: [
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: _controller,
@@ -142,26 +165,39 @@ class _State extends State<DeviceManager> {
                 )
               ],
             ),
+            _devicesDropDown(),
+            ElevatedButton(
+              onPressed: _isSetVideoDeviceEnabled
+                  ? () {
+                      _setVideoDevice(_selectedDeviceId);
+                    }
+                  : null,
+              child: const Text('Set video device'),
+            ),
             _renderVideo(),
           ],
         ),
-        if (kIsWeb || (Platform.isWindows || Platform.isMacOS))
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: _enumerateVideoDevices,
-                  child: const Text('Enumerate video devices'),
-                ),
-                ElevatedButton(
-                  onPressed: _setVideoDevice,
-                  child: const Text('Set video device'),
-                ),
-              ],
-            ),
-          )
+        // if (kIsWeb || (Platform.isWindows || Platform.isMacOS))
+        //   Align(
+        //     alignment: Alignment.bottomRight,
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         ElevatedButton(
+        //           onPressed: _enumerateVideoDevices,
+        //           child: const Text('Enumerate video devices'),
+        //         ),
+        //         ElevatedButton(
+        //           onPressed: _isSetVideoDeviceEnabled
+        //               ? () {
+        //                   _setVideoDevice(_selectedDeviceId);
+        //                 }
+        //               : null,
+        //           child: const Text('Set video device'),
+        //         ),
+        //       ],
+        //     ),
+        //   )
       ],
     );
   }

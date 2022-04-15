@@ -1,92 +1,26 @@
 import XCTest
+import Flutter
 @testable import agora_rtc_engine
 
-// TODO(littlegnal): Re-enable test after MS-88689 done
-//class FakeAgoraRtcEngineKitFactory : AgoraRtcEngineKitFactory {
-//    private var rtcEngineKit: AgoraRtcEngineKit!
-//
-//    init(_ rtcEngineKit: AgoraRtcEngineKit) {
-//        self.rtcEngineKit = rtcEngineKit
-//    }
-//    override func create(_ params: NSDictionary, _ delegate: RtcEngineEventHandler) -> AgoraRtcEngineKit? {
-//        return self.rtcEngineKit
-//    }
-//}
-//
-//class TestRtcEnginePlugin : NSObject, RtcEnginePlugin {
-//    var engine: AgoraRtcEngineKit? = nil
-//    var isRtcEngineCreated: Bool = false
-//    var isRtcEngineDestroyed: Bool = false
-//
-//    func onRtcEngineCreated(_ rtcEngine: AgoraRtcEngineKit?) {
-//        engine = rtcEngine
-//        isRtcEngineCreated = true
-//    }
-//
-//    func onRtcEngineDestroyed() {
-//        isRtcEngineDestroyed = true
-//    }
-//}
-//
-//class RunnerTests: XCTestCase {
-//
-//    private var rtcEngineKit: AgoraRtcEngineKit!
-//    private var rtcEngineManager: RtcEngineManager!
-//
-//    override func setUpWithError() throws {
-//        rtcEngineKit = FakeAgoraRtcEngineKit()
-//        rtcEngineManager = RtcEngineManager(
-//            {(_, _) -> Void in },
-//            FakeAgoraRtcEngineKitFactory(rtcEngineKit))
-//    }
-//
-//    override func tearDownWithError() throws {
-//        // Put teardown code here. This method is called after the invocation of each test method in the class.
-//    }
-//
-//    func testShouldCallPluginCallback() {
-//        let plugin = TestRtcEnginePlugin()
-//
-//        RtcEnginePluginRegistrant.register(plugin)
-//
-//
-//        rtcEngineManager.create(["appType": 0], ResultCallback())
-//        XCTAssertTrue(plugin.isRtcEngineCreated)
-//        XCTAssertEqual(rtcEngineKit, plugin.engine)
-//
-//        rtcEngineManager.destroy(ResultCallback())
-//        XCTAssertTrue(plugin.isRtcEngineDestroyed)
-//        XCTAssertNil(rtcEngineManager.engine)
-//
-//        RtcEnginePluginRegistrant.unregister(plugin)
-//    }
-//
-//    func testShouldCallOCPluginCallback() {
-//        let plugin = OCTestRtcEnginePlugin()
-//
-//        plugin.registerSelf()
-//
-//        rtcEngineManager.create(["appType": 0], ResultCallback())
-//        XCTAssertTrue(plugin.isRtcEngineCreated)
-//
-//        rtcEngineManager.destroy(ResultCallback())
-//        XCTAssertTrue(plugin.isRtcEngineDestroyed)
-//        XCTAssertNil(rtcEngineManager.engine)
-//
-//        plugin.unregisterSelf()
-//    }
-//
-//    func testShouldNotCallPluginCallbackAfterUnregister() {
-//        let plugin = TestRtcEnginePlugin()
-//
-//        RtcEnginePluginRegistrant.register(plugin)
-//        RtcEnginePluginRegistrant.unregister(plugin)
-//
-//        rtcEngineManager.create(["appType": 0], ResultCallback())
-//        rtcEngineManager.destroy(ResultCallback())
-//
-//        XCTAssertFalse(plugin.isRtcEngineCreated)
-//        XCTAssertFalse(plugin.isRtcEngineDestroyed)
-//    }
-//
-//}
+
+class RunnerTests: XCTestCase {
+
+
+    override func setUpWithError() throws {
+    }
+
+    override func tearDownWithError() throws {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+
+    func testCreateAndDestroyAgoraRtcEnginePlugin() {
+        for _ in 1...100 {
+            let flutterEngine = FlutterEngine()
+            flutterEngine.run()
+            AgoraRtcEnginePlugin.register(with: flutterEngine.registrar(forPlugin: "AgoraRtcEnginePlugin")!)
+            flutterEngine.destroyContext()
+            
+            sleep(1)
+        }
+    }
+}
