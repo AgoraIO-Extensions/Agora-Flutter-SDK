@@ -9,6 +9,7 @@ void main() => runApp(const MyApp());
 
 /// This widget is the root of your application.
 class MyApp extends StatefulWidget {
+  /// Construct the [MyApp]
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -77,7 +78,9 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+/// This widget is used to indicate the configuration is invalid
 class InvalidConfigWidget extends StatelessWidget {
+  /// Construct the [InvalidConfigWidget]
   const InvalidConfigWidget({Key? key}) : super(key: key);
 
   @override

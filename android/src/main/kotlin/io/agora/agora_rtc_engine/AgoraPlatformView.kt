@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import android.widget.FrameLayout
 import io.agora.iris.rtc.IrisRtcEngine
-import io.agora.iris.rtc.base.ApiTypeEngine
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.ErrorLogResult
 import io.flutter.plugin.common.MethodCall
@@ -17,7 +16,7 @@ private class PlatformViewApiTypeCallApiMethodCallHandler(
 ) : CallApiMethodCallHandler(irisRtcEngine) {
   override fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
     platformView.updateView()
-    return irisRtcEngine.callApi(ApiTypeEngine.fromInt(apiType), params, platformView.getIrisRenderView(), sb)
+    return irisRtcEngine.callApi(apiType, params, platformView.getIrisRenderView(), sb)
   }
 }
 

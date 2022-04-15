@@ -1,0 +1,18 @@
+name: testcase_gen
+description: A simple command-line application.
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.16.0 <3.0.0'
+
+publish_to: none
+
+dependencies:
+  paraphrase: 
+    path: ../paraphrase
+
+  dart_style: ^2.2.1
+
+dev_dependencies:
+  lints: ^1.0.0

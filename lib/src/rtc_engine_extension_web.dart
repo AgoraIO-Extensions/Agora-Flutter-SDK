@@ -13,10 +13,12 @@ extension RtcEngineExtension on RtcEngine {
     throw PlatformException(code: ErrorCode.NotSupported.toString());
   }
 
+  /// @nodoc
   List<dynamic> enumerateDisplays() {
     throw PlatformException(code: ErrorCode.NotSupported.toString());
   }
 
+  /// @nodoc
   List<dynamic> enumerateWindows() {
     throw PlatformException(code: ErrorCode.NotSupported.toString());
   }

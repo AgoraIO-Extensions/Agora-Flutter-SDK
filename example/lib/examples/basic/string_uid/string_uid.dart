@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// StringUid Example
 class StringUid extends StatefulWidget {
+  /// Construct the [StringUid]
   const StringUid({Key? key}) : super(key: key);
 
   @override

@@ -3,38 +3,33 @@
 set -e
 set -x
 
+ZIP_NAME=iris_3.6.2_RTC_Android_20220414_0825
+DOWNLOAD_IRIS_URL=https://download.agora.io/demo/release/${ZIP_NAME}.zip
+
+MY_PATH=$(dirname "$0")
 ROOT_PATH=$(pwd)
 IRIS_INTEGRATION_TEST_PATH=$ROOT_PATH/integration_test_app/iris_integration_test
 
-if [ ! -d "$IRIS_INTEGRATION_TEST_PATH/build/android" ]; then
-    mkdir -p $IRIS_INTEGRATION_TEST_PATH/build/android
+if [[ ! -d $ROOT_PATH/integration_test_app/android/libs ]]; then
+    mkdir -p $ROOT_PATH/integration_test_app/android/libs
 fi
 
-cd $IRIS_INTEGRATION_TEST_PATH/build/android
-echo "$IRIS_INTEGRATION_TEST_PATH"
-cmake \
-    -G "Ninja" \
-    -DANDROID_ABI="x86_64" \
-    -DANDROID_NDK="$ANDROID_NDK" \
-    -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK"/build/cmake/android.toolchain.cmake \
-    -DANDROID_TOOLCHAIN=clang \
-    -DANDROID_PLATFORM=android-16 \
-    -DCMAKE_BUILD_TYPE="Debug" \
-    -DIRIS_SDK_TYPE=RTC \
-    -DPLATFORM="ANDROID" \
-    "$IRIS_INTEGRATION_TEST_PATH"
+# /Users/fenglang/codes/aw/Agora-Flutter-SDK/integration_test_app/android/libs/x86_64
+pushd $ROOT_PATH/integration_test_app/android/libs
 
-cmake --build . --config "Debug"
+curl -o "iris_android.zip" -L $DOWNLOAD_IRIS_URL -v
 
-# cmake \
-#     -G Xcode \
-#     -DPLATFORM="MAC" \
-#     -DCMAKE_OSX_ARCHITECTURES="x86_64" \
-#     -DCMAKE_BUILD_TYPE="Debug" \
-#     -DRUN_TEST=1 \
-#     "$IRIS_INTEGRATION_TEST_PATH"
-# cmake --build . --config "Debug"
-# 
-# popd
+unzip iris_android.zip -d ./
 
-# cp -r "${IRIS_INTEGRATION_TEST_PATH}/build/mac/Debug/iris_integration_test.framework" "${IRIS_INTEGRATION_TEST_PATH}/../macos/Runner"
+ABIS="arm64-v8a x86_64"
+
+for ABI in ${ABIS};
+do
+    mkdir -p $ABI
+    cp -RP ${ZIP_NAME}/${ABI}/Release/libAgoraRtcWrapper.so ${ABI}/libAgoraRtcWrapper.so
+done;
+
+rm -rf iris_android.zip
+rm -rf ${ZIP_NAME}
+
+popd

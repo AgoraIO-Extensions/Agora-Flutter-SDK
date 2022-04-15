@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// [AppBar] action that shows a [Overlay] with log.
 class LogActionWidget extends StatefulWidget {
+  /// Construct the [LogActionWidget]
   const LogActionWidget({Key? key}) : super(key: key);
 
   @override
@@ -143,21 +145,27 @@ class __LogActionInnerState extends State<_LogActionInner> {
   }
 }
 
+/// Class that add and update the log in [LogActionWidget]
 class LogSink extends ChangeNotifier {
-  final StringBuffer stringBuffer = StringBuffer();
+  final StringBuffer _stringBuffer = StringBuffer();
+
+  /// Add log to [LogActionWidget]
   void log(String log) {
-    stringBuffer.writeln(log);
+    _stringBuffer.writeln(log);
     notifyListeners();
   }
 
+  /// Get all logs
   String output() {
-    return stringBuffer.toString();
+    return _stringBuffer.toString();
   }
 
+  /// Clear logs
   void clear() {
-    stringBuffer.clear();
+    _stringBuffer.clear();
     notifyListeners();
   }
 }
 
+/// The global [LogSink]
 final LogSink logSink = LogSink();

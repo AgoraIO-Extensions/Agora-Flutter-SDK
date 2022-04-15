@@ -337,7 +337,7 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     {
         handler->onRtmpStreamingStateChanged(
             "123", RTMP_STREAM_PUBLISH_STATE::RTMP_STREAM_PUBLISH_STATE_CONNECTING,
-            RTMP_STREAM_PUBLISH_ERROR::
+            RTMP_STREAM_PUBLISH_ERROR_TYPE::
                 RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT);
     }
     if (event_name == nullptr || strcmp(event_name, "onRtmpStreamingEvent") == 0)
@@ -434,6 +434,51 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     if (event_name == nullptr || strcmp(event_name, "onSnapshotTaken") == 0)
     {
         handler->onSnapshotTaken("123", 123, "path", 10, 10, 0);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onScreenCaptureInfoUpdated") == 0)
+    {
+#ifdef _WIN32
+        ScreenCaptureInfo info;
+        info.graphicsCardType = "123";
+        info.errCode = EXCLUDE_WINDOW_ERROR::EXCLUDE_WINDOW_NONE;
+        handler->onScreenCaptureInfoUpdated(info);
+#endif
+    }
+    if (event_name == nullptr || strcmp(event_name, "onClientRoleChangeFailed") == 0)
+    {
+        handler->onClientRoleChangeFailed(
+                CLIENT_ROLE_CHANGE_FAILED_REASON::CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS,
+                CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onWlAccMessage") == 0)
+    {
+        handler->onWlAccMessage(WLACC_MESSAGE_REASON::WLACC_MESSAGE_REASON_WEAK_SIGNAL, WLACC_SUGGEST_ACTION::WLACC_SUGGEST_ACTION_CHECK_5G, "msg");
+    }
+    if (event_name == nullptr || strcmp(event_name, "onWlAccStats") == 0)
+    {
+        WlAccStats currentStats;
+        currentStats.e2eDelayPercent = 1;
+        currentStats.frozenRatioPercent = 1;
+        currentStats.lossRatePercent = 1;
+
+        WlAccStats averageStats;
+        averageStats.e2eDelayPercent = 1;
+        averageStats.frozenRatioPercent = 1;
+        averageStats.lossRatePercent = 1;
+
+        handler->onWlAccStats(currentStats, averageStats);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onProxyConnected") == 0)
+    {
+        handler->onProxyConnected("123", 100, PROXY_TYPE::LOCAL_PROXY_TYPE, "10.0.1.11", 123);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onAudioDeviceTestVolumeIndication") == 0)
+    {
+        handler->onAudioDeviceTestVolumeIndication(AudioDeviceTestVolumeType::AudioTestPlaybackVolume, 10);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onContentInspectResult") == 0)
+    {
+        handler->onContentInspectResult(CONTENT_INSPECT_RESULT::CONTENT_INSPECT_NEUTRAL);
     }
 }
 
@@ -589,7 +634,7 @@ void CallRtcChannelEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
         handler->onRtmpStreamingStateChanged(
             rtcChannel, "123",
             RTMP_STREAM_PUBLISH_STATE::RTMP_STREAM_PUBLISH_STATE_CONNECTING,
-            RTMP_STREAM_PUBLISH_ERROR::
+            RTMP_STREAM_PUBLISH_ERROR_TYPE::
                 RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT);
     }
     if (event_name == nullptr || strcmp(event_name, "onRtmpStreamingEvent") == 0)
@@ -619,5 +664,12 @@ void CallRtcChannelEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
         handler->onConnectionStateChanged(
             rtcChannel, CONNECTION_STATE_TYPE::CONNECTION_STATE_CONNECTED,
             CONNECTION_CHANGED_REASON_TYPE::CONNECTION_CHANGED_BANNED_BY_SERVER);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onClientRoleChangeFailed") == 0)
+    {
+        handler->onClientRoleChangeFailed(
+                rtcChannel,
+                CLIENT_ROLE_CHANGE_FAILED_REASON::CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS,
+                CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
     }
 }

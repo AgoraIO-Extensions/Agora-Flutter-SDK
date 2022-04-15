@@ -18,3 +18,5 @@ x86/
 
 third_party/rtc
 third_party/iris
+
+.plugin_dev

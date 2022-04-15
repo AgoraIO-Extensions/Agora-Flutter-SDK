@@ -66,8 +66,10 @@ class IrisRtcVideoFrameObserver : public IrisVideoFrameObserver {
 
 class IrisRtcPacketObserver : public IrisPacketObserver {};
 
-class IIrisRtcRawData {
+class IRIS_CPP_API IIrisRtcRawData {
  public:
+  virtual ~IIrisRtcRawData() = default;
+
   virtual void Initialize(agora::rtc::IRtcEngine *rtc_engine) = 0;
 
   virtual void Release() = 0;

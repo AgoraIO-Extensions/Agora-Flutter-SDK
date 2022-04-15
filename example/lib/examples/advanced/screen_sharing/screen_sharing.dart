@@ -14,6 +14,7 @@ const String _kDefaultAppGroup = 'io.agora';
 
 /// ScreenSharing Example
 class ScreenSharing extends StatefulWidget {
+  /// Construct the [ScreenSharing]
   const ScreenSharing({Key? key}) : super(key: key);
 
   @override
@@ -115,7 +116,7 @@ class _State extends State<ScreenSharing> {
           (LocalVideoStreamState localVideoState, LocalVideoStreamError error) {
         logSink.log(
             'ScreenSharing localVideoStateChanged $localVideoState $error');
-        if (localVideoState == LocalVideoStreamState.Failed) {
+        if (error == LocalVideoStreamError.ScreenCaptureWindowClosed) {
           _stopScreenShare();
         }
       },
