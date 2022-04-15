@@ -80,7 +80,7 @@ Agora 视频 SDK 需要 `摄像头` 和 `麦克风` 权限来开始视频通话�
 
 #### macOS
 
-您可以从 [agora_rtc_engine.podspec](macOS/agora_rtc_engine.podspec) 文件中获取更多信息, 比如在 macOS 上的依赖库。
+您可以从 [agora_rtc_engine.podspec](macos/agora_rtc_engine.podspec) 文件中获取更多信息, 比如在 macOS 上的依赖库。
 
 #### Windows
 
@@ -90,13 +90,7 @@ Agora 视频 SDK 需要 `摄像头` 和 `麦克风` 权限来开始视频通话�
 
 我们使用 [js](https://pub.dev/packages/js) 库实现 dart 对 JavaScript 的调用。
 
-我们针对 Web SDK 有一个 [AgoraRtcWrapper.bundle.js](example/web/AgoraRtcWrapper.bundle.js)
-包装库，所以需要在您的 `index.html` 中添加引用，可以参考 [example/web/index.html](example/web/index.html) 。
-
-```html
-
-<script src="AgoraRtcWrapper.bundle.js" type="application/javascript"></script>
-```
+我们针对 Web SDK 有一个 [AgoraRtcWrapper.bundle.js](assets/AgoraRtcWrapper.bundle.js) 包装库。
 
 此包装库是 [Iris-Rtc-Web](https://github.com/AgoraIO-Community/Iris-Rtc-Web) 开源库的编译产物，它尝试将 Web SDK 接口映射成
 Native SDK 接口，我们将其开源以便开发者定位和排查问题。
