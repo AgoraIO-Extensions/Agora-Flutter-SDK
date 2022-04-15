@@ -89,11 +89,7 @@ You can get more info from the [CMakeLists.text](windows/CMakeLists.txt) file, s
 
 We use the [js](https://pub.dev/packages/js) library to call JavaScript from the dart layer.
 
-We have a wrapper library named [AgoraRtcWrapper.bundle.js](example/web/AgoraRtcWrapper.bundle.js) for the Web SDK, so you should add it to your `index.html`, you can refer to [example/web/index.html](example/web/index.html).
-
-```html
-<script src="AgoraRtcWrapper.bundle.js" type="application/javascript"></script>
-```
+We have a wrapper library named [AgoraRtcWrapper.bundle.js](assets/AgoraRtcWrapper.bundle.js) for the Web SDK.
 
 This wrapper library is the output of the open-source repository [Iris-Rtc-Web](https://github.com/AgoraIO-Community/Iris-Rtc-Web). The repository attempt to mapping the API from Web SDK as Native SDK, we make it open-source to help developer positioning and troubleshooting.
 

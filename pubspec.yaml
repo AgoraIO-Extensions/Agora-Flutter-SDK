@@ -40,3 +40,5 @@ flutter:
       web:
         fileName: agora_rtc_engine_web.dart
         pluginClass: AgoraRtcEngineWeb
+  assets:
+    - assets/AgoraRtcWrapper.bundle.js
