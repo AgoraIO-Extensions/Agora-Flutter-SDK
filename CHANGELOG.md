@@ -1,4 +1,16 @@
-## [5.0.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.1-rc.1...v5.0.1) (2022-03-16)
+
+
+# [5.1.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.1...v5.1.0) (2022-04-15)
+
+
+### Bug Fixes
+
+* Add missing named parameter 'channelId' for SurfaceView in example ([#642](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/642)) ([d873371](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/d873371214ad4c234893180cb6854de0b92c5d90))
+
+
+### Features
+
+* Upgrade native sdk 3.6.2 ([#651](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/651)) ([9014e6e](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/9014e6e4f95d2aa02c4024a975f57225d20e44b6))## [5.0.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.1-rc.1...v5.0.1) (2022-03-16)
 
 ## [5.0.1-rc.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.0...v5.0.1-rc.1) (2022-03-13)
 
