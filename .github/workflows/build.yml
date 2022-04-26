@@ -48,7 +48,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'
+          flutter-version: '2.10.5'
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2.21.0
         with:
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'   
+          flutter-version: '2.10.5'   
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'   
+          flutter-version: '2.10.5'   
       - run: flutter config --enable-macos-desktop 
       - run: bash ci/run_flutter_macos_integration_test.sh
 
@@ -100,7 +100,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'
+          flutter-version: '2.10.5'
       - run: flutter config --enable-windows-desktop
       - run: bash ci/run_flutter_macos_integration_test.sh
 
@@ -116,7 +116,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'
+          flutter-version: '2.10.5'
       - run: flutter pub get
       - run: bash ci/run_android_test.sh
 
@@ -129,12 +129,29 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'
+          flutter-version: '2.10.5'
       - run: flutter pub get
       - run: bash ci/run_ios_test.sh
   
-  build_android:
-    name: Build Android
+  build_android_windows:
+    name: Build Android on Windows
+    needs: flutter_codestyle_check
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.10.5'
+      - run: flutter pub get
+      - name: Run flutter build apk
+        run: flutter build apk
+        working-directory: example
+
+  build_android_ubuntu:
+    name: Build Android on Ubuntu
     needs: flutter_codestyle_check
     runs-on: ubuntu-latest
     steps:
@@ -144,7 +161,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'
+          flutter-version: '2.10.5'
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -159,7 +176,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.3'
+          flutter-version: '2.10.5'
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign
         run: flutter build ios --no-codesign
