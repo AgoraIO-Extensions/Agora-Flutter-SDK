@@ -3,7 +3,7 @@
 set -e
 set -x
 
-ZIP_NAME=iris_3.6.2_RTC_Android_20220414_0825
+ZIP_NAME=iris_0.0.0_RTC_Android_20220506_0255
 DOWNLOAD_IRIS_URL=https://download.agora.io/demo/release/${ZIP_NAME}.zip
 
 MY_PATH=$(dirname "$0")

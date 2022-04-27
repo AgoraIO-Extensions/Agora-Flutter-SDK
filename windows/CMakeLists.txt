@@ -6,8 +6,8 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_NAME "iris_3.6.2_RTC_Windows_20220414_0827")
-set(IRIS_SDK_VERSION "v3_6_2")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_0.0.0_RTC_Windows_20220506_0256")
+set(IRIS_SDK_VERSION "v3_6_2_fix.1")
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
