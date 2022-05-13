@@ -1,6 +1,16 @@
 
 
-# [5.1.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.1...v5.1.0) (2022-04-15)
+## [5.1.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.1.0...v5.1.1) (2022-05-13)
+
+
+### Bug Fixes
+
+* fix IrisEventHandler crash ([#667](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/667)) ([e5335d8](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/e5335d809514e91338f00ea76955733f476b6bc4))
+
+
+### Features
+
+* Upgrade gradle version to 7.x ([1291a5e](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/1291a5e14026eae9a3470fb576d8ce827ae5c0ae))# [5.1.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.0.1...v5.1.0) (2022-04-15)
 
 
 ### Bug Fixes
