@@ -66,12 +66,16 @@
   return self;
 }
 
+- (void)destroyIrisRtcEngine {
+    self.irisRtcEngine->SetEventHandler(nil);
+    self.irisRtcEngine->channel()->SetEventHandler(nil);
+    delete self.irisRtcEngine;
+    self.irisRtcEngine = nil;
+}
+
 - (void)dealloc {
     if (self.irisRtcEngine) {
-        self.irisRtcEngine->SetEventHandler(nil);
-        self.irisRtcEngine->channel()->SetEventHandler(nil);
-        delete self.irisRtcEngine;
-        self.irisRtcEngine = nil;
+        [self destroyIrisRtcEngine];
     }
     
     if (self.videoFrameBufferManager) {
@@ -85,6 +89,11 @@
 #if DEBUG
     if ([@"getIrisRtcEngineIntPtr" isEqualToString:call.method]) {
         result(@((intptr_t)self.irisRtcEngine));
+        return;
+    }
+    if ([@"forceDestroyIrisRtcEngine" isEqualToString:call.method]) {
+        [self destroyIrisRtcEngine];
+        result(@(true));
         return;
     }
 #endif

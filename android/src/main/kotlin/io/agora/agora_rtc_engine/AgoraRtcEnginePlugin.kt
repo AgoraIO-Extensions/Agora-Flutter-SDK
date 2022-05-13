@@ -72,6 +72,20 @@ open class CallApiMethodCallHandler(
     val params = call.argument<String>("params")
     val sb = StringBuffer()
 
+    if (BuildConfig.DEBUG) {
+      when (call.method) {
+        "getIrisRtcEngineIntPtr" -> {
+          result.success(irisRtcEngine.nativeHandle)
+          return
+        }
+        "forceDestroyIrisRtcEngine" -> {
+          irisRtcEngine.destroy()
+          result.success(true)
+          return
+        }
+      }
+    }
+
     if (BuildConfig.DEBUG && "getIrisRtcEngineIntPtr" == call.method) {
       result.success(irisRtcEngine.nativeHandle)
       return
@@ -192,10 +206,8 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-
     eventSink = events
     irisRtcEngine.setEventHandler(EventHandler(eventSink))
-    Log.e("MainActivity", "eventSink: $eventSink")
   }
 
   override fun onCancel(arguments: Any?) {

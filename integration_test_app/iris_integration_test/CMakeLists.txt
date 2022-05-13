@@ -29,7 +29,7 @@ target_include_directories(${LIBRARY_NAME} PUBLIC
 if (CMAKE_SYSTEM_NAME STREQUAL "Android") 
 # if(UNIX AND NOT APPLE)
 # if (PLATFORM STREQUAL "ANDROID") 
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../android/libs/${ANDROID_ABI}")
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../android/libs/${ANDROID_ABI}/libAgoraRtcWrapper.so")
     set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../android/libs/${ANDROID_ABI}")
     else()
         set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../android/libs/${ANDROID_ABI}")
@@ -123,7 +123,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         "${FRAMEWORKS}"
         )
 else()
-    set(IRIS_SDK_DOWNLOAD_NAME "iris_3.6.2_RTC_Windows_20220414_0827")
+    set(IRIS_SDK_DOWNLOAD_NAME "iris_0.0.0_RTC_Windows_20220506_0256")
     set(LIBS_DIR
     "${CMAKE_CURRENT_SOURCE_DIR}/../../windows/third_party/iris/${IRIS_SDK_DOWNLOAD_NAME}/x64/Release/AgoraRtcWrapper.lib"
         )
