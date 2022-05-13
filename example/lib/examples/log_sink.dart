@@ -82,7 +82,7 @@ class _LogActionWidgetState extends State<LogActionWidget> {
                           ),
                           const Expanded(
                             child: SingleChildScrollView(
-                              child: _LogActionInner(),
+                              child: LogWidget(),
                             ),
                           )
                         ],
@@ -106,31 +106,46 @@ class _LogActionWidgetState extends State<LogActionWidget> {
   }
 }
 
-class _LogActionInner extends StatefulWidget {
-  const _LogActionInner({Key? key}) : super(key: key);
+/// LogWidget
+class LogWidget extends StatefulWidget {
+  /// Construct the [LogWidget]
+  const LogWidget({
+    Key? key,
+    this.logSink,
+    this.textStyle = const TextStyle(fontSize: 15, color: Colors.white),
+  }) : super(key: key);
+
+  /// This [LogSink] is used to add log.
+  final LogSink? logSink;
+
+  /// The text style of the log.
+  final TextStyle textStyle;
 
   @override
-  __LogActionInnerState createState() => __LogActionInnerState();
+  _LogWidgetState createState() => _LogWidgetState();
 }
 
-class __LogActionInnerState extends State<_LogActionInner> {
+class _LogWidgetState extends State<LogWidget> {
   VoidCallback? _listener;
+  late final LogSink _logSink;
 
   @override
   void initState() {
     super.initState();
 
+    _logSink = widget.logSink ?? _defaultLogSink;
+
     _listener ??= () {
       setState(() {});
     };
 
-    logSink.addListener(_listener!);
+    _logSink.addListener(_listener!);
   }
 
   @override
   void dispose() {
     if (_listener != null) {
-      logSink.removeListener(_listener!);
+      _logSink.removeListener(_listener!);
       _listener = null;
     }
     super.dispose();
@@ -139,8 +154,8 @@ class __LogActionInnerState extends State<_LogActionInner> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      logSink.output(),
-      style: const TextStyle(fontSize: 15, color: Colors.white),
+      _logSink.output(),
+      style: widget.textStyle,
     );
   }
 }
@@ -167,5 +182,7 @@ class LogSink extends ChangeNotifier {
   }
 }
 
+final LogSink _defaultLogSink = LogSink();
+
 /// The global [LogSink]
-final LogSink logSink = LogSink();
+LogSink get logSink => _defaultLogSink;
