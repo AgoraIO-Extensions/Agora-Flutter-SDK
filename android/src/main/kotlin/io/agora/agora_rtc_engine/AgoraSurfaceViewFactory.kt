@@ -17,9 +17,9 @@ class AgoraSurfaceViewFactory(
   private val messenger: BinaryMessenger,
 private val irisRtcEngine: IrisRtcEngine
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
-  override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
+  override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
     return AgoraPlatformViewSurface(
-      context.applicationContext,
+      context?.applicationContext,
       messenger,
       viewId,
       args as? Map<*, *>,
@@ -29,13 +29,15 @@ private val irisRtcEngine: IrisRtcEngine
 }
 
 class AgoraPlatformViewSurface(
-  context: Context,
+  context: Context?,
   messenger: BinaryMessenger,
   viewId: Int, args: Map<*, *>?,
   irisRtcEngine: IrisRtcEngine
 ) : AgoraPlatformView(context, messenger, viewId, args, irisRtcEngine) {
-  override fun createView(context: Context): View {
-    return RtcEngine.CreateRendererView(context)
+  override fun createView(context: Context?): View? {
+    return context?.let {
+      RtcEngine.CreateRendererView(context)
+    }
   }
 
   override val channelName: String

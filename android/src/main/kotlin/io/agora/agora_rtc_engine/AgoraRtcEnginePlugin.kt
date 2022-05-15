@@ -260,6 +260,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       }
       return@getAssetAbsolutePath
     }
-    result.error(IllegalArgumentException::class.simpleName, null, null)
+    result.error(IllegalArgumentException::class.simpleName ?: "IllegalArgumentException", "The parameter should not be null", null)
   }
 }

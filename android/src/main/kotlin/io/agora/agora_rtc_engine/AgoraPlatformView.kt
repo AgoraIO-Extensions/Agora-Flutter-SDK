@@ -16,23 +16,27 @@ private class PlatformViewApiTypeCallApiMethodCallHandler(
 ) : CallApiMethodCallHandler(irisRtcEngine) {
   override fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
     platformView.updateView()
-    return irisRtcEngine.callApi(apiType, params, platformView.getIrisRenderView(), sb)
+    return platformView.getIrisRenderView()?.let {
+      irisRtcEngine.callApi(apiType, params, platformView.getIrisRenderView(), sb)
+    } ?: -1
   }
 }
 
 // We should ensure not doing some leak in constructor
 @Suppress("LeakingThis")
 abstract class AgoraPlatformView(
-  private val context: Context,
+  private val context: Context?,
   messenger: BinaryMessenger,
   viewId: Int,
   args: Map<*, *>?,
   private val irisRtcEngine: IrisRtcEngine
 ) : PlatformView, MethodChannel.MethodCallHandler {
 
-  private val parentView: FrameLayout = FrameLayout(context)
+  private val parentView: FrameLayout? by lazy {
+    context?.let { FrameLayout(context) }
+  }
 
-  private var platformView: View
+  private var platformView: View?
 
   private val channel: MethodChannel
 
@@ -40,8 +44,8 @@ abstract class AgoraPlatformView(
     PlatformViewApiTypeCallApiMethodCallHandler(irisRtcEngine, this)
 
   init {
-    platformView = createView(context.applicationContext)
-    parentView.addView(platformView)
+    platformView = createView(context?.applicationContext)
+    parentView?.addView(platformView)
 
     channel = MethodChannel(messenger, "${channelName}_$viewId")
     channel.setMethodCallHandler(this)
@@ -54,20 +58,20 @@ abstract class AgoraPlatformView(
   }
 
   fun updateView() {
-    parentView.removeAllViews()
-    platformView = createView(context.applicationContext)
-    parentView.addView(platformView)
+    parentView?.removeAllViews()
+    platformView = createView(context?.applicationContext)
+    parentView?.addView(platformView)
   }
 
-  abstract fun createView(context: Context): View
+  abstract fun createView(context: Context?): View?
 
   protected abstract val channelName: String
 
-  fun getIrisRenderView(): View {
+  fun getIrisRenderView(): View? {
     return platformView
   }
 
-  override fun getView(): View {
+  override fun getView(): View? {
     return parentView
   }
 

@@ -136,6 +136,9 @@ jobs:
   build_android_windows:
     name: Build Android on Windows
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v1
@@ -144,7 +147,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -153,6 +156,9 @@ jobs:
   build_android_ubuntu:
     name: Build Android on Ubuntu
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -161,7 +167,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -170,13 +176,16 @@ jobs:
   build_ios:
     name: Build iOS
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: macos-11
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign
         run: flutter build ios --no-codesign
