@@ -204,6 +204,8 @@ class _State extends State<JoinChannelVideo> {
                           ? rtc_remote_view.SurfaceView(
                               uid: e,
                               channelId: _controller.text,
+                              zOrderMediaOverlay: true,
+                              zOrderOnTop: true,
                             )
                           : rtc_remote_view.TextureView(
                               uid: e,

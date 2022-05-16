@@ -215,7 +215,7 @@ class _State extends State<StreamMessage> {
                 width: 120,
                 child: rtc_remote_view.SurfaceView(
                   uid: uid,
-                  channelId: config.channelId,
+                  channelId: _channelIdController.text,
                 ),
               )
             : SizedBox(
@@ -223,7 +223,7 @@ class _State extends State<StreamMessage> {
                 width: 120,
                 child: rtc_remote_view.TextureView(
                   uid: uid,
-                  channelId: config.channelId,
+                  channelId: _channelIdController.text,
                 ),
               ));
       }));

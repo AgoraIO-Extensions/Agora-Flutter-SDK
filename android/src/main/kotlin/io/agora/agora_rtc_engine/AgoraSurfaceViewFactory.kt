@@ -46,20 +46,22 @@ class AgoraPlatformViewSurface(
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
       "setZOrderOnTop" -> {
-        val surfaceView = getIrisRenderView() as SurfaceView
-        val parentView = view as FrameLayout
-        parentView.removeView(surfaceView)
-        surfaceView.setZOrderOnTop((call.argument<Boolean>("onTop"))!!)
-        parentView.addView(surfaceView)
-        result.success(null)
+        (getIrisRenderView() as SurfaceView?)?.apply {
+          val parentView = view as FrameLayout?
+          parentView?.removeView(this)
+          this.setZOrderOnTop((call.argument<Boolean>("onTop"))!!)
+          parentView?.addView(this)
+          result.success(null)
+        }
       }
       "setZOrderMediaOverlay" -> {
-        val surfaceView = getIrisRenderView() as SurfaceView
-        val parentView = view as FrameLayout
-        parentView.removeView(surfaceView)
-        surfaceView.setZOrderMediaOverlay((call.argument<Boolean>("isMediaOverlay"))!!)
-        parentView.addView(surfaceView)
-        result.success(null)
+        (getIrisRenderView() as SurfaceView?)?.apply {
+          val parentView = view as FrameLayout?
+          parentView?.removeView(this)
+          this.setZOrderMediaOverlay((call.argument<Boolean>("isMediaOverlay"))!!)
+          parentView?.addView(this)
+          result.success(null)
+        }
       }
       else -> {
         super.onMethodCall(call, result)

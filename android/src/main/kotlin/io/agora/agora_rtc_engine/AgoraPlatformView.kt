@@ -23,39 +23,21 @@ private class PlatformViewApiTypeCallApiMethodCallHandler(
 }
 
 // We should ensure not doing some leak in constructor
-@Suppress("LeakingThis")
 abstract class AgoraPlatformView(
   private val context: Context?,
-  messenger: BinaryMessenger,
-  viewId: Int,
-  args: Map<*, *>?,
+  private val messenger: BinaryMessenger,
+  private val viewId: Int,
+  private val args: Map<*, *>?,
   private val irisRtcEngine: IrisRtcEngine
 ) : PlatformView, MethodChannel.MethodCallHandler {
 
-  private val parentView: FrameLayout? by lazy {
-    context?.let { FrameLayout(context) }
-  }
+  private var parentView: FrameLayout? = null
 
-  private var platformView: View?
+  private var platformView: View? = null
 
-  private val channel: MethodChannel
+  private var channel: MethodChannel? = null
 
-  private val callApiMethodCallHandler: CallApiMethodCallHandler =
-    PlatformViewApiTypeCallApiMethodCallHandler(irisRtcEngine, this)
-
-  init {
-    platformView = createView(context?.applicationContext)
-    parentView?.addView(platformView)
-
-    channel = MethodChannel(messenger, "${channelName}_$viewId")
-    channel.setMethodCallHandler(this)
-
-    args?.apply {
-      for ((key, value) in entries) {
-        onMethodCall(MethodCall(key as String, value), ErrorLogResult(""))
-      }
-    }
-  }
+  private var callApiMethodCallHandler: CallApiMethodCallHandler? = null
 
   fun updateView() {
     parentView?.removeAllViews()
@@ -72,14 +54,36 @@ abstract class AgoraPlatformView(
   }
 
   override fun getView(): View? {
+    if (parentView != null) return parentView;
+
+    parentView = context?.let { FrameLayout(context) }
+    platformView = createView(context?.applicationContext)
+    parentView?.addView(platformView)
+
+    channel = MethodChannel(messenger, "${channelName}_$viewId")
+    channel?.setMethodCallHandler(this)
+
+    callApiMethodCallHandler = PlatformViewApiTypeCallApiMethodCallHandler(irisRtcEngine, this)
+
+    args?.apply {
+      for ((key, value) in entries) {
+        onMethodCall(MethodCall(key as String, value), ErrorLogResult(""))
+      }
+    }
+
     return parentView
   }
 
   override fun dispose() {
-    channel.setMethodCallHandler(null)
+    parentView?.removeAllViews()
+    parentView = null
+    platformView = null
+    channel?.setMethodCallHandler(null)
+    channel = null
+    callApiMethodCallHandler = null
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    callApiMethodCallHandler.onMethodCall(call, result)
+    callApiMethodCallHandler?.onMethodCall(call, result)
   }
 }
