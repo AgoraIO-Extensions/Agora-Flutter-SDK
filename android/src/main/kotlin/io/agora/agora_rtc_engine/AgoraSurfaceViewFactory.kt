@@ -19,7 +19,7 @@ private val irisRtcEngine: IrisRtcEngine
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
   override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
     return AgoraPlatformViewSurface(
-      context?.applicationContext,
+      context,
       messenger,
       viewId,
       args as? Map<*, *>,

@@ -23,12 +23,13 @@ private class PlatformViewApiTypeCallApiMethodCallHandler(
 }
 
 // We should ensure not doing some leak in constructor
+@Suppress("LeakingThis")
 abstract class AgoraPlatformView(
   private val context: Context?,
-  private val messenger: BinaryMessenger,
-  private val viewId: Int,
-  private val args: Map<*, *>?,
-  private val irisRtcEngine: IrisRtcEngine
+  messenger: BinaryMessenger,
+  viewId: Int,
+  args: Map<*, *>?,
+  irisRtcEngine: IrisRtcEngine
 ) : PlatformView, MethodChannel.MethodCallHandler {
 
   private var parentView: FrameLayout? = null
@@ -39,25 +40,9 @@ abstract class AgoraPlatformView(
 
   private var callApiMethodCallHandler: CallApiMethodCallHandler? = null
 
-  fun updateView() {
-    parentView?.removeAllViews()
-    platformView = createView(context?.applicationContext)
-    parentView?.addView(platformView)
-  }
-
-  abstract fun createView(context: Context?): View?
-
-  protected abstract val channelName: String
-
-  fun getIrisRenderView(): View? {
-    return platformView
-  }
-
-  override fun getView(): View? {
-    if (parentView != null) return parentView;
-
+  init {
     parentView = context?.let { FrameLayout(context) }
-    platformView = createView(context?.applicationContext)
+    platformView = createView(context)
     parentView?.addView(platformView)
 
     channel = MethodChannel(messenger, "${channelName}_$viewId")
@@ -70,7 +55,23 @@ abstract class AgoraPlatformView(
         onMethodCall(MethodCall(key as String, value), ErrorLogResult(""))
       }
     }
+  }
 
+  fun updateView() {
+    parentView?.removeAllViews()
+    platformView = createView(context)
+    parentView?.addView(platformView)
+  }
+
+  abstract fun createView(context: Context?): View?
+
+  protected abstract val channelName: String
+
+  fun getIrisRenderView(): View? {
+    return platformView
+  }
+
+  override fun getView(): View? {
     return parentView
   }
 

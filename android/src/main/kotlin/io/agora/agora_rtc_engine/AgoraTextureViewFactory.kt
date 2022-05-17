@@ -16,7 +16,7 @@ class AgoraTextureViewFactory(
 
   override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
     return AgoraPlatformViewTexture(
-      context!!.applicationContext,
+      context,
       messenger,
       viewId,
       args as? Map<*, *>,
