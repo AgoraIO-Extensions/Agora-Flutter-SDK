@@ -53,24 +53,46 @@ class RtcSurfaceViewState extends State<RtcSurfaceView> {
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: AndroidView(
-          viewType: 'AgoraSurfaceView',
-          onPlatformViewCreated: _onPlatformViewCreated,
-          hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-          creationParams: {
-            ..._creationParams,
-            'setZOrderOnTop': {
-              'onTop': widget.zOrderOnTop,
+      const viewType = 'AgoraSurfaceView';
+      final creationParams = {
+        ..._creationParams,
+        'setZOrderOnTop': {
+          'onTop': widget.zOrderOnTop,
+        },
+        'setZOrderMediaOverlay': {
+          'isMediaOverlay': widget.zOrderMediaOverlay,
+        },
+      };
+      return PlatformViewLink(
+        viewType: viewType,
+        surfaceFactory:
+            (BuildContext context, PlatformViewController controller) {
+          return AndroidViewSurface(
+            controller: controller as AndroidViewController,
+            gestureRecognizers: widget.gestureRecognizers ??
+                const <Factory<OneSequenceGestureRecognizer>>{},
+            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+          );
+        },
+        onCreatePlatformView: (PlatformViewCreationParams params) {
+          final controller = PlatformViewsService.initExpensiveAndroidView(
+            id: params.id,
+            viewType: viewType,
+            layoutDirection: TextDirection.ltr,
+            creationParams: creationParams,
+            creationParamsCodec: const StandardMessageCodec(),
+            onFocus: () {
+              params.onFocusChanged(true);
             },
-            'setZOrderMediaOverlay': {
-              'isMediaOverlay': widget.zOrderMediaOverlay,
-            },
-          },
-          creationParamsCodec: const StandardMessageCodec(),
-          gestureRecognizers: widget.gestureRecognizers,
-        ),
+          );
+          controller
+              .addOnPlatformViewCreatedListener(params.onPlatformViewCreated);
+          controller.addOnPlatformViewCreatedListener((id) {
+            widget.onPlatformViewCreated?.call(id);
+          });
+          controller.create();
+          return controller;
+        },
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return GestureDetector(

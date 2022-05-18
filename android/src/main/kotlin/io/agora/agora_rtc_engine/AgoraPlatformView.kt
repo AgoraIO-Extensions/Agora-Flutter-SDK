@@ -76,12 +76,6 @@ abstract class AgoraPlatformView(
   }
 
   override fun dispose() {
-    parentView?.removeAllViews()
-    parentView = null
-    platformView = null
-    channel?.setMethodCallHandler(null)
-    channel = null
-    callApiMethodCallHandler = null
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
