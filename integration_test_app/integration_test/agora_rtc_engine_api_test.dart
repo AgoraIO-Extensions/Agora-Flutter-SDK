@@ -1579,7 +1579,16 @@ void main() {
 
     rtcEngine = await _createEngine();
 
-    await rtcEngine.getEffectDuration('/path');
+    fakeIrisEngine.mockCallApiReturnCode(
+      ApiTypeEngine.kEngineGetEffectDuration.index,
+      jsonEncode({
+        'filePath': '/path',
+      }),
+      10,
+    );
+
+    final ret = await rtcEngine.getEffectDuration('/path');
+    expect(ret, 10);
 
     fakeIrisEngine.expectCalledApi(
       ApiTypeEngine.kEngineGetEffectDuration.index,
@@ -2560,8 +2569,18 @@ void main() {
     fakeIrisEngine = FakeIrisRtcEngine();
     await fakeIrisEngine.initialize();
 
-    rtcEngine = await _createEngine();
     final DataStreamConfig config = DataStreamConfig(true, true);
+
+    fakeIrisEngine.mockCallApiReturnCode(
+      ApiTypeEngine.kEngineCreateDataStream.index,
+      jsonEncode({
+        'config': config.toJson(),
+      }),
+      10,
+    );
+
+    rtcEngine = await _createEngine();
+
     await rtcEngine.createDataStreamWithConfig(config);
 
     fakeIrisEngine.expectCalledApi(
@@ -3157,6 +3176,12 @@ void main() {
       fakeIrisEngine = FakeIrisRtcEngine();
       await fakeIrisEngine.initialize();
 
+      fakeIrisEngine.mockCallApiResult(
+        ApiTypeEngine.kEngineGetCameraMaxZoomFactor.index,
+        jsonEncode({}),
+        "1.0",
+      );
+
       rtcEngine = await _createEngine();
       await rtcEngine.getCameraMaxZoomFactor();
 
@@ -3176,8 +3201,14 @@ void main() {
       fakeIrisEngine = FakeIrisRtcEngine();
       await fakeIrisEngine.initialize();
 
+      fakeIrisEngine.mockCallApiReturnCode(
+          ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
+          jsonEncode({}),
+          1);
+
       rtcEngine = await _createEngine();
-      await rtcEngine.isCameraAutoFocusFaceModeSupported();
+      final isSupported = await rtcEngine.isCameraAutoFocusFaceModeSupported();
+      expect(isSupported, true);
 
       fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
@@ -3195,8 +3226,14 @@ void main() {
       fakeIrisEngine = FakeIrisRtcEngine();
       await fakeIrisEngine.initialize();
 
+      fakeIrisEngine.mockCallApiReturnCode(
+          ApiTypeEngine.kEngineIsCameraExposurePositionSupported.index,
+          jsonEncode({}),
+          1);
+
       rtcEngine = await _createEngine();
-      await rtcEngine.isCameraExposurePositionSupported();
+      final isSupported = await rtcEngine.isCameraExposurePositionSupported();
+      expect(isSupported, true);
 
       fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineIsCameraExposurePositionSupported.index,
@@ -3214,11 +3251,38 @@ void main() {
       fakeIrisEngine = FakeIrisRtcEngine();
       await fakeIrisEngine.initialize();
 
+      fakeIrisEngine.mockCallApiReturnCode(
+          ApiTypeEngine.kEngineIsCameraFocusSupported.index, jsonEncode({}), 1);
+
       rtcEngine = await _createEngine();
-      await rtcEngine.isCameraFocusSupported();
+      final isSupported = await rtcEngine.isCameraFocusSupported();
+      expect(isSupported, true);
 
       fakeIrisEngine.expectCalledApi(
         ApiTypeEngine.kEngineIsCameraFocusSupported.index,
+        jsonEncode({}),
+      );
+    },
+    skip: !(Platform.isAndroid || Platform.isIOS),
+  );
+
+  testWidgets(
+    'isCameraTorchSupported',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+      fakeIrisEngine = FakeIrisRtcEngine();
+      await fakeIrisEngine.initialize();
+
+      fakeIrisEngine.mockCallApiReturnCode(
+          ApiTypeEngine.kEngineIsCameraTorchSupported.index, jsonEncode({}), 1);
+
+      rtcEngine = await _createEngine();
+      final isSupported = await rtcEngine.isCameraTorchSupported();
+      expect(isSupported, true);
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineIsCameraTorchSupported.index,
         jsonEncode({}),
       );
     },

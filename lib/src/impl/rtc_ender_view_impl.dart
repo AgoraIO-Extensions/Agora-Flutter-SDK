@@ -53,21 +53,24 @@ class RtcSurfaceViewState extends State<RtcSurfaceView> {
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
+      const viewType = 'AgoraSurfaceView';
+      final creationParams = {
+        ..._creationParams,
+        'setZOrderOnTop': {
+          'onTop': widget.zOrderOnTop,
+        },
+        'setZOrderMediaOverlay': {
+          'isMediaOverlay': widget.zOrderMediaOverlay,
+        },
+      };
+
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: AndroidView(
-          viewType: 'AgoraSurfaceView',
+          viewType: viewType,
           onPlatformViewCreated: _onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-          creationParams: {
-            ..._creationParams,
-            'setZOrderOnTop': {
-              'onTop': widget.zOrderOnTop,
-            },
-            'setZOrderMediaOverlay': {
-              'isMediaOverlay': widget.zOrderMediaOverlay,
-            },
-          },
+          creationParams: creationParams,
           creationParamsCodec: const StandardMessageCodec(),
           gestureRecognizers: widget.gestureRecognizers,
         ),
@@ -134,14 +137,6 @@ class RtcSurfaceViewState extends State<RtcSurfaceView> {
         _setMirrorMode();
       }
     }
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      if (oldWidget.zOrderOnTop != widget.zOrderOnTop) {
-        _setZOrderOnTop();
-      }
-      if (oldWidget.zOrderMediaOverlay != widget.zOrderMediaOverlay) {
-        _setZOrderMediaOverlay();
-      }
-    }
   }
 
   @override
@@ -196,18 +191,6 @@ class RtcSurfaceViewState extends State<RtcSurfaceView> {
         'renderMode': _renderMode,
         'mirrorMode': _mirrorMode,
       }),
-    });
-  }
-
-  void _setZOrderOnTop() {
-    _channels[_id]?.invokeMethod('setZOrderOnTop', {
-      'onTop': widget.zOrderOnTop,
-    });
-  }
-
-  void _setZOrderMediaOverlay() {
-    _channels[_id]?.invokeMethod('setZOrderMediaOverlay', {
-      'isMediaOverlay': widget.zOrderMediaOverlay,
     });
   }
 

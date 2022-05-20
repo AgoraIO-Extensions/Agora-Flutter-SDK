@@ -127,7 +127,6 @@ public:
 }
 
 - (void)destroy {
-  [self.channel setMethodCallHandler:nil];
   self.renderer->DisableVideoFrameBuffer(self.delegate);
   [self.textureRegistry unregisterTexture:self.textureId];
 }

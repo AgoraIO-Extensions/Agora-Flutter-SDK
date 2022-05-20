@@ -188,7 +188,8 @@ class _State extends State<EnableVirtualBackground> {
     return Expanded(
       child: Stack(
         children: [
-          const rtc_local_view.SurfaceView(),
+          const rtc_local_view.SurfaceView(
+          ),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(

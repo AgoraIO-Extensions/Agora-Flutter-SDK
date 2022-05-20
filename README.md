@@ -136,9 +136,9 @@ as [Custom Audio Source and Renderer](https://docs.agora.io/en/Video/custom_audi
 
 Please note that you should not call the [RtcEngine.destroy](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#afb808cdc9025a77af7dd2bce98311bfe)/[AgoraRtcEngineKit.destroy](https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/destroy) function on Android/iOS code, because it will affect the [RtcEngine](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/lib/src/rtc_engine.dart) on the Flutter side. To see how to use `RtcEnginePlugin`, please check the custom audio source example:
 
-Android: [CustomAudioPlugin.kt](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/android/app/src/main/kotlin/io/agora/agora_rtc_engine_example/custom_audio_source/CustomAudioPlugin.kt)
+Android: [CustomCaptureAudioPlugin.kt](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/android/app/src/main/kotlin/io/agora/agora_rtc_engine_example/custom_capture_audio/CustomCaptureAudioPlugin.kt)
 
-iOS: [CustmoAudioSourcePlugin.swift](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/ios/Runner/CustomAudioSource/CustmoAudioSourcePlugin.swift)
+iOS: [CustomCaptureAudioPlugin.swift](https://github.com/AgoraIO/Agora-Flutter-SDK/blob/master/example/ios/Runner/CustomCaptureAudio/CustomCaptureAudioPlugin.swift)
 
 ## API Reference Resources
 

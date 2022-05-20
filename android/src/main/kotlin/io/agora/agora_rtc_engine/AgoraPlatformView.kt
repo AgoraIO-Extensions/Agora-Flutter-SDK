@@ -16,35 +16,39 @@ private class PlatformViewApiTypeCallApiMethodCallHandler(
 ) : CallApiMethodCallHandler(irisRtcEngine) {
   override fun callApi(apiType: Int, params: String?, sb: StringBuffer): Int {
     platformView.updateView()
-    return irisRtcEngine.callApi(apiType, params, platformView.getIrisRenderView(), sb)
+    return platformView.getIrisRenderView()?.let {
+      irisRtcEngine.callApi(apiType, params, platformView.getIrisRenderView(), sb)
+    } ?: -1
   }
 }
 
 // We should ensure not doing some leak in constructor
 @Suppress("LeakingThis")
 abstract class AgoraPlatformView(
-  private val context: Context,
+  private val context: Context?,
   messenger: BinaryMessenger,
   viewId: Int,
   args: Map<*, *>?,
-  private val irisRtcEngine: IrisRtcEngine
+  irisRtcEngine: IrisRtcEngine
 ) : PlatformView, MethodChannel.MethodCallHandler {
 
-  private val parentView: FrameLayout = FrameLayout(context)
+  private var parentView: FrameLayout? = null
 
-  private var platformView: View
+  private var platformView: View? = null
 
-  private val channel: MethodChannel
+  private var channel: MethodChannel? = null
 
-  private val callApiMethodCallHandler: CallApiMethodCallHandler =
-    PlatformViewApiTypeCallApiMethodCallHandler(irisRtcEngine, this)
+  private var callApiMethodCallHandler: CallApiMethodCallHandler? = null
 
   init {
-    platformView = createView(context.applicationContext)
-    parentView.addView(platformView)
+    parentView = context?.let { FrameLayout(context) }
+    platformView = createView(context)
+    parentView?.addView(platformView)
 
     channel = MethodChannel(messenger, "${channelName}_$viewId")
-    channel.setMethodCallHandler(this)
+    channel?.setMethodCallHandler(this)
+
+    callApiMethodCallHandler = PlatformViewApiTypeCallApiMethodCallHandler(irisRtcEngine, this)
 
     args?.apply {
       for ((key, value) in entries) {
@@ -54,28 +58,27 @@ abstract class AgoraPlatformView(
   }
 
   fun updateView() {
-    parentView.removeAllViews()
-    platformView = createView(context.applicationContext)
-    parentView.addView(platformView)
+    parentView?.removeAllViews()
+    platformView = createView(context)
+    parentView?.addView(platformView)
   }
 
-  abstract fun createView(context: Context): View
+  abstract fun createView(context: Context?): View?
 
   protected abstract val channelName: String
 
-  fun getIrisRenderView(): View {
+  fun getIrisRenderView(): View? {
     return platformView
   }
 
-  override fun getView(): View {
+  override fun getView(): View? {
     return parentView
   }
 
   override fun dispose() {
-    channel.setMethodCallHandler(null)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    callApiMethodCallHandler.onMethodCall(call, result)
+    callApiMethodCallHandler?.onMethodCall(call, result)
   }
 }
