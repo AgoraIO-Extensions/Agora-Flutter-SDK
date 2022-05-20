@@ -37,6 +37,9 @@ jobs:
   integration_test_android:
     name: Run Flutter Android Integration Tests
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: macos-11
     timeout-minutes: 60
     env:
@@ -48,7 +51,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2.21.0
         with:
@@ -60,6 +63,9 @@ jobs:
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: macos-11
     timeout-minutes: 60
     env:
@@ -68,7 +74,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'   
+          flutter-version: ${{ matrix.version }}
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
@@ -77,6 +83,9 @@ jobs:
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: macos-11
     timeout-minutes: 60
     env:
@@ -85,13 +94,16 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'   
+          flutter-version: ${{ matrix.version }}
       - run: flutter config --enable-macos-desktop 
       - run: bash ci/run_flutter_macos_integration_test.sh
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: windows-2019
     timeout-minutes: 60
     env:
@@ -100,7 +112,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - run: flutter config --enable-windows-desktop
       - run: bash ci/run_flutter_macos_integration_test.sh
 
@@ -136,6 +148,9 @@ jobs:
   build_android_windows:
     name: Build Android on Windows
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v1
@@ -144,7 +159,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -153,6 +168,9 @@ jobs:
   build_android_ubuntu:
     name: Build Android on Ubuntu
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -161,7 +179,7 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -170,13 +188,16 @@ jobs:
   build_ios:
     name: Build iOS
     needs: flutter_codestyle_check
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
     runs-on: macos-11
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: ${{ matrix.version }}
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign
         run: flutter build ios --no-codesign

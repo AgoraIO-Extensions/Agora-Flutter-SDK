@@ -886,7 +886,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineIsCameraAutoFocusFaceModeSupported.index,
       'params': jsonEncode({}),
-    });
+    }).then((v) => v == 1 ? true : false);
   }
 
   @override
@@ -894,7 +894,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineIsCameraExposurePositionSupported.index,
       'params': jsonEncode({}),
-    });
+    }).then((v) => v == 1 ? true : false);
   }
 
   @override
@@ -902,7 +902,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineIsCameraFocusSupported.index,
       'params': jsonEncode({}),
-    });
+    }).then((v) => v == 1 ? true : false);
   }
 
   @override
@@ -910,7 +910,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineIsCameraTorchSupported.index,
       'params': jsonEncode({}),
-    });
+    }).then((v) => v == 1 ? true : false);
   }
 
   @override

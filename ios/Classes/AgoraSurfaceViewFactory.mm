@@ -103,7 +103,6 @@
 
 - (void)dealloc {
   [self removeObserver:self.parentView forKeyPath:[self observerForKeyPath] context:nil];
-  [self.methodChannel setMethodCallHandler:nil];
 }
 
 - (UIView *)getIrisRenderView {
