@@ -1,6 +1,11 @@
 
 
-## [5.1.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.1.0...v5.1.1) (2022-05-13)
+# [5.2.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.1.1...v5.2.0) (2022-05-20)
+
+
+### Features
+
+* Upgrade Flutter SDK 3.0 ([#685](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/685)) ([a67ca92](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/a67ca92e803c1d62b6f6d1d2f461fa1fa0e4399f))## [5.1.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.1.0...v5.1.1) (2022-05-13)
 
 
 ### Bug Fixes
