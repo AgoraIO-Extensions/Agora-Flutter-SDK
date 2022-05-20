@@ -40,4 +40,5 @@ final advanced = [
     'widget': const EnableVirtualBackground()
   },
   {'name': 'MediaRecorder', 'widget': const MediaRecorder()},
+
 ];

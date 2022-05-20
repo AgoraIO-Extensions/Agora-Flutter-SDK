@@ -189,8 +189,6 @@ class _State extends State<EnableVirtualBackground> {
       child: Stack(
         children: [
           const rtc_local_view.SurfaceView(
-            zOrderMediaOverlay: true,
-            zOrderOnTop: true,
           ),
           Align(
             alignment: Alignment.topLeft,
@@ -206,8 +204,6 @@ class _State extends State<EnableVirtualBackground> {
                       child: rtc_remote_view.SurfaceView(
                         uid: e,
                         channelId: _controller.text,
-                        zOrderMediaOverlay: true,
-                        zOrderOnTop: true,
                       ),
                     ),
                   ),

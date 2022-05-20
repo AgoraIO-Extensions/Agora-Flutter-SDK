@@ -63,36 +63,17 @@ class RtcSurfaceViewState extends State<RtcSurfaceView> {
           'isMediaOverlay': widget.zOrderMediaOverlay,
         },
       };
-      return PlatformViewLink(
-        viewType: viewType,
-        surfaceFactory:
-            (BuildContext context, PlatformViewController controller) {
-          return AndroidViewSurface(
-            controller: controller as AndroidViewController,
-            gestureRecognizers: widget.gestureRecognizers ??
-                const <Factory<OneSequenceGestureRecognizer>>{},
-            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-          );
-        },
-        onCreatePlatformView: (PlatformViewCreationParams params) {
-          final controller = PlatformViewsService.initExpensiveAndroidView(
-            id: params.id,
-            viewType: viewType,
-            layoutDirection: TextDirection.ltr,
-            creationParams: creationParams,
-            creationParamsCodec: const StandardMessageCodec(),
-            onFocus: () {
-              params.onFocusChanged(true);
-            },
-          );
-          controller
-              .addOnPlatformViewCreatedListener(params.onPlatformViewCreated);
-          controller.addOnPlatformViewCreatedListener((id) {
-            widget.onPlatformViewCreated?.call(id);
-          });
-          controller.create();
-          return controller;
-        },
+
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: AndroidView(
+          viewType: viewType,
+          onPlatformViewCreated: _onPlatformViewCreated,
+          hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+          creationParams: creationParams,
+          creationParamsCodec: const StandardMessageCodec(),
+          gestureRecognizers: widget.gestureRecognizers,
+        ),
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return GestureDetector(
@@ -156,14 +137,6 @@ class RtcSurfaceViewState extends State<RtcSurfaceView> {
         _setMirrorMode();
       }
     }
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      if (oldWidget.zOrderOnTop != widget.zOrderOnTop) {
-        _setZOrderOnTop();
-      }
-      if (oldWidget.zOrderMediaOverlay != widget.zOrderMediaOverlay) {
-        _setZOrderMediaOverlay();
-      }
-    }
   }
 
   @override
@@ -218,18 +191,6 @@ class RtcSurfaceViewState extends State<RtcSurfaceView> {
         'renderMode': _renderMode,
         'mirrorMode': _mirrorMode,
       }),
-    });
-  }
-
-  void _setZOrderOnTop() {
-    _channels[_id]?.invokeMethod('setZOrderOnTop', {
-      'onTop': widget.zOrderOnTop,
-    });
-  }
-
-  void _setZOrderMediaOverlay() {
-    _channels[_id]?.invokeMethod('setZOrderMediaOverlay', {
-      'isMediaOverlay': widget.zOrderMediaOverlay,
     });
   }
 
