@@ -1973,6 +1973,18 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
+  Future<void> startRtmpStreamWithTranscoding(
+      String url, LiveTranscoding transcoding) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartRtmpStreamWithTranscoding.index,
+      'params': jsonEncode({
+        'url': url,
+        'transcoding': transcoding.toJson(),
+      }),
+    });
+  }
+
+  @override
   Future<void> startRtmpStreamWithoutTranscoding(String url) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartRtmpStreamWithoutTranscoding.index,

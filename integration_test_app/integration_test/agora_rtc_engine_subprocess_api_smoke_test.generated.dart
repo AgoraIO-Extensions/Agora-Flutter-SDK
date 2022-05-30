@@ -4389,6 +4389,75 @@ void rtcEngineSubProcessSmokeTestCases() {
   );
 
   testWidgets(
+    'startRtmpStreamWithTranscoding',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
+        engineAppId,
+        areaCode: [AreaCode.NA, AreaCode.GLOB],
+      ));
+
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
+
+      const String url = "hello";
+      const VideoFrameRate transcodingVideoFramerate = VideoFrameRate.Fps1;
+      const AudioSampleRateType transcodingAudioSampleRate =
+          AudioSampleRateType.Type32000;
+      const AudioChannel transcodingAudioChannels = AudioChannel.Channel0;
+      const AudioCodecProfileType transcodingAudioCodecProfile =
+          AudioCodecProfileType.LCAAC;
+      const VideoCodecProfileType transcodingVideoCodecProfile =
+          VideoCodecProfileType.BaseLine;
+      const VideoCodecTypeForStream transcodingVideoCodecType =
+          VideoCodecTypeForStream.H264;
+      const List<TranscodingUser> transcodingTranscodingUsers = [];
+      const int transcodingWidth = 10;
+      const int transcodingHeight = 10;
+      const int transcodingVideoBitrate = 10;
+      const bool transcodingLowLatency = true;
+      const int transcodingVideoGop = 10;
+      const List<AgoraImage> transcodingWatermark = [];
+      const List<AgoraImage> transcodingBackgroundImage = [];
+      const int transcodingAudioBitrate = 10;
+      const int transcodingBackgroundColor = 10;
+      const String transcodingUserConfigExtraInfo = "hello";
+      final LiveTranscoding transcoding = LiveTranscoding(
+        transcodingTranscodingUsers,
+        width: transcodingWidth,
+        height: transcodingHeight,
+        videoBitrate: transcodingVideoBitrate,
+        videoFramerate: transcodingVideoFramerate,
+        lowLatency: transcodingLowLatency,
+        videoGop: transcodingVideoGop,
+        watermark: transcodingWatermark,
+        backgroundImage: transcodingBackgroundImage,
+        audioSampleRate: transcodingAudioSampleRate,
+        audioBitrate: transcodingAudioBitrate,
+        audioChannels: transcodingAudioChannels,
+        audioCodecProfile: transcodingAudioCodecProfile,
+        videoCodecProfile: transcodingVideoCodecProfile,
+        backgroundColor: transcodingBackgroundColor,
+        videoCodecType: transcodingVideoCodecType,
+        userConfigExtraInfo: transcodingUserConfigExtraInfo,
+      );
+      await screenShareHelper.startRtmpStreamWithTranscoding(
+        url,
+        transcoding,
+      );
+
+      await screenShareHelper.destroy();
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
     'startRtmpStreamWithoutTranscoding',
     (WidgetTester tester) async {
       app.main();
@@ -4644,3 +4713,4 @@ void rtcEngineSubProcessSmokeTestCases() {
     skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
   );
 }
+

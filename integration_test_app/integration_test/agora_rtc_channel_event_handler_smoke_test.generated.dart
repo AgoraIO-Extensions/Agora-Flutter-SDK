@@ -878,3 +878,4 @@ void rtcChannelEventHandlerSomkeTestCases() {
     await rtcEngine.destroy();
   });
 }
+

@@ -3362,6 +3362,30 @@ void main() {
       );
     },
   );
+
+  testWidgets(
+    'startRtmpStreamWithTranscoding',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+      fakeIrisEngine = FakeIrisRtcEngine();
+      await fakeIrisEngine.initialize();
+
+      rtcEngine = await _createEngine();
+      const url = 'https://google.com';
+      final LiveTranscoding transcoding =
+          LiveTranscoding([TranscodingUser(100)], width: 10, height: 10);
+      await rtcEngine.startRtmpStreamWithTranscoding(url, transcoding);
+
+      fakeIrisEngine.expectCalledApi(
+        ApiTypeEngine.kEngineStartRtmpStreamWithTranscoding.index,
+        jsonEncode({
+          'url': url,
+          'transcoding': transcoding.toJson(),
+        }),
+      );
+    },
+  );
 }
 
 Future<RtcEngine> _createEngine() async {

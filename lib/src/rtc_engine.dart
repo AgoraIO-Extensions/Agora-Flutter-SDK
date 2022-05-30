@@ -2228,6 +2228,44 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> setAVSyncSource(String channelId, int uid);
 
+  /// Starts pushing media streams to a CDN and sets the transcoding configuration.
+  ///
+  /// Since
+  /// v3.6.0
+  ///
+  /// You can call this method to push a live audio-and-video stream to the specified
+  /// CDN address and set the transcoding configuration. This method can push media
+  /// streams to only one CDN address at a time, so if you need to push streams to
+  /// multiple addresses, call this method multiple times.
+  ///
+  /// After you call this method, the SDK triggers the onRtmpStreamingStateChanged
+  /// callback on the local client to report the state of the streaming.
+
+  /// ## Note
+  /// Ensure that you enable the Media Push service before using this function.
+  /// See Prerequisites in Media Push.
+  ///
+  /// Call this method after joining a channel.
+  /// Only hosts in the LIVE_BROADCASTING profile can call this method.
+  ///
+  /// If you want to retry pushing streams after a failed push, make sure to call
+  /// stopRtmpStream first, then call this method to retry pushing streams; otherwise,
+  /// the SDK returns the same error code as the last failed push.
+  ///
+  /// ## Parameters
+  /// * [url]	The address of the CDN live streaming. The format is RTMP or RTMPS. The
+  /// character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  ///
+  /// * [transcoding]	The transcoding configuration for CDN live streaming. See LiveTranscoding.
+  ///
+  /// ## Returns
+  /// * 0: Success.
+  /// * < 0: Failure.
+  /// ERR_INVALID_ARGUMENT(-2): url is null or the string length is 0.
+  /// ERR_NOT_INITIALIZED(-7): The SDK is not initialized before calling this method.
+  Future<void> startRtmpStreamWithTranscoding(
+      String url, LiveTranscoding transcoding);
+
   ///
   /// Starts pushing media streams to a CDN without transcoding.
   /// This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.
