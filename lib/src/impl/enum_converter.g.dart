@@ -1006,6 +1006,7 @@ const _$RtmpStreamingStateEnumMap = {
   RtmpStreamingState.Running: 2,
   RtmpStreamingState.Recovering: 3,
   RtmpStreamingState.Failure: 4,
+  RtmpStreamingState.Disconnecting: 5,
 };
 
 StreamFallbackOptionsConverter _$StreamFallbackOptionsConverterFromJson(

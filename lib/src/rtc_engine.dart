@@ -1471,6 +1471,7 @@ abstract class RtcEngine {
   ///
   /// Param [transcoding] The transcoding configurations for the media push. See LiveTranscoding for details.
   ///
+  @Deprecated('This method is deprecated.')
   Future<void> setLiveTranscoding(LiveTranscoding transcoding);
 
   ///
@@ -1488,7 +1489,7 @@ abstract class RtcEngine {
   ///  true: Enable transcoding.
   ///  false: Disable transcoding. If you set this parameter as true, ensure that you call the setLiveTranscoding method before calling this method.
   ///
-  ///
+  @Deprecated('This method is deprecated.')
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   ///

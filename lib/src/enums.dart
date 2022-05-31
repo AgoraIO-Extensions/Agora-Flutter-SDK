@@ -2428,6 +2428,15 @@ enum RtmpStreamingState {
   ///
   @JsonValue(4)
   Failure,
+
+  /// The SDK is disconnecting from the Agora streaming server and CDN. When you call
+  /// remove or stop to stop the streaming normally, the SDK reports the streaming state
+  /// as DISCONNECTING, IDLE in sequence.
+  ///
+  /// Since
+  /// v3.6.0
+  @JsonValue(5)
+  Disconnecting,
 }
 
 ///

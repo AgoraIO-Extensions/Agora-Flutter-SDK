@@ -108,6 +108,11 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
   }
 
   Future<void> _leaveChannel() async {
+    if (_isStreaming) {
+      await _engine.stopRtmpStream(_rtmpUrlController.text);
+      _isStreaming = false;
+    }
+
     await _engine.leaveChannel();
   }
 
@@ -142,6 +147,9 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
       )
     ];
 
+    int width = 360;
+    int height = 640;
+
     if (isRemoteUser) {
       transcodingUsers.add(TranscodingUser(
         _remoteUid,
@@ -152,12 +160,29 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
         audioChannel: AudioChannel.Channel0,
         alpha: 1.0,
       ));
+      width = 720;
+      height = 640;
     }
 
+    final liveTranscoding = LiveTranscoding(
+      transcodingUsers,
+      width: width,
+      height: height,
+      videoBitrate: 400,
+      videoCodecProfile: VideoCodecProfileType.High,
+      videoGop: 30,
+      videoFramerate: VideoFrameRate.Fps24,
+      lowLatency: false,
+      audioSampleRate: AudioSampleRateType.Type44100,
+      audioBitrate: 48,
+      audioChannels: AudioChannel.Channel1,
+      audioCodecProfile: AudioCodecProfileType.LCAAC,
+    );
+
     try {
-      await _engine.addPublishStreamUrl(streamUrl, false);
+      await _engine.startRtmpStreamWithTranscoding(streamUrl, liveTranscoding);
     } catch (e) {
-      logSink.log('addPublishStreamUrl error: ${e.toString()}');
+      logSink.log('startRtmpStreamWithTranscoding error: ${e.toString()}');
     }
   }
 
