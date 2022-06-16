@@ -33,13 +33,12 @@ public:
     @autoreleasepool {
       TextureRenderer *renderer = (__bridge TextureRenderer *)renderer_;
       CVPixelBufferRef buffer = NULL;
-      NSDictionary *dic = [NSDictionary
-          dictionaryWithObjectsAndKeys:
-              @(YES), kCVPixelBufferCGBitmapContextCompatibilityKey, @(YES),
-              kCVPixelBufferCGImageCompatibilityKey, @(YES),
-              kCVPixelBufferOpenGLCompatibilityKey, @(YES),
-              kCVPixelBufferMetalCompatibilityKey, @(YES),
-              kCVPixelBufferOpenGLTextureCacheCompatibilityKey, nil];
+      NSDictionary* dic = @{
+          (__bridge NSString*)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA),
+          (__bridge NSString*)kCVPixelBufferIOSurfacePropertiesKey: @{},
+          (__bridge NSString*)kCVPixelBufferOpenGLCompatibilityKey : @YES,
+          (__bridge NSString*)kCVPixelBufferMetalCompatibilityKey : @YES,
+      };
       CVPixelBufferCreate(kCFAllocatorDefault, video_frame.width,
                           video_frame.height, kCVPixelFormatType_32BGRA,
                           (__bridge CFDictionaryRef)dic, &buffer);
