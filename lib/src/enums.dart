@@ -1699,6 +1699,7 @@ enum ErrorCode {
   StreamMessageTimeout,
 
   /// @nodoc
+  @Deprecated('Use ClientRoleChangeFailedReason instead.')
   @JsonValue(119)
   SetClientRoleNotAuthorized,
 
