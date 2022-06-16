@@ -209,3 +209,8 @@ typedef OnRecorderStateChanged = void Function(
     RecorderState state, RecorderErrorCode error);
 
 typedef OnRecorderInfoUpdated = void Function(RecorderInfo info);
+
+typedef OnLocalVoicePitchInHz = void Function(int pitchInHz);
+
+typedef OnFirstRemoteVideoFrame = void Function(
+    int uid, int width, int height, int elapsed);

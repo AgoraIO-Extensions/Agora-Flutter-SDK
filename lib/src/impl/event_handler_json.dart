@@ -36,6 +36,24 @@ class OnClientRoleChangeFailedJson {
 }
 
 @JsonSerializable()
+class OnFirstRemoteVideoFrameJson {
+  final int uid;
+  final int width;
+  final int height;
+  final int elapsed;
+
+  const OnFirstRemoteVideoFrameJson(
+      this.uid, this.width, this.height, this.elapsed);
+
+  /// @nodoc
+  factory OnFirstRemoteVideoFrameJson.fromJson(Map<String, dynamic> json) =>
+      _$OnFirstRemoteVideoFrameJsonFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$OnFirstRemoteVideoFrameJsonToJson(this);
+}
+
+@JsonSerializable()
 class OnWlAccMessageJson {
   final WlaccMessageReason reason;
   final WlaccSuggestAction action;

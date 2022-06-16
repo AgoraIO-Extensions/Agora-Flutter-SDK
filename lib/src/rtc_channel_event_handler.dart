@@ -447,6 +447,8 @@ class RtcChannelEventHandler {
   /// @nodoc
   OnClientRoleChangeFailed? clientRoleChangeFailed;
 
+  OnFirstRemoteVideoFrame? firstRemoteVideoFrame;
+
   /// Constructs the [RtcChannelEventHandler].
   RtcChannelEventHandler({
     this.warning,
@@ -486,5 +488,6 @@ class RtcChannelEventHandler {
     this.rtmpStreamingEvent,
     this.userSuperResolutionEnabled,
     this.clientRoleChangeFailed,
+    this.firstRemoteVideoFrame
   });
 }

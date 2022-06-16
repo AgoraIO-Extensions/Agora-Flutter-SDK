@@ -1867,15 +1867,29 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
-  Future<void> startScreenCapture(int windowId,
-      [int captureFreq = 0, Rect? rect, int bitrate = 0]) {
+  Future<void> startScreenCapture(ScreenCaptureParameters captureParams) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
+      'params': jsonEncode({'captureParams': captureParams.toJson()}),
+    });
+  }
+
+  @override
+  Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
       'params': jsonEncode({
-        'windowId': windowId,
-        'captureFreq': captureFreq,
-        'rect': rect?.toJson(),
-        'bitrate': bitrate,
+        'screenScenario': ScreenScenarioTypeConverter(screenScenario).value()
+      }),
+    });
+  }
+
+  @override
+  Future<void> enableLocalVoicePitchCallback(int interval) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
+      'params': jsonEncode({
+        'interval': interval,
       }),
     });
   }

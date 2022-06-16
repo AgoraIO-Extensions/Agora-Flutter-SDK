@@ -1188,6 +1188,8 @@ class RtcEngineEventHandler {
   /// @nodoc
   OnContentInspectResult? contentInspectResult;
 
+  OnLocalVoicePitchInHz? localVoicePitchInHz;
+
   /// @nodoc
   RtcEngineEventHandler({
     this.warning,
@@ -1287,5 +1289,6 @@ class RtcEngineEventHandler {
     this.proxyConnected,
     this.audioDeviceTestVolumeIndication,
     this.contentInspectResult,
+    this.localVoicePitchInHz,
   });
 }

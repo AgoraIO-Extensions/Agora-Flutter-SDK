@@ -2155,6 +2155,7 @@ abstract class RtcEngine {
   ///
   /// Param [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters .
   ///
+  @Deprecated('Use startScreenCaptureByDisplayId instead.')
   Future<void> startScreenCaptureByScreenRect(Rectangle screenRect,
       [Rectangle? regionRect, ScreenCaptureParameters? captureParams]);
 
@@ -2223,8 +2224,11 @@ abstract class RtcEngine {
   ///
   /// Param [bitrate] The bitrate of the screen share.
   ///
-  Future<void> startScreenCapture(int windowId,
-      [int captureFreq, Rect? rect, int bitrate]);
+  Future<void> startScreenCapture(ScreenCaptureParameters captureParams);
+
+  Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario);
+
+  Future<void> enableLocalVoicePitchCallback(int interval);
 
   /// @nodoc
   Future<void> setAVSyncSource(String channelId, int uid);

@@ -1425,6 +1425,12 @@ enum ConnectionChangedReason {
   ///
   @JsonValue(14)
   KeepAliveTimeout,
+
+  @JsonValue(19)
+  SameUidLogin,
+
+  @JsonValue(20)
+  TooManyBroadcasters,
 }
 
 ///
@@ -1885,6 +1891,12 @@ enum ErrorCode {
   @Deprecated('')
   @JsonValue(1603)
   VcmEncoderSetError,
+
+  @JsonValue(1735)
+  ErrAdmWinCoreServreShutDown,
+
+  @JsonValue(1736)
+  ErrNotSupportedMutiGpuExcludeWindow,
 }
 
 ///
@@ -4170,4 +4182,18 @@ enum ContentInspectResult {
   /// @nodoc
   @JsonValue(3)
   ContentInspectPorn,
+}
+
+enum ScreenScenarioType {
+  @JsonValue(1)
+  ScreenScenarioDocument,
+
+  @JsonValue(2)
+  ScreenScenarioGaming,
+
+  @JsonValue(3)
+  ScreenScenarioVideo,
+
+  @JsonValue(4)
+  ScreenScenarioRdc,
 }

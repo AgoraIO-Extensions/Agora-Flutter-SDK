@@ -623,6 +623,8 @@ const _$ConnectionChangedReasonEnumMap = {
   ConnectionChangedReason.RenewToken: 12,
   ConnectionChangedReason.ClientIpAddressChanged: 13,
   ConnectionChangedReason.KeepAliveTimeout: 14,
+  ConnectionChangedReason.SameUidLogin: 19,
+  ConnectionChangedReason.TooManyBroadcasters: 20,
 };
 
 ConnectionStateTypeConverter _$ConnectionStateTypeConverterFromJson(
@@ -778,6 +780,8 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.VcmEncoderInitError: 1601,
   ErrorCode.VcmEncoderEncodeError: 1602,
   ErrorCode.VcmEncoderSetError: 1603,
+  ErrorCode.ErrAdmWinCoreServreShutDown: 1735,
+  ErrorCode.ErrNotSupportedMutiGpuExcludeWindow: 1736,
 };
 
 InjectStreamStatusConverter _$InjectStreamStatusConverterFromJson(
@@ -1759,4 +1763,23 @@ const _$VideoContentHintEnumMap = {
   VideoContentHint.None: 0,
   VideoContentHint.Motion: 1,
   VideoContentHint.Details: 2,
+};
+
+ScreenScenarioTypeConverter _$ScreenScenarioTypeConverterFromJson(
+        Map<String, dynamic> json) =>
+    ScreenScenarioTypeConverter(
+      $enumDecode(_$ScreenScenarioTypeEnumMap, json['e']),
+    );
+
+Map<String, dynamic> _$ScreenScenarioTypeConverterToJson(
+        ScreenScenarioTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$ScreenScenarioTypeEnumMap[instance.e],
+    };
+
+const _$ScreenScenarioTypeEnumMap = {
+  ScreenScenarioType.ScreenScenarioDocument: 1,
+  ScreenScenarioType.ScreenScenarioGaming: 2,
+  ScreenScenarioType.ScreenScenarioVideo: 3,
+  ScreenScenarioType.ScreenScenarioRdc: 4,
 };
