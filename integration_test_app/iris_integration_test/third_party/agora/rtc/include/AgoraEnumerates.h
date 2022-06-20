@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, AgoraWarningCode) {
   AgoraWarningCodeSwitchLiveVideoTimeout = 111,
   /** 118: A timeout occurs when setting the client role in the interactive live streaming profile. */
   AgoraWarningCodeSetClientRoleTimeout = 118,
-  /** 119: The client role is unauthorized. */
+  /** 119: Deprecated as of v3.7.0. Use the reason reported in [didClientRoleChangeFailed]([AgoraRtcEngineDelegate rtcEngine:didClientRoleChangeFailed:currentRole:]) instead. */
   AgoraWarningCodeSetClientRoleNotAuthorized = 119,
   /** 121: The ticket to open the channel is invalid. */
   AgoraWarningCodeOpenChannelInvalidTicket = 121,
@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, AgoraWarningCode) {
   AgoraWarningCodeAdmPlaybackMalfunction = 1020,
   /** 1021: Audio Device Module: a sampling device fails. */
   AgoraWarningCodeAdmRecordMalfunction = 1021,
-  /** 1025: Call is interrupted by system events such as phone call or siri etc. */
+  /** 1025: The audio capture or playback is interrupted by a system call. If the audio capture or playback is required, remind your user to hang up the phone. */
   AgoraWarningCodeAdmInterruption = 1025,
   /** 1029: During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.*/
   AgoraWarningCodeAdmCategoryNotPlayAndRecord = 1029,
@@ -200,7 +200,7 @@ typedef NS_ENUM(NSInteger, AgoraErrorCode) {
   AgoraErrorCodePublishStreamInternalServerError = 154,
   /** 155: The server fails to find the stream. */
   AgoraErrorCodePublishStreamNotFound = 155,
-  /** 156: The format of the RTMP stream URL is not supported. Check whether the URL format is correct. */
+  /** 156: The format of the RTMP or RTMPS stream URL is not supported. Check whether the URL format is correct. */
   AgoraErrorCodePublishStreamFormatNotSuppported = 156,
   /** 157: The extension library is not integrated, such as the library for enabling deep-learning noise reduction. */
   AgoraErrorCodeModuleNotFound = 157,
@@ -252,7 +252,7 @@ typedef NS_ENUM(NSInteger, AgoraErrorCode) {
   AgoraErrorCodeAdmInitLoopback = 1022,
   /** 1023: Audio Device Module: An error occurs in starting the loopback device. */
   AgoraErrorCodeAdmStartLoopback = 1023,
-  /** 1027: Audio Device Module: An error occurs in no audio sampling permission. */
+  /** 1027: The application does not have permission to use the microphone. Remind your user to grant permission and rejoin the channel. */
   AgoraErrorCodeAdmNoPermission = 1027,
   /** 1206: Audio device module: Cannot activate the Audio Session.*/
   AgoraErrorCodeAdmActivateSessionFail = 1206,
@@ -706,44 +706,69 @@ typedef NS_ENUM(NSUInteger, AgoraUserOfflineReason) {
 
 /** The RTMP or RTMPS streaming state. */
 typedef NS_ENUM(NSUInteger, AgoraRtmpStreamingState) {
-  /** The RTMP or RTMPS streaming has not started or has ended. This state is also triggered after you remove an RTMP or RTMPS stream from the CDN by calling [removePublishStreamUrl]([AgoraRtcEngineKit removePublishStreamUrl:]).*/
+  /** 0: The RTMP or RTMPS streaming has not started or has ended. This state is also triggered after you remove an RTMP or RTMPS stream from the CDN by calling [removePublishStreamUrl]([AgoraRtcEngineKit removePublishStreamUrl:]).*/
   AgoraRtmpStreamingStateIdle = 0,
-  /** The SDK is connecting to Agora's streaming server and the CDN server. This state is triggered after you call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method. */
+  /** 1: The SDK is connecting to Agora's streaming server and the CDN server. This state is triggered after you call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method. */
   AgoraRtmpStreamingStateConnecting = 1,
-  /** The RTMP or RTMPS streaming is being published. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state. */
+  /** 2: The RTMP or RTMPS streaming is being published. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state. */
   AgoraRtmpStreamingStateRunning = 2,
-  /** The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP or RTMPS streaming and returns this state.
+  /** 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK attempts to resume RTMP or RTMPS streaming and returns this state.
 <li> If the SDK successfully resumes the streaming, `AgoraRtmpStreamingStateRunning(2)` returns.
 <li> If the streaming does not resume within 60 seconds or server errors occur, AgoraRtmpStreamingStateFailure(4) returns. You can also reconnect to the server by calling the [removePublishStreamUrl]([AgoraRtcEngineKit removePublishStreamUrl:]) and [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) methods. */
   AgoraRtmpStreamingStateRecovering = 3,
-  /** The RTMP or RTMPS streaming fails. See the errorCode parameter for the detailed error information. You can also call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method to publish the RTMP or RTMPS streaming again. */
+  /** 4: The RTMP or RTMPS streaming fails. See the errorCode parameter for the detailed error information. You can also call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method to publish the RTMP or RTMPS streaming again. */
   AgoraRtmpStreamingStateFailure = 4,
+  /** 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call `remove` or `stop` to stop the streaming normally, the SDK reports the streaming state as `Disconnecting`, `Idle` in sequence.
+
+   @since v3.6.0
+   */
+  AgoraRtmpStreamingStateDisconnecting = 5,
 };
 
 /** The detailed error information for streaming. */
 typedef NS_ENUM(NSUInteger, AgoraRtmpStreamingErrorCode) {
-  /** The RTMP or RTMPS streaming publishes successfully. */
+  /** 0: The RTMP or RTMPS streaming publishes successfully. */
   AgoraRtmpStreamingErrorCodeOK = 0,
-  /** Invalid argument used. If, for example, you do not call the [setLiveTranscoding]([AgoraRtcEngineKit setLiveTranscoding:]) method to configure the LiveTranscoding parameters before calling the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method, the SDK returns this error. Check whether you set the parameters in the setLiveTranscoding method properly. */
+  /** 1: Invalid argument used. If, for example, you do not call the [setLiveTranscoding]([AgoraRtcEngineKit setLiveTranscoding:]) method to configure the LiveTranscoding parameters before calling the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method, the SDK returns this error. Check whether you set the parameters in the setLiveTranscoding method properly. */
   AgoraRtmpStreamingErrorCodeInvalidParameters = 1,
-  /** The RTMP or RTMPS streaming is encrypted and cannot be published. */
+  /** 2: The RTMP or RTMPS streaming is encrypted and cannot be published. */
   AgoraRtmpStreamingErrorCodeEncryptedStreamNotAllowed = 2,
-  /** Timeout for the RTMP or RTMPS streaming. Call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method to publish the streaming again. */
+  /** 3: Timeout for the RTMP or RTMPS streaming. Call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method to publish the streaming again. */
   AgoraRtmpStreamingErrorCodeConnectionTimeout = 3,
-  /** An error occurs in Agora's streaming server. Call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method to publish the streaming again. */
+  /** 4: An error occurs in Agora's streaming server. Call the [addPublishStreamUrl]([AgoraRtcEngineKit addPublishStreamUrl:transcodingEnabled:]) method to publish the streaming again. */
   AgoraRtmpStreamingErrorCodeInternalServerError = 4,
-  /** An error occurs in the CDN server. */
+  /** 5: An error occurs in the CDN server. */
   AgoraRtmpStreamingErrorCodeRtmpServerError = 5,
-  /** The RTMP or RTMPS streaming publishes too frequently. */
+  /** 6: Reserved. */
   AgoraRtmpStreamingErrorCodeTooOften = 6,
-  /** The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones. */
+  /** 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones. */
   AgoraRtmpStreamingErrorCodeReachLimit = 7,
-  /** The host manipulates other hosts' URLs. Check your app logic. */
+  /** 8: The host manipulates other hosts' URLs. Check your app logic. */
   AgoraRtmpStreamingErrorCodeNotAuthorized = 8,
-  /** Agora's server fails to find the RTMP or RTMPS streaming. */
+  /** 9: Agora's server fails to find the RTMP or RTMPS streaming. */
   AgoraRtmpStreamingErrorCodeStreamNotFound = 9,
-  /** The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct. */
+  /** 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct. */
   AgoraRtmpStreamingErrorCodeFormatNotSupported = 10,
+  /** 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
+
+   @since v3.6.0
+   */
+  AgoraRtmpStreamPublishErrorNotBroadcaster = 11,
+  /** 13: The `updateRtmpTranscoding` or `setLiveTranscoding` method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
+
+   @since v3.6.0
+   */
+  AgoraRtmpStreamPublishErrorTranscodingNoMixStream = 13,
+  /** 14: Errors occurred in the host's network.
+
+   @since v3.6.0
+   */
+  AgoraRtmpStreamPublishErrorNetDown = 14,
+  /** 15: Your App ID does not have permission to use the CDN live streaming function. Refer to [Prerequisites](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_apple?platform=iOS#prerequisites) to enable the CDN live streaming permission.
+
+   @since v3.6.0
+   */
+  AgoraRtmpStreamPublishErrorInvalidAppId = 15,
   /** The streaming has been stopped normally. After you call
    [removePublishStreamUrl]([AgoraRtcEngineKit removePublishStreamUrl:]) to
    stop streaming, the SDK returns this value.
@@ -756,7 +781,7 @@ typedef NS_ENUM(NSUInteger, AgoraRtmpStreamingErrorCode) {
 /** Events during the RTMP or RTMPS streaming. */
 typedef NS_ENUM(NSUInteger, AgoraRtmpStreamingEvent) {
   /** 1: An error occurs when you add a background image or a watermark image
-   to the RTMP stream.
+   to the RTMP or RTMPS stream.
    */
   AgoraRtmpStreamingEventFailedLoadImage = 1,
   /** 2: The streaming URL is already being used for CDN live streaming. If you
@@ -765,6 +790,16 @@ typedef NS_ENUM(NSUInteger, AgoraRtmpStreamingEvent) {
    @since v3.4.5
    */
   AgoraRtmpStreamingEventUrlAlreadyInUse = 2,
+  /** 3: The feature is not supported.
+
+   @since v3.6.0
+   */
+  AgoraRtmpStreamingEventAdvancedFeatureNotSupport = 3,
+  /** 4: Reserved.
+
+   @since v3.6.0
+   */
+  AgoraRtmpStreamingEventRequestTooOften = 4,
 };
 
 /** State of importing an external video stream in the interactive live streaming. */
@@ -816,7 +851,12 @@ typedef NS_ENUM(NSInteger, AgoraAudioRecordingQuality) {
   /** 1: (Default) Medium quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 2 MB. */
   AgoraAudioRecordingQualityMedium = 1,
   /** 2: High quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 3.75 MB. */
-  AgoraAudioRecordingQualityHigh = 2
+  AgoraAudioRecordingQualityHigh = 2,
+  /** 3: Ultra-high quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 7.5 MB.
+
+   @since v3.6.2
+   */
+  AgoraAudioRecordingQualityUltraHigh = 3
 };
 
 /** Recording content, which is set in [startAudioRecordingWithConfig]([AgoraRtcEngineKit startAudioRecordingWithConfig:]). */
@@ -892,10 +932,53 @@ typedef NS_ENUM(NSUInteger, AgoraExperiencePoorReason) {
 
 /** API for future use.
  */
+typedef NS_ENUM(NSUInteger, AgoraWlAccReason) {
+
+  AgoraWlAccMessageReasonWeakSignal = 0,
+
+  AgoraWlAccMessageReasonChannelCongestion = 1,
+};
+
+/** API for future use.
+ */
+typedef NS_ENUM(NSUInteger, AgoraWlAccAction) {
+
+  AgoraWlAccSuggestActionCloseToWIFI = 0,
+
+  AgoraWlAccSuggestActionConnectSSID = 1,
+
+  AgoraWlAccSuggestActionCheck5G = 2,
+
+  AgoraWlAccSuggestActionModifySSID = 3,
+};
+
+/** API for future use.
+ */
 typedef NS_ENUM(NSInteger, AgoraUploadErrorReason) {
   AgoraUploadErrorReasonSuccess = 0,
   AgoraUploadErrorReasonNetError = 1,
   AgoraUploadErrorReasonServerError = 2,
+};
+
+/** The reason for a user role switch failure.
+
+ @since v3.7.0
+ */
+typedef NS_ENUM(NSInteger, AgoraClientRoleChangeFailedReason) {
+  /** 1: The number of hosts in the channel is already at the upper limit.
+
+   @note This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+   */
+  AgoraClientRoleChangeFailedByTooManyBroadcasters = 1,
+  /** 2: The request is rejected by the Agora server. Agora recommends you prompt the user to try to switch their user role again.
+   */
+  AgoraClientRoleChangeFailedByNotAuthorized = 2,
+  /** 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
+   */
+  AgoraClientRoleChangeFailedByRequestTimeOut = 3,
+  /** 4: The SDK connection fails. You can use the reason reported in the `connectionChangedToState` callback to troubleshoot the failure.
+   */
+  AgoraClientRoleChangeFailedByConnectionFailed = 4,
 };
 
 /** Video stream type. */
@@ -1078,6 +1161,8 @@ typedef NS_ENUM(NSUInteger, AgoraVideoRemoteStateReason) {
   AgoraVideoRemoteStateReasonAudioFallback = 8,
   /** 9: The remote audio-only stream switches back to the audio-and-video stream after the network conditions improve. */
   AgoraVideoRemoteStateReasonAudioFallbackRecovery = 9,
+  /** 10: Remote SDK(only for iOS) in background*/
+  AgoraVideoRemoteStateReasonRemoteSDKInBackGround = 10,
 };
 
 /** The reason why super resolution is not successfully enabled or the message
@@ -1581,10 +1666,15 @@ typedef NS_OPTIONS(NSUInteger, AgoraAudioSessionOperationRestriction) {
 
 /** Audio codec profile. */
 typedef NS_ENUM(NSInteger, AgoraAudioCodecProfileType) {
-  /** (Default) LC-AAC, the low-complexity audio codec profile. */
+  /** 0: (Default) LC-AAC */
   AgoraAudioCodecProfileLCAAC = 0,
-  /** HE-AAC, the high-efficiency audio codec profile. */
-  AgoraAudioCodecProfileHEAAC = 1
+  /** 1: HE-AAC */
+  AgoraAudioCodecProfileHEAAC = 1,
+  /** 2: HE-AAC v2
+
+   @since v3.6.0
+   */
+  AgoraAudioCodecProfileHEAACv2 = 2
 };
 
 /** The state of the remote audio. */
@@ -1637,16 +1727,21 @@ typedef NS_ENUM(NSUInteger, AgoraAudioLocalState) {
 typedef NS_ENUM(NSUInteger, AgoraAudioLocalError) {
   /** 0: The local audio is normal. */
   AgoraAudioLocalErrorOk = 0,
-  /** 1: No specified reason for the local audio failure. */
+  /** 1: No specified reason for the local audio error. */
   AgoraAudioLocalErrorFailure = 1,
-  /** 2: No permission to use the local audio sampling device. */
+  /** 2: The application does not have permission to start the local audio capture device. Remind your user to grant permission. */
   AgoraAudioLocalErrorDeviceNoPermission = 2,
-  /** 3: The audio sampling device is in use. */
+  /** 3: The local audio capture device is in use. Check whether the microphone is occupied by another application, or try to rejoin the channel. */
   AgoraAudioLocalErrorDeviceBusy = 3,
-  /** 4: The local audio sampling fails. Check whether the sampling device is working properly. */
+  /** 4: The local audio capture failed. Check whether the audio capture device is working properly. */
   AgoraAudioLocalErrorRecordFailure = 4,
-  /** 5: The local audio encoding fails. */
+  /** 5: The local audio encoding failed. */
   AgoraAudioLocalErrorEncodeFailure = 5,
+  /** 8: The local audio capture is interrupted by a system call. If the local audio capture is required, remind your user to hang up the phone.
+
+   @since v3.6.2
+   */
+  AgoraAudioLocalErrorInterrupted = 8
 };
 
 /** The information acquisition state. This enum is reported in
@@ -1744,8 +1839,18 @@ typedef NS_ENUM(NSUInteger, AgoraConnectionChangedReason) {
   AgoraConnectionChangedClientIpAddressChanged = 13,
   /** 14: Timeout for the keep-alive of the connection between the SDK and Agora's edge server. The connection state changes to `AgoraConnectionStateReconnecting(4)`. */
   AgoraConnectionChangedKeepAliveTimeout = 14,
-  /** 15: */
-  AgoraConnectionChangedProxyServerInterrupted = 15,
+  /** 19: Join the same channel from different devices using the same user ID.
+
+   @since v3.7.0
+   */
+  AgoraConnectionChangedSameUidLogin = 19,
+  /** 20: The number of hosts in the channel is already at the upper limit.
+
+   @note This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+
+   @since v3.7.0
+   */
+  AgoraConnectionChangedTooManyBroadcasters = 20,
 };
 
 /** The state code in AgoraChannelMediaRelayState.
@@ -1839,7 +1944,7 @@ typedef NS_ENUM(NSInteger, AgoraChannelMediaRelayError) {
   /** 1: An error occurs in the server response.
    */
   AgoraChannelMediaRelayErrorServerErrorResponse = 1,
-  /** 2: No server response. This error can also occur if your project has not enabled co-host token authentication. Contact support@agora.io to enable the co-host token authentication service before starting a channel media relay.
+  /** 2: No server response. This error can also occur if your project has not enabled the service for co-hosting across channels. Contact support@agora.io to enable the service for co-hosting across channels before starting a channel media relay.
    */
   AgoraChannelMediaRelayErrorServerNoResponse = 2,
   /** 3: The SDK fails to access the service, probably due to limited resources of the server.
@@ -1916,17 +2021,66 @@ typedef NS_ENUM(NSInteger, AgoraDegradationPreference) {
    */
   AgoraDegradationBalanced = 2,
 };
+
 /** The lightening contrast level. */
 typedef NS_ENUM(NSUInteger, AgoraLighteningContrastLevel) {
-  /** Low contrast level. */
+  /** 0: Low contrast level. */
   AgoraLighteningContrastLow = 0,
-  /** (Default) Normal contrast level. */
+  /** 1: (Default) Normal contrast level. */
   AgoraLighteningContrastNormal = 1,
-  /** High contrast level. */
+  /** 2: High contrast level. */
   AgoraLighteningContrastHigh = 2,
 };
 
+/** The video noise reduction mode.
+
+ @since v3.6.2
+ */
+typedef NS_ENUM(NSUInteger, AgoraVideoDenoiserMode) {
+  /** 0: (Default) Automatic mode. The SDK automatically enables or disables the video noise reduction feature according to the ambient light. */
+  AgoraVideoDenoiserModeAuto = 0,
+  /** 1: Manual mode. Users need to enable or disable the video noise reduction feature manually.  */
+  AgoraVideoDenoiserModeManual = 1,
+};
+
+/** The video noise reduction level.
+
+ @since v3.6.2
+ */
+typedef NS_ENUM(NSUInteger, AgoraVideoDenoiserLevel) {
+  /** 0: (Default) Promotes video quality during video noise reduction. `HighQuality` balances performance consumption and video noise reduction quality. The performance consumption is moderate, the video noise reduction speed is moderate, and the overall video quality is optimal. */
+  AgoraVideoDenoiserLevelHighQuality = 0,
+  /** 1: Promotes reducing performance consumption during video noise reduction. `Fast` prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use `Fast` when the camera is fixed. */
+  AgoraVideoDenoiserLevelFast = 1,
+  /** 2: Enhanced video noise reduction. `Strength` prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If `HighQuality` is not enough for your video noise reduction needs, you can use `Strength`. */
+  AgoraVideoDenoiserLevelStrength = 2,
+
+};
+
+/** The low-light enhancement mode.
+
+ @since v3.6.2
+ */
+typedef NS_ENUM(NSUInteger, AgoraLowlightEnhanceMode) {
+  /** 0: (Default) Automatic mode. The SDK automatically enables or disables the low-light enhancement feature according to the ambient light to compensate for the lighting level or prevent overexposure, as necessary. */
+  AgoraLowlightEnhanceModeAuto = 0,
+  /** 1: Manual mode. Users need to enable or disable the low-light enhancement feature manually. */
+  AgoraLowlightEnhanceModeManual = 1,
+};
+
+/** The low-light enhancement level.
+
+ @since v3.6.2
+ */
+typedef NS_ENUM(NSUInteger, AgoraLowlightEnhanceLevel) {
+  /** 0: (Default) Promotes video quality during low-light enhancement. It processes the brightness, details, and noise of the video image. The performance consumption is moderate, the processing speed is moderate, and the overall video quality is optimal. */
+  AgoraLowlightEnhanceLevelQuality = 0,
+  /** 1: Promotes performance during low-light enhancement. It processes the brightness and details of the video image. The processing speed is faster. */
+  AgoraLowlightEnhanceLevelFast = 1,
+};
+
 /** The type of the custom background image.
+
  @since v3.4.5
  */
 typedef NS_ENUM(NSUInteger, AgoraVirtualBackgroundSourceType) {
@@ -1991,25 +2145,25 @@ typedef NS_ENUM(NSInteger, AgoraLocalVideoStreamError) {
   AgoraLocalVideoStreamErrorOK = 0,
   /** 1: No specified reason for the local video failure. */
   AgoraLocalVideoStreamErrorFailure = 1,
-  /** 2: No permission to use the local video device. */
+  /** 2: The application does not have permission to start the local video capture device. Remind your user to grant permission and rejoin the channel. */
   AgoraLocalVideoStreamErrorDeviceNoPermission = 2,
-  /** 3: The local video capturer is in use. */
+  /** 3: The local video capture device is in use. Check whether the camera is occupied by another application or try to rejoin the channel. */
   AgoraLocalVideoStreamErrorDeviceBusy = 3,
-  /** 4: The local video capture fails. Check whether the capturer is working properly. */
+  /** 4: The local video capture failed. Check whether the video capture device is working properly, check whether the camera is occupied by another application, or try to rejoin the channel. */
   AgoraLocalVideoStreamErrorCaptureFailure = 4,
   /** 5: The local video encoding fails. */
   AgoraLocalVideoStreamErrorEncodeFailure = 5,
-  /** 6: (iOS only) The application is in the background.
+  /** 6: (iOS only) The application is in the background. Remind your user that the application cannot capture video properly when the application is in the background.
 
    @since v3.3.0
    */
   AgoraLocalVideoStreamErrorCaptureInBackGround = 6,
-  /** 7: (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
+  /** 7: (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode. Remind your user that the application cannot capture video properly when the application is running in Slide Over, Split View, or Picture in Picture mode.
 
    @since v3.3.0
    */
   AgoraLocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
-  /** 8: The SDK cannot find the local video capture device.
+  /** 8: The SDK cannot find the local video capture device. Check whether the camera is connected to the device properly, check whether the camera is working properly, or try to rejoin the channel.
 
    @since v3.4.0
    */
@@ -2020,13 +2174,14 @@ typedef NS_ENUM(NSInteger, AgoraLocalVideoStreamError) {
    @since v3.5.0
    */
   AgoraLocalVideoStreamErrorCaptureDeviceDisconnected = 9,
-  /** 10: (macOS only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
+  /** 10: The SDK cannot find the local video device id in device list, device id is invalid.
 
    @since v3.5.0
    */
   AgoraLocalVideoStreamErrorCaptureDeviceInvalidId = 10,
   /** 11: (macOS only) The shared window is minimized when you call
    [startScreenCaptureByWindowId]([AgoraRtcEngineKit startScreenCaptureByWindowId:rectangle:parameters:]) to share a window.
+   Remind your user that the window cannot be shared properly when the shared window is minimized.
 
    @since v3.1.0
    */
@@ -2045,7 +2200,24 @@ typedef NS_ENUM(NSInteger, AgoraLocalVideoStreamError) {
    @since v3.2.0
    */
   AgoraLocalVideoStreamErrorScreenCaptureWindowClosed = 12,
+  /** 13: (iOS only) The screen sharing extension process starts.
+
+   @since v3.7.0
+   */
+  AgoraLocalVideoStreamErrorExtensionCaptureStarted = 13,  // Start the extension process capture
+  /** 14: (iOS only) The screen sharing extension process ends.
+
+   @since v3.7.0
+   */
+  AgoraLocalVideoStreamErrorExtensionCaptureStoped = 14,  // Stop the extension process capture
+  /** 15: (iOS only) The screen sharing extension process quits unexpectedly.
+
+   @since v3.7.0
+   */
+  AgoraLocalVideoStreamErrorExtensionCaptureDisconnected = 15  // Disconnected with the extension process
+
 };
+
 /** Regions for connection
  */
 typedef NS_ENUM(NSUInteger, AgoraAreaCode) {
@@ -2094,18 +2266,56 @@ typedef NS_ENUM(NSInteger, AgoraLogLevel) {
    */
   AgoraLogLevelFatal = 0x0008
 };
+
 /** The cloud proxy type.
  */
 typedef NS_ENUM(NSUInteger, AgoraCloudProxyType) {
-  /** 0: Do not use the cloud proxy.
+  /** 0: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and
+   automatically switches to TLS 443 if the attempt fails. As of v3.6.2, the SDK has
+   this mode enabled by default.
    */
   AgoraNoneProxy = 0,
-  /** 1: The cloud proxy for the UDP protocol.
+  /** 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode.
+   In this mode, the SDK always transmits data over UDP.
    */
   AgoraUdpProxy = 1,
-  /** 2: Reserved parameter.
+  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode.
+   In this mode, the SDK always transmits data over TLS 443.
+   @since v3.6.2
    */
   AgoraTcpProxy = 2,
+};
+/** Reserved.
+ */
+typedef NS_ENUM(NSUInteger, AgoraLocalProxyMode) {
+
+  AgoraConnectivityFirst = 0,
+
+  AgoraLocalOnly = 1,
+};
+/** The proxy type.
+
+ @since v3.6.2
+ */
+typedef NS_ENUM(NSUInteger, AgoraProxyType) {
+  /** 0: Reserved for future use.
+   */
+  AgoraNoneProxyType = 0,
+  /** 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode.
+   In this mode, the SDK always transmits data over UDP.
+   */
+  AgoraUdpProxyType = 1,
+  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode.
+   In this mode, the SDK always transmits data over TLS 443.
+   */
+  AgoraTcpProxyType = 2,
+  /** 3: Reserved for future use.
+   */
+  AgoraLocalProxyType = 3,
+  /** 4: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically
+   switches to TLS 443 if the attempt fails.
+   */
+  AgoraTcpProxyAutoFallbackType = 4,
 };
 
 /** The channel mode. Set in
@@ -2254,17 +2464,9 @@ typedef NS_ENUM(NSUInteger, AgoraAudioFramePosition) {
    mixing, which enables the SDK to trigger the
    [onPlaybackAudioFrameBeforeMixing]([AgoraAudioDataFrameProtocol onPlaybackAudioFrameBeforeMixing:uid:])
    callback.
-   S-54718: add mutiplechannel and beforeMixingEx for audioDataFrameProtocol)
    */
   AgoraAudioFramePositionBeforeMixing = 1 << 3,
-};
 
-/** API for future use.
- */
-typedef NS_ENUM(NSInteger, AgoraContentInspectType) {
-  AgoraContentInspectTypeInvalid = 0,
-  AgoraContentInspectTypeModeration = 1,
-  AgoraContentInspectTypeSupervise = 2,
 };
 
 /** The push position of the external audio frame. Set in
@@ -2290,14 +2492,19 @@ typedef NS_ENUM(NSUInteger, AgoraAudioExternalSourcePos) {
    */
   AgoraAudioExternalRecordSourcePostProcess = 2,
 };
-/** API for future use.
- */
+
+/** API for future use. */
+typedef NS_ENUM(NSInteger, AgoraContentInspectType) {
+  AgoraContentInspectTypeInvalid = 0,
+  AgoraContentInspectTypeModeration = 1,
+  AgoraContentInspectTypeSupervise = 2,
+};
+/** API for future use. */
 typedef NS_ENUM(NSUInteger, AgoraContentInspectResult) {
   AgoraContentInspectNeutral = 1,
   AgoraContentInspectSexy = 2,
   AgoraContentInspectPorn = 3,
 };
-
 /**
  The current recording state.
 
@@ -2311,6 +2518,7 @@ typedef NS_ENUM(NSInteger, AgoraMediaRecorderState) {
   /** 3: The audio and video recording is stopped. */
   AgoraMediaRecorderStateStopped = 3,
 };
+
 /**
  The reason for the state change.
 
@@ -2330,6 +2538,7 @@ typedef NS_ENUM(NSInteger, AgoraMediaRecorderErrorCode) {
   /** 5: The SDK detects audio and video streams from users using versions of the SDK earlier than v3.0.0 in the `Communication` channel profile. */
   AgoraMediaRecorderErrorCustomStreamDetected = 5,
 };
+
 /**
  The recording content.
 
@@ -2343,6 +2552,20 @@ typedef NS_ENUM(NSInteger, AgoraMediaRecorderStreamType) {
   /** 3: (Default) Audio and video. */
   AgoraMediaRecorderStreamTypeBoth = 3,
 };
+
+/** The volume type.
+
+ @since v3.6.2
+ */
+typedef NS_ENUM(NSInteger, AgoraAudioDeviceTestVolumeType) {
+  /** 0: The volume of the audio capturing device.
+   **/
+  AgoraAudioDeviceTestRecordingVolume = 0,
+  /** 1: The volume of the audio playback device.
+   */
+  AgoraAudioDeviceTestPlaybackVolume = 1,
+};
+
 /**
  The format of the recording file.
 

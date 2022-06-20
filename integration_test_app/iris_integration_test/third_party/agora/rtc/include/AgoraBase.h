@@ -398,7 +398,7 @@ enum ERROR_CODE_TYPE {
   /** 117: The data stream transmission timed out.
    */
   ERR_STREAM_MESSAGE_TIMEOUT = 117,
-  /** 119: Switching roles fail. Please try to rejoin the channel.
+  /** 119: Deprecated as of v3.7.0. Use #CLIENT_ROLE_CHANGE_FAILED_REASON reported in `onClientRoleChangeFailed` instead.
    */
   ERR_SET_CLIENT_ROLE_NOT_AUTHORIZED = 119,
   /** 120: Decryption fails. The user may have used a different encryption password to join the channel. Check your settings or try rejoining the channel.
@@ -744,6 +744,11 @@ enum ERROR_CODE_TYPE {
    * @since v3.5.0
    */
   ERR_ADM_WIN_CORE_SERVRE_SHUT_DOWN = 1735,
+  /** 1736: (Windows only) The SDK does not support you to set `excludeWindowList` to block windows on a device with multiple graphics cards.
+   *
+   * @since v3.7.0
+   */
+  ERR_NOT_SUPPORTED_MUTI_GPU_EXCLUDE_WINDOW = 1736,
 };
 
 /** Output log filter level. */

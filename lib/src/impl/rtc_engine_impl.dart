@@ -1857,6 +1857,17 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
+  Future<void> updateScreenCaptureParameters2(
+      ScreenCaptureParameters2 parameters) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineUpdateScreenCaptureParameters.index,
+      'params': jsonEncode({
+        'parameters': parameters.toJson(),
+      }),
+    });
+  }
+
+  @override
   Future<void> updateScreenCaptureRegion(Rectangle regionRect) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineUpdateScreenCaptureRegion.index,

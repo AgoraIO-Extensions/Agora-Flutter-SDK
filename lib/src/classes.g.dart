@@ -1459,7 +1459,7 @@ Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) =>
 ScreenAudioParameters _$ScreenAudioParametersFromJson(
         Map<String, dynamic> json) =>
     ScreenAudioParameters(
-      json['captureSignalVolume'] as int,
+      json['captureSignalVolume'] as int?,
     );
 
 Map<String, dynamic> _$ScreenAudioParametersToJson(
@@ -1471,17 +1471,20 @@ Map<String, dynamic> _$ScreenAudioParametersToJson(
 ScreenVideoParameters _$ScreenVideoParametersFromJson(
         Map<String, dynamic> json) =>
     ScreenVideoParameters(
-      dimensions:
-          VideoDimensions.fromJson(json['dimensions'] as Map<String, dynamic>),
-      frameRate: json['frameRate'] as int,
-      bitrate: json['bitrate'] as int,
-      contentHint: $enumDecode(_$VideoContentHintEnumMap, json['contentHint']),
+      dimensions: json['dimensions'] == null
+          ? null
+          : VideoDimensions.fromJson(
+              json['dimensions'] as Map<String, dynamic>),
+      frameRate: json['frameRate'] as int?,
+      bitrate: json['bitrate'] as int?,
+      contentHint:
+          $enumDecodeNullable(_$VideoContentHintEnumMap, json['contentHint']),
     );
 
 Map<String, dynamic> _$ScreenVideoParametersToJson(
         ScreenVideoParameters instance) =>
     <String, dynamic>{
-      'dimensions': instance.dimensions.toJson(),
+      'dimensions': instance.dimensions?.toJson(),
       'frameRate': instance.frameRate,
       'bitrate': instance.bitrate,
       'contentHint': _$VideoContentHintEnumMap[instance.contentHint],
@@ -1496,19 +1499,23 @@ const _$VideoContentHintEnumMap = {
 ScreenCaptureParameters2 _$ScreenCaptureParameters2FromJson(
         Map<String, dynamic> json) =>
     ScreenCaptureParameters2(
-      captureAudio: json['captureAudio'] as bool,
-      audioParams: ScreenAudioParameters.fromJson(
-          json['audioParams'] as Map<String, dynamic>),
-      captureVideo: json['captureVideo'] as bool,
-      videoParams: ScreenVideoParameters.fromJson(
-          json['videoParams'] as Map<String, dynamic>),
+      captureAudio: json['captureAudio'] as bool?,
+      audioParams: json['audioParams'] == null
+          ? null
+          : ScreenAudioParameters.fromJson(
+              json['audioParams'] as Map<String, dynamic>),
+      captureVideo: json['captureVideo'] as bool?,
+      videoParams: json['videoParams'] == null
+          ? null
+          : ScreenVideoParameters.fromJson(
+              json['videoParams'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ScreenCaptureParameters2ToJson(
         ScreenCaptureParameters2 instance) =>
     <String, dynamic>{
       'captureAudio': instance.captureAudio,
-      'audioParams': instance.audioParams.toJson(),
+      'audioParams': instance.audioParams?.toJson(),
       'captureVideo': instance.captureVideo,
-      'videoParams': instance.videoParams.toJson(),
+      'videoParams': instance.videoParams?.toJson(),
     };

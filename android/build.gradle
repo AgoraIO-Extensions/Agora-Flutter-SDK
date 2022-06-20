@@ -54,6 +54,8 @@ dependencies {
     api 'io.agora.rtc:iris-rtc:3.6.2-fix.1'
   }
 
+  implementation 'io.agora.rtc:full-screen-sharing:3.7.0.2'
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', "$agora_rtc_engine_kt_version")}"
 }
 

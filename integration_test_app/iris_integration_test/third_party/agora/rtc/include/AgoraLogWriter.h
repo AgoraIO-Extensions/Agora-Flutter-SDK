@@ -26,7 +26,7 @@
 
  - <0: failure
  */
-- (NSInteger)writeLog:(const NSData*)message Length:(unsigned short)length;
+- (NSInteger)writeLog:(const NSData*)message Length:(unsigned short)length NS_SWIFT_NAME(writeLog(_:length:));
 
 @end
 

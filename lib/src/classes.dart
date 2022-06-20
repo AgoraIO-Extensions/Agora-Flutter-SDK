@@ -2631,7 +2631,7 @@ class SpatialAudioParams {
 
 @JsonSerializable(explicitToJson: true)
 class ScreenAudioParameters {
-  final int captureSignalVolume;
+  final int? captureSignalVolume;
 
   const ScreenAudioParameters(this.captureSignalVolume);
 
@@ -2642,16 +2642,13 @@ class ScreenAudioParameters {
 
 @JsonSerializable(explicitToJson: true)
 class ScreenVideoParameters {
-  final VideoDimensions dimensions;
-  final int frameRate;
-  final int bitrate;
-  final VideoContentHint contentHint;
+  final VideoDimensions? dimensions;
+  final int? frameRate;
+  final int? bitrate;
+  final VideoContentHint? contentHint;
 
   const ScreenVideoParameters(
-      {required this.dimensions,
-      required this.frameRate,
-      required this.bitrate,
-      required this.contentHint});
+      {this.dimensions, this.frameRate, this.bitrate, this.contentHint});
 
   factory ScreenVideoParameters.fromJson(Map<String, dynamic> json) =>
       _$ScreenVideoParametersFromJson(json);
@@ -2660,16 +2657,16 @@ class ScreenVideoParameters {
 
 @JsonSerializable(explicitToJson: true)
 class ScreenCaptureParameters2 {
-  final bool captureAudio;
-  final ScreenAudioParameters audioParams;
-  final bool captureVideo;
-  final ScreenVideoParameters videoParams;
+  final bool? captureAudio;
+  final ScreenAudioParameters? audioParams;
+  final bool? captureVideo;
+  final ScreenVideoParameters? videoParams;
 
   const ScreenCaptureParameters2({
-    required this.captureAudio,
-    required this.audioParams,
-    required this.captureVideo,
-    required this.videoParams,
+    this.captureAudio,
+    this.audioParams,
+    this.captureVideo,
+    this.videoParams,
   });
 
   factory ScreenCaptureParameters2.fromJson(Map<String, dynamic> json) =>

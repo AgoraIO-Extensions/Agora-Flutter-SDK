@@ -2191,6 +2191,9 @@ abstract class RtcEngine {
   Future<void> updateScreenCaptureParameters(
       ScreenCaptureParameters captureParams);
 
+  Future<void> updateScreenCaptureParameters2(
+      ScreenCaptureParameters2 parameters);
+
   ///
   /// Updates the screen sharing region.
   ///

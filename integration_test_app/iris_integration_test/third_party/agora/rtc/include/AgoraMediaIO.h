@@ -57,7 +57,7 @@ typedef NS_ENUM(NSInteger, AgoraVideoCaptureType) {
  @param timestamp   Timestamp (ms) of the video frame. For each video frame, you need to set a timestamp.
  @param rotation    AgoraVideoRotation
  */
-- (void)consumePixelBuffer:(CVPixelBufferRef _Nonnull)pixelBuffer withTimestamp:(CMTime)timestamp rotation:(AgoraVideoRotation)rotation;
+- (void)consumePixelBuffer:(CVPixelBufferRef _Nonnull)pixelBuffer withTimestamp:(CMTime)timestamp rotation:(AgoraVideoRotation)rotation NS_SWIFT_NAME(consumePixelBuffer(_:withTimestamp:rotation:));
 
 /** Uses the video information in the raw data.
 
@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, AgoraVideoCaptureType) {
  @param size      Size of the raw video data.
  @param rotation  AgoraVideoRotation
  */
-- (void)consumeRawData:(void* _Nonnull)rawData withTimestamp:(CMTime)timestamp format:(AgoraVideoPixelFormat)format size:(CGSize)size rotation:(AgoraVideoRotation)rotation;
+- (void)consumeRawData:(void* _Nonnull)rawData withTimestamp:(CMTime)timestamp format:(AgoraVideoPixelFormat)format size:(CGSize)size rotation:(AgoraVideoRotation)rotation NS_SWIFT_NAME(consumeRawData(_:withTimestamp:format:size:rotation:));
 @end
 
 /** Defines a set of protocols to implement the custom video source and pass it to the underlying media engine to replace the default video source.
@@ -111,7 +111,7 @@ typedef NS_ENUM(NSInteger, AgoraVideoCaptureType) {
  @return * YES: If the external video source is initialized.
  * NO: If the external video source is not ready or fails to initialize, the media engine stops and reports the error.
  */
-- (BOOL)shouldInitialize;
+- (BOOL)shouldInitialize NS_SWIFT_NAME(shouldInitialize());
 
 /** Enables the video source.
 
@@ -123,19 +123,19 @@ typedef NS_ENUM(NSInteger, AgoraVideoCaptureType) {
 
  After YES is returned, video frames can be passed to the media engine through the preset AgoraVideoFrameConsumer interface method.
  */
-- (void)shouldStart;
+- (void)shouldStart NS_SWIFT_NAME(shouldStart());
 
 /** Disables the video source.
 
  Call this method when the media engine stops streaming. You should then stop capturing the video frame and consuming it. After this method is called, the video frames are discarded by the media engine.
  */
-- (void)shouldStop;
+- (void)shouldStop NS_SWIFT_NAME(shouldStop());
 
 /** Releases the video source.
 
 Call this method when AgoraVideoFrameConsumer is released by the media engine. You can now release the video source as well as AgoraVideoFrameConsumer.
  */
-- (void)shouldDispose;
+- (void)shouldDispose NS_SWIFT_NAME(shouldDispose());
 
 /** Gets the buffer type.
 
@@ -143,7 +143,7 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
 
  @return return AgoraVideoBufferType
  */
-- (AgoraVideoBufferType)bufferType;
+- (AgoraVideoBufferType)bufferType NS_SWIFT_NAME(bufferType());
 
 /** Gets the capture type of the custom video source.
 
@@ -156,7 +156,7 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
 
  @return AgoraVideoCaptureType
  */
-- (AgoraVideoCaptureType)captureType;
+- (AgoraVideoCaptureType)captureType NS_SWIFT_NAME(captureType());
 
 /** Gets the content hint of the custom video source.
 
@@ -169,7 +169,7 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
 
  @return AgoraVideoContentHint
  */
-- (AgoraVideoContentHint)contentHint;
+- (AgoraVideoContentHint)contentHint NS_SWIFT_NAME(contentHint());
 @end
 
 /** Defines a set of protocols to implement the custom video sink and pass it to the underlying media engine to replace the default video sink.
@@ -209,7 +209,7 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
  @return * YES: If the video sink is initialized.
  * NO: If the video sink is not ready or fails to initialize, the media engine stops and reports the error.
  */
-- (BOOL)shouldInitialize;
+- (BOOL)shouldInitialize NS_SWIFT_NAME(shouldInitialize());
 
 /** Enables the video sink.
 
@@ -218,31 +218,31 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
  * YES: If the video sink is ready. The media engine provides the video frame to the custom video sink by calling the AgoraVideoFrameConsumer interface.
  * NO: If the video sink is not ready.
  */
-- (void)shouldStart;
+- (void)shouldStart NS_SWIFT_NAME(shouldStart());
 
 /** Disables the video sink.
 
  Call this method when the media engine stops video streaming. You should then stop the video sink.
  */
-- (void)shouldStop;
+- (void)shouldStop NS_SWIFT_NAME(shouldStop());
 
 /** Releases the video sink.
 
  Call this method when the media engine wants to release the video sink resources.
  */
-- (void)shouldDispose;
+- (void)shouldDispose NS_SWIFT_NAME(shouldDispose());
 
 /** Gets the buffer type and passes the buffer type specified in `AgoraVideoBufferType` to the media engine.
 
  @return bufferType AgoraVideoBufferType
  */
-- (AgoraVideoBufferType)bufferType;
+- (AgoraVideoBufferType)bufferType NS_SWIFT_NAME(bufferType());
 
 /** Gets the pixel format and passes it to the media engine.
 
  @return pixelFormat AgoraVideoPixelFormat
  */
-- (AgoraVideoPixelFormat)pixelFormat;
+- (AgoraVideoPixelFormat)pixelFormat NS_SWIFT_NAME(pixelFormat());
 
 @optional
 /** (Optional) Outputs the video in the pixel buffer.
@@ -250,7 +250,7 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
  @param pixelBuffer Video in the pixel buffer.
  @param rotation    Clockwise rotating angle of the video frame. See AgoraVideoRotation.
  */
-- (void)renderPixelBuffer:(CVPixelBufferRef _Nonnull)pixelBuffer rotation:(AgoraVideoRotation)rotation;
+- (void)renderPixelBuffer:(CVPixelBufferRef _Nonnull)pixelBuffer rotation:(AgoraVideoRotation)rotation NS_SWIFT_NAME(renderPixelBuffer(_:rotation:));
 
 /** (Optional) Outputs the video in the raw data.
 
@@ -258,7 +258,7 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
  @param size     Size of the raw video.
  @param rotation Clockwise rotating angle of the video frame. See AgoraVideoRotation.
  */
-- (void)renderRawData:(void* _Nonnull)rawData size:(CGSize)size rotation:(AgoraVideoRotation)rotation;
+- (void)renderRawData:(void* _Nonnull)rawData size:(CGSize)size rotation:(AgoraVideoRotation)rotation NS_SWIFT_NAME(renderRawData(_:size:rotation:));
 @end
 
 #pragma mark - Agora Default Media IO
@@ -273,7 +273,7 @@ typedef NS_ENUM(NSInteger, AgoraRtcDefaultCameraPosition) {
 __attribute__((visibility("default"))) @interface AgoraRtcDefaultCamera : NSObject<AgoraVideoSourceProtocol>
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
 @property(nonatomic, assign) AgoraRtcDefaultCameraPosition position;
-- (instancetype _Nonnull)initWithPosition:(AgoraRtcDefaultCameraPosition)position;
+- (instancetype _Nonnull)initWithPosition:(AgoraRtcDefaultCameraPosition)position NS_SWIFT_NAME(init(position:));
 #endif
 @end
 
@@ -289,13 +289,13 @@ __attribute__((visibility("default"))) @interface AgoraRtcScreenCapture : NSObje
 @property(nonatomic, assign, readonly) BOOL captureMouseCursor;
 @property(nonatomic, assign, readonly) BOOL windowFocus;
 
-+ (instancetype _Nonnull)screenCaptureWithId:(NSUInteger)displayId rect:(CGRect)rect dimensions:(CGSize)dimensions frameRate:(NSInteger)frameRate bitrate:(NSInteger)bitrate captureMouseCursor:(BOOL)captureMouseCursor;
-+ (instancetype _Nonnull)windowCaptureWithId:(NSUInteger)windowId rect:(CGRect)rect dimensions:(CGSize)dimensions frameRate:(NSInteger)frameRate bitrate:(NSInteger)bitrate captureMouseCursor:(BOOL)captureMouseCursor windowFocus:(BOOL)windowFocus;
++ (instancetype _Nonnull)screenCaptureWithId:(NSUInteger)displayId rect:(CGRect)rect dimensions:(CGSize)dimensions frameRate:(NSInteger)frameRate bitrate:(NSInteger)bitrate captureMouseCursor:(BOOL)captureMouseCursor NS_SWIFT_NAME(screenCapture(withId:rect:dimensions:frameRate:bitrate:captureMouseCursor:));
++ (instancetype _Nonnull)windowCaptureWithId:(NSUInteger)windowId rect:(CGRect)rect dimensions:(CGSize)dimensions frameRate:(NSInteger)frameRate bitrate:(NSInteger)bitrate captureMouseCursor:(BOOL)captureMouseCursor windowFocus:(BOOL)windowFocus NS_SWIFT_NAME(windowCapture(withId:rect:dimensions:frameRate:bitrate:captureMouseCursor:windowFocus:));
 @end
 #endif
 
 __attribute__((visibility("default"))) @interface AgoraRtcDefaultRenderer : NSObject<AgoraVideoSinkProtocol>
 @property(nonatomic, strong, readonly) VIEW_CLASS* _Nonnull view;
 @property(nonatomic, assign) AgoraVideoRenderMode mode;
-- (instancetype _Nonnull)initWithView:(VIEW_CLASS* _Nonnull)view renderMode:(AgoraVideoRenderMode)mode;
+- (instancetype _Nonnull)initWithView:(VIEW_CLASS* _Nonnull)view renderMode:(AgoraVideoRenderMode)mode NS_SWIFT_NAME(init(view:renderMode:));
 @end

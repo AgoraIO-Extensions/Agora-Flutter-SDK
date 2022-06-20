@@ -12,21 +12,21 @@ import 'package:permission_handler/permission_handler.dart';
 
 const String _kDefaultAppGroup = 'io.agora';
 
-/// ScreenSharing Example
-class ScreenSharing extends StatefulWidget {
-  /// Construct the [ScreenSharing]
-  const ScreenSharing({Key? key}) : super(key: key);
+/// ScreenSharingWithSubProcess Example
+class ScreenSharingWithSubProcess extends StatefulWidget {
+  /// Construct the [ScreenSharingWithSubProcess]
+  const ScreenSharingWithSubProcess({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ScreenSharing> {
+class _State extends State<ScreenSharingWithSubProcess> {
   late final RtcEngine _engine;
   String channelId = config.channelId;
   bool isJoined = false, screenSharing = false;
   List<int> remoteUid = [];
-  late final TextEditingController _controller;
+  TextEditingController? _controller;
 
   @override
   void initState() {
@@ -38,7 +38,6 @@ class _State extends State<ScreenSharing> {
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
     _engine.destroy();
   }
 
@@ -88,6 +87,31 @@ class _State extends State<ScreenSharing> {
           remoteUid.clear();
         });
       },
+    ));
+  }
+
+  _joinChannel() async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await [Permission.microphone, Permission.camera].request();
+    }
+    await _engine.joinChannel(config.token, channelId, null, config.uid);
+  }
+
+  _leaveChannel() async {
+    await _engine.leaveChannel();
+  }
+
+  _startScreenShare() async {
+    final helper = await _engine.getScreenShareHelper(
+        appGroup: kIsWeb || Platform.isWindows ? null : _kDefaultAppGroup);
+    helper.setEventHandler(RtcEngineEventHandler(
+      joinChannelSuccess: (String channel, int uid, int elapsed) {
+        logSink.log('ScreenSharing joinChannelSuccess $channel $uid $elapsed');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text('ScreenSharing joinChannelSuccess $channel $uid $elapsed'),
+        ));
+      },
       localVideoStateChanged:
           (LocalVideoStreamState localVideoState, LocalVideoStreamError error) {
         logSink.log(
@@ -97,88 +121,39 @@ class _State extends State<ScreenSharing> {
         }
       },
     ));
-  }
 
-  _joinChannel() async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      await [Permission.microphone, Permission.camera].request();
-    }
-    await _engine.joinChannel(config.token, _controller.text, null, config.uid);
-  }
-
-  _leaveChannel() async {
-    await _engine.leaveChannel();
-  }
-
-  _startScreenShare() async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      await _engine.startScreenCapture(const ScreenCaptureParameters2(
-        captureAudio: true,
-        captureVideo: true,
-      ));
-    } else {
-      // final helper = await _engine.getScreenShareHelper(
-      //     appGroup: kIsWeb || Platform.isWindows ? null : _kDefaultAppGroup);
-      // helper.setEventHandler(RtcEngineEventHandler(
-      //   joinChannelSuccess: (String channel, int uid, int elapsed) {
-      //     logSink
-      //         .log('ScreenSharing joinChannelSuccess $channel $uid $elapsed');
-      //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //       content:
-      //           Text('ScreenSharing joinChannelSuccess $channel $uid $elapsed'),
-      //     ));
-      //   },
-      //   localVideoStateChanged: (LocalVideoStreamState localVideoState,
-      //       LocalVideoStreamError error) {
-      //     logSink.log(
-      //         'ScreenSharing localVideoStateChanged $localVideoState $error');
-      //     if (error == LocalVideoStreamError.ScreenCaptureWindowClosed) {
-      //       _stopScreenShare();
-      //     }
-      //   },
-      // ));
-
-      // await helper.disableAudio();
-      // await helper.enableVideo();
-      // await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
-      // await helper.setClientRole(ClientRole.Broadcaster);
-
-      var windowId = 0;
-      var random = Random();
+    await helper.disableAudio();
+    await helper.enableVideo();
+    await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await helper.setClientRole(ClientRole.Broadcaster);
+    var windowId = 0;
+    var random = Random();
+    if (!kIsWeb &&
+        (Platform.isWindows || Platform.isMacOS || Platform.isAndroid)) {
       final windows = _engine.enumerateWindows();
       if (windows.isNotEmpty) {
         final index = random.nextInt(windows.length - 1);
         logSink.log('ScreenSharing window with index $index');
         windowId = windows[index].id;
       }
-      await _engine.startScreenCaptureByWindowId(windowId);
     }
-
-    // await _engine.joinChannel(
-    //     config.token, channelId, null, config.screenSharingUid);
-
+    await helper.startScreenCaptureByWindowId(windowId);
     setState(() {
       screenSharing = true;
     });
+    await helper.joinChannel(
+        config.token, channelId, null, config.screenSharingUid);
   }
 
   _stopScreenShare() async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      await _engine.stopScreenCapture();
+    final helper = await _engine.getScreenShareHelper();
+    await helper.destroy().then((value) {
       setState(() {
         screenSharing = false;
       });
-    } else {
-      final helper = await _engine.getScreenShareHelper();
-      await helper.stopScreenCapture();
-      await helper.destroy().then((value) {
-        setState(() {
-          screenSharing = false;
-        });
-      }).catchError((err) {
-        logSink.log('_stopScreenShare $err');
-      });
-    }
+    }).catchError((err) {
+      logSink.log('_stopScreenShare $err');
+    });
   }
 
   @override
@@ -210,18 +185,21 @@ class _State extends State<ScreenSharing> {
             _renderVideo(),
           ],
         ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: screenSharing ? _stopScreenShare : _startScreenShare,
-                child: Text('${screenSharing ? 'Stop' : 'Start'} screen share'),
-              ),
-            ],
-          ),
-        )
+        if (kIsWeb || (Platform.isWindows || Platform.isMacOS))
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed:
+                      screenSharing ? _stopScreenShare : _startScreenShare,
+                  child:
+                      Text('${screenSharing ? 'Stop' : 'Start'} screen share'),
+                ),
+              ],
+            ),
+          )
       ],
     );
   }
@@ -237,12 +215,12 @@ class _State extends State<ScreenSharing> {
                 child: kIsWeb
                     ? rtc_local_view.SurfaceView()
                     : rtc_local_view.TextureView()),
-            // if (screenSharing)
-            //   const Expanded(
-            //       flex: 1,
-            //       child: kIsWeb
-            //           ? rtc_local_view.SurfaceView.screenShare()
-            //           : rtc_local_view.TextureView.screenShare()),
+            if (screenSharing)
+              const Expanded(
+                  flex: 1,
+                  child: kIsWeb
+                      ? rtc_local_view.SurfaceView.screenShare()
+                      : rtc_local_view.TextureView.screenShare()),
           ],
         ),
         Align(
