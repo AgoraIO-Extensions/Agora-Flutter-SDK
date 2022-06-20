@@ -1867,17 +1867,17 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
-  Future<void> startScreenCapture(ScreenCaptureParameters captureParams) {
+  Future<void> startScreenCapture(ScreenCaptureParameters2 parameters) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
-      'params': jsonEncode({'captureParams': captureParams.toJson()}),
+      'params': jsonEncode({'parameters': parameters.toJson()}),
     });
   }
 
   @override
   Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario) {
     return _invokeMethod('callApi', {
-      'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
+      'apiType': ApiTypeEngineExt.kEngineSetScreenCaptureScenario,
       'params': jsonEncode({
         'screenScenario': ScreenScenarioTypeConverter(screenScenario).value()
       }),
@@ -1887,7 +1887,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   @override
   Future<void> enableLocalVoicePitchCallback(int interval) {
     return _invokeMethod('callApi', {
-      'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
+      'apiType': ApiTypeEngineExt.kEngineEnableLocalVoicePitchCallback,
       'params': jsonEncode({
         'interval': interval,
       }),
@@ -2024,6 +2024,28 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
       'apiType': ApiTypeEngine.kEngineUpdateRtmpTranscoding.index,
       'params': jsonEncode({
         'transcoding': transcoding.toJson(),
+      }),
+    });
+  }
+
+  @override
+  Future<void> enableSpatialAudio(bool enabled) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngineExt.kEngineEnableSpatialAudio,
+      'params': jsonEncode({
+        'enabled': enabled,
+      }),
+    });
+  }
+
+  @override
+  Future<void> setRemoteUserSpatialAudioParams(
+      int uid, SpatialAudioParams spatialAudioParams) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngineExt.kEngineSetRemoteUserSpatialAudioParams,
+      'params': jsonEncode({
+        'uid': uid,
+        'spatial_audio_params': spatialAudioParams.toJson(),
       }),
     });
   }

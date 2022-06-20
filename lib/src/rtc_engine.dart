@@ -2224,7 +2224,7 @@ abstract class RtcEngine {
   ///
   /// Param [bitrate] The bitrate of the screen share.
   ///
-  Future<void> startScreenCapture(ScreenCaptureParameters captureParams);
+  Future<void> startScreenCapture(ScreenCaptureParameters2 parameters);
 
   Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario);
 
@@ -2349,4 +2349,11 @@ abstract class RtcEngine {
 
   /// @nodoc
   Future<void> enableWirelessAccelerate(bool enabled);
+
+  /// @nodoc
+  Future<void> setRemoteUserSpatialAudioParams(
+      int uid, SpatialAudioParams spatialAudioParams);
+
+  /// @nodoc
+  Future<void> enableSpatialAudio(bool enabled);
 }

@@ -673,4 +673,8 @@ abstract class RtcChannel {
   /// Param [url] CDN streaming address. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   ///
   Future<void> stopRtmpStream(String url);
+
+  /// @nodoc
+  Future<void> setRemoteUserSpatialAudioParams(
+      int uid, SpatialAudioParams spatialAudioParams);
 }

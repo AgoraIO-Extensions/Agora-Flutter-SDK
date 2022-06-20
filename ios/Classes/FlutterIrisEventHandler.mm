@@ -10,11 +10,12 @@ public:
   void OnEvent(const char *event, const char *data) override {
     @autoreleasepool {
         if (eventSink_) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event], @"methodName", [NSString stringWithUTF8String:data], @"data", nil];
-            
-            if (shouldHandleSubProcess_) {
-                [dic setObject:@(sub_process_) forKey:@"subProcess"];
-            }
+            bool subProcess = shouldHandleSubProcess_ && sub_process_;
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                [NSString stringWithUTF8String:event], @"methodName", 
+                [NSString stringWithUTF8String:data], @"data", 
+                                        @(subProcess), @"subProcess",
+                nil];
             
             eventSink_(dic);
         }
@@ -28,11 +29,13 @@ public:
           typedDataWithBytes:[[NSData alloc] initWithBytes:buffer
                                                     length:length]];
         if (eventSink_) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:event], @"methodName", [NSString stringWithUTF8String:data], @"data", bufferApple, @"buffer", nil];
-            
-            if (shouldHandleSubProcess_) {
-                [dic setObject:@(sub_process_) forKey:@"subProcess"];
-            }
+            bool subProcess = shouldHandleSubProcess_ && sub_process_;
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        [NSString stringWithUTF8String:event], @"methodName",
+                                        [NSString stringWithUTF8String:data], @"data",
+                                        bufferApple, @"buffer",
+                                        @(subProcess), @"subProcess",
+                                        nil];
             
             eventSink_(dic);
         }

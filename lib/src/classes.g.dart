@@ -1435,3 +1435,80 @@ Map<String, dynamic> _$ContentInspectConfigToJson(
       'modules': instance.modules.map((e) => e.toJson()).toList(),
       'moduleCount': instance.moduleCount,
     };
+
+SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
+    SpatialAudioParams(
+      speakerAzimuth: (json['speaker_azimuth'] as num?)?.toDouble(),
+      speakerElevation: (json['speaker_elevation'] as num?)?.toDouble(),
+      speakerDistance: (json['speaker_distance'] as num?)?.toDouble(),
+      speakerOrientation: json['speaker_orientation'] as int?,
+      enableBlur: json['enable_blur'] as bool?,
+      enableAirAbsorb: json['enable_air_absorb'] as bool?,
+    );
+
+Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) =>
+    <String, dynamic>{
+      'speaker_azimuth': instance.speakerAzimuth,
+      'speaker_elevation': instance.speakerElevation,
+      'speaker_distance': instance.speakerDistance,
+      'speaker_orientation': instance.speakerOrientation,
+      'enable_blur': instance.enableBlur,
+      'enable_air_absorb': instance.enableAirAbsorb,
+    };
+
+ScreenAudioParameters _$ScreenAudioParametersFromJson(
+        Map<String, dynamic> json) =>
+    ScreenAudioParameters(
+      json['captureSignalVolume'] as int,
+    );
+
+Map<String, dynamic> _$ScreenAudioParametersToJson(
+        ScreenAudioParameters instance) =>
+    <String, dynamic>{
+      'captureSignalVolume': instance.captureSignalVolume,
+    };
+
+ScreenVideoParameters _$ScreenVideoParametersFromJson(
+        Map<String, dynamic> json) =>
+    ScreenVideoParameters(
+      dimensions:
+          VideoDimensions.fromJson(json['dimensions'] as Map<String, dynamic>),
+      frameRate: json['frameRate'] as int,
+      bitrate: json['bitrate'] as int,
+      contentHint: $enumDecode(_$VideoContentHintEnumMap, json['contentHint']),
+    );
+
+Map<String, dynamic> _$ScreenVideoParametersToJson(
+        ScreenVideoParameters instance) =>
+    <String, dynamic>{
+      'dimensions': instance.dimensions.toJson(),
+      'frameRate': instance.frameRate,
+      'bitrate': instance.bitrate,
+      'contentHint': _$VideoContentHintEnumMap[instance.contentHint],
+    };
+
+const _$VideoContentHintEnumMap = {
+  VideoContentHint.None: 0,
+  VideoContentHint.Motion: 1,
+  VideoContentHint.Details: 2,
+};
+
+ScreenCaptureParameters2 _$ScreenCaptureParameters2FromJson(
+        Map<String, dynamic> json) =>
+    ScreenCaptureParameters2(
+      captureAudio: json['captureAudio'] as bool,
+      audioParams: ScreenAudioParameters.fromJson(
+          json['audioParams'] as Map<String, dynamic>),
+      captureVideo: json['captureVideo'] as bool,
+      videoParams: ScreenVideoParameters.fromJson(
+          json['videoParams'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ScreenCaptureParameters2ToJson(
+        ScreenCaptureParameters2 instance) =>
+    <String, dynamic>{
+      'captureAudio': instance.captureAudio,
+      'audioParams': instance.audioParams.toJson(),
+      'captureVideo': instance.captureVideo,
+      'videoParams': instance.videoParams.toJson(),
+    };
