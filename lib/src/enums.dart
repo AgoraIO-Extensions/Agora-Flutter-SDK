@@ -1877,6 +1877,10 @@ enum ErrorCode {
   VdmCameraNotAuthorized,
 
   /// @nodoc
+  @JsonValue(1502)
+  vdmWinDeviceInUse,
+
+  /// @nodoc
   @JsonValue(1600)
   VcmUnknownError,
 
