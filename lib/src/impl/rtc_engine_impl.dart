@@ -1857,7 +1857,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
-  Future<void> updateScreenCaptureParameters2(
+  Future<void> updateScreenCaptureParametersMobile(
       ScreenCaptureParameters2 parameters) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineUpdateScreenCaptureParameters.index,
@@ -1878,7 +1878,21 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
-  Future<void> startScreenCapture(ScreenCaptureParameters2 parameters) {
+  Future<void> startScreenCapture(int windowId,
+      [int captureFreq = 0, Rect? rect, int bitrate = 0]) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
+      'params': jsonEncode({
+        'windowId': windowId,
+        'captureFreq': captureFreq,
+        'rect': rect?.toJson(),
+        'bitrate': bitrate,
+      }),
+    });
+  }
+
+  @override
+  Future<void> startScreenCaptureMobile(ScreenCaptureParameters2 parameters) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
       'params': jsonEncode({'parameters': parameters.toJson()}),

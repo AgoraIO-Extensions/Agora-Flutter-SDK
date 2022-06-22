@@ -37,8 +37,12 @@ target 'Runner' do
 
     inherit! :search_paths
   end
+
+  target 'ScreenSharing' do
+    inherit! :search_paths
+  end
   
-  # pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
+  pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
 end
 
 post_install do |installer|

@@ -11,6 +11,7 @@ import 'rtc_render_view.dart';
 ///  Android: SurfaceView (https://developer.android.com/reference/android/view/SurfaceView).
 ///  iOS: UIView (https://developer.apple.com/documentation/uikit/uiview) Applies to the macOS and Windows platforms only.
 ///
+@immutable
 class SurfaceView extends RtcSurfaceView {
   /// Constructs the [SurfaceView].
   /// Constructs the [SurfaceView].
@@ -74,6 +75,7 @@ class SurfaceView extends RtcSurfaceView {
 /// or FlutterTexture (https://api.flutter.dev/objcdoc/Protocols/FlutterTexture.html)。
 ///  iOS/macOS/Windows: FlutterTexture (https://api.flutter.dev/objcdoc/Protocols/FlutterTexture.html)。
 ///
+@immutable
 class TextureView extends RtcTextureView {
   /// Constructs the [TextureView].
   /// Constructs the [TextureView].

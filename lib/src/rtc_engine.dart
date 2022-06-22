@@ -2191,7 +2191,7 @@ abstract class RtcEngine {
   Future<void> updateScreenCaptureParameters(
       ScreenCaptureParameters captureParams);
 
-  Future<void> updateScreenCaptureParameters2(
+  Future<void> updateScreenCaptureParametersMobile(
       ScreenCaptureParameters2 parameters);
 
   ///
@@ -2227,7 +2227,10 @@ abstract class RtcEngine {
   ///
   /// Param [bitrate] The bitrate of the screen share.
   ///
-  Future<void> startScreenCapture(ScreenCaptureParameters2 parameters);
+  Future<void> startScreenCapture(int windowId,
+      [int captureFreq, Rect? rect, int bitrate]);
+
+  Future<void> startScreenCaptureMobile(ScreenCaptureParameters2 parameters);
 
   Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario);
 

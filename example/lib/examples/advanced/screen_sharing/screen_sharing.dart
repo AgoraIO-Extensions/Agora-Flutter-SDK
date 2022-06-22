@@ -112,37 +112,11 @@ class _State extends State<ScreenSharing> {
 
   _startScreenShare() async {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      await _engine.startScreenCapture(const ScreenCaptureParameters2(
+      await _engine.startScreenCaptureMobile(const ScreenCaptureParameters2(
         captureAudio: true,
         captureVideo: true,
       ));
     } else {
-      // final helper = await _engine.getScreenShareHelper(
-      //     appGroup: kIsWeb || Platform.isWindows ? null : _kDefaultAppGroup);
-      // helper.setEventHandler(RtcEngineEventHandler(
-      //   joinChannelSuccess: (String channel, int uid, int elapsed) {
-      //     logSink
-      //         .log('ScreenSharing joinChannelSuccess $channel $uid $elapsed');
-      //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //       content:
-      //           Text('ScreenSharing joinChannelSuccess $channel $uid $elapsed'),
-      //     ));
-      //   },
-      //   localVideoStateChanged: (LocalVideoStreamState localVideoState,
-      //       LocalVideoStreamError error) {
-      //     logSink.log(
-      //         'ScreenSharing localVideoStateChanged $localVideoState $error');
-      //     if (error == LocalVideoStreamError.ScreenCaptureWindowClosed) {
-      //       _stopScreenShare();
-      //     }
-      //   },
-      // ));
-
-      // await helper.disableAudio();
-      // await helper.enableVideo();
-      // await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
-      // await helper.setClientRole(ClientRole.Broadcaster);
-
       var windowId = 0;
       var random = Random();
       final windows = _engine.enumerateWindows();
@@ -153,9 +127,6 @@ class _State extends State<ScreenSharing> {
       }
       await _engine.startScreenCaptureByWindowId(windowId);
     }
-
-    // await _engine.joinChannel(
-    //     config.token, channelId, null, config.screenSharingUid);
 
     setState(() {
       screenSharing = true;
@@ -230,20 +201,10 @@ class _State extends State<ScreenSharing> {
     return Expanded(
         child: Stack(
       children: [
-        Row(
-          children: [
-            const Expanded(
-                flex: 1,
-                child: kIsWeb
-                    ? rtc_local_view.SurfaceView()
-                    : rtc_local_view.TextureView()),
-            // if (screenSharing)
-            //   const Expanded(
-            //       flex: 1,
-            //       child: kIsWeb
-            //           ? rtc_local_view.SurfaceView.screenShare()
-            //           : rtc_local_view.TextureView.screenShare()),
-          ],
+        const SizedBox.expand(
+          child: kIsWeb
+              ? rtc_local_view.SurfaceView()
+              : rtc_local_view.TextureView(),
         ),
         Align(
           alignment: Alignment.topLeft,

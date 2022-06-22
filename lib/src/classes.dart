@@ -2658,8 +2658,11 @@ class ScreenVideoParameters {
 @JsonSerializable(explicitToJson: true)
 class ScreenCaptureParameters2 {
   final bool? captureAudio;
+
   final ScreenAudioParameters? audioParams;
+
   final bool? captureVideo;
+
   final ScreenVideoParameters? videoParams;
 
   const ScreenCaptureParameters2({
