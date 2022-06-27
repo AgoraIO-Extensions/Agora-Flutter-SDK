@@ -30,19 +30,22 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-  
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  
+
   target 'RunnerTests' do
 
     inherit! :search_paths
   end
 
-  target 'ScreenSharing' do
-    inherit! :search_paths
-  end
-  
   pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
+end
+
+target 'ScreenSharing' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'AgoraRtcEngine_iOS', '3.7.0.2'
 end
 
 post_install do |installer|
