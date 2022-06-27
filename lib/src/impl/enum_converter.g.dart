@@ -776,6 +776,7 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.AdmNoRecordingDevice: 1359,
   ErrorCode.AdmNoPlayoutDevice: 1360,
   ErrorCode.VdmCameraNotAuthorized: 1501,
+  ErrorCode.vdmWinDeviceInUse: 1502,
   ErrorCode.VcmUnknownError: 1600,
   ErrorCode.VcmEncoderInitError: 1601,
   ErrorCode.VcmEncoderEncodeError: 1602,
@@ -868,10 +869,14 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.CaptureInBackground: 6,
   LocalVideoStreamError.CaptureMultipleForegroundApps: 7,
   LocalVideoStreamError.DeviceNotFound: 8,
+  LocalVideoStreamError.LocalVideoStreamErrorCaptureDeviceDisconnected: 8,
   LocalVideoStreamError.ScreenCaptureWindowMinmized: 11,
   LocalVideoStreamError.ScreenCaptureWindowClosed: 12,
   LocalVideoStreamError.LocalVideoStreamErrorDeviceInvalidId: 10,
   LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowOccluded: 13,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStarted: 13,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStoped: 14,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureDisconnected: 15,
   LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
 };

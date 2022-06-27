@@ -2085,6 +2085,12 @@ enum LocalVideoStreamError {
   @JsonValue(8)
   DeviceNotFound,
 
+  /// 9: (macOS only) The external camera currently in use is disconnected (such as being unplugged).
+  ///
+  ///Available in v3.5.0
+  @JsonValue(8)
+  LocalVideoStreamErrorCaptureDeviceDisconnected,
+
   ///
   ///  startScreenCaptureByWindowId 11: When calling to share the window, the shared window is in a minimized state.
   ///
@@ -2113,6 +2119,24 @@ enum LocalVideoStreamError {
   ///
   @JsonValue(13)
   LocalVideoStreamErrorScreenCaptureWindowOccluded,
+
+  /// 13: (iOS only) The screen sharing extension process starts.
+  ///
+  /// Available in v3.7.0
+  @JsonValue(13)
+  LocalVideoStreamErrorExtensionCaptureStarted,
+
+  /// 14: (iOS only) The screen sharing extension process ends.
+  ///
+  /// Available in v3.7.0
+  @JsonValue(14)
+  LocalVideoStreamErrorExtensionCaptureStoped,
+
+  /// 15: (iOS only) The screen sharing extension process quits unexpectedly.
+  ///
+  /// Available in v3.7.0
+  @JsonValue(15)
+  LocalVideoStreamErrorExtensionCaptureDisconnected,
 
   ///
   /// 20: (Windows only) The SDK does not support sharing this type of window.
@@ -4201,4 +4225,28 @@ enum ScreenScenarioType {
 
   @JsonValue(4)
   ScreenScenarioRdc,
+}
+
+enum ErrScreenCapture {
+  /// 16: The user refuses to grant screen capture permission to the application.
+  ///
+  /// Since
+  /// v3.7.0
+  @JsonValue(16)
+  ErrScreenCapturePermissionDenied,
+
+  /// 2: Due to system limitations, screen capture is not available on systems
+  /// earlier than Android 5 (that is, Android API level 21). The SDK reports this error code when you call startScreenCapture on systems earlier than Android 5.
+  ///
+  /// Since
+  /// v3.7.0
+  @JsonValue(2)
+  ErrScreenCaptureSystemNotSupported,
+
+  /// 3: Due to system limitations, system audio cannot be captured on systems earlier than Android 10 (that is, API level 29). The SDK reports this error when you call startScreenCapture and set captureAudio as true on systems later than Android 5 (API level 21) and earlier than Android 10 (API level 29).
+  ///
+  /// Since
+  /// v3.7.0
+  @JsonValue(3)
+  ErrScreenCaptureSystemAudioNotSupported,
 }
