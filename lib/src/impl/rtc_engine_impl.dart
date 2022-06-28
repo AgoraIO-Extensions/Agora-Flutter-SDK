@@ -870,7 +870,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetCameraMaxZoomFactor.index,
       'params': jsonEncode({}),
-    }).then((value) => double.tryParse(value) ?? 0.0);
+    }).then((value) => value == null ? null : double.tryParse(value) ?? 0.0);
   }
 
   @override
@@ -1654,7 +1654,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetNativeHandle.index,
       'params': jsonEncode({}),
-    }).then((value) => int.tryParse(value) ?? -1);
+    }).then((value) => value == null ? null : int.tryParse(value) ?? -1);
   }
 
   @override

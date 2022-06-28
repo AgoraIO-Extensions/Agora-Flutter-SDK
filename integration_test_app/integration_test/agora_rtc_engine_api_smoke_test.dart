@@ -39,8 +39,9 @@ void main() {
       await rtcEngine.startPreview();
       try {
         await rtcEngine.getCameraMaxZoomFactor();
-      } catch (e) {
-        debugPrint('getCameraMaxZoomFactor exception: ${e.toString()}');
+      } catch (e, s) {
+        debugPrint(
+            'getCameraMaxZoomFactor exception: ${e.toString()}, stacktrack: $s');
         final exception = e as PlatformException;
         // -4 = ErrorCode.NotSupported
         // It's allow this function return -4
@@ -206,5 +207,105 @@ void main() {
 
       await rtcEngine.destroy();
     },
+  );
+
+  testWidgets(
+    'updateScreenCaptureParametersMobile',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      final context = RtcEngineContext(
+        engineAppId,
+        areaCode: const [AreaCode.GLOB],
+      );
+
+      final rtcEngine = await RtcEngine.createWithContext(context);
+
+      const int audioParamsCaptureSignalVolume = 10;
+      const ScreenAudioParameters parametersAudioParams = ScreenAudioParameters(
+        audioParamsCaptureSignalVolume,
+      );
+      const int dimensionsWidth = 10;
+      const int dimensionsHeight = 10;
+      const VideoDimensions videoParamsDimensions = VideoDimensions(
+        width: dimensionsWidth,
+        height: dimensionsHeight,
+      );
+      const VideoContentHint videoParamsContentHint = VideoContentHint.None;
+      const int videoParamsFrameRate = 10;
+      const int videoParamsBitrate = 10;
+      const ScreenVideoParameters parametersVideoParams = ScreenVideoParameters(
+        dimensions: videoParamsDimensions,
+        frameRate: videoParamsFrameRate,
+        bitrate: videoParamsBitrate,
+        contentHint: videoParamsContentHint,
+      );
+      const bool parametersCaptureAudio = true;
+      const bool parametersCaptureVideo = true;
+      const ScreenCaptureParameters2 parameters = ScreenCaptureParameters2(
+        captureAudio: parametersCaptureAudio,
+        audioParams: parametersAudioParams,
+        captureVideo: parametersCaptureVideo,
+        videoParams: parametersVideoParams,
+      );
+      await rtcEngine.updateScreenCaptureParametersMobile(
+        parameters,
+      );
+    },
+    skip: !(Platform.isAndroid || Platform.isIOS),
+  );
+
+  testWidgets(
+    'startScreenCaptureMobile',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      final context = RtcEngineContext(
+        engineAppId,
+        areaCode: const [AreaCode.GLOB],
+      );
+
+      final rtcEngine = await RtcEngine.createWithContext(context);
+
+      const int audioParamsCaptureSignalVolume = 10;
+      const ScreenAudioParameters parametersAudioParams = ScreenAudioParameters(
+        audioParamsCaptureSignalVolume,
+      );
+      const int dimensionsWidth = 10;
+      const int dimensionsHeight = 10;
+      const VideoDimensions videoParamsDimensions = VideoDimensions(
+        width: dimensionsWidth,
+        height: dimensionsHeight,
+      );
+      const VideoContentHint videoParamsContentHint = VideoContentHint.None;
+      const int videoParamsFrameRate = 10;
+      const int videoParamsBitrate = 10;
+      const ScreenVideoParameters parametersVideoParams = ScreenVideoParameters(
+        dimensions: videoParamsDimensions,
+        frameRate: videoParamsFrameRate,
+        bitrate: videoParamsBitrate,
+        contentHint: videoParamsContentHint,
+      );
+      const bool parametersCaptureAudio = true;
+      const bool parametersCaptureVideo = true;
+      const ScreenCaptureParameters2 parameters = ScreenCaptureParameters2(
+        captureAudio: parametersCaptureAudio,
+        audioParams: parametersAudioParams,
+        captureVideo: parametersCaptureVideo,
+        videoParams: parametersVideoParams,
+      );
+      await rtcEngine.startScreenCaptureMobile(
+        parameters,
+      );
+    },
+    skip: !(Platform.isAndroid || Platform.isIOS),
   );
 }
