@@ -2088,7 +2088,7 @@ enum LocalVideoStreamError {
   /// 9: (macOS only) The external camera currently in use is disconnected (such as being unplugged).
   ///
   ///Available in v3.5.0
-  @JsonValue(8)
+  @JsonValue(9)
   LocalVideoStreamErrorCaptureDeviceDisconnected,
 
   ///

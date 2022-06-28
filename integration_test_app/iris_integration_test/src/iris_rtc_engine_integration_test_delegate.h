@@ -84,6 +84,9 @@ public:
     int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
                 unsigned int length, char result[kBasicResultLength]) override;
 
+    int CallApiMaxResult(ApiTypeEngine api_type, const char *params,
+                         char result[64 * 1024]) override;
+
     agora::iris::rtc::IIrisRtcDeviceManager *device_manager() override;
 
     agora::iris::rtc::IIrisRtcChannel *channel() override;

@@ -877,5 +877,29 @@ void rtcChannelEventHandlerSomkeTestCases() {
     await rtcChannel.destroy();
     await rtcEngine.destroy();
   });
+
+  testWidgets('onFirstRemoteVideoFrame', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    FakeIrisRtcEngine fakeIrisEngine = FakeIrisRtcEngine();
+    await fakeIrisEngine.initialize();
+    final rtcEngine = await RtcEngine.create('123');
+    final rtcChannel = await RtcChannel.create('testapi');
+    bool firstRemoteVideoFrameCalled = false;
+    rtcChannel.setEventHandler(RtcChannelEventHandler(
+      firstRemoteVideoFrame: (uid, width, height, elapsed) {
+        firstRemoteVideoFrameCalled = true;
+      },
+    ));
+
+    fakeIrisEngine.fireRtcChannelEvent('onFirstRemoteVideoFrame');
+// Wait for the `EventChannel` event be sent from Android/iOS side
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(firstRemoteVideoFrameCalled, isTrue);
+
+    await rtcChannel.destroy();
+    await rtcEngine.destroy();
+  });
 }
 

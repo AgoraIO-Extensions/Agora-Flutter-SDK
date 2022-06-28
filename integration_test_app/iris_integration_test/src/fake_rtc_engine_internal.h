@@ -3,26 +3,32 @@
 
 #include "IAgoraRtcEngine2.h"
 
-namespace agora {
-    namespace rtc {
+namespace agora
+{
+    namespace rtc
+    {
 
-        class FakeChannelInternal : public agora::rtc::IChannel {
+        class FakeChannelInternal : public agora::rtc::IChannel
+        {
         public:
             ~FakeChannelInternal() override {}
 
             virtual int release() override { return 0; }
 
-            virtual int setChannelEventHandler(IChannelEventHandler *channelEh) override {
+            virtual int setChannelEventHandler(IChannelEventHandler *channelEh) override
+            {
                 return 0;
             }
 
             int joinChannel(const char *token, const char *info, uid_t uid,
-                            const ChannelMediaOptions &options) override {
+                            const ChannelMediaOptions &options) override
+            {
                 return 0;
             }
 
             int joinChannelWithUserAccount(const char *token, const char *userAccount,
-                                           const ChannelMediaOptions &options) override {
+                                           const ChannelMediaOptions &options) override
+            {
                 return 0;
             }
 
@@ -42,35 +48,41 @@ namespace agora {
 
             int setEncryptionMode(const char *encryptionMode) override { return 0; }
 
-            int enableEncryption(bool enabled, const EncryptionConfig &config) override {
+            int enableEncryption(bool enabled, const EncryptionConfig &config) override
+            {
                 return 0;
             }
 
             int registerPacketObserver(IPacketObserver *observer) override { return 0; }
 
             int registerMediaMetadataObserver(
-                    IMetadataObserver *observer,
-                    IMetadataObserver::METADATA_TYPE type) override {
+                IMetadataObserver *observer,
+                IMetadataObserver::METADATA_TYPE type) override
+            {
                 return 0;
             }
 
             int setClientRole(CLIENT_ROLE_TYPE role) override { return 0; }
 
             int setClientRole(CLIENT_ROLE_TYPE role,
-                              const ClientRoleOptions &options) override {
+                              const ClientRoleOptions &options) override
+            {
                 return 0;
             }
 
-            int setRemoteUserPriority(uid_t uid, PRIORITY_TYPE userPriority) override {
+            int setRemoteUserPriority(uid_t uid, PRIORITY_TYPE userPriority) override
+            {
                 return 0;
             }
 
-            int setRemoteVoicePosition(uid_t uid, double pan, double gain) override {
+            int setRemoteVoicePosition(uid_t uid, double pan, double gain) override
+            {
                 return 0;
             }
 
             int setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode,
-                                    VIDEO_MIRROR_MODE_TYPE mirrorMode) override {
+                                    VIDEO_MIRROR_MODE_TYPE mirrorMode) override
+            {
                 return 0;
             }
 
@@ -84,7 +96,8 @@ namespace agora {
 
             int muteAllRemoteAudioStreams(bool mute) override { return 0; }
 
-            int adjustUserPlaybackSignalVolume(uid_t userId, int volume) override {
+            int adjustUserPlaybackSignalVolume(uid_t userId, int volume) override
+            {
                 return 0;
             }
 
@@ -95,52 +108,62 @@ namespace agora {
             int muteRemoteVideoStream(uid_t userId, bool mute) override { return 0; }
 
             int setRemoteVideoStreamType(uid_t userId,
-                                         REMOTE_VIDEO_STREAM_TYPE streamType) override {
+                                         REMOTE_VIDEO_STREAM_TYPE streamType) override
+            {
                 return 0;
             }
 
             int setRemoteDefaultVideoStreamType(
-                    REMOTE_VIDEO_STREAM_TYPE streamType) override {
+                REMOTE_VIDEO_STREAM_TYPE streamType) override
+            {
                 return 0;
             }
 
-            virtual int createDataStream(int *streamId, bool reliable, bool ordered) override {
+            virtual int createDataStream(int *streamId, bool reliable, bool ordered) override
+            {
                 return 0;
             }
 
-            virtual int createDataStream(int *streamId, DataStreamConfig &config) override {
+            virtual int createDataStream(int *streamId, DataStreamConfig &config) override
+            {
                 return 0;
             }
 
             int sendStreamMessage(int streamId, const char *data,
-                                  size_t length) override {
+                                  size_t length) override
+            {
                 return 0;
             }
 
-            int addPublishStreamUrl(const char *url, bool transcodingEnabled) override {
+            int addPublishStreamUrl(const char *url, bool transcodingEnabled) override
+            {
                 return 0;
             }
 
             int removePublishStreamUrl(const char *url) override { return 0; }
 
-            int setLiveTranscoding(const LiveTranscoding &transcoding) override {
+            int setLiveTranscoding(const LiveTranscoding &transcoding) override
+            {
                 return 0;
             }
 
             int addInjectStreamUrl(const char *url,
-                                   const InjectStreamConfig &config) override {
+                                   const InjectStreamConfig &config) override
+            {
                 return 0;
             }
 
             int removeInjectStreamUrl(const char *url) override { return 0; }
 
             int startChannelMediaRelay(
-                    const ChannelMediaRelayConfiguration &configuration) override {
+                const ChannelMediaRelayConfiguration &configuration) override
+            {
                 return 0;
             }
 
             int updateChannelMediaRelay(
-                    const ChannelMediaRelayConfiguration &configuration) override {
+                const ChannelMediaRelayConfiguration &configuration) override
+            {
                 return 0;
             }
 
@@ -150,48 +173,63 @@ namespace agora {
 
             int stopChannelMediaRelay() override { return 0; }
 
-            CONNECTION_STATE_TYPE getConnectionState() override {
+            CONNECTION_STATE_TYPE getConnectionState() override
+            {
                 return CONNECTION_STATE_CONNECTING;
             }
 
-            int enableRemoteSuperResolution(uid_t userId, bool enable) override {
+            int enableRemoteSuperResolution(uid_t userId, bool enable) override
+            {
                 return 0;
             }
 
-            int setAVSyncSource(const char *channelId, uid_t uid) override {
+            int setAVSyncSource(const char *channelId, uid_t uid) override
+            {
                 return 0;
             }
 
-            int startRtmpStreamWithoutTranscoding(const char *url) override {
+            int startRtmpStreamWithoutTranscoding(const char *url) override
+            {
                 return 0;
             }
 
             int
             startRtmpStreamWithTranscoding(const char *url,
-                                           const LiveTranscoding &transcoding) override {
+                                           const LiveTranscoding &transcoding) override
+            {
                 return 0;
             }
 
-            int updateRtmpTranscoding(const LiveTranscoding &transcoding) override {
+            int updateRtmpTranscoding(const LiveTranscoding &transcoding) override
+            {
                 return 0;
             }
 
-            int stopRtmpStream(const char *url) override {
+            int stopRtmpStream(const char *url) override
+            {
+                return 0;
+            }
+
+            int setRemoteUserSpatialAudioParams(uid_t uid, const agora::media::SpatialAudioParams &spatial_audio_params)
+            {
                 return 0;
             }
         };
 
-        class FakeRtcEngineInternal : public IRtcEngine3 {
+        class FakeRtcEngineInternal : public IRtcEngine3
+        {
         public:
             int setVideoProfileEx(int width, int height, int frameRate,
-                                  int bitrate) override {
+                                  int bitrate) override
+            {
                 return 0;
             }
 
             int setAppType(AppType appType) override { return 0; }
 
         public:
-            virtual IChannel *createChannel(const char *channelId) override {
+            virtual IChannel *createChannel(const char *channelId) override
+            {
                 return new FakeChannelInternal();
             }
 
@@ -203,26 +241,31 @@ namespace agora {
             int setClientRole(CLIENT_ROLE_TYPE role) override { return 0; }
 
             int setClientRole(CLIENT_ROLE_TYPE role,
-                              const ClientRoleOptions &options) override {
+                              const ClientRoleOptions &options) override
+            {
                 return 0;
             }
 
             int joinChannel(const char *token, const char *channelId, const char *info,
-                            uid_t uid) override {
+                            uid_t uid) override
+            {
                 return 0;
             }
 
             int joinChannel(const char *token, const char *channelId, const char *info,
-                            uid_t uid, const ChannelMediaOptions &options) override {
+                            uid_t uid, const ChannelMediaOptions &options) override
+            {
                 return 0;
             }
 
-            int switchChannel(const char *token, const char *channelId) override {
+            int switchChannel(const char *token, const char *channelId) override
+            {
                 return 0;
             }
 
             int switchChannel(const char *token, const char *channelId,
-                              const ChannelMediaOptions &options) override {
+                              const ChannelMediaOptions &options) override
+            {
                 return 0;
             }
 
@@ -233,23 +276,27 @@ namespace agora {
             int queryInterface(INTERFACE_ID_TYPE iid, void **inter) override { return 0; }
 
             int registerLocalUserAccount(const char *appId,
-                                         const char *userAccount) override {
+                                         const char *userAccount) override
+            {
                 return 0;
             }
 
             int joinChannelWithUserAccount(const char *token, const char *channelId,
-                                           const char *userAccount) override {
+                                           const char *userAccount) override
+            {
                 return 0;
             }
 
             int joinChannelWithUserAccount(const char *token, const char *channelId,
                                            const char *userAccount,
-                                           const ChannelMediaOptions &options) override {
+                                           const ChannelMediaOptions &options) override
+            {
                 return 0;
             }
 
             int getUserInfoByUserAccount(const char *userAccount,
-                                         UserInfo *userInfo) override {
+                                         UserInfo *userInfo) override
+            {
                 return 0;
             }
 
@@ -270,17 +317,20 @@ namespace agora {
             int disableVideo() override { return 0; }
 
             int setVideoProfile(VIDEO_PROFILE_TYPE profile,
-                                bool swapWidthAndHeight) override {
+                                bool swapWidthAndHeight) override
+            {
                 return 0;
             }
 
             int setVideoEncoderConfiguration(
-                    const VideoEncoderConfiguration &config) override {
+                const VideoEncoderConfiguration &config) override
+            {
                 return 0;
             }
 
             int setCameraCapturerConfiguration(
-                    const CameraCapturerConfiguration &config) override {
+                const CameraCapturerConfiguration &config) override
+            {
                 return 0;
             }
 
@@ -290,7 +340,8 @@ namespace agora {
 
             int startPreview() override { return 0; }
 
-            int setRemoteUserPriority(uid_t uid, PRIORITY_TYPE userPriority) override {
+            int setRemoteUserPriority(uid_t uid, PRIORITY_TYPE userPriority) override
+            {
                 return 0;
             }
 
@@ -303,7 +354,8 @@ namespace agora {
             int disableAudio() override { return 0; }
 
             int setAudioProfile(AUDIO_PROFILE_TYPE profile,
-                                AUDIO_SCENARIO_TYPE scenario) override {
+                                AUDIO_SCENARIO_TYPE scenario) override
+            {
                 return 0;
             }
 
@@ -313,7 +365,8 @@ namespace agora {
 
             int setDefaultMuteAllRemoteAudioStreams(bool mute) override { return 0; }
 
-            int adjustUserPlaybackSignalVolume(unsigned int uid, int volume) override {
+            int adjustUserPlaybackSignalVolume(unsigned int uid, int volume) override
+            {
                 return 0;
             }
 
@@ -330,43 +383,51 @@ namespace agora {
             int muteRemoteVideoStream(uid_t userId, bool mute) override { return 0; }
 
             int setRemoteVideoStreamType(uid_t userId,
-                                         REMOTE_VIDEO_STREAM_TYPE streamType) override {
+                                         REMOTE_VIDEO_STREAM_TYPE streamType) override
+            {
                 return 0;
             }
 
             int setRemoteDefaultVideoStreamType(
-                    REMOTE_VIDEO_STREAM_TYPE streamType) override {
+                REMOTE_VIDEO_STREAM_TYPE streamType) override
+            {
                 return 0;
             }
 
             int enableAudioVolumeIndication(int interval, int smooth,
-                                            bool report_vad) override {
+                                            bool report_vad) override
+            {
                 return 0;
             }
 
             int startAudioRecording(const char *filePath,
-                                    AUDIO_RECORDING_QUALITY_TYPE quality) override {
+                                    AUDIO_RECORDING_QUALITY_TYPE quality) override
+            {
                 return 0;
             }
 
             int startAudioRecording(const char *filePath, int sampleRate,
-                                    AUDIO_RECORDING_QUALITY_TYPE quality) override {
+                                    AUDIO_RECORDING_QUALITY_TYPE quality) override
+            {
                 return 0;
             }
 
-            int startAudioRecording(const AudioRecordingConfiguration &config) override {
+            int startAudioRecording(const AudioRecordingConfiguration &config) override
+            {
                 return 0;
             }
 
             int stopAudioRecording() override { return 0; }
 
             int startAudioMixing(const char *filePath, bool loopback, bool replace,
-                                 int cycle) override {
+                                 int cycle) override
+            {
                 return 0;
             }
 
             int startAudioMixing(const char *filePath, bool loopback, bool replace,
-                                 int cycle, int startPos) override {
+                                 int cycle, int startPos) override
+            {
                 return 0;
             }
 
@@ -381,14 +442,16 @@ namespace agora {
             int getAudioTrackCount() override { return 0; }
 
             int setAudioMixingDualMonoMode(
-                    agora::media::AUDIO_MIXING_DUAL_MONO_MODE mode) override {
+                agora::media::AUDIO_MIXING_DUAL_MONO_MODE mode) override
+            {
                 return 0;
             }
 
             int resumeAudioMixing() override { return 0; }
 
             int setHighQualityAudioParameters(bool fullband, bool stereo,
-                                              bool fullBitrate) override {
+                                              bool fullBitrate) override
+            {
                 return 0;
             }
 
@@ -418,17 +481,22 @@ namespace agora {
 
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
 
-            int enableFaceDetection(bool enable) override { return 0; }
+            int enableFaceDetection(bool enable) override
+            {
+                return 0;
+            }
 
 #endif
 
             int playEffect(int soundId, const char *filePath, int loopCount, double pitch,
-                           double pan, int gain, bool publish) override {
+                           double pan, int gain, bool publish) override
+            {
                 return 0;
             }
 
             int playEffect(int soundId, const char *filePath, int loopCount, double pitch,
-                           double pan, int gain, bool publish, int startPos) override {
+                           double pan, int gain, bool publish, int startPos) override
+            {
                 return 0;
             }
 
@@ -460,52 +528,62 @@ namespace agora {
 
             int enableSoundPositionIndication(bool enabled) override { return 0; }
 
-            int setRemoteVoicePosition(uid_t uid, double pan, double gain) override {
+            int setRemoteVoicePosition(uid_t uid, double pan, double gain) override
+            {
                 return 0;
             }
 
             int setLocalVoicePitch(double pitch) override { return 0; }
 
             int setLocalVoiceEqualization(AUDIO_EQUALIZATION_BAND_FREQUENCY bandFrequency,
-                                          int bandGain) override {
+                                          int bandGain) override
+            {
                 return 0;
             }
 
-            int setLocalVoiceReverb(AUDIO_REVERB_TYPE reverbKey, int value) override {
+            int setLocalVoiceReverb(AUDIO_REVERB_TYPE reverbKey, int value) override
+            {
                 return 0;
             }
 
-            int setLocalVoiceChanger(VOICE_CHANGER_PRESET voiceChanger) override {
+            int setLocalVoiceChanger(VOICE_CHANGER_PRESET voiceChanger) override
+            {
                 return 0;
             }
 
-            int setLocalVoiceReverbPreset(AUDIO_REVERB_PRESET reverbPreset) override {
+            int setLocalVoiceReverbPreset(AUDIO_REVERB_PRESET reverbPreset) override
+            {
                 return 0;
             }
 
-            int setVoiceBeautifierPreset(VOICE_BEAUTIFIER_PRESET preset) override {
+            int setVoiceBeautifierPreset(VOICE_BEAUTIFIER_PRESET preset) override
+            {
                 return 0;
             }
 
             int setAudioEffectPreset(AUDIO_EFFECT_PRESET preset) override { return 0; }
 
-            int setVoiceConversionPreset(VOICE_CONVERSION_PRESET preset) override {
+            int setVoiceConversionPreset(VOICE_CONVERSION_PRESET preset) override
+            {
                 return 0;
             }
 
             int setAudioEffectParameters(AUDIO_EFFECT_PRESET preset, int param1,
-                                         int param2) override {
+                                         int param2) override
+            {
                 return 0;
             }
 
             int setVoiceBeautifierParameters(VOICE_BEAUTIFIER_PRESET preset, int param1,
-                                             int param2) override {
+                                             int param2) override
+            {
                 return 0;
             }
 
             int setLogFile(const char *filePath) override { return 0; }
 
-            int setLogWriter(agora::commons::ILogWriter *pLogWriter) override {
+            int setLogWriter(agora::commons::ILogWriter *pLogWriter) override
+            {
                 return 0;
             }
 
@@ -520,49 +598,58 @@ namespace agora {
             int setLocalRenderMode(RENDER_MODE_TYPE renderMode) override { return 0; }
 
             int setLocalRenderMode(RENDER_MODE_TYPE renderMode,
-                                   VIDEO_MIRROR_MODE_TYPE mirrorMode) override {
+                                   VIDEO_MIRROR_MODE_TYPE mirrorMode) override
+            {
                 return 0;
             }
 
-            int setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode) override {
+            int setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode) override
+            {
                 return 0;
             }
 
             int setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode,
-                                    VIDEO_MIRROR_MODE_TYPE mirrorMode) override {
+                                    VIDEO_MIRROR_MODE_TYPE mirrorMode) override
+            {
                 return 0;
             }
 
-            int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode) override {
+            int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode) override
+            {
                 return 0;
             }
 
             int enableDualStreamMode(bool enabled) override { return 0; }
 
             int setExternalAudioSource(bool enabled, int sampleRate,
-                                       int channels) override {
+                                       int channels) override
+            {
                 return 0;
             }
 
             int setExternalAudioSink(bool enabled, int sampleRate,
-                                     int channels) override {
+                                     int channels) override
+            {
                 return 0;
             }
 
             int setRecordingAudioFrameParameters(int sampleRate, int channel,
                                                  RAW_AUDIO_FRAME_OP_MODE_TYPE mode,
-                                                 int samplesPerCall) override {
+                                                 int samplesPerCall) override
+            {
                 return 0;
             }
 
             int setPlaybackAudioFrameParameters(int sampleRate, int channel,
                                                 RAW_AUDIO_FRAME_OP_MODE_TYPE mode,
-                                                int samplesPerCall) override {
+                                                int samplesPerCall) override
+            {
                 return 0;
             }
 
             int setMixedAudioFrameParameters(int sampleRate,
-                                             int samplesPerCall) override {
+                                             int samplesPerCall) override
+            {
                 return 0;
             }
 
@@ -574,26 +661,33 @@ namespace agora {
 
             int enableWebSdkInteroperability(bool enabled) override { return 0; }
 
-            int setVideoQualityParameters(bool preferFrameRateOverImageQuality) override {
+            int setVideoQualityParameters(bool preferFrameRateOverImageQuality) override
+            {
                 return 0;
             }
 
-            int setLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS option) override {
+            int setLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS option) override
+            {
                 return 0;
             }
 
             int setRemoteSubscribeFallbackOption(
-                    STREAM_FALLBACK_OPTIONS option) override {
+                STREAM_FALLBACK_OPTIONS option) override
+            {
                 return 0;
             }
 
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
 
-            int switchCamera() override { return 0; }
+            int switchCamera() override
+            {
+                return 0;
+            }
 
             int switchCamera(CAMERA_DIRECTION direction) override { return 0; }
 
-            int setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker) override {
+            int setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker) override
+            {
                 return 0;
             }
 
@@ -608,62 +702,76 @@ namespace agora {
 #endif
 #if (defined(__APPLE__) && TARGET_OS_IOS)
             int setAudioSessionOperationRestriction(
-                AUDIO_SESSION_OPERATION_RESTRICTION restriction) override {
-              return 0;
+                AUDIO_SESSION_OPERATION_RESTRICTION restriction) override
+            {
+                return 0;
             }
 #endif
-#if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)                 \
- || defined(_WIN32)
-            int enableLoopbackRecording(bool enabled, const char *deviceName) override {
-              return 0;
+#if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
+            int enableLoopbackRecording(bool enabled, const char *deviceName) override
+            {
+                return 0;
             }
             IScreenCaptureSourceList *
             getScreenCaptureSources(const SIZE &thumbSize, const SIZE &iconSize,
-                                    const bool includeScreen) override {
-              return nullptr;
+                                    const bool includeScreen) override
+            {
+                return nullptr;
             }
             int startScreenCaptureByDisplayId(
                 unsigned int displayId, const Rectangle &regionRect,
-                const ScreenCaptureParameters &captureParams) override {
-              return 0;
+                const ScreenCaptureParameters &captureParams) override
+            {
+                return 0;
             }
 #if defined(_WIN32)
             int startScreenCaptureByScreenRect(
                 const Rectangle &screenRect, const Rectangle &regionRect,
-                const ScreenCaptureParameters &captureParams) override {
-              return 0;
+                const ScreenCaptureParameters &captureParams) override
+            {
+                return 0;
             }
 #endif
             int startScreenCaptureByWindowId(
                 view_t windowId, const Rectangle &regionRect,
-                const ScreenCaptureParameters &captureParams) override {
-              return 0;
+                const ScreenCaptureParameters &captureParams) override
+            {
+                return 0;
             }
-            int setScreenCaptureContentHint(VideoContentHint contentHint) override {
-              return 0;
+            int setScreenCaptureContentHint(VideoContentHint contentHint) override
+            {
+                return 0;
             }
             int updateScreenCaptureParameters(
-                const ScreenCaptureParameters &captureParams) override {
-              return 0;
+                const ScreenCaptureParameters &captureParams) override
+            {
+                return 0;
             }
-            int updateScreenCaptureRegion(const Rectangle &regionRect) override {
-              return 0;
+            int updateScreenCaptureRegion(const Rectangle &regionRect) override
+            {
+                return 0;
             }
             int stopScreenCapture() override { return 0; }
             int startScreenCapture(WindowIDType windowId, int captureFreq,
-                                   const Rect *rect, int bitrate) override {
-              return 0;
+                                   const Rect *rect, int bitrate) override
+            {
+                return 0;
             }
             int updateScreenCaptureRegion(const Rect *rect) override { return 0; }
 #endif
 
-            int getCallId(agora::util::AString &callId) override { return 0; }
-
-            int rate(const char *callId, int rating, const char *description) override {
+            int getCallId(agora::util::AString &callId) override
+            {
                 return 0;
             }
 
-            int complain(const char *callId, const char *description) override {
+            int rate(const char *callId, int rating, const char *description) override
+            {
+                return 0;
+            }
+
+            int complain(const char *callId, const char *description) override
+            {
                 return 0;
             }
 
@@ -673,7 +781,8 @@ namespace agora {
 
             int disableLastmileTest() override { return 0; }
 
-            int startLastmileProbeTest(const LastmileProbeConfig &config) override {
+            int startLastmileProbeTest(const LastmileProbeConfig &config) override
+            {
                 return 0;
             }
 
@@ -685,65 +794,77 @@ namespace agora {
 
             int setEncryptionMode(const char *encryptionMode) override { return 0; }
 
-            int enableEncryption(bool enabled, const EncryptionConfig &config) override {
+            int enableEncryption(bool enabled, const EncryptionConfig &config) override
+            {
                 return 0;
             }
 
             int registerPacketObserver(IPacketObserver *observer) override { return 0; }
 
-            virtual int createDataStream(int *streamId, bool reliable, bool ordered) override {
+            virtual int createDataStream(int *streamId, bool reliable, bool ordered) override
+            {
                 return 0;
             }
 
-            virtual int createDataStream(int *streamId, DataStreamConfig &config) override {
+            virtual int createDataStream(int *streamId, DataStreamConfig &config) override
+            {
                 return 0;
             }
 
             int sendStreamMessage(int streamId, const char *data,
-                                  size_t length) override {
+                                  size_t length) override
+            {
                 return 0;
             }
 
-            int addPublishStreamUrl(const char *url, bool transcodingEnabled) override {
+            int addPublishStreamUrl(const char *url, bool transcodingEnabled) override
+            {
                 return 0;
             }
 
             int removePublishStreamUrl(const char *url) override { return 0; }
 
-            int setLiveTranscoding(const LiveTranscoding &transcoding) override {
+            int setLiveTranscoding(const LiveTranscoding &transcoding) override
+            {
                 return 0;
             }
 
             int addVideoWatermark(const RtcImage &watermark) override { return 0; }
 
             int addVideoWatermark(const char *watermarkUrl,
-                                  const WatermarkOptions &options) override {
+                                  const WatermarkOptions &options) override
+            {
                 return 0;
             }
 
             int clearVideoWatermarks() override { return 0; }
 
-            int setBeautyEffectOptions(bool enabled, BeautyOptions options) override {
+            int setBeautyEffectOptions(bool enabled, BeautyOptions options) override
+            {
                 return 0;
             }
 
             int enableVirtualBackground(
-                    bool enabled, VirtualBackgroundSource backgroundSource) override {
+                bool enabled, VirtualBackgroundSource backgroundSource) override
+            {
                 return 0;
             }
 
             int addInjectStreamUrl(const char *url,
-                                   const InjectStreamConfig &config) override {
+                                   const InjectStreamConfig &config) override
+            {
                 return 0;
             }
 
             int startChannelMediaRelay(
-                    const ChannelMediaRelayConfiguration &configuration) override {
+                const ChannelMediaRelayConfiguration &configuration) override
+            {
                 return 0;
             }
 
             int updateChannelMediaRelay(
-                    const ChannelMediaRelayConfiguration &configuration) override {
+                const ChannelMediaRelayConfiguration &configuration) override
+            {
                 return 0;
             }
 
@@ -755,31 +876,37 @@ namespace agora {
 
             int removeInjectStreamUrl(const char *url) override { return 0; }
 
-            virtual bool registerEventHandler(IRtcEngineEventHandler *eventHandler) override {
+            virtual bool registerEventHandler(IRtcEngineEventHandler *eventHandler) override
+            {
                 return 0;
             }
 
-            bool unregisterEventHandler(IRtcEngineEventHandler *eventHandler) override {
+            bool unregisterEventHandler(IRtcEngineEventHandler *eventHandler) override
+            {
                 return 0;
             }
 
             int sendCustomReportMessage(const char *id, const char *category,
                                         const char *event, const char *label,
-                                        int value) override {
+                                        int value) override
+            {
                 return 0;
             }
 
-            CONNECTION_STATE_TYPE getConnectionState() override {
+            CONNECTION_STATE_TYPE getConnectionState() override
+            {
                 return CONNECTION_STATE_TYPE::CONNECTION_STATE_CONNECTED;
             }
 
-            int enableRemoteSuperResolution(uid_t userId, bool enable) override {
+            int enableRemoteSuperResolution(uid_t userId, bool enable) override
+            {
                 return 0;
             }
 
             int registerMediaMetadataObserver(
-                    IMetadataObserver *observer,
-                    IMetadataObserver::METADATA_TYPE type) override {
+                IMetadataObserver *observer,
+                IMetadataObserver::METADATA_TYPE type) override
+            {
                 return 0;
             }
 
@@ -791,82 +918,167 @@ namespace agora {
 //  }
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
 
-            int setCameraTorchOn(bool isOn) override { return 0; }
+            int setCameraTorchOn(bool isOn) override
+            {
+                return 0;
+            }
 
             bool isCameraTorchSupported() override { return 0; }
+
+            int setCameraZoomFactor(float factor) override
+            {
+            }
+
+            float getCameraMaxZoomFactor() override
+            {
+                return 0.0;
+            }
+
+            bool isCameraZoomSupported() override
+            {
+                return true;
+            }
+
+            bool isCameraFocusSupported() override
+            {
+                return true;
+            }
+
+            bool isCameraExposurePositionSupported() override
+            {
+                return true;
+            }
+
+            bool isCameraAutoFocusFaceModeSupported() override
+            {
+
+                return true;
+            }
+
+            int setCameraFocusPositionInPreview(float positionX, float positionY) override
+            {
+                return true;
+            }
+
+            int setCameraExposurePosition(float positionXinView, float positionYinView) override
+            {
+                return true;
+            }
+
+            int setCameraAutoFocusFaceModeEnabled(bool enabled) override
+            {
+                return true;
+            }
 
 #endif
 
             int takeSnapshot(const char *channel, uid_t uid,
-                             const char *filePath) override {
+                             const char *filePath) override
+            {
                 return 0;
             }
 
             int enableContentInspect(bool enabled,
-                                     const ContentInspectConfig &config) override {
+                                     const ContentInspectConfig &config) override
+            {
                 return 0;
             }
 
-            int setAVSyncSource(const char *channelId, uid_t uid) override {
+            int setAVSyncSource(const char *channelId, uid_t uid) override
+            {
                 return 0;
             }
 
-            int enableWirelessAccelerate(bool enabled) override {
+            int enableWirelessAccelerate(bool enabled) override
+            {
                 return 0;
             }
 
-            bool setVideoSource(IVideoSource *source) override {
+            bool setVideoSource(IVideoSource *source) override
+            {
                 return false;
             }
 
-            int startRtmpStreamWithoutTranscoding(const char *url) override {
+            int startRtmpStreamWithoutTranscoding(const char *url) override
+            {
                 return 0;
             }
 
             int startRtmpStreamWithTranscoding(const char *url,
-                                               const LiveTranscoding &transcoding) override {
+                                               const LiveTranscoding &transcoding) override
+            {
                 return 0;
             }
 
-            int updateRtmpTranscoding(const LiveTranscoding &transcoding) override {
+            int updateRtmpTranscoding(const LiveTranscoding &transcoding) override
+            {
                 return 0;
             }
 
-            int stopRtmpStream(const char *url) override {
+            int stopRtmpStream(const char *url) override
+            {
                 return 0;
             }
 
-            int setLowlightEnhanceOptions(bool enabled, LowLightEnhanceOptions options) override {
+            int setLowlightEnhanceOptions(bool enabled, LowLightEnhanceOptions options) override
+            {
                 return 0;
             }
 
-            int setVideoDenoiserOptions(bool enabled, VideoDenoiserOptions options) override {
+            int setVideoDenoiserOptions(bool enabled, VideoDenoiserOptions options) override
+            {
                 return 0;
             }
 
-            int setColorEnhanceOptions(bool enabled, ColorEnhanceOptions options) override {
+            int setColorEnhanceOptions(bool enabled, ColorEnhanceOptions options) override
+            {
                 return 0;
             }
 
-            int setLocalVideoRenderer(IVideoSink *videoSink) override {
+            int setLocalVideoRenderer(IVideoSink *videoSink) override
+            {
                 return 0;
             }
 
-            int setRemoteVideoRenderer(uid_t uid, IVideoSink *videoSink) override {
+            int setRemoteVideoRenderer(uid_t uid, IVideoSink *videoSink) override
+            {
                 return 0;
             }
 
-            int setLocalAccessPoint(const LocalAccessPointConfiguration &config) override {
+            int setLocalAccessPoint(const LocalAccessPointConfiguration &config) override
+            {
                 return 0;
             }
+
+            int enableLocalVoicePitchCallback(int interval) override
+            {
+                return 0;
+            }
+
+            int enableSpatialAudio(bool enabled) override
+            {
+                return 0;
+            }
+
+            int setRemoteUserSpatialAudioParams(uid_t uid, const agora::media::SpatialAudioParams &spatial_audio_params) override
+            {
+                return 0;
+            }
+
+#if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
+            int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) override
+            {
+                return 0;
+            }
+#endif
 
         protected:
-            ~FakeRtcEngineInternal() override {
-
+            ~FakeRtcEngineInternal() override
+            {
             }
         };
 
-    }// namespace rtc
-}// namespace agora
+    } // namespace rtc
+} // namespace agora
 
-#endif// FAKE_RTC_ENGINE_INTERNAL_H_
+#endif // FAKE_RTC_ENGINE_INTERNAL_H_

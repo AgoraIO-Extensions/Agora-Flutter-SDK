@@ -17,7 +17,7 @@ IrisRtcChannelIntegrationTestDelegate::
 void IrisRtcChannelIntegrationTestDelegate::Initialize(
     agora::rtc::IRtcEngine *engine)
 {
-  
+
   delegate_->Initialize(engine);
 }
 
@@ -201,6 +201,20 @@ int IrisRtcEngineIntegrationTestDelegate::CallApi(
   if (apiEngineRecorder_)
   {
     ret = apiEngineRecorder_->CallApi(api_type, params, buffer, length, result);
+  }
+  return ret;
+}
+
+int IrisRtcEngineIntegrationTestDelegate::CallApiMaxResult(ApiTypeEngine api_type, const char *params,
+                                                           char result[64 * 1024])
+{
+  int ret = 0;
+  ret = delegate_->CallApiMaxResult(api_type, params, result);
+  if (ret < 0)
+    return ret;
+  if (apiEngineRecorder_)
+  {
+    ret = apiEngineRecorder_->CallApi(api_type, params, result);
   }
   return ret;
 }

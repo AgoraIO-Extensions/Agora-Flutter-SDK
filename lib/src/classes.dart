@@ -48,16 +48,16 @@ class VideoDimensions {
   ///
   ///
   @JsonKey(includeIfNull: false)
-  int? width;
+  final int? width;
 
   ///
   /// The height (pixels) of the video.
   ///
   @JsonKey(includeIfNull: false)
-  int? height;
+  final int? height;
 
   /// Constructs the [VideoDimensions].
-  VideoDimensions({
+  const VideoDimensions({
     this.width,
     this.height,
   });
