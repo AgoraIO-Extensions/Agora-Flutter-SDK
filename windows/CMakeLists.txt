@@ -6,23 +6,23 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_NAME "iris_0.0.0_RTC_Windows_20220506_0256")
-set(IRIS_SDK_VERSION "v3_6_2_fix.1")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_3.7.0.3_RTC_Windows_Video_20220628_1047")
+set(IRIS_SDK_VERSION "v3_7_0_3")
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(IRIS_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/iris")
 
-set(IRIS_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/x64")
+set(IRIS_SDK_PATH "${SDK_ROOT}/x64")
 set(IRIS_SDK_BIN_PATH "${IRIS_SDK_PATH}/Release")
-set(RTC_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/RTC")
+set(RTC_SDK_PATH "${SDK_ROOT}/RTC")
 set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/Agora_Native_SDK_for_Windows_FULL/libs/x86_64")
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
     # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
     include(DownloadSDK)
-    DownloadSDK("Windows" "${IRIS_SDK_VERSION}" "${IRIS_DOWNLOAD_PATH}")   
+    DOWNLOAD_SDK_BY_URL("https://download.agora.io/sdk/release/${IRIS_SDK_DOWNLOAD_NAME}.zip" "${IRIS_DOWNLOAD_PATH}")
 endif()
 
 add_library(${PLUGIN_NAME} SHARED
