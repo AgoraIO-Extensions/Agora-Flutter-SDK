@@ -112,10 +112,27 @@ class _State extends State<ScreenSharing> {
 
   _startScreenShare() async {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      await _engine.startScreenCaptureMobile(const ScreenCaptureParameters2(
+      const ScreenAudioParameters parametersAudioParams = ScreenAudioParameters(
+        100,
+      );
+      const VideoDimensions videoParamsDimensions = VideoDimensions(
+        width: 1280,
+        height: 720,
+      );
+      const ScreenVideoParameters parametersVideoParams = ScreenVideoParameters(
+        dimensions: videoParamsDimensions,
+        frameRate: 15,
+        bitrate: 1000,
+        contentHint: VideoContentHint.Motion,
+      );
+      const ScreenCaptureParameters2 parameters = ScreenCaptureParameters2(
         captureAudio: true,
+        audioParams: parametersAudioParams,
         captureVideo: true,
-      ));
+        videoParams: parametersVideoParams,
+      );
+
+      await _engine.startScreenCaptureMobile(parameters);
     } else {
       var windowId = 0;
       var random = Random();
