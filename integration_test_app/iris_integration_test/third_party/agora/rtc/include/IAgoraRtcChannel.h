@@ -1825,7 +1825,13 @@ class IChannel {
    * - < 0: Failure.
    *   - `-157 (ERR_MODULE_NOT_FOUND)`: The dynamic library for super resolution is not integrated.
    */
-  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) = 0;
+  virtual int enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId) = 0;
+
+  /** enableRemoteSuperResolution.
+   * @deprecated
+   * This Interface is deprecated and replaced by the enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId)
+   */
+  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) AGORA_DEPRECATED_ATTRIBUTE = 0;
 };
 /** @since v3.0.0
 

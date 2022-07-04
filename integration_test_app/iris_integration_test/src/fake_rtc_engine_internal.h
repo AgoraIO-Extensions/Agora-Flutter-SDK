@@ -183,6 +183,11 @@ namespace agora
                 return 0;
             }
 
+            int enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId) override
+            {
+                return 0;
+            }
+
             int setAVSyncSource(const char *channelId, uid_t uid) override
             {
                 return 0;
@@ -903,6 +908,11 @@ namespace agora
                 return 0;
             }
 
+            int enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId) override
+            {
+                return 0;
+            }
+
             int registerMediaMetadataObserver(
                 IMetadataObserver *observer,
                 IMetadataObserver::METADATA_TYPE type) override
@@ -1036,6 +1046,11 @@ namespace agora
             }
 
             int setLocalVideoRenderer(IVideoSink *videoSink) override
+            {
+                return 0;
+            }
+
+            int setCameraCaptureRotation(const int rotation) override
             {
                 return 0;
             }

@@ -34,6 +34,7 @@ dependencies:
   ffi: ^1.1.2
   dart_style: ^2.2.1
   path_provider: ^2.0.8
+  permission_handler: ^8.3.0
   agora_rtc_engine:
     path: ../
 

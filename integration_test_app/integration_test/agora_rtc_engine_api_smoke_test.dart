@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

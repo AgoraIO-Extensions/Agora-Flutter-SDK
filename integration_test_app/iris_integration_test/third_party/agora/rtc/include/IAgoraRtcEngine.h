@@ -547,6 +547,14 @@ enum RENDER_MODE_TYPE {
   RENDER_MODE_FILL = 4,
 };
 
+/** Super Resolution modes. */
+enum SR_MODE {
+  /** 0: manual select uid to do super resolution */
+  SR_MODE_MANUAL = 0,
+  /** 1: auto select.*/
+  SR_MODE_AUTO,
+};
+
 /** Video mirror modes. */
 enum VIDEO_MIRROR_MODE_TYPE {
   /** 0: (Default) The SDK enables the mirror mode.
@@ -849,6 +857,9 @@ enum SUPER_RESOLUTION_STATE_REASON {
   /** 3: The device does not support using super resolution.
    */
   SR_STATE_REASON_DEVICE_NOT_SUPPORTED = 3,
+  /** 4: Insufficient device performance，It is recommended to turn off super resolution.
+   */
+  SR_STATE_REASON_INSUFFICIENT_PERFORMANCE = 4,
 };
 
 /**
@@ -873,6 +884,10 @@ enum VIRTUAL_BACKGROUND_SOURCE_STATE_REASON {
    * 3: The device does not support using the virtual background.
    */
   VIRTUAL_BACKGROUND_SOURCE_STATE_REASON_DEVICE_NOT_SUPPORTED = 3,
+  /**
+   * 4: Insufficient device performance，It is recommended to turn off virtual background.
+   */
+  VIRTUAL_BACKGROUND_SOURCE_STATE_REASON_INSUFFICIENT_PERFORMANCE = 4,
 };
 /// @cond nodoc
 enum CONTENT_INSPECT_RESULT {
@@ -11052,7 +11067,14 @@ class IRtcEngine {
    * - < 0: Failure.
    *   - `-157 (ERR_MODULE_NOT_FOUND)`: The dynamic library for super resolution is not integrated.
    */
-  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) = 0;
+  virtual int enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId) = 0;
+
+  /** enableRemoteSuperResolution.
+   * @deprecated
+   * This Interface is deprecated and replaced by the enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId)
+   */
+  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) AGORA_DEPRECATED_ATTRIBUTE = 0;
+
   /** This method enables you to add synchronized metadata in the video stream for more diversified interactive live streaming, such as sending shopping links, digital coupons, and online quizzes.
 
   @note Call this method before the joinChannel method.
@@ -11102,6 +11124,20 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setLocalVideoRenderer(IVideoSink* videoSink) = 0;
+  /**
+   * set camera capture rotate
+   *
+   * @since v3.7.0.2
+   *
+   * @param rotation counterclockwise rotation angle.
+   * rotation=1 angle=90, rotation=2 angle=180, rotation=3 angle=270, 0:default angle
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraCaptureRotation(const int rotation) = 0;
+
   /**
    * Customizes the remote video renderer. (for Windows only)
    *
@@ -11576,6 +11612,7 @@ class AGORA_CPP_API RtcEngineParameters {
   int setRemoteRenderMode(uid_t uid, RENDER_MODE_TYPE renderMode);
   int setCameraCapturerConfiguration(const CameraCapturerConfiguration& config);
   int enableDualStreamMode(bool enabled);
+  int setCameraCaptureRotation(const int rotation);
   int setRemoteVideoStreamType(uid_t uid, REMOTE_VIDEO_STREAM_TYPE streamType);
   int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType);
   int setRecordingAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall);

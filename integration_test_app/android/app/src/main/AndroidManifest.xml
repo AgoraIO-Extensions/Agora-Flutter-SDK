@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.agora.integration_test_app.integration_test_app">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
    <application
         android:label="integration_test_app"
         android:icon="@mipmap/ic_launcher">
