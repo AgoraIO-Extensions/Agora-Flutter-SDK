@@ -103,7 +103,14 @@ class _State extends State<ScreenSharing> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    await _engine.joinChannel(config.token, _controller.text, null, config.uid);
+    await _engine.joinChannel(
+        config.token,
+        _controller.text,
+        null,
+        config.uid,
+        ChannelMediaOptions(
+          publishLocalAudio: true,
+        ));
   }
 
   _leaveChannel() async {
@@ -134,15 +141,31 @@ class _State extends State<ScreenSharing> {
 
       await _engine.startScreenCaptureMobile(parameters);
     } else {
-      var windowId = 0;
-      var random = Random();
-      final windows = _engine.enumerateWindows();
-      if (windows.isNotEmpty) {
-        final index = random.nextInt(windows.length - 1);
-        logSink.log('ScreenSharing window with index $index');
-        windowId = windows[index].id;
+      if (Platform.isMacOS) {
+        var displayId = 0;
+        var random = Random();
+        final displays = _engine.enumerateDisplays();
+        if (displays.isNotEmpty) {
+          final index = random.nextInt(displays.length - 1);
+          logSink.log('ScreenSharing window with index $index');
+          final display =  displays[index];
+          displayId = display.id;
+          await _engine.startScreenCaptureByDisplayId(displayId, );
+          await _engine.enableLoopbackRecording(true, deviceName: 'External Headphones');
+        }
+      } else if (Platform.isWindows) {
+        var windowId = 0;
+        var random = Random();
+        final windows = _engine.enumerateWindows();
+        if (windows.isNotEmpty) {
+          final index = random.nextInt(windows.length - 1);
+          logSink.log('ScreenSharing window with index $index');
+          windowId = windows[index].id;
+          await _engine.startScreenCaptureByWindowId(windowId);
+          await _engine.enableLoopbackRecording(true);
+        }
       }
-      await _engine.startScreenCaptureByWindowId(windowId);
+      
     }
 
     setState(() {
@@ -151,22 +174,10 @@ class _State extends State<ScreenSharing> {
   }
 
   _stopScreenShare() async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      await _engine.stopScreenCapture();
-      setState(() {
-        screenSharing = false;
-      });
-    } else {
-      final helper = await _engine.getScreenShareHelper();
-      await helper.stopScreenCapture();
-      await helper.destroy().then((value) {
-        setState(() {
-          screenSharing = false;
-        });
-      }).catchError((err) {
-        logSink.log('_stopScreenShare $err');
-      });
-    }
+    await _engine.stopScreenCapture();
+    setState(() {
+      screenSharing = false;
+    });
   }
 
   @override
