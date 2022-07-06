@@ -38,4 +38,62 @@ void main() {
     },
     skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
   );
+
+  testWidgets(
+    'followSystemPlaybackDevice',
+        (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
+      final deviceManager = rtcEngine.deviceManager;
+
+      try {
+        const bool enable = true;
+        await deviceManager.followSystemPlaybackDevice(
+          enable,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-4', isTrue);
+      }
+
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
+    'followSystemRecordingDevice',
+        (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.create(engineAppId);
+      final deviceManager = rtcEngine.deviceManager;
+
+      try {
+        const bool enable = true;
+        await deviceManager.followSystemRecordingDevice(
+          enable,
+        );
+      } catch (e) {
+        if (e is! PlatformException) {
+          rethrow;
+        }
+        expect(e.code != '-4', isTrue);
+      }
+
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
 }

@@ -467,7 +467,7 @@ class RtcDeviceManagerImpl implements RtcDeviceManager {
 
   @override
   Future<void> followSystemPlaybackDevice(bool enable) {
-    return _invokeVideoMethod('callApi', {
+    return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMFollowSystemPlaybackDevice.index,
       'params': jsonEncode({
@@ -478,7 +478,7 @@ class RtcDeviceManagerImpl implements RtcDeviceManager {
 
   @override
   Future<void> followSystemRecordingDevice(bool enable) {
-    return _invokeVideoMethod('callApi', {
+    return _invokeAudioMethod('callApi', {
       'apiType':
           _ApiTypeAudioDeviceManager.kADMFollowSystemRecordingDevice.index,
       'params': jsonEncode({
