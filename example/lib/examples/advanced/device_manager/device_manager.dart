@@ -162,7 +162,37 @@ class _State extends State<DeviceManager> {
                     onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
-                )
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _engine.deviceManager.followSystemPlaybackDevice(true);
+                      },
+                      child: const Text('followSystemPlaybackDevice'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _engine.deviceManager.followSystemRecordingDevice(true);
+                      },
+                      child: const Text('followSystemRecordingDevice'),
+                    ),
+                  ),
+                ),
               ],
             ),
             _devicesDropDown(),

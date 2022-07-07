@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 
@@ -25,7 +26,13 @@ class _State extends State<ScreenSharing> {
   late final RtcEngine _engine;
   String channelId = config.channelId;
   bool isJoined = false, screenSharing = false;
+  int _selectedDisplayId = -1;
+  int _selectedWindowId = -1;
+  List<MediaDeviceInfo> recordings = [];
+  String _selectedLoopBackRecordingDeviceName = "";
   List<int> remoteUid = [];
+  List<Display> displays = [];
+  List<Window> windows = [];
   late final TextEditingController _controller;
 
   @override
@@ -50,6 +57,8 @@ class _State extends State<ScreenSharing> {
     await _engine.startPreview();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
+    await _enumerateDisplayAndWindow();
+    await _enumerateRecording();
   }
 
   _addListeners() {
@@ -117,6 +126,107 @@ class _State extends State<ScreenSharing> {
     await _engine.leaveChannel();
   }
 
+  Future<void> _enumerateDisplayAndWindow() async {
+    if (!(Platform.isWindows || Platform.isMacOS)) {
+      return;
+    }
+    final windows = await _engine.enumerateWindows();
+    final displays = await _engine.enumerateDisplays();
+    setState(() {
+      this.windows = windows;
+      this.displays = displays;
+    });
+  }
+
+  Widget _displayDropDown() {
+    if (displays.isEmpty || !(Platform.isWindows || Platform.isMacOS))
+      return Container();
+    final dropDownMenus = <DropdownMenuItem<int>>[];
+    dropDownMenus.add(const DropdownMenuItem(
+      child: Text('please select display id'),
+      value: -1,
+    ));
+    for (var v in displays) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('Display:${v.id}'),
+        value: v.id,
+      ));
+    }
+    return DropdownButton<int>(
+      items: dropDownMenus,
+      value: _selectedDisplayId,
+      onChanged: (v) {
+        setState(() {
+          _selectedDisplayId = v!;
+          _selectedWindowId = -1;
+        });
+      },
+    );
+  }
+
+  Widget _windowDropDown() {
+    if (windows.isEmpty || !(Platform.isWindows || Platform.isMacOS))
+      return Container();
+    final dropDownMenus = <DropdownMenuItem<int>>[];
+    dropDownMenus.add(const DropdownMenuItem(
+      child: Text('please select window id'),
+      value: -1,
+    ));
+    for (var v in windows) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('Window:${v.id}'),
+        value: v.id,
+      ));
+    }
+    return DropdownButton<int>(
+      items: dropDownMenus,
+      value: _selectedWindowId,
+      onChanged: (v) {
+        setState(() {
+          _selectedWindowId = v!;
+          _selectedDisplayId = -1;
+        });
+      },
+    );
+  }
+
+  Future<void> _enumerateRecording() async {
+    if (!(Platform.isWindows || Platform.isMacOS)) {
+      return;
+    }
+    final recordings =
+        await _engine.deviceManager.enumerateAudioRecordingDevices();
+
+    setState(() {
+      this.recordings = recordings;
+    });
+  }
+
+  Widget _loopBackRecordingDropDown() {
+    if (recordings.isEmpty || !(Platform.isWindows || Platform.isMacOS))
+      return Container();
+    final dropDownMenus = <DropdownMenuItem<String>>[];
+    dropDownMenus.add(const DropdownMenuItem(
+      child: Text('select loopBackRecording(Optional)'),
+      value: "",
+    ));
+    for (var v in recordings) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('Window:${v.deviceName}'),
+        value: v.deviceName,
+      ));
+    }
+    return DropdownButton<String>(
+      items: dropDownMenus,
+      value: _selectedLoopBackRecordingDeviceName,
+      onChanged: (v) {
+        setState(() {
+          _selectedLoopBackRecordingDeviceName = v!;
+        });
+      },
+    );
+  }
+
   _startScreenShare() async {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       const ScreenAudioParameters parametersAudioParams = ScreenAudioParameters(
@@ -140,32 +250,23 @@ class _State extends State<ScreenSharing> {
       );
 
       await _engine.startScreenCaptureMobile(parameters);
-    } else {
-      if (Platform.isMacOS) {
-        var displayId = 0;
-        var random = Random();
-        final displays = _engine.enumerateDisplays();
-        if (displays.isNotEmpty) {
-          final index = random.nextInt(displays.length - 1);
-          logSink.log('ScreenSharing window with index $index');
-          final display =  displays[index];
-          displayId = display.id;
-          await _engine.startScreenCaptureByDisplayId(displayId, );
-          await _engine.enableLoopbackRecording(true, deviceName: 'External Headphones');
-        }
-      } else if (Platform.isWindows) {
-        var windowId = 0;
-        var random = Random();
-        final windows = _engine.enumerateWindows();
-        if (windows.isNotEmpty) {
-          final index = random.nextInt(windows.length - 1);
-          logSink.log('ScreenSharing window with index $index');
-          windowId = windows[index].id;
-          await _engine.startScreenCaptureByWindowId(windowId);
-          await _engine.enableLoopbackRecording(true);
-        }
+    } else if (Platform.isWindows || Platform.isMacOS) {
+      if (_selectedDisplayId != -1) {
+        await _engine.startScreenCaptureByDisplayId(
+          _selectedDisplayId,
+        );
+        await _engine.enableAudio();
+        await _engine.enableLoopbackRecording(true,
+            deviceName: _selectedLoopBackRecordingDeviceName);
+      } else if (_selectedWindowId != -1) {
+        await _engine.startScreenCaptureByWindowId(_selectedWindowId);
+        await _engine.enableAudio();
+        var deviceId = await _engine.deviceManager.getAudioRecordingDevice();
+        await _engine.enableLoopbackRecording(true,
+            deviceName: _selectedLoopBackRecordingDeviceName);
+      } else {
+        return;
       }
-      
     }
 
     setState(() {
@@ -177,6 +278,8 @@ class _State extends State<ScreenSharing> {
     await _engine.stopScreenCapture();
     setState(() {
       screenSharing = false;
+      _selectedDisplayId = -1;
+      _selectedWindowId = -1;
     });
   }
 
@@ -206,6 +309,9 @@ class _State extends State<ScreenSharing> {
                 )
               ],
             ),
+            _displayDropDown(),
+            _windowDropDown(),
+            _loopBackRecordingDropDown(),
             _renderVideo(),
           ],
         ),
@@ -216,7 +322,7 @@ class _State extends State<ScreenSharing> {
             children: [
               ElevatedButton(
                 onPressed: screenSharing ? _stopScreenShare : _startScreenShare,
-                child: Text('${screenSharing ? 'Stop' : 'Start'} screen share'),
+                child: Text('${screenSharing ? 'Stop' : 'Start'} share'),
               ),
             ],
           ),
