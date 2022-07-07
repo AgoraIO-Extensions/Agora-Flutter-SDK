@@ -35,7 +35,8 @@ class MediaRecorderObserver {
 
 ///
 /// Used for recording audio and video on the client.
-/// MediaRecorder can record the following: The audio captured by the local microphone and encoded in AAC format.
+/// MediaRecorder can record the following:
+///  The audio captured by the local microphone and encoded in AAC format.
 ///  The video captured by the local camera and encoded by the SDK.
 ///
 abstract class MediaRecorder {
@@ -57,7 +58,8 @@ abstract class MediaRecorder {
   ///
   /// Starts recording the local audio and video.
   /// After successfully getting the object, you can all this method to enable the recoridng of the local audio and video.
-  ///  This method can record the following content: The audio captured by the local microphone and encoded in AAC format.
+  ///  This method can record the following content:
+  ///  The audio captured by the local microphone and encoded in AAC format.
   ///  The video captured by the local camera and encoded by the SDK. The SDK can generate a recording file only when it detects the recordable audio and video streams; when there are no audio
   ///  and video streams to be recorded or the audio and video streams are interrupted for more than five seconds, the SDK stops
   ///  recording and triggers the onRecorderStateChanged (Error, NoStream) callback.
@@ -66,10 +68,13 @@ abstract class MediaRecorder {
   /// Param [config] The recording configuration. See MediaRecorderConfiguration .
   ///
   /// **return** 0(ERR_OK): Success.
-  ///  < 0: Failure. -2(ERR_INVALID_ARGUMANT): The parameter is invalid. Ensure the following: The specified path of the recording file exists and is writable.
+  ///  < 0: Failure.
+  ///  -2(ERR_INVALID_ARGUMANT): The parameter is invalid. Ensure the following:
+  ///  The specified path of the recording file exists and is writable.
   ///  The specified format of the recording file is supported.
-  ///  The maximum recording duration is correctly set. -4(ERR_NOT_SUPPORTED): RtcEngine does not support the request due to one of the following reasons: The recording is ongoing.
-  ///  The recording stops because an error occurs. -7(ERR_NOT_INITIALIZED): This method is called before the initialization of RtcEngine . Ensure that you have called getMediaRecorder before calling this method.
+  ///  The maximum recording duration is correctly set. -4(ERR_NOT_SUPPORTED): RtcEngine does not support the request due to one of the following reasons:
+  ///  The recording is ongoing.
+  ///  The recording stops because an error occurs. -7(ERR_NOT_INITIALIZED): This method is called before the initialization of RtcEngine .
   ///
   Future<void> startRecording(MediaRecorderConfiguration config);
 
@@ -79,7 +84,8 @@ abstract class MediaRecorder {
   ///  otherwise, the generated recording files may not be playable.
   ///
   /// **return** 0(ERR_OK): Success.
-  ///  < 0: Failure: -7(ERR_NOT_INITIALIZED): This method is called before the initialization of RtcEngine . Ensure that ou have called getMediaRecorder before calling this method.
+  ///  < 0: Failure:
+  ///  -7(ERR_NOT_INITIALIZED): This method is called before the initialization of RtcEngine .
   ///
   Future<void> stopRecording();
 

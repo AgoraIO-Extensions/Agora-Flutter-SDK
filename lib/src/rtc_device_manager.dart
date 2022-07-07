@@ -68,10 +68,8 @@ abstract class RtcDeviceManager {
   /// Mutes the audio playback device.
   ///
   ///
-  /// Param [mute] Whether to mute the audio playback device:
-  ///  true: Mute the audio playback device.
+  /// Param [mute] Whether to mute the audio playback device: true: Mute the audio playback device.
   ///  false: Unmute the audio playback device.
-  ///
   ///
   Future<void> setAudioPlaybackDeviceMute(bool mute);
 
@@ -80,7 +78,7 @@ abstract class RtcDeviceManager {
   ///
   ///
   /// **return** true: The audio playback device is muted.
-  /// false: The audio playback device is unmuted.
+  ///  false: The audio playback device is unmuted.
   ///
   Future<bool?> getAudioPlaybackDeviceMute();
 
@@ -156,10 +154,8 @@ abstract class RtcDeviceManager {
   /// Sets the mute status of the audio capture device.
   ///
   ///
-  /// Param [mute] Whether to mute the audio capture device:
-  ///  true: Mute the audio capture device.
+  /// Param [mute] Whether to mute the audio capture device: true: Mute the audio capture device.
   ///  false: Unmute the audio capture device.
-  ///
   ///
   Future<void> setAudioRecordingDeviceMute(bool mute);
 
@@ -235,8 +231,7 @@ abstract class RtcDeviceManager {
   /// Sets the audio playback device used by the SDK to follow the system default audio playback device.
   ///
   ///
-  /// Param [enable] Whether to follow the system default audio playback device:
-  ///  true: Follow. The SDK immediately switches the audio playback device when the system default audio playback device changes.
+  /// Param [enable] Whether to follow the system default audio playback device: true: Follow. The SDK immediately switches the audio playback device when the system default audio playback device changes.
   ///  false: Do not follow. The SDK switches the audio playback device to the system default audio playback device only when the currently used audio playback device is disconnected.
   ///
   ///

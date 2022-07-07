@@ -89,20 +89,21 @@ class RtcEngineEventHandler {
   UserInfoCallback? userInfoUpdated;
 
   ///
-  /// Occurs when the user role switches in the interactive live streaming.
-  /// The SDK triggers this callback when the local user switches the user role after joining the channel.
+  /// Occurs when the user role switches successfully in the interactive live streaming.
+  /// In the LIVE_BROADCASTING channel profile, when the local user successfully calls setClientRole to switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers this callback to report the user role before and after the switch.
   ///
   /// Param [oldRole] Role that the user switches from: ClientRole .
   ///
+  ///
   /// Param [newRole] Role that the user switches to: ClientRole .
+  ///
   ///
   ClientRoleCallback? clientRoleChanged;
 
   ///
   /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) joins the channel.
   /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.
-  ///  In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17. The SDK triggers this callback under one of the following circumstances:
-  ///  A remote user/host joins the channel by calling the joinChannel method.
+  ///  In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17. The SDK triggers this callback under one of the following circumstances: A remote user/host joins the channel by calling the joinChannel method.
   ///  A remote user switches the user role to the host after joining the channel.
   ///  A remote user/host rejoins the channel after a network interruption.
   ///
@@ -115,13 +116,13 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) leaves the channel.
-  /// There are two reasons for users to become offline:
-  ///  Leave the channel: When a user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
+  /// There are two reasons for users to become offline: Leave the channel: When a user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
   ///  Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the communication profile, and more for the live broadcast profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections. It's recommended to use the Agora RTM SDK for reliable offline detection.
   ///
   /// Param [uid] The ID of the user who leaves the channel or goes offline.
   ///
   /// Param [reason] Reasons why the user goes offline: UserOfflineReason .
+  ///
   ///
   UserOfflineCallback? userOffline;
 
@@ -134,6 +135,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [reason] The reason for a connection state change.
   ///
+  ///
   ConnectionStateCallback? connectionStateChanged;
 
   ///
@@ -141,6 +143,7 @@ class RtcEngineEventHandler {
   /// This callback occurs when the connection state of the local user changes. You can get the connection state and reason for the state change in this callback. When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.
   ///
   /// Param [type] The type of the local network connection.
+  ///
   ///
   ///
   NetworkTypeCallback? networkTypeChanged;
@@ -175,14 +178,12 @@ class RtcEngineEventHandler {
   ///
   /// Reports the volume information of users.
   /// By default, this callback is disabled. You can enable it by calling enableAudioVolumeIndication . Once this callback is enabled and users send streams in the channel, the SDK triggers the enableAudioVolumeIndication callback at the time interval set in audioVolumeIndication. The SDK triggers two independent audioVolumeIndication callbacks simultaneously, which separately report the volume information of the local user who sends a stream and the remote users (up to three) whose instantaneous volumes are the highest.
-  ///  After you enable this callback, calling muteLocalAudioStream affects the SDK's behavior as follows:
-  ///  If the local user stops publishing the audio stream, the SDK stops triggering the local user's callback.
+  ///  After you enable this callback, calling muteLocalAudioStream affects the SDK's behavior as follows: If the local user stops publishing the audio stream, the SDK stops triggering the local user's callback.
   ///  20 seconds after a remote user whose volume is one of the three highest stops publishing the audio stream, the callback excludes this user's information; 20 seconds after all remote users stop publishing audio streams, the SDK stops triggering the callback for remote users.
   ///
   /// Param [speakers] The volume information of the users, see AudioVolumeInfo . An empty speakers array in the callback indicates that no remote user is in the channel or sending a stream at the moment.
   ///
-  /// Param [totalVolume] The volume of the speaker. The value range is [0,255].
-  ///  In the callback for the local user, totalVolume is the volume of the local user who sends a stream.
+  /// Param [totalVolume] The volume of the speaker. The value range is [0,255]. In the callback for the local user, totalVolume is the volume of the local user who sends a stream.
   ///  In the callback for remote users, totalVolume is the sum of the volume of all remote users (up to three) whose instantaneous volumes are the highest. If the user calls startAudioMixing , then totalVolume is the volume after audio mixing.
   ///
   AudioVolumeCallback? audioVolumeIndication;
@@ -190,8 +191,7 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the most active speaker is detected.
   /// After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user, who is detected as the loudest for the most times, is the most active user.
-  ///  When the number of users exceeds two (included) and an active speaker is detected, the SDK triggers this callback and reports the uid of the most active speaker.
-  ///  If the most active speaker remains the same, the SDK triggers the activeSpeaker callback only once.
+  ///  When the number of users exceeds two (included) and an active speaker is detected, the SDK triggers this callback and reports the uid of the most active speaker. If the most active speaker remains the same, the SDK triggers the activeSpeaker callback only once.
   ///  If the most active speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active speaker.
   ///
   /// Param [uid] The user ID of the most active speaker.
@@ -230,8 +230,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The ID of the remote user.
   ///
-  /// Param [muted] Whether the remote user's video stream playback is paused/resumed:
-  ///  true: Paused.
+  /// Param [muted] Whether the remote user's video stream playback is paused/resumed: true: Paused.
   ///  false: Resumed.
   ///
   ///
@@ -259,11 +258,13 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The ID of the remote user whose video state changes.
   ///
-  /// Param [state]  The state of the remote video, see
+  /// Param [state] The state of the remote video, see
   ///  VideoRemoteState .
   ///
-  /// Param [reason]  The reason for the remote video state
+  ///
+  /// Param [reason] The reason for the remote video state
   ///  change, see VideoRemoteStateReason .
+  ///
   ///
   /// Param [elapsed] Time elapsed (ms) from the local user calling the joinChannel method until the SDK triggers this
   ///  callback.
@@ -273,8 +274,7 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the local video stream state changes.
   /// When the state of the local video stream changes (including the state of the video capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
-  ///  The SDK triggers the localVideoStateChanged callback with the state code of Failed and error code of CaptureFailure in the following situations:
-  ///  The app switches to the background, and the system gets the camera resource.
+  ///  The SDK triggers the localVideoStateChanged callback with the state code of Failed and error code of CaptureFailure in the following situations: The app switches to the background, and the system gets the camera resource.
   ///  The camera starts normally, but does not output video for four consecutive seconds. When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers the localVideoStateChanged callback with the state code of Capturing and error code of CaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
   ///  For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
   ///
@@ -336,17 +336,19 @@ class RtcEngineEventHandler {
   ///  false: The published stream switches
   ///  back to the video after the network conditions improve.
   ///
+  ///
   FallbackCallback? localPublishFallbackToAudioOnly;
 
   ///
   /// Occurs when the remote media stream falls back to the audio-only stream due to poor network conditions or switches back to the video stream after the network conditions improve.
-  /// If you call setRemoteSubscribeFallbackOption and set option as AudioOnly, the SDK triggers this callback when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the downlink network condition improves.
+  /// If you call setRemoteSubscribeFallbackOption and set option as AudioOnly, the SDK triggers this callback when the remote media stream falls back to audio-only mode due to poor downlink conditions, or when the remote media stream switches back to the video after the downlink network condition improves.
   ///  Once the remote media stream switches to the low-quality stream due to poor network conditions, you can monitor the stream switch between a high-quality and low-quality stream in the remoteVideoStats callback.
   ///
   /// Param [uid] The user ID of the remote user.
   ///
   /// Param [isFallbackOrRecover] true: The remotely subscribed media stream falls back to audio-only due to poor network conditions.
   ///  false: The remotely subscribed media stream switches back to the video stream after the network conditions improved.
+  ///
   ///
   FallbackWithUidCallback? remoteSubscribeFallbackToAudioOnly;
 
@@ -379,20 +381,14 @@ class RtcEngineEventHandler {
 
   ///
   /// Reports the face detection result of the local user.
-  /// Once you enable face detection by calling enableFaceDetection (true), you can get the following information on the local user in real-time:
-  ///  The width and height of the local video.
+  /// Once you enable face detection by calling enableFaceDetection (true), you can get the following information on the local user in real-time: The width and height of the local video.
   ///  The position of the human face in the local video.
-  ///  The distance between the human face and the screen. The distance between the human face and the screen is based on the fitting calculation of the local video size and the position of the human face captured by the camera. If the SDK does not detect a face, it reduces the frequency of this callback to reduce power consumption on the local device.
+  ///  The distance between the human face and the screen. The distance between the human face and the screen is based on the fitting calculation of the local video size and the position of the human face captured by the camera. This callback is for Android and iOS only.
+  ///  When it is detected that the face in front of the camera disappears, the callback will be triggered immediately. In the state of no face, the trigger frequency of the callback will be reduced to save power consumption on the local device.
   ///  The SDK stops triggering this callback when a human face is in close proximity to the screen.
+  ///  On Android, the value of distance reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.
   ///
-  /// Param [imageWidth] The width (px) of the video image captured by the local camera.
-  ///
-  /// Param [imageHeight] The height (px) of the video image captured by the local camera.
-  ///
-  /// Param [faces] For the information of the detected face, see FacePositionInfo for details. If several faces are detected,
-  ///  this callback reports several FacePositionInfo
-  ///  arrays. The length of the array can be 0, which means that no human face is
-  ///  detected in front of the camera.
+  /// Param [faces] For the information of the detected face, see FacePositionInfo for details. If several faces are detected, this callback reports several FacePositionInfo arrays. The length of the array can be 0, which means that no human face is detected in front of the camera.
   ///
   FacePositionCallback? facePositionChanged;
 
@@ -421,6 +417,7 @@ class RtcEngineEventHandler {
   ///  Down (6): The network is down, and users cannot communicate at all.
   ///  See
   ///  NetworkQuality .
+  ///
   ///
   NetworkQualityCallback? lastmileQuality;
 
@@ -539,6 +536,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [url] The URL address where the state of the media push changes.
   ///
+  ///
   /// Param [state] The current state of the media push. See RtmpStreamingState . When the streaming state is Failure (4), you can view the error information in the errorCode parameter.
   ///
   /// Param [errCode] The detailed error information for the media push. See RtmpStreamingErrorCode .
@@ -610,10 +608,12 @@ class RtcEngineEventHandler {
   /// Occurs when the state of the media stream relay changes.
   /// The SDK returns the state of the current media relay with any error message.
   ///
-  /// Param [state]  The state code.
+  /// Param [state] The state code.
   ///
-  /// Param [code]  The error code of the channel media
+  ///
+  /// Param [code] The error code of the channel media
   ///  replay.
+  ///
   ///
   MediaRelayStateCallback? channelMediaRelayStateChanged;
 
@@ -630,13 +630,14 @@ class RtcEngineEventHandler {
   ///  Occurs when the first remote video frame is rendered.
   /// The SDK triggers this callback when the first local video frame is displayed/rendered on the local video view. The application can retrieve the time elapsed (the elapsed parameter) from a user joining the channel until the first video frame is displayed.
   ///
-  /// Param [uid] The user ID of the remote user sending the video stream.
+  /// Param [uid] User ID of the remote user sending the video stream.
   ///
-  /// Param [width] The width (px) of the video stream.
+  /// Param [width] Width (px) of the video frame.
   ///
-  /// Param [height] The height (px) of the video stream.
+  /// Param [height] Height (px) of the video frame.
   ///
-  /// Param [elapsed] Time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
+  /// Param [elapsed] Time elapsed (ms) from the local user calling the joinChannel method until the SDK triggers this callback.
+  ///
   ///
   @Deprecated('')
   VideoFrameWithUidCallback? firstRemoteVideoFrame;
@@ -656,10 +657,8 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the SDK decodes the first remote audio frame for playback.
   /// Deprecated:
-  ///  Please use remoteAudioStateChanged instead. The SDK triggers this callback under one of the following circumstances:
-  ///  The remote user joins the channel and sends the audio stream for the first time.
-  ///  The remote user's audio is offline and then goes online to re-send audio. It means the local user cannot receive audio in 15 seconds. Reasons for such an interruption include:
-  ///  The remote user leaves channel.
+  ///  Please use remoteAudioStateChanged instead. The SDK triggers this callback under one of the following circumstances: The remote user joins the channel and sends the audio stream for the first time.
+  ///  The remote user's audio is offline and then goes online to re-send audio. It means the local user cannot receive audio in 15 seconds. Reasons for such an interruption include: The remote user leaves channel.
   ///  The remote user drops offline.
   ///  The remote user calls muteLocalAudioStream to stop sending the audio stream.
   ///  The remote user calls disableAudio to disable audio.
@@ -678,9 +677,9 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] User ID.
   ///
-  /// Param [muted] Whether the remote user's audio stream is muted/unmuted:
-  ///  true: Muted.
+  /// Param [muted] Whether the remote user's audio stream is muted/unmuted: true: Muted.
   ///  false: Unmuted.
+  ///
   ///
   @Deprecated('')
   UidWithMutedCallback? userMuteAudio;
@@ -692,8 +691,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [url] The CDN streaming URL.
   ///
-  /// Param [error] Error codes of the RTMP or RTMPS streaming.
-  ///  ERR_OK (0): The publishing succeeds.
+  /// Param [error] Error codes of the RTMP or RTMPS streaming. ERR_OK (0): The publishing succeeds.
   ///  ERR_FAILED (1): The publishing fails.
   ///  ERR_INVALID_ARGUMENT (-2): Invalid argument used.
   ///  If you do not call setLiveTranscoding to configure
@@ -777,6 +775,7 @@ class RtcEngineEventHandler {
   /// Param [enabled] true: Enable.
   ///  false: Disable.
   ///
+  ///
   @Deprecated('')
   UidWithEnabledCallback? userEnableVideo;
 
@@ -787,8 +786,7 @@ class RtcEngineEventHandler {
   /// Param [uid] The user ID of the remote user.
   ///
   /// Param [enabled] Whether the specified remote user enables/disables the local video
-  ///  capturing function:
-  ///  true: Enable. Other users in the
+  ///  capturing function: true: Enable. Other users in the
   ///  channel can see the video of this remote user.
   ///  false: Disable. Other users in the
   ///  channel can no longer receive the video stream from this remote
@@ -801,12 +799,10 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the first remote video frame is received and decoded.
   /// Deprecated:
-  ///  Please use the remoteVideoStateChanged callback with the following parameters:
-  ///  Starting (1).
-  ///  Decoding (2). The SDK triggers this callback under one of the following circumstances:
-  ///  The remote user joins the channel and sends the video stream.
-  ///  The remote user stops sending the video stream and re-sends it after 15 seconds. Reasons for such an interruption include:
-  ///  The remote user leaves the channel.
+  ///  Please use the remoteVideoStateChanged callback with the following parameters: Starting (1).
+  ///  Decoding (2).
+  ///  The SDK triggers this callback under one of the following circumstances: The remote user joins the channel and sends the video stream.
+  ///  The remote user stops sending the video stream and re-sends it after 15 seconds. Reasons for such an interruption include: The remote user leaves the channel.
   ///  The remote user drops offline.
   ///  The remote user calls muteLocalVideoStream to stop sending the video stream.
   ///  The remote user calls disableVideo to disable video.
@@ -824,12 +820,10 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the microphone is enabled/disabled.
-  /// Deprecated: Please use the localAudioStateChanged callback:
-  ///  Stopped(0).
+  /// Deprecated: Please use the localAudioStateChanged callback: Stopped(0).
   ///  Recording(1). The SDK triggers this callback when the local user enableLocalAudio resumes or stops capturing the local audio stream by calling the method.
   ///
-  /// Param [enabled] Whether the microphone is enabled/disabled:
-  ///  true: The microphone is enabled.
+  /// Param [enabled] Whether the microphone is enabled/disabled: true: The microphone is enabled.
   ///  false: The microphone is disabled.
   ///
   @Deprecated('')
@@ -838,8 +832,7 @@ class RtcEngineEventHandler {
   ///
   /// Occurs when the connection between the SDK and the server is interrupted.
   /// Deprecated:
-  ///  Please use connectionStateChanged instead. The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. The difference between this callback and connectionLost is:
-  ///  The SDK triggers the connectionInterrupted callback when it loses connection with the server for more than four seconds after it successfully joins the channel.
+  ///  Please use connectionStateChanged instead. The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. The difference between this callback and connectionLost is: The SDK triggers the connectionInterrupted callback when it loses connection with the server for more than four seconds after it successfully joins the channel.
   ///  The SDK triggers the connectionLost callback when it loses connection with the server for more than 10 seconds, whether or not it joins the channel.
   ///  If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
   ///
@@ -915,8 +908,7 @@ class RtcEngineEventHandler {
 
   ///
   ///  Occurs when the first audio frame is published.
-  /// The SDK triggers this callback under one of the following circumstances:
-  ///  The local client enables the audio module and calls joinChannel successfully.
+  /// The SDK triggers this callback under one of the following circumstances: The local client enables the audio module and calls joinChannel successfully.
   ///  The local client calls muteLocalAudioStream (true) and muteLocalAudioStream(false) in sequence.
   ///  The local client calls disableAudio and enableAudio in sequence.
   ///
@@ -926,8 +918,7 @@ class RtcEngineEventHandler {
 
   ///
   /// Occurs when the first video frame is published.
-  /// The SDK triggers this callback under one of the following circumstances:
-  ///  The local client enables the video module and calls joinChannel successfully.
+  /// The SDK triggers this callback under one of the following circumstances: The local client enables the video module and calls joinChannel successfully.
   ///  The local client calls muteLocalVideoStream (true) and muteLocalVideoStream(false) in sequence.
   ///  The local client calls disableVideo and enableVideo in sequence.
   ///
@@ -1011,8 +1002,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The ID of the remote user.
   ///
-  /// Param [enabled] Whether super resolution is successfully enabled:
-  ///  true: Super resolution is successfully enabled.
+  /// Param [enabled] Whether super resolution is successfully enabled: true: Super resolution is successfully enabled.
   ///  false: Super resolution is not successfully enabled.
   ///
   ///
@@ -1027,10 +1017,8 @@ class RtcEngineEventHandler {
   ///
   /// Param [requestId] The request ID. The request ID is the same as the requestId returned in uploadLogFile. You can use the requestId to match a specific upload with a callback.
   ///
-  /// Param [success] Whether the log file is uploaded successfully:
-  ///  true: Successfully upload the log files.
+  /// Param [success] Whether the log file is uploaded successfully: true: Successfully upload the log files.
   ///  false: Fails to upload the log files.
-  ///
   ///
   /// Param [reason] The reason for the upload failure.
   ///
@@ -1047,13 +1035,12 @@ class RtcEngineEventHandler {
   EmptyCallback? airPlayConnected;
 
   ///
-  /// Reports whether virtual background is successfully enabled. (Beta feature)
+  /// Reports whether virtual background is successfully enabled. (beta feature)
   /// Since
   ///  v3.5.0 After you call enableVirtualBackground , the SDK triggers this callback to report whether virtual background is successfully enabled.
   ///  If the background image customized in the virtual background is in the PNG or JPG format, this callback is triggered after the image is read.
   ///
-  /// Param [enabled] Whether virtual background is successfully enabled:
-  ///  true: Virtual background is successfully enabled.
+  /// Param [enabled] Whether virtual background is successfully enabled: true: Virtual background is successfully enabled.
   ///  false: Virtual background is not successfully enabled.
   ///
   ///
@@ -1081,10 +1068,8 @@ class RtcEngineEventHandler {
   ///
   /// Param [volume] The volume value. The range is [0, 255].
   ///
-  /// Param [muted] Whether the audio device is muted:
-  ///  true: The audio device is muted.
+  /// Param [muted] Whether the audio device is muted: true: The audio device is muted.
   ///  false: The audio device is not muted.
-  ///
   ///
   AudioDeviceVolumeChanged? audioDeviceVolumeChanged;
 
@@ -1097,9 +1082,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [deviceType] The device type.
   ///
-  /// Param [deviceState] The device state.
-  ///  on macOS:
-  ///  0: The device is ready for use.
+  /// Param [deviceState] The device state. on macOS: 0: The device is ready for use.
   ///  8: The device is not connected. On Windows: MediaDeviceStateType .
   ///
   ///
@@ -1131,10 +1114,8 @@ class RtcEngineEventHandler {
   ///
   /// Param [height] The height (px) of the snapshot.
   ///
-  /// Param [errCode] The message that confirms success or the reason why the snapshot is not successfully taken:
-  ///  0: Success.
-  ///  < 0: Failure:
-  ///  -1: The SDK fails to write data to a file or encode a JPEG image.
+  /// Param [errCode] The message that confirms success or the reason why the snapshot is not successfully taken: 0: Success.
+  ///  < 0: Failure: -1: The SDK fails to write data to a file or encode a JPEG image.
   ///  -2: The SDK does not find the video stream of the specified user within one second after the takeSnapshot method call succeeds.
   ///
   SnapshotTakenCallback? snapshotTaken;
@@ -1145,6 +1126,7 @@ class RtcEngineEventHandler {
   ///  This callback is for Windows only.
   ///
   /// Param [info] Screen sharing information. See ScreenCaptureInfo .
+  ///
   ///
   OnScreenCaptureInfoUpdated? screenCaptureInfoUpdated;
 
@@ -1165,7 +1147,7 @@ class RtcEngineEventHandler {
   ///
   /// Param [uid] The user ID.
   ///
-  /// Param [proxyType] The proxy type connected. See ProxyType .
+  /// Param [proxyType] The proxy type connected. See CloudProxyType .
   ///
   /// Param [localProxyIp] Reserved for future use.
   ///
@@ -1177,7 +1159,7 @@ class RtcEngineEventHandler {
   /// Reports the result of an audio device test.
   /// After successfully calling startAudioRecordingDeviceTest , startAudioPlaybackDeviceTest , or startAudioDeviceLoopbackTest to start an audio device test, the SDK triggers the audioDeviceTestVolumeIndication callback at the set time interval to report the volume information of the audio device tested.
   ///
-  /// Param [volumeType] Volume type See AudioDeviceTestVolumeType .
+  /// Param [volumeType] The volume type. See AudioDeviceTestVolumeType .
   ///
   ///
   /// Param [volume] Volume level in the range [0,255].
@@ -1188,6 +1170,12 @@ class RtcEngineEventHandler {
   /// @nodoc
   OnContentInspectResult? contentInspectResult;
 
+  ///
+  /// Reports the voice pitch of the local user.
+  /// After the local audio capture is enabled and you call enableLocalVoicePitchCallback , the SDK triggers the localVoicePitchInHz callback at the time interval set in enableLocalVoicePitchCallback. After this callback is enabled, if the user disables the local audio capture, for example, by calling enableLocalAudio , the SDK immediately stops sending the localVoicePitchInHz callback.
+  ///
+  /// Param [pitchInHz] The voice pitch (Hz) of the local user.
+  ///
   OnLocalVoicePitchInHz? localVoicePitchInHz;
 
   /// @nodoc
