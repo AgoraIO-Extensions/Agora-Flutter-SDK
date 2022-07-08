@@ -6,8 +6,8 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_SDK_BY_URL "https://download.agora.io/sdk/release/iris_3.7.0.3_RTC_Windows_Video_20220628_1047.zip")
-set(IRIS_SDK_DOWNLOAD_NAME "iris_3.7.0.3_RTC_Windows_20220628_1047")
+set(IRIS_SDK_DOWNLOAD_SDK_BY_URL "https://download.agora.io/sdk/release/iris_3.7.0.3_RTC_Windows_Video_20220708_0330.zip")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_3.7.0.3_RTC_Windows_20220708_0330")
 set(IRIS_SDK_VERSION "v3_7_0_3")
 
 # Add this project's cmake/ directory to the module path.
