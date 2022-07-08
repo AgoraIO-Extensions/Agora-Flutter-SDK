@@ -1,0 +1,19 @@
+{
+  "git": {
+    "commitMessage": "chore: release ${version}",
+    "tagName": "v${version}"
+  },
+  "github": {
+    "release": true
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    },
+    "@release-it/bumper": {
+      "in": "pubspec.yaml",
+      "out": "pubspec.yaml"
+    }
+  }
+}
