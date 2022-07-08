@@ -1,0 +1,320 @@
+import 'package:agora_rtc_ng/agora_rtc_ng.dart';
+import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../log_sink.dart';
+
+/// JoinChannelAudio Example
+class JoinChannelAudio extends StatefulWidget {
+  /// Construct the [JoinChannelAudio]
+  const JoinChannelAudio({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _State();
+}
+
+class _State extends State<JoinChannelAudio> {
+  late final RtcEngine _engine;
+  String channelId = config.channelId;
+  bool isJoined = false,
+      openMicrophone = true,
+      enableSpeakerphone = true,
+      playEffect = false;
+  bool _enableInEarMonitoring = false;
+  double _recordingVolume = 100,
+      _playbackVolume = 100,
+      _inEarMonitoringVolume = 100;
+  late TextEditingController _controller;
+  ChannelProfileType _channelProfileType =
+      ChannelProfileType.channelProfileLiveBroadcasting;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: channelId);
+    _initEngine();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _dispose();
+  }
+
+  Future<void> _dispose() async {
+    await _engine.leaveChannel();
+    await _engine.release();
+  }
+
+  Future<void> _initEngine() async {
+    _engine = createAgoraRtcEngine();
+    await _engine.initialize(RtcEngineContext(
+      appId: config.appId,
+    ));
+
+    _engine.registerEventHandler(RtcEngineEventHandler(
+      onWarning: (warn, msg) {
+        logSink.log('[onWarning] warn: $warn, msg: $msg');
+      },
+      onError: (ErrorCodeType err, String msg) {
+        logSink.log('[onError] err: $err, msg: $msg');
+      },
+      onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+        logSink.log(
+            '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
+        setState(() {
+          isJoined = true;
+        });
+      },
+      onLeaveChannel: (RtcConnection connection, RtcStats stats) {
+        logSink.log(
+            '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
+        setState(() {
+          isJoined = false;
+        });
+      },
+    ));
+
+    await _engine.enableAudio();
+    await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    await _engine.setAudioProfile(
+      profile: AudioProfileType.audioProfileDefault,
+      scenario: AudioScenarioType.audioScenarioGameStreaming,
+    );
+  }
+
+  _joinChannel() async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await Permission.microphone.request();
+    }
+
+    await _engine.joinChannelWithOptions(
+        token: config.token,
+        channelId: _controller.text,
+        uid: config.uid,
+        options: ChannelMediaOptions(
+          channelProfile: _channelProfileType,
+          clientRoleType: ClientRoleType.clientRoleBroadcaster,
+        ));
+  }
+
+  _leaveChannel() async {
+    await _engine.leaveChannel();
+    setState(() {
+      isJoined = false;
+      openMicrophone = true;
+      enableSpeakerphone = true;
+      playEffect = false;
+      _enableInEarMonitoring = false;
+      _recordingVolume = 100;
+      _playbackVolume = 100;
+      _inEarMonitoringVolume = 100;
+    });
+  }
+
+  _switchMicrophone() async {
+    // await await _engine.muteLocalAudioStream(!openMicrophone);
+    await _engine.enableLocalAudio(!openMicrophone);
+    setState(() {
+      openMicrophone = !openMicrophone;
+    });
+  }
+
+  _switchSpeakerphone() async {
+    await _engine.setEnableSpeakerphone(!enableSpeakerphone);
+    setState(() {
+      enableSpeakerphone = !enableSpeakerphone;
+    });
+  }
+
+  _switchEffect() async {
+    if (playEffect) {
+      await _engine.stopEffect(1);
+      setState(() {
+        playEffect = false;
+      });
+    } else {
+      final path =
+          (await _engine.getAssetAbsolutePath("assets/Sound_Horizon.mp3"))!;
+      await _engine.playEffect(
+          soundId: 1,
+          filePath: path,
+          loopCount: 0,
+          pitch: 1,
+          pan: 1,
+          gain: 100,
+          publish: true);
+      // .then((value) {
+      setState(() {
+        playEffect = true;
+      });
+    }
+  }
+
+  _onChangeInEarMonitoringVolume(double value) async {
+    _inEarMonitoringVolume = value;
+    await _engine.setInEarMonitoringVolume(_inEarMonitoringVolume.toInt());
+    setState(() {});
+  }
+
+  _toggleInEarMonitoring(value) async {
+    _enableInEarMonitoring = value;
+    await _engine.enableInEarMonitoring(
+        enabled: _enableInEarMonitoring,
+        includeAudioFilters: EarMonitoringFilterType.earMonitoringFilterNone);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final channelProfileType = [
+      ChannelProfileType.channelProfileLiveBroadcasting,
+      ChannelProfileType.channelProfileCommunication,
+    ];
+    final items = channelProfileType
+        .map((e) => DropdownMenuItem(
+              child: Text(
+                e.toString().split('.')[1],
+              ),
+              value: e,
+            ))
+        .toList();
+
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(hintText: 'Channel ID'),
+            ),
+            const Text('Channel Profile: '),
+            DropdownButton<ChannelProfileType>(
+                items: items,
+                value: _channelProfileType,
+                onChanged: isJoined
+                    ? null
+                    : (v) async {
+                        setState(() {
+                          _channelProfileType = v!;
+                        });
+                      }),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
+                    child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+        Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: _switchMicrophone,
+                    child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
+                  ),
+                  ElevatedButton(
+                    onPressed: isJoined ? _switchSpeakerphone : null,
+                    child:
+                        Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
+                  ),
+                  if (!kIsWeb)
+                    ElevatedButton(
+                      onPressed: isJoined ? _switchEffect : null,
+                      child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text('RecordingVolume:'),
+                      Slider(
+                        value: _recordingVolume,
+                        min: 0,
+                        max: 400,
+                        divisions: 5,
+                        label: 'RecordingVolume',
+                        onChanged: isJoined
+                            ? (double value) async {
+                                setState(() {
+                                  _recordingVolume = value;
+                                });
+                                await _engine
+                                    .adjustRecordingSignalVolume(value.toInt());
+                              }
+                            : null,
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text('PlaybackVolume:'),
+                      Slider(
+                        value: _playbackVolume,
+                        min: 0,
+                        max: 400,
+                        divisions: 5,
+                        label: 'PlaybackVolume',
+                        onChanged: isJoined
+                            ? (double value) async {
+                                setState(() {
+                                  _playbackVolume = value;
+                                });
+                                await _engine
+                                    .adjustPlaybackSignalVolume(value.toInt());
+                              }
+                            : null,
+                      )
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        const Text('InEar Monitoring Volume:'),
+                        Switch(
+                          value: _enableInEarMonitoring,
+                          onChanged: isJoined ? _toggleInEarMonitoring : null,
+                          activeTrackColor: Colors.grey[350],
+                          activeColor: Colors.white,
+                        )
+                      ]),
+                      if (_enableInEarMonitoring)
+                        SizedBox(
+                            width: 300,
+                            child: Slider(
+                              value: _inEarMonitoringVolume,
+                              min: 0,
+                              max: 100,
+                              divisions: 5,
+                              label:
+                                  'InEar Monitoring Volume $_inEarMonitoringVolume',
+                              onChanged: isJoined
+                                  ? _onChangeInEarMonitoringVolume
+                                  : null,
+                            ))
+                    ],
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+            ))
+      ],
+    );
+  }
+}
