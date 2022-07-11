@@ -722,4 +722,3 @@ void rtcDeviceManagerSmokeTestCases() {
     skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
   );
 }
-

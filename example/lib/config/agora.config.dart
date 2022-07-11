@@ -8,8 +8,7 @@ String get appId {
 /// Please refer to https://docs.agora.io/en/Agora%20Platform/token
 String get token {
   // Allow pass a `token` as an environment variable with name `TEST_TOKEN` by using --dart-define
-  return const String.fromEnvironment('TEST_TOKEN',
-      defaultValue: '');
+  return const String.fromEnvironment('TEST_TOKEN', defaultValue: '');
 }
 
 /// Your channel ID

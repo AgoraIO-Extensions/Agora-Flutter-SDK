@@ -41,7 +41,7 @@ void main() {
 
   testWidgets(
     'followSystemPlaybackDevice',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -70,7 +70,7 @@ void main() {
 
   testWidgets(
     'followSystemRecordingDevice',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 

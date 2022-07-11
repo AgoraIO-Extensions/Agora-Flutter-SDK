@@ -1018,7 +1018,8 @@ class VideoContentHintConverter extends EnumConverter<VideoContentHint, int> {
 }
 
 @JsonSerializable()
-class ScreenScenarioTypeConverter extends EnumConverter<ScreenScenarioType, int> {
+class ScreenScenarioTypeConverter
+    extends EnumConverter<ScreenScenarioType, int> {
   ScreenScenarioTypeConverter(ScreenScenarioType e) : super(e);
 
   ScreenScenarioTypeConverter.fromValue(int value)

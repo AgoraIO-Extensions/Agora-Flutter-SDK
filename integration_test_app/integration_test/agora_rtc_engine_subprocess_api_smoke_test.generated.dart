@@ -4245,8 +4245,6 @@ void rtcEngineSubProcessSmokeTestCases() {
     skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
   );
 
-
-
   testWidgets(
     'updateScreenCaptureRegion',
     (WidgetTester tester) async {
@@ -4843,4 +4841,3 @@ void rtcEngineSubProcessSmokeTestCases() {
     skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
   );
 }
-
