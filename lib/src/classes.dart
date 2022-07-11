@@ -2620,8 +2620,11 @@ class SpatialAudioParams {
       this.enableBlur,
       this.enableAirAbsorb});
 
+  /// @nodoc
   factory SpatialAudioParams.fromJson(Map<String, dynamic> json) =>
       _$SpatialAudioParamsFromJson(json);
+
+  /// @nodoc
   Map<String, dynamic> toJson() => _$SpatialAudioParamsToJson(this);
 }
 
@@ -2640,8 +2643,11 @@ class ScreenAudioParameters {
   /// Constructs the [ScreenAudioParameters].
   const ScreenAudioParameters(this.captureSignalVolume);
 
+  /// @nodoc
   factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
       _$ScreenAudioParametersFromJson(json);
+
+  /// @nodoc
   Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
 }
 
@@ -2659,32 +2665,35 @@ class ScreenVideoParameters {
   ///  This value does not indicate the orientation mode of the output ratio. For how to set the video orientation, see VideoOutputOrientationMode .
   ///  Whether the SDK can support a resolution at 720P depends on the performance of the device. If you set 720P but the device cannot support it, the video frame rate can be lower.
   ///
+  final VideoDimensions? dimensions;
 
   ///
   /// The video encoding frame rate (fps). The default value is 15. For recommended values, see Recommended video profiles.
   ///
   ///
+  final int? frameRate;
 
   ///
   /// The video encoding bitrate (Kbps). For recommended values, see Recommended video profiles.
   ///
   ///
+  final int? bitrate;
 
   ///
   /// The content hint of the screen sharing. See VideoContentHint .
   ///
   ///
-  final VideoDimensions? dimensions;
-  final int? frameRate;
-  final int? bitrate;
   final VideoContentHint? contentHint;
 
   /// Constructs the [ScreenVideoParameters].
   const ScreenVideoParameters(
       {this.dimensions, this.frameRate, this.bitrate, this.contentHint});
 
+  /// @nodoc
   factory ScreenVideoParameters.fromJson(Map<String, dynamic> json) =>
       _$ScreenVideoParametersFromJson(json);
+
+  /// @nodoc
   Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
 }
 
@@ -2728,7 +2737,10 @@ class ScreenCaptureParameters2 {
     this.videoParams,
   });
 
+  /// @nodoc
   factory ScreenCaptureParameters2.fromJson(Map<String, dynamic> json) =>
       _$ScreenCaptureParameters2FromJson(json);
+
+  /// @nodoc
   Map<String, dynamic> toJson() => _$ScreenCaptureParameters2ToJson(this);
 }

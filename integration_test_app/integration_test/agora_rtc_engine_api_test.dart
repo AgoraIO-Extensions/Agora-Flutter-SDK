@@ -937,7 +937,7 @@ void main() {
 
     rtcEngine = await _createEngine();
     VideoEncoderConfiguration config = VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 10, height: 10));
+        dimensions: const VideoDimensions(width: 10, height: 10));
     await rtcEngine.setVideoEncoderConfiguration(config);
 
     fakeIrisEngine.expectCalledApi(
@@ -2833,7 +2833,7 @@ void main() {
         rtcEngine = await _createEngine();
         final rect = Rectangle(x: 10, y: 10);
         final ScreenCaptureParameters params = ScreenCaptureParameters(
-            dimensions: VideoDimensions(width: 10, height: 10));
+            dimensions: const VideoDimensions(width: 10, height: 10));
         await rtcEngine.startScreenCaptureByDisplayId(10, rect, params);
 
         fakeIrisEngine.expectCalledApi(
@@ -2912,7 +2912,7 @@ void main() {
         final screenRect = Rectangle(x: 10, y: 10);
         final regionRect = Rectangle(x: 20, y: 20);
         final ScreenCaptureParameters params = ScreenCaptureParameters(
-            dimensions: VideoDimensions(width: 10, height: 10));
+            dimensions: const VideoDimensions(width: 10, height: 10));
         await rtcEngine.startScreenCaptureByScreenRect(
             screenRect, regionRect, params);
 
@@ -2988,7 +2988,7 @@ void main() {
         rtcEngine = await _createEngine();
         final regionRect = Rectangle(x: 20, y: 20);
         final ScreenCaptureParameters params = ScreenCaptureParameters(
-            dimensions: VideoDimensions(width: 10, height: 10));
+            dimensions: const VideoDimensions(width: 10, height: 10));
         await rtcEngine.startScreenCaptureByWindowId(10, regionRect, params);
 
         fakeIrisEngine.expectCalledApi(
@@ -3033,7 +3033,7 @@ void main() {
 
       rtcEngine = await _createEngine();
       final ScreenCaptureParameters params = ScreenCaptureParameters(
-          dimensions: VideoDimensions(width: 10, height: 10));
+          dimensions: const VideoDimensions(width: 10, height: 10));
       await rtcEngine.updateScreenCaptureParameters(params);
 
       fakeIrisEngine.expectCalledApi(

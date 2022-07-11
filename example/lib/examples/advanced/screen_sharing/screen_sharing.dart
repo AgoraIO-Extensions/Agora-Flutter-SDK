@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
@@ -10,8 +8,6 @@ import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-const String _kDefaultAppGroup = 'io.agora';
 
 /// ScreenSharing Example
 class ScreenSharing extends StatefulWidget {
@@ -130,8 +126,8 @@ class _State extends State<ScreenSharing> {
     if (!(Platform.isWindows || Platform.isMacOS)) {
       return;
     }
-    final windows = await _engine.enumerateWindows();
-    final displays = await _engine.enumerateDisplays();
+    final windows = _engine.enumerateWindows();
+    final displays = _engine.enumerateDisplays();
     setState(() {
       this.windows = windows;
       this.displays = displays;
@@ -139,8 +135,9 @@ class _State extends State<ScreenSharing> {
   }
 
   Widget _displayDropDown() {
-    if (displays.isEmpty || !(Platform.isWindows || Platform.isMacOS))
+    if (displays.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
       return Container();
+    }
     final dropDownMenus = <DropdownMenuItem<int>>[];
     dropDownMenus.add(const DropdownMenuItem(
       child: Text('please select display id'),
@@ -165,8 +162,9 @@ class _State extends State<ScreenSharing> {
   }
 
   Widget _windowDropDown() {
-    if (windows.isEmpty || !(Platform.isWindows || Platform.isMacOS))
+    if (windows.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
       return Container();
+    }
     final dropDownMenus = <DropdownMenuItem<int>>[];
     dropDownMenus.add(const DropdownMenuItem(
       child: Text('please select window id'),
@@ -203,8 +201,9 @@ class _State extends State<ScreenSharing> {
   }
 
   Widget _loopBackRecordingDropDown() {
-    if (recordings.isEmpty || !(Platform.isWindows || Platform.isMacOS))
+    if (recordings.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
       return Container();
+    }
     final dropDownMenus = <DropdownMenuItem<String>>[];
     dropDownMenus.add(const DropdownMenuItem(
       child: Text('select loopBackRecording(Optional)'),
@@ -261,7 +260,6 @@ class _State extends State<ScreenSharing> {
       } else if (_selectedWindowId != -1) {
         await _engine.startScreenCaptureByWindowId(_selectedWindowId);
         await _engine.enableAudio();
-        var deviceId = await _engine.deviceManager.getAudioRecordingDevice();
         await _engine.enableLoopbackRecording(true,
             deviceName: _selectedLoopBackRecordingDeviceName);
       } else {

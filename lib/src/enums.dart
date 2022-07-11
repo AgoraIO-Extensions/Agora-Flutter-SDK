@@ -1887,11 +1887,11 @@ enum ErrorCode {
   @JsonValue(1603)
   VcmEncoderSetError,
 
-/* TODO(doc): property-ErrorCode-ErrAdmWinCoreServreShutDown */
+  /// @nodoc
   @JsonValue(1735)
   ErrAdmWinCoreServreShutDown,
 
-/* TODO(doc): property-ErrorCode-ErrNotSupportedMutiGpuExcludeWindow */
+  /// @nodoc
   @JsonValue(1736)
   ErrNotSupportedMutiGpuExcludeWindow,
 }
@@ -2130,7 +2130,7 @@ enum LocalVideoStreamError {
   @JsonValue(15)
   LocalVideoStreamErrorExtensionCaptureDisconnected,
 
-/* TODO(doc): property-LocalVideoStreamError-LocalVideoStreamErrorScreenCaptureWindowNotSupported */
+  /// @nodoc
   @JsonValue(20)
   LocalVideoStreamErrorScreenCaptureWindowNotSupported,
 }
