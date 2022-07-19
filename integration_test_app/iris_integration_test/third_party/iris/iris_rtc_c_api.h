@@ -69,6 +69,10 @@ IRIS_API int CallIrisRtcEngineApi(IrisRtcEnginePtr engine_ptr,
                                   enum ApiTypeEngine api_type,
                                   const char *params,
                                   char result[kBasicResultLength]);
+IRIS_API int CallIrisRtcEngineApiMaxResult(IrisRtcEnginePtr engine_ptr,
+                                           enum ApiTypeEngine api_type,
+                                           const char *params,
+                                           char result[kLargeResultLength]);
 
 IRIS_API int CallIrisRtcEngineApiWithBuffer(IrisRtcEnginePtr engine_ptr,
                                             enum ApiTypeEngine api_type,

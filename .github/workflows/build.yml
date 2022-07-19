@@ -114,7 +114,7 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
       - run: flutter config --enable-windows-desktop
-      - run: bash ci/run_flutter_macos_integration_test.sh
+      - run: bash ci/run_flutter_windows_integration_test.sh
 
   unittest_android:
     name: Run Android Unit Test

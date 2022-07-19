@@ -9,6 +9,7 @@ import 'package:agora_rtc_engine_example/examples/advanced/join_multiple_channel
 import 'package:agora_rtc_engine_example/examples/advanced/media_recorder/media_recorder.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing/screen_sharing.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/screen_sharing_with_subprocess/screen_sharing_with_subprocess.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_encryption/set_encryption.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/set_video_encoder_configuration/set_video_encoder_configuration.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/stream_message/stream_message.dart';
@@ -26,8 +27,12 @@ final advanced = [
     {'name': 'DeviceManager', 'widget': const DeviceManager()},
   {'name': 'JoinMultipleChannel', 'widget': const JoinMultipleChannel()},
   {'name': 'RtmpStreaming', 'widget': const RtmpStreaming()},
+  {'name': 'ScreenSharing', 'widget': const ScreenSharing()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
-    {'name': 'ScreenSharing', 'widget': const ScreenSharing()},
+    {
+      'name': 'ScreenSharingWithSubProcess',
+      'widget': const ScreenSharingWithSubProcess()
+    },
   {'name': 'SetEncryption', 'widget': SetEncryption()},
   {
     'name': 'SetVideoEncoderConfiguration',
@@ -40,5 +45,4 @@ final advanced = [
     'widget': const EnableVirtualBackground()
   },
   {'name': 'MediaRecorder', 'widget': const MediaRecorder()},
-
 ];

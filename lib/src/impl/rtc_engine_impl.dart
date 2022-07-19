@@ -870,7 +870,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetCameraMaxZoomFactor.index,
       'params': jsonEncode({}),
-    }).then((value) => double.tryParse(value) ?? 0.0);
+    }).then((value) => value == null ? null : double.tryParse(value) ?? 0.0);
   }
 
   @override
@@ -1654,7 +1654,7 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineGetNativeHandle.index,
       'params': jsonEncode({}),
-    }).then((value) => int.tryParse(value) ?? -1);
+    }).then((value) => value == null ? null : int.tryParse(value) ?? -1);
   }
 
   @override
@@ -1857,6 +1857,17 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
+  Future<void> updateScreenCaptureParametersMobile(
+      ScreenCaptureParameters2 parameters) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineUpdateScreenCaptureParameters.index,
+      'params': jsonEncode({
+        'parameters': parameters.toJson(),
+      }),
+    });
+  }
+
+  @override
   Future<void> updateScreenCaptureRegion(Rectangle regionRect) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineUpdateScreenCaptureRegion.index,
@@ -1876,6 +1887,34 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
         'captureFreq': captureFreq,
         'rect': rect?.toJson(),
         'bitrate': bitrate,
+      }),
+    });
+  }
+
+  @override
+  Future<void> startScreenCaptureMobile(ScreenCaptureParameters2 parameters) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
+      'params': jsonEncode({'parameters': parameters.toJson()}),
+    });
+  }
+
+  @override
+  Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngineExt.kEngineSetScreenCaptureScenario,
+      'params': jsonEncode({
+        'screenScenario': ScreenScenarioTypeConverter(screenScenario).value()
+      }),
+    });
+  }
+
+  @override
+  Future<void> enableLocalVoicePitchCallback(int interval) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngineExt.kEngineEnableLocalVoicePitchCallback,
+      'params': jsonEncode({
+        'interval': interval,
       }),
     });
   }
@@ -1973,6 +2012,18 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
   }
 
   @override
+  Future<void> startRtmpStreamWithTranscoding(
+      String url, LiveTranscoding transcoding) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngine.kEngineStartRtmpStreamWithTranscoding.index,
+      'params': jsonEncode({
+        'url': url,
+        'transcoding': transcoding.toJson(),
+      }),
+    });
+  }
+
+  @override
   Future<void> startRtmpStreamWithoutTranscoding(String url) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartRtmpStreamWithoutTranscoding.index,
@@ -1998,6 +2049,28 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
       'apiType': ApiTypeEngine.kEngineUpdateRtmpTranscoding.index,
       'params': jsonEncode({
         'transcoding': transcoding.toJson(),
+      }),
+    });
+  }
+
+  @override
+  Future<void> enableSpatialAudio(bool enabled) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngineExt.kEngineEnableSpatialAudio,
+      'params': jsonEncode({
+        'enabled': enabled,
+      }),
+    });
+  }
+
+  @override
+  Future<void> setRemoteUserSpatialAudioParams(
+      int uid, SpatialAudioParams spatialAudioParams) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeEngineExt.kEngineSetRemoteUserSpatialAudioParams,
+      'params': jsonEncode({
+        'uid': uid,
+        'spatial_audio_params': spatialAudioParams.toJson(),
       }),
     });
   }

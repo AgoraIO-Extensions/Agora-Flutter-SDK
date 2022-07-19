@@ -4,8 +4,8 @@ set -e
 set -x
 
 AGORA_FLUTTER_PROJECT_PATH=$(pwd)
-IRIS_PROJECT_PATH="$AGORA_FLUTTER_PROJECT_PATH/../iris"
 BUILD_TYPE=$1
+IRIS_PROJECT_PATH=$2
 
 echo "Cleaning build cache..."
 rm -rf $IRIS_PROJECT_PATH/build

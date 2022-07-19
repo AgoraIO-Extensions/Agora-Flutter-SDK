@@ -32,11 +32,10 @@
 
  @param frame The raw audio data. See AgoraAudioFrame.
 
- @return - `YES`: Valid buffer in AgoraAudioFrame, and the audio frame is
- sent out.
-- `NO`: Invalid buffer in AgoraAudioFrame, and the audio frame is discarded.
+ @return - `YES`: Reserved for future use.
+- `NO`: Reserved for future use.
  */
-- (BOOL)onRecordAudioFrame:(AgoraAudioFrame* _Nonnull)frame;
+- (BOOL)onRecordAudioFrame:(AgoraAudioFrame* _Nonnull)frame NS_SWIFT_NAME(onRecordAudioFrame(_:));
 
 /** Occurs when the playback audio frame of all remote users is received.
 
@@ -58,11 +57,10 @@
 
  @param frame The raw audio data. See AgoraAudioFrame.
 
- @return - `YES`: Valid buffer in AgoraAudioFrame, and the audio frame is
- sent out.
-- `NO`: Invalid buffer in AgoraAudioFrame, and the audio frame is discarded.
+ @return - `YES`: Reserved for future use.
+- `NO`: Reserved for future use.
  */
-- (BOOL)onPlaybackAudioFrame:(AgoraAudioFrame* _Nonnull)frame;
+- (BOOL)onPlaybackAudioFrame:(AgoraAudioFrame* _Nonnull)frame NS_SWIFT_NAME(onPlaybackAudioFrame(_:));
 
 /** Occurs when the mixed audio frame of the local user and all remote users
  is received.
@@ -89,11 +87,10 @@
 
  @param frame The raw audio data. See AgoraAudioFrame.
 
- @return - `YES`: Valid buffer in AgoraAudioFrame, and the audio frame is
- sent out.
-- `NO`: Invalid buffer in AgoraAudioFrame, and the audio frame is discarded.
+ @return - `YES`: Reserved for future use.
+- `NO`: Reserved for future use.
  */
-- (BOOL)onMixedAudioFrame:(AgoraAudioFrame* _Nonnull)frame;
+- (BOOL)onMixedAudioFrame:(AgoraAudioFrame* _Nonnull)frame NS_SWIFT_NAME(onMixedAudioFrame(_:));
 
 /** Occurs when the audio frame of a remote user is received before mixing.
 
@@ -112,69 +109,10 @@
  @param frame The raw audio data. See AgoraAudioFrame.
  @param uid The user ID of the remote user.
 
- @return - `YES`: Valid buffer in AgoraAudioFrame, and the audio frame is
- sent out.
-- `NO`: Invalid buffer in AgoraAudioFrame, and the audio frame is discarded.
+ @return - `YES`: Reserved for future use.
+- `NO`: Reserved for future use.
  */
-- (BOOL)onPlaybackAudioFrameBeforeMixing:(AgoraAudioFrame* _Nonnull)frame uid:(NSUInteger)uid;
-
-/** Determines whether to receive raw audio data from multiple channels.
-
- @since v3.5.0
-
- After you register the audio frame observer, the SDK triggers this callback
- every time it captures an audio frame.
-
- In a multi-channel scenario, if you want to get audio data from multiple
- channels, set the return value of this callback as `YES`, and set the return
- value of [getObservedAudioFramePosition]([AgoraAudioDataFrameProtocol getObservedAudioFramePosition]) as
- `AgoraAudioFramePositionBeforeMixing (1 << 3)`. After that, the SDK triggers
- the [onPlaybackAudioFrameBeforeMixingEx]([AgoraAudioDataFrameProtocol onPlaybackAudioFrameBeforeMixingEx:channelId:uid:])
- callback to send you the before-mixing audio data from various channels. You
- can also get the channel ID of each audio frame.
-
- **Note**
-
- - Once you set the return value of this callback as `YES`, the SDK triggers
- only the `onPlaybackAudioFrameBeforeMixingEx` callback to send the
- before-mixing audio frame.
- [onPlaybackAudioFrameBeforeMixing]([AgoraAudioDataFrameProtocol onPlaybackAudioFrameBeforeMixing:uid:])
- is not triggered. In a multi-channel scenario, Agora recommends setting the
- return value as `YES`.
- - If you set the return value of this callback as `NO`, the SDK triggers only
- the `onPlaybackAudioFrameBeforeMixing` callback to send the audio data.
-
- @return - `YES`: Receive audio data from multiple channels.
- - `NO`: Do not receive audio data from multiple channels.
- */
-- (BOOL)isMultipleChannelFrameWanted;
-
-/** Gets the audio frame of a remote user before mixing from one of the
- multiple channels.
-
- @since v3.5.0
-
- To trigger this callback, you need to register the following callbacks and
- set their return values when calling the
- [setAudioDataFrame]([AgoraRtcEngineKit setAudioDataFrame:]) method:
-
- - [getObservedAudioFramePosition]([AgoraAudioDataFrameProtocol getObservedAudioFramePosition]):
- Set its return value as `AgoraAudioFramePositionBeforeMixing (1 << 3)`.
- - [isMultipleChannelFrameWanted]([AgoraAudioDataFrameProtocol isMultipleChannelFrameWanted]):
- Set its return value as `YES`.
-
- After the setting is successful, the SDK triggers the
- `onPlaybackAudioFrameBeforeMixingEx` callback every 10 ms by default, and the
- reported audio frame format is the same as the playback audio frame format.
-
- @param frame The raw audio data. See AgoraAudioFrame.
- @param channelId The channel name.
- @param uid The user ID of the remote user.
-
- @return - `YES`: Valid buffer in `AgoraAudioFrame`, and the audio frame is sent out.
- - `NO`: Invalid buffer in `AgoraAudioFrame`, and the audio frame is discarded.
- */
-- (BOOL)onPlaybackAudioFrameBeforeMixingEx:(AgoraAudioFrame* _Nonnull)frame channelId:(NSString* _Nonnull)channelId uid:(NSUInteger)uid;
+- (BOOL)onPlaybackAudioFrameBeforeMixing:(AgoraAudioFrame* _Nonnull)frame uid:(NSUInteger)uid NS_SWIFT_NAME(onPlaybackAudioFrame(beforeMixing:uid:));
 
 /** Sets the audio observation positions.
 
@@ -206,7 +144,7 @@
  @return The bit mask that controls the audio observation positions.
  See AgoraAudioFramePosition.
  */
-- (AgoraAudioFramePosition)getObservedAudioFramePosition;
+- (AgoraAudioFramePosition)getObservedAudioFramePosition NS_SWIFT_NAME(getObservedAudioFramePosition());
 
 /** Sets the audio mixing format for the
  [onMixedAudioFrame]([AgoraAudioDataFrameProtocol onMixedAudioFrame:]) callback.
@@ -227,7 +165,7 @@
 
  @return Sets the audio format. See AgoraAudioParam.
  */
-- (AgoraAudioParam* _Nonnull)getMixedAudioParams;
+- (AgoraAudioParam* _Nonnull)getMixedAudioParams NS_SWIFT_NAME(getMixedAudioParams());
 
 /** Sets the audio recording format for the
  [onRecordAudioFrame]([AgoraAudioDataFrameProtocol onRecordAudioFrame:])
@@ -249,7 +187,7 @@
 
  @return Sets the audio format. See AgoraAudioParam.
  */
-- (AgoraAudioParam* _Nonnull)getRecordAudioParams;
+- (AgoraAudioParam* _Nonnull)getRecordAudioParams NS_SWIFT_NAME(getRecordAudioParams());
 
 /** Sets the audio playback format for the
  [onPlaybackAudioFrame]([AgoraAudioDataFrameProtocol onPlaybackAudioFrame:])
@@ -271,6 +209,65 @@
 
  @return Sets the audio format. See AgoraAudioParam.
  */
-- (AgoraAudioParam* _Nonnull)getPlaybackAudioParams;
+- (AgoraAudioParam* _Nonnull)getPlaybackAudioParams NS_SWIFT_NAME(getPlaybackAudioParams());
+
+@optional
+/** Determines whether to receive raw audio data from multiple channels.
+
+ @since v3.5.0
+
+ After you register the audio frame observer, the SDK triggers this callback
+ every time it captures an audio frame.
+
+ In a multi-channel scenario, if you want to get audio data from multiple
+ channels, set the return value of this callback as `YES`, and set the return
+ value of [getObservedAudioFramePosition]([AgoraAudioDataFrameProtocol getObservedAudioFramePosition]) as
+ `AgoraAudioFramePositionBeforeMixing (1 << 3)`. After that, the SDK triggers
+ the [onPlaybackAudioFrameBeforeMixingEx]([AgoraAudioDataFrameProtocol onPlaybackAudioFrameBeforeMixingEx:channelId:uid:])
+ callback to send you the before-mixing audio data from various channels. You
+ can also get the channel ID of each audio frame.
+
+ **Note**
+
+ - Once you set the return value of this callback as `YES`, the SDK triggers
+ only the `onPlaybackAudioFrameBeforeMixingEx` callback to send the
+ before-mixing audio frame.
+ [onPlaybackAudioFrameBeforeMixing]([AgoraAudioDataFrameProtocol onPlaybackAudioFrameBeforeMixing:uid:])
+ is not triggered. In a multi-channel scenario, Agora recommends setting the
+ return value as `YES`.
+ - If you set the return value of this callback as `NO`, the SDK triggers only
+ the `onPlaybackAudioFrameBeforeMixing` callback to send the audio data.
+
+ @return - `YES`: Receive audio data from multiple channels.
+ - `NO`: Do not receive audio data from multiple channels.
+ */
+- (BOOL)isMultipleChannelFrameWanted NS_SWIFT_NAME(isMultipleChannelFrameWanted());
+
+/** Gets the audio frame of a remote user before mixing from one of the
+ multiple channels.
+
+ @since v3.5.0
+
+ To trigger this callback, you need to register the following callbacks and
+ set their return values when calling the
+ [setAudioDataFrame]([AgoraRtcEngineKit setAudioDataFrame:]) method:
+
+ - [getObservedAudioFramePosition]([AgoraAudioDataFrameProtocol getObservedAudioFramePosition]):
+ Set its return value as `AgoraAudioFramePositionBeforeMixing (1 << 3)`.
+ - [isMultipleChannelFrameWanted]([AgoraAudioDataFrameProtocol isMultipleChannelFrameWanted]):
+ Set its return value as `YES`.
+
+ After the setting is successful, the SDK triggers the
+ `onPlaybackAudioFrameBeforeMixingEx` callback every 10 ms by default, and the
+ reported audio frame format is the same as the playback audio frame format.
+
+ @param frame The raw audio data. See AgoraAudioFrame.
+ @param channelId The channel name.
+ @param uid The user ID of the remote user.
+
+ @return - `YES`: Reserved for future use.
+ - `NO`: Reserved for future use.
+ */
+- (BOOL)onPlaybackAudioFrameBeforeMixingEx:(AgoraAudioFrame* _Nonnull)frame channelId:(NSString* _Nonnull)channelId uid:(NSUInteger)uid NS_SWIFT_NAME(onPlaybackAudioFrame(beforeMixingEx:channelId:uid:));
 
 @end

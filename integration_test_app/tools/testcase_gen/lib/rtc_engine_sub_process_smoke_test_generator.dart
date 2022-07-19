@@ -54,6 +54,9 @@ class RtcEngineSubProcessSmokeTestGenerator extends DefaultGenerator {
     GeneratorConfig(name: 'configRhythmPlayer', donotGenerate: true),
     GeneratorConfig(name: 'getNativeHandle', donotGenerate: true),
     GeneratorConfig(name: 'startEchoTest', donotGenerate: true),
+    GeneratorConfig(name: 'startScreenCaptureMobile', donotGenerate: true),
+    GeneratorConfig(
+        name: 'updateScreenCaptureParametersMobile', donotGenerate: true),
 
 // TODO(littlegnal): Re-enable it later
     GeneratorConfig(name: 'takeSnapshot', donotGenerate: true),

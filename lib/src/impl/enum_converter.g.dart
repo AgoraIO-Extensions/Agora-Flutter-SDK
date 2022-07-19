@@ -623,6 +623,8 @@ const _$ConnectionChangedReasonEnumMap = {
   ConnectionChangedReason.RenewToken: 12,
   ConnectionChangedReason.ClientIpAddressChanged: 13,
   ConnectionChangedReason.KeepAliveTimeout: 14,
+  ConnectionChangedReason.SameUidLogin: 19,
+  ConnectionChangedReason.TooManyBroadcasters: 20,
 };
 
 ConnectionStateTypeConverter _$ConnectionStateTypeConverterFromJson(
@@ -774,10 +776,13 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.AdmNoRecordingDevice: 1359,
   ErrorCode.AdmNoPlayoutDevice: 1360,
   ErrorCode.VdmCameraNotAuthorized: 1501,
+  ErrorCode.vdmWinDeviceInUse: 1502,
   ErrorCode.VcmUnknownError: 1600,
   ErrorCode.VcmEncoderInitError: 1601,
   ErrorCode.VcmEncoderEncodeError: 1602,
   ErrorCode.VcmEncoderSetError: 1603,
+  ErrorCode.ErrAdmWinCoreServreShutDown: 1735,
+  ErrorCode.ErrNotSupportedMutiGpuExcludeWindow: 1736,
 };
 
 InjectStreamStatusConverter _$InjectStreamStatusConverterFromJson(
@@ -864,10 +869,14 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.CaptureInBackground: 6,
   LocalVideoStreamError.CaptureMultipleForegroundApps: 7,
   LocalVideoStreamError.DeviceNotFound: 8,
+  LocalVideoStreamError.LocalVideoStreamErrorCaptureDeviceDisconnected: 8,
   LocalVideoStreamError.ScreenCaptureWindowMinmized: 11,
   LocalVideoStreamError.ScreenCaptureWindowClosed: 12,
   LocalVideoStreamError.LocalVideoStreamErrorDeviceInvalidId: 10,
   LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowOccluded: 13,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStarted: 13,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStoped: 14,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureDisconnected: 15,
   LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
 };
@@ -1006,6 +1015,7 @@ const _$RtmpStreamingStateEnumMap = {
   RtmpStreamingState.Running: 2,
   RtmpStreamingState.Recovering: 3,
   RtmpStreamingState.Failure: 4,
+  RtmpStreamingState.Disconnecting: 5,
 };
 
 StreamFallbackOptionsConverter _$StreamFallbackOptionsConverterFromJson(
@@ -1758,4 +1768,23 @@ const _$VideoContentHintEnumMap = {
   VideoContentHint.None: 0,
   VideoContentHint.Motion: 1,
   VideoContentHint.Details: 2,
+};
+
+ScreenScenarioTypeConverter _$ScreenScenarioTypeConverterFromJson(
+        Map<String, dynamic> json) =>
+    ScreenScenarioTypeConverter(
+      $enumDecode(_$ScreenScenarioTypeEnumMap, json['e']),
+    );
+
+Map<String, dynamic> _$ScreenScenarioTypeConverterToJson(
+        ScreenScenarioTypeConverter instance) =>
+    <String, dynamic>{
+      'e': _$ScreenScenarioTypeEnumMap[instance.e],
+    };
+
+const _$ScreenScenarioTypeEnumMap = {
+  ScreenScenarioType.ScreenScenarioDocument: 1,
+  ScreenScenarioType.ScreenScenarioGaming: 2,
+  ScreenScenarioType.ScreenScenarioVideo: 3,
+  ScreenScenarioType.ScreenScenarioRdc: 4,
 };

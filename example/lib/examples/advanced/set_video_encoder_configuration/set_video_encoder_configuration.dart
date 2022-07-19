@@ -26,9 +26,9 @@ class _SetVideoEncoderConfigurationState
   int _remoteUid = 0;
   int _selectedDimensionIndex = 0;
   List<VideoDimensions> dimensions = [
-    VideoDimensions(width: 640, height: 480),
-    VideoDimensions(width: 480, height: 480),
-    VideoDimensions(width: 480, height: 240),
+    const VideoDimensions(width: 640, height: 480),
+    const VideoDimensions(width: 480, height: 480),
+    const VideoDimensions(width: 480, height: 240),
   ];
   @override
   void initState() {

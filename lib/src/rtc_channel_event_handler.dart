@@ -55,20 +55,21 @@ class RtcChannelEventHandler {
   RtcStatsCallback? leaveChannel;
 
   ///
-  /// Occurs when the user role switches in the interactive live streaming.
-  /// The SDK triggers this callback when the local user changes the user role after joining the channel.
+  /// Occurs when the user role switches successfully in the interactive live streaming.
+  /// In the LIVE_BROADCASTING channel profile, when the local user successfully calls setClientRole to switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers this callback to report the user role before and after the switch.
   ///
   /// Param [newRole] Role that the user switches to: ClientRole .
   ///
+  ///
   /// Param [oldRole] Role that the user switches from: ClientRole .
+  ///
   ///
   ClientRoleCallback? clientRoleChanged;
 
   ///
   /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) joins the channel.
   /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.
-  ///  In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17. The SDK triggers this callback under one of the following circumstances:
-  ///  A remote user/host joins the channel by calling the joinChannel method.
+  ///  In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17. The SDK triggers this callback under one of the following circumstances: A remote user/host joins the channel by calling the joinChannel method.
   ///  A remote user switches the user role to the host after joining the channel.
   ///  A remote user/host rejoins the channel after a network interruption.
   ///  The host injects an online media stream into the channel by calling the addInjectStreamUrl method.
@@ -81,11 +82,11 @@ class RtcChannelEventHandler {
 
   ///
   /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) leaves the channel.
-  /// There are two reasons for users to become offline:
-  ///  Leave the channel: When a user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
+  /// There are two reasons for users to become offline: Leave the channel: When a user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
   ///  Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the communication profile, and more for the live broadcast profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections. It's recommended to use the Agora RTM SDK for reliable offline detection.
   ///
   /// Param [reason] Reasons why the user goes offline: UserOfflineReason .
+  ///
   ///
   /// Param [uid] The ID of the user who leaves the channel or goes offline.
   ///
@@ -96,6 +97,7 @@ class RtcChannelEventHandler {
   /// When the network connection state changes, the SDK triggers this callback and reports the current connection state and the reason for the change.
   ///
   /// Param [reason] The reason for a connection state change.
+  ///
   ///
   /// Param [state] The current connection state.
   ///
@@ -126,8 +128,7 @@ class RtcChannelEventHandler {
   ///
   /// Occurs when the most active speaker is detected.
   /// After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user, who is detected as the loudest for the most times, is the most active user.
-  ///  When the number of users exceeds two (included) and an active speaker is detected, the SDK triggers this callback and reports the uid of the most active speaker.
-  ///  If the most active speaker remains the same, the SDK triggers the activeSpeaker callback only once.
+  ///  When the number of users exceeds two (included) and an active speaker is detected, the SDK triggers this callback and reports the uid of the most active speaker. If the most active speaker remains the same, the SDK triggers the activeSpeaker callback only once.
   ///  If the most active speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active speaker.
   ///
   /// Param [uid] The user ID of the most active speaker.
@@ -153,11 +154,13 @@ class RtcChannelEventHandler {
   /// Occurs when the remote video state changes.
   /// This callback does not work properly when the number of users (in the voice/video call channel) or hosts (in the live streaming channel) in the channel exceeds 17.
   ///
-  /// Param [reason]  The reason for the remote video state
+  /// Param [reason] The reason for the remote video state
   ///  change, see VideoRemoteStateReason .
   ///
-  /// Param [state]  The state of the remote video, see
+  ///
+  /// Param [state] The state of the remote video, see
   ///  VideoRemoteState .
+  ///
   ///
   /// Param [uid] The ID of the remote user whose video state changes.
   ///
@@ -190,15 +193,17 @@ class RtcChannelEventHandler {
   ///  false: The published stream switches
   ///  back to the video after the network conditions improve.
   ///
+  ///
   FallbackCallback? localPublishFallbackToAudioOnly;
 
   ///
   /// Occurs when the remote media stream falls back to the audio-only stream due to poor network conditions or switches back to the video stream after the network conditions improve.
-  /// If you call setRemoteSubscribeFallbackOption and set option as AudioOnly, the SDK triggers this callback when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the downlink network condition improves.
+  /// If you call setRemoteSubscribeFallbackOption and set option as AudioOnly, the SDK triggers this callback when the remote media stream falls back to audio-only mode due to poor downlink conditions, or when the remote media stream switches back to the video after the downlink network condition improves.
   ///  Once the remote media stream switches to the low-quality stream due to poor network conditions, you can monitor the stream switch between a high-quality and low-quality stream in the remoteVideoStats callback.
   ///
   /// Param [isFallbackOrRecover] true: The remotely subscribed media stream falls back to audio-only due to poor network conditions.
   ///  false: The remotely subscribed media stream switches back to the video stream after the network conditions improved.
+  ///
   ///
   /// Param [uid] The user ID of the remote user.
   ///
@@ -280,14 +285,14 @@ class RtcChannelEventHandler {
   ///
   /// Param [url] The URL address where the state of the media push changes.
   ///
+  ///
   RtmpStreamingStateCallback? rtmpStreamingStateChanged;
 
   ///
   /// Occurs when the publisher's transcoding is updated.
   /// If you call the setLiveTranscoding
   ///  method to set the LiveTranscoding class for the first time, the
-  ///  SDK does not trigger this callback.
-  ///  When the LiveTranscoding class in the setLiveTranscoding method updates, the SDK triggers the transcodingUpdated callback to report the update information.
+  ///  SDK does not trigger this callback. When the LiveTranscoding class in the setLiveTranscoding method updates, the SDK triggers the transcodingUpdated callback to report the update information.
   ///
   EmptyCallback? transcodingUpdated;
 
@@ -335,10 +340,12 @@ class RtcChannelEventHandler {
   /// Occurs when the state of the media stream relay changes.
   /// The SDK returns the state of the current media relay with any error message.
   ///
-  /// Param [code]  The error code of the channel media
+  /// Param [code] The error code of the channel media
   ///  replay.
   ///
-  /// Param [state]  The state code.
+  ///
+  /// Param [state] The state code.
+  ///
   ///
   MediaRelayStateCallback? channelMediaRelayStateChanged;
 
@@ -435,8 +442,7 @@ class RtcChannelEventHandler {
   ///
   /// Param [reason] The reason why super resolution algorithm is not successfully enabled.
   ///
-  /// Param [enabled] Whether super resolution is successfully enabled:
-  ///  true: Super resolution is successfully enabled.
+  /// Param [enabled] Whether super resolution is successfully enabled: true: Super resolution is successfully enabled.
   ///  false: Super resolution is not successfully enabled.
   ///
   ///
@@ -447,44 +453,57 @@ class RtcChannelEventHandler {
   /// @nodoc
   OnClientRoleChangeFailed? clientRoleChangeFailed;
 
+  ///
+  ///  Occurs when the first remote video frame is rendered.
+  /// The SDK triggers this callback when the first local video frame is displayed/rendered on the local video view. The application can retrieve the time elapsed (the elapsed parameter) from a user joining the channel until the first video frame is displayed.
+  ///
+  /// Param [elapsed] Time elapsed (ms) from the local user calling the joinChannel method until the SDK triggers this callback.
+  ///
+  ///
+  /// Param [width] Width (px) of the video frame.
+  ///
+  /// Param [uid] User ID of the remote user sending the video stream.
+  ///
+  OnFirstRemoteVideoFrame? firstRemoteVideoFrame;
+
   /// Constructs the [RtcChannelEventHandler].
-  RtcChannelEventHandler({
-    this.warning,
-    this.error,
-    this.joinChannelSuccess,
-    this.rejoinChannelSuccess,
-    this.leaveChannel,
-    this.clientRoleChanged,
-    this.userJoined,
-    this.userOffline,
-    this.connectionStateChanged,
-    this.connectionLost,
-    this.tokenPrivilegeWillExpire,
-    this.requestToken,
-    this.activeSpeaker,
-    this.videoSizeChanged,
-    this.remoteVideoStateChanged,
-    this.remoteAudioStateChanged,
-    this.localPublishFallbackToAudioOnly,
-    this.remoteSubscribeFallbackToAudioOnly,
-    this.rtcStats,
-    this.networkQuality,
-    this.remoteVideoStats,
-    this.remoteAudioStats,
-    this.rtmpStreamingStateChanged,
-    this.transcodingUpdated,
-    this.streamInjectedStatus,
-    this.streamMessage,
-    this.streamMessageError,
-    this.channelMediaRelayStateChanged,
-    this.channelMediaRelayEvent,
-    this.metadataReceived,
-    this.audioPublishStateChanged,
-    this.videoPublishStateChanged,
-    this.audioSubscribeStateChanged,
-    this.videoSubscribeStateChanged,
-    this.rtmpStreamingEvent,
-    this.userSuperResolutionEnabled,
-    this.clientRoleChangeFailed,
-  });
+  RtcChannelEventHandler(
+      {this.warning,
+      this.error,
+      this.joinChannelSuccess,
+      this.rejoinChannelSuccess,
+      this.leaveChannel,
+      this.clientRoleChanged,
+      this.userJoined,
+      this.userOffline,
+      this.connectionStateChanged,
+      this.connectionLost,
+      this.tokenPrivilegeWillExpire,
+      this.requestToken,
+      this.activeSpeaker,
+      this.videoSizeChanged,
+      this.remoteVideoStateChanged,
+      this.remoteAudioStateChanged,
+      this.localPublishFallbackToAudioOnly,
+      this.remoteSubscribeFallbackToAudioOnly,
+      this.rtcStats,
+      this.networkQuality,
+      this.remoteVideoStats,
+      this.remoteAudioStats,
+      this.rtmpStreamingStateChanged,
+      this.transcodingUpdated,
+      this.streamInjectedStatus,
+      this.streamMessage,
+      this.streamMessageError,
+      this.channelMediaRelayStateChanged,
+      this.channelMediaRelayEvent,
+      this.metadataReceived,
+      this.audioPublishStateChanged,
+      this.videoPublishStateChanged,
+      this.audioSubscribeStateChanged,
+      this.videoSubscribeStateChanged,
+      this.rtmpStreamingEvent,
+      this.userSuperResolutionEnabled,
+      this.clientRoleChangeFailed,
+      this.firstRemoteVideoFrame});
 }

@@ -4015,7 +4015,7 @@ void rtcEngineSubProcessSmokeTestCases() {
       );
       const int dimensionsWidth = 10;
       const int dimensionsHeight = 10;
-      final VideoDimensions captureParamsDimensions = VideoDimensions(
+      const VideoDimensions captureParamsDimensions = VideoDimensions(
         width: dimensionsWidth,
         height: dimensionsHeight,
       );
@@ -4083,7 +4083,7 @@ void rtcEngineSubProcessSmokeTestCases() {
       );
       const int dimensionsWidth = 10;
       const int dimensionsHeight = 10;
-      final VideoDimensions captureParamsDimensions = VideoDimensions(
+      const VideoDimensions captureParamsDimensions = VideoDimensions(
         width: dimensionsWidth,
         height: dimensionsHeight,
       );
@@ -4142,7 +4142,7 @@ void rtcEngineSubProcessSmokeTestCases() {
       );
       const int dimensionsWidth = 10;
       const int dimensionsHeight = 10;
-      final VideoDimensions captureParamsDimensions = VideoDimensions(
+      const VideoDimensions captureParamsDimensions = VideoDimensions(
         width: dimensionsWidth,
         height: dimensionsHeight,
       );
@@ -4218,7 +4218,7 @@ void rtcEngineSubProcessSmokeTestCases() {
 
       const int dimensionsWidth = 10;
       const int dimensionsHeight = 10;
-      final VideoDimensions captureParamsDimensions = VideoDimensions(
+      const VideoDimensions captureParamsDimensions = VideoDimensions(
         width: dimensionsWidth,
         height: dimensionsHeight,
       );
@@ -4359,6 +4359,63 @@ void rtcEngineSubProcessSmokeTestCases() {
   );
 
   testWidgets(
+    'setScreenCaptureScenario',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
+        engineAppId,
+        areaCode: [AreaCode.NA, AreaCode.GLOB],
+      ));
+
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
+
+      const ScreenScenarioType screenScenario =
+          ScreenScenarioType.ScreenScenarioDocument;
+      await screenShareHelper.setScreenCaptureScenario(
+        screenScenario,
+      );
+
+      await screenShareHelper.destroy();
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
+    'enableLocalVoicePitchCallback',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
+        engineAppId,
+        areaCode: [AreaCode.NA, AreaCode.GLOB],
+      ));
+
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
+
+      const int interval = 10;
+      await screenShareHelper.enableLocalVoicePitchCallback(
+        interval,
+      );
+
+      await screenShareHelper.destroy();
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
     'setAVSyncSource',
     (WidgetTester tester) async {
       app.main();
@@ -4380,6 +4437,75 @@ void rtcEngineSubProcessSmokeTestCases() {
       await screenShareHelper.setAVSyncSource(
         channelId,
         uid,
+      );
+
+      await screenShareHelper.destroy();
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
+    'startRtmpStreamWithTranscoding',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
+        engineAppId,
+        areaCode: [AreaCode.NA, AreaCode.GLOB],
+      ));
+
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
+
+      const String url = "hello";
+      const VideoFrameRate transcodingVideoFramerate = VideoFrameRate.Fps1;
+      const AudioSampleRateType transcodingAudioSampleRate =
+          AudioSampleRateType.Type32000;
+      const AudioChannel transcodingAudioChannels = AudioChannel.Channel0;
+      const AudioCodecProfileType transcodingAudioCodecProfile =
+          AudioCodecProfileType.LCAAC;
+      const VideoCodecProfileType transcodingVideoCodecProfile =
+          VideoCodecProfileType.BaseLine;
+      const VideoCodecTypeForStream transcodingVideoCodecType =
+          VideoCodecTypeForStream.H264;
+      const List<TranscodingUser> transcodingTranscodingUsers = [];
+      const int transcodingWidth = 10;
+      const int transcodingHeight = 10;
+      const int transcodingVideoBitrate = 10;
+      const bool transcodingLowLatency = true;
+      const int transcodingVideoGop = 10;
+      const List<AgoraImage> transcodingWatermark = [];
+      const List<AgoraImage> transcodingBackgroundImage = [];
+      const int transcodingAudioBitrate = 10;
+      const int transcodingBackgroundColor = 10;
+      const String transcodingUserConfigExtraInfo = "hello";
+      final LiveTranscoding transcoding = LiveTranscoding(
+        transcodingTranscodingUsers,
+        width: transcodingWidth,
+        height: transcodingHeight,
+        videoBitrate: transcodingVideoBitrate,
+        videoFramerate: transcodingVideoFramerate,
+        lowLatency: transcodingLowLatency,
+        videoGop: transcodingVideoGop,
+        watermark: transcodingWatermark,
+        backgroundImage: transcodingBackgroundImage,
+        audioSampleRate: transcodingAudioSampleRate,
+        audioBitrate: transcodingAudioBitrate,
+        audioChannels: transcodingAudioChannels,
+        audioCodecProfile: transcodingAudioCodecProfile,
+        videoCodecProfile: transcodingVideoCodecProfile,
+        backgroundColor: transcodingBackgroundColor,
+        videoCodecType: transcodingVideoCodecType,
+        userConfigExtraInfo: transcodingUserConfigExtraInfo,
+      );
+      await screenShareHelper.startRtmpStreamWithTranscoding(
+        url,
+        transcoding,
       );
 
       await screenShareHelper.destroy();
@@ -4635,6 +4761,77 @@ void rtcEngineSubProcessSmokeTestCases() {
 
       const bool enabled = true;
       await screenShareHelper.enableWirelessAccelerate(
+        enabled,
+      );
+
+      await screenShareHelper.destroy();
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
+    'setRemoteUserSpatialAudioParams',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
+        engineAppId,
+        areaCode: [AreaCode.NA, AreaCode.GLOB],
+      ));
+
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
+
+      const int uid = 10;
+      const double spatialAudioParamsSpeakerAzimuth = 10.0;
+      const double spatialAudioParamsSpeakerElevation = 10.0;
+      const double spatialAudioParamsSpeakerDistance = 10.0;
+      const int spatialAudioParamsSpeakerOrientation = 10;
+      const bool spatialAudioParamsEnableBlur = true;
+      const bool spatialAudioParamsEnableAirAbsorb = true;
+      const SpatialAudioParams spatialAudioParams = SpatialAudioParams(
+        speakerAzimuth: spatialAudioParamsSpeakerAzimuth,
+        speakerElevation: spatialAudioParamsSpeakerElevation,
+        speakerDistance: spatialAudioParamsSpeakerDistance,
+        speakerOrientation: spatialAudioParamsSpeakerOrientation,
+        enableBlur: spatialAudioParamsEnableBlur,
+        enableAirAbsorb: spatialAudioParamsEnableAirAbsorb,
+      );
+      await screenShareHelper.setRemoteUserSpatialAudioParams(
+        uid,
+        spatialAudioParams,
+      );
+
+      await screenShareHelper.destroy();
+      await rtcEngine.destroy();
+    },
+    skip: !(Platform.isMacOS || Platform.isWindows || Platform.isLinux),
+  );
+
+  testWidgets(
+    'enableSpatialAudio',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = await RtcEngine.createWithContext(RtcEngineContext(
+        engineAppId,
+        areaCode: [AreaCode.NA, AreaCode.GLOB],
+      ));
+
+      final screenShareHelper =
+          await rtcEngine.getScreenShareHelper(appGroup: 'io.agora');
+
+      const bool enabled = true;
+      await screenShareHelper.enableSpatialAudio(
         enabled,
       );
 

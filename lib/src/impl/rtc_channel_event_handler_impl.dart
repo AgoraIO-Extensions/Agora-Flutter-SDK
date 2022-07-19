@@ -202,6 +202,13 @@ extension RtcChannelEventHandlerExt on RtcChannelEventHandler {
           clientRoleChangeFailed!(json.reason, json.currentRole);
         }
         break;
+      case 'FirstRemoteVideoFrame':
+        if (firstRemoteVideoFrame != null) {
+          final json = OnFirstRemoteVideoFrameJson.fromJson(dataMap);
+          firstRemoteVideoFrame!(
+              json.uid, json.width, json.height, json.elapsed);
+        }
+        break;
       default:
         // do nothing
         break;

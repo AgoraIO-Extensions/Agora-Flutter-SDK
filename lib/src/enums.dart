@@ -52,19 +52,18 @@ enum AreaCode {
 }
 
 ///
-///  The codec type of the output audio stream for CDN live
-///  streaming. The default value is LC-ACC.
+/// Self-defined audio codec profile.
 ///
 ///
 enum AudioCodecProfileType {
   ///
-  /// 0: (Default) LC-AAC, which is the low-complexity audio codec type.
+  /// 0: (Default) LC-AAC.
   ///
   @JsonValue(0)
   LCAAC,
 
   ///
-  /// 1: HE-AAC, which is the high-efficiency audio codec type.
+  /// 1: HE-AAC.
   ///
   @JsonValue(1)
   HEAAC,
@@ -137,7 +136,7 @@ enum AudioEqualizationBandFrequency {
 }
 
 ///
-///  Local audio state error codes.
+/// Local audio state error codes.
 ///
 ///
 enum AudioLocalError {
@@ -343,8 +342,7 @@ enum AudioMixingReason {
 enum AudioMixingStateCode {
   ///
   /// 710: The music file is playing.
-  ///  The possible reasons include:
-  ///  StartedByUser(710)
+  ///  The possible reasons include: StartedByUser(710)
   ///  OneLoopCompleted(720)
   ///  StartNewLoop(722)
   ///  ResumedByUser(726)
@@ -362,8 +360,7 @@ enum AudioMixingStateCode {
 
   ///
   /// 713: The music file stops playing.
-  ///  The possible reasons include:
-  ///  AllLoopsCompleted(723)
+  ///  The possible reasons include: AllLoopsCompleted(723)
   ///  StoppedByUser(724)
   ///
   @JsonValue(713)
@@ -371,8 +368,7 @@ enum AudioMixingStateCode {
 
   ///
   /// 714: An error occurs during the playback of the audio mixing file.
-  ///  The possible reasons include:
-  ///  CanNotOpen(701)
+  ///  The possible reasons include: CanNotOpen(701)
   ///  TooFrequentCall(702)
   ///  InterruptedEOF(703)
   ///
@@ -488,8 +484,7 @@ enum AudioOutputRouting {
 ///
 enum AudioProfile {
   ///
-  /// 0: The default audio profile.
-  ///  For the interactive streaming profile: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
+  /// 0: The default audio profile. For the interactive streaming profile: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
   ///  For the communication profile:
   ///
   @JsonValue(0)
@@ -510,6 +505,7 @@ enum AudioProfile {
   ///
   /// 3: A sample rate of 48 kHz, music encoding, stereo, and a bitrate of up to 80 Kbps.
   ///
+  ///
   @JsonValue(3)
   MusicStandardStereo,
 
@@ -527,27 +523,24 @@ enum AudioProfile {
 }
 
 ///
-///  Recording quality.
+/// Audio recording quality.
 ///
 ///
 enum AudioRecordingQuality {
   ///
-  /// 0: Low quality. The sample rate is 32 kHz, and the file size is around 1.2 MB for 10 minutes
-  ///  of recording.
+  /// 0: Low quality. The sample rate is 32 kHz, and the file size is around 1.2 MB after 10 minutes of recording.
   ///
   @JsonValue(0)
   Low,
 
   ///
-  /// 1: Medium quality. The sample rate is 32 kHz, and the file size is around 2 MB for 10 minutes
-  ///  of recording.
+  /// 1: Medium quality. The sample rate is 32 kHz, and the file size is around 2 MB after 10 minutes of recording.
   ///
   @JsonValue(1)
   Medium,
 
   ///
-  /// 2: High quality. The sample rate is 32 kHz, and the file size is around 3.75 MB for 10 minutes
-  ///  of recording.
+  /// 2: High quality. The sample rate is 32 kHz, and the file size is around 3.75 MB after 10 minutes of recording.
   ///
   @JsonValue(2)
   High,
@@ -1380,10 +1373,8 @@ enum ConnectionChangedReason {
   InvalidChannelName,
 
   ///
-  /// 8: The connection failed because the token is not valid. Typical reasons include:
-  ///  The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
+  /// 8: The connection failed because the token is not valid. Typical reasons include: The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
   ///  The uid specified when calling joinChannel to join the channel is inconsistent with the uid passed in when generating the token.
-  ///
   ///
   @JsonValue(8)
   InvalidToken,
@@ -1395,8 +1386,7 @@ enum ConnectionChangedReason {
   TokenExpired,
 
   ///
-  /// 10: The connection is rejected by server. Typical reasons include:
-  ///  The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.
+  /// 10: The connection is rejected by server. Typical reasons include: The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.
   ///  The user tries to join the channel when conducting a pre-call test. The user needs to call the channel after the call test ends.
   ///
   @JsonValue(10)
@@ -1425,6 +1415,19 @@ enum ConnectionChangedReason {
   ///
   @JsonValue(14)
   KeepAliveTimeout,
+
+  ///
+  /// 19: Join the same channel from different devices using the same user ID.
+  ///
+  @JsonValue(19)
+  SameUidLogin,
+
+  ///
+  /// 20: The number of hosts in the channel is already at the upper limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+  ///
+  ///
+  @JsonValue(20)
+  TooManyBroadcasters,
 }
 
 ///
@@ -1433,16 +1436,14 @@ enum ConnectionChangedReason {
 ///
 enum ConnectionStateType {
   ///
-  /// 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases:
-  ///  The initial state before calling the joinChannel method.
+  /// 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases: The initial state before calling the joinChannel method.
   ///  The app calls the leaveChannel method.
   ///
   @JsonValue(1)
   Disconnected,
 
   ///
-  /// 2: The SDK is connecting to the Agora edge server. This state indicates that the SDK is establishing a connection with the specified channel after the app calls joinChannel.
-  ///  If the SDK successfully joins the channel, it triggers the connectionStateChanged callback and the connection state switches to Connected.
+  /// 2: The SDK is connecting to the Agora edge server. This state indicates that the SDK is establishing a connection with the specified channel after the app calls joinChannel. If the SDK successfully joins the channel, it triggers the connectionStateChanged callback and the connection state switches to Connected.
   ///  After the connection is established, the SDK also initializes the media and triggers joinChannelSuccess when everything is ready.
   ///
   @JsonValue(2)
@@ -1455,19 +1456,15 @@ enum ConnectionStateType {
   Connected,
 
   ///
-  /// 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
-  ///  If the SDK cannot rejoin the channel within 10 seconds, it triggers connectionLost , stays in the Reconnecting state, and keeps rejoining the channel.
+  /// 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues. If the SDK cannot rejoin the channel within 10 seconds, it triggers connectionLost , stays in the Reconnecting state, and keeps rejoining the channel.
   ///  If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the connectionStateChanged callback, switches to the Failed state, and stops rejoining the channel.
-  ///
   ///
   @JsonValue(4)
   Reconnecting,
 
   ///
-  /// 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel.
-  ///  You can call joinChannel to rejoin the channel.
+  /// 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel. You can call joinChannel to rejoin the channel.
   ///  If the SDK is banned from joining the channel by the Agora edge server through the RESTful API, the SDK triggers the connectionStateChanged callback.
-  ///
   ///
   @JsonValue(5)
   Failed,
@@ -1494,7 +1491,6 @@ enum DegradationPreference {
   ///
   ///  2: Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.
   ///  The resolution of the video sent may change, so remote users need to handle this issue. See videoSizeChanged .
-  ///
   ///
   @JsonValue(2)
   MaintainBalanced
@@ -1693,6 +1689,7 @@ enum ErrorCode {
   StreamMessageTimeout,
 
   /// @nodoc
+  @Deprecated('Use ClientRoleChangeFailedReason instead.')
   @JsonValue(119)
   SetClientRoleNotAuthorized,
 
@@ -1870,6 +1867,10 @@ enum ErrorCode {
   VdmCameraNotAuthorized,
 
   /// @nodoc
+  @JsonValue(1502)
+  vdmWinDeviceInUse,
+
+  /// @nodoc
   @JsonValue(1600)
   VcmUnknownError,
 
@@ -1885,6 +1886,14 @@ enum ErrorCode {
   @Deprecated('')
   @JsonValue(1603)
   VcmEncoderSetError,
+
+  /// @nodoc
+  @JsonValue(1735)
+  ErrAdmWinCoreServreShutDown,
+
+  /// @nodoc
+  @JsonValue(1736)
+  ErrNotSupportedMutiGpuExcludeWindow,
 }
 
 ///
@@ -2069,7 +2078,13 @@ enum LocalVideoStreamError {
   DeviceNotFound,
 
   ///
-  ///  startScreenCaptureByWindowId 11: When calling to share the window, the shared window is in a minimized state.
+  /// 9: (macOS only) The external camera currently in use is disconnected (such as being unplugged).
+  ///
+  @JsonValue(9)
+  LocalVideoStreamErrorCaptureDeviceDisconnected,
+
+  ///
+  /// 11: When calling startScreenCaptureByWindowId to share the window, the shared window is in a minimized state.
   ///
   @JsonValue(11)
   ScreenCaptureWindowMinmized,
@@ -2079,7 +2094,7 @@ enum LocalVideoStreamError {
   ///  v3.2.0 12: The error code indicates that a window shared by the window ID has been closed, or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing.
   ///  Common scenarios for reporting this error code:
   ///  When the local user closes the shared window, the SDK reports this error code.
-  ///  The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
+  ///  The local user shows some slides in full-screen mode first, and then shares the cpp of the slides. After the user exits full-screen mode, the SDK reports this error code.
   ///  The local user watches web video or reads web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
   ///
   @JsonValue(12)
@@ -2098,8 +2113,24 @@ enum LocalVideoStreamError {
   LocalVideoStreamErrorScreenCaptureWindowOccluded,
 
   ///
-  /// 20: (Windows only) The SDK does not support sharing this type of window.
+  /// 13: (iOS only) The screen sharing extension process starts.
   ///
+  @JsonValue(13)
+  LocalVideoStreamErrorExtensionCaptureStarted,
+
+  ///
+  /// 14: (iOS only) The screen sharing extension process ends.
+  ///
+  @JsonValue(14)
+  LocalVideoStreamErrorExtensionCaptureStoped,
+
+  ///
+  /// 15: (iOS only) The screen sharing extension process quits unexpectedly.
+  ///
+  @JsonValue(15)
+  LocalVideoStreamErrorExtensionCaptureDisconnected,
+
+  /// @nodoc
   @JsonValue(20)
   LocalVideoStreamErrorScreenCaptureWindowNotSupported,
 }
@@ -2291,72 +2322,72 @@ enum NetworkType {
 }
 
 ///
-///  Error codes of the RTMP or RTMPS streaming.
+/// Error codes of the RTMP or RTMPS streaming.
 ///
 ///
 enum RtmpStreamingErrorCode {
   ///
-  /// The RTMP or RTMPS streaming publishes successfully.
+  /// 0: The RTMP or RTMPS streaming publishes successfully.
   ///
   @JsonValue(0)
   OK,
 
   ///
-  /// Invalid argument used. Please check the parameter setting. For example, if you do not call setLiveTranscoding to set the transcoding parameters before calling addPublishStreamUrl , the SDK returns this error.
+  /// 1: Invalid argument used. Please check the parameter setting. For example, if you do not call setLiveTranscoding to set the transcoding parameters before calling addPublishStreamUrl , the SDK returns this error.
   ///
   @JsonValue(1)
   InvalidParameters,
 
   ///
-  /// Check whether you set the parameters in the setLiveTranscoding method properly.
+  /// 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
   ///
   @JsonValue(2)
   EncryptedStreamNotAllowed,
 
   ///
-  /// The RTMP or RTMPS streaming is encrypted and cannot be published. Call addPublishStreamUrl to re-publish the stream.
+  /// 3: Timeout for the RTMP or RTMPS streaming. Call the addPublishStreamUrl method to publish the streaming again.
   ///
   @JsonValue(3)
   ConnectionTimeout,
 
   ///
-  /// An error occurs in Agora's streaming server. Call the addPublishStreamUrl method to publish the streaming again.
+  /// 4: An error occurs in Agora's streaming server. Call the addPublishStreamUrl method to publish the streaming again.
   ///
   @JsonValue(4)
   InternalServerError,
 
   ///
-  /// An error occurs in the CDN server.
+  /// 5: An error occurs in the CDN server.
   ///
   @JsonValue(5)
   RtmpServerError,
 
   ///
-  /// The RTMP or RTMPS streaming publishes too frequently.
+  /// 6: The RTMP or RTMPS streaming publishes too frequently.
   ///
   @JsonValue(6)
   TooOften,
 
   ///
-  /// The host has published more than 10 URLs. Delete the unnecessary URLs before adding new ones.
+  /// 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
   ///
   @JsonValue(7)
   ReachLimit,
 
   ///
-  /// The host manipulates other hosts' streams. For example, the host updates or stops other hosts' streams. Check your app logic.
+  /// 8: The host manipulates other hosts' URLs. For example, the host updates or stops other hosts' streams. Check your app logic.
   ///
   @JsonValue(8)
   NotAuthorized,
 
   ///
-  /// Agora's server fails to find the RTMP or RTMPS streaming.
+  /// 9: Agora's server fails to find the RTMP or RTMPS streaming.
   ///
   @JsonValue(9)
   StreamNotFound,
 
   ///
-  /// The URL format is incorrect. Check whether the URL format is correct.
+  /// 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
   ///
   @JsonValue(10)
   FormatNotSupported,
@@ -2368,7 +2399,7 @@ enum RtmpStreamingErrorCode {
   NotBroadcaster,
 
   ///
-  /// 13: The updateRtmpTranscoding or setLiveTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
+  /// The updateRtmpTranscoding or setLiveTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
   ///
   @JsonValue(13)
   TranscodingNoMixStream,
@@ -2380,7 +2411,7 @@ enum RtmpStreamingErrorCode {
   NetDown,
 
   ///
-  /// 15: Your App ID does not have permission to use the CDN live streaming function. Refer to Prerequisites in Media Push to enable the CDN live streaming permission.
+  /// 15: Your App ID does not have permission to use the CDN live streaming function. Refer to Prerequisites to enable the CDN live streaming permission.
   ///
   @JsonValue(15)
   InvalidAppid,
@@ -2393,41 +2424,47 @@ enum RtmpStreamingErrorCode {
 }
 
 ///
-///  States of the RTMP or RTMPS streaming.
+/// States of the Media Push.
 ///
 ///
 enum RtmpStreamingState {
   ///
-  /// The RTMP or RTMPS streaming has not started or has ended. This state is also triggered after you remove an RTMP or RTMPS stream from the CDN by calling removePublishStreamUrl .
+  /// 0: The Media Push has not started or has ended. This state is also triggered after you remove a RTMP or RTMPS stream from the CDN by calling removePublishStreamUrl .
   ///
   @JsonValue(0)
   Idle,
 
   ///
-  /// The SDK is connecting to Agora's streaming server and the CDN server. This state is triggered after you call the addPublishStreamUrl method.
+  /// 1: The SDK is connecting to Agora's streaming server and the CDN server. This state is triggered after you call the addPublishStreamUrl method.
   ///
   @JsonValue(1)
   Connecting,
 
   ///
-  /// The RTMP or RTMPS streaming publishes. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
+  /// 2: The RTMP or RTMPS streaming publishes. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
   ///
   @JsonValue(2)
   Running,
 
   ///
-  /// The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state. If the SDK successfully resumes the streaming, Running(2) returns.
-  ///  If the streaming does not resume within 60 seconds or server errors occur, Failure (4) returns. You can also reconnect to the server by calling the removePublishStreamUrl and addPublishStreamUrl methods.
+  /// 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state. If the SDK successfully resumes the streaming, Running(2) returns.
+  ///  If the streaming does not resume within 60 seconds or server errors occur, Failure(4) returns. You can also reconnect to the server by calling the removePublishStreamUrl and addPublishStreamUrl methods.
   ///
   ///
   @JsonValue(3)
   Recovering,
 
   ///
-  /// The RTMP or RTMPS streaming fails. See the error code for the detailed error information. You can also call the addPublishStreamUrl method to publish the RTMP or RTMPS stream again.
+  /// 4: The RTMP or RTMPS streaming fails. See the errCode parameter for the detailed error information. You can also call the addPublishStreamUrl method to publish the RTMP or RTMPS streaming again.
   ///
   @JsonValue(4)
   Failure,
+
+  ///
+  /// 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call removePublishStreamUrl or stopRtmpStream to stop the streaming normally, the SDK reports the streaming state as Disconnecting, Idle in sequence.
+  ///
+  @JsonValue(5)
+  Disconnecting,
 }
 
 ///
@@ -2613,6 +2650,7 @@ enum VideoOutputOrientationMode {
   ///
   /// 0: (Default) The output video always follows the orientation of the captured video. The receiver takes the rotational information passed on from the video encoder. This mode applies to scenarios where video orientation can be adjusted on the receiver. If the captured video is in landscape mode, the output video is in landscape mode.
   ///  If the captured video is in portrait mode, the output video is in portrait mode.
+  ///
   ///
   @JsonValue(0)
   Adaptative,
@@ -3028,8 +3066,7 @@ enum StreamPublishState {
   Idle,
 
   ///
-  /// 1: Fails to publish the local stream. Possible reasons:
-  ///  The local user calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending the local media stream.
+  /// 1: Fails to publish the local stream. Possible reasons: The local user calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending the local media stream.
   ///  The local user calls disableAudio or disableVideo to disable the local audio or video module.
   ///  The local user calls enableLocalAudio (false) or enableLocalVideo (false) to disable the local audio or video capture.
   ///  The role of the local user is audience.
@@ -3062,13 +3099,10 @@ enum StreamSubscribeState {
   Idle,
 
   ///
-  /// 1: Fails to subscribe to the remote stream. Possible reasons:
-  ///  The remote user:
-  /// Calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media stream.
-  /// Calls disableAudio or disableVideo to disable the local audio or video module.
+  /// 1: Fails to subscribe to the remote stream. Possible reasons: The remote user: Calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media stream.
+  ///  Calls disableAudio or disableVideo to disable the local audio or video module.
   ///  Calls enableLocalAudio (false) or enableLocalVideo (false) to disable the local audio or video capture.
-  ///  The role of the remote user is audience. The local user calls the following methods to stop receiving remote streams:
-  ///  Calls muteRemoteAudioStream (true), muteAllRemoteAudioStreams (true) or setDefaultMuteAllRemoteAudioStreams (true) to stop receiving the remote audio streams.
+  ///  The role of the remote user is audience. The local user calls the following methods to stop receiving remote streams: Calls muteRemoteAudioStream (true), muteAllRemoteAudioStreams (true) or setDefaultMuteAllRemoteAudioStreams (true) to stop receiving the remote audio streams.
   ///  Calls muteRemoteVideoStream (true), muteAllRemoteVideoStreams (true) or setDefaultMuteAllRemoteVideoStreams (true) to stop receiving the remote video streams.
   ///
   @JsonValue(1)
@@ -3088,12 +3122,12 @@ enum StreamSubscribeState {
 }
 
 ///
-///  Events during the media push.
+/// Events during the media push.
 ///
 ///
 enum RtmpStreamingEvent {
   ///
-  /// An error occurs when you add a background image or a watermark image in the media push.
+  /// 1: An error occurs when you add a background image or a watermark image in the media push.
   ///
   @JsonValue(1)
   FailedLoadImage,
@@ -3205,7 +3239,6 @@ enum AudioEffectPreset {
   /// The virtual stereo effect, which renders monophonic audio as stereo audio.
   ///  Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo; otherwise, the preset setting is invalid.
   ///
-  ///
   @JsonValue(0x02010500)
   RoomAcousticsVirtualStereo,
 
@@ -3225,13 +3258,13 @@ enum AudioEffectPreset {
   /// A 3D voice effect that makes the voice appear to be moving around the user. The default movement cycle is 10 seconds. After setting this effect, you can call setAudioEffectParameters to modify the movement period. Before using this preset, set the profile parameter of setAudioProfile to MusicStandardStereo or MusicHighQualityStereo; otherwise, the preset setting is invalid.
   ///  If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
   ///
+  ///
   @JsonValue(0x02010800)
   RoomAcoustics3DVoice,
 
   ///
   /// A middle-aged man's voice.
   ///  Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-  ///
   ///
   @JsonValue(0x02020100)
   VoiceChangerEffectUncle,
@@ -3240,14 +3273,12 @@ enum AudioEffectPreset {
   /// A senior man's voice.
   ///  Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
   ///
-  ///
   @JsonValue(0x02020200)
   VoiceChangerEffectOldMan,
 
   ///
   /// A boy's voice.
   ///  Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-  ///
   ///
   @JsonValue(0x02020300)
   VoiceChangerEffectBoy,
@@ -3256,14 +3287,12 @@ enum AudioEffectPreset {
   /// A young woman's voice.
   ///  Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
   ///
-  ///
   @JsonValue(0x02020400)
   VoiceChangerEffectSister,
 
   ///
   /// A girl's voice.
   ///  Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
-  ///
   ///
   @JsonValue(0x02020500)
   VoiceChangerEffectGirl,
@@ -3284,14 +3313,12 @@ enum AudioEffectPreset {
   /// The voice effect typical of R&B music.
   ///  Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo; otherwise, the preset setting is invalid.
   ///
-  ///
   @JsonValue(0x02030100)
   StyleTransformationRnB,
 
   ///
   /// The voice effect typical of popular music.
   ///  Before using this preset, set the profile parameter of setAudioProfile to MusicHighQuality or MusicHighQualityStereo; otherwise, the preset setting is invalid.
-  ///
   ///
   @JsonValue(0x02030200)
   StyleTransformationPopular,
@@ -3325,7 +3352,6 @@ enum VoiceBeautifierPreset {
   /// A fresher voice.
   ///  Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
   ///
-  ///
   @JsonValue(0x01010200)
   ChatBeautifierFresh,
 
@@ -3333,13 +3359,13 @@ enum VoiceBeautifierPreset {
   /// A more vital voice.
   ///  Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
   ///
-  ///
   @JsonValue(0x01010300)
   ChatBeautifierVitality,
 
   ///
   ///  Singing beautifier effect. If you call setVoiceBeautifierPreset (SingingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.
   ///  If you call setVoiceBeautifierParameters (SingingBeautifier, param1, param2), you can beautify a male- or female-sounding voice and add a reverberation effect.
+  ///
   ///
   @JsonValue(0x01020100)
   SingingBeautifier,
@@ -3541,7 +3567,7 @@ enum UploadErrorReason {
 ///
 enum CloudProxyType {
   ///
-  /// 0: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically switches to TLS 443 if the attempt fails. As of v3.6.2, the SDK has this mode enabled by default.
+  /// 0: The automatic mode. The SDK has this mode enabled by default. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically switches to TCP/TLS 443 if the attempt fails. As of v3.6.2, the SDK has this mode enabled by default.
   ///
   @JsonValue(0)
   None,
@@ -3553,7 +3579,7 @@ enum CloudProxyType {
   UDP,
 
   ///
-  /// 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode. In this mode, the SDK always transmits data over TLS 443.
+  /// 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode. In this mode, the SDK always transmits data over TCP/TLS 443.
   ///
   @JsonValue(2)
   TCP,
@@ -4161,4 +4187,58 @@ enum ContentInspectResult {
   /// @nodoc
   @JsonValue(3)
   ContentInspectPorn,
+}
+
+///
+/// The screen sharing scenario. Set in setScreenCaptureScenario .
+///
+///
+enum ScreenScenarioType {
+  ///
+  /// 1: (Default) Document. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share documents, slides, and tables, you can set this scenario.
+  ///
+  @JsonValue(1)
+  ScreenScenarioDocument,
+
+  ///
+  /// 2: Game. This scenario prioritizes the smoothness of screen sharing. If you share games, you can set this scenario.
+  ///
+  @JsonValue(2)
+  ScreenScenarioGaming,
+
+  ///
+  /// 3: Video. This scenario prioritizes the smoothness of screen sharing. If you share movies or live videos, you can set this scenario.
+  ///
+  @JsonValue(3)
+  ScreenScenarioVideo,
+
+  ///
+  /// 4: Remote control. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share the device desktop being remotely controlled, you can set this scenario.
+  ///
+  @JsonValue(4)
+  ScreenScenarioRdc,
+}
+
+///
+/// The screen capture error type.
+///
+///
+enum ErrScreenCapture {
+  ///
+  /// 16: The user refuses to grant screen capture permission to the application.
+  ///
+  @JsonValue(16)
+  ErrScreenCapturePermissionDenied,
+
+  ///
+  /// 2: Due to system limitations, screen capture is not available on systems earlier than Android 5 (that is, Android API level 21). The SDK reports this error code when you call startScreenCaptureMobile on systems earlier than Android 5.
+  ///
+  @JsonValue(2)
+  ErrScreenCaptureSystemNotSupported,
+
+  ///
+  /// 3: Due to system limitations, system audio cannot be captured on systems earlier than Android 10 (that is, API level 29). The SDK reports this error when you call startScreenCaptureMobile and set captureAudio as true on systems later than Android 5 (API level 21) and earlier than Android 10 (API level 29).
+  ///
+  @JsonValue(3)
+  ErrScreenCaptureSystemAudioNotSupported,
 }

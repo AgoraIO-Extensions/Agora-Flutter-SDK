@@ -214,6 +214,13 @@ enum ApiTypeEngine {
   kEngineEnableWirelessAccelerate,
 }
 
+abstract class ApiTypeEngineExt {
+  static const int kEngineEnableLocalVoicePitchCallback = 207;
+  static const int kEngineEnableSpatialAudio = 208;
+  static const int kEngineSetRemoteUserSpatialAudioParams = 209;
+  static const int kEngineSetScreenCaptureScenario = 210;
+}
+
 enum ApiTypeChannel {
   kChannelCreateChannel,
   kChannelRelease,
@@ -267,4 +274,8 @@ enum ApiTypeChannel {
   kChannelStartRtmpStreamWithTranscoding,
   kChannelUpdateRtmpTranscoding,
   kChannelStopRtmpStream,
+}
+
+abstract class ApiTypeChannelExt {
+  static const kChannelSetRemoteUserSpatialAudioParams = 52;
 }

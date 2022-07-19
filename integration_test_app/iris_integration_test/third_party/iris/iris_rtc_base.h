@@ -225,6 +225,10 @@ enum ApiTypeEngine {
   kEngineEnableWirelessAccelerate = 204,
   kEngineMediaRecorderStart = 205,
   kEngineMediaRecorderStop = 206,
+  kEngineEnableLocalVoicePitchCallback = 207,
+  kEngineEnableSpatialAudio = 208,
+  kEngineSetRemoteUserSpatialAudioParams = 209,
+  kEngineSetScreenCaptureScenario = 210,
 };
 
 enum ApiTypeChannel {
@@ -280,6 +284,7 @@ enum ApiTypeChannel {
   kChannelStartRtmpStreamWithTranscoding = 49,
   kChannelUpdateRtmpTranscoding = 50,
   kChannelStopRtmpStream = 51,
+  kChannelSetRemoteUserSpatialAudioParams = 52,
 };
 
 enum ApiTypeAudioDeviceManager {

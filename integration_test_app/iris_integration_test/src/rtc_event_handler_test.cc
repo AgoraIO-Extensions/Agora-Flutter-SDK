@@ -447,8 +447,8 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     if (event_name == nullptr || strcmp(event_name, "onClientRoleChangeFailed") == 0)
     {
         handler->onClientRoleChangeFailed(
-                CLIENT_ROLE_CHANGE_FAILED_REASON::CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS,
-                CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
+            CLIENT_ROLE_CHANGE_FAILED_REASON::CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS,
+            CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
     }
     if (event_name == nullptr || strcmp(event_name, "onWlAccMessage") == 0)
     {
@@ -479,6 +479,10 @@ void CallRtcEngineEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     if (event_name == nullptr || strcmp(event_name, "onContentInspectResult") == 0)
     {
         handler->onContentInspectResult(CONTENT_INSPECT_RESULT::CONTENT_INSPECT_NEUTRAL);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onLocalVoicePitchInHz") == 0)
+    {
+        handler->onLocalVoicePitchInHz(10);
     }
 }
 
@@ -668,8 +672,12 @@ void CallRtcChannelEvents(IrisRtcEnginePtr engine_ptr, const char *event_name)
     if (event_name == nullptr || strcmp(event_name, "onClientRoleChangeFailed") == 0)
     {
         handler->onClientRoleChangeFailed(
-                rtcChannel,
-                CLIENT_ROLE_CHANGE_FAILED_REASON::CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS,
-                CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
+            rtcChannel,
+            CLIENT_ROLE_CHANGE_FAILED_REASON::CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS,
+            CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER);
+    }
+    if (event_name == nullptr || strcmp(event_name, "onFirstRemoteVideoFrame") == 0)
+    {
+        handler->onFirstRemoteVideoFrame(rtcChannel, 123, 100, 100, 100);
     }
 }
