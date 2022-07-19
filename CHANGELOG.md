@@ -1,6 +1,16 @@
 
 
-# [5.2.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.1.1...v5.2.0) (2022-05-20)
+# [5.3.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.2.0...v5.3.0) (2022-07-19)
+
+
+### Bug Fixes
+
+* web joinChannelWithUserAccount not publish stream ([#704](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/704)) ([28d8848](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/28d8848a084c2f9755841ef6a5627df97a10598e))
+
+
+### Features
+
+* Upgrade native sdk 3.7.0 ([#702](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/702)) ([08b2862](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/08b2862f76e6c61ebe04c43160ff1838ef3b33dd))# [5.2.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.1.1...v5.2.0) (2022-05-20)
 
 
 ### Features
