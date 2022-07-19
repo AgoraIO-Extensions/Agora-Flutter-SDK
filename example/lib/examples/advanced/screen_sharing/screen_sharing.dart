@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
@@ -9,8 +8,6 @@ import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-const String _kDefaultAppGroup = 'io.agora';
 
 /// ScreenSharing Example
 class ScreenSharing extends StatefulWidget {
@@ -25,8 +22,14 @@ class _State extends State<ScreenSharing> {
   late final RtcEngine _engine;
   String channelId = config.channelId;
   bool isJoined = false, screenSharing = false;
+  int _selectedDisplayId = -1;
+  int _selectedWindowId = -1;
+  List<MediaDeviceInfo> recordings = [];
+  String _selectedLoopBackRecordingDeviceName = "";
   List<int> remoteUid = [];
-  TextEditingController? _controller;
+  List<Display> displays = [];
+  List<Window> windows = [];
+  late final TextEditingController _controller;
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _State extends State<ScreenSharing> {
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
     _engine.destroy();
   }
 
@@ -49,6 +53,8 @@ class _State extends State<ScreenSharing> {
     await _engine.startPreview();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
+    await _enumerateDisplayAndWindow();
+    await _enumerateRecording();
   }
 
   _addListeners() {
@@ -87,31 +93,6 @@ class _State extends State<ScreenSharing> {
           remoteUid.clear();
         });
       },
-    ));
-  }
-
-  _joinChannel() async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      await [Permission.microphone, Permission.camera].request();
-    }
-    await _engine.joinChannel(config.token, channelId, null, config.uid);
-  }
-
-  _leaveChannel() async {
-    await _engine.leaveChannel();
-  }
-
-  _startScreenShare() async {
-    final helper = await _engine.getScreenShareHelper(
-        appGroup: kIsWeb || Platform.isWindows ? null : _kDefaultAppGroup);
-    helper.setEventHandler(RtcEngineEventHandler(
-      joinChannelSuccess: (String channel, int uid, int elapsed) {
-        logSink.log('ScreenSharing joinChannelSuccess $channel $uid $elapsed');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text('ScreenSharing joinChannelSuccess $channel $uid $elapsed'),
-        ));
-      },
       localVideoStateChanged:
           (LocalVideoStreamState localVideoState, LocalVideoStreamError error) {
         logSink.log(
@@ -121,38 +102,182 @@ class _State extends State<ScreenSharing> {
         }
       },
     ));
+  }
 
-    await helper.disableAudio();
-    await helper.enableVideo();
-    await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await helper.setClientRole(ClientRole.Broadcaster);
-    var windowId = 0;
-    var random = Random();
-    if (!kIsWeb &&
-        (Platform.isWindows || Platform.isMacOS || Platform.isAndroid)) {
-      final windows = _engine.enumerateWindows();
-      if (windows.isNotEmpty) {
-        final index = random.nextInt(windows.length - 1);
-        logSink.log('ScreenSharing window with index $index');
-        windowId = windows[index].id;
+  _joinChannel() async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await [Permission.microphone, Permission.camera].request();
+    }
+    await _engine.joinChannel(
+        config.token,
+        _controller.text,
+        null,
+        config.uid,
+        ChannelMediaOptions(
+          publishLocalAudio: true,
+        ));
+  }
+
+  _leaveChannel() async {
+    await _engine.leaveChannel();
+  }
+
+  Future<void> _enumerateDisplayAndWindow() async {
+    if (!(Platform.isWindows || Platform.isMacOS)) {
+      return;
+    }
+    final windows = _engine.enumerateWindows();
+    final displays = _engine.enumerateDisplays();
+    setState(() {
+      this.windows = windows;
+      this.displays = displays;
+    });
+  }
+
+  Widget _displayDropDown() {
+    if (displays.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
+      return Container();
+    }
+    final dropDownMenus = <DropdownMenuItem<int>>[];
+    dropDownMenus.add(const DropdownMenuItem(
+      child: Text('please select display id'),
+      value: -1,
+    ));
+    for (var v in displays) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('Display:${v.id}'),
+        value: v.id,
+      ));
+    }
+    return DropdownButton<int>(
+      items: dropDownMenus,
+      value: _selectedDisplayId,
+      onChanged: (v) {
+        setState(() {
+          _selectedDisplayId = v!;
+          _selectedWindowId = -1;
+        });
+      },
+    );
+  }
+
+  Widget _windowDropDown() {
+    if (windows.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
+      return Container();
+    }
+    final dropDownMenus = <DropdownMenuItem<int>>[];
+    dropDownMenus.add(const DropdownMenuItem(
+      child: Text('please select window id'),
+      value: -1,
+    ));
+    for (var v in windows) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('Window:${v.id}'),
+        value: v.id,
+      ));
+    }
+    return DropdownButton<int>(
+      items: dropDownMenus,
+      value: _selectedWindowId,
+      onChanged: (v) {
+        setState(() {
+          _selectedWindowId = v!;
+          _selectedDisplayId = -1;
+        });
+      },
+    );
+  }
+
+  Future<void> _enumerateRecording() async {
+    if (!(Platform.isWindows || Platform.isMacOS)) {
+      return;
+    }
+    final recordings =
+        await _engine.deviceManager.enumerateAudioRecordingDevices();
+
+    setState(() {
+      this.recordings = recordings;
+    });
+  }
+
+  Widget _loopBackRecordingDropDown() {
+    if (recordings.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
+      return Container();
+    }
+    final dropDownMenus = <DropdownMenuItem<String>>[];
+    dropDownMenus.add(const DropdownMenuItem(
+      child: Text('select loopBackRecording(Optional)'),
+      value: "",
+    ));
+    for (var v in recordings) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('Window:${v.deviceName}'),
+        value: v.deviceName,
+      ));
+    }
+    return DropdownButton<String>(
+      items: dropDownMenus,
+      value: _selectedLoopBackRecordingDeviceName,
+      onChanged: (v) {
+        setState(() {
+          _selectedLoopBackRecordingDeviceName = v!;
+        });
+      },
+    );
+  }
+
+  _startScreenShare() async {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      const ScreenAudioParameters parametersAudioParams = ScreenAudioParameters(
+        100,
+      );
+      const VideoDimensions videoParamsDimensions = VideoDimensions(
+        width: 1280,
+        height: 720,
+      );
+      const ScreenVideoParameters parametersVideoParams = ScreenVideoParameters(
+        dimensions: videoParamsDimensions,
+        frameRate: 15,
+        bitrate: 1000,
+        contentHint: VideoContentHint.Motion,
+      );
+      const ScreenCaptureParameters2 parameters = ScreenCaptureParameters2(
+        captureAudio: true,
+        audioParams: parametersAudioParams,
+        captureVideo: true,
+        videoParams: parametersVideoParams,
+      );
+
+      await _engine.startScreenCaptureMobile(parameters);
+    } else if (Platform.isWindows || Platform.isMacOS) {
+      if (_selectedDisplayId != -1) {
+        await _engine.startScreenCaptureByDisplayId(
+          _selectedDisplayId,
+        );
+        await _engine.enableAudio();
+        await _engine.enableLoopbackRecording(true,
+            deviceName: _selectedLoopBackRecordingDeviceName);
+      } else if (_selectedWindowId != -1) {
+        await _engine.startScreenCaptureByWindowId(_selectedWindowId);
+        await _engine.enableAudio();
+        await _engine.enableLoopbackRecording(true,
+            deviceName: _selectedLoopBackRecordingDeviceName);
+      } else {
+        return;
       }
     }
-    await helper.startScreenCaptureByWindowId(windowId);
+
     setState(() {
       screenSharing = true;
     });
-    await helper.joinChannel(
-        config.token, channelId, null, config.screenSharingUid);
   }
 
   _stopScreenShare() async {
-    final helper = await _engine.getScreenShareHelper();
-    await helper.destroy().then((value) {
-      setState(() {
-        screenSharing = false;
-      });
-    }).catchError((err) {
-      logSink.log('_stopScreenShare $err');
+    await _engine.stopScreenCapture();
+    setState(() {
+      screenSharing = false;
+      _selectedDisplayId = -1;
+      _selectedWindowId = -1;
     });
   }
 
@@ -182,24 +307,24 @@ class _State extends State<ScreenSharing> {
                 )
               ],
             ),
+            _displayDropDown(),
+            _windowDropDown(),
+            _loopBackRecordingDropDown(),
             _renderVideo(),
           ],
         ),
-        if (kIsWeb || (Platform.isWindows || Platform.isMacOS))
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed:
-                      screenSharing ? _stopScreenShare : _startScreenShare,
-                  child:
-                      Text('${screenSharing ? 'Stop' : 'Start'} screen share'),
-                ),
-              ],
-            ),
-          )
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: screenSharing ? _stopScreenShare : _startScreenShare,
+                child: Text('${screenSharing ? 'Stop' : 'Start'} share'),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -208,20 +333,10 @@ class _State extends State<ScreenSharing> {
     return Expanded(
         child: Stack(
       children: [
-        Row(
-          children: [
-            const Expanded(
-                flex: 1,
-                child: kIsWeb
-                    ? rtc_local_view.SurfaceView()
-                    : rtc_local_view.TextureView()),
-            if (screenSharing)
-              const Expanded(
-                  flex: 1,
-                  child: kIsWeb
-                      ? rtc_local_view.SurfaceView.screenShare()
-                      : rtc_local_view.TextureView.screenShare()),
-          ],
+        const SizedBox.expand(
+          child: kIsWeb
+              ? rtc_local_view.SurfaceView()
+              : rtc_local_view.TextureView(),
         ),
         Align(
           alignment: Alignment.topLeft,

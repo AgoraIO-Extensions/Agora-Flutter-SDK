@@ -22,6 +22,9 @@ class IRIS_CPP_API IIrisRtcEngine : public IrisDelegate<ApiTypeEngine> {
   virtual int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
                       char result[kBasicResultLength]) = 0;
 
+  virtual int CallApiMaxResult(ApiTypeEngine api_type, const char *params,
+                               char result[64 * 1024]) = 0;
+
   virtual IIrisRtcDeviceManager *device_manager() = 0;
 
   virtual IIrisRtcChannel *channel() = 0;
@@ -58,7 +61,8 @@ class IRIS_CPP_API IrisRtcEngine : public IIrisRtcEngine {
 
   int CallApi(ApiTypeEngine api_type, const char *params, void *buffer,
               unsigned int length, char result[kBasicResultLength]) override;
-
+  int CallApiMaxResult(ApiTypeEngine api_type, const char *params,
+                       char result[64 * 1024]) override;
   IIrisRtcDeviceManager *device_manager() override;
 
   IIrisRtcChannel *channel() override;

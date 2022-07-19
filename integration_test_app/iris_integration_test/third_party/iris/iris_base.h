@@ -62,7 +62,7 @@ extern "C" {
 
 const int kBasicResultLength = 512;
 const int kMaxResultLength = 2048;
-
+const int kLargeResultLength = 64 * 1024;
 enum IrisAppType {
   kAppTypeNative = 0,
   kAppTypeCocos = 1,

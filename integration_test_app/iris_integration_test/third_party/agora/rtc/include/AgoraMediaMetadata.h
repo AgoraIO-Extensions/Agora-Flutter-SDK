@@ -29,7 +29,7 @@ The SDK triggers this callback after you successfully calling the [setMediaMetad
 This callback is returned multiple times, and you can update the maximum metadata size in the new callbacks.
 @return The maximum size of the buffer of the metadata (see the return value of [readyToSendMetadataAtTimestamp]([AgoraMediaMetadataDataSource readyToSendMetadataAtTimestamp:])) that you want to use. The highest value is 1024 bytes. Ensure that you set the return value.
  */
-- (NSInteger)metadataMaxSize;
+- (NSInteger)metadataMaxSize NS_SWIFT_NAME(metadataMaxSize());
 
 /** Occurs when the SDK is ready to receive and send metadata.
 
@@ -46,7 +46,7 @@ You need to specify the metadata in the return value of this method.
 
  Ensure that you set the return value.
  */
-- (NSData* _Nullable)readyToSendMetadataAtTimestamp:(NSTimeInterval)timestamp;
+- (NSData* _Nullable)readyToSendMetadataAtTimestamp:(NSTimeInterval)timestamp NS_SWIFT_NAME(readyToSendMetadata(atTimestamp:));
 
 @end
 
@@ -63,6 +63,6 @@ You need to specify the metadata in the return value of this method.
  @param uid The ID of the user who sends the metadata.
  @param timestamp The timestamp (ms) of the received metadata.
  */
-- (void)receiveMetadata:(NSData* _Nonnull)data fromUser:(NSInteger)uid atTimestamp:(NSTimeInterval)timestamp;
+- (void)receiveMetadata:(NSData* _Nonnull)data fromUser:(NSInteger)uid atTimestamp:(NSTimeInterval)timestamp NS_SWIFT_NAME(receiveMetadata(_:fromUser:atTimestamp:));
 
 @end

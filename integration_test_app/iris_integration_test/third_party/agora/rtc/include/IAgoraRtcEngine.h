@@ -369,6 +369,13 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    */
   LOCAL_VIDEO_STREAM_ERROR_DEVICE_NOT_FOUND = 8,
   /**
+   * 9: (macOS only) The external camera currently in use is disconnected
+   * (such as being unplugged).
+   *
+   * @since v3.5.0
+   */
+  LOCAL_VIDEO_STREAM_ERROR_DEVICE_DISCONNECTED = 9,
+  /**
    * 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID
    * of the video device is valid.
    *
@@ -402,12 +409,12 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    */
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_OCCLUDED = 13,
   /**
-   * 20: (Windows only) The SDK does not support sharing this type of window. Remind your user that the current type of window is not supported for sharing.
+   * 20: (Windows only) The SDK does not support sharing this type of window.Remind your user that the current type of window is not supported for sharing.
    *
-   * @since v3.5.2
+   * @deprecated Deprecated from v3.7.0.As of v3.7.0, the SDK no longer throws this error code and automatically adjusts the capture method to capture more types of windows.
+   *
    */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_NOT_SUPPORTED = 20,
-
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_NOT_SUPPORTED AGORA_DEPRECATED_ATTRIBUTE = 20,
 };
 
 /** Local audio state types.
@@ -538,6 +545,14 @@ enum RENDER_MODE_TYPE {
   4: The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
   */
   RENDER_MODE_FILL = 4,
+};
+
+/** Super Resolution modes. */
+enum SR_MODE {
+  /** 0: manual select uid to do super resolution */
+  SR_MODE_MANUAL = 0,
+  /** 1: auto select.*/
+  SR_MODE_AUTO,
 };
 
 /** Video mirror modes. */
@@ -842,6 +857,9 @@ enum SUPER_RESOLUTION_STATE_REASON {
   /** 3: The device does not support using super resolution.
    */
   SR_STATE_REASON_DEVICE_NOT_SUPPORTED = 3,
+  /** 4: Insufficient device performance，It is recommended to turn off super resolution.
+   */
+  SR_STATE_REASON_INSUFFICIENT_PERFORMANCE = 4,
 };
 
 /**
@@ -866,6 +884,10 @@ enum VIRTUAL_BACKGROUND_SOURCE_STATE_REASON {
    * 3: The device does not support using the virtual background.
    */
   VIRTUAL_BACKGROUND_SOURCE_STATE_REASON_DEVICE_NOT_SUPPORTED = 3,
+  /**
+   * 4: Insufficient device performance，It is recommended to turn off virtual background.
+   */
+  VIRTUAL_BACKGROUND_SOURCE_STATE_REASON_INSUFFICIENT_PERFORMANCE = 4,
 };
 /// @cond nodoc
 enum CONTENT_INSPECT_RESULT {
@@ -1775,8 +1797,10 @@ enum REMOTE_VIDEO_STATE_REASON {
 
   /** 9: The remote audio-only stream switches back to the audio-and-video stream after the network conditions improve.
    */
-  REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY = 9
-
+  REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY = 9,
+  /** 10: The remote user sdk(only for iOS) in background.
+   */
+  REMOTE_VIDEO_STATE_REASON_SDK_IN_BACKGROUND = 10
 };
 
 /** Video frame rates. */
@@ -1974,12 +1998,18 @@ enum CONNECTION_CHANGED_REASON_TYPE {
   CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED = 13,
   /** 14: Timeout for the keep-alive of the connection between the SDK and Agora's edge server. The connection state changes to CONNECTION_STATE_RECONNECTING(4). */
   CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT = 14,
-  /// @cond nodoc
-  /** 19: The connection failed due to same uid joined again on another device. */
+  /** 19: Join the same channel from different devices using the same user ID.
+   *
+   * @since v3.7.0
+   */
   CONNECTION_CHANGED_SAME_UID_LOGIN = 19,
-  /** 20: The connection failed due to too many broadcasters in the channel. */
+  /** 20: The number of hosts in the channel is already at the upper limit.
+   *
+   * @note This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+   *
+   * @since v3.7.0
+   */
   CONNECTION_CHANGED_TOO_MANY_BROADCASTERS = 20,
-  /// @endcond
 };
 
 /** Network type. */
@@ -2141,7 +2171,7 @@ enum PROXY_TYPE {
   /** 4: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically switches to TLS 443 if the attempt fails.
    */
   TCP_PROXY_AUTO_FALLBACK_TYPE = 4,
-};  // namespace rtc
+};
 
 #if (defined(__APPLE__) && TARGET_OS_IOS)
 /**
@@ -2296,30 +2326,30 @@ enum AUDIO_FILE_INFO_ERROR {
   AUDIO_FILE_INFO_ERROR_FAILURE = 1
 };
 
-/// @cond nodoc
 /**
- * The reason for failure of changing role.
+ * The reason for a user role switch failure.
  *
- * @since v3.6.1
+ * @since v3.7.0
  */
 enum CLIENT_ROLE_CHANGE_FAILED_REASON {
-  /** 1: Too many broadcasters in the channel.
+  /** 1: The number of hosts in the channel is already at the upper limit.
+   *
+   * @note This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS = 1,
 
-  /** 2: Change operation not authorized.
+  /** 2: The request is rejected by the Agora server. Agora recommends you prompt the user to try to switch their user role again.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_NOT_AUTHORIZED = 2,
 
-  /** 3: Change operation timer out.
+  /** 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_REQUEST_TIME_OUT = 3,
 
-  /** 4: Change operation is interrupted since we lost connection with agora service.
+  /** 4: The SDK connection fails. You can use `reason` reported in the `onConnectionStateChanged` callback to troubleshoot the failure.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_CONNECTION_FAILED = 4,
 };
-/// @endcond
 
 /** The detailed options of a user.
  */
@@ -3507,6 +3537,25 @@ enum VideoContentHint {
    */
   CONTENT_HINT_DETAILS
 };
+/**
+ * The screen sharing scenario.
+ *
+ * @since v3.7.0
+ */
+enum SCREEN_SCENARIO_TYPE {
+  /** 1: (Default) Document. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share documents, slides, and tables, you can set this scenario.
+   */
+  SCREEN_SCENARIO_DOCUMENT = 1,
+  /** 2: Game. This scenario prioritizes the smoothness of screen sharing. If you share games, you can set this scenario.
+   */
+  SCREEN_SCENARIO_GAMING = 2,
+  /** 3: Video. This scenario prioritizes the smoothness of screen sharing. If you share movies or live videos, you can set this scenario.
+   */
+  SCREEN_SCENARIO_VIDEO = 3,
+  /** 4: Remote control. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share the device desktop being remotely controlled, you can set this scenario.
+   */
+  SCREEN_SCENARIO_RDC = 4,
+};
 
 /** The relative location of the region to the screen or window.
  */
@@ -3605,16 +3654,38 @@ struct ScreenCaptureParameters {
   /** A list of IDs of windows to be blocked.
    *
    * When calling \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect" or \ref IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId" to start screen sharing, you can use this parameter to block the specified windows.
+   *
    * When calling \ref IRtcEngine::updateScreenCaptureParameters "updateScreenCaptureParameters" to update the configuration for screen sharing, you can use this parameter to dynamically block the specified windows during screen sharing.
+   *
+   * @note (Windows only) The SDK does not support you to block windows on a device with multiple graphics cards. If you set `excludeWindowList` on such a device, the SDK reports the error code `ERR_NOT_SUPPORTED_MUTI_GPU_EXCLUDE_WINDOW(1736)`.
    */
   view_t* excludeWindowList;
   /** The number of windows to be blocked.
    */
   int excludeWindowCount;
+  /** (macOS only) The width (px) of the border. Defaults to 0, and the value range is [0,50].
+   *
+   * @since v3.7.0
+   */
+  int highLightWidth;
+  /** (macOS only) The color of the border in RGBA format. The default value is 0xFF8CBF26.
+   *
+   * @since v3.7.0
+   */
+  unsigned int highLightColor;
+  /** (macOS only) Determines whether to place a border around the shared window or screen:
+   * - true: Place a border.
+   * - false: (Default) Do not place a border.
+   *
+   * @note When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set `enableHighLight` as true.
+   *
+   * @since v3.7.0
+   */
+  bool enableHighLight;
 
-  ScreenCaptureParameters() : dimensions(1920, 1080), frameRate(5), bitrate(STANDARD_BITRATE), captureMouseCursor(true), windowFocus(false), excludeWindowList(NULL), excludeWindowCount(0) {}
-  ScreenCaptureParameters(const VideoDimensions& d, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(d), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt) {}
-  ScreenCaptureParameters(int width, int height, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(width, height), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt) {}
+  ScreenCaptureParameters() : dimensions(1920, 1080), frameRate(5), bitrate(STANDARD_BITRATE), captureMouseCursor(true), windowFocus(false), excludeWindowList(NULL), excludeWindowCount(0), highLightWidth(0), highLightColor(0), enableHighLight(false) {}
+  ScreenCaptureParameters(const VideoDimensions& d, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(d), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt), highLightWidth(0), highLightColor(0), enableHighLight(false) {}
+  ScreenCaptureParameters(int width, int height, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(width, height), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt), highLightWidth(0), highLightColor(0), enableHighLight(false) {}
 };
 
 /** Video display settings of the VideoCanvas class.
@@ -3924,13 +3995,13 @@ struct EchoTestConfiguration {
   /**
    * Whether to enable the audio device for the call loop test:
    * - true: (Default) Enables the audio device. To test the audio device, set this parameter as `true`.
-   * - false: Disables the audio device.
+   * - false: Disable the audio device.
    */
   bool enableAudio;
   /**
    * Whether to enable the video device for the call loop test:
    * - true: (Default) Enables the video device. To test the video device, set this parameter as `true`.
-   * - false: Disables the video device.
+   * - false: Disable the video device.
    */
   bool enableVideo;
   /**
@@ -4451,26 +4522,24 @@ class IRtcEngineEventHandler {
    */
   virtual void onLeaveChannel(const RtcStats& stats) { (void)stats; }
 
-  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
-
-  This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method.
-
-  The SDK triggers this callback when the local user switches the user role by calling the \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" method after joining the channel.
-   @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
-   @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
+  /** Occurs when the user role switches successfully in the interactive live streaming.
+   *
+   * In the `LIVE_BROADCASTING` channel profile, when the local user successfully calls \ref IRtcEngine::setClientRole "setClientRole" to switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers this callback to report the user role before and after the switch.
+   *
+   * @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
+   * @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
    */
   virtual void onClientRoleChanged(CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole) {}
-  /// @cond nodoc
-  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
-
-  This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method, and failed to change role.
-
-  The SDK triggers this callback when the local user switches the user role by calling the \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" method after joining the channel, and failed to change role.
-   @param reason The reason of changing client role failed. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
-   @param currentRole Current Role that the user holds: #CLIENT_ROLE_TYPE.
+  /** Occurs when the user role switch fails in the interactive live streaming.
+   *
+   * @since v3.7.0
+   *
+   * In the `LIVE_BROADCASTING` channel profile, when the local user calls \ref IRtcEngine::setClientRole "setClientRole" to switch their user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
+   *
+   * @param reason The reason for the user role switch failure. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
+   * @param currentRole The current user role. See #CLIENT_ROLE_TYPE.
    */
   virtual void onClientRoleChangeFailed(CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {}
-  /// @endcond
   /** Occurs when a remote user (`COMMUNICATION`)/ host (`LIVE_BROADCASTING`) joins the channel.
 
    - `COMMUNICATION` profile: This callback notifies the application that another user joins the channel. If other users are already in the channel, the SDK also reports to the application on the existing users.
@@ -4861,8 +4930,20 @@ class IRtcEngineEventHandler {
   }
 
   /**
-   * Reports the result of an audio device test.
+   * Reports the voice pitch of the local user.
    *
+   * @since v3.7.0
+   *
+   * After the local audio capture is enabled, and you call \ref IRtcEngine::enableLocalVoicePitchCallback "enableLocalVoicePitchCallback" , the SDK triggers this callback at the time interval set in `enableLocalVoicePitchCallback`.
+   *
+   * @note After this callback is enabled, if the user disables the local audio capture, for example, by calling \ref IRtcEngine::enableLocalAudio "enableLocalAudio(false)", the SDK immediately stops sending the `onLocalVoicePitchInHz` callback.
+   *
+   * @param pitchInHz The voice pitch (Hz) of the local user.
+   */
+  virtual void onLocalVoicePitchInHz(int pitchInHz) { (void)pitchInHz; }
+
+  /**
+   * Reports the result of an audio device test.
    * @since v3.6.2
    *
    * After successfully calling \ref IAudioDeviceManager::startRecordingDeviceTest "startRecordingDeviceTest", \ref IAudioDeviceManager::startPlaybackDeviceTest "startPlaybackDeviceTest", or \ref IAudioDeviceManager::startAudioDeviceLoopbackTest "startAudioDeviceLoopbackTest" to start an audio device test,
@@ -4875,6 +4956,7 @@ class IRtcEngineEventHandler {
     (void)volumeType;
     (void)volume;
   }
+
   /** Occurs when the most active remote speaker is detected.
 
    After a successful call of \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication",
@@ -4957,13 +5039,14 @@ class IRtcEngineEventHandler {
   }
 
   /** Occurs when the first remote video frame is rendered.
-   The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can get the time elapsed from a user joining the channel until the first video frame is displayed.
-
-   @param uid User ID of the remote user sending the video stream.
-   @param width Width (px) of the video frame.
-   @param height Height (px) of the video stream.
-   @param elapsed Time elapsed (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
-  */
+   *
+   * The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can get the time elapsed from a user joining the channel until the first video frame is displayed.
+   *
+   * @param uid User ID of the remote user sending the video stream.
+   * @param width Width (px) of the video frame.
+   * @param height Height (px) of the video stream.
+   * @param elapsed Time elapsed (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
+   */
   virtual void onFirstRemoteVideoFrame(uid_t uid, int width, int height, int elapsed) {
     (void)uid;
     (void)width;
@@ -5384,7 +5467,7 @@ The SDK triggers this callback when the local user fails to receive the stream m
   }
 
   /**
-   * Reports whether the virtual background is successfully enabled. (beta feature)
+   * Reports whether the virtual background is successfully enabled.
    *
    * @since v3.4.5
    *
@@ -5770,7 +5853,7 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)success;
     (void)reason;
   }
-  /// @endcond
+
 #ifdef _WIN32
   /**
    * Occurs when the screen sharing information is updated.
@@ -5786,6 +5869,7 @@ The SDK triggers this callback when the local user fails to receive the stream m
    */
   virtual void onScreenCaptureInfoUpdated(ScreenCaptureInfo& info) { (void)info; }
 #endif
+  /// @endcond
 };
 
 /**
@@ -6341,7 +6425,7 @@ struct LogConfig {
    * - iOS: `App Sandbox/Library/caches/agorasdk.log`
    * - macOS:
    *  - Sandbox enabled: `App Sandbox/Library/Logs/agorasdk.log`, such as `/Users/<username>/Library/Containers/<App Bundle Identifier>/Data/Library/Logs/agorasdk.log`.
-   *  - Sandbox disabled: `～/Library/Logs/agorasdk.log`.
+   *  - Sandbox disabled: `/Users/<username>/Library/Caches/<App Bundle Identifier>/Logs/agorasdk.log`.
    * - Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log`
    *
    * Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
@@ -6804,11 +6888,10 @@ class IRtcEngine {
    * After calling \ref IRtcEngine::setChannelProfile "setChannelProfile" (CHANNEL_PROFILE_LIVE_BROADCASTING), the
    * SDK sets the user role as audience by default. You can call `setClientRole` to set the user role as host.
    *
-   * You can call this method either before or after joining a channel. If you
-   * call this method to switch the user role after joining a channel, the SDK automatically does the following:
+   * You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" and \ref IRtcEngine::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
+   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client.
    * - Triggers \ref IRtcEngineEventHandler::onUserJoined "onUserJoined" or \ref IRtcEngineEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -6841,7 +6924,7 @@ class IRtcEngine {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" and \ref IRtcEngine::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
+   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client.
    * - Triggers \ref IRtcEngineEventHandler::onUserJoined "onUserJoined" or \ref IRtcEngineEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -7923,7 +8006,7 @@ class IRtcEngine {
 
    @param interval Sets the time interval between two consecutive volume indications:
    - &le; 0: Disables the volume indication.
-   - > 0: Time interval (ms) between two consecutive volume indications. We recommend setting @p interval &gt; 200 ms. Do not set @p interval &lt; 10 ms, or the *onAudioVolumeIndication* callback will not be triggered.
+   - &gt; 0: Time interval (ms) between two consecutive volume indications. We recommend setting @p interval &gt; 200 ms. Do not set @p interval &lt; 10 ms, or the *onAudioVolumeIndication* callback will not be triggered.
    @param smooth Smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The greater the value, the more sensitive the indicator. The recommended value is 3.
    @param report_vad
    - true: Enable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the `onAudioVolumeIndication` callback reports the voice activity status of the local user.
@@ -7933,6 +8016,25 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int enableAudioVolumeIndication(int interval, int smooth, bool report_vad) = 0;
+
+  /** Enables reporting the voice pitch of the local user.
+   *
+   * @since v3.7.0
+   *
+   * This method enables the SDK to regularly report the voice pitch of the local user. After the local audio capture is enabled, and you call this method, the SDK triggers the \ref IRtcEngineEventHandler::onLocalVoicePitchInHz "onLocalVoicePitchInHz" callback at the time interval set in this method.
+   *
+   * @note You can call this method either before or after joining a channel.
+   *
+   * @param interval Sets the time interval at which the SDK triggers the `onLocalVoicePitchInHz` callback:
+   * - ≤ 0: Disables the `onLocalVoicePitchInHz` callback.
+   * - &gt; 0: The time interval (ms) at which the SDK triggers the `onLocalVoicePitchInHz` callback. The value must be greater than or equal to 10. If the value is less than 10, the SDK automatically changes it to 10.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableLocalVoicePitchCallback(int interval) = 0;
+
   /** Starts an audio recording.
 
    @deprecated Deprecated from v2.9.1.
@@ -8718,7 +8820,7 @@ class IRtcEngine {
    *
    * @param enable Sets whether to enable deep-learning noise reduction.
    * - true: (Default) Enables deep-learning noise reduction.
-   * - false: Disables deep-learning noise reduction.
+   * - false: Disable deep-learning noise reduction.
    *
    * @return
    * - 0: Success.
@@ -8731,8 +8833,8 @@ class IRtcEngine {
    Ensure that you call this method before joinChannel to enable stereo panning for remote users so that the local user can track the position of a remote user by calling \ref agora::rtc::IRtcEngine::setRemoteVoicePosition "setRemoteVoicePosition".
 
    @param enabled Sets whether to enable stereo panning for remote users:
-   - true: enables stereo panning.
-   - false: disables stereo panning.
+   - true: Enable stereo panning.
+   - false: Disable stereo panning.
 
    @return
    - 0: Success.
@@ -8760,6 +8862,43 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int setRemoteVoicePosition(uid_t uid, double pan, double gain) = 0;
+  /// @cond nodoc
+  /**
+   * Enables or disables the spatial audio effect.
+   *
+   * @since v3.7.0
+   *
+   * After enabling the spatial audio effect, you can call `setRemoteUserSpatialAudioParams` to set the spatial audio effect parameters of a remote user. After a successful setting, the local user can hear the remote user with a real sense of space.
+   *
+   * @note You can call this method either before or after joining a channel.
+   *
+   * @param enabled Whether to enable the spatial audio effect:
+   * - true: Enable the spatial audio effect.
+   * - false: Disable the spatial audio effect.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableSpatialAudio(bool enabled) = 0;
+
+  /** Sets the spatial audio effect parameters of the remote user.
+   *
+   * @since v3.7.0
+   *
+   * After calling \ref IRtcEngine::enableSpatialAudio "enableSpatialAudio" and setting the spatial audio effect parameters of a remote user successfully, the local user can hear the remote user with a real sense of space.
+   *
+   * @note Call this method after calling `enableSpatialAudio`.
+   *
+   * @param uid The user ID of the remote user.
+   * @param spatial_audio_params Spatial audio effect parameters. See \ref agora::media::SpatialAudioParams "SpatialAudioParams".
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setRemoteUserSpatialAudioParams(uid_t uid, const agora::media::SpatialAudioParams& spatial_audio_params) = 0;
+  /// @endcond
 
   /** Changes the voice pitch of the local speaker.
 
@@ -9292,7 +9431,7 @@ class IRtcEngine {
    and \ref IRtcEngine::startPreview "startPreview".
 
    @param enabled Sets whether to enable/disable the external audio source:
-   - true: Enables the external audio source.
+   - true: Enable the external audio source.
    - false: (Default) Disables the external audio source.
    @param sampleRate Sets the sample rate (Hz) of the external audio source, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
    @param channels Sets the number of audio channels of the external audio source:
@@ -9317,7 +9456,7 @@ class IRtcEngine {
    * - Ensure that you call this method before joining a channel.
    *
    * @param enabled
-   * - true: Enables the external audio sink.
+   * - true: Enable the external audio sink.
    * - false: (Default) Disables the external audio sink.
    * @param sampleRate Sets the sample rate (Hz) of the external audio sink, which can be set as 16000, 32000, 44100 or 48000.
    * @param channels Sets the number of audio channels of the external
@@ -9663,20 +9802,24 @@ class IRtcEngine {
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
 
   /** Enables loopback audio capturing.
-
-     If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
-
-     @note You can call this method either before or after joining a channel.
-
-     @param enabled Sets whether to enable/disable loopback capturing.
-     - true: Enable loopback capturing.
-     - false: (Default) Disable loopback capturing.
-     @param deviceName Pointer to the device name of the sound card. The default value is NULL (the default sound card).
-
-   @note
-   - This method is for macOS and Windows only.
-   - macOS does not support loopback capturing of the default sound card. If you need to use this method, please use a virtual sound card and pass its name to the deviceName parameter. Agora has tested and recommends using soundflower.
-
+   *
+   * If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
+   *
+   * @note
+   * - This method is for macOS and Windows only.
+   * - On macOS, call this method after joining a channel; on windows, call this method either before or after joining a channel.
+   * - The default sound card on the macOS system does not support loopback audio capture. To enable this capture, you need to enable a virtual sound card and pass the name of the virtual sound card in the `deviceName` parameter.
+   * Agora recommends that you use [AgoraALD (Agora Audio Loopback Device)](https://docs.agora.io/en/Interactive%20Broadcast/agoraald?platform=macOS) and pass in `"AgoraALD"`.
+   *
+   * @param enabled Sets whether to enable/disable loopback capturing.
+   * - true: Enable loopback capturing.
+   * - false: (Default) Disable loopback capturing.
+   * @param deviceName The device name of the sound card. The default is set to null, which means the SDK uses the current sound card to capture. If you are using a virtual sound card, such as AgoraALD (Agora Audio Loopback Device), set this parameter as the name of the sound card (`"AgoraALD"`).
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *
    */
   virtual int enableLoopbackRecording(bool enabled, const char* deviceName = NULL) = 0;
   /**
@@ -9716,10 +9859,6 @@ class IRtcEngine {
    * - This method is for macOS and Windows only.
    * - Ensure that you call this method after joining a channel.
    *
-   * @warning On Windows platforms, if the user device is connected to another display, to avoid screen sharing issues,
-   * use `startScreenCaptureByDisplayId` to start sharing instead of
-   * using \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect".
-   *
    * @param displayId The display ID of the screen to be shared. Use this parameter to specify which screen you want to
    * share. For more information on how to get the display ID, see the advanced feature guide *Share the Screen* or get
    * the display ID from `sourceId` returned by \ref IRtcEngine::getScreenCaptureSources "getScreenCaptureSources".
@@ -9738,13 +9877,12 @@ class IRtcEngine {
 #if defined(_WIN32)
   /** Shares the whole or part of a screen by specifying the screen rect.
    *
+   * @deprecated This method is deprecated as of v3.7.0, use \ref IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId" instead. Agora strongly recommends using `startScreenCaptureByDisplayId` if you need to start screen sharing on a device connected to another display.
+   *
    * @note
    * - Ensure that you call this method after joining a channel.
    * - Applies to the Windows platform only.
    *
-   * @warning On Windows platforms, if the user device is connected to another display, to avoid screen sharing issues,
-   * use \ref IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId" to start sharing instead of
-   * using \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect".
    *
    * @param screenRect Sets the relative location of the screen to the virtual screen. For information on how to get screenRect, see the advanced guide *Share Screen*.
    * @param regionRect (Optional) Sets the relative location of the region to the screen. NULL means sharing the whole screen. See Rectangle. If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
@@ -9906,6 +10044,22 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int setScreenCaptureContentHint(VideoContentHint contentHint) = 0;
+  /**
+   * Sets the screen sharing scenario.
+   *
+   * @since v3.7.0
+   *
+   * When you start screen sharing or window sharing, you can call this method to set the screen sharing scenario. The SDK adjusts the video quality and experience of the sharing according to the scenario.
+   *
+   * @note This method is only available for the macOS and Windows platforms.
+   *
+   * @param screenScenario The screen sharing scenario. See #SCREEN_SCENARIO_TYPE.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) = 0;
 
   /** Updates the screen sharing parameters.
 
@@ -9950,7 +10104,6 @@ class IRtcEngine {
    This method is deprecated as of v2.4.0. See the following methods instead:
 
    - \ref agora::rtc::IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId"
-   - \ref agora::rtc::IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect"
    - \ref agora::rtc::IRtcEngine::startScreenCaptureByWindowId "startScreenCaptureByWindowId"
 
    This method shares the whole screen, specified window, or specified region:
@@ -10280,7 +10433,7 @@ class IRtcEngine {
    The \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback on the local client to report the state of adding a local stream to the CDN.
    @note
    - Ensure that the user joins the channel before calling this method.
-   - Ensure that you enable the RTMP Converter service before using this function. See  *Prerequisites* in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the Media Push service before using this function. See  *Prerequisites* in the advanced guide *Media Push*.
    - This method adds only one stream CDN streaming URL each time it is called.
    - This method applies to `LIVE_BROADCASTING` only.
 
@@ -10326,7 +10479,7 @@ class IRtcEngine {
 
    @note
    - This method applies to `LIVE_BROADCASTING` only.
-   - Ensure that you enable the RTMP Converter service before using this function. See *Prerequisites* in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the Media Push service before using this function. See *Prerequisites* in the advanced guide *Media Push*.
    - If you call the `setLiveTranscoding` method to update the transcoding setting for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
    - Ensure that you call this method after joining a channel.
    - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
@@ -10351,7 +10504,7 @@ class IRtcEngine {
    * callback on the local client to report the state of the streaming.
    *
    * @note
-   * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+   * - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
    * - Call this method after joining a channel.
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IRtcEngine::stopRtmpStream "stopRtmpStream" first,
@@ -10381,7 +10534,7 @@ class IRtcEngine {
    * callback on the local client to report the state of the streaming.
    *
    * @note
-   * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+   * - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
    * - Call this method after joining a channel.
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IRtcEngine::stopRtmpStream "stopRtmpStream" first,
@@ -10506,7 +10659,7 @@ class IRtcEngine {
    *  - Windows: `libagora_video_process_extension.dll`
    *
    * @param enabled Determines whether to enable image enhancement:
-   * - true: Enables image enhancement.
+   * - true: Enable image enhancement.
    * - false: (Default) Disables image enhancement.
    * @param options The image enhancement option. See BeautyOptions.
    *
@@ -10598,7 +10751,7 @@ class IRtcEngine {
    */
   virtual int setColorEnhanceOptions(bool enabled, ColorEnhanceOptions options) = 0;
   /**
-   * Enables/Disables the virtual background. (beta feature)
+   * Enables/Disables the virtual background.
    *
    * Support for macOS and Windows as of v3.4.5 and Android and iOS as of v3.5.0.
    *
@@ -10663,7 +10816,7 @@ class IRtcEngine {
    @warning Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
 
    @note
-   - Ensure that you enable the RTMP Converter service before using this function. See *Prerequisites* in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the RTMP Converter service before using this function. See *Prerequisites* in the advanced guide *Media Push*.
    - This method applies to the Native SDK v2.4.1 and later.
    - This method applies to the `LIVE_BROADCASTING` profile only.
    - You can inject only one media stream into the channel at the same time.
@@ -10914,7 +11067,14 @@ class IRtcEngine {
    * - < 0: Failure.
    *   - `-157 (ERR_MODULE_NOT_FOUND)`: The dynamic library for super resolution is not integrated.
    */
-  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) = 0;
+  virtual int enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId) = 0;
+
+  /** enableRemoteSuperResolution.
+   * @deprecated
+   * This Interface is deprecated and replaced by the enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId)
+   */
+  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) AGORA_DEPRECATED_ATTRIBUTE = 0;
+
   /** This method enables you to add synchronized metadata in the video stream for more diversified interactive live streaming, such as sending shopping links, digital coupons, and online quizzes.
 
   @note Call this method before the joinChannel method.
@@ -10964,6 +11124,20 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setLocalVideoRenderer(IVideoSink* videoSink) = 0;
+  /**
+   * set camera capture rotate
+   *
+   * @since v3.7.0.2
+   *
+   * @param rotation counterclockwise rotation angle.
+   * rotation=1 angle=90, rotation=2 angle=180, rotation=3 angle=270, 0:default angle
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraCaptureRotation(const int rotation) = 0;
+
   /**
    * Customizes the remote video renderer. (for Windows only)
    *
@@ -11032,6 +11206,103 @@ class IRtcEngine {
    * - false: The device does not support enabling the flash.
    */
   virtual bool isCameraTorchSupported() = 0;
+
+  /** Sets the camera zoom ratio.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @param factor Sets the camera zoom factor. The value ranges between 1.0 and the maximum zoom supported by the device.
+   *
+   * @return
+   * - The set camera zoom factor, if this method call is successful.
+   * - 0: Failure.
+   */
+  virtual int setCameraZoomFactor(float factor) = 0;
+  /** Gets the maximum zoom ratio supported by the camera.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return The maximum camera zoom factor.
+   */
+  virtual float getCameraMaxZoomFactor() = 0;
+  /** Checks whether the camera zoom function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera zoom function.
+   * - false: The device does not support the camera zoom function.
+   */
+  virtual bool isCameraZoomSupported() = 0;
+  /** Checks whether the camera manual focus function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera manual focus function.
+   * - false: The device does not support the camera manual focus function.
+   */
+  virtual bool isCameraFocusSupported() = 0;
+  /** Checks whether the camera exposure function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera exposure function.
+   * - false: The device does not support the camera exposure function.
+   */
+  virtual bool isCameraExposurePositionSupported() = 0;
+  /** Checks whether the camera auto-face focus function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera auto-face focus function.
+   * - false: The device does not support the camera auto-face focus function.
+   */
+  virtual bool isCameraAutoFocusFaceModeSupported() = 0;
+  /** Sets the camera manual focus position.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * A successful setCameraFocusPositionInPreview method call triggers the {@link IRtcEngineEventHandler#onCameraFocusAreaChanged onCameraFocusAreaChanged} callback on the local client.
+   * @param positionX The horizontal coordinate of the touch point in the view.
+   * @param positionY The vertical coordinate of the touch point in the view.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraFocusPositionInPreview(float positionX, float positionY) = 0;
+  /** Sets the camera exposure position.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * A successful setCameraExposurePosition method call triggers the {@link IRtcEngineEventHandler#onCameraExposureAreaChanged onCameraExposureAreaChanged} callback on the local client.
+   * @param positionXinView The horizontal coordinate of the touch point in the view.
+   * @param positionYinView The vertical coordinate of the touch point in the view.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraExposurePosition(float positionXinView, float positionYinView) = 0;
+  /** Sets whether to enable face autofocus.
+   *
+   * The SDK disables face autofocus by default. To set face autofocus, call this method.
+   *
+   * @note
+   * Call this method after the camera is started.
+   *
+   * @param enabled Determines whether to enable face autofocus:
+   * - `true`: Enable face autofocus.
+   * - `false`: Disable face autofocus.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraAutoFocusFaceModeEnabled(bool enabled) = 0;
 #endif
 
   /**
@@ -11326,6 +11597,7 @@ class AGORA_CPP_API RtcEngineParameters {
   int adjustRecordingSignalVolume(int volume /* [0, 400]: e.g. 50~0.5x 100~1x 400~4x */);
   int adjustPlaybackSignalVolume(int volume /* [0, 400] */);
   int enableAudioVolumeIndication(int interval, int smooth, bool report_vad);  // in ms: <= 0: disable, > 0: enable, interval in ms
+  int enableLocalVoicePitchCallback(int interval);
   int muteLocalAudioStream(bool mute);
   int muteRemoteAudioStream(uid_t uid, bool mute);
   int muteAllRemoteAudioStreams(bool mute);
@@ -11340,6 +11612,7 @@ class AGORA_CPP_API RtcEngineParameters {
   int setRemoteRenderMode(uid_t uid, RENDER_MODE_TYPE renderMode);
   int setCameraCapturerConfiguration(const CameraCapturerConfiguration& config);
   int enableDualStreamMode(bool enabled);
+  int setCameraCaptureRotation(const int rotation);
   int setRemoteVideoStreamType(uid_t uid, REMOTE_VIDEO_STREAM_TYPE streamType);
   int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType);
   int setRecordingAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall);

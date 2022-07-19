@@ -707,4 +707,16 @@ class RtcChannelImpl implements RtcChannel {
       }),
     });
   }
+
+  @override
+  Future<void> setRemoteUserSpatialAudioParams(
+      int uid, SpatialAudioParams spatialAudioParams) {
+    return _invokeMethod('callApi', {
+      'apiType': ApiTypeChannelExt.kChannelSetRemoteUserSpatialAudioParams,
+      'params': jsonEncode({
+        'uid': uid,
+        'spatial_audio_params': spatialAudioParams.toJson(),
+      }),
+    });
+  }
 }

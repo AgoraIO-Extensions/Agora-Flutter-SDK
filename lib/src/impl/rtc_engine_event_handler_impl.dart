@@ -491,6 +491,11 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
           contentInspectResult!(json.result);
         }
         break;
+      case 'LocalVoicePitchInHz':
+        if (localVoicePitchInHz != null) {
+          localVoicePitchInHz!(newData[0]);
+        }
+        break;
 
       default:
         // do nothing

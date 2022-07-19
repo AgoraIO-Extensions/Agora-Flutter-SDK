@@ -8,7 +8,9 @@
 #import "AgoraRtcEngineKit.h"
 
 @class AgoraRtcChannelMediaOptions;
+
 @protocol AgoraRtcChannelDelegate;
+
 @interface AgoraRtcEngineKit ()
 
 /** Creates and gets an AgoraRtcChannel instance.
@@ -34,7 +36,7 @@ After joining multiple channels, you can simultaneously subscribe to streams of 
 - An empty pointer `nil`, if the method call fails.
 - `AgoraErrorCodeRefused`(-5), if you set `channelId` as the empty string "".
  */
-- (AgoraRtcChannel* _Nullable)createRtcChannel:(NSString* _Nonnull)channelId;
+- (AgoraRtcChannel* _Nullable)createRtcChannel:(NSString* _Nonnull)channelId NS_SWIFT_NAME(createRtcChannel(_:));
 
 @end
 
@@ -51,21 +53,21 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
    - `AgoraErrorCodeNotInitialized`(-7): The AgoraRtcChannel instance is not initialized before calling this method.
  */
-- (int)destroy;
+- (int)destroy NS_SWIFT_NAME(destroy());
 /** Sets the channel delegate.
 
  After setting the channel delegate, you can listen for channel events and receive the statistics of the corresponding AgoraRtcChannel instance.
 
  @param channelDelegate The delegate of the AgoraRtcChannel instance. For details, see AgoraRtcChannelDelegate.
  */
-- (void)setRtcChannelDelegate:(id<AgoraRtcChannelDelegate> _Nullable)channelDelegate;
+- (void)setRtcChannelDelegate:(id<AgoraRtcChannelDelegate> _Nullable)channelDelegate NS_SWIFT_NAME(setRtcChannelDelegate(_:));
 
 /** Gets the channel ID of the current AgoraRtcChannel instance.
 
  @return - The channel ID of the current AgoraRtcChannel instance, if the method call succeeds.
  - The empty string "", if the method call fails.
  */
-- (NSString* _Nullable)getChannelId;
+- (NSString* _Nullable)getChannelId NS_SWIFT_NAME(getId());
 
 /** Gets the current call ID.
 
@@ -74,7 +76,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return - The current call ID, if the method call succeeds.
  - The empty string "", if the method call fails.
  */
-- (NSString* _Nullable)getCallId;
+- (NSString* _Nullable)getCallId NS_SWIFT_NAME(getCallId());
 /** Gets the connection state of the SDK.
 
  You can call this method either before or after joining a channel.
@@ -87,7 +89,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   - `AgoraConnectionStateReconnecting`(4): The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
   - `AgoraConnectionStateFailed`(5): The SDK fails to join the channel.
  */
-- (AgoraConnectionStateType)getConnectionState;
+- (AgoraConnectionStateType)getConnectionState NS_SWIFT_NAME(getConnectionState());
 
 /** Joins the channel with a user ID.
 
@@ -106,7 +108,6 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  **Note**
 
  - If you are already in a channel, you cannot rejoin it with the same `uid`.
- - We recommend using different `uid` for different channels.
  - If you want to join the same channel from different devices, ensure that the `uid` in all devices are different.
  - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the AgoraRtcEngineKit instance.
 
@@ -130,7 +131,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   same AgoraRtcChannel channel repeatedly. Therefore, the SDK returns this error code when a user who has already
   joined an AgoraRtcChannel channel calls the joining channel method of this AgoraRtcChannel object.
  */
-- (int)joinChannelByToken:(NSString* _Nullable)token info:(NSString* _Nullable)info uid:(NSUInteger)uid options:(AgoraRtcChannelMediaOptions* _Nonnull)options;
+- (int)joinChannelByToken:(NSString* _Nullable)token info:(NSString* _Nullable)info uid:(NSUInteger)uid options:(AgoraRtcChannelMediaOptions* _Nonnull)options NS_SWIFT_NAME(join(byToken:info:uid:options:));
 
 /** Joins a channel with the user account.
 
@@ -147,7 +148,6 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
  - Before using a String user name, ensure that you read [How can I use string user names](https://docs.agora.io/en/faq/string) for getting details about the limitations and implementation steps.
  - If you are already in a channel, you cannot rejoin it with the same `uid`.
- - We recommend using different `uid` for different channels.
  - If you want to join the same channel from different devices, ensure that the `uid` in all devices are different.
  - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the AgoraRtcEngineKit instance.
 
@@ -171,7 +171,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   same AgoraRtcChannel channel repeatedly. Therefore, the SDK returns this error code when a user who has already
   joined an AgoraRtcChannel channel calls the joining channel method of this AgoraRtcChannel object.
  */
-- (int)joinChannelByUserAccount:(NSString* _Nonnull)userAccount token:(NSString* _Nullable)token options:(AgoraRtcChannelMediaOptions* _Nonnull)options;
+- (int)joinChannelByUserAccount:(NSString* _Nonnull)userAccount token:(NSString* _Nullable)token options:(AgoraRtcChannelMediaOptions* _Nonnull)options NS_SWIFT_NAME(join(byUserAccount:token:options:));
 
 /** Leaves the current channel.
 
@@ -187,7 +187,9 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   - `-2`(`AgoraErrorCodeInvalidArgument`): The parameter is invalid.
   - `-7`(`AgoraErrorCodeNotInitialized`): The SDK is not initialized.
  */
-- (int)leaveChannel;
+- (int)leaveChannel NS_SWIFT_NAME(leave());
+
+- (int)setAVSyncSource:(NSString* _Nullable)channelId uid:(NSUInteger)uid NS_SWIFT_NAME(setAVSyncSource(channelId:uid:));
 
 /** Stops or resumes publishing the local audio stream.
 
@@ -223,7 +225,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
   - `-5` (`AgoraErrorCodeRefused`): The request is rejected.
  */
-- (int)muteLocalAudioStream:(BOOL)mute;
+- (int)muteLocalAudioStream:(BOOL)mute NS_SWIFT_NAME(muteLocalAudioStream(_:));
 
 /** Stops or resumes publishing the local video stream.
 
@@ -259,7 +261,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
   - `-5` (`AgoraErrorCodeRefused`): The request is rejected.
  */
-- (int)muteLocalVideoStream:(BOOL)mute;
+- (int)muteLocalVideoStream:(BOOL)mute NS_SWIFT_NAME(muteLocalVideoStream(_:));
 
 /** Publishes the local stream to the channel.
 
@@ -277,7 +279,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
    - `AgoraErrorCodeRefused`(-5): The method call is refused.
  */
-- (int)publish;
+- (int)publish NS_SWIFT_NAME(publish());
 
 /** Stops publishing a stream to the channel.
 
@@ -292,7 +294,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
    - `AgoraErrorCodeRefused`(-5): The method call is refused.
  */
-- (int)unpublish;
+- (int)unpublish NS_SWIFT_NAME(unpublish());
 
 /** Sets the role of the user in interactive live streaming.
 
@@ -307,8 +309,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  - Calls [muteLocalAudioStream]([AgoraRtcChannel muteLocalAudioStream:]) and
  [muteLocalVideoStream]([AgoraRtcChannel muteLocalVideoStream:]) to change
  the publishing state.
- - Triggers [didClientRoleChanged]([AgoraRtcChannelDelegate rtcChannel:didClientRoleChanged:newRole:])
- on the local client.
+ - Triggers [didClientRoleChanged]([AgoraRtcChannelDelegate rtcChannel:didClientRoleChanged:newRole:]) or [didClientRoleChangeFailed]([AgoraRtcChannelDelegate rtcChannel:didClientRoleChangeFailed:currentRole:]) on the local client.
  - Triggers [didJoinedOfUid]([AgoraRtcChannelDelegate rtcChannel:didJoinedOfUid:elapsed:])
  or [didOfflineOfUid(AgoraUserOfflineReasonBecomeAudience)]([AgoraRtcChannelDelegate rtcChannel:didOfflineOfUid:reason:])
  on the remote client.
@@ -337,7 +338,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
      - Call `setClientRole` to set the user role as host.
      - Call `muteLocalAudioStream(NO)` or `muteLocalVideoStream(NO)`.
  */
-- (int)setClientRole:(AgoraClientRole)role;
+- (int)setClientRole:(AgoraClientRole)role NS_SWIFT_NAME(setClientRole(_:));
 
 /** Sets the role of the user in interactive live streaming.
 
@@ -355,7 +356,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  [muteLocalVideoStream]([AgoraRtcChannel muteLocalVideoStream:]) to change
  the publishing state.
  - Triggers [didClientRoleChanged]([AgoraRtcChannelDelegate rtcChannel:didClientRoleChanged:newRole:])
- on the local client.
+ or [didClientRoleChangeFailed]([AgoraRtcChannelDelegate rtcChannel:didClientRoleChangeFailed:currentRole:]) on the local client.
  - Triggers [didJoinedOfUid]([AgoraRtcChannelDelegate rtcChannel:didJoinedOfUid:elapsed:])
  or [didOfflineOfUid(AgoraUserOfflineReasonBecomeAudience)]([AgoraRtcChannelDelegate rtcChannel:didOfflineOfUid:reason:])
  on the remote client.
@@ -399,7 +400,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
      - Call `setClientRole` to set the user role as host.
      - Call `muteLocalAudioStream(NO)` or `muteLocalVideoStream(NO)`.
  */
-- (int)setClientRole:(AgoraClientRole)role options:(AgoraClientRoleOptions* _Nullable)options;
+- (int)setClientRole:(AgoraClientRole)role options:(AgoraClientRoleOptions* _Nullable)options NS_SWIFT_NAME(setClientRole(_:options:));
 /** Renews the token when the current token expires.
 
  In the following situations, the SDK decides that the current token has expired:
@@ -422,7 +423,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   - `-2`(`AgoraErrorCodeInvalidArgument`): The parameter is invalid.
   - `-7`(`AgoraErrorCodeNotInitialized`): The SDK is not initialized.
  */
-- (int)renewToken:(NSString* _Nonnull)token;
+- (int)renewToken:(NSString* _Nonnull)token NS_SWIFT_NAME(renewToken(_:));
 
 /** Enables built-in encryption with an encryption password before joining a channel.
 
@@ -442,7 +443,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)setEncryptionSecret:(NSString* _Nullable)secret;
+- (int)setEncryptionSecret:(NSString* _Nullable)secret NS_SWIFT_NAME(setEncryptionSecret(_:));
 
 /** Sets the built-in encryption mode.
 
@@ -469,7 +470,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)setEncryptionMode:(NSString* _Nullable)encryptionMode;
+- (int)setEncryptionMode:(NSString* _Nullable)encryptionMode NS_SWIFT_NAME(setEncryptionMode(_:));
 /** Enables/Disables the built-in encryption.
 
  @since v3.1.0
@@ -509,7 +510,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   - -7 (`AgoraErrorCodeNotInitialized`): The SDK is not initialized. Initialize the `AgoraRtcEngineKit` instance before calling this method.
   - -4 (`AgoraErrorCodeNotSupported`): The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
  */
-- (int)enableEncryption:(bool)enabled encryptionConfig:(AgoraEncryptionConfig* _Nonnull)config;
+- (int)enableEncryption:(bool)enabled encryptionConfig:(AgoraEncryptionConfig* _Nonnull)config NS_SWIFT_NAME(enableEncryption(_:encryptionConfig:));
 
 /** Sets the priority of a remote user’s stream.
 
@@ -525,7 +526,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)setRemoteUserPriority:(NSUInteger)uid type:(AgoraUserPriority)userPriority;
+- (int)setRemoteUserPriority:(NSUInteger)uid type:(AgoraUserPriority)userPriority NS_SWIFT_NAME(setRemoteUserPriority(_:type:));
 /** Sets the sound position and gain of a remote user.
 
  When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
@@ -549,7 +550,9 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)setRemoteVoicePosition:(NSUInteger)uid pan:(double)pan gain:(double)gain;
+- (int)setRemoteVoicePosition:(NSUInteger)uid pan:(double)pan gain:(double)gain NS_SWIFT_NAME(setRemoteVoicePosition(_:pan:gain:));
+
+- (int)setRemoteUserSpatialAudioParams:(NSUInteger)uid param:(AgoraSpatialAudioParams* _Nonnull)param NS_SWIFT_NAME(setRemoteUserSpatialAudioParams(_:param:));
 /** Updates the display mode of the video view of a remote user.
 
  After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes. This method affects only the video view that the local user sees.
@@ -570,7 +573,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)setRemoteRenderMode:(NSUInteger)uid renderMode:(AgoraVideoRenderMode)renderMode mirrorMode:(AgoraVideoMirrorMode)mirrorMode;
+- (int)setRemoteRenderMode:(NSUInteger)uid renderMode:(AgoraVideoRenderMode)renderMode mirrorMode:(AgoraVideoMirrorMode)mirrorMode NS_SWIFT_NAME(setRemoteRenderMode(_:renderMode:mirrorMode:));
 
 /** Stops or resumes subscribing to the audio streams of all remote users by default.
 
@@ -602,7 +605,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)setDefaultMuteAllRemoteAudioStreams:(BOOL)mute;
+- (int)setDefaultMuteAllRemoteAudioStreams:(BOOL)mute NS_SWIFT_NAME(setDefaultMuteAllRemoteAudioStreams(_:));
 
 /** Stops or resumes subscribing to the video streams of all remote users by default.
 
@@ -634,7 +637,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)setDefaultMuteAllRemoteVideoStreams:(BOOL)mute;
+- (int)setDefaultMuteAllRemoteVideoStreams:(BOOL)mute NS_SWIFT_NAME(setDefaultMuteAllRemoteVideoStreams(_:));
 
 /** Stops or resumes subscribing to the audio stream of a specified user.
 
@@ -653,7 +656,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)muteRemoteAudioStream:(NSUInteger)uid mute:(BOOL)mute;
+- (int)muteRemoteAudioStream:(NSUInteger)uid mute:(BOOL)mute NS_SWIFT_NAME(muteRemoteAudioStream(_:mute:));
 /** Adjust the playback signal volume of a specified remote user.
 
  You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
@@ -666,16 +669,15 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
  @param uid The ID of the remote user.
  @param volume The playback volume of the specified remote user. The value
- ranges between 0 and 400, including the following:
+ ranges between 0 and 100, including the following:
 
  - 0: Mute.
  - 100: (Default) Original volume.
- - 400: Four times the original volume with signal-clipping protection.
 
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)adjustUserPlaybackSignalVolume:(NSUInteger)uid volume:(int)volume;
+- (int)adjustUserPlaybackSignalVolume:(NSUInteger)uid volume:(int)volume NS_SWIFT_NAME(adjustUserPlaybackSignalVolume(_:volume:));
 
 /** Stops or resumes subscribing to the audio streams of all remote users.
 
@@ -701,7 +703,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)muteAllRemoteAudioStreams:(BOOL)mute;
+- (int)muteAllRemoteAudioStreams:(BOOL)mute NS_SWIFT_NAME(muteAllRemoteAudioStreams(_:));
 
 /** Stops or resumes subscribing to the video stream of a specified user.
 
@@ -720,7 +722,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)muteRemoteVideoStream:(NSUInteger)uid mute:(BOOL)mute;
+- (int)muteRemoteVideoStream:(NSUInteger)uid mute:(BOOL)mute NS_SWIFT_NAME(muteRemoteVideoStream(_:mute:));
 
 /** Stops or resumes subscribing to the video streams of all remote users.
 
@@ -746,7 +748,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)muteAllRemoteVideoStreams:(BOOL)mute;
+- (int)muteAllRemoteVideoStreams:(BOOL)mute NS_SWIFT_NAME(muteAllRemoteVideoStreams(_:));
 /** Sets the stream type of the remote video.
 
  Under limited network conditions, if the publisher has not disabled the dual-stream mode using [enableDualStreamMode(NO)]([AgoraRtcEngineKit enableDualStreamMode:])enableDualStreamMode(NO), the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or the low-quality video stream (the low resolution, and low bitrate video stream).
@@ -765,17 +767,21 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)setRemoteVideoStream:(NSUInteger)uid type:(AgoraVideoStreamType)streamType;
+- (int)setRemoteVideoStream:(NSUInteger)uid type:(AgoraVideoStreamType)streamType NS_SWIFT_NAME(setRemoteVideoStream(_:type:));
 /** Sets the default video-stream type for the video received by the local user when the remote user sends dual streams.
 
- @note You can call this method either before or after joining a channel. If you call both `setRemoteDefaultVideoStreamType` and [setRemoteVideoStream]([AgoraRtcEngineKit setRemoteVideoStream:type:]), the SDK applies the settings in the `setRemoteDefaultVideoStreamType` method.
+ **Note**
+
+ - This method can only be called before joining a channel. Agora does not support you to change the default subscribed video stream type after joining a channel.
+ - If you call both this method and `setRemoteVideoStream`, the SDK applies the settings in the `setRemoteVideoStream` method.
+
 
  @param streamType Sets the default video-stream type. See AgoraVideoStreamType.
 
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)setRemoteDefaultVideoStreamType:(AgoraVideoStreamType)streamType;
+- (int)setRemoteDefaultVideoStreamType:(AgoraVideoStreamType)streamType NS_SWIFT_NAME(setRemoteDefaultVideoStreamType(_:));
 /** Adds a voice or video stream CDN streaming URL to the interactive live streaming.
 
  If this method call is successful, the server pulls the voice or video stream and injects it into a live channel. This is applicable to scenarios where all audience members in the channel can watch a live show and interact with each other.
@@ -798,7 +804,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
  - Ensure that you call this method after joining a channel.
  - You can inject only one media stream into the channel at the same time.
- - Ensure that you enable the RTMP Converter service before using this function. See [Prerequisites](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_apple?platform=iOS#prerequisites).
+ - Ensure that you enable the Media Push service before using this function. See [Prerequisites](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_apple?platform=iOS#prerequisites).
  - This method applies to the Native SDK v2.4.1 and later.
 
  @param url    URL address to be added to the ongoing interactive live streaming. Valid protocols are RTMP, HLS, and HTTP-FLV.
@@ -815,7 +821,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
     - `AgoraErrorCodeNotSupported`(-4): The channel profile is not Live Broadcast.
     - `AgoraErrorCodeNotInitialized`(-7): The SDK is not initialized. Ensure that the AgoraRtcChannel object is initialized before using this method.
  */
-- (int)addInjectStreamUrl:(NSString* _Nonnull)url config:(AgoraLiveInjectStreamConfig* _Nonnull)config;
+- (int)addInjectStreamUrl:(NSString* _Nonnull)url config:(AgoraLiveInjectStreamConfig* _Nonnull)config NS_SWIFT_NAME(addInjectStreamUrl(_:config:));
 /** Removes the voice or video stream CDN streaming URL from the interactive live streaming.
 
  This method removes the URL address (added by the [addInjectStreamUrl]([AgoraRtcChannel addInjectStreamUrl:config:]) method) from the interactive live streaming.
@@ -829,8 +835,10 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @return * 0: Success.
  * < 0: Failure.
  */
-- (int)removeInjectStreamUrl:(NSString* _Nonnull)url;
+- (int)removeInjectStreamUrl:(NSString* _Nonnull)url NS_SWIFT_NAME(removeInjectStreamUrl(_:));
 /** Publishes the local stream to the CDN.
+
+ **Deprecated** This method is deprecated as of v3.6.0. See [Release Notes](https://docs.agora.io/en/Interactive%20Broadcast/release_ios_video?platform=iOS) for an alternative solution.
 
  After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN. The SDK triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDelegate rtcChannel:rtmpStreamingChangedToState:state:errorCode:]) callback on the local client to report the state of adding a local stream to the CDN.
 
@@ -838,7 +846,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
  - This method applies to the interactive live streaming profile only.
  - Ensure that the user joins the channel before calling this method.
- - Ensure that you enable the RTMP Converter service before using this function. See [Prerequisites](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_apple?platform=iOS#prerequisites).
+ - Ensure that you enable the Media Push service before using this function. See [Prerequisites](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_apple?platform=iOS#prerequisites).
  - This method adds only one stream URL each time it is called.
  - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
 
@@ -854,8 +862,10 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   - `AgoraErrorCodeInvalidArgument`(-2): Invalid parameter. The URL is nil or the string length is 0.
   - `AgoraErrorCodeNotInitialized`(-7): You have not initialized the RTC Engine when publishing the stream.
  */
-- (int)addPublishStreamUrl:(NSString* _Nonnull)url transcodingEnabled:(BOOL)transcodingEnabled;
+- (int)addPublishStreamUrl:(NSString* _Nonnull)url transcodingEnabled:(BOOL)transcodingEnabled NS_SWIFT_NAME(addPublishStreamUrl(_:transcodingEnabled:));
 /** Removes an RTMP or RTMPS stream from the CDN.
+
+**Deprecated** This method is deprecated as of v3.6.0. See [Release Notes](https://docs.agora.io/en/Interactive%20Broadcast/release_ios_video?platform=iOS) for an alternative solution.
 
 This method removes the CDN streaming URL added by the [addPublishStreamUrl]([AgoraRtcChannel addPublishStreamUrl:transcodingEnabled:]) method from a CDN live stream.
 
@@ -872,8 +882,10 @@ This method call triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDele
  @return * 0: Success.
  * < 0: Failure.
  */
-- (int)removePublishStreamUrl:(NSString* _Nonnull)url;
+- (int)removePublishStreamUrl:(NSString* _Nonnull)url NS_SWIFT_NAME(removePublishStreamUrl(_:));
 /** Sets the video layout and audio settings for CDN live. (CDN live only.)
+
+**Deprecated** This method is deprecated as of v3.6.0. See [Release Notes](https://docs.agora.io/en/Interactive%20Broadcast/release_ios_video?platform=iOS) for an alternative solution.
 
  The SDK triggers the [rtcEngineTranscodingUpdated]([AgoraRtcEngineDelegate rtcEngineTranscodingUpdated:]) callback when you call the `setLiveTranscoding` method to update the transcoding setting.
 
@@ -881,7 +893,7 @@ This method call triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDele
 
  - Ensure that you call this method after joining a channel.
  - This method applies to the interactive live streaming profile only.
- - Ensure that you enable the RTMP Converter service before using this function. See [Prerequisites](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_apple?platform=iOS#prerequisites).
+ - Ensure that you enable the Media Push service before using this function. See [Prerequisites](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_apple?platform=iOS#prerequisites).
  - If you call the `setLiveTranscoding` method to update the transcoding setting for the first time, the SDK does not trigger the `rtcEngineTranscodingUpdated` callback.
  - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
 
@@ -890,7 +902,92 @@ This method call triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDele
  @return * 0: Success.
  * < 0: Failure.
  */
-- (int)setLiveTranscoding:(AgoraLiveTranscoding* _Nullable)transcoding;
+- (int)setLiveTranscoding:(AgoraLiveTranscoding* _Nullable)transcoding NS_SWIFT_NAME(setLiveTranscoding(_:));
+/** Starts pushing media streams to a CDN without transcoding.
+
+ @since v3.6.0
+
+ You can call this method to push a live audio-and-video stream to the specified CDN address.
+ This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.
+
+ After you call this method, the SDK triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDelegate rtcChannel:rtmpStreamingChangedToState:state:errorCode:]) callback on the local client to report the state of the streaming.
+
+ **Note:**
+
+ - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
+ - Call this method after joining a channel.
+ - Only hosts in the `LiveBroadcasting` profile can call this method.
+ - If you want to retry pushing streams after a failed push, make sure to call [stopRtmpStream]([AgoraRtcChannel stopRtmpStream:]) first, then call this method to retry pushing streams;
+ otherwise, the SDK returns the same error code as the last failed push.
+
+
+ @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+
+ @return - 0: Success.
+ - < 0: Failure.
+
+  - `AgoraErrorCodeInvalidArgument(-2)`: `url` is null or the string length is 0.
+  - `AgoraErrorCodeNotInitialized(-7)`: The SDK is not initialized before calling this method.
+ */
+- (int)startRtmpStreamWithoutTranscoding:(NSString* _Nonnull)url NS_SWIFT_NAME(startRtmpStreamWithoutTranscoding(_:));
+/** Starts pushing media streams to a CDN and sets the transcoding configuration.
+
+ @since v3.6.0
+
+ You can call this method to push a live audio-and-video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.
+
+ After you call this method, the SDK triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDelegate rtcChannel:rtmpStreamingChangedToState:state:errorCode:]) callback on the local client to report the state of the streaming.
+
+ **Note:**
+
+ - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
+ - Call this method after joining a channel.
+ - Only hosts in the `LiveBroadcasting` profile can call this method.
+ - If you want to retry pushing streams after a failed push, make sure to call [stopRtmpStream]([AgoraRtcChannel stopRtmpStream:]) first, then call this method to retry pushing streams;
+ otherwise, the SDK returns the same error code as the last failed push.
+
+
+ @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+ @param transcoding The transcoding configuration for CDN live streaming. See AgoraLiveTranscoding.
+
+ @return - 0: Success.
+ - < 0: Failure.
+
+  - `AgoraErrorCodeInvalidArgument(-2)`: `url` is null or the string length is 0.
+  - `AgoraErrorCodeNotInitialized(-7)`: The SDK is not initialized before calling this method.
+ */
+- (int)startRtmpStreamWithTranscoding:(NSString* _Nonnull)url transcoding:(AgoraLiveTranscoding* _Nullable)transcoding NS_SWIFT_NAME(startRtmpStream(withTranscoding:transcoding:));
+
+/** Updates the transcoding configuration.
+
+ @since v3.6.0
+
+ After you start pushing media streams to CDN with transcoding, you can dynamically update the transcoding configuration according to the scenario.
+ The SDK triggers the [rtcChannelTranscodingUpdated]([AgoraRtcChannelDelegate rtcChannelTranscodingUpdated:]) callback after the transcoding configuration is updated.
+
+ @param transcoding The transcoding configuration for CDN live streaming. See AgoraLiveTranscoding.
+
+ @return - 0: Success.
+ - < 0: Failure.
+ */
+- (int)updateRtmpTranscoding:(AgoraLiveTranscoding* _Nullable)transcoding NS_SWIFT_NAME(updateRtmpTranscoding(_:));
+
+/** Stops pushing media streams to a CDN.
+
+ @since v3.6.0
+
+ You can call this method to stop the live stream on the specified CDN address.
+ This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.
+
+ After you call this method, the SDK triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDelegate rtcChannel:rtmpStreamingChangedToState:state:errorCode:]) callback on the local client to report the state of the streaming.
+
+ @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+
+ @return - 0: Success.
+ - < 0: Failure.
+ */
+- (int)stopRtmpStream:(NSString* _Nonnull)url NS_SWIFT_NAME(stopRtmpStream(_:));
+
 /** Creates a data stream.
 
  **Deprecated** This method is deprecated from v3.3.0. Use the
@@ -918,7 +1015,7 @@ This method call triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDele
  @return * 0: Success.
 * < 0: Failure.
  */
-- (int)createDataStream:(NSInteger* _Nonnull)streamId reliable:(BOOL)reliable ordered:(BOOL)ordered;
+- (int)createDataStream:(NSInteger* _Nonnull)streamId reliable:(BOOL)reliable ordered:(BOOL)ordered NS_SWIFT_NAME(createDataStream(_:reliable:ordered:));
 /** Creates a data stream.
 
  @since v3.3.0
@@ -929,13 +1026,13 @@ This method call triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDele
  packet five seconds or more after it was sent, the SDK directly discards
  the data.
 
- @param streamId ID of the created data stream.
+ @param streamId (Output parameter) The ID of the created data stream.
  @param config The configurations for the data stream: AgoraDataStreamConfig.
 
- @return * Returns the stream ID if you successfully create the data stream.
+ @return * 0: Success.
 * < 0: Fails to create the data stream.
  */
-- (int)createDataStream:(NSInteger* _Nonnull)streamId config:(AgoraDataStreamConfig* _Nonnull)config;
+- (int)createDataStream:(NSInteger* _Nonnull)streamId config:(AgoraDataStreamConfig* _Nonnull)config NS_SWIFT_NAME(createDataStream(_:config:));
 /** Sends data stream messages to all users in a channel.
 
 The SDK has the following restrictions on this method:
@@ -959,7 +1056,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return * 0: Success.
  * < 0: Failure.
  */
-- (int)sendStreamMessage:(NSInteger)streamId data:(NSData* _Nonnull)data;
+- (int)sendStreamMessage:(NSInteger)streamId data:(NSData* _Nonnull)data NS_SWIFT_NAME(sendStreamMessage(_:data:));
 /** Starts to relay media streams across channels.
 
  After a successful method call, the SDK triggers the [channelMediaRelayStateDidChange]([AgoraRtcChannelDelegate rtcChannel:channelMediaRelayStateDidChange:error:]) and [didReceiveChannelMediaRelayEvent]([AgoraRtcChannelDelegate rtcChannel:didReceiveChannelMediaRelayEvent:]) callbacks, and these callbacks return the state and events of the media stream relay.
@@ -980,7 +1077,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)startChannelMediaRelay:(AgoraChannelMediaRelayConfiguration* _Nonnull)config;
+- (int)startChannelMediaRelay:(AgoraChannelMediaRelayConfiguration* _Nonnull)config NS_SWIFT_NAME(startMediaRelay(_:));
 /** Updates the channels for media stream relay.
 
  After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the `updateChannelMediaRelay` method.
@@ -1001,7 +1098,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)updateChannelMediaRelay:(AgoraChannelMediaRelayConfiguration* _Nonnull)config;
+- (int)updateChannelMediaRelay:(AgoraChannelMediaRelayConfiguration* _Nonnull)config NS_SWIFT_NAME(updateMediaRelay(_:));
 
 /** Pauses the media stream relay to all destination channels.
 
@@ -1022,7 +1119,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)pauseAllChannelMediaRelay;
+- (int)pauseAllChannelMediaRelay NS_SWIFT_NAME(pauseAllChannelMediaRelay());
 
 /** Resumes the media stream relay to all destination channels.
 
@@ -1041,7 +1138,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)resumeAllChannelMediaRelay;
+- (int)resumeAllChannelMediaRelay NS_SWIFT_NAME(resumeAllChannelMediaRelay());
 
 /** Stops the media stream relay.
 
@@ -1056,7 +1153,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return - 0: Success.
  - < 0: Failure.
  */
-- (int)stopChannelMediaRelay;
+- (int)stopChannelMediaRelay NS_SWIFT_NAME(stopMediaRelay());
 
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
 /** Enables/Disables the super resolution feature for a remote user's video. (beta feature)
@@ -1127,7 +1224,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
 
    - -157(`AgoraErrorCodeModuleNotFound`): The dynamic library for super resolution is not integrated.
  */
-- (int)enableRemoteSuperResolution:(NSUInteger)uid enabled:(BOOL)enabled;
+- (int)enableRemoteSuperResolution:(NSUInteger)uid enabled:(BOOL)enabled NS_SWIFT_NAME(enableRemoteSuperResolution(_:enabled:));
 #endif
 
 /** Customizes the remote video renderer for the AgoraRtcChannel object.
@@ -1139,7 +1236,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @param videoRenderer The customized remote video renderer: AgoraVideoSinkProtocol.
  @param userId The ID of the remote user.
  */
-- (void)setRemoteVideoRenderer:(id<AgoraVideoSinkProtocol> _Nullable)videoRenderer forUserId:(NSUInteger)userId;
+- (void)setRemoteVideoRenderer:(id<AgoraVideoSinkProtocol> _Nullable)videoRenderer forUserId:(NSUInteger)userId NS_SWIFT_NAME(setRemoteVideoRenderer(_:forUserId:));
 
 /** Gets the customized remote video renderer for the AgoraRtcChannel object.
 
@@ -1147,7 +1244,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
 
  @return The customized remote video renderer: AgoraVideoSourceProtocol.
 */
-- (id<AgoraVideoSinkProtocol> _Nullable)remoteVideoRendererOfUserId:(NSUInteger)userId;
+- (id<AgoraVideoSinkProtocol> _Nullable)remoteVideoRendererOfUserId:(NSUInteger)userId NS_SWIFT_NAME(remoteVideoRenderer(userId:));
 
 /** Sets the data source of the metadata.
 
@@ -1155,10 +1252,8 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
 
  Use this method with the [setMediaMetadataDelegate]([AgoraRtcChannel setMediaMetadataDelegate:withType:]) method to add synchronized metadata in the video stream. You can create more diversified interactive live streaming interactions, such as sending shopping links, digital coupons, and online quizzes.
 
- **Note**
+ @note Call this method before the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method.
 
- - Call this method before the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method.
- - This method applies to the interactive live streaming channel profile only.
 
  @param metadataDataSource The AgoraMediaMetadataDataSource protocol.
  @param type The metadata type. See [AgoraMetadataType](AgoraMetadataType). Currently, the SDK supports video metadata only.
@@ -1166,15 +1261,13 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return * YES: Success.
  * NO: Failure.
  */
-- (BOOL)setMediaMetadataDataSource:(id<AgoraMediaMetadataDataSource> _Nullable)metadataDataSource withType:(AgoraMetadataType)type;
+- (BOOL)setMediaMetadataDataSource:(id<AgoraMediaMetadataDataSource> _Nullable)metadataDataSource withType:(AgoraMetadataType)type NS_SWIFT_NAME(setMediaMetadataDataSource(_:with:));
 /** Sets the delegate of the metadata.
 
  You need to implement the AgoraMediaMetadataDelegate protocol and specify the type of metadata in this method.
 
- **Note**
+ @note Call this method before the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method.
 
- - Call this method before the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method.
- - This method applies to the interactive live streaming channel profile only.
 
  @param metadataDelegate The AgoraMediaMetadataDelegate protocol.
  @param type The metadata type. See [AgoraMetadataType](AgoraMetadataType). Currently, the SDK supports video metadata only.
@@ -1182,7 +1275,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @return * YES: Success.
  * NO: Failure.
  */
-- (BOOL)setMediaMetadataDelegate:(id<AgoraMediaMetadataDelegate> _Nullable)metadataDelegate withType:(AgoraMetadataType)type;
+- (BOOL)setMediaMetadataDelegate:(id<AgoraMediaMetadataDelegate> _Nullable)metadataDelegate withType:(AgoraMetadataType)type NS_SWIFT_NAME(setMediaMetadataDelegate(_:with:));
 
 @end
 /** The AgoraRtcChannelDelegate class.
@@ -1202,7 +1295,7 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  @param rtcChannel AgoraRtcChannel
  @param warningCode Warning code: AgoraWarningCode
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOccurWarning:(AgoraWarningCode)warningCode;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOccurWarning:(AgoraWarningCode)warningCode NS_SWIFT_NAME(rtcChannel(_:didOccurWarning:));
 /** Reports an error during SDK runtime.
 
 In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.
@@ -1214,14 +1307,14 @@ See [AgoraErrorCode](AgoraErrorCode).
  @param rtcChannel AgoraRtcChannel
  @param errorCode Error code: AgoraErrorCode
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOccurError:(AgoraErrorCode)errorCode;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOccurError:(AgoraErrorCode)errorCode NS_SWIFT_NAME(rtcChannel(_:didOccurError:));
 /** Occurs when the local user joins a specified channel.
 
  @param rtcChannel AgoraRtcChannel
  @param uid User ID. If the `uid` is specified in the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method, the specified user ID is returned. If the user ID is not specified when the `joinChannelByToken` method is called, the server automatically assigns a `uid`.
  @param elapsed Time elapsed (ms) from the user calling the `joinChannelByToken` method until the SDK triggers this callback.
  */
-- (void)rtcChannelDidJoinChannel:(AgoraRtcChannel* _Nonnull)rtcChannel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
+- (void)rtcChannelDidJoinChannel:(AgoraRtcChannel* _Nonnull)rtcChannel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed NS_SWIFT_NAME(rtcChannelDidJoin(_:withUid:elapsed:));
 /** Occurs when the local user rejoins a channel.
 
  If the client loses connection with the server because of network problems, the SDK automatically attempts to reconnect and then triggers this callback upon reconnection, indicating that the user rejoins the channel with the assigned channel ID and user ID.
@@ -1230,7 +1323,7 @@ See [AgoraErrorCode](AgoraErrorCode).
  @param uid     User ID. If the `uid` is specified in the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method, the specified user ID is returned. If the user ID is not specified when the `joinChannelByToken` method is called, the server automatically assigns a `uid`.
  @param elapsed Time elapsed (ms) from starting to reconnect to a successful reconnection.
  */
-- (void)rtcChannelDidRejoinChannel:(AgoraRtcChannel* _Nonnull)rtcChannel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
+- (void)rtcChannelDidRejoinChannel:(AgoraRtcChannel* _Nonnull)rtcChannel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed NS_SWIFT_NAME(rtcChannelDidRejoin(_:withUid:elapsed:));
 /** Occurs when the local user leaves a channel.
 
  When the app calls the [leaveChannel]([AgoraRtcChannel leaveChannel]) method, this callback notifies the app that a user leaves a channel.
@@ -1240,16 +1333,28 @@ See [AgoraErrorCode](AgoraErrorCode).
  @param rtcChannel AgoraRtcChannel
  @param stats  Statistics of the call: [AgoraChannelStats](AgoraChannelStats).
  */
-- (void)rtcChannelDidLeaveChannel:(AgoraRtcChannel* _Nonnull)rtcChannel withStats:(AgoraChannelStats* _Nonnull)stats;
-/** Occurs when the local user role switches in the interactive live streaming.
+- (void)rtcChannelDidLeaveChannel:(AgoraRtcChannel* _Nonnull)rtcChannel withStats:(AgoraChannelStats* _Nonnull)stats NS_SWIFT_NAME(rtcChannelDidLeave(_:with:));
+/** Occurs when the user role switch fails in the interactive live streaming.
 
-The SDK triggers this callback when the local user switches the user role by calling the [setClientRole]([AgoraRtcChannel setClientRole:]) method after joining the channel.
+ @since v3.7.0
+
+ In the `LiveBroadcasting` channel profile, when the local user calls [setClientRole]([AgoraRtcChannel setClientRole:]) to switch their user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
+
+ @param rtcChannel AgoraRtcChannel
+ @param reason The reason for the user role switch failure. See AgoraClientRoleChangeFailedReason.
+ @param currentRole The current user role. See AgoraClientRole.
+ */
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didClientRoleChangeFailed:(AgoraClientRoleChangeFailedReason)reason currentRole:(AgoraClientRole)currentRole NS_SWIFT_NAME(rtcChannel(_:didClientRoleChangeFailed:currentRole:));
+
+/** Occurs when the user role switches successfully in the interactive live streaming.
+
+ In the `LiveBroadcasting` channel profile, when the local user successfully calls `setClientRole` to switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers this callback to report the user role before and after the switch.
 
  @param rtcChannel AgoraRtcChannel
  @param oldRole Role that the user switches from: AgoraClientRole.
  @param newRole Role that the user switches to: AgoraClientRole.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didClientRoleChanged:(AgoraClientRole)oldRole newRole:(AgoraClientRole)newRole;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didClientRoleChanged:(AgoraClientRole)oldRole newRole:(AgoraClientRole)newRole NS_SWIFT_NAME(rtcChannel(_:didClientRoleChanged:newRole:));
 /** Occurs when a remote user or host joins a channel.
 
  - Communication profile: This callback notifies the app that another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
@@ -1273,7 +1378,7 @@ The SDK triggers this callback when the local user switches the user role by cal
  @param uid     ID of the user or host who joins the channel. If the `uid` is specified in the `joinChannelByToken` method, the specified user ID is returned. If the `uid` is not specified in the `joinChannelByToken` method, the Agora server automatically assigns a `uid`.
  @param elapsed Time elapsed (ms) from the local user calling the `joinChannelByToken` method until the SDK triggers this callback.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed NS_SWIFT_NAME(rtcChannel(_:didJoinedOfUid:elapsed:));
 /** Occurs when a remote user (Communication)/host (Live Broadcast) leaves a channel.
 
 There are two reasons for users to be offline:
@@ -1285,7 +1390,7 @@ There are two reasons for users to be offline:
  @param uid    ID of the user or host who leaves a channel or goes offline.
  @param reason Reason why the user goes offline, see AgoraUserOfflineReason.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason NS_SWIFT_NAME(rtcChannel(_:didOfflineOfUid:reason:));
 /** Occurs when the network connection state changes.
 
 The SDK triggers this callback to report on the current network connection state when it changes, and the reason of the change.
@@ -1294,7 +1399,25 @@ The SDK triggers this callback to report on the current network connection state
 @param state The current network connection state, see AgoraConnectionStateType.
 @param reason The reason of the connection state change, see AgoraConnectionChangedReason.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel connectionChangedToState:(AgoraConnectionStateType)state reason:(AgoraConnectionChangedReason)reason;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel connectionChangedToState:(AgoraConnectionStateType)state reason:(AgoraConnectionChangedReason)reason NS_SWIFT_NAME(rtcChannel(_:connectionChangedTo:reason:));
+
+/** Reports the proxy connection state.
+
+ @since v3.6.2
+
+ You can use this callback to listen for the state of the SDK connecting to a proxy.
+ For example, when a user calls [setCloudProxy]([AgoraRtcEngineKit setCloudProxy:]) and joins a channel
+ successfully, the SDK triggers this callback to report the user ID, the proxy type connected,
+ and the time elapsed from the user calling `joinChannelByToken` until this callback is triggered.
+
+ @param rtcChannel AgoraRtcChannel
+ @param uid The user ID.
+ @param proxyType The proxy type connected. See AgoraProxyType.
+ @param localProxyIp Reserved for future use.
+ @param elapsed The time elapsed (ms) from the user calling `joinChannel` until this callback is triggered.
+
+ */
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didProxyConnected:(NSUInteger)uid proxyType:(AgoraProxyType)proxyType localProxyIp:(NSString* _Nonnull)localProxyIp elapsed:(NSInteger)elapsed NS_SWIFT_NAME(rtcChannel(_:didProxyConnected:proxyType:localProxyIp:elapsed:));
 /** Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
 
 The SDK triggers this callback when it cannot connect to the server 10 seconds after calling the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method, regardless of whether it is in the channel or not.
@@ -1303,7 +1426,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
 
 @param rtcChannel AgoraRtcChannel
  */
-- (void)rtcChannelDidLost:(AgoraRtcChannel* _Nonnull)rtcChannel;
+- (void)rtcChannelDidLost:(AgoraRtcChannel* _Nonnull)rtcChannel NS_SWIFT_NAME(rtcChannelDidLost(_:));
 /** Occurs when the token expires in 30 seconds.
 
  The user becomes offline if the `token` used in the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method expires. The SDK triggers this callback 30 seconds before the `token` expires to remind the app to get a new `token`.
@@ -1312,7 +1435,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  @param rtcChannel AgoraRtcChannel
  @param token  The `token` that expires in 30 seconds.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel tokenPrivilegeWillExpire:(NSString* _Nonnull)token;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel tokenPrivilegeWillExpire:(NSString* _Nonnull)token NS_SWIFT_NAME(rtcChannel(_:tokenPrivilegeWillExpire:));
 /** Occurs when the token expires.
 
  After a `token` is specified by calling the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method, if the SDK losses connection to the Agora server due to network issues, the `token` may expire after a certain period of time and a new `token` may be required to reconnect to the server.
@@ -1321,7 +1444,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
 
  @param rtcChannel AgoraRtcChannel
  */
-- (void)rtcChannelRequestToken:(AgoraRtcChannel* _Nonnull)rtcChannel;
+- (void)rtcChannelRequestToken:(AgoraRtcChannel* _Nonnull)rtcChannel NS_SWIFT_NAME(rtcChannelRequestToken(_:));
 /** Occurs when the most active remote speaker is detected.
 
  After a successful call of [enableAudioVolumeIndication]([AgoraRtcEngineKit enableAudioVolumeIndication:smooth:report_vad:]),
@@ -1336,7 +1459,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  @param rtcChannel AgoraRtcChannel
  @param speakerUid The user ID of the most active remote speaker.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel activeSpeaker:(NSUInteger)speakerUid;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel activeSpeaker:(NSUInteger)speakerUid NS_SWIFT_NAME(rtcChannel(_:activeSpeaker:));
 /** Occurs when the video size or rotation of a specific remote user changes.
 
  @param rtcChannel AgoraRtcChannel
@@ -1344,7 +1467,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  @param size     New video size.
  @param rotation New rotation of the video. The value ranges between 0 and 360.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel videoSizeChangedOfUid:(NSUInteger)uid size:(CGSize)size rotation:(NSInteger)rotation;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel videoSizeChangedOfUid:(NSUInteger)uid size:(CGSize)size rotation:(NSInteger)rotation NS_SWIFT_NAME(rtcChannel(_:videoSizeChangedOfUid:size:rotation:));
 /** Occurs when the remote video state changes.
 
  @param rtcChannel AgoraRtcChannel
@@ -1353,7 +1476,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  @param reason The reason of the remote video state change. See [AgoraVideoRemoteStateReason](AgoraVideoRemoteStateReason).
  @param elapsed The time elapsed (ms) from the local user calling the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method until the SDK triggers this callback.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteVideoStateChangedOfUid:(NSUInteger)uid state:(AgoraVideoRemoteState)state reason:(AgoraVideoRemoteStateReason)reason elapsed:(NSInteger)elapsed;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteVideoStateChangedOfUid:(NSUInteger)uid state:(AgoraVideoRemoteState)state reason:(AgoraVideoRemoteStateReason)reason elapsed:(NSInteger)elapsed NS_SWIFT_NAME(rtcChannel(_:remoteVideoStateChangedOfUid:state:reason:elapsed:));
 ;
 
 /** Reports whether the super resolution feature is successfully enabled. (beta feature)
@@ -1373,7 +1496,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  @param reason The reason why super resolution is not successfully enabled or
  the message that confirms success. See [AgoraSuperResolutionStateReason](AgoraSuperResolutionStateReason).
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel superResolutionEnabledOfUid:(NSUInteger)uid enabled:(BOOL)enabled reason:(AgoraSuperResolutionStateReason)reason;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel superResolutionEnabledOfUid:(NSUInteger)uid enabled:(BOOL)enabled reason:(AgoraSuperResolutionStateReason)reason NS_SWIFT_NAME(rtcChannel(_:superResolutionEnabledOfUid:enabled:reason:));
 
 /** Occurs when the local audio state changes.
 
@@ -1385,7 +1508,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  @param reason The reason of the remote audio state change. See [AgoraAudioRemoteStateReason](AgoraAudioRemoteStateReason).
  @param elapsed Time elapsed (ms) from the local user calling the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method until the SDK triggers this callback.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteAudioStateChangedOfUid:(NSUInteger)uid state:(AgoraAudioRemoteState)state reason:(AgoraAudioRemoteStateReason)reason elapsed:(NSInteger)elapsed;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteAudioStateChangedOfUid:(NSUInteger)uid state:(AgoraAudioRemoteState)state reason:(AgoraAudioRemoteStateReason)reason elapsed:(NSInteger)elapsed NS_SWIFT_NAME(rtcChannel(_:remoteAudioStateChangedOfUid:state:reason:elapsed:));
 /** Occurs when the published video stream falls back to an audio-only stream due to unreliable network conditions or switches back to the video when the network conditions improve.
 
  If you call the [setLocalPublishFallbackOption]([AgoraRtcEngineKit setLocalPublishFallbackOption:]) method and set `option` as AgoraStreamFallbackOptionAudioOnly, the SDK triggers this callback when the published stream falls back to audio-only mode due to unreliable uplink conditions, or when the audio stream switches back to the video when the uplink network condition improves.
@@ -1400,7 +1523,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  * YES: The published stream falls back to audio-only due to unreliable network conditions.
  * NO: The published stream switches back to the video after the network conditions improve.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didLocalPublishFallbackToAudioOnly:(BOOL)isFallbackOrRecover;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didLocalPublishFallbackToAudioOnly:(BOOL)isFallbackOrRecover NS_SWIFT_NAME(rtcChannel(_:didLocalPublishFallbackToAudioOnly:));
 /** Occurs when the remote video stream falls back to an audio-only stream due to unreliable network conditions or switches back to the video after the network conditions improve.
 
  If you call [setRemoteSubscribeFallbackOption]([AgoraRtcEngineKit setRemoteSubscribeFallbackOption:]) and set `option` as `AgoraStreamFallbackOptionAudioOnly`, the SDK triggers this callback when the remote media stream falls back to audio only due to poor downlink conditions or switches back to the video after the downlink network condition improves.
@@ -1416,13 +1539,13 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  * NO: The remote media stream switches back to the video stream after the network conditions improve.
  @param uid ID of the remote user sending the stream.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didRemoteSubscribeFallbackToAudioOnly:(BOOL)isFallbackOrRecover byUid:(NSUInteger)uid;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didRemoteSubscribeFallbackToAudioOnly:(BOOL)isFallbackOrRecover byUid:(NSUInteger)uid NS_SWIFT_NAME(rtcChannel(_:didRemoteSubscribeFallbackToAudioOnly:byUid:));
 /** Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
 
  @param rtcChannel AgoraRtcChannel
  @param stats  Statistics of the AgoraRtcEngineKit: [AgoraChannelStats](AgoraChannelStats).
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel reportRtcStats:(AgoraChannelStats* _Nonnull)stats;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel reportRtcStats:(AgoraChannelStats* _Nonnull)stats NS_SWIFT_NAME(rtcChannel(_:reportRtcStats:));
 /** Reports the last mile network quality of each user in the channel once every two seconds.
 
  Last mile refers to the connection between the local device and Agora's edge server. The SDK triggers this callback once every two seconds to report the last mile network conditions of each user in the channel. If a channel includes multiple users, the SDK triggers this callback as many times.
@@ -1434,7 +1557,7 @@ If the SDK fails to rejoin the channel 20 minutes after being disconnected from 
  @param txQuality Uplink transmission quality of the user in terms of the transmission bitrate, packet loss rate, average RTT (Round-Trip Time), and jitter of the uplink network. `txQuality` is a quality rating helping you understand how well the current uplink network conditions can support the selected AgoraVideoEncoderConfiguration. For example, a 1000-Kbps uplink network may be adequate for video frames with a resolution of 640 * 480 and a frame rate of 15 fps in the interactive live streaming profile, but may be inadequate for resolutions higher than 1280 * 720. See  AgoraNetworkQuality.
  @param rxQuality Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network.  See AgoraNetworkQuality.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel networkQuality:(NSUInteger)uid txQuality:(AgoraNetworkQuality)txQuality rxQuality:(AgoraNetworkQuality)rxQuality;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel networkQuality:(NSUInteger)uid txQuality:(AgoraNetworkQuality)txQuality rxQuality:(AgoraNetworkQuality)rxQuality NS_SWIFT_NAME(rtcChannel(_:networkQuality:txQuality:rxQuality:));
 /** Reports the statistics of the video stream from each remote user/host.
 
  The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
@@ -1446,7 +1569,7 @@ Schemes such as FEC (Forward Error Correction) or retransmission counter the fra
  @param rtcChannel AgoraRtcChannel
  @param stats  Statistics of the received remote video streams. See [AgoraRtcRemoteVideoStats](AgoraRtcRemoteVideoStats).
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteVideoStats:(AgoraRtcRemoteVideoStats* _Nonnull)stats;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteVideoStats:(AgoraRtcRemoteVideoStats* _Nonnull)stats NS_SWIFT_NAME(rtcChannel(_:remoteVideoStats:));
 /** Reports the statistics of the audio stream from each remote user/host.
 
  The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
@@ -1458,12 +1581,10 @@ Schemes such as FEC (Forward Error Correction) or retransmission counter the fra
  @param rtcChannel AgoraRtcChannel
  @param stats  Statistics of the received remote audio streams. See AgoraRtcRemoteAudioStats.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteAudioStats:(AgoraRtcRemoteAudioStats* _Nonnull)stats;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel remoteAudioStats:(AgoraRtcRemoteAudioStats* _Nonnull)stats NS_SWIFT_NAME(rtcChannel(_:remoteAudioStats:));
 /** Occurs when the state of the RTMP or RTMPS streaming changes.
 
-The SDK triggers this callback to report the result of the local user calling the [addPublishStreamUrl]([AgoraRtcChannel addPublishStreamUrl:transcodingEnabled:]) or [removePublishStreamUrl]([AgoraRtcChannel removePublishStreamUrl:]) method.
-
-This callback returns the URL and its current streaming state.
+When the CDN live streaming state changes, the SDK triggers this callback to report the current state and the reason why the state has changed.
 
 This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errorCode` parameter.
 
@@ -1472,7 +1593,7 @@ This callback indicates the state of the RTMP or RTMPS streaming. When exception
 @param state The RTMP or RTMPS streaming state: AgoraRtmpStreamingState.
 @param errorCode The detailed error information for streaming: AgoraRtmpStreamingErrorCode.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel rtmpStreamingChangedToState:(NSString* _Nonnull)url state:(AgoraRtmpStreamingState)state errorCode:(AgoraRtmpStreamingErrorCode)errorCode;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel rtmpStreamingChangedToState:(NSString* _Nonnull)url state:(AgoraRtmpStreamingState)state errorCode:(AgoraRtmpStreamingErrorCode)errorCode NS_SWIFT_NAME(rtcChannel(_:rtmpStreamingChangedToState:state:errorCode:));
 
 /** Reports events during the RTMP or RTMPS streaming.
 
@@ -1482,7 +1603,7 @@ This callback indicates the state of the RTMP or RTMPS streaming. When exception
  @param url The RTMP or RTMPS streaming URL.
  @param eventCode The event code. See AgoraRtmpStreamingEvent.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel rtmpStreamingEventWithUrl:(NSString* _Nonnull)url eventCode:(AgoraRtmpStreamingEvent)eventCode;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel rtmpStreamingEventWithUrl:(NSString* _Nonnull)url eventCode:(AgoraRtmpStreamingEvent)eventCode NS_SWIFT_NAME(rtcChannel(_:rtmpStreamingEventWithUrl:eventCode:));
 
 /** Occurs when the CDN live streaming settings are updated.
 
@@ -1494,7 +1615,7 @@ This callback indicates the state of the RTMP or RTMPS streaming. When exception
 
  @param rtcChannel AgoraRtcChannel
  */
-- (void)rtcChannelTranscodingUpdated:(AgoraRtcChannel* _Nonnull)rtcChannel;
+- (void)rtcChannelTranscodingUpdated:(AgoraRtcChannel* _Nonnull)rtcChannel NS_SWIFT_NAME(rtcChannelTranscodingUpdated(_:));
 
 #pragma mark Inject Stream URL Delegate Methods
 /** Reports the status of injecting an online stream to the interactive live streaming.
@@ -1506,7 +1627,7 @@ This callback indicates the state of the RTMP or RTMPS streaming. When exception
  @param uid     User ID.
  @param status  Status of the externally injected stream. See AgoraInjectStreamStatus.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel streamInjectedStatusOfUrl:(NSString* _Nonnull)url uid:(NSUInteger)uid status:(AgoraInjectStreamStatus)status;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel streamInjectedStatusOfUrl:(NSString* _Nonnull)url uid:(NSUInteger)uid status:(AgoraInjectStreamStatus)status NS_SWIFT_NAME(rtcChannel(_:streamInjectedStatusOfUrl:uid:status:));
 
 #pragma mark Stream Message Delegate Methods
 
@@ -1519,7 +1640,7 @@ The SDK triggers this callback when the local user receives the stream message t
  @param streamId Stream ID.
  @param data     Data received by the local user.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData* _Nonnull)data;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData* _Nonnull)data NS_SWIFT_NAME(rtcChannel(_:receiveStreamMessageFromUid:streamId:data:));
 /** Occurs when the local user does not receive the data stream from the remote user within five seconds.
 
  The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the [sendStreamMessage]([AgoraRtcChannel sendStreamMessage:data:]) method.
@@ -1531,7 +1652,7 @@ The SDK triggers this callback when the local user receives the stream message t
  @param missed Number of lost messages.
  @param cached Number of incoming cached messages when the data stream is interrupted.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached NS_SWIFT_NAME(rtcChannel(_:didOccurStreamMessageErrorFromUid:streamId:error:missed:cached:));
 /** Occurs when the state of the media stream relay changes.
 
  The SDK reports the state of the current media relay and possible error messages in this callback.
@@ -1540,13 +1661,25 @@ The SDK triggers this callback when the local user receives the stream message t
  @param state The state code in [AgoraChannelMediaRelayState](AgoraChannelMediaRelayState).
  @param error The error code in [AgoraChannelMediaRelayError](AgoraChannelMediaRelayError).
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel channelMediaRelayStateDidChange:(AgoraChannelMediaRelayState)state error:(AgoraChannelMediaRelayError)error;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel channelMediaRelayStateDidChange:(AgoraChannelMediaRelayState)state error:(AgoraChannelMediaRelayError)error NS_SWIFT_NAME(rtcChannel(_:channelMediaRelayStateDidChange:error:));
 /** Reports events during the media stream relay.
 
  @param rtcChannel AgoraRtcChannel
  @param event The event code in [AgoraChannelMediaRelayEvent](AgoraChannelMediaRelayEvent).
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didReceiveChannelMediaRelayEvent:(AgoraChannelMediaRelayEvent)event;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didReceiveChannelMediaRelayEvent:(AgoraChannelMediaRelayEvent)event NS_SWIFT_NAME(rtcChannel(_:didReceive:));
+
+/** Occurs when the first remote video frame is rendered.
+
+ @since v3.7.0
+
+ @param rtcChannel AgoraRtcChannel
+ @param uid     User ID of the remote user sending the video stream.
+ @param size    Size of the video frame (width and height).
+ @param elapsed Time elapsed (ms) from the local user calling the [joinChannelByToken]([AgoraRtcChannel joinChannelByToken:info:uid:options:]) method until the SDK triggers this callback.
+ */
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel firstRemoteVideoFrameOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed;
+
 /** Occurs when the audio publishing state changes.
 
  @since v3.1.0
@@ -1558,7 +1691,7 @@ The SDK triggers this callback when the local user receives the stream message t
  @param newState   The current publishing state. For details, see AgoraStreamPublishState.
  @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didAudioPublishStateChange:(AgoraStreamPublishState)oldState newState:(AgoraStreamPublishState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didAudioPublishStateChange:(AgoraStreamPublishState)oldState newState:(AgoraStreamPublishState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState NS_SWIFT_NAME(rtcChannel(_:didAudioPublishStateChange:newState:elapseSinceLastState:));
 
 /** Occurs when the video publishing state changes.
 
@@ -1571,7 +1704,7 @@ The SDK triggers this callback when the local user receives the stream message t
  @param newState   The current publishing state. For details, see AgoraStreamPublishState.
  @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didVideoPublishStateChange:(AgoraStreamPublishState)oldState newState:(AgoraStreamPublishState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didVideoPublishStateChange:(AgoraStreamPublishState)oldState newState:(AgoraStreamPublishState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState NS_SWIFT_NAME(rtcChannel(_:didVideoPublishStateChange:newState:elapseSinceLastState:));
 
 /** Occurs when the audio subscribing state changes.
 
@@ -1585,7 +1718,7 @@ The SDK triggers this callback when the local user receives the stream message t
  @param newState  The current subscribing state. For details, see AgoraStreamSubscribeState.
  @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didAudioSubscribeStateChange:(NSUInteger)uid oldState:(AgoraStreamSubscribeState)oldState newState:(AgoraStreamSubscribeState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didAudioSubscribeStateChange:(NSUInteger)uid oldState:(AgoraStreamSubscribeState)oldState newState:(AgoraStreamSubscribeState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState NS_SWIFT_NAME(rtcChannel(_:didAudioSubscribeStateChange:oldState:newState:elapseSinceLastState:));
 
 /** Occurs when the video subscribing state changes.
 
@@ -1599,6 +1732,6 @@ The SDK triggers this callback when the local user receives the stream message t
  @param newState  The current subscribing state. For details, see AgoraStreamSubscribeState.
  @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
  */
-- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didVideoSubscribeStateChange:(NSUInteger)uid oldState:(AgoraStreamSubscribeState)oldState newState:(AgoraStreamSubscribeState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState;
+- (void)rtcChannel:(AgoraRtcChannel* _Nonnull)rtcChannel didVideoSubscribeStateChange:(NSUInteger)uid oldState:(AgoraStreamSubscribeState)oldState newState:(AgoraStreamSubscribeState)newState elapseSinceLastState:(NSInteger)elapseSinceLastState NS_SWIFT_NAME(rtcChannel(_:didVideoSubscribeStateChange:oldState:newState:elapseSinceLastState:));
 
 @end

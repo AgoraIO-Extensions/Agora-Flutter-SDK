@@ -7,8 +7,9 @@ IRIS_PROJECT_PATH="$AGORA_FLUTTER_PROJECT_PATH/../iris"
 ARCH_TYPE="SIMULATOR64"
 BUILD_TYPE=$1
 
-bash $IRIS_PROJECT_PATH/rtc/ci/build-ios.sh build SIMULATOR64 $BUILD_TYPE
-bash $IRIS_PROJECT_PATH/rtc/ci/build-ios.sh build OS64COMBINED $BUILD_TYPE
+# bash $IRIS_PROJECT_PATH/rtc/ci/build-ios.sh build SIMULATOR64 $BUILD_TYPE
+# bash $IRIS_PROJECT_PATH/rtc/ci/build-ios.sh build OS64COMBINED $BUILD_TYPE
+bash $IRIS_PROJECT_PATH/rtc/ci/build-ios.sh $BUILD_TYPE
 
 # echo "Copying $IRIS_PROJECT_PATH/build/ios/$ARCH_TYPE/output/rtc/$BUILD_TYPE/AgoraRtcWrapper.framework $AGORA_FLUTTER_PROJECT_PATH/ios/AgoraRtcWrapper.framework"
 # cp -RP "$IRIS_PROJECT_PATH/build/ios/$ARCH_TYPE/output/rtc/$BUILD_TYPE/AgoraRtcWrapper.framework" "$AGORA_FLUTTER_PROJECT_PATH/ios/"

@@ -46,6 +46,24 @@ const _$ClientRoleEnumMap = {
   ClientRole.Audience: 2,
 };
 
+OnFirstRemoteVideoFrameJson _$OnFirstRemoteVideoFrameJsonFromJson(
+        Map<String, dynamic> json) =>
+    OnFirstRemoteVideoFrameJson(
+      json['uid'] as int,
+      json['width'] as int,
+      json['height'] as int,
+      json['elapsed'] as int,
+    );
+
+Map<String, dynamic> _$OnFirstRemoteVideoFrameJsonToJson(
+        OnFirstRemoteVideoFrameJson instance) =>
+    <String, dynamic>{
+      'uid': instance.uid,
+      'width': instance.width,
+      'height': instance.height,
+      'elapsed': instance.elapsed,
+    };
+
 OnWlAccMessageJson _$OnWlAccMessageJsonFromJson(Map<String, dynamic> json) =>
     OnWlAccMessageJson(
       $enumDecode(_$WlaccMessageReasonEnumMap, json['reason']),

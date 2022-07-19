@@ -2,6 +2,7 @@
 #define AGORA_MEDIA_ENGINE_H
 #include <stdint.h>
 #include "AgoraBase.h"
+#include "AgoraOptional.h"
 
 namespace agora {
 namespace media {
@@ -1043,6 +1044,52 @@ class IMediaEngine {
    */
   virtual int registerVideoEncodedFrameObserver(IVideoEncodedFrameObserver* observer) = 0;
 };
+/// @cond nodoc
+/**
+ * Spatial audio effect parameters.
+ *
+ * @since v3.7.0
+ */
+struct SpatialAudioParams {
+  /**
+   * The azimuthal angle in degrees of the remote user relative to the local user in the spherical coordinate system (taking the position of the local user as its origin). The value range is [0,360], as defined by the following main directions:
+   * - `0`: (Default) 0 degrees, which means the remote user is directly in front of the local user.
+   * - `90`: 90 degrees, which means the remote user is directly to the left of the local user.
+   * - `180`: 180 degrees, which means the remote user is directly behind the local user.
+   * - `270`: 270 degrees, which means the remote user is directly to the right of the local user.
+   */
+  Optional<double> speaker_azimuth;
+  /**
+   * The elevation angle in degrees of the remote user relative to the local user in the spherical coordinate system (taking the position of the local user as its origin). The value range is [-90,90], as defined by the following main directions:
+   * - `0`: (Default) 0 degrees, which means the remote user is at the same horizontal level as the local user.
+   * - `-90`: -90 degrees, which means the remote user is directly above the local user.
+   * - `90`: 90 degrees, which means the remote user is directly below the local user.
+   */
+  Optional<double> speaker_elevation;
+  /**
+   * The distance in meters of the remote user relative to the local user in the spherical coordinate system (taking the position of the local user as its origin). The value range is [1,50]. The default value is 1 meter.
+   */
+  Optional<double> speaker_distance;
+  /**
+   * The orientation in degrees of the remote user's head relative to the local user's head in a spherical coordinate system (taking the position of the local user as its origin). The value range is [0,180], as defined by the following main directions:
+   * - `0`: (Default) 0 degrees, which means the remote user's head and the local user's head face the same direction.
+   * - `180`: 180 degrees, which means the remote user's head and the local user's head face opposite directions.
+   */
+  Optional<int> speaker_orientation;
+  /**
+   * Whether to enable audio blurring:
+   * - true: Enable blurring.
+   * - false: (Default) Disables blurring.
+   */
+  Optional<bool> enable_blur;
+  /**
+   * Whether to enable air absorption. This function simulates the energy attenuation of audio when the audio transmits in the air:
+   * - true: (Default) Enables air absorption.
+   * - false: Disable air absorption.
+   */
+  Optional<bool> enable_air_absorb;
+};
+/// @endcond
 
 }  // namespace media
 

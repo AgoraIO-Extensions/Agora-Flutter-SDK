@@ -448,8 +448,10 @@ __attribute__((visibility("default"))) @interface AgoraRtcAudioVolumeInfo : NSOb
 @property(copy, nonatomic) NSString* _Nonnull channelId;
 @end
 
-/** **Since** v3.5.1. The information of an audio file. This struct is reported in
+/** The information of an audio file. This struct is reported in
  [didRequestAudioFileInfo]([AgoraRtcEngineDelegate rtcEngine:didRequestAudioFileInfo:error:]).
+
+ **Since** v3.5.1
  */
 __attribute__((visibility("default"))) @interface AgoraRtcAudioFileInfo : NSObject
 /** The file path.
@@ -476,6 +478,15 @@ __attribute__((visibility("default"))) @interface AgoraRtcRhythmPlayerConfig : N
  - `NO`: Do not publish. Only the local user can hear the metronome.
  */
 @property(assign, nonatomic) BOOL publish;
+@end
+
+__attribute__((visibility("default"))) @interface AgoraWlAccStats : NSObject
+
+@property(assign, nonatomic) NSInteger e2eDelayPercent;
+
+@property(assign, nonatomic) NSInteger frozenRatioPercent;
+
+@property(assign, nonatomic) NSInteger lossRatePercent;
 @end
 
 /** Statistics of the channel
@@ -775,6 +786,8 @@ In either case, Agora uses the value of this parameter to calculate the charges.
  - YES: Bring the window to the front.
  - NO: (Default) Do not bring the window to the front.
 
+ @note Due to system limitations, `windowFocus` only supports bringing the main window of an application to the front.
+
  @since v3.1.0
  */
 @property(assign, nonatomic) BOOL windowFocus;
@@ -789,6 +802,28 @@ In either case, Agora uses the value of this parameter to calculate the charges.
  @since v3.1.0
  */
 @property(copy, nonatomic) NSArray* _Nullable excludeWindowList;
+/** (macOS only) Determines whether to place a border around the shared window or screen:
+
+ - YES: Place a border.
+ - NO: (Default) Do not place a border.
+
+ @note When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set `highLighted` as YES.
+
+ @since v3.7.0
+ */
+@property(assign, nonatomic) BOOL highLighted;
+/** (macOS only) The color of the border in RGBA format. The default value is 0xFF8CBF26.
+
+ on macOS, `COLOR_CLASS` refers to `NSColor`.
+
+ @since v3.7.0
+ */
+@property(strong, nonatomic) COLOR_CLASS* _Nullable highLightColor;
+/** (macOS only) The width (px) of the border. Defaults to 0, and the value range is [0,50].
+
+ @since v3.7.0
+ */
+@property(assign, nonatomic) NSUInteger highLightWidth;
 
 @end
 
@@ -862,6 +897,21 @@ The maximum length of this parameter is 1024 bytes.
 /** Position and size of the image on the broadcasting video in CGRect.
  */
 @property(assign, nonatomic) CGRect rect;
+/** The layer number of the watermark or background image.
+
+ When you use the watermark array to add a watermark or multiple watermarks, you must pass a value to `zOrder` in the range [1,255]; otherwise, the SDK reports an error. In other cases, `zOrder` can optionally be passed in the range [0,255], with `0` being the default value. `0` means the bottom layer and `255` means the top layer.
+
+ @since v3.6.0
+ */
+@property(assign, nonatomic) NSInteger zOrder;
+/** The transparency of the watermark or background image. The value range is [0.0,1.0]:
+
+ - `0.0`: Completely transparent.
+ - `1.0`: (Default) Opaque.
+
+ @since v3.6.0
+ */
+@property(assign, nonatomic) double alpha;
 @end
 
 /** The options of the watermark image to be added.
@@ -951,18 +1001,30 @@ If you set this parameter to other values, Agora adjusts it to the default value
 /** Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 bytes. For more information on SEI, see [SEI-related questions](https://docs.agora.io/en/faq/sei).
  */
 @property(copy, nonatomic) NSString* _Nullable transcodingExtraInfo;
-/** The watermark image added to the CDN live publishing stream.
+/** **Deprecated** from v3.6.0. Use `watermarkArray` instead.
 
-The audience of the CDN live publishing stream can see the watermark. Ensure that the format of the image is PNG.
-
-See AgoraImage for the definition of the watermark.
+ The watermark on the live video. The image format must be PNG. See AgoraImage.
  */
 @property(strong, nonatomic) AgoraImage* _Nullable watermark;
-/** The background image added to the CDN live publishing stream.
 
-The audience of the CDN live publishing stream can see the background image. See AgoraImage for the definition of the background image.
+/** The array of watermarks on the live video. You can use `watermarkArray` to add one or more watermarks. The image format must be PNG. The total number of watermarks and background images on the live video must be greater than or equal to 0 and less than or equal to 10.
+
+ @since v3.6.0
+ */
+@property(copy, nonatomic) NSArray<AgoraImage*>* _Nullable watermarkArray;
+
+/** **Deprecated** from v3.6.0. Use `backgroundImageArray` instead.
+
+ The background image on the live video. The image format must be PNG. See AgoraImage.
  */
 @property(strong, nonatomic) AgoraImage* _Nullable backgroundImage;
+
+/** The array of background images on the live video. You can use `backgroundImageArray` to add one or more background images. The image format must be PNG. The total number of watermarks and background images on the live video must be greater than or equal to 0 and less than or equal to 10.
+
+ @since v3.6.0
+ */
+@property(copy, nonatomic) NSArray<AgoraImage*>* _Nullable backgroundImageArray;
+
 /** The background color in RGB hex.
 
 Value only. Do not include a preceding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
@@ -1483,33 +1545,74 @@ __attribute__((visibility("default"))) @interface AgoraChannelMediaRelayConfigur
 /** The image enhancement options in [setBeautyEffectOptions]([AgoraRtcEngineKit setBeautyEffectOptions:options:]). */
 __attribute__((visibility("default"))) @interface AgoraBeautyOptions : NSObject
 
-/** The lightening contrast level
-
-[AgoraLighteningContrastLevel](AgoraLighteningContrastLevel), used with the lighteningLevel property:
-
-- 0: Low contrast level.
-- 1: (Default) Normal contrast level.
-- 2: High contrast level.
-*/
+/** The contrast level, often used in conjunction with `lighteningLevel`. The higher the value, the greater the contrast level. See [AgoraLighteningContrastLevel](AgoraLighteningContrastLevel).
+ */
 @property(nonatomic, assign) AgoraLighteningContrastLevel lighteningContrastLevel;
 
-/** The brightness level.
-
-The default value is 0.7. The value ranges from 0.0 (original) to 1.0.
+/** The brightening level, in the range [0.0,1.0], where 0.0 means the original brightening. The default value is 0.6. The higher the value, the greater the brightening level.
  */
 @property(nonatomic, assign) float lighteningLevel;
 
-/** The sharpness level.
-
-The default value is 0.5. The value ranges from 0.0 (original) to 1.0. This parameter is usually used to remove blemishes.
+/** The smoothness level, in the range [0.0,1.0], where 0.0 means the original smoothness. The default value is 0.5. The higher the value, the greater the smoothness level.
  */
 @property(nonatomic, assign) float smoothnessLevel;
 
-/** The redness level.
-
-The default value is 0.1. The value ranges from 0.0 (original) to 1.0. This parameter adjusts the red saturation level.
-*/
+/** The redness level, in the range [0.0,1.0], where 0.0 means the original redness. The default value is 0.1. The higher the value, the greater the redness level.
+ */
 @property(nonatomic, assign) float rednessLevel;
+
+/** The sharpness level, in the range [0.0,1.0], where 0.0 means the original sharpness. The default value is 0.3. The higher the value, the greater the sharpness level.
+
+ @since v3.6.0
+*/
+@property(nonatomic, assign) float sharpnessLevel;
+
+@end
+
+/**
+ The video noise reduction options.
+
+ **Since** v3.6.2
+ */
+__attribute__((visibility("default"))) @interface AgoraVideoDenoiserOptions : NSObject
+
+/** The video noise reduction mode. See AgoraVideoDenoiserMode.
+ */
+@property(nonatomic, assign) AgoraVideoDenoiserMode mode;
+
+/** The video noise reduction level. See AgoraVideoDenoiserLevel.
+ */
+@property(nonatomic, assign) AgoraVideoDenoiserLevel level;
+
+@end
+
+/**
+ The video noise reduction options.
+
+ **Since** v3.6.2
+ */
+__attribute__((visibility("default"))) @interface AgoraLowlightEnhanceOptions : NSObject
+
+/** The low-light enhancement mode. See AgoraLowlightEnhanceMode. */
+@property(nonatomic, assign) AgoraLowlightEnhanceMode mode;
+
+/** The low-light enhancement level. See AgoraLowlightEnhanceLevel. */
+@property(nonatomic, assign) AgoraLowlightEnhanceLevel level;
+
+@end
+
+/**
+ The color enhancement options.
+
+ **Since** v3.6.2
+ */
+__attribute__((visibility("default"))) @interface AgoraColorEnhanceOptions : NSObject
+
+/** The level of color enhancement. The value range is [0.0,1.0]. `0.0` is the default value, which means no color enhancement is applied to the video. The higher the value, the higher the level of color enhancement. */
+@property(nonatomic, assign) float strengthLevel;
+
+/** The level of skin tone protection. The value range is [0.0,1.0]. `0.0` means no skin tone protection. The higher the value, the higher the level of skin tone protection. The default value is `1.0.` When the level of color enhancement is higher, the portrait skin tone can be significantly distorted, so you need to set the level of skin tone protection; when the level of skin tone protection is higher, the color enhancement effect can be slightly reduced. Therefore, to get the best color enhancement effect, Agora recommends that you adjust strengthLevel and skinProtectLevel to get the most appropriate values. */
+@property(nonatomic, assign) float skinProtectLevel;
 
 @end
 
@@ -1526,7 +1629,7 @@ __attribute__((visibility("default"))) @interface AgoraVirtualBackgroundSource :
  The default value is `0xFFFFFF`, which signifies white. The value range is
  [0x000000,0xFFFFFF]. If the value is invalid, the SDK replaces the original
  background image with a white background image.
- <p><b>Note</b>: This parameter takes effect only when the type of the custom
+ <p><b>Note</b>: This parameter takes effect only when the type of the custom
  background image is <code>AgoraVirtualBackgroundColor</code>.</p>
  */
 @property(nonatomic, assign) NSUInteger color;
@@ -1534,13 +1637,13 @@ __attribute__((visibility("default"))) @interface AgoraVirtualBackgroundSource :
 /** The local absolute path of the custom background image. PNG and JPG formats
  are supported. If the path is invalid, the SDK replaces the original
  background image with a white background image.
- <p><b>Note</b>: This parameter takes effect only when the type of the custom
+ <p><b>Note</b>: This parameter takes effect only when the type of the custom
  background image is <code>AgoraVirtualBackgroundImg</code>.</p>
  */
 @property(nonatomic, copy) NSString* _Nullable source;
 
 /** The degree of blurring applied to the custom background image. See AgoraBlurDegree.
- <p><b>Note</b>: This parameter takes effect only when the type of the custom
+ <p><b>Note</b>: This parameter takes effect only when the type of the custom
  background image is <code>AgoraVirtualBackgroundBlur</code>.</p>
 
  @since v3.5.1
@@ -1616,11 +1719,11 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannelMediaOptions : 
  */
 __attribute__((visibility("default"))) @interface AgoraFacePositionInfo : NSObject
 
-/** The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
+/** The x coordinate (px) of the human face in the local view. Taking the top left corner of the view as the origin, the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
  */
 @property(assign, nonatomic) NSInteger x;
 
-/** The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
+/** The y coordinate (px) of the human face in the local view. Taking the top left corner of the view as the origin, the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
  */
 @property(assign, nonatomic) NSInteger y;
 
@@ -1667,13 +1770,22 @@ __attribute__((visibility("default"))) @interface AgoraAudioRecordingConfigurati
  files or AAC files whose `recordingQuality` is `AgoraAudioRecordingQualityMedium` or `AgoraAudioRecordingQualityHigh`.
  */
 @property(assign, nonatomic) NSInteger recordingSampleRate;
+
+/** The recorded audio channel.
+
+ The following values are supported:
+
+ - `1`: (Default) Mono channel.
+ - `2`: Dual channel.
+
+ @since v3.6.2
+
+ @note The actual recorded audio channel is related to the audio channel that you capture. If the captured audio is mono and `recordingChannel` is `2`, the recorded audio is the dual-channel data that is copied from mono data, not stereo. If the captured audio is dual channel and `recordingChannel` is `1`, the recorded audio is the mono data that is mixed by dual-channel data. The integration scheme also affects the final recorded audio channel. Therefore, to record in stereo, contact technical support for assistance.
+ */
+@property(assign, nonatomic) NSInteger recordingChannel;
+
 @end
 
-//__attribute__((visibility("default"))) @interface AgoraRtcChannelInfo : NSObject
-//
-//@property (nonatomic, copy) NSString * _Nonnull channelId;
-//
-//@end
 /** The configuration of the log files that the SDK outputs.
  */
 __attribute__((visibility("default"))) @interface AgoraLogConfig : NSObject
@@ -1688,7 +1800,7 @@ __attribute__((visibility("default"))) @interface AgoraLogConfig : NSObject
  - macOS:
    - Sandbox enabled: `App Sandbox/Library/Logs/agorasdk.log`, such as
    `/Users/<username>/Library/Containers/<App Bundle Identifier>/Data/Library/Logs/agorasdk.log`
-   - Sandbox disabled: `～/Library/Logs/agorasdk.log`
+   - Sandbox disabled: `/Users/<username>/Library/Caches/<App Bundle Identifier>/Logs/agorasdk.log`
  */
 @property(copy, nonatomic) NSString* _Nullable filePath;
 /** The size (KB) of a log file.
@@ -1856,29 +1968,29 @@ __attribute__((visibility("default"))) @interface AgoraVideoDataFrame : NSObject
 @property(assign, nonatomic) AgoraVideoFrameType frameType;
 /** The width (px) of the video.
  */
-@property(assign, nonatomic) NSInteger width;              // width of video frame
+@property(assign, nonatomic) NSInteger width;  // width of video frame
 /** The height (px) of the video.
  */
-@property(assign, nonatomic) NSInteger height;             // height of video frame
+@property(assign, nonatomic) NSInteger height;  // height of video frame
 /** For YUV data, the line span of the Y buffer; for RGBA data, the total
  data length.
  */
-@property(assign, nonatomic) NSInteger yStride;            // stride of Y data buffer
+@property(assign, nonatomic) NSInteger yStride;  // stride of Y data buffer
 /** For YUV data, the line span of the U buffer; for RGBA data, the value is 0.
  */
-@property(assign, nonatomic) NSInteger uStride;            // stride of U data buffer
+@property(assign, nonatomic) NSInteger uStride;  // stride of U data buffer
 /** For YUV data, the line span of the V buffer; for RGBA data, the value is 0.
  */
-@property(assign, nonatomic) NSInteger vStride;            // stride of V data buffer
+@property(assign, nonatomic) NSInteger vStride;  // stride of V data buffer
 /** For YUV data, the pointer to the Y buffer; for RGBA data, the data buffer.
  */
-@property(assign, nonatomic) void* _Nullable yBuffer;      // Y data buffer
+@property(assign, nonatomic) void* _Nullable yBuffer;  // Y data buffer
 /** For YUV data, the pointer to the U buffer; for RGBA data, the value is 0.
  */
-@property(assign, nonatomic) void* _Nullable uBuffer;      // U data buffer
+@property(assign, nonatomic) void* _Nullable uBuffer;  // U data buffer
 /** For YUV data, the pointer to the V buffer; for RGBA data, the value is 0.
  */
-@property(assign, nonatomic) void* _Nullable vBuffer;      // V data buffer
+@property(assign, nonatomic) void* _Nullable vBuffer;  // V data buffer
 /** The clockwise rotation angle of the video frame.
  See AgoraVideoRotation.
  */
@@ -1935,7 +2047,7 @@ __attribute__((visibility("default"))) @interface AgoraContentInspectModule : NS
 
 @property(assign, nonatomic) AgoraContentInspectType type;
 
-@property(assign, nonatomic) NSInteger interval NS_SWIFT_NAME(interval);
+@property(assign, nonatomic) NSInteger interval;
 
 @end
 
@@ -1943,5 +2055,205 @@ __attribute__((visibility("default"))) @interface AgoraContentInspectConfig : NS
 
 @property(nonatomic, copy) NSString* _Nullable extraInfo;
 
+// @property(nonatomic, strong) NSArray* _Nullable featureRate;
+
 @property(copy, nonatomic) NSArray<AgoraContentInspectModule*>* _Nullable modules;
+@end
+
+__attribute__((visibility("default"))) @interface AgoraLocalAccessPointConfiguration : NSObject
+
+@property(copy, nonatomic) NSArray* _Nullable ipList;
+
+@property(copy, nonatomic) NSArray* _Nullable domainList;
+
+@property(copy, nonatomic) NSString* _Nullable verifyDomainName;
+
+@property(assign, nonatomic) AgoraLocalProxyMode mode;
+@end
+/** The video configuration for the shared screen stream.
+
+ Only available for scenarios where `captureVideo` is `YES`.
+
+ @since v3.7.0
+ */
+__attribute__((visibility("default"))) @interface AgoraScreenVideoParameters : NSObject
+/** The video encoding resolution. The default value is 1280 × 720. For recommended values, see [Recommended video profiles](https://docs.agora.io/en/Interactive%20Broadcast/game_streaming_video_profile?platform=iOS#recommended-video-profiles).
+
+ If the aspect ratio is different between dimensions and the screen, the SDK adjusts the video encoding resolution according to the following rules (using an example value for dimensions of 1280 × 720):
+
+ - When the width and height of the screen are both lower than those of dimensions, the SDK uses the resolution of the screen for video encoding. For example, if the screen is 640 × 360, the SDK uses 640 × 360 for video encoding.
+ - When either the width or height of the screen is higher than that of dimension, the SDK uses the maximum values that do not exceed those of dimensions while maintaining the aspect ratio of the screen for video encoding. For example, if the screen is 2000 × 1500, the SDK uses 960 × 720 for video encoding.
+
+ **Note:**
+
+ - The billing of the screen sharing stream is based on the value of dimensions. When you do not pass in a value, Agora bills you at 1280 × 720; when you pass a value in, Agora bills you at that value. For details, see [Pricing for Real-time Communication](https://docs.agora.io/en/Interactive%20Broadcast/billing_rtc).
+ - This value does not indicate the orientation mode of the output ratio. For how to set the video orientation, see AgoraVideoOutputOrientationMode.
+ - Whether the SDK can support a resolution at 720P depends on the performance of the device. If you set 720P but the device cannot support it, the video frame rate can be lower.
+
+ */
+@property(assign, nonatomic) CGSize dimensions;
+/** The video encoding frame rate (fps). The default value is 15. For recommended values, see [Recommended video profiles](https://docs.agora.io/en/Interactive%20Broadcast/game_streaming_video_profile?platform=iOS#recommended-video-profiles).
+ */
+@property(assign, nonatomic) NSInteger frameRate;
+/** The video encoding bitrate (Kbps). For recommended values, see [Recommended video profiles](https://docs.agora.io/en/Interactive%20Broadcast/game_streaming_video_profile?platform=iOS#recommended-video-profiles).
+ */
+@property(assign, nonatomic) NSInteger bitrate;
+/** The content hint of the screen sharing. See AgoraVideoContentHint.
+ */
+@property(assign, nonatomic) AgoraVideoContentHint contentHint;
+
+@end
+/** The audio configuration for the shared screen stream.
+
+ Only available for scenarios where `captureAudio` is `YES`.
+
+ @since v3.7.0
+ */
+__attribute__((visibility("default"))) @interface AgoraScreenAudioParameters : NSObject
+/** The volume of the captured system audio. The value range is [0,100]. The default value is 100. */
+@property(assign, nonatomic) NSInteger captureSignalVolume;
+
+@end
+/** The configuration of the screen sharing.
+
+ @since v3.7.0
+ */
+__attribute__((visibility("default"))) @interface AgoraScreenCaptureParameters2 : NSObject
+/** Determines whether to capture system audio during screen sharing:
+ - YES: Capture.
+ - NO: (Default) Do not capture.
+ */
+@property(assign, nonatomic) BOOL captureAudio;
+/** The audio configuration for the shared screen stream. See AgoraScreenAudioParameters.
+
+ @note This parameter is only available for scenarios where `captureAudio` is `YES`.
+ */
+@property(strong, nonatomic) AgoraScreenAudioParameters* _Nonnull audioParams;
+/** Determines whether to capture the screen during screen sharing:
+ - YES: (Default) Capture.
+ - NO: Do not capture.
+ */
+@property(assign, nonatomic) BOOL captureVideo;
+/** The video configuration for the shared screen stream. See AgoraScreenVideoParameters.
+
+ @note This parameter is only available for scenarios where `captureVideo` is `YES`.
+ */
+@property(strong, nonatomic) AgoraScreenVideoParameters* _Nonnull videoParams;
+
+@end
+
+__attribute__((visibility("default"))) @interface AgoraRtcDoubleOptional : NSObject
+
+/**
+ * Checks if no value
+ */
+@property(nonatomic, readonly) BOOL isEmpty;
+/**
+ * Checks if has value
+ */
+@property(nonatomic, readonly) BOOL hasValue;
+/**
+ * Extracts data from optional. Will assert if it's nil!
+ */
+@property(nonatomic, readonly) double value;
+
+/**
+ * Returns empty optional
+ * @return AgoraRtcUIntOptional.empty
+ */
++ (nonnull instancetype)empty;
+/**
+ * Creates optional with value
+
+ * @param aValue double value storage for optional double
+ * @return guaranteed nonnull optional
+ */
++ (nonnull instancetype)of:(double)aValue;
+
++ (nonnull instancetype)new NS_UNAVAILABLE;
+- (nonnull instancetype)init NS_UNAVAILABLE;
+
+@end
+
+__attribute__((visibility("default"))) @interface AgoraRtcIntOptional : NSObject
+
+/**
+ * Checks if no value
+ */
+@property(nonatomic, readonly) BOOL isEmpty;
+/**
+ * Checks if has value
+ */
+@property(nonatomic, readonly) BOOL hasValue;
+
+/**
+ * Extracts data from optional. Will assert if it's nil!
+ */
+@property(nonatomic, readonly) int value;
+
+/**
+ * Returns empty optional
+ * @return AgoraRtcIntOptional.empty
+ */
++ (nonnull instancetype)empty;
+/**
+ * Creates optional with value
+
+ * @param aValue double value storage for optional double
+ * @return guaranteed nonnull optional
+ */
++ (nonnull instancetype)of:(int)aValue;
+
++ (nonnull instancetype)new NS_UNAVAILABLE;
+- (nonnull instancetype)init NS_UNAVAILABLE;
+
+@end
+
+__attribute__((visibility("default"))) @interface AgoraRtcBoolOptional : NSObject
+
+/**
+ * Checks if no value
+ */
+@property(nonatomic, readonly) BOOL isEmpty;
+/**
+ * Checks if has value
+ */
+@property(nonatomic, readonly) BOOL hasValue;
+/**
+ * Extracts data from optional. Will assert if it's nil!
+ */
+@property(nonatomic, readonly) BOOL value;
+
+/**
+ * Returns empty optional
+ * @return AgoraRtcBoolOptional.empty
+ */
++ (nonnull instancetype)empty;
+/**
+ * Creates optional with value
+
+ * @param aValue double value storage for optional double
+ * @return guaranteed nonnull optional
+ */
++ (nonnull instancetype)of:(BOOL)aValue;
+
++ (nonnull instancetype)new NS_UNAVAILABLE;
+- (nonnull instancetype)init NS_UNAVAILABLE;
+
+@end
+
+__attribute__((visibility("default"))) @interface AgoraSpatialAudioParams : NSObject
+
+@property(strong, nonatomic) AgoraRtcDoubleOptional* _Nullable speaker_azimuth;
+
+@property(strong, nonatomic) AgoraRtcDoubleOptional* _Nullable speaker_elevation;
+
+@property(strong, nonatomic) AgoraRtcDoubleOptional* _Nullable speaker_distance;
+
+@property(strong, nonatomic) AgoraRtcIntOptional* _Nullable speaker_orientation;
+
+@property(strong, nonatomic) AgoraRtcBoolOptional* _Nullable enable_blur;
+
+@property(strong, nonatomic) AgoraRtcBoolOptional* _Nullable enable_air_absorb;
+
 @end

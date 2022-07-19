@@ -41,7 +41,35 @@
  @return - YES: Sets the SDK to receive the video frame.
  - NO: Sets the SDK to discard the video frame.
  */
-- (BOOL)onCaptureVideoFrame:(AgoraVideoDataFrame*)videoFrame;
+- (BOOL)onCaptureVideoFrame:(AgoraVideoDataFrame*)videoFrame NS_SWIFT_NAME(onCaptureVideoFrame(_:));
+
+/** Gets the incoming remote video data.
+
+ @since v3.4.5
+
+ After you successfully register the raw video frame and set the return value
+ of [isMultipleChannelFrameWanted]([AgoraVideoDataFrameProtocol isMultipleChannelFrameWanted])
+ as `NO`, the SDK triggers this callback each time a video frame is received.
+ You can get the incoming remote video data in `videoFrame` and then process
+ the video data according to your scenario. After processing, you can use
+ `videoFrame` to pass the processed video data back to the SDK.
+
+ **Note**:
+
+ - This callback applies to iOS only.
+ - If you get the video data in RGBA color encoding format, Agora does not
+ support using this callback to send the processed data in RGBA color
+ encoding format back to the SDK.
+
+ @param videoFrame The video frame. See AgoraVideoDataFrame.
+ @param uid The user ID of the remote user.
+
+ @return - YES: Sets the SDK to receive the video frame.
+ - NO: Sets the SDK to discard the video frame.
+ */
+- (BOOL)onRenderVideoFrame:(AgoraVideoDataFrame*)videoFrame forUid:(unsigned int)uid NS_SWIFT_NAME(onRenderVideoFrame(_:forUid:));
+
+@optional
 /** Gets the local pre-encoded video data.
 
  @since v3.4.5
@@ -69,32 +97,7 @@
  @return - YES: Sets the SDK to receive the video frame.
  - NO: Sets the SDK to discard the video frame.
  */
-- (BOOL)onPreEncodeVideoFrame:(AgoraVideoDataFrame*)videoFrame;
-/** Gets the incoming remote video data.
-
- @since v3.4.5
-
- After you successfully register the raw video frame and set the return value
- of [isMultipleChannelFrameWanted]([AgoraVideoDataFrameProtocol isMultipleChannelFrameWanted])
- as `NO`, the SDK triggers this callback each time a video frame is received.
- You can get the incoming remote video data in `videoFrame` and then process
- the video data according to your scenario. After processing, you can use
- `videoFrame` to pass the processed video data back to the SDK.
-
- **Note**:
-
- - This callback applies to iOS only.
- - If you get the video data in RGBA color encoding format, Agora does not
- support using this callback to send the processed data in RGBA color
- encoding format back to the SDK.
-
- @param videoFrame The video frame. See AgoraVideoDataFrame.
- @param uid The user ID of the remote user.
-
- @return - YES: Sets the SDK to receive the video frame.
- - NO: Sets the SDK to discard the video frame.
- */
-- (BOOL)onRenderVideoFrame:(AgoraVideoDataFrame*)videoFrame forUid:(unsigned int)uid;
+- (BOOL)onPreEncodeVideoFrame:(AgoraVideoDataFrame*)videoFrame NS_SWIFT_NAME(onPreEncodeVideoFrame(_:));
 /** Sets the format of the raw video data output by the SDK.
 
  @since v3.4.5
@@ -111,7 +114,7 @@
  @return The color encoding format of the raw video data output by the SDK.
  See AgoraVideoFrameType.
  */
-- (AgoraVideoFrameType)getVideoFormatPreference;
+- (AgoraVideoFrameType)getVideoFormatPreference NS_SWIFT_NAME(getVideoFormatPreference());
 /** Sets whether to rotate the raw video data output by the SDK.
 
  @since v3.4.5
@@ -134,7 +137,7 @@
  - YES: Rotate the raw video data.
  - NO: (Default) Do not rotate the raw video data.
  */
-- (BOOL)getRotationApplied;
+- (BOOL)getRotationApplied NS_SWIFT_NAME(getRotationApplied());
 /** Sets whether to mirror the raw video data output by the SDK.
 
  @since v3.4.5
@@ -156,7 +159,7 @@
  - YES: Mirror the raw video data.
  - NO: (Default) Do not mirror the raw video data.
  */
-- (BOOL)getMirrorApplied;
+- (BOOL)getMirrorApplied NS_SWIFT_NAME(getMirrorApplied());
 /** Sets the video observation positions.
 
  @since v3.4.5
@@ -185,7 +188,7 @@
 
  @return The bit mask of the observation positions. See AgoraVideoFramePosition.
  */
-- (AgoraVideoFramePosition)getObservedFramePosition;
+- (AgoraVideoFramePosition)getObservedFramePosition NS_SWIFT_NAME(getObservedFramePosition());
 
 /** Sets whether the SDK outputs remote video data received in multiple channels.
 
@@ -216,7 +219,7 @@
  - NO: (Default) The SDK uses `onRenderVideoFrame` to output remote video data
  received in a single channel.
  */
-- (BOOL)isMultipleChannelFrameWanted;
+- (BOOL)isMultipleChannelFrameWanted NS_SWIFT_NAME(isMultipleChannelFrameWanted());
 
 /** Gets the remote video data received in multiple channels.
 
@@ -244,7 +247,7 @@
  @return - YES: Sets the SDK to receive the video frame.
  - NO: Sets the SDK to discard the video frame.
  */
-- (BOOL)onRenderVideoFrameEx:(AgoraVideoDataFrame*)videoFrame forUid:(unsigned int)uid inChannel:(NSString*)channelId;
+- (BOOL)onRenderVideoFrameEx:(AgoraVideoDataFrame*)videoFrame forUid:(unsigned int)uid inChannel:(NSString*)channelId NS_SWIFT_NAME(onRenderVideoFrameEx(_:forUid:inChannel:));
 
 @end
 
@@ -272,9 +275,9 @@
  @param VideoEncodedFrame The local encoded video frame.
  See AgoraVideoEncodedFrame.
 
- @return - YES: Sets the SDK to receive the video frame.
- - NO: Sets the SDK to discard the video frame.
+ @return - YES: Reserved for future use.
+ - NO: Reserved for future use.
  */
-- (BOOL)onVideoEncodedFrame:(AgoraVideoEncodedFrame*)VideoEncodedFrame;
+- (BOOL)onVideoEncodedFrame:(AgoraVideoEncodedFrame*)VideoEncodedFrame NS_SWIFT_NAME(onVideoEncodedFrame(_:));
 
 @end

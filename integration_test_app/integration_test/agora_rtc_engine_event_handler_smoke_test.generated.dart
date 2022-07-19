@@ -2414,4 +2414,29 @@ void rtcEngineEventHandlerSomkeTestCases() {
       rtcEngine.destroy();
     },
   );
+
+  testWidgets(
+    'onLocalVoicePitchInHz',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      FakeIrisRtcEngine fakeIrisEngine = FakeIrisRtcEngine();
+      await fakeIrisEngine.initialize();
+      final rtcEngine = await RtcEngine.create('123');
+      bool localVoicePitchInHzCalled = false;
+      rtcEngine.setEventHandler(RtcEngineEventHandler(
+        localVoicePitchInHz: (pitchInHz) {
+          localVoicePitchInHzCalled = true;
+        },
+      ));
+
+      fakeIrisEngine.fireRtcEngineEvent('onLocalVoicePitchInHz');
+// Wait for the `EventChannel` event be sent from Android/iOS side
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(localVoicePitchInHzCalled, isTrue);
+
+      rtcEngine.destroy();
+    },
+  );
 }

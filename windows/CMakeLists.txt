@@ -6,8 +6,9 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_NAME "iris_0.0.0_RTC_Windows_20220506_0256")
-set(IRIS_SDK_VERSION "v3_6_2_fix.1")
+set(IRIS_SDK_DOWNLOAD_SDK_BY_URL "https://download.agora.io/sdk/release/iris_3.7.0.3_RTC_Windows_Video_20220719_0357.zip")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_3.7.0.3_RTC_Windows_20220719_0357")
+set(IRIS_SDK_VERSION "v3_7_0_3")
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -22,7 +23,7 @@ set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/Agora_Native_SDK_for_Windows_FULL/libs/x86
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
     # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
     include(DownloadSDK)
-    DownloadSDK("Windows" "${IRIS_SDK_VERSION}" "${IRIS_DOWNLOAD_PATH}")   
+    DOWNLOAD_SDK_BY_URL("${IRIS_SDK_DOWNLOAD_SDK_BY_URL}" "${IRIS_DOWNLOAD_PATH}")
 endif()
 
 add_library(${PLUGIN_NAME} SHARED
@@ -43,19 +44,21 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   )
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin ${IRIS_SDK_BIN_PATH}/AgoraRtcWrapper.lib)
 
-# List of absolute paths to libraries that should be bundled with the plugin
-set(agora_rtc_engine_bundled_libraries
+set(BUNDLED_LIBRARIES
   "${IRIS_SDK_BIN_PATH}/AgoraRtcScreenSharing.exe"
   "${IRIS_SDK_BIN_PATH}/AgoraRtcWrapper.dll"
-  "${RTC_SDK_BIN_PATH}/agora_rtc_sdk.dll"
-  "${RTC_SDK_BIN_PATH}/av1.dll"
-  "${RTC_SDK_BIN_PATH}/libagora_ai_denoise_extension.dll"
-  "${RTC_SDK_BIN_PATH}/libagora_dav1d_extension.dll"
-  "${RTC_SDK_BIN_PATH}/libagora-core.dll"
-  "${RTC_SDK_BIN_PATH}/libagora_fdkaac.dll"
-  "${RTC_SDK_BIN_PATH}/libagora-ffmpeg.dll"
-  "${RTC_SDK_BIN_PATH}/libagora_mpg123.dll"
-  "${RTC_SDK_BIN_PATH}/libagora-soundtouch.dll"
-  "${RTC_SDK_BIN_PATH}/libhwcodec.dll"
+  "${RTC_SDK_BIN_PATH}/agora_rtc_sdk.lib"
+  )
+
+file(GLOB RTC_DLLS ${RTC_SDK_BIN_PATH}/*.dll)
+foreach (RTC_DLL ${RTC_DLLS})
+    message("Add bundled library: ${RTC_DLL}")
+    
+    list(APPEND BUNDLED_LIBRARIES ${RTC_DLL})
+endforeach (RTC_DLL ${RTC_DLLS})
+
+# List of absolute paths to libraries that should be bundled with the plugin
+set(agora_rtc_engine_bundled_libraries
+  ${BUNDLED_LIBRARIES}
   PARENT_SCOPE
 )

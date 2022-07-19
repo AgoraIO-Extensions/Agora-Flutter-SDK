@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
@@ -25,6 +27,10 @@ class _State extends State<DeviceManager> {
   TextEditingController? _controller;
   late String _selectedDeviceId;
   bool _isSetVideoDeviceEnabled = false;
+  List<MediaDeviceInfo> recordings = [];
+  List<MediaDeviceInfo> playbackDevices = [];
+  String _selectedRecordingDeviceId = "";
+  String _selectedPlaybackDeviceId = "";
 
   @override
   void initState() {
@@ -48,6 +54,8 @@ class _State extends State<DeviceManager> {
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
     await _enumerateVideoDevices();
+    _enumerateRecording();
+    _enumeratePlaybackDevices();
   }
 
   _addListeners() {
@@ -129,6 +137,86 @@ class _State extends State<DeviceManager> {
     );
   }
 
+  Future<void> _enumeratePlaybackDevices() async {
+    if (!(Platform.isWindows || Platform.isMacOS)) {
+      return;
+    }
+    final playbackDevices =
+        await _engine.deviceManager.enumerateAudioPlaybackDevices();
+
+    _selectedPlaybackDeviceId =
+        await _engine.deviceManager.getAudioPlaybackDevice() ?? '';
+
+    setState(() {
+      this.playbackDevices = playbackDevices;
+    });
+  }
+
+  Widget _playbackDevicesDropDown() {
+    if (playbackDevices.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
+      return Container();
+    }
+    final dropDownMenus = <DropdownMenuItem<String>>[];
+    for (var v in playbackDevices) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('playback DeviceId:${v.deviceName}'),
+        value: v.deviceId,
+      ));
+    }
+    return DropdownButton<String>(
+      items: dropDownMenus,
+      value: _selectedPlaybackDeviceId,
+      onChanged: (v) async {
+        _selectedPlaybackDeviceId = v!;
+
+        await _engine.deviceManager
+            .setAudioPlaybackDevice(_selectedPlaybackDeviceId);
+
+        setState(() {});
+      },
+    );
+  }
+
+  Future<void> _enumerateRecording() async {
+    if (!(Platform.isWindows || Platform.isMacOS)) {
+      return;
+    }
+    final recordings =
+        await _engine.deviceManager.enumerateAudioRecordingDevices();
+
+    _selectedRecordingDeviceId =
+        await _engine.deviceManager.getAudioRecordingDevice() ?? '';
+
+    setState(() {
+      this.recordings = recordings;
+    });
+  }
+
+  Widget _loopBackRecordingDropDown() {
+    if (recordings.isEmpty || !(Platform.isWindows || Platform.isMacOS)) {
+      return Container();
+    }
+    final dropDownMenus = <DropdownMenuItem<String>>[];
+    for (var v in recordings) {
+      dropDownMenus.add(DropdownMenuItem(
+        child: Text('recording deviceId:${v.deviceName}'),
+        value: v.deviceId,
+      ));
+    }
+    return DropdownButton<String>(
+      items: dropDownMenus,
+      value: _selectedRecordingDeviceId,
+      onChanged: (v) async {
+        _selectedRecordingDeviceId = v!;
+
+        await _engine.deviceManager
+            .setAudioRecordingDevice(_selectedRecordingDeviceId);
+
+        setState(() {});
+      },
+    );
+  }
+
   Future<void> _setVideoDevice(String deviceId) async {
     await _engine.deviceManager.setVideoDevice(deviceId);
     setState(() {
@@ -162,7 +250,43 @@ class _State extends State<DeviceManager> {
                     onPressed: isJoined ? _leaveChannel : _joinChannel,
                     child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
                   ),
-                )
+                ),
+              ],
+            ),
+            _loopBackRecordingDropDown(),
+            _playbackDevicesDropDown(),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await _engine.deviceManager
+                            .followSystemPlaybackDevice(true);
+                        _enumeratePlaybackDevices();
+                      },
+                      child: const Text('followSystemPlaybackDevice'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await _engine.deviceManager
+                            .followSystemRecordingDevice(true);
+                        _enumerateRecording();
+                      },
+                      child: const Text('followSystemRecordingDevice'),
+                    ),
+                  ),
+                ),
               ],
             ),
             _devicesDropDown(),
@@ -177,27 +301,6 @@ class _State extends State<DeviceManager> {
             _renderVideo(),
           ],
         ),
-        // if (kIsWeb || (Platform.isWindows || Platform.isMacOS))
-        //   Align(
-        //     alignment: Alignment.bottomRight,
-        //     child: Column(
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         ElevatedButton(
-        //           onPressed: _enumerateVideoDevices,
-        //           child: const Text('Enumerate video devices'),
-        //         ),
-        //         ElevatedButton(
-        //           onPressed: _isSetVideoDeviceEnabled
-        //               ? () {
-        //                   _setVideoDevice(_selectedDeviceId);
-        //                 }
-        //               : null,
-        //           child: const Text('Set video device'),
-        //         ),
-        //       ],
-        //     ),
-        //   )
       ],
     );
   }

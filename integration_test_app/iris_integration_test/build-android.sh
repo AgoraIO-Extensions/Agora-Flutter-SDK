@@ -3,7 +3,8 @@
 set -e
 set -x
 
-ZIP_NAME=iris_0.0.0_RTC_Android_20220506_0255
+ZIP_NAME=iris_3.7.0.3_RTC_Android_Video_20220704_0700
+IRIS_ARCHIVE_NAME="${ZIP_NAME/Video_/}"
 DOWNLOAD_IRIS_URL=https://download.agora.io/demo/release/${ZIP_NAME}.zip
 
 MY_PATH=$(dirname "$0")
@@ -26,10 +27,12 @@ ABIS="arm64-v8a x86_64"
 for ABI in ${ABIS};
 do
     mkdir -p $ABI
-    cp -RP ${ZIP_NAME}/${ABI}/Release/libAgoraRtcWrapper.so ${ABI}/libAgoraRtcWrapper.so
+    echo $(pwd)
+    cp -RP ${IRIS_ARCHIVE_NAME}/${ABI}/Release/libAgoraRtcWrapper.so ${ABI}/libAgoraRtcWrapper.so
+    cp -RP ${IRIS_ARCHIVE_NAME}/${ABI}/Release/libAgoraRtcWrapperSymbol.so ${ABI}/libAgoraRtcWrapperSymbol.so
 done;
 
 rm -rf iris_android.zip
-rm -rf ${ZIP_NAME}
+rm -rf ${IRIS_ARCHIVE_NAME}
 
 popd

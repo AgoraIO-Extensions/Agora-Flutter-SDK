@@ -48,16 +48,16 @@ class VideoDimensions {
   ///
   ///
   @JsonKey(includeIfNull: false)
-  int? width;
+  final int? width;
 
   ///
   /// The height (pixels) of the video.
   ///
   @JsonKey(includeIfNull: false)
-  int? height;
+  final int? height;
 
   /// Constructs the [VideoDimensions].
-  VideoDimensions({
+  const VideoDimensions({
     this.width,
     this.height,
   });
@@ -206,7 +206,7 @@ class BeautyOptions {
 }
 
 ///
-///  Image properties.
+/// Image properties.
 /// This class sets the properties of the watermark and background images in the live video.
 ///
 @JsonSerializable(explicitToJson: true)
@@ -294,7 +294,8 @@ class TranscodingUser {
   int? height;
 
   ///
-  /// The layer index number of the host's video. The value range is [0, 100]. 0: (Default) The host's video is the bottom layer.
+  /// The layer index number of the host's video. The value range is [0, 100].
+  ///  0: (Default) The host's video is the bottom layer.
   ///  100: The host's video is the top layer.
   ///  If the value is beyond this range, the SDK reports the error code ERR_INVALID_ARGUMENT.
   ///  As of v2.3, the SDK supports setting zOrder to 0.
@@ -304,14 +305,16 @@ class TranscodingUser {
   int? zOrder;
 
   ///
-  /// The transparency of the host's video. The value range is [0.0, 1.0]. 0.0: Completely transparent.
+  /// The transparency of the host's video. The value range is [0.0, 1.0].
+  ///  0.0: Completely transparent.
   ///  1.0: (Default) Opaque.
   ///
   @JsonKey(includeIfNull: false)
   double? alpha;
 
   ///
-  /// The audio channel used by the host's audio in the output audio. The default value is 0, and the value range is [0, 5]. 0: (Recommended) The defaut setting, which supports dual channels at most and depends on the upstream of the host.
+  /// The audio channel used by the host's audio in the output audio. The default value is 0, and the value range is [0, 5].
+  ///  0: (Recommended) The defaut setting, which supports dual channels at most and depends on the upstream of the host.
   ///  1: The host's audio uses the FL audio channel. If the host's upstream uses multiple audio channels, the Agora
   ///  server mixes them into mono first.
   ///  2: The host's audio uses the FC audio channel. If the host's upstream uses multiple audio channels, the Agora
@@ -350,53 +353,46 @@ class TranscodingUser {
 }
 
 ///
-/// Transcoding configurations for the media push.
+/// Transcoding configurations for Media Push.
 ///
 ///
 @JsonSerializable(explicitToJson: true)
 class LiveTranscoding {
   ///
-  /// The width of the output media stream in pixels. The default value is 360. When pushing video streams to the CDN,
-  /// width
-  ///  is less than 64, Agora server automatically adjusts it to 64.
-  ///  When pushing audio streams to the CDN,
-  /// width
-  ///  as 0.
+  /// The width of the video in pixels. The default value is 360. When pushing video streams to the CDN, the value range of width is [64,1920]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1920, Agora server automatically adjusts it to 1920.
+  ///  When pushing audio streams to the CDN, set width and height as 0.
   ///
   ///
   @JsonKey(includeIfNull: false)
   int? width;
 
   ///
-  /// The height of the output media stream in pixels. The default value is 640. When pushing video streams to the CDN,
-  /// height
-  ///  is less than 64, Agora server automatically adjusts it to 64.
-  ///  When pushing audio streams to the CDN,
-  /// height
-  ///  as 0.
+  /// The height of the video in pixels. The default value is 640. When pushing video streams to the CDN, the value range of height is [64,1080]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1080, Agora server automatically adjusts it to 1080.
+  ///  When pushing audio streams to the CDN, set width and height as 0.
   ///
   ///
   @JsonKey(includeIfNull: false)
   int? height;
 
   ///
-  /// The video bitrate (Kbps) of the output media stream. The default value is 400.
+  /// Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps.
+  ///  Set this parameter according to the Video profile table. If you set a bitrate beyond the proper range, the SDK automatically adapts it to a value within the range.
+  ///  You can refer to Media Pushfor how to set this parameter.
+  ///
   ///
   @JsonKey(includeIfNull: false)
   int? videoBitrate;
 
   ///
-  /// The video frame rate (fps) of the output media stream. The default value is 15, and the value range is [1, 30].The Agora server adjusts
-  /// any frame rate higher than 30 fps to 30 fps.
-  ///
+  /// Frame rate (in fps) of the output video stream set for Media Push. The default value is 15 , and the value range is (0,30].
+  ///  The Agora server adjusts any value over 30 to 30.
   ///
   @JsonKey(includeIfNull: false)
   VideoFrameRate? videoFramerate;
 
   ///
   ///  Deprecated
-  ///  This attribute is deprecated since v2.8.0, and Agora does not recommend it.
-  ///  true: Low latency with unassured quality.
+  ///  This parameter is deprecated. Latency mode: true: Low latency with unassured quality.
   ///  false: (Default) High latency with assured quality.
   ///
   ///
@@ -406,41 +402,41 @@ class LiveTranscoding {
   bool? lowLatency;
 
   ///
-  /// The video GOP (Group of Pictures) of the output media stream. The default value is 30.
+  /// GOP (Group of Pictures) in fps of the video frames for Media Push. The default value is 30.
   ///
   @JsonKey(includeIfNull: false)
   int? videoGop;
 
   ///
-  /// The number of watermarks (watermark) of the output media stream. If you do not add a watermark or add only one watermark, this parameter is optional.
-  ///  If you add more than one watermarks, ensure that you set this parameter.
+  /// The watermark on the live video. Watermark images must be in the PNG format. See AgoraImage for details.
+  ///  You can add one watermark, or add multiple watermarks using an array. This parameter is used with watermarkCount.
   ///
   ///
   @JsonKey(includeIfNull: false)
   List<AgoraImage>? watermark;
 
   ///
-  /// The video background image of the output media stream.
+  ///
   ///
   @JsonKey(includeIfNull: false)
   List<AgoraImage>? backgroundImage;
 
   ///
-  /// The audio sampling rate (Hz) of the output media stream. See
-  ///  AudioSampleRateType .
+  /// Self-defined audio sample rate. See AudioSampleRateType for details.
+  ///
   ///
   @JsonKey(includeIfNull: false)
   AudioSampleRateType? audioSampleRate;
 
   ///
-  /// The audio bitrate (Kbps) of the output media stream. The default value is 48, and the maximum is 128.
+  /// Bitrate (Kbps) of the audio output stream for Media Push. The default value is 48, and the highest value is 128.
+  ///
   ///
   @JsonKey(includeIfNull: false)
   int? audioBitrate;
 
   ///
-  /// The number of audio channels of the output media stream. The default value is 1. Agora recommends setting it to 1 or 2.
-  ///  1: (Default) Mono
+  /// The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5. 1: (Default) Mono
   ///  2: Stereo.
   ///  3: Three audio channels.
   ///  4: Four audio channels.
@@ -451,43 +447,40 @@ class LiveTranscoding {
   AudioChannel? audioChannels;
 
   ///
+  /// Audio codec profile type for Media Push. See AudioCodecProfileType for details.
   ///
   ///
   @JsonKey(includeIfNull: false)
   AudioCodecProfileType? audioCodecProfile;
 
   ///
-  /// The video encoding specifications of the output media stream. See
-  ///  VideoCodecProfileType .
+  /// Video codec profile type for Media Push. Set it as 66, 77, or 100 (default). See VideoCodecProfileType for details.
   ///  If you set this parameter to any other value, Agora adjusts it to the default value.
   ///
   @JsonKey(includeIfNull: false)
   VideoCodecProfileType? videoCodecProfile;
 
   ///
-  /// The video background color of the output media stream. The format is a hexadecimal integer defined by RGB without the # symbol. Such as
-  /// For example, 0xFFB6C1
-  /// means light pink. The default is
-  /// 0x000000
-  /// , which means black.
+  /// The background color in RGB hex value. Value only. Do not include a preceeding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
+  ///
   ///
   @JsonKey(includeIfNull: false)
   int? backgroundColor;
 
   ///
-  /// The codec type of the output video.
+  /// Video codec profile types for Media Push. See VideoCodecTypeForStream for details.
   ///
   @JsonKey(includeIfNull: false)
   VideoCodecTypeForStream? videoCodecType;
 
   ///
-  /// Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
+  ///
   ///
   @JsonKey(includeIfNull: false)
   String? userConfigExtraInfo;
 
   ///
-  /// Transcoding configurations of each host. One live streaming channel supports up to 17 hosts.
+  /// Manages the user layout configuration in the CDN live streaming. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser for details.
   ///
   ///
   List<TranscodingUser> transcodingUsers;
@@ -565,24 +558,18 @@ class ChannelMediaInfo {
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaRelayConfiguration {
   ///
-  /// The information of the source channel ChannelMediaInfo . It contains the following members:
-  ///  channelName: The name of the source channel. The default value is , which means the SDK applies the name of the current channel.null
+  /// The information of the source channel ChannelMediaInfo . It contains the following members: channelName: The name of the source channel. The default value is , which means the SDK applies the name of the current channel.null
   ///  uid: The unique ID to identify the relay stream in the source channel. The default value is 0, which means the SDK generates a random UID. You must set it as 0.
-  ///  token: The token for joining the source channel. It is generated with the channelName and uid you set in srcInfo.
-  ///  If you have not enabled the App Certificate, set this parameter as the default value null , which means the SDK applies the App ID.
+  ///  token: The token for joining the source channel. It is generated with the channelName and uid you set in srcInfo. If you have not enabled the App Certificate, set this parameter as the default value null , which means the SDK applies the App ID.
   ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.
-  ///
   ///
   ChannelMediaInfo srcInfo;
 
   ///
-  /// The information of the destination channel ChannelMediaInfo. It contains the following members:
-  ///  channelName: The name of the destination channel.
+  /// The information of the destination channel ChannelMediaInfo. It contains the following members: channelName: The name of the destination channel.
   ///  uid: The unique ID to identify the relay stream in the destination channel. The value ranges from 0 to (232-1). To avoid UID conflicts, this `UID` must be different from any other `UID` in the destination channel. The default value is 0, which means the SDK generates a random `UID`. Do not set this parameter as the `UID` of the host in the destination channel, and ensure that this `UID` is different from any other `UID` in the channel.
-  ///  token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos.
-  ///  If you have not enabled the App Certificate, set this parameter as the default value null , which means the SDK applies the App ID.
+  ///  token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos. If you have not enabled the App Certificate, set this parameter as the default value null , which means the SDK applies the App ID.
   ///  If you have enabled the App Certificate, you must use the token generated with the channelName and uid.
-  ///
   ///
   List<ChannelMediaInfo> destInfos;
 
@@ -699,8 +686,7 @@ class Rectangle {
 @JsonSerializable(explicitToJson: true)
 class WatermarkOptions {
   ///
-  /// Whether the watermark image is visible in the local video preview:
-  ///  true: (Default) The watermark image is visible in the local preview.
+  /// Whether the watermark image is visible in the local video preview: true: (Default) The watermark image is visible in the local preview.
   ///  false: The watermark image is not visible in the local preview.
   ///
   @JsonKey(includeIfNull: false)
@@ -777,7 +763,6 @@ class LiveInjectStreamConfig {
   /// The sampling rate (Hz) of injecting the external audio stream. The default value is 48000 Hz. See AudioSampleRateType .
   ///  Agora recommends using the default value.
   ///
-  ///
   @JsonKey(includeIfNull: false)
   AudioSampleRateType? audioSampleRate;
 
@@ -785,15 +770,12 @@ class LiveInjectStreamConfig {
   /// The bitrate (Kbps) of injecting the external audio stream. The default value is 48 Kbps.
   ///  Agora recommends using the default value.
   ///
-  ///
   @JsonKey(includeIfNull: false)
   int? audioBitrate;
 
   ///
-  /// The number of channels of the external audio stream after injecting.
-  ///  1: (Default) Mono.
+  /// The number of channels of the external audio stream after injecting. 1: (Default) Mono.
   ///  2: Stereo. Agora recommends using the default value.
-  ///
   ///
   @JsonKey(includeIfNull: false)
   AudioChannel? audioChannels;
@@ -874,7 +856,8 @@ class CameraCapturerConfiguration {
 @JsonSerializable(explicitToJson: true)
 class ChannelMediaOptions {
   ///
-  /// Whether to automatically subscribe to all remote audio streams when the user joins a channel: true: (Default) Subscribe.
+  /// Whether to automatically subscribe to all remote audio streams when the user joins a channel:
+  ///  true: (Default) Subscribe.
   ///  false: Do not subscribe.
   ///  This member serves a similar function to the muteAllRemoteAudioStreams method. After joining the channel, you can call the muteAllRemoteAudioStreams method to set whether to subscribe to audio streams in the channel.
   ///
@@ -882,7 +865,8 @@ class ChannelMediaOptions {
   bool? autoSubscribeAudio;
 
   ///
-  /// Whether to subscribe to video streams when the user joins the channel: true: (Default) Subscribe.
+  /// Whether to subscribe to video streams when the user joins the channel:
+  ///  true: (Default) Subscribe.
   ///  false: Do not subscribe.
   ///  This member serves a similar function to the muteAllRemoteVideoStreams method. After joining the channel, you can call the muteAllRemoteVideoStreams method to set whether to subscribe to video streams in the channel.
   ///
@@ -890,7 +874,9 @@ class ChannelMediaOptions {
   bool? autoSubscribeVideo;
 
   ///
-  ///  whether to publish the local audio stream when the user joins a channel. true: (Default) Publish the local audio.
+  ///
+  ///  whether to publish the local audio stream when the user joins a channel.
+  ///  true: (Default) Publish the local audio.
   ///  false: Do not publish the local audio. This member serves a similar function to the muteLocalAudioStream method. After the user joins the channel, you can call the muteLocalAudioStream method to set whether to publish the local audio stream in the channel.
   ///
   ///
@@ -898,7 +884,9 @@ class ChannelMediaOptions {
   bool? publishLocalAudio;
 
   ///
-  ///  whether to publish the local video stream when the user joins a channel. true: (Default) Publish the local video.
+  ///
+  ///  whether to publish the local video stream when the user joins a channel.
+  ///  true: (Default) Publish the local video.
   ///  false: Do not publish the local video. This member serves a similar function to the muteLocalVideoStream method. After the user joins the channel, you can call the muteLocalVideoStream method to set whether to publish the local audio stream in the channel.
   ///
   ///
@@ -1071,7 +1059,6 @@ class RtcStats {
   ///
   /// The round-trip time delay (ms) from the client to the local router.
   ///
-  ///
   int gatewayRtt;
 
   ///
@@ -1137,7 +1124,8 @@ class RtcStats {
 @JsonSerializable(explicitToJson: true)
 class AudioVolumeInfo {
   ///
-  /// The user ID. In the local user's callback, uid = 0.
+  /// The user ID.
+  ///  In the local user's callback, uid = 0.
   ///  In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is one of the three highest.
   ///
   int uid;
@@ -1148,7 +1136,8 @@ class AudioVolumeInfo {
   int volume;
 
   ///
-  /// The voice activity status of the local user. 0: The local user is not speaking.
+  /// The voice activity status of the local user.
+  ///  0: The local user is not speaking.
   ///  1: The local user is speaking.
   ///  The vad parameter does not report the voice activity status of remote users. In the remote users' callback, the value of vad is always 0.
   ///  To use this parameter, you must set true when calling enableAudioVolumeIndication .
@@ -1379,15 +1368,13 @@ class LocalAudioStats {
 @JsonSerializable(explicitToJson: true)
 class LocalVideoStats {
   ///
-  /// The actual bitrate (Kbps) for sending the local video stream.
-  ///  This value does not include the bitrate for resending the video after packet loss.
+  /// The actual bitrate (Kbps) while sending the local video stream. This value does not include the bitrate for resending the video after packet loss.
   ///
   ///
   int sentBitrate;
 
   ///
-  /// The actual frame rate (Kbps) while sending the local video stream.
-  ///  This value does not include the frame rate for resending the video after packet loss.
+  /// The actual frame rate (fps) while sending the local video stream. This value does not include the frame rate for resending the video after packet loss.
   ///
   int sentFrameRate;
 
@@ -1412,14 +1399,12 @@ class LocalVideoStats {
   int targetFrameRate;
 
   ///
-  /// Quality change of the local video in terms of target frame rate and target bit rate in this reported interval.
-  ///
+  ///  Quality adaption of the local video stream in the reported interval (based on the target frame rate and target bitrate).
   ///
   VideoQualityAdaptIndication qualityAdaptIndication;
 
   ///
-  /// The bitrate (Kbps) for encoding the local video stream.
-  ///  This value does not include the bitrate for resending the video after packet loss.
+  /// The bitrate (Kbps) while encoding the local video stream. This value does not include the bitrate for resending the video after packet loss.
   ///
   ///
   int encodedBitrate;
@@ -1455,7 +1440,8 @@ class LocalVideoStats {
   int captureFrameRate;
 
   ///
-  /// The brightness level of the video image captured by the local camera.
+  ///  Since
+  ///  v3.3.0 The brightness level of the video image captured by the local camera. See CaptureBrightnessLevelType for details.
   ///
   ///
   CaptureBrightnessLevelType captureBrightnessLevel;
@@ -1510,8 +1496,7 @@ class RemoteAudioStats {
   int networkTransportDelay;
 
   ///
-  /// The network delay (ms) from the receiver to the jitter buffer.
-  ///  This parameter does not take effect if the receiver is an audience member and audienceLatencyLevel of ClientRoleOptions is 1.
+  /// The network delay (ms) from the receiver to the jitter buffer. This parameter does not take effect if the receiver is an audience member and audienceLatencyLevel of ClientRoleOptions is 1.
   ///
   ///
   int jitterBufferDelay;
@@ -1642,7 +1627,7 @@ class RemoteVideoStats {
   int height;
 
   ///
-  /// The bitrate (Kbps) of receiving the remote video since the last count.
+  /// The bitrate (Kbps) of the remote video received since the last count.
   ///
   int receivedBitrate;
 
@@ -1667,26 +1652,28 @@ class RemoteVideoStats {
   VideoStreamType rxStreamType;
 
   ///
-  /// The total freeze time (ms) of the remote video stream after the remote user joins the channel. In a video session where the frame rate is set to 5 fps or higher, video freeze occurs when the time interval between two adjacent video frames is more than 500
+  /// The total freeze time (ms) of the remote video stream after the remote user joins the channel. In a video session where the frame rate is set to 5 fps or higher, video freezing occurs when the time interval between two adjacent video frames is more than 500
   /// ms.
   ///
   int totalFrozenTime;
 
   ///
-  /// The total video freeze time as a percentage (%) of the total time when the video is available. The video is available means that the remote user neither stops sending the video stream nor disables the video module after joining the channel.
+  /// The total video freeze time as a percentage (%) of the total time the video is available. The video is considered available as long as that the remote user neither stops sending the video stream nor disables the video module after joining the channel.
   ///
   int frozenRate;
 
   ///
   ///  Since
-  ///  v3.0.1 Total active time (ms) of the video.
-  ///  When the remote user/host neither stops sending the video stream nor disables the video module after joining the channel, the video is available.
+  ///  v3.0.1 The total active time (ms) of the video.
+  ///  As long as the remote user/host neither stops sending the video stream nor disables the video module after joining the channel, the video is available.
+  ///
   ///
   int totalActiveTime;
 
   ///
   ///  Since
   ///  v3.1.0 The total duration (ms) of the remote video stream.
+  ///
   ///
   int publishDuration;
 
@@ -1722,13 +1709,13 @@ class RemoteVideoStats {
 @JsonSerializable(explicitToJson: true)
 class FacePositionInfo {
   ///
-  /// The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
+  /// The x-coordinate (px) of the human face in the local video. The horizontal position relative to the origin, where the upper left corner of the captured video is the origin, and the x-coordinate is the upper left corner of the watermark.
   ///
   ///
   int x;
 
   ///
-  /// The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
+  /// The y-coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
   ///
   ///
   int y;
@@ -1840,8 +1827,7 @@ class LogConfig {
 @JsonSerializable(explicitToJson: true)
 class DataStreamConfig {
   ///
-  /// Whether to synchronize the data packet with the published audio packet.
-  ///  true: Synchronize the data packet with the audio packet.
+  /// Whether to synchronize the data packet with the published audio packet. true: Synchronize the data packet with the audio packet.
   ///  false: Do not synchronize the data packet with the audio packet.
   ///  When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay, the SDK triggers the streamMessage callback when the synchronized audio packet is played out. Do not set this parameter as true if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
   ///
@@ -1849,8 +1835,7 @@ class DataStreamConfig {
   bool syncWithAudio;
 
   ///
-  /// Whether the SDK guarantees that the receiver receives the data in the sent order.
-  ///  true: Guarantee that the receiver receives the data in the sent order.
+  /// Whether the SDK guarantees that the receiver receives the data in the sent order. true: Guarantee that the receiver receives the data in the sent order.
   ///  false: Do not guarantee that the receiver receives the data in the sent order.
   ///  Do not set this parameter as true if you need the receiver to receive the data packet immediately.
   ///
@@ -1897,6 +1882,7 @@ class RtcEngineContext {
   /// The region for connection. This is an advanced feature and applies to scenarios that have regional restrictions.
   ///  After specifying the region, the SDK connects to the Agora servers within that region.
   ///
+  ///
   @JsonKey(includeIfNull: false, toJson: _$AreaCodeListToJson)
   List<AreaCode>? areaCode;
 
@@ -1904,6 +1890,7 @@ class RtcEngineContext {
   /// The configuration of the log files. See LogConfig .
   ///  By default, the SDK outputs five log files: agorasdk.log, agorasdk_1.log, agorasdk_2.log, agorasdk_3.log, and agorasdk_4.log.
   ///  Each log file has a default size of 512 KB and is encoded in UTF-8 format. The SDK writes the latest log in agorasdk.log. When agorasdk.log is full, the SDK deletes the log file with the earliest modification time among the other four, renames agorasdk.log to the name of the deleted log file, and create a new agorasdk.log to record the latest log.
+  ///
   ///
   @JsonKey(includeIfNull: false)
   LogConfig? logConfig;
@@ -1951,8 +1938,7 @@ class RhythmPlayerConfig {
   int? beatsPerMinute;
 
   ///
-  /// Whether to publish the sound of the metronome to remote users:
-  ///  true: (Default) Publish the sound of the metronome. Both the local user and remote users can hear the metronome.
+  /// Whether to publish the sound of the metronome to remote users: true: (Default) Publish the sound of the metronome. Both the local user and remote users can hear the metronome.
   ///  false: Do not publish the sound of the metronome. Only the local user can hear the metronome.
   ///
   ///
@@ -1981,7 +1967,9 @@ class RhythmPlayerConfig {
 @JsonSerializable(explicitToJson: true)
 class AudioRecordingConfiguration {
   ///
-  /// The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.aac . Ensure that the directory for the log files exists and is writable.
+  /// The absolute path (including the filename extensions) of the recording file. For example:
+  ///  C:\music\audio.aac
+  ///  . Ensure that the directory for the log files exists and is writable.
   ///
   ///
   String filePath;
@@ -2001,7 +1989,8 @@ class AudioRecordingConfiguration {
   AudioRecordingPosition? recordingPosition;
 
   ///
-  /// Recording sample rate (Hz). 16000
+  /// Recording sample rate (Hz).
+  ///  16000
   ///  (Default) 32000
   ///  44100
   ///  48000 If you set this parameter as 44100 or 48000, Agora recommends recording WAV files or AAV files whose
@@ -2011,6 +2000,7 @@ class AudioRecordingConfiguration {
   ///  or
   ///  High
   ///  for better recording quality.
+  ///
   ///
   @JsonKey(includeIfNull: false)
   AudioSampleRateType? recordingSampleRate;
@@ -2040,23 +2030,25 @@ class VirtualBackgroundSource {
   ///
   /// The type of the custom background image. See BACKGROUND_SOURCE_TYPE .
   ///
+  ///
   @JsonKey(includeIfNull: false, name: 'background_source_type')
   VirtualBackgroundSourceType? backgroundSourceType;
 
   ///
-  ///  The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BACKGROUND_COLOR.
+  ///  The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image. This parameter takes effect only when the type of the custom background image is BACKGROUND_COLOR.
   ///
   @JsonKey(includeIfNull: false)
   int? color;
 
   ///
-  /// The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BACKGROUND_IMG.
+  /// The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image. This parameter takes effect only when the type of the custom background image is BACKGROUND_IMG.
   ///
   @JsonKey(includeIfNull: false)
   String? source;
 
   ///
-  /// The degree of blurring applied to the custom background image. See VirtualBackgroundBlurDegree .This parameter takes effect only when the type of the custom background image is BACKGROUND_BLUR.
+  /// The degree of blurring applied to the custom background image. See VirtualBackgroundBlurDegree .
+  ///  This parameter takes effect only when the type of the custom background image is BACKGROUND_BLUR.
   ///
   @JsonKey(name: 'blur_degree')
   VirtualBackgroundBlurDegree blurDegree;
@@ -2116,7 +2108,8 @@ class AudioFileInfo {
 @JsonSerializable(explicitToJson: true)
 class EchoTestConfiguration {
   ///
-  /// Whether to enable the audio device for the call loop test: true: (Default) Enables the audio device. To test the audio device, set this parameter as true.
+  /// Whether to enable the audio device for the call loop test:
+  ///  true: (Default) Enables the audio device. To test the audio device, set this parameter as true.
   ///  false: Disables the audio device.
   ///
   ///
@@ -2124,7 +2117,8 @@ class EchoTestConfiguration {
   bool? enableAudio;
 
   ///
-  /// Whether to enable the video device for the call loop test: true: (Default) Enables the video device. To test the video device, set this parameter as true.
+  /// Whether to enable the video device for the call loop test:
+  ///  true: (Default) Enables the video device. To test the video device, set this parameter as true.
   ///  false: Disables the video device.
   ///
   ///
@@ -2203,7 +2197,8 @@ class MediaDeviceInfo {
 class ScreenCaptureParameters {
   ///
   /// The maximum dimensions of encoding the shared region.
-  ///  If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions are set to 1,920 x 1,080: If the value of the screen dimensions is lower than that of dimensions, for example, 1,000 x 1,000 pixels, the SDK uses 1,000 x 1,000 pixels
+  ///  If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions are set to 1,920 x 1,080:
+  ///  If the value of the screen dimensions is lower than that of dimensions, for example, 1,000 x 1,000 pixels, the SDK uses 1,000 x 1,000 pixels
   ///  for encoding.
   ///  If the value of the screen dimensions is larger than that of dimensions, for example, 2,000 × 1,500, the SDK uses
   ///  the maximum value next to 1,920 × 1,080 with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1,440 × 1,080.
@@ -2266,8 +2261,7 @@ class ScreenCaptureParameters {
 @JsonSerializable(explicitToJson: true)
 class Metadata {
   ///
-  /// User ID.
-  ///  For the receiver: The user ID of the user who sent the Metadata.
+  /// User ID. For the receiver: The user ID of the user who sent the Metadata.
   ///  For the sender: Ignore this value.
   ///
   int uid;
@@ -2414,10 +2408,12 @@ class LowLightEnhanceOptions {
   ///
   /// The low-light enhancement mode.
   ///
+  ///
   final LowLightEnhanceMode mode;
 
   ///
   /// The low-light enhancement level.
+  ///
   ///
   final LowLightEnhanceLevel level;
 
@@ -2586,4 +2582,165 @@ class ContentInspectConfig {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$ContentInspectConfigToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true)
+class SpatialAudioParams {
+  /// @nodoc
+  @JsonKey(name: 'speaker_azimuth')
+  final double? speakerAzimuth;
+
+  /// @nodoc
+  @JsonKey(name: 'speaker_elevation')
+  final double? speakerElevation;
+
+  /// @nodoc
+  @JsonKey(name: 'speaker_distance')
+  final double? speakerDistance;
+
+  /// @nodoc
+  @JsonKey(name: 'speaker_orientation')
+  final int? speakerOrientation;
+
+  /// @nodoc
+  @JsonKey(name: 'enable_blur')
+  final bool? enableBlur;
+
+  /// @nodoc
+  @JsonKey(name: 'enable_air_absorb')
+  final bool? enableAirAbsorb;
+
+  /// Constructs the [SpatialAudioParams].
+  const SpatialAudioParams(
+      {this.speakerAzimuth,
+      this.speakerElevation,
+      this.speakerDistance,
+      this.speakerOrientation,
+      this.enableBlur,
+      this.enableAirAbsorb});
+
+  /// @nodoc
+  factory SpatialAudioParams.fromJson(Map<String, dynamic> json) =>
+      _$SpatialAudioParamsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SpatialAudioParamsToJson(this);
+}
+
+///
+/// The audio configuration for the shared screen stream.
+/// Only available for scenarios where captureAudio is true.
+///
+@JsonSerializable(explicitToJson: true)
+class ScreenAudioParameters {
+  ///
+  /// The volume of the captured system audio. The value range is [0,100]. The default value is 100.
+  ///
+  ///
+  final int? captureSignalVolume;
+
+  /// Constructs the [ScreenAudioParameters].
+  const ScreenAudioParameters(this.captureSignalVolume);
+
+  /// @nodoc
+  factory ScreenAudioParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenAudioParametersFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ScreenAudioParametersToJson(this);
+}
+
+///
+/// The video configuration for the shared screen stream.
+///
+///
+@JsonSerializable(explicitToJson: true)
+class ScreenVideoParameters {
+  ///
+  /// The video encoding resolution. The default value is 1280 × 720. For recommended values, see Recommended video profiles.
+  ///  If the aspect ratio is different between dimensions and the screen, the SDK adjusts the video encoding resolution according to the following rules (using an example value for dimensions of 1280 × 720): When the width and height of the screen are both lower than those of dimensions, the SDK uses the resolution of the screen for video encoding. For example, if the screen is 640 × 360, the SDK uses 640 × 360 for video encoding.
+  ///  When either the width or height of the screen is higher than that of dimensions, the SDK uses the maximum values that do not exceed those of dimensions while maintaining the aspect ratio of the screen for video encoding. For example, if the screen is 2000 × 1500, the SDK uses 960 × 720 for video encoding.
+  ///  The billing of the screen sharing stream is based on the value of dimensions. When you do not pass in a value, Agora bills you at 1280 × 720; when you pass a value in, Agora bills you at that value. For details, see Pricing for Real-time Communication.
+  ///  This value does not indicate the orientation mode of the output ratio. For how to set the video orientation, see VideoOutputOrientationMode .
+  ///  Whether the SDK can support a resolution at 720P depends on the performance of the device. If you set 720P but the device cannot support it, the video frame rate can be lower.
+  ///
+  final VideoDimensions? dimensions;
+
+  ///
+  /// The video encoding frame rate (fps). The default value is 15. For recommended values, see Recommended video profiles.
+  ///
+  ///
+  final int? frameRate;
+
+  ///
+  /// The video encoding bitrate (Kbps). For recommended values, see Recommended video profiles.
+  ///
+  ///
+  final int? bitrate;
+
+  ///
+  /// The content hint of the screen sharing. See VideoContentHint .
+  ///
+  ///
+  final VideoContentHint? contentHint;
+
+  /// Constructs the [ScreenVideoParameters].
+  const ScreenVideoParameters(
+      {this.dimensions, this.frameRate, this.bitrate, this.contentHint});
+
+  /// @nodoc
+  factory ScreenVideoParameters.fromJson(Map<String, dynamic> json) =>
+      _$ScreenVideoParametersFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ScreenVideoParametersToJson(this);
+}
+
+///
+/// Screen sharing configurations.
+///
+///
+@JsonSerializable(explicitToJson: true)
+class ScreenCaptureParameters2 {
+  ///
+  /// Determines whether to capture system audio during screen sharing: true: Capture.
+  ///  false: (Default) Do not capture. On Android, due to system limitations, capturing system audio is only available for Android API level 29 and later (that is, Android 10 and later).
+  ///
+  final bool? captureAudio;
+
+  ///
+  /// The audio configuration for the shared screen stream. See ScreenAudioParameters .
+  ///  This parameter is only available for scenarios where captureAudio is true.
+  ///
+  ///
+  final ScreenAudioParameters? audioParams;
+
+  ///
+  /// Determines whether to capture system video during screen sharing: true: Capture.
+  ///  false: (Default) Do not capture. On Android, due to system limitations, screen capture is only available for Android API level 21 and later (that is, Android 5 and later).
+  ///
+  final bool? captureVideo;
+
+  ///
+  /// The video configuration for the shared screen stream. See ScreenVideoParameters .
+  ///  This parameter is only available for scenarios where captureVideo is true.
+  ///
+  ///
+  final ScreenVideoParameters? videoParams;
+
+  /// Constructs the [ScreenCaptureParameters2].
+  const ScreenCaptureParameters2({
+    this.captureAudio,
+    this.audioParams,
+    this.captureVideo,
+    this.videoParams,
+  });
+
+  /// @nodoc
+  factory ScreenCaptureParameters2.fromJson(Map<String, dynamic> json) =>
+      _$ScreenCaptureParameters2FromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$ScreenCaptureParameters2ToJson(this);
 }
