@@ -6,7 +6,7 @@ set -x
 MY_PATH=$(dirname "$0")
 ROOT_PATH=$1
 IRIS_INTEGRATION_TEST_PATH=$ROOT_PATH/integration_test_app/iris_integration_test
-IRIS_NAME="AgoraIrisRTC_iOS_Beta"
+IRIS_NAME="AgoraIrisRTC_iOS"
 
 if [[ -f $ROOT_PATH/ios/AgoraRtcWrapper.podspec ]]; then
     bash $MY_PATH/copy-ios-framework.sh $ROOT_PATH/ios/AgoraRtcWrapper.xcframework
