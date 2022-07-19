@@ -9,9 +9,9 @@ bash integration_test_app/iris_integration_test/build-macos.sh $(pwd)
 
 cd integration_test_app
 
-pushd iris_integration_test
-    git submodule update
-popd
+# pushd iris_integration_test
+#     git submodule update
+# popd
 
 flutter packages get
 

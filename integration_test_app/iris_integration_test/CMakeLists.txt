@@ -133,6 +133,6 @@ else()
 
 endif()
 
-if (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/unittest)
-endif()
+# if (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+#     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/unittest)
+# endif()
