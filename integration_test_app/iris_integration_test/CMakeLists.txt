@@ -123,7 +123,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         "${FRAMEWORKS}"
         )
 else()
-    set(IRIS_SDK_DOWNLOAD_NAME "iris_0.0.0_RTC_Windows_20220506_0256")
+    set(IRIS_SDK_DOWNLOAD_NAME "iris_3.7.0.3_RTC_Windows_20220708_0330")
     set(LIBS_DIR
     "${CMAKE_CURRENT_SOURCE_DIR}/../../windows/third_party/iris/${IRIS_SDK_DOWNLOAD_NAME}/x64/Release/AgoraRtcWrapper.lib"
         )
