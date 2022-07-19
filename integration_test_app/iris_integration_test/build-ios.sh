@@ -4,7 +4,7 @@ set -e
 set -x
 
 MY_PATH=$(dirname "$0")
-ROOT_PATH=$(pwd)
+ROOT_PATH=$1
 IRIS_INTEGRATION_TEST_PATH=$ROOT_PATH/integration_test_app/iris_integration_test
 
 if [[ -f $ROOT_PATH/ios/AgoraRtcWrapper.podspec ]]; then
