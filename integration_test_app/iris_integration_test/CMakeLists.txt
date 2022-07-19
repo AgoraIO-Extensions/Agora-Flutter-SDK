@@ -102,7 +102,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
             )
     else()
         set(LIBS_DIR
-                "${CMAKE_CURRENT_SOURCE_DIR}/../macos/Pods/AgoraIrisRTC_macOS"
+                "${CMAKE_CURRENT_SOURCE_DIR}/../macos/Pods/AgoraIrisRTC_macOS_Beta"
                 )
     endif()
 
