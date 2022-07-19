@@ -6,6 +6,7 @@ set -x
 MY_PATH=$(dirname "$0")
 ROOT_PATH=$1
 IRIS_INTEGRATION_TEST_PATH=$ROOT_PATH/integration_test_app/iris_integration_test
+IRIS_NAME="AgoraIrisRTC_iOS_Beta"
 
 if [[ -f $ROOT_PATH/ios/AgoraRtcWrapper.podspec ]]; then
     bash $MY_PATH/copy-ios-framework.sh $ROOT_PATH/ios/AgoraRtcWrapper.xcframework
@@ -15,7 +16,7 @@ else
       pod install
     popd
 
-    bash $MY_PATH/copy-ios-framework.sh $ROOT_PATH/integration_test_app/ios/Pods/AgoraIrisRTC_iOS/AgoraRtcWrapper.xcframework
+    bash $MY_PATH/copy-ios-framework.sh $ROOT_PATH/integration_test_app/ios/Pods/$IRIS_NAME/AgoraRtcWrapper.xcframework
 fi
 
 if [ ! -d "$IRIS_INTEGRATION_TEST_PATH/build/ios" ]; then
