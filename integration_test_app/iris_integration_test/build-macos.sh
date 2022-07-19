@@ -6,6 +6,11 @@ set -x
 ROOT_PATH=$1
 IRIS_INTEGRATION_TEST_PATH=$ROOT_PATH/integration_test_app/iris_integration_test
 
+pushd $ROOT_PATH/integration_test_app/macos
+    flutter packages get
+    pod install
+popd
+
 if [ ! -d "$IRIS_INTEGRATION_TEST_PATH/build/mac" ]; then
     mkdir -p $IRIS_INTEGRATION_TEST_PATH/build/mac
 fi
