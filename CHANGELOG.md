@@ -1,3 +1,7 @@
+## 6.0.0-beta.2
+
+feat: Convert kotlin to java to avoid kotlin version conflict
+
 ## 6.0.0-beta.1
 
 See release note: 
