@@ -1,54 +1,45 @@
 group 'io.agora.agora_rtc_ng'
 version '1.0-SNAPSHOT'
 
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 buildscript {
-    ext.kotlin_version = '1.6.10'
     repositories {
         google()
         mavenCentral()
     }
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
 }
 
 rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://www.jitpack.io' }
     }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion safeExtGet('compileSdkVersion', 31)
+
+    defaultConfig {
+        minSdkVersion safeExtGet('minSdkVersion', 16)
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        
         if (isDev(project)) {
            main.jniLibs.srcDirs += 'libs'
         }
-    }
-
-    defaultConfig {
-        minSdkVersion 16
-
-        consumerProguardFiles 'consumer-rules.pro'
     }
 }
 
@@ -59,8 +50,6 @@ dependencies {
      api 'io.agora.rtc:iris-rtc:3.8.201'
      api 'io.agora.rtc:agora-special-full:3.8.201.2.2'
   }
-   
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 static boolean isDev(Project project) {
