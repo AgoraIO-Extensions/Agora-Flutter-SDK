@@ -161,25 +161,19 @@ class _ApiCallExecutor {
       } else if (request is _SetupIrisRtcEngineEventHandlerRequest) {
         executor.setupIrisRtcEngineEventHandler(mainEventSendPort);
         mainApiCallSendPort.send(0);
-        debugPrint('[_ApiCallExecutor] setupIrisRtcEngineEventHandler');
       } else if (request is _DisposeIrisRtcEngineEventHandlerRequest) {
         executor.disposeIrisRtcEngineEventHandler();
         mainApiCallSendPort.send(0);
-        debugPrint('[_ApiCallExecutor] disposeIrisRtcEngineEventHandler');
       } else if (request is _SetupIrisMediaPlayerEventHandlerRequest) {
         executor.setupIrisMediaPlayerEventHandlerIfNeed(mainEventSendPort);
         mainApiCallSendPort.send(0);
-        debugPrint('[_ApiCallExecutor] setupIrisMediaPlayerEventHandlerIfNeed');
       } else if (request is _DisposeIrisMediaPlayerEventHandlerRequest) {
         executor.disposeIrisMediaPlayerEventHandlerIfNeed();
         mainApiCallSendPort.send(0);
-        debugPrint(
-            '[_ApiCallExecutor] disposeIrisMediaPlayerEventHandlerIfNeed');
       }
     }
 
     executor.dispose();
-    debugPrint('[_ApiCallExecutor] _execute exit');
     Isolate.exit();
   }
 
