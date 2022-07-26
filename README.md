@@ -1,11 +1,11 @@
-# agora_rtc_ng
+# agora_rtc_engine
 
 <p align="center">
-    <a href="https://pub.dev/packages/agora_rtc_ng"><img src="https://badges.bar/agora_rtc_ng/likes" alt="Pub.dev likes"/></a>
-    <a href="https://pub.dev/packages/agora_rtc_ng" alt="Pub.dev popularity"><img src="https://badges.bar/agora_rtc_ng/popularity"/></a>
-    <a href="https://pub.dev/packages/agora_rtc_ng"><img src="https://badges.bar/agora_rtc_ng/pub%20points" alt="Pub.dev points"/></a><br/>
-    <a href="https://pub.dev/packages/agora_rtc_ng"><img src="https://img.shields.io/pub/v/agora_rtc_ng.svg?include_prereleases" alt="latest version"/></a>
-    <a href="https://pub.dev/packages/agora_rtc_ng"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Web%20%7C%20Windows-blue?logo=flutter" alt="Platform"/></a>
+    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/pub/likes/agora_rtc_engine?logo=dart" alt="Pub.dev likes"/></a>
+    <a href="https://pub.dev/packages/agora_rtc_engine" alt="Pub.dev popularity"><img src="https://img.shields.io/pub/popularity/agora_rtc_engine?logo=dart"/></a>
+    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/pub/points/agora_rtc_engine?logo=dart" alt="Pub.dev points"/></a><br/>
+    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/pub/v/agora_rtc_engine.svg?include_prereleases" alt="latest version"/></a>
+    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Web%20%7C%20Windows-blue?logo=flutter" alt="Platform"/></a>
     <a href="./LICENSE"><img src="https://img.shields.io/github/license/agoraio-community/flutter-uikit?color=lightgray" alt="License"/></a>
     <a href="https://www.agora.io/en/join-slack/">
         <img src="https://img.shields.io/badge/slack-@RTE%20Dev-blue.svg?logo=slack" alt="RTE Dev Slack Link"/>
@@ -18,7 +18,7 @@ Agora.io provides building blocks for you to add real-time voice and video commu
 
 ## Usage
 
-To use this plugin, please add `agora_rtc_ng` as a dependency to
+To use this plugin, please add `agora_rtc_engine` as a dependency to
 your [pubspec.yaml](https://flutter.dev/docs/development/packages-and-plugins/using-packages) file.
 
 ## Getting Started
@@ -63,23 +63,23 @@ Open the `Info.plist` and add:
 
 ### Multiple Platforms
 
-The [agora_rtc_ng](https://pub.dev/packages/agora_rtc_ng) supports Android/iOS/macOS/Windows, but not support Web yet.
+The [agora_rtc_engine](https://pub.dev/packages/agora_rtc_engine) supports Android/iOS/macOS/Windows, but not support Web yet.
 
 ## API Reference Resources
 
 * [Flutter](https://docs.agora.io/en/video-call-4.x-beta/API%20Reference/flutter_ng/API/rtc_api_overview_ng.html)
-* [Android](https://docs-preprod.agora.io/cn/video-call-4.x-beta/API%20Reference/java_ng/API/rtc_api_overview_ng.html)
-* [iOS/macOS](https://docs-preprod.agora.io/cn/video-call-4.x-beta/API%20Reference/mac_ng/API/rtc_api_overview_ng.html)
-* [Windows](https://docs-preprod.agora.io/cn/video-call-4.x-beta/API%20Reference/windows_ng/API/rtc_api_overview_ng.html)
+* [Android](https://docs-preprod.agora.io/en/video-call-4.x-beta/API%20Reference/java_ng/API/rtc_api_overview_ng.html)
+* [iOS/macOS](https://docs-preprod.agora.io/en/video-call-4.x-beta/API%20Reference/mac_ng/API/rtc_api_overview_ng.html)
+* [Windows](https://docs-preprod.agora.io/en/video-call-4.x-beta/API%20Reference/windows_ng/API/rtc_api_overview_ng.html)
 * [Web](https://docs.agora.io/en/Video/API%20Reference/web_ng/index.html)
 
 ## Feedback
 
-If you have any problems or suggestions regarding the sample projects, feel free to file an [issue](https://github.com/AgoraIO-Community/agora_rtc_ng/issues) OR pull request.
+If you have any problems or suggestions regarding the sample projects, feel free to file an [issue](https://github.com/AgoraIO-Community/agora_rtc_engine/issues) OR pull request.
 
 ## How to contribute
 
-To help work on this sdk, please refer to [CONTRIBUTING.md](https://github.com/AgoraIO-Community/agora_rtc_ng/blob/main/CONTRIBUTING.md).
+To help work on this sdk, please refer to [CONTRIBUTING.md](https://github.com/AgoraIO/agora_rtc_engine/blob/main/CONTRIBUTING.md).
 
 ## Related resources
 

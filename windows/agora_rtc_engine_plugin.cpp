@@ -1,4 +1,4 @@
-#include "include/agora_rtc_ng/agora_rtc_ng_plugin.h"
+#include "include/agora_rtc_engine/agora_rtc_engine_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -9,7 +9,7 @@
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
 #include <flutter/standard_method_codec.h>
-#include "include/agora_rtc_ng/video_view_controller.h"
+#include "include/agora_rtc_engine/video_view_controller.h"
 
 #include <memory>
 #include <sstream>
@@ -18,18 +18,18 @@
 namespace agora_rtc_ng
 {
 
-  class AgoraRtcNgPlugin : public flutter::Plugin
+  class AgoraRtcEnginePlugin : public flutter::Plugin
   {
   public:
     static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar);
 
-    AgoraRtcNgPlugin(flutter::PluginRegistrarWindows *registrar);
+    AgoraRtcEnginePlugin(flutter::PluginRegistrarWindows *registrar);
 
-    virtual ~AgoraRtcNgPlugin();
+    virtual ~AgoraRtcEnginePlugin();
 
     // Disallow copy and assign.
-    AgoraRtcNgPlugin(const AgoraRtcNgPlugin &) = delete;
-    AgoraRtcNgPlugin &operator=(const AgoraRtcNgPlugin &) = delete;
+    AgoraRtcEnginePlugin(const AgoraRtcEnginePlugin &) = delete;
+    AgoraRtcEnginePlugin &operator=(const AgoraRtcEnginePlugin &) = delete;
 
   private:
     std::unique_ptr<VideoViewController> video_view_controller_;
@@ -40,7 +40,7 @@ namespace agora_rtc_ng
   };
 
   // static
-  void AgoraRtcNgPlugin::RegisterWithRegistrar(
+  void AgoraRtcEnginePlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarWindows *registrar)
   {
     auto channel =
@@ -48,7 +48,7 @@ namespace agora_rtc_ng
             registrar->messenger(), "agora_rtc_ng",
             &flutter::StandardMethodCodec::GetInstance());
 
-    auto plugin = std::make_unique<AgoraRtcNgPlugin>(registrar);
+    auto plugin = std::make_unique<AgoraRtcEnginePlugin>(registrar);
 
     channel->SetMethodCallHandler(
         [plugin_pointer = plugin.get()](const auto &call, auto result)
@@ -59,16 +59,16 @@ namespace agora_rtc_ng
     registrar->AddPlugin(std::move(plugin));
   }
 
-  AgoraRtcNgPlugin::AgoraRtcNgPlugin(flutter::PluginRegistrarWindows *registrar)
+  AgoraRtcEnginePlugin::AgoraRtcEnginePlugin(flutter::PluginRegistrarWindows *registrar)
   {
     video_view_controller_ = std::make_unique<VideoViewController>(
         registrar->texture_registrar(),
         registrar->messenger());
   }
 
-  AgoraRtcNgPlugin::~AgoraRtcNgPlugin() {}
+  AgoraRtcEnginePlugin::~AgoraRtcEnginePlugin() {}
 
-  void AgoraRtcNgPlugin::HandleMethodCall(
+  void AgoraRtcEnginePlugin::HandleMethodCall(
       const flutter::MethodCall<flutter::EncodableValue> &method_call,
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
   {
@@ -97,10 +97,10 @@ namespace agora_rtc_ng
 
 } // namespace agora_rtc_ng
 
-void AgoraRtcNgPluginRegisterWithRegistrar(
+void AgoraRtcEnginePluginRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar)
 {
-  agora_rtc_ng::AgoraRtcNgPlugin::RegisterWithRegistrar(
+  agora_rtc_ng::AgoraRtcEnginePlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarManager::GetInstance()
           ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar));
 }

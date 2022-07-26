@@ -1,7 +1,8 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine_example/examples/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
 
 /// MultiChannel Example
@@ -13,7 +14,7 @@ class SetContentInspect extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<SetContentInspect> {
+class _State extends State<SetContentInspect> with KeepRemoteVideoViewsMixin {
   late final RtcEngine _engine;
 
   bool _isReadyPreview = false;
@@ -50,9 +51,6 @@ class _State extends State<SetContentInspect> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -90,6 +88,7 @@ class _State extends State<SetContentInspect> {
         logSink.log('[onContentInspectResult] result: $result');
       },
     ));
+
     await _engine.enableVideo();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
@@ -102,21 +101,26 @@ class _State extends State<SetContentInspect> {
 
   Future<void> _joinChannel() async {
     await _engine.joinChannel(
-      token: config.token,
-      channelId: _controller.text,
-      info: '',
-      uid: config.uid,
-    );
+        token: config.token,
+        channelId: _controller.text,
+        uid: config.uid,
+        options: const ChannelMediaOptions());
   }
 
   void _leaveChannel() async {
-    await _engine.setContentInspect(const ContentInspectConfig(
-      enable: false,
-      modules: [
-        ContentInspectModule(type: ContentInspectType.contentInspectModeration)
-      ],
-      moduleCount: 1,
-    ));
+    if (_isStartContentInspect) {
+      _isStartContentInspect = !_isStartContentInspect;
+      await _engine.enableContentInspect(
+          enabled: false,
+          config: const ContentInspectConfig(
+            modules: [
+              ContentInspectModule(
+                  type: ContentInspectType.contentInspectModeration,
+                  interval: 0)
+            ],
+            moduleCount: 1,
+          ));
+    }
 
     await _engine.leaveChannel();
   }
@@ -126,11 +130,23 @@ class _State extends State<SetContentInspect> {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
         if (!_isReadyPreview) return Container();
-        return AgoraVideoView(
-          controller: VideoViewController(
-            rtcEngine: _engine,
-            canvas: const VideoCanvas(uid: 0),
-          ),
+        return Stack(
+          children: [
+            AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: _engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: RemoteVideoViewsWidget(
+                key: keepRemoteVideoViewsKey,
+                rtcEngine: _engine,
+                channelId: _controller.text,
+              ),
+            )
+          ],
         );
       },
       actionsBuilder: (context, isLayoutHorizontal) {
@@ -162,33 +178,31 @@ class _State extends State<SetContentInspect> {
                       _isStartContentInspect = !_isStartContentInspect;
 
                       if (_isStartContentInspect) {
-                        _engine.setContentInspect(const ContentInspectConfig(
-                          enable: true,
-                          deviceWork: true,
-                          deviceworkType: ContentInspectDeviceType
-                              .contentInspectDeviceAgora,
-                          modules: [
-                            ContentInspectModule(
-                              type: ContentInspectType.contentInspectModeration,
-                              frequency: 2,
-                            )
-                          ],
-                          moduleCount: 1,
-                        ));
+                        _engine.enableContentInspect(
+                            enabled: true,
+                            config: const ContentInspectConfig(
+                              modules: [
+                                ContentInspectModule(
+                                  type: ContentInspectType
+                                      .contentInspectModeration,
+                                  interval: 2,
+                                )
+                              ],
+                              moduleCount: 1,
+                            ));
                       } else {
-                        _engine.setContentInspect(const ContentInspectConfig(
-                          enable: false,
-                          deviceWork: true,
-                          deviceworkType: ContentInspectDeviceType
-                              .contentInspectDeviceAgora,
-                          modules: [
-                            ContentInspectModule(
-                              type: ContentInspectType.contentInspectModeration,
-                              frequency: 2,
-                            )
-                          ],
-                          moduleCount: 1,
-                        ));
+                        _engine.enableContentInspect(
+                            enabled: false,
+                            config: const ContentInspectConfig(
+                              modules: [
+                                ContentInspectModule(
+                                  type: ContentInspectType
+                                      .contentInspectModeration,
+                                  interval: 2,
+                                )
+                              ],
+                              moduleCount: 1,
+                            ));
                       }
 
                       setState(() {});

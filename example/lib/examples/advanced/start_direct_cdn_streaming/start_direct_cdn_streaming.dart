@@ -1,7 +1,7 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/material.dart';
 
 /// StartDirectCDNStreaming Example
@@ -31,7 +31,7 @@ class _State extends State<StartDirectCDNStreaming> {
     super.initState();
     _controller = TextEditingController(text: config.channelId);
     _publishUrlController = TextEditingController(
-        text: 'rtmp://push.alexmk.name/live/agora_rtc_ng');
+        text: 'rtmp://push.alexmk.name/live/agora_rtc_engine');
     _widthController = TextEditingController(text: '360');
     _heightController = TextEditingController(text: '240');
     _fpsController = TextEditingController(text: '30');
@@ -66,9 +66,6 @@ class _State extends State<StartDirectCDNStreaming> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -116,11 +113,10 @@ class _State extends State<StartDirectCDNStreaming> {
 
   Future<void> _joinChannel() async {
     await _engine.joinChannel(
-      token: config.token,
-      channelId: _controller.text,
-      info: '',
-      uid: config.uid,
-    );
+        token: config.token,
+        channelId: _controller.text,
+        uid: config.uid,
+        options: const ChannelMediaOptions());
   }
 
   Future<void> _leaveChannel() async {

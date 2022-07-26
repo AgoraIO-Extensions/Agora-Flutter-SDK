@@ -1,8 +1,13 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'dart:io';
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine_debug.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 const _channelId0 = 'channel0';
 const _channelId1 = 'channel1';
@@ -19,14 +24,19 @@ class JoinMultipleChannel extends StatefulWidget {
 class _State extends State<JoinMultipleChannel> {
   late final RtcEngineEx _engine;
   bool _isReadyPreview = false;
-  late final RtcConnection _channel0, _channel1;
+  late RtcConnection _channel0, _channel1;
   String? renderChannelId;
   bool isJoined0 = false, isJoined1 = false;
   List<int> remoteUid0 = [], remoteUid1 = [];
+  late final TextEditingController _channel0UidController;
+  late final TextEditingController _channel1UidController;
+  bool _startDumpVideo = false;
 
   @override
   void initState() {
     super.initState();
+    _channel0UidController = TextEditingController(text: '1000');
+    _channel1UidController = TextEditingController(text: '1001');
     _initEngine();
   }
 
@@ -44,9 +54,6 @@ class _State extends State<JoinMultipleChannel> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -111,16 +118,15 @@ class _State extends State<JoinMultipleChannel> {
     await _engine.startPreview();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
-    _channel0 = const RtcConnection(channelId: _channelId0, localUid: 1000);
-
-    _channel1 = const RtcConnection(channelId: _channelId1, localUid: 1001);
-
     setState(() {
       _isReadyPreview = true;
     });
   }
 
   void _joinChannel0() async {
+    final uid = int.tryParse(_channel0UidController.text);
+    if (uid == null) return;
+    _channel0 = RtcConnection(channelId: _channelId0, localUid: uid);
     await _engine.joinChannelEx(
         token: '',
         connection: _channel0,
@@ -129,6 +135,9 @@ class _State extends State<JoinMultipleChannel> {
   }
 
   void _joinChannel1() async {
+    final uid = int.tryParse(_channel1UidController.text);
+    if (uid == null) return;
+    _channel1 = RtcConnection(channelId: _channelId1, localUid: uid);
     await _engine.joinChannelEx(
         token: '',
         connection: _channel1,
@@ -140,14 +149,14 @@ class _State extends State<JoinMultipleChannel> {
     if (isJoined1) {
       await _engine.updateChannelMediaOptionsEx(
           options: const ChannelMediaOptions(
-              publishAudioTrack: false, publishCameraTrack: false),
+              publishMicrophoneTrack: false, publishCameraTrack: false),
           connection: _channel1);
     }
 
     if (isJoined0) {
       await _engine.updateChannelMediaOptionsEx(
           options: const ChannelMediaOptions(
-              publishAudioTrack: true, publishCameraTrack: true),
+              publishMicrophoneTrack: true, publishCameraTrack: true),
           connection: _channel0);
     }
   }
@@ -156,14 +165,14 @@ class _State extends State<JoinMultipleChannel> {
     if (isJoined0) {
       await _engine.updateChannelMediaOptionsEx(
           options: const ChannelMediaOptions(
-              publishAudioTrack: false, publishCameraTrack: false),
+              publishMicrophoneTrack: false, publishCameraTrack: false),
           connection: _channel0);
     }
 
     if (isJoined1) {
       await _engine.updateChannelMediaOptionsEx(
           options: const ChannelMediaOptions(
-              publishAudioTrack: true, publishCameraTrack: true),
+              publishMicrophoneTrack: true, publishCameraTrack: true),
           connection: _channel1);
     }
   }
@@ -171,12 +180,14 @@ class _State extends State<JoinMultipleChannel> {
   _leaveChannel0() async {
     if (isJoined0) {
       await _engine.leaveChannelEx(_channel0);
+      await _engine.startPreview();
     }
   }
 
   _leaveChannel1() async {
     if (isJoined1) {
       await _engine.leaveChannelEx(_channel1);
+      await _engine.startPreview();
     }
   }
 
@@ -235,6 +246,15 @@ class _State extends State<JoinMultipleChannel> {
             const SizedBox(
               height: 20,
             ),
+            TextField(
+              controller: _channel0UidController,
+              decoration: const InputDecoration(
+                hintText: 'Enter channel0 uid',
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             Row(
               children: [
                 Expanded(
@@ -251,6 +271,15 @@ class _State extends State<JoinMultipleChannel> {
                   ),
                 )
               ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextField(
+              controller: _channel1UidController,
+              decoration: const InputDecoration(
+                hintText: 'Enter channel1 uid',
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -312,6 +341,32 @@ class _State extends State<JoinMultipleChannel> {
                     },
               child: const Text('Render $_channelId1'),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            if (defaultTargetPlatform == TargetPlatform.windows)
+              ElevatedButton(
+                onPressed: () async {
+                  _startDumpVideo = !_startDumpVideo;
+
+                  Directory appDocDir =
+                      await getApplicationDocumentsDirectory();
+
+                  if (_startDumpVideo) {
+                    _engine.startDumpVideo(
+                      VideoSourceType.videoSourceCamera.value(),
+                      appDocDir.absolute.path,
+                    );
+                    logSink.log(
+                        'Video data has dump to ${appDocDir.absolute.path}');
+                  } else {
+                    _engine.stopDumpVideo();
+                  }
+
+                  setState(() {});
+                },
+                child: Text('${_startDumpVideo ? 'Stop' : 'Start'} dump video'),
+              ),
           ],
         );
       },

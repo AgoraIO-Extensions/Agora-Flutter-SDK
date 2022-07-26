@@ -63,6 +63,10 @@ class _MyAppState extends State<MyApp> {
             _remoteUid = null;
           });
         },
+        onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
+          debugPrint(
+              '[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+      },
       ),
     );
 

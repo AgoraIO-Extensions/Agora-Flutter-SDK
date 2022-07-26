@@ -7,17 +7,42 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06F3F243ED8ED3F65ADCB6E2 /* Pods_ScreenSharing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67398F84B31F85ED557E0FAF /* Pods_ScreenSharing.framework */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		1948169C2C60B1C7718DF415 /* libPods-Runner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 794D3C5B56E9EC887696EF97 /* libPods-Runner.a */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		71BBA3BA28AB50E2007B0DBC /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71BBA3B928AB50E2007B0DBC /* ReplayKit.framework */; };
+		71BBA3BE28AB50E2007B0DBC /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BBA3BD28AB50E2007B0DBC /* SampleHandler.m */; };
+		71BBA3C228AB50E2007B0DBC /* ScreenSharing.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 71BBA3B828AB50E2007B0DBC /* ScreenSharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */; };
 		97C146F31CF9000F007C117D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C146F21CF9000F007C117D /* main.m */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		9DA4854253E6947D845E2F5D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31D53834ADE5D55008417C7 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		71BBA3C028AB50E2007B0DBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 71BBA3B728AB50E2007B0DBC;
+			remoteInfo = ScreenSharing;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		71BBA3C328AB50E2007B0DBC /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				71BBA3C228AB50E2007B0DBC /* ScreenSharing.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -34,7 +59,14 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		794D3C5B56E9EC887696EF97 /* libPods-Runner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Runner.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49879E8E3743876C11F5B3F1 /* Pods-ScreenSharing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenSharing.release.xcconfig"; path = "Target Support Files/Pods-ScreenSharing/Pods-ScreenSharing.release.xcconfig"; sourceTree = "<group>"; };
+		58AA7C52E81F75ADAAE34F02 /* Pods-ScreenSharing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenSharing.debug.xcconfig"; path = "Target Support Files/Pods-ScreenSharing/Pods-ScreenSharing.debug.xcconfig"; sourceTree = "<group>"; };
+		67398F84B31F85ED557E0FAF /* Pods_ScreenSharing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenSharing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		71BBA3B828AB50E2007B0DBC /* ScreenSharing.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScreenSharing.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		71BBA3B928AB50E2007B0DBC /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		71BBA3BC28AB50E2007B0DBC /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
+		71BBA3BD28AB50E2007B0DBC /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
+		71BBA3BF28AB50E2007B0DBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AB68121F487243619EA4BE3 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		7AFFD8ED1D35381100E5BB4D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -48,15 +80,26 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D31D53834ADE5D55008417C7 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9C6F4A6807310209DA744E2 /* Pods-ScreenSharing.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenSharing.profile.xcconfig"; path = "Target Support Files/Pods-ScreenSharing/Pods-ScreenSharing.profile.xcconfig"; sourceTree = "<group>"; };
 		DD82A732C16AA290C9143352 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		71BBA3B528AB50E2007B0DBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71BBA3BA28AB50E2007B0DBC /* ReplayKit.framework in Frameworks */,
+				06F3F243ED8ED3F65ADCB6E2 /* Pods_ScreenSharing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97C146EB1CF9000F007C117D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1948169C2C60B1C7718DF415 /* libPods-Runner.a in Frameworks */,
+				9DA4854253E6947D845E2F5D /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,14 +112,29 @@
 				95E2CCC7A17B556B48DA5225 /* Pods-Runner.debug.xcconfig */,
 				DD82A732C16AA290C9143352 /* Pods-Runner.release.xcconfig */,
 				7AB68121F487243619EA4BE3 /* Pods-Runner.profile.xcconfig */,
+				58AA7C52E81F75ADAAE34F02 /* Pods-ScreenSharing.debug.xcconfig */,
+				49879E8E3743876C11F5B3F1 /* Pods-ScreenSharing.release.xcconfig */,
+				D9C6F4A6807310209DA744E2 /* Pods-ScreenSharing.profile.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		71BBA3BB28AB50E2007B0DBC /* ScreenSharing */ = {
+			isa = PBXGroup;
+			children = (
+				71BBA3BC28AB50E2007B0DBC /* SampleHandler.h */,
+				71BBA3BD28AB50E2007B0DBC /* SampleHandler.m */,
+				71BBA3BF28AB50E2007B0DBC /* Info.plist */,
+			);
+			path = ScreenSharing;
 			sourceTree = "<group>";
 		};
 		7D1A4C6C963464F565340767 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				794D3C5B56E9EC887696EF97 /* libPods-Runner.a */,
+				71BBA3B928AB50E2007B0DBC /* ReplayKit.framework */,
+				D31D53834ADE5D55008417C7 /* Pods_Runner.framework */,
+				67398F84B31F85ED557E0FAF /* Pods_ScreenSharing.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -97,6 +155,7 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				71BBA3BB28AB50E2007B0DBC /* ScreenSharing */,
 				97C146EF1CF9000F007C117D /* Products */,
 				22BC92B699305D85A299F66F /* Pods */,
 				7D1A4C6C963464F565340767 /* Frameworks */,
@@ -107,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
+				71BBA3B828AB50E2007B0DBC /* ScreenSharing.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -138,6 +198,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		71BBA3B728AB50E2007B0DBC /* ScreenSharing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71BBA3C728AB50E2007B0DBC /* Build configuration list for PBXNativeTarget "ScreenSharing" */;
+			buildPhases = (
+				C59B172B4D5AF0EDCB6BF9C2 /* [CP] Check Pods Manifest.lock */,
+				71BBA3B428AB50E2007B0DBC /* Sources */,
+				71BBA3B528AB50E2007B0DBC /* Frameworks */,
+				71BBA3B628AB50E2007B0DBC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ScreenSharing;
+			productName = ScreenSharing;
+			productReference = 71BBA3B828AB50E2007B0DBC /* ScreenSharing.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		97C146ED1CF9000F007C117D /* Runner */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
@@ -150,10 +228,12 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				39CD36047290E845D66DC420 /* [CP] Embed Pods Frameworks */,
+				71BBA3C328AB50E2007B0DBC /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				71BBA3C128AB50E2007B0DBC /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -169,6 +249,9 @@
 				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
+					71BBA3B728AB50E2007B0DBC = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -188,11 +271,19 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
+				71BBA3B728AB50E2007B0DBC /* ScreenSharing */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		71BBA3B628AB50E2007B0DBC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97C146EC1CF9000F007C117D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -274,9 +365,39 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
+		C59B172B4D5AF0EDCB6BF9C2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ScreenSharing-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		71BBA3B428AB50E2007B0DBC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71BBA3BE28AB50E2007B0DBC /* SampleHandler.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97C146EA1CF9000F007C117D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -288,6 +409,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		71BBA3C128AB50E2007B0DBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 71BBA3B728AB50E2007B0DBC /* ScreenSharing */;
+			targetProxy = 71BBA3C028AB50E2007B0DBC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
@@ -383,6 +512,115 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Profile;
+		};
+		71BBA3C428AB50E2007B0DBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 58AA7C52E81F75ADAAE34F02 /* Pods-ScreenSharing.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKNR67U6GB;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScreenSharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ScreenSharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcNgExample.ScreenSharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		71BBA3C528AB50E2007B0DBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49879E8E3743876C11F5B3F1 /* Pods-ScreenSharing.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKNR67U6GB;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScreenSharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ScreenSharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcNgExample.ScreenSharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		71BBA3C628AB50E2007B0DBC /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9C6F4A6807310209DA744E2 /* Pods-ScreenSharing.profile.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKNR67U6GB;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScreenSharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ScreenSharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcNgExample.ScreenSharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Profile;
 		};
@@ -547,6 +785,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		71BBA3C728AB50E2007B0DBC /* Build configuration list for PBXNativeTarget "ScreenSharing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71BBA3C428AB50E2007B0DBC /* Debug */,
+				71BBA3C528AB50E2007B0DBC /* Release */,
+				71BBA3C628AB50E2007B0DBC /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

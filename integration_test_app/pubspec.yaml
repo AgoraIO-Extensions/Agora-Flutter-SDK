@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  agora_rtc_ng:
+  agora_rtc_engine:
     path: ../
 
 

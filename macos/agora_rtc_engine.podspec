@@ -3,7 +3,7 @@
 # Run `pod lib lint agora_rtc_ng.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'agora_rtc_ng'
+  s.name             = 'agora_rtc_engine'
   s.version          = '0.0.1'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
@@ -16,9 +16,9 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*.{h,mm}', 'Classes/File.swift'
   s.dependency 'FlutterMacOS'
   # s.dependency 'AgoraRtcWrapper'
-  s.dependency 'AgoraRtcEngine_Special_macOS', '3.8.201.2'
-  s.dependency 'AgoraIrisRTC_macOS', '3.8.201'
+  # s.dependency  'AgoraRtcEngine_macOS', '4.0.0-rc.1'
+  s.dependency 'AgoraIrisRTC_macOS', '4.0.0-beta.8'
 
   s.platform = :osx, '10.11'
-  # s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 end

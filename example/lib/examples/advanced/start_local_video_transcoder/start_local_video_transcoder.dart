@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +28,7 @@ class _State extends State<StartLocalVideoTranscoder> {
   Set<int> remoteUid = {};
   late TextEditingController _controller;
   late TextEditingController _mediaPlayerUrlController;
-  late final MediaPlayerController _mediaPlayerController;
+  late MediaPlayerController _mediaPlayerController;
   MediaPlayerSourceObserver? _mediaPlayerSourceObserver;
   List<TranscodingVideoStream> transcodingVideoStreams = [];
   List<VideoDeviceInfo> _videoDevices = [];
@@ -62,8 +62,8 @@ class _State extends State<StartLocalVideoTranscoder> {
   }
 
   Future<void> _dispose() async {
-    // await _localVideoController.dispose();
-    _stopLocalVideoTranscoder();
+    await _stopLocalVideoTranscoder();
+
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -76,9 +76,6 @@ class _State extends State<StartLocalVideoTranscoder> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -114,9 +111,6 @@ class _State extends State<StartLocalVideoTranscoder> {
       },
     ));
 
-    _mediaPlayerController = await MediaPlayerController.create(
-        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
-
     _videoDeviceManager = _engine.getVideoDeviceManager();
 
     if (!(defaultTargetPlatform == TargetPlatform.android ||
@@ -143,7 +137,7 @@ class _State extends State<StartLocalVideoTranscoder> {
   }
 
   Future<void> _joinChannel() async {
-    await _engine.joinChannelWithOptions(
+    await _engine.joinChannel(
       token: config.token,
       channelId: _controller.text,
       uid: config.uid,
@@ -156,7 +150,7 @@ class _State extends State<StartLocalVideoTranscoder> {
   }
 
   Future<void> _leaveChannel() async {
-    _stopLocalVideoTranscoder();
+    // await _stopLocalVideoTranscoder();
     await _engine.leaveChannel();
   }
 
@@ -206,6 +200,19 @@ class _State extends State<StartLocalVideoTranscoder> {
   }
 
   Future<void> _stopLocalVideoTranscoder() async {
+    if (_isMediaPlayerSource) {
+      await _mediaPlayerController.stop();
+      await _mediaPlayerController.dispose();
+    }
+
+    if (_isSecondaryCameraSource) {
+      await _engine.stopSecondaryCameraCapture();
+    }
+
+    if (_isPrimaryScreenSource) {
+      await _engine.stopScreenCapture();
+    }
+
     await _engine.stopPrimaryCameraCapture();
     await _engine.stopLocalVideoTranscoder();
     transcodingVideoStreams.clear();
@@ -228,13 +235,13 @@ class _State extends State<StartLocalVideoTranscoder> {
         ),
         const Text('Start Primary Camera Source By Default'),
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             _isStartLocalvideoTranscoder = !_isStartLocalvideoTranscoder;
 
             if (_isStartLocalvideoTranscoder) {
-              _startLocalVideoTranscoder();
+              await _startLocalVideoTranscoder();
             } else {
-              _stopLocalVideoTranscoder();
+              await _stopLocalVideoTranscoder();
             }
 
             setState(() {});
@@ -295,30 +302,64 @@ class _State extends State<StartLocalVideoTranscoder> {
               const Text('PrimaryScreenSource:'),
               Switch(
                 value: _isPrimaryScreenSource,
-                onChanged:
-                    _isStartLocalvideoTranscoder && _videoDevices.length >= 2
-                        ? (v) async {
-                            if (!v) {
-                              transcodingVideoStreams.removeWhere((element) =>
-                                  element.sourceType ==
-                                  MediaSourceType.primaryScreenSource);
-                            } else {
-                              transcodingVideoStreams.add(
-                                  const TranscodingVideoStream(
-                                      sourceType:
-                                          MediaSourceType.primaryScreenSource,
-                                      width: 640,
-                                      height: 320));
+                onChanged: _isStartLocalvideoTranscoder
+                    ? (v) async {
+                        if (!v) {
+                          transcodingVideoStreams.removeWhere((element) =>
+                              element.sourceType ==
+                              MediaSourceType.primaryScreenSource);
+                        } else {
+                          SIZE t = const SIZE(width: 360, height: 240);
+
+                          SIZE s = const SIZE(width: 360, height: 240);
+
+                          var info = await _engine.getScreenCaptureSources(
+                              thumbSize: t, iconSize: s, includeScreen: true);
+
+                          if (info.isNotEmpty) {
+                            final item = info[0];
+                            if (item.type ==
+                                ScreenCaptureSourceType
+                                    .screencapturesourcetypeWindow) {
+                              await _engine.startScreenCaptureByWindowId(
+                                windowId: item.sourceId!,
+                                regionRect: const Rectangle(
+                                    x: 0, y: 0, width: 0, height: 0),
+                                captureParams: const ScreenCaptureParameters(),
+                              );
+                            } else if (item.type ==
+                                ScreenCaptureSourceType
+                                    .screencapturesourcetypeScreen) {
+                              await _engine.startScreenCaptureByDisplayId(
+                                displayId: item.sourceId!,
+                                regionRect: const Rectangle(
+                                    x: 0, y: 0, width: 0, height: 0),
+                                captureParams: const ScreenCaptureParameters(
+                                    captureMouseCursor: true, frameRate: 30),
+                              );
                             }
-
-                            await _engine.updateLocalTranscoderConfiguration(
-                                _createLocalTranscoderConfiguration());
-
-                            setState(() {
-                              _isPrimaryScreenSource = !_isPrimaryScreenSource;
-                            });
+                            transcodingVideoStreams.add(
+                                const TranscodingVideoStream(
+                                    sourceType:
+                                        MediaSourceType.primaryScreenSource,
+                                    x: 110,
+                                    y: 110,
+                                    width: 200,
+                                    height: 200,
+                                    zOrder: 20));
+                          } else {
+                            logSink.log('No Screen Capture Sources Avaliable');
                           }
-                        : null,
+                        }
+
+                        await _engine.updateLocalTranscoderConfiguration(
+                            _createLocalTranscoderConfiguration());
+
+                        setState(() {
+                          _isPrimaryScreenSource = !_isPrimaryScreenSource;
+                        });
+                      }
+                    : null,
               )
             ],
           ),
@@ -333,11 +374,16 @@ class _State extends State<StartLocalVideoTranscoder> {
                       if (!v) {
                         _mediaPlayerController.unregisterPlayerSourceObserver(
                             _mediaPlayerSourceObserver!);
-                        _mediaPlayerController.stop();
+                        await _mediaPlayerController.stop();
                         transcodingVideoStreams.removeWhere((element) =>
                             element.sourceType ==
                             MediaSourceType.mediaPlayerSource);
                       } else {
+                        _mediaPlayerController = MediaPlayerController(
+                            rtcEngine: _engine,
+                            canvas: const VideoCanvas(uid: 0));
+                        await _mediaPlayerController.initialize();
+
                         _mediaPlayerSourceObserver ??=
                             MediaPlayerSourceObserver(
                           onPlayerSourceStateChanged: (state, ec) {
@@ -386,9 +432,15 @@ class _State extends State<StartLocalVideoTranscoder> {
         SizedBox(
           width: 150,
           height: 100,
-          child: AgoraVideoView(
-            controller: _mediaPlayerController,
-          ),
+          child: _isMediaPlayerSource
+              ? AgoraVideoView(
+                  controller: _mediaPlayerController,
+                )
+              : Container(
+                  color: Colors.grey[200],
+                  alignment: Alignment.center,
+                  child: const Text('MediaPlayer source'),
+                ),
         ),
         const SizedBox(
           height: 20,

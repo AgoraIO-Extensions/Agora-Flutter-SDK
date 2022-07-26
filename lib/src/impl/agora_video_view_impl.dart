@@ -1,5 +1,6 @@
-import 'package:agora_rtc_ng/src/impl/video_view_controller_impl.dart';
-import 'package:agora_rtc_ng/src/render/agora_video_view.dart';
+import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
+import 'package:agora_rtc_engine/src/render/agora_video_view.dart';
+import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -68,7 +69,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
       throw ArgumentError('PlatformView render is not supported on desktop');
     }
 
-    widget.controller.initialize();
+    widget.controller.initializeRender();
   }
 
   @override
@@ -112,7 +113,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
   Future<void> _disposeRender() async {
     await widget.controller.disposeRender();
-    await getMethodChannel()!.invokeMethod<int>('deleteNativeViewPtr');
+    await getMethodChannel()?.invokeMethod<int>('deleteNativeViewPtr');
   }
 }
 
@@ -138,7 +139,7 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _initialize() async {
     final oldTextureId = widget.controller.getTextureId();
-    await widget.controller.initialize();
+    await widget.controller.initializeRender();
     if (oldTextureId != widget.controller.getTextureId()) {
       setState(() {});
     }

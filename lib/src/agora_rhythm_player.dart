@@ -1,4 +1,4 @@
-import 'package:agora_rtc_ng/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_rhythm_player.g.dart';
 
 /// @nodoc
@@ -25,7 +25,7 @@ enum RhythmPlayerStateType {
   rhythmPlayerStateFailed,
 }
 
-/// Extensions functions of [RhythmPlayerStateType].
+/// @nodoc
 extension RhythmPlayerStateTypeExt on RhythmPlayerStateType {
   /// @nodoc
   static RhythmPlayerStateType fromValue(int value) {
@@ -62,7 +62,7 @@ enum RhythmPlayerErrorType {
   rhythmPlayerErrorFileOverDurationLimit,
 }
 
-/// Extensions functions of [RhythmPlayerErrorType].
+/// @nodoc
 extension RhythmPlayerErrorTypeExt on RhythmPlayerErrorType {
   /// @nodoc
   static RhythmPlayerErrorType fromValue(int value) {
@@ -75,17 +75,18 @@ extension RhythmPlayerErrorTypeExt on RhythmPlayerErrorType {
   }
 }
 
-/// The metronome configuration.
-@JsonSerializable(explicitToJson: true)
+/// 虚拟节拍器配置。
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AgoraRhythmPlayerConfig {
-  /// Construct the [AgoraRhythmPlayerConfig].
+  /// @nodoc
   const AgoraRhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute});
 
-  /// The number of beats per measure, which ranges from 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
+  /// 每小节的拍数，取值范围为 [1,9]。默认值为 4，即每小节包含 1 个强拍和 3 个弱拍。
   @JsonKey(name: 'beatsPerMeasure')
   final int? beatsPerMeasure;
 
-  /// The beat speed (beats/minute), which ranges from 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
+  /// 节拍速度（拍/分钟），取值范围为 [60,360]。默认值为 60，即 1 分钟有 60 拍。
   @JsonKey(name: 'beatsPerMinute')
   final int? beatsPerMinute;
 

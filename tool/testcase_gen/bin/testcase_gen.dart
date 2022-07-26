@@ -34,12 +34,22 @@ void main(List<String> arguments) {
     path.join(srcDir, 'agora_log.dart'),
     path.join(srcDir, 'agora_media_base.dart'),
     path.join(srcDir, 'agora_media_player.dart'),
+    path.join(srcDir, 'agora_media_player_types.dart'),
     path.join(srcDir, 'agora_media_player_source.dart'),
     path.join(srcDir, 'agora_rhythm_player.dart'),
     path.join(srcDir, 'agora_rtc_engine.dart'),
     path.join(srcDir, 'agora_rtc_engine_ex.dart'),
     path.join(srcDir, 'audio_device_manager.dart'),
+    path.join(srcDir, 'agora_media_engine.dart'),
+    path.join(srcDir, 'agora_spatial_audio.dart'),
+    path.join(srcDir, 'agora_media_recorder.dart'),
   ];
+
+  final outDir = path.join(
+    fileSystem.currentDirectory.absolute.path,
+    'integration_test_app',
+    'integration_test',
+  );
 
   List<TemplatedTestCase> templatedTestCases = [
     TemplatedTestCase(
@@ -47,7 +57,7 @@ void main(List<String> arguments) {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
@@ -88,7 +98,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'rtcEngine',
-      outputDir: path.join(srcDir, 'generated'),
+      outputDir: path.join(outDir, 'generated'),
       skipMemberFunctions: [
         'release',
         'registerAudioEncodedFrameObserver',
@@ -109,7 +119,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
@@ -150,7 +160,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'rtcEngineEx',
-      outputDir: path.join(srcDir, 'generated'),
+      outputDir: path.join(outDir, 'generated'),
       skipMemberFunctions: [],
     ),
     TemplatedTestCase(
@@ -158,7 +168,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:integration_test_app/main.dart' as app;
@@ -201,7 +211,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'audioDeviceManager',
-      outputDir: path.join(srcDir, 'generated'),
+      outputDir: path.join(outDir, 'generated'),
       skipMemberFunctions: [
         'release',
       ],
@@ -211,7 +221,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:integration_test_app/main.dart' as app;
@@ -254,7 +264,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'videoDeviceManager',
-      outputDir: path.join(srcDir, 'generated'),
+      outputDir: path.join(outDir, 'generated'),
       skipMemberFunctions: [
         'release',
       ],
@@ -264,7 +274,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       testCaseFileTemplate: '''
 $defaultHeader
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
@@ -288,9 +298,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
 
-    final mediaPlayerController = await MediaPlayerController.create(
+    final mediaPlayerController = MediaPlayerController(
         rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-
+    await mediaPlayerController.initialize();
     
     try {
       {{TEST_CASE_BODY}}
@@ -310,10 +320,170 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'mediaPlayerController',
-      outputDir: path.join(srcDir, 'generated'),
+      outputDir: path.join(outDir, 'generated'),
       skipMemberFunctions: [
         'release',
         'setView',
+      ],
+    ),
+    TemplatedTestCase(
+      className: 'MediaEngine',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:integration_test_app/main.dart' as app;
+
+void mediaEngineSmokeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    final mediaEngine = rtcEngine.getMediaEngine();
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+      }
+      expect(e is AgoraRtcException, true);
+      debugPrint(
+        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+    }
+
+    await mediaEngine.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'mediaEngine',
+      outputDir: path.join(outDir, 'generated'),
+      skipMemberFunctions: [
+        'release',
+      ],
+    ),
+    TemplatedTestCase(
+      className: 'MediaRecorder',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:integration_test_app/main.dart' as app;
+
+void mediaRecorderSmokeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    final mediaRecorder = rtcEngine.getMediaRecorder();
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+      }
+      expect(e is AgoraRtcException, true);
+      debugPrint(
+        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+    }
+
+    await mediaRecorder.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'mediaRecorder',
+      outputDir: path.join(outDir, 'generated'),
+      skipMemberFunctions: [
+        'release',
+      ],
+    ),
+        TemplatedTestCase(
+      className: 'LocalSpatialAudioEngine',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:integration_test_app/main.dart' as app;
+
+void localSpatialAudioEngineSmokeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+      }
+      expect(e is AgoraRtcException, true);
+      debugPrint(
+        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+    }
+
+    await localSpatialAudioEngine.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'localSpatialAudioEngine',
+      outputDir: path.join(outDir, 'generated'),
+      skipMemberFunctions: [
+        'release',
       ],
     ),
   ];

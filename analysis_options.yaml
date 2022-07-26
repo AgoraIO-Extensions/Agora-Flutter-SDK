@@ -10,4 +10,4 @@ analyzer:
     
 linter:
   rules:
-    - public_member_api_docs
+    # - public_member_api_docs

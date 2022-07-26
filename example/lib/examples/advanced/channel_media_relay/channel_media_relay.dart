@@ -1,7 +1,7 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/material.dart';
 
 /// ChannelMediaRelay Example
@@ -17,7 +17,6 @@ class _State extends State<ChannelMediaRelay> {
   late final RtcEngine _engine;
   bool _isReadyPreview = false;
   bool isJoined = false;
-  final int _myUid = 1000;
   int? remoteUid;
   bool isRelaying = false;
   late final TextEditingController _channelMediaRelayController;
@@ -50,9 +49,6 @@ class _State extends State<ChannelMediaRelay> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -106,6 +102,9 @@ class _State extends State<ChannelMediaRelay> {
             });
             break;
           default:
+            setState(() {
+              isRelaying = false;
+            });
             break;
         }
       },
@@ -132,8 +131,8 @@ class _State extends State<ChannelMediaRelay> {
     await _engine.joinChannel(
         token: config.token,
         channelId: _channelController.text,
-        info: '',
-        uid: _myUid);
+        uid: 0,
+        options: const ChannelMediaOptions());
 
     setState(() {
       isJoined = true;
@@ -141,7 +140,8 @@ class _State extends State<ChannelMediaRelay> {
   }
 
   void _leaveChannel() async {
-    await _engine.stopChannelMediaRelay();
+    await _onPressRelayOrStop();
+
     await _engine.leaveChannel();
 
     setState(() {
@@ -149,9 +149,12 @@ class _State extends State<ChannelMediaRelay> {
     });
   }
 
-  _onPressRelayOrStop() async {
+  Future<void> _onPressRelayOrStop() async {
     if (isRelaying) {
       await _engine.stopChannelMediaRelay();
+      setState(() {
+        isRelaying = !isRelaying;
+      });
       return;
     }
     if (_channelMediaRelayController.text.isEmpty) {

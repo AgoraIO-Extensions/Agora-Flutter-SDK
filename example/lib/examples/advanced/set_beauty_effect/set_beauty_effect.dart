@@ -1,10 +1,10 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
-import 'package:flutter/foundation.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine_example/examples/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
 
 /// SetBeautyEffect Example
@@ -16,7 +16,7 @@ class SetBeautyEffect extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<SetBeautyEffect> {
+class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
   late final RtcEngine _engine;
   bool _isReadyPreview = false;
   bool isJoined = false;
@@ -59,9 +59,6 @@ class _State extends State<SetBeautyEffect> {
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -88,7 +85,7 @@ class _State extends State<SetBeautyEffect> {
           isJoined = false;
         });
       },
-      onExtensionErrored:
+      onExtensionError:
           (String provider, String extName, int error, String msg) {
         logSink.log(
             '[onExtensionErrored] provider: $provider, extName: $extName, error: $error, msg: $msg');
@@ -112,16 +109,6 @@ class _State extends State<SetBeautyEffect> {
 
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
-    if (defaultTargetPlatform == TargetPlatform.windows) {
-      await _engine
-          .loadExtensionProvider('libagora_video_process_extension.dll');
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      await _engine.loadExtensionProvider('agora_video_process_extension');
-    }
-    await _engine.enableExtension(
-      provider: 'agora',
-      extension: 'beauty',
-    );
     await _engine.startPreview();
 
     setState(() {
@@ -131,11 +118,10 @@ class _State extends State<SetBeautyEffect> {
 
   void _joinChannel() async {
     await _engine.joinChannel(
-      token: config.token,
-      channelId: _channelIdController.text,
-      info: '',
-      uid: 0,
-    );
+        token: config.token,
+        channelId: _channelIdController.text,
+        uid: 0,
+        options: const ChannelMediaOptions());
   }
 
   _leaveChannel() async {
@@ -350,11 +336,23 @@ class _State extends State<SetBeautyEffect> {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
         if (!_isReadyPreview) return Container();
-        return AgoraVideoView(
-          controller: VideoViewController(
-            rtcEngine: _engine,
-            canvas: const VideoCanvas(uid: 0),
-          ),
+        return Stack(
+          children: [
+            AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: _engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: RemoteVideoViewsWidget(
+                key: keepRemoteVideoViewsKey,
+                rtcEngine: _engine,
+                channelId: _channelIdController.text,
+              ),
+            ),
+          ],
         );
       },
       actionsBuilder: (context, isLayoutHorizontal) {

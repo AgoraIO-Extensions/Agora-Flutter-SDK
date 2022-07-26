@@ -2,9 +2,9 @@
 
 import 'dart:io';
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -57,9 +57,6 @@ class _State extends State<StartRhythmPlayer> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -115,13 +112,6 @@ class _State extends State<StartRhythmPlayer> {
   }
 
   void _joinChannel() async {
-    await _engine.joinChannel(
-      token: config.token,
-      channelId: _controller0.text,
-      info: '',
-      uid: 0,
-    );
-
     final sound1 = await _getFilePath('dang.mp3');
     final sound2 = await _getFilePath('ding.mp3');
     await _engine.startRhythmPlayer(
@@ -130,6 +120,13 @@ class _State extends State<StartRhythmPlayer> {
       config: AgoraRhythmPlayerConfig(
           beatsPerMeasure: _beatsPerMeasure.toInt(),
           beatsPerMinute: _beatsPerMinute.toInt()),
+    );
+
+    await _engine.joinChannel(
+      token: config.token,
+      channelId: _controller0.text,
+      uid: 0,
+      options: const ChannelMediaOptions(publishRhythmPlayerTrack: true),
     );
   }
 

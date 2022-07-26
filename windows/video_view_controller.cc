@@ -1,4 +1,4 @@
-#include "include/agora_rtc_ng/video_view_controller.h"
+#include "include/agora_rtc_engine/video_view_controller.h"
 
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar.h>
@@ -30,7 +30,6 @@ VideoViewController::VideoViewController(
 
 VideoViewController::~VideoViewController()
 {
-    DeleteVideoFrameBufferManagerIfNeed();
 }
 
 void VideoViewController::HandleMethodCall(
@@ -38,76 +37,13 @@ void VideoViewController::HandleMethodCall(
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
 {
     auto method = method_call.method_name();
-    // if (!method_call.arguments())
-    // {
-    //     result->Error("Bad Arguments", "Null arguments received");
-    //     return;
-    // }
-    // if (method.compare("setData") == 0)
-    // {
-    //     auto arguments = std::get<flutter::EncodableMap>(*method_call.arguments());
-    //     auto data = std::get<flutter::EncodableMap>(
-    //         arguments[flutter::EncodableValue("data")]);
-    //     unsigned int uid = 0;
-    //     auto uid_int32 =
-    //         std::get_if<int32_t>(&data[flutter::EncodableValue("uid")]);
-    //     if (!uid_int32)
-    //     {
-    //         auto uid_int64 =
-    //             std::get_if<int64_t>(&data[flutter::EncodableValue("uid")]);
-    //         uid = (unsigned int)*uid_int64;
-    //     }
-    //     else
-    //     {
-    //         uid = (unsigned int)*uid_int32;
-    //     }
-    //     auto channel_id =
-    //         std::get_if<std::string>(&data[flutter::EncodableValue("channelId")]);
-    //     if (uid_ != uid)
-    //     {
-    //         renderer_->DisableVideoFrameBuffer(this);
-    //     }
-    //     uid_ = uid;
-    //     if (channel_id)
-    //     {
-    //         channel_id_ = channel_id->c_str();
-    //     }
-    //     else
-    //     {
-    //         channel_id_ = "";
-    //     }
 
-    //     IrisVideoFrameBuffer buffer(kVideoFrameTypeRGBA, this);
-    //     IrisVideoFrameBufferConfig config;
-
-    //     config.id = uid_;
-    //     if (config.id == 0)
-    //     {
-    //         config.type = IrisVideoSourceType::kVideoSourceTypeCameraPrimary;
-    //     }
-    //     else
-    //     {
-    //         config.type = IrisVideoSourceType::kVideoSourceTypeRemote;
-    //     }
-    //     if (!channel_id_.empty())
-    //     {
-    //         strcpy_s(config.key, channel_id_.c_str());
-    //     }
-    //     else
-    //     {
-    //         strcpy_s(config.key, "");
-    //     }
-    //     renderer_->EnableVideoFrameBuffer(buffer, &config);
-
-    //     result->Success();
-    // }
-    // else
     if (method.compare("attachVideoFrameBufferManager") == 0)
     {
         intptr_t irisRtcEnginePtr = std::get<intptr_t>(*method_call.arguments());
         IrisApiEngine *irisApiEngine = reinterpret_cast<IrisApiEngine *>(irisRtcEnginePtr);
         irisApiEngine->Attach(videoFrameBufferManager_);
-        result->Success(flutter::EncodableValue(true));
+        result->Success((intptr_t)videoFrameBufferManager_);
     }
     else if (method.compare("detachVideoFrameBufferManager") == 0)
     {
@@ -115,7 +51,7 @@ void VideoViewController::HandleMethodCall(
         IrisApiEngine *irisApiEngine = reinterpret_cast<IrisApiEngine *>(irisRtcEnginePtr);
         irisApiEngine->Detach(videoFrameBufferManager_);
 
-        // DeleteVideoFrameBufferManagerIfNeed();
+        DeleteVideoFrameBufferManagerIfNeed();
         result->Success(flutter::EncodableValue(true));
     }
     else if (method.compare("createTextureRender") == 0)

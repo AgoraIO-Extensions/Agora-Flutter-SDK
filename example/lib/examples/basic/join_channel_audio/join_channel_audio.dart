@@ -1,5 +1,5 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -55,9 +55,6 @@ class _State extends State<JoinChannelAudio> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -90,7 +87,7 @@ class _State extends State<JoinChannelAudio> {
       await Permission.microphone.request();
     }
 
-    await _engine.joinChannelWithOptions(
+    await _engine.joinChannel(
         token: config.token,
         channelId: _controller.text,
         uid: config.uid,

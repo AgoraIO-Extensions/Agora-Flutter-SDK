@@ -1,14 +1,12 @@
 PODS:
-  - agora_rtc_ng (6.0.0):
-    - AgoraIrisRTC_iOS (= 3.8.201)
-    - AgoraRtcEngine_Special_iOS (= 3.8.201.2)
+  - agora_rtc_engine (6.0.0-beta.2):
+    - AgoraIrisRTC_iOS (= 4.0.0-beta.8)
     - Flutter
-  - AgoraIrisEventFlutter_iOS_Beta (1.0.0)
-  - AgoraIrisRTC_iOS (3.8.201)
-  - AgoraRtcEngine_Special_iOS (3.8.201.2)
+  - AgoraIrisEventFlutter_iOS (1.4.0)
+  - AgoraIrisRTC_iOS (4.0.0-beta.8)
   - Flutter (1.0.0)
   - iris_event (0.0.1):
-    - AgoraIrisEventFlutter_iOS_Beta (= 1.0.0)
+    - AgoraIrisEventFlutter_iOS (= 1.4.0)
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
@@ -16,7 +14,8 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - agora_rtc_ng (from `.symlinks/plugins/agora_rtc_ng/ios`)
+  - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
+  - AgoraIrisRTC_iOS (= 4.0.0-beta.8)
   - Flutter (from `Flutter`)
   - iris_event (from `.symlinks/plugins/iris_event/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
@@ -24,13 +23,12 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AgoraIrisEventFlutter_iOS_Beta
+    - AgoraIrisEventFlutter_iOS
     - AgoraIrisRTC_iOS
-    - AgoraRtcEngine_Special_iOS
 
 EXTERNAL SOURCES:
-  agora_rtc_ng:
-    :path: ".symlinks/plugins/agora_rtc_ng/ios"
+  agora_rtc_engine:
+    :path: ".symlinks/plugins/agora_rtc_engine/ios"
   Flutter:
     :path: Flutter
   iris_event:
@@ -41,15 +39,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler/ios"
 
 SPEC CHECKSUMS:
-  agora_rtc_ng: e9fc0c0d931404d9299d983ff01be094126bcf4e
-  AgoraIrisEventFlutter_iOS_Beta: c3cd8b92b32dc8639aaff91d2eb6fffa82f66d6f
-  AgoraIrisRTC_iOS: adb6eef45f7af8e4c3b651226588fe81aa480e49
-  AgoraRtcEngine_Special_iOS: e3639c355d902bf0fbe326fa0db3d34c4c251d4d
+  agora_rtc_engine: 301b1b2a132a4bbf1dbaa8a5c28c3ce70eb1bade
+  AgoraIrisEventFlutter_iOS: a5ade1ea532633e8c26496f3eee87a3810ac92b0
+  AgoraIrisRTC_iOS: a31a2ee3fe268310a915dc8bdf4adeb7fbe27407
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  iris_event: 6ca3e57c8500e399d75620ea8ef4dd0b8defa1f0
+  iris_event: bc3ca64765be2fca08816b7231beee12e344a2b9
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
 
-PODFILE CHECKSUM: 1dbaa5392de1c6ae665e16581747c1a1a40eee13
+PODFILE CHECKSUM: 724104496007cc7571f676f12bcd4b06ba8974fa
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

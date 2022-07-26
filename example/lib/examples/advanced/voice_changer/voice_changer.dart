@@ -1,7 +1,7 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/advanced/voice_changer/voice_changer.config.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/examples/advanced/voice_changer/voice_changer.config.dart';
+import 'package:agora_rtc_engine_example/examples/log_sink.dart';
 import 'package:flutter/material.dart';
 
 /// VoiceChanger Example
@@ -44,9 +44,6 @@ class _State extends State<VoiceChanger> {
 
   AudioReverbType _selectedAudioReverbType =
       AudioReverbType.audioReverbDryLevel;
-
-  double _audioEffectPresetParam1 = 0;
-  double _audioEffectPresetParam2 = 0;
 
   final List<VoiceBeautifierPreset> _voiceBeautifierPresets = [
     VoiceBeautifierPreset.voiceBeautifierOff,
@@ -116,9 +113,6 @@ class _State extends State<VoiceChanger> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -149,8 +143,13 @@ class _State extends State<VoiceChanger> {
       },
     ));
 
+    await _engine.enableAudio();
+    await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
     await _engine.joinChannel(
-        token: config.token, channelId: _channelId.text, info: '', uid: 0);
+        token: config.token,
+        channelId: _channelId.text,
+        uid: 0,
+        options: const ChannelMediaOptions(autoSubscribeAudio: true));
   }
 
   DropdownButton _createDropdownButton<T>(
@@ -215,50 +214,6 @@ class _State extends State<VoiceChanger> {
             await _engine.setAudioEffectPreset(_selectedAudioEffectPreset);
           },
           child: const Text('setAudioEffectPreset'),
-        ),
-        Row(
-          children: [
-            const Text('param1'),
-            Slider(
-              value: _audioEffectPresetParam1,
-              min: 0.0,
-              max: 10.0,
-              divisions: 10,
-              label: 'param1 $_audioEffectPresetParam1',
-              onChanged: (double value) {
-                setState(() {
-                  _audioEffectPresetParam1 = value;
-                });
-              },
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const Text('param2'),
-            Slider(
-              value: _audioEffectPresetParam2,
-              min: 0.0,
-              max: 10.0,
-              divisions: 10,
-              label: 'param2 $_audioEffectPresetParam2',
-              onChanged: (double value) {
-                setState(() {
-                  _audioEffectPresetParam2 = value;
-                });
-              },
-            ),
-          ],
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            await _engine.setAudioEffectParameters(
-              preset: _selectedAudioEffectPreset,
-              param1: _audioEffectPresetParam1.toInt(),
-              param2: _audioEffectPresetParam2.toInt(),
-            );
-          },
-          child: const Text('setAudioEffectParameters'),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,31 +1,36 @@
-import 'package:agora_rtc_ng/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_log.g.dart';
 
-/// The output log level of the SDK.
+/// 日志输出等级。
+///
 @JsonEnum(alwaysCreate: true)
 enum LogLevel {
-  /// 0: Do not output any log information.
+  /// 0: 不输出任何日志。
   @JsonValue(0x0000)
   logLevelNone,
 
-  /// 0x0001: (Default) Output FATAL, ERROR, WARN, and INFO level log information. We recommend setting your log filter to this level.
+  /// 0x0001:（默认）输出FATAL、ERROR、WARN、INFO 级别的日志。我们推荐你将日志级别设为该等级。
   @JsonValue(0x0001)
   logLevelInfo,
 
-  /// 0x0002: Output FATAL, ERROR, and WARN level log information.
+  /// 0x0002: 仅输出FATAL、ERROR、WARN 级别的日志。
   @JsonValue(0x0002)
   logLevelWarn,
 
-  /// 0x0004: Output FATAL and ERROR level log information.
+  /// 0x0004: 仅输出FATAL、ERROR 级别的日志。
   @JsonValue(0x0004)
   logLevelError,
 
-  /// 0x0008: Output FATAL level log information.
+  /// 0x0008: 仅输出FATAL 级别的日志。
   @JsonValue(0x0008)
   logLevelFatal,
+
+  /// @nodoc
+  @JsonValue(0x0010)
+  logLevelApiCall,
 }
 
-/// Extensions functions of [LogLevel].
+/// @nodoc
 extension LogLevelExt on LogLevel {
   /// @nodoc
   static LogLevel fromValue(int value) {
@@ -38,30 +43,31 @@ extension LogLevelExt on LogLevel {
   }
 }
 
-/// The output log level of the SDK.
+/// 日志过滤等级。
+///
 @JsonEnum(alwaysCreate: true)
 enum LogFilterType {
-  /// 0: Do not output any log information.
+  /// 0: 不输出日志信息。
   @JsonValue(0)
   logFilterOff,
 
-  /// 0x080f: Output all log information. Set your log filter to this level if you want to get the most complete log file.
+  /// 0x080f: 输出所有 API 日志信息。如果你想获取最完整的日志，可以将日志级别设为该等级。
   @JsonValue(0x080f)
   logFilterDebug,
 
-  /// 0x000f: Output logFilterCritical, logFilterError, logFilterWarn, and logFilterInfo level log information. We recommend setting your log filter to this level.
+  /// 0x000f: 输出logFilterCritical、logFilterError、logFilterWarn 和logFilterInfo 级别的日志信息。我们推荐你将日志级别设为该等级。
   @JsonValue(0x000f)
   logFilterInfo,
 
-  /// 0x000e: Output logFilterCritical, logFilterError, and logFilterWarn level log information.
+  /// 0x000e: 输出logFilterCritical、logFilterError 和logFilterWarn 级别的日志信息。
   @JsonValue(0x000e)
   logFilterWarn,
 
-  /// 0x000c: Output logFilterCritical and logFilterError level log information.
+  /// 0x000c: 输出logFilterCritical 和logFilterError 级别的日志信息。
   @JsonValue(0x000c)
   logFilterError,
 
-  /// 0x0008: Output logFilterCritical level log information.
+  /// 0x0008: 输出logFilterCritical 级别的日志信息。
   @JsonValue(0x0008)
   logFilterCritical,
 
@@ -70,7 +76,7 @@ enum LogFilterType {
   logFilterMask,
 }
 
-/// Extensions functions of [LogFilterType].
+/// @nodoc
 extension LogFilterTypeExt on LogFilterType {
   /// @nodoc
   static LogFilterType fromValue(int value) {
@@ -92,22 +98,22 @@ const minLogSize = 128 * 1024;
 /// @nodoc
 const defaultLogSizeInKb = 1024;
 
-/// Configuration of Agora SDK log files.
-@JsonSerializable(explicitToJson: true)
+/// Agora SDK 日志文件的配置。
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LogConfig {
-  /// Construct the [LogConfig].
+  /// @nodoc
   const LogConfig({this.filePath, this.fileSizeInKB, this.level});
 
-  /// The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files.
+  /// 日志文件的完整路径。请确保你指定的目录存在且可写。你可以通过该参数修改日志文件名。
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// The size (KB) of an agorasdk.log file. The value range is [128,1024]. The default value is 1,024 KB. If you set fileSizeInKByte to a value lower than 128 KB, the SDK adjusts it to 128 KB. If you set fileSizeInKBytes to a value higher than 1,024 KB, the SDK adjusts it to 1,024 KB.
+  /// 单个agorasdk.log 日志文件的大小，单位为 KB，取值范围为 [128,1024]，默认值为 1,024 KB。 如果你将fileSizeInKByte 设为小于 128 KB，SDK 会自动调整到 128 KB；如果你将fileSizeInKByte 设为大于 1,024 KB，SDK 会自动调整到 1,024 KB。
   @JsonKey(name: 'fileSizeInKB')
   final int? fileSizeInKB;
 
-  /// The output level of the SDK log file. See LogLevel .
-  /// For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
+  /// Agora SDK 的日志输出等级，详见 LogLevel 。例如，如果你选择 WARN 级别，就可以看到在 FATAL、ERROR 和 WARN 级别上的所有日志信息。
   @JsonKey(name: 'level')
   final LogLevel? level;
 

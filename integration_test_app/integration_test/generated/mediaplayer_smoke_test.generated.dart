@@ -2,7 +2,7 @@
 
 // ignore_for_file: deprecated_member_use,constant_identifier_names
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
@@ -24,8 +24,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         mediaPlayerController.getMediaPlayerId();
@@ -59,8 +60,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String url = "hello";
@@ -84,6 +86,60 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
+    'openWithMediaSource',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        const String sourceUrl = "hello";
+        const String sourceUri = "hello";
+        const int sourceStartPos = 10;
+        const bool sourceAutoPlay = true;
+        const bool sourceEnableCache = true;
+        const bool sourceIsAgoraSource = true;
+        const bool sourceIsLiveSource = true;
+        const MediaSource source = MediaSource(
+          url: sourceUrl,
+          uri: sourceUri,
+          startPos: sourceStartPos,
+          autoPlay: sourceAutoPlay,
+          enableCache: sourceEnableCache,
+          isAgoraSource: sourceIsAgoraSource,
+          isLiveSource: sourceIsLiveSource,
+        );
+        await mediaPlayerController.openWithMediaSource(
+          source,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[openWithMediaSource] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[openWithMediaSource] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'play',
     (WidgetTester tester) async {
       app.main();
@@ -98,8 +154,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.play();
@@ -132,8 +189,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.pause();
@@ -166,8 +224,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.stop();
@@ -200,8 +259,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.resume();
@@ -234,8 +294,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int newPos = 10;
@@ -271,8 +332,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int pitch = 10;
@@ -309,8 +371,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getDuration();
@@ -343,8 +406,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getPlayPosition();
@@ -378,8 +442,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getStreamCount();
@@ -413,8 +478,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int index = 10;
@@ -451,8 +517,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int loopCount = 10;
@@ -466,150 +533,6 @@ void mediaPlayerControllerSmokeTestCases() {
         expect(e is AgoraRtcException, true);
         debugPrint(
             '[setLoopCount] errorcode: ${(e as AgoraRtcException).code}');
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'muteAudio',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = await MediaPlayerController.create(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-
-      try {
-        const bool audioMute = true;
-        await mediaPlayerController.muteAudio(
-          audioMute,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[muteAudio] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint('[muteAudio] errorcode: ${(e as AgoraRtcException).code}');
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'isAudioMuted',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = await MediaPlayerController.create(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-
-      try {
-        await mediaPlayerController.isAudioMuted();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[isAudioMuted] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint(
-            '[isAudioMuted] errorcode: ${(e as AgoraRtcException).code}');
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'muteVideo',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = await MediaPlayerController.create(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-
-      try {
-        const bool videoMute = true;
-        await mediaPlayerController.muteVideo(
-          videoMute,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[muteVideo] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint('[muteVideo] errorcode: ${(e as AgoraRtcException).code}');
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'isVideoMuted',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = await MediaPlayerController.create(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-
-      try {
-        await mediaPlayerController.isVideoMuted();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[isVideoMuted] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint(
-            '[isVideoMuted] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await mediaPlayerController.dispose();
@@ -633,8 +556,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int speed = 10;
@@ -671,8 +595,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int index = 10;
@@ -709,8 +634,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String filename = "hello";
@@ -747,8 +673,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int index = 10;
@@ -785,8 +712,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String url = "hello";
@@ -823,8 +751,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getState();
@@ -857,13 +786,14 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
-        const bool mute = true;
+        const bool muted = true;
         await mediaPlayerController.mute(
-          mute,
+          muted,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -894,8 +824,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getMute();
@@ -928,8 +859,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int volume = 10;
@@ -966,8 +898,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getPlayoutVolume();
@@ -1001,8 +934,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int volume = 10;
@@ -1039,8 +973,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getPublishSignalVolume();
@@ -1074,8 +1009,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const RenderModeType renderMode = RenderModeType.renderModeHidden;
@@ -1112,14 +1048,15 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
               (MediaPlayerState state, MediaPlayerError ec) {},
-          onPositionChanged: (int position) {},
+          onPositionChanged: (int positionMs) {},
           onPlayerEvent:
               (MediaPlayerEvent eventCode, int elapsedTime, String message) {},
           onMetaData: (Uint8List data, int length) {},
@@ -1164,14 +1101,15 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
               (MediaPlayerState state, MediaPlayerError ec) {},
-          onPositionChanged: (int position) {},
+          onPositionChanged: (int positionMs) {},
           onPlayerEvent:
               (MediaPlayerEvent eventCode, int elapsedTime, String message) {},
           onMetaData: (Uint8List data, int length) {},
@@ -1202,6 +1140,94 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
+    'registerMediaPlayerAudioSpectrumObserver',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final AudioSpectrumObserver observer = AudioSpectrumObserver(
+          onLocalAudioSpectrum: (AudioSpectrumData data) {},
+          onRemoteAudioSpectrum: (List spectrums, int spectrumNumber) {},
+        );
+        const int intervalInMS = 10;
+        mediaPlayerController.registerMediaPlayerAudioSpectrumObserver(
+          observer: observer,
+          intervalInMS: intervalInMS,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[registerMediaPlayerAudioSpectrumObserver] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[registerMediaPlayerAudioSpectrumObserver] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'unregisterMediaPlayerAudioSpectrumObserver',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final AudioSpectrumObserver observer = AudioSpectrumObserver(
+          onLocalAudioSpectrum: (AudioSpectrumData data) {},
+          onRemoteAudioSpectrum: (List spectrums, int spectrumNumber) {},
+        );
+        mediaPlayerController.unregisterMediaPlayerAudioSpectrumObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[unregisterMediaPlayerAudioSpectrumObserver] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[unregisterMediaPlayerAudioSpectrumObserver] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'setAudioDualMonoMode',
     (WidgetTester tester) async {
       app.main();
@@ -1216,8 +1242,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const AudioDualMonoMode mode = AudioDualMonoMode.audioDualMonoStereo;
@@ -1254,8 +1281,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getPlayerSdkVersion();
@@ -1289,8 +1317,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getPlaySrc();
@@ -1323,8 +1352,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String src = "hello";
@@ -1363,8 +1393,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getAgoraCDNLineCount();
@@ -1398,8 +1429,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const int index = 10;
@@ -1436,8 +1468,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         await mediaPlayerController.getCurrentAgoraCDNIndex();
@@ -1471,8 +1504,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const bool enable = true;
@@ -1509,8 +1543,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String token = "hello";
@@ -1549,8 +1584,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String src = "hello";
@@ -1589,8 +1625,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String src = "hello";
@@ -1628,8 +1665,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String src = "hello";
@@ -1667,8 +1705,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String src = "hello";
@@ -1705,8 +1744,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String src = "hello";
@@ -1742,8 +1782,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const double paramsSpeakerAzimuth = 10.0;
@@ -1752,6 +1793,7 @@ void mediaPlayerControllerSmokeTestCases() {
         const int paramsSpeakerOrientation = 10;
         const bool paramsEnableBlur = true;
         const bool paramsEnableAirAbsorb = true;
+        const double paramsSpeakerAttenuation = 10.0;
         const SpatialAudioParams params = SpatialAudioParams(
           speakerAzimuth: paramsSpeakerAzimuth,
           speakerElevation: paramsSpeakerElevation,
@@ -1759,6 +1801,7 @@ void mediaPlayerControllerSmokeTestCases() {
           speakerOrientation: paramsSpeakerOrientation,
           enableBlur: paramsEnableBlur,
           enableAirAbsorb: paramsEnableAirAbsorb,
+          speakerAttenuation: paramsSpeakerAttenuation,
         );
         await mediaPlayerController.setSpatialAudioParams(
           params,
@@ -1770,6 +1813,215 @@ void mediaPlayerControllerSmokeTestCases() {
         expect(e is AgoraRtcException, true);
         debugPrint(
             '[setSpatialAudioParams] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'setSoundPositionParams',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        const double pan = 10.0;
+        const double gain = 10.0;
+        await mediaPlayerController.setSoundPositionParams(
+          pan: pan,
+          gain: gain,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setSoundPositionParams] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[setSoundPositionParams] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'registerAudioFrameObserver',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerAudioFrameObserver observer =
+            MediaPlayerAudioFrameObserver(
+          onFrame: (AudioPcmFrame frame) {},
+        );
+        mediaPlayerController.registerAudioFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[registerAudioFrameObserver] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[registerAudioFrameObserver] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'unregisterAudioFrameObserver',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerAudioFrameObserver observer =
+            MediaPlayerAudioFrameObserver(
+          onFrame: (AudioPcmFrame frame) {},
+        );
+        mediaPlayerController.unregisterAudioFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[unregisterAudioFrameObserver] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[unregisterAudioFrameObserver] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'registerVideoFrameObserver',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerVideoFrameObserver observer =
+            MediaPlayerVideoFrameObserver(
+          onFrame: (VideoFrame frame) {},
+        );
+        mediaPlayerController.registerVideoFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[registerVideoFrameObserver] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[registerVideoFrameObserver] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'unregisterVideoFrameObserver',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerVideoFrameObserver observer =
+            MediaPlayerVideoFrameObserver(
+          onFrame: (VideoFrame frame) {},
+        );
+        mediaPlayerController.unregisterVideoFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[unregisterVideoFrameObserver] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[unregisterVideoFrameObserver] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await mediaPlayerController.dispose();
@@ -1793,8 +2045,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String key = "hello";
@@ -1833,8 +2086,9 @@ void mediaPlayerControllerSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaPlayerController = await MediaPlayerController.create(
+      final mediaPlayerController = MediaPlayerController(
           rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
 
       try {
         const String key = "hello";
@@ -1858,3 +2112,4 @@ void mediaPlayerControllerSmokeTestCases() {
 //  skip: !(),
   );
 }
+

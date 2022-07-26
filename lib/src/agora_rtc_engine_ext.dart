@@ -1,44 +1,47 @@
-import 'package:agora_rtc_ng/src/impl/agora_rtc_engine_impl.dart';
+import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'agora_media_player.dart';
 import 'agora_rtc_engine.dart';
 import 'agora_rtc_engine_ex.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
+import 'impl/media_player_impl.dart';
 
-/// Extension for [RtcEngineExt]
+/// @nodoc
 extension RtcEngineExt on RtcEngine {
-  /// Obtain the actual absolute path of the Asset through the relative path of the Asset.
-  ///
-  /// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.None
-  ///
-  /// ## Return
-  /// The actual path of the Asset.
+  /// @nodoc
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     final p = await impl.engineMethodChannel
         .invokeMethod<String>('getAssetAbsolutePath', assetPath);
     return p;
   }
+
+  /// @nodoc
+  MediaPlayerCacheManager getMediaPlayerCacheManager() {
+    return MediaPlayerCacheManagerImpl.create(this);
+  }
 }
 
-/// Exceptions are thrown when [RtcEngine] and releative class call error.
+/// 错误码及错误描述。
+///
 class AgoraRtcException implements Exception {
-  /// Construct the [AgoraRtcException]
+  /// @nodoc
   AgoraRtcException({required this.code, this.message});
 
-  /// The error code, see [ErrorCodeType]
+  /// 错误码，详见 ErrorCodeType 。
   final int code;
 
-  /// The error description of the [code].
+  /// 错误描述。
   final String? message;
 
   @override
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-/// Creates the RtcEngineEx object.
-/// Currently, the Agora RTC SDK v4.0.0 supports creating only one RtcEngineEx object for an app.
+/// 创建RtcEngine 对象。
+/// 目前 Agora RTC SDK v4.0.0 只支持每个 app 创建一个RtcEngine 对象。
 ///
-/// ## Return
-/// RtcEngineEx object.
+/// Returns
+/// RtcEngine 对象。
 RtcEngine createAgoraRtcEngine() {
   return impl.RtcEngineImpl.create();
 }

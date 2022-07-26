@@ -1,4 +1,4 @@
-import 'package:agora_rtc_ng/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'call_api_impl_params_json.g.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
@@ -13,6 +13,19 @@ class VideoDeviceManagerGetDeviceJson {
       _$VideoDeviceManagerGetDeviceJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$VideoDeviceManagerGetDeviceJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class VideoDeviceManagerGetCapabilityJson {
+  const VideoDeviceManagerGetCapabilityJson(this.capability);
+
+  @JsonKey(name: 'capability')
+  final VideoFormat capability;
+  factory VideoDeviceManagerGetCapabilityJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$VideoDeviceManagerGetCapabilityJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$VideoDeviceManagerGetCapabilityJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -145,10 +158,10 @@ class MediaPlayerGetStreamInfoJson {
 
 @JsonSerializable(explicitToJson: true)
 class MediaPlayerGetMuteJson {
-  const MediaPlayerGetMuteJson(this.mute);
+  const MediaPlayerGetMuteJson(this.muted);
 
-  @JsonKey(name: 'mute')
-  final bool mute;
+  @JsonKey(name: 'muted')
+  final bool muted;
   factory MediaPlayerGetMuteJson.fromJson(Map<String, dynamic> json) =>
       _$MediaPlayerGetMuteJsonFromJson(json);
   Map<String, dynamic> toJson() => _$MediaPlayerGetMuteJsonToJson(this);
@@ -177,6 +190,19 @@ class MediaPlayerGetPublishSignalVolumeJson {
       _$MediaPlayerGetPublishSignalVolumeJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$MediaPlayerGetPublishSignalVolumeJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerCacheManagerGetCacheDirJson {
+  const MediaPlayerCacheManagerGetCacheDirJson(this.path);
+
+  @JsonKey(name: 'path')
+  final String path;
+  factory MediaPlayerCacheManagerGetCacheDirJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerCacheManagerGetCacheDirJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerCacheManagerGetCacheDirJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

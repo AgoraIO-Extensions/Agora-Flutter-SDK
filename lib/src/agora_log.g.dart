@@ -14,11 +14,20 @@ LogConfig _$LogConfigFromJson(Map<String, dynamic> json) => LogConfig(
       level: $enumDecodeNullable(_$LogLevelEnumMap, json['level']),
     );
 
-Map<String, dynamic> _$LogConfigToJson(LogConfig instance) => <String, dynamic>{
-      'filePath': instance.filePath,
-      'fileSizeInKB': instance.fileSizeInKB,
-      'level': _$LogLevelEnumMap[instance.level],
-    };
+Map<String, dynamic> _$LogConfigToJson(LogConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('filePath', instance.filePath);
+  writeNotNull('fileSizeInKB', instance.fileSizeInKB);
+  writeNotNull('level', _$LogLevelEnumMap[instance.level]);
+  return val;
+}
 
 const _$LogLevelEnumMap = {
   LogLevel.logLevelNone: 0,
@@ -26,6 +35,7 @@ const _$LogLevelEnumMap = {
   LogLevel.logLevelWarn: 2,
   LogLevel.logLevelError: 4,
   LogLevel.logLevelFatal: 8,
+  LogLevel.logLevelApiCall: 16,
 };
 
 const _$LogFilterTypeEnumMap = {
