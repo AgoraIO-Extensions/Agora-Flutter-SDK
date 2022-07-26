@@ -1,7 +1,8 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:agora_rtc_engine_example/components/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
 
 /// ChannelMediaRelay Example
@@ -13,11 +14,10 @@ class ChannelMediaRelay extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ChannelMediaRelay> {
+class _State extends State<ChannelMediaRelay> with KeepRemoteVideoViewsMixin {
   late final RtcEngine _engine;
   bool _isReadyPreview = false;
   bool isJoined = false;
-  final int _myUid = 1000;
   int? remoteUid;
   bool isRelaying = false;
   late final TextEditingController _channelMediaRelayController;
@@ -50,9 +50,6 @@ class _State extends State<ChannelMediaRelay> {
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -106,6 +103,9 @@ class _State extends State<ChannelMediaRelay> {
             });
             break;
           default:
+            setState(() {
+              isRelaying = false;
+            });
             break;
         }
       },
@@ -113,6 +113,7 @@ class _State extends State<ChannelMediaRelay> {
 
     // enable video module and set up video encoding configs
     await _engine.enableVideo();
+    await _engine.startPreview();
 
     // make this room live broadcasting room
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
@@ -132,8 +133,8 @@ class _State extends State<ChannelMediaRelay> {
     await _engine.joinChannel(
         token: config.token,
         channelId: _channelController.text,
-        info: '',
-        uid: _myUid);
+        uid: 0,
+        options: const ChannelMediaOptions());
 
     setState(() {
       isJoined = true;
@@ -141,7 +142,8 @@ class _State extends State<ChannelMediaRelay> {
   }
 
   void _leaveChannel() async {
-    await _engine.stopChannelMediaRelay();
+    await _onPressRelayOrStop();
+
     await _engine.leaveChannel();
 
     setState(() {
@@ -149,9 +151,12 @@ class _State extends State<ChannelMediaRelay> {
     });
   }
 
-  _onPressRelayOrStop() async {
+  Future<void> _onPressRelayOrStop() async {
     if (isRelaying) {
       await _engine.stopChannelMediaRelay();
+      setState(() {
+        isRelaying = !isRelaying;
+      });
       return;
     }
     if (_channelMediaRelayController.text.isEmpty) {
@@ -177,7 +182,24 @@ class _State extends State<ChannelMediaRelay> {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
         if (!_isReadyPreview) return Container();
-        return _renderVideo(isLayoutHorizontal);
+        return Stack(
+          children: [
+            AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: _engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: RemoteVideoViewsWidget(
+                key: keepRemoteVideoViewsKey,
+                rtcEngine: _engine,
+                channelId: _channelController.text,
+              ),
+            )
+          ],
+        );
       },
       actionsBuilder: (context, isLayoutHorizontal) {
         return Column(
@@ -217,80 +239,5 @@ class _State extends State<ChannelMediaRelay> {
         );
       },
     );
-  }
-
-  Widget _renderVideo(bool isLayoutHorizontal) {
-    if (isLayoutHorizontal) {
-      return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: AgoraVideoView(
-                  controller: VideoViewController(
-                    rtcEngine: _engine,
-                    canvas: const VideoCanvas(uid: 0),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: remoteUid != null
-                  ? AspectRatio(
-                      aspectRatio: 1,
-                      child: AgoraVideoView(
-                        controller: VideoViewController.remote(
-                          rtcEngine: _engine,
-                          canvas: VideoCanvas(uid: remoteUid),
-                          connection:
-                              RtcConnection(channelId: _channelController.text),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      color: Colors.grey[200],
-                      child: const SizedBox.expand(
-                        child: Center(
-                          child: Text('The remote relay view'),
-                        ),
-                      ),
-                    ),
-            ),
-          ]);
-    }
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: AgoraVideoView(
-              controller: VideoViewController(
-                rtcEngine: _engine,
-                canvas: const VideoCanvas(uid: 0),
-              ),
-            ),
-          ),
-          Expanded(
-            child: remoteUid != null
-                ? AgoraVideoView(
-                    controller: VideoViewController.remote(
-                      rtcEngine: _engine,
-                      canvas: VideoCanvas(uid: remoteUid),
-                      connection:
-                          RtcConnection(channelId: _channelController.text),
-                    ),
-                  )
-                : Container(
-                    color: Colors.grey[200],
-                    child: const SizedBox.expand(
-                      child: Center(
-                        child: Text('The remote relay view'),
-                      ),
-                    ),
-                  ),
-          ),
-        ]);
   }
 }

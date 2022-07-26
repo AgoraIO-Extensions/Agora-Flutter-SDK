@@ -15,13 +15,21 @@ InputSeiData _$InputSeiDataFromJson(Map<String, dynamic> json) => InputSeiData(
       dataSize: json['data_size'] as int?,
     );
 
-Map<String, dynamic> _$InputSeiDataToJson(InputSeiData instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'timestamp': instance.timestamp,
-      'frame_index': instance.frameIndex,
-      'data_size': instance.dataSize,
-    };
+Map<String, dynamic> _$InputSeiDataToJson(InputSeiData instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', instance.type);
+  writeNotNull('timestamp', instance.timestamp);
+  writeNotNull('frame_index', instance.frameIndex);
+  writeNotNull('data_size', instance.dataSize);
+  return val;
+}
 
 const _$StreamingSrcErrEnumMap = {
   StreamingSrcErr.streamingSrcErrNone: 0,

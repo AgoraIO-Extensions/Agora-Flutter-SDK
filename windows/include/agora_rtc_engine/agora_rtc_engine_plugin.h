@@ -14,7 +14,7 @@ extern "C"
 {
 #endif
 
-    FLUTTER_PLUGIN_EXPORT void AgoraRtcNgPluginRegisterWithRegistrar(
+    FLUTTER_PLUGIN_EXPORT void AgoraRtcEnginePluginRegisterWithRegistrar(
         FlutterDesktopPluginRegistrarRef registrar);
 
 #if defined(__cplusplus)

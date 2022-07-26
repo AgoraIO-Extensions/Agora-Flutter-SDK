@@ -5,16 +5,16 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Project-level configuration.
-set(PROJECT_NAME "agora_rtc_ng")
+set(PROJECT_NAME "agora_rtc_engine")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 # This value is used when generating builds using this plugin, so it must
 # not be changed
-set(PLUGIN_NAME "agora_rtc_ng_plugin")
+set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_3.8.201_DCG_Windows_Video_20220704_1236.zip")
-set(IRIS_SDK_DOWNLOAD_NAME "iris_3.8.201_DCG_Windows_20220704_1236")
-set(RTC_SDK_DOWNLOAD_NAME "Agora_Native_SDK_for_Windows_x64_rel.v3.8.201.2_65935_20220704_1632_full_216486")
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.0.0_DCG_Windows_Video_20220910_0326.zip")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_4.0.0_DCG_Windows_20220910_0326")
+set(RTC_SDK_DOWNLOAD_NAME "Agora_Native_SDK_for_Windows_FULL")
 set(IRIS_SDK_VERSION "v3_6_2_fix.1")
 
 # Add this project's cmake/ directory to the module path.
@@ -25,35 +25,25 @@ set(IRIS_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/iris")
 set(IRIS_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/x64")
 set(IRIS_SDK_BIN_PATH "${IRIS_SDK_PATH}/Release")
 set(RTC_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/DCG")
-set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/${RTC_SDK_DOWNLOAD_NAME}/rtc/sdk")
+set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/${RTC_SDK_DOWNLOAD_NAME}/sdk/x86_64")
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
     # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
     include(DownloadSDK)
-    DOWNLOAD_SDK_BY_URL("${IRIS_SDK_DOWNLOAD_URL}" "${IRIS_DOWNLOAD_PATH}")   
+    DOWNLOAD_SDK_BY_URL("${IRIS_SDK_DOWNLOAD_URL}" "${IRIS_DOWNLOAD_PATH}")
 endif()
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
-  "agora_rtc_ng_plugin.cpp"
-  # "agora_rtc_ng_plugin.h"
-  # "texture_render.h"
+  "agora_rtc_engine_plugin.cpp"
   "texture_render.cc"
-  # "video_view_controller.h"
   "video_view_controller.cc"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
 # on PLUGIN_NAME above).
 add_library(${PLUGIN_NAME} SHARED
-  # "include/agora_rtc_ng/agora_rtc_ng_plugin_c_api.h"
-  # "agora_rtc_ng_plugin_c_api.cpp"
-  "agora_rtc_ng_plugin.cpp"
-  # "agora_rtc_ng_plugin.h"
-  # "texture_render.h"
-  "texture_render.cc"
-  # "video_view_controller.h"
-  "video_view_controller.cc"
+  ${PLUGIN_SOURCES}
 )
 
 # Apply a standard set of build settings that are configured in the
@@ -75,9 +65,9 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   PRIVATE
   "${IRIS_SDK_PATH}/include"
   )
-target_link_libraries(${PLUGIN_NAME} PRIVATE 
-  flutter 
-  flutter_wrapper_plugin 
+target_link_libraries(${PLUGIN_NAME} PRIVATE
+  flutter
+  flutter_wrapper_plugin
   ${IRIS_SDK_BIN_PATH}/AgoraRtcWrapper.lib)
 
 set(BUNDLED_LIBRARIES
@@ -87,21 +77,21 @@ set(BUNDLED_LIBRARIES
 file(GLOB RTC_DLLS ${RTC_SDK_BIN_PATH}/*.dll)
 foreach (RTC_DLL ${RTC_DLLS})
     message("Add bundled library: ${RTC_DLL}")
-    
+
     list(APPEND BUNDLED_LIBRARIES ${RTC_DLL})
 endforeach (RTC_DLL ${RTC_DLLS})
 
 file(GLOB RTC_LIBS ${RTC_SDK_BIN_PATH}/*.lib)
 foreach (RTC_LIB ${RTC_LIBS})
     message("Add bundled library: ${RTC_LIB}")
-    
+
     list(APPEND BUNDLED_LIBRARIES ${RTC_LIB})
 endforeach (RTC_LIB ${RTC_LIBS})
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(agora_rtc_ng_bundled_libraries
+set(agora_rtc_engine_bundled_libraries
   ${BUNDLED_LIBRARIES}
   PARENT_SCOPE
 )

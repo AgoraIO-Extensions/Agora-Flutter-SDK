@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,12 +49,13 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
 
         @Override
         public View provide(Context context) {
-            return new SurfaceView(context);
+            return new TextureView(context);
         }
     }
 
     static class AgoraPlatformView implements PlatformView, MethodChannel.MethodCallHandler {
         private View innerView;
+        private FrameLayout parentView;
 
         private final MethodChannel methodChannel;
 
@@ -68,6 +70,8 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
             methodChannel = new MethodChannel(messenger, "agora_rtc_ng/" + viewType + "_" + viewId);
             methodChannel.setMethodCallHandler(this);
             innerView = viewProvider.provide(context);
+            parentView = new FrameLayout(context);
+            parentView.addView(innerView);
 
             platformViewPtr = IrisApiEngine.GetJObjectAddress(innerView);
         }
@@ -81,6 +85,7 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
                     IrisApiEngine.FreeJObjectByAddress(platformViewPtr);
                     platformViewPtr = 0;
                 }
+                parentView.removeAllViews();
                 innerView = null;
                 result.success(0);
             }
@@ -89,7 +94,7 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
         @Nullable
         @Override
         public View getView() {
-            return innerView;
+            return parentView;
         }
 
         @Override

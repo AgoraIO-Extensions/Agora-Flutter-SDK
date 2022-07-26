@@ -64,6 +64,9 @@ flutter {
 }
 
 dependencies {
-
+    def devFile = project.file("${rootProject.projectDir.getParentFile().parentFile}/android/.plugin_dev")
+    if (devFile.exists()) {
+        implementation fileTree(dir: "${rootProject.projectDir.getParentFile().parentFile}/android/libs", include: ["*.aar"])
+    }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

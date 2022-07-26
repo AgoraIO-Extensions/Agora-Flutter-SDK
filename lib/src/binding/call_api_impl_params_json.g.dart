@@ -20,6 +20,18 @@ Map<String, dynamic> _$VideoDeviceManagerGetDeviceJsonToJson(
       'deviceIdUTF8': instance.deviceIdUTF8,
     };
 
+VideoDeviceManagerGetCapabilityJson
+    _$VideoDeviceManagerGetCapabilityJsonFromJson(Map<String, dynamic> json) =>
+        VideoDeviceManagerGetCapabilityJson(
+          VideoFormat.fromJson(json['capability'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$VideoDeviceManagerGetCapabilityJsonToJson(
+        VideoDeviceManagerGetCapabilityJson instance) =>
+    <String, dynamic>{
+      'capability': instance.capability.toJson(),
+    };
+
 RtcEngineGetExtensionPropertyJson _$RtcEngineGetExtensionPropertyJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetExtensionPropertyJson(
@@ -157,13 +169,13 @@ Map<String, dynamic> _$MediaPlayerGetStreamInfoJsonToJson(
 MediaPlayerGetMuteJson _$MediaPlayerGetMuteJsonFromJson(
         Map<String, dynamic> json) =>
     MediaPlayerGetMuteJson(
-      json['mute'] as bool,
+      json['muted'] as bool,
     );
 
 Map<String, dynamic> _$MediaPlayerGetMuteJsonToJson(
         MediaPlayerGetMuteJson instance) =>
     <String, dynamic>{
-      'mute': instance.mute,
+      'muted': instance.muted,
     };
 
 MediaPlayerGetPlayoutVolumeJson _$MediaPlayerGetPlayoutVolumeJsonFromJson(
@@ -189,6 +201,19 @@ Map<String, dynamic> _$MediaPlayerGetPublishSignalVolumeJsonToJson(
         MediaPlayerGetPublishSignalVolumeJson instance) =>
     <String, dynamic>{
       'volume': instance.volume,
+    };
+
+MediaPlayerCacheManagerGetCacheDirJson
+    _$MediaPlayerCacheManagerGetCacheDirJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerCacheManagerGetCacheDirJson(
+          json['path'] as String,
+        );
+
+Map<String, dynamic> _$MediaPlayerCacheManagerGetCacheDirJsonToJson(
+        MediaPlayerCacheManagerGetCacheDirJson instance) =>
+    <String, dynamic>{
+      'path': instance.path,
     };
 
 RtcEngineExGetUserInfoByUserAccountExJson

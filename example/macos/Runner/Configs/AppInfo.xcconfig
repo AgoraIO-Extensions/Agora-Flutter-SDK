@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = agora_rtc_ng_example
+PRODUCT_NAME = agora_rtc_engine_example
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcFlutterExample
+PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2022 io.agora. All rights reserved.

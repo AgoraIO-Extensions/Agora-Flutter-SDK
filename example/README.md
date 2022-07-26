@@ -1,8 +1,8 @@
-# agora_rtc_ng_example
+# agora_rtc_engine_example
 
 ## Overview
 
-This project is an open-source demo that will show you different scenes on how to integrate [agora_rtc_ng](https://pub.dev/packages/agora_rtc_ng) APIs into your project.
+This project is an open-source demo that will show you different scenes on how to integrate [agora_rtc_engine](https://pub.dev/packages/agora_rtc_engine) APIs into your project.
 
 Any scene of this project can run successfully alone.
 
@@ -67,4 +67,4 @@ Any scene of this project can run successfully alone.
 
 4. Make the project and run the app in the simulator or connected physical device.
 
-You are all set! Feel free to play with this sample project and explore features of the [agora_rtc_ng](https://pub.dev/packages/agora_rtc_ng).
+You are all set! Feel free to play with this sample project and explore features of the [agora_rtc_engine](https://pub.dev/packages/agora_rtc_engine).

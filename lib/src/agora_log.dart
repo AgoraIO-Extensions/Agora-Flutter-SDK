@@ -1,7 +1,8 @@
-import 'package:agora_rtc_ng/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_log.g.dart';
 
 /// The output log level of the SDK.
+///
 @JsonEnum(alwaysCreate: true)
 enum LogLevel {
   /// 0: Do not output any log information.
@@ -23,9 +24,13 @@ enum LogLevel {
   /// 0x0008: Output FATAL level log information.
   @JsonValue(0x0008)
   logLevelFatal,
+
+  /// @nodoc
+  @JsonValue(0x0010)
+  logLevelApiCall,
 }
 
-/// Extensions functions of [LogLevel].
+/// @nodoc
 extension LogLevelExt on LogLevel {
   /// @nodoc
   static LogLevel fromValue(int value) {
@@ -39,6 +44,7 @@ extension LogLevelExt on LogLevel {
 }
 
 /// The output log level of the SDK.
+///
 @JsonEnum(alwaysCreate: true)
 enum LogFilterType {
   /// 0: Do not output any log information.
@@ -70,7 +76,7 @@ enum LogFilterType {
   logFilterMask,
 }
 
-/// Extensions functions of [LogFilterType].
+/// @nodoc
 extension LogFilterTypeExt on LogFilterType {
   /// @nodoc
   static LogFilterType fromValue(int value) {
@@ -93,9 +99,10 @@ const minLogSize = 128 * 1024;
 const defaultLogSizeInKb = 1024;
 
 /// Configuration of Agora SDK log files.
-@JsonSerializable(explicitToJson: true)
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LogConfig {
-  /// Construct the [LogConfig].
+  /// @nodoc
   const LogConfig({this.filePath, this.fileSizeInKB, this.level});
 
   /// The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files.
@@ -106,8 +113,7 @@ class LogConfig {
   @JsonKey(name: 'fileSizeInKB')
   final int? fileSizeInKB;
 
-  /// The output level of the SDK log file. See LogLevel .
-  /// For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
+  /// The output level of the SDK log file. See LogLevel .For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
   @JsonKey(name: 'level')
   final LogLevel? level;
 

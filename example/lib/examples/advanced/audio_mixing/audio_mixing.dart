@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,7 +29,6 @@ class _AudioMixingState extends State<AudioMixing> {
 
   bool _isStartedAudioMixing = false;
   bool _loopback = false;
-  bool _replace = false;
   double _cycle = 1.0;
   double _startPos = 1000;
 
@@ -53,9 +52,6 @@ class _AudioMixingState extends State<AudioMixing> {
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -77,7 +73,7 @@ class _AudioMixingState extends State<AudioMixing> {
         logSink.log('[onAudioMixingFinished]');
       },
       onAudioMixingStateChanged:
-          (AudioMixingStateType state, AudioMixingErrorType errorCode) {
+          (AudioMixingStateType state, AudioMixingReasonType errorCode) {
         logSink.log(
             '[onAudioMixingStateChanged] state:${state.toString()}, errorCode: ${errorCode.toString()}}');
       },
@@ -99,18 +95,17 @@ class _AudioMixingState extends State<AudioMixing> {
   }
 
   Future<void> _joinChannel() async {
-    await _engine.joinChannel(
-        token: config.token,
+    _engine.joinChannel(
+        token: '',
         channelId: _controller.text,
-        info: '',
-        uid: config.uid);
+        uid: 0,
+        options: const ChannelMediaOptions());
   }
 
   Future<void> _leaveChannel() async {
     _stopAudioMixing();
     _isStartedAudioMixing = false;
     _loopback = false;
-    _replace = false;
     _cycle = 1.0;
     _startPos = 1000;
     await _engine.leaveChannel();
@@ -133,7 +128,6 @@ class _AudioMixingState extends State<AudioMixing> {
     await _engine.startAudioMixing(
       filePath: p,
       loopback: _loopback,
-      replace: _replace,
       cycle: _cycle.toInt(),
       startPos: _startPos.toInt(),
     );
@@ -187,21 +181,6 @@ class _AudioMixingState extends State<AudioMixing> {
                       : (changed) {
                           setState(() {
                             _loopback = changed;
-                          });
-                        },
-                  activeTrackColor: Colors.grey[350],
-                  activeColor: Colors.white,
-                )
-              ]),
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                const Text('replace: '),
-                Switch(
-                  value: _replace,
-                  onChanged: _isStartedAudioMixing
-                      ? null
-                      : (changed) {
-                          setState(() {
-                            _replace = changed;
                           });
                         },
                   activeTrackColor: Colors.grey[350],

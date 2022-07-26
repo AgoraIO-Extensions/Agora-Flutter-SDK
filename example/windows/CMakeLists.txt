@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(agora_rtc_ng_example LANGUAGES CXX)
+project(agora_rtc_engine_example LANGUAGES CXX)
 
-set(BINARY_NAME "agora_rtc_ng_example")
+set(BINARY_NAME "agora_rtc_engine_example")
 
 cmake_policy(SET CMP0063 NEW)
 

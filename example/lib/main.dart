@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'examples/advanced/index.dart';
 import 'examples/basic/index.dart';
 import 'config/agora.config.dart' as config;
-import 'examples/log_sink.dart';
+import 'components/log_sink.dart';
 
 void main() => runApp(const MyApp());
 

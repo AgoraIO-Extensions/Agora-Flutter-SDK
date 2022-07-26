@@ -1,16 +1,13 @@
-import 'package:agora_rtc_ng/src/impl/agora_rtc_engine_impl.dart';
+import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'agora_media_player.dart';
 import 'agora_rtc_engine.dart';
 import 'agora_rtc_engine_ex.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
+import 'impl/media_player_impl.dart';
 
-/// Extension for [RtcEngineExt]
+/// @nodoc
 extension RtcEngineExt on RtcEngine {
-  /// Obtain the actual absolute path of the Asset through the relative path of the Asset.
-  ///
-  /// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.None
-  ///
-  /// ## Return
-  /// The actual path of the Asset.
+  /// @nodoc
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     final p = await impl.engineMethodChannel
@@ -19,31 +16,45 @@ extension RtcEngineExt on RtcEngine {
   }
 }
 
-/// Exceptions are thrown when [RtcEngine] and releative class call error.
+/// Error codes and error messages.
+///
 class AgoraRtcException implements Exception {
-  /// Construct the [AgoraRtcException]
+  /// @nodoc
   AgoraRtcException({required this.code, this.message});
 
-  /// The error code, see [ErrorCodeType]
+  /// The error code. See ErrorCodeType .
   final int code;
 
-  /// The error description of the [code].
+  /// The error message.
   final String? message;
 
   @override
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-/// Creates the RtcEngineEx object.
-/// Currently, the Agora RTC SDK v4.0.0 supports creating only one RtcEngineEx object for an app.
+/// Creates the RtcEngine object.
+/// Currently, the Agora RTC SDK v4.0.0 supports creating only one RtcEngine object for an app.
 ///
-/// ## Return
-/// RtcEngineEx object.
+/// Returns
+/// RtcEngine object.
 RtcEngine createAgoraRtcEngine() {
   return impl.RtcEngineImpl.create();
 }
 
-/// @nodoc
+/// Creates an RtcEngineEx object.
+/// Currentluy, the Agora RTC v4.x SDK supports creating only one RtcEngineEx object for each app.
+///
+/// Returns
+/// An RtcEngineEx object.
 RtcEngineEx createAgoraRtcEngineEx() {
   return impl.RtcEngineImpl.create();
+}
+
+/// Gets an MediaPlayerCacheManager instance.
+/// Make sure the RtcEngine is initialized before you call this method.
+///
+/// Returns
+/// The MediaPlayerCacheManager instance.
+MediaPlayerCacheManager getMediaPlayerCacheManager(RtcEngine rtcEngine) {
+  return MediaPlayerCacheManagerImpl.create(rtcEngine);
 }

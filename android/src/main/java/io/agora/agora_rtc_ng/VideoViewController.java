@@ -35,6 +35,8 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         switch (call.method) {
             case "attachVideoFrameBufferManager":
+                result.success(0);
+                break;
             case "detachVideoFrameBufferManager":
                 result.success(true);
                 break;

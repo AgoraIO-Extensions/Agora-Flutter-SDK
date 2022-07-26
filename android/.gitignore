@@ -10,3 +10,4 @@
 .cxx
 libs/
 .plugin_dev
+zip_download_path/
