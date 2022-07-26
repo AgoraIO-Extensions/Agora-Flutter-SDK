@@ -1,9 +1,9 @@
-name: agora_rtc_ng
+name: agora_rtc_engine
 description: Flutter plugin of Agora RTC SDK, allow you to simply integrate Agora Video
   Calling or Live Video Streaming to your app with just a few lines of code.
-version: 6.0.0-beta.2
+version: 6.0.0-rc.1
 homepage: https://www.agora.io
-repository: https://github.com/AgoraIO-Community/agora_rtc_ng_flutter
+repository: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/tree/main
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
@@ -16,7 +16,7 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.4.0
   ffi: ">=1.1.2"
-  iris_event: ^1.1.0
+  iris_event: ^1.2.0
   async: ^2.8.2
   meta: ^1.7.0
 
@@ -24,7 +24,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.0
   build_runner: ^2.1.7
   json_serializable: ^6.1.1
   ffigen: ">=4.1.2"
@@ -49,10 +49,10 @@ flutter:
       macos:
         pluginClass: AgoraRtcNgPlugin
       windows:
-        pluginClass: AgoraRtcNgPlugin
+        pluginClass: AgoraRtcEnginePlugin
       web:
         pluginClass: AgoraRtcNgWeb
-        fileName: agora_rtc_ng_web.dart
+        fileName: agora_rtc_engine_web.dart
 
 
   # To add assets to your plugin package, add an assets section, like this:

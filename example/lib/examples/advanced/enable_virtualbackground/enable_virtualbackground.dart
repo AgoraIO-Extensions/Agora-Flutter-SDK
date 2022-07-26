@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
-import 'package:flutter/foundation.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:agora_rtc_engine_example/components/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
@@ -19,12 +19,11 @@ class EnableVirtualBackground extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<EnableVirtualBackground> {
+class _State extends State<EnableVirtualBackground> with KeepRemoteVideoViewsMixin {
   late final RtcEngine _engine;
   bool _isReadyPreview = false;
 
   bool isJoined = false, switchCamera = true, switchRender = true;
-  List<int> remoteUid = [];
   late TextEditingController _controller;
   bool _isEnabledVirtualBackgroundImage = false;
 
@@ -48,9 +47,6 @@ class _State extends State<EnableVirtualBackground> {
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -61,17 +57,6 @@ class _State extends State<EnableVirtualBackground> {
           isJoined = true;
         });
       },
-      onUserJoined: (RtcConnection connection, int rUid, int elapsed) {
-        logSink.log(
-            '[onUserJoined] connection: ${connection.toJson()} remoteUid: $rUid elapsed: $elapsed');
-        setState(() {});
-      },
-      onUserOffline:
-          (RtcConnection connection, int rUid, UserOfflineReasonType reason) {
-        logSink.log(
-            '[onUserOffline] connection: ${connection.toJson()}  rUid: $rUid reason: $reason');
-        setState(() {});
-      },
       onLeaveChannel: (RtcConnection connection, RtcStats stats) {
         logSink.log(
             '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
@@ -81,20 +66,8 @@ class _State extends State<EnableVirtualBackground> {
       },
     ));
 
-    if (defaultTargetPlatform == TargetPlatform.windows) {
-      await _engine
-          .loadExtensionProvider('libagora_segmentation_extension.dll');
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      await _engine.loadExtensionProvider('agora_segmentation_extension');
-    }
-
-    await _engine.enableExtension(
-        provider: 'agora_segmentation',
-        extension: 'PortraitSegmentation',
-        enable: !_isEnabledVirtualBackgroundImage);
-
     await _engine.enableVideo();
-    await _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+    await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
     await _engine.startPreview();
 
@@ -120,7 +93,9 @@ class _State extends State<EnableVirtualBackground> {
         enabled: !_isEnabledVirtualBackgroundImage,
         backgroundSource: VirtualBackgroundSource(
             backgroundSourceType: BackgroundSourceType.backgroundImg,
-            source: p));
+            source: p),
+        segproperty:
+            const SegmentationProperty(modelType: SegModelType.segModelAi));
     setState(() {
       _isEnabledVirtualBackgroundImage = !_isEnabledVirtualBackgroundImage;
     });
@@ -130,8 +105,8 @@ class _State extends State<EnableVirtualBackground> {
     await _engine.joinChannel(
         token: config.token,
         channelId: _controller.text,
-        info: '',
-        uid: config.uid);
+        uid: config.uid,
+        options: const ChannelMediaOptions());
   }
 
   _leaveChannel() async {
@@ -155,26 +130,12 @@ class _State extends State<EnableVirtualBackground> {
             )),
             Align(
               alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.of(remoteUid.map(
-                    (e) => SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: AgoraVideoView(
-                        controller: VideoViewController.remote(
-                          rtcEngine: _engine,
-                          canvas: VideoCanvas(uid: e),
-                          connection:
-                              RtcConnection(channelId: _controller.text),
-                        ),
-                      ),
-                    ),
-                  )),
-                ),
+              child: RemoteVideoViewsWidget(
+                key: keepRemoteVideoViewsKey,
+                rtcEngine: _engine,
+                channelId: _controller.text,
               ),
-            )
+            ),
           ],
         );
       },

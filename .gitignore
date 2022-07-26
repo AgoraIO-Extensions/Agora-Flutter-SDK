@@ -34,3 +34,4 @@ third_party/
 **/generated_plugin_registrant.h
 **/generated_plugins.cmake
 **/GeneratedPluginRegistrant.swift
+**/.plugin_dev

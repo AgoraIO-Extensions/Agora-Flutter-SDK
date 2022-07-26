@@ -1,14 +1,14 @@
-import 'package:agora_rtc_ng/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_media_player_types.g.dart';
 
 /// @nodoc
 const kMaxCharBufferLength = 50;
 
 /// The playback state.
+///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerState {
-  /// 0: The default state.
-  /// The media player returns this state code before you open the media resource or after you stop the playback.
+  /// 0: The default state. The media player returns this state code before you open the media resource or after you stop the playback.
   @JsonValue(0)
   playerStateIdle,
 
@@ -73,7 +73,7 @@ enum MediaPlayerState {
   playerStateFailed,
 }
 
-/// Extensions functions of [MediaPlayerState].
+/// @nodoc
 extension MediaPlayerStateExt on MediaPlayerState {
   /// @nodoc
   static MediaPlayerState fromValue(int value) {
@@ -87,6 +87,7 @@ extension MediaPlayerStateExt on MediaPlayerState {
 }
 
 /// Error codes of the media player.
+///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerError {
   /// 0: No error.
@@ -97,7 +98,7 @@ enum MediaPlayerError {
   @JsonValue(-1)
   playerErrorInvalidArguments,
 
-  /// @nodoc
+  /// -2: Internal error.
   @JsonValue(-2)
   playerErrorInternal,
 
@@ -109,7 +110,7 @@ enum MediaPlayerError {
   @JsonValue(-4)
   playerErrorInvalidMediaSource,
 
-  /// -5: The type of the media stream is unknown.
+  /// -5: The media stream type is unknown.
   @JsonValue(-5)
   playerErrorUnknownStreamType,
 
@@ -129,11 +130,11 @@ enum MediaPlayerError {
   @JsonValue(-9)
   playerErrorInvalidState,
 
-  /// -10: The URL of the media resource can not be found.
+  /// -10: The URL of the media resource cannot be found.
   @JsonValue(-10)
   playerErrorUrlNotFound,
 
-  /// -11: Invalid connection between the player and Agora's server.
+  /// -11: Invalid connection between the player and the Agora Server.
   @JsonValue(-11)
   playerErrorInvalidConnectionState,
 
@@ -145,11 +146,11 @@ enum MediaPlayerError {
   @JsonValue(-13)
   playerErrorInterrupted,
 
-  /// -14: The SDK does support the method being called.
+  /// -14: The SDK does not support the method being called.
   @JsonValue(-14)
   playerErrorNotSupported,
 
-  /// @nodoc
+  /// -15: The authentication information of the media resource is expired.
   @JsonValue(-15)
   playerErrorTokenExpired,
 
@@ -162,7 +163,7 @@ enum MediaPlayerError {
   playerErrorUnknown,
 }
 
-/// Extensions functions of [MediaPlayerError].
+/// @nodoc
 extension MediaPlayerErrorExt on MediaPlayerError {
   /// @nodoc
   static MediaPlayerError fromValue(int value) {
@@ -176,6 +177,7 @@ extension MediaPlayerErrorExt on MediaPlayerError {
 }
 
 /// The type of the media stream.
+///
 @JsonEnum(alwaysCreate: true)
 enum MediaStreamType {
   /// 0: The type is unknown.
@@ -195,7 +197,7 @@ enum MediaStreamType {
   streamTypeSubtitle,
 }
 
-/// Extensions functions of [MediaStreamType].
+/// @nodoc
 extension MediaStreamTypeExt on MediaStreamType {
   /// @nodoc
   static MediaStreamType fromValue(int value) {
@@ -209,6 +211,7 @@ extension MediaStreamTypeExt on MediaStreamType {
 }
 
 /// Media player events.
+///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerEvent {
   /// 0: The player begins to seek to a new playback position.
@@ -258,9 +261,29 @@ enum MediaPlayerEvent {
   /// 13: The first video frame is rendered.
   @JsonValue(13)
   playerEventFirstDisplayed,
+
+  /// 14: The cached media files reach the limit in number.
+  @JsonValue(14)
+  playerEventReachCacheFileMaxCount,
+
+  /// 15: The cached media files reach the limit in aggregate storage space.
+  @JsonValue(15)
+  playerEventReachCacheFileMaxSize,
+
+  /// @nodoc
+  @JsonValue(16)
+  playerEventTryOpenStart,
+
+  /// @nodoc
+  @JsonValue(17)
+  playerEventTryOpenSucceed,
+
+  /// @nodoc
+  @JsonValue(18)
+  playerEventTryOpenFailed,
 }
 
-/// Extensions functions of [MediaPlayerEvent].
+/// @nodoc
 extension MediaPlayerEventExt on MediaPlayerEvent {
   /// @nodoc
   static MediaPlayerEvent fromValue(int value) {
@@ -274,6 +297,7 @@ extension MediaPlayerEventExt on MediaPlayerEvent {
 }
 
 /// Events that occur when media resources are preloaded.
+///
 @JsonEnum(alwaysCreate: true)
 enum PlayerPreloadEvent {
   /// 0: Starts preloading media resources.
@@ -289,7 +313,7 @@ enum PlayerPreloadEvent {
   playerPreloadEventError,
 }
 
-/// Extensions functions of [PlayerPreloadEvent].
+/// @nodoc
 extension PlayerPreloadEventExt on PlayerPreloadEvent {
   /// @nodoc
   static PlayerPreloadEvent fromValue(int value) {
@@ -303,9 +327,10 @@ extension PlayerPreloadEventExt on PlayerPreloadEvent {
 }
 
 /// The detailed information of the media stream.
-@JsonSerializable(explicitToJson: true)
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlayerStreamInfo {
-  /// Construct the [PlayerStreamInfo].
+  /// @nodoc
   const PlayerStreamInfo(
       {this.streamIndex,
       this.streamType,
@@ -341,7 +366,7 @@ class PlayerStreamInfo {
   @JsonKey(name: 'videoFrameRate')
   final int? videoFrameRate;
 
-  /// @nodoc
+  /// This parameter only takes effect for video streams, and indicates the video bitrate (bps).
   @JsonKey(name: 'videoBitRate')
   final int? videoBitRate;
 
@@ -382,9 +407,10 @@ class PlayerStreamInfo {
 }
 
 /// Information about the video bitrate of the media resource being played.
-@JsonSerializable(explicitToJson: true)
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SrcInfo {
-  /// Construct the [SrcInfo].
+  /// @nodoc
   const SrcInfo({this.bitrateInKbps, this.name});
 
   /// The video bitrate (Kbps) of the media resource being played.
@@ -404,6 +430,7 @@ class SrcInfo {
 }
 
 /// The type of media metadata.
+///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerMetadataType {
   /// 0: The type is unknown.
@@ -415,7 +442,7 @@ enum MediaPlayerMetadataType {
   playerMetadataTypeSei,
 }
 
-/// Extensions functions of [MediaPlayerMetadataType].
+/// @nodoc
 extension MediaPlayerMetadataTypeExt on MediaPlayerMetadataType {
   /// @nodoc
   static MediaPlayerMetadataType fromValue(int value) {
@@ -428,11 +455,39 @@ extension MediaPlayerMetadataTypeExt on MediaPlayerMetadataType {
   }
 }
 
+/// Statistics about the media files being cached.
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class CacheStatistics {
+  /// @nodoc
+  const CacheStatistics({this.fileSize, this.cacheSize, this.downloadSize});
+
+  /// The size (bytes) of the media file being played.
+  @JsonKey(name: 'fileSize')
+  final int? fileSize;
+
+  /// The size (bytes) of the media file that you want to cache.
+  @JsonKey(name: 'cacheSize')
+  final int? cacheSize;
+
+  /// The size (bytes) of the media file that has been downloaded.
+  @JsonKey(name: 'downloadSize')
+  final int? downloadSize;
+
+  /// @nodoc
+  factory CacheStatistics.fromJson(Map<String, dynamic> json) =>
+      _$CacheStatisticsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$CacheStatisticsToJson(this);
+}
+
 /// Information related to the media player.
-@JsonSerializable(explicitToJson: true)
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlayerUpdatedInfo {
-  /// Construct the [PlayerUpdatedInfo].
-  const PlayerUpdatedInfo({this.playerId, this.deviceId});
+  /// @nodoc
+  const PlayerUpdatedInfo({this.playerId, this.deviceId, this.cacheStatistics});
 
   /// The ID of a media player.
   @JsonKey(name: 'playerId')
@@ -442,10 +497,64 @@ class PlayerUpdatedInfo {
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
+  /// The statistics about the media file being cached.If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics .
+  @JsonKey(name: 'cacheStatistics')
+  final CacheStatistics? cacheStatistics;
+
   /// @nodoc
   factory PlayerUpdatedInfo.fromJson(Map<String, dynamic> json) =>
       _$PlayerUpdatedInfoFromJson(json);
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$PlayerUpdatedInfoToJson(this);
+}
+
+/// Information related to the media file to be played and the playback scenario configurations.
+///
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MediaSource {
+  /// @nodoc
+  const MediaSource(
+      {this.url,
+      this.uri,
+      this.startPos,
+      this.autoPlay,
+      this.enableCache,
+      this.isAgoraSource,
+      this.isLiveSource});
+
+  /// The URL of the media file to be played.If you need to open a custom media resource, you do not have to pass in a value to the url.
+  @JsonKey(name: 'url')
+  final String? url;
+
+  /// The URI (Uniform Resource Identifier) of the media file.
+  @JsonKey(name: 'uri')
+  final String? uri;
+
+  /// The starting position (ms) for playback. The default value is 0.
+  @JsonKey(name: 'startPos')
+  final int? startPos;
+
+  /// Whether to enable autoplay once the media file is opened:true: (Default) Enable autoplay.false: Disable autoplay.If autoplay is disabled, you need to call the play method to play a media file after it is opened.
+  @JsonKey(name: 'autoPlay')
+  final bool? autoPlay;
+
+  /// Whether to cache the media file when it is being played:true:Enable caching.false: (Default) Disable caching.If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics .
+  @JsonKey(name: 'enableCache')
+  final bool? enableCache;
+
+  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service:true: The media resource is a live stream or on-demand video distributed through Media Broadcast service.false: (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service.If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
+  @JsonKey(name: 'isAgoraSource')
+  final bool? isAgoraSource;
+
+  /// Whether the media resource to be opened is a live stream:true: The media resource is a live stream.false: (Default) The media resource is not a live stream.If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly.If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
+  @JsonKey(name: 'isLiveSource')
+  final bool? isLiveSource;
+
+  /// @nodoc
+  factory MediaSource.fromJson(Map<String, dynamic> json) =>
+      _$MediaSourceFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$MediaSourceToJson(this);
 }

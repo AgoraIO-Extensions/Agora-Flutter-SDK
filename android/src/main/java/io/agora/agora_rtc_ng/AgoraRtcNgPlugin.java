@@ -1,6 +1,9 @@
 package io.agora.agora_rtc_ng;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -18,9 +21,12 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
     private VideoViewController videoViewController;
+    @Nullable
+    private Context applicationContext;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        applicationContext = flutterPluginBinding.getApplicationContext();
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "agora_rtc_ng");
         channel.setMethodCallHandler(this);
         flutterPluginBindingRef = new WeakReference<>(flutterPluginBinding);
@@ -44,6 +50,7 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        applicationContext = null;
         channel.setMethodCallHandler(null);
         videoViewController.dispose();
     }
@@ -52,6 +59,12 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if ("getAssetAbsolutePath".equals(call.method)) {
             getAssetAbsolutePath(call, result);
+        } else if ("getExternalFilesDir".equals(call.method)) {
+            if (applicationContext != null) {
+                result.success(applicationContext.getExternalFilesDir(null).getAbsolutePath());
+            } else {
+                result.error("", "Application context is null", null);
+            }
         } else {
             result.notImplemented();
         }

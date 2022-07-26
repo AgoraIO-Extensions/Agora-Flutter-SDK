@@ -1,4 +1,4 @@
-import 'package:agora_rtc_ng/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_media_streaming_source.g.dart';
 
 /// @nodoc
@@ -93,7 +93,7 @@ enum StreamingSrcErr {
   streamingSrcErrCodecproc,
 }
 
-/// Extensions functions of [StreamingSrcErr].
+/// @nodoc
 extension StreamingSrcErrExt on StreamingSrcErr {
   /// @nodoc
   static StreamingSrcErr fromValue(int value) {
@@ -138,7 +138,7 @@ enum StreamingSrcState {
   streamingSrcStateError,
 }
 
-/// Extensions functions of [StreamingSrcState].
+/// @nodoc
 extension StreamingSrcStateExt on StreamingSrcState {
   /// @nodoc
   static StreamingSrcState fromValue(int value) {
@@ -152,9 +152,9 @@ extension StreamingSrcStateExt on StreamingSrcState {
 }
 
 /// @nodoc
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class InputSeiData {
-  /// Construct the [InputSeiData].
+  /// @nodoc
   const InputSeiData(
       {this.type,
       this.timestamp,

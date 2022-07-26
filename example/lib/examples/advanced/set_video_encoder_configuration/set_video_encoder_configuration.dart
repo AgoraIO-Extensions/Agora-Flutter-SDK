@@ -1,7 +1,8 @@
-import 'package:agora_rtc_ng/agora_rtc_ng.dart';
-import 'package:agora_rtc_ng_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_ng_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_ng_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
+import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:agora_rtc_engine_example/components/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
 
 /// SetVideoEncoderConfiguration Example
@@ -14,14 +15,13 @@ class SetVideoEncoderConfiguration extends StatefulWidget {
 }
 
 class _SetVideoEncoderConfigurationState
-    extends State<SetVideoEncoderConfiguration> {
+    extends State<SetVideoEncoderConfiguration> with KeepRemoteVideoViewsMixin {
   late final RtcEngine _engine;
   bool _isReadyPreview = false;
   String channelId = config.channelId;
   bool isJoined = false;
   bool switchCamera = true;
   late TextEditingController _channelIdController;
-  final int _remoteUid = 0;
   int _selectedDimensionIndex = 0;
   List<VideoDimensions> dimensions = const [
     VideoDimensions(width: 640, height: 480),
@@ -49,9 +49,6 @@ class _SetVideoEncoderConfigurationState
     ));
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onWarning: (warn, msg) {
-        logSink.log('[onWarning] warn: $warn, msg: $msg');
-      },
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -93,7 +90,10 @@ class _SetVideoEncoderConfigurationState
 
   Future<void> _joinChannel() async {
     await _engine.joinChannel(
-        token: config.token, channelId: channelId, info: '', uid: config.uid);
+        token: config.token,
+        channelId: channelId,
+        uid: config.uid,
+        options: const ChannelMediaOptions());
     await setVideoEncoderConfiguration(dim: _selectedDimensionIndex);
   }
 
@@ -109,9 +109,9 @@ class _SetVideoEncoderConfigurationState
 
     VideoEncoderConfiguration config = VideoEncoderConfiguration(
       dimensions: dimensions[dim],
-      frameRate: FrameRate.frameRateFps1.value(),
+      frameRate: FrameRate.frameRateFps15.value(),
       bitrate: 0,
-      minBitrate: 1,
+      minBitrate: -1,
       orientationMode: OrientationMode.orientationModeAdaptive,
       degradationPreference: DegradationPreference.maintainFramerate,
       mirrorMode: VideoMirrorModeType.videoMirrorModeAuto,
@@ -142,21 +142,14 @@ class _SetVideoEncoderConfigurationState
               controller: VideoViewController(
                   rtcEngine: _engine, canvas: const VideoCanvas(uid: 0)),
             ),
-            if (_remoteUid != 0)
-              Align(
-                alignment: Alignment.topLeft,
-                child: SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: AgoraVideoView(
-                      controller: VideoViewController.remote(
-                        rtcEngine: _engine,
-                        canvas: VideoCanvas(uid: _remoteUid),
-                        connection:
-                            RtcConnection(channelId: _channelIdController.text),
-                      ),
-                    )),
+            Align(
+              alignment: Alignment.topLeft,
+              child: RemoteVideoViewsWidget(
+                key: keepRemoteVideoViewsKey,
+                rtcEngine: _engine,
+                channelId: _channelIdController.text,
               ),
+            ),
           ],
         );
       },

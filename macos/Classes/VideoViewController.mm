@@ -56,7 +56,7 @@
 //      agora::iris::rtc::IrisRtcRawData *rawData = engine->raw_data();
       irisApiEngine->Attach(self.videoFrameBufferManager);
       
-      result(@(YES));
+      result(@((intptr_t)self.videoFrameBufferManager));
   } else if ([@"detachVideoFrameBufferManager" isEqualToString:call.method]) {
       NSNumber *enginePtrValue = call.arguments;
 //      if (self.irisRtcEnginePtr == 0) {

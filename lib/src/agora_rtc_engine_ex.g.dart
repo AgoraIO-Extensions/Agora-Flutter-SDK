@@ -14,8 +14,16 @@ RtcConnection _$RtcConnectionFromJson(Map<String, dynamic> json) =>
       localUid: json['localUid'] as int?,
     );
 
-Map<String, dynamic> _$RtcConnectionToJson(RtcConnection instance) =>
-    <String, dynamic>{
-      'channelId': instance.channelId,
-      'localUid': instance.localUid,
-    };
+Map<String, dynamic> _$RtcConnectionToJson(RtcConnection instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('channelId', instance.channelId);
+  writeNotNull('localUid', instance.localUid);
+  return val;
+}

@@ -1,5 +1,6 @@
-import 'package:agora_rtc_ng/src/binding_forward_export.dart';
-import 'package:agora_rtc_ng/src/binding/impl_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+import 'package:iris_event/iris_event.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 
@@ -12,6 +13,7 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         MediaPlayerSourceObserverOnPlayerSourceStateChangedJson paramJson =
             MediaPlayerSourceObserverOnPlayerSourceStateChangedJson.fromJson(
                 jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         MediaPlayerState? state = paramJson.state;
         MediaPlayerError? ec = paramJson.ec;
         if (state == null || ec == null) {
@@ -24,17 +26,19 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         if (onPositionChanged == null) break;
         MediaPlayerSourceObserverOnPositionChangedJson paramJson =
             MediaPlayerSourceObserverOnPositionChangedJson.fromJson(jsonMap);
-        int? position = paramJson.position;
-        if (position == null) {
+        paramJson = paramJson.fillBuffers(buffers);
+        int? positionMs = paramJson.positionMs;
+        if (positionMs == null) {
           break;
         }
-        onPositionChanged!(position);
+        onPositionChanged!(positionMs);
         break;
 
       case 'MediaPlayerSourceObserver_onPlayerEvent':
         if (onPlayerEvent == null) break;
         MediaPlayerSourceObserverOnPlayerEventJson paramJson =
             MediaPlayerSourceObserverOnPlayerEventJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         MediaPlayerEvent? eventCode = paramJson.eventCode;
         int? elapsedTime = paramJson.elapsedTime;
         String? message = paramJson.message;
@@ -48,6 +52,7 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         if (onMetaData == null) break;
         MediaPlayerSourceObserverOnMetaDataJson paramJson =
             MediaPlayerSourceObserverOnMetaDataJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         Uint8List? data = paramJson.data;
         int? length = paramJson.length;
         if (data == null || length == null) {
@@ -60,6 +65,7 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         if (onPlayBufferUpdated == null) break;
         MediaPlayerSourceObserverOnPlayBufferUpdatedJson paramJson =
             MediaPlayerSourceObserverOnPlayBufferUpdatedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         int? playCachedBuffer = paramJson.playCachedBuffer;
         if (playCachedBuffer == null) {
           break;
@@ -71,6 +77,7 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         if (onPreloadEvent == null) break;
         MediaPlayerSourceObserverOnPreloadEventJson paramJson =
             MediaPlayerSourceObserverOnPreloadEventJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         String? src = paramJson.src;
         PlayerPreloadEvent? event = paramJson.event;
         if (src == null || event == null) {
@@ -83,6 +90,7 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         if (onCompleted == null) break;
         MediaPlayerSourceObserverOnCompletedJson paramJson =
             MediaPlayerSourceObserverOnCompletedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         onCompleted!();
         break;
 
@@ -91,6 +99,7 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson paramJson =
             MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson.fromJson(
                 jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         onAgoraCDNTokenWillExpire!();
         break;
 
@@ -99,11 +108,14 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson paramJson =
             MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson.fromJson(
                 jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         SrcInfo? from = paramJson.from;
         SrcInfo? to = paramJson.to;
         if (from == null || to == null) {
           break;
         }
+        from = from.fillBuffers(buffers);
+        to = to.fillBuffers(buffers);
         onPlayerSrcInfoChanged!(from, to);
         break;
 
@@ -111,10 +123,12 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         if (onPlayerInfoUpdated == null) break;
         MediaPlayerSourceObserverOnPlayerInfoUpdatedJson paramJson =
             MediaPlayerSourceObserverOnPlayerInfoUpdatedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         PlayerUpdatedInfo? info = paramJson.info;
         if (info == null) {
           break;
         }
+        info = info.fillBuffers(buffers);
         onPlayerInfoUpdated!(info);
         break;
 
@@ -123,6 +137,7 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         MediaPlayerSourceObserverOnAudioVolumeIndicationJson paramJson =
             MediaPlayerSourceObserverOnAudioVolumeIndicationJson.fromJson(
                 jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
         int? volume = paramJson.volume;
         if (volume == null) {
           break;
@@ -132,5 +147,26 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
       default:
         break;
     }
+  }
+}
+
+class MediaPlayerSourceObserverWrapper implements IrisEventHandler {
+  const MediaPlayerSourceObserverWrapper(this.mediaPlayerSourceObserver);
+  final MediaPlayerSourceObserver mediaPlayerSourceObserver;
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is MediaPlayerSourceObserverWrapper &&
+        other.mediaPlayerSourceObserver == mediaPlayerSourceObserver;
+  }
+
+  @override
+  int get hashCode => mediaPlayerSourceObserver.hashCode;
+  @override
+  void onEvent(String event, String data, List<Uint8List> buffers) {
+    if (!event.startsWith('MediaPlayerSourceObserver')) return;
+    mediaPlayerSourceObserver.process(event, data, buffers);
   }
 }

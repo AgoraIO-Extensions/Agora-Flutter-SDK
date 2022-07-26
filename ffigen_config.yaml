@@ -8,6 +8,8 @@ headers:
     - 'third_party/include/iris_rtc_c_api.h'
   include-directives:
     - 'third_party/include/iris_rtc_c_api.h'
+    - 'third_party/include/iris_base.h'
+    - 'third_party/include/iris_video_processor_c.h'
 
 preamble: |
   // ignore_for_file: camel_case_types, non_constant_identifier_names

@@ -1,5 +1,5 @@
-name: agora_rtc_ng_example
-description: Demonstrates how to use the agora_rtc_ng plugin.
+name: agora_rtc_engine_example
+description: Demonstrates how to use the agora_rtc_engine plugin.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -18,9 +18,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  agora_rtc_ng:
+  agora_rtc_engine:
     # When depending on this package from a real application you should use:
-    #   agora_rtc_ng: ^x.y.z
+    #   agora_rtc_engine: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.

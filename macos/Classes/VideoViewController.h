@@ -1,7 +1,11 @@
 #ifndef VideoViewController_h
 #define VideoViewController_h
 
+#if TARGET_OS_IPHONE
+#import <Flutter/Flutter.h>
+#else
 #import <FlutterMacOS/FlutterMacOS.h>
+#endif
 
 @interface VideoViewController : NSObject
 

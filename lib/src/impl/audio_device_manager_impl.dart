@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:agora_rtc_ng/src/agora_rtc_engine.dart';
-import 'package:agora_rtc_ng/src/agora_rtc_engine_ext.dart';
-import 'package:agora_rtc_ng/src/impl/api_caller.dart';
-import 'package:agora_rtc_ng/src/audio_device_manager.dart';
-import 'package:agora_rtc_ng/src/binding/audio_device_manager_impl.dart'
+import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:agora_rtc_engine/src/audio_device_manager.dart';
+import 'package:agora_rtc_engine/src/binding/audio_device_manager_impl.dart'
     as audio_device_manager_impl_binding;
 
 // ignore_for_file: public_member_api_docs
@@ -12,11 +12,10 @@ import 'package:agora_rtc_ng/src/binding/audio_device_manager_impl.dart'
 extension DeviceInfoListExt on List<AudioDeviceInfo> {
   void fill(dynamic rm) {
     final devicesList = List.from(rm);
-    final List<AudioDeviceInfo> deviceInfoList = [];
     for (final d in devicesList) {
       final dm = Map<String, dynamic>.from(d);
 
-      deviceInfoList.add(AudioDeviceInfo.fromJson(dm));
+      add(AudioDeviceInfo.fromJson(dm));
     }
   }
 }
