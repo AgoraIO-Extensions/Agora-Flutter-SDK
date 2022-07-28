@@ -66,7 +66,12 @@
   return self;
 }
 
+- (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
+    [self destroyIrisRtcEngine];
+}
+
 - (void)destroyIrisRtcEngine {
+    [self.flutterIrisEventHandler resetEventHandler:self.irisRtcEngine];
     self.irisRtcEngine->SetEventHandler(nil);
     self.irisRtcEngine->channel()->SetEventHandler(nil);
     delete self.irisRtcEngine;

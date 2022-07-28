@@ -2,3 +2,4 @@ integration_test_app/
 tools/
 ios/libs
 macos/libs
+test_shard/
