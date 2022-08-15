@@ -1,30 +1,45 @@
 #import <Foundation/Foundation.h>
 #import "FlutterIrisEventHandler.h"
 #import <AgoraRtcWrapper/iris_rtc_engine.h>
+#include <mutex>
 
 class EventHandler : public agora::iris::IrisEventHandler {
+    
 public:
-    EventHandler(FlutterEventSink eventSink, bool shouldHandleSubProcess = false, bool sub_process = false) : eventSink_(eventSink), sub_process_(sub_process), shouldHandleSubProcess_(shouldHandleSubProcess) {
+    EventHandler(FlutterEventSink eventSink, bool shouldHandleSubProcess = false, bool sub_process = false) : eventSink_(eventSink), sub_process_(sub_process),  shouldHandleSubProcess_(shouldHandleSubProcess), isCleanUp_(false) {
   }
 
   void OnEvent(const char *event, const char *data) override {
-    @autoreleasepool {
-        if (eventSink_) {
-            bool subProcess = shouldHandleSubProcess_ && sub_process_;
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                [NSString stringWithUTF8String:event], @"methodName", 
-                [NSString stringWithUTF8String:data], @"data", 
-                                        @(subProcess), @"subProcess",
-                nil];
-            
-            eventSink_(dic);
-        }
+    std::lock_guard<std::mutex> guard(isCleanUpMutex_);
+      
+    if (isCleanUp_) return;
+
+    @try {
+      if (eventSink_) {
+          bool subProcess = shouldHandleSubProcess_ && sub_process_;
+          NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+              [NSString stringWithUTF8String:event], @"methodName",
+              [NSString stringWithUTF8String:data], @"data",
+                                      @(subProcess), @"subProcess",
+              nil];
+          
+          if (isCleanUp_) return;
+          eventSink_(dic);
+      }
+    } @catch (NSException *e) {
+        NSLog(@"Error: %@ %@", e, [e userInfo]);
+    } @finally {
     }
+
   }
 
   void OnEvent(const char *event, const char *data, const void *buffer,
                unsigned int length) override {
-    @autoreleasepool {
+    std::lock_guard<std::mutex> guard(isCleanUpMutex_);
+      
+    if (isCleanUp_) return;
+
+    @try {
       FlutterStandardTypedData *bufferApple = [FlutterStandardTypedData
           typedDataWithBytes:[[NSData alloc] initWithBytes:buffer
                                                     length:length]];
@@ -37,15 +52,26 @@ public:
                                         @(subProcess), @"subProcess",
                                         nil];
             
+            if (isCleanUp_) return;
             eventSink_(dic);
         }
+    } @catch (NSException *e) {
+      NSLog(@"Error: %@ %@", e, [e userInfo]);
+    } @finally {
     }
   }
+    
+    void setIsCleanUp(bool isCleanUp) {
+        std::lock_guard<std::mutex> guard(isCleanUpMutex_);
+        isCleanUp_ = isCleanUp;
+    }
 
 private:
     FlutterEventSink eventSink_;
     bool sub_process_;
     bool shouldHandleSubProcess_;
+    bool isCleanUp_ = false;
+    std::mutex isCleanUpMutex_;
 };
 
 @interface FlutterIrisEventHandler ()
@@ -115,6 +141,13 @@ private:
 }
 
 - (void)resetEventHandler:(void *)engine {
+    if (self.eventHandler) {
+        self.eventHandler->setIsCleanUp(true);
+    }
+    if (self.eventHandlerSub) {
+        self.eventHandlerSub->setIsCleanUp(true);
+    }
+    
     agora::iris::rtc::IrisRtcEngine *e = (agora::iris::rtc::IrisRtcEngine *)engine;
     e->SetEventHandler(nil);
     self.eventSink = nil;
