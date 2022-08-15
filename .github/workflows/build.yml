@@ -132,18 +132,20 @@ jobs:
       - run: flutter pub get
       - run: bash ci/run_android_test.sh
 
-  unittest_ios:
-    name: Run iOS Unit Test
+  run_test_shard:
+    name: Run test shard
     needs: flutter_codestyle_check
     runs-on: macos-11
     timeout-minutes: 60
+    env:
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.10.5'
+          flutter-version: '3.0.1'
       - run: flutter pub get
-      - run: bash ci/run_ios_test.sh
+      - run: bash ci/run_test_shard.sh
   
   build_android_windows:
     name: Build Android on Windows

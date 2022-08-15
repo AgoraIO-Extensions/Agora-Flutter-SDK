@@ -64,6 +64,8 @@ using namespace agora::iris::rtc;
 }
 
 - (void)dealloc {
+  [self.eventHandler resetEventHandler:self.engine_main];
+    
   if (self.engine_main) {
     self.engine_main->SetEventHandler(nil);
     self.engine_main->channel()->SetEventHandler(nil);
