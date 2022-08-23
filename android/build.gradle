@@ -51,11 +51,11 @@ dependencies {
   if (isDev(project)) {
     api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
   } else {
-    api 'io.agora.rtc:full-sdk:3.7.0.3'
-    api 'io.agora.rtc:iris-rtc:3.7.0.3'
+    api 'io.agora.rtc:full-sdk:3.7.1'
+    api 'io.agora.rtc:iris-rtc:3.7.1-beta.1'
   }
 
-  implementation 'io.agora.rtc:full-screen-sharing:3.7.0.3'
+  implementation 'io.agora.rtc:full-screen-sharing:3.7.1'
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', "$agora_rtc_engine_kt_version")}"
 }
