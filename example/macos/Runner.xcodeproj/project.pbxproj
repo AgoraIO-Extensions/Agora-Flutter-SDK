@@ -302,7 +302,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
-				"${PODS_ROOT}/AgoraIrisRTC_macOS_Beta/AgoraRtcWrapper.framework",
+				"${PODS_ROOT}/AgoraIrisRTC_macOS/AgoraRtcWrapper.framework",
 				"${BUILT_PRODUCTS_DIR}/agora_rtc_engine/agora_rtc_engine.framework",
 				"${BUILT_PRODUCTS_DIR}/path_provider_macos/path_provider_macos.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/AgoraRtcEngine_macOS/AINS/AgoraAIDenoiseExtension.framework/AgoraAIDenoiseExtension",
