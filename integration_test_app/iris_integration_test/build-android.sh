@@ -5,7 +5,7 @@ set -x
 
 ZIP_NAME=iris_3.7.1_RTC_Android_Video_20220821_0245
 IRIS_ARCHIVE_NAME="${ZIP_NAME/Video_/}"
-DOWNLOAD_IRIS_URL=https://download.agora.io/demo/release/${ZIP_NAME}.zip
+DOWNLOAD_IRIS_URL=https://download.agora.io/sdk/release/${ZIP_NAME}.zip
 
 MY_PATH=$(dirname "$0")
 ROOT_PATH=$(pwd)
