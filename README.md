@@ -1,9 +1,9 @@
 # Agora RTC SDK for Flutter
 
 <p align="center">
-    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://badges.bar/agora_rtc_engine/likes" alt="Pub.dev likes"/></a>
-    <a href="https://pub.dev/packages/agora_rtc_engine" alt="Pub.dev popularity"><img src="https://badges.bar/agora_rtc_engine/popularity"/></a>
-    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://badges.bar/agora_rtc_engine/pub%20points" alt="Pub.dev points"/></a><br/>
+    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/pub/likes/agora_rtc_engine?logo=dart" alt="Pub.dev likes"/></a>
+    <a href="https://pub.dev/packages/agora_rtc_engine" alt="Pub.dev popularity"><img src="https://img.shields.io/pub/popularity/agora_rtc_engine?logo=dart"/></a>
+    <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/pub/points/agora_rtc_engine?logo=dart" alt="Pub.dev points"/></a><br/>
     <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/pub/v/agora_rtc_engine.svg?include_prereleases" alt="latest version"/></a>
     <a href="https://pub.dev/packages/agora_rtc_engine"><img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Web%20%7C%20Windows-blue?logo=flutter" alt="Platform"/></a>
     <a href="./LICENSE"><img src="https://img.shields.io/github/license/agoraio-community/flutter-uikit?color=lightgray" alt="License"/></a>
