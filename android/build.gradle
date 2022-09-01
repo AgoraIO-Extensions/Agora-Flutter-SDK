@@ -49,7 +49,7 @@ dependencies {
   } else {
      api 'io.agora.rtc:iris-rtc:4.0.0-beta.8'
     //  api 'io.agora.rtc:full-sdk:4.0.0-rc.1'
-    //  implementation 'io.agora.rtc:full-screen-sharing:4.0.0-rc.1'
+     implementation 'io.agora.rtc:full-screen-sharing:4.0.0-rc.1'
   }
 }
 
