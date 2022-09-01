@@ -14,7 +14,8 @@
 VideoViewController::VideoViewController(
     flutter::TextureRegistrar *texture_registrar,
     flutter::BinaryMessenger *messenger) : texture_registrar_(texture_registrar),
-                                           messenger_(messenger)
+                                           messenger_(messenger),
+                                           videoFrameBufferManager_(nullptr)
 {
     auto channel =
         std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
@@ -22,7 +23,7 @@ VideoViewController::VideoViewController(
             &flutter::StandardMethodCodec::GetInstance());
 
     // auto plugin = std::make_unique<AgoraRtcFlutterPlugin>();
-    videoFrameBufferManager_ = new agora::iris::IrisVideoFrameBufferManager;
+
 
     channel->SetMethodCallHandler([this](const auto &call, auto result)
                                   { this->HandleMethodCall(call, std::move(result)); });
@@ -42,6 +43,9 @@ void VideoViewController::HandleMethodCall(
     {
         intptr_t irisRtcEnginePtr = std::get<intptr_t>(*method_call.arguments());
         IrisApiEngine *irisApiEngine = reinterpret_cast<IrisApiEngine *>(irisRtcEnginePtr);
+        if (!videoFrameBufferManager_) {
+            videoFrameBufferManager_ = new agora::iris::IrisVideoFrameBufferManager;
+        }
         irisApiEngine->Attach(videoFrameBufferManager_);
         result->Success((intptr_t)videoFrameBufferManager_);
     }
