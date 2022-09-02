@@ -1,18 +1,18 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_rtc_engine_ex.g.dart';
 
-/// 包含连接信息的类。
+/// Contains connection information.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcConnection {
   /// @nodoc
   const RtcConnection({this.channelId, this.localUid});
 
-  /// 频道名。
+  /// The channel name.
   @JsonKey(name: 'channelId')
   final String? channelId;
 
-  /// 本地用户 ID。
+  /// The ID of the local user.
   @JsonKey(name: 'localUid')
   final int? localUid;
 
@@ -24,15 +24,15 @@ class RtcConnection {
   Map<String, dynamic> toJson() => _$RtcConnectionToJson(this);
 }
 
-/// 提供多频道方法的接口类。
-/// 继承自 RtcEngine 。
+/// This interface class contains multi-channel methods.
+/// Inherited from RtcEngine .
 abstract class RtcEngineEx implements RtcEngine {
-  /// 使用连接 ID 加入频道。
-  /// 调用该方法，你可以同时加入多个频道。如果你已经在一个频道内，你不能用相同的用户 UID 再次加入该频道。如果你想在不同的设备上加入相同的频道，请确保你在不同设备上使用的用户 UID 都不同。请确保生成 Token 时传入的 app ID 和创建 RtcEngine 实例时传入的 app ID 一致。
+  /// Joins a channel with the connection ID.
+  /// You can call this method multiple times to join more than one channels.If you are already in a channel, you cannot rejoin it with the same user ID.If you want to join the same channel from different devices, ensure that the user IDs in all devices are different.Ensure that the app ID you use to generate the token is the same with the app ID used when creating the RtcEngine instance.
   ///
-  /// * [options] 频道媒体设置选项。详见 ChannelMediaOptions 。
+  /// * [options] The channel media options. See ChannelMediaOptions .
   ///
-  /// * [token] 在服务端生成的用于鉴权的动态密钥。详见
+  /// * [token] The token generated on your server for authentication. See
   ///
   ///
   Future<void> joinChannelEx(
@@ -40,64 +40,64 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection,
       required ChannelMediaOptions options});
 
-  /// 离开频道。
+  /// Leaves a channel.
   ///
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> leaveChannelEx(RtcConnection connection);
 
-  /// 加入频道后更新频道媒体选项 。
+  /// Updates the channel media options after joining the channel.
   ///
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [options] 频道媒体选项，详见 ChannelMediaOptions 。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [options] The channel media options. See ChannelMediaOptions .
   Future<void> updateChannelMediaOptionsEx(
       {required ChannelMediaOptions options,
       required RtcConnection connection});
 
-  /// 设置本地视频编码属性。
-  /// 每一种视频编码属性对应一系列视频相关参数设置，包含分辨率、帧率和码率。该方法的config 参数设置是在理想网络状态下能达到的最大值。如果网络状态不好，视频引擎便不能使用该config 渲染本地视频， 它会自动降低到一个合适的视频参数设置。
+  /// Sets the encoder configuration for the local video.
+  /// Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.Theconfig specified in this method is the maximum values under ideal network conditions. If the network condition is not good, the video engine cannot use theconfig renders local video, which automatically reduces to an appropriate video parameter setting.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [config] 视频编码参数配置。详见 VideoEncoderConfiguration 。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [config] Video profile. See VideoEncoderConfiguration .
   ///
   /// Returns
-  /// 0: 方法调用成功。< 0: 方法调用失败。
+  /// 0: Success.< 0: Failure.
   Future<void> setVideoEncoderConfigurationEx(
       {required VideoEncoderConfiguration config,
       required RtcConnection connection});
 
-  /// 初始化远端用户视图。
-  /// 该方法绑定远端用户和显示视图，并设置远端用户视图在本地显示时的渲染模式和镜像模式，只影响本地用户看到的视频画面。调用该方法时需要在 VideoCanvas 中指定远端视频的用户 ID，一般可以在进频道前提前设置好。如果无法在加入频道前得到远端用户的 uid，可以在收到 onUserJoined 回调时调用该方法。如果启用了视频录制功能，视频录制服务会做为一个哑客户端加入频道，因此其他客户端也会收到它的onUserJoined 事件， App 不应给它绑定视图（因为它不会发送视频流）。如需解除某个远端用户的绑定视图，可以调用该方法并将view 设置为空。离开频道后，SDK 会清除远端用户视图的绑定关系。
+  /// Initializes the video view of a remote user.
+  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.The application specifies the uid of the remote video in the VideoCanvas method before the remote user joins the channel.If the remote uid is unknown to the application, set it after the application receives the onUserJoined callback. If the Video Recording function is enabled, the Video Recording Service joins the channel as a dummy client, causing other clients to also receive theonUserJoined callback. Do not bind the dummy client to the application view because the dummy client does not send any video streams.To unbind the remote user from the view, set theview parameter to NULL.Once the remote user leaves the channel, the SDK unbinds the remote user.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [canvas] 视频画布信息。详见 VideoCanvas 。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [canvas] The remote video view settings. See VideoCanvas .
   Future<void> setupRemoteVideoEx(
       {required VideoCanvas canvas, required RtcConnection connection});
 
-  /// 停止/恢复接收指定的音频流。
-  /// 该方法停止/恢复接收某一个指定远端用户的音频流。在加入频道前或后都可以调用。该方法的设置在离开频道后失效。
+  /// Stops or resumes receiving the audio stream of a specified user.
+  /// This method is used to stops or resumes receiving the audio stream of a specified user. You can call this method before or after joining a channel. If a user leaves a channel, the settings in this method become invalid.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [uid] 指定用户的 ID。
-  /// * [mute] 是否停止接收指定音频流：true: 停止接收指定音频流。false:（默认）继续接收指定音频流。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uid] The ID of the specified user.
+  /// * [mute] Whether to stop receiving the audio stream of the specified user:true: Stop receiving the audio stream of the specified user.false: (Default) Resume receiving the audio stream of the specified user.
   ///
   /// Returns
-  /// 0: 方法调用成功 < 0: 方法调用失败
+  /// 0: Success. < 0: Failure.
   Future<void> muteRemoteAudioStreamEx(
       {required int uid,
       required bool mute,
       required RtcConnection connection});
 
-  /// 停止/恢复接收指定的视频流。
-  /// 该方法停止/恢复接收某一个指定远端用户的视频流。在加入频道前或后都可以调用。该方法的设置在离开频道后失效。
+  /// Stops or resumes receiving the video stream of a specified user.
+  /// This method is used to stops or resumes receiving the video stream of a specified user. You can call this method before or after joining a channel. If a user leaves a channel, the settings in this method become invalid.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [uid] 远端用户的 ID。
-  /// * [mute] 是否停止接收某个远端用户的视频：true: 停止接收。false: （默认）恢复接收。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uid] The user ID of the remote user.
+  /// * [mute] Whether to stop receiving the video stream of the specified user:true: Stop receiving the video stream of the specified user.false: (Default) Resume receiving the video stream of the specified user.
   ///
   /// Returns
-  /// 0：方法调用成功。< 0：方法调用失败。
+  /// 0: Success.< 0: Failure.
   Future<void> muteRemoteVideoStreamEx(
       {required int uid,
       required bool mute,
@@ -109,73 +109,82 @@ abstract class RtcEngineEx implements RtcEngine {
       required VideoStreamType streamType,
       required RtcConnection connection});
 
-  /// 设置音频订阅黑名单。
-  /// 你可以调用该方法指定不订阅的音频流。该方法在加入频道前后均可调用。音频订阅黑名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的autoSubscribeAudio 影响。设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
+  /// Set the blacklist of subscriptions for audio streams.
+  /// You can call this method to specify the audio streams of a user that you do not want to subscribe to.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams andautoSubscribeAudio in ChannelMediaOptions .Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [uidNumber] 黑名单用户 ID 列表中的用户数量。
-  /// * [uidList] 订阅黑名单的用户 ID 列表。如果你想指定不订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeAudioBlacklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的uid。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeAudioBlacklist method to update the user ID list; this means you only add theuid of users that you do not want to subscribe to in the new user ID list.
   Future<void> setSubscribeAudioBlacklistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// 设置音频订阅白名单。
-  /// 你可以调用该方法指定想要订阅的音频流。 如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。该方法在加入频道前后均可调用。音频订阅白名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的 autoSubscribeAudio 的影响。
-  ///  设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
+  /// Sets the whitelist of subscriptions for audio streams.
+  /// You can call this method to specify the audio streams of a user that you want to subscribe to. If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .
+  ///  Once the whitelist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [uidNumber] 白名单用户 ID 列表中的用户数量。
-  /// * [uidList] 音频订阅白名单的用户 ID 列表。
-  ///  如果你想指定订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeAudioWhitelist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.
+  ///  If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeAudioWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
   ///
   Future<void> setSubscribeAudioWhitelistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// 设置视频订阅黑名单。
-  /// 你可以调用该方法指定不订阅的视频流。 如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。该方法在加入频道前后均可调用。视频订阅黑名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
+  /// Set the blacklist of subscriptions for video streams.
+  /// You can call this method to specify the video streams of a user that you do not want to subscribe to. If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [uidNumber] 黑名单用户 ID 列表中的用户数量。
-  /// * [uidList] 视频订阅黑名单的用户 ID 列表。
-  ///  如果你想指定不订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeVideoBlacklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.
+  ///  If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeVideoBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
   ///
   Future<void> setSubscribeVideoBlacklistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// 设置视频订阅白名单。
-  /// 你可以调用该方法指定想要订阅的视频流。 如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
-  ///  该方法在加入频道前后均可调用。视频订阅白名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
+  /// Set the whitelist of subscriptions for video streams.
+  /// You can call this method to specify the video streams of a user that you want to subscribe to. If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.Once the whitelist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+  ///  You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [uidList] 视频订阅白名单的用户 ID 列表。
-  ///  如果你想指定仅订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeVideoWhitelist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.
+  ///  If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeVideoWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
   ///
   Future<void> setSubscribeVideoWhitelistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Options for subscribing remote video streams.
+  /// When a remote user has enabled the dual-stream mode, you can call this method to choose the option for subscribing the video streams sent by the remote user.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [options] The video subscription options. See VideoSubscriptionOptions .
+  /// * [uid] The user ID of the remote user.
+  ///
+  /// Returns
+  /// 0: Success.< 0: Failure.
   Future<void> setRemoteVideoSubscriptionOptionsEx(
       {required int uid,
       required VideoSubscriptionOptions options,
       required RtcConnection connection});
 
-  /// 设置远端用户声音的 2D 位置，即水平面位置。
-  /// 设置远端用户声音的空间位置和音量，方便本地用户听声辨位。通过调用该接口设置远端用户声音出现的位置，左右声道的声音差异会产生声音的方位感，从而判断出远端用户的实时位置。在多人在线游戏场景，如吃鸡游戏中，该方法能有效增加游戏角色的方位感，模拟真实场景。为获得最佳听觉体验，我们建议用户佩戴有线耳机。该方法需要在加入频道后调用。
+  /// Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
+  /// This method sets the voice position and volume of a remote user.When the local user calls this method to set the voice position of a remote user, the voice difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a sense of space. This method applies to massive multiplayer online games, such as Battle Royale games.For the best voice positioning, Agora recommends using a wired headset.Call this method after joining a channel.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [uid] 远端用户的 ID。
-  /// * [pan] 设置远端用户声音的空间位置，取值范围为 [-1.0,1.0]:-1.0: 声音出现在左边。(默认）0.0: 声音出现在正前方。1.0: 声音出现在右边。
-  /// * [gain] 设置远端用户声音的音量，取值范围为 [0.0,100.0]，默认值为 100.0，表示该用户的原始音量。取值越小，则音量越低。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uid] The user ID of the remote user.
+  /// * [pan] The voice position of the remote user. The value ranges from -1.0 to 1.0:-1.0: The remote voice comes from the left.0.0: (Default) The remote voice comes from the front.1.0: The remote voice comes from the right.
+  /// * [gain] The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
   ///
   /// Returns
-  /// 0: 方法调用成功< 0: 方法调用失败
+  /// 0: Success.< 0: Failure.
   Future<void> setRemoteVoicePositionEx(
       {required int uid,
       required double pan,
@@ -195,27 +204,29 @@ abstract class RtcEngineEx implements RtcEngine {
       required VideoMirrorModeType mirrorMode,
       required RtcConnection connection});
 
-  /// 开启声卡采集。
-  /// 启用声卡采集功能后，声卡播放的声音会被合到本地音频流中，从而可以发送到远端。macOS 系统默认声卡不支持采集功能，如果你需要使用该功能，请启用一个虚拟声卡，并将该虚拟声卡的名字传入deviceName 参数。Agora 推荐你使用虚拟声卡 Soundflower 进行声卡采集。该方法在加入频道前后都能调用。
+  /// Enables loopback audio capture.
+  /// If you enable loopback audio capture, the output of the sound card is mixed into the audio stream sent to the other end.macOS does not support loopback audio capture of the default sound card. If you need to use this method, use a virtual sound card and pass its name to thedeviceName parameter. Agora recommends that you use Soundflower for loopback audio capture.You can call this method either before or after joining a channel.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [enabled] 是否开启声卡采集：true: 开启声卡采集。false:（默认）不开启声卡采集。
-  /// * [deviceName] 设备名称。
+  /// * [deviceName] macOS: The device name of the virtual sound card. The default is set to null, which means the SDK uses Soundflower for loopback audio capture.
+  ///  Windows: The device name of the sound card. The default is set to null, which means the SDK uses the sound card of your device for loopback audio capture.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [enabled] Sets whether to enable loopback audio capture:true: Enable loopback audio capture.false: (Default) Disable loopback audio capture.
   ///
   /// Returns
-  /// 0: 方法调用成功。< 0: 方法调用失败。
+  /// 0: Success.< 0: Failure.
   Future<void> enableLoopbackRecordingEx(
       {required RtcConnection connection,
       required bool enabled,
       String? deviceName});
 
-  /// 获取当前网络连接状态。
-  /// 该方法在加入频道前后都能调用。
+  /// Gets the current connection state of the SDK.
+  /// You can call this method either before or after joining a channel.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [connection] The connection information. See RtcConnection .
   ///
   /// Returns
-  /// 当前网络连接状态。详见 ConnectionStateType 。
+  /// The current connection state.
   Future<ConnectionStateType> getConnectionStateEx(RtcConnection connection);
 
   /// @nodoc
@@ -224,46 +235,45 @@ abstract class RtcEngineEx implements RtcEngine {
       required bool enabled,
       required EncryptionConfig config});
 
-  /// 发送数据流。
-  /// 调用 createDataStreamEx 后，你可以调用本方法向频道内所有用户发送数据流消息。SDK 对该方法有如下限制：频道内每秒最多能发送 60 个包，且每个包最大为 1 KB。每个客户端每秒最多能发送 30 KB 数据。频道内每人最多能同时有 5 个数据通道。成功调用该方法后，远端会触发 onStreamMessage 回调，远端用户可以在该回调中获取接收到的流消息；
-  ///  若调用失败，远端会触发 onStreamMessageError 回调。请确保在调用该方法前，已调用createDataStreamEx 创建了数据通道。该方法仅适用于通信场景以及直播场景下的主播用户，如果直播场景下的观众调用此方法可能会造成观众变主播。
+  /// Sends data stream messages.
+  /// After calling createDataStreamEx , you can call this method to send data stream messages to all users in the channel.The SDK has the following restrictions on this method:Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 kB.Each client can send up to 6 KB of data per second.Each user can have up to five data streams simultaneously.A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
+  /// A failed method call triggers the onStreamMessageError callback on the remote client.Ensure that you callcreateDataStreamEx to create a data channel before calling this method.This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [streamId] 数据流 ID。可以通过createDataStreamEx 获取。
-  /// * [data] 待发送的数据。
-  /// * [length] 数据长度。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [streamId] The data stream ID. You can get the data stream ID by callingcreateDataStreamEx.
+  /// * [data] The data to be sent.
+  /// * [length] The length of the data.
   ///
   /// Returns
-  /// 0: 方法调用成功。< 0: 方法调用失败。
+  /// 0: Success.< 0: Failure.
   Future<void> sendStreamMessageEx(
       {required int streamId,
       required Uint8List data,
       required int length,
       required RtcConnection connection});
 
-  /// 添加本地视频水印。
-  /// 该方法将一张 PNG 图片作为水印添加到本地发布的直播视频流上，同一直播频道中的用户、旁路直播观众和采集设备都能看到或采集到该水印图片。
-  ///  Agora 当前只支持在直播视频流中添加一个水印，后添加的水印会替换掉之前添加的水印。水印坐标和 setVideoEncoderConfigurationEx 方法中的设置有依赖关系：如果视频编码方向（ OrientationMode ）固定为横屏或自适应模式下的横屏，那么水印使用横屏坐标。如果视频编码方向（OrientationMode）固定为竖屏或自适应模式下的竖屏，那么水印使用竖屏坐标。设置水印坐标时，水印的图像区域不能超出setVideoEncoderConfigurationEx 方法中设置的视频尺寸，否则超出部分将被裁剪。你需要在调用 enableVideo 方法之后再调用本方法。待添加水印图片必须是 PNG 格式。本方法支持所有像素格式的 PNG 图片：RGBA、RGB、Palette、Gray 和 Alpha_gray。如果待添加的 PNG 图片的尺寸与你在本方法中设置的尺寸不一致，SDK 会对 PNG 图片进行缩放或裁剪，以与设置相符。如果你已经使用 startPreview 方法开启本地视频预览，那么本方法的visibleInPreview 可设置水印在预览时是否可见。如果你已设置本地视频为镜像模式，那么此处的本地水印也为镜像。为避免本地用户看本地视频时的水印也被镜像，Agora 建议你不要对本地视频同时使用镜像和水印功能，请在应用层实现本地水印功能。
+  /// Adds a watermark image to the local video.
+  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfigurationEx method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than thesetVideoEncoderConfigurationEx dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that you have called enableVideo before calling this method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabled the local video preview by calling the startPreview method, you can use thevisibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
-  /// * [options] 待添加的水印图片的设置选项，详见 WatermarkOptions 。
-  /// * [watermarkUrl] 待添加的水印图片的本地路径。该方法支持从本地绝对/相对路径添加水印图片。
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [options] The options of the watermark image to be added.
+  /// * [watermarkUrl] The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
   ///
   /// Returns
-  /// 0: 方法调用成功< 0: 方法调用失败
+  /// 0: Success.< 0: Failure.
   Future<void> addVideoWatermarkEx(
       {required String watermarkUrl,
       required WatermarkOptions options,
       required RtcConnection connection});
 
-  /// 删除已添加的视频水印。
+  /// Removes the watermark image from the video stream.
   ///
   ///
-  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> clearVideoWatermarkEx(RtcConnection connection);
 
-  /// 自定义数据上报和分析服务。
-  /// 声网提供自定义数据上报和分析服务。该服务当前处于免费内测期。内测期提供的能力为 6 秒内最多上报 10 条数据，每条自定义数据不能超过 256 字节，每个字符串不能超过 100 字节。如需试用该服务，请联系 开通并商定自定义数据格式。
+  /// Agora supports reporting and analyzing customized messages.
+  /// Agora supports reporting and analyzing customized messages. This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact and discuss the format of customized messages with us.
   Future<void> sendCustomReportMessageEx(
       {required String id,
       required String category,
@@ -308,29 +318,36 @@ abstract class RtcEngineEx implements RtcEngine {
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection});
 
-  /// @nodoc
   @override
   Future<void> enableWirelessAccelerate(bool enabled);
 
-  /// 获取视频截图。
-  /// 该方法是异步操作，调用返回时 SDK 并没有真正获取截图。成功调用该方法后，SDK 会触发 onSnapshotTaken 回调报告截图是否成功和获取截图的详情。
-  ///  该方法用于对指定用户的视频流进行截图，生成一张 JPG 格式的图片，并保存至指定的路径。
-  ///  该方法需要在调用 joinChannelEx 后调用。该方法对 ChannelMediaOptions 中指定发布的视频流进行截图。如果用户的视频经过前处理，例如，添加了水印或美颜，生成的截图会包含前处理效果。
+  /// Takes a snapshot of a video stream.
+  /// The method is asynchronous, and the SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.
+  ///  This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+  ///  Call this method after the joinChannelEx method.This method takes a snapshot of the published video stream specified in ChannelMediaOptions .If the user's video has been preprocessed, for example, watermarked or beautified, the resulting snapshot includes the pre-processing effect.
   ///
-  /// * [filePath] 截图的本地保存路径，需精确到文件名及格式， 例如： Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
+  /// * [filePath] The local path (including filename extensions) of the snapshot. For example:
+  ///  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
   ///  iOS: /App Sandbox/Library/Caches/example.jpg
   ///  macOS: ～/Library/Logs/example.jpg
   ///  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg
-  ///  请确保目录存在且可写。
+  ///  Ensure that the path you specify exists and is writable.
   ///
-  /// * [uid] 用户 ID。如果要对本地用户的视频截图，则设为 0。
-  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uid] The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> takeSnapshotEx(
       {required RtcConnection connection,
       required int uid,
       required String filePath});
 
-  /// @nodoc
+  /// Creates a data stream.
+  /// Creates a data stream. Each user can create up to five data streams in a single channel.Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [config] The configurations for the data stream. See DataStreamConfig .
+  ///
+  /// Returns
+  /// < 0: Failure.
   Future<int> createDataStreamEx(
       {required DataStreamConfig config, required RtcConnection connection});
 }

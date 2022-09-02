@@ -1,18 +1,18 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_spatial_audio.g.dart';
 
-/// 远端用户或媒体播放器的空间位置信息。
+/// The spatial position of the remote user or the media player.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RemoteVoicePositionInfo {
   /// @nodoc
   const RemoteVoicePositionInfo({this.position, this.forward});
 
-  /// 在世界坐标系中的坐标。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
+  /// The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
   @JsonKey(name: 'position')
   final List<double>? position;
 
-  /// 在世界坐标系前轴的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
+  /// The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
   @JsonKey(name: 'forward')
   final List<double>? forward;
 
@@ -24,38 +24,38 @@ class RemoteVoicePositionInfo {
   Map<String, dynamic> toJson() => _$RemoteVoicePositionInfoToJson(this);
 }
 
-/// 该类包含 LocalSpatialAudioEngine 类中的部分 API。
-/// LocalSpatialAudioEngine 类继承自BaseSpatialAudioEngine。
+/// This class contains some of the APIs in the LocalSpatialAudioEngine class.
+/// TheLocalSpatialAudioEngine class inherits fromBaseSpatialAudioEngine.
 abstract class BaseSpatialAudioEngine {
-  /// 销毁 BaseSpatialAudioEngine 。
-  /// 该方法释放BaseSpatialAudioEngine 下的所有资源。当用户不需要使用空间音效时，你可以调用该方法将资源释放出来用于其他操作。调用该方法后，你将无法再使用BaseSpatialAudioEngine 下的任何 API。该方法需要在 RtcEngine 的 release 方法前调用。
+  /// Destroys BaseSpatialAudioEngine .
+  /// This method releases all resources underBaseSpatialAudioEngine. When the user does not need to use the spatial audio effect, you can call this method to release resources for other operations.After calling this method, you can no longer use any of the APIs underBaseSpatialAudioEngine.Call this method before the release method under RtcEngine .
   Future<void> release();
 
-  /// 设置音频接收范围内最多可接收的音频流数。
-  /// 如果在音频接收范围内可接收的音频流数超过设置的值，则本地用户会接收音源距离较近的maxCount 路音频。如果房间里有和本地用户属于同一队伍的用户，则本地用户会优先接收队员的音频。例如，当maxCount 设为 3 时，如果房间里有 5 位远端用户，其中 2 位和本地用户属于同一队伍、3 位和本地用户属于不同队伍但在本地用户的音频接收范围内，则本地用户可以听到 2 位队友和 1 位离自己最近的不同队伍的用户。
+  /// Sets the maximum number of streams that a user can receive in a specified audio reception range.
+  /// If the number of receivable streams exceeds the set value, the local user receives themaxCount streams that are closest to the local user. If there are users who belong to the same team as the local user in the room, the local user receives the audio of the teammates first. For example, whenmaxCount is set to 3, if there are five remote users in the room, two of whom belong to the same team as the local user, and three of whom belong to different teams but are within the audio reception range of the local user, the local user can hear the two teammates and the one user from a different team closest to the local user.
   ///
-  /// * [maxCount] 音频接收范围内最多可接收的音频流数。
+  /// * [maxCount] The maximum number of streams that a user can receive within a specified audio reception range.
   Future<void> setMaxAudioRecvCount(int maxCount);
 
-  /// 设置本地用户的音频接收范围。
-  /// 设置成功后，用户只能听见设置范围内或属于同一队伍的远端用户。你可以随时调用该方法更新音频的接收范围。
+  /// Sets the audio reception range of the local user.
+  /// After the setting is successful, the local user can only hear the remote users within the setting range or belonging to the same team. You can call this method at any time to update the audio reception range.
   ///
-  /// * [range] 可接收音频的最大范围，单位为米。取值需大于 0。
+  /// * [range] The maximum audio reception range. The unit is meters. The value must be greater than 0.
   Future<void> setAudioRecvRange(double range);
 
-  /// 设置游戏引擎单位距离的长度（米）。
-  /// 游戏引擎里的距离单位是游戏引擎自定义的，而 Agora 空间音效算法的距离单位为米。默认情况下，SDK 会将每单位的游戏引擎距离换算为一米。你可以调用该方法，将游戏引擎里的单位距离换算为指定的米数。
+  /// Sets the length (in meters) of the game engine distance per unit.
+  /// In a game engine, the unit of distance is customized, while in the Agora spatial audio algorithm, distance is measured in meters. By default, the SDK converts the game engine distance per unit to one meter. You can call this method to convert the game engine distance per unit to a specified number of meters.
   ///
-  /// * [unit] 每单位游戏引擎距离转换后的米数，取值需大于 0.00。例如，将 unit 设为 2.00，表示每单位的游戏引擎距离等于 2 米。该值越大，当远端用户远离本地用户时，本地用户听到的声音衰减速度越快。
+  /// * [unit] The number of meters that the game engine distance per unit is equal to. This parameter must be greater than 0.00. For example, setting unit as 2.00 means the game engine distance per unit equals 2 meters.The larger the value is, the faster the sound heard by the local user attenuates when the remote user moves far away from the local user.
   Future<void> setDistanceUnit(double unit);
 
-  /// 更新本地用户的空间位置。
-  /// 在 LocalSpatialAudioEngine 类下，该方法需要和 updateRemotePosition 搭配使用。SDK 会根据该方法和updateRemotePosition 设置的参数计算本地和远端用户之间的相对位置，从而计算用户的空间音效参数。
+  /// Updates the spatial position of the local user.
+  /// Under the LocalSpatialAudioEngine class, this method needs to be used with updateRemotePosition . The SDK calculates the relative position between the local and remote users according to this method and the parameter settings inupdateRemotePosition, and then calculates the user's spatial audio effect parameters.
   ///
-  /// * [position] 在世界坐标系中的坐标。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
-  /// * [axisForward] 在世界坐标系前轴的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
-  /// * [axisRight] 在世界坐标系右轴的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
-  /// * [axisUp] 在世界坐标系上轴的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
+  /// * [position] The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// * [axisForward] The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// * [axisRight] The unit vector of the y axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  /// * [axisUp] The unit vector of the z axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
   Future<void> updateSelfPosition(
       {required List<double> position,
       required List<double> axisForward,
@@ -70,42 +70,42 @@ abstract class BaseSpatialAudioEngine {
       required List<double> axisUp,
       required RtcConnection connection});
 
-  /// 更新媒体播放器的空间位置。
-  /// 成功更新后，本地用户可以听到媒体播放器空间位置的变化。
+  /// Updates the spatial position of the media player.
+  /// After a successful update, the local user can hear the change in the spatial position of the media player.
   ///
-  /// * [playerId] 媒体播放器 ID。
-  /// * [positionInfo] 媒体播放器的空间位置信息。详见 RemoteVoicePositionInfo 。
+  /// * [playerId] The ID of the media player.
+  /// * [positionInfo] The spatial position of the media player. See RemoteVoicePositionInfo .
   Future<void> updatePlayerPositionInfo(
       {required int playerId, required RemoteVoicePositionInfo positionInfo});
 
   /// @nodoc
   Future<void> setParameters(String params);
 
-  /// 取消或恢复发布本地音频流。
-  /// 该方法不影响音频采集状态，因为没有禁用音频采集设备。该方法需要在 joinChannelWithOptions 后调用。在使用空间音效时，如需设置是否发布本地音频流，Agora 推荐调用该方法替代 RtcEngine 的 muteLocalAudioStream 方法。
+  /// Stops or resumes publishing the local audio stream.
+  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to publish the local audio stream, Agora recommends calling this method instead of the muteLocalAudioStream method under RtcEngine .
   ///
-  /// * [mute] 是否取消发布本地音频流。true: 取消发布本地音频流。false: 发布本地音频流。
+  /// * [mute] Whether to stop publishing the local audio stream.true: Stop publishing the local audio stream.false: Publish the local audio stream.
   Future<void> muteLocalAudioStream(bool mute);
 
-  /// 取消或恢复订阅所有远端用户的音频流。
-  /// 成功调用该方法后，本地用户会取消或恢复订阅所有远端用户的音频流，包括在调用该方法后加入频道的用户的音频流。该方法需要在 joinChannelWithOptions 后调用。在使用空间音效时，如需设置是否订阅所有远端用户的音频流，Agora 推荐调用该方法替代 RtcEngine 的 muteAllRemoteAudioStreams 方法。
+  /// Stops or resumes subscribing to the audio streams of all remote users.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .
   ///
-  /// * [mute] 是否取消订阅所有远端用户的音频流：true: 取消订阅所有远端用户的音频流。false: 订阅所有远端用户的音频流。
+  /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 }
 
-/// 该类通过 SDK 计算用户坐标，实现空间音效。
-/// 调用该类下其他 API 前，你需要调用 initialize 方法初始化该类。
+/// This class calculates user positions through the SDK to implement the spatial audio effect.
+///
 abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
-  /// 初始化 LocalSpatialAudioEngine 。
-  /// 在调用LocalSpatialAudioEngine 类的其他方法前，你需要先调用该方法初始化LocalSpatialAudioEngine。SDK 只支持每个 app 创建一个LocalSpatialAudioEngine 实例。
+  /// Initializes LocalSpatialAudioEngine .
+  /// Before calling other methods of theLocalSpatialAudioEngine class, you need to call this method to initializeLocalSpatialAudioEngine.The SDK supports creating only oneLocalSpatialAudioEngine instance for an app.
   Future<void> initialize();
 
-  /// 更新远端用户的空间位置信息。
-  /// 成功调用该方法后，SDK 会根据本地和远端用户的相对位置计算空间音效参数。该方法需要在 joinChannelWithOptions 后调用。
+  /// Updates the spatial position of the specified remote user.
+  /// After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user.Call this method after the joinChannel [2/2] method.
   ///
-  /// * [uid] 用户 ID。需与用户加入频道时填写的用户 ID 一致。
-  /// * [posInfo] 远端用户的空间位置信息。详见 RemoteVoicePositionInfo 。
+  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
+  /// * [posInfo] The spatial position of the remote user. See RemoteVoicePositionInfo .
   Future<void> updateRemotePosition(
       {required int uid, required RemoteVoicePositionInfo posInfo});
 
@@ -115,18 +115,18 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
       required RemoteVoicePositionInfo posInfo,
       required RtcConnection connection});
 
-  /// 删除指定远端用户的空间位置信息。
-  /// 成功调用该方法后，本地用户将听不到指定的远端用户。离开频道后，为避免计算资源的浪费，你也可以调用该方法删除指定远端用户的空间位置信息。
+  /// Removes the spatial position of the specified remote user.
+  /// After successfully calling this method, the local user no longer hears the specified remote user.After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial position of the specified remote user.
   ///
-  /// * [uid] 用户 ID。需与用户加入频道时填写的用户 ID 一致。
+  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
   Future<void> removeRemotePosition(int uid);
 
   /// @nodoc
   Future<void> removeRemotePositionEx(
       {required int uid, required RtcConnection connection});
 
-  /// 删除所有远端用户的空间位置信息。
-  /// 成功调用该方法后，本地用户将听不到所有远端用户。离开频道后，为避免计算资源的浪费，你也可以调用该方法删除所有远端用户的空间位置信息。
+  /// Removes the spatial positions of all remote users.
+  /// After successfully calling this method, the local user no longer hears any remote users.After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial positions of all remote users.
   Future<void> clearRemotePositions();
 
   /// @nodoc

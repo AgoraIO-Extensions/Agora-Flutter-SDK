@@ -1,11 +1,11 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'audio_device_manager.g.dart';
 
-/// 设备 ID 的最大长度。
+/// The maximum length of the device ID.
 ///
 @JsonEnum(alwaysCreate: true)
 enum MaxDeviceIdLengthType {
-  /// 设备 ID 的最大长度为 512 个字符。
+  /// The maximum length of the device ID is 512 bytes.
   @JsonValue(512)
   maxDeviceIdLength,
 }
@@ -23,41 +23,41 @@ extension MaxDeviceIdLengthTypeExt on MaxDeviceIdLengthType {
   }
 }
 
-/// 音频设备管理方法。
+/// Audio device management methods.
 ///
 abstract class AudioDeviceManager {
-  /// 获取系统中所有的播放设备列表。
+  /// Enumerates the audio playback devices.
   ///
   ///
   /// Returns
-  /// 方法调用成功，返回 AudioDeviceInfo 数组，包含所有音频播放设备的设备 ID 和设备名称。方法调用失败: 返回空列表。
+  /// Success: Returns an AudioDeviceInfo array, which includes all the audio playback devices.Failure: An empty array.
   Future<List<AudioDeviceInfo>> enumeratePlaybackDevices();
 
-  /// 获取系统中所有的音频采集设备列表。
+  /// Enumerates the audio capture devices.
   ///
   ///
   /// Returns
-  /// 方法调用成功，返回一个 AudioDeviceInfo 数组，包含所有音频采集设备的设备 ID 和设备名称。方法调用失败: 返回空列表。
+  /// Success: An AudioDeviceInfo array, which includes all the audio capture devices.Failure: An empty array.
   Future<List<AudioDeviceInfo>> enumerateRecordingDevices();
 
-  /// 指定播放设备。
+  /// Sets the audio playback device.
   ///
   ///
-  /// * [deviceId] 通过 deviceID 指定播放设备。由 enumeratePlaybackDevices 获取。插拔设备不会影响deviceId。
+  /// * [deviceId] The ID of the specified audio playback device. You can get the device ID by calling enumeratePlaybackDevices . Plugging or unplugging the audio device does not change the value ofdeviceId.
   Future<void> setPlaybackDevice(String deviceId);
 
-  /// 获取当前音频播放设备。
+  /// Retrieves the audio playback device associated with the device ID.
   ///
   ///
   /// Returns
-  /// 当前音频播放设备。
+  /// The current audio playback device.
   Future<String> getPlaybackDevice();
 
-  /// 获取音频播放设备信息。
+  /// Retrieves the audio playback device associated with the device ID.
   ///
   ///
   /// Returns
-  /// AudioDeviceInfo 对象，包含音频播放设备的设备 ID 和设备名称。
+  /// An AudioDeviceInfo object, which contains the ID and device name of the audio devices.
   Future<AudioDeviceInfo> getPlaybackDeviceInfo();
 
   /// @nodoc
@@ -66,24 +66,24 @@ abstract class AudioDeviceManager {
   /// @nodoc
   Future<int> getPlaybackDeviceVolume();
 
-  /// 指定音频采集设备。
+  /// Sets the audio recording device.
   ///
   ///
-  /// * [deviceId] 音频采集设备的 Device ID。可通过 enumerateRecordingDevices 获取。插拔设备不会影响deviceId。
+  /// * [deviceId] The ID of the audio recording device. You can get the device ID by calling enumerateRecordingDevices . Plugging or unplugging the audio device does not change the value ofdeviceId.
   Future<void> setRecordingDevice(String deviceId);
 
-  /// 获取当前音频采集设备。
+  /// Gets the current audio recording device.
   ///
   ///
   /// Returns
-  /// 当前音频采集设备。
+  /// The current audio recording device.
   Future<String> getRecordingDevice();
 
-  /// 获取音频采集设备信息。
+  /// Retrieves the volume of the audio recording device.
   ///
   ///
   /// Returns
-  /// AudioDeviceInfo 对象，包含音频采集设备的设备 ID 和设备名称。
+  /// An AudioDeviceInfo object, which includes the device ID and device name.
   Future<AudioDeviceInfo> getRecordingDeviceInfo();
 
   /// @nodoc
@@ -104,49 +104,49 @@ abstract class AudioDeviceManager {
   /// @nodoc
   Future<bool> getRecordingDeviceMute();
 
-  /// 启动音频播放设备测试。
-  /// 该方法测试音频播放设备是否能正常工作。启动测试后，SDK 播放指定的音频文件，测试者如果能听到声音，说明播放设备能正常工作。调用该方法后，SDK 会每隔 100 ms 触发一次 onAudioVolumeIndication 回调，报告uid = 1 及播放设备的音量信息。该方法需要在加入频道前调用。
+  /// Starts the audio playback device test.
+  /// This method tests whether the audio playback device works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly.After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reportinguid = 1 and the volume information of the playback device.Ensure that you call this method before joining a channel.
   ///
-  /// * [testAudioFilePath] 音频文件的绝对路径，路径字符串使用 UTF-8 编码格式。支持文件格式: wav、mp3、m4a、aac。支持文件采样率: 8000、16000、32000、44100、48000。
+  /// * [testAudioFilePath] The path of the audio file. The data format is string in UTF-8.Supported file formats: wav, mp3, m4a, and aac.Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
   Future<void> startPlaybackDeviceTest(String testAudioFilePath);
 
-  /// 停止音频播放设备测试。
-  /// 该方法停止音频播放设备测试。调用 startPlaybackDeviceTest 后，必须调用该方法停止测试。该方法需要在加入频道前调用。
+  /// Stops the audio playback device test.
+  /// This method stops the audio playback device test. You must call this method to stop the test after calling the startPlaybackDeviceTest method.Ensure that you call this method before joining a channel.
   Future<void> stopPlaybackDeviceTest();
 
-  /// 启动音频采集设备测试。
-  /// 该方法测试音频采集设备是否能正常工作。调用该方法后，SDK 会按设置的时间间隔触发 onAudioVolumeIndication 回调，报告uid = 0 及采集设备的音量信息。该方法需要在加入频道前调用。
+  /// Starts the audio capture device test.
+  /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reportsuid = 0 and the volume information of the capturing device.Ensure that you call this method before joining a channel.
   ///
-  /// * [indicationInterval] SDK 触发 onAudioVolumeIndication 回调的时间间隔，单位为毫秒。建议设置到大于 200 毫秒。不得小于 10 毫秒，否则会收不到onAudioVolumeIndication 回调。
+  /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive theonAudioVolumeIndication callback.
   Future<void> startRecordingDeviceTest(int indicationInterval);
 
-  /// 停止音频采集设备测试。
-  /// 该方法停止音频采集设备测试。调用 startRecordingDeviceTest 后，必须调用该方法停止测试。该方法需要在加入频道前调用。
+  /// Stops the audio capture device test.
+  /// This method stops the audio capture device test. You must call this method to stop the test after calling the startRecordingDeviceTest method.Ensure that you call this method before joining a channel.
   Future<void> stopRecordingDeviceTest();
 
-  /// 开始音频设备回路测试。
-  /// 该方法测试音频采集和播放设备是否能正常工作。一旦测试开始，音频采集设备会采集本地音频，然后使用音频播放设备播放出来。SDK 会按设置的时间间隔触发两个 onAudioVolumeIndication 回调，分别报告音频采集设备（uid = 0）和音频播放设置（uid = 1）的音量信息。该方法需要在加入频道前调用。该方法仅在本地进行音频设备测试，不涉及网络连接。
+  /// Starts an audio device loopback test.
+  /// This method tests whether the local audio capture device and playback device are working properly. Once the test starts, the audio recording device records the local audio, and the audio playback device plays the captured audio. The SDK triggers two independent onAudioVolumeIndication callbacks at the time interval set in this method, which reports the volume information of the capture device (uid = 0) and the volume information of the playback device (uid = 1) respectively.Ensure that you call this method before joining a channel.This method tests local audio devices and does not report the network conditions.
   ///
-  /// * [indicationInterval] SDK 触发onAudioVolumeIndication 回调的时间间隔，单位为毫秒。建议设置到大于 200 毫秒。不得少于 10 毫秒，否则会收不到onAudioVolumeIndication 回调。
+  /// * [indicationInterval] The time interval (ms) at which the SDK triggers theonAudioVolumeIndication callback. Agora recommends setting a value greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive theonAudioVolumeIndication callback.
   Future<void> startAudioDeviceLoopbackTest(int indicationInterval);
 
-  /// 停止音频设备回路测试。
-  /// 该方法需要在加入频道前调用。在调用 startAudioDeviceLoopbackTest 后，必须调用该方法停止音频设备回路测试。
+  /// Stops the audio device loopback test.
+  /// Ensure that you call this method before joining a channel.Ensure that you call this method to stop the loopback test after calling the startAudioDeviceLoopbackTest method.
   Future<void> stopAudioDeviceLoopbackTest();
 
-  /// 设置 SDK 使用的音频播放设备跟随系统默认的音频播放设备。
+  /// Sets the audio playback device used by the SDK to follow the system default audio playback device.
   ///
   ///
-  /// * [enable] 是否跟随系统默认的音频播放设备：true：跟随。当系统默认音频播放设备发生改变时，SDK 立即切换音频播放设备。false：不跟随。只有当 SDK 使用的音频播放设备被移除后，SDK 才切换至系统默认的音频播放设备。
+  /// * [enable] Whether to follow the system default audio playback device:true: Follow. The SDK immediately switches the audio playback device when the system default audio playback device changes.false: Do not follow. The SDK switches the audio playback device to the system default audio playback device only when the currently used audio playback device is disconnected.
   Future<void> followSystemPlaybackDevice(bool enable);
 
-  /// 设置 SDK 使用的音频采集设备跟随系统默认的音频采集设备。
+  /// Sets the audio recording device used by the SDK to follow the system default audio recording device.
   ///
   ///
-  /// * [enable] 是否跟随系统默认的音频采集设备：true：跟随。当系统默认的音频采集设备改变时，SDK 立即切换音频采集设备。false：不跟随。只有当 SDK 使用的音频采集设备被移除后，SDK 才切换至系统默认的音频采集设备。
+  /// * [enable] Whether to follow the system default audio recording device:true: Follow. The SDK immediately switches the audio recording device when the system default audio recording device changes.false: Do not follow. The SDK switches the audio recording device to the system default audio recording device only when the currently used audio recording device is disconnected.
   Future<void> followSystemRecordingDevice(bool enable);
 
-  /// 释放AudioDeviceManager 对象占用的所有资源。
+  /// Releases all the resources occupied by theAudioDeviceManager object.
   ///
   Future<void> release();
 }

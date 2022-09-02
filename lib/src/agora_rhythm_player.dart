@@ -75,18 +75,18 @@ extension RhythmPlayerErrorTypeExt on RhythmPlayerErrorType {
   }
 }
 
-/// 虚拟节拍器配置。
+/// The metronome configuration.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AgoraRhythmPlayerConfig {
   /// @nodoc
   const AgoraRhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute});
 
-  /// 每小节的拍数，取值范围为 [1,9]。默认值为 4，即每小节包含 1 个强拍和 3 个弱拍。
+  /// The number of beats per measure, which ranges from 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
   @JsonKey(name: 'beatsPerMeasure')
   final int? beatsPerMeasure;
 
-  /// 节拍速度（拍/分钟），取值范围为 [60,360]。默认值为 60，即 1 分钟有 60 拍。
+  /// The beat speed (beats/minute), which ranges from 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
   @JsonKey(name: 'beatsPerMinute')
   final int? beatsPerMinute;
 

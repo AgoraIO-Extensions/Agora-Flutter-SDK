@@ -7,51 +7,51 @@ const defaultConnectionId = 0;
 /// @nodoc
 const dummyConnectionId = 4294967295;
 
-/// 音频路由的类型。
+/// The type of the audio route.
 ///
 @JsonEnum(alwaysCreate: true)
 enum AudioRoute {
-  /// -1: 使用默认的音频路由。
+  /// -1: The default audio route.
   @JsonValue(-1)
   routeDefault,
 
-  /// 0: 音频路由为带麦克风的耳机。
+  /// 0: Audio output routing is a headset with microphone.
   @JsonValue(0)
   routeHeadset,
 
-  /// 1: 音频路由为听筒。
+  /// 1: The audio route is an earpiece.
   @JsonValue(1)
   routeEarpiece,
 
-  /// 2: 音频路由为不带麦克风的耳机。
+  /// 2: The audio route is a headset without a microphone.
   @JsonValue(2)
   routeHeadsetnomic,
 
-  /// 3: 音频路由为设备自带的扬声器。
+  /// 3: The audio route is the speaker that comes with the device.
   @JsonValue(3)
   routeSpeakerphone,
 
-  /// @nodoc
+  /// 4: The audio route is an external speaker.(iOS and macOS only)
   @JsonValue(4)
   routeLoudspeaker,
 
-  /// 5: 音频路由为蓝牙耳机。
+  /// 5: The audio route is a bluetooth headset.
   @JsonValue(5)
   routeHeadsetbluetooth,
 
-  /// 7: 音频路由为 USB 外围设备。（仅适用于 macOS）
+  /// 7: The audio route is a USB peripheral device.(For macOS only)
   @JsonValue(6)
   routeUsb,
 
-  /// 6: 音频路由为 HDMI 外围设备。（仅适用于 macOS）
+  /// 6: The audio route is an HDMI peripheral device.(For macOS only)
   @JsonValue(7)
   routeHdmi,
 
-  /// @nodoc
+  /// 8: The audio route is a DisplayPort peripheral device.(For macOS only)
   @JsonValue(8)
   routeDisplayport,
 
-  /// @nodoc
+  /// 9: The audio route is Apple AirPlay.(For macOS only)
   @JsonValue(9)
   routeAirplay,
 }
@@ -116,15 +116,15 @@ class AudioParameters {
   Map<String, dynamic> toJson() => _$AudioParametersToJson(this);
 }
 
-/// 音频数据的使用模式。
+/// The use mode of the audio data.
 ///
 @JsonEnum(alwaysCreate: true)
 enum RawAudioFrameOpModeType {
-  /// 0: 只读模式，
+  /// 0: Read-only mode,
   @JsonValue(0)
   rawAudioFrameOpModeReadOnly,
 
-  /// 2: 读写模式,
+  /// 2: Read and write mode,
   @JsonValue(2)
   rawAudioFrameOpModeReadWrite,
 }
@@ -142,23 +142,23 @@ extension RawAudioFrameOpModeTypeExt on RawAudioFrameOpModeType {
   }
 }
 
-/// 媒体源类型。
+/// Media source type.
 ///
 @JsonEnum(alwaysCreate: true)
 enum MediaSourceType {
-  /// 0: 音频播放设备。
+  /// 0: Audio playback device.
   @JsonValue(0)
   audioPlayoutSource,
 
-  /// 1: 音频采集设备。
+  /// 1: Audio capturing device.
   @JsonValue(1)
   audioRecordingSource,
 
-  /// 2: 第一个摄像头
+  /// 2: The primary camera.
   @JsonValue(2)
   primaryCameraSource,
 
-  /// 3: 第二个摄像头。
+  /// 3: The secondary camera.
   @JsonValue(3)
   secondaryCameraSource,
 
@@ -198,7 +198,7 @@ enum MediaSourceType {
   @JsonValue(12)
   transcodedVideoSource,
 
-  /// 100: 未知媒体源。
+  /// 100: Unknown media source.
   @JsonValue(100)
   unknownMediaSource,
 }
@@ -216,18 +216,19 @@ extension MediaSourceTypeExt on MediaSourceType {
   }
 }
 
-/// @nodoc
+/// Content moderation results.
+///
 @JsonEnum(alwaysCreate: true)
 enum ContentInspectResult {
-  /// @nodoc
+  /// 1: The image does not contain inappropriate elements.
   @JsonValue(1)
   contentInspectNeutral,
 
-  /// @nodoc
+  /// 2: The image is sexually suggestive.
   @JsonValue(2)
   contentInspectSexy,
 
-  /// @nodoc
+  /// 3: The image is pornographic.
   @JsonValue(3)
   contentInspectPorn,
 }
@@ -245,19 +246,19 @@ extension ContentInspectResultExt on ContentInspectResult {
   }
 }
 
-/// 视频内容审核模块的类型。
+/// The type of video content moderation module.
 ///
 @JsonEnum(alwaysCreate: true)
 enum ContentInspectType {
-  /// @nodoc
+  /// 0: (Default) This module has no actual function. Do not settype to this value.
   @JsonValue(0)
   contentInspectInvalid,
 
-  /// @nodoc
+  /// 1: Video content moderation. SDK takes screenshots, inspects video content of the video stream in the channel, and uploads the screenshots and moderation results.
   @JsonValue(1)
   contentInspectModeration,
 
-  /// @nodoc
+  /// 2: Screenshot capture. SDK takes screenshots of the video stream in the channel and uploads them.
   @JsonValue(2)
   contentInspectSupervision,
 }
@@ -275,18 +276,18 @@ extension ContentInspectTypeExt on ContentInspectType {
   }
 }
 
-/// ContentInspectModule 结构体，用于配置视频内容审核模块的类型和频率。
+/// ContentInspectModuleStructure to configure the type and frequency of the video content moderation module.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectModule {
   /// @nodoc
   const ContentInspectModule({this.type, this.interval});
 
-  /// 视频内容审核模块的类型。详见 ContentInspectType 。
+  /// The type of video content moderation module. See ContentInspectType .
   @JsonKey(name: 'type')
   final ContentInspectType? type;
 
-  /// 视频内容审核的间隔，单位为秒，取值必须大于 0。默认值为 0，表示不进行内容审核。推荐值为 10 秒，你也可以根据业务需求自行调整。
+  /// The frequency (in seconds) of video content moderation. The value should be set as larger than 0. If set as 0 (default), the video content is not inspected. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
   @JsonKey(name: 'interval')
   final int? interval;
 
@@ -298,22 +299,22 @@ class ContentInspectModule {
   Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
 }
 
-/// 视频内容审核配置。
+/// Configuration of video content moderation.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectConfig {
   /// @nodoc
   const ContentInspectConfig({this.extraInfo, this.modules, this.moduleCount});
 
-  /// 视频内容审核的附加信息，最大长度为 1024 字节。SDK 会将附加信息和截图一起上传至 Agora 内容审核服务器；审核完成后，Agora 内容审核服务器会将附加信息随审核结果一起发送给你的服务器。
+  /// Additional information for video content moderation, with a maximum length of 1024 bytes.The SDK sends the screenshots and additional information on the video content to the Agora content moderation server. Once the content moderation process is completed, the Agora content moderation server sends the additional information and the content moderation results to your server.
   @JsonKey(name: 'extraInfo')
   final String? extraInfo;
 
-  /// 视频内容审核模块。详见 ContentInspectModule 。最多支持配置 32 个ContentInspectModule 实例，MAX_CONTENT_INSPECT_MODULE_COUNT 的取值范围为 [1,32] 中的整数。一个视频内容审核模块最多只能配置一个实例。
+  /// Video content moderation module. See ContentInspectModule .A maximum of 32ContentInspectModule instances can be configured, and the value range ofMAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A video content moderation module can only be configured with one instance at most.
   @JsonKey(name: 'modules')
   final List<ContentInspectModule>? modules;
 
-  /// 视频内容审核模块数，即配置的ContentInspectModule 实例的数量，必须与modules 中配置的实例个数一致。最大值为 32。
+  /// The number of video content moderation modules, that is, the number of configuredContentInspectModule instances, must be the same as the number of instances configured inmodules. The maximum number is 32.
   @JsonKey(name: 'moduleCount')
   final int? moduleCount;
 
@@ -372,7 +373,7 @@ class AudioEncodedFrameInfo {
   Map<String, dynamic> toJson() => _$AudioEncodedFrameInfoToJson(this);
 }
 
-/// 外部 PCM 格式音频帧的信息。
+/// The parameters of the audio frame in PCM format.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioPcmFrame {
@@ -385,27 +386,27 @@ class AudioPcmFrame {
       this.bytesPerSample,
       this.data});
 
-  /// 音频帧的时间戳 (ms)。
+  /// The timestamp (ms) of the audio frame.
   @JsonKey(name: 'capture_timestamp')
   final int? captureTimestamp;
 
-  /// 每个声道的采样点数。
+  /// The number of samples per channel in the audio frame.
   @JsonKey(name: 'samples_per_channel_')
   final int? samplesPerChannel;
 
-  /// 音频采样率 (Hz)。
+  /// Audio sample rate (Hz).
   @JsonKey(name: 'sample_rate_hz_')
   final int? sampleRateHz;
 
-  /// 音频声道数。
+  /// The number of audio channels.
   @JsonKey(name: 'num_channels_')
   final int? numChannels;
 
-  /// @nodoc
+  /// The number of bytes per sample.
   @JsonKey(name: 'bytes_per_sample')
   final BytesPerSample? bytesPerSample;
 
-  /// 音频帧数据。
+  /// The video frame.
   @JsonKey(name: 'data_')
   final List<int>? data;
 
@@ -417,23 +418,23 @@ class AudioPcmFrame {
   Map<String, dynamic> toJson() => _$AudioPcmFrameToJson(this);
 }
 
-/// 声道模式。
+/// The channel mode.
 ///
 @JsonEnum(alwaysCreate: true)
 enum AudioDualMonoMode {
-  /// 0: 原始模式。
+  /// 0: Original mode.
   @JsonValue(0)
   audioDualMonoStereo,
 
-  /// 1: 左声道模式。该模式用左声道的音频替换右声道的音频，即用户只能听到左声道的音频。
+  /// 1: Left channel mode. This mode replaces the audio of the right channel with the audio of the left channel, which means the user can only hear the audio of the left channel.
   @JsonValue(1)
   audioDualMonoL,
 
-  /// 2: 右声道模式。该模式用右声道的音频替换左声道的音频，即用户只能听到右声道的音频。
+  /// 2: Right channel mode. This mode replaces the audio of the left channel with the audio of the right channel, which means the user can only hear the audio of the right channel.
   @JsonValue(2)
   audioDualMonoR,
 
-  /// 3: 混合模式。该模式将左右声道的数据叠加，即用户能同时听到左声道和右声道的音频。
+  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the right channel, which means the user can hear the audio of the left channel and the right channel at the same time.
   @JsonValue(3)
   audioDualMonoMix,
 }
@@ -451,15 +452,15 @@ extension AudioDualMonoModeExt on AudioDualMonoMode {
   }
 }
 
-/// 视频像素格式。
+/// The video pixel format.
 ///
 @JsonEnum(alwaysCreate: true)
 enum VideoPixelFormat {
-  /// 0: 原始视频像素格式。
+  /// 0: Raw video pixel format.
   @JsonValue(0)
   videoPixelDefault,
 
-  /// 1: I420 格式。
+  /// 1: The format is I420.
   @JsonValue(1)
   videoPixelI420,
 
@@ -471,11 +472,11 @@ enum VideoPixelFormat {
   @JsonValue(3)
   videoPixelNv21,
 
-  /// 4: RGBA 格式。
+  /// 4: The format is RGBA.
   @JsonValue(4)
   videoPixelRgba,
 
-  /// 8: NV12 格式。
+  /// 8: The format is NV12.
   @JsonValue(8)
   videoPixelNv12,
 
@@ -499,7 +500,7 @@ enum VideoPixelFormat {
   @JsonValue(14)
   videoCvpixelBgra,
 
-  /// 16: I422 格式。
+  /// 16: The format is I422.
   @JsonValue(16)
   videoPixelI422,
 }
@@ -517,19 +518,19 @@ extension VideoPixelFormatExt on VideoPixelFormat {
   }
 }
 
-/// 视频显示模式。
+/// Video display modes.
 ///
 @JsonEnum(alwaysCreate: true)
 enum RenderModeType {
-  /// 1: 视频尺寸等比缩放。优先保证视窗被填满。因视频尺寸与显示视窗尺寸不一致而多出的视频将被截掉。
+  /// 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
   @JsonValue(1)
   renderModeHidden,
 
-  /// 2: 视频尺寸等比缩放。优先保证视频内容全部显示。因视频尺寸与显示视窗尺寸不一致造成的视窗未被填满的区域填充黑色。
+  /// 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
   @JsonValue(2)
   renderModeFit,
 
-  /// 弃用：3: 该模式已弃用。
+  /// Deprecated:3: This mode is deprecated.
   @JsonValue(3)
   renderModeAdaptive,
 }
@@ -547,7 +548,7 @@ extension RenderModeTypeExt on RenderModeType {
   }
 }
 
-/// 外部视频帧。
+/// The external video frame.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ExternalVideoFrame {
@@ -570,67 +571,67 @@ class ExternalVideoFrame {
       this.metadataBuffer,
       this.metadataSize});
 
-  /// 视频类型。详见 VideoBufferType 。
+  /// The video type. See VideoBufferType .
   @JsonKey(name: 'type')
   final VideoBufferType? type;
 
-  /// 像素格式。详见 VideoPixelFormat 。
+  /// The pixel format. See VideoPixelFormat .
   @JsonKey(name: 'format')
   final VideoPixelFormat? format;
 
-  /// 视频缓冲区。
+  /// Video frame buffer.
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
-  /// 传入视频帧的行间距，单位为像素而不是字节。对于 Texture，该值指的是 Texture 的宽度。
+  /// Line spacing of the incoming video frame, which must be in pixels instead of bytes. For textures, it is the width of the texture.
   @JsonKey(name: 'stride')
   final int? stride;
 
-  /// 传入视频帧的高度。
+  /// Height of the incoming video frame.
   @JsonKey(name: 'height')
   final int? height;
 
-  /// 原始数据相关字段。指定左边裁剪掉的像素数量。默认为 0。
+  /// Raw data related parameter. The number of pixels trimmed from the left. The default value is 0.
   @JsonKey(name: 'cropLeft')
   final int? cropLeft;
 
-  /// 原始数据相关字段。指定顶边裁剪掉的像素数量。默认为 0。
+  /// Raw data related parameter. The number of pixels trimmed from the top. The default value is 0.
   @JsonKey(name: 'cropTop')
   final int? cropTop;
 
-  ///  原始数据相关字段。指定右边裁剪掉的像素数量。默认为 0。
+  /// Raw data related parameter. The number of pixels trimmed from the right. The default value is 0.
   @JsonKey(name: 'cropRight')
   final int? cropRight;
 
-  /// 原始数据相关字段。指定底边裁剪掉的像素数量。默认为 0。
+  /// Raw data related parameter. The number of pixels trimmed from the bottom. The default value is 0.
   @JsonKey(name: 'cropBottom')
   final int? cropBottom;
 
-  /// 原始数据相关字段。指定是否对传入的视频组做顺时针旋转操作，可选值为 0， 90， 180， 270。默认为 0。
+  /// Raw data related parameter. The clockwise rotation of the video frame. You can set the rotation angle as 0, 90, 180, or 270. The default value is 0.
   @JsonKey(name: 'rotation')
   final int? rotation;
 
-  /// 传入的视频帧的时间戳，以毫秒为单位。不正确的时间戳会导致丢帧或者音视频不同步。
+  /// Timestamp (ms) of the incoming video frame. An incorrect timestamp results in frame loss or unsynchronized audio and video.
   @JsonKey(name: 'timestamp')
   final int? timestamp;
 
-  /// 该参数仅适用于 Texture 格式的视频数据。指该视频帧的 Texture ID。
+  /// This parameter only applies to video data in Texture format. Texture ID of the frame.
   @JsonKey(name: 'eglType')
   final EglContextType? eglType;
 
-  /// 该参数仅适用于 Texture 格式的视频数据。为一个输入的 4x4 变换矩阵，典型值为一个单位矩阵。
+  /// This parameter only applies to video data in Texture format. Incoming 4 x 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'textureId')
   final int? textureId;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Texture format. Incoming 4 x 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value isNULL.
   @JsonKey(name: 'metadata_buffer', ignore: true)
   final Uint8List? metadataBuffer;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is0.
   @JsonKey(name: 'metadata_size')
   final int? metadataSize;
 
@@ -667,19 +668,19 @@ extension EglContextTypeExt on EglContextType {
   }
 }
 
-/// 视频 buffer 类型。
+/// The video buffer type.
 ///
 @JsonEnum(alwaysCreate: true)
 enum VideoBufferType {
-  /// 1: 类型为原始数据。
+  /// 1: The video buffer in the format of raw data.
   @JsonValue(1)
   videoBufferRawData,
 
-  /// 2: 类型为原始数据。
+  /// 2: The video buffer in the format of raw data.
   @JsonValue(2)
   videoBufferArray,
 
-  /// 3: 类型为Texture。
+  /// 3: The video buffer in the format ofTexture.
   @JsonValue(3)
   videoBufferTexture,
 }
@@ -697,8 +698,8 @@ extension VideoBufferTypeExt on VideoBufferType {
   }
 }
 
-/// 视频帧的属性设置。
-/// 视频数据的格式为 YUV420。缓冲区给出的是指向指针的指针，该接口不能修改缓冲区的指针，只能修改缓冲区的内容。
+/// Configurations of the video frame.
+/// The video data format is YUV420. Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer but can modify the content of the buffer.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoFrame {
   /// @nodoc
@@ -725,67 +726,67 @@ class VideoFrame {
   @JsonKey(name: 'type')
   final VideoPixelFormat? type;
 
-  /// @nodoc
+  /// The width of the video in pixels.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// @nodoc
+  /// The height of the video in pixels.
   @JsonKey(name: 'height')
   final int? height;
 
-  /// @nodoc
+  /// For YUV data, the line span of the Y buffer; for RGBA data, the total data length.
   @JsonKey(name: 'yStride')
   final int? yStride;
 
-  /// @nodoc
+  /// For YUV data, the line span of the U buffer; for RGBA data, the value is 0.
   @JsonKey(name: 'uStride')
   final int? uStride;
 
-  /// @nodoc
+  /// For YUV data, the line span of the V buffer; for RGBA data, the value is 0.
   @JsonKey(name: 'vStride')
   final int? vStride;
 
-  /// @nodoc
+  /// For YUV data, the pointer to the Y buffer; for RGBA data, the data buffer.
   @JsonKey(name: 'yBuffer', ignore: true)
   final Uint8List? yBuffer;
 
-  /// @nodoc
+  /// For YUV data, the pointer to the U buffer; for RGBA data, the value is 0.
   @JsonKey(name: 'uBuffer', ignore: true)
   final Uint8List? uBuffer;
 
-  /// @nodoc
+  /// For YUV data, the pointer to the V buffer; for RGBA data, the value is 0.
   @JsonKey(name: 'vBuffer', ignore: true)
   final Uint8List? vBuffer;
 
-  /// 在渲染视频前设置该帧的顺时针旋转角度，目前支持 0 度、90 度、180 度，和 270 度。
+  /// The clockwise rotation of the video frame before rendering. Supported values include 0, 90, 180, and 270 degrees.
   @JsonKey(name: 'rotation')
   final int? rotation;
 
-  /// @nodoc
+  /// The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. It is required.
   @JsonKey(name: 'renderTimeMs')
   final int? renderTimeMs;
 
-  /// @nodoc
+  /// Reserved for future use.
   @JsonKey(name: 'avsync_type')
   final int? avsyncType;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value isNULL.
   @JsonKey(name: 'metadata_buffer', ignore: true)
   final Uint8List? metadataBuffer;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is0.
   @JsonKey(name: 'metadata_size')
   final int? metadataSize;
 
-  /// 该参数仅适用于 Texture 格式的视频数据。Texture ID。
+  /// This parameter only applies to video data in Texture format. Texture ID.
   @JsonKey(name: 'textureId')
   final int? textureId;
 
-  /// 该参数仅适用于 Texture 格式的视频数据。为一个输入的 4x4 变换矩阵，典型值为一个单位矩阵。
+  /// This parameter only applies to video data in Texture format. Incoming 4 x 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// 表示人像分割算法的输出数据，跟视频帧的尺寸一致。每个像素点的取值范围为 [0,255]，其中 0 表示背景；255 代表前景（人像）。在用户自定义视频渲染场景下，该参数可帮助实现将视频背景自渲染为各种效果，例如：透明、纯色、图片、视频等等。该参数需要联系技术支持开通。
+  /// Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame. The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).In the costom video renderer scenario, you can use this parameter to render the video background into various effects, such as: transparent, solid color, picture, video and so on.To use this parameter, contact.
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
@@ -826,19 +827,19 @@ extension MediaPlayerSourceTypeExt on MediaPlayerSourceType {
   }
 }
 
-/// 视频观测位置。
+/// The frame position of the video observer.
 ///
 @JsonEnum(alwaysCreate: true)
 enum VideoModulePosition {
-  /// @nodoc
+  /// 1: The post-capturer position, which corresponds to the video data in theonCaptureVideoFrame callback.
   @JsonValue(1 << 0)
   positionPostCapturer,
 
-  /// @nodoc
+  /// 2: The pre-renderer position, which corresponds to the video data in theonRenderVideoFrame callback.
   @JsonValue(1 << 1)
   positionPreRenderer,
 
-  /// @nodoc
+  /// 4: The pre-encoder position, which corresponds to the video data in theonPreEncodeVideoFrame callback.
   @JsonValue(1 << 2)
   positionPreEncoder,
 
@@ -860,7 +861,7 @@ extension VideoModulePositionExt on VideoModulePosition {
   }
 }
 
-/// 语音观测器。
+/// The audio frame observer.
 ///
 class AudioFrameObserverBase {
   /// @nodoc
@@ -870,41 +871,41 @@ class AudioFrameObserverBase {
     this.onMixedAudioFrame,
   });
 
-  /// 获得采集的音频。
+  /// Gets the captured audio frame.
   ///
   ///
-  /// * [audioFrame] 音频原始数据。详见 AudioFrame 。
-  /// * [channelId] 频道 ID。
+  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// * [channelId] The channel ID.
   ///
   /// Returns
-  /// 无实际含义。
+  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onRecordAudioFrame;
 
-  /// 获得播放的声音。
-  /// 为保证播放的音频数据格式符合预期，Agora 推荐你在调用 registerAudioFrameObserver 注册音频观测器后，调用 setPlaybackAudioFrameParameters 方法设置播放的音频数据格式。
+  /// Gets the audio frame for playback.
+  /// If you want to set the format of the audio frame for playback, Agora recommends that you call the registerAudioFrameObserver method to set the format of the audio frame after calling the setPlaybackAudioFrameParameters method to register an audio frame observer.
   ///
-  /// * [audioFrame] 音频原始数据。详见 AudioFrame 。
-  /// * [channelId] 频道 ID。
+  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// * [channelId] The channel ID.
   ///
   /// Returns
-  /// 无实际含义。
+  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onPlaybackAudioFrame;
 
-  /// 获取采集和播放音频混音后的数据。
-  /// 该方法仅返回单通道数据。为保证采集和播放音频混音后的数据格式符合预期，Agora 推荐你在调用 registerAudioFrameObserver 注册音频观测器后，调用 setMixedAudioFrameParameters 方法设置采集和播放音频混音后的音频数据格式。
+  /// Retrieves the mixed captured and playback audio frame.
+  /// This callback only returns the single-channel data.If you want to set the format of the mixed captured and playback audio frame, Agora recommends you call the registerAudioFrameObserver method to set the format of the audio frames after calling the setMixedAudioFrameParameters method to register an audio frame observer.
   ///
-  /// * [audioFrame] 音频原始数据。详见 AudioFrame 。
-  /// * [channelId] 频道 ID。
+  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// * [channelId] The channel ID.
   ///
   /// Returns
-  /// 无实际含义。
+  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onMixedAudioFrame;
 }
 
-/// 音频帧类型。
+/// Audio frame type.
 ///
 @JsonEnum(alwaysCreate: true)
 enum AudioFrameType {
@@ -926,7 +927,7 @@ extension AudioFrameTypeExt on AudioFrameType {
   }
 }
 
-/// 原始音频数据。
+/// Raw audio data.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioFrame {
@@ -941,35 +942,35 @@ class AudioFrame {
       this.renderTimeMs,
       this.avsyncType});
 
-  /// 音频帧类型，详见 AudioFrameType 。
+  /// The type of the audio frame. See AudioFrameType .
   @JsonKey(name: 'type')
   final AudioFrameType? type;
 
-  /// 每个声道的采样点数。
+  /// The number of samples per channel in the audio frame.
   @JsonKey(name: 'samplesPerChannel')
   final int? samplesPerChannel;
 
-  /// 每个采样点的字节数: 对于 PCM 来说，一般使用 16 bit，即两个字节。
+  /// The number of bytes per audio sample, which is usually 16-bit (2 bytes).
   @JsonKey(name: 'bytesPerSample')
   final BytesPerSample? bytesPerSample;
 
-  /// 声道数量(如果是立体声，数据是交叉的)。1: 单声道2: 双声道
+  /// The number of audio channels (the data are interleaved if it is stereo).1: Mono.2: Stereo.
   @JsonKey(name: 'channels')
   final int? channels;
 
-  /// 每声道每秒的采样点数。
+  /// The number of samples per channel in the audio frame.
   @JsonKey(name: 'samplesPerSec')
   final int? samplesPerSec;
 
-  /// 声音数据缓存区（如果是立体声，数据是交叉存储的）。缓存区数据大小buffer =samples ×channels ×bytesPerSample。
+  /// The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved.The size of the data buffer is as follows:buffer =samples ×channels ×bytesPerSample.
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
-  /// 外部音频帧的渲染时间戳。你可以使用该时间戳还原音频帧顺序；在有视频的场景中（包含使用外部视频源的场景），该参数可以用于实现音视频同步。
+  /// The timestamp (ms) of the external audio frame.You can use this timestamp to restore the order of the captured audio frame, and synchronize audio and video frames in video scenarios, including scenarios where external video sources are used.
   @JsonKey(name: 'renderTimeMs')
   final int? renderTimeMs;
 
-  /// @nodoc
+  /// Reserved for future use.
   @JsonKey(name: 'avsync_type')
   final int? avsyncType;
 
@@ -1018,27 +1019,27 @@ extension AudioFramePositionExt on AudioFramePosition {
   }
 }
 
-/// 音频数据格式。
-/// 你可以在以下回调的返回值中传入AudioParams 对象，用于设置对应回调报告的音频数据格式：：设置 onRecordAudioFrame 回调的数据格式。：设置 onPlaybackAudioFrame 回调的数据格式。：设置 onMixedAudioFrame 回调的数据格式。SDK 会通过AudioParams 中的samplesPerCall、sampleRate 和channel 参数计算采样间隔，并根据该采样间隔触发onRecordAudioFrame、onPlaybackAudioFrame 和onMixedAudioFrame 回调。采样间隔 =samplesPerCall/(sampleRate ×channel)。请确保采样间隔不得小于 0.01 (s)。
+/// Audio data format.
+/// The SDK calculates the sampling interval through thesamplesPerCall,sampleRate, andchannel parameters inAudioParams, and triggers theonRecordAudioFrame,onPlaybackAudioFrame, andonMixedAudioFrame callbacks according to the sampling interval.Sample interval =samplePerCall/(sampleRate ×channel).Ensure that the sample interval ≥ 0.01 (s).
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioParams {
   /// @nodoc
   const AudioParams(
       {this.sampleRate, this.channels, this.mode, this.samplesPerCall});
 
-  /// @nodoc
+  /// The audio sample rate (Hz), which can be set as one of the following values:8000.(Default) 16000.32000.4410048000
   @JsonKey(name: 'sample_rate')
   final int? sampleRate;
 
-  /// 数据的声道数，取值如下：1：单声道（默认值）2：双声道
+  /// The number of audio channels, which can be set as either of the following values:1: (Default) Mono.2: Stereo.
   @JsonKey(name: 'channels')
   final int? channels;
 
-  /// 数据的使用模式。详见 RawAudioFrameOpModeType 。
+  /// The use mode of the audio data. See RawAudioFrameOpModeType .
   @JsonKey(name: 'mode')
   final RawAudioFrameOpModeType? mode;
 
-  /// @nodoc
+  /// The number of samples, such as 1024 for the media push.
   @JsonKey(name: 'samples_per_call')
   final int? samplesPerCall;
 
@@ -1050,7 +1051,7 @@ class AudioParams {
   Map<String, dynamic> toJson() => _$AudioParamsToJson(this);
 }
 
-/// 语音观测器。
+/// The audio frame observer.
 ///
 class AudioFrameObserver extends AudioFrameObserverBase {
   /// @nodoc
@@ -1071,31 +1072,31 @@ class AudioFrameObserver extends AudioFrameObserverBase {
           onMixedAudioFrame: onMixedAudioFrame,
         );
 
-  /// 获得混音前的指定用户的声音。
+  /// Retrieves the unmixed audio frame of a specified user.
   ///
   ///
-  /// * [channelId] 频道 ID。
-  /// * [uid] 指定用户的用户 ID。
-  /// * [audioFrame] 音频原始数据。详见 AudioFrame 。
+  /// * [channelId] The channel ID.
+  /// * [uid] The user ID of the specified user.
+  /// * [audioFrame] The audio frame. See AudioFrame .
   ///
   /// Returns
-  /// 无实际含义。
+  /// Reserved for future use.
   final void Function(String channelId, int uid, AudioFrame audioFrame)?
       onPlaybackAudioFrameBeforeMixing;
 }
 
-/// 音频频谱数据。
+/// The audio spectrum data.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioSpectrumData {
   /// @nodoc
   const AudioSpectrumData({this.audioSpectrumData, this.dataLength});
 
-  /// 音频频谱数据。Agora 将声音频率分为 256 个频域，通过该参数报告各频域的能量值，每个能量值的取值范围为 [-300,1]，单位为 dBFS。
+  /// The audio spectrum data. Agora divides the audio frequency into 256 frequency domains, and reports the energy value of each frequency domain through this parameter. The value range of each energy type is [-300, 1] and the unit is dBFS.
   @JsonKey(name: 'audioSpectrumData')
   final List<double>? audioSpectrumData;
 
-  /// 音频频谱数据长度为 256。
+  /// The audio spectrum data length is 256.
   @JsonKey(name: 'dataLength')
   final int? dataLength;
 
@@ -1107,18 +1108,18 @@ class AudioSpectrumData {
   Map<String, dynamic> toJson() => _$AudioSpectrumDataToJson(this);
 }
 
-/// 远端用户的音频频谱信息。
+/// Audio spectrum information of the remote user.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserAudioSpectrumInfo {
   /// @nodoc
   const UserAudioSpectrumInfo({this.uid, this.spectrumData});
 
-  /// 远端用户 ID。
+  /// The user ID of the remote user.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// 远端用户的音频频谱数据。详见 AudioSpectrumData 。
+  /// Audio spectrum information of the remote user.See AudioSpectrumData .
   @JsonKey(name: 'spectrumData')
   final AudioSpectrumData? spectrumData;
 
@@ -1130,7 +1131,7 @@ class UserAudioSpectrumInfo {
   Map<String, dynamic> toJson() => _$UserAudioSpectrumInfoToJson(this);
 }
 
-/// 音频频谱观测器。
+/// The audio spectrum observer.
 ///
 class AudioSpectrumObserver {
   /// @nodoc
@@ -1139,23 +1140,23 @@ class AudioSpectrumObserver {
     this.onRemoteAudioSpectrum,
   });
 
-  /// 获取本地音频频谱。
-  /// 成功调用 registerAudioSpectrumObserver 实现 AudioSpectrumObserver 中的onLocalAudioSpectrum 回调并调用 enableAudioSpectrumMonitor 开启音频频谱监测后，SDK 会按照你设置的时间间隔触发该回调，报告编码后的本地音频数据的频谱。
+  /// Gets the statistics of a local audio spectrum.
+  /// After successfully calling registerAudioSpectrumObserver to implement theonLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [data] 本地用户的音频频谱数据。详见 AudioSpectrumData 。
+  /// * [data] The audio spectrum data of the local user. See AudioSpectrumData .
   final void Function(AudioSpectrumData data)? onLocalAudioSpectrum;
 
-  /// 获取远端音频频谱。
-  /// 成功调用 registerAudioSpectrumObserver 实现 AudioSpectrumObserver 中的onRemoteAudioSpectrum 回调并调用 enableAudioSpectrumMonitor 开启音频频谱监测后，SDK 会按照你设置的时间间隔触发该回调，报告接收到的远端音频数据的频谱。
+  /// Gets the remote audio spectrum.
+  /// After successfully calling registerAudioSpectrumObserver to implement theonRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [spectrums] 远端用户的音频频谱信息，详见 UserAudioSpectrumInfo 。 数组数量等于 SDK 监测到的远端用户数量，数组为空表示没有监测到远端用户的音频频谱
-  /// * [spectrumNumber] 远端用户的数量。
+  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo . The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+  /// * [spectrumNumber] The number of remote users.
   final void Function(
           List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?
       onRemoteAudioSpectrum;
 }
 
-/// 用于接收编码后的视频图像的类。
+/// Receives encoded video images.
 ///
 class VideoEncodedFrameObserver {
   /// @nodoc
@@ -1163,21 +1164,21 @@ class VideoEncodedFrameObserver {
     this.onEncodedVideoFrameReceived,
   });
 
-  /// 报告 SDK 接收到编码后的视频图像。
+  /// Occurs each time the SDK receives an encoded video image.
   ///
   ///
-  /// * [uid] 远端用户 ID。
-  /// * [imageBuffer] 视频图像 buffer。
-  /// * [length] 视频图像的数据长度。
-  /// * [videoEncodedFrameInfo] 编码后的视频帧信息，详见 EncodedVideoFrameInfo 。
+  /// * [uid] The user ID of the remote user.
+  /// * [imageBuffer] The encoded video image buffer.
+  /// * [length] The data length of the video image.
+  /// * [videoEncodedFrameInfo] For the information of the encoded video frame, see EncodedVideoFrameInfo .
   ///
   /// Returns
-  /// 无实际含义。
+  /// Reserved for future use.
   final void Function(int uid, Uint8List imageBuffer, int length,
       EncodedVideoFrameInfo videoEncodedFrameInfo)? onEncodedVideoFrameReceived;
 }
 
-/// 视频观测器。
+/// The IVideoFrameObserver class.
 ///
 class VideoFrameObserver {
   /// @nodoc
@@ -1195,50 +1196,46 @@ class VideoFrameObserver {
     this.onTranscodedVideoFrame,
   });
 
-  /// 获取本地摄像头采集到的视频数据。
-  /// 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取本地摄像头采集到的视频数据，然后根据场景需要，对视频数据进行前处理。完成前处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。此处获取的视频数据未经过前处理，如水印、裁剪、旋转和美颜等。
+  /// Occurs each time the SDK receives a video frame captured by the local camera.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.After pre-processing, you can send the processed video data back to the SDK through this callback.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
+  /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onCaptureVideoFrame;
 
-  /// 获取本地视频编码前的视频数据。
-  /// 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取编码前的视频数据，然后根据场景需要，对视频数据进行处理。完成处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。此处获取的视频数据已经过前处理，如裁剪、旋转和美颜等。
+  /// Occurs each time the SDK receives a video frame before encoding.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
+  /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onPreEncodeVideoFrame;
 
   /// @nodoc
   final void Function(VideoFrame videoFrame)?
       onSecondaryCameraCaptureVideoFrame;
 
-  /// 获取第二个摄像头采集后、编码前的视频数据。
-  /// 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取第二个摄像头采集后、编码前的视频数据，然后根据场景需要，对视频数据进行处理。完成处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。
+  /// Gets the video data captured from the second camera before encoding.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second camera before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
+  /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeCameraVideoFrame;
 
-  /// 获取从屏幕采集到的视频数据。
-  /// 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取从屏幕采集到的视频数据，然后根据场景需要，对视频数据进行前处理。完成前处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。如果你获取到的视频数据类型为 RGBA，Agora 不支持将处理后的 RGBA 数据通过该回调再发送回 SDK。此处获取的视频数据未经过前处理，如水印、裁剪、旋转和美颜等。
+  /// Occurs each time the SDK receives a video frame captured by the screen.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data for screen sharing. You can then pre-process the data according to your scenarios.After pre-processing, you can send the processed video data back to the SDK through this callback.This callback does not support sending processed RGBA video data back to the SDK.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
+  /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onScreenCaptureVideoFrame;
 
-  /// 获取屏幕采集后、编码前的视频数据。
-  /// 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取从屏幕采集后、编码前的视频数据，然后根据场景需要，对视频数据进行处理。完成处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。此处获取的视频数据已经过前处理，如裁剪、旋转和美颜等。如果你获取到的视频数据类型为 RGBA，Agora 不支持将处理后的 RGBA 数据通过该回调再发送回 SDK。
+  /// Gets the video data captured from the screen before encoding.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the screen before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.This callback does not support sending processed RGBA video data back to the SDK.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
+  /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onPreEncodeScreenVideoFrame;
 
-  /// 获取媒体播放器中的视频数据。
-  /// 成功注册视频数据观测器并调用 createMediaPlayer 后， SDK 会在捕捉到每个视频帧时触发该回调。
-  ///  你可以在回调中获取媒体播放器中的视频数据，然后根据场景需要，对视频数据进行前处理。完成前处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。
+  /// Gets the video data of the media player.
+  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.After pre-processing, you can send the processed video data back to the SDK by this callback.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
-  /// * [mediaPlayerId] 媒体播放器 ID。
-  ///
-  /// Returns
-  /// true：设置 SDK 接收视频帧。false：设置 SDK 丢弃视频帧。
+  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [mediaPlayerId] The ID of the media player.
   final void Function(VideoFrame videoFrame, int mediaPlayerId)?
       onMediaPlayerVideoFrame;
 
@@ -1246,19 +1243,19 @@ class VideoFrameObserver {
   final void Function(VideoFrame videoFrame)?
       onSecondaryScreenCaptureVideoFrame;
 
-  /// 获取从第二个屏幕采集后、编码前的视频数据。
-  /// 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取从第二个屏幕采集后、编码前的视频数据，然后根据场景需要，对视频数据进行处理。完成处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。
+  /// Gets the video data captured from the second screen before encoding.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second screen before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
+  /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeScreenVideoFrame;
 
-  /// 获取远端发送的视频数据。
-  /// 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取远端发送的视频数据，然后根据场景需要，对视频数据进行处理。该功能仅支持视频处理模式为PROCESS_MODE_READ_ONLY 的场景。
+  /// Occurs each time the SDK receives a video frame sent by the remote user.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding. You can then process the data according to your particular scenarios.This function only applies to the scenarios where the video processing mode isprocessModeReadOnly.
   ///
-  /// * [videoFrame] 视频帧数据。详见 VideoFrame 。
-  /// * [remoteUid] 发送该帧视频的远端用户 ID。
-  /// * [channelId] 频道 ID。
+  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [remoteUid] The ID of the remote user who sends the current video frame.
+  /// * [channelId] The channel ID.
   final void Function(String channelId, int remoteUid, VideoFrame videoFrame)?
       onRenderVideoFrame;
 
@@ -1266,15 +1263,15 @@ class VideoFrameObserver {
   final void Function(VideoFrame videoFrame)? onTranscodedVideoFrame;
 }
 
-/// 视频帧处理模式。
+/// The process mode of the video frame:
 ///
 @JsonEnum(alwaysCreate: true)
 enum VideoFrameProcessMode {
-  /// @nodoc
+  /// Read-only mode.In this mode, you do not modify the video frame. The video frame observer is a renderer.
   @JsonValue(0)
   processModeReadOnly,
 
-  /// @nodoc
+  /// Read and write mode.In this mode, you modify the video frame. The video frame observer is a video filter.
   @JsonValue(1)
   processModeReadWrite,
 }
@@ -1292,15 +1289,15 @@ extension VideoFrameProcessModeExt on VideoFrameProcessMode {
   }
 }
 
-/// 外部视频帧编码类型。
+/// The external video frame encoding type.
 ///
 @JsonEnum(alwaysCreate: true)
 enum ExternalVideoSourceType {
-  /// 0：未编码视频帧。
+  /// 0: The video frame is not encoded.
   @JsonValue(0)
   videoFrame,
 
-  /// 1：已编码视频帧。
+  /// 1: The video frame is encoded.
   @JsonValue(1)
   encodedVideoFrame,
 }
@@ -1318,11 +1315,11 @@ extension ExternalVideoSourceTypeExt on ExternalVideoSourceType {
   }
 }
 
-/// 录制文件的格式。
+/// The format of the recording file.
 ///
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderContainerFormat {
-  /// 1:（默认）MP4
+  /// 1: (Default) MP4.
   @JsonValue(1)
   formatMp4,
 }
@@ -1340,19 +1337,19 @@ extension MediaRecorderContainerFormatExt on MediaRecorderContainerFormat {
   }
 }
 
-/// 录制内容。
+/// The recording content.
 ///
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderStreamType {
-  /// 仅音频。
+  /// Only audio.
   @JsonValue(0x01)
   streamTypeAudio,
 
-  /// 仅视频。
+  /// Only video.
   @JsonValue(0x02)
   streamTypeVideo,
 
-  /// （默认）音视频。
+  /// (Default) Audio and video.
   @JsonValue(0x01 | 0x02)
   streamTypeBoth,
 }
@@ -1370,19 +1367,19 @@ extension MediaRecorderStreamTypeExt on MediaRecorderStreamType {
   }
 }
 
-/// 当前的录制状态。
+/// The current recording state.
 ///
 @JsonEnum(alwaysCreate: true)
 enum RecorderState {
-  /// -1: 音视频流录制出错，错误原因详见 RecorderErrorCode 。
+  /// -1: An error occurs during the recording. See RecorderErrorCode for the reason.
   @JsonValue(-1)
   recorderStateError,
 
-  /// 2: 音视频流录制开始。
+  /// 2: The audio and video recording starts.
   @JsonValue(2)
   recorderStateStart,
 
-  /// 3: 音视频流录制停止。
+  /// 3: The audio and video recording stops.
   @JsonValue(3)
   recorderStateStop,
 }
@@ -1400,27 +1397,27 @@ extension RecorderStateExt on RecorderState {
   }
 }
 
-/// 录制状态出错的原因。
+/// The reason for the state change.
 ///
 @JsonEnum(alwaysCreate: true)
 enum RecorderErrorCode {
-  /// 0: 一切正常。
+  /// 0: No error.
   @JsonValue(0)
   recorderErrorNone,
 
-  /// 1: 录制文件写入失败。
+  /// 1: The SDK fails to write the recorded data to a file.
   @JsonValue(1)
   recorderErrorWriteFailed,
 
-  /// 2: 没有可录制的音视频流或者录制的音视频流中断超过 5 秒。
+  /// 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
   @JsonValue(2)
   recorderErrorNoStream,
 
-  /// 3: 录制时长超出上限。
+  /// 3: The recording duration exceeds the upper limit.
   @JsonValue(3)
   recorderErrorOverMaxDuration,
 
-  /// 4: 录制配置改变。
+  /// 4: The recording configuration changes.
   @JsonValue(4)
   recorderErrorConfigChanged,
 }
@@ -1438,7 +1435,7 @@ extension RecorderErrorCodeExt on RecorderErrorCode {
   }
 }
 
-/// 本地音视频流录制配置。
+/// Configurations for the local audio and video recording.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaRecorderConfiguration {
@@ -1450,23 +1447,23 @@ class MediaRecorderConfiguration {
       this.maxDurationMs,
       this.recorderInfoUpdateInterval});
 
-  /// 录音文件在本地保存的绝对路径，需精确到文件名及格式。例如：Windows:C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS:/App Sandbox/Library/Caches/example.mp4macOS:/Library/Logs/example.mp4Android:/storage/emulated/0/Android/data/<package name>/files/example.mp4请确保你指定的路径存在并且可写。
+  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /AppSandbox/Library/Caches/example.mp4macOS:～/Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/agorasdk.mp4Ensure that the directory for the log files exists and is writable.
   @JsonKey(name: 'storagePath')
   final String? storagePath;
 
-  /// 录制文件的格式。详见 MediaRecorderContainerFormat 。
+  /// The format of the recording file. See MediaRecorderContainerFormat .
   @JsonKey(name: 'containerFormat')
   final MediaRecorderContainerFormat? containerFormat;
 
-  /// 录制内容。详见 MediaRecorderStreamType 。
+  /// The recording content. See MediaRecorderStreamType .
   @JsonKey(name: 'streamType')
   final MediaRecorderStreamType? streamType;
 
-  /// 最大录制时长，单位为毫秒，默认值为 120000。
+  /// The maximum recording duration, in milliseconds. The default value is 120000.
   @JsonKey(name: 'maxDurationMs')
   final int? maxDurationMs;
 
-  /// 录制信息更新间隔，单位为毫秒，取值范围为 [1000,10000]。SDK 会根据该值的设置触发 onRecorderInfoUpdated 回调，报告更新后的录制信息。
+  /// The interval (ms) of updating the recording information. The value range is [1000,10000]. Based on the value you set in this parameter, the SDK triggers the onRecorderInfoUpdated callback to report the updated recording information.
   @JsonKey(name: 'recorderInfoUpdateInterval')
   final int? recorderInfoUpdateInterval;
 
@@ -1478,22 +1475,22 @@ class MediaRecorderConfiguration {
   Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
 }
 
-/// 录制文件信息。
+/// The information about the file that is recorded.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RecorderInfo {
   /// @nodoc
   const RecorderInfo({this.fileName, this.durationMs, this.fileSize});
 
-  /// 录制文件的绝对存储路径。
+  /// The absolute path of the recording file.
   @JsonKey(name: 'fileName')
   final String? fileName;
 
-  /// 录制文件的时长，单位为毫秒。
+  /// The recording duration (ms).
   @JsonKey(name: 'durationMs')
   final int? durationMs;
 
-  /// 录制文件的大小，单位为字节。
+  /// The size (bytes) of the recording file.
   @JsonKey(name: 'fileSize')
   final int? fileSize;
 
@@ -1505,7 +1502,7 @@ class RecorderInfo {
   Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
 }
 
-/// 包含音视频录制的事件。
+/// TheMediaRecorderObserver class.
 ///
 class MediaRecorderObserver {
   /// @nodoc
@@ -1514,17 +1511,17 @@ class MediaRecorderObserver {
     this.onRecorderInfoUpdated,
   });
 
-  /// 录制状态发生改变回调。
-  /// 本地音视频流录制状态发生改变时，SDK 会触发该回调，报告当前的录制状态和引起录制状态改变的原因。
+  /// Occurs when the recording state changes.
+  /// When the local audio or video recording state changes, the SDK triggers this callback to report the current recording state and the reason for the change.
   ///
-  /// * [state] 当前的录制状态。详见 RecorderState 。
-  /// * [error] 录制状态出错的原因。详见 RecorderErrorCode 。
+  /// * [state] The current recording state. See RecorderState .
+  /// * [error] The reason for the state change. See RecorderErrorCode .
   final void Function(RecorderState state, RecorderErrorCode error)?
       onRecorderStateChanged;
 
-  /// 录制信息更新回调。
-  /// 成功注册该回调并开启本地音视频流录制后，SDK 会根据你在 MediaRecorderConfiguration 中设置的recorderInfoUpdateInterval 的值周期性触发该回调，报告当前录制文件的文件名、时长和大小。
+  /// Occurs when the recording information is updated.
+  /// After you successfully enable the local audio and video recording, the SDK periodically triggers this callback based on the value ofrecorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
   ///
-  /// * [info] 录制文件信息。详见 RecorderInfo 。
+  /// * [info] The information about the file that is recorded. See RecorderInfo .
   final void Function(RecorderInfo info)? onRecorderInfoUpdated;
 }
