@@ -37,7 +37,8 @@ final advanced = [
   {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
   // if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
   //   {'name': 'CustomCaptureAudio', 'widget': const CustomCaptureAudio()},
-  {'name': 'DeviceManager', 'widget': const DeviceManager()},
+  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
+    {'name': 'DeviceManager', 'widget': const DeviceManager()},
   {'name': 'JoinMultipleChannel', 'widget': const JoinMultipleChannel()},
   {'name': 'RtmpStreaming', 'widget': const RtmpStreaming()},
   if (!kIsWeb) {'name': 'ScreenSharing', 'widget': const ScreenSharing()},
@@ -81,8 +82,6 @@ final advanced = [
     'name': 'SpatialAudioWithMediaPlayer',
     'widget': const SpatialAudioWithMediaPlayer()
   },
-    {
-    'name': 'PreCallTest',
-    'widget': const PreCallTest()
-  },
+  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
+    {'name': 'PreCallTest', 'widget': const PreCallTest()},
 ];

@@ -45,6 +45,7 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
     final callApiResult = await apiCaller
         .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
 
+    _eventHandlers.clear();
     _eventHandlers.add(MediaRecorderObserverWrapper(callback));
   }
 
