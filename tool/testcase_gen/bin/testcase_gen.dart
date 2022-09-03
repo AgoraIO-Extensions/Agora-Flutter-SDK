@@ -112,6 +112,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'destroyMediaPlayer',
         'setupRemoteVideo',
         'setupLocalVideo',
+        'getEffectDuration',
       ],
     ),
     TemplatedTestCase(

@@ -2581,39 +2581,39 @@ void rtcEngineSmokeTestCases() {
 //  skip: !(),
   );
 
-  testWidgets(
-    'getEffectDuration',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
+//   testWidgets(
+//     'getEffectDuration',
+//     (WidgetTester tester) async {
+//       app.main();
+//       await tester.pumpAndSettle();
 
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
+//       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+//           defaultValue: '<YOUR_APP_ID>');
 
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+//       RtcEngine rtcEngine = createAgoraRtcEngine();
+//       await rtcEngine.initialize(RtcEngineContext(
+//         appId: engineAppId,
+//         areaCode: AreaCode.areaCodeGlob.value(),
+//       ));
 
-      try {
-        const String filePath = "hello";
-        await rtcEngine.getEffectDuration(
-          filePath,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getEffectDuration] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint(
-            '[getEffectDuration] errorcode: ${(e as AgoraRtcException).code}');
-      }
+//       try {
+//         const String filePath = "hello";
+//         await rtcEngine.getEffectDuration(
+//           filePath,
+//         );
+//       } catch (e) {
+//         if (e is! AgoraRtcException) {
+//           debugPrint('[getEffectDuration] error: ${e.toString()}');
+//         }
+//         expect(e is AgoraRtcException, true);
+//         debugPrint(
+//             '[getEffectDuration] errorcode: ${(e as AgoraRtcException).code}');
+//       }
 
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
+//       await rtcEngine.release();
+//     },
+// //  skip: !(),
+//   );
 
   testWidgets(
     'setEffectPosition',

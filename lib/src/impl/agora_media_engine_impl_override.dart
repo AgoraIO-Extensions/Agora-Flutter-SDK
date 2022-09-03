@@ -112,8 +112,6 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
       {required ExternalVideoFrame frame, int videoTrackId = 0}) async {
     const apiType = 'MediaEngine_pushVideoFrame';
     final json = frame.toJson();
-    // final ptr = uint8ListToPtr(frame.buffer!);
-    // json['buffer'] = ptr.address;
     json['eglContext'] = 0;
     json['metadata_buffer'] = 0;
     final param = createParams({'frame': json, 'videoTrackId': videoTrackId});
@@ -125,8 +123,6 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     buffers.add(frame.metadataBuffer ?? Uint8List.fromList([]));
     final callApiResult = await apiCaller
         .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
-
-    // freePointer(ptr);
 
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
@@ -148,7 +144,6 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
   @override
   Future<void> release() async {
     _eventHandlers.clear();
-    await super.release();
   }
 
   @override

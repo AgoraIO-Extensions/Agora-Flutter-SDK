@@ -78,7 +78,7 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 10; i++) {
       // await rtcEngine.enableVideo();
       await tester.pumpWidget(_RenderViewWidget(
         builder: (context, engine) {
