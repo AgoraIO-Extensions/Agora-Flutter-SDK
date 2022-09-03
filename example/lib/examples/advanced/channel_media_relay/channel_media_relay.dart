@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/examples/log_sink.dart';
+import 'package:agora_rtc_engine_example/examples/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
 
 /// ChannelMediaRelay Example
@@ -13,7 +14,7 @@ class ChannelMediaRelay extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<ChannelMediaRelay> {
+class _State extends State<ChannelMediaRelay> with KeepRemoteVideoViewsMixin {
   late final RtcEngine _engine;
   bool _isReadyPreview = false;
   bool isJoined = false;
@@ -112,6 +113,7 @@ class _State extends State<ChannelMediaRelay> {
 
     // enable video module and set up video encoding configs
     await _engine.enableVideo();
+    await _engine.startPreview();
 
     // make this room live broadcasting room
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
@@ -180,7 +182,24 @@ class _State extends State<ChannelMediaRelay> {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
         if (!_isReadyPreview) return Container();
-        return _renderVideo(isLayoutHorizontal);
+        return Stack(
+          children: [
+            AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: _engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: RemoteVideoViewsWidget(
+                key: keepRemoteVideoViewsKey,
+                rtcEngine: _engine,
+                channelId: _channelController.text,
+              ),
+            )
+          ],
+        );
       },
       actionsBuilder: (context, isLayoutHorizontal) {
         return Column(
