@@ -157,11 +157,15 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _toggleInEarMonitoring(value) async {
-    _enableInEarMonitoring = value;
-    await _engine.enableInEarMonitoring(
-        enabled: _enableInEarMonitoring,
-        includeAudioFilters: EarMonitoringFilterType.earMonitoringFilterNone);
-    setState(() {});
+    try {
+      await _engine.enableInEarMonitoring(
+          enabled: value,
+          includeAudioFilters: EarMonitoringFilterType.earMonitoringFilterNone);
+      _enableInEarMonitoring = value;
+      setState(() {});
+    } catch (e) {
+      // Do nothing
+    }
   }
 
   @override

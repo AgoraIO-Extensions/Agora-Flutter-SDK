@@ -37,13 +37,13 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
 
   @override
   void dispose() {
-    super.dispose();
     _dispose();
+    super.dispose();
   }
 
-  void _dispose() {
-    _engine.leaveChannel();
-    _engine.release();
+  Future<void> _dispose() async {
+    await _engine.leaveChannel();
+    await _engine.release();
   }
 
   Future<void> _initEngine() async {

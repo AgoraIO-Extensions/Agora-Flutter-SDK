@@ -243,8 +243,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       final externalFilesDir =
           await engineMethodChannel.invokeMethod('getExternalFilesDir');
       if (externalFilesDir != null) {
-        // Reset the sdk log file to ensure the iris log path has been set
-        await setLogFile('$externalFilesDir/agorasdk.log');
+        try {
+          // Reset the sdk log file to ensure the iris log path has been set
+          await setLogFile('$externalFilesDir/agorasdk.log');
+        } catch (e) {
+          debugPrint(
+              '[RtcEngine] setLogFile fail, make sure the permission is granted.');
+        }
       }
     }
 
