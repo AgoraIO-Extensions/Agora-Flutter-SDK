@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../log_sink.dart';
+import 'package:agora_rtc_engine_example/components/log_sink.dart';
 
 /// JoinChannelAudio Example
 class JoinChannelAudio extends StatefulWidget {

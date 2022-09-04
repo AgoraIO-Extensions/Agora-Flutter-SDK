@@ -1,5 +1,5 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine_example/examples/log_sink.dart';
+import 'log_sink.dart';
 import 'package:flutter/material.dart';
 
 mixin KeepRemoteVideoViewsMixin<T extends StatefulWidget> on State<T> {

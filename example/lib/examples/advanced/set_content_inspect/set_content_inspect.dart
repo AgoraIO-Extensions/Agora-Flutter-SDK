@@ -1,8 +1,8 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
-import 'package:agora_rtc_engine_example/examples/example_actions_widget.dart';
-import 'package:agora_rtc_engine_example/examples/log_sink.dart';
-import 'package:agora_rtc_engine_example/examples/remote_video_views_widget.dart';
+import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
+import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:agora_rtc_engine_example/components/remote_video_views_widget.dart';
 import 'package:flutter/material.dart';
 
 /// MultiChannel Example
