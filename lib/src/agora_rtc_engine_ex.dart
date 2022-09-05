@@ -56,7 +56,7 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Sets the encoder configuration for the local video.
-  /// Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.Theconfig specified in this method is the maximum values under ideal network conditions. If the network condition is not good, the video engine cannot use theconfig renders local video, which automatically reduces to an appropriate video parameter setting.
+  /// Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.The config specified in this method is the maximum values under ideal network conditions. If the network condition is not good, the video engine cannot use the config renders local video, which automatically reduces to an appropriate video parameter setting.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [config] Video profile. See VideoEncoderConfiguration .
@@ -68,7 +68,7 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Initializes the video view of a remote user.
-  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.The application specifies the uid of the remote video in the VideoCanvas method before the remote user joins the channel.If the remote uid is unknown to the application, set it after the application receives the onUserJoined callback. If the Video Recording function is enabled, the Video Recording Service joins the channel as a dummy client, causing other clients to also receive theonUserJoined callback. Do not bind the dummy client to the application view because the dummy client does not send any video streams.To unbind the remote user from the view, set theview parameter to NULL.Once the remote user leaves the channel, the SDK unbinds the remote user.
+  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.The application specifies the uid of the remote video in the VideoCanvas method before the remote user joins the channel.If the remote uid is unknown to the application, set it after the application receives the onUserJoined callback. If the Video Recording function is enabled, the Video Recording Service joins the channel as a dummy client, causing other clients to also receive the onUserJoined callback. Do not bind the dummy client to the application view because the dummy client does not send any video streams.To unbind the remote user from the view, set the view parameter to NULL.Once the remote user leaves the channel, the SDK unbinds the remote user.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [canvas] The remote video view settings. See VideoCanvas .
@@ -110,11 +110,11 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Set the blacklist of subscriptions for audio streams.
-  /// You can call this method to specify the audio streams of a user that you do not want to subscribe to.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams andautoSubscribeAudio in ChannelMediaOptions .Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.
+  /// You can call this method to specify the audio streams of a user that you do not want to subscribe to.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [uidNumber] The number of users in the user ID list.
-  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeAudioBlacklist method to update the user ID list; this means you only add theuid of users that you do not want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeAudioBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
   Future<void> setSubscribeAudioBlacklistEx(
       {required List<int> uidList,
       required int uidNumber,
@@ -161,15 +161,7 @@ abstract class RtcEngineEx implements RtcEngine {
       required int uidNumber,
       required RtcConnection connection});
 
-  /// Options for subscribing remote video streams.
-  /// When a remote user has enabled the dual-stream mode, you can call this method to choose the option for subscribing the video streams sent by the remote user.
-  ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [options] The video subscription options. See VideoSubscriptionOptions .
-  /// * [uid] The user ID of the remote user.
-  ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
+  /// @nodoc
   Future<void> setRemoteVideoSubscriptionOptionsEx(
       {required int uid,
       required VideoSubscriptionOptions options,
@@ -205,13 +197,14 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Enables loopback audio capture.
-  /// If you enable loopback audio capture, the output of the sound card is mixed into the audio stream sent to the other end.macOS does not support loopback audio capture of the default sound card. If you need to use this method, use a virtual sound card and pass its name to thedeviceName parameter. Agora recommends that you use Soundflower for loopback audio capture.You can call this method either before or after joining a channel.
+  /// If you enable loopback audio capture, the output of the sound card is mixed into the audio stream sent to the other end.macOS does not support loopback audio capture of the default sound card. If you need to use this method, use a virtual sound card and pass its name to the deviceName parameter. Agora recommends that you use Soundflower for loopback audio capture.You can call this method either before or after joining a channel.
   ///
   /// * [deviceName] macOS: The device name of the virtual sound card. The default is set to null, which means the SDK uses Soundflower for loopback audio capture.
   ///  Windows: The device name of the sound card. The default is set to null, which means the SDK uses the sound card of your device for loopback audio capture.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [enabled] Sets whether to enable loopback audio capture:true: Enable loopback audio capture.false: (Default) Disable loopback audio capture.
+  /// * [enabled] Sets whether to enable loopback audio capture:
+  ///  true: Enable loopback audio capture.false: (Default) Disable loopback audio capture.
   ///
   /// Returns
   /// 0: Success.< 0: Failure.
@@ -237,10 +230,10 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Sends data stream messages.
   /// After calling createDataStreamEx , you can call this method to send data stream messages to all users in the channel.The SDK has the following restrictions on this method:Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 kB.Each client can send up to 6 KB of data per second.Each user can have up to five data streams simultaneously.A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
-  /// A failed method call triggers the onStreamMessageError callback on the remote client.Ensure that you callcreateDataStreamEx to create a data channel before calling this method.This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
+  /// A failed method call triggers the onStreamMessageError callback on the remote client.Ensure that you call createDataStreamEx to create a data channel before calling this method.This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [streamId] The data stream ID. You can get the data stream ID by callingcreateDataStreamEx.
+  /// * [streamId] The data stream ID. You can get the data stream ID by calling createDataStreamEx.
   /// * [data] The data to be sent.
   /// * [length] The length of the data.
   ///
@@ -253,7 +246,7 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Adds a watermark image to the local video.
-  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfigurationEx method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than thesetVideoEncoderConfigurationEx dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that you have called enableVideo before calling this method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabled the local video preview by calling the startPreview method, you can use thevisibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
+  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfigurationEx method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than the setVideoEncoderConfigurationEx dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that you have called enableVideo before calling this method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [options] The options of the watermark image to be added.

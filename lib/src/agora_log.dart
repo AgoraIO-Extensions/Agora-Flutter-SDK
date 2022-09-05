@@ -9,19 +9,19 @@ enum LogLevel {
   @JsonValue(0x0000)
   logLevelNone,
 
-  /// 0x0001: (Default) OutputFATAL,ERROR,WARN, andINFO level log information. We recommend setting your log filter to this level.
+  /// 0x0001: (Default) Output FATAL, ERROR, WARN, and INFO level log information. We recommend setting your log filter to this level.
   @JsonValue(0x0001)
   logLevelInfo,
 
-  /// 0x0002: OutputFATAL,ERROR, andWARN level log information.
+  /// 0x0002: Output FATAL, ERROR, and WARN level log information.
   @JsonValue(0x0002)
   logLevelWarn,
 
-  /// 0x0004: OutputFATAL andERROR level log information.
+  /// 0x0004: Output FATAL and ERROR level log information.
   @JsonValue(0x0004)
   logLevelError,
 
-  /// 0x0008: OutputFATAL level log information.
+  /// 0x0008: Output FATAL level log information.
   @JsonValue(0x0008)
   logLevelFatal,
 
@@ -55,19 +55,19 @@ enum LogFilterType {
   @JsonValue(0x080f)
   logFilterDebug,
 
-  /// 0x000f: OutputlogFilterCritical,logFilterError,logFilterWarn, andlogFilterInfo level log information. We recommend setting your log filter to this level.
+  /// 0x000f: Output logFilterCritical, logFilterError, logFilterWarn, and logFilterInfo level log information. We recommend setting your log filter to this level.
   @JsonValue(0x000f)
   logFilterInfo,
 
-  /// 0x000e: OutputlogFilterCritical,logFilterError, andlogFilterWarn level log information.
+  /// 0x000e: Output logFilterCritical, logFilterError, and logFilterWarn level log information.
   @JsonValue(0x000e)
   logFilterWarn,
 
-  /// 0x000c: OutputlogFilterCritical andlogFilterError level log information.
+  /// 0x000c: Output logFilterCritical and logFilterError level log information.
   @JsonValue(0x000c)
   logFilterError,
 
-  /// 0x0008: OutputlogFilterCritical level log information.
+  /// 0x0008: Output logFilterCritical level log information.
   @JsonValue(0x0008)
   logFilterCritical,
 
@@ -109,7 +109,7 @@ class LogConfig {
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// The size (KB) of anagorasdk.log file. The value range is [128,1024]. The default value is 1,024 KB. If you setfileSizeInKByte to a value lower than 128 KB, the SDK adjusts it to 128 KB. If you setfileSizeInKBytes to a value higher than 1,024 KB, the SDK adjusts it to 1,024 KB.
+  /// The size (KB) of an agorasdk.log file. The value range is [128,1024]. The default value is 1,024 KB. If you set fileSizeInKByte to a value lower than 128 KB, the SDK adjusts it to 128 KB. If you set fileSizeInKBytes to a value higher than 1,024 KB, the SDK adjusts it to 1,024 KB.
   @JsonKey(name: 'fileSizeInKB')
   final int? fileSizeInKB;
 

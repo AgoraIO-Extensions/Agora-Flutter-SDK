@@ -1,22 +1,23 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_media_engine.g.dart';
 
-/// @nodoc
+/// The channel mode.
+///
 @JsonEnum(alwaysCreate: true)
 enum AudioMixingDualMonoMode {
-  /// @nodoc
+  /// 0: Original mode.
   @JsonValue(0)
   audioMixingDualMonoAuto,
 
-  /// @nodoc
+  /// 1: Left channel mode. This mode replaces the audio of the right channel with the audio of the left channel, which means the user can only hear the audio of the left channel.
   @JsonValue(1)
   audioMixingDualMonoL,
 
-  /// @nodoc
+  /// 2: Right channel mode. This mode replaces the audio of the left channel with the audio of the right channel, which means the user can only hear the audio of the right channel.
   @JsonValue(2)
   audioMixingDualMonoR,
 
-  /// @nodoc
+  /// 3: Mixed channel mode. This mode mixes the audio of the left channel and the right channel, which means the user can hear the audio of the left channel and the right channel at the same time.
   @JsonValue(3)
   audioMixingDualMonoMix,
 }
@@ -34,17 +35,17 @@ extension AudioMixingDualMonoModeExt on AudioMixingDualMonoMode {
   }
 }
 
-/// TheMediaEngine class.
+/// The MediaEngine class.
 ///
 abstract class MediaEngine {
   /// Registers an audio frame observer object.
   /// Ensure that you call this method before joining a channel.
   ///
-  /// * [observer] The observer object instance. See AudioFrameObserver .Agora recommends calling after receiving onLeaveChannel to release the audio observer object.
+  /// * [observer] The observer object instance. See AudioFrameObserver . Agora recommends calling after receiving onLeaveChannel to release the audio observer object.
   void registerAudioFrameObserver(AudioFrameObserver observer);
 
   /// Registers a video frame observer object.
-  /// You need to implement the VideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.When handling the video data returned in the callbacks, pay attention to the changes in thewidth andheight parameters, which may be adapted under the following circumstances:When the network condition deteriorates, the video resolution decreases incrementally.If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.Ensure that you call this method before joining a channel.
+  /// You need to implement the VideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.When handling the video data returned in the callbacks, pay attention to the changes in the width and height parameters, which may be adapted under the following circumstances:When the network condition deteriorates, the video resolution decreases incrementally.If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.Ensure that you call this method before joining a channel.
   ///
   /// * [observer] The observer object instance. See VideoFrameObserver .
   void registerVideoFrameObserver(VideoFrameObserver observer);
@@ -78,7 +79,7 @@ abstract class MediaEngine {
   Future<void> pushDirectAudioFrame(AudioFrame frame);
 
   /// Pulls the remote audio data.
-  /// Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering.After a successful method call, the app pulls the decoded and mixed audio data for playback.This method only supports pulling data from custom audio source. If you need to pull the data captured by the SDK, do not call this method.Call this method after joining a channel.Once you enable the external audio sink, the app will not retrieve any audio data from the onPlaybackAudioFrame callback.The difference between this method and theonPlaybackAudioFrame callback is as follows:The SDK sends the audio data to the app through theonPlaybackAudioFrame callback. Any delay in processing the audio frames may result in audio jitter.After a successful method call, the app automatically pulls the audio data from the SDK. After setting the audio data parameters, the SDK adjusts the frame buffer and avoids problems caused by jitter in the external audio playback.
+  /// Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering.After a successful method call, the app pulls the decoded and mixed audio data for playback.This method only supports pulling data from custom audio source. If you need to pull the data captured by the SDK, do not call this method.Call this method after joining a channel.Once you enable the external audio sink, the app will not retrieve any audio data from the onPlaybackAudioFrame callback.The difference between this method and the onPlaybackAudioFrame callback is as follows:The SDK sends the audio data to the app through the onPlaybackAudioFrame callback. Any delay in processing the audio frames may result in audio jitter.After a successful method call, the app automatically pulls the audio data from the SDK. After setting the audio data parameters, the SDK adjusts the frame buffer and avoids problems caused by jitter in the external audio playback.
   Future<void> pullAudioFrame(AudioFrame frame);
 
   /// Configures the external video source.
@@ -87,7 +88,7 @@ abstract class MediaEngine {
   /// * [enabled] Whether to use the external video source:true: Use the external video source. The SDK prepares to accept the external video frame.false: (Default) Do not use the external video source.
   /// * [useTexture] Whether to use the external video frame in the Texture format.true: Use the external video frame in the Texture format.false: (Default) Do not use the external video frame in the Texture format.
   /// * [sourceType] Whether to encode the external video frame, see ExternalVideoSourceType .
-  /// * [encodedVideoOption] Video encoding options. This parameter needs to be set ifsourceType isencodedVideoFrame. To set this parameter, contact.
+  /// * [encodedVideoOption] Video encoding options. This parameter needs to be set if sourceType is encodedVideoFrame. To set this parameter, contact .
   Future<void> setExternalVideoSource(
       {required bool enabled,
       required bool useTexture,
@@ -100,9 +101,9 @@ abstract class MediaEngine {
   /// Call this method before joining a channel.
   ///
   /// * [enabled] Whether to enable the external audio source:true: Enable the external audio source.false: (Default) Disable the external audio source.
-  /// * [sampleRate] The sample rate (Hz) of the external audio source, which can be set as8000,16000,32000,44100, or48000.
-  /// * [channels] The number of channels of the external audio source, which can be set as1 (Mono) or2 (Stereo).
-  /// * [sourceNumber] The number of external audio sources. The value of this parameter should be larger than 0.The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions , you can setpublishCustomAudioSourceId to the ID of the audio track you want to publish.
+  /// * [sampleRate] The sample rate (Hz) of the external audio source, which can be set as 8000, 16000, 32000, 44100, or 48000.
+  /// * [channels] The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
+  /// * [sourceNumber] The number of external audio sources. The value of this parameter should be larger than 0. The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions , you can set publishCustomAudioSourceId to the ID of the audio track you want to publish.
   /// * [localPlayback] Whether to play the external audio source:true: Play the external audio source.false: (Default) Do not play the external source.
   /// * [publish] Whether to publish audio to the remote users:true: (Default) Publish audio to the remote users.false: Do not publish audio to the remote users
   Future<void> setExternalAudioSource(
@@ -131,7 +132,7 @@ abstract class MediaEngine {
       {required bool enable, bool localPlayback = false});
 
   /// Pushes the external raw video frame to the SDK.
-  /// To push the unencoded external raw video frame to the SDK, call createCustomVideoTrack to get the video track ID, setcustomVideoTrackId as the video track ID you want to publish in the ChannelMediaOptions of each channel, and setpublishCustomVideoTrack astrue.
+  /// To push the unencoded external raw video frame to the SDK, call createCustomVideoTrack to get the video track ID, set customVideoTrackId as the video track ID you want to publish in the ChannelMediaOptions of each channel, and set publishCustomVideoTrack as true.
   ///
   /// * [frame] The external raw video frame to be pushed. See ExternalVideoFrame .
   /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.

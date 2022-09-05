@@ -25,14 +25,14 @@ class RemoteVoicePositionInfo {
 }
 
 /// This class contains some of the APIs in the LocalSpatialAudioEngine class.
-/// TheLocalSpatialAudioEngine class inherits fromBaseSpatialAudioEngine.
+/// The LocalSpatialAudioEngine class inherits from BaseSpatialAudioEngine.
 abstract class BaseSpatialAudioEngine {
   /// Destroys BaseSpatialAudioEngine .
-  /// This method releases all resources underBaseSpatialAudioEngine. When the user does not need to use the spatial audio effect, you can call this method to release resources for other operations.After calling this method, you can no longer use any of the APIs underBaseSpatialAudioEngine.Call this method before the release method under RtcEngine .
+  /// This method releases all resources under BaseSpatialAudioEngine. When the user does not need to use the spatial audio effect, you can call this method to release resources for other operations.After calling this method, you can no longer use any of the APIs under BaseSpatialAudioEngine.Call this method before the release method under RtcEngine .
   Future<void> release();
 
   /// Sets the maximum number of streams that a user can receive in a specified audio reception range.
-  /// If the number of receivable streams exceeds the set value, the local user receives themaxCount streams that are closest to the local user. If there are users who belong to the same team as the local user in the room, the local user receives the audio of the teammates first. For example, whenmaxCount is set to 3, if there are five remote users in the room, two of whom belong to the same team as the local user, and three of whom belong to different teams but are within the audio reception range of the local user, the local user can hear the two teammates and the one user from a different team closest to the local user.
+  /// If the number of receivable streams exceeds the set value, the local user receives the maxCount streams that are closest to the local user. If there are users who belong to the same team as the local user in the room, the local user receives the audio of the teammates first. For example, when maxCount is set to 3, if there are five remote users in the room, two of whom belong to the same team as the local user, and three of whom belong to different teams but are within the audio reception range of the local user, the local user can hear the two teammates and the one user from a different team closest to the local user.
   ///
   /// * [maxCount] The maximum number of streams that a user can receive within a specified audio reception range.
   Future<void> setMaxAudioRecvCount(int maxCount);
@@ -50,7 +50,7 @@ abstract class BaseSpatialAudioEngine {
   Future<void> setDistanceUnit(double unit);
 
   /// Updates the spatial position of the local user.
-  /// Under the LocalSpatialAudioEngine class, this method needs to be used with updateRemotePosition . The SDK calculates the relative position between the local and remote users according to this method and the parameter settings inupdateRemotePosition, and then calculates the user's spatial audio effect parameters.
+  /// Under the LocalSpatialAudioEngine class, this method needs to be used with updateRemotePosition . The SDK calculates the relative position between the local and remote users according to this method and the parameter settings in updateRemotePosition, and then calculates the user's spatial audio effect parameters.
   ///
   /// * [position] The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
   /// * [axisForward] The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
@@ -98,7 +98,7 @@ abstract class BaseSpatialAudioEngine {
 ///
 abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   /// Initializes LocalSpatialAudioEngine .
-  /// Before calling other methods of theLocalSpatialAudioEngine class, you need to call this method to initializeLocalSpatialAudioEngine.The SDK supports creating only oneLocalSpatialAudioEngine instance for an app.
+  /// Before calling other methods of the LocalSpatialAudioEngine class, you need to call this method to initialize LocalSpatialAudioEngine.The SDK supports creating only one LocalSpatialAudioEngine instance for an app.
   Future<void> initialize();
 
   /// Updates the spatial position of the specified remote user.

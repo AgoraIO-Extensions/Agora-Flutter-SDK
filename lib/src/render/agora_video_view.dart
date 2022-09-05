@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../impl/agora_video_view_impl.dart';
 
-/// TheAgoraVideoView Class for rendering local and remote video.
+/// The AgoraVideoView Class for rendering local and remote video.
 ///
 class AgoraVideoView extends StatefulWidget {
   /// @nodoc
   const AgoraVideoView({Key? key, required this.controller}) : super(key: key);
 
-  /// Controls the type of video to render:If you want to render video of theRtcEngine, see VideoViewController .If you want to render video of the media player, see MediaPlayerController .
+  /// Controls the type of video to render:If you want to render video of the RtcEngine, see VideoViewController .If you want to render video of the media player, see MediaPlayerController .
   final VideoViewControllerBase controller;
 
   @override

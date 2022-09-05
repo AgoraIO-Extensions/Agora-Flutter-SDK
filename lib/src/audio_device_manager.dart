@@ -43,7 +43,7 @@ abstract class AudioDeviceManager {
   /// Sets the audio playback device.
   ///
   ///
-  /// * [deviceId] The ID of the specified audio playback device. You can get the device ID by calling enumeratePlaybackDevices . Plugging or unplugging the audio device does not change the value ofdeviceId.
+  /// * [deviceId] The ID of the specified audio playback device. You can get the device ID by calling enumeratePlaybackDevices . Plugging or unplugging the audio device does not change the value of deviceId.
   Future<void> setPlaybackDevice(String deviceId);
 
   /// Retrieves the audio playback device associated with the device ID.
@@ -69,7 +69,7 @@ abstract class AudioDeviceManager {
   /// Sets the audio recording device.
   ///
   ///
-  /// * [deviceId] The ID of the audio recording device. You can get the device ID by calling enumerateRecordingDevices . Plugging or unplugging the audio device does not change the value ofdeviceId.
+  /// * [deviceId] The ID of the audio recording device. You can get the device ID by calling enumerateRecordingDevices . Plugging or unplugging the audio device does not change the value of deviceId.
   Future<void> setRecordingDevice(String deviceId);
 
   /// Gets the current audio recording device.
@@ -105,7 +105,7 @@ abstract class AudioDeviceManager {
   Future<bool> getRecordingDeviceMute();
 
   /// Starts the audio playback device test.
-  /// This method tests whether the audio playback device works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly.After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reportinguid = 1 and the volume information of the playback device.Ensure that you call this method before joining a channel.
+  /// This method tests whether the audio playback device works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly.After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reporting uid = 1 and the volume information of the playback device.Ensure that you call this method before joining a channel.
   ///
   /// * [testAudioFilePath] The path of the audio file. The data format is string in UTF-8.Supported file formats: wav, mp3, m4a, and aac.Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
   Future<void> startPlaybackDeviceTest(String testAudioFilePath);
@@ -115,9 +115,9 @@ abstract class AudioDeviceManager {
   Future<void> stopPlaybackDeviceTest();
 
   /// Starts the audio capture device test.
-  /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reportsuid = 0 and the volume information of the capturing device.Ensure that you call this method before joining a channel.
+  /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device.Ensure that you call this method before joining a channel.
   ///
-  /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive theonAudioVolumeIndication callback.
+  /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
   Future<void> startRecordingDeviceTest(int indicationInterval);
 
   /// Stops the audio capture device test.
@@ -127,7 +127,7 @@ abstract class AudioDeviceManager {
   /// Starts an audio device loopback test.
   /// This method tests whether the local audio capture device and playback device are working properly. Once the test starts, the audio recording device records the local audio, and the audio playback device plays the captured audio. The SDK triggers two independent onAudioVolumeIndication callbacks at the time interval set in this method, which reports the volume information of the capture device (uid = 0) and the volume information of the playback device (uid = 1) respectively.Ensure that you call this method before joining a channel.This method tests local audio devices and does not report the network conditions.
   ///
-  /// * [indicationInterval] The time interval (ms) at which the SDK triggers theonAudioVolumeIndication callback. Agora recommends setting a value greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive theonAudioVolumeIndication callback.
+  /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends setting a value greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
   Future<void> startAudioDeviceLoopbackTest(int indicationInterval);
 
   /// Stops the audio device loopback test.
@@ -146,7 +146,7 @@ abstract class AudioDeviceManager {
   /// * [enable] Whether to follow the system default audio recording device:true: Follow. The SDK immediately switches the audio recording device when the system default audio recording device changes.false: Do not follow. The SDK switches the audio recording device to the system default audio recording device only when the currently used audio recording device is disconnected.
   Future<void> followSystemRecordingDevice(bool enable);
 
-  /// Releases all the resources occupied by theAudioDeviceManager object.
+  /// Releases all the resources occupied by the AudioDeviceManager object.
   ///
   Future<void> release();
 }

@@ -85,7 +85,7 @@ enum AudioMixingReasonType {
   @JsonValue(701)
   audioMixingReasonCanNotOpen,
 
-  /// 702: The SDK opens the music file too frequently. If you need to callstartAudioMixing multiple times, ensure that the call interval is more than 500 ms.
+  /// 702: The SDK opens the music file too frequently. If you need to call startAudioMixing multiple times, ensure that the call interval is more than 500 ms.
   @JsonValue(702)
   audioMixingReasonTooFrequentCall,
 
@@ -435,7 +435,7 @@ class LocalVideoStats {
   @JsonKey(name: 'encodedFrameCount')
   final int? encodedFrameCount;
 
-  /// The codec type of the local video.See VideoCodecType .
+  /// The codec type of the local video. See VideoCodecType .
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
@@ -486,7 +486,7 @@ class RemoteVideoStats {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Deprecated:In scenarios where audio and video are synchronized, you can get the video delay data fromnetworkTransportDelay andjitterBufferDelay in RemoteAudioStats .The video delay (ms).
+  /// Deprecated:In scenarios where audio and video are synchronized, you can get the video delay data from networkTransportDelay and jitterBufferDelay in RemoteAudioStats .The video delay (ms).
   @JsonKey(name: 'delay')
   final int? delay;
 
@@ -518,7 +518,7 @@ class RemoteVideoStats {
   @JsonKey(name: 'packetLossRate')
   final int? packetLossRate;
 
-  /// The type of the video stream.
+  /// The type of the video stream. See VideoStreamType .
   @JsonKey(name: 'rxStreamType')
   final VideoStreamType? rxStreamType;
 
@@ -900,11 +900,11 @@ class CameraCapturerConfiguration {
       this.format,
       this.followEncodeDimensionRatio});
 
-  /// This parameter applies to Android and iOS only.The camera direction. CameraDirection
+  /// This parameter applies to Android and iOS only.The camera direction.  CameraDirection
   @JsonKey(name: 'cameraDirection')
   final CameraDirection? cameraDirection;
 
-  /// The device ID of the playback device.The maximum length is MaxDeviceIdLengthType .
+  /// The device ID of the playback device. The maximum length is MaxDeviceIdLengthType .
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
@@ -957,7 +957,7 @@ class ScreenCaptureConfiguration {
   @JsonKey(name: 'params')
   final ScreenCaptureParameters? params;
 
-  /// (For Windows and macOS only) The relative position of the shared region to the whole screen. See Rectangle .If you do not set this parameter, the SDK shares the whole screen. If the region you set exceeds the boundary of the screen, only the region within in the screen is shared. If you setwidth or height inRectangle as 0, the whole screen is shared.
+  /// (For Windows and macOS only) The relative position of the shared region to the whole screen. See Rectangle .If you do not set this parameter, the SDK shares the whole screen. If the region you set exceeds the boundary of the screen, only the region within in the screen is shared. If you setwidth or height in Rectangle as 0, the whole screen is shared.
   @JsonKey(name: 'regionRect')
   final Rectangle? regionRect;
 
@@ -1083,11 +1083,11 @@ class ScreenCaptureSourceInfo {
   @JsonKey(name: 'sourceName')
   final String? sourceName;
 
-  /// The image content of the thumbnail.See
+  /// The image content of the thumbnail. See
   @JsonKey(name: 'thumbImage')
   final ThumbImageBuffer? thumbImage;
 
-  /// The image content of the icon.See
+  /// The image content of the icon. See
   @JsonKey(name: 'iconImage')
   final ThumbImageBuffer? iconImage;
 
@@ -1162,8 +1162,8 @@ class ImageTrackOptions {
 }
 
 /// The channel media options.
-/// Agora supports publishing multiple audio streams and one video stream at the same time and in the same RtcConnection . For example,publishCustomAudioTrack andpublishMediaPlayerAudioTrack can betrue at the same time;
-/// but only one ofpublishCameraTrack,publishCustomVideoTrack, andpublishEncodedVideoTrack can betrue at the same time.
+/// Agora supports publishing multiple audio streams and one video stream at the same time and in the same RtcConnection . For example, publishCustomAudioTrack and publishMediaPlayerAudioTrack can be true at the same time;
+/// but only one of publishCameraTrack, publishCustomVideoTrack, and publishEncodedVideoTrack can be true at the same time.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChannelMediaOptions {
   /// @nodoc
@@ -1210,7 +1210,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
-  /// Whether to publish the captured audio:true: (Default) Publish the captured audio.false: Do not publish the captured audio.Since v4.0.0, the parameter name has been changed frompublishAudioTrack topublishMicrophoneTrack.
+  /// Whether to publish the captured audio:true: (Default) Publish the captured audio.false: Do not publish the captured audio.Since v4.0.0, the parameter name has been changed from publishAudioTrack to publishMicrophoneTrack.
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
@@ -1234,7 +1234,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishCustomAudioTrack')
   final bool? publishCustomAudioTrack;
 
-  /// The ID of the custom audio source to publish. The default value is 0.If you have set the value ofsourceNumber greater than 1 in setExternalAudioSource , the SDK creates the corresponding number of custom audio tracks and assigns an ID to each audio track starting from 0.
+  /// The ID of the custom audio source to publish. The default value is 0.If you have set the value of sourceNumber greater than 1 in setExternalAudioSource , the SDK creates the corresponding number of custom audio tracks and assigns an ID to each audio track starting from 0.
   @JsonKey(name: 'publishCustomAudioSourceId')
   final int? publishCustomAudioSourceId;
 
@@ -1266,7 +1266,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishMediaPlayerVideoTrack')
   final bool? publishMediaPlayerVideoTrack;
 
-  /// Whether to publish the local transcoded video.true:Publish the local transcoded video.false:(Default) Do not publish the local transcoded video.
+  /// Whether to publish the local transcoded video.true: Publish the local transcoded video.false: (Default) Do not publish the local transcoded video.
   @JsonKey(name: 'publishTrancodedVideoTrack')
   final bool? publishTrancodedVideoTrack;
 
@@ -1290,7 +1290,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'clientRoleType')
   final ClientRoleType? clientRoleType;
 
-  /// The latency level of an audience member in interactive live streaming.See AudienceLatencyLevelType .
+  /// The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType .
   @JsonKey(name: 'audienceLatencyLevel')
   final AudienceLatencyLevelType? audienceLatencyLevel;
 
@@ -1323,7 +1323,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishRhythmPlayerTrack')
   final bool? publishRhythmPlayerTrack;
 
-  /// Whether to enable interactive mode:true: Enable interactive mode. Local users receive low-latency and smooth video from remote users.false: (Default) Do not enable interactive mode. Local users receive the video of the remote user with the default settings.This parameter is used to implement the cohost across channels scenario only. The cohosts need to call joinChannelEx method to join the other host's channel as an audience member, and setisInteractiveAudience totrue.This parameter takes effect only when the user role isclientRoleAudience.
+  /// Whether to enable interactive mode:true: Enable interactive mode. Local users receive low-latency and smooth video from remote users.false: (Default) Do not enable interactive mode. Local users receive the video of the remote user with the default settings.This parameter is used to implement the cohost across channels scenario only. The cohosts need to call joinChannelEx method to join the other host's channel as an audience member, and set isInteractiveAudience to true.This parameter takes effect only when the user role is clientRoleAudience.
   @JsonKey(name: 'isInteractiveAudience')
   final bool? isInteractiveAudience;
 
@@ -1435,7 +1435,7 @@ class LocalAccessPointConfiguration {
   @JsonKey(name: 'domainListSize')
   final int? domainListSize;
 
-  /// The domain name used for Intranet certificate verification. If you pass an empty value, the SDK uses the default domain namesecure-edge.local for certificate verification.
+  /// The domain name used for Intranet certificate verification. If you pass an empty value, the SDK uses the default domain name secure-edge.local for certificate verification.
   @JsonKey(name: 'verifyDomainName')
   final String? verifyDomainName;
 
@@ -1459,15 +1459,15 @@ class LeaveChannelOptions {
   const LeaveChannelOptions(
       {this.stopAudioMixing, this.stopAllEffect, this.stopMicrophoneRecording});
 
-  /// Whether to stop playing and mixing the music file when a user leaves the channel.true: (Default) Stop playing and mixing the music file.false: Do not stop playing and mixing the music file.
+  /// Whether to stop playing and mixing the music file when a user leaves the channel. true: (Default) Stop playing and mixing the music file.false: Do not stop playing and mixing the music file.
   @JsonKey(name: 'stopAudioMixing')
   final bool? stopAudioMixing;
 
-  /// Whether to stop playing all audio effects when a user leaves the channel.true: (Default) Stop playing all audio effects.false: Do not stop playing any audio effect.
+  /// Whether to stop playing all audio effects when a user leaves the channel. true: (Default) Stop playing all audio effects.false: Do not stop playing any audio effect.
   @JsonKey(name: 'stopAllEffect')
   final bool? stopAllEffect;
 
-  /// Whether to stop microphone recording when a user leaves the channel.true: (Default) Stop microphone recording.false: Do not stop microphone recording.
+  /// Whether to stop microphone recording when a user leaves the channel. true: (Default) Stop microphone recording.false: Do not stop microphone recording.
   @JsonKey(name: 'stopMicrophoneRecording')
   final bool? stopMicrophoneRecording;
 
@@ -1581,7 +1581,7 @@ class RtcEngineEventHandler {
   /// This callback notifies the application that a user joins a specified channel.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [elapsed] The time elapsed (ms) from the local user callingjoinChannel [2/2] until the SDK triggers this callback.
+  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
   final void Function(RtcConnection connection, int elapsed)?
       onJoinChannelSuccess;
 
@@ -1599,7 +1599,7 @@ class RtcEngineEventHandler {
   /// * [uid] The user ID.
   ///
   /// * [localProxyIp] Reserved for future use.
-  /// * [elapsed] The time elapsed (ms) from the user callingjoinChannel [1/2] until this callback is triggered.
+  /// * [elapsed] The time elapsed (ms) from the user calling joinChannel [1/2] until this callback is triggered.
   final void Function(String channel, int uid, ProxyType proxyType,
       String localProxyIp, int elapsed)? onProxyConnected;
 
@@ -1615,7 +1615,7 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [remoteUid] The user ID of the remote user sending the audio stream.
-  /// * [quality] Audio quality of the user.See QualityType .
+  /// * [quality] Audio quality of the user. See QualityType .
   /// * [delay] The network delay (ms) from the sender to the receiver, including the delay caused by audio sampling pre-processing, network transmission, and network jitter buffering.
   /// * [lost] The packet loss rate (%) of the audio packet sent from the remote user.
   final void Function(RtcConnection connection, int remoteUid,
@@ -1628,12 +1628,12 @@ class RtcEngineEventHandler {
   final void Function(LastmileProbeResult result)? onLastmileProbeResult;
 
   /// Reports the volume information of users.
-  /// By default, this callback is disabled. You can enable it by calling enableAudioVolumeIndication . Once this callback is enabled and users send streams in the channel, the SDK triggers theonAudioVolumeIndication callback according to the time interval set inenableAudioVolumeIndication. The SDK triggers two independentonAudioVolumeIndication callbacks simultaneously, which separately report the volume information of the local user who sends a stream and the remote users (up to three) whose instantaneous volume is the highest.Once this callback is enabled, if the local user calls the muteLocalAudioStream method for mute, the SDK continues to report the volume indication of the local user.20 seconds after a remote user whose volume is one of the three highest in the channel stops publishing the audio stream, the callback excludes this user's information; 20 seconds after all remote users stop publishing audio streams, the SDK stops triggering the callback for remote users.
+  /// By default, this callback is disabled. You can enable it by calling enableAudioVolumeIndication . Once this callback is enabled and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback according to the time interval set in enableAudioVolumeIndication. The SDK triggers two independent onAudioVolumeIndication callbacks simultaneously, which separately report the volume information of the local user who sends a stream and the remote users (up to three) whose instantaneous volume is the highest.Once this callback is enabled, if the local user calls the muteLocalAudioStream method for mute, the SDK continues to report the volume indication of the local user.20 seconds after a remote user whose volume is one of the three highest in the channel stops publishing the audio stream, the callback excludes this user's information; 20 seconds after all remote users stop publishing audio streams, the SDK stops triggering the callback for remote users.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [speakers] The volume information of the users. See AudioVolumeInfo . An emptyspeakers array in the callback indicates that no remote user is in the channel or sending a stream at the moment.
-  /// * [speakerNumber] The total number of users.In the callback for the local user, if the local user is sending streams, the value ofspeakerNumber is 1.In the callback for remote users, the value range ofspeakerNumber is [0,3]. If the number of remote users who send streams is greater than or equal to three, the value ofspeakerNumber is 3.
-  /// * [totalVolume] The volume of the speaker. The value ranges between 0 (lowest volume) and 255 (highest volume).In the callback for the local user,totalVolume is the volume of the local user who sends a stream.In the callback for remote users,totalVolume is the sum of the volume of the remote users (up to three) whose instantaneous volume are the highest.
+  /// * [speakers] The volume information of the users. See AudioVolumeInfo . An empty speakers array in the callback indicates that no remote user is in the channel or sending a stream at the moment.
+  /// * [speakerNumber] The total number of users.In the callback for the local user, if the local user is sending streams, the value of speakerNumber is 1.In the callback for remote users, the value range of speakerNumber is [0,3]. If the number of remote users who send streams is greater than or equal to three, the value of speakerNumber is 3.
+  /// * [totalVolume] The volume of the speaker. The value ranges between 0 (lowest volume) and 255 (highest volume).In the callback for the local user, totalVolume is the volume of the local user who sends a stream.In the callback for remote users, totalVolume is the sum of the volume of the remote users (up to three) whose instantaneous volume are the highest.
   final void Function(RtcConnection connection, List<AudioVolumeInfo> speakers,
       int speakerNumber, int totalVolume)? onAudioVolumeIndication;
 
@@ -1649,6 +1649,7 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [stats] Statistics of the RTC engine. See RtcStats .
+  ///
   final void Function(RtcConnection connection, RtcStats stats)? onRtcStats;
 
   /// Occurs when the audio device state changes.
@@ -1661,7 +1662,7 @@ class RtcEngineEventHandler {
       MediaDeviceStateType deviceState)? onAudioDeviceStateChanged;
 
   /// Occurs when the playback of the local music file finishes.
-  /// Deprecated:Please use onAudioMixingStateChanged instead.After you call startAudioMixing to play a local music file, this callback occurs when the playback finishes. If the callstartAudioMixing fails, the error codeWARN_AUDIO_MIXING_OPEN_ERROR is returned.
+  /// Deprecated:Please use onAudioMixingStateChanged instead.After you call startAudioMixing to play a local music file, this callback occurs when the playback finishes. If the call startAudioMixing fails, the error code WARN_AUDIO_MIXING_OPEN_ERROR is returned.
   final void Function()? onAudioMixingFinished;
 
   /// Occurs when the playback of the local music file finishes.
@@ -1678,12 +1679,12 @@ class RtcEngineEventHandler {
   final void Function(MediaDeviceType deviceType)? onMediaDeviceChanged;
 
   /// Reports the last mile network quality of each user in the channel.
-  /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server.The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times.txQuality isrxQuality is
+  /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server.The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times.txQuality is rxQuality is
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [remoteUid] The user ID. The network quality of the user with this user ID is reported.
-  /// * [txQuality] Uplink network quality rating of the user in terms of the transmission bit rate, packet loss rate, average RTT (Round-Trip Time) and jitter of the uplink network. This parameter is a quality rating helping you understand how well the current uplink network conditions can support the selected video encoder configuration. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 640 × 480 and a frame rate of 15 fps in the LIVE_BROADCASTING profile, but may be inadequate for resolutions higher than 1280 × 720.See QualityType .
-  /// * [rxQuality] Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network.See QualityType .
+  /// * [txQuality] Uplink network quality rating of the user in terms of the transmission bit rate, packet loss rate, average RTT (Round-Trip Time) and jitter of the uplink network. This parameter is a quality rating helping you understand how well the current uplink network conditions can support the selected video encoder configuration. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 640 × 480 and a frame rate of 15 fps in the LIVE_BROADCASTING profile, but may be inadequate for resolutions higher than 1280 × 720. See QualityType .
+  /// * [rxQuality] Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network. See QualityType .
   final void Function(RtcConnection connection, int remoteUid,
       QualityType txQuality, QualityType rxQuality)? onNetworkQuality;
 
@@ -1720,16 +1721,16 @@ class RtcEngineEventHandler {
   /// * [connection] The connection information. See RtcConnection .
   /// * [width] The width (px) of the first local video frame.
   /// * [height] The height (px) of the first local video frame.
-  /// * [elapsed] Time elapsed (ms) from the local user callingjoinChannel [2/2] until the SDK triggers this callback. If you call startPreview before callingjoinChannel [2/2], then this parameter is the time elapsed from calling thestartPreview method until the SDK triggers this callback.
+  /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback. If you call startPreview before calling joinChannel [2/2], then this parameter is the time elapsed from calling the startPreview method until the SDK triggers this callback.
   final void Function(
           RtcConnection connection, int width, int height, int elapsed)?
       onFirstLocalVideoFrame;
 
   /// Occurs when the first video frame is published.
-  /// The SDK triggers this callback under one of the following circumstances:The local client enables the video module and callsjoinChannel [2/2] successfully.The local client calls muteLocalVideoStream (true) andmuteLocalVideoStream(false) in sequence.The local client calls disableVideo and enableVideo in sequence.
+  /// The SDK triggers this callback under one of the following circumstances:The local client enables the video module and calls joinChannel [2/2] successfully.The local client calls muteLocalVideoStream (true) and muteLocalVideoStream(false) in sequence.The local client calls disableVideo and enableVideo in sequence.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [elapsed] Time elapsed (ms) from the local user callingjoinChannel [2/2] until the SDK triggers this callback.
+  /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
   final void Function(RtcConnection connection, int elapsed)?
       onFirstLocalVideoFramePublished;
 
@@ -1740,7 +1741,7 @@ class RtcEngineEventHandler {
   /// * [remoteUid] The ID of the remote user sending the video stream.
   /// * [width] The width (px) of the video stream.
   /// * [height] The height (px) of the video stream.
-  /// * [elapsed] The time elapsed (ms) from the local user callingjoinChannel [2/2] until the SDK triggers this callback.
+  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
   final void Function(RtcConnection connection, int remoteUid, int width,
       int height, int elapsed)? onFirstRemoteVideoDecoded;
 
@@ -1749,7 +1750,7 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [sourceType] The capture type of the custom video source. See VideoSourceType .
-  /// * [uid] The ID of the user whose video size or rotation changes. (Theuid for the local user is 0. The video is the local user's video preview).
+  /// * [uid] The ID of the user whose video size or rotation changes. (The uid for the local user is 0. The video is the local user's video preview).
   /// * [width] The width (pixels) of the video stream.
   /// * [height] The height (pixels) of the video stream.
   /// * [rotation] The rotation information. The value range is [0,360).
@@ -1757,7 +1758,7 @@ class RtcEngineEventHandler {
       int uid, int width, int height, int rotation)? onVideoSizeChanged;
 
   /// Occurs when the local video stream state changes.
-  /// When the state of the local video stream changes (including the state of the video capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.The SDK triggers theonLocalVideoStateChanged callback with the state code oflocalVideoStreamStateFailed and error code oflocalVideoStreamErrorCaptureFailure in the following situations:The app switches to the background, and the system gets the camera resource.The camera starts normally, but does not output video frames for four consecutive seconds.When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers theonLocalVideoStateChanged callback with the state code oflocalVideoStreamStateCapturing and error code oflocalVideoStreamErrorCaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
+  /// When the state of the local video stream changes (including the state of the video capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.The SDK triggers the onLocalVideoStateChanged callback with the state code of localVideoStreamStateFailed and error code of localVideoStreamErrorCaptureFailure in the following situations:The app switches to the background, and the system gets the camera resource.The camera starts normally, but does not output video frames for four consecutive seconds.When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers the onLocalVideoStateChanged callback with the state code of localVideoStreamStateCapturing and error code of localVideoStreamErrorCaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
   ///
   /// * [source] The capture type of the custom video source. See VideoSourceType .
   /// * [state] The state of the local video, see LocalVideoStreamState .
@@ -1772,7 +1773,7 @@ class RtcEngineEventHandler {
   /// * [remoteUid] The ID of the remote user whose video state changes.
   /// * [state] The state of the remote video, see RemoteVideoState .
   /// * [reason] The reason for the remote video state change, see RemoteVideoStateReason .
-  /// * [elapsed] Time elapsed (ms) from the local user calling thejoinChannel [2/2] method until the SDK triggers this callback.
+  /// * [elapsed] Time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
   final void Function(
       RtcConnection connection,
       int remoteUid,
@@ -1787,16 +1788,16 @@ class RtcEngineEventHandler {
   /// * [connection] The connection information. See RtcConnection .
   /// * [width] The width (px) of the video stream.
   /// * [height] The height (px) of the video stream.
-  /// * [elapsed] The time elapsed (ms) from the local user callingjoinChannel [2/2] until the SDK triggers this callback.
+  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
   final void Function(RtcConnection connection, int remoteUid, int width,
       int height, int elapsed)? onFirstRemoteVideoFrame;
 
   /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) joins the channel.
-  /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17.The SDK triggers this callback under one of the following circumstances:A remote user/host joins the channel by calling thejoinChannel [2/2] method.A remote user switches the user role to the host after joining the channel.A remote user/host rejoins the channel after a network interruption.
+  /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17.The SDK triggers this callback under one of the following circumstances:A remote user/host joins the channel by calling the joinChannel [2/2] method.A remote user switches the user role to the host after joining the channel.A remote user/host rejoins the channel after a network interruption.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [remoteUid] The ID of the user or host who joins the channel.
-  /// * [elapsed] Time delay (ms) from the local user callingjoinChannel [2/2] until this callback is triggered.
+  /// * [elapsed] Time delay (ms) from the local user calling joinChannel [2/2] until this callback is triggered.
   final void Function(RtcConnection connection, int remoteUid, int elapsed)?
       onUserJoined;
 
@@ -1818,7 +1819,7 @@ class RtcEngineEventHandler {
   final void Function(RtcConnection connection, int remoteUid, bool muted)?
       onUserMuteAudio;
 
-  /// Occurs when a remote user stops or resumes publishing the video stream.
+  /// Occurs when a remote user stops/resumes publishing the video stream.
   /// When a remote user calls muteLocalVideoStream to stop or resume publishing the video stream, the SDK triggers this callback to report the state of the remote user's publishing stream to the local user.This callback can be inaccurate when the number of users (in the communication profile) or hosts (in the live streaming profile) in a channel exceeds 17.
   ///
   /// * [connection] The connection information. See RtcConnection .
@@ -1830,7 +1831,8 @@ class RtcEngineEventHandler {
   /// Occurs when a remote user enables/disables the video module.
   /// Once the video module is disabled, the user can only use a voice call. The user cannot send or receive any video.The SDK triggers this callback when a remote user enables or disables the video module by calling the enableVideo or disableVideo method.
   ///
-  /// * [uid] The user ID of the remote user.
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [remoteUid] The user ID of the remote user.
   /// * [enabled] true: Enable.false: Disable.
   final void Function(RtcConnection connection, int remoteUid, bool enabled)?
       onUserEnableVideo;
@@ -1842,13 +1844,9 @@ class RtcEngineEventHandler {
   /// Occurs when a specific remote user enables/disables the local video capturing function.
   /// The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the enableLocalVideo method.
   ///
-  /// * [uid] The user ID of the remote user.
-  /// * [enabled] Whether the specified remote user enables/disables the local video
-  ///  capturing function:true: Enable. Other users in the
-  ///  channel can see the video of this remote user.false: Disable. Other users in the
-  ///  channel can no longer receive the video stream from this remote
-  ///  user, while this remote user can still receive the video streams
-  ///  from other users.
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [remoteUid] The user ID of the remote user.
+  /// * [enabled] Whether the specified remote user enables/disables the local video capturing function:true: Enable. Other users in the channel can see the video of this remote user.false: Disable. Other users in the channel can no longer receive the video stream from this remote user, while this remote user can still receive the video streams from other users.
   final void Function(RtcConnection connection, int remoteUid, bool enabled)?
       onUserEnableLocalVideo;
 
@@ -1893,7 +1891,7 @@ class RtcEngineEventHandler {
       onRemoteVideoStats;
 
   /// Occurs when the camera turns on and is ready to capture the video.
-  /// Deprecated:Please uselocalVideoStreamStateCapturing(1) in onLocalVideoStateChanged instead.This callback indicates that the camera has been successfully turned on and you can start to capture video.
+  /// Deprecated:Please use localVideoStreamStateCapturing(1) in onLocalVideoStateChanged instead.This callback indicates that the camera has been successfully turned on and you can start to capture video.
   final void Function()? onCameraReady;
 
   /// Occurs when the camera focus area changes.
@@ -1912,7 +1910,7 @@ class RtcEngineEventHandler {
       onCameraExposureAreaChanged;
 
   /// Reports the face detection result of the local user.
-  /// Once you enable face detection by calling enableFaceDetection (true), you can get the following information on the local user in real-time:The width and height of the local video.The position of the human face in the local view.The distance between the human face and the screen.This value is based on the fitting calculation of the local video size and the position of the human face.This callback is for Android and iOS only.When it is detected that the face in front of the camera disappears, the callback will be triggered immediately. When no human face is detected, the frequency of this callback to be rtriggered wil be decreased to reduce power consumption on the local device.The SDK stops triggering this callback when a human face is in close proximity to the screen.On Android, the value ofdistance reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.
+  /// Once you enable face detection by calling enableFaceDetection (true), you can get the following information on the local user in real-time:The width and height of the local video.The position of the human face in the local view.The distance between the human face and the screen.This value is based on the fitting calculation of the local video size and the position of the human face.This callback is for Android and iOS only.When it is detected that the face in front of the camera disappears, the callback will be triggered immediately. When no human face is detected, the frequency of this callback to be rtriggered wil be decreased to reduce power consumption on the local device.The SDK stops triggering this callback when a human face is in close proximity to the screen.On Android, the value of distance reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.
   ///
   /// * [imageWidth] The width (px) of the video image captured by the local camera.
   /// * [imageHeight] The height (px) of the video image captured by the local camera.
@@ -1923,14 +1921,14 @@ class RtcEngineEventHandler {
       int vecDistance, int numFaces)? onFacePositionChanged;
 
   /// Occurs when the video stops playing.
-  /// Deprecated:UselocalVideoStreamStateStopped(0) in the onLocalVideoStateChanged callback instead.The application can use this callback to change the configuration of theview (for example, displaying other pictures in the view) after the video stops playing.
+  /// Deprecated:Use localVideoStreamStateStopped(0) in the onLocalVideoStateChanged callback instead.The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
   final void Function()? onVideoStopped;
 
   /// Occurs when the playback state of the music file changes.
   /// This callback occurs when the playback state of the music file changes, and reports the current state and error code.
   ///
-  /// * [state] The playback state of the music file.
-  /// * [reason] Error code.
+  /// * [state] The playback state of the music file. See AudioMixingStateType .
+  /// * [reason] Error code. See AudioMixingReasonType .
   final void Function(AudioMixingStateType state, AudioMixingReasonType reason)?
       onAudioMixingStateChanged;
 
@@ -1940,13 +1938,13 @@ class RtcEngineEventHandler {
       onRhythmPlayerStateChanged;
 
   /// Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
-  /// The SDK triggers this callback when it cannot connect to the server 10 seconds after calling thejoinChannel [2/2] method, regardless of whether it is in the channel. If the SDK fails to rejoin the channel within 20 minutes after disconnecting, the SDK will stop trying to reconnect.
+  /// The SDK triggers this callback when it cannot connect to the server 10 seconds after calling the joinChannel [2/2] method, regardless of whether it is in the channel. If the SDK fails to rejoin the channel within 20 minutes after disconnecting, the SDK will stop trying to reconnect.
   ///
   /// * [connection] The connection information. See RtcConnection .
   final void Function(RtcConnection connection)? onConnectionLost;
 
   /// Occurs when the connection between the SDK and the server is interrupted.
-  /// Deprecated:Use onConnectionStateChanged instead.The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. The difference between this callback and onConnectionLost is:The SDK triggers theonConnectionInterrupted callback when it loses connection with the server for more than four seconds after it successfully joins the channel.The SDK triggers theonConnectionLost callback when it loses connection with the server for more than 10 seconds, whether or not it joins the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
+  /// Deprecated:Use onConnectionStateChanged instead.The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. The difference between this callback and onConnectionLost is:The SDK triggers the onConnectionInterrupted callback when it loses connection with the server for more than four seconds after it successfully joins the channel.The SDK triggers the onConnectionLost callback when it loses connection with the server for more than 10 seconds, whether or not it joins the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
   ///
   /// * [connection] The connection information. See RtcConnection .
   final void Function(RtcConnection connection)? onConnectionInterrupted;
@@ -1996,10 +1994,10 @@ class RtcEngineEventHandler {
       onTokenPrivilegeWillExpire;
 
   /// Occurs when the first audio frame is published.
-  /// The SDK triggers this callback under one of the following circumstances:The local client enables the audio module and callsjoinChannel [2/2] successfully.The local client calls muteLocalAudioStream (true) andmuteLocalAudioStream(false) in sequence.The local client calls disableAudio and enableAudio in sequence.
+  /// The SDK triggers this callback under one of the following circumstances:The local client enables the audio module and calls joinChannel [2/2] successfully.The local client calls muteLocalAudioStream (true) and muteLocalAudioStream(false) in sequence.The local client calls disableAudio and enableAudio in sequence.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [elapsed] Time elapsed (ms) from the local user callingjoinChannel [2/2] until the SDK triggers this callback.
+  /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
   final void Function(RtcConnection connection, int elapsed)?
       onFirstLocalAudioFramePublished;
 
@@ -2008,7 +2006,7 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [userId] The ID of the remote user sending the audio frames.
-  /// * [elapsed] The time elapsed (ms) from the local user calling thejoinChannel [2/2] method until the SDK triggers this callback.
+  /// * [elapsed] The time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
   final void Function(RtcConnection connection, int userId, int elapsed)?
       onFirstRemoteAudioFrame;
 
@@ -2017,12 +2015,12 @@ class RtcEngineEventHandler {
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [uid] The user ID of the remote user.
-  /// * [elapsed] The time elapsed (ms) from the local user calling thejoinChannel [2/2] method until the SDK triggers this callback.
+  /// * [elapsed] The time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
   final void Function(RtcConnection connection, int uid, int elapsed)?
       onFirstRemoteAudioDecoded;
 
   /// Occurs when the local audio stream state changes.
-  /// When the state of the local audio stream changes (including the state of the audio capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local audio stream, and allows you to troubleshoot issues when audio exceptions occur.When the state islocalAudioStreamStateFailed (3), you can view the error information in theerror parameter.
+  /// When the state of the local audio stream changes (including the state of the audio capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local audio stream, and allows you to troubleshoot issues when audio exceptions occur.When the state is localAudioStreamStateFailed (3), you can view the error information in the error parameter.
   ///
   /// * [connection] The connection information. See RtcConnection .
   ///
@@ -2037,7 +2035,7 @@ class RtcEngineEventHandler {
   /// * [remoteUid] The ID of the remote user whose audio state changes.
   ///
   /// * [reason] The reason of the remote audio state change. See RemoteAudioStateReason .
-  /// * [elapsed] Time elapsed (ms) from the local user calling thejoinChannel [2/2] method until the SDK triggers this callback.
+  /// * [elapsed] Time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
   final void Function(
       RtcConnection connection,
       int remoteUid,
@@ -2046,24 +2044,26 @@ class RtcEngineEventHandler {
       int elapsed)? onRemoteAudioStateChanged;
 
   /// Occurs when the most active remote speaker is detected.
-  /// After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user, who is detected as the loudest for the most times, is the most active user.When the number of users is no less than two and an active remote speaker exists, the SDK triggers this callback and reports theuid of the most active remote speaker.If the most active remote speaker is always the same user, the SDK triggers theonActiveSpeaker callback only once.If the most active remote speaker changes to another user, the SDK triggers this callback again and reports theuid of the new active remote speaker.
+  /// After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user, who is detected as the loudest for the most times, is the most active user.When the number of users is no less than two and an active remote speaker exists, the SDK triggers this callback and reports the uid of the most active remote speaker.If the most active remote speaker is always the same user, the SDK triggers the onActiveSpeaker callback only once.If the most active remote speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active remote speaker.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [uid] The user ID of the most active remote speaker.
   final void Function(RtcConnection connection, int uid)? onActiveSpeaker;
 
   /// Reports the result of video content moderation.
-  /// After calling enableContentInspect to enable the video content moderation, and setting thetype parameter in ContentInspectConfig tocontentInspectModeration, the SDK triggers the onContentInspectResult callback and reports the result of video content moderation.
+  /// After calling enableContentInspect to enable the video content moderation, and setting the type parameter in ContentInspectConfig tocontentInspectModeration, the SDK triggers the onContentInspectResult callback and reports the result of video content moderation.
+  ///
+  /// * [result] The results of video content moderation. See ContentInspectResult .
   final void Function(ContentInspectResult result)? onContentInspectResult;
 
   /// Reports the result of taking a video snapshot.
   /// After a successful takeSnapshot method call, the SDK triggers this callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.
   ///
-  /// * [uid] The user ID. Auid of 0 indicates the local user.
+  /// * [uid] The user ID. A uid of 0 indicates the local user.
   /// * [filePath] The local path of the snapshot.
   /// * [width] The width (px) of the snapshot.
   /// * [height] The height (px) of the snapshot.
-  /// * [errCode] The message that confirms success or gives the reason why the snapshot is not successfully taken:0: Success.< 0: Failure:-1: The SDK fails to write data to a file or encode a JPEG image.-2: The SDK does not find the video stream of the specified user within one second after thetakeSnapshot method call succeeds.-3: Calling thetakeSnapshot method too frequently.
+  /// * [errCode] The message that confirms success or gives the reason why the snapshot is not successfully taken:0: Success.< 0: Failure:-1: The SDK fails to write data to a file or encode a JPEG image.-2: The SDK does not find the video stream of the specified user within one second after the takeSnapshot method call succeeds.-3: Calling the takeSnapshot method too frequently.
   final void Function(RtcConnection connection, int uid, String filePath,
       int width, int height, int errCode)? onSnapshotTaken;
 
@@ -2109,7 +2109,7 @@ class RtcEngineEventHandler {
       onRtmpStreamingEvent;
 
   /// Occurs when the publisher's transcoding is updated.
-  /// When the LiveTranscoding class in the setLiveTranscoding method updates, the SDK triggers theonTranscodingUpdated callback to report the update information.If you call thesetLiveTranscoding method to set theLiveTranscoding class for the first time, the SDK does not trigger this callback.
+  /// When the LiveTranscoding class in the setLiveTranscoding method updates, the SDK triggers the onTranscodingUpdated callback to report the update information.If you call the setLiveTranscoding method to set the LiveTranscoding class for the first time, the SDK does not trigger this callback.
   final void Function()? onTranscodingUpdated;
 
   /// Occurs when the local audio route changes.
@@ -2202,7 +2202,7 @@ class RtcEngineEventHandler {
   final void Function(PermissionType permissionType)? onPermissionError;
 
   /// Occurs when the local user registers a user account.
-  /// After the local user successfully calls registerLocalUserAccount to register the user account or callsjoinChannelWithUserAccount to join a channel, the SDK triggers the callback and informs the local user's UID and User Account.
+  /// After the local user successfully calls registerLocalUserAccount to register the user account or calls joinChannelWithUserAccount to join a channel, the SDK triggers the callback and informs the local user's UID and User Account.
   ///
   /// * [uid] The ID of the local user.
   /// * [userAccount] The user account of the local user.
@@ -2225,7 +2225,7 @@ class RtcEngineEventHandler {
   /// * [channel] The channel name.
   /// * [uid] The user ID of the remote user.
   /// * [oldState] The previous subscribing status, see StreamSubscribeState for details.
-  /// * [newState] The current subscribing status, seeStreamSubscribeState for details.
+  /// * [newState] The current subscribing status, see StreamSubscribeState for details.
   /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
   final void Function(
       String channel,
@@ -2240,7 +2240,7 @@ class RtcEngineEventHandler {
   /// * [channel] The channel name.
   /// * [uid] The ID of the remote user.
   /// * [oldState] The previous subscribing status, see StreamSubscribeState for details.
-  /// * [newState] The current subscribing status, seeStreamSubscribeState for details.
+  /// * [newState] The current subscribing status, see StreamSubscribeState for details.
   /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
   final void Function(
       String channel,
@@ -2254,7 +2254,7 @@ class RtcEngineEventHandler {
   ///
   /// * [channel] The channel name.
   /// * [oldState] The previous subscribing status. See StreamPublishState .
-  /// * [newState] The current subscribing status. SeeStreamPublishState.
+  /// * [newState] The current subscribing status. See StreamPublishState.
   /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
   final void Function(
       String channel,
@@ -2268,7 +2268,7 @@ class RtcEngineEventHandler {
   /// * [channel] The channel name.
   /// * [source] The capture type of the custom video source. See VideoSourceType .
   /// * [oldState] For the previous publishing state, see StreamPublishState .
-  /// * [newState] For the current publishing state, seeStreamPublishState.
+  /// * [newState] For the current publishing state, see StreamPublishState.
   /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
   final void Function(
       VideoSourceType source,
@@ -2289,7 +2289,7 @@ class RtcEngineEventHandler {
       onExtensionEvent;
 
   /// Occurs when the extension is enabled.
-  /// After a successful call of enableExtension (true), this callback is triggered.
+  /// After a successful call of enableExtension (true), the extension triggers this callback.
   ///
   /// * [provider] The name of the extension provider.
   /// * [extName] The name of the extension.
@@ -2352,7 +2352,7 @@ abstract class VideoDeviceManager {
   /// After calling numberOfCapabilities to get the number of video formats supported by the video capture device, you can call this method to get the specific video frame information supported by the specified index number.
   ///
   /// * [deviceIdUTF8] The ID of the video capture device.
-  /// * [deviceCapabilityNumber] The index number of the video format. IfnumberOfCapabilities the return value of is i, the value range of this parameter is [0,i).
+  /// * [deviceCapabilityNumber] The index number of the video format. If numberOfCapabilities the return value of is i, the value range of this parameter is [0,i).
   ///
   /// Returns
   /// The specific information of the specified video format, including width (px), height (px), and frame rate (fps). See VideoFormat .
@@ -2370,7 +2370,7 @@ abstract class VideoDeviceManager {
   Future<void> release();
 }
 
-/// Configurations for theRtcEngineContext instance.
+/// Configurations for the RtcEngineContext instance.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineContext {
@@ -2384,7 +2384,7 @@ class RtcEngineContext {
       this.threadPriority,
       this.useExternalEglContext});
 
-  /// The App ID issued by Agora for your project. Only users in apps with the same App ID can join the same channel and communicate with each other. An App ID can only be used to create oneRtcEngine instance. To change your App ID, call release to destroy the currentRtcEngine instance, and then create a new one.
+  /// The App ID issued by Agora for your project. Only users in apps with the same App ID can join the same channel and communicate with each other. An App ID can only be used to create one RtcEngine instance. To change your App ID, call release to destroy the current RtcEngine instance, and then create a new one.
   @JsonKey(name: 'appId')
   final String? appId;
 
@@ -2392,7 +2392,7 @@ class RtcEngineContext {
   @JsonKey(name: 'channelProfile')
   final ChannelProfileType? channelProfile;
 
-  /// The audio scenario.  Under different audio scenarios, the device uses different volume types.
+  /// The audio scenarios. See AudioScenarioType . Under different audio scenarios, the device uses different volume types.
   @JsonKey(name: 'audioScenario')
   final AudioScenarioType? audioScenario;
 
@@ -2506,19 +2506,19 @@ class Metadata {
   /// @nodoc
   const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
 
-  /// The user ID.For the recipient:the ID of the remote user who sent theMetadata.Ignore it for sender.
+  /// The user ID.For the recipient:the ID of the remote user who sent the Metadata.Ignore it for sender.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Buffer size for received or sentMetadata.
+  /// Buffer size for received or sent Metadata.
   @JsonKey(name: 'size')
   final int? size;
 
-  /// The buffer address of the received or sentMetadata.
+  /// The buffer address of the received or sent Metadata.
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
-  /// The timestamp (ms) ofMetadata.
+  /// The timestamp (ms) of Metadata.
   @JsonKey(name: 'timeStampMs')
   final int? timeStampMs;
 
@@ -2592,7 +2592,7 @@ enum DirectCdnStreamingState {
   @JsonValue(3)
   directCdnStreamingStateFailed,
 
-  /// 4: Tries to reconnect Agora server to the CDN. The SDK attempts to reconnect a maximum of 10 times; if the connection is not restored, the streaming state becomesdirectCdnStreamingStateFailed.
+  /// 4: Tries to reconnect Agora server to the CDN. The SDK attempts to reconnect a maximum of 10 times; if the connection is not restored, the streaming state becomes directCdnStreamingStateFailed.
   @JsonValue(4)
   directCdnStreamingStateRecovering,
 }
@@ -2650,7 +2650,7 @@ class DirectCdnStreamingStats {
   Map<String, dynamic> toJson() => _$DirectCdnStreamingStatsToJson(this);
 }
 
-/// TheDirectCdnStreamingEventHandler interface class is used by the SDK to send event notifications of CDN streaming to your app. Your app can get those notifications through methods that inherit this interface class.
+/// The DirectCdnStreamingEventHandler interface class is used by the SDK to send event notifications of CDN streaming to your app. Your app can get those notifications through methods that inherit this interface class.
 ///
 class DirectCdnStreamingEventHandler {
   /// @nodoc
@@ -2722,19 +2722,19 @@ class DirectCdnStreamingMediaOptions {
 /// The basic interface of the Agora SDK that implements the core functions of real-time communication.
 /// RtcEngine provides the main methods that your app can call.
 abstract class RtcEngine {
-  /// Releases theRtcEngine instance.
-  /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations.After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a newRtcEngine instance.If you want to create a newRtcEngine instance after destroying the current one, ensure that you wait till therelease method execution to complete.
+  /// Releases the RtcEngine instance.
+  /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations.After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new RtcEngine instance.If you want to create a new RtcEngine instance after destroying the current one, ensure that you wait till the release method execution to complete.
   ///
-  /// * [sync] true: Synchronous call. Agora suggests calling this method in a sub-thread to avoid congestion in the main thread because the synchronous call and the app cannot move on to another task until the resources used byRtcEngine are released. Besides, you cannot callrelease in any method or callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock. The SDK automatically detects the deadlock and converts this method into an asynchronous call, causing the test to take additional time.false: Asynchronous call. The app can move on to another task, no matter the resources used byRtcEngine are released or not. Do not immediately uninstall the SDK's dynamic library after the call; otherwise, it may cause a crash due to the SDK clean-up thread not quitting.
+  /// * [sync] true: Synchronous call. Agora suggests calling this method in a sub-thread to avoid congestion in the main thread because the synchronous call and the app cannot move on to another task until the resources used by RtcEngine are released. Besides, you cannot call release in any method or callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock. The SDK automatically detects the deadlock and converts this method into an asynchronous call, causing the test to take additional time.false: Asynchronous call. The app can move on to another task, no matter the resources used by RtcEngine are released or not. Do not immediately uninstall the SDK's dynamic library after the call; otherwise, it may cause a crash due to the SDK clean-up thread not quitting.
   Future<void> release({bool sync = false});
 
-  /// InitializesRtcEngine.
-  /// All called methods provided by theRtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.Before calling other APIs, you must call createAgoraRtcEngine andRtcEngine to create and initialize theinitialize object.The SDK supports creating only oneRtcEngine instance for an app.
+  /// Initializes RtcEngine.
+  /// All called methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.Before calling other APIs, you must call createAgoraRtcEngine and RtcEngine to create and initialize the initialize object.The SDK supports creating only one RtcEngine instance for an app.
   ///
   /// * [context] Configurations for the RtcEngine instance. See RtcEngineContext .
   ///
   /// Returns
-  /// TheRtcEngine instance, if the method call succeeds.An error code, if the call fails.
+  /// The RtcEngine instance, if the method call succeeds.An error code, if the call fails.
   Future<void> initialize(RtcEngineContext context);
 
   /// Gets the SDK version.
@@ -2760,13 +2760,13 @@ abstract class RtcEngine {
   Future<void> updateChannelMediaOptions(ChannelMediaOptions options);
 
   /// Gets a new token when the current token expires after a period of time.
-  /// You can use this method to pass a new token to the SDK. A token expires after a certain period of time. In the following two cases, the app should call this method to pass in a new token. Failure to do so will result in the SDK disconnecting from the server.The SDK triggers the onTokenPrivilegeWillExpire callback.The onConnectionStateChanged callback reportsconnectionChangedTokenExpired(9).
+  /// You can use this method to pass a new token to the SDK. A token expires after a certain period of time. In the following two cases, the app should call this method to pass in a new token. Failure to do so will result in the SDK disconnecting from the server.The SDK triggers the onTokenPrivilegeWillExpire callback.The onConnectionStateChanged callback reports connectionChangedTokenExpired(9).
   ///
   /// * [token] The new token.
   Future<void> renewToken(String token);
 
   /// Sets the channel profile.
-  /// After initializing the SDK, the default channel profile is the live streaming profile. You can call this method to set the usage scenario of Agora channel. The Agora SDK differentiates channel profiles and applies optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call and prioritizes video quality for interactive live video streaming.To ensure the quality of real-time communication, Agora recommends that all users in a channel use the same channel profile.This method must be called and set beforejoinChannel [2/2], and cannot be set again after joining the channel.
+  /// After initializing the SDK, the default channel profile is the live streaming profile. You can call this method to set the usage scenario of Agora channel. The Agora SDK differentiates channel profiles and applies optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call and prioritizes video quality for interactive live video streaming.To ensure the quality of real-time communication, Agora recommends that all users in a channel use the same channel profile.This method must be called and set before joinChannel [2/2], and cannot be set again after joining the channel.
   ///
   /// * [profile] The channel profile. See ChannelProfileType .
   Future<void> setChannelProfile(ChannelProfileType profile);
@@ -2784,7 +2784,7 @@ abstract class RtcEngine {
   Future<void> disableVideo();
 
   /// Starts the last mile network probe test.
-  /// This method starts the last-mile network probe test before joining a channel to get the uplink and downlink last mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).Once this method is enabled, the SDK returns the following callbacks: onLastmileQuality : The SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions and is more closely linked to the user experience. onLastmileProbeResult : The SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.This method applies to the following scenarios:Before a user joins a channel, call this method to check the uplink network quality.In a live streaming channel, call this method to check the uplink network quality before an audience member switches to a host.Do not call other methods before receiving theonLastmileQuality andonLastmileProbeResult callbacks. Otherwise, the callbacks may be interrupted.A host should not call this method after joining a channel (when in a call).
+  /// This method starts the last-mile network probe test before joining a channel to get the uplink and downlink last mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).Once this method is enabled, the SDK returns the following callbacks: onLastmileQuality : The SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions and is more closely linked to the user experience. onLastmileProbeResult : The SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.This method applies to the following scenarios:Before a user joins a channel, call this method to check the uplink network quality.In a live streaming channel, call this method to check the uplink network quality before an audience member switches to a host.Do not call other methods before receiving the onLastmileQuality and onLastmileProbeResult callbacks. Otherwise, the callbacks may be interrupted.A host should not call this method after joining a channel (when in a call).
   ///
   /// * [config] The configurations of the last-mile network probe test. See LastmileProbeConfig .
   Future<void> startLastmileProbeTest(LastmileProbeConfig config);
@@ -2812,7 +2812,7 @@ abstract class RtcEngine {
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
   /// Sets low-light enhancement.
-  /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.Both this method and setExtensionProperty can turn on low-light enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends usingsetExtensionProperty.
+  /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.Both this method and setExtensionProperty can turn on low-light enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
   ///
   /// * [enabled] Whether to enable low-light enhancement function:true: Enable low-light enhancement function.false: (Default) Disable low-light enhancement function.
   /// * [options] The low-light enhancement options. See LowlightEnhanceOptions .
@@ -2823,7 +2823,7 @@ abstract class RtcEngine {
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
   /// Sets video noise reduction.
-  /// Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding.You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.Call this method after calling enableVideo .Video noise reduction has certain requirements for equipment performance. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.Both this method and setExtensionProperty can turn on video noise reduction function:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends usingsetExtensionProperty.
+  /// Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding.You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.Call this method after calling enableVideo .Video noise reduction has certain requirements for equipment performance. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.Both this method and setExtensionProperty can turn on video noise reduction function:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
   ///
   /// * [type] The type of the video source. See MediaSourceType .
   /// * [enabled] Whether to enable video noise reduction:true: Enable video noise reduction.false: (Default) Disable video noise reduction.
@@ -2834,7 +2834,7 @@ abstract class RtcEngine {
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
   /// Sets color enhancement.
-  /// The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .The color enhancement feature has certain performance requirements on devices. With color enhancement turned on, Agora recommends that you change the color enhancement level to one that consumes less performance or turn off color enhancement if your device is experiencing severe heat problems.Both this method and setExtensionProperty can turn on color enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends usingsetExtensionProperty.
+  /// The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .The color enhancement feature has certain performance requirements on devices. With color enhancement turned on, Agora recommends that you change the color enhancement level to one that consumes less performance or turn off color enhancement if your device is experiencing severe heat problems.Both this method and setExtensionProperty can turn on color enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
   ///
   /// * [type] The type of the video source. See MediaSourceType .
   /// * [enabled] Whether to enable color enhancement:true Enable color enhancement.false: (Default) Disable color enhancement.
@@ -2856,7 +2856,7 @@ abstract class RtcEngine {
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
   /// Enables/Disables the super resolution algorithm for a remote user's video stream.
-  /// This function can effectively improve the resolution of the remote video picture seen by the local user, that is, the width and height (pixels) of the video received by the specified remote user are enlarged to 2 times original size.After calling this method, you can confirm whether super resolution is successfully enabled through the remote video stream statistics ( RemoteVideoStats ) in the onRemoteVideoStats callback:If the parametersuperResolutionType >0: Super resolution is enabled.If parametersuperResolutionType =0: Super resolution is not enabled.The super resolution feature requires extra system resources. To balance the visual experience and system resource consumption, this feature can only be enabled for a single remote user. If the local user uses super resolution on Android, the original resolution of the remote user's video cannot exceed 640 × 360 pixels; if the local user uses super resolution on iOS, the original resolution of the remote user's video cannot exceed 640 × 480 pixels.This method is for Android and iOS only.Before calling this method, ensure that you have integrated the following dynamic libraries:Android:libagora_super_resolution_extension.soiOS:AgoraSuperResolutionExtension.xcframeworkBecause this method has certain system performance requirements, Agora recommends that you use the following devices or better:Android:VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 ProOPPO: PCCM00, Find X3OnePlus: A6000Xiaomi: Mi 8, Mi 9, Mi 10, Mi 11, MIX3, Redmi K20 ProSAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, SM-G9750, S20, S21HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, EVR-AN00, nova 4, nova 5 Pro, nova 6 5G, nova 7 5G, Mate 30, Mate 30 Pro, Mate 40, Mate 40 Pro, P40, P40 Pro, Huawei M6, MatePad 10.8iOS:iPhone XRiPhone XSiPhone XS MaxiPhone 11iPhone 11 ProiPhone 11 Pro MaxiPhone 12iPhone 12 miniiPhone 12 ProiPhone 12 Pro MaxiPhone 12 SE (2nd generation)iPad Pro 11-inch (3rd generation)iPad Pro 12.9-inch (3rd generation)iPad Air 3 (3rd generation)iPad Air 3 (4th generation)
+  /// This function can effectively improve the resolution of the remote video picture seen by the local user, that is, the width and height (pixels) of the video received by the specified remote user are enlarged to 2 times original size.After calling this method, you can confirm whether super resolution is successfully enabled through the remote video stream statistics ( RemoteVideoStats ) in the onRemoteVideoStats callback:If the parameter superResolutionType >0: Super resolution is enabled.If parameter superResolutionType =0: Super resolution is not enabled.The super resolution feature requires extra system resources. To balance the visual experience and system resource consumption, this feature can only be enabled for a single remote user. If the local user uses super resolution on Android, the original resolution of the remote user's video cannot exceed 640 × 360 pixels; if the local user uses super resolution on iOS, the original resolution of the remote user's video cannot exceed 640 × 480 pixels.This method is for Android and iOS only.Before calling this method, ensure that you have integrated the following dynamic libraries:Android: libagora_super_resolution_extension.soiOS: AgoraSuperResolutionExtension.xcframeworkBecause this method has certain system performance requirements, Agora recommends that you use the following devices or better:Android:VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 ProOPPO: PCCM00, Find X3OnePlus: A6000Xiaomi: Mi 8, Mi 9, Mi 10, Mi 11, MIX3, Redmi K20 ProSAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, SM-G9750, S20, S21HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, EVR-AN00, nova 4, nova 5 Pro, nova 6 5G, nova 7 5G, Mate 30, Mate 30 Pro, Mate 40, Mate 40 Pro, P40, P40 Pro, Huawei M6, MatePad 10.8iOS:iPhone XRiPhone XSiPhone XS MaxiPhone 11iPhone 11 ProiPhone 11 Pro MaxiPhone 12iPhone 12 miniiPhone 12 ProiPhone 12 Pro MaxiPhone 12 SE (2nd generation)iPad Pro 11-inch (3rd generation)iPad Pro 12.9-inch (3rd generation)iPad Air 3 (3rd generation)iPad Air 3 (4th generation)
   ///
   /// * [userId] The user ID of the remote user.
   /// * [enable] Whether to enable super resolution for the remote user’s video:true: Enable super resolution.false: Disable super resolution.
@@ -2864,13 +2864,13 @@ abstract class RtcEngine {
       {required int userId, required bool enable});
 
   /// Initializes the video view of a remote user.
-  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.You need to specify the ID of the remote user in this method. If the remote user ID is unknown to the application, set it after the app receives the onUserJoined callback.To unbind the remote user from the view, set theview parameter to NULL.Once the remote user leaves the channel, the SDK unbinds the remote user.To update the rendering or mirror mode of the remote video view during a call, use the setRemoteRenderMode method.If you use the Agora recording feature, the recording client joins the channel as a dummy client, triggering the onUserJoined callback. Do not bind the dummy client to the app view because the dummy client does not send any video streams. If your app does not recognize the dummy client, bind the remote user to the view when the SDK triggers the onFirstRemoteVideoDecoded callback.
+  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.You need to specify the ID of the remote user in this method. If the remote user ID is unknown to the application, set it after the app receives the onUserJoined callback.To unbind the remote user from the view, set the view parameter to NULL.Once the remote user leaves the channel, the SDK unbinds the remote user.To update the rendering or mirror mode of the remote video view during a call, use the setRemoteRenderMode method.If you use the Agora recording feature, the recording client joins the channel as a dummy client, triggering the onUserJoined callback. Do not bind the dummy client to the app view because the dummy client does not send any video streams. If your app does not recognize the dummy client, bind the remote user to the view when the SDK triggers the onFirstRemoteVideoDecoded callback.
   ///
   /// * [canvas] The remote video view and settings. See VideoCanvas .
   Future<void> setupRemoteVideo(VideoCanvas canvas);
 
   /// Initializes the local video view.
-  /// This method initializes the video view of a local stream on the local device. It affects only the video view that the local user sees, not the published local video stream. Call this method to bind the local video stream to a videoview and to set the rendering and mirror modes of the video view.After initialization, call this method to set the local video and then join the channel. The local video still binds to the view after you leave the channel. To unbind the local video from the view, set theview parameter asNULL.You can call this method either before or after joining a channel.To update the rendering or mirror mode of the local video view during a call, use the setLocalRenderMode [2/2] method.
+  /// This method initializes the video view of a local stream on the local device. It affects only the video view that the local user sees, not the published local video stream. Call this method to bind the local video stream to a video view and to set the rendering and mirror modes of the video view.After initialization, call this method to set the local video and then join the channel. The local video still binds to the view after you leave the channel. To unbind the local video from the view, set the view parameter as NULL.You can call this method either before or after joining a channel.To update the rendering or mirror mode of the local video view during a call, use the setLocalRenderMode [2/2] method.
   ///
   /// * [canvas] Local video display properties. See VideoCanvas .
   Future<void> setupLocalVideo(VideoCanvas canvas);
@@ -2890,7 +2890,7 @@ abstract class RtcEngine {
   Future<void> setAudioScenario(AudioScenarioType scenario);
 
   /// Enables/Disables the local audio capture.
-  /// The audio function is enabled by default. This method disables or re-enables the local audio function to stop or restart local audio capturing.This method does not affect receiving or playing the remote audio streams, and enableLocalAudio (false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.Once the local audio function is disabled or re-enabled, the SDK triggers the onLocalAudioStateChanged callback, which reportslocalAudioStreamStateStopped (0) orlocalAudioStreamStateRecording (1).This method is different from the muteLocalAudioStream method:enableLocalAudio: Disables/Re-enables the local audio capturing and processing. If you disable or re-enable local audio capturing using theenableLocalAudio method, the local user might hear a pause in the remote audio playback.muteLocalAudioStream: Sends/Stops sending the local audio streams.You can call this method either before or after joining a channel. Calling it before joining a channel only sets the device state, and it takes effect immediately after you join the channel.
+  /// The audio function is enabled by default. This method disables or re-enables the local audio function to stop or restart local audio capturing.This method does not affect receiving or playing the remote audio streams, and enableLocalAudio (false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.Once the local audio function is disabled or re-enabled, the SDK triggers the onLocalAudioStateChanged callback, which reports localAudioStreamStateStopped (0) or localAudioStreamStateRecording (1).This method is different from the muteLocalAudioStream method:enableLocalAudio: Disables/Re-enables the local audio capturing and processing. If you disable or re-enable local audio capturing using the enableLocalAudio method, the local user might hear a pause in the remote audio playback.muteLocalAudioStream: Sends/Stops sending the local audio streams.You can call this method either before or after joining a channel. Calling it before joining a channel only sets the device state, and it takes effect immediately after you join the channel.
   ///
   /// * [enabled] true: (Default) Re-enable the local audio function, that is, to start the local audio capturing device (for example, the microphone).false: Disable the local audio function, that is, to stop local audio capturing.
   Future<void> enableLocalAudio(bool enabled);
@@ -2902,13 +2902,13 @@ abstract class RtcEngine {
   Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can call joinChannel [2/2] and setautoSubscribeAudio asfalse.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can call joinChannel [2/2] and set autoSubscribeAudio as false.
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users by default.
-  /// Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.If you need to resume subscribing to the audio streams of remote users in the channel after calling this method, do the following:To resume subscribing to the audio stream of a specified user, call muteRemoteAudioStream (false), and specify the user ID.To resume subscribing to the audio streams of multiple remote users, callmuteRemoteAudioStream(false) multiple times.
+  /// Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.If you need to resume subscribing to the audio streams of remote users in the channel after calling this method, do the following:To resume subscribing to the audio stream of a specified user, call muteRemoteAudioStream (false), and specify the user ID.To resume subscribing to the audio streams of multiple remote users, call muteRemoteAudioStream(false) multiple times.
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users by default.true: Stop subscribing to the audio streams of all remote users by default.false: (Default) Subscribe to the audio streams of all remote users by default.
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool mute);
@@ -2917,7 +2917,8 @@ abstract class RtcEngine {
   /// Call this method after joining a channel.
   ///
   /// * [uid] The user ID of the specified user.
-  /// * [mute] Whether to stop subscribing to the audio stream of the specified user.true: Unsubscribe from the specified user's audio stream.false: (Default) Subscribes to the specified user's audio stream.
+  /// * [mute] Whether to stop subscribing to the audio stream of the specified user.
+  ///  true: Unsubscribe from the specified user's audio stream.false: (Default) Subscribes to the specified user's audio stream.
   Future<void> muteRemoteAudioStream({required int uid, required bool mute});
 
   /// Stops or resumes publishing the local video stream.
@@ -2927,19 +2928,19 @@ abstract class RtcEngine {
   Future<void> muteLocalVideoStream(bool mute);
 
   /// Enables/Disables the local video capture.
-  /// This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.After calling enableVideo , the local video capturer is enabled by default. You can call enableLocalVideo (false) to disable the local video capturer. If you want to re-enable the local video, callenableLocalVideo(true).After the local video capturer is successfully disabled or re-enabled, the SDK triggers the onRemoteVideoStateChanged callback on the remote client.You can call this method either before or after joining a channel.This method enables the internal engine and is valid after leaving the channel.
+  /// This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.After calling enableVideo , the local video capturer is enabled by default. You can call enableLocalVideo (false) to disable the local video capturer. If you want to re-enable the local video, call enableLocalVideo(true).After the local video capturer is successfully disabled or re-enabled, the SDK triggers the onRemoteVideoStateChanged callback on the remote client.You can call this method either before or after joining a channel.This method enables the internal engine and is valid after leaving the channel.
   ///
-  /// * [enabled] Whether to enable the local video capture.true: (Default) Enable the local video capture.false: Disables the local video capture. Once the local video is disabled, the remote users can no longer receive the video stream of this user, while this user can still receive the video streams of the other remote users. When set tofalse, this method does not require a local camera.
+  /// * [enabled] Whether to enable the local video capture.true: (Default) Enable the local video capture.false: Disables the local video capture. Once the local video is disabled, the remote users can no longer receive the video stream of this user, while this user can still receive the video streams of the other remote users. When set to false, this method does not require a local camera.
   Future<void> enableLocalVideo(bool enabled);
 
   /// Stops or resumes subscribing to the video streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel [2/2] and setautoSubscribeVideo asfalse.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel [2/2] and set autoSubscribeVideo as false.
   ///
   /// * [mute] Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
   Future<void> muteAllRemoteVideoStreams(bool mute);
 
   /// Stops or resumes subscribing to the video streams of all remote users by default.
-  /// Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.If you need to resume subscribing to the audio streams of remote users in the channel after calling this method, do the following:To resume subscribing to the audio stream of a specified user, call muteRemoteVideoStream (false), and specify the user ID.To resume subscribing to the audio streams of multiple remote users, callmuteRemoteVideoStream(false) multiple times.
+  /// Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.If you need to resume subscribing to the audio streams of remote users in the channel after calling this method, do the following:To resume subscribing to the audio stream of a specified user, call muteRemoteVideoStream (false), and specify the user ID.To resume subscribing to the audio streams of multiple remote users, call muteRemoteVideoStream(false) multiple times.
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users by default.true: Stop subscribing to the audio streams of all remote users by default.false: (Default) Resume subscribing to the audio streams of all remote users by default.
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
@@ -2952,60 +2953,53 @@ abstract class RtcEngine {
   Future<void> muteRemoteVideoStream({required int uid, required bool mute});
 
   /// Sets the stream type of the remote video.
-  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or the low-quality video stream (the low resolution, and low bitrate video stream). The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.The method result returns in the onApiCallExecuted callback.You can call this method either before or after joining a channel. If you call bothsetRemoteVideoStreamType and setRemoteDefaultVideoStreamType , the setting ofsetRemoteVideoStreamType takes effect.
+  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or the low-quality video stream (the low resolution, and low bitrate video stream). The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.The method result returns in the onApiCallExecuted callback.You can call this method either before or after joining a channel. If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType , the setting of setRemoteVideoStreamType takes effect.
   ///
   /// * [uid] The user ID.
   /// * [streamType] The video stream type: VideoStreamType .
   Future<void> setRemoteVideoStreamType(
       {required int uid, required VideoStreamType streamType});
 
-  /// Options for subscribing remote video streams.
-  /// When a remote user has enabled the dual-stream mode, you can call this method to choose the option for subscribing the video streams sent by the remote user.Agora recommends calling this method after receiving the onUserJoined callback.
-  ///
-  /// * [uid] The user ID of the remote user.
-  /// * [options] The video subscription options. See VideoSubscriptionOptions .
-  ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
+  /// @nodoc
   Future<void> setRemoteVideoSubscriptionOptions(
       {required int uid, required VideoSubscriptionOptions options});
 
   /// Sets the default stream type of subscrption for remote video streams.
-  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.The result of this method is returned in the onApiCallExecuted callback.Call this method before joining a channel. Agora does not support changing the default subscribed video stream type after joining a channel.If you call both this method and setRemoteVideoStreamType , the SDK applies the settings in thesetRemoteVideoStreamType method.
+  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.The result of this method is returned in the onApiCallExecuted callback.Call this method before joining a channel. Agora does not support changing the default subscribed video stream type after joining a channel.If you call both this method and setRemoteVideoStreamType , the SDK applies the settings in the setRemoteVideoStreamType method.
   ///
   /// * [streamType] The default video-stream type. See VideoStreamType .
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 
   /// Set the blacklist of subscriptions for audio streams.
-  /// You can call this method to specify the audio streams of a user that you do not want to subscribe to.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams andautoSubscribeAudio in ChannelMediaOptions .Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.
+  /// You can call this method to specify the audio streams of a user that you do not want to subscribe to.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.
   ///
-  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeAudioBlacklist method to update the user ID list; this means you only add theuid of users that you do not want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeAudioBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
   /// * [uidNumber] The number of users in the user ID list.
   Future<void> setSubscribeAudioBlacklist(
       {required List<int> uidList, required int uidNumber});
 
   /// Sets the whitelist of subscriptions for audio streams.
-  /// You can call this method to specify the audio streams of a user that you want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams andautoSubscribeAudio in ChannelMediaOptions .Once the whitelist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+  /// You can call this method to specify the audio streams of a user that you want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the whitelist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
   ///
-  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeAudioWhitelist method to update the user ID list; this means you only add theuid of users that you want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeAudioWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
   /// * [uidNumber] The number of users in the user ID list.
   Future<void> setSubscribeAudioWhitelist(
       {required List<int> uidList, required int uidNumber});
 
   /// Set the blacklist of subscriptions for video streams.
-  /// You can call this method to specify the video streams of a user that you do not want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams andautoSubscribeAudio in ChannelMediaOptions .
+  /// You can call this method to specify the video streams of a user that you do not want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
   ///
   /// * [uidNumber] The number of users in the user ID list.
-  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeVideoBlacklist method to update the user ID list; this means you only add theuid of users that you do not want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeVideoBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
   Future<void> setSubscribeVideoBlacklist(
       {required List<int> uidList, required int uidNumber});
 
   /// Set the whitelist of subscriptions for video streams.
   /// You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.Once the whitelist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-  ///  You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams andautoSubscribeAudio in ChannelMediaOptions .
+  ///  You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
   ///
   /// * [uidNumber] The number of users in the user ID list.
-  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeVideoWhitelist method to update the user ID list; this means you only add theuid of users that you want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeVideoWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
   Future<void> setSubscribeVideoWhitelist(
       {required List<int> uidList, required int uidNumber});
 
@@ -3014,12 +3008,12 @@ abstract class RtcEngine {
   ///
   /// * [interval] Sets the time interval between two consecutive volume indications:≤ 0: Disables the volume indication.> 0: Time interval (ms) between two consecutive volume indications. You need to set this parameter to an integer multiple of 200. If the value is lower than 200, the SDK automatically adjusts the value to 200.
   /// * [smooth] The smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
-  /// * [reportVad] true: Enable the voice activity detection of the local user. Once it is enabled,thevad parameter of theonAudioVolumeIndication callback reports the voice activity status of the local user.false: (Default) Disable the voice activity detection of the local user. Once it is disabled, thevad parameter of theonAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
+  /// * [reportVad] true: Enable the voice activity detection of the local user. Once it is enabled,the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user.false: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
   Future<void> enableAudioVolumeIndication(
       {required int interval, required int smooth, required bool reportVad});
 
   /// Registers an encoded audio observer.
-  /// Call this method after joining a channel.You can call this method or the startAudioRecording method to set the audio content and audio quality. Agora recommends not using this method andstartAudioRecording at the same time; otherwise, only the method called later takes effect.
+  /// Call this method after joining a channel.You can call this method or the startAudioRecording method to set the audio content and audio quality. Agora recommends not using this method and startAudioRecording at the same time; otherwise, only the method called later takes effect.
   ///
   /// * [config] Observer settings for the encoded audio. See AudioEncodedFrameObserverConfig .
   /// * [observer] The encoded audio observer. See AudioEncodedFrameObserver .
@@ -3031,10 +3025,11 @@ abstract class RtcEngine {
   ///
   Future<void> stopAudioRecording();
 
+  /// Creates a media player instance.
   ///
   ///
   /// Returns
-  /// The MediaPlayer instance, if the method call succeeds.An empty pointer, if the method call fails.
+  /// The MediaPlayer instance, if the method call succeeds.An empty pointer , if the method call fails.
   Future<MediaPlayer> createMediaPlayer();
 
   /// Destroys the media player instance.
@@ -3054,13 +3049,14 @@ abstract class RtcEngine {
   Future<void> resumeAudioMixing();
 
   /// Selects the audio track used during playback.
-  /// After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.For the supported formats of audio files, see.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (audioMixingStatePlaying) callback.
+  /// After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.For the supported formats of audio files, see .You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (audioMixingStatePlaying) callback.
   ///
-  /// * [index] The audio track you want to specify. The value range is [0, getAudioTrackCount ()].
+  /// * [index
+  /// ] The audio track you want to specify. The value range is [0, getAudioTrackCount ()].
   Future<void> selectAudioTrack(int index);
 
   /// Gets the index of audio tracks of the current music file.
-  /// You need to call this method after calling startAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
   ///
   /// Returns
   /// The SDK returns the index of the audio tracks if the method call succeeds.< 0: Failure.
@@ -3073,26 +3069,26 @@ abstract class RtcEngine {
   Future<void> adjustAudioMixingVolume(int volume);
 
   /// Adjusts the volume of audio mixing for publishing.
-  /// This method adjusts the audio mixing volume on the remote clients.Call this method after calling startAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// This method adjusts the audio mixing volume on the remote clients.Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
   ///
   /// * [volume] The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
   Future<void> adjustAudioMixingPublishVolume(int volume);
 
   /// Retrieves the audio mixing volume for publishing.
-  /// This method helps to troubleshoot audio volume‑related issues.You need to call this method after calling startAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// This method helps to troubleshoot audio volume‑related issues.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
   ///
   /// Returns
   /// The audio mixing volume, if this method call succeeds. The value range is [0,100].< 0: Failure.
   Future<int> getAudioMixingPublishVolume();
 
   /// Adjusts the volume of audio mixing for local playback.
-  /// Call this method after calling startAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
   ///
   /// * [volume] The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
   Future<void> adjustAudioMixingPlayoutVolume(int volume);
 
   /// Retrieves the audio mixing volume for local playback.
-  /// This method retrieves the audio mixing volume for local playback. You can use it to troubleshoot audio volume related issues.You need to call this method after calling startAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// This method retrieves the audio mixing volume for local playback. You can use it to troubleshoot audio volume related issues.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
   ///
   /// Returns
   /// The audio mixing volume, if this method call succeeds. The value range is [0,100].< 0: Failure.
@@ -3106,14 +3102,14 @@ abstract class RtcEngine {
   Future<int> getAudioMixingDuration();
 
   /// Retrieves the playback position (ms) of the music file.
-  /// Retrieves the playback position (ms) of the audio.You need to call this method after calling startAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.If you need to callgetAudioMixingCurrentPosition multiple times, ensure that the time interval between calling this method is more than 500 ms.
+  /// Retrieves the playback position (ms) of the audio.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.If you need to call getAudioMixingCurrentPosition multiple times, ensure that the time interval between calling this method is more than 500 ms.
   ///
   /// Returns
   /// ≥ 0: The current playback position (ms) of the audio mixing, if this method call succeeds. 0 represents that the current music file does not start playing.< 0: Failure.
   Future<int> getAudioMixingCurrentPosition();
 
   /// Sets the audio mixing position.
-  /// Call this method to set the playback position of the music file to a different starting position, rather than playing the file from the beginning.You need to call this method after callingstartAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// Call this method to set the playback position of the music file to a different starting position, rather than playing the file from the beginning.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
   ///
   /// * [pos] Integer. The playback position (ms).
   Future<void> setAudioMixingPosition(int pos);
@@ -3121,14 +3117,14 @@ abstract class RtcEngine {
   /// Sets the channel mode of the current audio file.
   /// In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (audioMixingStatePlaying) callback.This method only applies to stereo audio files.
   ///
-  /// * [mode] The channel mode. See AudioMxingDualMonoMode .
+  /// * [mode] The channel mode. See AudioMixingDualMonoMode .
   ///
   /// Returns
   /// 0: Success.< 0: Failure.
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode);
 
   /// Sets the pitch of the local music file.
-  /// When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only.You need to call this method after callingstartAudioMixing and receiving theonAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
   ///
   /// * [pitch] Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
   Future<void> setAudioMixingPitch(int pitch);
@@ -3147,19 +3143,19 @@ abstract class RtcEngine {
   Future<void> setEffectsVolume(int volume);
 
   /// Preloads a specified audio effect file into the memory.
-  /// To ensure smooth communication, limit the size of the audio effect file. Agora recommends using this method to preload the audio effect before callingjoinChannel [2/2].This method does not support online audio effect files.For the audio file formats supported by this method, seeWhat formats of audio files the Agora RTC SDK support.
+  /// To ensure smooth communication, limit the size of the audio effect file. Agora recommends using this method to preload the audio effect before calling joinChannel [2/2].This method does not support online audio effect files.For the audio file formats supported by this method, see What formats of audio files the Agora RTC SDK support.
   ///
   /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
-  /// * [filePath] File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports using a URI address, an absolute path, or a path that starts with/assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example:content://com.android.providers.media.documents/document/audio%3A14441.Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example:C:\music\audio.mp4.iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example:/var/mobile/Containers/Data/audio.mp4.
+  /// * [filePath] File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports using a URI address, an absolute path, or a path that starts with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441.Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
   /// * [startPos] The playback position (ms) of the audio effect file.
   Future<void> preloadEffect(
       {required int soundId, required String filePath, int startPos = 0});
 
   /// Plays the specified local or online sound effect file.
-  /// To play multiple audio effect files at the same time, call this method multiple times with differentsoundId andfilePath. For the best user experience, Agora recommends playing no more than three audio effect files at the same time. After the playback of an audio effect file completes, the SDK triggers theonAudioEffectFinished callback.Call this method after joining a channel.
+  /// To play multiple audio effect files at the same time, call this method multiple times with different soundId and filePath. For the best user experience, Agora recommends playing no more than three audio effect files at the same time. After the playback of an audio effect file completes, the SDK triggers the onAudioEffectFinished callback.Call this method after joining a channel.
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.If you have loaded the audio effect into memory via preloadEffect , make sure this parameter is the same as thesoundId set inpreloadEffect.
-  /// * [filePath] Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example:C:\music\audio.mp4. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. Seesupported audio formats.If you have loaded the audio effect into memory via preloadEffect , make sure this parameter is the same as thefilePath set inpreloadEffect.
+  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique. If you have loaded the audio effect into memory via preloadEffect , make sure this parameter is the same as the soundId set in preloadEffect.
+  /// * [filePath] Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. See supported audio formats.If you have loaded the audio effect into memory via preloadEffect , make sure this parameter is the same as the filePath set in preloadEffect.
   /// * [loopCount] The number of times the audio effect loops.≥ 0: The number of playback times. For example, 1 means loop one time, which means playing the audio effect two times in total.-1: Play the music file in an infinite loop.
   /// * [pitch] The pitch of the audio effect. The value range is 0.5 to 2.0. The default value is 1.0, which means the original pitch. The lower the value, the lower the pitch.
   /// * [pan] The spatial position of the audio effect. The value ranges between -1.0 and 1.0, where:-1.0: The audio effect displays to the left.0.0: The audio effect displays ahead.1.0: The audio effect displays to the right.
@@ -3261,14 +3257,14 @@ abstract class RtcEngine {
   Future<int> getEffectDuration(String filePath);
 
   /// Sets the playback position of an audio effect file.
-  /// After a successful setting, the local audio effect file starts playing at the specified position.Call this method afterplayEffect.
+  /// After a successful setting, the local audio effect file starts playing at the specified position.Call this method after playEffect.
   ///
   /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
   /// * [pos] The playback position (ms) of the audio effect file.
   Future<void> setEffectPosition({required int soundId, required int pos});
 
   /// Retrieves the playback position of the audio effect file.
-  /// Call this method after theplayEffect method.
+  /// Call this method after the playEffect method.
   ///
   /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
   ///
@@ -3277,7 +3273,7 @@ abstract class RtcEngine {
   Future<int> getEffectCurrentPosition(int soundId);
 
   /// Enables/Disables stereo panning for remote users.
-  /// Ensure that you call this method before joining a channel to enable stereo panning for remote users so that the local user can track the position of a remote user by callingsetRemoteVoicePosition.
+  /// Ensure that you call this method before joining a channel to enable stereo panning for remote users so that the local user can track the position of a remote user by calling setRemoteVoicePosition.
   ///
   /// * [enabled] Whether to enable stereo panning for remote users:true: Enable stereo panning.false: Disable stereo panning.
   Future<void> enableSoundPositionIndication(bool enabled);
@@ -3299,36 +3295,36 @@ abstract class RtcEngine {
       {required int uid, required SpatialAudioParams params});
 
   /// Sets a preset voice beautifier effect.
-  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios.For better voice effects, Agora recommends that you call setAudioProfile [1/2] and setscenario toaudioScenarioGameStreaming(3) andprofile toaudioProfileMusicHighQuality(4) oraudioProfileMusicHighQualityStereo(5) before calling this method.You can call this method either before or after joining a channel.Do not set theprofile parameter insetAudioProfile [1/2] toaudioProfileSpeechStandard(1) oraudioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After callingsetVoiceBeautifierPreset, Agora recommends not calling the following methods, because they can override settings insetVoiceBeautifierPreset: setAudioEffectPreset setAudioEffectParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
+  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. For better voice effects, Agora recommends that you call setAudioProfile [1/2] and set scenario to audioScenarioGameStreaming(3) and profile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setVoiceBeautifierPreset, Agora recommends not calling the following methods, because they can override settings in setVoiceBeautifierPreset: setAudioEffectPreset setAudioEffectParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///
   /// * [preset] The preset voice beautifier effect options: VoiceBeautifierPreset .
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
 
   /// Sets an SDK preset audio effect.
-  /// Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect.To get better audio effect quality, Agora recommends calling and settingscenario in setAudioProfile [1/2] asaudioScenarioGameStreaming(3) before calling this method.You can call this method either before or after joining a channel.Do not set theprofile parameter insetAudioProfile [1/2] toaudioProfileSpeechStandard (1) oraudioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.If you callsetAudioEffectPreset and set enumerators except forroomAcoustics3dVoice orpitchCorrection, do not call setAudioEffectParameters ; otherwise,setAudioEffectPreset is overridden.After callingsetAudioEffectPreset, Agora recommends not calling the following methods, or the settings insetAudioEffectPreset are overridden: setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
+  /// Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect.To get better audio effect quality, Agora recommends calling and setting scenario in setAudioProfile [1/2] as audioScenarioGameStreaming(3) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard (1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.If you call setAudioEffectPreset and set enumerators except for roomAcoustics3dVoice or pitchCorrection, do not call setAudioEffectParameters ; otherwise, setAudioEffectPreset is overridden.After calling setAudioEffectPreset, Agora recommends not calling the following methods, or the settings in setAudioEffectPreset are overridden: setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///
   /// * [preset] The options for SDK preset audio effects. See AudioEffectPreset .
   Future<void> setAudioEffectPreset(AudioEffectPreset preset);
 
   /// Sets a preset voice beautifier effect.
-  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting an audio effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios.To achieve better audio effect quality, Agora recommends that you call setAudioProfile [1/2] and set theprofile toaudioProfileMusicHighQuality(4) oraudioProfileMusicHighQualityStereo(5) andscenario toaudioScenarioGameStreaming(3) before calling this method.You can call this method either before or after joining a channel.Do not set theprofile parameter insetAudioProfile [1/2] toaudioProfileSpeechStandard(1) oraudioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After callingsetVoiceConversionPreset, Agora recommends not calling the following methods, or the settings insetVoiceConversionPreset are overridden: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setVoiceBeautifierParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb
+  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting an audio effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. To achieve better audio effect quality, Agora recommends that you call setAudioProfile [1/2] and set the profile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) and scenario to audioScenarioGameStreaming(3) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setVoiceConversionPreset, Agora recommends not calling the following methods, or the settings in setVoiceConversionPreset are overridden: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setVoiceBeautifierParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb
   ///
   /// * [preset] The options for the preset voice beautifier effects: VoiceConversionPreset .
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset);
 
   /// Sets parameters for SDK preset audio effects.
-  /// Call this method to set the following parameters for the local user who sends an audio stream:3D voice effect: Sets the cycle period of the 3D voice effect.Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches. Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively.After setting the audio parameters, all users in the channel can hear the effect.You can call this method either before or after joining a channel.To get better audio effect quality, Agora recommends calling and settingscenario in setAudioProfile [1/2] asaudioScenarioGameStreaming(3) before calling this method.Do not set theprofile parameter insetAudioProfile [1/2] toaudioProfileSpeechStandard(1) oraudioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After callingsetAudioEffectParameters, Agora recommends not calling the following methods, or the settings insetAudioEffectParameters are overridden: setAudioEffectPreset setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
+  /// Call this method to set the following parameters for the local user who sends an audio stream:3D voice effect: Sets the cycle period of the 3D voice effect.Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches. Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively.After setting the audio parameters, all users in the channel can hear the effect.You can call this method either before or after joining a channel.To get better audio effect quality, Agora recommends calling and setting scenario in setAudioProfile [1/2] as audioScenarioGameStreaming(3) before calling this method.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setAudioEffectParameters, Agora recommends not calling the following methods, or the settings in setAudioEffectParameters are overridden: setAudioEffectPreset setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///
-  /// * [preset] The options for SDK preset audio effects:roomAcoustics3dVoice, 3D voice effect:You need to set theprofile parameter insetAudioProfile [1/2] toaudioProfileMusicStandardStereo(3) oraudioProfileMusicHighQualityStereo(5) before setting this enumerator; otherwise, the enumerator setting does not take effect.If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.pitchCorrection; pitch correction effect: To achieve better audio effect quality, Agora recommends setting theprofile parameter insetAudioProfile [1/2] toaudioProfileMusicHighQuality(4) oraudioProfileMusicHighQualityStereo(5) before setting this enumerator.
-  /// * [param1] If you setpreset toroomAcoustics3dVoice,param1 indicates the cycle period of the 3D voice effect. The value range is [1,60], in seconds. The default value is 10, indicating that the voice moves around you every 10 seconds. If you setpreset topitchCorrection,param1 indicates the basic mode of the pitch correction effect:1: (Default) Natural major scale.2: Natural minor scale.3: Japanese pentatonic scale.
-  /// * [param2] If you setpreset toroomAcoustics3dVoice, you need to setparam2 to0. If you setpreset topitchCorrection,param2 indicates the tonic pitch of the pitch correction effect:1: A2: A#3: B4: (Default) C5: C#6: D7: D#8: E9: F10: F#11: G12: G#
+  /// * [preset] The options for SDK preset audio effects:roomAcoustics3dVoice, 3D voice effect:You need to set the profile parameter in setAudioProfile [1/2] to audioProfileMusicStandardStereo(3) or audioProfileMusicHighQualityStereo(5) before setting this enumerator; otherwise, the enumerator setting does not take effect.If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.pitchCorrection; pitch correction effect: To achieve better audio effect quality, Agora recommends setting the profile parameter in setAudioProfile [1/2] to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) before setting this enumerator.
+  /// * [param1] If you set preset to roomAcoustics3dVoice, param1 indicates the cycle period of the 3D voice effect. The value range is [1,60], in seconds. The default value is 10, indicating that the voice moves around you every 10 seconds. If you set preset to pitchCorrection, param1 indicates the basic mode of the pitch correction effect:1: (Default) Natural major scale.2: Natural minor scale.3: Japanese pentatonic scale.
+  /// * [param2] If you set preset to roomAcoustics3dVoice, you need to set param2 to 0. If you set preset to pitchCorrection, param2 indicates the tonic pitch of the pitch correction effect:1: A2: A#3: B4: (Default) C5: C#6: D7: D#8: E9: F10: F#11: G12: G#
   Future<void> setAudioEffectParameters(
       {required AudioEffectPreset preset,
       required int param1,
       required int param2});
 
   /// Sets parameters for the preset voice beautifier effects.
-  /// Call this method to set a gender characteristic and a reverberation effect for the singing beautifier effect. This method sets parameters for the local user who sends an audio stream. After setting the audio parameters, all users in the channel can hear the effect.For better voice effects, Agora recommends that you call setAudioProfile [1/2] and setscenario toaudioScenarioGameStreaming(3) andprofile toaudioProfileMusicHighQuality(4) oraudioProfileMusicHighQualityStereo(5) before calling this method.You can call this method either before or after joining a channel.Do not set theprofile parameter insetAudioProfile [1/2] toaudioProfileSpeechStandard(1)This method works best with the human voice. Agora does not recommend using this method for audio containing music.After callingsetVoiceBeautifierParameters, Agora recommends not calling the following methods, because they can override settings insetVoiceBeautifierParameters: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceConversionPreset
+  /// Call this method to set a gender characteristic and a reverberation effect for the singing beautifier effect. This method sets parameters for the local user who sends an audio stream. After setting the audio parameters, all users in the channel can hear the effect.For better voice effects, Agora recommends that you call setAudioProfile [1/2] and set scenario to audioScenarioGameStreaming(3) and profile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1)This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setVoiceBeautifierParameters, Agora recommends not calling the following methods, because they can override settings in setVoiceBeautifierParameters: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceConversionPreset
   ///
   /// * [preset] The option for the preset audio effect:SINGING_BEAUTIFIER: The singing beautifier effect.
   /// * [param1] The gender characteristics options for the singing voice:1: A male-sounding voice.2: A female-sounding voice.
@@ -3368,15 +3364,15 @@ abstract class RtcEngine {
       {required AudioReverbType reverbKey, required int value});
 
   /// Sets the log file.
-  /// Deprecated:Use themLogConfig parameter in initialize method instead.Specifies an SDK output log file. The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.Ensure that you call this method immediately after calling theinitialize method to initialize the RtcEngine , or the output log may not be complete.
+  /// Deprecated:Use the mLogConfig parameter in initialize method instead.Specifies an SDK output log file. The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.Ensure that you call this method immediately after calling the initialize method to initialize the RtcEngine , or the output log may not be complete.
   ///
   /// * [filePath] The complete path of the log files. These log files are encoded in UTF-8.
   Future<void> setLogFile(String filePath);
 
   /// Sets the log output level of the SDK.
-  /// Deprecated:UselogConfig in initialize instead.This method sets the output log level of the SDK. You can use one or a combination of the log filter levels. The log level follows the sequence oflogFilterOff,logFilterCritical,logFilterError,logFilterWarn,logFilterInfo, andlogFilterDebug. Choose a level to see the logs preceding that level.If, for example, you set the log level tologFilterWarn, you see the logs within levelslogFilterCritical,logFilterError, andlogFilterWarn.
+  /// Deprecated:Use logConfig in initialize instead.This method sets the output log level of the SDK. You can use one or a combination of the log filter levels. The log level follows the sequence of logFilterOff, logFilterCritical, logFilterError, logFilterWarn, logFilterInfo, and logFilterDebug. Choose a level to see the logs preceding that level.If, for example, you set the log level to logFilterWarn, you see the logs within levels logFilterCritical, logFilterError, and logFilterWarn.
   ///
-  /// * [filter] The output log level of the SDK.See LogFilterType .
+  /// * [filter] The output log level of the SDK. See LogFilterType .
   Future<void> setLogFilter(LogFilterType filter);
 
   /// Sets the output log level of the SDK.
@@ -3386,9 +3382,9 @@ abstract class RtcEngine {
   Future<void> setLogLevel(LogLevel level);
 
   /// Sets the log file size.
-  /// Deprecated:Use thelogConfig parameter in initialize instead.By default, the SDK generates five SDK log files and five API call log files with the following rules:The SDK log files are:agorasdk.log,agorasdk.1.log,agorasdk.2.log,agorasdk.3.log, andagorasdk.4.log.The API call log files are:agoraapi.log,agoraapi.1.log,agoraapi.2.log,agoraapi.3.log, andagoraapi.4.log.The default size for each SDK log file is 1,024 KB; the default size for each API call log file is 2,048 KB. These log files are encoded in UTF-8.The SDK writes the latest logs inagorasdk.log oragoraapi.log.Whenagorasdk.log is full, the SDK processes the log files in the following order:Delete theagorasdk.4.log file (if any).Renameagorasdk.3.log toagorasdk.4.log.Renameagorasdk.2.log toagorasdk.3.log.Renameagorasdk.1.log toagorasdk.2.log.Create a newagorasdk.log file.The overwrite rules for theagoraapi.log file are the same as foragorasdk.log.This method is used to set the size of theagorasdk.log file only and does not effect theagoraapi.log file.
+  /// Deprecated:Use the logConfig parameter in initialize instead.By default, the SDK generates five SDK log files and five API call log files with the following rules:The SDK log files are: agorasdk.log, agorasdk.1.log, agorasdk.2.log, agorasdk.3.log, and agorasdk.4.log.The API call log files are: agoraapi.log, agoraapi.1.log, agoraapi.2.log, agoraapi.3.log, and agoraapi.4.log.The default size for each SDK log file is 1,024 KB; the default size for each API call log file is 2,048 KB. These log files are encoded in UTF-8.The SDK writes the latest logs in agorasdk.log or agoraapi.log.When agorasdk.log is full, the SDK processes the log files in the following order:Delete the agorasdk.4.log file (if any).Rename agorasdk.3.log to agorasdk.4.log.Rename agorasdk.2.log to agorasdk.3.log.Rename agorasdk.1.log to agorasdk.2.log.Create a new agorasdk.log file.The overwrite rules for the agoraapi.log file are the same as for agorasdk.log.This method is used to set the size of the agorasdk.log file only and does not effect the agoraapi.log file.
   ///
-  /// * [fileSizeInKBytes] The size (KB) of anagorasdk.log file. The value range is [128,20480]. The default value is 1,024 KB. If you setfileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you setfileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
+  /// * [fileSizeInKBytes] The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 1,024 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
   Future<void> setLogFileSize(int fileSizeInKBytes);
 
   /// @nodoc
@@ -3432,12 +3428,12 @@ abstract class RtcEngine {
   Future<void> stopSecondaryCustomAudioTrack();
 
   /// Sets the format of the captured raw audio data.
-  /// Sets the audio format for the onRecordAudioFrame callback.Ensure that you call this method before joining a channel.The SDK calculates the sampling interval based on thesamplesPerCall,sampleRate andchannel parameters set in this method.Sample interval =samplePerCall/(sampleRate ×channel). Ensure that the sample interval ≥ 0.01 (s).
+  /// Sets the audio format for the onRecordAudioFrame callback.Ensure that you call this method before joining a channel.The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method.Sample interval = samplePerCall/(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s).
   ///
-  /// * [sampleRate] The sample rate returned in theonRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
-  /// * [channel] The number of channels returned in theonRecordAudioFrame callback:1: Mono.2: Stereo.
+  /// * [sampleRate] The sample rate returned in the onRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+  /// * [channel] The number of channels returned in the onRecordAudioFrame callback:1: Mono.2: Stereo.
   /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType .
-  /// * [samplesPerCall] The number of data samples returned in theonRecordAudioFrame callback, such as 1024 for the Media Push.
+  /// * [samplesPerCall] The number of data samples returned in the onRecordAudioFrame callback, such as 1024 for the Media Push.
   Future<void> setRecordingAudioFrameParameters(
       {required int sampleRate,
       required int channel,
@@ -3445,12 +3441,12 @@ abstract class RtcEngine {
       required int samplesPerCall});
 
   /// Sets the audio data format for playback.
-  /// Sets the data format for the onPlaybackAudioFrame callback.Ensure that you call this method before joining a channel.The SDK calculates the sampling interval based on thesamplesPerCall,sampleRate andchannel parameters set in this method.Sample interval =samplePerCall/(sampleRate ×channel). Ensure that the sample interval ≥ 0.01 (s). The SDK triggers theonPlaybackAudioFrame callback according to the sampling interval.
+  /// Sets the data format for the onPlaybackAudioFrame callback.Ensure that you call this method before joining a channel.The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method.Sample interval = samplePerCall/(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s). The SDK triggers the onPlaybackAudioFrame callback according to the sampling interval.
   ///
-  /// * [sampleRate] The sample rate returned in theonPlaybackAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
-  /// * [channel] The number of channels returned in theonPlaybackAudioFrame callback:1: Mono.2: Stereo.
+  /// * [sampleRate] The sample rate returned in the onPlaybackAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+  /// * [channel] The number of channels returned in the onPlaybackAudioFrame callback:1: Mono.2: Stereo.
   /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType .
-  /// * [samplesPerCall] The number of data samples returned in theonPlaybackAudioFrame callback, such as 1024 for the Media Push.
+  /// * [samplesPerCall] The number of data samples returned in the onPlaybackAudioFrame callback, such as 1024 for the Media Push.
   Future<void> setPlaybackAudioFrameParameters(
       {required int sampleRate,
       required int channel,
@@ -3460,9 +3456,9 @@ abstract class RtcEngine {
   /// Sets the audio data format reported by onMixedAudioFrame .
   ///
   ///
-  /// * [sampleRate] The sample rate (Hz) of the audio data, which can be set as8000,16000,32000,44100, or48000.
-  /// * [channel] The number of channels of the audio data, which can be set as1 (Mono) or2 (Stereo).
-  /// * [samplesPerCall] Sets the number of samples. In Media Push scenarios, set it as1024.
+  /// * [sampleRate] The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
+  /// * [channel] The number of channels of the audio data, which can be set as 1 (Mono) or 2 (Stereo).
+  /// * [samplesPerCall] Sets the number of samples. In Media Push scenarios, set it as 1024.
   Future<void> setMixedAudioFrameParameters(
       {required int sampleRate,
       required int channel,
@@ -3471,15 +3467,15 @@ abstract class RtcEngine {
   /// Sets the audio data format reported by onPlaybackAudioFrameBeforeMixing .
   ///
   ///
-  /// * [null] The sample rate (Hz) of the audio data, which can be set as8000,16000,32000,44100, or48000.
-  /// * [channel] The number of channels of the external audio source, which can be set as1(Mono) or2(Stereo).
+  /// * [null] The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
+  /// * [channel] The number of channels of the external audio source, which can be set as 1(Mono) or 2(Stereo).
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate, required int channel});
 
   /// Turns on audio spectrum monitoring.
   /// If you want to obtain the audio spectrum data of local or remote users, you can register the audio spectrum observer and enable audio spectrum monitoring.You can call this method either before or after joining a channel.
   ///
-  /// * [null] The interval (in milliseconds) at which the SDK triggers the onLocalAudioSpectrum and onRemoteAudioSpectrum callbacks. The default value is 100. Do not set this parameter to less than 10 milliseconds, otherwise the calling of this method fails.
+  /// * [intervalInMS] The interval (in milliseconds) at which the SDK triggers the onLocalAudioSpectrum and onRemoteAudioSpectrum callbacks. The default value is 100. Do not set this parameter to less than 10 milliseconds, otherwise the calling of this method fails.
   Future<void> enableAudioSpectrumMonitor({int intervalInMS = 100});
 
   /// Disables audio spectrum monitoring.
@@ -3487,7 +3483,8 @@ abstract class RtcEngine {
   Future<void> disableAudioSpectrumMonitor();
 
   /// Registers an audio spectrum observer.
-  /// After successfully registering the audio spectrum observer and calling enableAudioSpectrumMonitor to enable the audio spectrum monitoring, the SDK reports the callback that you implement in the AudioSpectrumObserver class at the time interval you set.You can call this method either before or after joining a channel.
+  /// After successfully registering the audio spectrum observer and calling
+  ///  enableAudioSpectrumMonitor to enable the audio spectrum monitoring, the SDK reports the callback that you implement in the AudioSpectrumObserver class at the time interval you set.You can call this method either before or after joining a channel.
   ///
   /// * [observer] The Audio spectrum observer. See AudioSpectrumObserver .
   void registerAudioSpectrumObserver(AudioSpectrumObserver observer);
@@ -3532,7 +3529,7 @@ abstract class RtcEngine {
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
 
   /// Enables loopback audio capture.
-  /// If you enable loopback audio capture, the output of the sound card is mixed into the audio stream sent to the other end.Applies to the macOS and Windows platforms only.macOS does not support loopback audio capture of the default sound card. If you need to use this method, use a virtual sound card and pass its name to thedeviceName parameter. Agora recommends that you use Soundflower for loopback audio capture.You can call this method either before or after joining a channel.
+  /// If you enable loopback audio capture, the output of the sound card is mixed into the audio stream sent to the other end.Applies to the macOS and Windows platforms only.macOS does not support loopback audio capture of the default sound card. If you need to use this method, use a virtual sound card and pass its name to the deviceName parameter. Agora recommends that you use Soundflower for loopback audio capture.You can call this method either before or after joining a channel.
   ///
   /// * [enabled] Whether to enable loopback audio capture.true: Enable loopback audio capture.false: (Default) Disable loopback audio capture.
   /// * [deviceName] macOS: The device name of the virtual sound card. The default is set to null, which means the SDK uses Soundflower for loopback audio capture.Windows: The device name of the sound card. The default is set to null, which means the SDK uses the sound card of your device for loopback audio capture.
@@ -3569,7 +3566,7 @@ abstract class RtcEngine {
   /// Adds an extension to the SDK.
   /// (For Windows and Android only)
   ///
-  /// * [path] The extension library path and name. For example:/library/libagora_segmentation_extension.dll.
+  /// * [path] The extension library path and name. For example: /library/libagora_segmentation_extension.dll.
   /// * [unloadAfterUse] Whether to uninstall the current extension when you no longer using it:true: Uninstall the extension when the RtcEngine is destroyed.false: (Rcommended) Do not uninstall the extension until the process terminates.
   Future<void> loadExtensionProvider(
       {required String path, bool unloadAfterUse = false});
@@ -3589,7 +3586,7 @@ abstract class RtcEngine {
   /// * [extension] The name of the extension.
   /// * [provider] The name of the extension provider.
   /// * [enable] Whether to enable the extension:true: Enable the extension.false: Disable the extension.
-  /// * [type] Type of media source. See MediaSourceType .In this method, this parameter supports only the following two settings:The default value isunknownMediaSource.If you want to use the second camera to capture video, set this parameter tosecondaryCameraSource.
+  /// * [type] Type of media source. See MediaSourceType . In this method, this parameter supports only the following two settings:The default value is unknownMediaSource.If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   ///
   /// Returns
   /// 0: Success.< 0: Failure.
@@ -3639,7 +3636,7 @@ abstract class RtcEngine {
       CameraCapturerConfiguration config);
 
   /// Creates a customized video track.
-  /// When you need to publish multiple custom captured videos in the channel, you can refer to the following steps:Call this method to create a video track and get the video track ID.In each channel's ChannelMediaOptions , set thecustomVideoTrackId parameter to the ID of the video track you want to publish, and setpublishCustomVideoTrack totrue.
+  /// When you need to publish multiple custom captured videos in the channel, you can refer to the following steps:Call this method to create a video track and get the video track ID.In each channel's ChannelMediaOptions , set the customVideoTrackId parameter to the ID of the video track you want to publish, and set publishCustomVideoTrack to true.
   ///
   /// Returns
   /// If the method call is successful, the video track ID is returned as the unique identifier of the video track.If the method call fails, a negative value is returned.
@@ -3651,8 +3648,7 @@ abstract class RtcEngine {
   /// Destroys the specified video track.
   ///
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
+  /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method.
   Future<void> destroyCustomVideoTrack(int videoTrackId);
 
   /// @nodoc
@@ -3678,7 +3674,7 @@ abstract class RtcEngine {
 
   /// Checks whether the device supports camera flash.
   /// Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo ,depending on which method you use to turn on your local camera.
-  ///  This method is for Android and iOS only.The app enables the front camera by default. If your front camera does not support enabling the flash, this method returnsfalse. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.On iPads with system version 15, even if isCameraTorchSupported returnstrue, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
+  ///  This method is for Android and iOS only.The app enables the front camera by default. If your front camera does not support enabling the flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
   ///
   /// Returns
   /// true: The device supports enabling the flash.false: The device does not support enabling the flash.
@@ -3705,7 +3701,7 @@ abstract class RtcEngine {
   Future<void> setCameraZoomFactor(double factor);
 
   /// Enables/Disables face detection for the local user.
-  /// You can call this method either before or after joining a channel.This method is for Android and iOS only.Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following:The width and height of the local video.The position of the human face in the local view.The distance between the human face and the screen.This method needs to be called after the camera is started (for example, by callingstartPreviewjoinChannel [2/2]).
+  /// You can call this method either before or after joining a channel.This method is for Android and iOS only.Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following:The width and height of the local video.The position of the human face in the local view.The distance between the human face and the screen.This method needs to be called after the camera is started (for example, by calling startPreviewjoinChannel [2/2]).
   ///
   /// * [enabled] Whether to enable face detection for the local user:true: Enable face detection.false: (Default) Disable face detection.
   Future<void> enableFaceDetection(bool enabled);
@@ -3763,7 +3759,8 @@ abstract class RtcEngine {
   /// Sets whether to enable auto exposure.
   /// This method applies to iOS only.Call this method before calling joinChannel [2/2] , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
   ///
-  /// * [enabled] Whether to enable auto exposure:true: Enable auto exposure.false: Disable auto exposure.
+  /// * [enabled] Whether to enable auto exposure:
+  ///  true: Enable auto exposure.false: Disable auto exposure.
   Future<void> setCameraAutoExposureFaceModeEnabled(bool enabled);
 
   /// Sets the default audio playback route.
@@ -3773,7 +3770,7 @@ abstract class RtcEngine {
   Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker);
 
   /// Enables/Disables the audio route to the speakerphone.
-  /// This method is for Android and iOS only.After a successful method call, the SDK triggers the onAudioRoutingChanged callback.You can call this method before joining a channel, when in a channel, or after leaving a channel. However, Agora recommends calling this method only when you are in a channel to change the audio route temporarily.If you do not have a clear requirement for transient settings, Agora recommends calling setDefaultAudioRouteToSpeakerphone to set the audio route.Any user behavior or audio-related API call might change the transient setting ofsetEnableSpeakerphone.
+  /// This method is for Android and iOS only.After a successful method call, the SDK triggers the onAudioRoutingChanged callback.You can call this method before joining a channel, when in a channel, or after leaving a channel. However, Agora recommends calling this method only when you are in a channel to change the audio route temporarily.If you do not have a clear requirement for transient settings, Agora recommends calling setDefaultAudioRouteToSpeakerphone to set the audio route.Any user behavior or audio-related API call might change the transient setting of setEnableSpeakerphone.
   ///
   /// * [speakerOn] Whether to set the speakerphone as the default audio route:true: Set the speakerphone as the audio route temporarily.false: Do not set the speakerphone as the audio route.
   Future<void> setEnableSpeakerphone(bool speakerOn);
@@ -3788,8 +3785,8 @@ abstract class RtcEngine {
   /// Gets a list of shareable screens and windows.
   /// You can call this method before sharing a screen or window to get a list of shareable screens and windows, which enables a user to use thumbnails in the list to choose a particular screen or window to share. This list also contains important information such as window ID and screen ID, with which you can call startScreenCaptureByWindowId or startScreenCaptureByDisplayId to start the sharing.
   ///
-  /// * [thumbSize] The target size of the screen or window thumbnail (the width and height are in pixels).The SDK scales the original image to make the length of the longest side of the image the same as that of the target size without distorting the original image. For example, if the original image is 400 × 300 andthumbSize is 100 × 100, the actual size of the thumbnail is 100 × 75. If the target size is larger than the original size, the thumbnail is the original image and the SDK does not scale it.
-  /// * [iconSize] The target size of the icon corresponding to the application program (the width and height are in pixels).The SDK scales the original image to make the length of the longest side of the image the same as that of the target size without distorting the original image. For example, if the original image is 400 × 300 andiconSize is 100 × 100, the actual size of the icon is 100 × 75. If the target size is larger than the original size, the icon is the original image and the SDK does not scale it.
+  /// * [thumbSize] The target size of the screen or window thumbnail (the width and height are in pixels). The SDK scales the original image to make the length of the longest side of the image the same as that of the target size without distorting the original image. For example, if the original image is 400 × 300 and thumbSize is 100 × 100, the actual size of the thumbnail is 100 × 75. If the target size is larger than the original size, the thumbnail is the original image and the SDK does not scale it.
+  /// * [iconSize] The target size of the icon corresponding to the application program (the width and height are in pixels). The SDK scales the original image to make the length of the longest side of the image the same as that of the target size without distorting the original image. For example, if the original image is 400 × 300 and iconSize is 100 × 100, the actual size of the icon is 100 × 75. If the target size is larger than the original size, the icon is the original image and the SDK does not scale it.
   /// * [includeScreen] Whether the SDK returns the screen information in addition to the window information:true: The SDK returns screen and window information.false: The SDK returns the window information only.
   Future<List<ScreenCaptureSourceInfo>> getScreenCaptureSources(
       {required SIZE thumbSize,
@@ -3804,7 +3801,7 @@ abstract class RtcEngine {
       AudioSessionOperationRestriction restriction);
 
   /// Shares the screen by specifying the display ID.
-  /// This method shares a screen or part of the screen.There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and setpublishScreenTrack orpublishSecondaryScreenTrack totrue to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and setpublishScreenTrack orpublishSecondaryScreenTrack totrue to start screen sharing.This method is for Windows and macOS only.
+  /// This method shares a screen or part of the screen.There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.This method is for Windows and macOS only.
   ///
   /// * [displayId] The display ID of the screen to be shared.
   /// * [regionRect] (Optional) Sets the relative location of the region to the screen. If you do not set this parameter, the SDK shares the whole screen. See Rectangle . If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
@@ -3817,7 +3814,7 @@ abstract class RtcEngine {
   /// Shares the whole or part of a screen by specifying the screen rect.
   /// There are two ways to start screen sharing, you can choose one according to the actual needs:
   ///  Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.
-  ///  Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing. Deprecated:This method is deprecated. Use startScreenCaptureByDisplayId instead. Agora strongly recommends usingstartScreenCaptureByDisplayId if you need to start screen sharing on a device connected to another display.This method shares a screen or part of the screen. You need to specify the area of the screen to be shared.This method applies to Windows only.
+  ///  Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing. Deprecated:This method is deprecated. Use startScreenCaptureByDisplayId instead. Agora strongly recommends using startScreenCaptureByDisplayId if you need to start screen sharing on a device connected to another display.This method shares a screen or part of the screen. You need to specify the area of the screen to be shared.This method applies to Windows only.
   ///
   /// * [screenRect] Sets the relative location of the screen to the virtual screen.
   /// * [regionRect]  Rectangle . If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
@@ -3837,7 +3834,7 @@ abstract class RtcEngine {
   /// Shares the whole or part of a window by specifying the window ID.
   /// There are two ways to start screen sharing, you can choose one according to the actual needs:
   ///  Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.
-  ///  Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing. This method shares a window or part of the window. You need to specify the ID of the window to be shared.Applies to the macOS and Windows platforms only.The window sharing feature of the Agora SDK relies on WGC (Windows Graphics Capture) or GDI (Graphics Device Interface) capture, and WGC cannot be set to disable mouse capture on systems earlier than Windows 10 2004. Therefore,captureMouseCursor(false) might not work when you start window sharing on a device with a system earlier than Windows 10 2004. See ScreenCaptureParameters .This method supports window sharing of UWP (Universal Windows Platform) applications. Agora tests the mainstream UWP applications by using the lastest SDK, see details as follows:
+  ///  Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing. This method shares a window or part of the window. You need to specify the ID of the window to be shared.Applies to the macOS and Windows platforms only.The window sharing feature of the Agora SDK relies on WGC (Windows Graphics Capture) or GDI (Graphics Device Interface) capture, and WGC cannot be set to disable mouse capture on systems earlier than Windows 10 2004. Therefore, captureMouseCursor(false) might not work when you start window sharing on a device with a system earlier than Windows 10 2004. See ScreenCaptureParameters .This method supports window sharing of UWP (Universal Windows Platform) applications. Agora tests the mainstream UWP applications by using the lastest SDK, see details as follows:
   ///
   /// * [windowId] The ID of the window to be shared.
   /// * [regionRect] (Optional) Sets the relative location of the region to the screen. If you do not set this parameter, the SDK shares the whole screen. See Rectangle . If the specified region overruns the window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole window.
@@ -3848,7 +3845,7 @@ abstract class RtcEngine {
       required ScreenCaptureParameters captureParams});
 
   /// Sets the content hint for screen sharing.
-  /// A content hint suggests the type of the content being shared, so that the SDK applies different optimization algorithms to different types of content. If you don't call this method, the default content hint iscontentHintNone.You can call this method either before or after you start screen sharing.
+  /// A content hint suggests the type of the content being shared, so that the SDK applies different optimization algorithms to different types of content. If you don't call this method, the default content hint is contentHintNone.You can call this method either before or after you start screen sharing.
   ///
   /// * [contentHint] The content hint for screen sharing. See VideoContentHint .
   Future<void> setScreenCaptureContentHint(VideoContentHint contentHint);
@@ -3873,7 +3870,7 @@ abstract class RtcEngine {
       ScreenCaptureParameters captureParams);
 
   /// Starts screen sharing.
-  /// There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and setpublishScreenCaptureVideotrue to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and setpublishScreenCaptureVideotrue to start screen sharing.This method is for Android only.
+  /// There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenCaptureVideotrue to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenCaptureVideotrue to start screen sharing.This method is for Android only.
   ///
   /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2 .
   Future<void> startScreenCapture(ScreenCaptureParameters2 captureParams);
@@ -3889,7 +3886,7 @@ abstract class RtcEngine {
   Future<void> stopScreenCapture();
 
   /// Retrieves the call ID.
-  /// When a user joins a channel on a client, acallId is generated to identify the call from the client. Some methods, such as rate and complain , must be called after the call ends to submit feedback to the SDK. These methods require thecallId parameter.Call this method after joining a channel.
+  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. Some methods, such as rate and complain , must be called after the call ends to submit feedback to the SDK. These methods require the callId parameter.Call this method after joining a channel.
   ///
   /// Returns
   /// The current call ID.
@@ -3900,7 +3897,7 @@ abstract class RtcEngine {
   ///
   /// * [callId] The current call ID. You can get the call ID by calling getCallId .
   /// * [rating] The rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the SDK returns the -2 (ERR_INVALID_ARGUMENT) error.
-  ///
+  /// * [description] A description of the call. The string length should be less than 800 bytes.
   Future<void> rate(
       {required String callId,
       required int rating,
@@ -3910,7 +3907,7 @@ abstract class RtcEngine {
   /// This method allows users to complain about the quality of the call. Call this method after the user leaves the channel.
   ///
   /// * [callId] The current call ID. You can get the call ID by calling getCallId .
-  ///
+  /// * [description] A description of the call. The string length should be less than 800 bytes.
   Future<void> complain({required String callId, required String description});
 
   /// Starts Media Push without transcoding.
@@ -4019,7 +4016,7 @@ abstract class RtcEngine {
   Future<ConnectionStateType> getConnectionState();
 
   /// Adds event handlers.
-  /// The SDK uses the RtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this interface class have default (empty) implementations. Therefore, the application can only inherit some required events. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as thesendStreamMessage method.
+  /// The SDK uses the RtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this interface class have default (empty) implementations. Therefore, the application can only inherit some required events. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method.
   /// Otherwise, the SDK may not work properly.
   ///
   /// * [eventHandler] Callback events to be added.
@@ -4033,13 +4030,13 @@ abstract class RtcEngine {
       {required int uid, required PriorityType userPriority});
 
   /// Sets the built-in encryption mode.
-  /// Deprecated:Use enableEncryption instead.The Agora SDK supports built-in encryption, which is set to the AES-128-GCM mode by default. Call this method to use other encryption modes. All users in the same channel must use the same encryption mode andsecret. Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.Before calling this method, please call setEncryptionSecret to enable the built-in encryption function.
+  /// Deprecated:Use enableEncryption instead.The Agora SDK supports built-in encryption, which is set to the AES-128-GCM mode by default. Call this method to use other encryption modes. All users in the same channel must use the same encryption mode and secret. Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.Before calling this method, please call setEncryptionSecret to enable the built-in encryption function.
   ///
   /// * [encryptionMode] The following encryption modes:"aes-128-xts": 128-bit AES encryption, XTS mode."aes-128-ecb": 128-bit AES encryption, ECB mode."aes-256-xts": 256-bit AES encryption, XTS mode."sm4-128-ecb": 128-bit SM4 encryption, ECB mode."aes-128-gcm": 128-bit AES encryption, GCM mode."aes-256-gcm": 256-bit AES encryption, GCM mode."": When this parameter is set as null, the encryption mode is set as "aes-128-gcm" by default.
   Future<void> setEncryptionMode(String encryptionMode);
 
   /// Enables built-in encryption with an encryption password before users join a channel.
-  /// Deprecated:This method is deprecated. Use enableEncryption instead.Before joining the channel, you need to call this method to set thesecret parameter to enable the built-in encryption. All users in the same channel should use the samesecret. Thesecret is automatically cleared once a user leaves the channel. If you do not specify thesecret orsecret is set as null, the built-in encryption is disabled.Do not use this method for CDN live streaming.For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
+  /// Deprecated:This method is deprecated. Use enableEncryption instead.Before joining the channel, you need to call this method to set the secret parameter to enable the built-in encryption. All users in the same channel should use the same secret. The secret is automatically cleared once a user leaves the channel. If you do not specify the secret or secret is set as null, the built-in encryption is disabled.Do not use this method for CDN live streaming.For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
   ///
   /// * [secret] The encryption password.
   Future<void> setEncryptionSecret(String secret);
@@ -4056,7 +4053,7 @@ abstract class RtcEngine {
   /// Sends data stream messages to all users in a channel. The SDK has the following restrictions on this method:Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.Each client can send up to 6 KB of data per second.Each user can have up to five data streams simultaneously.A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
   /// A failed method call triggers the onStreamMessageError callback on the remote client.Ensure that you call createDataStream to create a data channel before calling this method.In live streaming scenarios, this method only applies to hosts.
   ///
-  /// * [streamId] The data stream ID. You can get the data stream ID by callingcreateDataStream.
+  /// * [streamId] The data stream ID. You can get the data stream ID by calling createDataStream.
   /// * [data] The data to be sent.
   /// * [length] The length of the data.
   Future<void> sendStreamMessage(
@@ -4099,10 +4096,10 @@ abstract class RtcEngine {
 
   /// Registers the metadata observer.
   /// You need to implement the MetadataObserver class and specify the metadata type in this method. This method enables you to add synchronized metadata in the video stream for more diversified
-  ///  live interactive streaming, such as sending shopping links, digital coupons, and online quizzes.Call this method beforejoinChannel [2/2].
+  ///  live interactive streaming, such as sending shopping links, digital coupons, and online quizzes.Call this method before joinChannel [2/2].
   ///
   /// * [observer] The metadata observer. See MetadataObserver .
-  /// * [type] The metadata type. The SDK currently only supportsvideoMetadata.
+  /// * [type] The metadata type. The SDK currently only supports videoMetadata.
   void registerMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type});
 
@@ -4128,17 +4125,17 @@ abstract class RtcEngine {
       required String location});
 
   /// Registers a user account.
-  /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the registration is successful, the user account can identify the identity of the local user, and the user can use it to join the channel.After the user successfully registers a user account, the SDK triggers the onLocalUserRegistered callback on the local client, reporting the user ID and user account of the local user.This method is optional. To join a channel with a user account, you can choose either of the following ways:CallregisterLocalUserAccount to create a user account, and then call joinChannelWithUserAccount to join the channel.Call thejoinChannelWithUserAccount method to join the channel.The difference between the two ways is that the time elapsed between calling theregisterLocalUserAccount method and joining the channel is shorter than directly callingjoinChannelWithUserAccount.Ensure that you set theuserAccount parameter; otherwise, this method does not take effect.Ensure that theuserAccount is unique in the channel.To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
+  /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the registration is successful, the user account can identify the identity of the local user, and the user can use it to join the channel.After the user successfully registers a user account, the SDK triggers the onLocalUserRegistered callback on the local client, reporting the user ID and user account of the local user.This method is optional. To join a channel with a user account, you can choose either of the following ways:Call registerLocalUserAccount to create a user account, and then call joinChannelWithUserAccount to join the channel.Call the joinChannelWithUserAccount method to join the channel.The difference between the two ways is that the time elapsed between calling the registerLocalUserAccount method and joining the channel is shorter than directly calling joinChannelWithUserAccount.Ensure that you set the userAccount parameter; otherwise, this method does not take effect.Ensure that the userAccount is unique in the channel.To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
   ///
   /// * [appId] The App ID of your project on Agora Console.
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it asNULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   Future<void> registerLocalUserAccount(
       {required String appId, required String userAccount});
 
   /// Joins the channel with a user account, and configures whether to automatically subscribe to audio or video streams after joining the channel.
-  /// To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the correspondingmute methods.This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: The onUserJoined callback if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.
+  /// To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods.This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: The onUserJoined callback if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.
   ///
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it asNULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "= ", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "= ", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   /// * [token] The token generated on your server for authentication. See
   /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:All lowercase English letters: a to z.All uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   /// * [options] The channel media options. See ChannelMediaOptions .
@@ -4162,25 +4159,25 @@ abstract class RtcEngine {
   /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method to get the user account of the remote user from the UserInfo object by passing in the user ID.
   ///
   /// Returns
-  /// TheUserInfo object that identifies the user information.Not null: Success.Null: Failure.
+  /// The UserInfo object that identifies the user information.Not null: Success.Null: Failure.
   Future<UserInfo> getUserInfoByUid(int uid);
 
   /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If theonChannelMediaRelayStateChanged callback returnsrelayStateRunning (2) andrelayOk (0), and theonChannelMediaRelayEvent callback returnsrelayEventPacketSentToDestChannel (4); it means that the SDK starts relaying media streams between the source channel and the destination channel.If theonChannelMediaRelayStateChanged callback returnsrelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelay method to quit the current relay.You need to before implementing this function.We do not support string type of UID in this API.
+  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4); it means that the SDK starts relaying media streams between the source channel and the destination channel.If the onChannelMediaRelayStateChanged callback returns relayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelay method to quit the current relay.You need to before implementing this function.We do not support string type of UID in this API.
   ///
   /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration configuration);
 
   /// Updates the channels for media stream relay.
-  /// After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with therelayEventPacketUpdateDestChannel (7) state code.Call the method after successfully calling the startChannelMediaRelay method and receiving onChannelMediaRelayStateChanged (relayStateRunning,relayOk); otherwise, the method call fails.
+  /// After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the relayEventPacketUpdateDestChannel (7) state code.Call the method after successfully calling the startChannelMediaRelay method and receiving onChannelMediaRelayStateChanged (relayStateRunning, relayOk); otherwise, the method call fails.
   ///
   /// * [configuration] The configuration of the media stream relay.
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration configuration);
 
   /// Stops the media stream relay. Once the relay stops, the host quits all the destination channels.
-  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reportsrelayStateIdle (0) andrelayOk (0), the host successfully stops the relay.If the method call fails, the SDK triggers theonChannelMediaRelayStateChanged callback with therelayErrorServerNoResponse (2) orrelayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
+  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports relayStateIdle (0) and relayOk (0), the host successfully stops the relay.If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the relayErrorServerNoResponse (2) or relayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 
   /// Pauses the media stream relay to all destination channels.
@@ -4192,21 +4189,21 @@ abstract class RtcEngine {
   Future<void> resumeAllChannelMediaRelay();
 
   /// Sets the audio profile of the media streams directly pushed to the CDN by the host.
-  /// When you set thepublishMicrophoneTrack orpublishCustomAudioTrack in the DirectCdnStreamingMediaOptions astrue to capture audios, you can call this method to set the audio profile.
+  /// When you set the publishMicrophoneTrack or publishCustomAudioTrack in the DirectCdnStreamingMediaOptions as true to capture audios, you can call this method to set the audio profile.
   ///
-  /// * [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels.See AudioProfileType .
+  /// * [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfileType .
   Future<void> setDirectCdnStreamingAudioConfiguration(
       AudioProfileType profile);
 
   /// Sets the video profile of the media streams directly pushed to the CDN by the host.
-  /// This method is only valid for video captured by camera, screen sharing, or self-captured.When you setpublishCameraTrack orpublishCustomVideoTrack in the DirectCdnStreamingMediaOptions astrue to capture videos, you can call this method to set the video profile.
+  /// This method is only valid for video captured by camera, screen sharing, or self-captured. When you set publishCameraTrack or publishCustomVideoTrack in the DirectCdnStreamingMediaOptions as true to capture videos, you can call this method to set the video profile.
   ///
   /// * [config] Video profile. See VideoEncoderConfiguration .
   Future<void> setDirectCdnStreamingVideoConfiguration(
       VideoEncoderConfiguration config);
 
   /// Starts pushing media streams to the CDN directly.
-  /// Aogra does not support pushing streams to one URL repeatedly.Media optionsAgora does not support setting the value ofpublishCameraTrack andpublishCustomVideoTrack astrue, or the value ofpublishMicrophoneTrack andpublishCustomAudioTrack astrue at the same time. When choosing media setting options ( DirectCdnStreamingMediaOptions ) you can refer to the following examples:If you want to push audio and video streams published by the host to the CDN, the media setting options should be set as follows:publishCameraTrack is set astrue.publishMicrophoneTrack is set astrue.publishCustomAudioTrack is set asfalse (Default).publishCustomVideoTrack is set asfalse (Default).If you want to push external audio and video streams, ensure the following:publishCustomVideoTrack is set astrue and call the pushVideoFrame method.publishCameraTrack is set asfalse (Default).publishMicrophoneTrack is set asfalse (Default).
+  /// Aogra does not support pushing streams to one URL repeatedly.Media optionsAgora does not support setting the value of publishCameraTrack and publishCustomVideoTrack as true, or the value of publishMicrophoneTrack and publishCustomAudioTrack as true at the same time. When choosing media setting options ( DirectCdnStreamingMediaOptions ) you can refer to the following examples:If you want to push audio and video streams published by the host to the CDN, the media setting options should be set as follows:publishCameraTrack is set as true.publishMicrophoneTrack is set as true.publishCustomAudioTrack is set as false (Default).publishCustomVideoTrack is set as false (Default).If you want to push external audio and video streams, ensure the following:publishCustomVideoTrack is set as true and call the pushVideoFrame method.publishCameraTrack is set as false (Default).publishMicrophoneTrack is set as false (Default).
   ///
   /// * [eventHandler] See onDirectCdnStreamingStateChanged and onDirectCdnStreamingStats .
   /// * [publishUrl] The CDN live streaming URL.
@@ -4228,10 +4225,10 @@ abstract class RtcEngine {
       DirectCdnStreamingMediaOptions options);
 
   /// Enables the virtual metronome.
-  /// In music education, physical education, and other scenarios, teachers might need to use a metronome so that students can practice with the correct beat. The meter is composed of a downbeat and upbeats. The first beat of each measure is called a downbeat, and the rest are called upbeats.In this method, you need to set the paths of the upbeat and downbeat files, the number of beats per measure, the tempo, and whether to send the sound of the metronome to remote users.This method is for Android and iOS only.After enabling the virtual metronome, the SDK plays the specified audio effect file from the beginning and controls the playback duration of each file according tobeatsPerMinuteyou set in AgoraRhythmPlayerConfig . For example, if you setbeatsPerMinute as60, the SDK plays one beat every second. If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.By default, the sound of the virtual metronome is published in the channel. If you do not want the sound to be heard by the remote users, you can setpublishRhythmPlayerTrack in ChannelMediaOptions asfalse.
+  /// In music education, physical education, and other scenarios, teachers might need to use a metronome so that students can practice with the correct beat. The meter is composed of a downbeat and upbeats. The first beat of each measure is called a downbeat, and the rest are called upbeats.In this method, you need to set the paths of the upbeat and downbeat files, the number of beats per measure, the tempo, and whether to send the sound of the metronome to remote users.This method is for Android and iOS only.After enabling the virtual metronome, the SDK plays the specified audio effect file from the beginning and controls the playback duration of each file according to beatsPerMinuteyou set in AgoraRhythmPlayerConfig . For example, if you set beatsPerMinute as 60, the SDK plays one beat every second. If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.By default, the sound of the virtual metronome is published in the channel. If you do not want the sound to be heard by the remote users, you can set publishRhythmPlayerTrack in ChannelMediaOptions as false.
   ///
-  /// * [sound1] The absolute path or URL address (including the filename extensions) of the file for the downbeat. For example:C:\music\audio.mp4. For the audio file formats supported by this method, seeWhat formats of audio files does the Agora RTC SDK v4.0.0 support.
-  /// * [sound2] The absolute path or URL address (including the filename extensions) of the file for the upbeats. For example:C:\music\audio.mp4. For the audio file formats supported by this method, seeWhat formats of audio files does the Agora RTC SDK v4.0.0 support.
+  /// * [sound1] The absolute path or URL address (including the filename extensions) of the file for the downbeat. For example: C:\music\audio.mp4. For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK v4.0.0 support.
+  /// * [sound2] The absolute path or URL address (including the filename extensions) of the file for the upbeats. For example: C:\music\audio.mp4. For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK v4.0.0 support.
   /// * [config] The metronome configuration. See AgoraRhythmPlayerConfig .
   Future<void> startRhythmPlayer(
       {required String sound1,
@@ -4243,7 +4240,7 @@ abstract class RtcEngine {
   Future<void> stopRhythmPlayer();
 
   /// Configures the virtual metronome.
-  /// This method is for Android and iOS only.After enabling the virtual metronome, the SDK plays the specified audio effect file from the beginning and controls the playback duration of each file according tobeatsPerMinuteyou set in AgoraRhythmPlayerConfig . For example, if you setbeatsPerMinute as60, the SDK plays one beat every second. If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.By default, the sound of the virtual metronome is published in the channel. If you do not want the sound to be heard by the remote users, you can setpublishRhythmPlayerTrack in ChannelMediaOptions asfalse.After calling startRhythmPlayer , you can call this method to reconfigure the virtual metronome.
+  /// This method is for Android and iOS only.After enabling the virtual metronome, the SDK plays the specified audio effect file from the beginning and controls the playback duration of each file according to beatsPerMinuteyou set in AgoraRhythmPlayerConfig . For example, if you set beatsPerMinute as 60, the SDK plays one beat every second. If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.By default, the sound of the virtual metronome is published in the channel. If you do not want the sound to be heard by the remote users, you can set publishRhythmPlayerTrack in ChannelMediaOptions as false.After calling startRhythmPlayer , you can call this method to reconfigure the virtual metronome.
   ///
   /// * [config] The metronome configuration. See AgoraRhythmPlayerConfig .
   Future<void> configRhythmPlayer(AgoraRhythmPlayerConfig config);
@@ -4252,11 +4249,11 @@ abstract class RtcEngine {
   /// This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.The method is asynchronous, and the SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.Call this method after joining a channel.This method takes a snapshot of the published video stream specified in ChannelMediaOptions .If the user's video has been preprocessed, for example, watermarked or beautified, the resulting snapshot includes the pre-processing effect.
   ///
   /// * [uid] The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
-  /// * [filePath] The local path (including filename extensions) of the snapshot. For example:Windows:C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpgiOS:/App Sandbox/Library/Caches/example.jpgmacOS:～/Library/Logs/example.jpgAndroid:/storage/emulated/0/Android/data/<package name>/files/example.jpgEnsure that the path you specify exists and is writable.
+  /// * [filePath] The local path (including filename extensions) of the snapshot. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpgiOS: /App Sandbox/Library/Caches/example.jpgmacOS: ～/Library/Logs/example.jpgAndroid: /storage/emulated/0/Android/data/<package name>/files/example.jpgEnsure that the path you specify exists and is writable.
   Future<void> takeSnapshot({required int uid, required String filePath});
 
   /// Enables/Disables video content moderation.
-  /// When video content moderation is enabled, the SDK takes screenshots, reviews the content, and uploads videos sent by local users based on the type and frequency of the content moderation module you set in ContentInspectConfig . After content moderation, the Agora content moderation server sends the results to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.If you set thetype inContentInspectModule tocontentInspectModeration, after the content moderation is completed, the SDK triggers the onContentInspectResult callback and reports the moderation result.Before calling this method, ensure that the Agora content moderation service has been enabled.
+  /// When video content moderation is enabled, the SDK takes screenshots, reviews the content, and uploads videos sent by local users based on the type and frequency of the content moderation module you set in ContentInspectConfig . After content moderation, the Agora content moderation server sends the results to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.If you set the type in ContentInspectModule to contentInspectModeration, after the content moderation is completed, the SDK triggers the onContentInspectResult callback and reports the moderation result.Before calling this method, ensure that the Agora content moderation service has been enabled.
   ///
   /// * [enabled] Whether to enable video content moderation:true: Enable video content moderation.false: Disable video content moderation.
   /// * [config] Configuration of content moderation. See ContentInspectConfig .
@@ -4276,7 +4273,7 @@ abstract class RtcEngine {
       {required int sourceId, required int volume});
 
   /// Sets the Agora cloud proxy service.
-  /// When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses and ports provided by Agora; then, call this method to enable the cloud proxy and set the cloud proxy type with theproxyType parameter.After successfully connecting to the cloud proxy, the SDK triggers the onConnectionStateChanged (connectionStateConnecting,connectionChangedSettingProxyServer) callback.To disable the cloud proxy that has been set, call thesetCloudProxy (noneProxy).To change the cloud proxy type that has been set, call thesetCloudProxy (noneProxy) first, and then call thesetCloudProxy to set theproxyType you want.Agora recommends that you call this method before joining the channel or after leaving the channel.When a user is behind a firewall and uses the Force UDP cloud proxy, the services for the Media Push and cohosting across channels are not available.When you use the Force TCP cloud proxy, note that an error would occur when calling the startAudioMixing method to play online music files in the HTTP protocol. The services for the Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
+  /// When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses and ports provided by Agora; then, call this method to enable the cloud proxy and set the cloud proxy type with the proxyType parameter.After successfully connecting to the cloud proxy, the SDK triggers the onConnectionStateChanged (connectionStateConnecting, connectionChangedSettingProxyServer) callback.To disable the cloud proxy that has been set, call the setCloudProxy (noneProxy).To change the cloud proxy type that has been set, call the setCloudProxy (noneProxy) first, and then call the setCloudProxy to set the proxyType you want.Agora recommends that you call this method before joining the channel or after leaving the channel.When a user is behind a firewall and uses the Force UDP cloud proxy, the services for the Media Push and cohosting across channels are not available.When you use the Force TCP cloud proxy, note that an error would occur when calling the startAudioMixing method to play online music files in the HTTP protocol. The services for the Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
   ///
   /// * [proxyType] The type of the cloud proxy. See CloudProxyType .This parameter is mandatory. The SDK reports an error if you do not pass in a value.
   Future<void> setCloudProxy(CloudProxyType proxyType);
@@ -4320,22 +4317,22 @@ abstract class RtcEngine {
       required ChannelMediaOptions options});
 
   /// Leaves a channel.
-  /// If you call release immediately after calling this method, the SDK does not trigger theonLeaveChannel callback.This method lets the user leave the channel, for example, by hanging up or exiting the call.After joining the channel, you must call this method or leaveChannel to end the call, otherwise, the next call cannot be started.No matter whether you are currently in a call or not, you can call this method without side effects. This method releases all resources related to the session.This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. A successful call of this method triggers the following callbacks: The local client:onLeaveChannel
+  /// If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.This method lets the user leave the channel, for example, by hanging up or exiting the call.After joining the channel, you must call this method or leaveChannel to end the call, otherwise, the next call cannot be started.No matter whether you are currently in a call or not, you can call this method without side effects. This method releases all resources related to the session.This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. A successful call of this method triggers the following callbacks: The local client: onLeaveChannel
   /// The remote client: onUserOffline , if the user joining the channel is in the COMMUNICATION profile, or is a host in the LIVE_BROADCASTING profile.
   ///
   /// * [options] The options for leaving the channel. See LeaveChannelOptions .
   Future<void> leaveChannel({LeaveChannelOptions? options});
 
   /// Sets the user role and level in an interactive live streaming channel.
-  /// In the interactive live streaming profile, the SDK sets the user role as audience by default. You can call this method to set the user role as host.You can call this method either before or after joining a channel.If you call this method to set the user's role as the host before joining the channel and set the local video property through the setupLocalVideo method, the local video preview is automatically enabled when the user joins the channel.If you call this method to switch the user role after joining a channel, the SDK automatically does the following:Calls muteLocalAudioStream and muteLocalVideoStream to change the publishing state.Triggers onClientRoleChanged on the local client.Triggers onUserJoined or onUserOffline on the remote client.This method applies to the interactive live streaming profile (theprofile parameter of setChannelProfile ischannelProfileLiveBroadcasting) only.
+  /// In the interactive live streaming profile, the SDK sets the user role as audience by default. You can call this method to set the user role as host.You can call this method either before or after joining a channel.If you call this method to set the user's role as the host before joining the channel and set the local video property through the setupLocalVideo method, the local video preview is automatically enabled when the user joins the channel.If you call this method to switch the user role after joining a channel, the SDK automatically does the following:Calls muteLocalAudioStream and muteLocalVideoStream to change the publishing state.Triggers onClientRoleChanged on the local client.Triggers onUserJoined or onUserOffline on the remote client.This method applies to the interactive live streaming profile (the profile parameter of setChannelProfile is channelProfileLiveBroadcasting) only.
   ///
-  /// * [role] The user role in the interactive live streaming.
+  /// * [role] The user role in the interactive live streaming. See ClientRoleType .
   /// * [options] The detailed options of a user, including the user level. See ClientRoleOptions .
   Future<void> setClientRole(
       {required ClientRoleType role, ClientRoleOptions? options});
 
   /// Starts an audio call test.
-  /// This method starts an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly. To conduct the test, let the user speak for a while, and the recording is played back within the set interval. If the user can hear the recording within the interval, the audio devices and network connection are working properly.Call this method before joining a channel.After callingstartEchoTest, you must call stopEchoTest to end the test. Otherwise, the app cannot perform the next echo test, and you cannot join the channel.In the live streaming channels, only a host can call this method.
+  /// This method starts an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly. To conduct the test, let the user speak for a while, and the recording is played back within the set interval. If the user can hear the recording within the interval, the audio devices and network connection are working properly.Call this method before joining a channel.After calling startEchoTest, you must call stopEchoTest to end the test. Otherwise, the app cannot perform the next echo test, and you cannot join the channel.In the live streaming channels, only a host can call this method.
   ///
   /// * [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back. The value range is [2, 10], and the default value is 10.
   Future<void> startEchoTest({int intervalInSeconds = 10});
@@ -4362,17 +4359,17 @@ abstract class RtcEngine {
       AudioScenarioType scenario = AudioScenarioType.audioScenarioDefault});
 
   /// Starts the audio recording on the client.
-  /// The Agora SDK allows recording during a call. After successfully calling this method, you can record the audio of all the users in the channel and get an audio recording file. Supported formats of the recording file are as follows:WAV: High-fidelity files with typically larger file sizes. For example, the size of a WAV file with a sample rate of 32,000 Hz and a recording duration of 10 minutes is around 73 MB.AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality isaudioRecordingQualityMedium, the file size for a 10-minute recording is approximately 2 MB.Once the user leaves the channel, the recording automatically stops.Call this method after joining a channel.
+  /// The Agora SDK allows recording during a call. After successfully calling this method, you can record the audio of all the users in the channel and get an audio recording file. Supported formats of the recording file are as follows:WAV: High-fidelity files with typically larger file sizes. For example, the size of a WAV file with a sample rate of 32,000 Hz and a recording duration of 10 minutes is around 73 MB.AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is audioRecordingQualityMedium, the file size for a 10-minute recording is approximately 2 MB.Once the user leaves the channel, the recording automatically stops.Call this method after joining a channel.
   ///
   /// * [config] Recording configuration. See AudioRecordingConfiguration .
   Future<void> startAudioRecording(AudioRecordingConfiguration config);
 
   /// Starts playing the music file.
-  /// This method mixes the specified local or online audio file with the audio from the microphone, or replaces the microphone's audio with the specified local or remote audio file. A successful method call triggers the onAudioMixingStateChanged (audioMixingStatePlaying) callback. When the audio mixing file playback finishes, the SDK triggers theonAudioMixingStateChanged(audioMixingStateStopped) callback on the local client.For the audio file formats supported by this method, seeWhat formats of audio files the Agora RTC SDK support.You can call this method either before or after joining a channel. If you need to callstartAudioMixing multiple times, ensure that the call interval is longer than 500 ms.If the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL, the SDK reports the warn code 701.
+  /// This method mixes the specified local or online audio file with the audio from the microphone, or replaces the microphone's audio with the specified local or remote audio file. A successful method call triggers the onAudioMixingStateChanged (audioMixingStatePlaying) callback. When the audio mixing file playback finishes, the SDK triggers the onAudioMixingStateChanged(audioMixingStateStopped) callback on the local client.For the audio file formats supported by this method, see What formats of audio files the Agora RTC SDK support.You can call this method either before or after joining a channel. If you need to call startAudioMixing multiple times, ensure that the time interval between calling this method is more than 500 ms.If the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL, the SDK reports the warn code 701.
   ///
-  /// * [filePath] File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports using a URI address, an absolute path, or a path that starts with/assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example:content://com.android.providers.media.documents/document/audio%3A14441.Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example:C:\music\audio.mp4.iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example:/var/mobile/Containers/Data/audio.mp4.
-  /// * [loopback] Whether to play music files only on the local client:true: Only play music files on the local client so that only the local user can hear the music.false: Publish music files to remote clients so that both the local user and remote users can hear the music.
-  /// * [cycle] The number of times the music file plays.≥ 0: The number of playback times. For example, 0 means that the SDK does not play the music file while 1 means that the SDK plays once.-1: Play the music file in an infinite loop.
+  /// * [filePath] File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports using a URI address, an absolute path, or a path that starts with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441.Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
+  /// * [loopback] Whether to only play music files on the local client:true: Only play music files on the local client so that only the local user can hear the music.false: Publish music files to remote clients so that both the local user and remote users can hear the music.
+  /// * [cycle] The number of times the music file plays.≥ 0: The number of playback times. For example, 0 means that the SDK does not play the music file while 1 means that the SDK plays once.-1: Play the audio file in an infinite loop.
   /// * [startPos] The playback position (ms) of the music file.
   Future<void> startAudioMixing(
       {required String filePath,
@@ -4412,7 +4409,7 @@ abstract class RtcEngine {
   Future<int> createDataStream(DataStreamConfig config);
 
   /// Adds a watermark image to the local video.
-  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfiguration method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than thesetVideoEncoderConfiguration dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that call this method after enableVideo .If you only want to add a watermark to the Media Push, you can call this method or the setLiveTranscoding method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabledthe local video preview by calling the startPreview method, you can use thevisibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
+  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfiguration method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than thesetVideoEncoderConfiguration dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that call this method after enableVideo .If you only want to add a watermark to the Media Push, you can call this method or the setLiveTranscoding method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabledthe local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
   ///
   /// * [watermarkUrl] The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
   /// * [options] The options of the watermark image to be added.
@@ -4420,12 +4417,12 @@ abstract class RtcEngine {
       {required String watermarkUrl, required WatermarkOptions options});
 
   /// Joins the channel with a user account, and configures whether to automatically subscribe to audio or video streams after joining the channel.
-  /// This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: The onUserJoined callback if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the correspondingmute methods.To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
+  /// This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: The onUserJoined callback if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods.To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
   ///
   /// * [options] The channel media options. See ChannelMediaOptions .
   /// * [token] The token generated on your server for authentication. See
   /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:All lowercase English letters: a to z.All uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it asNULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   Future<void> joinChannelWithUserAccount(
       {required String token,
       required String channelId,
@@ -4436,14 +4433,14 @@ abstract class RtcEngine {
   ///
   ///
   /// Returns
-  /// An AudioDeviceManager object.
+  /// One AudioDeviceManager object.
   AudioDeviceManager getAudioDeviceManager();
 
   /// Gets the VideoDeviceManager object to manage video devices.
   ///
   ///
   /// Returns
-  /// A VideoDeviceManager object.
+  /// One VideoDeviceManager object.
   VideoDeviceManager getVideoDeviceManager();
 
   /// Gets one MediaEngine object.
@@ -4878,7 +4875,7 @@ class SDKBuildInfo {
   Map<String, dynamic> toJson() => _$SDKBuildInfoToJson(this);
 }
 
-/// TheVideoDeviceInfo class that contains the ID and device name of the video devices.
+/// The VideoDeviceInfo class that contains the ID and device name of the video devices.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoDeviceInfo {
@@ -4901,7 +4898,7 @@ class VideoDeviceInfo {
   Map<String, dynamic> toJson() => _$VideoDeviceInfoToJson(this);
 }
 
-/// TheAudioDeviceInfo class that contains the ID and device name of the audio devices.
+/// The AudioDeviceInfo class that contains the ID and device name of the audio devices.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioDeviceInfo {

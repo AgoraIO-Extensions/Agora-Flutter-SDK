@@ -554,7 +554,8 @@ class _ApiCallExecutorInternal implements _ApiCallExecutorBase {
       } catch (e) {
         debugPrint(
             '[_ApiCallExecutor] $funcName, params: $params\nerror: ${e.toString()}');
-        return CallApiResult(irisReturnCode: -ErrorCodeType.errFailed.value(), data: const {});
+        return CallApiResult(
+            irisReturnCode: -ErrorCodeType.errFailed.value(), data: const {});
       }
     });
   }

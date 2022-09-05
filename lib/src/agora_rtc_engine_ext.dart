@@ -37,8 +37,8 @@ class AgoraRtcException implements Exception {
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-/// Creates theRtcEngine object.
-/// Currently, the Agora RTC SDK v4.0.0 supports creating only oneRtcEngine object for an app.
+/// Creates the RtcEngine object.
+/// Currently, the Agora RTC SDK v4.0.0 supports creating only one RtcEngine object for an app.
 ///
 /// Returns
 /// RtcEngine object.
@@ -46,11 +46,11 @@ RtcEngine createAgoraRtcEngine() {
   return impl.RtcEngineImpl.create();
 }
 
-/// Creates anRtcEngineEx object.
-/// Currentluy, the Agora RTC v4.x SDK supports creating only oneRtcEngineEx object for each app.
+/// Creates an RtcEngineEx object.
+/// Currentluy, the Agora RTC v4.x SDK supports creating only one RtcEngineEx object for each app.
 ///
 /// Returns
-/// AnRtcEngineEx object.
+/// An RtcEngineEx object.
 RtcEngineEx createAgoraRtcEngineEx() {
   return impl.RtcEngineImpl.create();
 }

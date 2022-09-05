@@ -31,7 +31,7 @@ enum AudioRoute {
   @JsonValue(3)
   routeSpeakerphone,
 
-  /// 4: The audio route is an external speaker.(iOS and macOS only)
+  /// 4: The audio route is an external speaker. (iOS and macOS only)
   @JsonValue(4)
   routeLoudspeaker,
 
@@ -39,19 +39,19 @@ enum AudioRoute {
   @JsonValue(5)
   routeHeadsetbluetooth,
 
-  /// 7: The audio route is a USB peripheral device.(For macOS only)
+  /// 7: The audio route is a USB peripheral device. (For macOS only)
   @JsonValue(6)
   routeUsb,
 
-  /// 6: The audio route is an HDMI peripheral device.(For macOS only)
+  /// 6: The audio route is an HDMI peripheral device. (For macOS only)
   @JsonValue(7)
   routeHdmi,
 
-  /// 8: The audio route is a DisplayPort peripheral device.(For macOS only)
+  /// 8: The audio route is a DisplayPort peripheral device. (For macOS only)
   @JsonValue(8)
   routeDisplayport,
 
-  /// 9: The audio route is Apple AirPlay.(For macOS only)
+  /// 9: The audio route is Apple AirPlay. (For macOS only)
   @JsonValue(9)
   routeAirplay,
 }
@@ -250,7 +250,7 @@ extension ContentInspectResultExt on ContentInspectResult {
 ///
 @JsonEnum(alwaysCreate: true)
 enum ContentInspectType {
-  /// 0: (Default) This module has no actual function. Do not settype to this value.
+  /// 0: (Default) This module has no actual function. Do not set type to this value.
   @JsonValue(0)
   contentInspectInvalid,
 
@@ -310,11 +310,11 @@ class ContentInspectConfig {
   @JsonKey(name: 'extraInfo')
   final String? extraInfo;
 
-  /// Video content moderation module. See ContentInspectModule .A maximum of 32ContentInspectModule instances can be configured, and the value range ofMAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A video content moderation module can only be configured with one instance at most.
+  /// Video content moderation module. See ContentInspectModule .A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A video content moderation module can only be configured with one instance at most.
   @JsonKey(name: 'modules')
   final List<ContentInspectModule>? modules;
 
-  /// The number of video content moderation modules, that is, the number of configuredContentInspectModule instances, must be the same as the number of instances configured inmodules. The maximum number is 32.
+  /// The number of video content moderation modules, that is, the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
   @JsonKey(name: 'moduleCount')
   final int? moduleCount;
 
@@ -627,11 +627,11 @@ class ExternalVideoFrame {
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value isNULL.
+  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
   @JsonKey(name: 'metadata_buffer', ignore: true)
   final Uint8List? metadataBuffer;
 
-  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is0.
+  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
   @JsonKey(name: 'metadata_size')
   final int? metadataSize;
 
@@ -680,7 +680,7 @@ enum VideoBufferType {
   @JsonValue(2)
   videoBufferArray,
 
-  /// 3: The video buffer in the format ofTexture.
+  /// 3: The video buffer in the format of Texture.
   @JsonValue(3)
   videoBufferTexture,
 }
@@ -770,11 +770,11 @@ class VideoFrame {
   @JsonKey(name: 'avsync_type')
   final int? avsyncType;
 
-  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value isNULL.
+  /// This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
   @JsonKey(name: 'metadata_buffer', ignore: true)
   final Uint8List? metadataBuffer;
 
-  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is0.
+  /// This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
   @JsonKey(name: 'metadata_size')
   final int? metadataSize;
 
@@ -786,7 +786,7 @@ class VideoFrame {
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame. The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).In the costom video renderer scenario, you can use this parameter to render the video background into various effects, such as: transparent, solid color, picture, video and so on.To use this parameter, contact.
+  /// Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame. The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).In the costom video renderer scenario, you can use this parameter to render the video background into various effects, such as: transparent, solid color, picture, video and so on.To use this parameter, contact .
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
@@ -831,15 +831,15 @@ extension MediaPlayerSourceTypeExt on MediaPlayerSourceType {
 ///
 @JsonEnum(alwaysCreate: true)
 enum VideoModulePosition {
-  /// 1: The post-capturer position, which corresponds to the video data in theonCaptureVideoFrame callback.
+  /// 1: The post-capturer position, which corresponds to the video data in the onCaptureVideoFrame callback.
   @JsonValue(1 << 0)
   positionPostCapturer,
 
-  /// 2: The pre-renderer position, which corresponds to the video data in theonRenderVideoFrame callback.
+  /// 2: The pre-renderer position, which corresponds to the video data in the onRenderVideoFrame callback.
   @JsonValue(1 << 1)
   positionPreRenderer,
 
-  /// 4: The pre-encoder position, which corresponds to the video data in theonPreEncodeVideoFrame callback.
+  /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
   @JsonValue(1 << 2)
   positionPreEncoder,
 
@@ -962,7 +962,7 @@ class AudioFrame {
   @JsonKey(name: 'samplesPerSec')
   final int? samplesPerSec;
 
-  /// The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved.The size of the data buffer is as follows:buffer =samples ×channels ×bytesPerSample.
+  /// The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved.The size of the data buffer is as follows: buffer = samples ×channels × bytesPerSample.
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
@@ -1020,7 +1020,7 @@ extension AudioFramePositionExt on AudioFramePosition {
 }
 
 /// Audio data format.
-/// The SDK calculates the sampling interval through thesamplesPerCall,sampleRate, andchannel parameters inAudioParams, and triggers theonRecordAudioFrame,onPlaybackAudioFrame, andonMixedAudioFrame callbacks according to the sampling interval.Sample interval =samplePerCall/(sampleRate ×channel).Ensure that the sample interval ≥ 0.01 (s).
+/// The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, and onMixedAudioFrame callbacks according to the sampling interval.Sample interval = samplePerCall/(sampleRate × channel).Ensure that the sample interval ≥ 0.01 (s).
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioParams {
   /// @nodoc
@@ -1072,12 +1072,12 @@ class AudioFrameObserver extends AudioFrameObserverBase {
           onMixedAudioFrame: onMixedAudioFrame,
         );
 
-  /// Retrieves the unmixed audio frame of a specified user.
+  /// Retrieves the audio frame of a specified user before mixing.
   ///
   ///
   /// * [channelId] The channel ID.
   /// * [uid] The user ID of the specified user.
-  /// * [audioFrame] The audio frame. See AudioFrame .
+  /// * [audioFrame] The raw audio data. See AudioFrame .
   ///
   /// Returns
   /// Reserved for future use.
@@ -1141,13 +1141,13 @@ class AudioSpectrumObserver {
   });
 
   /// Gets the statistics of a local audio spectrum.
-  /// After successfully calling registerAudioSpectrumObserver to implement theonLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
+  /// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
   /// * [data] The audio spectrum data of the local user. See AudioSpectrumData .
   final void Function(AudioSpectrumData data)? onLocalAudioSpectrum;
 
   /// Gets the remote audio spectrum.
-  /// After successfully calling registerAudioSpectrumObserver to implement theonRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
+  /// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
   /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo . The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
   /// * [spectrumNumber] The number of remote users.
@@ -1251,7 +1251,7 @@ class VideoFrameObserver {
       onSecondaryPreEncodeScreenVideoFrame;
 
   /// Occurs each time the SDK receives a video frame sent by the remote user.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding. You can then process the data according to your particular scenarios.This function only applies to the scenarios where the video processing mode isprocessModeReadOnly.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding. You can then process the data according to your particular scenarios.This function only applies to the scenarios where the video processing mode is processModeReadOnly.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   /// * [remoteUid] The ID of the remote user who sends the current video frame.
@@ -1447,7 +1447,7 @@ class MediaRecorderConfiguration {
       this.maxDurationMs,
       this.recorderInfoUpdateInterval});
 
-  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /AppSandbox/Library/Caches/example.mp4macOS:～/Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/agorasdk.mp4Ensure that the directory for the log files exists and is writable.
+  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /AppSandbox/Library/Caches/example.mp4macOS: ～/Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/agorasdk.mp4Ensure that the directory for the log files exists and is writable.
   @JsonKey(name: 'storagePath')
   final String? storagePath;
 
@@ -1502,7 +1502,7 @@ class RecorderInfo {
   Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
 }
 
-/// TheMediaRecorderObserver class.
+/// The MediaRecorderObserver class.
 ///
 class MediaRecorderObserver {
   /// @nodoc
@@ -1520,7 +1520,7 @@ class MediaRecorderObserver {
       onRecorderStateChanged;
 
   /// Occurs when the recording information is updated.
-  /// After you successfully enable the local audio and video recording, the SDK periodically triggers this callback based on the value ofrecorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
+  /// After you successfully enable the local audio and video recording, the SDK periodically triggers this callback based on the value of recorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
   ///
   /// * [info] The information about the file that is recorded. See RecorderInfo .
   final void Function(RecorderInfo info)? onRecorderInfoUpdated;
