@@ -124,6 +124,7 @@ class _State extends State<StartDirectCDNStreaming> {
   }
 
   Future<void> _startDirectCdnStreaming() async {
+    await _engine.startPreview();
     await _engine.setDirectCdnStreamingAudioConfiguration(
         AudioProfileType.audioProfileDefault);
     await _engine

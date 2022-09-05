@@ -88,6 +88,7 @@ To help work on this sdk, please refer to [CONTRIBUTING.md](https://github.com/A
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case.
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community).
 - If you encounter problems during integration, feel free to ask questions in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io).
+- [Release notes](https://docs.agora.io/en/video-call-4.x-beta/release_flutter_ng?platform=Flutter).
 
 ## License
 

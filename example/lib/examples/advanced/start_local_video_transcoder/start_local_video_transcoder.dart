@@ -118,6 +118,10 @@ class _State extends State<StartLocalVideoTranscoder> {
       _videoDevices = await _videoDeviceManager.enumerateVideoDevices();
     }
 
+    _mediaPlayerController = MediaPlayerController(
+        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
+    await _mediaPlayerController.initialize();
+
     await _engine.enableVideo();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
@@ -380,11 +384,6 @@ class _State extends State<StartLocalVideoTranscoder> {
                             element.sourceType ==
                             MediaSourceType.mediaPlayerSource);
                       } else {
-                        _mediaPlayerController = MediaPlayerController(
-                            rtcEngine: _engine,
-                            canvas: const VideoCanvas(uid: 0));
-                        await _mediaPlayerController.initialize();
-
                         _mediaPlayerSourceObserver ??=
                             MediaPlayerSourceObserver(
                           onPlayerSourceStateChanged: (state, ec) {
@@ -402,10 +401,6 @@ class _State extends State<StartLocalVideoTranscoder> {
                           url: _mediaPlayerUrlController.text,
                           startPos: 0,
                         );
-
-                        debugPrint('mediaplayerid: ${_mediaPlayerController
-                              .getMediaPlayerId()
-                              .toString()}');
 
                         transcodingVideoStreams.add(TranscodingVideoStream(
                           sourceType: MediaSourceType.mediaPlayerSource,
