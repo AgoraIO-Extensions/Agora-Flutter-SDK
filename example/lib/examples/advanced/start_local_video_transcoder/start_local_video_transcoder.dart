@@ -305,6 +305,7 @@ class _State extends State<StartLocalVideoTranscoder> {
                 onChanged: _isStartLocalvideoTranscoder
                     ? (v) async {
                         if (!v) {
+                          await _engine.stopScreenCapture();
                           transcodingVideoStreams.removeWhere((element) =>
                               element.sourceType ==
                               MediaSourceType.primaryScreenSource);
@@ -401,6 +402,10 @@ class _State extends State<StartLocalVideoTranscoder> {
                           url: _mediaPlayerUrlController.text,
                           startPos: 0,
                         );
+
+                        debugPrint('mediaplayerid: ${_mediaPlayerController
+                              .getMediaPlayerId()
+                              .toString()}');
 
                         transcodingVideoStreams.add(TranscodingVideoStream(
                           sourceType: MediaSourceType.mediaPlayerSource,

@@ -94,7 +94,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
               RtcConnection(channelId: _controller.text, localUid: localUid),
           options: const ChannelMediaOptions(
             publishCameraTrack: true,
-            publishMicrophoneTrack: false,
+            publishMicrophoneTrack: true,
             clientRoleType: ClientRoleType.clientRoleBroadcaster,
           ));
     }
