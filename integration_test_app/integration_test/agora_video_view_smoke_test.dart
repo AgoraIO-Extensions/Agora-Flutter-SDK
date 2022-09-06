@@ -7,64 +7,24 @@ import 'package:integration_test_app/main.dart' as app;
 class _RenderViewWidget extends StatefulWidget {
   const _RenderViewWidget({
     Key? key,
+    required this.rtcEngine,
     required this.builder,
   }) : super(key: key);
 
   final Function(BuildContext context, RtcEngine engine) builder;
+
+  final RtcEngine rtcEngine;
 
   @override
   State<_RenderViewWidget> createState() => _RenderViewWidgetState();
 }
 
 class _RenderViewWidgetState extends State<_RenderViewWidget> {
-  late RtcEngine _rtcEngine;
-  bool _isInit = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _init();
-  }
-
-  Future<void> _init() async {
-    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-        defaultValue: '<YOUR_APP_ID>');
-
-    _rtcEngine = createAgoraRtcEngine();
-    await _rtcEngine.initialize(RtcEngineContext(
-      appId: engineAppId,
-      areaCode: AreaCode.areaCodeGlob.value(),
-    ));
-
-    try {
-      await _rtcEngine.enableVideo();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-
-    if (mounted) {
-      setState(() {
-        _isInit = true;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _destroy();
-    super.dispose();
-  }
-
-  Future<void> _destroy() async {
-    await _rtcEngine.release(sync: true);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: _isInit ? widget.builder(context, _rtcEngine) : Container(),
+        body: widget.builder(context, widget.rtcEngine),
       ),
     );
   }
@@ -78,9 +38,25 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    for (int i = 0; i < 10; i++) {
-      // await rtcEngine.enableVideo();
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+        defaultValue: '<YOUR_APP_ID>');
+
+    final rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    try {
+      await rtcEngine.enableVideo();
+      await rtcEngine.startPreview();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    for (int i = 0; i < 5; i++) {
       await tester.pumpWidget(_RenderViewWidget(
+        rtcEngine: rtcEngine,
         builder: (context, engine) {
           return SizedBox(
             height: 100,
@@ -102,5 +78,7 @@ void main() {
     }
 
     expect(find.byType(AgoraVideoView), findsNothing);
+
+    await rtcEngine.release(sync: true);
   });
 }
