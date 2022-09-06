@@ -82,6 +82,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     ));
 
     try {
+      await rtcEngine.enableVideo();
+      
       {{TEST_CASE_BODY}}
     } catch (e) {
       if (e is! AgoraRtcException) {
