@@ -63,6 +63,7 @@ class _State extends State<StartLocalVideoTranscoder> {
 
   Future<void> _dispose() async {
     await _stopLocalVideoTranscoder();
+    await _mediaPlayerController.dispose();
 
     await _engine.leaveChannel();
     await _engine.release();
@@ -206,7 +207,6 @@ class _State extends State<StartLocalVideoTranscoder> {
   Future<void> _stopLocalVideoTranscoder() async {
     if (_isMediaPlayerSource) {
       await _mediaPlayerController.stop();
-      await _mediaPlayerController.dispose();
     }
 
     if (_isSecondaryCameraSource) {
