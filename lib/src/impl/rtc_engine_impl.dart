@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/src/impl/api_types.dart';
 import 'package:agora_rtc_engine/src/classes.dart';

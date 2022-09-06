@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/src/impl/rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/rtc_engine_event_handler.dart';
