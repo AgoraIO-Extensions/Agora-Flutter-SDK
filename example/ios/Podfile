@@ -60,7 +60,7 @@ target 'ScreenSharing' do
 #  end
   # pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
 
-  pod 'AgoraIrisRTC_iOS', '4.0.0-beta.9'
+  pod 'AgoraIrisRTC_iOS', '4.0.0-beta.11'
 end
 
 post_install do |installer|
