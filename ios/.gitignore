@@ -40,3 +40,4 @@ Icon?
 AgoraRtcWrapper.xcframework
 libs/
 AgoraRtcWrapper.podspec
+zip_download_path/
