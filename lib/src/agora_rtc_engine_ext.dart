@@ -14,11 +14,6 @@ extension RtcEngineExt on RtcEngine {
         .invokeMethod<String>('getAssetAbsolutePath', assetPath);
     return p;
   }
-
-  /// @nodoc
-  MediaPlayerCacheManager getMediaPlayerCacheManager() {
-    return MediaPlayerCacheManagerImpl.create(this);
-  }
 }
 
 /// Error codes and error messages.
@@ -53,4 +48,13 @@ RtcEngine createAgoraRtcEngine() {
 /// An RtcEngineEx object.
 RtcEngineEx createAgoraRtcEngineEx() {
   return impl.RtcEngineImpl.create();
+}
+
+/// Gets an MediaPlayerCacheManager instance.
+/// Make sure the RtcEngine is initialized before you call this method.
+///
+/// Returns
+/// The MediaPlayerCacheManager instance.
+MediaPlayerCacheManager getMediaPlayerCacheManager(RtcEngine rtcEngine) {
+  return MediaPlayerCacheManagerImpl.create(rtcEngine);
 }
