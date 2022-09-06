@@ -55,12 +55,11 @@ target 'ScreenSharing' do
   use_frameworks!
   use_modular_headers!
   
-#  if plugin_dev != nil
-#    pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_ng', 'ios')
-#  end
-  # pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
-
-  pod 'AgoraIrisRTC_iOS', '4.0.0-beta.11'
+  if plugin_dev != nil
+    pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
+  else
+    pod 'AgoraIrisRTC_iOS', '4.0.0-beta.11'
+  end
 end
 
 post_install do |installer|
