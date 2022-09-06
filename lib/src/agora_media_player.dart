@@ -285,7 +285,10 @@ abstract class MediaPlayer {
   /// * [observer] The audio frame observer, reporting the reception of each audio frame. See MediaPlayerAudioFrameObserver .
   void registerAudioFrameObserver(MediaPlayerAudioFrameObserver observer);
 
-  /// @nodoc
+  /// Unregisters an audio frame observer.
+  ///
+  ///
+  /// * [observer] The audio observer. See MediaPlayerAudioFrameObserver .
   void unregisterAudioFrameObserver(MediaPlayerAudioFrameObserver observer);
 
   /// Registers a video frame observer object.
@@ -294,7 +297,10 @@ abstract class MediaPlayer {
   /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .
   void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
-  /// @nodoc
+  /// Unregisters a video frame observer.
+  ///
+  ///
+  /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .
   void unregisterVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
   /// Sets the private options for the media player.

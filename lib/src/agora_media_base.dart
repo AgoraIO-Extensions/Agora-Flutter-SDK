@@ -722,7 +722,7 @@ class VideoFrame {
       this.matrix,
       this.alphaBuffer});
 
-  /// @nodoc
+  /// The pixel format. See VideoPixelFormat .
   @JsonKey(name: 'type')
   final VideoPixelFormat? type;
 

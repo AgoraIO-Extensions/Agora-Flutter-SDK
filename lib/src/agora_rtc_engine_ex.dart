@@ -31,9 +31,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// You can call this method multiple times to join more than one channels.If you are already in a channel, you cannot rejoin it with the same user ID.If you want to join the same channel from different devices, ensure that the user IDs in all devices are different.Ensure that the app ID you use to generate the token is the same with the app ID used when creating the RtcEngine instance.
   ///
   /// * [options] The channel media options. See ChannelMediaOptions .
-  ///
-  /// * [token] The token generated on your server for authentication. See
-  ///
+  /// * [token] The token generated on your server for authentication.
   ///
   Future<void> joinChannelEx(
       {required String token,
