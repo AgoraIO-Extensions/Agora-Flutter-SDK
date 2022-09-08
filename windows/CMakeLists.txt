@@ -12,8 +12,8 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.0.0_DCG_Windows_Video_20220906_0857.zip")
-set(IRIS_SDK_DOWNLOAD_NAME "iris_4.0.0_DCG_Windows_20220906_0857")
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.0.0_DCG_Windows_Video_20220908_1257.zip")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_4.0.0_DCG_Windows_20220908_1257")
 set(RTC_SDK_DOWNLOAD_NAME "Agora_Native_SDK_for_Windows_FULL")
 set(IRIS_SDK_VERSION "v3_6_2_fix.1")
 
@@ -30,7 +30,7 @@ set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/${RTC_SDK_DOWNLOAD_NAME}/sdk/x86_64")
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
     # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
     include(DownloadSDK)
-    DOWNLOAD_SDK_BY_URL("${IRIS_SDK_DOWNLOAD_URL}" "${IRIS_DOWNLOAD_PATH}")   
+    DOWNLOAD_SDK_BY_URL("${IRIS_SDK_DOWNLOAD_URL}" "${IRIS_DOWNLOAD_PATH}")
 endif()
 
 # Any new source files that you add to the plugin should be added here.
@@ -65,9 +65,9 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   PRIVATE
   "${IRIS_SDK_PATH}/include"
   )
-target_link_libraries(${PLUGIN_NAME} PRIVATE 
-  flutter 
-  flutter_wrapper_plugin 
+target_link_libraries(${PLUGIN_NAME} PRIVATE
+  flutter
+  flutter_wrapper_plugin
   ${IRIS_SDK_BIN_PATH}/AgoraRtcWrapper.lib)
 
 set(BUNDLED_LIBRARIES
@@ -77,14 +77,14 @@ set(BUNDLED_LIBRARIES
 file(GLOB RTC_DLLS ${RTC_SDK_BIN_PATH}/*.dll)
 foreach (RTC_DLL ${RTC_DLLS})
     message("Add bundled library: ${RTC_DLL}")
-    
+
     list(APPEND BUNDLED_LIBRARIES ${RTC_DLL})
 endforeach (RTC_DLL ${RTC_DLLS})
 
 file(GLOB RTC_LIBS ${RTC_SDK_BIN_PATH}/*.lib)
 foreach (RTC_LIB ${RTC_LIBS})
     message("Add bundled library: ${RTC_LIB}")
-    
+
     list(APPEND BUNDLED_LIBRARIES ${RTC_LIB})
 endforeach (RTC_LIB ${RTC_LIBS})
 
