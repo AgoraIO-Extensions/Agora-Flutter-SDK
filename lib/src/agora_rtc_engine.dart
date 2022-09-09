@@ -1,31 +1,31 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_rtc_engine.g.dart';
 
-/// Media device types.
+/// 设备类型。
 ///
 @JsonEnum(alwaysCreate: true)
 enum MediaDeviceType {
-  /// -1: Unknown device type.
+  /// -1: 设备类型未知。
   @JsonValue(-1)
   unknownAudioDevice,
 
-  /// 0: Audio playback device.
+  /// 0: 音频播放设备。
   @JsonValue(0)
   audioPlayoutDevice,
 
-  /// 1: Audio capturing device.
+  /// 1: 音频采集设备。
   @JsonValue(1)
   audioRecordingDevice,
 
-  /// 2: Video renderer.
+  /// 2: 视频渲染设备。
   @JsonValue(2)
   videoRenderDevice,
 
-  /// 3: Video capturer.
+  /// 3: 视频采集设备。
   @JsonValue(3)
   videoCaptureDevice,
 
-  /// 4: Application audio playback device.
+  /// 4: 音频应用播放设备。
   @JsonValue(4)
   audioApplicationPlayoutDevice,
 }
@@ -43,23 +43,23 @@ extension MediaDeviceTypeExt on MediaDeviceType {
   }
 }
 
-/// The playback state of the music file.
+/// 音乐文件播放状态。
 ///
 @JsonEnum(alwaysCreate: true)
 enum AudioMixingStateType {
-  /// 710: The music file is playing.
+  /// 710: 音乐文件正常播放。
   @JsonValue(710)
   audioMixingStatePlaying,
 
-  /// 711: The music file pauses playing.
+  /// 711: 音乐文件暂停播放。
   @JsonValue(711)
   audioMixingStatePaused,
 
-  /// 713: The music file stops playing.The possible reasons include:audioMixingReasonAllLoopsCompleted(723)audioMixingReasonStoppedByUser(724)
+  /// 713: 音乐文件停止播放。该状态可能由以下原因导致： audioMixingReasonAllLoopsCompleted(723)audioMixingReasonStoppedByUser(724)
   @JsonValue(713)
   audioMixingStateStopped,
 
-  /// 714: An error occurs during the playback of the audio mixing file.The possible reasons include:audioMixingReasonCanNotOpen(701)audioMixingReasonTooFrequentCall(702)audioMixingReasonInterruptedEof(703)
+  /// 714: 音乐文件播放出错。该状态可能由以下原因导致： audioMixingReasonCanNotOpen(701)audioMixingReasonTooFrequentCall(702)audioMixingReasonInterruptedEof(703)
   @JsonValue(714)
   audioMixingStateFailed,
 }
@@ -77,35 +77,35 @@ extension AudioMixingStateTypeExt on AudioMixingStateType {
   }
 }
 
-/// The reason why the playback state of the music file changes. Reported in the onAudioMixingStateChanged callback.
+/// 音乐文件播放状态改变的原因。在 onAudioMixingStateChanged 回调中报告。
 ///
 @JsonEnum(alwaysCreate: true)
 enum AudioMixingReasonType {
-  /// 701: The SDK cannot open the music file. For example, the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL.
+  /// 701: 音乐文件打开出错。例如，本地音乐文件不存在、文件格式不支持或无法访问在线音乐文件 URL。
   @JsonValue(701)
   audioMixingReasonCanNotOpen,
 
-  /// 702: The SDK opens the music file too frequently. If you need to call startAudioMixing multiple times, ensure that the call interval is more than 500 ms.
+  /// 702: 音乐文件打开太频繁。如需多次调用 startAudioMixing，请确保调用间隔大于 500 ms。
   @JsonValue(702)
   audioMixingReasonTooFrequentCall,
 
-  /// 703: The music file playback is interrupted.
+  /// 703: 音乐文件播放中断。
   @JsonValue(703)
   audioMixingReasonInterruptedEof,
 
-  /// 721: The music file completes a loop playback.
+  /// 721: 音乐文件完成一次循环播放。
   @JsonValue(721)
   audioMixingReasonOneLoopCompleted,
 
-  /// 723: The music file completes all loop playback.
+  /// 723: 音乐文件完成所有循环播放。
   @JsonValue(723)
   audioMixingReasonAllLoopsCompleted,
 
-  /// 724: Successfully call stopAudioMixing to stop playing the music file.
+  /// 724: 成功调用 stopAudioMixing 停止播放音乐文件。
   @JsonValue(724)
   audioMixingReasonStoppedByUser,
 
-  /// 0: The SDK opens music file successfully.
+  /// 0: 成功打开音乐文件。
   @JsonValue(0)
   audioMixingReasonOk,
 }
@@ -184,7 +184,7 @@ extension InjectStreamStatusExt on InjectStreamStatus {
   }
 }
 
-/// The midrange frequency for audio equalization.
+/// 语音音效均衡波段的中心频率。
 ///
 @JsonEnum(alwaysCreate: true)
 enum AudioEqualizationBandFrequency {
@@ -242,27 +242,27 @@ extension AudioEqualizationBandFrequencyExt on AudioEqualizationBandFrequency {
   }
 }
 
-/// Audio reverberation types.
+/// 音频混响类型。
 ///
 @JsonEnum(alwaysCreate: true)
 enum AudioReverbType {
-  /// 0: The level of the dry signal (dB). The value is between -20 and 10.
+  /// 0: 原始声音强度，即所谓的 dry signal，取值范围 [-20,10]，单位为 dB。
   @JsonValue(0)
   audioReverbDryLevel,
 
-  /// 1: The level of the early reflection signal (wet signal) (dB). The value is between -20 and 10.
+  /// 1: 早期反射信号强度，即所谓的 wet signal，取值范围 [-20,10]，单位为 dB。
   @JsonValue(1)
   audioReverbWetLevel,
 
-  /// 2: The room size of the reflection. The value is between 0 and 100.
+  /// 2: 所需混响效果的房间尺寸，一般房间越大，混响越强，取值范围 [0,100]，单位为 dB。
   @JsonValue(2)
   audioReverbRoomSize,
 
-  /// 3: The length of the initial delay of the wet signal (ms). The value is between 0 and 200.
+  /// 3: Wet signal 的初始延迟长度，取值范围 [0,200]，单位为毫秒。
   @JsonValue(3)
   audioReverbWetDelay,
 
-  /// 4: The reverberation strength. The value is between 0 and 100.
+  /// 4: 混响持续的强度，取值范围为 [0,100]。
   @JsonValue(4)
   audioReverbStrength,
 }
@@ -334,7 +334,7 @@ extension PriorityTypeExt on PriorityType {
   }
 }
 
-/// The statistics of the local video stream.
+/// 本地视频流统计信息。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocalVideoStats {
@@ -363,87 +363,87 @@ class LocalVideoStats {
       this.captureBrightnessLevel,
       this.dualStreamEnabled});
 
-  /// The user ID of the local user.
+  /// 本地用户的 ID。
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The actual bitrate (Kbps) while sending the local video stream.This value does not include the bitrate for resending the video after packet loss.
+  /// 实际发送码率 (Kbps) 不包含丢包后重传视频等的发送码率。
   @JsonKey(name: 'sentBitrate')
   final int? sentBitrate;
 
-  /// The actual frame rate (fps) while sending the local video stream.This value does not include the frame rate for resending the video after packet loss.
+  /// 实际发送帧率 (fps)。 不包含丢包后重传视频等的发送帧率。
   @JsonKey(name: 'sentFrameRate')
   final int? sentFrameRate;
 
-  /// The frame rate (fps) for capturing the local video stream.
+  /// 本地视频采集帧率 (fps)。
   @JsonKey(name: 'captureFrameRate')
   final int? captureFrameRate;
 
-  /// The width (px) for capturing the local video stream.
+  /// 本地视频采集宽度 (px)。
   @JsonKey(name: 'captureFrameWidth')
   final int? captureFrameWidth;
 
-  /// The height (px) for capturing the local video stream.
+  /// 本地视频采集高度 (px)。
   @JsonKey(name: 'captureFrameHeight')
   final int? captureFrameHeight;
 
-  /// The frame rate (fps) adjusted by the built-in video capture adapter (regulator) of the SDK for capturing the local video stream. The regulator adjusts the frame rate of the video captured by the camera according to the video encoding configuration.
+  /// SDK 内置的视频采集适配器（regulator）调整后的摄像头采集视频帧率 (fps)。Regulator 根据视频编码配置对摄像头采集视频的帧率进行调整。
   @JsonKey(name: 'regulatedCaptureFrameRate')
   final int? regulatedCaptureFrameRate;
 
-  /// The width (px) adjusted by the built-in video capture adapter (regulator) of the SDK for capturing the local video stream. The regulator adjusts the height and width of the video captured by the camera according to the video encoding configuration.
+  /// SDK 内置的视频采集适配器（regulator）调整后的摄像头采集视频宽度 (px)。Regulator 根据视频编码配置对摄像头采集视频的宽高进行调整。
   @JsonKey(name: 'regulatedCaptureFrameWidth')
   final int? regulatedCaptureFrameWidth;
 
-  /// The height (px) adjusted by the built-in video capture adapter (regulator) of the SDK for capturing the local video stream. The regulator adjusts the height and width of the video captured by the camera according to the video encoding configuration.
+  /// SDK 内置的视频采集适配器（regulator）调整后的摄像头采集视频高度 (px)。Regulator 根据视频编码配置对摄像头采集视频的宽高进行调整。
   @JsonKey(name: 'regulatedCaptureFrameHeight')
   final int? regulatedCaptureFrameHeight;
 
-  /// The output frame rate (fps) of the local video encoder.
+  /// 本地视频编码器的输出帧率，单位为 fps。
   @JsonKey(name: 'encoderOutputFrameRate')
   final int? encoderOutputFrameRate;
 
-  /// The width of the encoded video (px).
+  /// 视频编码宽度（px）。
   @JsonKey(name: 'encodedFrameWidth')
   final int? encodedFrameWidth;
 
-  /// The height of the encoded video (px).
+  /// 视频编码高度（px）。
   @JsonKey(name: 'encodedFrameHeight')
   final int? encodedFrameHeight;
 
-  /// The output frame rate (fps) of the local video renderer.
+  /// 本地视频渲染器的输出帧率，单位为 fps。
   @JsonKey(name: 'rendererOutputFrameRate')
   final int? rendererOutputFrameRate;
 
-  /// The target bitrate (Kbps) of the current encoder. This is an estimate made by the SDK based on the current network conditions.
+  /// 当前编码器的目标编码码率 (Kbps)，该码率为 SDK 根据当前网络状况预估的一个值。
   @JsonKey(name: 'targetBitrate')
   final int? targetBitrate;
 
-  /// The target frame rate (fps) of the current encoder.
+  /// 当前编码器的目标编码帧率 (fps)。
   @JsonKey(name: 'targetFrameRate')
   final int? targetFrameRate;
 
-  /// The quality adaption of the local video stream in the reported interval (based on the target frame rate and target bitrate).
+  /// 统计周期内本地视频质量（基于目标帧率和目标码率）的自适应情况。详见 QualityAdaptIndication 。
   @JsonKey(name: 'qualityAdaptIndication')
   final QualityAdaptIndication? qualityAdaptIndication;
 
-  /// The bitrate (Kbps) while encoding the local video stream.This value does not include the bitrate for resending the video after packet loss.
+  /// 视频编码码率（Kbps）。 不包含丢包后重传视频等的编码码率。
   @JsonKey(name: 'encodedBitrate')
   final int? encodedBitrate;
 
-  /// The number of sent video frames, represented by an aggregate value.
+  /// 视频发送的帧数，累计值。
   @JsonKey(name: 'encodedFrameCount')
   final int? encodedFrameCount;
 
-  /// The codec type of the local video. See VideoCodecType .
+  /// 视频的编码类型。详见 VideoCodecType 。
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The video packet loss rate (%) from the local client to the Agora server before applying the anti-packet loss strategies.
+  /// 弱网对抗前本端到 Agora 边缘服务器的视频丢包率 (%)。
   @JsonKey(name: 'txPacketLossRate')
   final int? txPacketLossRate;
 
-  /// The brightness level of the video image captured by the local camera. See CaptureBrightnessLevelType .
+  /// @nodoc
   @JsonKey(name: 'captureBrightnessLevel')
   final CaptureBrightnessLevelType? captureBrightnessLevel;
 
@@ -459,7 +459,7 @@ class LocalVideoStats {
   Map<String, dynamic> toJson() => _$LocalVideoStatsToJson(this);
 }
 
-/// Statistics of the remote video stream.
+/// 远端视频流的统计信息。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RemoteVideoStats {
@@ -482,67 +482,67 @@ class RemoteVideoStats {
       this.publishDuration,
       this.superResolutionType});
 
-  /// The user ID of the remote user sending the video stream.
+  /// 用户 ID，指定是哪个用户的视频流。
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Deprecated:In scenarios where audio and video are synchronized, you can get the video delay data from networkTransportDelay and jitterBufferDelay in RemoteAudioStats .The video delay (ms).
+  /// 弃用：在有音画同步机制的音视频场景中，你可以参考 RemoteAudioStats 里的 networkTransportDelay 和 jitterBufferDelay 成员的值，了解视频的延迟数据。延时（毫秒）。
   @JsonKey(name: 'delay')
   final int? delay;
 
-  /// The width (pixels) of the video.
+  /// 视频流宽（像素）。
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height (pixels) of the video.
+  /// 视频流高（像素）。
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The bitrate (Kbps) of the remote video received since the last count.
+  /// （上次统计后）接收到的码率(Kbps)。
   @JsonKey(name: 'receivedBitrate')
   final int? receivedBitrate;
 
-  /// The frame rate (fps) of decoding the remote video.
+  /// 远端视频解码器的输出帧率，单位为 fps。
   @JsonKey(name: 'decoderOutputFrameRate')
   final int? decoderOutputFrameRate;
 
-  /// The frame rate (fps) of rendering the remote video.
+  /// 远端视频渲染器的输出帧率，单位为 fps。
   @JsonKey(name: 'rendererOutputFrameRate')
   final int? rendererOutputFrameRate;
 
-  /// The packet loss rate (%) of the remote video.
+  /// 远端视频丢包率(%)。
   @JsonKey(name: 'frameLossRate')
   final int? frameLossRate;
 
-  /// The packet loss rate (%) of the remote video after using the anti-packet-loss technology.
+  /// 远端视频在使用抗丢包技术之后的丢包率(%)。
   @JsonKey(name: 'packetLossRate')
   final int? packetLossRate;
 
-  /// The type of the video stream. See VideoStreamType .
+  /// 视频流类型，大流或小流。详见 VideoStreamType 。
   @JsonKey(name: 'rxStreamType')
   final VideoStreamType? rxStreamType;
 
-  /// The total freeze time (ms) of the remote video stream after the remote user joins the channel. In a video session where the frame rate is set to no less than 5 fps, video freeze occurs when the time interval between two adjacent renderable video frames is more than 500 ms.
+  /// 远端用户在加入频道后发生视频卡顿的累计时长（ms）。通话过程中，视频帧率设置不低于 5 fps 时，连续渲染的两帧视频之间间隔超过 500 ms，则记为一次视频卡顿。
   @JsonKey(name: 'totalFrozenTime')
   final int? totalFrozenTime;
 
-  /// The total video freeze time as a percentage (%) of the total time the video is available. The video is considered available as long as that the remote user neither stops sending the video stream nor disables the video module after joining the channel.
+  /// 远端用户在加入频道后发生视频卡顿的累计时长占视频总有效时长的百分比 (%)。视频有效时长是指远端用户加入频道后视频未被停止发送或禁用的时长。
   @JsonKey(name: 'frozenRate')
   final int? frozenRate;
 
-  /// The amount of time (ms) that the audio is ahead of the video.If this value is negative, the audio is lagging behind the video.
+  /// 音频超前视频的时间 (ms)。 如果为负值，则代表音频落后于视频。
   @JsonKey(name: 'avSyncTimeMs')
   final int? avSyncTimeMs;
 
-  /// The total active time (ms) of the video.As long as the remote user or host neither stops sending the video stream nor disables the video module after joining the channel, the video is available.
+  /// 视频有效时长（毫秒）。视频总有效时长是远端用户或主播加入频道后，既没有停止发送视频流，也没有禁用视频模块的通话时长。
   @JsonKey(name: 'totalActiveTime')
   final int? totalActiveTime;
 
-  /// The total duration (ms) of the remote video stream.
+  /// 远端视频流的累计发布时长（毫秒）。
   @JsonKey(name: 'publishDuration')
   final int? publishDuration;
 
-  /// The state of super resolution:>0: Super resolution is enabled.=0: Super resolution is not enabled.
+  /// 超分辨率的开启状态： >0：超分辨率已开启。=0：超分辨率未开启。
   @JsonKey(name: 'superResolutionType')
   final int? superResolutionType;
 
@@ -710,15 +710,15 @@ class InjectStreamConfig {
   Map<String, dynamic> toJson() => _$InjectStreamConfigToJson(this);
 }
 
-/// Lifecycle of the CDN live video stream.
-/// Deprecated
+/// 服务端转码推流的生命周期。
+/// 弃用
 @JsonEnum(alwaysCreate: true)
 enum RtmpStreamLifeCycleType {
-  /// Bind to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
+  /// 跟频道生命周期绑定，即频道内所有主播离开，服务端转码推流会在 30 秒之后停止。
   @JsonValue(1)
   rtmpStreamLifeCycleBind2channel,
 
-  /// Bind to the owner of the RTMP stream. If the owner leaves the channel, the CDN live streaming stops immediately.
+  /// 跟启动服务端转码推流的主播生命周期绑定，即该主播离开，服务端转码推流会立即停止。
   @JsonValue(2)
   rtmpStreamLifeCycleBind2owner,
 }
@@ -833,15 +833,15 @@ class AudioTrackConfig {
   Map<String, dynamic> toJson() => _$AudioTrackConfigToJson(this);
 }
 
-/// The camera direction.
+/// 摄像头方向。
 ///
 @JsonEnum(alwaysCreate: true)
 enum CameraDirection {
-  /// The rear camera.
+  /// 后置摄像头。
   @JsonValue(0)
   cameraRear,
 
-  /// The front camera.
+  /// 前置摄像头。
   @JsonValue(1)
   cameraFront,
 }
@@ -859,19 +859,19 @@ extension CameraDirectionExt on CameraDirection {
   }
 }
 
-/// The cloud proxy type.
+/// 云代理类型。
 ///
 @JsonEnum(alwaysCreate: true)
 enum CloudProxyType {
-  /// 0: The automatic mode. The SDK has this mode enabled by default. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically switches to TCP/TLS 443 if the attempt fails.
+  /// 0：自动模式。SDK 默认开启该模式。在该模式下，SDK 优先连接 SD-RTN™，如果连接失败，自动切换到 TLS 443。
   @JsonValue(0)
   noneProxy,
 
-  /// 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode. In this mode, the SDK always transmits data over UDP.
+  /// 1：UDP 协议的云代理，即 Force UDP 云代理模式。在该模式下，SDK 始终通过 UDP 协议传输数据。
   @JsonValue(1)
   udpProxy,
 
-  /// 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode. In this mode, the SDK always transmits data over TCP/TLS 443.
+  /// 2：TCP（加密）协议的云代理，即 Force TCP 云代理模式。在该模式下，SDK 始终通过 TLS 443 传输数据。
   @JsonValue(2)
   tcpProxy,
 }
@@ -889,7 +889,7 @@ extension CloudProxyTypeExt on CloudProxyType {
   }
 }
 
-/// The camera capturer preference.
+/// 摄像头采集配置。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CameraCapturerConfiguration {
@@ -900,15 +900,15 @@ class CameraCapturerConfiguration {
       this.format,
       this.followEncodeDimensionRatio});
 
-  /// This parameter applies to Android and iOS only.The camera direction.  CameraDirection
+  /// 该参数仅适用于 Android 和 iOS 平台。摄像头方向设置。详见 CameraDirection 。
   @JsonKey(name: 'cameraDirection')
   final CameraDirection? cameraDirection;
 
-  /// The device ID of the playback device. The maximum length is MaxDeviceIdLengthType .
+  /// 最大长度为 MaxDeviceIdLengthType 。
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// See VideoFormat .
+  /// 详见 VideoFormat 。
   @JsonKey(name: 'format')
   final VideoFormat? format;
 
@@ -924,7 +924,7 @@ class CameraCapturerConfiguration {
   Map<String, dynamic> toJson() => _$CameraCapturerConfigurationToJson(this);
 }
 
-/// The configuration of the captured screen.
+/// 屏幕采集配置。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureConfiguration {
@@ -937,27 +937,27 @@ class ScreenCaptureConfiguration {
       this.params,
       this.regionRect});
 
-  /// Whether to capture the window on the screen:true: Capture the window.false: (Default) Capture the screen, not the window.
+  /// 是否采集屏幕上的窗口： true：采集窗口。false：（默认）采集屏幕，不采集窗口。
   @JsonKey(name: 'isCaptureWindow')
   final bool? isCaptureWindow;
 
-  /// (macOS only) The display ID of the screen.This parameter takes effect only when you want to capture the screen on macOS.
+  /// （仅适用于 macOS 平台）屏幕的 display ID。 请仅在 Mac 设备上采集屏幕时使用该参数。
   @JsonKey(name: 'displayId')
   final int? displayId;
 
-  /// (Windows only) The relative position of the shared screen to the virtual screen.This parameter takes effect only when you want to capture the screen on Windows.
+  /// （仅适用于 Windows 平台）待共享的屏幕相对于虚拟屏的位置。 请仅在 Windows 设备上采集屏幕时使用该参数。
   @JsonKey(name: 'screenRect')
   final Rectangle? screenRect;
 
-  /// (For Windows and macOS only) Window ID.This parameter takes effect only when you want to capture the window.
+  /// （仅适用于 Windows 和 macOS 平台）窗口 ID。 请仅在采集窗口时使用该参数。
   @JsonKey(name: 'windowId')
   final int? windowId;
 
-  /// (For Windows and macOS only) The screen capture configuration. See ScreenCaptureParameters .
+  /// （仅适用于 Windows 和 macOS 平台）屏幕共享流的编码参数配置。详见 ScreenCaptureParameters 。
   @JsonKey(name: 'params')
   final ScreenCaptureParameters? params;
 
-  /// (For Windows and macOS only) The relative position of the shared region to the whole screen. See Rectangle .If you do not set this parameter, the SDK shares the whole screen. If the region you set exceeds the boundary of the screen, only the region within in the screen is shared. If you setwidth or height in Rectangle as 0, the whole screen is shared.
+  /// （仅适用于 Windows 和 macOS 平台）待共享区域相对于整个屏幕的位置。详见 Rectangle 。如不填，则表示共享整个屏幕。如果设置的共享区域超出了屏幕的边界，则只共享屏幕内的内容。 如果将 Rectangle 中的 width 或 height 设为 0 ，则共享整个屏幕。
   @JsonKey(name: 'regionRect')
   final Rectangle? regionRect;
 
@@ -990,26 +990,26 @@ class SIZE {
   Map<String, dynamic> toJson() => _$SIZEToJson(this);
 }
 
-/// The image content of the thumbnail or icon. Set in ScreenCaptureSourceInfo .
+/// 缩略图或图标的图像内容。在 ScreenCaptureSourceInfo 中设置。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ThumbImageBuffer {
   /// @nodoc
   const ThumbImageBuffer({this.buffer, this.length, this.width, this.height});
 
-  /// The buffer of the thumbnail ot icon.
+  /// 缩略图或图标的 buffer。
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
-  /// The buffer length of the thumbnail or icon, in bytes.
+  /// 缩略图或图标的 buffer 长度，单位为字节。
   @JsonKey(name: 'length')
   final int? length;
 
-  /// The actual width (px) of the thumbnail or icon.
+  /// 缩略图或图标的实际宽度（px）。
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The actual height (px) of the thumbnail or icon.
+  /// 缩略图或图标的实际高度（px）。
   @JsonKey(name: 'height')
   final int? height;
 
@@ -1021,23 +1021,23 @@ class ThumbImageBuffer {
   Map<String, dynamic> toJson() => _$ThumbImageBufferToJson(this);
 }
 
-/// The type of the shared target. Set in ScreenCaptureSourceInfo .
+/// 共享目标的类型。在 ScreenCaptureSourceInfo 中设置。
 ///
 @JsonEnum(alwaysCreate: true)
 enum ScreenCaptureSourceType {
-  /// -1: Unknown type.
+  /// -1：未知。
   @JsonValue(-1)
   screencapturesourcetypeUnknown,
 
-  /// 0: The shared target is a window.
+  /// 0：共享目标为某一个窗口。
   @JsonValue(0)
   screencapturesourcetypeWindow,
 
-  /// 1: The shared target is a screen of a particular monitor.
+  /// 1：共享目标为某一个显示器的屏幕。
   @JsonValue(1)
   screencapturesourcetypeScreen,
 
-  /// 2: Reserved parameter
+  /// 2：预留参数。
   @JsonValue(2)
   screencapturesourcetypeCustom,
 }
@@ -1055,7 +1055,7 @@ extension ScreenCaptureSourceTypeExt on ScreenCaptureSourceType {
   }
 }
 
-/// The information about the specified shareable window or screen.
+/// 可共享窗口或屏幕的信息。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureSourceInfo {
@@ -1071,35 +1071,35 @@ class ScreenCaptureSourceInfo {
       this.primaryMonitor,
       this.isOccluded});
 
-  /// The type of the shared target. See ScreenCaptureSourceType .
+  /// 共享目标的类型。详见 ScreenCaptureSourceType 。
   @JsonKey(name: 'type')
   final ScreenCaptureSourceType? type;
 
-  /// The window ID for a window or the display ID for a screen.
+  /// 对于窗口，表示窗口 ID（Window ID)；对于屏幕，表示屏幕 ID（Display ID）。
   @JsonKey(name: 'sourceId')
   final int? sourceId;
 
-  /// The name of the window or screen. UTF-8 encoding.
+  /// 窗口或屏幕的名称。UTF-8 编码。
   @JsonKey(name: 'sourceName')
   final String? sourceName;
 
-  /// The image content of the thumbnail. See
+  /// 缩略图的图像内容。详见
   @JsonKey(name: 'thumbImage')
   final ThumbImageBuffer? thumbImage;
 
-  /// The image content of the icon. See
+  /// 图标的图像内容。详见
   @JsonKey(name: 'iconImage')
   final ThumbImageBuffer? iconImage;
 
-  /// The process to which the window belongs. UTF-8 encoding.
+  /// 窗口所属的进程。UTF-8 编码。
   @JsonKey(name: 'processPath')
   final String? processPath;
 
-  /// The title of the window. UTF-8 encoding.
+  /// 窗口标题。UTF-8 编码。
   @JsonKey(name: 'sourceTitle')
   final String? sourceTitle;
 
-  /// Determines whether the screen is the primary display:true: The screen is the primary display.false: The screen is not the primary display.
+  /// 屏幕是否为主显示屏： true: 是。false: 否。
   @JsonKey(name: 'primaryMonitor')
   final bool? primaryMonitor;
 
@@ -1115,14 +1115,14 @@ class ScreenCaptureSourceInfo {
   Map<String, dynamic> toJson() => _$ScreenCaptureSourceInfoToJson(this);
 }
 
-/// The advanced options for audio.
+/// 音频的高级选项。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvancedAudioOptions {
   /// @nodoc
   const AdvancedAudioOptions({this.audioProcessingChannels});
 
-  /// The number of channels for audio preprocessing. See audioprocessingchannels .
+  /// 音频前处理的声道数。详见 audioprocessingchannels 。
   @JsonKey(name: 'audioProcessingChannels')
   final int? audioProcessingChannels;
 
@@ -1134,18 +1134,18 @@ class AdvancedAudioOptions {
   Map<String, dynamic> toJson() => _$AdvancedAudioOptionsToJson(this);
 }
 
-/// Image configurations
+/// 垫片图片的设置选项。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ImageTrackOptions {
   /// @nodoc
   const ImageTrackOptions({this.imageUrl, this.fps, this.mirrorMode});
 
-  /// The URL of the image that you want to use to replace the video feeds. The image must be in PNG format. This method supports adding an image from the local absolute or relative file path.
+  /// 垫片图片的 URL，目前仅支持本地 PNG 格式的图片。支持从本地绝对路径或相对路径添加垫片图片。
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
-  /// The frame rate of the video streams being published. The value range is [1,30]. The default value is 1.
+  /// 视频帧率，取值范围为 [1,30]。默认值为 1。
   @JsonKey(name: 'fps')
   final int? fps;
 
@@ -1161,9 +1161,9 @@ class ImageTrackOptions {
   Map<String, dynamic> toJson() => _$ImageTrackOptionsToJson(this);
 }
 
-/// The channel media options.
-/// Agora supports publishing multiple audio streams and one video stream at the same time and in the same RtcConnection . For example, publishCustomAudioTrack and publishMediaPlayerAudioTrack can be true at the same time;
-/// but only one of publishCameraTrack, publishCustomVideoTrack, and publishEncodedVideoTrack can be true at the same time.
+/// 频道媒体设置选项。
+/// Agora 支持在同一时间、同一 RtcConnection 中发布多路音频流、一路视频流。例如，publishCustomAudioTrack 和 publishMediaPlayerAudioTrack 可以同时为 true；
+///  publishCameraTrack、publishCustomVideoTrack 或 publishEncodedVideoTrack 之中同一时间只能有一个为 true。
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChannelMediaOptions {
   /// @nodoc
@@ -1202,43 +1202,53 @@ class ChannelMediaOptions {
       this.customVideoTrackId,
       this.isAudioFilterable});
 
-  /// Whether to publish the video captured by the camera:true: (Default) Publish the video captured by the camera.false: Do not publish the video captured by the camera.
+  /// 设置是否发布摄像头采集的视频：
+  ///  true：（默认）发布摄像头采集的视频。false：不发布摄像头采集的视频。
   @JsonKey(name: 'publishCameraTrack')
   final bool? publishCameraTrack;
 
-  /// Whether to publish the video captured by the second camera:true: Publish the video captured by the second camera.false: (Default) Publish the video captured by the second camera.
+  /// 设置是否发布第二个摄像头采集的视频：
+  ///  true：发布第二个摄像头采集的视频。false：（默认）不发布第二个摄像头采集的视频。
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
-  /// Whether to publish the captured audio:true: (Default) Publish the captured audio.false: Do not publish the captured audio.Since v4.0.0, the parameter name has been changed from publishAudioTrack to publishMicrophoneTrack.
+  /// 设置是否发布采集到的音频：
+  ///  true：（默认）发布采集到的音频。false：不发布采集到的音频。自 v4.0.0 起，该参数名称由 publishAudioTrack 改为 publishMicrophoneTrack。
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Whether to publish the captured video from the screen:true: Publish the captured video from the screen.false: (Default) Do not publish the captured video from the screen.
+  /// 设置是否发布屏幕采集的视频：
+  ///  true：发布屏幕采集到的视频。false：（默认）不发布屏幕采集到的视频。
   @JsonKey(name: 'publishScreenCaptureVideo')
   final bool? publishScreenCaptureVideo;
 
-  /// Whether to publish the captured video from the screen:true: Publish the captured video from the screen.false: (Default) Do not publish the captured video from the screen.
+  /// 设置是否发布屏幕采集的音频：
+  ///  true：发布屏幕采集到的音频。false：（默认）不发布屏幕采集到的音频。
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
 
-  /// Whether to publish the captured video from the screen:true: Publish the captured video from the screen.false: (Default) Do not publish the captured video from the screen.
+  /// 设置是否发布屏幕采集的视频：
+  ///  true：发布屏幕采集到的视频。false：（默认）不发布屏幕采集到的视频。
   @JsonKey(name: 'publishScreenTrack')
   final bool? publishScreenTrack;
 
-  /// Whether to publish the captured video from the secondary screen:true: Publish the captured video from the second screen.false: (Default) Do not publish the captured video from the second screen.
+  /// 设置是否发布第二个屏幕采集的视频：
+  ///  true：发布第二个屏幕采集到的视频。false：（默认）不发布第二个屏幕采集到的视频。
   @JsonKey(name: 'publishSecondaryScreenTrack')
   final bool? publishSecondaryScreenTrack;
 
-  /// Whether to publish the captured audio from a custom source:true: Publish the captured audio from a custom source.false: (Default) Do not publish the captured audio from the custom source.
+  /// 设置是否发布自定义采集的音频：
+  ///  true：发布自定义采集到的音频。false：（默认）不发布自定义采集到的音频。
   @JsonKey(name: 'publishCustomAudioTrack')
   final bool? publishCustomAudioTrack;
 
-  /// The ID of the custom audio source to publish. The default value is 0.If you have set the value of sourceNumber greater than 1 in setExternalAudioSource , the SDK creates the corresponding number of custom audio tracks and assigns an ID to each audio track starting from 0.
+  /// 待发布的自定义音频源的 ID。默认值为 0。
+  ///  如果你已在 setExternalAudioSource 中设置了 sourceNumber 大于 1，SDK 会创建对应数量的自采集音频轨道，并从 0 开始为每一个音频轨道分配一个 ID。
   @JsonKey(name: 'publishCustomAudioSourceId')
   final int? publishCustomAudioSourceId;
 
-  /// Whether to enable AEC when publishing the captured audio from a custom source:true: Enable AEC when publishing the captured audio from a custom source.false: (Default) Do not enable AEC when publishing the captured audio from a custom source.
+  /// 设置发布自定义采集的音频时是否启用 AEC：
+  ///  true：发布自定义采集的音频时启用 AEC。false：（默认）发布自定义采集的音频时不启用 AEC。
   @JsonKey(name: 'publishCustomAudioTrackEnableAec')
   final bool? publishCustomAudioTrackEnableAec;
 
@@ -1250,56 +1260,64 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishCustomAudioTrackAec')
   final bool? publishCustomAudioTrackAec;
 
-  /// Whether to publish the captured video from a custom source:true: Publish the captured video from a custom source.false: (Default) Do not publish the captured video from the custom source.
+  /// 设置是否发布自定义采集的视频：
+  ///  true：发布自定义采集的视频。false：（默认）不发布自定义采集到的视频。
   @JsonKey(name: 'publishCustomVideoTrack')
   final bool? publishCustomVideoTrack;
 
-  /// Whether to publish the encoded video:true: Publish the encoded video.false: (Default) Do not publish the encoded video.
+  /// 设置是否发布编码后的视频：
+  ///  true：发布编码后的视频 。false：（默认）不发布编码后的视频。
   @JsonKey(name: 'publishEncodedVideoTrack')
   final bool? publishEncodedVideoTrack;
 
-  /// Whether to publish the audio from the media player:true: Publish the audio from the media player.false: (Default) Do not publish the audio from the media player.
+  /// 设置是否发布媒体播放器的音频：
+  ///  true：发布媒体播放器的音频。false：（默认）不发布媒体播放器的音频。
   @JsonKey(name: 'publishMediaPlayerAudioTrack')
   final bool? publishMediaPlayerAudioTrack;
 
-  /// Whether to publish the video from the media player:true: Publish the video from the media player.false: (Default) Do not publish the video from the media player.
+  /// 设置是否发布媒体播放器的视频：
+  ///  true：发布媒体播放器的视频。false：（默认）不发布媒体播放器的视频。
   @JsonKey(name: 'publishMediaPlayerVideoTrack')
   final bool? publishMediaPlayerVideoTrack;
 
-  /// Whether to publish the local transcoded video.true: Publish the local transcoded video.false: (Default) Do not publish the local transcoded video.
+  /// 设置是否发布本地的转码视频：
+  ///  true：发布本地的转码视频。false：（默认）不发布本地的转码视频。
   @JsonKey(name: 'publishTrancodedVideoTrack')
   final bool? publishTrancodedVideoTrack;
 
-  /// Whether to automatically subscribe to all remote audio streams when the user joins a channel:true: (Default) Subscribe to all remote audio streams.false: Do not subscribe to any remote audio stream.
+  /// 设置是否自动订阅所有音频流：
+  ///  true：（默认）自动订阅所有音频流。false：不自动订阅任何音频流。
   @JsonKey(name: 'autoSubscribeAudio')
   final bool? autoSubscribeAudio;
 
-  /// Whether to subscribe to all remote video streams when the user joins the channel:true: (Default) Subscribe to all remote video streams.false: Do not subscribe to any remote video stream.
+  /// 设置是否自动订阅所有视频流：
+  ///  true：（默认）自动订阅所有视频流。false：不自动订阅任何视频流。
   @JsonKey(name: 'autoSubscribeVideo')
   final bool? autoSubscribeVideo;
 
-  /// Whether to enable audio capturing or playback:true: (Default) Enable audio capturing and playback.false: Do not enable audio capturing or playback.
+  /// 设置是否开启音频录制或播放：
+  ///  true：（默认）开启音频录制和播放。false：不开启音频录制或播放。
   @JsonKey(name: 'enableAudioRecordingOrPlayout')
   final bool? enableAudioRecordingOrPlayout;
 
-  /// The ID of the media player to be published. The default value is 0.
+  /// 待发布的媒体播放器的 ID。默认值为 0。
   @JsonKey(name: 'publishMediaPlayerId')
   final int? publishMediaPlayerId;
 
-  /// The user role. See ClientRoleType for details.
+  /// 用户角色。详见 ClientRoleType 。
   @JsonKey(name: 'clientRoleType')
   final ClientRoleType? clientRoleType;
 
-  /// The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType .
+  /// 观众端延时级别。详见 AudienceLatencyLevelType 。
   @JsonKey(name: 'audienceLatencyLevel')
   final AudienceLatencyLevelType? audienceLatencyLevel;
 
-  /// The default video-stream type. See VideoStreamType .
+  /// 默认订阅的视频流类型: VideoStreamType 。
   ///
   @JsonKey(name: 'defaultVideoStreamType')
   final VideoStreamType? defaultVideoStreamType;
 
-  /// The channel profile. See ChannelProfileType .
+  /// 频道使用场景。详见 ChannelProfileType 。
   @JsonKey(name: 'channelProfile')
   final ChannelProfileType? channelProfile;
 
@@ -1311,7 +1329,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'mediaPlayerAudioDelayMs')
   final int? mediaPlayerAudioDelayMs;
 
-  /// (Optional) The token generated on your server for authentication. SeeThis parameter takes effect only when calling updateChannelMediaOptions or updateChannelMediaOptionsEx .Ensure that the App ID, channel name, and user name used for creating the token are the same ones as those used by the initialize method for initializing the RTC engine, and those used by the joinChannel [2/2] and joinChannelEx methods for joining the channel.
+  /// （可选）在服务端生成的用于鉴权的动态密钥。详见该参数仅在调用 updateChannelMediaOptions 或 updateChannelMediaOptionsEx 时生效。请确保用于生成 token 的 App ID、频道名和用户名和 initialize 方法初始化引擎时用的 App ID，以及 joinChannel [2/2] 或 joinChannelEx 方法加入频道时设置的频道名和用户名是一致的。
   @JsonKey(name: 'token')
   final String? token;
 
@@ -1319,15 +1337,17 @@ class ChannelMediaOptions {
   @JsonKey(name: 'enableBuiltInMediaEncryption')
   final bool? enableBuiltInMediaEncryption;
 
-  /// Whether to publish the sound of the metronome to remote users:true: (Default) Publish the sound of the metronome. Both the local user and remote users can hear the metronome.false: Do not publish processed audio frames. Only the local user can hear the metronome.
+  /// 设置是否发布虚拟节拍器声音至远端：
+  ///  true：（默认）发布。本地用户和远端用户都能听到节拍器。false：不发布。只有本地用户能听到节拍器。
   @JsonKey(name: 'publishRhythmPlayerTrack')
   final bool? publishRhythmPlayerTrack;
 
-  /// Whether to enable interactive mode:true: Enable interactive mode. Local users receive low-latency and smooth video from remote users.false: (Default) Do not enable interactive mode. Local users receive the video of the remote user with the default settings.This parameter is used to implement the cohost across channels scenario only. The cohosts need to call joinChannelEx method to join the other host's channel as an audience member, and set isInteractiveAudience to true.This parameter takes effect only when the user role is clientRoleAudience.
+  /// 是否开启互动模式：
+  ///  true：开启互动模式。成功开启后，本地用户收到低延时和流畅的远端用户视频。false：（默认）不开启互动模式。本地用户收到默认设置的远端用户视频。该参数用于实现跨直播间连麦场景。连麦主播需要调用 joinChannelEx 方法，以观众身份加入对方的直播间，并将 isInteractiveAudience 设置为 true。仅当用户角色为 clientRoleAudience 时，该参数生效。
   @JsonKey(name: 'isInteractiveAudience')
   final bool? isInteractiveAudience;
 
-  /// The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
+  /// 调用 createCustomVideoTrack 方法返回的视频轨道 ID。默认值为 0。
   @JsonKey(name: 'customVideoTrackId')
   final int? customVideoTrackId;
 
@@ -1343,15 +1363,15 @@ class ChannelMediaOptions {
   Map<String, dynamic> toJson() => _$ChannelMediaOptionsToJson(this);
 }
 
-/// The connection mode with the Agora private media server.
+/// 与声网私有媒体服务器的连接模式。
 ///
 @JsonEnum(alwaysCreate: true)
 enum LocalProxyMode {
-  /// 0: The SDK will first try to connect to the specified Agora private media server; if it cannot connect to the specified Agora private media server, it will connect to the Agora SD-RTN™.
+  /// 0：SDK 优先尝试连接指定的声网私有媒体服务器；如果无法连接到指定的声网私有媒体服务器，则连接声网 SD-RTN™。
   @JsonValue(0)
   connectivityFirst,
 
-  /// 1: The SDK only tries to connect to the specified Agora private media server.
+  /// 1：SDK 只尝试连接指定的声网私有媒体服务器。
   @JsonValue(1)
   localOnly,
 }
@@ -1369,27 +1389,27 @@ extension LocalProxyModeExt on LocalProxyMode {
   }
 }
 
-/// The cloud proxy type.
+/// 代理类型。
 ///
 @JsonEnum(alwaysCreate: true)
 enum ProxyType {
-  /// 0: Reserved for future use.
+  /// 0: 预留参数，暂不支持。
   @JsonValue(0)
   noneProxyType,
 
-  /// 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode. In this mode, the SDK always transmits data over UDP.
+  /// 1: UDP 协议的云代理，即 Force UDP 云代理模式。在该模式下，SDK 始终通过 UDP 协议传输数据。
   @JsonValue(1)
   udpProxyType,
 
-  /// 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode. In this mode, the SDK always transmits data over TCP/TLS 443.
+  /// 2: TCP（加密）协议的云代理，即 Force TCP 云代理模式。在该模式下，SDK 始终通过 TLS 443 传输数据。
   @JsonValue(2)
   tcpProxyType,
 
-  /// 3: Reserved for future use.
+  /// 3: 预留参数，暂不支持。
   @JsonValue(3)
   localProxyType,
 
-  /// 4: Automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically switches to TCP/TLS 443 if the attempt fails.
+  /// 4: 自动模式。在该模式下，SDK 优先连接 SD-RTN™，如果连接失败，自动切换为 TLS 443。
   @JsonValue(4)
   tcpProxyAutoFallbackType,
 }
@@ -1407,7 +1427,7 @@ extension ProxyTypeExt on ProxyType {
   }
 }
 
-/// The configurations of the Local Access Point.
+/// Local Access Point 配置。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocalAccessPointConfiguration {
@@ -1420,27 +1440,27 @@ class LocalAccessPointConfiguration {
       this.verifyDomainName,
       this.mode});
 
-  /// The list of IP addresses for the Local Access Point. ipList and domainList must be filled in at least one.
+  /// Local Access Point 的对内 IP 地址列表。ipList 和 domainList 必须至少填一个。
   @JsonKey(name: 'ipList')
   final List<String>? ipList;
 
-  /// The number of IP addresses of the Local Access Point. This value must be the same as the number of IP addresses that you specify for the ipList parameter.
+  /// Local Access Point 对内 IP 地址的数量。该参数的值必须和你填入的 IP 地址的数量一致。
   @JsonKey(name: 'ipListSize')
   final int? ipListSize;
 
-  /// The list of domain names for the Local Access Point. The SDK will parse the IP addresses according to the provided domain names. The parse times out after 10 seconds. ipList and domainList must be filled in at least one. If you specify an IP address and a domain name at the same time, the SDK will combine the IP address parsed from the domain name and the IP address you specify, remove duplicates, and then connect to a random IP to achieve load balancing.
+  /// Local Access Point 的域名列表。SDK 会根据你填入的域名解析出 Local Access Point 的 IP 地址。域名解析的超时时间为 10 秒。ipList 和 domainList 必须至少填一个。如果你同时指定 IP 地址和域名，SDK 会将根据域名解析出来的 IP 地址和你指定的 IP 地址合并、去重，然后随机连接一个 IP 来实现负载均衡。
   @JsonKey(name: 'domainList')
   final List<String>? domainList;
 
-  /// The number of domain names for Local Access Point. This value must be the same as the number of domain names that you specifyfor the domainList parameter.
+  /// Local Access Point 域名的数量。该参数的值必须和你填入的域名的数量一致。
   @JsonKey(name: 'domainListSize')
   final int? domainListSize;
 
-  /// The domain name used for Intranet certificate verification. If you pass an empty value, the SDK uses the default domain name secure-edge.local for certificate verification.
+  /// 内网证书验证域名。如果传值为空，则用 SDK 默认的证书验证域名 secure-edge.local。
   @JsonKey(name: 'verifyDomainName')
   final String? verifyDomainName;
 
-  /// The connection mode. See LocalProxyMode .
+  /// 连接模式。详见 LocalProxyMode 。
   @JsonKey(name: 'mode')
   final LocalProxyMode? mode;
 
@@ -1452,7 +1472,7 @@ class LocalAccessPointConfiguration {
   Map<String, dynamic> toJson() => _$LocalAccessPointConfigurationToJson(this);
 }
 
-/// The options for leaving a channel.
+/// 离开频道的选项。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LeaveChannelOptions {
@@ -1460,15 +1480,18 @@ class LeaveChannelOptions {
   const LeaveChannelOptions(
       {this.stopAudioMixing, this.stopAllEffect, this.stopMicrophoneRecording});
 
-  /// Whether to stop playing and mixing the music file when a user leaves the channel. true: (Default) Stop playing and mixing the music file.false: Do not stop playing and mixing the music file.
+  /// 离开频道时，是否停止播放音乐文件及混音：
+  ///  true：（默认）停止播放音乐文件及混音。false： 不停止播放音乐文件及混音。
   @JsonKey(name: 'stopAudioMixing')
   final bool? stopAudioMixing;
 
-  /// Whether to stop playing all audio effects when a user leaves the channel. true: (Default) Stop playing all audio effects.false: Do not stop playing any audio effect.
+  /// 离开频道时，是否停止播放音效：
+  ///  true：（默认）停止播放音效。false： 不停止播放音效。
   @JsonKey(name: 'stopAllEffect')
   final bool? stopAllEffect;
 
-  /// Whether to stop microphone recording when a user leaves the channel. true: (Default) Stop microphone recording.false: Do not stop microphone recording.
+  /// 离开频道时，是否停止麦克风采集：
+  ///  true：（默认）停止麦克风采集。false： 不停止麦克风采集。
   @JsonKey(name: 'stopMicrophoneRecording')
   final bool? stopMicrophoneRecording;
 
@@ -1480,7 +1503,7 @@ class LeaveChannelOptions {
   Map<String, dynamic> toJson() => _$LeaveChannelOptionsToJson(this);
 }
 
-/// RtcEngineEventHandlerThe SDK uses the interface to send event notifications to your app. Your app can get those notifications through methods that inherit this interface.
+/// RtcEngineEventHandler 接口类用于 SDK 向 app 发送事件通知，app 通过继承该接口类的方法获取 SDK 的事件通知。
 ///
 class RtcEngineEventHandler {
   /// @nodoc
@@ -1578,98 +1601,99 @@ class RtcEngineEventHandler {
     this.onUserAccountUpdated,
   });
 
-  /// Occurs when a user joins a channel.
-  /// This callback notifies the application that a user joins a specified channel.
+  /// 成功加入频道回调。
+  /// 该回调方法表示该客户端成功加入了指定的频道。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [elapsed] 从本地调用 joinChannel [2/2] 开始到发生此事件过去的时间（毫秒）。
   final void Function(RtcConnection connection, int elapsed)?
       onJoinChannelSuccess;
 
-  /// Occurs when a user rejoins the channel.
-  /// When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.
+  /// 成功重新加入频道回调。
+  /// 有时候由于网络原因，客户端可能会和服务器失去连接，SDK 会进行自动重连，自动重连成功后触发此回调方法。
   ///
-  /// * [elapsed] Time elapsed (ms) from the local user calling the joinChannel [1/2] or joinChannel [2/2] method until this callback is triggered.
+  /// * [elapsed] 从调用 joinChannel [1/2] 或 joinChannel [2/2] 方法到触发该回调的时间间隔（毫秒）。
   final void Function(RtcConnection connection, int elapsed)?
       onRejoinChannelSuccess;
 
-  /// Reports the proxy connection state.
-  /// You can use this callback to listen for the state of the SDK connecting to a proxy. For example, when a user calls setCloudProxy and joins a channel successfully, the SDK triggers this callback to report the user ID, the proxy type connected, and the time elapsed fromthe user calling joinChannel [1/2] until this callback is triggered.
+  /// 代理连接状态回调。
+  /// 通过该回调你可以监听 SDK 连接代理的状态。例如，当用户调用 setCloudProxy 设置代理并成功加入频道后， SDK 会触发该回调报告用户 ID、连接的代理类型和从调用 joinChannel [1/2] 到触发该回调经过的时间等。
   ///
-  /// * [channel] The channel name.
-  /// * [uid] The user ID.
-  ///
-  /// * [localProxyIp] Reserved for future use.
-  /// * [elapsed] The time elapsed (ms) from the user calling joinChannel [1/2] until this callback is triggered.
+  /// * [channel] 频道名称。
+  /// * [uid] 用户 ID
+  /// * [localProxyIp] 预留参数，暂不支持。
+  /// * [elapsed] 从调用 joinChannel [1/2] 到 SDK 触发该回调的经过的时间（毫秒）。
   final void Function(String channel, int uid, ProxyType proxyType,
       String localProxyIp, int elapsed)? onProxyConnected;
 
-  /// Reports an error during SDK runtime.
-  /// This callback indicates that an error (concerning network or media) occurs during SDK runtime. In most cases, the SDK cannot fix the issue and resume running. The SDK requires the application to take action or informs the user about the issue.
+  /// 发生错误回调。
+  /// 该回调方法表示 SDK 运行时出现了网络或媒体相关的错误。通常情况下，SDK 上报的错误意味着 SDK 无法自动恢复，需要 app 干预或提示用户。
   ///
-  /// * [err] Error code. See ErrorCodeType .
-  /// * [msg] The error message.
+  /// * [err] 错误码。详见 ErrorCodeType 。
+  /// * [msg] 错误描述。
   final void Function(ErrorCodeType err, String msg)? onError;
 
-  /// Reports the statistics of the audio stream from each remote user.
-  /// Deprecated:Please use onRemoteAudioStats instead.The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple users/hosts sending audio streams, the SDK triggers this callback as many times.
+  /// 远端声音质量回调。
+  /// 弃用：请改用 onRemoteAudioStats 。该回调描述远端用户在通话中的音频质量，针对每个远端用户/主播每 2 秒触发一次。如果远端同时存在多个用户/主播，该回调每 2 秒会被触发多次。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The user ID of the remote user sending the audio stream.
-  /// * [quality] Audio quality of the user. See QualityType .
-  /// * [delay] The network delay (ms) from the sender to the receiver, including the delay caused by audio sampling pre-processing, network transmission, and network jitter buffering.
-  /// * [lost] The packet loss rate (%) of the audio packet sent from the remote user.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID，指定是谁发的音频流。
+  /// * [quality] 语音质量。详见 QualityType 。
+  /// * [delay] 音频包从发送端到接收端的延迟（毫秒），包括声音采样前处理、网络传输、网络抖动缓冲引起的延迟。
+  /// * [lost] 音频包从发送端到接收端的丢包率 (%)。
   final void Function(RtcConnection connection, int remoteUid,
       QualityType quality, int delay, int lost)? onAudioQuality;
 
-  /// Reports the last mile network probe result.
-  /// The SDK triggers this callback within 30 seconds after the app calls startLastmileProbeTest .
+  /// 通话前网络上下行 Last mile 质量探测报告回调。
+  /// 在调用 startLastmileProbeTest 之后，SDK 会在约 30 秒内返回该回调。
   ///
-  /// * [result] The uplink and downlink last-mile network probe test result. See LastmileProbeResult .
+  /// * [result]  上下行 Last mile 质量探测结果。 详见: LastmileProbeResult 。
   final void Function(LastmileProbeResult result)? onLastmileProbeResult;
 
-  /// Reports the volume information of users.
-  /// By default, this callback is disabled. You can enable it by calling enableAudioVolumeIndication . Once this callback is enabled and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback according to the time interval set in enableAudioVolumeIndication. The SDK triggers two independent onAudioVolumeIndication callbacks simultaneously, which separately report the volume information of the local user who sends a stream and the remote users (up to three) whose instantaneous volume is the highest.Once this callback is enabled, if the local user calls the muteLocalAudioStream method for mute, the SDK continues to report the volume indication of the local user.20 seconds after a remote user whose volume is one of the three highest in the channel stops publishing the audio stream, the callback excludes this user's information; 20 seconds after all remote users stop publishing audio streams, the SDK stops triggering the callback for remote users.
+  /// 用户音量提示回调。
+  /// 该回调默认禁用，你可以通过 enableAudioVolumeIndication 开启。 开启后，只要频道内有发流用户，SDK 会在加入频道后按 enableAudioVolumeIndication 中设置的时间间隔触发 onAudioVolumeIndication 回调。每次会触发两个 onAudioVolumeIndication 回调，一个报告本地发流用户的音量相关信息，另一个报告瞬时音量最高的远端用户（最多 3 位）的音量相关信息。启用该功能后，如果有用户将自己静音（调用了 muteLocalAudioStream ），SDK 会继续报告本地用户的音量提示回调。瞬时音量最高的远端用户静音后 20 秒，远端的音量提示回调中将不再包含该用户；如果远端所有用户都将自己静音，20 秒后 SDK 停止报告远端用户的音量提示回调。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [speakers] The volume information of the users. See AudioVolumeInfo . An empty speakers array in the callback indicates that no remote user is in the channel or sending a stream at the moment.
-  /// * [speakerNumber] The total number of users.In the callback for the local user, if the local user is sending streams, the value of speakerNumber is 1.In the callback for remote users, the value range of speakerNumber is [0,3]. If the number of remote users who send streams is greater than or equal to three, the value of speakerNumber is 3.
-  /// * [totalVolume] The volume of the speaker. The value ranges between 0 (lowest volume) and 255 (highest volume).In the callback for the local user, totalVolume is the volume of the local user who sends a stream.In the callback for remote users, totalVolume is the sum of the volume of the remote users (up to three) whose instantaneous volume are the highest.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [speakers] 用户音量信息，详见 AudioVolumeInfo 数组。如果 speakers 为空，则表示远端用户不发流或没有远端用户。
+  /// * [speakerNumber] 用户数量。 在本地用户的回调中，只要本地用户在发流，speakerNumber 始终为 1。在远端用户的回调中，speakerNumber 取值范围为 [0,3]。如果远端发流用户数量大于 3，则此回调中 speakerNumber 值为 3。
+  /// * [totalVolume] 混音后的总音量，取值范围为 [0,255]。 在本地用户的回调中，totalVolume 为本地发流用户的音量。在远端用户的回调中，totalVolume 为瞬时音量最高的远端用户（最多 3 位）混音后的总音量。
   final void Function(RtcConnection connection, List<AudioVolumeInfo> speakers,
       int speakerNumber, int totalVolume)? onAudioVolumeIndication;
 
-  /// Occurs when a user leaves a channel.
-  /// This callback notifies the app that the user leaves the channel by calling leaveChannel . From this callback, the app can get information such as the call duration and quality statistics.
+  /// 离开频道回调。
+  /// App 调用 leaveChannel 方法时，SDK 提示 app 离开频道成功。在该回调方法中，app 可以得到此次通话的总通话时长、SDK 收发数据的流量等信息。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [stats] The statistics of the call. See RtcStats .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [stats] 通话的统计数据: RtcStats 。
   final void Function(RtcConnection connection, RtcStats stats)? onLeaveChannel;
 
-  /// Reports the statistics of the current call.
-  /// The SDK triggers this callback once every two seconds after the user joins the channel.
+  /// 当前通话统计信息回调。
+  /// SDK 定期向 App 报告当前通话的统计信息，每两秒触发一次。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [stats] Statistics of the RTC engine. See RtcStats .
+  /// * [connection]  Connection 信息。详见 RtcConnection 。
+  /// * [stats] RTC 引擎统计数据，详见
+  ///  RtcStats
+  ///  。
   ///
   final void Function(RtcConnection connection, RtcStats stats)? onRtcStats;
 
-  /// Occurs when the audio device state changes.
-  /// This callback notifies the application that the system's audio device state is changed. For example, a headset is unplugged from the device.This method is for Windows and macOS only.
+  /// 音频设备变化回调。
+  /// 提示系统音频设备状态发生改变，比如耳机被拔出。该方法仅适用于 Windows 和 macOS 平台。
   ///
-  /// * [deviceId] The device ID.
-  /// * [deviceType] The evice type. See MediaDeviceType .
-  /// * [deviceState] The device state.On macOS:0: The device is ready for use.8: The device is not connected.On Windows: see MediaDeviceStateType .
+  /// * [deviceId] 设备 ID。
+  /// * [deviceType] 设备类型定义。详见 MediaDeviceType 。
+  /// * [deviceState] 设备状态定义。 macOS 平台： 0: 设备就绪。8: 设备被拔出。Windows 平台：详见 MediaDeviceStateType 。
   final void Function(String deviceId, MediaDeviceType deviceType,
       MediaDeviceStateType deviceState)? onAudioDeviceStateChanged;
 
-  /// Occurs when the playback of the local music file finishes.
-  /// Deprecated:Please use onAudioMixingStateChanged instead.After you call startAudioMixing to play a local music file, this callback occurs when the playback finishes. If the call startAudioMixing fails, the error code WARN_AUDIO_MIXING_OPEN_ERROR is returned.
+  /// 本地音乐文件播放已结束回调。
+  /// 弃用：请改用 onAudioMixingStateChanged 。当调用 startAudioMixing 播放本地音乐文件结束后，会触发该回调。如果调用 startAudioMixing 失败，会返回错误码 WARN_AUDIO_MIXING_OPEN_ERROR。
   final void Function()? onAudioMixingFinished;
 
-  /// Occurs when the playback of the local music file finishes.
-  /// This callback occurs when the local audio effect file finishes playing.
+  /// 本地音效文件播放已结束回调。
+  /// 当播放音效结束后，会触发该回调。
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
+  /// * [soundId] 指定音效的 ID。每个音效均有唯一的 ID。
   final void Function(int soundId)? onAudioEffectFinished;
 
   /// @nodoc
@@ -1679,102 +1703,106 @@ class RtcEngineEventHandler {
   /// @nodoc
   final void Function(MediaDeviceType deviceType)? onMediaDeviceChanged;
 
-  /// Reports the last mile network quality of each user in the channel.
-  /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server.The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times.txQuality is rxQuality is
+  /// 通话中每个用户的网络上下行 last mile 质量报告回调。
+  /// 该回调描述每个用户在通话中的 last mile 网络状态，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。该回调每 2 秒触发一次。如果远端有多个用户，该回调每 2 秒会被触发多次。用户不发流时，txQuality 为 rxQuality 为
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The user ID. The network quality of the user with this user ID is reported.
-  /// * [txQuality] Uplink network quality rating of the user in terms of the transmission bit rate, packet loss rate, average RTT (Round-Trip Time) and jitter of the uplink network. This parameter is a quality rating helping you understand how well the current uplink network conditions can support the selected video encoder configuration. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 640 × 480 and a frame rate of 15 fps in the LIVE_BROADCASTING profile, but may be inadequate for resolutions higher than 1280 × 720. See QualityType .
-  /// * [rxQuality] Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network. See QualityType .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID。表示该回调报告的是持有该 ID 的用户的网络质量。
+  /// * [txQuality] 该用户的上行网络质量，基于发送码率、上行丢包率、平均往返时延和网络抖动计算。 该值代表当前的上行网络质量，帮助判断是否可以支持当前设置的视频编码属性。 假设上行码率是 1000 Kbps，那么支持直播场景下 640 × 480 的分辨率、15 fps 的帧率没有问题，但是支持 1280 × 720 的分辨率就会有困难。 详见 QualityType 。
+  /// * [rxQuality] 该用户的下行网络质量，基于下行网络的丢包率、平均往返延时和网络抖动计算。详见 QualityType 。
   final void Function(RtcConnection connection, int remoteUid,
       QualityType txQuality, QualityType rxQuality)? onNetworkQuality;
 
   /// @nodoc
   final void Function(RtcConnection connection)? onIntraRequestReceived;
 
-  /// Occurs when the uplink network information changes.
-  /// The SDK triggers this callback when the uplink network information changes.This callback only applies to scenarios where you push externally encoded video data in H.264 format to the SDK.
+  /// 上行网络信息变化回调。
+  /// 只有当上行网络信息发生变化时，SDK 才会触发该回调。该回调仅适用于向 SDK 推送 H.264 格式的外部编码视频数据的场景。
   ///
-  /// * [info] The uplink network information. See UplinkNetworkInfo .
+  /// * [info] 上行网络信息，详见 UplinkNetworkInfo 。
   final void Function(UplinkNetworkInfo info)? onUplinkNetworkInfoUpdated;
 
   /// @nodoc
   final void Function(DownlinkNetworkInfo info)? onDownlinkNetworkInfoUpdated;
 
-  /// Reports the last-mile network quality of the local user.
-  /// This callback reports the last-mile network conditions of the local user before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server.Before the user joins the channel, this callback is triggered by the SDK once startLastmileProbeTest is called and reports the last-mile network conditions of the local user.
+  /// 网络上下行 last mile 质量报告回调。
+  /// 该回调描述本地用户在加入频道前的 last mile 网络探测的结果，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。加入频道前，调用 startLastmileProbeTest 之后，SDK 触发该回调报告本地用户在加入频道前的 last mile 网络探测的结果。
   ///
-  /// * [quality] The last-mile network quality.
-  ///  qualityUnknown(0): The quality is unknown.
-  ///  qualityExcellent(1): The quality is excellent.
-  ///  qualityGood(2): The network quality seems excellent, but the bitrate can be slightly lower than excellent.
-  ///  qualityPoor(3): Users can feel the communication is slightly impaired.
-  ///  qualityBad(4): Users cannot communicate smoothly.
-  ///  qualityVbad(5): The quality is so bad that users can barely communicate.
-  ///  qualityDown(6): The network is down, and users cannot communicate at all.
-  ///  See QualityType .
+  /// * [quality] Last mile 网络质量。
+  ///  qualityUnknown (0)：质量未知。
+  ///  qualityExcellent (1)：质量极好。
+  ///  qualityGood (2)：用户主观感觉和极好差不多，但码率可能略低于极好。
+  ///  qualityPoor (3)：用户主观感受有瑕疵但不影响沟通。
+  ///  qualityBad (4)：勉强能沟通但不顺畅。
+  ///  qualityVbad (5)：网络质量非常差，基本不能沟通。
+  ///  qualityDown (6)：网络连接断开，完全无法沟通。
+  ///  详见 QualityType 。
   final void Function(QualityType quality)? onLastmileQuality;
 
-  /// Occurs when the first local video frame is displayed on the local video view.
-  /// The SDK triggers this callback when the first local video frame is displayed on the local video view.
+  /// 已显示本地视频首帧回调。
+  /// 本地视频首帧显示在本地视图上时，SDK 会触发此回调。
   ///
-  /// * [source] The capture type of the custom video source. See VideoSourceType .
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [width] The width (px) of the first local video frame.
-  /// * [height] The height (px) of the first local video frame.
-  /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback. If you call startPreview before calling joinChannel [2/2], then this parameter is the time elapsed from calling the startPreview method until the SDK triggers this callback.
+  /// * [source] 视频源的类型。详见 VideoSourceType 。
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [width] 本地渲染视频的宽 (px) 。
+  /// * [height] 本地渲染视频的高 (px)。
+  /// * [elapsed] 从调用 joinChannel [2/2] 到发生此事件过去的时间（毫秒）。如果在 joinChannel [2/2] 前调用了 startPreview ，则是从 startPreview到发生此事件过去的时间。
   final void Function(
           RtcConnection connection, int width, int height, int elapsed)?
       onFirstLocalVideoFrame;
 
-  /// Occurs when the first video frame is published.
-  /// The SDK triggers this callback under one of the following circumstances:The local client enables the video module and calls joinChannel [2/2] successfully.The local client calls muteLocalVideoStream (true) and muteLocalVideoStream(false) in sequence.The local client calls disableVideo and enableVideo in sequence.
+  /// 已发布本地视频首帧回调。
+  /// SDK 会在以下三种时机触发该回调：
+  ///  开启本地视频的情况下，调用 joinChannel [2/2] 成功加入频道后。调用 muteLocalVideoStream (true)，再调用 muteLocalVideoStream(false) 后。调用 disableVideo ，再调用 enableVideo 后。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [elapsed] 从调用 joinChannel [2/2] 方法到触发该回调的时间间隔（毫秒）。
   final void Function(RtcConnection connection, int elapsed)?
       onFirstLocalVideoFramePublished;
 
-  /// Occurs when the first remote video frame is received and decoded.
-  /// The SDK triggers this callback under one of the following circumstances:The remote user joins the channel and sends the video stream.The remote user stops sending the video stream and re-sends it after 15 seconds. Reasons for such an interruption include:The remote user leaves the channel.The remote user drops offline.The remote user calls muteLocalVideoStream to stop sending the video stream.The remote user calls disableVideo to disable video.
+  /// 已接收到远端视频并完成解码回调。
+  /// SDK 会在以下时机触发该回调：
+  ///  远端用户首次上线后发送视频。远端用户视频离线再上线后发送视频。出现这种中断的可能原因包括：
+  ///  远端用户离开频道。远端用户掉线。远端用户调用 muteLocalVideoStream 方法停止发送本地视频流。远端用户调用 disableVideo 方法关闭视频模块。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the remote user sending the video stream.
-  /// * [width] The width (px) of the video stream.
-  /// * [height] The height (px) of the video stream.
-  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID，指定是哪个用户的视频流。
+  /// * [width] 视频流宽（px）。
+  /// * [height] 视频流高（px）。
+  /// * [elapsed] 从本地调用 joinChannel [2/2] 开始到该回调触发的延迟（毫秒)。
   final void Function(RtcConnection connection, int remoteUid, int width,
       int height, int elapsed)? onFirstRemoteVideoDecoded;
 
-  /// Occurs when the video size or rotation of a specified user changes.
+  /// 本地或远端视频大小和旋转信息发生改变回调。
   ///
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [sourceType] The capture type of the custom video source. See VideoSourceType .
-  /// * [uid] The ID of the user whose video size or rotation changes. (The uid for the local user is 0. The video is the local user's video preview).
-  /// * [width] The width (pixels) of the video stream.
-  /// * [height] The height (pixels) of the video stream.
-  /// * [rotation] The rotation information. The value range is [0,360).
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [sourceType] 视频源的类型。详见 VideoSourceType 。
+  /// * [uid] 图像尺寸和旋转信息发生变化的用户 ID（本地用户的 uid 为 0。此时视频为本地用户的视频预览）。
+  /// * [width] 视频流的宽度（像素）。
+  /// * [height] 视频流的高度（像素）。
+  /// * [rotation] 旋转信息，取值范围 [0,360)。
   final void Function(RtcConnection connection, VideoSourceType sourceType,
       int uid, int width, int height, int rotation)? onVideoSizeChanged;
 
-  /// Occurs when the local video stream state changes.
-  /// When the state of the local video stream changes (including the state of the video capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.The SDK triggers the onLocalVideoStateChanged callback with the state code of localVideoStreamStateFailed and error code of localVideoStreamErrorCaptureFailure in the following situations:The app switches to the background, and the system gets the camera resource.The camera starts normally, but does not output video frames for four consecutive seconds.When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers the onLocalVideoStateChanged callback with the state code of localVideoStreamStateCapturing and error code of localVideoStreamErrorCaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
+  /// 本地视频状态发生改变回调。
+  /// 本地视频的状态发生改变时，SDK 会触发该回调返回当前的本地视频状态。你可以通过该回调了解当前视频的状态以及出现故障的原因，方便排查问题。 SDK 会在如下情况触发 onLocalVideoStateChanged 回调，状态为 localVideoStreamStateFailed，错误码为 localVideoStreamErrorCaptureFailure：
+  ///  应用退到后台，系统回收摄像头。摄像头正常启动，但连续 4 秒都没有输出采集的视频。摄像头输出采集的视频帧时，如果连续 15 帧中，所有视频帧都一样，SDK 触发 onLocalVideoStateChanged 回调，状态为 localVideoStreamStateCapturing，错误码为 localVideoStreamErrorCaptureFailure。注意，帧重复检测仅针对分辨率大于 200 × 200、帧率大于等于 10 fps、码率小于 20 Kbps 的视频帧。对某些机型而言，当本地视频采集设备正在使用中时，SDK 不会在本地视频状态发生改变时触发该回调，你需要自行做超时判断。
   ///
-  /// * [source] The capture type of the custom video source. See VideoSourceType .
-  /// * [state] The state of the local video, see LocalVideoStreamState .
-  /// * [error] The detailed error information, see LocalVideoStreamError .
+  /// * [source] 视频源的类型。详见 VideoSourceType 。
+  /// * [state] 本地视频状态，详见 LocalVideoStreamState 。
+  /// * [error] 本地视频出错原因，详见 LocalVideoStreamError 。
   final void Function(VideoSourceType source, LocalVideoStreamState state,
       LocalVideoStreamError error)? onLocalVideoStateChanged;
 
-  /// Occurs when the remote video stream state changes.
-  /// This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 17.
+  /// 远端视频状态发生改变回调。
+  /// 频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调可能不准确。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the remote user whose video state changes.
-  /// * [state] The state of the remote video, see RemoteVideoState .
-  /// * [reason] The reason for the remote video state change, see RemoteVideoStateReason .
-  /// * [elapsed] Time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 发生视频状态改变的远端用户 ID。
+  /// * [state] 远端视频流状态，详见 RemoteVideoState 。
+  /// * [reason] 远端视频流状态改变的具体原因，详见 RemoteVideoStateReason 。
+  /// * [elapsed] 从本地用户调用 joinChannel [2/2] 方法到发生本事件经历的时间，单位为毫秒。
   final void Function(
       RtcConnection connection,
       int remoteUid,
@@ -1782,59 +1810,64 @@ class RtcEngineEventHandler {
       RemoteVideoStateReason reason,
       int elapsed)? onRemoteVideoStateChanged;
 
-  /// Occurs when the renderer receives the first frame of the remote video.
+  /// 渲染器已接收首帧远端视频回调。
   ///
   ///
-  /// * [uid] The ID of the remote user sending the video stream.
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [width] The width (px) of the video stream.
-  /// * [height] The height (px) of the video stream.
-  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
+  /// * [uid] 用户 ID，指定是哪个用户的视频流。
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [width] 视频流宽（px）。
+  /// * [height] 视频流高（px）。
+  /// * [elapsed]  从本地调用 joinChannel [2/2] 到发生此事件过去的时间（毫秒)。
   final void Function(RtcConnection connection, int remoteUid, int width,
       int height, int elapsed)? onFirstRemoteVideoFrame;
 
-  /// Occurs when a remote user (COMMUNICATION)/ host (LIVE_BROADCASTING) joins the channel.
-  /// In a communication channel, this callback indicates that a remote user joins the channel. The SDK also triggers this callback to report the existing users in the channel when a user joins the channel.In a live-broadcast channel, this callback indicates that a host joins the channel. The SDK also triggers this callback to report the existing hosts in the channel when a host joins the channel. Agora recommends limiting the number of hosts to 17.The SDK triggers this callback under one of the following circumstances:A remote user/host joins the channel by calling the joinChannel [2/2] method.A remote user switches the user role to the host after joining the channel.A remote user/host rejoins the channel after a network interruption.
+  /// 远端用户（通信场景）/主播（直播场景）加入当前频道回调。
+  /// 通信场景下，该回调提示有远端用户加入了频道。如果加入之前，已经有其他用户在频道中了，新加入的用户也会收到这些已有用户加入频道的回调。直播场景下，该回调提示有主播加入了频道。如果加入之前，已经有主播在频道中了，新加入的用户也会收到已有主播加入频道的回调。Agora 建议连麦主播不超过 17 人。该回调在如下情况下会被触发：
+  ///  远端用户/主播调用 joinChannel [2/2] 方法加入频道。远端用户加入频道后将用户角色改变为主播。远端用户/主播网络中断后重新加入频道。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the user or host who joins the channel.
-  /// * [elapsed] Time delay (ms) from the local user calling joinChannel [2/2] until this callback is triggered.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 新加入频道的远端用户/主播 ID。
+  /// * [elapsed] 从本地用户调用 joinChannel [2/2] 到该回调触发的延迟（毫秒)。
+  ///
   final void Function(RtcConnection connection, int remoteUid, int elapsed)?
       onUserJoined;
 
-  /// Occurs when a remote user (in the communication profile)/ host (in the live streaming profile) leaves the channel.
-  /// There are two reasons for users to become offline:Leave the channel: When a user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the communication profile, and more for the live broadcast profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections. It's recommended to use the Agora RTM SDK for reliable offline detection.
+  /// 远端用户（通信场景）/主播（直播场景）离开当前频道回调。
+  /// 用户离开频道有两个原因：
+  ///  正常离开：远端用户/主播会发送类似“再见”的消息。接收此消息后，判断用户离开频道。超时掉线：在一定时间内（通信场景为 20 秒，直播场景稍有延时），用户没有收到对方的任何数据包，则判定为对方掉线。在网络较差的情况下，有可能会误报。我们建议使用 Agora 云信令 SDK 来做可靠的掉线检测。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the user who leaves the channel or goes offline.
-  /// * [reason] Reasons why the user goes offline: UserOfflineReasonType .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 离线用户或主播的用户 ID。
+  /// * [reason] 离线原因: UserOfflineReasonType 。
   final void Function(RtcConnection connection, int remoteUid,
       UserOfflineReasonType reason)? onUserOffline;
 
-  /// Occurs when a remote user (in the communication profile) or a host (in the live streaming profile) stops/resumes sending the audio stream.
-  /// The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the muteLocalAudioStream method.This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 17.
+  /// 远端用户（通信场景）/主播（直播场景）停止或恢复发送音频流回调。
+  /// 该回调是由远端用户调用 muteLocalAudioStream 方法关闭或开启音频发送触发的。频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调可能不准确。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The user ID.
-  /// * [muted] Whether the remote user's audio stream is muted/unmuted:true: User's audio stream is muted.false: User's audio stream is unmuted.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID。
+  /// * [muted] 该用户是否静音：
+  ///  true: 该用户已将音频静音。false: 该用户取消了音频静音。
   final void Function(RtcConnection connection, int remoteUid, bool muted)?
       onUserMuteAudio;
 
-  /// Occurs when a remote user stops/resumes publishing the video stream.
-  /// When a remote user calls muteLocalVideoStream to stop or resume publishing the video stream, the SDK triggers this callback to report the state of the remote user's publishing stream to the local user.This callback can be inaccurate when the number of users (in the communication profile) or hosts (in the live streaming profile) in a channel exceeds 17.
+  /// 远端用户取消或恢复发布视频流回调。
+  /// 当远端用户调用 muteLocalVideoStream 取消或恢复发布视频流时，SDK 会触发该回调向本地用户报告远端用户的发流状况。当频道内的用户（通信场景）或主播（直播场景）的人数超过 17 时，该回调可能不准确。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The user ID of the remote user.
-  /// * [muted] Whether the remote user stops publishing the video stream:true: The remote user stops publishing the video stream.false: The remote user resumes publishing the video stream.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 远端用户 ID。
+  /// * [muted] 远端用户是否取消发布视频流：
+  ///  true: 取消发布视频流。false: 发布视频流。
   final void Function(RtcConnection connection, int remoteUid, bool muted)?
       onUserMuteVideo;
 
-  /// Occurs when a remote user enables/disables the video module.
-  /// Once the video module is disabled, the user can only use a voice call. The user cannot send or receive any video.The SDK triggers this callback when a remote user enables or disables the video module by calling the enableVideo or disableVideo method.
+  /// 远端用户开/关视频模块回调。
+  /// 关闭视频功能是指该用户只能进行语音通话，不能显示、发送自己的视频，也不能接收、显示别人的视频。该回调是由远端用户调用 enableVideo 或 disableVideo 方法开启或关闭视频模块触发的。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The user ID of the remote user.
-  /// * [enabled] true: Enable.false: Disable.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID，提示是哪个用户的视频流。
+  /// * [enabled] true: 该用户已启用视频功能。false: 该用户已关闭视频功能。
   final void Function(RtcConnection connection, int remoteUid, bool enabled)?
       onUserEnableVideo;
 
@@ -1842,94 +1875,95 @@ class RtcEngineEventHandler {
   final void Function(RtcConnection connection, int remoteUid, int state)?
       onUserStateChanged;
 
-  /// Occurs when a specific remote user enables/disables the local video capturing function.
-  /// The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the enableLocalVideo method.
+  /// 远端用户开/关本地视频采集回调。
+  /// 该回调是由远端用户调用 enableLocalVideo 方法开启或关闭视频采集触发的。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The user ID of the remote user.
-  /// * [enabled] Whether the specified remote user enables/disables the local video capturing function:true: Enable. Other users in the channel can see the video of this remote user.false: Disable. Other users in the channel can no longer receive the video stream from this remote user, while this remote user can still receive the video streams from other users.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID，提示是哪个用户的视频流。
+  /// * [enabled] 远端用户是否启用视频采集：
+  ///  true: 该用户已启用视频功能。启用后，其他用户可以接收到该用户的视频流。false: 该用户已关闭视频功能。关闭后，该用户仍然可以接收其他用户的视频流，但其他用户接收不到该用户的视频流。
   final void Function(RtcConnection connection, int remoteUid, bool enabled)?
       onUserEnableLocalVideo;
 
-  /// Occurs when a method is executed by the SDK.
+  /// API 方法已执行回调。
   ///
   ///
-  /// * [err] The error code returned by the SDK when the method call fails. If the SDK returns 0, then the method call is successful.
-  /// * [api] The method executed by the SDK.
-  /// * [result] The result of the method call.
+  /// * [err] 当方法调用失败时 SDK 返回的错误码。如果该方法调用成功，SDK 会返回 0。
+  /// * [api] SDK 执行的 API 方法。
+  /// * [result] SDK 调用 API 的结果。
   final void Function(ErrorCodeType err, String api, String result)?
       onApiCallExecuted;
 
-  /// Reports the statistics of the local audio stream.
-  /// The SDK triggers this callback once every two seconds.
+  /// 通话中本地音频流的统计信息回调。
+  /// SDK 每 2 秒触发该回调一次。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [stats] Local audio statistics. See LocalAudioStats .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [stats] 本地音频统计数据。详见 LocalAudioStats 。
   final void Function(RtcConnection connection, LocalAudioStats stats)?
       onLocalAudioStats;
 
-  /// Reports the statistics of the audio stream sent by each remote users.
-  /// The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times.
+  /// 通话中远端音频流的统计信息回调。
+  /// 该回调针对每个发送音频流的远端用户/主播每 2 秒触发一次。如果远端有多个用户/主播发送音频流，该回调每 2 秒会被触发多次。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [stats] Statistics of the received remote audio stream. See RemoteAudioStats .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [stats] 接收到的远端音频统计数据，详见 RemoteAudioStats 。
   final void Function(RtcConnection connection, RemoteAudioStats stats)?
       onRemoteAudioStats;
 
-  /// Reports the statistics of the local video stream.
-  /// The SDK triggers this callback once every two seconds to report the statistics of the local video stream.
+  /// 本地视频流统计信息回调。
+  /// 该回调描述本地设备发送视频流的统计信息，每 2 秒触发一次。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [stats] The statistics of the local video stream. See LocalVideoStats .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [stats] 本地视频流统计信息。详见 LocalVideoStats 。
   final void Function(RtcConnection connection, LocalVideoStats stats)?
       onLocalVideoStats;
 
-  /// Reports the statistics of the video stream sent by each remote users.
-  /// Reports the statistics of the video stream from the remote users. The SDK triggers this callback once every two seconds for each remote user. If a channel has multiple users/hosts sending video streams, the SDK triggers this callback as many times.
+  /// 通话中远端视频流的统计信息回调。
+  /// 该回调描述远端用户在通话中端到端的视频流统计信息， 针对每个远端用户/主播每 2 秒触发一次。如果远端同时存在多个用户/主播， 该回调每 2 秒会被触发多次。
   ///
-  /// * [stats] Statistics of the remote video stream.
+  /// * [stats] 远端视频统计数据。详见 RemoteVideoStats 。
   final void Function(RtcConnection connection, RemoteVideoStats stats)?
       onRemoteVideoStats;
 
-  /// Occurs when the camera turns on and is ready to capture the video.
-  /// Deprecated:Please use localVideoStreamStateCapturing(1) in onLocalVideoStateChanged instead.This callback indicates that the camera has been successfully turned on and you can start to capture video.
+  /// 摄像头就绪回调。
+  /// 弃用:请改用 onLocalVideoStateChanged 中的 localVideoStreamStateCapturing(1)。该回调提示已成功打开摄像头，可以开始捕获视频。
   final void Function()? onCameraReady;
 
-  /// Occurs when the camera focus area changes.
+  /// 相机对焦区域已改变回调。
   ///
   ///
-  /// * [x] The x-coordinate of the changed focus area.
-  /// * [y] The y-coordinate of the changed focus area.
-  /// * [width] The width of the focus area that changes.
-  /// * [height] The height of the focus area that changes.
+  /// * [x] 发生改变的对焦区域的 x 坐标。
+  /// * [y] 发生改变的对焦区域的 y 坐标。
+  /// * [width] 发生改变的对焦区域的宽度。
+  /// * [height] 发生改变的对焦区域的高度。
   final void Function(int x, int y, int width, int height)?
       onCameraFocusAreaChanged;
 
-  /// Occurs when the camera exposure area changes.
+  /// 摄像头曝光区域已改变回调。
   ///
   final void Function(int x, int y, int width, int height)?
       onCameraExposureAreaChanged;
 
-  /// Reports the face detection result of the local user.
-  /// Once you enable face detection by calling enableFaceDetection (true), you can get the following information on the local user in real-time:The width and height of the local video.The position of the human face in the local view.The distance between the human face and the screen.This value is based on the fitting calculation of the local video size and the position of the human face.This callback is for Android and iOS only.When it is detected that the face in front of the camera disappears, the callback will be triggered immediately. When no human face is detected, the frequency of this callback to be rtriggered wil be decreased to reduce power consumption on the local device.The SDK stops triggering this callback when a human face is in close proximity to the screen.On Android, the value of distance reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.
+  /// 报告本地人脸检测结果。
+  /// 调用 enableFaceDetection (true) 开启本地人脸检测后，你可以通过该回调实时获取以下人脸检测的信息： 摄像头采集的画面大小人脸在 view 中的位置人脸距设备屏幕的距离其中，人脸距设备屏幕的距离由 SDK 通过摄像头采集的画面大小和人脸在 view 中的位置拟合计算得出。该回调仅适用于 Android 和 iOS 平台。当检测到摄像头前的人脸消失时，该回调会立刻触发；在无人脸的状态下，该回调触发频率会降低，以节省设备耗能。当人脸距离设备屏幕过近时，SDK 不会触发该回调。Android 平台上，人脸距设备屏幕的距离（distance）值有一定误差，请不要用它进行精确计算。
   ///
-  /// * [imageWidth] The width (px) of the video image captured by the local camera.
-  /// * [imageHeight] The height (px) of the video image captured by the local camera.
-  /// * [vecRectangle] The information of the detected human face. See Rectangle .
-  /// * [vecDistance] The distance between the human face and the device screen (cm).
-  /// * [numFaces] The number of faces detected. If the value is 0, it means that no human face is detected.
+  /// * [imageWidth] 摄像头采集画面的宽度 (px)。
+  /// * [imageHeight] 摄像头采集画面的高度 (px)。
+  /// * [vecRectangle] 检测到的人脸信息。详见 Rectangle 。
+  /// * [vecDistance] 人脸距设备屏幕的距离 (cm)。
+  /// * [numFaces] 检测的人脸数量。如果为 0，则表示没有检测到人脸。
   final void Function(int imageWidth, int imageHeight, Rectangle vecRectangle,
       int vecDistance, int numFaces)? onFacePositionChanged;
 
-  /// Occurs when the video stops playing.
-  /// Deprecated:Use localVideoStreamStateStopped(0) in the onLocalVideoStateChanged callback instead.The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
+  /// 视频功能已停止回调。
+  /// 弃用：请改用 onLocalVideoStateChanged 回调中的 localVideoStreamStateStopped(0)。App 如需在停止视频后对 view 做其他处理（比如显示其他画面），可以在这个回调中进行。
   final void Function()? onVideoStopped;
 
-  /// Occurs when the playback state of the music file changes.
-  /// This callback occurs when the playback state of the music file changes, and reports the current state and error code.
+  /// 音乐文件的播放状态已改变回调。
+  /// 该回调在音乐文件播放状态发生改变时触发，并报告当前的播放状态和错误码。
   ///
-  /// * [state] The playback state of the music file. See AudioMixingStateType .
-  /// * [reason] Error code. See AudioMixingReasonType .
+  /// * [state] 音乐文件播放状态。详见 AudioMixingStateType 。
+  /// * [reason] 错误码。详见 AudioMixingReasonType 。
   final void Function(AudioMixingStateType state, AudioMixingReasonType reason)?
       onAudioMixingStateChanged;
 
@@ -1938,105 +1972,110 @@ class RtcEngineEventHandler {
           RhythmPlayerStateType state, RhythmPlayerErrorType errorCode)?
       onRhythmPlayerStateChanged;
 
-  /// Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
-  /// The SDK triggers this callback when it cannot connect to the server 10 seconds after calling the joinChannel [2/2] method, regardless of whether it is in the channel. If the SDK fails to rejoin the channel within 20 minutes after disconnecting, the SDK will stop trying to reconnect.
+  /// 网络连接中断，且 SDK 无法在 10 秒内连接服务器回调。
+  /// SDK 在调用 joinChannel [2/2] 后，无论是否加入成功，只要 10 秒和服务器无法连接就会触发该回调。如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，SDK 会停止尝试重连。
   ///
-  /// * [connection] The connection information. See RtcConnection .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
   final void Function(RtcConnection connection)? onConnectionLost;
 
-  /// Occurs when the connection between the SDK and the server is interrupted.
-  /// Deprecated:Use onConnectionStateChanged instead.The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. The difference between this callback and onConnectionLost is:The SDK triggers the onConnectionInterrupted callback when it loses connection with the server for more than four seconds after it successfully joins the channel.The SDK triggers the onConnectionLost callback when it loses connection with the server for more than 10 seconds, whether or not it joins the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
+  /// 网络连接中断回调。
+  /// 弃用:请改用 onConnectionStateChanged 回调。SDK 在和服务器建立连接后，失去了网络连接超过 4 秒，会触发该回调。在触发事件后，SDK 会主动重连服务器，所以该事件可以用于 UI 提示。该回调与 onConnectionLost 的区别是：
+  ///  onConnectionInterrupted 回调一定是发生在成功加入频道后，且 SDK 刚失去和服务器连接超过 4 秒时触发。onConnectionLost 回调是无论是否成功加入频道，只要 10 秒内和服务器无法建立连接都会触发。 如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，SDK 会停止尝试重连。
   ///
-  /// * [connection] The connection information. See RtcConnection .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
   final void Function(RtcConnection connection)? onConnectionInterrupted;
 
-  /// Occurs when the connection is banned by the Agora server.
-  /// Deprecated:Please use onConnectionStateChanged instead.
+  /// 网络连接已被服务器禁止回调。
+  /// 弃用: 请改用 onConnectionStateChanged 。
   ///
-  /// * [connection] The connection information. See RtcConnection .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
   final void Function(RtcConnection connection)? onConnectionBanned;
 
-  /// Occurs when the local user receives the data stream from the remote user.
-  /// The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the sendStreamMessage method.
+  /// 接收到对方数据流消息的回调。
+  /// 该回调表示本地用户收到了远端用户调用 sendStreamMessage 方法发送的流消息。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [uid] The ID of the remote user sending the message.
-  /// * [streamId] The stream ID of the received message.
-  /// * [data] received data.
-  /// * [length] The data length (byte).
-  /// * [sentTs] The time when the data stream is sent.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uid] 发送消息的用户 ID。
+  /// * [streamId] 接收到的消息的 Stream ID。
+  /// * [data] 接收到的数据。
+  /// * [length] 数据长度，单位为字节。
+  /// * [sentTs] 数据流发出的时间。
   final void Function(RtcConnection connection, int remoteUid, int streamId,
       Uint8List data, int length, int sentTs)? onStreamMessage;
 
-  /// Occurs when the local user does not receive the data stream from the remote user.
-  /// The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the sendStreamMessage method.
+  /// 接收对方数据流消息发生错误的回调。
+  /// 该回调表示本地用户未收到远端用户调用 sendStreamMessage 方法发送的流消息。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the remote user sending the message.
-  /// * [streamId] The stream ID of the received message.
-  /// * [code] The error code.
-  /// * [missed] The number of lost messages.
-  /// * [cached] Number of incoming cached messages when the data stream is interrupted.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 发送消息的用户 ID。
+  /// * [streamId] 接收到的消息的 Stream ID。
+  /// * [code] 发生错误的错误码。
+  /// * [missed] 丢失的消息数量。
+  /// * [cached] 数据流中断时，后面缓存的消息数量。
   final void Function(RtcConnection connection, int remoteUid, int streamId,
       ErrorCodeType code, int missed, int cached)? onStreamMessageError;
 
-  /// Occurs when the token expires.
-  /// When the token expires during a call, the SDK triggers this callback to remind the app to renew the token.Once you receive this callback, generate a new token on your app server, and call joinChannel [2/2] to rejoin the channel.
+  /// Token 已过期回调。
+  /// 在通话过程中如果 Token 已失效，SDK 会触发该回调，提醒 app 更新 Token。
+  ///  当收到该回调时，你需要重新在服务端生成新的 Token，然后调用 joinChannel [2/2] 重新加入频道。
   ///
-  /// * [connection] The connection information. See RtcConnection .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
   final void Function(RtcConnection connection)? onRequestToken;
 
-  /// Occurs when the token expires in 30 seconds.
-  /// When the token is about to expire in 30 seconds, the SDK triggers this callback to remind the app to renew the token.Upon receiving this callback, generate a new token on your server, and call renewToken to pass the new token to the SDK.
+  /// Token 服务将在30s内过期回调。
+  /// 在通话过程中如果 Token 即将失效，SDK 会提前 30 秒触发该回调，提醒 app 更新 Token。
+  ///  当收到该回调时，你需要重新在服务端生成新的 Token，然后调用 renewToken 将新生成的 Token 传给 SDK。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [token] The token that expires in 30 seconds.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [token] 即将服务失效的 Token。
   final void Function(RtcConnection connection, String token)?
       onTokenPrivilegeWillExpire;
 
-  /// Occurs when the first audio frame is published.
-  /// The SDK triggers this callback under one of the following circumstances:The local client enables the audio module and calls joinChannel [2/2] successfully.The local client calls muteLocalAudioStream (true) and muteLocalAudioStream(false) in sequence.The local client calls disableAudio and enableAudio in sequence.
+  /// 已发布本地音频首帧回调。
+  /// SDK 会在以下时机触发该回调：
+  ///  开启本地音频的情况下，调用 joinChannel [2/2] 成功加入频道后。调用 muteLocalAudioStream (true)，再调用 muteLocalAudioStream(false) 后。调用 disableAudio ，再调用 enableAudio 后。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [elapsed]  从调用 joinChannel [2/2] 方法到触发该回调的时间间隔（毫秒）。
   final void Function(RtcConnection connection, int elapsed)?
       onFirstLocalAudioFramePublished;
 
-  /// Occurs when the first audio frame sent by a specified remote user is received.
-  /// Deprecated:Use onRemoteAudioStateChanged instead.
+  /// 已接收远端音频首帧回调。
+  /// 弃用：请改用 onRemoteAudioStateChanged 。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [userId] The ID of the remote user sending the audio frames.
-  /// * [elapsed] The time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [userId] 发送音频帧的远端用户的用户 ID。
+  /// * [elapsed] 从本地用户调用 joinChannel [2/2] 直至该回调触发的延迟，单位为毫秒。
   final void Function(RtcConnection connection, int userId, int elapsed)?
       onFirstRemoteAudioFrame;
 
-  /// Occurs when the SDK decodes the first remote audio frame for playback.
-  /// Deprecated:Use onRemoteAudioStateChanged instead.The SDK triggers this callback under one of the following circumstances:The remote user joins the channel and sends the audio stream.The remote user stops sending the audio stream and re-sends it after 15 seconds, and the possible reasons include:The remote user leaves the channel.The remote user is offline.The remote user calls muteLocalAudioStream to stop sending the video stream.The remote user calls disableAudio to disable video.
+  /// 已解码远端音频首帧的回调。
+  /// 弃用：请改用 onRemoteAudioStateChanged 。SDK 会在以下时机触发该回调： 远端用户首次上线后发送音频。远端用户音频离线再上线发送音频。音频离线指本地在 15 秒内没有收到音频包，可能有如下原因： 远端用户离开频道远端用户掉线远端用户调用 muteLocalAudioStream 方法停止发送音频流远端用户调用 disableAudio 方法关闭音频
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [uid] The user ID of the remote user.
-  /// * [elapsed] The time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uid] 远端用户 ID。
+  /// * [elapsed] 从本地用户调用 joinChannel [2/2] 直至该回调触发的延迟，单位为毫秒。
   final void Function(RtcConnection connection, int uid, int elapsed)?
       onFirstRemoteAudioDecoded;
 
-  /// Occurs when the local audio stream state changes.
-  /// When the state of the local audio stream changes (including the state of the audio capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local audio stream, and allows you to troubleshoot issues when audio exceptions occur.When the state is localAudioStreamStateFailed (3), you can view the error information in the error parameter.
+  /// 本地音频状态发生改变回调。
+  /// 本地音频的状态发生改变时（包括本地麦克风采集状态和音频编码状态），SDK 会触发该回调报告当前的本地音频状态。在本地音频出现故障时，该回调可以帮助你了解当前音频的状态以及出现故障的原因，方便你排查问题。
+  ///  当状态为 localAudioStreamStateFailed (3) 时， 你可以在 error 参数中查看返回的错误信息。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [state] The state of the local audio. See localaudiostreamstate .
-  /// * [error] Local audio state error codes. See LocalAudioStreamError .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [state] 当前的本地音频状态。详见 localaudiostreamstate 。
+  /// * [error] 本地音频出错原因。详见 LocalAudioStreamError 。
   final void Function(RtcConnection connection, LocalAudioStreamState state,
       LocalAudioStreamError error)? onLocalAudioStateChanged;
 
-  /// Occurs when the remote audio state changes.
-  /// When the audio state of a remote user (in a voice/video call channel) or host (in a live streaming channel) changes, the SDK triggers this callback to report the current state of the remote audio stream.This callback does not work properly when the number of users (in the communication profile) or hosts (in the live streaming channel) in a channel exceeds 17.
+  /// 远端音频流状态发生改变回调。
+  /// 远端用户（通信场景）或主播（直播场景）的音频状态发生改变时，SDK 会触发该回调向本地用户报告当前的远端音频流状态。频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调可能不准确。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the remote user whose audio state changes.
-  /// * [state] The state of the remote audio. See RemoteAudioState .
-  /// * [reason] The reason of the remote audio state change. See RemoteAudioStateReason .
-  /// * [elapsed] Time elapsed (ms) from the local user calling the joinChannel [2/2] method until the SDK triggers this callback.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 发生音频状态改变的远端用户 ID。
+  /// * [state]  远端音频流状态，详见 RemoteAudioState 。
+  /// * [reason]  远端音频流状态改变的具体原因，详见 RemoteAudioStateReason 。
+  /// * [elapsed]  从本地用户调用 joinChannel [2/2] 方法到发生本事件经历的时间，单位为毫秒。
   final void Function(
       RtcConnection connection,
       int remoteUid,
@@ -2044,45 +2083,49 @@ class RtcEngineEventHandler {
       RemoteAudioStateReason reason,
       int elapsed)? onRemoteAudioStateChanged;
 
-  /// Occurs when the most active remote speaker is detected.
-  /// After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user, who is detected as the loudest for the most times, is the most active user.When the number of users is no less than two and an active remote speaker exists, the SDK triggers this callback and reports the uid of the most active remote speaker.If the most active remote speaker is always the same user, the SDK triggers the onActiveSpeaker callback only once.If the most active remote speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active remote speaker.
+  /// 监测到远端最活跃用户回调。
+  /// 成功调用 enableAudioVolumeIndication 后，SDK 会持续监测音量最大的远端用户，并统计该用户被判断为音量最大者的次数。当前时间段内，该次数累积最多的远端用户为最活跃的用户。当频道内用户数量大于或等于 2 且有远端活跃用户时，SDK 会触发该回调并报告远端最活跃用户的 uid。
+  ///  如果远端最活跃用户一直是同一位用户，则 SDK 不会再次触发 onActiveSpeaker 回调。如果远端最活跃用户有变化，则 SDK 会再次触发该回调并报告新的远端最活跃用户的 uid。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [uid] The user ID of the most active remote speaker.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uid] 远端最活跃用户的 ID。
   final void Function(RtcConnection connection, int uid)? onActiveSpeaker;
 
-  /// Reports the result of video content moderation.
-  /// After calling enableContentInspect to enable the video content moderation, and setting the type parameter in ContentInspectConfig tocontentInspectModeration, the SDK triggers the onContentInspectResult callback and reports the result of video content moderation.
+  /// 视频鉴黄结果回调。
+  /// 调用 enableContentInspect 启用视频内容审核服务，并设置 ContentInspectConfig 中的 type 为 contentInspectModeration 后，SDK 会触发 onContentInspectResult 回调，报告鉴黄结果。
   ///
-  /// * [result] The results of video content moderation. See ContentInspectResult .
+  /// * [result] 鉴黄结果。详见 ContentInspectResult 。
   final void Function(ContentInspectResult result)? onContentInspectResult;
 
-  /// Reports the result of taking a video snapshot.
-  /// After a successful takeSnapshot method call, the SDK triggers this callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.
+  /// 视频截图结果回调。
+  /// 成功调用 takeSnapshot 后，SDK 触发该回调报告截图是否成功和获取截图的详情。
   ///
-  /// * [uid] The user ID. A uid of 0 indicates the local user.
-  /// * [filePath] The local path of the snapshot.
-  /// * [width] The width (px) of the snapshot.
-  /// * [height] The height (px) of the snapshot.
-  /// * [errCode] The message that confirms success or gives the reason why the snapshot is not successfully taken:0: Success.< 0: Failure:-1: The SDK fails to write data to a file or encode a JPEG image.-2: The SDK does not find the video stream of the specified user within one second after the takeSnapshot method call succeeds.-3: Calling the takeSnapshot method too frequently.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uid] 用户 ID。如果 uid 为 0，表示本地用户。
+  /// * [filePath] 截图的本地保存路径。
+  /// * [width] 图片宽度（px）。
+  /// * [height] 图片高度（px）。
+  /// * [errCode] 截图成功的提示或失败的原因。
+  ///  0：截图成功。< 0: 截图失败。
+  ///  -1：写入文件失败或 JPEG 编码失败。-2：takeSnapshot 方法调用成功后 1 秒内没有发现指定用户的视频流。-3：takeSnapshot 方法调用过于频繁。
   final void Function(RtcConnection connection, int uid, String filePath,
       int width, int height, int errCode)? onSnapshotTaken;
 
-  /// Occurs when the user role switches in the interactive live streaming.
-  /// The SDK triggers this callback when the local user switches the user role by calling setClientRole after joining the channel.
+  /// 直播场景下用户角色已切换回调。
+  /// 该回调是由本地用户在加入频道后调用 setClientRole 改变用户角色触发的。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [oldRole] Role that the user switches from: ClientRoleType .
-  /// * [newRole] Role that the user switches to: ClientRoleType .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [oldRole] 切换前的角色： ClientRoleType 。
+  /// * [newRole] 切换后的角色： ClientRoleType 。
   final void Function(RtcConnection connection, ClientRoleType oldRole,
       ClientRoleType newRole)? onClientRoleChanged;
 
-  /// Occurs when the user role switch fails in the interactive live streaming.
-  /// In the live broadcasting channel profile, when the local user calls setClientRole [1/2] to switch their user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
+  /// 直播场景下切换用户角色失败回调。
+  /// 直播场景下，本地用户加入频道后调用 setClientRole [1/2] 切换用户角色失败时，SDK 会触发该回调，报告切换失败的原因和当前的用户角色。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [reason] The reason for a user role switch failure. See ClientRoleChangeFailedReason .
-  /// * [currentRole] Current user role. See ClientRoleType .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [reason] 切换用户角色失败的原因。详见 ClientRoleChangeFailedReason 。
+  /// * [currentRole] 当前用户角色。详见 ClientRoleType 。
   final void Function(
       RtcConnection connection,
       ClientRoleChangeFailedReason reason,
@@ -2092,46 +2135,46 @@ class RtcEngineEventHandler {
   final void Function(MediaDeviceType deviceType, int volume, bool muted)?
       onAudioDeviceVolumeChanged;
 
-  /// Occurs when the media push state changes.
-  /// When the media push state changes, the SDK triggers this callback and reports the URL address and the current state of the media push. This callback indicates the state of the media push. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the error code parameter.
+  /// 旁路推流状态发生改变回调。
+  /// 旁路推流状态发生改变时，SDK会触发该回调，并在回调中明确状态发生改变的 URL 地址及当前推流状态。该回调方便推流用户了解当前的推流状态；推流出错时，你可以通过返回的错误码了解出错的原因，方便排查问题。
   ///
-  /// * [url] The URL address where the state of the media push changes.
-  /// * [state] The current state of the media push. See RtmpStreamPublishState .
-  /// * [errCode] The detailed error information for the media push. See RtmpStreamPublishErrorType .
+  /// * [url] 推流状态发生改变的 URL 地址。
+  /// * [state] 当前的推流状态，详见 RtmpStreamPublishState 。
+  /// * [errCode] 推流错误信息，详见 RtmpStreamPublishErrorType 。
   final void Function(String url, RtmpStreamPublishState state,
       RtmpStreamPublishErrorType errCode)? onRtmpStreamingStateChanged;
 
-  /// Reports events during the media push.
+  /// 旁路推流事件回调。
   ///
   ///
-  /// * [url] The URL of media push.
-  /// * [eventCode] The event code of media push. See RtmpStreamingEvent .
+  /// * [url] 旁路推流 URL。
+  /// * [eventCode] 旁路推流事件码。详见 RtmpStreamingEvent 。
   final void Function(String url, RtmpStreamingEvent eventCode)?
       onRtmpStreamingEvent;
 
-  /// Occurs when the publisher's transcoding is updated.
-  /// When the LiveTranscoding class in the setLiveTranscoding method updates, the SDK triggers the onTranscodingUpdated callback to report the update information.If you call the setLiveTranscoding method to set the LiveTranscoding class for the first time, the SDK does not trigger this callback.
+  /// 旁路推流转码设置已被更新回调。
+  /// setLiveTranscoding 方法中的直播参数 LiveTranscoding 更新时，onTranscodingUpdated 回调会被触发并向主播报告更新信息。首次调用 setLiveTranscoding 方法设置转码参数 LiveTranscoding 时，不会触发此回调。
   final void Function()? onTranscodingUpdated;
 
-  /// Occurs when the local audio route changes.
-  /// This method is for Android, iOS and macOS only.
+  /// 音频路由已发生变化回调。
+  /// 该回调仅适用于 Android、iOS 和 macOS 平台。
   ///
-  /// * [routing] The current audio routing. See AudioRoute .
+  /// * [routing] 当前的音频路由。详见 AudioRoute 。
   final void Function(int routing)? onAudioRoutingChanged;
 
-  /// Occurs when the state of the media stream relay changes.
-  /// The SDK returns the state of the current media relay with any error message.
+  /// 跨频道媒体流转发状态发生改变回调。
+  /// 当跨频道媒体流转发状态发生改变时，SDK 会触发该回调，并报告当前的转发状态以及相关的错误信息。
   ///
-  /// * [state] The state code. See ChannelMediaRelayState .
-  /// * [code] The error code of the channel media relay. See ChannelMediaRelayError .
+  /// * [state] 跨频道媒体流转发状态。详见 ChannelMediaRelayState 。
+  /// * [code] 跨频道媒体流转发出错的错误码。详见 ChannelMediaRelayError 。
   final void Function(
           ChannelMediaRelayState state, ChannelMediaRelayError code)?
       onChannelMediaRelayStateChanged;
 
-  /// Reports events during the media stream relay.
+  /// 跨频道媒体流转发事件回调。
   ///
   ///
-  /// * [code] The event code of channel media relay. See ChannelMediaRelayEvent .
+  /// * [code] 跨频道媒体流转发事件码。详见 ChannelMediaRelayEvent 。
   final void Function(ChannelMediaRelayEvent code)? onChannelMediaRelayEvent;
 
   /// @nodoc
@@ -2142,33 +2185,34 @@ class RtcEngineEventHandler {
   final void Function(int uid, bool isFallbackOrRecover)?
       onRemoteSubscribeFallbackToAudioOnly;
 
-  /// Reports the transport-layer statistics of each remote audio stream.
-  /// Deprecated:Please use onRemoteAudioStats instead.This callback reports the transport-layer statistics, such as the packet loss rate and network time delay, once every two seconds after the local user receives an audio packet from a remote user. During a call, when the user receives the video packet sent by the remote user/host, the callback is triggered every 2 seconds.
+  /// 通话中远端音频流传输的统计信息回调。
+  /// 弃用：请改用 onRemoteAudioStats 。该回调描述远端用户通话中端到端的网络统计信息，通过音频包计算，用客观的数据，如丢包、 网络延迟等，展示当前网络状态。通话中，当用户收到远端用户/主播发送的音频数据包后 ，会每 2 秒触发一次该回调。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the remote user sending the audio packets.
-  /// * [delay] The network delay (ms) from the sender to the receiver.
-  /// * [lost] The packet loss rate (%) of the audio packet sent from the remote user.
-  /// * [rxKBitRate] The bitrate of the received audio (Kbps).
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID，指定是哪个用户/主播的音频包。
+  /// * [delay] 音频包从发送端到接收端的延时（毫秒）。
+  /// * [lost] 音频包从发送端到接收端的丢包率 (%)。
+  /// * [rxKBitrate] 远端音频包的接收码率（Kbps）。
   final void Function(RtcConnection connection, int remoteUid, int delay,
       int lost, int rxKBitRate)? onRemoteAudioTransportStats;
 
-  /// Reports the transport-layer statistics of each remote video stream.
-  /// Deprecated:This callback is deprecated; use onRemoteVideoStats instead.This callback reports the transport-layer statistics, such as the packet loss rate and network time delay, once every two seconds after the local user receives a video packet from a remote user.During a call, when the user receives the video packet sent by the remote user/host, the callback is triggered every 2 seconds.
+  /// 通话中远端视频流传输的统计信息回调。
+  /// 弃用：该回调已被废弃，请改用 onRemoteVideoStats 。该回调描述远端用户通话中端到端的网络统计信息，通过视频包计算，用客观的数据，如丢包、 网络延迟等，展示当前网络状态。通话中，当用户收到远端用户/主播发送的视频数据包后，会每 2 秒触发一次该回调。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [remoteUid] The ID of the remote user sending the video packets.
-  /// * [delay] The network delay (ms) from the sender to the receiver.
-  /// * [lost] The packet loss rate (%) of the video packet sent from the remote user.
-  /// * [rxKBitRate] The bitrate of the received video (Kbps).
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [remoteUid] 用户 ID，指定是哪个用户/主播的视频包。
+  /// * [delay] 视频包从发送端到接收端的延时（毫秒）。
+  /// * [lost] 视频包从发送端到接收端的丢包率 (%)。
+  /// * [rxKBitRate] 远端视频包的接收码率（Kbps）。
   final void Function(RtcConnection connection, int remoteUid, int delay,
       int lost, int rxKBitRate)? onRemoteVideoTransportStats;
 
-  /// Occurs when the network connection state changes.
-  /// When the network connection state changes, the SDK triggers this callback and reports the current connection state and the reason for the change.
+  /// 网络连接状态已改变回调。
+  /// 该回调在网络连接状态发生改变的时候触发，并告知用户当前的网络连接状态和引起网络状态改变的原因。
   ///
-  /// * [state] The current connection state.
-  /// * [reason] The reason for a connection state change.
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [state] 当前网络连接状态。详见 ConnectionStateType 。
+  /// * [reason] 引起当前网络连接状态改变的原因。详见 ConnectionChangedReasonType 。
   final void Function(RtcConnection connection, ConnectionStateType state,
       ConnectionChangedReasonType reason)? onConnectionStateChanged;
 
@@ -2180,54 +2224,54 @@ class RtcEngineEventHandler {
   final void Function(RtcConnection connection, WlAccStats currentStats,
       WlAccStats averageStats)? onWlAccStats;
 
-  /// Occurs when the local network type changes.
-  /// This callback occurs when the connection state of the local user changes. You can get the connection state and reason for the state change in this callback. When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.
+  /// 本地网络类型发生改变回调。
+  /// 本地网络连接类型发生改变时，SDK 会触发该回调，并在回调中明确当前的网络连接类型。 你可以通过该回调获取正在使用的网络类型；当连接中断时，该回调能辨别引起中断的原因是网络切换还是网络条件不好。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [type] Network types: See NetworkType .
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [type] 本地网络连接类型。详见 NetworkType 。
   final void Function(RtcConnection connection, NetworkType type)?
       onNetworkTypeChanged;
 
-  /// Reports the built-in encryption errors.
-  /// When encryption is enabled by calling enableEncryption , the SDK triggers this callback if an error occurs in encryption or decryption on the sender or the receiver side.
+  /// 内置加密出错回调。
+  /// 调用 enableEncryption 开启加密后， 如果发流端、收流端出现加解密出错，SDK 会触发该回调。
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [errorType] 错误类型，详见 EncryptionErrorType 。
   final void Function(RtcConnection connection, EncryptionErrorType errorType)?
       onEncryptionError;
 
-  /// Occurs when the SDK cannot get the device permission.
-  /// When the SDK fails to get the device permission, the SDK triggers this callback to report which device permission cannot be got.This method is for Android and iOS only.
+  /// 获取设备权限出错回调。
+  /// 无法获取设备权限时，SDK 会触发该回调，报告哪个设备的权限无法获取。该回调仅适用于 Android 和 iOS。
   ///
-  /// * [permissionType] The type of the device permission. See PermissionType .
+  /// * [permissionType] 设备权限类型。详见 PermissionType 。
   final void Function(PermissionType permissionType)? onPermissionError;
 
-  /// Occurs when the local user registers a user account.
-  /// After the local user successfully calls registerLocalUserAccount to register the user account or calls joinChannelWithUserAccount to join a channel, the SDK triggers the callback and informs the local user's UID and User Account.
+  /// 本地用户成功注册 User Account 回调。
+  /// 本地用户成功调用 registerLocalUserAccount 方法注册用户 User Account，或调用 joinChannelWithUserAccount 加入频道后，SDK 会触发该回调，并告知本地用户的 UID 和 User Account。
   ///
-  /// * [uid] The ID of the local user.
-  /// * [userAccount] The user account of the local user.
+  /// * [uid] 本地用户的 ID。
+  /// * [userAccount] 本地用户的 User Account。
   final void Function(int uid, String userAccount)? onLocalUserRegistered;
 
-  /// Occurs when the SDK gets the user ID and user account of the remote user.
-  /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers this callback on the local client.
+  /// 远端用户信息已更新回调。
+  /// 远端用户加入频道后， SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，并在本地触发该回调。
   ///
-  /// * [uid] The user ID of the remote user.
-  /// * [info] The UserInfo object that contains the user ID and user account of the remote user. See UserInfo for details.
+  /// * [uid] 远端用户 ID。
+  /// * [info] 标识用户信息的 UserInfo 对象，包含用户 UID 和 User Account。详见 UserInfo 类。
   final void Function(int uid, UserInfo info)? onUserInfoUpdated;
 
   /// @nodoc
   final void Function(RtcConnection connection, String requestId, bool success,
       UploadErrorReason reason)? onUploadLogResult;
 
-  /// Occurs when the audio subscribing state changes.
+  /// 音频订阅状态发生改变回调。
   ///
   ///
-  /// * [channel] The channel name.
-  /// * [uid] The user ID of the remote user.
-  /// * [oldState] The previous subscribing status, see StreamSubscribeState for details.
-  /// * [newState] The current subscribing status, see StreamSubscribeState for details.
-  /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
+  /// * [channel] 频道名。
+  /// * [uid] 远端用户的 ID。
+  /// * [oldState] 之前的订阅状态，详见 StreamSubscribeState 。
+  /// * [newState] 当前的订阅状态，详见 StreamSubscribeState。
+  /// * [elapseSinceLastState] 两次状态变化时间间隔（毫秒）。
   final void Function(
       String channel,
       int uid,
@@ -2235,14 +2279,14 @@ class RtcEngineEventHandler {
       StreamSubscribeState newState,
       int elapseSinceLastState)? onAudioSubscribeStateChanged;
 
-  /// Occurs when the video subscribing state changes.
+  /// 视频订阅状态发生改变回调。
   ///
   ///
-  /// * [channel] The channel name.
-  /// * [uid] The ID of the remote user.
-  /// * [oldState] The previous subscribing status, see StreamSubscribeState for details.
-  /// * [newState] The current subscribing status, see StreamSubscribeState for details.
-  /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
+  /// * [channel] 频道名。
+  /// * [uid] 远端用户的 ID。
+  ///
+  ///
+  /// * [elapseSinceLastState] 两次状态变化时间间隔（毫秒）。
   final void Function(
       String channel,
       int uid,
@@ -2250,27 +2294,27 @@ class RtcEngineEventHandler {
       StreamSubscribeState newState,
       int elapseSinceLastState)? onVideoSubscribeStateChanged;
 
-  /// Occurs when the audio publishing state changes.
+  /// 音频发布状态改变回调。
   ///
   ///
-  /// * [channel] The channel name.
-  /// * [oldState] The previous subscribing status. See StreamPublishState .
-  /// * [newState] The current subscribing status. See StreamPublishState.
-  /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
+  /// * [channel] 频道名。
+  /// * [oldState] 之前的发布状态，详见 StreamPublishState 。
+  /// * [newState] 当前的发布状态，详见 StreamPublishState。
+  /// * [elapseSinceLastState] 两次状态变化时间间隔（毫秒）。
   final void Function(
       String channel,
       StreamPublishState oldState,
       StreamPublishState newState,
       int elapseSinceLastState)? onAudioPublishStateChanged;
 
-  /// Occurs when the video publishing state changes.
+  /// 视频发布状态改变回调。
   ///
   ///
-  /// * [channel] The channel name.
-  /// * [source] The capture type of the custom video source. See VideoSourceType .
-  /// * [oldState] For the previous publishing state, see StreamPublishState .
-  /// * [newState] For the current publishing state, see StreamPublishState.
-  /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
+  /// * [channel] 频道名。
+  /// * [source] 视频源的类型。详见 VideoSourceType 。
+  /// * [oldState] 之前的发布状态，详见 StreamPublishState 。
+  /// * [newState] 当前的发布状态，详见 StreamPublishState。
+  /// * [elapseSinceLastState] 两次状态变化时间间隔（毫秒）。
   final void Function(
       VideoSourceType source,
       String channel,
@@ -2278,38 +2322,38 @@ class RtcEngineEventHandler {
       StreamPublishState newState,
       int elapseSinceLastState)? onVideoPublishStateChanged;
 
-  /// The event callback of the extension.
-  /// To listen for events while the extension is running, you need to register this callback.
+  /// 插件事件回调。
+  /// 为监听插件事件，你需要注册该回调。
   ///
-  /// * [value] The value of the extension key.
-  /// * [key] The key of the extension.
-  /// * [provider] The name of the extension provider.
-  /// * [extName] The name of the extension.
+  /// * [value] 插件属性 Key 对应的值。
+  /// * [key] 插件属性的 Key。
+  /// * [provider] 提供插件的服务商名称。
+  /// * [extName] 插件名称。
   final void Function(
           String provider, String extension, String key, String value)?
       onExtensionEvent;
 
-  /// Occurs when the extension is enabled.
-  /// After a successful call of enableExtension (true), the extension triggers this callback.
+  /// 插件启用回调。
+  /// 当调用 enableExtension (true) 启用插件成功时，插件会触发该回调。
   ///
-  /// * [provider] The name of the extension provider.
-  /// * [extName] The name of the extension.
+  /// * [provider] 提供插件的服务商名称。
+  /// * [extName] 插件名称。
   final void Function(String provider, String extension)? onExtensionStarted;
 
-  /// Occurs when the extension is disabled.
-  /// After a successful call of enableExtension (false), this callback is triggered.
+  /// 插件禁用回调。
+  /// 当调用 enableExtension (false) 禁用插件成功时，插件会触发该回调。
   ///
-  /// * [extName] The name of the extension.
-  /// * [provider] The name of the extension provider.
+  /// * [extName] 插件名称。
+  /// * [provider] 提供插件的服务商名称。
   final void Function(String provider, String extension)? onExtensionStopped;
 
-  /// Occurs when the extension runs incorrectly.
-  /// When calling enableExtension (true) fails or the extension runs in error, the extension triggers this callback and reports the error code and reason.
+  /// 插件出错回调。
+  /// 当调用 enableExtension (true) 启用插件失败或者插件运行出错时， 插件会触发该回调并上报错误码和错误原因。
   ///
-  /// * [provider] The name of the extension provider.
-  /// * [extension] The name of the extension.
-  /// * [error] Error code. For details, see the extension documentation provided by the extension provider.
-  /// * [message] Reason. For details, see the extension documentation provided by the extension provider.
+  /// * [provider] 提供插件的服务商名称。
+  /// * [extension] 插件的名称。
+  /// * [error] 错误码。详见插件服务商提供的插件文档。
+  /// * [message] 错误原因。详见插件服务商提供的插件文档。
   final void Function(
           String provider, String extension, int error, String message)?
       onExtensionError;
@@ -2320,43 +2364,43 @@ class RtcEngineEventHandler {
       onUserAccountUpdated;
 }
 
-/// Video device management methods.
+/// 视频设备管理方法。
 ///
 abstract class VideoDeviceManager {
-  /// Enumerates the video devices.
+  /// 获取系统中所有的视频设备列表。
   ///
   ///
   /// Returns
-  /// Success: A VideoDeviceInfo array including all video devices in the system.Failure: An empty array.
+  /// 方法调用成功：返回一个 VideoDeviceInfo 数组，其中包含系统中所有视频设备。方法调用失败: 返回空列表。
   Future<List<VideoDeviceInfo>> enumerateVideoDevices();
 
-  /// Specifies the video capture device with the device ID.
-  /// Plugging or unplugging a device does not change its device ID.
+  /// 通过设备 ID 指定视频采集设备。
+  /// 插拔设备不会改变设备 ID。
   ///
-  /// * [deviceIdUTF8] The device ID. You can get the device ID by calling enumerateVideoDevices .The maximum length is MaxDeviceIdLengthType .
+  /// * [deviceIdUTF8] 设备 ID。可通过调用 enumerateVideoDevices 方法获取。最大长度为 MaxDeviceIdLengthType 。
   Future<void> setDevice(String deviceIdUTF8);
 
-  /// Retrieves the current video capture device.
+  /// 获取当前使用的视频采集设备。
   ///
   ///
   /// Returns
-  /// The video capture device.
+  /// 视频采集设备。
   Future<String> getDevice();
 
-  /// Gets the number of video formats supported by the specified video capture device.
-  /// Video capture devices may support multiple video formats, and each format supports different combinations of video frame width, video frame height, and frame rate.You can call this method to get how many video formats the specified video capture device can support, and then call getCapability to get the specific video frame information in the specified video format.
+  /// 获取指定视频采集设备支持的视频格式数量。
+  /// 视频采集设备可能支持多种视频格式，每一种格式都支持不同的视频帧宽度、视频帧高度、帧率组合。你可以通过调用该方法，获取指定的视频采集设备可支持多少种视频格式，然后调用 getCapability 获取指定视频格式下的具体视频帧信息。
   ///
-  /// * [deviceIdUTF8] The ID of the video capture device.
+  /// * [deviceIdUTF8] 视频采集设备的 ID。
   Future<void> numberOfCapabilities(String deviceIdUTF8);
 
-  /// Gets the detailed video frame information of the video capture device in the specified video format.
-  /// After calling numberOfCapabilities to get the number of video formats supported by the video capture device, you can call this method to get the specific video frame information supported by the specified index number.
+  /// 获取视频采集设备在指定的视频格式下的详细视频帧信息。
+  /// 在调用 numberOfCapabilities 获取视频采集设备支持的视频格式数量后，你可以调用该方法获取指定索引号支持的具体视频帧信息。
   ///
-  /// * [deviceIdUTF8] The ID of the video capture device.
-  /// * [deviceCapabilityNumber] The index number of the video format. If numberOfCapabilities the return value of is i, the value range of this parameter is [0,i).
+  /// * [deviceIdUTF8] 视频采集设备的 ID。
+  /// * [deviceCapabilityNumber] 视频格式的索引号。如果 numberOfCapabilities 的返回值为 i，则该参数取值范围为[0,i)。
   ///
   /// Returns
-  /// The specific information of the specified video format, including width (px), height (px), and frame rate (fps). See VideoFormat .
+  /// 指定视频格式的具体信息，包括宽度（px），高度（px）和帧率（fps）。详见 VideoFormat 。
   Future<VideoFormat> getCapability(
       {required String deviceIdUTF8, required int deviceCapabilityNumber});
 
@@ -2366,12 +2410,12 @@ abstract class VideoDeviceManager {
   /// @nodoc
   Future<void> stopDeviceTest();
 
-  /// Releases all the resources occupied by the VideoDeviceManager object.
+  /// 释放 VideoDeviceManager 对象占用的所有资源。
   ///
   Future<void> release();
 }
 
-/// Configurations for the RtcEngineContext instance.
+/// RtcEngineContext 定义。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcEngineContext {
@@ -2385,32 +2429,32 @@ class RtcEngineContext {
       this.threadPriority,
       this.useExternalEglContext});
 
-  /// The App ID issued by Agora for your project. Only users in apps with the same App ID can join the same channel and communicate with each other. An App ID can only be used to create one RtcEngine instance. To change your App ID, call release to destroy the current RtcEngine instance, and then create a new one.
+  /// Agora 为 app 开发者签发的 App ID。 使用同一个 App ID 的 app 才能进入同一个频道进行通话或直播。一个 App ID 只能用于创建一个 RtcEngine。如需更换 App ID，必须先调用 release 销毁当前 RtcEngine 再重新创建。
   @JsonKey(name: 'appId')
   final String? appId;
 
-  /// The channel profile. See ChannelProfileType .
+  /// 频道使用场景。详见 ChannelProfileType 。
   @JsonKey(name: 'channelProfile')
   final ChannelProfileType? channelProfile;
 
-  /// The audio scenarios. See AudioScenarioType . Under different audio scenarios, the device uses different volume types.
+  /// 音频场景。详见 AudioScenarioType 。不同的音频场景下，设备的音量类型是不同的。
+  ///
   @JsonKey(name: 'audioScenario')
   final AudioScenarioType? audioScenario;
 
-  /// The region for connection. This is an advanced feature and applies to scenarios that have regional restrictions.  The area codes support bitwise operation.
+  /// 服务器的访问区域。该功能为高级设置，适用于有访问安全限制的场景。支持的区域详见 AreaCode 。区域码支持位操作。
   @JsonKey(name: 'areaCode')
   final int? areaCode;
 
-  /// The SDK log files are: agorasdk.log, agorasdk.1.log, agorasdk.2.log, agorasdk.3.log, and agorasdk.4.log.
-  ///  The API call log files are: agoraapi.log, agoraapi.1.log, agoraapi.2.log, agoraapi.3.log, and agoraapi.4.log.
-  ///  The default size for each SDK log file is 1,024 KB; the default size for each API call log file is 2,048 KB. These log files are encoded in UTF-8.
-  ///  The SDK writes the latest logs in agorasdk.log or agoraapi.log.
-  ///  When agorasdk.log is full, the SDK processes the log files in the following order:
-  ///  Delete the agorasdk.4.log file (if any).
-  ///  Rename agorasdk.3.log to agorasdk.4.log.
-  ///  Rename agorasdk.2.log to agorasdk.3.log.
-  ///  Rename agorasdk.1.log to agorasdk.2.log.
-  ///  Create a new agorasdk.log file. The overwrite rules for the agoraapi.log file are the same as for agorasdk.log. The log files that the SDK outputs. See LogConfig .By default, the SDK generates five SDK log files and five API call log files with the following rules:
+  /// SDK 日志文件的名称分别为：agorasdk.log、agorasdk.1.log、agorasdk.2.log、agorasdk.3.log、agorasdk.4.log。
+  ///  API 调用日志文件的名称分别为：agoraapi.log、agoraapi.1.log、agoraapi.2.log、agoraapi.3.log、agoraapi.4.log。
+  ///  每个 SDK 日志文件的默认大小为 1,024 KB；API 调用日志文件的默认大小为 2,048 KB。日志文件均为 UTF-8 编码。
+  ///  最新的日志永远写在 agorasdk.log 和 agoraapi.log 中。
+  ///  当 agorasdk.log 写满后，SDK 会按照以下顺序对日志文件进行操作： 删除 agorasdk.4.log 文件（如有）。
+  ///  将agorasdk.3.log 重命名为 agorasdk.4.log。
+  ///  将agorasdk.2.log 重命名为 agorasdk.3.log。
+  ///  将agorasdk.1.log 重命名为 agorasdk.2.log。
+  ///  新建 agorasdk.log 文件。 agoraapi.log 文件的覆盖规则与 agorasdk.log 相同。 设置 Agora SDK 输出的日志文件。详见 LogConfig 。默认情况下，SDK 会生成 5 个 SDK 日志文件和 5 个 API 调用日志文件，规则如下：
   @JsonKey(name: 'logConfig')
   final LogConfig? logConfig;
 
@@ -2430,7 +2474,7 @@ class RtcEngineContext {
   Map<String, dynamic> toJson() => _$RtcEngineContextToJson(this);
 }
 
-/// The metadata observer.
+/// Metadata 观测器。
 ///
 class MetadataObserver {
   /// @nodoc
@@ -2438,22 +2482,22 @@ class MetadataObserver {
     this.onMetadataReceived,
   });
 
-  /// Occurs when the local user receives the metadata.
+  /// 接收端已收到 metadata。
   ///
   ///
-  /// * [metadata] The metadata received, see Metadata .
+  /// * [metadata] 接收到的 metadata，详见 Metadata 。
   final void Function(Metadata metadata)? onMetadataReceived;
 }
 
-/// Metadata type of the observer. We only support video metadata for now.
+/// 观测器的 Metadata 类型。当前仅支持视频类型的 Metadata 。
 ///
 @JsonEnum(alwaysCreate: true)
 enum MetadataType {
-  /// The type of metadata is unknown.
+  /// Metadata 类型未知。
   @JsonValue(-1)
   unknownMetadata,
 
-  /// The type of metadata is video.
+  /// Metadata 类型为视频。
   @JsonValue(0)
   videoMetadata,
 }
@@ -2500,26 +2544,26 @@ extension MaxMetadataSizeTypeExt on MaxMetadataSizeType {
   }
 }
 
-/// Media metadata.
+/// 媒体附属信息。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Metadata {
   /// @nodoc
   const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
 
-  /// The user ID.For the recipient:the ID of the remote user who sent the Metadata.Ignore it for sender.
+  /// 用户 ID。 对于接收者：发送该 Metadata 的远端用户的 ID。对于发送者：请忽略。
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Buffer size for received or sent Metadata.
+  /// 接收到的或发送的 Metadata 的缓存大小。
   @JsonKey(name: 'size')
   final int? size;
 
-  /// The buffer address of the received or sent Metadata.
+  /// 接收到的或发送的 Metadata 的缓存地址。
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
-  /// The timestamp (ms) of Metadata.
+  /// Metadata 的时间戳，单位为毫秒。
   @JsonKey(name: 'timeStampMs')
   final int? timeStampMs;
 
@@ -2531,31 +2575,31 @@ class Metadata {
   Map<String, dynamic> toJson() => _$MetadataToJson(this);
 }
 
-/// The reason for the CDN streaming error.
+/// CDN 推流出错原因。
 ///
 @JsonEnum(alwaysCreate: true)
 enum DirectCdnStreamingError {
-  /// 0: No error.
+  /// 0：推流状态正常。
   @JsonValue(0)
   directCdnStreamingErrorOk,
 
-  /// 1: General error, no clear reason. You can try to push the stream again.
+  /// 1：一般性错误，没有明确原因。你可以尝试重新推流。
   @JsonValue(1)
   directCdnStreamingErrorFailed,
 
-  /// 2: An error occurs when pushing audio streams. For example, the local audio capture device is not working properly, is occupied by another process, or does not get the permission.
+  /// 2：音频推流出错。例如，本地音频采集设备未正常工作、被其他进程占用或没有使用权限。
   @JsonValue(2)
   directCdnStreamingErrorAudioPublication,
 
-  /// 3: An error occurs when pushing video streams. For example, the local video capture device is not working properly, is occupied by another process, or does not get the permission.
+  /// 3：视频推流出错。例如，本地视频采集设备未正常工作、被其他进程占用或没有使用权限。
   @JsonValue(3)
   directCdnStreamingErrorVideoPublication,
 
-  /// 4: Fails to connect to the CDN.
+  /// 4：连接 CDN 失败。
   @JsonValue(4)
   directCdnStreamingErrorNetConnect,
 
-  /// 5: The URL is already being used. Use a new media push URL.
+  /// 5：URL 已用于推流。请使用新的 URL。
   @JsonValue(5)
   directCdnStreamingErrorBadName,
 }
@@ -2573,27 +2617,27 @@ extension DirectCdnStreamingErrorExt on DirectCdnStreamingError {
   }
 }
 
-/// The current CDN streaming state.
+/// 当前 CDN 推流状态。
 ///
 @JsonEnum(alwaysCreate: true)
 enum DirectCdnStreamingState {
-  /// 0: The initial state before the CDN streaming starts.
+  /// 0：初始状态，即推流尚未开始。
   @JsonValue(0)
   directCdnStreamingStateIdle,
 
-  /// 1: Streams are being pushed to the CDN. The SDK returns this value when you call the startDirectCdnStreaming method to push streams to the CDN.
+  /// 1：正在推流中。当你调用 startDirectCdnStreaming 成功推流时，SDK 会返回该值。
   @JsonValue(1)
   directCdnStreamingStateRunning,
 
-  /// 2: Stops pushing streams to the CDN. The SDK returns this value when you call the stopDirectCdnStreaming method to stop pushing streams to the CDN.
+  /// 2：推流已正常结束。当你调用 stopDirectCdnStreaming 主动停止推流时，SDK 会返回该值。
   @JsonValue(2)
   directCdnStreamingStateStopped,
 
-  /// 3: Fails to push streams to the CDN. You can troubleshoot the issue with the information reported by the onDirectCdnStreamingStateChanged callback, and then push streams to the CDN again.
+  /// 3：推流失败。你可以通过 onDirectCdnStreamingStateChanged 回调报告的信息排查问题，然后重新推流。
   @JsonValue(3)
   directCdnStreamingStateFailed,
 
-  /// 4: Tries to reconnect Agora server to the CDN. The SDK attempts to reconnect a maximum of 10 times; if the connection is not restored, the streaming state becomes directCdnStreamingStateFailed.
+  /// 4：尝试重新连接 Agora 服务器和 CDN。最多尝试重连 10 次，如仍未成功恢复连接，则推流状态变为 directCdnStreamingStateFailed。
   @JsonValue(4)
   directCdnStreamingStateRecovering,
 }
@@ -2611,7 +2655,7 @@ extension DirectCdnStreamingStateExt on DirectCdnStreamingState {
   }
 }
 
-/// The statistics of the current CDN streaming.
+/// 当前 CDN 推流的统计数据。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class DirectCdnStreamingStats {
@@ -2623,23 +2667,23 @@ class DirectCdnStreamingStats {
       this.videoBitrate,
       this.audioBitrate});
 
-  /// The width (px) of the video frame.
+  /// 视频的宽度（px）。
   @JsonKey(name: 'videoWidth')
   final int? videoWidth;
 
-  /// The height (px) of the video frame.
+  /// 视频的高度（px）。
   @JsonKey(name: 'videoHeight')
   final int? videoHeight;
 
-  /// The frame rate (fps) of the current video frame.
+  /// 当前视频帧率（fps）。
   @JsonKey(name: 'fps')
   final int? fps;
 
-  /// The bitrate (bps) of the current video frame.
+  /// 当前视频码率（bps）。
   @JsonKey(name: 'videoBitrate')
   final int? videoBitrate;
 
-  /// The bitrate (bps) of the current audio frame.
+  /// 当前音频码率（bps）。
   @JsonKey(name: 'audioBitrate')
   final int? audioBitrate;
 
@@ -2651,7 +2695,7 @@ class DirectCdnStreamingStats {
   Map<String, dynamic> toJson() => _$DirectCdnStreamingStatsToJson(this);
 }
 
-/// The DirectCdnStreamingEventHandler interface class is used by the SDK to send event notifications of CDN streaming to your app. Your app can get those notifications through methods that inherit this interface class.
+/// DirectCdnStreamingEventHandler 接口类用于 SDK 向 app 发送 CDN 推流的事件通知，app 通过继承该接口类的方法获取 SDK 的事件通知。
 ///
 class DirectCdnStreamingEventHandler {
   /// @nodoc
@@ -2670,7 +2714,7 @@ class DirectCdnStreamingEventHandler {
   final void Function(DirectCdnStreamingStats stats)? onDirectCdnStreamingStats;
 }
 
-/// The media setting options for the host.
+/// 主播端的媒体选项。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class DirectCdnStreamingMediaOptions {
@@ -2684,19 +2728,21 @@ class DirectCdnStreamingMediaOptions {
       this.publishMediaPlayerId,
       this.customVideoTrackId});
 
-  /// Sets whether to publish the video captured by the camera:true: Publish the video captured by the camera.false: (Default) Do not publish the video captured by the camera.
+  /// 设置是否发布摄像头采集的视频。
+  ///  true: 发布摄像头采集的视频。false:（默认）不发布摄像头采集的视频。
   @JsonKey(name: 'publishCameraTrack')
   final bool? publishCameraTrack;
 
-  /// Sets whether to publish the audio captured by the microphone:true: Publish the audio captured by the microphone.false: (Default) Do not publish the audio captured by the microphone.
+  /// 设置是否发布麦克风采集的音频。
+  ///  true: 发布麦克风采集的音频。false:（默认）不发布麦克风采集的音频。
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Sets whether to publish the captured audio from a custom source:true: Publish the captured audio from a custom source.false: (Default) Do not publish the captured audio from the custom source.
+  /// 设置是否发布自定义采集的音频。 true: 发布自定义采集的音频。false:（默认）不发布自定义采集的音频。
   @JsonKey(name: 'publishCustomAudioTrack')
   final bool? publishCustomAudioTrack;
 
-  /// Sets whether to publish the captured video from a custom source:true: Publish the captured video from a custom source.false: (Default) Do not publish the captured video from the custom source.
+  /// 设置是否发布自定义采集的视频。 true: 发布自定义采集的视频。false:（默认）不发布自定义采集的视频。
   @JsonKey(name: 'publishCustomVideoTrack')
   final bool? publishCustomVideoTrack;
 
@@ -2708,7 +2754,7 @@ class DirectCdnStreamingMediaOptions {
   @JsonKey(name: 'publishMediaPlayerId')
   final int? publishMediaPlayerId;
 
-  /// The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
+  /// 调用 createCustomVideoTrack 方法返回的视频轨道 ID。默认值为 0。
   @JsonKey(name: 'customVideoTrackId')
   final int? customVideoTrackId;
 
@@ -2720,244 +2766,265 @@ class DirectCdnStreamingMediaOptions {
   Map<String, dynamic> toJson() => _$DirectCdnStreamingMediaOptionsToJson(this);
 }
 
-/// The basic interface of the Agora SDK that implements the core functions of real-time communication.
-/// RtcEngine provides the main methods that your app can call.
+/// Agora RTC SDK 的基础接口类，实现实时音视频的主要功能。
+/// RtcEngine 提供了 app 调用的主要方法。
 abstract class RtcEngine {
-  /// Releases the RtcEngine instance.
-  /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations.After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new RtcEngine instance.If you want to create a new RtcEngine instance after destroying the current one, ensure that you wait till the release method execution to complete.
+  /// 销毁 RtcEngine 对象。
+  /// 该方法释放 Agora SDK 使用的所有资源。有些 app 只在用户需要时才进行实时音视频通信，不需要时则将资源释放出来用于其他操作， 该方法适用于此类情况。调用该方法后，你将无法再使用 SDK 的其它方法和回调。如需再次使用实时音视频通信功能， 你必须依次重新调用 createAgoraRtcEngine 和 initialize 方法创建一个新的 RtcEngine 对象。如需在销毁后再次创建 RtcEngine 对象，需要等待 release 方法执行结束后再创建实例。
   ///
-  /// * [sync] true: Synchronous call. Agora suggests calling this method in a sub-thread to avoid congestion in the main thread because the synchronous call and the app cannot move on to another task until the resources used by RtcEngine are released. Besides, you cannot call release in any method or callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock. The SDK automatically detects the deadlock and converts this method into an asynchronous call, causing the test to take additional time.false: Asynchronous call. The app can move on to another task, no matter the resources used by RtcEngine are released or not. Do not immediately uninstall the SDK's dynamic library after the call; otherwise, it may cause a crash due to the SDK clean-up thread not quitting.
+  /// * [sync] true: 该方法为同步调用。需要等待 RtcEngine 资源释放后才能执行其他操作，所以我们建议在子线程中调用该方法，避免主线程阻塞。此外，我们不建议在 SDK 的回调中调用 release，否则由于 SDK 要等待回调返回才能回收相关的对象资源，会造成死锁。SDK 会自动检测这种死锁并转为异步调用，但是检测本身会消耗额外的时间。false: 该方法为异步调用。不需要等待 RtcEngine 资源释放后就能执行其他操作。使用异步调用时要注意，不要在调用该方法后立即卸载 SDK 动态库，否则可能会因为 SDK 的清理线程还没有退出而崩溃。
   Future<void> release({bool sync = false});
 
-  /// Initializes RtcEngine.
-  /// All called methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.Before calling other APIs, you must call createAgoraRtcEngine and RtcEngine to create and initialize the initialize object.The SDK supports creating only one RtcEngine instance for an app.
+  /// 初始化 RtcEngine。
+  /// RtcEngine 类的所有接口函数，如无特殊说明，都是异步调用，对接口的调用建议在同一个线程进行。请确保在调用其他 API 前先调用 createAgoraRtcEngine 和 initialize 创建并初始化 RtcEngine。SDK 只支持每个 app 创建一个 RtcEngine 实例。
   ///
-  /// * [context] Configurations for the RtcEngine instance. See RtcEngineContext .
+  /// * [context]  RtcEngine 实例的配置。详见 RtcEngineContext 。
   ///
   /// Returns
-  /// The RtcEngine instance, if the method call succeeds.An error code, if the call fails.
+  /// 方法调用成功，返回一个 RtcEngine 对象。方法调用失败，返回错误码。
   Future<void> initialize(RtcEngineContext context);
 
-  /// Gets the SDK version.
+  /// 获取 SDK 版本。
   ///
   ///
   /// Returns
-  /// An SDKBuildInfo object.
+  /// SDKBuildInfo 对象。
   Future<SDKBuildInfo> getVersion();
 
-  /// Gets the warning or error description.
+  /// 获取警告或错误描述。
   ///
   ///
-  /// * [code] The error code or warning code reported by the SDK.
+  /// * [code] SDK 报告的错误码或警告码。
   ///
   /// Returns
-  /// The specific error or warning description.
+  /// 具体的错误或警告描述。
   Future<String> getErrorDescription(int code);
 
-  /// Updates the channel media options after joining the channel.
+  /// 加入频道后更新频道媒体选项。
   ///
   ///
-  /// * [options] The channel media options. See ChannelMediaOptions .
+  /// * [options ] 频道媒体选项，详见 ChannelMediaOptions 。
   Future<void> updateChannelMediaOptions(ChannelMediaOptions options);
 
-  /// Gets a new token when the current token expires after a period of time.
-  /// You can use this method to pass a new token to the SDK. A token expires after a certain period of time. In the following two cases, the app should call this method to pass in a new token. Failure to do so will result in the SDK disconnecting from the server.The SDK triggers the onTokenPrivilegeWillExpire callback.The onConnectionStateChanged callback reports connectionChangedTokenExpired(9).
+  /// 更新 Token。
+  /// 该方法用于更新 Token。Token 会在一定时间后失效。在以下两种情况下，app 应重新获取 Token，然后调用该方法传入新的 Token，否则 SDK 无法和服务器建立连接： 发生 onTokenPrivilegeWillExpire 回调时。 onConnectionStateChanged 回调报告 connectionChangedTokenExpired(9) 时。
   ///
-  /// * [token] The new token.
+  /// * [token] 新的 Token。
   Future<void> renewToken(String token);
 
-  /// Sets the channel profile.
-  /// After initializing the SDK, the default channel profile is the live streaming profile. You can call this method to set the usage scenario of Agora channel. The Agora SDK differentiates channel profiles and applies optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call and prioritizes video quality for interactive live video streaming.To ensure the quality of real-time communication, Agora recommends that all users in a channel use the same channel profile.This method must be called and set before joinChannel [2/2], and cannot be set again after joining the channel.
+  /// 设置频道场景。
+  /// SDK 初始化后默认的频道场景为直播场景。你可以调用该方法设置 Agora 频道的使用场景。Agora SDK 会针对不同的使用场景采用不同的优化策略，如通信场景偏好流畅，直播场景偏好画质。为保证实时音视频质量，相同频道内的用户必须使用同一种频道场景。该方法必须在 joinChannel [2/2] 前调用和进行设置，进入频道后无法再设置。
   ///
-  /// * [profile] The channel profile. See ChannelProfileType .
+  /// * [profile] 频道使用场景。详见 ChannelProfileType 。
   Future<void> setChannelProfile(ChannelProfileType profile);
 
-  /// Stops the audio call test.
+  /// 停止语音通话回路测试。
   ///
   Future<void> stopEchoTest();
 
-  /// Enables the video module.
-  /// Call this method either before joining a channel or during a call. If this method is called before joining a channel, the call starts in the video mode. Call disableVideo to disable the video mode.A successful call of this method triggers the onRemoteVideoStateChanged callback on the remote client.This method enables the internal engine and is valid after leaving the channel.This method resets the internal engine and takes some time to take effect. Agora recommends using the following API methods to control the video engine modules separately: enableLocalVideo : Whether to enable the camera to create the local video stream. muteLocalVideoStream : Whether to publish the local video stream. muteRemoteVideoStream : Whether to subscribe to and play the remote video stream. muteAllRemoteVideoStreams : Whether to subscribe to and play all remote video streams.
+  /// 启用视频模块。
+  /// 该方法可以在加入频道前或者通话中调用，在加入频道前调用则自动开启视频模块；在通话中调用则由音频模式切换为视频模式。调用 disableVideo 方法可关闭视频模式。成功调用该方法后，远端会触发 onRemoteVideoStateChanged 回调。该方法设置的是内部引擎为启用状态，在离开频道后仍然有效。该方法重置整个引擎，响应时间较慢，因此声网建议使用如下方法来控制视频模块： enableLocalVideo : 是否启动摄像头采集并创建本地视频流。 muteLocalVideoStream : 是否发布本地视频流。 muteRemoteVideoStream : 是否接收并播放远端视频流。 muteAllRemoteVideoStreams : 是否接收并播放所有远端视频流。
   Future<void> enableVideo();
 
-  /// Disables the video module.
-  /// This method disables video. You can call this method either before or after joining a channel. If you call it before joining a channel, an audio call starts when you join the channel. If you call it after joining a channel, a video call switches to an audio call. Call enableVideo to enable video.A successful call of this method triggers the onUserEnableVideo (false) callback on the remote client.This method affects the internal engine and can be called after leaving the channel.This method resets the internal engine and takes some time to take effect. Agora recommends using the following API methods to control the video engine modules separately: enableLocalVideo : Whether to enable the camera to create the local video stream. muteLocalVideoStream : Whether to publish the local video stream. muteRemoteVideoStream : Whether to subscribe to and play the remote video stream. muteAllRemoteVideoStreams : Whether to subscribe to and play all remote video streams.
+  /// 关闭视频模块。
+  /// 该方法用于关闭视频模块，可以在加入频道前或者通话中调用，在加入频道前调用，则自动开启纯音频模式，在通话中调用则由视频模式切换为纯音频模式。 调用 enableVideo 方法可开启视频模式。成功调用该方法后，远端会触发 onUserEnableVideo (false) 回调。该方法设置的是内部引擎为禁用状态，在离开频道后仍然有效。该方法重置整个引擎，响应时间较慢，因此声网建议使用如下方法来控制视频模块： enableLocalVideo : 是否启动摄像头采集并创建本地视频流。 muteLocalVideoStream : 是否发布本地视频流。 muteRemoteVideoStream : 是否接收并播放远端视频流。 muteAllRemoteVideoStreams : 是否接收并播放所有远端视频流。
   Future<void> disableVideo();
 
-  /// Starts the last mile network probe test.
-  /// This method starts the last-mile network probe test before joining a channel to get the uplink and downlink last mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).Once this method is enabled, the SDK returns the following callbacks: onLastmileQuality : The SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions and is more closely linked to the user experience. onLastmileProbeResult : The SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.This method applies to the following scenarios:Before a user joins a channel, call this method to check the uplink network quality.In a live streaming channel, call this method to check the uplink network quality before an audience member switches to a host.Do not call other methods before receiving the onLastmileQuality and onLastmileProbeResult callbacks. Otherwise, the callbacks may be interrupted.A host should not call this method after joining a channel (when in a call).
+  /// 开始通话前网络质量探测。
+  /// 开始通话前网络质量探测，向用户反馈上下行网络的带宽、丢包、网络抖动和往返时延数据。
+  ///  启用该方法后，SDK 会依次返回如下 2 个回调：
+  ///  onLastmileQuality ，视网络情况约 2 秒内返回。该回调通过打分反馈上下行网络质量，更贴近用户的主观感受。
+  ///  onLastmileProbeResult ，视网络情况约 30 秒内返回。该回调通过具体数据反馈上下行网络质量，更加客观。 该方法主要用于以下两种场景：
+  ///  用户加入频道前，可以调用该方法判断和预测目前的上行网络质量是否足够好。直播场景下，当用户角色想由观众切换为主播时，可以调用该方法判断和预测目前的上行网络质量是否足够好。
+  ///  调用该方法后，在收到 onLastmileQuality 和 onLastmileProbeResult 回调之前请不要调用其他方法，否则可能会由于 API 操作过于频繁导致此方法无法执行。
+  ///  在直播场景中，如果本地用户为主播，请勿加入频道后调用该方法。
   ///
-  /// * [config] The configurations of the last-mile network probe test. See LastmileProbeConfig .
+  /// * [config] Last mile 网络探测配置，详见 LastmileProbeConfig 。
+  ///
   Future<void> startLastmileProbeTest(LastmileProbeConfig config);
 
-  /// Stops the last mile network probe test.
+  /// 停止通话前网络质量探测。
   ///
   Future<void> stopLastmileProbeTest();
 
-  /// Sets the video encoder configuration.
-  /// Sets the encoder configuration for the local video.You can call this method either before or after joining a channel. If you don't need to set the video encoder configuration after joining a channel,
-  /// Agora recommends you calling this method before the enableVideo method to reduce the rendering time of the first video frame.
+  /// 设置视频编码属性。
+  /// 设置本地视频的编码属性。该方法在加入频道前后都能调用。如果用户在加入频道后不需要重新设置视频编码属性，则
+  ///  Agora 建议在 enableVideo 前调用该方法，可以加快首帧出图的时间。
   ///
-  /// * [config] Video profile. See VideoEncoderConfiguration .
+  /// * [config] 视频编码参数配置。详见 VideoEncoderConfiguration 。
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
 
-  /// Sets the image enhancement options.
-  /// Enables or disables image enhancement, and sets the options.Call this method before calling enableVideo or startPreview .
+  /// 设置美颜效果选项。
+  /// 开启本地美颜功能，并设置美颜效果选项。请在 enableVideo 或 startPreview 之后调用该方法。
   ///
-  /// * [type] The type of the video source. See MediaSourceType .
-  /// * [enabled] Whether to enable the image enhancement function:true: Enable the image enhancement function.false: (Default) Disable the image enhancement function.
-  /// * [options] The image enhancement options. See BeautyOptions .
+  /// * [type] 媒体源类型，详见 MediaSourceType 。
+  /// * [enabled] 是否开启美颜功能： true: 开启。false:（默认）关闭。
+  /// * [options] 美颜选项，详细定义见 BeautyOptions 。
   Future<void> setBeautyEffectOptions(
       {required bool enabled,
       required BeautyOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
-  /// Sets low-light enhancement.
-  /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.Both this method and setExtensionProperty can turn on low-light enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
+  /// 设置暗光增强功能。
+  /// 暗光增强功能可以在光线亮度偏低（如背光、阴天、暗场景）和亮度不均匀的环境下自适应调整视频画面的亮度值，恢复或凸显图像的细节信息，最终提升视频图像的整体视觉效果。你可以调用该方法开启暗光增强功能并设置暗光增强的效果。请在 enableVideo 后调用该方法。暗光增强对设备性能有一定要求。开启暗光增强后，如果设备出现严重发烫等问题，Agora 推荐你将暗光增强等级修改为消耗性能较少的等级或关闭暗光增强功能。该方法和 setExtensionProperty 均可开启暗光增强功能： 当你使用 SDK 采集视频时，Agora 推荐使用该方法（该方法只可对 SDK 采集的视频起作用）。当你使用外部的视频源实现自定义视频采集，或者将外部视频源发送给 SDK 时，Agora 推荐使用 setExtensionProperty 方法。
   ///
-  /// * [enabled] Whether to enable low-light enhancement function:true: Enable low-light enhancement function.false: (Default) Disable low-light enhancement function.
-  /// * [options] The low-light enhancement options. See LowlightEnhanceOptions .
-  /// * [type] The type of the video source. See MediaSourceType .
+  /// * [enabled] 是否开启暗光增强功能：
+  ///  true: 开启暗光增强功能。false:（默认）关闭暗光增强功能。
+  /// * [options] 暗光增强选项，用于设置暗光增强的效果。详见 LowlightEnhanceOptions 。
+  /// * [type] 媒体资源类型，详见 MediaSourceType 。
   Future<void> setLowlightEnhanceOptions(
       {required bool enabled,
       required LowlightEnhanceOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
-  /// Sets video noise reduction.
-  /// Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding.You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.Call this method after calling enableVideo .Video noise reduction has certain requirements for equipment performance. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.Both this method and setExtensionProperty can turn on video noise reduction function:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
+  /// 设置视频降噪功能。
+  /// 采光不足的环境和低端视频采集设备会使视频图像含有明显的噪声，影响视频画质。在实时互动场景下，视频噪声还会在编码过程中占用码流资源并降低编码效率。你可以调用该方法开启视频降噪功能并设置视频降噪的效果。请在 enableVideo 后调用该方法。视频降噪对设备性能有一定要求。开启视频降噪后，如果设备出现严重发烫等问题，Agora 推荐你将视频降噪等级修改为消耗性能较少的等级或关闭视频降噪功能。该方法和 setExtensionProperty 均可开启视频降噪功能： 当你使用 SDK 采集视频时，Agora 推荐使用该方法（该方法只可对 SDK 采集的视频起作用）。当你使用外部的视频源实现自定义视频采集，或者将外部视频源发送给 SDK 时，Agora 推荐使用 setExtensionProperty 方法。
   ///
-  /// * [type] The type of the video source. See MediaSourceType .
-  /// * [enabled] Whether to enable video noise reduction:true: Enable video noise reduction.false: (Default) Disable video noise reduction.
-  /// * [options] The video noise reduction options. See VideoDenoiserOptions .
+  /// * [type] 媒体资源类型，详见 MediaSourceType 。
+  /// * [enabled]  是否开启视频降噪功能： true: 开启视频降噪功能。false:（默认）关闭视频降噪功能。
+  /// * [options] 视频降噪选项，用于设置视频降噪的效果。详见 VideoDenoiserOptions 。
   Future<void> setVideoDenoiserOptions(
       {required bool enabled,
       required VideoDenoiserOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
-  /// Sets color enhancement.
-  /// The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .The color enhancement feature has certain performance requirements on devices. With color enhancement turned on, Agora recommends that you change the color enhancement level to one that consumes less performance or turn off color enhancement if your device is experiencing severe heat problems.Both this method and setExtensionProperty can turn on color enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
+  /// 设置色彩增强功能。
+  /// 摄像头采集到的视频画面可能存在色彩失真的现象。色彩增强功能可以通过智能调节饱和度和对比度等视频特性，提升视频色彩丰富度和色彩还原度，最终使视频画面更生动。你可以调用该方法开启色彩增强功能并设置色彩增强的效果。请在 enableVideo 后调用该方法。色彩增强对设备性能有一定要求。开启色彩增强后，如果设备出现严重发烫等问题，Agora 推荐你将色彩增强等级修改为消耗性能较少的等级或关闭色彩增强功能。该方法和 setExtensionProperty 均可开启色彩增强功能：
+  ///  当你使用 SDK 采集视频时，Agora 推荐使用该方法（该方法只可对 SDK 采集的视频起作用）。当你使用外部的视频源实现自定义视频采集，或者将外部视频源发送给 SDK 时，Agora 推荐使用 setExtensionProperty 方法。
   ///
-  /// * [type] The type of the video source. See MediaSourceType .
-  /// * [enabled] Whether to enable color enhancement:true Enable color enhancement.false: (Default) Disable color enhancement.
-  /// * [options] The color enhancement options. See ColorEnhanceOptions .
+  /// * [type] 媒体资源类型，详见 MediaSourceType 。
+  /// * [enabled] 是否开启色彩增强功能：
+  ///  true：开启色彩增强功能。false：（默认）关闭色彩增强功能。
+  /// * [options] 色彩增强选项，用于设置色彩增强的效果。详见 ColorEnhanceOptions 。
   Future<void> setColorEnhanceOptions(
       {required bool enabled,
       required ColorEnhanceOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
-  /// Enables/Disables the virtual background.
-  /// The virtual background function allows you to replace the original background image of the local user or to blur the background. After successfully enabling the virtual background function, all users in the channel can see the customized background.Call this method before calling enableVideo or startPreview .This function requires a high-performance device. Agora recommends that you use this function on devices with the following chips:Snapdragon 700 series 750G and laterSnapdragon 800 series 835 and laterDimensity 700 series 720 and laterKirin 800 series 810 and laterKirin 900 series 980 and laterDevices with an A9 chip and better, as follows:iPhone 6S and lateriPad Air 3rd generation and lateriPad 5th generation and lateriPad Pro 1st generation and lateriPad mini 5th generation and laterAgora recommends that you use this function in scenarios that meet the following conditions:A high-definition camera device is used, and the environment is uniformly lit.The captured video image is uncluttered, the user's portrait is half-length and largely unobstructed, and the background is a single color that differs from the color of the user's clothing.
+  /// 开启/关闭虚拟背景。
+  /// 虚拟背景功能支持你使用自定义的背景图替代本地用户原来的背景图或者将背景虚化处理。成功开启虚拟背景功能后，频道内所有用户都能看到自定义的背景。请在 enableVideo 或 startPreview 之后调用该方法。该功能对设备性能要求较高，Agora 推荐你在搭载如下芯片的设备上使用： 骁龙 700 系列 750G 及以上骁龙 800 系列 835 及以上天玑 700 系列 720 及以上麒麟 800 系列 810 及以上麒麟 900 系列 980 及以上搭载 A9 及以上芯片的如下设备： iPhone 6S 及以上iPad Air 第三代及以上iPad 第五代及以上iPad Pro 第一代及以上iPad mini 第五代及以上Agora 建议你在满足如下条件的场景中使用该功能： 使用高清摄像设备、摄像环境光照均匀。摄像画面中，物件较少，用户的人像为半身人像且基本无遮挡，背景色较单一且与用户着装颜色不同。
   ///
-  /// * [enabled] Whether to enable virtual background:true: Enable virtual background.false: Disable virtual background.
-  /// * [backgroundSource] The custom background image. See VirtualBackgroundSource . To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
+  /// * [enabled] 是否开启虚拟背景： true: 开启。false: 关闭。
+  /// * [backgroundSource] 自定义的背景图。详见 VirtualBackgroundSource 。为将自定义背景图的分辨率与 SDK 的视频采集分辨率适配，SDK 会在保证自定义背景图不变形的前提下，对自定义背景图进行缩放和裁剪。
   Future<void> enableVirtualBackground(
       {required bool enabled,
       required VirtualBackgroundSource backgroundSource,
       required SegmentationProperty segproperty,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
-  /// Enables/Disables the super resolution algorithm for a remote user's video stream.
-  /// This function can effectively improve the resolution of the remote video picture seen by the local user, that is, the width and height (pixels) of the video received by the specified remote user are enlarged to 2 times original size.After calling this method, you can confirm whether super resolution is successfully enabled through the remote video stream statistics ( RemoteVideoStats ) in the onRemoteVideoStats callback:If the parameter superResolutionType >0: Super resolution is enabled.If parameter superResolutionType =0: Super resolution is not enabled.The super resolution feature requires extra system resources. To balance the visual experience and system resource consumption, this feature can only be enabled for a single remote user. If the local user uses super resolution on Android, the original resolution of the remote user's video cannot exceed 640 × 360 pixels; if the local user uses super resolution on iOS, the original resolution of the remote user's video cannot exceed 640 × 480 pixels.This method is for Android and iOS only.Before calling this method, ensure that you have integrated the following dynamic libraries:Android: libagora_super_resolution_extension.soiOS: AgoraSuperResolutionExtension.xcframeworkBecause this method has certain system performance requirements, Agora recommends that you use the following devices or better:Android:VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 ProOPPO: PCCM00, Find X3OnePlus: A6000Xiaomi: Mi 8, Mi 9, Mi 10, Mi 11, MIX3, Redmi K20 ProSAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, SM-G9750, S20, S21HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, EVR-AN00, nova 4, nova 5 Pro, nova 6 5G, nova 7 5G, Mate 30, Mate 30 Pro, Mate 40, Mate 40 Pro, P40, P40 Pro, Huawei M6, MatePad 10.8iOS:iPhone XRiPhone XSiPhone XS MaxiPhone 11iPhone 11 ProiPhone 11 Pro MaxiPhone 12iPhone 12 miniiPhone 12 ProiPhone 12 Pro MaxiPhone 12 SE (2nd generation)iPad Pro 11-inch (3rd generation)iPad Pro 12.9-inch (3rd generation)iPad Air 3 (3rd generation)iPad Air 3 (4th generation)
+  /// 开启或关闭远端视频超分辨率。
+  /// 该功能可以有效提升本地用户看到的远端视频画面的分辨率，即：将接收到的指定远端用户的视频宽和高（像素）均扩大为 2 倍。调用该方法后，通过 onRemoteVideoStats 回调中的远端视频统计数据（ RemoteVideoStats ），确认超分辨率是否成功开启：如果参数 superResolutionType >0：超分辨率已开启。如果参数 superResolutionType =0：超分辨率未开启。超分辨率功能会额外耗费系统资源。为平衡视觉体验和系统消耗，只可以对一个远端用户开启超分辨率，并且远端用户视频的原始分辨率在 Android 设备上不能超过 640 × 360，在 iOS 设备上不能超过 640 × 480。该方法仅适用于 Android 和 iOS 平台。调用该方法前，请确保你已经集成相应的动态库：
+  ///  Android: libagora_super_resolution_extension.soiOS: AgoraSuperResolutionExtension.xcframework该方法对用户设备具有一定要求，Agora 推荐你使用如下或更好的设备：
+  ///  Android:
+  ///  VIVO：V1821A，NEX S，1914A，1916A，1962A，1824BA，X60，X60 ProOPPO：PCCM00，Find X3OnePlus：A6000Xiaomi：Mi 8，Mi 9，Mi 10，Mi 11，MIX3，Redmi K20 ProSAMSUNG：SM-G9600，SM-G9650，SM-N9600，SM-G9708，SM-G960U，SM-G9750，S20，S21HUAWEI：SEA-AL00，ELE-AL00，VOG-AL00，YAL-AL10，HMA-AL00，EVR-AN00，nova 4，nova 5 Pro，nova 6 5G，nova 7 5G，Mate 30，Mate 30 Pro，Mate 40，Mate 40 Pro，P40，P40 Pro，华为平板 M6，MatePad 10.8iOS:
+  ///  iPhone XRiPhone XSiPhone XS MaxiPhone 11iPhone 11 ProiPhone 11 Pro MaxiPhone 12iPhone 12 miniiPhone 12 ProiPhone 12 Pro MaxiPhone 12 SE（第二代）iPad Pro 11-inch（第三代）iPad Pro 12.9-inch（第三代）iPad Air（第三代）iPad Air（第四代）
   ///
-  /// * [userId] The user ID of the remote user.
-  /// * [enable] Whether to enable super resolution for the remote user’s video:true: Enable super resolution.false: Disable super resolution.
+  /// * [userId] 远端用户 ID。
+  /// * [enable] 是否对远端视频开启超分辨率：
+  ///  true: 开启。false: 关闭。
   Future<void> enableRemoteSuperResolution(
       {required int userId, required bool enable});
 
-  /// Initializes the video view of a remote user.
-  /// This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.You need to specify the ID of the remote user in this method. If the remote user ID is unknown to the application, set it after the app receives the onUserJoined callback.To unbind the remote user from the view, set the view parameter to NULL.Once the remote user leaves the channel, the SDK unbinds the remote user.To update the rendering or mirror mode of the remote video view during a call, use the setRemoteRenderMode method.If you use the Agora recording feature, the recording client joins the channel as a dummy client, triggering the onUserJoined callback. Do not bind the dummy client to the app view because the dummy client does not send any video streams. If your app does not recognize the dummy client, bind the remote user to the view when the SDK triggers the onFirstRemoteVideoDecoded callback.
+  /// 初始化远端用户视图。
+  /// 该方法绑定远端用户和显示视图，并设置远端用户视图在本地显示时的渲染模式和镜像模式，只影响本地用户看到的视频画面。调用该方法时需要指定远端视频的用户 ID，一般可以在进频道前提前设置好。如果无法在加入频道前得到远端用户的 ID，可以在收到 onUserJoined 回调时调用该方法。如需解除某个远端用户的绑定视图，可以调用该方法并将 view 设置为空。离开频道后，SDK 会清除远端用户视图的绑定关系。如果你希望在通话中更新远端用户视图的渲染或镜像模式，请使用 setRemoteRenderMode 方法。如果你使用了 Agora 录制服务，录制服务会作为一个哑客户端加入频道，因此也会触发 onUserJoined 回调。由于录制服务不会发送视频流，app 无需为它绑定视图。如果 app 无法识别哑客户端，可以在收到 onFirstRemoteVideoDecoded 回调时再绑定远端用户视图。
   ///
-  /// * [canvas] The remote video view and settings. See VideoCanvas .
+  /// * [canvas] 远端视频显示属性。详见 VideoCanvas 。
   Future<void> setupRemoteVideo(VideoCanvas canvas);
 
-  /// Initializes the local video view.
-  /// This method initializes the video view of a local stream on the local device. It affects only the video view that the local user sees, not the published local video stream. Call this method to bind the local video stream to a video view and to set the rendering and mirror modes of the video view.After initialization, call this method to set the local video and then join the channel. The local video still binds to the view after you leave the channel. To unbind the local video from the view, set the view parameter as NULL.You can call this method either before or after joining a channel.To update the rendering or mirror mode of the local video view during a call, use the setLocalRenderMode method.
+  /// 初始化本地视图。
+  /// 该方法初始化本地视图并设置本地用户视频显示属性，只影响本地用户看到的视频画面，不影响本地发布视频。调用该方法绑定本地视频流的显示视窗(view)，并设置本地用户视图的渲染模式和镜像模式。在 App 开发中，通常在初始化后调用该方法进行本地视频设置，然后再加入频道。退出频道后，绑定仍然有效，如果需要解除绑定，可以调用该方法将参数 view 设为 NULL。该方法在加入频道前后都能调用。如果你希望在通话中更新本地用户视图的渲染或镜像模式，请使用 setLocalRenderMode 方法。
   ///
-  /// * [canvas] Local video display properties. See VideoCanvas .
+  /// * [canvas] 本地视频显示属性。详见 VideoCanvas 。
   Future<void> setupLocalVideo(VideoCanvas canvas);
 
-  /// Enables the audio module.
-  /// The audio mode is enabled by default.This method enables the internal engine and can be called anytime after initialization. It is still valid after one leaves channel.This method enables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio module separately: enableLocalAudio : Whether to enable the microphone to create the local audio stream. muteLocalAudioStream : Whether to publish the local audio stream. muteRemoteAudioStream : Whether to subscribe and play the remote audio stream. muteAllRemoteAudioStreams : Whether to subscribe to and play all remote audio streams.
+  /// 启用音频模块。
+  /// 启用音频模块（默认为开启状态）。该方法设置音频模块为启用状态，在频道内和频道外均可调用。在离开频道后仍然有效。该方法开启整个音频模块，响应时间较慢，因此 Agora 建议使用如下方法来控制音频模块： enableLocalAudio : 是否启动麦克风采集并创建本地音频流。 muteLocalAudioStream : 是否发布本地音频流。 muteRemoteAudioStream : 是否接收并播放远端音频流。 muteAllRemoteAudioStreams : 是否接收并播放所有远端音频流。
   Future<void> enableAudio();
 
-  /// Disables the audio module.
-  /// This method disables the internal engine and can be called anytime after initialization. It is still valid after one leaves channel.This method resets the internal engine and takes some time to take effect. Agora recommends using the following API methods to control the audio modules separately: enableLocalAudio : Whether to enable the microphone to create the local audio stream. muteLocalAudioStream : Whether to publish the local audio stream. muteRemoteAudioStream : Whether to subscribe and play the remote audio stream. muteAllRemoteAudioStreams : Whether to subscribe to and play all remote audio streams.
+  /// 关闭音频模块。
+  /// 该方法设置内部引擎为禁用状态，在频道内和频道外均可调用。离开频道后仍然有效。该方法重置整个引擎，响应时间较慢，因此声网建议使用如下方法来控制音频模块： enableLocalAudio : 是否启动麦克风采集并创建本地音频流。 muteLocalAudioStream : 是否发布本地音频流。 muteRemoteAudioStream : 是否接收并播放远端音频流。 muteAllRemoteAudioStreams : 是否接收并播放所有远端音频流。
   Future<void> disableAudio();
 
-  /// Sets audio scenarios.
-  /// You can call this method either before or after joining a channel.
+  /// 设置音频场景。
+  /// 该方法在加入频道前后均可调用。
   ///
-  /// * [scenario] The audio scenarios. See AudioScenarioType . Under different audio scenarios, the device uses different volume types.
+  /// * [scenario] 音频场景。详见 AudioScenarioType 。不同的音频场景下，设备的音量类型是不同的。
   Future<void> setAudioScenario(AudioScenarioType scenario);
 
-  /// Enables/Disables the local audio capture.
-  /// The audio function is enabled by default. This method disables or re-enables the local audio function to stop or restart local audio capturing.This method does not affect receiving or playing the remote audio streams, and enableLocalAudio (false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.Once the local audio function is disabled or re-enabled, the SDK triggers the onLocalAudioStateChanged callback, which reports localAudioStreamStateStopped (0) or localAudioStreamStateRecording (1).This method is different from the muteLocalAudioStream method:enableLocalAudio: Disables/Re-enables the local audio capturing and processing. If you disable or re-enable local audio capturing using the enableLocalAudio method, the local user might hear a pause in the remote audio playback.muteLocalAudioStream: Sends/Stops sending the local audio streams.You can call this method either before or after joining a channel. Calling it before joining a channel only sets the device state, and it takes effect immediately after you join the channel.
+  /// 开关本地音频采集。
+  /// 当用户加入频道时，音频功能默认是开启的。该方法可以关闭或重新开启本地音频功能，即停止或重新开始本地音频采集。该方法不影响接收远端音频流， enableLocalAudio (false) 适用于只听不发的用户场景。音频功能关闭或重新开启后，会收到 onLocalAudioStateChanged 回调，并报告 localAudioStreamStateStopped(0) 或 localAudioStreamStateRecording(1)。 该方法与 muteLocalAudioStream 的区别在于： enableLocalAudio: 开启或关闭本地音频采集及处理。使用 enableLocalAudio 关闭或开启本地采集后，本地听远端播放会有短暂中断。muteLocalAudioStream: 停止或继续发送本地音频流。该方法在加入频道前后均可调用。在加入频道前调用只能设置设备状态，在加入频道后才会立即生效。
   ///
-  /// * [enabled] true: (Default) Re-enable the local audio function, that is, to start the local audio capturing device (for example, the microphone).false: Disable the local audio function, that is, to stop local audio capturing.
+  /// * [enabled] true: 重新开启本地音频功能，即开启本地音频采集（默认）；false: 关闭本地音频功能，即停止本地音频采集。
   Future<void> enableLocalAudio(bool enabled);
 
-  /// Stops or resumes publishing the local audio stream.
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
+  /// 取消或恢复发布本地音频流。
+  /// 该方法不影响音频采集状态，因为没有禁用音频采集设备。
   ///
-  /// * [mute] Whether to stop publishing the local audio stream.true: Stop publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
+  /// * [mute] 是否取消发布本地音频流。 true: 取消发布。false:（默认）发布。
   Future<void> muteLocalAudioStream(bool mute);
 
-  /// Stops or resumes subscribing to the audio streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can call joinChannel [2/2] and set autoSubscribeAudio as false.
+  /// 取消或恢复订阅所有远端用户的音频流。
+  /// 成功调用该方法后，本地用户会取消或恢复订阅所有远端用户的音频流，包括在调用该方法后加入频道的用户的音频流。该方法需要在加入频道后调用。如果需要在加入频道前设置默认不订阅远端用户音频流，可以在调用 joinChannel [2/2] 加入频道时设置 autoSubscribeAudio 为 false。
   ///
-  /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
+  /// * [mute] 是否取消订阅所有远端用户的音频流： true: 取消订阅所有远端用户的音频流。false:（默认）订阅所有远端用户的音频流。
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
-  /// Stops or resumes subscribing to the audio streams of all remote users by default.
-  /// Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.If you need to resume subscribing to the audio streams of remote users in the channel after calling this method, do the following:To resume subscribing to the audio stream of a specified user, call muteRemoteAudioStream (false), and specify the user ID.To resume subscribing to the audio streams of multiple remote users, call muteRemoteAudioStream(false) multiple times.
+  /// 默认取消或恢复订阅远端用户的音频流。
+  /// 该方法需要在加入频道后调用。调用成功后，本地用户取消或恢复订阅调用时刻之后加入频道的远端用户。取消订阅音频流后，如果需要恢复订阅频道内的远端，可以进行如下操作：
+  ///  如果需要恢复订阅单个用户的音频流，调用 muteRemoteAudioStream (false)，并指定你想要订阅的远端用户 ID。如果想恢复订阅多个用户的音频流，则需要多次调用 muteRemoteAudioStream (false)。
   ///
-  /// * [mute] Whether to stop subscribing to the audio streams of all remote users by default.true: Stop subscribing to the audio streams of all remote users by default.false: (Default) Subscribe to the audio streams of all remote users by default.
+  /// * [mute] 是否默认取消订阅远端用户的音频流： true：默认取消订阅远端用户的音频流。false：（默认）默认订阅远端用户的音频流。
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool mute);
 
-  /// Cancels or resumes subscribing to the specified remote user's audio stream.
-  /// Call this method after joining a channel.
+  /// 取消或恢复订阅指定远端用户的音频流。
+  /// 该方法需要在加入频道后调用。
   ///
-  /// * [uid] The user ID of the specified user.
-  /// * [mute] Whether to stop subscribing to the audio stream of the specified user.
-  ///  true: Unsubscribe from the specified user's audio stream.false: (Default) Subscribes to the specified user's audio stream.
+  /// * [uid] 指定用户的用户 ID。
+  /// * [mute] 是否取消订阅指定远端用户的音频流。
+  ///  true: 取消订阅指定用户的音频流。false:（默认）订阅指定用户的音频流。
   Future<void> muteRemoteAudioStream({required int uid, required bool mute});
 
-  /// Stops or resumes publishing the local video stream.
-  /// A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.This method does not affect any ongoing video recording, because it does not disable the camera.
+  /// 取消或恢复发布本地视频流。
+  /// 成功调用该方法后，远端会触发 onUserMuteVideo 回调。相比于 enableLocalVideo (false) 用于控制本地视频流发送的方法，该方法响应速度更快。该方法不影响视频采集状态，没有禁用摄像头。
   ///
-  /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
+  /// * [mute] 是否取消发送本地视频流。
+  ///  true: 取消发送本地视频流。false: （默认）发送本地视频流。
   Future<void> muteLocalVideoStream(bool mute);
 
-  /// Enables/Disables the local video capture.
-  /// This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.After calling enableVideo , the local video capturer is enabled by default. You can call enableLocalVideo (false) to disable the local video capturer. If you want to re-enable the local video, call enableLocalVideo(true).After the local video capturer is successfully disabled or re-enabled, the SDK triggers the onRemoteVideoStateChanged callback on the remote client.You can call this method either before or after joining a channel.This method enables the internal engine and is valid after leaving the channel.
+  /// 开关本地视频采集。
+  /// 该方法禁用或重新启用本地视频采集，不影响接收远端视频。调用 enableVideo 后，本地视频采集即默认开启。你可以调用 enableLocalVideo (false) 关闭本地视频采集。关闭后如果想要重新开启，则可调用 enableLocalVideo(true)。成功禁用或启用本地视频采集后，远端会触发 onRemoteVideoStateChanged 回调。该方法在加入频道前后都能调用。该方法设置内部引擎为启用状态，在离开频道后仍然有效。
   ///
-  /// * [enabled] Whether to enable the local video capture.true: (Default) Enable the local video capture.false: Disables the local video capture. Once the local video is disabled, the remote users can no longer receive the video stream of this user, while this user can still receive the video streams of the other remote users. When set to false, this method does not require a local camera.
+  /// * [enabled] 是否开启本地视频采集。true:（默认）开启本地视频采集。false: 关闭本地视频采集。关闭后，远端用户会接收不到本地用户的视频流；但本地用户依然可以接收远端用户的视频流。设置为 false 时，该方法不需要本地有摄像头。
   Future<void> enableLocalVideo(bool enabled);
 
-  /// Stops or resumes subscribing to the video streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel [2/2] and set autoSubscribeVideo as false.
+  /// 取消或恢复订阅所有远端用户的视频流。
+  /// 成功调用该方法后，本地用户会取消或恢复订阅所有远端用户的视频流，包括在调用该方法后加入频道的用户的视频流。该方法需要在加入频道后调用。如果需要在加入频道前设置默认不订阅远端用户视频流，可以在调用 joinChannel [2/2] 加入频道时设置 autoSubscribeVideo 为 false。
   ///
-  /// * [mute] Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
+  /// * [mute] 是否取消订阅所有远端用户的视频流。
+  ///  true: 取消订阅所有用户的视频流。false:（默认）订阅所有用户的视频流。
   Future<void> muteAllRemoteVideoStreams(bool mute);
 
-  /// Stops or resumes subscribing to the video streams of all remote users by default.
-  /// Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.If you need to resume subscribing to the audio streams of remote users in the channel after calling this method, do the following:To resume subscribing to the audio stream of a specified user, call muteRemoteVideoStream (false), and specify the user ID.To resume subscribing to the audio streams of multiple remote users, call muteRemoteVideoStream(false) multiple times.
+  /// 默认取消或恢复订阅远端用户的视频流。
+  /// 该方法需要在加入频道后调用。调用成功后，本地用户取消或恢复订阅调用时刻之后加入频道的远端用户。取消订阅视频流后，如果需要恢复订阅频道内的远端用户，可以进行如下操作：
+  ///  如果需要恢复订阅单个用户的视频流，调用 muteRemoteVideoStream (false)，并指定你想要订阅的远端用户 ID。如果想恢复订阅多个用户的视频流，则需要多次调用 muteRemoteVideoStream(false)。
   ///
-  /// * [mute] Whether to stop subscribing to the audio streams of all remote users by default.true: Stop subscribing to the audio streams of all remote users by default.false: (Default) Resume subscribing to the audio streams of all remote users by default.
+  /// * [mute] 是否默认取消订阅远端用户的视频流： true: 默认取消订阅。false:（默认）默认订阅。
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
 
-  /// Cancels or resumes subscribing to the specified remote user's video stream.
-  /// Call this method after joining a channel.
+  /// 取消或恢复订阅指定远端用户的视频流。
+  /// 该方法需要在加入频道后调用。
   ///
-  /// * [uid] The user ID of the specified user.
-  /// * [mute] Whether to subscribe to the specified remote user's video stream.true: Unsubscribe from the specified user's video stream.false: (Default) Subscribes to the specified user's video stream.
+  /// * [uid] 指定用户的用户 ID。
+  /// * [mute] 是否取消订阅指定远端用户的视频流。 true: 取消订阅指定用户的视频流。false: （默认）订阅指定用户的视频流。
   Future<void> muteRemoteVideoStream({required int uid, required bool mute});
 
-  /// Sets the stream type of the remote video.
-  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or the low-quality video stream (the low resolution, and low bitrate video stream). The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.The method result returns in the onApiCallExecuted callback.You can call this method either before or after joining a channel. If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType , the setting of setRemoteVideoStreamType takes effect.
+  /// 设置订阅的视频流类型。
+  /// 在网络条件受限的情况下，如果发送端没有调用 enableDualStreamMode (false) 关闭双流模式，接收端可以选择接收大流还是小流。其中，大流为高分辨率高码率的视频流，小流则是低分辨率低码率的视频流。
+  ///  正常情况下，用户默认接收大流。如需接收小流，可以调用本方法进行切换。SDK 会根据视频窗口的大小动态调整对应视频流的大小，以节约带宽和计算资源。视频小流默认的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。
+  ///  调用本方法的执行结果将在 onApiCallExecuted 中返回。 该方法在加入频道前后都能调用。如果既调用了 setRemoteVideoStreamType ，也调用了 setRemoteDefaultVideoStreamType ，则 SDK 以 setRemoteVideoStreamType 中的设置为准。
   ///
-  /// * [uid] The user ID.
-  /// * [streamType] The video stream type: VideoStreamType .
+  /// * [uid] 用户 ID。
+  /// * [streamType] 视频流类型: VideoStreamType 。
   Future<void> setRemoteVideoStreamType(
       {required int uid, required VideoStreamType streamType});
 
@@ -2965,204 +3032,205 @@ abstract class RtcEngine {
   Future<void> setRemoteVideoSubscriptionOptions(
       {required int uid, required VideoSubscriptionOptions options});
 
-  /// Sets the default stream type of subscrption for remote video streams.
-  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.The result of this method is returned in the onApiCallExecuted callback.Call this method before joining a channel. Agora does not support changing the default subscribed video stream type after joining a channel.If you call both this method and setRemoteVideoStreamType , the SDK applies the settings in the setRemoteVideoStreamType method.
+  /// 设置默认订阅的视频流类型。
+  /// 在网络条件受限的情况下，如果发送端没有调用 enableDualStreamMode (false) 关闭双流模式，接收端可以选择接收大流还是小流。其中，大流为高分辨率高码率的视频流，小流则是低分辨率低码率的视频流。正常情况下，用户默认接收大流。如需默认接收所有用户的视频小流，可以调用本方法进行切换。SDK 会根据视频窗口的大小动态调整对应视频流的大小，以节约带宽和计算资源。视频小流默认的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。调用本方法的执行结果将在 onApiCallExecuted 中返回。该方法只能在加入频道前调用。Agora 不支持你在加入频道后修改默认订阅的视频流类型。如果你既调用了该方法，也调用了 setRemoteVideoStreamType ，则 SDK 以 setRemoteVideoStreamType 中的设置为准。
   ///
-  /// * [streamType] The default video-stream type. See VideoStreamType .
+  /// * [streamType] 默认订阅的视频流类型: VideoStreamType 。
   Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 
-  /// Set the blacklist of subscriptions for audio streams.
-  /// You can call this method to specify the audio streams of a user that you do not want to subscribe to.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.
+  /// 设置音频订阅黑名单。
+  /// 你可以调用该方法指定不订阅的音频流。该方法在加入频道前后均可调用。音频订阅黑名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的 autoSubscribeAudio 影响。设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
   ///
-  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeAudioBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] 订阅黑名单的用户 ID 列表。如果你想指定不订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeAudioBlacklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  /// * [uidNumber] 黑名单用户 ID 列表中的用户数量。
   Future<void> setSubscribeAudioBlacklist(
       {required List<int> uidList, required int uidNumber});
 
-  /// Sets the whitelist of subscriptions for audio streams.
-  /// You can call this method to specify the audio streams of a user that you want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the whitelist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+  /// 设置音频订阅白名单。
+  /// 你可以调用该方法指定想要订阅的音频流。如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。该方法在加入频道前后均可调用。音频订阅白名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的 autoSubscribeAudio 的影响。设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
   ///
-  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeAudioWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
-  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] 音频订阅白名单的用户 ID 列表。如果你想指定订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeAudioWhitelist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  /// * [uidNumber] 白名单用户 ID 列表中的用户数量。
   Future<void> setSubscribeAudioWhitelist(
       {required List<int> uidList, required int uidNumber});
 
-  /// Set the blacklist of subscriptions for video streams.
-  /// You can call this method to specify the video streams of a user that you do not want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.Once the blacklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The blacklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+  /// 设置视频订阅黑名单。
+  /// 你可以调用该方法指定不订阅的视频流。如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。该方法在加入频道前后均可调用。视频订阅黑名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
   ///
-  /// * [uidNumber] The number of users in the user ID list.
-  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blacklist, you need to call the setSubscribeVideoBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
+  /// * [uidNumber] 黑名单用户 ID 列表中的用户数量。
+  /// * [uidList] 视频订阅黑名单的用户 ID 列表。如果你想指定不订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeVideoBlacklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
   Future<void> setSubscribeVideoBlacklist(
       {required List<int> uidList, required int uidNumber});
 
-  /// Set the whitelist of subscriptions for video streams.
-  /// You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the whitelist and blacklist at the same time, only the blacklist takes effect.Once the whitelist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-  ///  You can call this method either before or after joining a channel.The whitelist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+  /// 设置视频订阅白名单。
+  /// 你可以调用该方法指定想要订阅的视频流。如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
+  ///  该方法在加入频道前后均可调用。视频订阅白名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
   ///
-  /// * [uidNumber] The number of users in the user ID list.
-  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the whitelist, you need to call the setSubscribeVideoWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
+  /// * [uidNumber] 白名单用户 ID 列表中的用户数量。
+  /// * [uidList] 视频订阅白名单的用户 ID 列表。如果你想指定仅订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeVideoWhitelist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
   Future<void> setSubscribeVideoWhitelist(
       {required List<int> uidList, required int uidNumber});
 
-  /// Enables the reporting of users' volume indication.
-  /// This method enables the SDK to regularly report the volume information of the local user who sends a stream and remote users (up to three) whose instantaneous volumes are the highest to the app. Once you call this method and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method.You can call this method either before or after joining a channel.
+  /// 启用用户音量提示。
+  /// 该方法允许 SDK 定期向 app 报告本地发流用户和瞬时音量最高的远端用户（最多 3 位）的音量相关信息。启用该方法后，只要频道内有发流用户， SDK 会在加入频道后按设置的时间间隔触发 onAudioVolumeIndication 回调。该方法在加入频道前后都能调用。
   ///
-  /// * [interval] Sets the time interval between two consecutive volume indications:≤ 0: Disables the volume indication.> 0: Time interval (ms) between two consecutive volume indications. You need to set this parameter to an integer multiple of 200. If the value is lower than 200, the SDK automatically adjusts the value to 200.
-  /// * [smooth] The smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
-  /// * [reportVad] true: Enable the voice activity detection of the local user. Once it is enabled,the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user.false: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
+  /// * [interval] 指定音量提示的时间间隔： ≤ 0: 禁用音量提示功能。> 0: 返回音量提示的间隔，单位为毫秒。该参数需要设为 200 的整数倍。如果取值低于 200，SDK 会自动调整为 200。
+  /// * [smooth] 平滑系数，指定音量提示的灵敏度。取值范围为 [0,10]，建议值为 3。数字越大，波动越灵敏；数字越小，波动越平滑。
+  /// * [reportVad] true：开启本地人声检测功能。开启后，onAudioVolumeIndication 回调的 vad 参数会报告是否在本地检测到人声。false：（默认）关闭本地人声检测功能。除引擎自动进行本地人声检测的场景外，onAudioVolumeIndication 回调的 vad 参数不会报告是否在本地检测到人声。
   Future<void> enableAudioVolumeIndication(
       {required int interval, required int smooth, required bool reportVad});
 
-  /// Registers an encoded audio observer.
-  /// Call this method after joining a channel.You can call this method or the startAudioRecording method to set the audio content and audio quality. Agora recommends not using this method and startAudioRecording at the same time; otherwise, only the method called later takes effect.
+  /// 注册音频编码数据观测器。
+  /// 请在加入频道后调用该方法。由于该方法和 startAudioRecording 都会设置音频内容和音质，Agora 不推荐该方法和 startAudioRecording 一起使用。否则，只有后调用的方法会生效。
   ///
-  /// * [config] Observer settings for the encoded audio. See AudioEncodedFrameObserverConfig .
-  /// * [observer] The encoded audio observer. See AudioEncodedFrameObserver .
+  /// * [config] 编码后音频的观测器设置。详见 AudioEncodedFrameObserverConfig 。
+  /// * [observer] 编码后音频的观测器。详见 AudioEncodedFrameObserver 。
   void registerAudioEncodedFrameObserver(
       {required AudioEncodedFrameObserverConfig config,
       required AudioEncodedFrameObserver observer});
 
-  /// Stops the audio recording on the client.
+  /// 停止客户端录音。
   ///
   Future<void> stopAudioRecording();
 
-  /// Creates a media player instance.
+  /// 创建媒体播放器。
   ///
   ///
   /// Returns
-  /// The MediaPlayer instance, if the method call succeeds.An empty pointer , if the method call fails.
+  /// 方法调用成功：返回 MediaPlayer 对象。方法调用失败：返回空指针。
   Future<MediaPlayer> createMediaPlayer();
 
-  /// Destroys the media player instance.
+  /// 销毁媒体播放器。
   ///
   Future<void> destroyMediaPlayer(MediaPlayer mediaPlayer);
 
-  /// Stops playing and mixing the music file.
-  /// This method stops the audio mixing. Call this method when you are in a channel.
+  /// 停止播放音乐文件。
+  /// 该方法停止播放音乐文件。请在频道内调用该方法。
   Future<void> stopAudioMixing();
 
-  /// Pauses playing the music file.
-  /// Call this method after joining a channel.
+  /// 暂停播放音乐文件。
+  /// 请在加入频道后调用该方法。
   Future<void> pauseAudioMixing();
 
-  /// Resumes playing and mixing the music file.
-  /// This method resumes playing and mixing the music file. Call this method when you are in a channel.
+  /// 恢复播放音乐文件。
+  /// 该方法恢复混音，继续播放音乐文件。请在频道内调用该方法。
   Future<void> resumeAudioMixing();
 
-  /// Selects the audio track used during playback.
-  /// After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.For the supported formats of audio files, see .You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (audioMixingStatePlaying) callback.
+  /// 指定当前音乐文件的播放音轨。
+  /// 获取音乐文件的音轨数量后，你可以调用该方法指定任一音轨进行播放。例如，如果一个多音轨文件的不同音轨存放了不同语言的歌曲，则你可以调用该方法设置音乐文件的播放语言。该方法支持的音频文件格式见 。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged (audioMixingStatePlaying) 回调后调用该方法。
   ///
-  /// * [index
-  /// ] The audio track you want to specify. The value range is [0, getAudioTrackCount ()].
+  /// * [index] 指定的播放音轨。取值范围为 [0, getAudioTrackCount ()]。
   Future<void> selectAudioTrack(int index);
 
-  /// Gets the index of audio tracks of the current music file.
-  /// You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// 获取当前音乐文件的音轨索引。
+  /// 你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。
   ///
   /// Returns
-  /// The SDK returns the index of the audio tracks if the method call succeeds.< 0: Failure.
+  /// 方法调用成功时，返回当前音乐文件的音轨索引。< 0: 方法调用失败。
   Future<int> getAudioTrackCount();
 
-  /// Adjusts the volume during audio mixing.
-  /// This method adjusts the audio mixing volume on both the local client and remote clients.Call this method after the startAudioMixing method.
+  /// 调节音乐文件的播放音量。
+  /// 该方法调节混音音乐文件在本端和远端的播放音量大小。该方法需要在 startAudioMixing 后调用。
   ///
-  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
+  /// * [volume] 音乐文件音量范围为 0~100。100 （默认值）为原始文件音量。
   Future<void> adjustAudioMixingVolume(int volume);
 
-  /// Adjusts the volume of audio mixing for publishing.
-  /// This method adjusts the audio mixing volume on the remote clients.Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// 调节音乐文件远端播放音量。
+  /// 该方法调节混音音乐文件在远端的播放音量大小。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。
   ///
-  /// * [volume] The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
+  /// * [volume] 音乐文件音量。取值范围为 [0,100]，100 （默认值）为原始音量。
   Future<void> adjustAudioMixingPublishVolume(int volume);
 
-  /// Retrieves the audio mixing volume for publishing.
-  /// This method helps to troubleshoot audio volume‑related issues.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// 获取音乐文件的远端播放音量。
+  /// 该接口可以方便开发者排查音量相关问题。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。
   ///
   /// Returns
-  /// The audio mixing volume, if this method call succeeds. The value range is [0,100].< 0: Failure.
+  /// ≥ 0: 方法调用成功则返回音量值，范围为 [0,100]。< 0: 方法调用失败。
   Future<int> getAudioMixingPublishVolume();
 
-  /// Adjusts the volume of audio mixing for local playback.
-  /// Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// 调节音乐文件在本地播放的音量。
+  /// 你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。
   ///
-  /// * [volume] The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
+  /// * [volume] 音乐文件音量。取值范围为 [0,100]，100 （默认值）为原始音量。
   Future<void> adjustAudioMixingPlayoutVolume(int volume);
 
-  /// Retrieves the audio mixing volume for local playback.
-  /// This method retrieves the audio mixing volume for local playback. You can use it to troubleshoot audio volume related issues.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// 获取音乐文件的本地播放音量。
+  /// 该方法获取混音的音乐文件本地播放音量，方便排查音量相关问题。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。
   ///
   /// Returns
-  /// The audio mixing volume, if this method call succeeds. The value range is [0,100].< 0: Failure.
+  /// ≥ 0: 方法调用成功则返回音量值，范围为 [0,100]。< 0: 方法调用失败。
   Future<int> getAudioMixingPlayoutVolume();
 
-  /// Retrieves the duration (ms) of the music file.
-  /// Retrieves the total duration (ms) of the audio file.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (audioMixingStatePlaying) callback.
+  /// 获取音乐文件总时长。
+  /// 该方法获取音乐文件总时长，单位为毫秒。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged (audioMixingStatePlaying) 回调后调用该方法。
   ///
   /// Returns
-  /// ≥ 0: The audio mixing duration, if this method call succeeds.< 0: Failure.
+  /// ≥ 0: 方法调用成功返回音乐文件时长。< 0: 方法调用失败。
   Future<int> getAudioMixingDuration();
 
-  /// Retrieves the playback position (ms) of the music file.
-  /// Retrieves the playback position (ms) of the audio.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.If you need to call getAudioMixingCurrentPosition multiple times, ensure that the time interval between calling this method is more than 500 ms.
+  /// 获取音乐文件的播放进度。
+  /// 该方法获取当前音乐文件播放进度，单位为毫秒。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。如需多次调用 getAudioMixingCurrentPosition，请确保调用间隔大于 500 ms。
   ///
   /// Returns
-  /// ≥ 0: The current playback position (ms) of the audio mixing, if this method call succeeds. 0 represents that the current music file does not start playing.< 0: Failure.
+  /// ≥ 0: 方法调用成功，返回当前音乐文件播放进度（ms）。0 表示当前音乐文件未开始播放。< 0: 方法调用失败。
   Future<int> getAudioMixingCurrentPosition();
 
-  /// Sets the audio mixing position.
-  /// Call this method to set the playback position of the music file to a different starting position, rather than playing the file from the beginning.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// 设置音乐文件的播放位置。
+  /// 该方法可以设置音频文件的播放位置，这样你可以根据实际情况播放文件，而非从头到尾播放整个文件。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。
   ///
-  /// * [pos] Integer. The playback position (ms).
+  /// * [pos] 整数。进度条位置，单位为毫秒。
   Future<void> setAudioMixingPosition(int pos);
 
-  /// Sets the channel mode of the current audio file.
-  /// In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (audioMixingStatePlaying) callback.This method only applies to stereo audio files.
+  /// 设置当前音频文件的声道模式。
+  /// 在双声道音频文件中，左声道和右声道可以存储不同的音频数据。根据实际需要，你可以设置声道模式为原始模式、左声道模式、右声道模式或混合模式。例如，在 KTV 场景中，音频文件的左声道存储了伴奏，右声道存储了原唱的歌声。如果你只需听伴奏，调用该方法设置音频文件的声道模式为左声道模式；如果你需要同时听伴奏和原唱，调用该方法设置声道模式为混合模式。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged (audioMixingStatePlaying) 回调后调用该方法。该方法仅适用于双声道的音频文件。
   ///
-  /// * [mode] The channel mode. See AudioMixingDualMonoMode .
+  /// * [mode] 声道模式。详见 AudioMixingDualMonoMode 。
   ///
   /// Returns
-  /// 0: Success.< 0: Failure.
+  /// 0: 方法调用成功< 0: 方法调用失败
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode);
 
-  /// Sets the pitch of the local music file.
-  /// When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only.You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
+  /// 调整本地播放的音乐文件的音调。
+  /// 本地人声和播放的音乐文件混音时，调用该方法可以仅调节音乐文件的音调。你需要在调用 startAudioMixing 并收到 onAudioMixingStateChanged(audioMixingStatePlaying) 回调后调用该方法。
   ///
-  /// * [pitch] Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
+  /// * [pitch] 按半音音阶调整本地播放的音乐文件的音调，默认值为 0，即不调整音调。取值范围为 [-12,12]，每相邻两个值的音高距离相差半音。取值的绝对值越大，音调升高或降低得越多。
   Future<void> setAudioMixingPitch(int pitch);
 
-  /// Retrieves the volume of the audio effects.
-  /// The volume range is [0,100]. The default value is 100, the original volume.Call this method after the playEffect method.
+  /// 获取音效文件的播放音量。
+  /// 音量范围为 0~100。100 （默认值）为原始文件音量。该方法需要在 playEffect 后调用。
   ///
   /// Returns
-  /// Volume of the audio effects, if this method call succeeds.< 0: Failure.
+  /// 音效文件的音量。< 0: 方法调用失败
   Future<int> getEffectsVolume();
 
-  /// Sets the volume of the audio effects.
-  /// Call this method after the playEffect method.
+  /// 设置音效文件的播放音量。
+  /// 该方法需要在 playEffect 后调用。
   ///
-  /// * [volume] The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
+  /// * [volume] 播放音量。取值范围为 [0,100]。默认值为 100，表示原始音量。
   Future<void> setEffectsVolume(int volume);
 
-  /// Preloads a specified audio effect file into the memory.
-  /// To ensure smooth communication, limit the size of the audio effect file. Agora recommends using this method to preload the audio effect before calling joinChannel [2/2].This method does not support online audio effect files.For the audio file formats supported by this method, see What formats of audio files the Agora RTC SDK support.
+  /// 将音效文件加载至内存。
+  /// 为保证通信畅通，请注意控制预加载音效文件的大小，并在 joinChannel [2/2] 前就使用该方法完成音效预加载。该方法不支持在线音频文件。该方法支持的音频文件格式见 Agora RTC SDK 支持播放哪些格式的音频文件。
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
-  /// * [filePath] File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports using a URI address, an absolute path, or a path that starts with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441.Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
-  /// * [startPos] The playback position (ms) of the audio effect file.
+  /// * [soundId] 音效的 ID。每个音效的 ID 具有唯一性。
+  /// * [filePath] 文件路径： Android: 文件路径，需精确到文件名及后缀。支持在线文件的 URL 地址，本地文件的 URI 地址、绝对路径或以 /assets/ 开头的路径。
+  ///  通过绝对路径访问本地文件可能会遇到权限问题，Agora 推荐使用 URI 地址访问本地文件。例如 content://com.android.providers.media.documents/document/audio%3A14441。Windows: 音频文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 C:\music\audio.mp4。iOS 或 macOS: 音频文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 /var/mobile/Containers/Data/audio.mp4。
+  /// * [startPos] 音效文件加载的起始位置，单位为毫秒。
   Future<void> preloadEffect(
       {required int soundId, required String filePath, int startPos = 0});
 
-  /// Plays the specified local or online sound effect file.
-  /// To play multiple audio effect files at the same time, call this method multiple times with different soundId and filePath. For the best user experience, Agora recommends playing no more than three audio effect files at the same time. After the playback of an audio effect file completes, the SDK triggers the onAudioEffectFinished callback.Call this method after joining a channel.
+  /// 播放指定的本地或在线音效文件。
+  /// 你可以多次调用该方法，传入不同的 soundID 和 filePath，同时播放多个音效文件。为获得最佳用户体验，Agora 推荐同时播放的音效文件不超过 3 个。 音效文件播放结束后，SDK 会触发 onAudioEffectFinished 回调。
+  ///  该方法需要在加入频道后调用。
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique. If you have loaded the audio effect into memory via preloadEffect , make sure this parameter is the same as the soundId set in preloadEffect.
-  /// * [filePath] Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. See supported audio formats.If you have loaded the audio effect into memory via preloadEffect , make sure this parameter is the same as the filePath set in preloadEffect.
-  /// * [loopCount] The number of times the audio effect loops.≥ 0: The number of playback times. For example, 1 means loop one time, which means playing the audio effect two times in total.-1: Play the music file in an infinite loop.
-  /// * [pitch] The pitch of the audio effect. The value range is 0.5 to 2.0. The default value is 1.0, which means the original pitch. The lower the value, the lower the pitch.
-  /// * [pan] The spatial position of the audio effect. The value ranges between -1.0 and 1.0, where:-1.0: The audio effect displays to the left.0.0: The audio effect displays ahead.1.0: The audio effect displays to the right.
-  /// * [gain] The volume of the audio effect. The value range is 0.0 to 100.0. The default value is 100.0, which means the original volume. The smaller the value, the lower the volume.
-  /// * [publish] Whether to publish the audio effect to the remote users.true: Publish the audio effect to the remote users. Both the local user and remote users can hear the audio effect.false: Do not publish the audio effect to the remote users. Only the local user can hear the audio effect.
-  /// * [startPos] The playback position (ms) of the audio effect file.
+  /// * [soundId] 音效的 ID。每个音效的 ID 具有唯一性。 如果你已通过 preloadEffect 将音效加载至内存，请确保该参数与 preloadEffect 中设置的 soundId 相同。
+  /// * [filePath] 播放文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 C:\music\audio.mp4。支持的音频格式包括 MP3、AAC、M4A、MP4、WAV、3GP。详见支持的媒体格式。如果你已通过 preloadEffect 将音效加载至内存，请确保该参数与 preloadEffect 中设置的 filePath 相同。
+  /// * [loopCount] 音效循环播放的次数。 ≥ 0: 循环播放次数。例如，1 表示循环播放 1 次，即总计播放 2 次。-1: 无限循环播放。
+  /// * [pitch] 音效的音调，取值范围为 [0.5,2.0]。默认值为 1.0，表示原始音调。取值越小，则音调越低。
+  /// * [pan] 音效的空间位置。取值范围为 [-1.0,1.0]，例如： -1.0：音效出现在左边0.0：音效出现在正前方 1.0：音效出现在右边
+  /// * [gain] 音效的音量。取值范围为 [0.0,100.0]。默认值为 100.0，表示原始音量。取值越小，则音量越低。
+  /// * [publish] 是否将音效发布至远端： true: 将音效发布至远端。本地用户和远端用户都能听到音效。false: 不将音效发布至远端。只有本地用户能听到音效。
+  /// * [startPos] 音效文件的播放位置，单位为毫秒。
   Future<void> playEffect(
       {required int soundId,
       required String filePath,
@@ -3173,14 +3241,16 @@ abstract class RtcEngine {
       bool publish = false,
       int startPos = 0});
 
-  /// Plays all audio effects.
-  /// After calling preloadEffect multiple times to preload multiple audio effects into the memory, you can call this method to play all the specified audio effects for all users in the channel.
+  /// 播放所有音效文件。
+  /// 多次调用 preloadEffect 预加载多个音效文件后，你可以调用本方法播放所有预加载的音效文件。
   ///
-  /// * [loopCount] The number of times the audio effect loops:-1: Play the audio effect in an indefinite loop until you call stopEffect or stopAllEffects .0: Play the audio effect once.1: Play the audio effect twice.
-  /// * [pitch] The pitch of the audio effect. The value ranges between 0.5 and 2.0. The default value is 1.0 (original pitch). The lower the value, the lower the pitch.
-  /// * [pan] The spatial position of the audio effect. The value ranges between -1.0 and 1.0:-1.0: The audio effect shows on the left.0: The audio effect shows ahead.1.0: The audio effect shows on the right.
-  /// * [gain] The volume of the audio effect. The value range is [0, 100]. The default value is 100 (original volume). The smaller the value, the lower the volume.
-  /// * [publish] Whether to publish the audio effect to the remote users:true: Publish the audio effect to the remote users. Both the local user and remote users can hear the audio effect.false: Do not publish the audio effect to the remote users. Only the local user can hear the audio effect.
+  /// * [loopCount] 音效文件循环播放的次数：
+  ///  -1: 无限循环播放音效文件，直至调用 stopEffect 或 stopAllEffects 后停止。0: 播放音效文件一次。1: 播放音效文件两次。
+  /// * [pitch] 音效的音调。取值范围为 [0.5,2.0]。默认值为 1.0，代表原始音调。取值越小，则音调越低。
+  /// * [pan] 音效的空间位置。取值范围为 [-1.0,1.0]: -1.0: 音效出现在左边。0: 音效出现在正前边。1.0: 音效出现在右边。
+  /// * [gain] 音效的音量。取值范围为 [0,100]。100 为默认值，代表原始音量。取值越小，则音量越低。
+  /// * [publish] 是否将音效发布到远端：
+  ///  true: 将音效发布到远端。本地和远端用户都能听到该音效。false: （默认）不将音效发布到远端。只能本地用户能听到该音效。
   Future<void> playAllEffects(
       {required int loopCount,
       required double pitch,
@@ -3188,103 +3258,103 @@ abstract class RtcEngine {
       required int gain,
       bool publish = false});
 
-  /// Gets the volume of a specified audio effect.
+  /// 获取指定音效文件的播放音量。
   ///
   ///
-  /// * [soundId] The ID of the audio effect.
+  /// * [soundId] 音效文件的 ID。
   ///
   /// Returns
-  /// The volume of the specified audio effect, if the method call succeeds. The value range is [0,100]. 100 represents the original volume. < 0: Failure.
+  /// ≥ 0: 方法调用成功，返回播放音量。音量范围为 [0,100]。100 为原始音量。 < 0: 方法调用失败。
   Future<int> getVolumeOfEffect(int soundId);
 
-  /// Sets the volume of a specified audio effect.
+  /// 实时调整音效文件的播放音量。
   ///
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
-  /// * [volume] The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
+  /// * [soundId] 指定音效的 ID。每个音效均有唯一的 ID。
+  /// * [volume] 播放音量。取值范围为 [0,100]。默认值为 100，表示原始音量。
   Future<void> setVolumeOfEffect({required int soundId, required int volume});
 
-  /// Pauses playing a specified audio effect file.
+  /// 暂停音效文件播放。
   ///
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
+  /// * [soundId] 音效的 ID。每个音效的 ID 具有唯一性。
   Future<void> pauseEffect(int soundId);
 
-  /// Pauses playing all audio effect files.
+  /// 暂停所有音效文件播放。
   ///
   Future<void> pauseAllEffects();
 
-  /// Resumes playing a specified audio effect.
+  /// 恢复播放指定音效文件。
   ///
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
+  /// * [soundId] 音效的 ID。每个音效的 ID 具有唯一性。
   Future<void> resumeEffect(int soundId);
 
-  /// Resumes playing all audio effects.
+  /// 恢复播放所有音效文件。
   ///
   Future<void> resumeAllEffects();
 
-  /// Stops playing a specified audio effect.
+  /// 停止播放指定音效文件。
   ///
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
+  /// * [soundId] 指定音效文件的 ID。每个音效文件均有唯一的 ID。
   Future<void> stopEffect(int soundId);
 
-  /// Stops playing all audio effects.
+  /// 停止播放所有音效文件。
   ///
   Future<void> stopAllEffects();
 
-  /// Releases a specified preloaded audio effect from the memory.
+  /// 从内存释放某个预加载的音效文件。
   ///
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
+  /// * [soundId] 指定音效文件的 ID。每个音效文件均有唯一的 ID。
   Future<void> unloadEffect(int soundId);
 
-  /// Releases a specified preloaded audio effect from the memory.
+  /// 从内存释放所有预加载音效文件。
   ///
   Future<void> unloadAllEffects();
 
-  /// Retrieves the duration of the audio effect file.
-  /// Call this method after joining a channel.
+  /// 获取指定音效文件总时长。
+  /// 该方法需要在加入频道后调用。
   ///
-  /// * [filePath] File path:
-  ///  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports using a URI address, an absolute path, or a path that starts with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441.
-  ///  Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.
-  ///  iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
+  /// * [filePath] 文件路径： Android: 文件路径，需精确到文件名及后缀。支持在线文件的 URL 地址，本地文件的 URI 地址、绝对路径或以 /assets/ 开头的路径。
+  ///  通过绝对路径访问本地文件可能会遇到权限问题，Agora 推荐使用 URI 地址访问本地文件。例如 content://com.android.providers.media.documents/document/audio%3A14441。
+  ///  Windows: 音频文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 C:\music\audio.mp4。
+  ///  iOS 或 macOS: 音频文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 /var/mobile/Containers/Data/audio.mp4。
   ///
   ///
   /// Returns
-  /// The total duration (ms) of the specified audio effect file, if the method call succeeds.< 0: Failure.
+  /// 方法调用成功，返回指定音效文件时长（毫秒）。< 0：方法调用失败。
   Future<int> getEffectDuration(String filePath);
 
-  /// Sets the playback position of an audio effect file.
-  /// After a successful setting, the local audio effect file starts playing at the specified position.Call this method after playEffect.
+  /// 设置指定音效文件的播放位置。
+  /// 成功设置后，本地音效文件会在指定位置开始播放。该方法需要在 playEffect 后调用。
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
-  /// * [pos] The playback position (ms) of the audio effect file.
+  /// * [soundId] 音效的 ID。每个音效的 ID 具有唯一性。
+  /// * [pos] 音效文件的播放位置，单位为毫秒。
   Future<void> setEffectPosition({required int soundId, required int pos});
 
-  /// Retrieves the playback position of the audio effect file.
-  /// Call this method after the playEffect method.
+  /// 获取指定音效文件的播放进度。
+  /// 该方法需要在 playEffect 后调用。
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
+  /// * [soundId] 音效的 ID。每个音效的 ID 具有唯一性。
   ///
   /// Returns
-  /// The playback position (ms) of the specified audio effect file, if the method call succeeds.< 0: Failure.
+  /// 方法调用成功，返回指定音效文件的播放进度（毫秒）。< 0：方法调用失败。
   Future<int> getEffectCurrentPosition(int soundId);
 
-  /// Enables/Disables stereo panning for remote users.
-  /// Ensure that you call this method before joining a channel to enable stereo panning for remote users so that the local user can track the position of a remote user by calling setRemoteVoicePosition.
+  /// 开启/关闭远端用户的语音立体声。
+  /// 如果想调用 setRemoteVoicePosition 实现听声辨位的功能，请确保在加入频道前调用该方法开启远端用户的语音立体声。
   ///
-  /// * [enabled] Whether to enable stereo panning for remote users:true: Enable stereo panning.false: Disable stereo panning.
+  /// * [enabled] 是否开启远端用户语音立体声： true: 开启语音立体声。false: 关闭语音立体声。
   Future<void> enableSoundPositionIndication(bool enabled);
 
-  /// Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
-  /// This method sets the 2D position and volume of a remote user, so that the local user can easily hear and identify the remote user's position.When the local user calls this method to set the voice position of a remote user, the voice difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a sense of space. This method applies to massive multiplayer online games, such as Battle Royale games.For this method to work, enable stereo panning for remote users by calling the enableSoundPositionIndication method before joining a channel.For the best voice positioning, Agora recommends using a wired headset.Call this method after joining a channel.
+  /// 设置远端用户声音的 2D 位置，即水平面位置。
+  /// 设置远端用户声音的 2D 位置和音量，方便本地用户听声辨位。通过调用该接口设置远端用户声音出现的位置，左右声道的声音差异会产生声音的方位感，从而判断出远端用户的实时位置。在多人在线游戏场景，如吃鸡游戏中，该方法能有效增加游戏角色的方位感，模拟真实场景。使用该方法需要在加入频道前调用 enableSoundPositionIndication 开启远端用户的语音立体声。为获得最佳听觉体验，我们建议使用该方法时使用有线耳机。该方法需要在加入频道后调用。
   ///
-  /// * [uid] The user ID of the remote user.
-  /// * [pan] The voice position of the remote user. The value ranges from -1.0 to 1.0:0.0: (Default) The remote voice comes from the front.-1.0: The remote voice comes from the left.1.0: The remote voice comes from the right.
-  /// * [gain] The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
+  /// * [uid] 远端用户的 ID
+  /// * [pan] 设置远端用户声音的 2D 位置，取值范围为 [-1.0,1.0]: (默认）0.0: 声音出现在正前方。-1.0: 声音出现在左边。1.0: 声音出现在右边。
+  /// * [gain] 设置远端用户声音的音量，取值范围为 [0.0,100.0]，默认值为 100.0，表示该用户的原始音量。取值越小，则音量越低。
   Future<void> setRemoteVoicePosition(
       {required int uid, required double pan, required double gain});
 
@@ -3295,41 +3365,51 @@ abstract class RtcEngine {
   Future<void> setRemoteUserSpatialAudioParams(
       {required int uid, required SpatialAudioParams params});
 
-  /// Sets a preset voice beautifier effect.
-  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. For better voice effects, Agora recommends that you call setAudioProfile [1/2] and set scenario to audioScenarioGameStreaming(3) and profile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setVoiceBeautifierPreset, Agora recommends not calling the following methods, because they can override settings in setVoiceBeautifierPreset: setAudioEffectPreset setAudioEffectParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
+  /// 设置预设的美声效果。
+  /// 调用该方法可以为本地发流用户设置预设的人声美化效果。设置美声效果后，频道内所有用户都能听到该效果。根据不同的场景，你可以为用户设置不同的美声效果。为获取更好的人声效果，Agora 推荐你在调用该方法前将 setAudioProfile [1/2] 的 scenario 设为 audioScenarioGameStreaming(3)，并将 profile 设为 audioProfileMusicHighQuality(4) 或 audioProfileMusicHighQualityStereo(5)。该方法在加入频道前后都能调用。请勿将 setAudioProfile [1/2] 的 profile 参数设置为 audioProfileSpeechStandard(1) 或 audioProfileIot(6)，否则该方法不生效。该方法对人声的处理效果最佳，Agora 不推荐调用该方法处理含音乐的音频数据。调用 setVoiceBeautifierPreset，Agora 不推荐调用以下方法，否则 setVoiceBeautifierPreset 设置的效果会被覆盖：
+  ///  setAudioEffectPreset setAudioEffectParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///
-  /// * [preset] The preset voice beautifier effect options: VoiceBeautifierPreset .
+  /// * [preset] 预设的美声效果选项，详见 VoiceBeautifierPreset 。
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
 
-  /// Sets an SDK preset audio effect.
-  /// Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect.To get better audio effect quality, Agora recommends calling and setting scenario in setAudioProfile [1/2] as audioScenarioGameStreaming(3) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard (1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.If you call setAudioEffectPreset and set enumerators except for roomAcoustics3dVoice or pitchCorrection, do not call setAudioEffectParameters ; otherwise, setAudioEffectPreset is overridden.After calling setAudioEffectPreset, Agora recommends not calling the following methods, or the settings in setAudioEffectPreset are overridden: setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
+  /// 设置 SDK 预设的人声音效。
+  /// 调用该方法可以为本地发流用户设置 SDK 预设的人声音效，且不会改变原声的性别特征。设置音效后，频道内所有用户都能听到该效果。为获取更好的人声效果，Agora 推荐你在调用该方法前将 setAudioProfile [1/2] 的 scenario 设为 audioScenarioGameStreaming(3)。该方法在加入频道前后都能调用。请勿将 setAudioProfile [1/2] 的 profile 参数设置为 audioProfileSpeechStandard(1) 或 audioProfileIot(6)，否则该方法不生效。该方法对人声的处理效果最佳，Agora 不推荐调用该方法处理含音乐的音频数据。如果调用 setAudioEffectPreset 并设置除 roomAcoustics3dVoice 或 pitchCorrection 外的枚举，请勿再调用 setAudioEffectParameters ，否则 setAudioEffectPreset 设置的效果会被覆盖。调用 setAudioEffectPreset 后，Agora 不推荐调用以下方法，否则 setAudioEffectPreset 设置的效果会被覆盖： setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///
-  /// * [preset] The options for SDK preset audio effects. See AudioEffectPreset .
+  /// * [preset] 预设的音效选项，详见 AudioEffectPreset 。
   Future<void> setAudioEffectPreset(AudioEffectPreset preset);
 
-  /// Sets a preset voice beautifier effect.
-  /// Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting an audio effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. To achieve better audio effect quality, Agora recommends that you call setAudioProfile [1/2] and set the profile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) and scenario to audioScenarioGameStreaming(3) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setVoiceConversionPreset, Agora recommends not calling the following methods, or the settings in setVoiceConversionPreset are overridden: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setVoiceBeautifierParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb
+  /// 设置预设的变声效果。
+  /// 调用该方法可以为本地发流用户设置 SDK 预设的变声效果。设置变声效果后，频道内所有用户都能听到该效果。根据不同的场景，你可以为用户设置不同的变声效果。为获取更好的人声效果，Agora 推荐你在调用该方法前将 setAudioProfile [1/2] 的 profile 设为 audioProfileMusicHighQuality(4) 或 audioProfileMusicHighQualityStereo(5)，并将 scenario 设为 audioScenarioGameStreaming(3)。该方法在加入频道前后都能调用。请勿将 setAudioProfile [1/2] 的 profile 参数设置为 audioProfileSpeechStandard(1) 或 audioProfileIot(6)，否则该方法不生效。该方法对人声的处理效果最佳，Agora 不推荐调用该方法处理含音乐的音频数据。调用 setVoiceConversionPreset 后，Agora 不推荐调用以下方法，否则 setVoiceConversionPreset 设置的效果会被覆盖：
+  ///  setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setVoiceBeautifierParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb
   ///
-  /// * [preset] The options for the preset voice beautifier effects: VoiceConversionPreset .
+  /// * [preset] 预设的变声效果选项: VoiceConversionPreset 。
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset);
 
-  /// Sets parameters for SDK preset audio effects.
-  /// Call this method to set the following parameters for the local user who sends an audio stream:3D voice effect: Sets the cycle period of the 3D voice effect.Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches. Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively.After setting the audio parameters, all users in the channel can hear the effect.You can call this method either before or after joining a channel.To get better audio effect quality, Agora recommends calling and setting scenario in setAudioProfile [1/2] as audioScenarioGameStreaming(3) before calling this method.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1) or audioProfileIot(6), or the method does not take effect.This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setAudioEffectParameters, Agora recommends not calling the following methods, or the settings in setAudioEffectParameters are overridden: setAudioEffectPreset setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
+  /// 设置 SDK 预设人声音效的参数。
+  /// 调用该方法可以对本地发流用户进行如下设置：
+  ///  3D 人声音效：设置 3D 人声音效的环绕周期。电音音效：设置电音音效的基础调式和主音音高。为方便用户自行调节电音音效，Agora 推荐你将基础调式和主音音高配置选项与应用的 UI 元素绑定。设置后，频道内所有用户都能听到该效果。该方法在加入频道前后都能调用。为获取更好的人声效果，Agora 推荐你在调用该方法前将 setAudioProfile [1/2] 的 scenario 设为 audioScenarioGameStreaming(3)。请勿将 setAudioProfile [1/2] 的 profile 参数设置为 audioProfileSpeechStandard(1) 或 audioProfileIot(6)，否则该方法不生效。该方法对人声的处理效果最佳，Agora 不推荐调用该方法处理含音乐的音频数据。调用 setAudioEffectParameters 后，Agora 不推荐调用以下方法，否则 setAudioEffectParameters 设置的效果会被覆盖： setAudioEffectPreset setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
   ///
-  /// * [preset] The options for SDK preset audio effects:roomAcoustics3dVoice, 3D voice effect:You need to set the profile parameter in setAudioProfile [1/2] to audioProfileMusicStandardStereo(3) or audioProfileMusicHighQualityStereo(5) before setting this enumerator; otherwise, the enumerator setting does not take effect.If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.pitchCorrection; pitch correction effect: To achieve better audio effect quality, Agora recommends setting the profile parameter in setAudioProfile [1/2] to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) before setting this enumerator.
-  /// * [param1] If you set preset to roomAcoustics3dVoice, param1 indicates the cycle period of the 3D voice effect. The value range is [1,60], in seconds. The default value is 10, indicating that the voice moves around you every 10 seconds. If you set preset to pitchCorrection, param1 indicates the basic mode of the pitch correction effect:1: (Default) Natural major scale.2: Natural minor scale.3: Japanese pentatonic scale.
-  /// * [param2] If you set preset to roomAcoustics3dVoice, you need to set param2 to 0. If you set preset to pitchCorrection, param2 indicates the tonic pitch of the pitch correction effect:1: A2: A#3: B4: (Default) C5: C#6: D7: D#8: E9: F10: F#11: G12: G#
+  /// * [preset] SDK 预设的音效，支持以下设置：
+  ///  roomAcoustics3dVoice，3D 人声音效。
+  ///  你需要在使用该枚举前将 setAudioProfile [1/2] 的 profile 参数设置 为 audioProfileMusicStandardStereo(3) 或 audioProfileMusicHighQualityStereo(5)，否则该枚举设置无效。启用 3D 人声后，用户需要使用支持双声道的音频播放设备才能听到预期效果。pitchCorrection，电音音效。为获取更好的人声效果，Agora 建议你在使用该枚举前将 setAudioProfile [1/2] 的 profile 参数设置为 audioProfileMusicHighQuality(4) 或 audioProfileMusicHighQualityStereo(5)。
+  /// * [param1] 如果 preset 设为 roomAcoustics3dVoice ，则 param1 表示 3D 人声音效的环绕周期。取值范围为 [1,60]，单位为秒。默认值为 10，表示人声会 10 秒环绕 360 度。如果 preset 设为 pitchCorrection，则 param1 表示电音音效的基础调式：
+  ///  1: （默认）自然大调。2: 自然小调。3: 和风小调。
+  /// * [param2] 如果 preset 设为 roomAcoustics3dVoice，你需要将 param2 设置为 0。如果 preset 设为 pitchCorrection，则 param2 表示电音音效的主音音高： 1: A2: A#3: B4: (Default) C5: C#6: D7: D#8: E9: F10: F#11: G12: G#
   Future<void> setAudioEffectParameters(
       {required AudioEffectPreset preset,
       required int param1,
       required int param2});
 
-  /// Sets parameters for the preset voice beautifier effects.
-  /// Call this method to set a gender characteristic and a reverberation effect for the singing beautifier effect. This method sets parameters for the local user who sends an audio stream. After setting the audio parameters, all users in the channel can hear the effect.For better voice effects, Agora recommends that you call setAudioProfile [1/2] and set scenario to audioScenarioGameStreaming(3) and profile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) before calling this method.You can call this method either before or after joining a channel.Do not set the profile parameter in setAudioProfile [1/2] to audioProfileSpeechStandard(1)This method works best with the human voice. Agora does not recommend using this method for audio containing music.After calling setVoiceBeautifierParameters, Agora recommends not calling the following methods, because they can override settings in setVoiceBeautifierParameters: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceConversionPreset
+  /// 设置预设美声效果的参数。
+  /// 调用该方法可以设置歌唱美声效果的性别特征和混响效果。该方法对本地发流用户进行设置。设置后，频道内所有用户都能听到该效果。为获取更好的人声效果，Agora 推荐你在调用该方法前将 setAudioProfile [1/2] 的 scenario 设为 audioScenarioGameStreaming(3)，并将 profile 设为 audioProfileMusicHighQuality(4) 或 audioProfileMusicHighQualityStereo(5)。该方法在加入频道前后都能调用。请勿将 setAudioProfile [1/2] 的 profile 参数设置为 audioProfileSpeechStandard(1) 或 audioProfileIot(6)，否则该方法不生效。该方法对人声的处理效果最佳，Agora 不推荐调用该方法处理含音乐的音频数据。调用 setVoiceBeautifierParameters，Agora 不推荐调用以下方法，否则 setVoiceBeautifierParameters 设置的效果会被覆盖：
+  ///  setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceConversionPreset
   ///
-  /// * [preset] The option for the preset audio effect:SINGING_BEAUTIFIER: The singing beautifier effect.
-  /// * [param1] The gender characteristics options for the singing voice:1: A male-sounding voice.2: A female-sounding voice.
-  /// * [param2] The reverberation effect options for the singing voice:1: The reverberation effect sounds like singing in a small room.2: The reverberation effect sounds like singing in a large room.3: The reverberation effect sounds like singing in a hall.
+  /// * [preset] 预设的音效：
+  ///  SINGING_BEAUTIFIER: 歌唱美声。
+  /// * [param1] 歌声的性别特征：
+  ///  1: 男声。2: 女声。
+  /// * [param2] 歌声的混响效果：
+  ///  1: 歌声在小房间的混响效果。2: 歌声在大房间的混响效果。3: 歌声在大厅的混响效果。
   Future<void> setVoiceBeautifierParameters(
       {required VoiceBeautifierPreset preset,
       required int param1,
@@ -3341,71 +3421,72 @@ abstract class RtcEngine {
       required int param1,
       required int param2});
 
-  /// Changes the voice pitch of the local speaker.
-  /// You can call this method either before or after joining a channel.
+  /// 设置本地语音音调。
+  /// 该方法在加入频道前后都能调用。
   ///
-  /// * [pitch] The local voice pitch. The value range is [0.5,2.0]. The lower the value, the lower the pitch. The default value is 1 (no change to the pitch).
+  /// * [pitch] 语音频率。可以 [0.5,2.0] 范围内设置。取值越小，则音调越低。默认值为 1.0，表示不需要修改音调。
   Future<void> setLocalVoicePitch(double pitch);
 
-  /// Sets the local voice equalization effect.
-  /// You can call this method either before or after joining a channel.
+  /// 设置本地语音音效均衡。
+  /// 该方法在加入频道前后都能调用。
   ///
-  /// * [bandFrequency] The band frequency. The value ranges between 0 and 9; representing the respective 10-band center frequencies of the voice effects, including 31, 62, 125, 250, 500, 1k, 2k, 4k, 8k, and 16k Hz.
-  /// * [bandGain] The gain of each band in dB. The value ranges between -15 and 15. The default value is 0.
+  /// * [bandFrequency] 频谱子带索引。取值范围是 [0,9]，分别代表音效的 10 个频带。对应的中心频率为 [31，62，125，250，500，1k，2k，4k，8k，16k] Hz。详见 AudioEqualizationBandFrequency 。
+  /// * [bandGain] 每个 band 的增益，单位是 dB，每一个值的范围是 [-15,15]，默认值为 0。
   Future<void> setLocalVoiceEqualization(
       {required AudioEqualizationBandFrequency bandFrequency,
       required int bandGain});
 
-  /// Sets the local voice reverberation.
-  /// The SDK also provides the setAudioEffectPreset method, which allows you to directly implement preset reverb effects for such as pop, R&B, and KTV.You can call this method either before or after joining a channel.
+  /// 设置本地音效混响。
+  /// SDK 提供一个使用更为简便的方法 setAudioEffectPreset ，直接实现流行、R&B、KTV 等预置的混响效果。该方法在加入频道前后都能调用。
   ///
-  /// * [reverbKey] The reverberation key. Agora provides five reverberation keys; see AudioReverbType for details.
-  /// * [value] The value of the reverberation key.
+  /// * [reverbKey] 混响音效 Key。该方法共有 5 个混响音效 Key，详见 AudioReverbType 。
+  /// * [value] 各混响音效 Key 所对应的值。
   Future<void> setLocalVoiceReverb(
       {required AudioReverbType reverbKey, required int value});
 
-  /// Sets the log file.
-  /// Deprecated:Use the mLogConfig parameter in initialize method instead.Specifies an SDK output log file. The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.Ensure that you call this method immediately after calling the initialize method to initialize the RtcEngine , or the output log may not be complete.
+  /// 设置日志文件
+  /// 弃用：此方法已废弃，请改用 initialize 中的 logConfig 参数设置日志文件路径 。设置 SDK 的输出 log 文件。SDK 运行时产生的所有 log 将写入该文件。App 必须保证指定的目录存在而且可写。如需调用本方法，请在调用 initialize 方法初始化 RtcEngine 对象后立即调用，否则输出日志可能不完整。
   ///
-  /// * [filePath] The complete path of the log files. These log files are encoded in UTF-8.
+  /// * [filePath] 日志文件的完整路径。该日志文件为 UTF-8 编码。
   Future<void> setLogFile(String filePath);
 
-  /// Sets the log output level of the SDK.
-  /// Deprecated:Use logConfig in initialize instead.This method sets the output log level of the SDK. You can use one or a combination of the log filter levels. The log level follows the sequence of logFilterOff, logFilterCritical, logFilterError, logFilterWarn, logFilterInfo, and logFilterDebug. Choose a level to see the logs preceding that level.If, for example, you set the log level to logFilterWarn, you see the logs within levels logFilterCritical, logFilterError, and logFilterWarn.
+  /// 设置日志输出等级。
+  /// 弃用：请改用 initialize 中的 logConfig。该方法设置 Agora SDK 的输出日志输出等级。不同的输出等级可以单独或组合使用。日志级别顺序依次为 logFilterOff、logFilterCritical、logFilterError、logFilterWarn、logFilterInfo 和 logFilterDebug。
+  ///  选择一个级别，你就可以看到在该级别之前所有级别的日志信息。例如，你选择 logFilterWarn 级别，就可以看到在 logFilterCritical、logFilterError 和 logFilterWarn 级别的日志信息。
   ///
-  /// * [filter] The output log level of the SDK. See LogFilterType .
+  /// * [filter] 日志过滤等级。详见 LogFilterType 。
   Future<void> setLogFilter(LogFilterType filter);
 
-  /// Sets the output log level of the SDK.
-  /// Deprecated:This method is deprecated. Use RtcEngineContext instead to set the log output level.Choose a level to see the logs preceding that level.
+  /// 设置 SDK 的日志输出级别。
+  /// 弃用：该方法已经废弃。请改用 RtcEngineContext 设置日志输出级别。选择一个级别，你就可以看到该级别的日志信息。
   ///
-  /// * [level] The log level: LogLevel .
+  /// * [level] 日志级别: LogLevel 。
   Future<void> setLogLevel(LogLevel level);
 
-  /// Sets the log file size.
-  /// Deprecated:Use the logConfig parameter in initialize instead.By default, the SDK generates five SDK log files and five API call log files with the following rules:The SDK log files are: agorasdk.log, agorasdk.1.log, agorasdk.2.log, agorasdk.3.log, and agorasdk.4.log.The API call log files are: agoraapi.log, agoraapi.1.log, agoraapi.2.log, agoraapi.3.log, and agoraapi.4.log.The default size for each SDK log file is 1,024 KB; the default size for each API call log file is 2,048 KB. These log files are encoded in UTF-8.The SDK writes the latest logs in agorasdk.log or agoraapi.log.When agorasdk.log is full, the SDK processes the log files in the following order:Delete the agorasdk.4.log file (if any).Rename agorasdk.3.log to agorasdk.4.log.Rename agorasdk.2.log to agorasdk.3.log.Rename agorasdk.1.log to agorasdk.2.log.Create a new agorasdk.log file.The overwrite rules for the agoraapi.log file are the same as for agorasdk.log.This method is used to set the size of the agorasdk.log file only and does not effect the agoraapi.log file.
+  /// 设置 SDK 输出的日志文件的大小。
+  /// 弃用：该方法已废弃，请改用 initialize 中的 logConfig 参数设置日志文件大小。默认情况下，SDK 会生成 5 个 SDK 日志文件和 5 个 API 调用日志文件，规则如下：SDK 日志文件的名称分别为：agorasdk.log、agorasdk.1.log、agorasdk.2.log、agorasdk.3.log、agorasdk.4.log。API 调用日志文件的名称分别为：agoraapi.log、agoraapi.1.log、agoraapi.2.log、agoraapi.3.log、agoraapi.4.log。每个 SDK 日志文件的默认大小为 1,024 KB；API 调用日志文件的默认大小为 2,048 KB。日志文件均为 UTF-8 编码。最新的日志永远写在 agorasdk.log 和 agoraapi.log 中。当 agorasdk.log 写满后，SDK 会按照以下顺序对日志文件进行操作： 删除 agorasdk.4.log 文件（如有）。将agorasdk.3.log 重命名为 agorasdk.4.log。将agorasdk.2.log 重命名为 agorasdk.3.log。将agorasdk.1.log 重命名为 agorasdk.2.log。新建 agorasdk.log 文件。agoraapi.log 文件的覆盖规则与 agorasdk.log 相同。该方法仅用于设置 agorasdk.log 文件的大小，对agoraapi.log不生效。
   ///
-  /// * [fileSizeInKBytes] The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 1,024 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
+  /// * [fileSizeInKBytes] 单个 agorasdk.log 日志文件的大小，单位为 KB，取值范围为 [128,20480]，默认值为 1,024 KB。 如果你将 fileSizeInKByte 设为小于 128 KB，SDK 会自动调整到 128 KB；如果你将 fileSizeInKByte 设为大于 20,480 KB，SDK 会自动调整到 20,480 KB。
   Future<void> setLogFileSize(int fileSizeInKBytes);
 
   /// @nodoc
   Future<void> uploadLogFile(String requestId);
 
-  /// Updates the display mode of the video view of a remote user.
-  /// After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes. This method affects only the video view that the local user sees.Please call this method after initializing the remote view by calling the setupRemoteVideo method.During a call, you can call this method as many times as necessary to update the display mode of the video view of a remote user.
+  /// 更新远端视图显示模式。
+  /// 初始化远端用户视图后，你可以调用该方法更新远端用户视图在本地显示时的渲染和镜像模式。该方法只影响本地用户看到的视频画面。请在调用 setupRemoteVideo 方法初始化远端视图后，调用该方法。你可以在通话中多次调用该方法，多次更新远端用户视图的显示模式。
   ///
-  /// * [uid] The user ID of the remote user.
-  /// * [renderMode] The rendering mode of the remote user view.
-  /// * [mirrorMode] The mirror mode of the remote user view.
+  /// * [uid] 远端用户 ID。
+  /// * [renderMode] 远端用户视图的渲染模式，详见 RenderModeType 。
+  /// * [mirrorMode] 远端用户视图的镜像模式，详见 VideoMirrorModeType 。
   Future<void> setRemoteRenderMode(
       {required int uid,
       required RenderModeType renderMode,
       required VideoMirrorModeType mirrorMode});
 
-  /// Sets the local video mirror mode.
-  /// Deprecated:This method is deprecated.Use setupLocalVideo or setLocalRenderMode instead.
+  /// 设置本地视频镜像。
+  /// 弃用:该方法已废弃。请改用 setupLocalVideo 或 setLocalRenderMode 。
   ///
-  /// * [mirrorMode] The local video mirror mode. See VideoMirrorModeType .
+  /// * [mirrorMode] 本地视频镜像模式。详见 VideoMirrorModeType 。
   Future<void> setLocalVideoMirrorMode(VideoMirrorModeType mirrorMode);
 
   /// @nodoc
@@ -3428,98 +3509,97 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> stopSecondaryCustomAudioTrack();
 
-  /// Sets the format of the captured raw audio data.
-  /// Sets the audio format for the onRecordAudioFrame callback.Ensure that you call this method before joining a channel.The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method.Sample interval = samplePerCall/(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s).
+  /// 设置采集的原始音频数据格式。
+  /// 该方法设置 onRecordAudioFrame 回调的采集音频格式。该方法需要在加入频道前调用。SDK 会通过该方法中的 samplesPerCall、sampleRate 和 channel 参数计算出采样间隔，计算公式为采样间隔 = samplesPerCall/(sampleRate × channel)。请确保采样间隔不小于 0.01 秒。
   ///
-  /// * [sampleRate] The sample rate returned in the onRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
-  /// * [channel] The number of channels returned in the onRecordAudioFrame callback:1: Mono.2: Stereo.
-  /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType .
-  /// * [samplesPerCall] The number of data samples returned in the onRecordAudioFrame callback, such as 1024 for the Media Push.
+  /// * [sampleRate] onRecordAudioFrame 中返回数据的采样率，可设置为 8000、 16000、 32000、44100 或 48000。
+  /// * [channel] onRecordAudioFrame 中返回数据的通道数，可设置为 1 或 2:
+  ///  1: 单声道。2: 双声道。
+  /// * [mode] 音频帧的使用模式，详见 RawAudioFrameOpModeType 。
+  /// * [samplesPerCall] onRecordAudioFrame 中返回数据的采样点数，如旁路推流应用中通常为 1024。
   Future<void> setRecordingAudioFrameParameters(
       {required int sampleRate,
       required int channel,
       required RawAudioFrameOpModeType mode,
       required int samplesPerCall});
 
-  /// Sets the audio data format for playback.
-  /// Sets the data format for the onPlaybackAudioFrame callback.Ensure that you call this method before joining a channel.The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method.Sample interval = samplePerCall/(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s). The SDK triggers the onPlaybackAudioFrame callback according to the sampling interval.
+  /// 设置播放的音频格式。
+  /// 该方法设置 onPlaybackAudioFrame 回调数据的格式。该方法需要在加入频道前调用。SDK 会通过该方法中的 samplesPerCall、sampleRate 和 channel 参数计算出采样间隔，计算公式为采样间隔 = samplesPerCall/(sampleRate × channel)。请确保采样间隔不小于 0.01 秒。SDK 会根据该采样间隔触发 onPlaybackAudioFrame 回调。
   ///
-  /// * [sampleRate] The sample rate returned in the onPlaybackAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
-  /// * [channel] The number of channels returned in the onPlaybackAudioFrame callback:1: Mono.2: Stereo.
-  /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType .
-  /// * [samplesPerCall] The number of data samples returned in the onPlaybackAudioFrame callback, such as 1024 for the Media Push.
+  /// * [sampleRate] onPlaybackAudioFrame 中返回数据的采样率，可设置为 8000、 16000、 32000、44100 或 48000。
+  /// * [channel] onPlaybackAudioFrame 中返回数据的通道数，可设置为 1 或 2: 1: 单声道2: 双声道
+  /// * [mode] 音频帧的使用模式，详见 RawAudioFrameOpModeType 。
+  /// * [samplesPerCall] onPlaybackAudioFrame 中返回数据的采样点数，如旁路推流应用中通常为 1024。
   Future<void> setPlaybackAudioFrameParameters(
       {required int sampleRate,
       required int channel,
       required RawAudioFrameOpModeType mode,
       required int samplesPerCall});
 
-  /// Sets the audio data format reported by onMixedAudioFrame .
+  /// 设置 onMixedAudioFrame 报告的音频数据格式。
   ///
   ///
-  /// * [sampleRate] The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
-  /// * [channel] The number of channels of the audio data, which can be set as 1 (Mono) or 2 (Stereo).
-  /// * [samplesPerCall] Sets the number of samples. In Media Push scenarios, set it as 1024.
+  /// * [sampleRate] 音频数据采样率 (Hz)，可设置为 8000、 16000、32000、 44100 或 48000。
+  /// * [channel] 音频数据声道数，可设置为 1（单声道） 或 2（双声道）。
+  /// * [samplesPerCall] 音频数据采样点数。旁路推流场景下通常设为 1024。
   Future<void> setMixedAudioFrameParameters(
       {required int sampleRate,
       required int channel,
       required int samplesPerCall});
 
-  /// Sets the audio data format reported by onPlaybackAudioFrameBeforeMixing .
+  /// 设置 onPlaybackAudioFrameBeforeMixing 报告的音频数据格式。
   ///
   ///
-  /// * [sampleRate] The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
-  /// * [channel] The number of channels of the external audio source, which can be set as 1(Mono) or 2(Stereo).
+  /// * [null] 音频数据采样率 (Hz)，可设置为 8000、 16000、32000、 44100 或 48000。
+  /// * [channel] 音频数据声道数，可设置为 1（单声道） 或 2（双声道） 。
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate, required int channel});
 
-  /// Turns on audio spectrum monitoring.
-  /// If you want to obtain the audio spectrum data of local or remote users, you can register the audio spectrum observer and enable audio spectrum monitoring.You can call this method either before or after joining a channel.
+  /// 开启音频频谱监测。
+  /// 如果你想获取本地或远端用户的音频频谱数据，请注册音频频谱观测器并开启音频频谱监测。该方法在加入频道前后均可调用。
   ///
-  /// * [intervalInMS] The interval (in milliseconds) at which the SDK triggers the onLocalAudioSpectrum and onRemoteAudioSpectrum callbacks. The default value is 100. Do not set this parameter to less than 10 milliseconds, otherwise the calling of this method fails.
+  /// * [null] SDK 触发 onLocalAudioSpectrum 和 onRemoteAudioSpectrum 回调的时间间隔（毫秒）。 默认值为 100 毫秒。取值不得少于 10 毫秒，否则该方法会调用失败。
   Future<void> enableAudioSpectrumMonitor({int intervalInMS = 100});
 
-  /// Disables audio spectrum monitoring.
-  /// After calling enableAudioSpectrumMonitor , if you want to disable audio spectrum monitoring, you can call this method.You can call this method either before or after joining a channel.
+  /// 关闭音频频谱监测。
+  /// 调用 enableAudioSpectrumMonitor 后，如果你想关闭音频频谱监测，请调用该方法。该方法在加入频道前后均可调用。
   Future<void> disableAudioSpectrumMonitor();
 
-  /// Registers an audio spectrum observer.
-  /// After successfully registering the audio spectrum observer and calling
-  ///  enableAudioSpectrumMonitor to enable the audio spectrum monitoring, the SDK reports the callback that you implement in the AudioSpectrumObserver class at the time interval you set.You can call this method either before or after joining a channel.
+  /// 注册音频频谱观测器。
+  /// 成功注册音频频谱观测器并调用 enableAudioSpectrumMonitor 开启音频频谱监测后，SDK 会按照你设置的时间间隔报告你在 AudioSpectrumObserver 类中实现的回调。该方法在加入频道前后均可调用。
   ///
-  /// * [observer] The Audio spectrum observer. See AudioSpectrumObserver .
+  /// * [observer] 音频频谱观测器。详见 AudioSpectrumObserver 。
   void registerAudioSpectrumObserver(AudioSpectrumObserver observer);
 
-  /// Unregisters the audio spectrum observer.
-  /// After calling registerAudioSpectrumObserver , if you want to disable audio spectrum monitoring, you can call this method.You can call this method either before or after joining a channel.
+  /// 取消注册音频频谱观测器。
+  /// 调用 registerAudioSpectrumObserver 后，如果你想取消注册音频频谱观测器，请调用该方法。该方法在加入频道前后均可调用。
   void unregisterAudioSpectrumObserver(AudioSpectrumObserver observer);
 
-  /// Adjusts the capturing signal volume.
-  /// You can call this method either before or after joining a channel.
+  /// 调节音频采集信号音量。
+  /// 该方法在加入频道前后都能调用。
   ///
-  /// * [volume] The volume of the user. The value range is [0,400].0: Mute.100: (Default) The original volume.400: Four times the original volume (amplifying the audio signals by four times).
+  /// * [volume] 音量，取值范围为 [0,400]。 0: 静音。100: （默认）原始音量。400: 原始音量的 4 倍，自带溢出保护。
   Future<void> adjustRecordingSignalVolume(int volume);
 
-  /// Whether to mute the recording signal.
+  /// 是否将录音信号静音。
   ///
   ///
-  /// * [mute] true: Mute the recording signal.false: (Default) Do not mute the recording signal.
+  /// * [mute] true: 静音。false:（默认）不静音。
   Future<void> muteRecordingSignal(bool mute);
 
-  /// Adjusts the playback signal volume of all remote users.
-  /// This method adjusts the playback volume that is the mixed volume of all remote users.You can call this method either before or after joining a channel.
+  /// 调节本地播放的所有远端用户信号音量。
+  /// 该方法调节的是本地播放的所有远端用户混音后的音量。该方法在加入频道前后都能调用。
   ///
-  /// * [volume] The volume of the user. The value range is [0,400].
-  ///  0: Mute.
-  ///  100: (Default) The original volume.
-  ///  400: Four times the original volume (amplifying the audio signals by four times).
+  /// * [volume] 音量，取值范围为 [0,400]。 0: 静音。
+  ///  100: （默认）原始音量。
+  ///  400: 原始音量的 4 倍，自带溢出保护。
   Future<void> adjustPlaybackSignalVolume(int volume);
 
-  /// Adjusts the playback signal volume of a specified remote user.
-  /// You can call this method to adjust the playback volume of a specified remote user. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.Call this method after joining a channel.The playback volume here refers to the mixed volume of a specified remote user.
+  /// 调节本地播放的指定远端用户信号音量。
+  /// 你可以在通话中调用该方法调节指定远端用户在本地播放的音量。如需调节多个用户在本地播放的音量，则需多次调用该方法。该方法需要在加入频道后调用。该方法调节的是本地播放的指定远端用户混音后的音量。
   ///
-  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
-  /// * [uid] The user ID of the remote user.
+  /// * [volume] 音乐文件音量范围为 0~100。100 （默认值）为原始文件音量。
+  /// * [uid] 远端用户 ID。
   Future<void> adjustUserPlaybackSignalVolume(
       {required int uid, required int volume});
 
@@ -3529,82 +3609,84 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
 
-  /// Enables loopback audio capture.
-  /// If you enable loopback audio capture, the output of the sound card is mixed into the audio stream sent to the other end.Applies to the macOS and Windows platforms only.macOS does not support loopback audio capture of the default sound card. If you need to use this method, use a virtual sound card and pass its name to the deviceName parameter. Agora recommends that you use Soundflower for loopback audio capture.You can call this method either before or after joining a channel.
+  /// 开启声卡采集。
+  /// 启用声卡采集功能后，声卡播放的声音会被合到本地音频流中，从而可以发送到远端。该方法仅适用于 macOS 和 Windows 平台。macOS 系统默认声卡不支持采集功能，如果你需要使用该功能，请启用一个虚拟声卡，并将该虚拟声卡的名字传入 deviceName 参数。Agora 推荐你使用虚拟声卡 Soundflower 进行声卡采集。该方法在加入频道前后都能调用。
   ///
-  /// * [enabled] Whether to enable loopback audio capture.true: Enable loopback audio capture.false: (Default) Disable loopback audio capture.
-  /// * [deviceName] macOS: The device name of the virtual sound card. The default is set to null, which means the SDK uses Soundflower for loopback audio capture.Windows: The device name of the sound card. The default is set to null, which means the SDK uses the sound card of your device for loopback audio capture.
+  /// * [enabled] 是否开启声卡采集: true: 开启声卡采集。false:（默认）关闭声卡采集。
+  /// * [deviceName] macOS: 虚拟声卡的设备名。默认为空，代表使用 Soundflower 虚拟声卡进行采集。Windows: 声卡的设备名。默认为空，代表使用设备自带的声卡进行采集。
   Future<void> enableLoopbackRecording(
       {required bool enabled, String? deviceName});
 
-  /// Adjusts the volume of the signal captured by the sound card.
-  /// After calling enableLoopbackRecording to enable loopback audio capturing, you can call this method to adjust the volume of the signal captured by the sound card.
+  /// 调节声卡采集信号音量。
+  /// 调用 enableLoopbackRecording 开启声卡采集后，你可以调用该方法调节声卡采集的信号音量。
   ///
-  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
+  /// * [volume] 音乐文件音量范围为 0~100。100 （默认值）为原始文件音量。
   Future<void> adjustLoopbackSignalVolume(int volume);
 
   /// @nodoc
   Future<int> getLoopbackRecordingVolume();
 
-  /// Enables in-ear monitoring.
-  /// This method enables or disables in-ear monitoring.
+  /// 开启耳返功能。
+  /// 该方法打开或关闭耳返功能。
   ///
-  /// * [enabled] Enables in-ear monitoring.true: Enables in-ear monitoring.false: (Default) Disables in-ear monitoring.
-  ///
+  /// * [enabled] 开启/关闭耳返功能: true: 开启耳返功能。false: （默认）关闭耳返功能。
   ///
   /// Returns
-  /// 0: Success.< 0: Failure.
+  /// 0: 方法调用成功。< 0: 方法调用失败。
   Future<void> enableInEarMonitoring(
       {required bool enabled,
       required EarMonitoringFilterType includeAudioFilters});
 
-  /// Sets the volume of the in-ear monitor.
-  /// This method is for Android and iOS only.Users must use wired earphones to hear their own voices.You can call this method either before or after joining a channel.
+  /// 设置耳返音量。
+  /// 该方法仅适用于 Android 和 iOS 平台。用户必须使用有线耳机才能听到耳返效果。该方法在加入频道前后都能调用。
   ///
-  /// * [volume] Sets the volume of the in-ear monitor. The value ranges between 0 and 100. The default value is 100.
+  /// * [volume] 设置耳返音量，取值范围在 [0,100]。默认值为 100。
   Future<void> setInEarMonitoringVolume(int volume);
 
-  /// Adds an extension to the SDK.
-  /// (For Windows and Android only)
+  /// 将插件添加到 SDK 中。
+  /// 该方法仅适用于 Windows 和 Android。
   ///
-  /// * [path] The extension library path and name. For example: /library/libagora_segmentation_extension.dll.
-  /// * [unloadAfterUse] Whether to uninstall the current extension when you no longer using it:true: Uninstall the extension when the RtcEngine is destroyed.false: (Rcommended) Do not uninstall the extension until the process terminates.
+  /// * [path] 插件的动态库路径和名称。例如：/library/libagora_segmentation_extension.dll。
+  /// * [unloadAfterUse] 是否在插件使用完毕后自动卸载：
+  ///  true: 当 RtcEngine 销毁时自动卸载插件。false: 不自动卸载插件，直到进程退出（推荐）。
   Future<void> loadExtensionProvider(
       {required String path, bool unloadAfterUse = false});
 
-  /// Sets the properties of the extension provider.
-  /// You can call this method to set the attributes of the extension provider and initialize the relevant parameters according to the type of the provider.Call this method after enableExtension , and before enabling the audio ( enableAudio / enableLocalAudio ) or the video ( enableVideo / enableLocalVideo ).
+  /// 设置插件服务商的属性。
+  /// 你可以调用该方法设置插件服务商的属性，并根据服务商的类型初始化相关参数。该方法需要在 enableExtension 之后、且启用音频（ enableAudio / enableLocalAudio ）或启用视频（ enableVideo / enableLocalVideo ）之前调用。
   ///
-  /// * [value] The value of the extension key.
-  /// * [key] The key of the extension.
-  /// * [provider] The name of the extension provider.
+  /// * [value] 插件属性 Key 对应的值。
+  /// * [key] 插件属性的 Key。
+  /// * [provider] 提供插件的服务商名称。
   Future<void> setExtensionProviderProperty(
       {required String provider, required String key, required String value});
 
-  /// Enables/Disables extensions.
-  /// Ensure that you call this method before joining a channel.If you want to enable multiple extensions, you need to call this method multiple times.The data processing order of different extensions in the SDK is determined by the order in which the extensions are enabled. That is, the extension that is enabled first will process the data first.
+  /// 启用/禁用插件。
+  /// 该方法需要在加入频道前调用。如果要开启多个插件，需要多次调用该方法。不同插件在 SDK 中处理数据的顺序由插件的开通顺序决定。即先开启的插件会先处理数据。
   ///
-  /// * [extension] The name of the extension.
-  /// * [provider] The name of the extension provider.
-  /// * [enable] Whether to enable the extension:true: Enable the extension.false: Disable the extension.
-  /// * [type] Type of media source. See MediaSourceType . In this method, this parameter supports only the following two settings:The default value is unknownMediaSource.If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
+  /// * [extension] 插件的名称。
+  /// * [provider] 提供插件的服务商名称。
+  /// * [enable] 是否启用插件： true: 启用插件。false: 禁用插件。
+  /// * [type] 媒体资源类型。详见 MediaSourceType 。
+  ///  在该方法中，该参数仅支持以下两种设置：
+  ///  默认值为 unknownMediaSource。如果要使用第二个摄像头采集视频，将该参数设置为 secondaryCameraSource。
   ///
   /// Returns
-  /// 0: Success.< 0: Failure.
+  /// 0: 方法调用成功< 0: 方法调用失败
   Future<void> enableExtension(
       {required String provider,
       required String extension,
       bool enable = true,
       MediaSourceType type = MediaSourceType.unknownMediaSource});
 
-  /// Sets the properties of the extension.
-  /// After enabling the extension, you can call this method to set the properties of the extension.
+  /// 设置插件的属性。
+  /// 开启插件后，你可以调用该方法设置插件的属性。
   ///
-  /// * [provider] The name of the extension provider.
-  /// * [extension] The name of the extension.
-  /// * [key] The key of the extension.
-  /// * [value] The value of the extension key.
-  /// * [type] The type of the video source. See MediaSourceType .
+  /// * [provider] 提供插件的服务商名称。
+  /// * [extension] 插件的名称。
+  /// * [key] 插件属性的 Key。
+  /// * [value] 插件属性 Key 对应的值。
+  /// * [type] 媒体源类型，详见 MediaSourceType 。
   Future<void> setExtensionProperty(
       {required String provider,
       required String extension,
@@ -3612,16 +3694,17 @@ abstract class RtcEngine {
       required String value,
       MediaSourceType type = MediaSourceType.unknownMediaSource});
 
-  /// Gets detailed information of the extension.
+  /// 获取插件的详细信息。
   ///
   ///
-  /// * [key] The key of the extension.
-  /// * [extension] The name of the extension.
-  /// * [provider] The name of the extension provider.
-  /// * [sourceType] Source type of the extension. See MediaSourceType .
+  /// * [key] 插件属性的 Key。
+  /// * [extension] 插件的名称。
+  /// * [provider] 提供插件的服务商名称。
+  /// * [sourceType] 插件的媒体源类型。详见 MediaSourceType 。
+  /// * [buf_len] 插件属性 JSON 字符串的最大长度。最大值为 512 字节。
   ///
   /// Returns
-  /// 0: Success.< 0: Failure.
+  /// 0: 方法调用成功< 0: 方法调用失败
   Future<String> getExtensionProperty(
       {required String provider,
       required String extension,
@@ -3629,359 +3712,367 @@ abstract class RtcEngine {
       required int bufLen,
       MediaSourceType type = MediaSourceType.unknownMediaSource});
 
-  /// Sets the camera capture configuration.
-  /// This method is for Android and iOS only.Call this method before calling joinChannel [2/2] , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
+  /// 设置摄像头采集配置。
+  /// 该方法仅适用于 Android 和 iOS。请在启动摄像头之前调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之前。
   ///
-  /// * [config] The camera capturer configuration. See CameraCapturerConfiguration .
+  /// * [config] 摄像头采集配置，详见 CameraCapturerConfiguration 。
+  ///
   Future<void> setCameraCapturerConfiguration(
       CameraCapturerConfiguration config);
 
-  /// Creates a customized video track.
-  /// When you need to publish multiple custom captured videos in the channel, you can refer to the following steps:Call this method to create a video track and get the video track ID.In each channel's ChannelMediaOptions , set the customVideoTrackId parameter to the ID of the video track you want to publish, and set publishCustomVideoTrack to true.
+  /// 创建一个自定义的视频轨道。
+  /// 当你需要在频道中发布多路自定义采集视频时，可参考以下步骤：
+  ///  调用该方法创建视频轨道并获得视频轨道 ID。在每个频道的 ChannelMediaOptions 中，将 customVideoTrackId 参数设置为你想要发布的视频轨道 ID，并将 publishCustomVideoTrack 设置为 true。
   ///
   /// Returns
-  /// If the method call is successful, the video track ID is returned as the unique identifier of the video track.If the method call fails, a negative value is returned.
+  /// 方法调用成功，返回视频轨道 ID 作为该视频轨道的唯一标识。方法调用失败，返回负值。
   Future<int> createCustomVideoTrack();
 
   /// @nodoc
   Future<int> createCustomEncodedVideoTrack(SenderOptions senderOption);
 
-  /// Destroys the specified video track.
+  /// 销毁指定的视频轨道。
   ///
   ///
-  /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method.
+  /// * [videoTrackId] 调用 createCustomVideoTrack 方法返回的视频轨道 ID。
   Future<void> destroyCustomVideoTrack(int videoTrackId);
 
   /// @nodoc
   Future<void> destroyCustomEncodedVideoTrack(int videoTrackId);
 
-  /// Switches between front and rear cameras.
-  /// This method needs to be called after the camera is started (for example, by calling startPreview or joinChannel [2/2] ).This method is for Android and iOS only.
+  /// 切换前置/后置摄像头。
+  /// 该方法需要在相机启动（如通过调用 startPreview 或 joinChannel [2/2] 实现）后调用。该方法仅适用于 Android 和 iOS。
   Future<void> switchCamera();
 
-  /// Checks whether the device supports camera zoom.
-  /// Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo ,depending on which method you use to turn on your local camera.This method is for Android and iOS only.
+  /// 检测设备是否支持摄像头缩放功能。
+  /// 请在启动摄像头之后调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。该方法仅适用于 Android 和 iOS。
   ///
   /// Returns
-  /// true: The device supports camera zoom.false: The device does not support camera zoom.
+  /// true: 设备支持相机缩放功能。false: 设备不支持相机缩放功能。
   Future<bool> isCameraZoomSupported();
 
-  /// Checks whether the device camera supports face detection.
-  ///
+  /// 检查设备摄像头是否支持人脸检测。
+  /// 请在启动摄像头之后调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。该方法仅适用于 Android。
   ///
   /// Returns
-  /// true: The device camera supports face detection.false: The device camera does not support face detection.
+  /// true: 设备摄像头支持人脸检测。false: 设备摄像头不支持人脸检测。
   Future<bool> isCameraFaceDetectSupported();
 
-  /// Checks whether the device supports camera flash.
-  /// Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo ,depending on which method you use to turn on your local camera.
-  ///  This method is for Android and iOS only.The app enables the front camera by default. If your front camera does not support enabling the flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
+  /// 检测设备是否支持闪光灯常开。
+  /// 请在启动摄像头之后调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。
+  ///  该方法仅适用于 Android 和 iOS。一般情况下，app 默认开启前置摄像头，因此如果你的前置摄像头不支持闪光灯常开，直接使用该方法会返回 false。如果需要检查后置摄像头是否支持闪光灯常开，需要先使用 switchCamera 切换摄像头，再使用该方法。在系统版本 15 的 iPad 上，即使 isCameraTorchSupported 返回 true，也可能因系统问题导致你无法通过 setCameraTorchOn 成功开启闪光灯。
   ///
   /// Returns
-  /// true: The device supports enabling the flash.false: The device does not support enabling the flash.
+  /// true: 设备支持闪光灯常开。false: 设备不支持闪光灯常开。
   Future<bool> isCameraTorchSupported();
 
-  /// Check whether the device supports the manual focus function.
-  /// Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo ,depending on which method you use to turn on your local camera.This method is for Android and iOS only.
+  /// 检测设备是否支持手动对焦功能。
+  /// 请在启动摄像头之后调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。该方法仅适用于 Android 和 iOS。
   ///
   /// Returns
-  /// true: The device supports the manual focus function.false: The device does not support the manual focus function.
+  /// true: 设备支持手动对焦功能。false: 设备不支持手动对焦功能。
   Future<bool> isCameraFocusSupported();
 
-  /// Checks whether the device supports the face auto-focus function.
-  /// This method is for Android and iOS only.Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo ,depending on which method you use to turn on your local camera.
+  /// 检测设备是否支持人脸对焦功能。
+  /// 该方法仅适用于 Android 和 iOS。请在启动摄像头之后调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。
   ///
   /// Returns
-  /// true: The device supports the face auto-focus function.false: The device does not support the face auto-focus function.
+  /// true: 设备支持人脸对焦功能。false: 设备不支持人脸对焦功能。
   Future<bool> isCameraAutoFocusFaceModeSupported();
 
-  /// Sets the camera zoom ratio.
-  /// This method is for Android and iOS only.Call this method before calling joinChannel [2/2] , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
+  /// 设置摄像头缩放比例。
+  /// 该方法仅适用于 Android 和 iOS。请在启动摄像头之前调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之前。
   ///
-  /// * [factor] The camera zoom ratio. The value ranges between 1.0 and the maximum zoom supported by the device. You can get the maximum zoom ratio supported by the device by calling the getCameraMaxZoomFactor method.
+  /// * [factor] 相机缩放比例，有效范围从 1.0 到最大缩放比例。你可以通过 getCameraMaxZoomFactor 方法获取设备支持的最大缩放比例。
   Future<void> setCameraZoomFactor(double factor);
 
-  /// Enables/Disables face detection for the local user.
-  /// You can call this method either before or after joining a channel.This method is for Android and iOS only.Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following:The width and height of the local video.The position of the human face in the local view.The distance between the human face and the screen.This method needs to be called after the camera is started (for example, by calling startPreviewjoinChannel [2/2]).
+  /// 开启/关闭本地人脸检测。
+  /// 该方法在加入频道前后都能调用。该方法仅适用于 Android 和 iOS。开启本地人脸检测后，SDK 会触发 onFacePositionChanged 回调向你报告人脸检测的信息： 摄像头采集的画面大小人脸在 view 中的位置人脸距设备屏幕的距离该方法需要在相机启动（如通过调用 startPreviewjoinChannel [2/2] 实现）后调用。
   ///
-  /// * [enabled] Whether to enable face detection for the local user:true: Enable face detection.false: (Default) Disable face detection.
+  /// * [enabled] 是否开启人脸检测： true：开启人脸检测。false：（默认）关闭人脸检测。
   Future<void> enableFaceDetection(bool enabled);
 
-  /// Gets the maximum zoom ratio supported by the camera.
-  /// This method is for Android and iOS only.Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
+  /// 获取摄像头支持最大缩放比例。
+  /// 该方法仅适用于 Android 和 iOS。请在启动摄像头之后调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。
   ///
   /// Returns
-  /// The maximum zoom factor.
+  /// 设备摄像头支持的最大缩放比例。
   Future<double> getCameraMaxZoomFactor();
 
-  /// Sets the camera manual focus position.
-  /// This method needs to be called after the camera is started (for example, by calling startPreview or joinChannel [2/2] ). After a successful method call, the SDK triggers the onCameraFocusAreaChanged callback.This method is for Android and iOS only.
+  /// 设置手动对焦位置，并触发对焦。
+  /// 该方法需要在相机启动（如通过调用 startPreview 或 joinChannel [2/2] 实现）后调用。
+  ///  成功调用该方法后，本地会触发 onCameraFocusAreaChanged 回调。该方法仅适用于 Android 和 iOS。
   ///
-  /// * [positionX] The horizontal coordinate of the touchpoint in the view.
-  /// * [positionY] The vertical coordinate of the touchpoint in the view.
+  /// * [positionX] 触摸点相对于视图的横坐标。
+  /// * [positionY] 触摸点相对于视图的纵坐标。
   Future<void> setCameraFocusPositionInPreview(
       {required double positionX, required double positionY});
 
-  /// Enables the camera flash.
-  /// This method is for Android and iOS only.Call this method before calling joinChannel [2/2] , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
+  /// 设置是否打开闪光灯。
+  /// 该方法仅适用于 Android 和 iOS。请在启动摄像头之前调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之前。
   ///
-  /// * [isOn] Whether to turn on the camera flash:true: Turn on the flash.false: (Default) Turn off the flash.
+  /// * [isOn] 是否打开闪光灯： true: 打开闪光灯。false:（默认）关闭闪光灯。
   Future<void> setCameraTorchOn(bool isOn);
 
-  /// Sets whether to enable face autofocus.
-  /// By default, the SDK disables face autofocus on Android and enables face autofocus on iOS. To set face autofocus, call this method.This method is for Android and iOS only.Call this method after the camera is started, such as after joinChannel [2/2] , enableVideo , or enableLocalVideo .
+  /// 设置是否开启人脸对焦功能。
+  /// SDK 默认在 Android 平台关闭人脸自动对焦，在 iOS 平台开启人脸自动对焦。如需自行设置人脸自动对焦，请调用该方法。该方法仅适用于 Android 和 iOS。该方法需在摄像头启动后调用，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。
   ///
-  /// * [enabled] Whether to enable face autofocus:true: Enable face autofocus.false: Disable face autofocus.
+  /// * [enabled] 是否开启人脸对焦： true: 开启人脸对焦功能。false: 关闭人脸对焦功能。
   Future<void> setCameraAutoFocusFaceModeEnabled(bool enabled);
 
-  /// Checks whether the device supports manual exposure.
-  /// Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo ,depending on which method you use to turn on your local camera.
-  ///  This method is for Android and iOS only.
+  /// 检测设备是否支持手动曝光功能。
+  /// 请在启动摄像头之后调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之后。
+  ///  该方法仅适用于 Android 和 iOS。
   ///
   /// Returns
-  /// true: The device supports manual exposure.false: The device does not support manual exposure.
+  /// true: 设备支持手动曝光功能。false: 设备不支持手动曝光功能。
   Future<bool> isCameraExposurePositionSupported();
 
-  /// Sets the camera exposure position.
-  /// This method needs to be called after the camera is started (for example, by calling startPreview or joinChannel [2/2] ).After a successful method call, the SDK triggers the onCameraExposureAreaChanged callback.This method is for Android and iOS only.
+  /// 设置手动曝光位置。
+  /// 该方法需要在相机启动（如通过调用 startPreview 或 joinChannel [2/2] 实现）后调用。成功调用该方法后，本地会触发 onCameraExposureAreaChanged 回调。该方法仅适用于 Android 和 iOS。
   ///
-  /// * [positionXinView] The horizontal coordinate of the touchpoint in the view.
-  /// * [positionYinView] The vertical coordinate of the touchpoint in the view.
+  /// * [positionXinView] 触摸点相对于视图的横坐标。
+  /// * [positionYinView] 触摸点相对于视图的纵坐标。
   Future<void> setCameraExposurePosition(
       {required double positionXinView, required double positionYinView});
 
-  /// Checks whether the device supports auto exposure.
-  /// Call this method after enabling the local camera, for example, by calling joinChannel [2/2] , enableVideo , or enableLocalVideo ,depending on which method you use to turn on your local camera.This method applies to iOS only.
+  /// 检测设备是否支持自动曝光功能。
+  /// 该方法仅适用于 iOS。请在启动摄像头之前调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之前。
   ///
   /// Returns
-  /// true: The device supports auto exposure.false: The device does not support auto exposure.
+  /// true: 设备支持自动曝光功能。false: 设备不支持自动曝光功能。
   Future<bool> isCameraAutoExposureFaceModeSupported();
 
-  /// Sets whether to enable auto exposure.
-  /// This method applies to iOS only.Call this method before calling joinChannel [2/2] , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
+  /// 设置是否开启自动曝光功能。
+  /// 该方法仅适用于 iOS。请在启动摄像头之前调用该方法，如 joinChannel [2/2] 、 enableVideo 或者 enableLocalVideo 之前。
   ///
-  /// * [enabled] Whether to enable auto exposure:
-  ///  true: Enable auto exposure.false: Disable auto exposure.
+  /// * [enabled] 是否开启自动曝光：
+  ///  true: 开启自动曝光。false: 关闭自动曝光。
   Future<void> setCameraAutoExposureFaceModeEnabled(bool enabled);
 
-  /// Sets the default audio playback route.
-  /// This method applies to Android and iOS only.Ensure that you call this method before joining a channel. If you need to change the audio route after joining a channel, call setEnableSpeakerphone .Most mobile phones have two audio routes: an earpiece at the top, and a speakerphone at the bottom. The earpiece plays at a lower volume, and the speakerphone at a higher volume. When setting the default audio route, you determine whether audio playback comes through the earpiece or speakerphone when no external audio device is connected.
+  /// 设置默认的音频路由。
+  /// 该方法仅适用于 Android 和 iOS 平台。该方法需要在加入频道前调用。如需在加入频道后切换音频路由，请调用 setEnableSpeakerphone 。手机设备一般有两个音频路由，一个是位于顶部的听筒，播放声音偏小；一个是位于底部的扬声器，播放声音偏大。设置默认的音频路由，就是在没有外接设备的前提下，设置系统使用听筒还是扬声器播放音频。
   ///
-  /// * [defaultToSpeaker] Whether to set the speakerphone as the default audio route:true: Set the speakerphone as the default audio route.false: Set the earpiece as the default audio route.
+  /// * [defaultToSpeaker] 是否使用扬声器作为默认的音频路由：
+  ///  true: 设置默认音频路由为扬声器。false: 设置默认音频路由为听筒。
   Future<void> setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker);
 
-  /// Enables/Disables the audio route to the speakerphone.
-  /// This method is for Android and iOS only.After a successful method call, the SDK triggers the onAudioRoutingChanged callback.You can call this method before joining a channel, when in a channel, or after leaving a channel. However, Agora recommends calling this method only when you are in a channel to change the audio route temporarily.If you do not have a clear requirement for transient settings, Agora recommends calling setDefaultAudioRouteToSpeakerphone to set the audio route.Any user behavior or audio-related API call might change the transient setting of setEnableSpeakerphone.
+  /// 开启或关闭扬声器播放。
+  /// 如果 SDK 默认的音频路由（见音频路由）或 setDefaultAudioRouteToSpeakerphone 的设置无法满足你的需求，你可以调用 setEnableSpeakerphone 切换当前的音频路由。成功改变音频路由后，SDK 会触发 onAudioRoutingChanged 回调。该方法只设置用户在当前频道内使用的音频路由，不会影响 SDK 默认的音频路由。如果用户离开当前频道并加入新的频道，则用户还是会使用 SDK 默认的音频路由。该方法仅适用于 Android 和 iOS 平台。该方法需要在加入频道后调用。如果用户使用了蓝牙耳机、有线耳机等外接音频播放设备，则该方法的设置无效，音频只会通过外接设备播放。当有多个外接设备时，音频会通过最后一个接入的设备播放。
   ///
-  /// * [speakerOn] Whether to set the speakerphone as the default audio route:true: Set the speakerphone as the audio route temporarily.false: Do not set the speakerphone as the audio route.
+  /// * [speakerOn] 设置是否开启扬声器播放： true: 开启。音频路由为扬声器。false: 关闭。音频路由为听筒。
   Future<void> setEnableSpeakerphone(bool speakerOn);
 
-  /// Checks whether the speakerphone is enabled.
-  /// This method is for Android and iOS only.You can call this method either before or after joining a channel.
+  /// 检查扬声器状态启用状态。
+  /// 该方法仅适用于 Android 和 iOS。该方法在加入频道前后都能调用。
   ///
   /// Returns
-  /// true: The speakerphone is enabled, and the audio plays from the speakerphone.false: The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
+  /// true: 扬声器已开启，语音会输出到扬声器。false: 扬声器未开启，语音会输出到非扬声器（听筒，耳机等）。
   Future<bool> isSpeakerphoneEnabled();
 
-  /// Gets a list of shareable screens and windows.
-  /// You can call this method before sharing a screen or window to get a list of shareable screens and windows, which enables a user to use thumbnails in the list to choose a particular screen or window to share. This list also contains important information such as window ID and screen ID, with which you can call startScreenCaptureByWindowId or startScreenCaptureByDisplayId to start the sharing.
+  /// 获取可共享的屏幕和窗口对象列表。
+  /// 屏幕共享或窗口共享前，你可以调用该方法获取可共享的屏幕和窗口的对象列表，方便用户通过列表中的缩略图选择共享某个显示器的屏幕或某个窗口。列表中包含窗口 ID 和屏幕 ID 等重要信息，你可以获取到 ID 后再调用 startScreenCaptureByWindowId 或 startScreenCaptureByDisplayId 开启共享。
   ///
-  /// * [thumbSize] The target size of the screen or window thumbnail (the width and height are in pixels). The SDK scales the original image to make the length of the longest side of the image the same as that of the target size without distorting the original image. For example, if the original image is 400 × 300 and thumbSize is 100 × 100, the actual size of the thumbnail is 100 × 75. If the target size is larger than the original size, the thumbnail is the original image and the SDK does not scale it.
-  /// * [iconSize] The target size of the icon corresponding to the application program (the width and height are in pixels). The SDK scales the original image to make the length of the longest side of the image the same as that of the target size without distorting the original image. For example, if the original image is 400 × 300 and iconSize is 100 × 100, the actual size of the icon is 100 × 75. If the target size is larger than the original size, the icon is the original image and the SDK does not scale it.
-  /// * [includeScreen] Whether the SDK returns the screen information in addition to the window information:true: The SDK returns screen and window information.false: The SDK returns the window information only.
+  /// * [thumbSize] 屏幕或窗口的缩略图的目标尺寸（宽高单位为像素）。 SDK 会在保证原图不变形的前提下，缩放原图，使图片最长边和目标尺寸的最长边的长度一致。例如，原图宽高为 400 × 300，thumbSize 为 100 x 100，缩略图实际尺寸为 100 × 75。如果目标尺寸大于原图尺寸，缩略图即为原图，SDK 不进行缩放操作。
+  /// * [iconSize] 程序所对应的图标的目标尺寸（宽高单位为像素）。SDK 会在保证原图不变形的前提下，缩放原图，使图片最长边和目标尺寸的最长边的长度一致。例如，原图宽高为 400 × 300，iconSize 为 100 × 100，图标实际尺寸为 100 × 75。如果目标尺寸大于原图尺寸，图标即为原图，SDK 不进行缩放操作。
+  /// * [includeScreen] 除了窗口信息外，SDK 是否返回屏幕信息：
+  ///  true：SDK 返回屏幕和窗口信息。 false：SDK 仅返回窗口信息。
   Future<List<ScreenCaptureSourceInfo>> getScreenCaptureSources(
       {required SIZE thumbSize,
       required SIZE iconSize,
       required bool includeScreen});
 
-  /// Sets the operation permissions of the SDK on the Audio Session.
-  /// By default, both the SDK and the app have permission to operate the Audio Session. If you only need to use the app to operate the Audio Session, you can call this method to restrict the SDK's operation permissions to the Audio Session.You can call this method either before or after joining a channel. Once this method is called to restrict the SDK's operation permissions to the Audio Session, the restriction taks effect when the SDK needs to change the Audio Session.This method applies to iOS only.This method does not affect the operation permissions of the app on the Audio Session.
+  /// 设置 SDK 对 Audio Session 的操作权限。
+  /// 默认情况下，SDK 和 app 对 Audio Session 都有操作权限。如果你只需使用 app 对 Audio Session 进行操作，你可以调用该方法限制 SDK 对 Audio Session 的操作权限。该方法在加入频道前后都能调用。一旦调用该方法限制了 SDK 对 Audio Session 的操作权限，该限制会在 SDK 需要更改 Audio Session 时生效。该方法仅适用于 iOS 平台。该方法不会限制 app 对 Audio Session 的操作权限。
   ///
-  /// * [restriction] The operation permissions of the SDK on the audio session. See AudioSessionOperationRestriction . This parameter is in bit mask format, and each bit corresponds to a permission.
+  /// * [restriction] SDK 对 Audio Session 的操作权限，详见 AudioSessionOperationRestriction 。该参数为 Bit Mask，每个 Bit 对应一个权限。
   Future<void> setAudioSessionOperationRestriction(
       AudioSessionOperationRestriction restriction);
 
-  /// Shares the screen by specifying the display ID.
-  /// This method shares a screen or part of the screen.There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.This method is for Windows and macOS only.
+  /// 通过屏幕 ID 共享屏幕。
+  /// 共享一个屏幕或该屏幕的部分区域。开启屏幕共享有如下两种方案，你可以根据实际场景进行选择：
+  ///  在加入频道前调用该方法，然后调用 joinChannel [2/2] 加入频道并设置 publishScreenTrack 或 publishSecondaryScreenTrack 为 true，即可开始屏幕共享。在加入频道后调用该方法，然后调用 updateChannelMediaOptions 设置 publishScreenTrack 或 publishSecondaryScreenTrack 为 true，即可开始屏幕共享。该方法仅适用于 Windows 和 macOS。
   ///
-  /// * [displayId] The display ID of the screen to be shared.
-  /// * [regionRect] (Optional) Sets the relative location of the region to the screen. If you do not set this parameter, the SDK shares the whole screen. See Rectangle . If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
-  /// * [captureParams] Screen sharing configurations. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters .
+  /// * [displayId] 指定待共享的屏幕 ID。
+  ///
+  /// * [regionRect] （可选）指定待共享区域相对于整个屏幕的位置。如不填，则表示共享整个屏幕。详见 Rectangle 。
+  /// * [captureParams] 屏幕共享的参数配置。默认的视频编码分辨率为 1920 × 1080，即 2073600 像素。该像素值为计费标准。详见 ScreenCaptureParameters 。
   Future<void> startScreenCaptureByDisplayId(
       {required int displayId,
       required Rectangle regionRect,
       required ScreenCaptureParameters captureParams});
 
-  /// Shares the whole or part of a screen by specifying the screen rect.
-  /// There are two ways to start screen sharing, you can choose one according to the actual needs:
-  ///  Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.
-  ///  Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing. Deprecated:This method is deprecated. Use startScreenCaptureByDisplayId instead. Agora strongly recommends using startScreenCaptureByDisplayId if you need to start screen sharing on a device connected to another display.This method shares a screen or part of the screen. You need to specify the area of the screen to be shared.This method applies to Windows only.
+  /// 通过指定区域共享屏幕。
+  /// 开启屏幕共享有如下两种方案，你可以根据实际场景进行选择： 在加入频道前调用该方法，然后调用 joinChannel [2/2] 加入频道并设置 publishScreenTrack 或 publishSecondaryScreenTrack 为 true，即可开始屏幕共享。
+  ///  在加入频道后调用该方法，然后调用 updateChannelMediaOptions 设置 publishScreenTrack 或 publishSecondaryScreenTrack 为 true，即可开始屏幕共享。 弃用：该方法已废弃。请改用 startScreenCaptureByDisplayId 。如果你需要在设备外接其他显示屏的情况下开启屏幕共享，Agora 强烈建议你使用 startScreenCaptureByDisplayId。共享一个屏幕或该屏幕的部分区域。你需要在该方法中指定想要共享的屏幕区域。该方法仅适用于 Windows 平台。
   ///
-  /// * [screenRect] Sets the relative location of the screen to the virtual screen.
-  /// * [regionRect]  Rectangle . If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
-  /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters .
+  /// * [screenRect] 指定待共享的屏幕相对于虚拟屏的位置。
+  /// * [regionRect]  Rectangle 。如果设置的共享区域超出了屏幕的边界，则只共享屏幕内的内容；如果将 width 或 height 设为 0 ，则共享整个屏幕。
+  /// * [captureParams] 屏幕共享的编码参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见 ScreenCaptureParameters 。
   Future<void> startScreenCaptureByScreenRect(
       {required Rectangle screenRect,
       required Rectangle regionRect,
       required ScreenCaptureParameters captureParams});
 
-  /// Gets the audio device information.
-  /// After calling this method, you can get whether the audio device supports ultra-low-latency capture and playback.This method is for Android only.You can call this method either before or after joining a channel.
+  /// 获取音频设备信息。
+  /// 调用该方法后，你可以获取音频设备是否支持极低延时采集和播放。该方法仅适用于 Android 平台。该方法在加入频道前后均可调用。
   ///
   /// Returns
-  /// The DeviceInfo object that identifies the audio device information.Not null: Success.Null: Failure.
+  /// 包含音频设备信息的 DeviceInfo 对象。 非空：方法调用成功。空：方法调用失败。
   Future<DeviceInfo> getAudioDeviceInfo();
 
-  /// Shares the whole or part of a window by specifying the window ID.
-  /// There are two ways to start screen sharing, you can choose one according to the actual needs:
-  ///  Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing.
-  ///  Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing. This method shares a window or part of the window. You need to specify the ID of the window to be shared.Applies to the macOS and Windows platforms only.The window sharing feature of the Agora SDK relies on WGC (Windows Graphics Capture) or GDI (Graphics Device Interface) capture, and WGC cannot be set to disable mouse capture on systems earlier than Windows 10 2004. Therefore, captureMouseCursor(false) might not work when you start window sharing on a device with a system earlier than Windows 10 2004. See ScreenCaptureParameters .This method supports window sharing of UWP (Universal Windows Platform) applications. Agora tests the mainstream UWP applications by using the lastest SDK, see details as follows:
+  /// 通过窗口 ID 共享窗口。
+  /// 开启屏幕共享有如下两种方案，你可以根据实际场景进行选择： 在加入频道前调用该方法，然后调用 joinChannel [2/2] 加入频道并设置 publishScreenTrack 或 publishSecondaryScreenTrack 为 true，即可开始屏幕共享。
+  ///  在加入频道后调用该方法，然后调用 updateChannelMediaOptions 设置 publishScreenTrack 或 publishSecondaryScreenTrack 为 true，即可开始屏幕共享。 共享一个窗口或该窗口的部分区域。用户需要在该方法中指定想要共享的窗口 ID。该方法仅适用于 macOS 和 Windows 平台。Agora SDK 的窗口共享功能依赖于 WGC（Windows Graphics Capture）或 GDI（Graphics Device Interface）采集，WGC 在早于 Windows 10 2004 的系统上无法设置关闭鼠标采集，因此，当你在搭载早于 Windows 10 2004 系统的设备上进行窗口共享时，可能出现 captureMouseCursor(false) 不生效的现象。详见 ScreenCaptureParameters 。该方法支持共享通用 Windows 平台（UWP）应用窗口。声网使用最新版 SDK 对主流的 UWP 应用进行了测试，结果如下：
   ///
-  /// * [windowId] The ID of the window to be shared.
-  /// * [regionRect] (Optional) Sets the relative location of the region to the screen. If you do not set this parameter, the SDK shares the whole screen. See Rectangle . If the specified region overruns the window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole window.
-  /// * [captureParams] Screen sharing configurations. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters .
+  /// * [windowId] 指定待共享的窗口 ID。
+  ///
+  /// * [regionRect] （可选）指定待共享区域相对于整个屏幕的位置。如不填，则表示共享整个屏幕。详见 Rectangle 。如果设置的共享区域超出了窗口的边界，则只共享窗口内的内容；如果宽或高为 0，则共享整个窗口。
+  /// * [captureParams] 屏幕共享的参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见 ScreenCaptureParameters 。
   Future<void> startScreenCaptureByWindowId(
       {required int windowId,
       required Rectangle regionRect,
       required ScreenCaptureParameters captureParams});
 
-  /// Sets the content hint for screen sharing.
-  /// A content hint suggests the type of the content being shared, so that the SDK applies different optimization algorithms to different types of content. If you don't call this method, the default content hint is contentHintNone.You can call this method either before or after you start screen sharing.
+  /// 设置屏幕共享内容类型。
+  /// Agora SDK 会根据不同的内容类型，使用不同的算法对共享效果进行优化。如果不调用该方法，SDK 会将屏幕共享的内容默认为 contentHintNone，即无指定的内容类型。该方法在开始屏幕共享前后都能调用。
   ///
-  /// * [contentHint] The content hint for screen sharing. See VideoContentHint .
+  /// * [contentHint] 屏幕共享的内容类型。详见 VideoContentHint 。
   Future<void> setScreenCaptureContentHint(VideoContentHint contentHint);
 
-  /// Sets the screen sharing scenario.
-  /// When you start screen sharing or window sharing, you can call this method to set the screen sharing scenario. The SDK adjusts the video quality and experience of the sharing according to the scenario.This method applies to macOS and Windows only.
+  /// 设置屏幕共享的场景。
+  /// 开启屏幕共享或窗口共享时，你可以调用该方法设置屏幕共享的场景，SDK 会根据你设置的场景调整共享画面的画质。
+  ///  该方法仅适用于 macOS 和 Windows。
   ///
-  /// * [screenScenario] The screen sharing scenario. See ScreenScenarioType .
+  /// * [screenScenario] 屏幕共享的场景，详见 ScreenScenarioType 。
   Future<void> setScreenCaptureScenario(ScreenScenarioType screenScenario);
 
-  /// Updates the screen sharing region.
-  /// Call this method after starting screen sharing or window sharing.
+  /// 更新屏幕共享区域。
+  /// 请在开启屏幕共享或窗口共享后调用该方法。
   ///
-  /// * [regionRect] The relative location of the screen-share area to the screen or window. If you do not set this parameter, the SDK shares the whole screen or window. See Rectangle . If the specified region overruns the screen or window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen or window.
+  /// * [regionRect] 待共享区域相对于整个屏幕或窗口的位置，如不填，则表示共享整个屏幕或窗口。详见 Rectangle 。如果设置的共享区域超出了屏幕或窗口的边界，则只共享屏幕或窗口内的内容；如果将 width 或 height 设为 0，则共享整个屏幕或窗口。
   Future<void> updateScreenCaptureRegion(Rectangle regionRect);
 
-  /// Updates the screen sharing parameters.
-  /// Call this method after starting screen sharing or window sharing.
+  /// 更新屏幕共享的参数配置。
+  /// 该方法适用于 Windows 和 macOS 平台。请在开启屏幕共享或窗口共享后调用该方法。
   ///
-  /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters
+  /// * [captureParams] 屏幕共享的编码参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见 ScreenCaptureParameters
   Future<void> updateScreenCaptureParameters(
       ScreenCaptureParameters captureParams);
 
-  /// Starts screen sharing.
-  /// There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenCaptureVideotrue to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenCaptureVideotrue to start screen sharing.This method is for Android only.
+  /// 开始屏幕共享。
+  /// 开启屏幕共享有如下两种方案，你可以根据实际场景进行选择： 在加入频道前调用该方法，然后调用 joinChannel [2/2] 加入频道并设置 publishScreenCaptureVideo true，即可开始屏幕共享。在加入频道后调用该方法，然后调用 updateChannelMediaOptions 设置 publishScreenCaptureVideotrue，即可开始屏幕共享。该方法适用于 Android 和 iOS 平台。
   ///
-  /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2 .
+  /// * [captureParams] 屏幕共享的编码参数配置。默认的分辨率为 1920 x 1080，即 2,073,600 像素。该像素值为计费标准。详见 ScreenCaptureParameters2 。
   Future<void> startScreenCapture(ScreenCaptureParameters2 captureParams);
 
-  /// Updates the screen sharing parameters.
+  /// 更新屏幕共享的参数配置。
+  /// 该方法适用于 Android 和 iOS 平台。
   ///
-  ///
-  /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2 .
+  /// * [captureParams] 屏幕共享的编码参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见 ScreenCaptureParameters2 。
   Future<void> updateScreenCapture(ScreenCaptureParameters2 captureParams);
 
-  /// Stops screen sharing.
+  /// 停止屏幕共享。
   ///
   Future<void> stopScreenCapture();
 
-  /// Retrieves the call ID.
-  /// When a user joins a channel on a client, a callId is generated to identify the call from the client. Some methods, such as rate and complain , must be called after the call ends to submit feedback to the SDK. These methods require the callId parameter.Call this method after joining a channel.
+  /// 获取通话 ID。
+  /// 客户端在每次加入频道后会生成一个对应的 callId，标识该客户端的此次通话。有些方法，如 rate 、 complain 等，需要在通话结束后调用，向 SDK 提交反馈。这些方法中需要填入指定的 callId 参数。该方法需要在加入频道后调用。
   ///
   /// Returns
-  /// The current call ID.
+  /// 通话 ID。
   Future<String> getCallId();
 
-  /// Allows a user to rate a call after the call ends.
-  /// Ensure that you call this method after leaving a channel.
+  /// 给通话评分。
+  /// 该方法需要在用户离开频道后调用。
   ///
-  /// * [callId] The current call ID. You can get the call ID by calling getCallId .
-  /// * [rating] The rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the SDK returns the -2 (ERR_INVALID_ARGUMENT) error.
-  /// * [description] A description of the call. The string length should be less than 800 bytes.
+  /// * [callId] 通话 ID。你可以通过调用 getCallId 获取该参数。
+  /// * [rating] 给通话的评分，最低 1 分，最高 5 分，如超过这个范围，SDK 会返回 -2(ERR_INVALID_ARGUMENT) 错误。
+  /// * [description] 给通话的描述。长度应小于 800 字节。
   Future<void> rate(
       {required String callId,
       required int rating,
       required String description});
 
-  /// Allows a user to complain about the call quality after a call ends.
-  /// This method allows users to complain about the quality of the call. Call this method after the user leaves the channel.
+  /// 投诉通话质量。
+  /// 该方法允许用户就通话质量进行投诉。需要在离开频道后调用。
   ///
-  /// * [callId] The current call ID. You can get the call ID by calling getCallId .
-  /// * [description] A description of the call. The string length should be less than 800 bytes.
+  /// * [callId] 通话 ID。你可以通过调用 getCallId 获取该参数。
+  /// * [description] 通话的描述。长度应小于 800 字节。
   Future<void> complain({required String callId, required String description});
 
-  /// Starts Media Push without transcoding.
-  /// Ensure that you enable the media push service before using this function.Call this method after joining a channel.Only hosts in the LIVE_BROADCASTING profile can call this method.If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the Media Push.
+  /// 开始非转码推流。
+  /// 请确保已开通旁路推流服务。请在加入频道后调用该方法。只有直播场景下的主播才能调用该方法。调用该方法推流失败后，如果你想要重新推流，那么请你务必先调用 stopRtmpStream ，再调用该方法重推，否则 SDK 会返回与上次推流失败时一样的错误码。调用该方法，你可以向指定的旁路推流地址推送直播音视频流。该方法每次只能向一个地址推送媒体流，如果你需要向多个地址转码推流，则需多次调用该方法。调用该方法后，SDK 会在本地触发 onRtmpStreamingStateChanged 回调，报告推流的状态。
   ///
-  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  /// * [url] 旁路推流地址。格式为 RTMP 或 RTMPS。字符长度不能超过 1024 字节。不支持中文字符等特殊字符。
   Future<void> startRtmpStreamWithoutTranscoding(String url);
 
-  /// Starts Media Push and sets the transcoding configuration.
-  /// You can call this method to push an audio or video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the Media Push.Ensure that you enable the media push service before using this function.Call this method after joining a channel.Only hosts in the LIVE_BROADCASTING profile can call this method.If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+  /// 开始旁路推流并设置转码属性。
+  /// 调用该方法，你可以向指定的旁路推流地址推送直播音视频流并设置转码属性。该方法每次只能向一个地址推送媒体流，如果你需要向多个地址转码推流，则需多次调用该方法。调用该方法后，SDK 会在本地触发 onRtmpStreamingStateChanged 回调，报告推流的状态。请确保已开通旁路推流服务。请在加入频道后调用该方法。只有直播场景下的主播才能调用该方法。调用该方法推流失败后，如果你想要重新推流，那么请你务必先调用 stopRtmpStream ，再调用该方法重推，否则 SDK 会返回与上次推流失败时一样的错误码。
   ///
-  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
-  /// * [transcoding] The transcoding configuration for media push. See LiveTranscoding .
+  /// * [url] 旁路推流地址。格式为 RTMP 或 RTMPS。字符长度不能超过 1024 字节。不支持中文字符等特殊字符。
+  /// * [transcoding] 旁路推流的转码属性，详见 LiveTranscoding 类。
   Future<void> startRtmpStreamWithTranscoding(
       {required String url, required LiveTranscoding transcoding});
 
-  /// Updates the transcoding configuration.
-  /// After you start pushing media streams to CDN with transcoding, you can dynamically update the transcoding configuration according to the scenario. The SDK triggers the onTranscodingUpdated callback after the transcoding configuration is updated.
+  /// 更新旁路推流转码属性。
+  /// 开启转码推流后，你可以根据场景需求，动态更新转码属性。转码属性更新后，SDK 会触发 onTranscodingUpdated 回调。
   ///
-  /// * [transcoding] The transcoding configuration for media push. See LiveTranscoding .
+  /// * [transcoding] 旁路推流的转码属性，详见 LiveTranscoding 类。
   Future<void> updateRtmpTranscoding(LiveTranscoding transcoding);
 
-  /// Stops pushing media streams to a CDN.
-  /// You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  /// 结束旁路推流。
+  /// 调用该方法，你可以结束指定的旁路推流地址上的直播。该方法每次只能结束一个推流地址上的直播，如果你需要结束多个推流地址的直播，则需多次调用该方法。调用该方法后，SDK 会在本地触发 onRtmpStreamingStateChanged 回调，报告推流的状态。
   ///
-  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  /// * [url] 旁路推流地址。格式为 RTMP 或 RTMPS。字符长度不能超过 1024 字节。不支持中文字符等特殊字符。
   Future<void> stopRtmpStream(String url);
 
-  /// Starts the local video mixing.
-  /// After calling this method, you can merge multiple video streams into one video stream locally. Common scenarios include the following:In a live streaming scenario with cohosts or when using the Media Push function, you can locally mix the videos of multiple hosts into one.In scenarios where you capture multiple local video streams (for example, video captured by cameras, screen sharing streams, video files, or pictures), you can merge them into one video stream and then publish the mixed video stream after joining the channel.
+  /// 开启本地合图。
+  /// 调用该方法后，你可以在本地将多路视频流合并为一路视频流。常见场景如下：
+  ///  在多主播直播场景或使用旁路推流功能时，你可以在本地将多个主播的画面合并为一个画面。将本地采集的多路视频流（例如：摄像头采集的视频、屏幕共享流、视频文件、图片等）合并为一路视频流，加入频道后推送已合图的视频流。
   ///
-  /// * [config] Configuration of the local video mixing. See LocalTranscoderConfiguration .
+  /// * [config] 本地合图的配置，详见 LocalTranscoderConfiguration 。
   Future<void> startLocalVideoTranscoder(LocalTranscoderConfiguration config);
 
-  /// Update the local video mixing configuration.
-  /// After calling startLocalVideoTranscoder , call this method if you want to update the local video mixing configuration.
+  /// 更新本地合图配置。
+  /// 调用 startLocalVideoTranscoder 后，如果你希望更新本地合图配置，请调用该方法。
   ///
-  /// * [config] Configuration of the local video mixing, see LocalTranscoderConfiguration .
+  /// * [config] 本地合图的配置，详见 LocalTranscoderConfiguration 。
   Future<void> updateLocalTranscoderConfiguration(
       LocalTranscoderConfiguration config);
 
-  /// Stops the local video mixing.
-  /// After calling startLocalVideoTranscoder , call this method if you want to stop the local video mixing.
+  /// 停止本地合图。
+  /// 调用 startLocalVideoTranscoder 后， 如果你希望停止本地合图，请调用该方法。
   Future<void> stopLocalVideoTranscoder();
 
-  /// Starts video capture with a primary camera.
+  /// 开始通过第一个摄像头采集视频。
   ///
   ///
-  /// * [config] The configuration of the video capture with a primary camera. See CameraCapturerConfiguration .
+  /// * [config] 视频采集配置。详见 CameraCapturerConfiguration 。
   Future<void> startPrimaryCameraCapture(CameraCapturerConfiguration config);
 
-  /// Starts video capture with a secondary camera.
+  /// 开始通过第二个摄像头采集视频。
   ///
   ///
-  /// * [config] The configuration of the video capture with a primary camera. See CameraCapturerConfiguration .
+  /// * [config] 视频采集配置。详见 CameraCapturerConfiguration 。
   Future<void> startSecondaryCameraCapture(CameraCapturerConfiguration config);
 
-  /// Stops capturing video through a primary camera.
-  /// You can call this method to stop capturing video through the primary camera after calling the startPrimaryCameraCapture .
+  /// 停止通过第一个摄像头采集视频。
+  /// 调用 startPrimaryCameraCapture 后，你可以调用本方法停止通过第一个摄像头采集视频。
   Future<void> stopPrimaryCameraCapture();
 
-  /// Stops capturing video through the secondary camera.
-  /// You can call this method to stop capturing video through the secondary camera after calling the startSecondaryCameraCapture .
+  /// 停止通过第二个摄像头采集视频。
+  /// 调用 startSecondaryCameraCapture 后，你可以调用本方法停止通过第二个摄像头采集视频。
   Future<void> stopSecondaryCameraCapture();
 
-  /// Sets the rotation angle of the captured video.
-  /// When the video capture device does not have the gravity sensing function, you can call this method to manually adjust the rotation angle of the captured video.
+  /// 设置采集视频的旋转角度。
+  /// 当视频采集设备不带重力感应功能时，你可以调用该方法手动调整采集到的视频画面的旋转角度。
   ///
-  /// * [type] The video source type. See VideoSourceType .
-  /// * [orientation] The clockwise rotation angle. See VideoOrientation .
+  /// * [null] 视频源类型，详见 VideoSourceType
+  /// * [orientation] 顺时针旋转角度，详见 VideoOrientation
   ///
   /// Returns
-  /// 0: Success.< 0: Failure.
+  /// 0: 方法调用成功< 0: 方法调用失败
   Future<void> setCameraDeviceOrientation(
       {required VideoSourceType type, required VideoOrientation orientation});
 
@@ -3989,38 +4080,39 @@ abstract class RtcEngine {
   Future<void> setScreenCaptureOrientation(
       {required VideoSourceType type, required VideoOrientation orientation});
 
-  /// Starts sharing the primary screen.
+  /// 开始共享第一个屏幕。
   ///
   ///
-  /// * [config] The configuration of the captured screen. See ScreenCaptureConfiguration .
+  /// * [config] 屏幕采集配置。详见 ScreenCaptureConfiguration 。
   Future<void> startPrimaryScreenCapture(ScreenCaptureConfiguration config);
 
-  /// Starts sharing a secondary screen.
+  /// 开始共享第二个屏幕。
   ///
   ///
-  /// * [config] The configuration of the captured screen. See ScreenCaptureConfiguration .
+  /// * [config] 屏幕采集配置。详见 ScreenCaptureConfiguration 。
   Future<void> startSecondaryScreenCapture(ScreenCaptureConfiguration config);
 
-  /// Stop sharing the first screen.
-  /// After calling startPrimaryScreenCapture , you can call this method to stop sharing the first screen.
+  /// 停止共享第一个屏幕。
+  /// 调用 startPrimaryScreenCapture 后，你可以调用本方法停止共享第一个屏幕。
   Future<void> stopPrimaryScreenCapture();
 
-  /// Stops sharing the secondary screen.
-  /// After calling startSecondaryScreenCapture , you can call this method to stop sharing the secondary screen.
+  /// 停止共享第二个屏幕。
+  /// 调用 startSecondaryScreenCapture 后，你可以调用本方法停止共享第二个屏幕。
   Future<void> stopSecondaryScreenCapture();
 
-  /// Gets the current connection state of the SDK.
-  /// You can call this method either before or after joining a channel.
+  /// 获取当前网络连接状态。
+  /// 该方法在加入频道前后都能调用。
   ///
   /// Returns
-  /// The current connection state.
+  /// 当前网络连接状态。详见 ConnectionStateType 。
   Future<ConnectionStateType> getConnectionState();
 
-  /// Adds event handlers.
-  /// The SDK uses the RtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this interface class have default (empty) implementations. Therefore, the application can only inherit some required events. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method.
-  /// Otherwise, the SDK may not work properly.
+  /// 添加主回调事件。
+  /// RtcEngineEventHandler 接口类用于 SDK 向 app 发送回调事件通知，app 通过继承该接口类的方法获取 SDK 的事件通知。
+  ///  接口类的所有方法都有缺省（空）实现，app 可以根据需要只继承关心的事件。在回调方法中，app 不应该做耗时或者调用可能会引起阻塞的 API（如 sendStreamMessage），
+  ///  否则可能影响 SDK 的运行。
   ///
-  /// * [eventHandler] Callback events to be added.
+  /// * [eventHandler] 待添加的回调事件，详见 RtcEngineEventHandler 。
   void registerEventHandler(RtcEngineEventHandler eventHandler);
 
   /// @nodoc
@@ -4030,40 +4122,41 @@ abstract class RtcEngine {
   Future<void> setRemoteUserPriority(
       {required int uid, required PriorityType userPriority});
 
-  /// Sets the built-in encryption mode.
-  /// Deprecated:Use enableEncryption instead.The Agora SDK supports built-in encryption, which is set to the AES-128-GCM mode by default. Call this method to use other encryption modes. All users in the same channel must use the same encryption mode and secret. Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.Before calling this method, please call setEncryptionSecret to enable the built-in encryption function.
+  /// 启用内置的加密方案。
+  /// 弃用：请改用 enableEncryption 方法。Agora Video SDK 支持内置加密方案，默认支持 AES-128-GCM。如需采用其他加密方案，可以调用本方法。同一频道内的所有用户必须设置相同的加密方式和 secret 才能进行通话。关于这几种加密方式的区别，请参考 AES 加密算法的相关资料。在调用本方法前，请先调用 setEncryptionSecret 启用内置加密功能。
   ///
-  /// * [encryptionMode] The following encryption modes:"aes-128-xts": 128-bit AES encryption, XTS mode."aes-128-ecb": 128-bit AES encryption, ECB mode."aes-256-xts": 256-bit AES encryption, XTS mode."sm4-128-ecb": 128-bit SM4 encryption, ECB mode."aes-128-gcm": 128-bit AES encryption, GCM mode."aes-256-gcm": 256-bit AES encryption, GCM mode."": When this parameter is set as null, the encryption mode is set as "aes-128-gcm" by default.
+  /// * [encryptionMode] 加密模式： "aes-128-xts": 128 位 AES 加密，XTS 模式；"aes-128-ecb": 128 位 AES 加密，ECB 模式；"aes-256-xts": 256 位 AES 加密，XTS 模式；"sm4-128-ecb": 128 位 SM4 加密，ECB 模式；"aes-128-gcm": 128 位 AES 加密，GCM 模式；"aes-256-gcm": 256 位 AES 加密，GCM 模式；"": 设置为空字符串时，默认使用加密方式 "aes-128-gcm"。
   Future<void> setEncryptionMode(String encryptionMode);
 
-  /// Enables built-in encryption with an encryption password before users join a channel.
-  /// Deprecated:This method is deprecated. Use enableEncryption instead.Before joining the channel, you need to call this method to set the secret parameter to enable the built-in encryption. All users in the same channel should use the same secret. The secret is automatically cleared once a user leaves the channel. If you do not specify the secret or secret is set as null, the built-in encryption is disabled.Do not use this method for CDN live streaming.For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
+  /// 启用内置加密，并设置数据加密密码。
+  /// 弃用：请改用 enableEncryption 方法。在加入频道之前， app 需调用该方法指定 secret 来启用内置的加密功能，同一频道内的所有用户应设置相同的 secret。
+  ///  当用户离开频道时，该频道的 secret 会自动清除。如果未指定 secret 或将 secret 设置为空，则无法激活加密功能。请不要在旁路推流时调用此方法。为保证最佳传输效果，请确保加密后的数据大小不超过原始数据大小 + 16 字节。16 字节是 AES 通用加密模式下最大填充块大小。
   ///
-  /// * [secret] The encryption password.
+  /// * [secret] 加密密码。
   Future<void> setEncryptionSecret(String secret);
 
-  /// Enables/Disables the built-in encryption.
-  /// In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.If you enable the built-in encryption, you cannot use the Media Push function.
+  /// 开启或关闭内置加密。
+  /// 在安全要求较高的场景下，Agora 建议你在加入频道前，调用本方法开启内置加密。同一频道内所有用户必须使用相同的加密模式和密钥。用户离开频道后，SDK 会自动关闭加密。如需重新开启加密，你需要在用户再次加入频道前调用该方法。如果开启了内置加密，则不能使用旁路推流功能。
   ///
-  /// * [enabled] Whether to enable built-in encryption:true: Enable the built-in encryption.false: Disable the built-in encryption.
-  /// * [config] Built-in encryption configurations. See EncryptionConfig .
+  /// * [enabled] 是否开启内置加密： true: 开启内置加密。false: 关闭内置加密。
+  /// * [config] 配置内置加密模式和密钥。详见 EncryptionConfig 。
   Future<void> enableEncryption(
       {required bool enabled, required EncryptionConfig config});
 
-  /// Sends data stream messages.
-  /// Sends data stream messages to all users in a channel. The SDK has the following restrictions on this method:Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.Each client can send up to 6 KB of data per second.Each user can have up to five data streams simultaneously.A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
-  /// A failed method call triggers the onStreamMessageError callback on the remote client.Ensure that you call createDataStream to create a data channel before calling this method.In live streaming scenarios, this method only applies to hosts.
+  /// 发送数据流。
+  /// 该方法发送数据流消息到频道内所有用户。SDK 对该方法的实现进行了如下限制： 频道内每秒最多能发送 30 个包，且每个包最大为 1 KB。每个客户端每秒最多能发送 6 KB 数据。频道内每人最多能同时有 5 个数据通道。成功调用该方法后，远端会触发 onStreamMessage 回调，远端用户可以在该回调中获取接收到的流消息；
+  ///  若调用失败，远端会触发 onStreamMessageError 回调。请确保在调用该方法前，已调用 createDataStream 创建了数据通道。直播场景下，该方法仅适用于主播用户。
   ///
-  /// * [streamId] The data stream ID. You can get the data stream ID by calling createDataStream.
-  /// * [data] The data to be sent.
-  /// * [length] The length of the data.
+  /// * [streamId] 数据流 ID。可以通过 createDataStream 获取。
+  /// * [data] 待发送的数据。
+  /// * [length] 数据长度。
   Future<void> sendStreamMessage(
       {required int streamId, required Uint8List data, required int length});
 
   /// @nodoc
   Future<void> clearVideoWatermark();
 
-  /// Removes the watermark image from the video stream.
+  /// 删除已添加的视频水印。
   ///
   Future<void> clearVideoWatermarks();
 
@@ -4080,14 +4173,14 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> resumeAudio();
 
-  /// Enables interoperability with the Agora Web SDK (applicable only in the live streaming scenarios).
-  /// Deprecated:The SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.This method enables or disables interoperability with the Agora Web SDK. If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.This method is only applicable in live streaming scenarios, and interoperability is enabled by default in communication scenarios.
+  /// 打开与 Web SDK 的互通（仅在直播场景适用）。
+  /// 弃用:该方法已废弃，SDK 自动开启与 Web SDK 的互通，无需调用该方法开启。该方法打开或关闭与 Agora Web SDK 的互通。如果有用户通过 Web SDK 加入频道，请确保调用该方法，否则 Web 端用户看 Native 端的画面会是黑屏。该方法仅在直播场景下适用，通信场景下默认互通是打开的。
   ///
-  /// * [enabled] Whether to enable interoperability with the Agora Web SDK.true: Enable interoperability.false: (Default) Disable interoperability.
+  /// * [enabled] 是否打开与 Agora Web SDK 的互通： true: 打开互通。false: (默认) 关闭互通。
   Future<void> enableWebSdkInteroperability(bool enabled);
 
-  /// Reports customized messages.
-  /// Agora supports reporting and analyzing customized messages. This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact and discuss the format of customized messages with us.
+  /// 发送自定义上报消息。
+  /// 声网提供自定义数据上报和分析服务。该服务当前处于免费内测期。内测期提供的能力为 6 秒内最多上报 10 条数据，每条自定义数据不能超过 256 字节，每个字符串不能超过 100 字节。如需试用该服务，请联系 开通并商定自定义数据格式。
   Future<void> sendCustomReportMessage(
       {required String id,
       required String category,
@@ -4095,16 +4188,15 @@ abstract class RtcEngine {
       required String label,
       required int value});
 
-  /// Registers the metadata observer.
-  /// You need to implement the MetadataObserver class and specify the metadata type in this method. This method enables you to add synchronized metadata in the video stream for more diversified
-  ///  live interactive streaming, such as sending shopping links, digital coupons, and online quizzes.Call this method before joinChannel [2/2].
+  /// 注册媒体 metadata 观测器用于接收或发送 metadata。
+  /// 你需要自行实现 MetadataObserver 类并在本方法中指定 metadata 类型。本方法允许你为视频流添加同步的 metadata，用于多样化的直播互动，如发送购物链接、电子优惠券和在线测试。请在 joinChannel [2/2] 前调用该方法。
   ///
-  /// * [observer] The metadata observer. See MetadataObserver .
-  /// * [type] The metadata type. The SDK currently only supports videoMetadata.
+  /// * [observer] metadata 观测器。详见 MetadataObserver 。
+  /// * [type] metadata 类型。目前仅支持 videoMetadata。
   void registerMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type});
 
-  /// Unregisters the specified metadata observer.
+  /// 取消注册媒体 metadata 观测器。
   ///
   void unregisterMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type});
@@ -4125,101 +4217,101 @@ abstract class RtcEngine {
       required int userId,
       required String location});
 
-  /// Registers a user account.
-  /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the registration is successful, the user account can identify the identity of the local user, and the user can use it to join the channel.After the user successfully registers a user account, the SDK triggers the onLocalUserRegistered callback on the local client, reporting the user ID and user account of the local user.This method is optional. To join a channel with a user account, you can choose either of the following ways:Call registerLocalUserAccount to create a user account, and then call joinChannelWithUserAccount to join the channel.Call the joinChannelWithUserAccount method to join the channel.The difference between the two ways is that the time elapsed between calling the registerLocalUserAccount method and joining the channel is shorter than directly calling joinChannelWithUserAccount.Ensure that you set the userAccount parameter; otherwise, this method does not take effect.Ensure that the userAccount is unique in the channel.To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
+  /// 注册本地用户 User Account。
+  /// 该方法为本地用户注册一个 User Account。注册成功后，该 User Account 即可标识该本地用户的身份，用户可以使用它加入频道。成功注册 User Account 后，本地会触发 onLocalUserRegistered 回调，告知本地用户的 UID 和 User Account。该方法为可选。如果你希望用户使用 User Account 加入频道，可以选用以下两种方式： 先调用 registerLocalUserAccount 方法注册 Account，再调用 joinChannelWithUserAccount 方法加入频道。直接调用 joinChannelWithUserAccount 方法加入频道。两种方式的区别在于，提前调用 registerLocalUserAccount，可以缩短使用 joinChannelWithUserAccount 进入频道的时间。userAccount 不能为空，否则该方法不生效。请确保在该方法中设置的 userAccount 在频道中的唯一性。为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。 如果有用户通过 Agora Web SDK 加入频道，请确保 Web 加入的用户也是同样类型。
   ///
-  /// * [appId] The App ID of your project on Agora Console.
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// * [appId] 你的项目在 Agora 控制台注册的 App ID。
+  /// * [userAccount] 用户 User Account。该参数用于标识实时音视频互动频道中的用户。你需要自行设置和管理用户的 User Account，并确保同一频道中每个用户的 User Account 是唯一的。该参数为必填，最大不超过 255 字节，不可填 NULL。以下为支持的字符集范围（共 89 个字符）： 26 个小写英文字母 a-z26 个大写英文字母 A-Z10 个数字 0-9空格"!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、"{"、"}"、"|"、"~"、","
   Future<void> registerLocalUserAccount(
       {required String appId, required String userAccount});
 
-  /// Joins the channel with a user account, and configures whether to automatically subscribe to audio or video streams after joining the channel.
-  /// To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods.This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: The onUserJoined callback if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.
+  /// 使用 User Account 加入频道，并设置是否自动订阅音频或视频流。
+  /// 为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。如果有用户通过 Agora Web SDK 加入频道，请确保 Web 加入的用户也是同样类型。用户成功加入频道后，默认订阅频道内所有其他用户的音频流和视频流，因此产生用量并影响计费。如果想取消订阅，可以通过调用相应的 mute 方法实现。该方法允许本地用户使用 User Account 加入频道。成功加入频道后，会触发以下回调：
+  ///  本地： onLocalUserRegistered 、 onJoinChannelSuccess 和 onConnectionStateChanged 回调。远端：通信场景下的用户和直播场景下的主播加入频道后，远端会分别触发 onUserJoined 和 onUserInfoUpdated 回调。
   ///
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "= ", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [token] The token generated on your server for authentication.
-  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:All lowercase English letters: a to z.All uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [options] The channel media options. See ChannelMediaOptions .
+  /// * [userAccount] 用户 User Account。该参数用于标识实时音视频互动频道中的用户。你需要自行设置和管理用户的 User Account，并确保同一频道中每个用户的 User Account 是唯一的。 该参数为必填，最大不超过 255 字节，不可填 NULL。以下为支持的字符集范围（共 89 个字符）： 26 个小写英文字母 a-z26 个大写英文字母 A-Z10 个数字 0-9空格"!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、"{"、"}"、"|"、"~"、","
+  /// * [token] 在服务端生成的用于鉴权的动态密钥。详见。
+  /// * [channelId] 频道名。该参数标识用户进行实时音视频互动的频道。App ID 一致的前提下，填入相同频道名的用户会进入同一个频道进行音视频互动。该参数为长度在 64 字节以内的字符串。以下为支持的字符集范围（共 89 个字符）:
+  ///  26 个小写英文字母 a~z26 个大写英文字母 A~Z10 个数字 0~9空格"!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、"{"、"}"、"|"、"~"、","
+  /// * [options] 频道媒体设置选项。详见 ChannelMediaOptions 。
   Future<void> joinChannelWithUserAccountEx(
       {required String token,
       required String channelId,
       required String userAccount,
       required ChannelMediaOptions options});
 
-  /// Gets the user information by passing in the user account.
-  /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method to get the user account of the remote user from the UserInfo object by passing in the user ID.
+  /// 通过 User Account 获取用户信息。
+  /// 远端用户加入频道后，SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，并在本地触发 onUserInfoUpdated 回调。收到这个回调后，你可以调用该方法，通过传入 UID 获取包含了指定用户 User Account 的 UserInfo 对象。
   ///
-  /// * [userAccount] The user account.
+  /// * [userAccount] 用户 User Account。
   ///
   /// Returns
-  /// The UserInfo object that identifies the user information. A pointer to the UserInfo instance, if the method call succeeds.
-  ///  If the call fails, returns NULL.
+  /// 包含用户信息的 UserInfo 对象。 方法调用成功，返回 UserInfo 对象。
+  ///  方法调用失败，则返回 NULL。
   Future<UserInfo> getUserInfoByUserAccount(String userAccount);
 
-  /// Gets the user information by passing in the user ID.
-  /// After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method to get the user account of the remote user from the UserInfo object by passing in the user ID.
+  /// 通过 UID 获取用户信息。
+  /// 远端用户加入频道后，SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，并在本地触发 onUserInfoUpdated 回调。收到这个回调后，你可以调用该方法，通过传入 UID 获取包含了指定用户 User Account 的 UserInfo 对象。
   ///
-  /// * [uid] The user ID.
+  /// * [uid] 用户 ID。
   ///
   /// Returns
-  /// The UserInfo object that identifies the user information.A pointer to the UserInfo instance, if the method call succeeds.If the call fails, returns NULL.
+  /// 包含用户信息的 UserInfo 对象。方法调用成功，返回 UserInfo 对象。方法调用失败，则返回 NULL。
   Future<UserInfo> getUserInfoByUid(int uid);
 
-  /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4); it means that the SDK starts relaying media streams between the source channel and the destination channel.If the onChannelMediaRelayStateChanged callback returns relayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelay method to quit the current relay.You need to before implementing this function.We do not support string type of UID in this API.
+  /// 开始跨频道媒体流转发。该方法可用于实现跨频道连麦等场景。
+  /// 成功调用该方法后，SDK 会触发 onChannelMediaRelayStateChanged 和 onChannelMediaRelayEvent 回调，并在回调中报告当前的跨频道媒体流转发状态和事件。 如果 onChannelMediaRelayStateChanged 回调报告 relayStateRunning (2) 和 relayOk (0)，且 onChannelMediaRelayEvent 回调报告 relayEventPacketSentToDestChannel (4)， 则表示 SDK 开始在源频道和目标频道之间转发媒体流。如果 onChannelMediaRelayStateChanged 回调报告 relayStateFailure (3)， 则表示跨频道媒体流转发出现异常。请在成功加入频道后调用该方法。在直播场景中，只有角色为主播的用户才能调用该方法。成功调用该方法后，若你想再次调用该方法，必须先调用 stopChannelMediaRelay 方法退出当前的转发状态。跨频道媒体流转发功能需要开通。该功能不支持 String 型 UID。
   ///
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
+  /// * [configuration] 跨频道媒体流转发参数配置。详见 ChannelMediaRelayConfiguration 。
   Future<void> startChannelMediaRelay(
       ChannelMediaRelayConfiguration configuration);
 
-  /// Updates the channels for media stream relay.
-  /// After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the relayEventPacketUpdateDestChannel (7) state code.Call the method after successfully calling the startChannelMediaRelay method and receiving onChannelMediaRelayStateChanged (relayStateRunning, relayOk); otherwise, the method call fails.
+  /// 更新媒体流转发的频道。
+  /// 成功开始跨频道转发媒体流后，如果你希望将流转发到多个目标频道，或退出当前的转发频道，可以调用该方法。成功调用该方法后，SDK 会触发 onChannelMediaRelayEvent 回调， 并在回调中报告状态码 relayEventPacketUpdateDestChannel (7)。请在成功调用 startChannelMediaRelay 方法并收到 onChannelMediaRelayStateChanged (relayStateRunning, relayOk) 后调用该方法；否则，方法调用会失败。
   ///
-  /// * [configuration] The configuration of the media stream relay.
+  /// * [configuration] 跨频道媒体流转发参数配置。详见 ChannelMediaRelayConfiguration 。
   Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration configuration);
 
-  /// Stops the media stream relay. Once the relay stops, the host quits all the destination channels.
-  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports relayStateIdle (0) and relayOk (0), the host successfully stops the relay.If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the relayErrorServerNoResponse (2) or relayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
+  /// 停止跨频道媒体流转发。一旦停止，主播会退出所有目标频道。
+  /// 成功调用该方法后，SDK 会触发 onChannelMediaRelayStateChanged 回调。如果报告 relayStateIdle (0) 和 relayOk (0)，则表示已停止转发媒体流。
+  ///  如果该方法调用不成功，SDK 会触发 onChannelMediaRelayStateChanged 回调，并报告状态码 relayErrorServerNoResponse (2) 或 relayErrorServerConnectionLost (8)。你可以调用 leaveChannel 方法离开频道，跨频道媒体流转发会自动停止。
   Future<void> stopChannelMediaRelay();
 
-  /// Pauses the media stream relay to all destination channels.
-  /// After the cross-channel media stream relay starts, you can call this method to pause relaying media streams to all destination channels; after the pause, if you want to resume the relay, call resumeAllChannelMediaRelay .After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback to report whether the media stream relay is successfully paused.Call this method after the startChannelMediaRelay method.
+  /// 暂停向所有目标频道转发媒体流。
+  /// 开始跨频道转发媒体流后，如果你需要暂停向所有频道转发媒体流，可以调用该方法；暂停后，如果要恢复跨频道媒体流转发，可以调用 resumeAllChannelMediaRelay 方法。成功调用该方法后，SDK 会触发 onChannelMediaRelayEvent 回调，并在回调中报告是否成功暂停媒体流转发。该方法需要在 startChannelMediaRelay 后调用。
   Future<void> pauseAllChannelMediaRelay();
 
-  /// Resumes the media stream relay to all destination channels.
-  /// After calling the pauseAllChannelMediaRelay method, you can call this method to resume relaying media streams to all destination channels.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback to report whether the media stream relay is successfully resumed.Call this method after the pauseAllChannelMediaRelay method.
+  /// 恢复向所有目标频道转发媒体流。
+  /// 调用 pauseAllChannelMediaRelay 方法后，如果你需要恢复向所有目标频道转发媒体流，可以调用该方法。成功调用该方法后，SDK 会触发 onChannelMediaRelayEvent 回调，并在回调中报告是否成功恢复媒体流转发。该方法需要在 pauseAllChannelMediaRelay 后调用。
   Future<void> resumeAllChannelMediaRelay();
 
-  /// Sets the audio profile of the media streams directly pushed to the CDN by the host.
-  /// When you set the publishMicrophoneTrack or publishCustomAudioTrack in the DirectCdnStreamingMediaOptions as true to capture audios, you can call this method to set the audio profile.
+  /// 设置主播端直接向 CDN 推流时的音频编码属性。
+  /// 该方法仅对麦克风采集或自采集的音频有效，即对在 DirectCdnStreamingMediaOptions 中设置 publishMicrophoneTrack 或 publishCustomAudioTrack 为 true 时所采集的音频有效。
   ///
-  /// * [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfileType .
+  /// * [profile] 音频编码属性，包含采样率、码率、编码模式和声道数。详见 AudioProfileType 。
   Future<void> setDirectCdnStreamingAudioConfiguration(
       AudioProfileType profile);
 
-  /// Sets the video profile of the media streams directly pushed to the CDN by the host.
-  /// This method is only valid for video captured by camera, screen sharing, or self-captured. When you set publishCameraTrack or publishCustomVideoTrack in the DirectCdnStreamingMediaOptions as true to capture videos, you can call this method to set the video profile.
+  /// 设置主播端直接向 CDN 推流时的视频编码属性。
+  /// 该方法仅对摄像头采集、屏幕共享或自采集的视频有效。
   ///
-  /// * [config] Video profile. See VideoEncoderConfiguration .
+  /// * [config] 视频编码参数配置。详见 VideoEncoderConfiguration 。
   Future<void> setDirectCdnStreamingVideoConfiguration(
       VideoEncoderConfiguration config);
 
-  /// Starts pushing media streams to the CDN directly.
-  /// Aogra does not support pushing streams to one URL repeatedly.Media optionsAgora does not support setting the value of publishCameraTrack and publishCustomVideoTrack as true, or the value of publishMicrophoneTrack and publishCustomAudioTrack as true at the same time. When choosing media setting options ( DirectCdnStreamingMediaOptions ) you can refer to the following examples:If you want to push audio and video streams published by the host to the CDN, the media setting options should be set as follows:publishCameraTrack is set as true.publishMicrophoneTrack is set as true.publishCustomAudioTrack is set as false (Default).publishCustomVideoTrack is set as false (Default).If you want to push external audio and video streams, ensure the following:publishCustomVideoTrack is set as true and call the pushVideoFrame method.publishCameraTrack is set as false (Default).publishMicrophoneTrack is set as false (Default).
+  /// 设置主播端开始直接向 CDN 推流。
+  /// Agora 不支持同一时间向同一个 URL 重复推流。媒体选项说明Agora 不支持 publishCameraTrack 和 publishCustomVideoTrack 同时为 true，也不支持 publishMicrophoneTrack 和 publishCustomAudioTrack 同时为 true。你可以根据场景需求设置媒体选项 ( DirectCdnStreamingMediaOptions )。示例如下：如果你想推送主播端采集的音视频流，请将媒体选项进行如下设置：publishCustomAudioTrack 设为 true 并调用 pushAudioFrame publishCustomVideoTrack 设为 true 并调用 pushVideoFrame 确保 publishCameraTrack 为 false(默认值)确保 publishMicrophoneTrack 为 false(默认值)
   ///
-  /// * [eventHandler] See onDirectCdnStreamingStateChanged and onDirectCdnStreamingStats .
-  /// * [publishUrl] The CDN live streaming URL.
-  /// * [options] The media setting options for the host. See DirectCdnStreamingMediaOptions .
-  ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
+  /// * [eventHandler] 详见 onDirectCdnStreamingStateChanged 及 onDirectCdnStreamingStats 。
+  /// * [publishUrl] CDN 推流 URL。
+  /// * [options] 主播端的媒体选项。详见 DirectCdnStreamingMediaOptions 。
   Future<void> startDirectCdnStreaming(
       {required DirectCdnStreamingEventHandler eventHandler,
       required String publishUrl,
       required DirectCdnStreamingMediaOptions options});
 
-  /// Stops pushing media streams to the CDN directly.
+  /// 设置主播端停止直接向 CDN 推流。
   ///
   Future<void> stopDirectCdnStreaming();
 
@@ -4227,47 +4319,51 @@ abstract class RtcEngine {
   Future<void> updateDirectCdnStreamingMediaOptions(
       DirectCdnStreamingMediaOptions options);
 
-  /// Enables the virtual metronome.
-  /// In music education, physical education, and other scenarios, teachers might need to use a metronome so that students can practice with the correct beat. The meter is composed of a downbeat and upbeats. The first beat of each measure is called a downbeat, and the rest are called upbeats.In this method, you need to set the paths of the upbeat and downbeat files, the number of beats per measure, the tempo, and whether to send the sound of the metronome to remote users.This method is for Android and iOS only.After enabling the virtual metronome, the SDK plays the specified audio effect file from the beginning and controls the playback duration of each file according to beatsPerMinuteyou set in AgoraRhythmPlayerConfig . For example, if you set beatsPerMinute as 60, the SDK plays one beat every second. If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.By default, the sound of the virtual metronome is published in the channel. If you do not want the sound to be heard by the remote users, you can set publishRhythmPlayerTrack in ChannelMediaOptions as false.
+  /// 开启虚拟节拍器。
+  /// 在音乐教学、体育教学等场景中，老师通常需要使用节拍器，让学生跟着正确的节拍练习。 节拍由强拍和弱拍组成，每小节的第一拍称为强拍，其余称为弱拍。你需要在该方法中设置强拍和弱拍的文件路径、每小节的拍数、节拍速度以及是否将节拍器的声音发送至远端。该方法仅适用于 Android 和 iOS。开启虚拟节拍器后，SDK 会从头开始播放指定的音频文件，并根据你在 AgoraRhythmPlayerConfig 中设置的 beatsPerMinute 控制每个文件的播放时长。例如，将 beatsPerMinute 设为 60，则 SDK 会 1 秒播放 1 个节拍。如果文件时长超过了节拍时长，则 SDK 只播放节拍时长部分的音频。虚拟节拍器的声音默认会发布至远端，如果你不希望远端用户听到虚拟节拍器的声音，你可以将 ChannelMediaOptions 中的 publishRhythmPlayerTrack 设为 false。
   ///
-  /// * [sound1] The absolute path or URL address (including the filename extensions) of the file for the downbeat. For example: C:\music\audio.mp4. For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK v4.0.0 support.
-  /// * [sound2] The absolute path or URL address (including the filename extensions) of the file for the upbeats. For example: C:\music\audio.mp4. For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK v4.0.0 support.
-  /// * [config] The metronome configuration. See AgoraRhythmPlayerConfig .
+  /// * [sound1] 强拍文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 C:\music\audio.mp4。支持的音频文件格式见 Agora RTC SDK 支持播放哪些格式的音频文件。
+  ///
+  /// * [sound2] 弱拍文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 C:\music\audio.mp4。支持的音频文件格式见 Agora RTC SDK 支持播放哪些格式的音频文件。
+  ///
+  /// * [config] 节拍器配置。详见 AgoraRhythmPlayerConfig 。
   Future<void> startRhythmPlayer(
       {required String sound1,
       required String sound2,
       required AgoraRhythmPlayerConfig config});
 
-  /// Disables the virtual metronome.
-  /// After calling startRhythmPlayer , you can call this method to disable the virtual metronome.This method is for Android and iOS only.
+  /// 关闭虚拟节拍器。
+  /// 调用 startRhythmPlayer 后，你可以调用该方法关闭虚拟节拍器。该方法仅适用于 Android 和 iOS。
   Future<void> stopRhythmPlayer();
 
-  /// Configures the virtual metronome.
-  /// This method is for Android and iOS only.After enabling the virtual metronome, the SDK plays the specified audio effect file from the beginning and controls the playback duration of each file according to beatsPerMinuteyou set in AgoraRhythmPlayerConfig . For example, if you set beatsPerMinute as 60, the SDK plays one beat every second. If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.By default, the sound of the virtual metronome is published in the channel. If you do not want the sound to be heard by the remote users, you can set publishRhythmPlayerTrack in ChannelMediaOptions as false.After calling startRhythmPlayer , you can call this method to reconfigure the virtual metronome.
+  /// 配置虚拟节拍器。
+  /// 该方法仅适用于 Android 和 iOS。开启虚拟节拍器后，SDK 会从头开始播放指定的音频文件，并根据你在 AgoraRhythmPlayerConfig 中设置的 beatsPerMinute 控制每个文件的播放时长。例如，将 beatsPerMinute 设为 60，则 SDK 会 1 秒播放 1 个节拍。如果文件时长超过了节拍时长，则 SDK 只播放节拍时长部分的音频。虚拟节拍器的声音默认会发布至远端，如果你不希望远端用户听到虚拟节拍器的声音，你可以将 ChannelMediaOptions 中的 publishRhythmPlayerTrack 设为 false。调用 startRhythmPlayer 后，你可以调用该方法重新配置虚拟节拍器。
   ///
-  /// * [config] The metronome configuration. See AgoraRhythmPlayerConfig .
+  /// * [config] 节拍器配置。详见 AgoraRhythmPlayerConfig 。
   Future<void> configRhythmPlayer(AgoraRhythmPlayerConfig config);
 
-  /// Takes a snapshot of a video stream.
-  /// This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.The method is asynchronous, and the SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.Call this method after joining a channel.This method takes a snapshot of the published video stream specified in ChannelMediaOptions .If the user's video has been preprocessed, for example, watermarked or beautified, the resulting snapshot includes the pre-processing effect.
+  /// 获取视频截图。
+  /// 该方法用于对指定用户的视频流进行截图，生成一张 JPG 格式的图片，并保存至指定的路径。该方法是异步操作，调用返回时 SDK 并没有真正获取截图。成功调用该方法后，SDK 会触发 onSnapshotTaken 回调报告截图是否成功和获取截图的详情。该方法需要在加入频道后调用。该方法对 ChannelMediaOptions 中指定发布的视频流进行截图。如果用户的视频经过前处理，例如，添加了水印或美颜，生成的截图会包含前处理效果。
   ///
-  /// * [uid] The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
-  /// * [filePath] The local path (including filename extensions) of the snapshot. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpgiOS: /App Sandbox/Library/Caches/example.jpgmacOS: ～/Library/Logs/example.jpgAndroid: /storage/emulated/0/Android/data/<package name>/files/example.jpgEnsure that the path you specify exists and is writable.
+  /// * [uid] 用户 ID。如果要对本地用户的视频截图，则设为 0。
+  /// * [filePath] 截图的本地保存路径，需精确到文件名及格式， 例如：
+  ///  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpgiOS: /App Sandbox/Library/Caches/example.jpgmacOS: ～/Library/Logs/example.jpgAndroid: /storage/emulated/0/Android/data/<package name>/files/example.jpg请确保目录存在且可写。
   Future<void> takeSnapshot({required int uid, required String filePath});
 
-  /// Enables/Disables video content moderation.
-  /// When video content moderation is enabled, the SDK takes screenshots, reviews the content, and uploads videos sent by local users based on the type and frequency of the content moderation module you set in ContentInspectConfig . After content moderation, the Agora content moderation server sends the results to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.If you set the type in ContentInspectModule to contentInspectModeration, after the content moderation is completed, the SDK triggers the onContentInspectResult callback and reports the moderation result.Before calling this method, ensure that the Agora content moderation service has been enabled.
+  /// 开启/关闭视频内容审核。
+  /// 开启视频内容审核后，SDK 会根据你在 ContentInspectConfig 中设置的内容审核模块类型和频率对本地用户发送的视频进行截图、审核和上传。审核完成后，Agora 内容审核服务器会以 HTTPS 请求的形式，向你的服务器发送审核结果，并将所有截图发送至你指定的第三方云存储。如果你将 ContentInspectModule 中的 type 设置为 contentInspectModeration（视频鉴黄），审核完成后，SDK 会触发 onContentInspectResult 回调，报告鉴黄结果。调用该方法前，请确保已开通 Agora 视频内容审核服务。
   ///
-  /// * [enabled] Whether to enable video content moderation:true: Enable video content moderation.false: Disable video content moderation.
-  /// * [config] Configuration of content moderation. See ContentInspectConfig .
+  /// * [enabled] 设置是否开启视频内容审核：
+  ///  true：开启。false：关闭。
+  /// * [config] 内容审核配置。详见 ContentInspectConfig 。
   Future<void> enableContentInspect(
       {required bool enabled, required ContentInspectConfig config});
 
-  /// Adjusts the volume of the custom external audio source when it is published in the channel.
-  /// Ensure you have called the setExternalAudioSource method to create an external audio track before calling this method.If you want to change the volume of the audio to be published, you need to call this method again.
+  /// 调节自定义采集的外部音频源在远端播放的音量。
+  /// 在调用该方法前，请确保你已经调用 setExternalAudioSource 方法创建自定义采集的音频轨道。调用该方法设置音频在远端播放的音量后，如果你想重新调整音量，你可以再次调用该方法。
   ///
-  /// * [sourceId] The ID of external audio source. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
-  /// * [volume] The volume of the audio source. The value can range from 0 to 100. 0 means mute; 100 means the original volume.
+  /// * [sourceId] 外部音频源的 ID。如果你要发布自定义的外部音频源，则将该参数设置为你想要发布的自定义音频轨道 ID。
+  /// * [volume] 自定义采集音频的播放音量，取值范围为 [0,100]。0 表示静音，100 表示原始音量。
   Future<void> adjustCustomAudioPublishVolume(
       {required int sourceId, required int volume});
 
@@ -4275,241 +4371,247 @@ abstract class RtcEngine {
   Future<void> adjustCustomAudioPlayoutVolume(
       {required int sourceId, required int volume});
 
-  /// Sets the Agora cloud proxy service.
-  /// When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses and ports provided by Agora; then, call this method to enable the cloud proxy and set the cloud proxy type with the proxyType parameter.After successfully connecting to the cloud proxy, the SDK triggers the onConnectionStateChanged (connectionStateConnecting, connectionChangedSettingProxyServer) callback.To disable the cloud proxy that has been set, call the setCloudProxy (noneProxy).To change the cloud proxy type that has been set, call the setCloudProxy (noneProxy) first, and then call the setCloudProxy to set the proxyType you want.Agora recommends that you call this method before joining the channel or after leaving the channel.When a user is behind a firewall and uses the Force UDP cloud proxy, the services for the Media Push and cohosting across channels are not available.When you use the Force TCP cloud proxy, note that an error would occur when calling the startAudioMixing method to play online music files in the HTTP protocol. The services for the Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
+  /// 设置 Agora 云代理服务。
+  /// 当用户的网络访问受到防火墙限制时，你需要将 Agora 提供的 IP 和端口号添加到防火墙白名单，然后调用该方法开启云代理，并通过 proxyType 参数设置云代理类型。成功连接云代理后，SDK 会触发 onConnectionStateChanged (connectionStateConnecting, connectionChangedSettingProxyServer) 回调。
+  ///  如果你想关闭已设置的 Force UDP 或 Force TCP 云代理，请调用 setCloudProxy (noneProxy)。如果你想更改已设置的云代理类型，请先调用 setCloudProxy (noneProxy)，再调用 setCloudProxy 并传入你期望的 proxyType 值。
+  ///  Agora 推荐你在频道外调用该方法。如果用户处于内网防火墙环境下，使用 Force UDP 云代理时，旁路推流和跨频道媒体流转发功能不可用。使用 Force UDP 云代理时，调用 startAudioMixing 方法时无法播放 HTTP 协议的在线音频文件。旁路推流和跨频道媒体流转发功能会使用 TCP 协议的云代理。
   ///
-  /// * [proxyType] The type of the cloud proxy. See CloudProxyType .This parameter is mandatory. The SDK reports an error if you do not pass in a value.
+  /// * [proxyType] 云代理类型，详见 CloudProxyType 。该参数为必填参数，如果你不赋值，SDK 会报错。
   Future<void> setCloudProxy(CloudProxyType proxyType);
 
-  /// Configure the connection with the native access module of the Agora network private media server.
-  /// After successfully deploying the Agora private media server and integrating Agora Native SDK v4.0.0 on the intranet terminal, you can call this method to specify the Local Access Point and assign the Native access module to the SDK.This method takes effect only after the Agora hybrid cloud solution is deployed. You can contact to get to know more about the Agora hybrid cloud solution.Ensure that you call this method before joining a channel.
+  /// 配置与声网私有媒体服务器 Native 接入模块的连接。
+  /// 成功部署声网私有媒体服务器并在内网终端集成 Agora Native SDK v4.0.0 后，你可以调用该方法指定 Local Access Point，给 SDK 分配 Native 接入模块。该方法仅在部署声网混合云方案后生效。你可以联系 了解和部署声网混合云。该方法需要在加入频道前调用。
   ///
-  /// * [config] The configurations of the Local Access Point. See LocalAccessPointConfiguration .
+  /// * [config] Local Access Point 配置。详见 LocalAccessPointConfiguration 。
   Future<void> setLocalAccessPoint(LocalAccessPointConfiguration config);
 
-  /// Sets audio advanced options.
-  /// If you have advanced audio processing requirements, such as capturing and sending stereo audio, you can call this method to set advanced audio options.This method is for Android and iOS only.Call this method after calling joinChannel [2/2] , enableAudio and enableLocalAudio .
+  /// 设置音频的高级选项。
+  /// 如果你对音频处理有进阶需求，例如需要采集和发送立体声，可以调用该方法设置音频的高级选项。该方法仅适用于 Android 和 iOS 平台。你需要在 joinChannel [2/2] 、 enableAudio 和 enableLocalAudio 前调用该方法。
   ///
   /// Returns
-  /// The advanced options for audio. See AdvancedAudioOptions .
+  /// 音频的高级选项。详见 AdvancedAudioOptions 。
   Future<AdvancedAudioOptions> setAdvancedAudioOptions();
 
-  /// Sets the pitch of the local music file.
-  /// The same user may use two devices to send audio streams and video streams respectively. To ensure the time synchronization of the audio and video heard and seen by the receiver, you can call this method on the video sender and pass in the channel of the audio sender. name, user ID. The SDK will automatically adjust the sent video stream based on the timestamp of the sent audio stream to ensure that even when the upstream network conditions of the two senders are inconsistent (such as using Wi-Fi and 4G networks respectively), the The received audio and video have time synchronization.Agora recommends calling this method before .
+  /// 设置发流端音画同步。
+  /// 同一用户可能使用两个设备分别发送音频流和视频流，为保证接收端听到和看到的音频和视频的时间同步性，你可以在视频发送端调用该方法，并传入音频发送端的频道名、用户 ID。 SDK 会以发送的音频流的时间戳为基准进行自动调节发送的视频流，以保证即使在两个发送端的上行网络情况不一致（如分别使用 Wi-Fi 和 4G 网络）的情况下，也能让接收到的音视频具有时间同步性。Agora 推荐你在加入频道前调用该方法。
   ///
-  /// * [channelId] Identifies the channel name of the channel where the audio sender is located.
-  /// * [uid] User ID of the audio sender.
+  /// * [channelId] 标识音频发送端所在频道的频道名。
+  /// * [uid] 音频发送端的用户 ID。
   Future<void> setAVSyncSource({required String channelId, required int uid});
 
-  /// Sets whether to replace the current video feeds with images when publishing video streams.
-  /// Agora recommends that you call this method after joining a channel.When publishing video streams, you can call this method to replace the current video feeds with custom images.Once you enable this function, you can select images to replace the video feeds through the ImageTrackOptions parameter. If you disable this function, the remote users see the video feeds that you publish.
+  /// 设置是否开启垫片推流功能。
+  /// Agora 推荐你在加入频道后调用该方法。在发布视频流时，你可以调用该方法使用自定义图片来替代当前发布的视频流画面进行推流。开启该功能后，你可以通过 ImageTrackOptions 参数自定义垫片图片；在你关闭垫片功能之后，远端用户看到的依旧是当前你发布的视频流画面。
   ///
-  /// * [enable] Whether to replace the current video feeds with custom images:true: Replace the current video feeds with custom images.false: (Default) Do not replace the current video feeds with custom images.
-  /// * [options] Image configurations. See ImageTrackOptions .
+  /// * [enable] 是否开启垫片推流：
+  ///  true：开启垫片推流。false：（默认）关闭垫片推流。
+  /// * [options] 垫片图片设置，详见 ImageTrackOptions 。
   Future<void> enableVideoImageSource(
       {required bool enable, required ImageTrackOptions options});
 
   /// @nodoc
   Future<void> enableWirelessAccelerate(bool enabled);
 
-  /// Joins a channel with media options.
-  /// This method enables users to join a channel. Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other.A successful call of this method triggers the following callbacks: The local client: The onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: onUserJoined , if the user joining the channel is in the Communication profile or is a host in the Live-broadcasting profile.When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the onRejoinChannelSuccess callback on the local client.This method allows users to join only one channel at a time.Ensure that the app ID you use to generate the token is the same app ID that you pass in the initialize method; otherwise, you may fail to join the channel by token.
+  /// 设置媒体选项并加入频道。
+  /// 该方法让用户加入通话频道，在同一个频道内的用户可以互相通话，多个用户加入同一个频道，可以群聊。 使用不同 App ID 的 app 不能互通。成功调用该方法加入频道后会触发以下回调： 本地会触发 onJoinChannelSuccess 和 onConnectionStateChanged 回调。通信场景下的用户和直播场景下的主播加入频道后，远端会触发 onUserJoined 回调。在网络状况不理想的情况下，客户端可能会与 Agora 服务器失去连接；SDK 会自动尝试重连，重连成功后，本地会触发 onRejoinChannelSuccess 回调。该方法允许用户一次加入仅一个频道。请务必确保用于生成 Token 的 App ID 和 initialize 方法初始化引擎时用的是同一个 App ID，否则使用 Token 加入频道失败。
   ///
-  /// * [token] The token generated on your server for authentication.
-  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:All lowercase English letters: a to z.All uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [uid] The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 232-1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
-  /// * [options] The channel media options. See ChannelMediaOptions .
+  /// * [token] 在服务端生成的用于鉴权的动态密钥。详见。
+  /// * [channelId] 频道名。该参数标识用户进行实时音视频互动的频道。App ID 一致的前提下，填入相同频道名的用户会进入同一个频道进行音视频互动。该参数为长度在 64 字节以内的字符串。以下为支持的字符集范围（共 89 个字符）:
+  ///  26 个小写英文字母 a~z26 个大写英文字母 A~Z10 个数字 0~9空格"!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、"{"、"}"、"|"、"~"、","
+  /// * [uid] 用户 ID。该参数用于标识在实时音视频互动频道中的用户。你需要自行设置和管理用户 ID，并确保同一频道内的每个用户 ID 是唯一的。该参数为 32 位无符号整数。 建议设置范围：1 到 232-1。如果不指定（即设为 0），SDK 会自动分配一个，并在 onJoinChannelSuccess 回调中返回， app 层必须记住该返回值并维护，SDK 不对该返回值进行维护。
+  /// * [options] 频道媒体设置选项。详见 ChannelMediaOptions 。
   Future<void> joinChannel(
       {required String token,
       required String channelId,
       required int uid,
       required ChannelMediaOptions options});
 
-  /// Leaves a channel.
-  /// This method releases all resources related to the session. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.After joining the channel, you must call this method or leaveChannel to end the call, otherwise, the next call cannot be started.If you successfully call this method and leave the channel, the following callbacks are triggered:The local client: onLeaveChannel .The remote client: onUserOffline , if the user joining the channel is in the Communication profile, or is a host in the Live-broadcasting profile.If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
+  /// 离开频道。
+  /// 该方法会把会话相关的所有资源释放掉。该方法是异步操作，调用返回时并没有真正退出频道。成功加入频道后，必须调用本方法或者 leaveChannel 结束通话，否则无法开始下一次通话。成功调用该方法、并且离开频道后会触发以下回调：
+  ///  本地： onLeaveChannel 回调。远端：通信场景下的用户和直播场景下的主播离开频道后，远端会触发 onUserOffline 回调。如果你调用了本方法后立即调用 release 方法，SDK 将无法触发 onLeaveChannel 回调。
   Future<void> leaveChannel({LeaveChannelOptions? options});
 
-  /// Sets the user role and level in an interactive live streaming channel.
-  /// In the interactive live streaming profile, the SDK sets the user role as audience by default. You can call this method to set the user role as host.You can call this method either before or after joining a channel.If you call this method to set the user's role as the host before joining the channel and set the local video property through the setupLocalVideo method, the local video preview is automatically enabled when the user joins the channel.If you call this method to switch the user role after joining a channel, the SDK automatically does the following:Calls muteLocalAudioStream and muteLocalVideoStream to change the publishing state.Triggers onClientRoleChanged on the local client.Triggers onUserJoined or onUserOffline on the remote client.This method applies to the interactive live streaming profile (the profile parameter of setChannelProfile is channelProfileLiveBroadcasting) only.
+  /// 设置直播场景下的用户角色和级别。
+  /// 直播场景下，SDK 会默认设置用户角色为观众，你可以调用该方法设置用户角色为主播。该方法在加入频道前后均可调用。如果你在加入频道前调用该方法设置用户角色为主播、并且通过 setupLocalVideo 方法设置了本地视频属性，则用户加入频道时会自动开启本地视频预览。如果你在加入频道后调用该方法切换用户角色，调用成功后，SDK 会自动进行如下操作：
+  ///  调用 muteLocalAudioStream 和 muteLocalVideoStream 修改发布状态。本地触发 onClientRoleChanged 回调。远端触发 onUserJoined 或 onUserOffline 回调。该方法仅适用于直播场景（ setChannelProfile 中 profile 设为 channelProfileLiveBroadcasting）。
   ///
-  /// * [role] The user role in the interactive live streaming. See ClientRoleType .
-  /// * [options] The detailed options of a user, including the user level. See ClientRoleOptions .
+  /// * [role] 直播场景中的用户角色。详见 ClientRoleType 。
+  /// * [options] 用户具体设置，包含用户级别。详见 ClientRoleOptions 。
   Future<void> setClientRole(
       {required ClientRoleType role, ClientRoleOptions? options});
 
-  /// Starts an audio call test.
-  /// This method starts an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly. To conduct the test, let the user speak for a while, and the recording is played back within the set interval. If the user can hear the recording within the interval, the audio devices and network connection are working properly.Call this method before joining a channel.After calling startEchoTest, you must call stopEchoTest to end the test. Otherwise, the app cannot perform the next echo test, and you cannot join the channel.In the live streaming channels, only a host can call this method.
+  /// 开始语音通话回路测试。
+  /// 该方法启动语音通话测试，目的是测试系统的音频设备（耳麦、扬声器等）和网络连接是否正常。在测试过程中，用户先说一段话，声音会在设置的时间间隔（单位为秒）后回放出来。如果用户能正常听到自己刚才说的话，就表示系统音频设备和网络连接都是正常的。请在加入频道前调用该方法。
+  ///  调用 startEchoTest 后必须调用 stopEchoTest 以结束测试，否则不能进行下一次回声测试，也无法加入频道。
+  ///  直播场景下，该方法仅能由用户角色为主播的用户调用。
   ///
-  /// * [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back. The value range is [2, 10], and the default value is 10.
+  /// * [intervalInSeconds] 设置返回语音通话回路测试结果的时间间隔，取值范围为 [2,10]，单位为秒，默认为 10 秒。
   Future<void> startEchoTest({int intervalInSeconds = 10});
 
-  /// Enables the local video preview and specifies the video source for the preview.
-  /// This method starts the local video preview before joining the channel. Before calling this method, ensure that you do the following:
-  ///  Call setupLocalVideo to set the local preview window.
-  ///  Call enableVideo to enable the video. The local preview enables the mirror mode by default.After the local video preview is enabled, if you call leaveChannel to exit the channel, the local preview remains until you call stopPreview to disable it.The video source type set in this method needs to be consistent with the video source type of VideoCanvas you set in setupLocalVideo .
+  /// 开启视频预览并指定预览的视频源。
+  /// 该方法用于启动本地视频预览。调用该 API 前，必须： 调用 setupLocalVideo 设置预览窗口及属性。
+  ///  调用 enableVideo 开启视频功能。 本地预览默认开启镜像功能。如果调用 leaveChannel 退出频道，本地预览依然处于开启状态，如需要关闭本地预览，需要调用 stopPreview 。该方法中设置的视频源类型需要跟 setupLocalVideo 中 VideoCanvas 的视频源类型一致。
   ///
-  /// * [sourceType] The type of the video source, see VideoSourceType .
+  /// * [sourceType] 视频源的类型，详见 VideoSourceType 。
   Future<void> startPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
-  /// Stops the local video preview.
-  /// After calling startPreview to start the preview, if you want to close the local video preview, please call this method.Please call this method before joining a channel or after leaving a channel.
+  /// 停止视频预览。
+  /// 调用 startPreview 开启预览后，如果你想关闭本地视频预览，请调用该方法。请在加入频道前或离开频道后调用该方法。
   ///
-  /// * [sourceType] The type of the video source, see VideoSourceType .
+  /// * [sourceType] 视频源的类型，详见 VideoSourceType 。
   Future<void> stopPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
-  /// Sets the audio parameters and application scenarios.
-  /// You can call this method either before or after joining a channel.In scenarios requiring high-quality audio, such as online music tutoring, Agora recommends you set profile as audioProfileMusicHighQuality (4).If you want to set the audio scenario, call initialize and set RtcEngineContext struct.
+  /// 设置音频编码属性。
+  /// 该方法在加入频道前后均可调用。在有高音质需求的场景（例如音乐教学场景）中，建议将 profile 设置为 audioProfileMusicHighQuality (4)。如果你想设置音频应用场景，请调用 initialize 并设置 RtcEngineContext 结构体中的
   ///
-  /// * [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfileType .
-  ///
+  /// * [profile] 音频编码属性，包含采样率、码率、编码模式和声道数。详见 AudioProfileType 。
   Future<void> setAudioProfile(
       {required AudioProfileType profile,
       AudioScenarioType scenario = AudioScenarioType.audioScenarioDefault});
 
-  /// Starts the audio recording on the client.
-  /// The Agora SDK allows recording during a call. After successfully calling this method, you can record the audio of all the users in the channel and get an audio recording file. Supported formats of the recording file are as follows:WAV: High-fidelity files with typically larger file sizes. For example, the size of a WAV file with a sample rate of 32,000 Hz and a recording duration of 10 minutes is around 73 MB.AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is audioRecordingQualityMedium, the file size for a 10-minute recording is approximately 2 MB.Once the user leaves the channel, the recording automatically stops.Call this method after joining a channel.
+  /// 开始客户端录音。
+  /// Agora SDK 支持通话过程中在客户端进行录音。调用该方法后，你可以录制频道内用户的音频，并得到一个录音文件。录音文件格式可以为: WAV: 音质保真度较高，文件较大。例如，采样率为 32000 Hz，录音时长为 10 分钟的文件大小约为 73 M。AAC: 音质保真度较低，文件较小。例如，采样率为 32000 Hz，录音音质为 audioRecordingQualityMedium，录音时长为 10 分钟的文件大小约为 2 M。用户离开频道后，录音会自动停止。该方法需要在加入频道后调用。
   ///
-  /// * [config] Recording configuration. See AudioRecordingConfiguration .
+  /// * [config] 录音配置。详见 AudioRecordingConfiguration 。
   Future<void> startAudioRecording(AudioRecordingConfiguration config);
 
-  /// Starts playing the music file.
-  /// This method mixes the specified local or online audio file with the audio from the microphone, or replaces the microphone's audio with the specified local or remote audio file. A successful method call triggers the onAudioMixingStateChanged (audioMixingStatePlaying) callback. When the audio mixing file playback finishes, the SDK triggers the onAudioMixingStateChanged(audioMixingStateStopped) callback on the local client.For the audio file formats supported by this method, see What formats of audio files the Agora RTC SDK support.You can call this method either before or after joining a channel. If you need to call startAudioMixing multiple times, ensure that the time interval between calling this method is more than 500 ms.If the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL, the SDK reports the warn code 701.
+  /// 开始播放音乐文件。
+  /// 该方法支持将本地或在线音乐文件和麦克风采集的音频进行混音或替换。成功播放音乐文件后，本地会触发 onAudioMixingStateChanged (audioMixingStatePlaying) 回调。播放结束后，本地会触发 onAudioMixingStateChanged(audioMixingStateStopped) 回调。该方法支持的音频文件格式见 Agora RTC SDK 支持播放哪些格式的音频文件。该方法在加入频道前后均可调用。如需多次调用 startAudioMixing，请确保调用间隔大于 500 ms。如果本地音乐文件不存在、文件格式不支持或无法访问在线音乐文件 URL，则 SDK 会报告警告码 701。
   ///
-  /// * [filePath] File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports using a URI address, an absolute path, or a path that starts with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441.Windows: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: C:\music\audio.mp4.iOS or macOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
-  /// * [loopback] Whether to only play music files on the local client:true: Only play music files on the local client so that only the local user can hear the music.false: Publish music files to remote clients so that both the local user and remote users can hear the music.
-  /// * [cycle] The number of times the music file plays.≥ 0: The number of playback times. For example, 0 means that the SDK does not play the music file while 1 means that the SDK plays once.-1: Play the audio file in an infinite loop.
-  /// * [startPos] The playback position (ms) of the music file.
+  /// * [filePath] 文件路径： Android: 文件路径，需精确到文件名及后缀。支持在线文件的 URL 地址，本地文件的 URI 地址、绝对路径或以 /assets/ 开头的路径。
+  ///  通过绝对路径访问本地文件可能会遇到权限问题，Agora 推荐使用 URI 地址访问本地文件。例如 content://com.android.providers.media.documents/document/audio%3A14441。Windows: 音频文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 C:\music\audio.mp4。iOS 或 macOS: 音频文件的绝对路径或 URL 地址，需精确到文件名及后缀。例如 /var/mobile/Containers/Data/audio.mp4。
+  /// * [loopback] 是否只在本地播放音乐文件： true: 只在本地播放音乐文件，只有本地用户能听到音乐。false: 将本地播放的音乐文件发布至远端，本地用户和远端用户都能听到音乐。
+  /// * [cycle] 音乐文件的播放次数。
+  ///  ≥ 0: 播放次数。例如，0 表示不播放；1 表示播放 1 次。-1: 无限循环播放。
+  /// * [startPos] 音乐文件的播放位置，单位为毫秒。
   Future<void> startAudioMixing(
       {required String filePath,
       required bool loopback,
       required int cycle,
       int startPos = 0});
 
-  /// Updates the display mode of the local video view.
-  /// After initializing the local video view, you can call this method to update its rendering and mirror modes. It affects only the video view that the local user sees, not the published local video stream.Ensure that you have called the setupLocalVideo method to initialize the local video view before calling this method.During a call, you can call this method as many times as necessary to update the display mode of the local video view.
+  /// 更新本地视图显示模式。
+  /// 初始化本地用户视图后，你可以调用该方法更新本地用户视图的渲染和镜像模式。该方法只影响本地用户看到的视频画面，不影响本地发布视频。请在调用 setupLocalVideo 方法初始化本地视图后，调用该方法。你可以在通话中多次调用该方法，多次更新本地用户视图的显示模式。
   ///
-  /// * [renderMode] The local video display mode. See RenderModeType .
-  /// * [mirrorMode] The rendering mode of the local video view. See VideoMirrorModeType .If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
+  /// * [renderMode] 本地视图显示模式。详见 RenderModeType 。
+  /// * [mirrorMode] 本地视图的镜像模式，详见 VideoMirrorModeType 。如果你使用前置摄像头，默认启动本地用户视图镜像模式；如果你使用后置摄像头，默认关闭本地视图镜像模式。
   Future<void> setLocalRenderMode(
       {required RenderModeType renderMode,
       VideoMirrorModeType mirrorMode =
           VideoMirrorModeType.videoMirrorModeAuto});
 
-  /// Enables/Disables dual-stream mode.
-  /// You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a hybrid of a high-quality video stream and a low-quality video stream:
-  ///  High-quality video stream: High bitrate, high resolution.
-  ///  Low-quality video stream: Low bitrate, low resolution. After you enable the dual-stream mode, you can call setRemoteVideoStreamType to choose toreceive the high-quality video stream or low-quality video stream on the subscriber side. You can call this method either before or after joining a channel.
+  /// 开关双流模式。
+  /// 你可以在发流端调用该方法开启或关闭双流模式。双流指视频大流和视频小流： 视频大流：高分辨率、高帧率的视频流。
+  ///  视频小流：低分辨率、低帧率的视频流。 开启双流模式后，你可以在收流端调用 setRemoteVideoStreamType 选择接收视频大流或视频小流。 该方法可以在加入频道前后调用。
   ///
-  /// * [enabled] Whether to enable dual-stream mode.
-  ///  true: Enable dual-stream mode.
-  ///  false: Disable dual-stream mode.
-  /// * [sourceType] The capture type of the custom video source. See VideoSourceType .
+  /// * [enabled] 是否开启双流模式： true: 开启双流模式。
+  ///  false: 关闭双流模式。
+  /// * [sourceType] 视频源的类型。详见 VideoSourceType 。
   ///
-  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
+  /// * [streamConfig] 视频小流的配置。详见 SimulcastStreamConfig
   Future<void> enableDualStreamMode(
       {required bool enabled,
       VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary,
       SimulcastStreamConfig? streamConfig});
 
-  /// Creates a data stream.
-  /// Creates a data stream. Each user can create up to five data streams in a single channel.
+  /// 创建数据流。
+  /// 该方法用于创建数据流。每个用户在每个频道中最多只能创建 5 个数据流。
   ///
-  /// * [config] The configurations for the data stream. See DataStreamConfig .
+  /// * [config] 数据流设置。详见 DataStreamConfig 。
   ///
   /// Returns
-  /// ID of the created data stream, if the method call succeeds.< 0: Failure.
+  /// 创建的数据流的 ID：方法调用成功。< 0：方法调用失败。
   Future<int> createDataStream(DataStreamConfig config);
 
-  /// Adds a watermark image to the local video.
-  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfiguration method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than thesetVideoEncoderConfiguration dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that call this method after enableVideo .If you only want to add a watermark to the Media Push, you can call this method or the setLiveTranscoding method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabledthe local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
+  /// 添加本地视频水印。
+  /// 该方法将一张 PNG 图片作为水印添加到本地发布的直播视频流上，同一直播频道中的用户、旁路直播观众和采集设备都能看到或采集到该水印图片。
+  ///  Agora 当前只支持在直播视频流中添加一个水印，后添加的水印会替换掉之前添加的水印。水印坐标和 setVideoEncoderConfiguration 方法中的设置有依赖关系： 如果视频编码方向（ OrientationMode ）固定为横屏或自适应模式下的横屏，那么水印使用横屏坐标。如果视频编码方向（OrientationMode）固定为竖屏或自适应模式下的竖屏，那么水印使用竖屏坐标。设置水印坐标时，水印的图像区域不能超出 setVideoEncoderConfiguration 方法中设置的视频尺寸，否则超出部分将被裁剪。你需要在调用 enableVideo 方法之后再调用该方法。如果你只是在旁路推流时添加水印，你可以使用该方法或 setLiveTranscoding 方法设置水印。待添加水印图片必须是 PNG 格式。该方法支持所有像素格式的 PNG 图片：RGBA、RGB、Palette、Gray 和 Alpha_gray。如果待添加的 PNG 图片的尺寸与你在该方法中设置的尺寸不一致，SDK 会对 PNG 图片进行缩放或裁剪，以与设置相符。如果你已经使用 startPreview 方法开启本地视频预览，那么该方法的 visibleInPreview 可设置水印在预览时是否可见。如果你已设置本地视频为镜像模式，那么此处的本地水印也为镜像。为避免本地用户看本地视频时的水印也被镜像，Agora 建议你不要对本地视频同时使用镜像和水印功能，请在应用层实现本地水印功能。
   ///
-  /// * [watermarkUrl] The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
-  /// * [options] The options of the watermark image to be added.
+  /// * [watermarkUrl] 待添加的水印图片的本地路径。该方法支持从本地绝对/相对路径添加水印图片。
+  /// * [options] 待添加的水印图片的设置选项，详见 WatermarkOptions 。
   Future<void> addVideoWatermark(
       {required String watermarkUrl, required WatermarkOptions options});
 
-  /// Joins a channel with a User Account and Token.
-  /// This method allows a user to join the channel with the user account and a token. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: onUserJoined and onUserInfoUpdated , if the user joining the channel is in the communication profile or is a host in the live streaming profile.Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods.To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
+  /// 使用 User Account 和 Token 加入频道。
+  /// 该方法允许本地用户使用 User Account 和 Token 加入频道。成功加入频道后，会触发以下回调：
+  ///  本地： onLocalUserRegistered 、 onJoinChannelSuccess 和 onConnectionStateChanged 回调。通信场景下的用户和直播场景下的主播加入频道后，远端会依次触发 onUserJoined 和 onUserInfoUpdated 回调。用户成功加入频道后，默认订阅频道内所有其他用户的音频流和视频流，因此产生用量并影响计费。如果想取消订阅，可以通过调用相应的 mute 方法实现。为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。如果有用户通过 Agora Web SDK 加入频道，请确保 Web 加入的用户也是同样类型。
   ///
-  /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
-  ///  The 26 lowercase English letters: a to z.
-  ///  The 26 uppercase English letters: A to Z.
-  ///  All numeric characters: 0 to 9.
-  ///  Space
-  ///  "!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [token] The token generated on your server for authentication.
-  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
-  ///  All lowercase English letters: a to z.
-  ///  All uppercase English letters: A to Z.
-  ///  All numeric characters: 0 to 9.
-  ///  Space
-  ///  "!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// * [userAccount] 用户 User Account。该参数用于标识实时音视频互动频道中的用户。你需要自行设置和管理用户的 User Account，并确保同一频道中每个用户的 User Account 是唯一的。 该参数为必填，最大不超过 255 字节，不可填 NULL。以下为支持的字符集范围（共 89 个字符）： 26 个小写英文字母 a-z
+  ///  26 个大写英文字母 A-Z
+  ///  10 个数字 0-9
+  ///  空格
+  ///  "!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、"{"、"}"、"|"、"~"、","
+  /// * [token] 在服务端生成的用于鉴权的动态密钥。详见。
+  /// * [channelId] 频道名。该参数标识用户进行实时音视频互动的频道。App ID 一致的前提下，填入相同频道名的用户会进入同一个频道进行音视频互动。该参数为长度在 64 字节以内的字符串。以下为支持的字符集范围（共 89 个字符）: 26 个小写英文字母 a~z
+  ///  26 个大写英文字母 A~Z
+  ///  10 个数字 0~9
+  ///  空格
+  ///  "!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、"{"、"}"、"|"、"~"、","
   Future<void> joinChannelWithUserAccount(
       {required String token,
       required String channelId,
       required String userAccount,
       ChannelMediaOptions? options});
 
-  /// Gets the AudioDeviceManager object to manage audio devices.
+  /// 获取 AudioDeviceManager 对象，以管理音频设备。
   ///
   ///
   /// Returns
-  /// One AudioDeviceManager object.
+  /// 一个 AudioDeviceManager 对象。
   AudioDeviceManager getAudioDeviceManager();
 
-  /// Gets the VideoDeviceManager object to manage video devices.
+  /// 获取 VideoDeviceManager 对象，以管理视频设备。
   ///
   ///
   /// Returns
-  /// One VideoDeviceManager object.
+  /// 一个 VideoDeviceManager 对象。
   VideoDeviceManager getVideoDeviceManager();
 
-  /// Gets one MediaEngine object.
-  /// Make sure the RtcEngine is initialized before you call this method.
+  /// 获取 MediaEngine 对象。
+  /// 该方法需要在初始化 RtcEngine 对象后调用。
   ///
   /// Returns
-  /// One MediaEngine object.
+  /// MediaEngine 对象。
   MediaEngine getMediaEngine();
 
-  /// Gets one MediaRecorder object.
-  /// Make sure the RtcEngine is initialized before you call this method.
+  /// 获取 MediaRecorder 对象。
+  /// 该方法需要在初始化 RtcEngine 对象后调用。
   ///
   /// Returns
-  /// One MediaRecorder object.
+  /// MediaRecorder 对象。
   MediaRecorder getMediaRecorder();
 
-  /// Gets one LocalSpatialAudioEngine object.
-  /// Make sure the RtcEngine is initialized before you call this method.
+  /// 获取 LocalSpatialAudioEngine 对象。
+  /// 该方法需要在初始化 RtcEngine 对象后调用。
   ///
   /// Returns
-  /// One LocalSpatialAudioEngine object.
+  /// 一个 LocalSpatialAudioEngine 对象。
   LocalSpatialAudioEngine getLocalSpatialAudioEngine();
 
-  /// Sends media affiliate information.
-  /// If the media attachment information is successfully sent, the receiver will receive the onMetadataReceived callback.
+  /// 发送媒体附属信息。
+  /// 如果成功发送了媒体附属信息，接收端会收到 onMetadataReceived 回调。
   ///
-  /// * [metadata] Media metadata. See Metadata .
+  /// * [metadata] 媒体附属信息。详见 Metadata 。
   Future<void> sendMetaData(
       {required Metadata metadata, required VideoSourceType sourceType});
 
-  /// Sets the maximum size of media metadata information.
-  /// After calling registerMediaMetadataObserver , you can call this method to set the maximum size of media metadata information.
+  /// 设置媒体附属信息的最大大小。
+  /// 调用 registerMediaMetadataObserver 后，你可以调用本方法来设置媒体附属信息的最大大小。
   ///
-  /// * [size] Sets the maximum size of media metadata information.
+  /// * [size] 媒体附属信息的最大大小。
   Future<void> setMaxMetadataSize(int size);
 
-  /// Unregisters the encoded audio frame observer.
+  /// 取消注册音频编码数据观测器。
   ///
   ///
-  /// * [observer] The encoded audio observer. See AudioEncodedFrameObserver .
+  /// * [observer] 音频编码数据观测器。详见 AudioEncodedFrameObserver 。
   void unregisterAudioEncodedFrameObserver(AudioEncodedFrameObserver observer);
 
-  /// Provides the technical preview functionalities or special customizations by configuring the SDK with JSON options.
+  /// 通过 JSON 配置 SDK 提供技术预览或特别定制功能。
   ///
   ///
-  /// * [parameters] Pointer to the set parameters in a JSON string.
+  /// * [parameters] JSON 字符串形式的参数。
   Future<void> setParameters(String parameters);
 }
 
@@ -4538,27 +4640,27 @@ extension QualityReportFormatTypeExt on QualityReportFormatType {
   }
 }
 
-/// Media device states.
+/// 设备状态。
 ///
 @JsonEnum(alwaysCreate: true)
 enum MediaDeviceStateType {
-  /// 0: The device is ready for use.
+  /// 0: 设备就绪。
   @JsonValue(0)
   mediaDeviceStateIdle,
 
-  /// 1: The device is in use.
+  /// 1: 设备正在使用。
   @JsonValue(1)
   mediaDeviceStateActive,
 
-  /// 2: The device is disabled.
+  /// 2: 设备被禁用。
   @JsonValue(2)
   mediaDeviceStateDisabled,
 
-  /// 4: The device is not found.
+  /// 4: 没有此设备。
   @JsonValue(4)
   mediaDeviceStateNotPresent,
 
-  /// 8: The device is not connected.
+  /// 8: 设备被拔出。
   @JsonValue(8)
   mediaDeviceStateUnplugged,
 }
@@ -4576,131 +4678,131 @@ extension MediaDeviceStateTypeExt on MediaDeviceStateType {
   }
 }
 
-/// Video profile.
+/// 视频属性。
 ///
 @JsonEnum(alwaysCreate: true)
 enum VideoProfileType {
-  /// 0: 160 × 120, frame rate 15 fps, bitrate 65 Kbps.
+  /// 0：分辨率 160 × 120，帧率 15 fps，码率 65 Kbps。
   @JsonValue(0)
   videoProfileLandscape120p,
 
-  /// 2: 120 × 120, frame rate 15 fps, bitrate 50 Kbps.
+  /// 2：分辨率 120 × 120，帧率 15 fps，码率 50 Kbps。
   @JsonValue(2)
   videoProfileLandscape120p3,
 
-  /// 10: 320 × 180, frame rate 15 fps, bitrate 140 Kbps.
+  /// 10：分辨率 320 × 180，帧率 15 fps，码率 140 Kbps。
   @JsonValue(10)
   videoProfileLandscape180p,
 
-  /// 12: 180 × 180, frame rate 15 fps, bitrate 100 Kbps.
+  /// 12：分辨率 180 × 180，帧率 15 fps，码率 100 Kbps。
   @JsonValue(12)
   videoProfileLandscape180p3,
 
-  /// 13: 240 × 180, frame rate 15 fps, bitrate 120 Kbps.
+  /// 13：分辨率 240 × 180，帧率 15 fps，码率 120 Kbps。
   @JsonValue(13)
   videoProfileLandscape180p4,
 
-  /// 20: 320 × 240, frame rate 15 fps, bitrate 200 Kbps.
+  /// 20：分辨率 320 × 240，帧率 15 fps，码率 200 Kbps。
   @JsonValue(20)
   videoProfileLandscape240p,
 
-  /// 22: 240 × 240, frame rate 15 fps, bitrate 140 Kbps.
+  /// 22：分辨率 240 × 240，帧率 15 fps，码率 140 Kbps。
   @JsonValue(22)
   videoProfileLandscape240p3,
 
-  /// 23: 424 × 240, frame rate 15 fps, bitrate 220 Kbps.
+  /// 23：分辨率 424 × 240，帧率 15 fps，码率 220 Kbps。
   @JsonValue(23)
   videoProfileLandscape240p4,
 
-  /// 30: 640 × 360, frame rate 15 fps, bitrate 400 Kbps.
+  /// 30：分辨率 640 × 360，帧率 15 fps，码率 400 Kbps。
   @JsonValue(30)
   videoProfileLandscape360p,
 
-  /// 32: 360 × 360, frame rate 15 fps, bitrate 260 Kbps.
+  /// 32：分辨率 360 × 360，帧率 15 fps，码率 260 Kbps。
   @JsonValue(32)
   videoProfileLandscape360p3,
 
-  /// 33: 640 × 360, frame rate 30 fps, bitrate 600 Kbps.
+  /// 33：分辨率 640 × 360，帧率 30 fps，码率 600 Kbps。
   @JsonValue(33)
   videoProfileLandscape360p4,
 
-  /// 35: 360 × 360, frame rate 30 fps, bitrate 400 Kbps.
+  /// 35：分辨率 360 × 360，帧率 30 fps，码率 400 Kbps。
   @JsonValue(35)
   videoProfileLandscape360p6,
 
-  /// 36: 480 × 360, frame rate 15 fps, bitrate 320 Kbps.
+  /// 36：分辨率 480 × 360，帧率 15 fps，码率 320 Kbps。
   @JsonValue(36)
   videoProfileLandscape360p7,
 
-  /// 37: 480 × 360, frame rate 30 fps, bitrate 490 Kbps.
+  /// 37：分辨率 480 × 360，帧率 30 fps，码率 490 Kbps。
   @JsonValue(37)
   videoProfileLandscape360p8,
 
-  /// 38: 640 × 360, frame rate 15 fps, bitrate 800 Kbps.This profile applies only to the live streaming channel profile.
+  /// 38：分辨率 640 × 360，帧率 15 fps，码率 800 Kbps。该视频属性仅适用于直播频道场景。
   @JsonValue(38)
   videoProfileLandscape360p9,
 
-  /// 39: 640 × 360, frame rate 24 fps, bitrate 800 Kbps.This profile applies only to the live streaming channel profile.
+  /// 39：分辨率 640 × 360，帧率 24 fps，码率 800 Kbps。该视频属性仅适用于直播频道场景。
   @JsonValue(39)
   videoProfileLandscape360p10,
 
-  /// 100: 640 × 360, frame rate 24 fps, bitrate 1000 Kbps.This profile applies only to the live streaming channel profile.
+  /// 100: 分辨率 640 × 360，帧率 24 fps，码率 1000 Kbps。该视频属性仅适用于直播频道场景。
   @JsonValue(100)
   videoProfileLandscape360p11,
 
-  /// 40: 640 × 480, frame rate 15 fps, bitrate 500 Kbps.
+  /// 40：分辨率 640 × 480，帧率 15 fps，码率 500 Kbps。
   @JsonValue(40)
   videoProfileLandscape480p,
 
-  /// 42: 480 × 480, frame rate 15 fps, bitrate 400 Kbps.
+  /// 42：分辨率 480 × 480，帧率 15 fps，码率 400 Kbps。
   @JsonValue(42)
   videoProfileLandscape480p3,
 
-  /// 43: 640 × 480, frame rate 30 fps, bitrate 750 Kbps.
+  /// 43：分辨率 640 × 480，帧率 30 fps，码率 750 Kbps。
   @JsonValue(43)
   videoProfileLandscape480p4,
 
-  /// 45: 480 × 480, frame rate 30 fps, bitrate 600 Kbps.
+  /// 45：分辨率 480 × 480，帧率 30 fps，码率 600 Kbps。
   @JsonValue(45)
   videoProfileLandscape480p6,
 
-  /// 47: 848 × 480, frame rate 15 fps, bitrate 610 Kbps.
+  /// 47：分辨率 848 × 480，帧率 15 fps，码率 610 Kbps。
   @JsonValue(47)
   videoProfileLandscape480p8,
 
-  /// 48: 848 × 480, frame rate 30 fps, bitrate 930 Kbps.
+  /// 48：分辨率 848 × 480，帧率 30 fps，码率 930 Kbps。
   @JsonValue(48)
   videoProfileLandscape480p9,
 
-  /// 49: 640 × 480, frame rate 10 fps, bitrate 400 Kbps.
+  /// 49：分辨率 640 × 480，帧率 10 fps，码率 400 Kbps。
   @JsonValue(49)
   videoProfileLandscape480p10,
 
-  /// 50: 1280 × 720, frame rate 15 fps, bitrate 1130 Kbps.
+  /// 50：分辨率 1280 × 720，帧率 15 fps，码率 1130 Kbps。
   @JsonValue(50)
   videoProfileLandscape720p,
 
-  /// 52: 1280 × 720, frame rate 30 fps, bitrate 1710 Kbps.
+  /// 52：分辨率 1280 × 720，帧率 30 fps，码率 1710 Kbps。
   @JsonValue(52)
   videoProfileLandscape720p3,
 
-  /// 54: 960 × 720, frame rate 15 fps, bitrate 910 Kbps.
+  /// 54：分辨率 960 × 720，帧率 15 fps，码率 910 Kbps。
   @JsonValue(54)
   videoProfileLandscape720p5,
 
-  /// 55: 960 × 720, frame rate 30 fps, bitrate 1380 Kbps.
+  /// 55：分辨率 960 × 720，帧率 30 fps，码率 1380 Kbps。
   @JsonValue(55)
   videoProfileLandscape720p6,
 
-  /// 60: 1920 × 1080, frame rate 15 fps, bitrate 2080 Kbps.
+  /// 60：分辨率 1920 × 1080，帧率 15 fps，码率 2080 Kbps。
   @JsonValue(60)
   videoProfileLandscape1080p,
 
-  /// 60: 1920 × 1080, frame rate 30 fps, bitrate 3150 Kbps.
+  /// 62：分辨率 1920 × 1080，帧率 30 fps，码率 3150 Kbps。
   @JsonValue(62)
   videoProfileLandscape1080p3,
 
-  /// 64: 1920 × 1080, frame rate 60 fps, bitrate 4780 Kbps.
+  /// 64：分辨率 1920 × 1080，帧率 60 fps，码率 4780 Kbps。
   @JsonValue(64)
   videoProfileLandscape1080p5,
 
@@ -4720,127 +4822,127 @@ enum VideoProfileType {
   @JsonValue(72)
   videoProfileLandscape4k3,
 
-  /// 1000: 120 × 160, frame rate 15 fps, bitrate 65 Kbps.
+  /// 1000: 分辨率 120 × 160，帧率 15 fps，码率 65 Kbps。
   @JsonValue(1000)
   videoProfilePortrait120p,
 
-  /// 1002: 120 × 120, frame rate 15 fps, bitrate 50 Kbps.
+  /// 1002: 分辨率 120 × 120，帧率 15 fps，码率 50 Kbps。
   @JsonValue(1002)
   videoProfilePortrait120p3,
 
-  /// 1010: 180 × 320, frame rate 15 fps, bitrate 140 Kbps.
+  /// 1010: 分辨率 180 × 320，帧率 15 fps，码率 140 Kbps。
   @JsonValue(1010)
   videoProfilePortrait180p,
 
-  /// 1012: 180 × 180, frame rate 15 fps, bitrate 100 Kbps.
+  /// 1012: 分辨率 180 × 180，帧率 15 fps，码率 100 Kbps。
   @JsonValue(1012)
   videoProfilePortrait180p3,
 
-  /// 1013: 180 × 240, frame rate 15 fps, bitrate 120 Kbps.
+  /// 1013: 分辨率 180 × 240，帧率 15 fps，码率 120 Kbps。
   @JsonValue(1013)
   videoProfilePortrait180p4,
 
-  /// 1020: 240 × 320, frame rate 15 fps, bitrate 200 Kbps.
+  /// 1020: 分辨率 240 × 320，帧率 15 fps，码率 200 Kbps。
   @JsonValue(1020)
   videoProfilePortrait240p,
 
-  /// 1022: 240 × 240, frame rate 15 fps, bitrate 140 Kbps.
+  /// 1022: 分辨率 240 × 240，帧率 15 fps，码率 140 Kbps。
   @JsonValue(1022)
   videoProfilePortrait240p3,
 
-  /// 1023: 240 × 424, frame rate 15 fps, bitrate 220 Kbps.
+  /// 1023: 分辨率 240 × 424，帧率 15 fps，码率 220 Kbps。
   @JsonValue(1023)
   videoProfilePortrait240p4,
 
-  /// 1030: 360 × 640, frame rate 15 fps, bitrate 400 Kbps.
+  /// 1030: 分辨率 360 × 640，帧率 15 fps，码率 400 Kbps。
   @JsonValue(1030)
   videoProfilePortrait360p,
 
-  /// 1032: 360 × 360, frame rate 15 fps, bitrate 260 Kbps.
+  /// 1032: 分辨率 360 × 360，帧率 15 fps，码率 260 Kbps。
   @JsonValue(1032)
   videoProfilePortrait360p3,
 
-  /// 1033: 360 × 640, frame rate 15 fps, bitrate 600 Kbps.
+  /// 1033: 分辨率 360 × 640，帧率 30 fps，码率 600 Kbps。
   @JsonValue(1033)
   videoProfilePortrait360p4,
 
-  /// 1035: 360 × 360, frame rate 30 fps, bitrate 400 Kbps.
+  /// 1035: 分辨率 360 × 360，帧率 30 fps，码率 400 Kbps。
   @JsonValue(1035)
   videoProfilePortrait360p6,
 
-  /// 1036: 360 × 480, frame rate 15 fps, bitrate 320 Kbps.
+  /// 1036: 分辨率 360 × 480，帧率 15 fps，码率 320 Kbps。
   @JsonValue(1036)
   videoProfilePortrait360p7,
 
-  /// 1037: 360 × 480, frame rate 30 fps, bitrate 490 Kbps.
+  /// 1037: 分辨率 360 × 480，帧率 30 fps，码率 490 Kbps。
   @JsonValue(1037)
   videoProfilePortrait360p8,
 
-  /// 1038: 360 × 640, frame rate 15 fps, bitrate 800 Kbps.This profile applies only to the live streaming channel profile.
+  /// 1038: 分辨率 360 × 640，帧率 15 fps，码率 800 Kbps。该视频属性仅适用于直播频道场景。
   @JsonValue(1038)
   videoProfilePortrait360p9,
 
-  /// 1039: 360 × 640, frame rate 24 fps, bitrate 800 Kbps.This profile applies only to the live streaming channel profile.
+  /// 1039: 分辨率 360 × 640，帧率 24 fps，码率 800 Kbps。该视频属性仅适用于直播频道场景。
   @JsonValue(1039)
   videoProfilePortrait360p10,
 
-  /// 1100: 360 × 640, frame rate 24 fps, bitrate 1000 Kbps.This profile applies only to the live streaming channel profile.
+  /// 1100: 分辨率 360 × 640，帧率 24 fps，码率 1000 Kbps。该视频属性仅适用于直播频道场景。
   @JsonValue(1100)
   videoProfilePortrait360p11,
 
-  /// 1040: 480 × 640, frame rate 15 fps, bitrate 500 Kbps.
+  /// 1040: 分辨率 480 × 640，帧率 15 fps，码率 500 Kbps。
   @JsonValue(1040)
   videoProfilePortrait480p,
 
-  /// 1042: 480 × 480, frame rate 15 fps, bitrate 400 Kbps.
+  /// 1042: 分辨率 480 × 480，帧率 15 fps，码率 400 Kbps。
   @JsonValue(1042)
   videoProfilePortrait480p3,
 
-  /// 1043: 480 × 640, frame rate 30 fps, bitrate 750 Kbps.
+  /// 1043: 分辨率 480 × 640，帧率 30 fps，码率 750 Kbps。
   @JsonValue(1043)
   videoProfilePortrait480p4,
 
-  /// 1045: 480 × 480, frame rate 30 fps, bitrate 600 Kbps.
+  /// 1045: 分辨率 480 × 480，帧率 30 fps，码率 600 Kbps。
   @JsonValue(1045)
   videoProfilePortrait480p6,
 
-  /// 1047: 480 × 848, frame rate 15 fps, bitrate 610 Kbps.
+  /// 1047: 分辨率 480 × 848，帧率 15 fps，码率 610 Kbps。
   @JsonValue(1047)
   videoProfilePortrait480p8,
 
-  /// 1048: 480 × 848, frame rate 30 fps, bitrate 930 Kbps.
+  /// 1048: 分辨率 480 × 848，帧率 30 fps，码率 930 Kbps。
   @JsonValue(1048)
   videoProfilePortrait480p9,
 
-  /// 1049: 480 × 640, frame rate 10 fps, bitrate 400 Kbps.
+  /// 1049: 分辨率 480 × 640，帧率 10 fps，码率 400 Kbps。
   @JsonValue(1049)
   videoProfilePortrait480p10,
 
-  /// 1050: 720 × 1280, frame rate 15 fps, bitrate 1130 Kbps.
+  /// 1050: 分辨率 分辨率 720 × 1280，帧率 15 fps，码率 1130 Kbps。
   @JsonValue(1050)
   videoProfilePortrait720p,
 
-  /// 1052: 720 × 1280, frame rate 30 fps, bitrate 1710 Kbps.
+  /// 1052: 分辨率 分辨率 720 × 1280，帧率 30 fps，码率 1710 Kbps。
   @JsonValue(1052)
   videoProfilePortrait720p3,
 
-  /// 1054: 720 × 960, frame rate 15 fps, bitrate 910 Kbps.
+  /// 1054: 分辨率 720 × 960，帧率 15 fps，码率 910 Kbps。
   @JsonValue(1054)
   videoProfilePortrait720p5,
 
-  /// 1055: 720 × 960, frame rate 30 fps, bitrate 1380 Kbps.
+  /// 1055: 分辨率 720 × 960，帧率 30 fps，码率 1380 Kbps。
   @JsonValue(1055)
   videoProfilePortrait720p6,
 
-  /// 1060: 1080 × 1920, frame rate 15 fps, bitrate 2080 Kbps.
+  /// 1060: 分辨率 1080 × 1920，帧率 15 fps，码率 2080 Kbps。
   @JsonValue(1060)
   videoProfilePortrait1080p,
 
-  /// 1062: 1080 × 1920, frame rate 30 fps, bitrate 3150 Kbps.
+  /// 1062: 分辨率 1080 × 1920，帧率 30 fps，码率 3150 Kbps。
   @JsonValue(1062)
   videoProfilePortrait1080p3,
 
-  /// 1064: 1080 × 1920, frame rate 60 fps, bitrate 4780 Kbps.
+  /// 1064: 分辨率 1080 × 1920，帧率 60 fps，码率 4780 Kbps。
   @JsonValue(1064)
   videoProfilePortrait1080p5,
 
@@ -4860,7 +4962,7 @@ enum VideoProfileType {
   @JsonValue(1072)
   videoProfilePortrait4k3,
 
-  /// (Default) 640 × 360, frame rate 15 fps, bitrate 400 Kbps.
+  /// （默认）分辨率 640 × 360，帧率 15 fps，码率 400 Kbps。
   @JsonValue(30)
   videoProfileDefault,
 }
@@ -4878,18 +4980,18 @@ extension VideoProfileTypeExt on VideoProfileType {
   }
 }
 
-/// SDK version information.
+/// SDK 版本信息。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SDKBuildInfo {
   /// @nodoc
   const SDKBuildInfo({this.build, this.version});
 
-  /// SDK build index.
+  /// SDK 编译号。
   @JsonKey(name: 'build')
   final int? build;
 
-  /// SDK version information. String, such as 4.0.0.
+  /// SDK 版本号。格式为字符串，如 4.0.0。
   @JsonKey(name: 'version')
   final String? version;
 
@@ -4901,18 +5003,18 @@ class SDKBuildInfo {
   Map<String, dynamic> toJson() => _$SDKBuildInfoToJson(this);
 }
 
-/// The VideoDeviceInfo class that contains the ID and device name of the video devices.
+/// VideoDeviceInfo 类，包含视频设备的 ID 和设备名称。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoDeviceInfo {
   /// @nodoc
   const VideoDeviceInfo({this.deviceId, this.deviceName});
 
-  /// The device ID.
+  /// 设备 ID。
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// The device name.
+  /// 设备名称。
   @JsonKey(name: 'deviceName')
   final String? deviceName;
 
@@ -4924,18 +5026,18 @@ class VideoDeviceInfo {
   Map<String, dynamic> toJson() => _$VideoDeviceInfoToJson(this);
 }
 
-/// The AudioDeviceInfo class that contains the ID and device name of the audio devices.
+/// AudioDeviceInfo 类，包含音频设备的 ID 和设备名称。
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioDeviceInfo {
   /// @nodoc
   const AudioDeviceInfo({this.deviceId, this.deviceName});
 
-  /// The device ID.
+  /// 设备 ID。
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// The device name.
+  /// 设备名称。
   @JsonKey(name: 'deviceName')
   final String? deviceName;
 

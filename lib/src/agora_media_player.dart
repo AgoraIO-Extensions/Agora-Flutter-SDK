@@ -1,106 +1,107 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 
-/// This class provides media player functions and supports multiple instances.
+/// 提供媒体播放器功能的类，支持多实例。
 ///
 abstract class MediaPlayer {
-  /// Gets the ID of the media player.
+  /// 获取播放器 ID。
   ///
   ///
   /// Returns
-  /// ≥ 0: Success. The ID of the media player.< 0: Failure.
+  /// 方法调用成功，返回播放器 ID。< 0: 方法调用失败。
   int getMediaPlayerId();
 
-  /// Opens the media resource.
-  /// This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.
+  /// 打开媒体资源。
+  /// 该方法为异步调用。如需播放媒体文件，请在收到 onPlayerSourceStateChanged 回调报告播放状态为 playerStateOpenCompleted 后再调用 play 方法播放媒体文件。
   ///
-  /// * [url] The path of the media file. Both local path and online path are supported.On the Android platform, if you need to open a file in URI format, use open .
-  /// * [startPos] The starting position (ms) for playback. Default value is 0.
+  /// * [url] 设置媒体文件的路径，支持本地和在线文件。
+  ///  在 Android 平台上，如果你需要打开 URI 格式的文件，请使用 open 。
+  /// * [startPos] 设置起始播放位置（毫秒），默认值为 0。
   Future<void> open({required String url, required int startPos});
 
-  /// Opens a media file and configures the playback scenarios.
-  /// This method supports opening media files of different sources, including a custom media source, and allows you to configure the playback scenarios.
+  /// 打开媒体资源并进行播放设置。
+  /// 该方法支持你打开不同类型的媒体资源，包括自定义的媒体资源文件，并可进行播放设置。
   ///
-  /// * [source] Media resources. See MediaSource .
+  /// * [source] 媒体资源，详见 MediaSource 。
   ///
   /// Returns
-  /// 0: Success.< 0: Failure.
+  /// 0：方法调用成功。< 0：方法调用失败。
   Future<void> openWithMediaSource(MediaSource source);
 
-  /// Plays the media file.
-  /// After calling open or seek, you can call this method to play the media file.
+  /// 播放媒体文件。
+  /// 调用 open 或 seek 后，你可以调用该方法播放媒体文件。
   Future<void> play();
 
-  /// Pauses the playback.
+  /// 暂停播放。
   ///
   Future<void> pause();
 
-  /// Stops playing the media track.
+  /// 停止播放。
   ///
   Future<void> stop();
 
-  /// Resumes playing the media file.
+  /// 暂停后恢复播放。
   ///
   Future<void> resume();
 
-  /// Seeks to a new playback position.
-  /// After successfully calling this method, you will receive the onPlayerEvent callback, reporting the result of the seek operation to the new playback position.To play the media file from a specific position, do the following:Call this method to seek to the position you want to begin playback.Call the play method to play the media file.
+  /// 定位到媒体文件的指定播放位置。
+  /// 成功调用该方法后，你会收到 onPlayerEvent 回调，报告当前播放器发生的事件，如定位开始、定位成功或定位失败。如果你想定位播放，请进行如下操作：
+  ///  调用该方法定位。定位完成后，调用 play 方法播放。
   ///
-  /// * [newPos] The new playback position (ms).
+  /// * [newPos] 指定的位置（毫秒）。
   Future<void> seek(int newPos);
 
-  /// Sets the pitch of the current media resource.
-  /// Call this method after calling open .
+  /// 调整当前播放的媒体资源的音调。
+  /// 你需要在调用 open 后调用该方法。
   ///
-  /// * [pitch] Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
+  /// * [pitch] 按半音音阶调整本地播放的音乐文件的音调，默认值为 0，即不调整音调。取值范围为 [-12,12]，每相邻两个值的音高距离相差半音。取值的绝对值越大，音调升高或降低得越多。
   Future<void> setAudioPitch(int pitch);
 
-  /// Gets the duration of the media resource.
+  /// 获取媒体文件总时长。
   ///
   ///
   /// Returns
-  /// The total duration (ms) of the media file.
+  /// 媒体文件总时长（毫秒）。
   Future<int> getDuration();
 
-  /// Gets current local playback progress.
+  /// 获取当前播放进度。
   ///
   ///
   /// Returns
-  /// Returns the current playback progress (ms) if the call succeeds.< 0: Failure. See MediaPlayerError .
+  /// 方法调用成功，返回当前播放进度（毫秒）。< 0: 方法调用失败，详见 MediaPlayerError 。
   Future<int> getPlayPosition();
 
-  /// Gets the number of the media streams in the media resource.
-  /// Call this method after calling open .
+  /// 获取当前媒体文件中媒体流的数量。
+  /// 你需要在 open 后调用该方法。
   ///
   /// Returns
-  /// The number of the media streams in the media resource if the method call succeeds.< 0: Failure. See MediaPlayerError .
+  /// 方法调用成功，返回该媒体文件中媒体流的数量。< 0: 方法调用失败，详见 MediaPlayerError 。
   Future<int> getStreamCount();
 
-  /// Gets the detailed information of the media stream.
-  /// Call this method after calling getStreamCount .
+  /// 通过媒体流的索引值获取媒体流信息。
+  /// 你需要在 getStreamCount 后调用该方法。
   ///
-  /// * [index] The index of the media stream.
+  /// * [index] 媒体流索引值。
   ///
   /// Returns
-  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
+  /// 方法调用成功，返回媒体流信息，详见 PlayerStreamInfo 。方法调用失败，返回 NULL。
   Future<PlayerStreamInfo> getStreamInfo(int index);
 
-  /// Sets the loop playback.
-  /// If you want to loop, call this method and set the number of the loops.When the loop finishes, the SDK triggers onPlayerSourceStateChanged and reports the playback state as playerStatePlaybackAllLoopsCompleted.
+  /// 设置循环播放。
+  /// 如果你希望循环播放，请调用该方法并设置循环播放次数。循环播放结束时，SDK 会触发 onPlayerSourceStateChanged 回调，向你报告播放状态为 playerStatePlaybackAllLoopsCompleted。
   ///
-  /// * [loopCount] The number of times the audio effect loops:
+  /// * [loopCount] 循环播放的次数。
   Future<void> setLoopCount(int loopCount);
 
-  /// Sets the channel mode of the current audio file.
-  /// Call this method after calling open .
+  /// 设置当前音频文件的播放速度。
+  /// 你需要在 open 后调用该方法。
   ///
-  /// * [speed] The playback speed. Agora recommends that you limit this value to between 50 and 400, defined as follows:50: Half the original speed.100: The original speed.400: 4 times the original speed.
+  /// * [speed] 播放速度。推荐取值范围为 [50,400]，其中： 50: 0.5 倍速。100: 原始速度。400: 4 倍速。
   Future<void> setPlaybackSpeed(int speed);
 
-  /// Selects the audio track used during playback.
-  /// After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.You need to call this method after calling getStreamInfo to get the audio stream index value.
+  /// 指定当前音频文件的播放音轨。
+  /// 获取音频文件的音轨索引后，你可以调用该方法指定任一音轨进行播放。例如，如果一个多音轨文件的不同音轨存放了不同语言的歌曲，则你可以调用该方法设置播放语言。你需要在调用 getStreamInfo 获取音频流索引值后调用该方法。
   ///
-  /// * [index
-  /// ] The index of the audio track.
+  /// * [index] 音轨的索引值。
   Future<void> selectAudioTrack(int index);
 
   /// @nodoc
@@ -112,72 +113,76 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<void> setExternalSubtitle(String url);
 
-  /// Gets current playback state.
+  /// 获取播放器当前状态。
   ///
   ///
   /// Returns
-  /// The current playback state. See MediaPlayerState .
+  /// 播放器当前状态，详见 MediaPlayerState 。
   Future<MediaPlayerState> getState();
 
-  /// Sets whether to mute the media file.
+  /// 设置是否静音。
   ///
   ///
-  /// * [mute] Whether to mute the media file:true: Mute the media file.false: (Default) Unmute the media file.
+  /// * [mute] 静音选项。
+  ///  true：静音。false：（默认）不静音。
   Future<void> mute(bool muted);
 
-  /// Reports whether the media resource is muted.
+  /// 获取当前播放的媒体文件是否静音。
   ///
   ///
   /// Returns
-  /// true: Reports whether the media resource is muted.false: Reports whether the media resource is muted.
+  /// true：当前播放的媒体文件为静音。false：当前播放的媒体文件没有静音。
   Future<bool> getMute();
 
-  /// Adjusts the local playback volume.
+  /// 调节本地播放音量。
   ///
   ///
-  /// * [volume] The local playback volume, which ranges from 0 to 100:0: Mute.100: (Default) The original volume.
+  /// * [volume] 本地播放音量，取值范围从 0 到 100：
+  ///  0: 无声。100: （默认）媒体文件的原始播放音量。
   Future<void> adjustPlayoutVolume(int volume);
 
-  /// Gets the local playback volume.
+  /// 获取当前本地播放音量。
   ///
   ///
   /// Returns
-  /// The local playback volume, which ranges from 0 to 100.0: Mute.100: (Default) The original volume.
+  /// 返回当前本地播放音量，取值范围从 0 到 100：
+  ///  0: 无声。100: （默认）媒体文件的原始播放音量。
   Future<int> getPlayoutVolume();
 
-  /// Adjusts the volume of the media file for publishing.
-  /// After connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.
+  /// 调节远端用户听到的音量。
+  /// 连接到 Agora 服务器后，你可以调用该方法，调节远端用户听到的媒体文件的音量。
   ///
-  /// * [volume] The volume, which ranges from 0 to 400:0: Mute.100: (Default) The original volume.400: Four times the original volume (amplifying the audio signals by four times).
+  /// * [volume] 信号音量，取值范围从 0 到 400：
+  ///  0: 无声。100: （默认）媒体文件的原始音量。400: 原始音量的四倍（自带溢出保护）。
   Future<void> adjustPublishSignalVolume(int volume);
 
-  /// Gets the volume of the media file for publishing.
+  /// 获取远端用户听到的音量。
   ///
   ///
   /// Returns
-  /// The remote playback volume, if the method call succeeds.< 0: Failure.
+  /// ≥ 0: 播放文件的远端播放音量。< 0: 方法调用失败。
   Future<int> getPublishSignalVolume();
 
-  /// Sets the view.
+  /// 设置播放器渲染视图。
   ///
   Future<void> setView(int view);
 
-  /// Sets the render mode of the media player.
+  /// 设置播放器视图的渲染模式。
   ///
   ///
-  /// * [renderMode] Sets the render mode of the view. See RenderModeType .
+  /// * [renderMode] 播放器视图的渲染模式。详见 RenderModeType 。
   Future<void> setRenderMode(RenderModeType renderMode);
 
-  /// Registers a media player observer.
+  /// 注册一个播放观测器。
   ///
   ///
-  /// * [observer] The player observer, listening for events during the playback. See MediaPlayerSourceObserver .
+  /// * [observer] 播放观测器，报告播放中的事件，详见 MediaPlayerSourceObserver 。
   void registerPlayerSourceObserver(MediaPlayerSourceObserver observer);
 
-  /// Releases a media player observer.
+  /// 取消注册播放观测器。
   ///
   ///
-  /// * [observer] The player observer, listening for events during the playback. See MediaPlayerSourceObserver .
+  /// * [observer] 播放观测器，报告播放中的事件，详见 MediaPlayerSourceObserver 。
   void unregisterPlayerSourceObserver(MediaPlayerSourceObserver observer);
 
   /// @nodoc
@@ -188,10 +193,10 @@ abstract class MediaPlayer {
   void unregisterMediaPlayerAudioSpectrumObserver(
       AudioSpectrumObserver observer);
 
-  /// Sets the channel mode of the current audio file.
-  /// In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.Call this method after calling open .This method only applies to stereo audio files.
+  /// 设置当前音频文件的声道模式。
+  /// 在双声道音频文件中，左声道和右声道可以存储不同的音频数据。根据实际需要，你可以设置声道模式为原始模式、左声道模式、右声道模式或混合模式。例如，在 KTV 场景中，音频文件的左声道存储了伴奏，右声道存储了原唱的歌声。如果你只需听伴奏，调用该方法设置音频文件的声道模式为左声道模式；如果你需要同时听伴奏和原唱，调用该方法设置声道模式为混合模式。你需要在调用 open 后调用该方法。该方法仅适用于双声道的音频文件。
   ///
-  /// * [mode] The channel mode. See AudioDualMonoMode .
+  /// * [mode] 声道模式。详见 AudioDualMonoMode 。
   Future<void> setAudioDualMonoMode(AudioDualMonoMode mode);
 
   /// @nodoc
@@ -200,76 +205,78 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<String> getPlaySrc();
 
-  /// Opens a media resource and requests all the CDN routes of the media resources through the self-developed scheduling center.
-  /// This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.After you call this method, Agora opens the media resources and tries to obtain all the CDN routes for playing the media resource. By default, Agora uses the first CDN route for playing, and you can call the switchAgoraCDNLineByIndex method to switch routes.If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:The URL of the media file to be opened: rtmp://$domain/$appName/$streamNameThe URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$signAuthentication information:sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s.
+  /// 打开媒体资源，并通过自研调度中心请求媒体资源的所有 CDN 线路。
+  /// 该方法为异步调用。如需播放媒体文件，请在收到 onPlayerSourceStateChanged 回调报告播放状态为 playerStateOpenCompleted 后再调用 play 方法播放媒体文件。调用该方法后，Agora 会打开媒体资源并通过自研调度中心请求媒体资源的所有 CDN 线路。Agora 默认使用第一个线路，你也可以通过 switchAgoraCDNLineByIndex 自行切换线路。如果你希望保障连接和播放媒体资源的安全性，你可以协商鉴权字段 (sign) 和鉴权过期时间 (ts)。确定字段后，请将其作为 URL 的 query parameter 以更新媒体资源的网路路径。例如：
+  ///  媒体资源网络路径为 rtmp://$domain/$appName/$streamName通过鉴权信息更新过的媒体资源网络路径为 rtmp://$domain/$appName/$streamName?ts=$ts&sign=$sign鉴权信息说明：
+  ///  sign : 通过 authKey + appName + streamName + ts 进行 md5 算法加密得出的鉴权字段。你需要咨询你的 authKey 字段内容。ts : 鉴权过期时间。你可以指定再过多久鉴权过期。例如， 24h 或 1h30m20s。
   ///
-  /// * [src] The URL of the media resource.
-  /// * [startPos] The starting position (ms) for playback. The default value is 0. This value can be empty if the media resource to be played is live streams.
+  /// * [src] 媒体资源的网络路径。
+  /// * [startPos] 设置起始播放位置 (毫秒)，默认值为 0。如果媒体资源为直播流，则无需赋值。
   Future<void> openWithAgoraCDNSrc(
       {required String src, required int startPos});
 
-  /// Gets the number of CDN routes for the media resource.
+  /// 获取媒体资源的 CDN 线路数量。
   ///
   Future<int> getAgoraCDNLineCount();
 
-  /// Changes the CDN route for playing the media resource.
-  /// After calling openWithAgoraCDNSrc to open the media resource, you can call this method if you want to change the CDN routes for playing the media resource.Call this method after calling openWithAgoraCDNSrc .You can call this method either before or after play . If you call this method before play, the switch does not take effect immediately. The SDK waits for the playback to complete before switching the CDN line of the media resource.
+  /// 切换媒体资源的 CDN 线路。
+  /// 通过 openWithAgoraCDNSrc 打开媒体资源后，如果你想切换媒体资源 CDN 线路，你可以调用该方法。
+  ///  请在 openWithAgoraCDNSrc 后调用该方法。该方法在 play 前后均可调用。如果你在 play 前调用该方法，切换不会立即生效。SDK 会等待播放完成后再切换媒体资源的 CDN 线路。
   ///
-  /// * [index] The index of the CDN routes.
+  /// * [index] CDN 线路索引。
   Future<void> switchAgoraCDNLineByIndex(int index);
 
-  /// Gets the CDN routes index of the current media resource.
+  /// 获取当前使用的媒体资源的 CDN 线路索引。
   ///
   Future<int> getCurrentAgoraCDNIndex();
 
-  /// Enables/Disables the automatic switch of the CDN routes for playing the media resource.
-  /// You can call this method if you want the SDK to automatically switch the CDN routes according to your network conditions.Call this method before openWithAgoraCDNSrc .
+  /// 开启/关闭自动切换媒体资源的 CDN 线路。
+  /// 如果你想设置 SDK 根据网络情况自动切换媒体资源 CDN 线路，你可以调用该方法。请在 openWithAgoraCDNSrc 前调用该方法。
   ///
-  /// * [enable] Whether to enable the automatic switch of the CDN routes for playing the media resource:true: Enables the automatic switch of the CDN routes.false: (Default) Disables the automatic switch of the CDN routes.
+  /// * [enable] 设置是否开启自动切换媒体资源的 CDN 线路: true：开启自动切换媒体资源的 CDN 线路。false：(默认) 关闭自动切换媒体资源的 CDN 线路。
   Future<void> enableAutoSwitchAgoraCDN(bool enable);
 
-  /// Renew the authentication information for the URL of the media resource to be played.
-  /// When the authentication information expires (exceeds the ts field), you can call the openWithAgoraCDNSrc method to reopen the media resource or the switchAgoraCDNSrc method to switch the media resource, and then pass in the authenticated URL (with the ts field updated) of the media resource.If your authentication information expires when you call the switchAgoraCDNLineByIndex to switch the CDN route for playing the media resource, you need to call this method to pass in the updated authentication information to update the authentication information of the media resource URL. After updating the authentication information, you need to call switchAgoraCDNLineByIndex to complete the route switching.To avoid frequent expiration of authentication information, ensure that you set the ts field appropriately or according to the scenario requirements.
+  /// 更新媒体资源网络路径的鉴权信息。
+  /// 当鉴权信息过期（超出 ts 时间）时，你可以调用 openWithAgoraCDNSrc 或 switchAgoraCDNSrc 重新打开或切换媒体资源，并传入带新鉴权信息（如更新 ts 字段内容）的媒体资源网络路径。如果你在切换媒体资源线路 ( switchAgoraCDNLineByIndex ) 时遇到鉴权信息过期，你需要调用该方法并传入新的鉴权信息，以更新该媒体资源网络路径的鉴权信息。更新鉴权信息后，你还需调用 switchAgoraCDNLineByIndex 才能完成线路切换。为避免鉴权信息频繁过期，请务必根据场景需求设置合适的 ts 字段内容或。
   ///
-  /// * [token] The authentication field. See the sign field of the authentication information.
-  /// * [ts] The timestamp when the authentication information expires. See the ts field of the authentication information.
+  /// * [token] 鉴权字段。即鉴权信息中的 sign 字段。
+  /// * [ts] 鉴权过期时间。即鉴权信息中的 ts 字段。
   Future<void> renewAgoraCDNSrcToken({required String token, required int ts});
 
-  /// Switches the media resource being played.
-  /// If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:The URL of the media file to be opened: rtmp://$domain/$appName/$streamNameThe URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$signAuthentication information:sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s.If you want to customize the CDN routes for playing the media resource, call this method to switch media resources. Agora changes the CDN route through the self-developed scheduling center to improve the viewing experience. If you do not need to customize CDN routes for playing the media resource, call the switchSrc method to switch media resources.
-  /// Call this method after calling openWithAgoraCDNSrc .You can call this method either before or after play . If you call this method before play, the SDK waits for you to call play before completing the route switch.
+  /// 切换媒体资源。
+  /// 如果你希望保障连接和播放媒体资源的安全性，你可以协商鉴权字段 (sign) 和鉴权过期时间 (ts)。确定字段后，请将其作为 URL 的 query parameter 以更新媒体资源的网路路径。例如：
+  ///  媒体资源网络路径为 rtmp://$domain/$appName/$streamName通过鉴权信息更新过的媒体资源网络路径为 rtmp://$domain/$appName/$streamName?ts=$ts&sign=$sign鉴权信息说明：
+  ///  sign : 通过 authKey + appName + streamName + ts 进行 md5 算法加密得出的鉴权字段。你需要咨询你的 authKey 字段内容。ts : 鉴权过期时间。你可以指定再过多久鉴权过期。例如， 24h 或 1h30m20s。如果用户需要自定义播放线路，你可以调用该方法实现媒体资源切换。Agora 会通过自研调度中心支持调度线路，提升观看用户体验。如果用户不需要自定义播放线路，你可以调用 switchSrc 实现媒体资源切换。
+  /// 请在 openWithAgoraCDNSrc 后调用该方法。该方法在 play 前后均可调用。如果你在 play 前调用该方法，SDK 会等你调用 play 后再完成线路切换。
   ///
-  /// * [src] The URL of the media resource.
-  /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch:true: Synchronize the playback position before and after the switch.false: (Default) Do not synchronize the playback position before and after the switch.falseMake sure to set this parameter as if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
+  /// * [src] 媒体资源的网络路径。
+  /// * [syncPts] 是否同步切换前后的起始播放位置: true：同步。false：(默认) 不同步。如果媒体资源为直播流，你只能将该参数设置为 false，否则 SDK 切换媒体资源会失败。如果媒体资源为点播流，你可以根据场景需求对该参数赋值。
   Future<void> switchAgoraCDNSrc({required String src, bool syncPts = false});
 
-  /// Switches the media resource being played.
-  /// You can call this method to switch the media resource to be played according to the current network status. For example:When the network is poor, the media resource to be played is switched to a media resource address with a lower bitrate.When the network is good, the media resource to be played is switched to a media resource address with a higher bitrate.After calling this method, if you receive the onPlayerEvent event in the playerEventSwitchComplete callback, the switch is successful; If you receive the onPlayerEvent event in the playerEventSwitchError callback, the switch fails.Ensure that you call this method after open .To ensure normal playback, pay attention to the following when calling this method:Do not call this method when playback is paused.Do not call the seek method during switching.Before switching the media resource, make sure that the playback position does not exceed the total duration of the media resource to be switched.
+  /// 切换媒体资源。
+  /// 你可以根据当前网络状态调用该方法切换播放的媒体资源的码率。例如： 在网络较差时，将播放的媒体资源切换为较低码率的媒体资源地址。在网络较好时，将播放的媒体资源切换为较高码率的媒体资源地址。调用该方法后，如果你收到 onPlayerEvent 回调报告事件 playerEventSwitchComplete，则媒体资源切换成功；如果你收到 onPlayerEvent 回调报告事件 playerEventSwitchError，则媒体资源切换失败。请确保在 open 之后调用该方法。为保证播放正常，请在调用该方法时注意如下： 不要在播放暂停时调用该方法。不要在切换码率过程中调用 seek 。确保切换码率前的播放位置不大于待切换的媒体资源总时长。
   ///
-  /// * [src] The URL of the media resource.
-  /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch:true: Synchronize the playback position before and after the switch.false: (Default) Do not synchronize the playback position before and after the switch.Make sure to set this parameter as false if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
-  ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
+  /// * [src] 媒体资源的网络路径。
+  /// * [syncPts] 是否同步切换前后的起始播放位置: true：同步。false：(默认) 不同步。如果媒体资源为直播流，你只能将该参数设置为 false，否则 SDK 切换媒体资源会失败。如果媒体资源为点播流，你可以根据场景需求对该参数赋值。
   Future<void> switchSrc({required String src, bool syncPts = true});
 
-  /// Preloads a media resource.
-  /// You can call this method to preload a media resource into the playlist. If you need to preload multiple media resources, you can call this method multiple times.If the preload is successful and you want to play the media resource, call playPreloadedSrc ; if you want to clear the playlist, call stop .Agora does not support preloading duplicate media resources to the playlist. However, you can preload the media resources that are being played to the playlist again.
+  /// 预加载媒体资源。
+  /// 你可以调用该方法将一个媒体资源预加载到播放列表中。如果需要预加载多个媒体资源，你可以多次调用该方法。预加载成功后，如果你想播放媒体资源，请调用 playPreloadedSrc ；如果你想清空播放列表，请调用 stop 。Agora 不支持你预加载重复的媒体资源到播放列表，但支持你将正在播放的媒体资源再次预加载到播放列表。
   ///
-  /// * [src] The URL of the media resource.
-  /// * [startPos] The starting position (ms) for playing after the media resource is preloaded to the playlist. When preloading a live stream, set this parameter to 0.
+  /// * [src] 媒体资源的网络路径。
+  /// * [startPos] 预加载到播放列表后，开始播放时的起始位置（毫秒）。预加载直播流时，将该参数设置为 0。
   Future<void> preloadSrc({required String src, required int startPos});
 
-  /// Plays preloaded media resources.
-  /// After calling the preloadSrc method to preload the media resource into the playlist, you can call this method to play the preloaded media resource. After calling this method, if you receive the onPlayerSourceStateChanged callback which reports the playerStatePlaying state, the playback is successful.If you want to change the preloaded media resource to be played, you can call this method again and specify the URL of the new media resource that you want to preload. If you want to replay the media resource, you need to call preloadSrc to preload the media resource to the playlist again before playing. If you want to clear the playlist, call the stop method.If you call this method when playback is paused, this method does not take effect until playback is resumed.
+  /// 播放预加载的媒体资源。
+  /// 调用 preloadSrc 方法将媒体资源预加载到播放列表后，可以调用该方法播放已预加载的媒体资源。调用该方法后，如果你收到 onPlayerSourceStateChanged 回调报告状态 playerStatePlaying，则表示播放成功。如果你想更换播放的预加载媒体资源，你可以再次调用该方法并指定新的媒体资源路径。如果你想重新播放媒体资源，你需要在播放前调用 preloadSrc 重新将该媒体资源预加载到播放列表。如果你想清空播放列表，请调用 stop 。如果你在播放暂停时调用该方法，该方法会在恢复播放后才生效。
   ///
-  /// * [src] The URL of the media resource in the playlist must be consistent with the src set by the preloadSrc method; otherwise, the media resource cannot be played.
+  /// * [src] 播放列表中的媒体资源 URL 地址，必须与 preloadSrc 方法设置的 src 一致，否则无法播放。
   Future<void> playPreloadedSrc(String src);
 
-  /// Unloads media resources that are preloaded.
-  /// This method cannot release the media resource being played.
+  /// 释放预加载的媒体资源。
+  /// 该方法不支持释放当前播放的媒体资源。
   ///
-  /// * [src] The URL of the media resource.
+  /// * [src] 媒体资源的网络路径。
   Future<void> unloadSrc(String src);
 
   /// @nodoc
@@ -279,35 +286,35 @@ abstract class MediaPlayer {
   Future<void> setSoundPositionParams(
       {required double pan, required double gain});
 
-  /// Registers an audio frame observer object.
-  /// You need to implement the MediaPlayerAudioFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+  /// 注册音频帧观测器。
+  /// 你需要在该方法中实现一个 MediaPlayerAudioFrameObserver 类，并根据场景需要，注册该类的回调。成功注册音频帧观测器后，SDK 会在捕捉到每个音频帧时，触发你所注册的回调。
   ///
-  /// * [observer] The audio frame observer, reporting the reception of each audio frame. See MediaPlayerAudioFrameObserver .
+  /// * [observer] 音频帧观测器，观测每帧音频的接收，详见 MediaPlayerAudioFrameObserver 。
   void registerAudioFrameObserver(MediaPlayerAudioFrameObserver observer);
 
-  /// Unregisters an audio frame observer.
+  /// 取消注册音频帧观测器 。
   ///
   ///
-  /// * [observer] The audio observer. See MediaPlayerAudioFrameObserver .
+  /// * [observer] 音频帧观测器，详见 MediaPlayerAudioFrameObserver 。
   void unregisterAudioFrameObserver(MediaPlayerAudioFrameObserver observer);
 
-  /// Registers a video frame observer object.
-  /// You need to implement the MediaPlayerVideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+  /// 注册视频帧观测器。
+  /// 你需要在该方法中实现一个 MediaPlayerVideoFrameObserver 类，并根据场景需要，注册该类的回调。成功注册视频帧观测器后，SDK 会在捕捉到每个视频帧时，触发你所注册的回调。
   ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .
+  /// * [observer] 视频帧观测器，观测每帧视频的接收。详见 MediaPlayerVideoFrameObserver 。
   void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
-  /// Unregisters a video frame observer.
+  /// 取消注册视频帧观测器。
   ///
   ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .
+  /// * [observer] 视频帧观测器，观测每帧视频的接收，详见 MediaPlayerVideoFrameObserver 。
   void unregisterVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
-  /// Sets the private options for the media player.
-  /// The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.Ensure that you call this method before open .If you need to push streams with SEI into the CDN, callsetPlayerOptionInInt ("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
+  /// 设置媒体播放器的私有选项。
+  /// 媒体播放器支持通过 key 和 value 来设置私有选项。 一般情况下，你无需知晓私有选项设置，使用媒体播放器默认的选项设置即可。请确保在 open 之前调用该方法。如果你使用客户端旁路推流功能，且在推流过程中发送 SEI 信息，你需要调用 setPlayerOptionInInt("sei_data_with_uuid", 1) 方法，否则会导致 SEI 信息的丢失。
   ///
-  /// * [key] The key of the option.
-  /// * [value] The value of the key.
+  /// * [key] key 值。
+  /// * [value] value 值。
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
   /// @nodoc
@@ -315,79 +322,80 @@ abstract class MediaPlayer {
       {required String key, required String value});
 }
 
-/// This class provides methods to manage cached media files.
+/// 该类提供管理媒体播放器中缓存媒体文件的方法。
 ///
 abstract class MediaPlayerCacheManager {
-  /// Deletes all cached media files in the media player.
-  /// The cached media file currently being played will not be deleted.
+  /// 删除媒体播放器中所有已缓存的媒体文件。
+  /// 该方法不会删除正在播放中的已缓存媒体文件。
   Future<void> removeAllCaches();
 
-  /// Deletes a cached media file that is the least recently used.
-  /// You can call this method to delete a cached media file when the storage space for the cached files is about to reach its limit. After you call this method, the SDK deletes the cached media file that is least used.The cached media file currently being played will not be deleted.
+  /// 删除媒体播放器中近期最少使用的一个缓存媒体文件。
+  /// 缓存媒体文件占用过多空间时，你可以调用该方法清理缓存文件。调用该方法后，SDK 会删除最少使用的一个缓存媒体文件。当你调用此方法删除缓存媒体文件时，当前正在播放的已缓存媒体文件不会被删除。
   Future<void> removeOldCache();
 
-  /// Deletes a cached media file.
-  /// The cached media file currently being played will not be deleted.
+  /// 删除指定的已缓存媒体文件。
+  /// 该方法不会删除正在播放中的已缓存媒体文件。
   ///
-  /// * [uri] The URI (Uniform Resource Identifier) of the media file to be deleted.
+  /// * [uri] 待删除的缓存文件的 URI（Uniform Resource Identifier），可用于标识媒体文件。
   Future<void> removeCacheByUri(String uri);
 
-  /// Sets the storage path for the media files that you want to cache.
-  /// Make sure RtcEngine is initialized before you call this method.
+  /// 设置待缓存的媒体文件的储存路径。
+  /// 该方法需在初始化 RtcEngine 之前调用。
   ///
-  /// * [path] The absolute path of the media files to be cached. Ensure that the directory for the media files exists and is writable.
+  /// * [path] 缓存文件储存的绝对路径。请确保指定的目录存在且可写。
   Future<void> setCacheDir(String path);
 
-  /// Sets the maximum number of media files that can be cached.
+  /// 设置缓存媒体文件数量的上限。
   ///
   ///
-  /// * [count] The maximum number of media files that can be cached. The default value is 1,000.
+  /// * [count] 可缓存的媒体文件数量的上限，默认值为 1000。
   Future<void> setMaxCacheFileCount(int count);
 
-  /// Sets the maximum size of the aggregate storage space for cached media files.
+  /// 设置缓存媒体文件的总缓存大小的上限。
   ///
   ///
-  /// * [cacheSize] The maximum size (bytes) of the aggregate storage space for cached media files. The default value is 1 GB.
+  /// * [cacheSize] 缓存媒体文件的总缓存上限，单位为字节。默认为 1 GB。
   Future<void> setMaxCacheFileSize(int cacheSize);
 
-  /// Sets whether to delete cached media files automatically.
-  /// If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
+  /// 设置是否开启自动清除缓存文件功能。
+  /// 开启自动清除缓存文件后，当播放器中缓存的媒体文件超过你设置的文件数量或总缓存大小的上限时，SDK 会自动清除近期最少使用的一个缓存文件。
   ///
-  /// * [enable] Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
+  /// * [enable] 是否自动清除缓存文件：
+  ///  true：开启自动清除缓存文件功能。false：（默认）关闭自动清除缓存文件功能。
   Future<void> enableAutoRemoveCache(bool enable);
 
-  /// Gets the storage path of the cached media files.
-  /// If you have not called the setCacheDir method to set the storage path for the media files to be cached before calling this method, you get the default storage path used by the SDK.
+  /// 获取缓存文件的储存路径。
+  /// 如果你在调用该方法前未曾调用 setCacheDir 方法自定义缓存文件的储存路径，该方法返回的为 SDK 默认的缓存文件储存路径。
   ///
-  /// * [length] An input parameter; the maximum length of the cache file storage path string.
+  /// * [length] 输入参数，缓存文件储存路径字符串的最大长度。
   ///
   /// Returns
-  /// The call succeeds, and the SDK returns the storage path of the cached media files.< 0: Failure. See MediaPlayerError .
+  /// 方法调用成功时，返回缓存文件的储存路径。< 0：方法调用失败，详见 MediaPlayerError 。
   Future<String> getCacheDir(int length);
 
-  /// Gets the maximum number of media files that can be cached.
-  /// By default, the maximum number of media files that can be cached is 1,000.
+  /// 获取所设置的缓存文件数量上限。
+  /// SDK 默认的缓存文件数量上限为 1000。
   ///
   /// Returns
-  /// > 0: The call succeeds and returns the maximum number of media files that can be cached.< 0: Failure. See MediaPlayerError .
+  /// > 0：方法调用成功，返回缓存文件数量的上限。< 0：方法调用失败，详见 MediaPlayerError 。
   Future<int> getMaxCacheFileCount();
 
-  /// Gets the maximum size of the aggregate storage space for cached media files.
-  /// By default, the maximum size of the aggregate storage space for cached media files is 1 GB. You can call the setMaxCacheFileSize method to set the limit according to your scenarios.
+  /// 获取所设置的缓存文件总缓存的上限。
+  /// SDK 默认的缓存文件总缓存上限为 1GB。你可以调用 setMaxCacheFileSize 方法自定义总缓存大小的上限。
   ///
   /// Returns
-  /// > 0: The call succeeds and returns the maximum size (in bytes) of the aggregate storage space for cached media files.< 0: Failure. See MediaPlayerError .
+  /// > 0：方法调用成功，返回缓存文件的总缓存上限，单位为字节。< 0：方法调用失败，详见 MediaPlayerError 。
   Future<int> getMaxCacheFileSize();
 
-  /// Gets the number of media files that are cached.
+  /// 获取当前已缓存的媒体文件的总数量。
   ///
   ///
   /// Returns
-  /// ≥ 0: The call succeeds and returns the number of media files that are cached.< 0: Failure. See MediaPlayerError .
+  /// ≥ 0：方法调用成功，返回当前已缓存的媒体文件的总数量。< 0：方法调用失败，详见 MediaPlayerError 。
   Future<int> getCacheFileCount();
 }
 
-/// The audio frame observer for the media player.
+/// 媒体播放器的音频数据观测器。
 ///
 class MediaPlayerAudioFrameObserver {
   /// @nodoc
@@ -395,14 +403,14 @@ class MediaPlayerAudioFrameObserver {
     this.onFrame,
   });
 
-  /// Occurs each time the player receives an audio frame.
-  /// After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
+  /// 已获取音频帧回调。
+  /// 注册音频帧观测器后，每次接收到一帧音频帧时，都会触发该回调，报告音频帧信息。
   ///
-  /// * [frame] Audio frame information. See AudioPcmFrame .
+  /// * [frame] 音频帧信息，详见 AudioPcmFrame 。
   final void Function(AudioPcmFrame frame)? onFrame;
 }
 
-/// The video frame observer for the media player.
+/// 媒体播放器的视频数据观测器。
 ///
 class MediaPlayerVideoFrameObserver {
   /// @nodoc
@@ -410,9 +418,9 @@ class MediaPlayerVideoFrameObserver {
     this.onFrame,
   });
 
-  /// Occurs each time the player receives a video frame.
-  /// After registering the video frame observer, the callback occurs every time the player receives a video frame, reporting the detailed information of the video frame.
+  /// 已获取视频帧回调。
+  /// 注册视频观测器后，每次接收到一帧视频时，都会触发该回调，报告视频帧信息。
   ///
-  /// * [frame] Video frame information. See VideoFrame .
+  /// * [frame] 视频帧信息，详见 VideoFrame 。
   final void Function(VideoFrame frame)? onFrame;
 }

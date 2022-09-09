@@ -16,45 +16,45 @@ extension RtcEngineExt on RtcEngine {
   }
 }
 
-/// Error codes and error messages.
+/// 错误码及错误描述。
 ///
 class AgoraRtcException implements Exception {
   /// @nodoc
   AgoraRtcException({required this.code, this.message});
 
-  /// The error code. See ErrorCodeType .
+  /// 错误码，详见 ErrorCodeType 。
   final int code;
 
-  /// The error message.
+  /// 错误描述。
   final String? message;
 
   @override
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-/// Creates the RtcEngine object.
-/// Currently, the Agora RTC SDK v4.0.0 supports creating only one RtcEngine object for an app.
+/// 创建 RtcEngine 对象。
+/// 目前 Agora RTC SDK v4.0.0 只支持每个 app 创建一个 RtcEngine 对象。
 ///
 /// Returns
-/// RtcEngine object.
+/// RtcEngine 对象。
 RtcEngine createAgoraRtcEngine() {
   return impl.RtcEngineImpl.create();
 }
 
-/// Creates an RtcEngineEx object.
-/// Currentluy, the Agora RTC v4.x SDK supports creating only one RtcEngineEx object for each app.
+/// 创建 RtcEngineEx 对象。
+/// 目前 Agora RTC v4.x SDK 只支持每个 app 创建一个 RtcEngineEx 对象。
 ///
 /// Returns
-/// An RtcEngineEx object.
+/// RtcEngineEx 对象。
 RtcEngineEx createAgoraRtcEngineEx() {
   return impl.RtcEngineImpl.create();
 }
 
-/// Gets an MediaPlayerCacheManager instance.
-/// Make sure the RtcEngine is initialized before you call this method.
+/// 获取 MediaPlayerCacheManager 实例。
+/// 请在初始化 RtcEngine 后调用该方法。
 ///
 /// Returns
-/// The MediaPlayerCacheManager instance.
+/// MediaPlayerCacheManager 实例。
 MediaPlayerCacheManager getMediaPlayerCacheManager(RtcEngine rtcEngine) {
   return MediaPlayerCacheManagerImpl.create(rtcEngine);
 }
