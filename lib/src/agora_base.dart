@@ -560,7 +560,7 @@ enum InterfaceIdType {
   @JsonValue(7)
   agoraIidRtcConnection,
 
-  /// @nodoc
+  /// This interface class is deprecated.
   @JsonValue(8)
   agoraIidSignalingEngine,
 

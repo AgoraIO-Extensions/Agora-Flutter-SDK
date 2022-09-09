@@ -1286,7 +1286,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishMediaPlayerId')
   final int? publishMediaPlayerId;
 
-  /// The user role. See ClientRoleType for details.
+  /// The user role. See ClientRoleType .
   @JsonKey(name: 'clientRoleType')
   final ClientRoleType? clientRoleType;
 
@@ -1598,7 +1598,6 @@ class RtcEngineEventHandler {
   ///
   /// * [channel] The channel name.
   /// * [uid] The user ID.
-  ///
   /// * [localProxyIp] Reserved for future use.
   /// * [elapsed] The time elapsed (ms) from the user calling joinChannel [1/2] until this callback is triggered.
   final void Function(String channel, int uid, ProxyType proxyType,
@@ -2723,19 +2722,19 @@ class DirectCdnStreamingMediaOptions {
 /// The basic interface of the Agora SDK that implements the core functions of real-time communication.
 /// RtcEngine provides the main methods that your app can call.
 abstract class RtcEngine {
-  /// Releases the RtcEngine instance.
+  /// Releases the instanceRtcEngine.
   /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations.After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new RtcEngine instance.If you want to create a new RtcEngine instance after destroying the current one, ensure that you wait till the release method execution to complete.
   ///
-  /// * [sync] true: Synchronous call. Agora suggests calling this method in a sub-thread to avoid congestion in the main thread because the synchronous call and the app cannot move on to another task until the resources used by RtcEngine are released. Besides, you cannot call release in any method or callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock. The SDK automatically detects the deadlock and converts this method into an asynchronous call, causing the test to take additional time.false: Asynchronous call. The app can move on to another task, no matter the resources used by RtcEngine are released or not. Do not immediately uninstall the SDK's dynamic library after the call; otherwise, it may cause a crash due to the SDK clean-up thread not quitting.
+  /// * [sync] true: Synchronous call. Agora suggests callingRtcEngine this method in a sub-thread to avoid congestion in the main thread because the synchronous call and the app cannot move on to another task until the resources used by are released. Besides, you cannot call in any method or callback of the SDKrelease. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock. The SDK automatically detects the deadlock and converts this method into an asynchronous call, causing the test to take additional time.false: Asynchronous call. The app can move on toanother task, no matter the resources used by RtcEngine are released or not. Do not immediately uninstall the SDK's dynamic library after the call; otherwise, it may cause a crash due to the SDK clean-up thread not quitting.
   Future<void> release({bool sync = false});
 
   /// Initializes RtcEngine.
-  /// All called methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.Before calling other APIs, you must call createAgoraRtcEngine and RtcEngine to create and initialize the initialize object.The SDK supports creating only one RtcEngine instance for an app.
+  /// All called methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.Before calling other APIs, you must call createAgoraRtcEngine and initialize to create and initialize the RtcEngine object.The SDK supports creating only one RtcEngine instance for an app.
   ///
-  /// * [context] Configurations for the RtcEngine instance. See RtcEngineContext .
+  /// * [context] Configurations for the RtcEngine instance.  RtcEngineContext
   ///
   /// Returns
-  /// The RtcEngine instance, if the method call succeeds.An error code, if the call fails.
+  /// The RtcEngine instance, if the method call succeeds.An error code, if the call fails,.
   Future<void> initialize(RtcEngineContext context);
 
   /// Gets the SDK version.
@@ -3468,7 +3467,7 @@ abstract class RtcEngine {
   /// Sets the audio data format reported by onPlaybackAudioFrameBeforeMixing .
   ///
   ///
-  /// * [sampleRate] The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
+  /// * [null] The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
   /// * [channel] The number of channels of the external audio source, which can be set as 1(Mono) or 2(Stereo).
   Future<void> setPlaybackAudioFrameBeforeMixingParameters(
       {required int sampleRate, required int channel});
@@ -3476,7 +3475,7 @@ abstract class RtcEngine {
   /// Turns on audio spectrum monitoring.
   /// If you want to obtain the audio spectrum data of local or remote users, you can register the audio spectrum observer and enable audio spectrum monitoring.You can call this method either before or after joining a channel.
   ///
-  /// * [intervalInMS] The interval (in milliseconds) at which the SDK triggers the onLocalAudioSpectrum and onRemoteAudioSpectrum callbacks. The default value is 100. Do not set this parameter to less than 10 milliseconds, otherwise the calling of this method fails.
+  /// * [null] The interval (in milliseconds) at which the SDK triggers the onLocalAudioSpectrum and onRemoteAudioSpectrum callbacks. The default value is 100. Do not set this parameter to less than 10 milliseconds, otherwise the calling of this method fails.
   Future<void> enableAudioSpectrumMonitor({int intervalInMS = 100});
 
   /// Disables audio spectrum monitoring.
@@ -3550,7 +3549,6 @@ abstract class RtcEngine {
   /// This method enables or disables in-ear monitoring.
   ///
   /// * [enabled] Enables in-ear monitoring.true: Enables in-ear monitoring.false: (Default) Disables in-ear monitoring.
-  ///
   ///
   /// Returns
   /// 0: Success.< 0: Failure.
@@ -3871,7 +3869,7 @@ abstract class RtcEngine {
       ScreenCaptureParameters captureParams);
 
   /// Starts screen sharing.
-  /// There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenCaptureVideotrue to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenCaptureVideotrue to start screen sharing.This method is for Android only.
+  /// There are two ways to start screen sharing, you can choose one according to the actual needs:Call this method before joining a channel, and then call joinChannel [2/2] to join a channel and set publishScreenCaptureVideotrue to start screen sharing.Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenCaptureVideotrue to start screen sharing.This method applies to Android and iOS only.
   ///
   /// * [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2 .
   Future<void> startScreenCapture(ScreenCaptureParameters2 captureParams);
@@ -4326,7 +4324,7 @@ abstract class RtcEngine {
       required ChannelMediaOptions options});
 
   /// Leaves a channel.
-  /// This method releases all resources related to the session. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.After joining the channel, you must call this method or leaveChannel to end the call, otherwise, the next call cannot be started.If you successfully call this method and leave the channel, the following callbacks are triggered:The local client: onLeaveChannel .The remote client: onUserOffline , if the user joining the channel is in the Communication profile, or is a host in the Live-broadcasting profile.If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
+  /// This method releases all resources related to the session.This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.After joining the channel, you must call this method or leaveChannel to end the call, otherwise, the next call cannot be started.If you successfully call this method and leave the channel, the following callbacks are triggered:The local client: onLeaveChannel .The remote client: onUserOffline , if the user joining the channel is in the Communication profile, or is a host in the Live-broadcasting profile.If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
   Future<void> leaveChannel({LeaveChannelOptions? options});
 
   /// Sets the user role and level in an interactive live streaming channel.
