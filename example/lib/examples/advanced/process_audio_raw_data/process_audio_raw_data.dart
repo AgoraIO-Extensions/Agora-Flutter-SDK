@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 /// ProcessVideoRawData Example
 class ProcessAudioRawData extends StatefulWidget {
@@ -24,6 +28,9 @@ class _State extends State<ProcessAudioRawData> {
   bool _isUseFlutterTexture = false;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
+  late File _audioFile;
+  late File _playbackAudioFile;
+  late AudioFrameObserver _audioFrameObserver;
 
   @override
   void initState() {
@@ -40,6 +47,7 @@ class _State extends State<ProcessAudioRawData> {
   }
 
   Future<void> _dispose() async {
+    _stopAudioFrameRecord();
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -89,12 +97,30 @@ class _State extends State<ProcessAudioRawData> {
 
     await _engine.enableVideo();
 
-    _engine.getMediaEngine().registerAudioFrameObserver(AudioFrameObserver(
-      onRecordAudioFrame: (channelId, audioFrame) {
+    _audioFrameObserver = AudioFrameObserver(
+      onRecordAudioFrame: (channelId, audioFrame) async {
         debugPrint(
             '[onRecordAudioFrame] channelId: $channelId, audioFrame: ${audioFrame.toJson()}');
+        if (!isJoined) {
+          return;
+        }
+        if (audioFrame.buffer != null) {
+          await _audioFile.writeAsBytes(audioFrame.buffer!.toList(),
+              mode: FileMode.append, flush: true);
+        }
       },
-    ));
+      onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) async {
+        debugPrint(
+            '[onPlaybackAudioFrame] channelId: $channelId, audioFrame: ${audioFrame.toJson()}');
+        if (!isJoined) {
+          return;
+        }
+        if (audioFrame.buffer != null) {
+          await _playbackAudioFile.writeAsBytes(audioFrame.buffer!.toList(),
+              mode: FileMode.append, flush: true);
+        }
+      },
+    );
 
     await _engine.setVideoEncoderConfiguration(
       const VideoEncoderConfiguration(
@@ -106,9 +132,42 @@ class _State extends State<ProcessAudioRawData> {
 
     await _engine.startPreview();
 
+    await _startAudioFrameRecord();
+
     setState(() {
       _isReadyPreview = true;
     });
+  }
+
+  Future<void> _startAudioFrameRecord() async {
+    Directory appDocDir = Platform.isAndroid
+        ? (await getExternalStorageDirectory())!
+        : await getApplicationDocumentsDirectory();
+
+    _audioFile = File(path.join(appDocDir.absolute.path, 'record_audio.raw'));
+    if (await _audioFile.exists()) {
+      await _audioFile.delete();
+    }
+    await _audioFile.create();
+    logSink
+        .log('onRecordAudioFrame file output to: ${_audioFile.absolute.path}');
+
+    _playbackAudioFile = File(path.join(
+      appDocDir.absolute.path,
+      'playback_audio.raw',
+    ));
+    if (await _playbackAudioFile.exists()) {
+      await _playbackAudioFile.delete();
+    }
+    await _playbackAudioFile.create();
+    logSink.log(
+        'onPlaybackAudioFrame file output to: ${_playbackAudioFile.absolute.path}');
+
+    _engine.getMediaEngine().registerAudioFrameObserver(_audioFrameObserver);
+  }
+
+  void _stopAudioFrameRecord() {
+    _engine.getMediaEngine().unregisterAudioFrameObserver(_audioFrameObserver);
   }
 
   Future<void> _joinChannel() async {
@@ -139,39 +198,8 @@ class _State extends State<ProcessAudioRawData> {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
         if (!_isReadyPreview) return Container();
-        return Stack(
-          children: [
-            AgoraVideoView(
-              controller: VideoViewController(
-                rtcEngine: _engine,
-                canvas: const VideoCanvas(uid: 0),
-                useFlutterTexture: _isUseFlutterTexture,
-              ),
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.of(remoteUid.map(
-                    (e) => SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: AgoraVideoView(
-                        controller: VideoViewController.remote(
-                          rtcEngine: _engine,
-                          canvas: VideoCanvas(uid: e),
-                          connection:
-                              RtcConnection(channelId: _controller.text),
-                          useFlutterTexture: _isUseFlutterTexture,
-                        ),
-                      ),
-                    ),
-                  )),
-                ),
-              ),
-            )
-          ],
+        return const Center(
+          child: Text('No Preview'),
         );
       },
       actionsBuilder: (context, isLayoutHorizontal) {

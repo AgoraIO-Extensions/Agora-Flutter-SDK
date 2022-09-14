@@ -11,7 +11,7 @@ abstract class MediaPlayer {
   int getMediaPlayerId();
 
   /// Opens the media resource.
-  /// This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.
+  /// This method is called asynchronously.If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.
   ///
   /// * [url] The path of the media file. Both local path and online path are supported.On the Android platform, if you need to open a file in URI format, use open .
   /// * [startPos] The starting position (ms) for playback. Default value is 0.
@@ -201,7 +201,7 @@ abstract class MediaPlayer {
   Future<String> getPlaySrc();
 
   /// Opens a media resource and requests all the CDN routes of the media resources through the self-developed scheduling center.
-  /// This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.After you call this method, Agora opens the media resources and tries to obtain all the CDN routes for playing the media resource. By default, Agora uses the first CDN route for playing, and you can call the switchAgoraCDNLineByIndex method to switch routes.If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:The URL of the media file to be opened: rtmp://$domain/$appName/$streamNameThe URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$signAuthentication information:sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s.
+  /// This method is called asynchronously.If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.After you call this method, Agora opens the media resources and tries to obtain all the CDN routes for playing the media resource. By default, Agora uses the first CDN route for playing, and you can call the switchAgoraCDNLineByIndex method to switch routes.If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:The URL of the media file to be opened: rtmp://$domain/$appName/$streamNameThe URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$signAuthentication information:sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s.
   ///
   /// * [src] The URL of the media resource.
   /// * [startPos] The starting position (ms) for playback. The default value is 0. This value can be empty if the media resource to be played is live streams.
@@ -285,7 +285,7 @@ abstract class MediaPlayer {
   /// * [observer] The audio frame observer, reporting the reception of each audio frame. See MediaPlayerAudioFrameObserver .
   void registerAudioFrameObserver(MediaPlayerAudioFrameObserver observer);
 
-  /// Unregisters an audio frame observer.
+  /// Unregisters an audio observer.
   ///
   ///
   /// * [observer] The audio observer. See MediaPlayerAudioFrameObserver .
@@ -297,7 +297,7 @@ abstract class MediaPlayer {
   /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .
   void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
-  /// Unregisters a video frame observer.
+  /// Unregisters the video frame observer.
   ///
   ///
   /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .

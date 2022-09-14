@@ -47,8 +47,6 @@ class LocalSpatialAudioEngineImpl extends spatial_audio_binding
     final param = createParams({});
     final callApiResult =
         await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
-
-    _rtcEngine.removeFromPool(LocalSpatialAudioEngineImpl);
   }
 
   @override

@@ -8,7 +8,7 @@ extension AudioFrameObserverBaseExt on AudioFrameObserverBase {
   void process(String event, String data, List<Uint8List> buffers) {
     final jsonMap = jsonDecode(data);
     switch (event) {
-      case 'AudioFrameObserverBase_onRecordAudioFrame':
+      case 'AudioFrameObserver_onRecordAudioFrame':
         if (onRecordAudioFrame == null) break;
         AudioFrameObserverBaseOnRecordAudioFrameJson paramJson =
             AudioFrameObserverBaseOnRecordAudioFrameJson.fromJson(jsonMap);
@@ -94,6 +94,19 @@ extension AudioFrameObserverExt on AudioFrameObserver {
         }
         audioFrame = audioFrame.fillBuffers(buffers);
         onPlaybackAudioFrameBeforeMixing!(channelId, uid, audioFrame);
+        break;
+      case 'AudioFrameObserver_onRecordAudioFrame':
+        if (onRecordAudioFrame == null) break;
+        AudioFrameObserverBaseOnRecordAudioFrameJson paramJson =
+            AudioFrameObserverBaseOnRecordAudioFrameJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        String? channelId = paramJson.channelId;
+        AudioFrame? audioFrame = paramJson.audioFrame;
+        if (channelId == null || audioFrame == null) {
+          break;
+        }
+        audioFrame = audioFrame.fillBuffers(buffers);
+        onRecordAudioFrame!(channelId, audioFrame);
         break;
       default:
         break;

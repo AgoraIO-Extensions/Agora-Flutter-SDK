@@ -66,8 +66,9 @@ class ObjectPool {
   }
 
   Future<void> clear() async {
-    for (final key in pool.keys) {
-      await pool[key]?.disposeAsync();
+    final values = pool.values;
+    for (final v in values) {
+      await v.disposeAsync();
     }
 
     pool.clear();
@@ -244,7 +245,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         release(sync: true);
       },
     );
-    WidgetsBinding.instance.addObserver(_lifecycle!);
+    // Compatible with 2.10
+    // ignore: invalid_null_aware_operator
+    WidgetsBinding.instance?.addObserver(_lifecycle!);
 
     if (defaultTargetPlatform == TargetPlatform.android) {
       final externalFilesDir =
@@ -282,7 +285,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (_instance == null) return;
 
     if (_lifecycle != null) {
-      WidgetsBinding.instance.removeObserver(_lifecycle!);
+      // Compatible with 2.10
+      // ignore: invalid_null_aware_operator
+      WidgetsBinding.instance?.removeObserver(_lifecycle!);
       _lifecycle = null;
     }
 
@@ -1083,5 +1088,10 @@ class VideoDeviceManagerImpl extends rtc_engine_binding.VideoDeviceManagerImpl
   @override
   Future<void> release() async {
     _instance = null;
+  }
+
+  @override
+  Future<void> startDeviceTest(int hwnd) {
+    throw AgoraRtcException(code: ErrorCodeType.errNotSupported.value());
   }
 }
