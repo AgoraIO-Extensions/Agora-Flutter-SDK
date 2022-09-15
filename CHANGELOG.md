@@ -1,4 +1,11 @@
-# 6.0.0-rc.1 (2022-09-13)
+
+
+# [6.0.0-rc.2](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v6.0.0-rc.1...v6.0.0-rc.2) (2022-09-15)
+
+
+### Bug Fixes
+
+* fix AudioFrameObserver event bugs ([7a85728](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/7a8572804f0d242c7ead4c74458b04138be75980))# 6.0.0-rc.1 (2022-09-13)
 
 
 ### Features
