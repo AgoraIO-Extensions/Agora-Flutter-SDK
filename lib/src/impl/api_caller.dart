@@ -635,6 +635,7 @@ class _ApiCallExecutorInternal implements _ApiCallExecutorBase {
                 ));
       } else if (key.op == CallIrisEventOp.dispose) {
         _irisEventHandlerObservers[key]?.dispose();
+        _irisEventHandlerObservers.remove(key);
       }
     } else if (key is IrisEventObserverKey) {
       if (key.op == CallIrisEventOp.create) {
@@ -650,6 +651,7 @@ class _ApiCallExecutorInternal implements _ApiCallExecutorBase {
                 ));
       } else if (key.op == CallIrisEventOp.dispose) {
         _irisEventHandlerObservers[key]?.dispose();
+        _irisEventHandlerObservers.remove(key);
       }
     }
 
