@@ -25,6 +25,7 @@ import 'enable_virtualbackground/enable_virtualbackground.dart';
 import 'join_multiple_channel/join_multiple_channel.dart';
 import 'media_recorder/media_recorder.dart';
 import 'precall_test/precall_test.dart';
+import 'process_audio_raw_data/process_audio_raw_data.dart';
 import 'send_metadata/send_metadata.dart';
 import 'set_content_inspect/set_content_inspect.dart';
 import 'start_rhythm_player/start_rhythm_player.dart';
@@ -72,7 +73,7 @@ final advanced = [
       'widget': const StartLocalVideoTranscoder()
     },
   // {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
-  // {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
+  {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
   {'name': 'AudioSpectrum', 'widget': const AudioSpectrum()},
   {'name': 'MediaRecorder', 'widget': const MediaRecorder()},
   {'name': 'PushVideoFrame', 'widget': const PushVideoFrame()},
