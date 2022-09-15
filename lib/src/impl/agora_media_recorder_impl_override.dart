@@ -60,8 +60,6 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
           jsonEncode({}));
       _eventHandlers.clear();
     }
-
-    _rtcEngine.removeFromPool(MediaRecorderImpl);
   }
 
   @override
