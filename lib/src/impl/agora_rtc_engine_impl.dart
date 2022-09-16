@@ -7,6 +7,7 @@ import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_engine.dart';
 import 'package:agora_rtc_engine/src/agora_media_player.dart';
 import 'package:agora_rtc_engine/src/agora_media_recorder.dart';
+import 'package:agora_rtc_engine/src/agora_music_content_center.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
@@ -21,6 +22,8 @@ import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart'
 
 import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
     as media_recorder_impl;
+import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_override.dart'
+    as music_center_impl;
 import 'package:agora_rtc_engine/src/impl/agora_spatial_audio_impl_override.dart'
     as agora_spatial_audio_impl;
 import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
@@ -451,9 +454,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> destroyMediaPlayer(covariant MediaPlayer mediaPlayer) async {
-    --_mediaPlayerCount;
-    if (_mediaPlayerCount == 0) {
-      await apiCaller.disposeIrisMediaPlayerEventHandlerIfNeedAsync();
+    if (mediaPlayer is! MusicPlayer) {
+      --_mediaPlayerCount;
+      if (_mediaPlayerCount == 0) {
+        await apiCaller.disposeIrisMediaPlayerEventHandlerIfNeedAsync();
+      }
+    }
+
+    if (mediaPlayer is MusicPlayer) {
+      (getMusicContentCenter() as music_center_impl.MusicContentCenterImpl)
+          .removeMusicPlayerById(mediaPlayer.getMediaPlayerId());
     }
 
     const apiType = 'RtcEngine_destroyMediaPlayer';

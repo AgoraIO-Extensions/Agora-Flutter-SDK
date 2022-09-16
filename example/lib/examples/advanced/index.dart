@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:agora_rtc_engine_example/examples/advanced/media_player/media_player.dart';
+import 'package:agora_rtc_engine_example/examples/advanced/music_player/music_player.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/push_encoded_video_frame/push_encoded_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/push_video_frame/push_video_frame.dart';
 import 'package:agora_rtc_engine_example/examples/advanced/rtmp_streaming/rtmp_streaming.dart';
@@ -23,6 +23,7 @@ import 'channel_media_relay/channel_media_relay.dart';
 import 'device_manager/device_manager.dart';
 import 'enable_virtualbackground/enable_virtualbackground.dart';
 import 'join_multiple_channel/join_multiple_channel.dart';
+import 'media_player/media_player.dart';
 import 'media_recorder/media_recorder.dart';
 import 'precall_test/precall_test.dart';
 import 'process_audio_raw_data/process_audio_raw_data.dart';
@@ -85,4 +86,5 @@ final advanced = [
   },
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
+  {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
 ];

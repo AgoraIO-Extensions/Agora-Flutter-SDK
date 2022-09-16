@@ -15,9 +15,8 @@ A new flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*.{h,mm}', 'Classes/File.swift'
   s.dependency 'FlutterMacOS'
-  # s.dependency 'AgoraRtcWrapper'
   s.dependency 'AgoraRtcEngine_Special_macOS', '4.0.0.5'
-  s.dependency 'AgoraIrisRTC_macOS', '4.0.0-rc.2'
+  s.dependency 'AgoraIrisRTC_macOS', '4.0.0.5-beta.1'
 
   s.platform = :osx, '10.11'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
