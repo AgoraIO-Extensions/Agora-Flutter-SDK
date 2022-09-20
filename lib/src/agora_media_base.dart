@@ -842,10 +842,6 @@ enum VideoModulePosition {
   /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
   @JsonValue(1 << 2)
   positionPreEncoder,
-
-  /// @nodoc
-  @JsonValue(1 << 3)
-  positionPostFilters,
 }
 
 /// @nodoc
@@ -869,6 +865,7 @@ class AudioFrameObserverBase {
     this.onRecordAudioFrame,
     this.onPlaybackAudioFrame,
     this.onMixedAudioFrame,
+    this.onEarMonitoringAudioFrame,
   });
 
   /// Gets the captured audio frame.
@@ -903,6 +900,9 @@ class AudioFrameObserverBase {
   /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onMixedAudioFrame;
+
+  /// @nodoc
+  final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
 }
 
 /// Audio frame type.
@@ -1004,6 +1004,10 @@ enum AudioFramePosition {
   /// @nodoc
   @JsonValue(0x0008)
   audioFramePositionBeforeMixing,
+
+  /// @nodoc
+  @JsonValue(0x0010)
+  audioFramePositionEarMonitoring,
 }
 
 /// @nodoc
@@ -1065,11 +1069,15 @@ class AudioFrameObserver extends AudioFrameObserverBase {
 
     /// @nodoc
     void Function(String channelId, AudioFrame audioFrame)? onMixedAudioFrame,
+
+    /// @nodoc
+    void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame,
     this.onPlaybackAudioFrameBeforeMixing,
   }) : super(
           onRecordAudioFrame: onRecordAudioFrame,
           onPlaybackAudioFrame: onPlaybackAudioFrame,
           onMixedAudioFrame: onMixedAudioFrame,
+          onEarMonitoringAudioFrame: onEarMonitoringAudioFrame,
         );
 
   /// Retrieves the audio frame of a specified user before mixing.
@@ -1447,7 +1455,7 @@ class MediaRecorderConfiguration {
       this.maxDurationMs,
       this.recorderInfoUpdateInterval});
 
-  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /AppSandbox/Library/Caches/example.mp4macOS: ～/Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/agorasdk.mp4Ensure that the directory for the log files exists and is writable.
+  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /App Sandbox/Library/Caches/example.mp4macOS: /Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/example.mp4Ensure that the directory for the log files exists and is writable.
   @JsonKey(name: 'storagePath')
   final String? storagePath;
 

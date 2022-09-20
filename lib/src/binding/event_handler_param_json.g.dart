@@ -306,6 +306,20 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
 };
 
+RtcEngineEventHandlerOnAudioMixingPositionChangedJson
+    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnAudioMixingPositionChangedJson(
+          position: json['position'] as int?,
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(
+            RtcEngineEventHandlerOnAudioMixingPositionChangedJson instance) =>
+        <String, dynamic>{
+          'position': instance.position,
+        };
+
 RtcEngineEventHandlerOnAudioMixingFinishedJson
     _$RtcEngineEventHandlerOnAudioMixingFinishedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -601,6 +615,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowOccluded: 13,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -1204,6 +1220,35 @@ Map<String, dynamic>
           'token': instance.token,
         };
 
+RtcEngineEventHandlerOnLicenseValidationFailureJson
+    _$RtcEngineEventHandlerOnLicenseValidationFailureJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnLicenseValidationFailureJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          reason:
+              $enumDecodeNullable(_$LicenseErrorTypeEnumMap, json['reason']),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnLicenseValidationFailureJsonToJson(
+            RtcEngineEventHandlerOnLicenseValidationFailureJson instance) =>
+        <String, dynamic>{
+          'connection': instance.connection?.toJson(),
+          'reason': _$LicenseErrorTypeEnumMap[instance.reason],
+        };
+
+const _$LicenseErrorTypeEnumMap = {
+  LicenseErrorType.licenseErrInvalid: 1,
+  LicenseErrorType.licenseErrExpire: 2,
+  LicenseErrorType.licenseErrMinutesExceed: 3,
+  LicenseErrorType.licenseErrLimitedPeriod: 4,
+  LicenseErrorType.licenseErrDiffDevices: 5,
+  LicenseErrorType.licenseErrInternal: 99,
+};
+
 RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson
     _$RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1426,6 +1471,10 @@ RtcEngineEventHandlerOnClientRoleChangedJson
               $enumDecodeNullable(_$ClientRoleTypeEnumMap, json['oldRole']),
           newRole:
               $enumDecodeNullable(_$ClientRoleTypeEnumMap, json['newRole']),
+          newRoleOptions: json['newRoleOptions'] == null
+              ? null
+              : ClientRoleOptions.fromJson(
+                  json['newRoleOptions'] as Map<String, dynamic>),
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnClientRoleChangedJsonToJson(
@@ -1434,6 +1483,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnClientRoleChangedJsonToJson(
       'connection': instance.connection?.toJson(),
       'oldRole': _$ClientRoleTypeEnumMap[instance.oldRole],
       'newRole': _$ClientRoleTypeEnumMap[instance.newRole],
+      'newRoleOptions': instance.newRoleOptions?.toJson(),
     };
 
 const _$ClientRoleTypeEnumMap = {
@@ -1789,6 +1839,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedClientIpAddressChangedByUser: 18,
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
+  ConnectionChangedReasonType.connectionChangedLicenseVerifyFailed: 21,
 };
 
 RtcEngineEventHandlerOnWlAccMessageJson
@@ -2361,6 +2412,22 @@ Map<String, dynamic> _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(
       'channelId': instance.channelId,
       'audioFrame': instance.audioFrame?.toJson(),
     };
+
+AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson(
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(
+            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) =>
+        <String, dynamic>{
+          'audioFrame': instance.audioFrame?.toJson(),
+        };
 
 AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
     _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(

@@ -5,9 +5,9 @@ output: 'lib/src/impl/native_iris_api_engine_bindings.dart'
 
 headers:
   entry-points:
-    - 'third_party/include/iris_rtc_c_api.h'
+    - 'third_party/include/iris_c_api.h'
   include-directives:
-    - 'third_party/include/iris_rtc_c_api.h'
+    - 'third_party/include/iris_c_api.h'
     - 'third_party/include/iris_base.h'
     - 'third_party/include/iris_video_processor_c.h'
 

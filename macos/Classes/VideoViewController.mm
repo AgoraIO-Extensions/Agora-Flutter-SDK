@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "VideoViewController.h"
 #import "TextureRenderer.h"
-#import <AgoraRtcWrapper/iris_rtc_cxx_api.h>
+#import <AgoraRtcWrapper/iris_engine_base.h>
 #import <AgoraRtcWrapper/iris_video_processor_cxx.h>
 
 @interface VideoViewController ()
@@ -52,7 +52,7 @@
 //          return;
 //      }
       intptr_t irisRtcEnginePtr = (intptr_t)[enginePtrValue longLongValue];
-      IrisApiEngine *irisApiEngine = reinterpret_cast<IrisApiEngine *>(irisRtcEnginePtr);
+      IApiEngineBase *irisApiEngine = reinterpret_cast<IApiEngineBase *>(irisRtcEnginePtr);
 //      agora::iris::rtc::IrisRtcRawData *rawData = engine->raw_data();
       irisApiEngine->Attach(self.videoFrameBufferManager);
       
@@ -64,7 +64,7 @@
 //          return;
 //      }
       intptr_t irisRtcEnginePtr = (intptr_t)[enginePtrValue longLongValue];
-      IrisApiEngine *irisApiEngine = reinterpret_cast<IrisApiEngine *>(irisRtcEnginePtr);
+      IApiEngineBase *irisApiEngine = reinterpret_cast<IApiEngineBase *>(irisRtcEnginePtr);
 //      agora::iris::rtc::IrisRtcRawData *rawData = engine->raw_data();
       irisApiEngine->Detach(self.videoFrameBufferManager);
       

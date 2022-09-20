@@ -96,6 +96,12 @@ abstract class AudioDeviceManager {
   Future<int> getRecordingDeviceVolume();
 
   /// @nodoc
+  Future<void> setLoopbackDevice(String deviceId);
+
+  /// @nodoc
+  Future<String> getLoopbackDevice();
+
+  /// @nodoc
   Future<void> setPlaybackDeviceMute(bool mute);
 
   /// @nodoc
@@ -117,7 +123,7 @@ abstract class AudioDeviceManager {
   /// This method stops the audio playback device test. You must call this method to stop the test after calling the startPlaybackDeviceTest method.Ensure that you call this method before joining a channel.
   Future<void> stopPlaybackDeviceTest();
 
-  /// Starts the audio capture device test.
+  /// Starts the audio recording device test.
   /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device.Ensure that you call this method before joining a channel.
   ///
   /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
@@ -149,7 +155,16 @@ abstract class AudioDeviceManager {
   /// * [enable] Whether to follow the system default audio recording device:true: Follow. The SDK immediately switches the audio recording device when the system default audio recording device changes.false: Do not follow. The SDK switches the audio recording device to the system default audio recording device only when the currently used audio recording device is disconnected.
   Future<void> followSystemRecordingDevice(bool enable);
 
+  /// @nodoc
+  Future<void> followSystemLoopbackDevice(bool enable);
+
   /// Releases all the resources occupied by the AudioDeviceManager object.
   ///
   Future<void> release();
+
+  /// @nodoc
+  Future<AudioDeviceInfo> getPlaybackDefaultDevice();
+
+  /// @nodoc
+  Future<AudioDeviceInfo> getRecordingDefaultDevice();
 }

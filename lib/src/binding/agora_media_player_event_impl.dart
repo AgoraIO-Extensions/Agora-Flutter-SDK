@@ -1,32 +1,10 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
-import 'package:iris_event/iris_event.dart';
+import 'package:agora_rtc_engine/src/impl/event_loop.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 
-extension MediaPlayerAudioFrameObserverExt on MediaPlayerAudioFrameObserver {
-  void process(String event, String data, List<Uint8List> buffers) {
-    final jsonMap = jsonDecode(data);
-    switch (event) {
-      case 'MediaPlayerAudioFrameObserver_onFrame':
-        if (onFrame == null) break;
-        MediaPlayerAudioFrameObserverOnFrameJson paramJson =
-            MediaPlayerAudioFrameObserverOnFrameJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        AudioPcmFrame? frame = paramJson.frame;
-        if (frame == null) {
-          break;
-        }
-        frame = frame.fillBuffers(buffers);
-        onFrame!(frame);
-        break;
-      default:
-        break;
-    }
-  }
-}
-
-class MediaPlayerAudioFrameObserverWrapper implements IrisEventHandler {
+class MediaPlayerAudioFrameObserverWrapper implements EventLoopEventHandler {
   const MediaPlayerAudioFrameObserverWrapper(
       this.mediaPlayerAudioFrameObserver);
   final MediaPlayerAudioFrameObserver mediaPlayerAudioFrameObserver;
@@ -42,35 +20,43 @@ class MediaPlayerAudioFrameObserverWrapper implements IrisEventHandler {
   @override
   int get hashCode => mediaPlayerAudioFrameObserver.hashCode;
   @override
-  void onEvent(String event, String data, List<Uint8List> buffers) {
-    if (!event.startsWith('MediaPlayerAudioFrameObserver')) return;
-    mediaPlayerAudioFrameObserver.process(event, data, buffers);
-  }
-}
-
-extension MediaPlayerVideoFrameObserverExt on MediaPlayerVideoFrameObserver {
-  void process(String event, String data, List<Uint8List> buffers) {
-    final jsonMap = jsonDecode(data);
-    switch (event) {
-      case 'MediaPlayerVideoFrameObserver_onFrame':
-        if (onFrame == null) break;
-        MediaPlayerVideoFrameObserverOnFrameJson paramJson =
-            MediaPlayerVideoFrameObserverOnFrameJson.fromJson(jsonMap);
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onFrame':
+        if (mediaPlayerAudioFrameObserver.onFrame == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        MediaPlayerAudioFrameObserverOnFrameJson paramJson =
+            MediaPlayerAudioFrameObserverOnFrameJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        VideoFrame? frame = paramJson.frame;
+        AudioPcmFrame? frame = paramJson.frame;
         if (frame == null) {
-          break;
+          return true;
         }
         frame = frame.fillBuffers(buffers);
-        onFrame!(frame);
-        break;
-      default:
-        break;
+        mediaPlayerAudioFrameObserver.onFrame!(frame);
+        return true;
     }
+    return false;
+  }
+
+  @override
+  bool handleEvent(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    if (!eventName.startsWith('MediaPlayerAudioFrameObserver')) return false;
+    final newEvent =
+        eventName.replaceFirst('MediaPlayerAudioFrameObserver_', '');
+    if (handleEventInternal(newEvent, eventData, buffers)) {
+      return true;
+    }
+
+    return false;
   }
 }
 
-class MediaPlayerVideoFrameObserverWrapper implements IrisEventHandler {
+class MediaPlayerVideoFrameObserverWrapper implements EventLoopEventHandler {
   const MediaPlayerVideoFrameObserverWrapper(
       this.mediaPlayerVideoFrameObserver);
   final MediaPlayerVideoFrameObserver mediaPlayerVideoFrameObserver;
@@ -86,8 +72,38 @@ class MediaPlayerVideoFrameObserverWrapper implements IrisEventHandler {
   @override
   int get hashCode => mediaPlayerVideoFrameObserver.hashCode;
   @override
-  void onEvent(String event, String data, List<Uint8List> buffers) {
-    if (!event.startsWith('MediaPlayerVideoFrameObserver')) return;
-    mediaPlayerVideoFrameObserver.process(event, data, buffers);
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onFrame':
+        if (mediaPlayerVideoFrameObserver.onFrame == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        MediaPlayerVideoFrameObserverOnFrameJson paramJson =
+            MediaPlayerVideoFrameObserverOnFrameJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        VideoFrame? frame = paramJson.frame;
+        if (frame == null) {
+          return true;
+        }
+        frame = frame.fillBuffers(buffers);
+        mediaPlayerVideoFrameObserver.onFrame!(frame);
+        return true;
+    }
+    return false;
+  }
+
+  @override
+  bool handleEvent(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    if (!eventName.startsWith('MediaPlayerVideoFrameObserver')) return false;
+    final newEvent =
+        eventName.replaceFirst('MediaPlayerVideoFrameObserver_', '');
+    if (handleEventInternal(newEvent, eventData, buffers)) {
+      return true;
+    }
+
+    return false;
   }
 }

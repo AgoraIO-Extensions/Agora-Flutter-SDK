@@ -1,0 +1,16 @@
+name: 'NativeIrisTesterBinding'
+description: 'Bindings to IrisApiEngine'
+
+output: 'lib/src/iris_tester_bindings.dart'
+
+headers:
+  entry-points:
+    - 'ffigen_include/iris_debug.h'
+  include-directives:
+    - 'ffigen_include/iris_debug.h'
+
+preamble: |
+  // ignore_for_file: camel_case_types, non_constant_identifier_names
+
+llvm-path:
+  - '/usr/local/opt/llvm'

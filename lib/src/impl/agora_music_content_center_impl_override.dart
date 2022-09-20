@@ -15,6 +15,7 @@ import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_json.d
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
+import 'package:agora_rtc_engine/src/impl/event_loop.dart';
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
 import 'package:iris_event/iris_event.dart';
@@ -59,13 +60,14 @@ class MusicContentCenterEventHandlerWrapper
       : super(musicContentCenterEventHandler);
 
   @override
-  void onEvent(String event, String data, List<Uint8List> buffers) {
-    if (!event.startsWith('AgoraMusicContentCenterEventHandler')) return;
-    final newEvent = event.replaceAll('Agora', '');
-    final jsonMap = jsonDecode(data);
-    switch (newEvent) {
-      case 'MusicContentCenterEventHandler_onMusicChartsResult':
-        if (musicContentCenterEventHandler.onMusicChartsResult == null) return;
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onMusicChartsResult':
+        if (musicContentCenterEventHandler.onMusicChartsResult == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
         MusicContentCenterEventHandlerOnMusicChartsResultJson paramJson =
             MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
                 jsonMap);
@@ -74,27 +76,27 @@ class MusicContentCenterEventHandlerWrapper
         MusicContentCenterStatusCode? status = paramJson.status;
         List<MusicChartInfo>? result = paramJson.result;
         if (requestId == null || status == null || result == null) {
-          return;
+          return true;
         }
         result = result.map((e) => e.fillBuffers(buffers)).toList();
         musicContentCenterEventHandler.onMusicChartsResult!(
             requestId, status, result);
-        return;
 
-      case 'MusicContentCenterEventHandler_onMusicCollectionResult':
+        return true;
+
+      case 'onMusicCollectionResult':
         if (musicContentCenterEventHandler.onMusicCollectionResult == null) {
-          return;
+          return true;
         }
-
+        final jsonMap = jsonDecode(eventData);
         MusicContentCenterEventHandlerOnMusicCollectionResultJson paramJson =
             MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
         MusicContentCenterStatusCode? status = paramJson.status;
-
         if (requestId == null || status == null) {
-          return;
+          return true;
         }
 
         final musicCollectionJson =
@@ -103,17 +105,17 @@ class MusicContentCenterEventHandlerWrapper
 
         musicContentCenterEventHandler.onMusicCollectionResult!(
             requestId, status, musicCollectionImpl);
-
-        return;
+        return true;
     }
 
-    musicContentCenterEventHandler.process(newEvent, data, buffers);
+    return super.handleEventInternal(eventName, eventData, buffers);
   }
 }
 
 class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
     implements MusicPlayer {
-  MusicPlayerImpl.create(int mediaPlayerId) : super.create(mediaPlayerId);
+  MusicPlayerImpl.create(int mediaPlayerId, EventLoop eventLoop)
+      : super.create(mediaPlayerId, eventLoop);
 
   @override
   Future<void> open({required String url, required int startPos}) {
@@ -139,20 +141,21 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
 }
 
 class MusicContentCenterImpl extends binding.MusicContentCenterImpl
-    implements IrisEventHandler, AsyncDisposableObject {
-  MusicContentCenterImpl._(this._rtcEngine) {
-    _rtcEngine.addToPool(MusicContentCenterImpl, this);
-  }
+    implements AsyncDisposableObject {
+  MusicContentCenterImpl._(this._rtcEngine, this._eventLoop);
 
   factory MusicContentCenterImpl.create(RtcEngine rtcEngine) {
-    return MusicContentCenterImpl._(rtcEngine);
+    return rtcEngine.objectPool.putIfAbsent(MusicContentCenterImpl,
+        () => MusicContentCenterImpl._(rtcEngine, rtcEngine.eventLoop));
   }
 
   final RtcEngine _rtcEngine;
 
+  final EventLoop _eventLoop;
+
   final Map<int, MusicPlayerImpl> _musicPlayers = {};
 
-  MusicContentCenterEventHandlerWrapper? _musicContentCenterEventHandler;
+  MusicContentCenterEventHandler? _musicContentCenterEventHandler;
 
   @override
   Future<MusicPlayer> createMusicPlayer() async {
@@ -168,11 +171,9 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     final result = rm['result'];
     final musicPlayerId = result as int;
 
-    final mp = MusicPlayerImpl.create(musicPlayerId);
+    final mp = MusicPlayerImpl.create(musicPlayerId, _rtcEngine.eventLoop);
 
     _musicPlayers.putIfAbsent(musicPlayerId, () => mp);
-
-    await apiCaller.setupIrisMediaPlayerEventHandlerIfNeedAsync();
 
     return mp;
   }
@@ -180,28 +181,34 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   @override
   void registerEventHandler(MusicContentCenterEventHandler eventHandler) async {
     if (_musicContentCenterEventHandler != null) return;
+    _musicContentCenterEventHandler = eventHandler;
     await apiCaller.callIrisEventAsync(
-        const IrisEventHandlerKey(
+        const IrisEventObserverKey(
             op: CallIrisEventOp.create,
             registerName: 'MusicContentCenter_registerEventHandler',
             unregisterName: 'MusicContentCenter_unregisterEventHandler'),
         jsonEncode({}));
-    _musicContentCenterEventHandler =
-        MusicContentCenterEventHandlerWrapper(eventHandler);
-    apiCaller.addEventHandler(this);
+
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(MusicContentCenterImpl),
+      MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!),
+    );
   }
 
   @override
   void unregisterEventHandler() async {
     if (_musicContentCenterEventHandler == null) return;
     await apiCaller.callIrisEventAsync(
-        const IrisEventHandlerKey(
+        const IrisEventObserverKey(
             op: CallIrisEventOp.dispose,
             registerName: 'MusicContentCenter_registerEventHandler',
             unregisterName: 'MusicContentCenter_unregisterEventHandler'),
         jsonEncode({}));
 
-    apiCaller.removeEventHandler(this);
+    _eventLoop.removeEventHandler(
+      const EventLoopEventHandlerKey(MusicContentCenterImpl),
+      MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!),
+    );
     _musicContentCenterEventHandler = null;
   }
 
@@ -224,11 +231,6 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
 
     _musicPlayers.clear();
     _musicContentCenterEventHandler = null;
-  }
-
-  @override
-  void onEvent(String event, String data, List<Uint8List> buffers) {
-    _musicContentCenterEventHandler?.onEvent(event, data, buffers);
   }
 
   @override

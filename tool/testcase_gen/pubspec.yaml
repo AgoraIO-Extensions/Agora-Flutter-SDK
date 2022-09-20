@@ -12,6 +12,8 @@ dependencies:
   paraphrase: 
     path: /Users/fenglang/codes/prototype/paraphrase
 
+  args: ^2.3.1
+
   dart_style: ^2.2.1
 
 dev_dependencies:

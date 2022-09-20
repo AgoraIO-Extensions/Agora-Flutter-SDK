@@ -223,6 +223,43 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   }
 
   @override
+  Future<void> setLoopbackDevice(String deviceId) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_setLoopbackDevice';
+    final param = createParams({'deviceId': deviceId});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<String> getLoopbackDevice() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getLoopbackDevice';
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+    final getLoopbackDeviceJson =
+        AudioDeviceManagerGetLoopbackDeviceJson.fromJson(rm);
+    return getLoopbackDeviceJson.deviceId;
+  }
+
+  @override
   Future<void> setPlaybackDeviceMute(bool mute) async {
     final apiType =
         '${isOverrideClassName ? className : 'AudioDeviceManager'}_setPlaybackDeviceMute';
@@ -433,6 +470,23 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
   }
 
   @override
+  Future<void> followSystemLoopbackDevice(bool enable) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_followSystemLoopbackDevice';
+    final param = createParams({'enable': enable});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> release() async {
     final apiType =
         '${isOverrideClassName ? className : 'AudioDeviceManager'}_release';
@@ -447,5 +501,35 @@ class AudioDeviceManagerImpl implements AudioDeviceManager {
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
+  }
+
+  @override
+  Future<AudioDeviceInfo> getPlaybackDefaultDevice() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDefaultDevice';
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as AudioDeviceInfo;
+  }
+
+  @override
+  Future<AudioDeviceInfo> getRecordingDefaultDevice() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDefaultDevice';
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as AudioDeviceInfo;
   }
 }

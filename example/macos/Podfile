@@ -43,8 +43,9 @@ target 'Runner' do
   flutter_install_all_macos_pods File.dirname(File.realpath(__FILE__))
   if plugin_dev != nil
     pod 'AgoraRtcWrapper', :path => File.join(File.join('Flutter', 'ephemeral', '.symlinks'), 'plugins', 'agora_rtc_engine', 'macos')
-    # pod 'iris_event_handler', :path => File.join(File.join('Flutter', 'ephemeral', '.symlinks'), 'plugins', 'iris_event', 'macos')
   end
+
+  pod 'VideoObserverPlugin', :path => File.join(File.join('Flutter', 'ephemeral', '.symlinks'), 'plugins', 'video_raw_data_example_plugin', 'macos')
 end
 
 post_install do |installer|

@@ -363,9 +363,6 @@ class MediaEngineImpl implements MediaEngine {
 // }
 // final rm = callApiResult.data;
 // final result = rm['result'];
-// if (result < 0) {
-// throw AgoraRtcException(code: result);
-// }
     throw UnimplementedError('Unimplement for unregisterAudioFrameObserver');
   }
 
@@ -380,9 +377,6 @@ class MediaEngineImpl implements MediaEngine {
 // }
 // final rm = callApiResult.data;
 // final result = rm['result'];
-// if (result < 0) {
-// throw AgoraRtcException(code: result);
-// }
     throw UnimplementedError('Unimplement for unregisterVideoFrameObserver');
   }
 
@@ -397,9 +391,6 @@ class MediaEngineImpl implements MediaEngine {
 // }
 // final rm = callApiResult.data;
 // final result = rm['result'];
-// if (result < 0) {
-// throw AgoraRtcException(code: result);
-// }
     throw UnimplementedError(
         'Unimplement for unregisterVideoEncodedFrameObserver');
   }

@@ -24,6 +24,65 @@ class RemoteVoicePositionInfo {
   Map<String, dynamic> toJson() => _$RemoteVoicePositionInfoToJson(this);
 }
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SpatialAudioZone {
+  /// @nodoc
+  const SpatialAudioZone(
+      {this.zoneSetId,
+      this.position,
+      this.forward,
+      this.right,
+      this.up,
+      this.forwardLength,
+      this.rightLength,
+      this.upLength,
+      this.audioAttenuation});
+
+  /// @nodoc
+  @JsonKey(name: 'zoneSetId')
+  final int? zoneSetId;
+
+  /// @nodoc
+  @JsonKey(name: 'position')
+  final List<double>? position;
+
+  /// @nodoc
+  @JsonKey(name: 'forward')
+  final List<double>? forward;
+
+  /// @nodoc
+  @JsonKey(name: 'right')
+  final List<double>? right;
+
+  /// @nodoc
+  @JsonKey(name: 'up')
+  final List<double>? up;
+
+  /// @nodoc
+  @JsonKey(name: 'forwardLength')
+  final double? forwardLength;
+
+  /// @nodoc
+  @JsonKey(name: 'rightLength')
+  final double? rightLength;
+
+  /// @nodoc
+  @JsonKey(name: 'upLength')
+  final double? upLength;
+
+  /// @nodoc
+  @JsonKey(name: 'audioAttenuation')
+  final double? audioAttenuation;
+
+  /// @nodoc
+  factory SpatialAudioZone.fromJson(Map<String, dynamic> json) =>
+      _$SpatialAudioZoneFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SpatialAudioZoneToJson(this);
+}
+
 /// This class contains some of the APIs in the LocalSpatialAudioEngine class.
 /// The LocalSpatialAudioEngine class inherits from BaseSpatialAudioEngine.
 abstract class BaseSpatialAudioEngine {
@@ -92,6 +151,19 @@ abstract class BaseSpatialAudioEngine {
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
   Future<void> muteAllRemoteAudioStreams(bool mute);
+
+  /// @nodoc
+  Future<void> setZones(
+      {required SpatialAudioZone zones, required int zoneCount});
+
+  /// @nodoc
+  Future<void> setPlayerAttenuation(
+      {required int playerId,
+      required double attenuation,
+      required bool forceSet});
+
+  /// @nodoc
+  Future<void> muteRemoteAudioStream({required int uid, required bool mute});
 }
 
 /// This class calculates user positions through the SDK to implement the spatial audio effect.
@@ -131,4 +203,8 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
 
   /// @nodoc
   Future<void> clearRemotePositionsEx(RtcConnection connection);
+
+  /// @nodoc
+  Future<void> setRemoteAudioAttenuation(
+      {required int uid, required double attenuation, required bool forceSet});
 }

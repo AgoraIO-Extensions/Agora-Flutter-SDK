@@ -17,8 +17,6 @@ import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_ex_impl.dart'
     as rtc_engine_ex_binding;
 import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_impl.dart'
     as rtc_engine_binding;
-import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart'
-    as media_base_event_binding;
 
 import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
     as media_recorder_impl;
@@ -29,12 +27,14 @@ import 'package:agora_rtc_engine/src/impl/agora_spatial_audio_impl_override.dart
 import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
     as media_engine_impl;
 import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
+import 'package:agora_rtc_engine/src/impl/event_loop.dart';
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
 import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
     as audio_device_manager_impl;
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform;
+import 'package:flutter/foundation.dart'
+    show ValueGetter, defaultTargetPlatform;
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/widgets.dart'
     show
@@ -45,8 +45,6 @@ import 'package:flutter/widgets.dart'
         TargetPlatform,
         debugPrint;
 
-import 'package:iris_event/iris_event.dart';
-
 import 'global_video_view_controller.dart';
 import 'package:meta/meta.dart';
 
@@ -54,27 +52,32 @@ import 'package:meta/meta.dart';
 
 class ObjectPool {
   ObjectPool();
-  final Map<Type, AsyncDisposableObject> pool = {};
+  final Map<Type, AsyncDisposableObject> _pool = {};
 
   void put(Type objectType, AsyncDisposableObject obj) {
-    pool.putIfAbsent(objectType, () => obj);
+    _pool.putIfAbsent(objectType, () => obj);
+  }
+
+  T putIfAbsent<T>(
+      Type objectType, ValueGetter<AsyncDisposableObject> ifAbsent) {
+    return _pool.putIfAbsent(objectType, ifAbsent) as T;
   }
 
   void remove(Type objectType) {
-    pool.remove(objectType);
+    _pool.remove(objectType);
   }
 
   AsyncDisposableObject? get(Type objectType) {
-    return pool[objectType];
+    return _pool[objectType];
   }
 
   Future<void> clear() async {
-    final values = pool.values;
+    final values = _pool.values;
     for (final v in values) {
       await v.disposeAsync();
     }
 
-    pool.clear();
+    _pool.clear();
   }
 }
 
@@ -82,17 +85,9 @@ extension RtcEngineExt on RtcEngine {
   GlobalVideoViewController get globalVideoViewController =>
       (this as RtcEngineImpl)._globalVideoViewController;
 
-  void addToPool<V>(Type objectType, AsyncDisposableObject obj) {
-    (this as RtcEngineImpl)._objectPool.put(objectType, obj);
-  }
+  ObjectPool get objectPool => (this as RtcEngineImpl)._objectPool;
 
-  void removeFromPool(Type objectType) {
-    (this as RtcEngineImpl)._objectPool.remove(objectType);
-  }
-
-  V? getObjectFromPool<V>(Type objectType) {
-    return (this as RtcEngineImpl)._objectPool.get(objectType) as V?;
-  }
+  EventLoop get eventLoop => (this as RtcEngineImpl)._eventLoop;
 }
 
 extension ThumbImageBufferExt on ThumbImageBuffer {
@@ -109,7 +104,7 @@ extension ThumbImageBufferExt on ThumbImageBuffer {
 extension RtcEngineEventHandlerExExt on RtcEngineEventHandler {
   bool eventIntercept(String event, String eventData, List<Uint8List> buffers) {
     switch (event) {
-      case 'onStreamMessageEx':
+      case 'RtcEngineEventHandler_onStreamMessageEx':
         if (onStreamMessage == null) break;
         final jsonMap = jsonDecode(eventData);
         RtcEngineEventHandlerOnStreamMessageJson paramJson =
@@ -182,20 +177,6 @@ extension MetadataObserverExt on MetadataObserver {
   }
 }
 
-class AudioSpectrumObserverWrapper
-    extends media_base_event_binding.AudioSpectrumObserverWrapper {
-  const AudioSpectrumObserverWrapper(
-      AudioSpectrumObserver audioSpectrumObserver)
-      : super(audioSpectrumObserver);
-
-  @override
-  void onEvent(String event, String data, List<Uint8List> buffers) {
-    if (!event.startsWith('RtcEngine_')) return;
-    audioSpectrumObserver.process(
-        event.replaceFirst('RtcEngine_', ''), data, buffers);
-  }
-}
-
 class _Lifecycle with WidgetsBindingObserver {
   const _Lifecycle(this.onDestroy);
 
@@ -212,22 +193,17 @@ class _Lifecycle with WidgetsBindingObserver {
 }
 
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
-    implements RtcEngineEx, IrisEventHandler {
+    implements RtcEngineEx {
   RtcEngineImpl._();
 
   static RtcEngineImpl? _instance;
-  final Set<RtcEngineEventHandler> _rtcEngineEventHandlers = {};
-  final Set<MetadataObserver> _metadataObservers = {};
-  DirectCdnStreamingEventHandler? _directCdnStreamingEventHandler;
-
-  final List<IrisEventHandler> _eventHandlers = [];
 
   final GlobalVideoViewController _globalVideoViewController =
       GlobalVideoViewController();
 
   final ObjectPool _objectPool = ObjectPool();
 
-  int _mediaPlayerCount = 0;
+  final EventLoop _eventLoop = EventLoop();
 
   _Lifecycle? _lifecycle;
 
@@ -280,6 +256,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       jsonEncode({'appType': 4}),
     );
 
+    _eventLoop.run();
+
     await _initializeInternal(context);
   }
 
@@ -294,19 +272,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       _lifecycle = null;
     }
 
-    if (_rtcEngineEventHandlers.isNotEmpty) {
-      _rtcEngineEventHandlers.clear();
-      apiCaller.removeEventHandler(this);
-    }
-
-    _eventHandlers.clear();
-    _metadataObservers.clear();
-    _directCdnStreamingEventHandler = null;
-    _mediaPlayerCount = 0;
-
-    await _objectPool.clear();
+    _eventLoop.terminate();
 
     await apiCaller.disposeAllEventHandlersAsync();
+
+    await _objectPool.clear();
 
     await _globalVideoViewController
         .detachVideoFrameBufferManager(apiCaller.getIrisApiEngineIntPtr());
@@ -318,116 +288,37 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
-  void onEvent(String event, String data, List<Uint8List> buffers) {
-    for (final e in _eventHandlers) {
-      e.onEvent(event, data, buffers);
-    }
-
-    for (final eh in _rtcEngineEventHandlers) {
-      if (!eh.eventIntercept(event, data, buffers)) {
-        eh.process(event, data, buffers);
-      }
-    }
-
-    for (final observer in _metadataObservers) {
-      if (!observer.eventIntercept(event, data, buffers)) {
-        observer.process(event, data, buffers);
-      }
-    }
-
-    _directCdnStreamingEventHandler?.process(event, data, buffers);
-  }
-
-  @override
   void registerEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    if (_rtcEngineEventHandlers.isEmpty) {
-      await apiCaller.setupIrisRtcEngineEventHandlerAsync();
-      apiCaller.addEventHandler(_instance!);
-    }
-    _rtcEngineEventHandlers.add(eventHandler);
+    final param = createParams({});
+    await apiCaller.callIrisEventAsync(
+        const IrisEventObserverKey(
+            op: CallIrisEventOp.create,
+            registerName: 'RtcEngine_registerEventHandler',
+            unregisterName: 'RtcEngine_unregisterEventHandler'),
+        jsonEncode(param));
+
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      RtcEngineEventHandlerWrapper(eventHandler),
+    );
   }
 
   @override
   void unregisterEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    _rtcEngineEventHandlers.remove(eventHandler);
-    if (_rtcEngineEventHandlers.isEmpty) {
-      await apiCaller.disposeIrisRtcEngineEventHandlerAsync();
-    }
-  }
+    _eventLoop.removeEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      RtcEngineEventHandlerWrapper(eventHandler),
+    );
 
-  @override
-  Future<void> setupRemoteVideo(VideoCanvas canvas) async {
-    const apiType = 'RtcEngine_setupRemoteVideo';
-    final jsonWithBuffer = canvas.toJson();
-    final bufferPtr = canvas.priv != null ? uint8ListToPtr(canvas.priv!) : null;
-    jsonWithBuffer['priv'] = bufferPtr?.address;
-    final param = createParams({'canvas': jsonWithBuffer});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    if (bufferPtr != null) {
-      freePointer(bufferPtr);
-    }
-    final result = rm['result'];
-
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> setupLocalVideo(VideoCanvas canvas) async {
-    const apiType = 'RtcEngine_setupLocalVideo';
-    final jsonWithBuffer = canvas.toJson();
-    final bufferPtr = canvas.priv != null ? uint8ListToPtr(canvas.priv!) : null;
-    jsonWithBuffer['priv'] = bufferPtr?.address;
-    final param = createParams({'canvas': jsonWithBuffer});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    if (bufferPtr != null) {
-      freePointer(bufferPtr);
-    }
-    final result = rm['result'];
-
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> setupRemoteVideoEx(
-      {required VideoCanvas canvas, required RtcConnection connection}) async {
-    const apiType = 'RtcEngineEx_setupRemoteVideoEx';
-    final jsonWithBuffer = canvas.toJson();
-    final bufferPtr = canvas.priv != null ? uint8ListToPtr(canvas.priv!) : null;
-    jsonWithBuffer['priv'] = bufferPtr?.address;
-    final param = createParams({
-      'canvas': jsonWithBuffer,
-      'connection': connection.toJson(),
-    });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    if (bufferPtr != null) {
-      freePointer(bufferPtr);
-    }
-    final result = rm['result'];
-
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
+    final param = createParams({});
+    await apiCaller.callIrisEventAsync(
+        const IrisEventObserverKey(
+            op: CallIrisEventOp.dispose,
+            registerName: 'RtcEngine_registerEventHandler',
+            unregisterName: 'RtcEngine_unregisterEventHandler'),
+        jsonEncode(param));
   }
 
   @override
@@ -442,30 +333,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     final rm = callApiResult.data;
     final result = rm['result'];
 
-    if (_mediaPlayerCount == 0) {
-      await apiCaller.setupIrisMediaPlayerEventHandlerIfNeedAsync();
-    }
-
     final MediaPlayer mediaPlayer =
-        media_player_impl.MediaPlayerImpl.create(result as int);
-    ++_mediaPlayerCount;
+        media_player_impl.MediaPlayerImpl.create(result as int, _eventLoop);
     return mediaPlayer;
   }
 
   @override
   Future<void> destroyMediaPlayer(covariant MediaPlayer mediaPlayer) async {
-    if (mediaPlayer is! MusicPlayer) {
-      --_mediaPlayerCount;
-      if (_mediaPlayerCount == 0) {
-        await apiCaller.disposeIrisMediaPlayerEventHandlerIfNeedAsync();
-      }
-    }
-
-    if (mediaPlayer is MusicPlayer) {
-      (getMusicContentCenter() as music_center_impl.MusicContentCenterImpl)
-          .removeMusicPlayerById(mediaPlayer.getMediaPlayerId());
-    }
-
     const apiType = 'RtcEngine_destroyMediaPlayer';
     final playerId = mediaPlayer.getMediaPlayerId();
     final param = createParams({'playerId': playerId});
@@ -633,34 +507,36 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type}) async {
-    const apiType = 'RtcEngine_registerMediaMetadataObserver';
     final param = createParams({'type': type.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-    _metadataObservers.add(observer);
+    await apiCaller.callIrisEventAsync(
+        const IrisEventObserverKey(
+            op: CallIrisEventOp.create,
+            registerName: 'RtcEngine_registerMediaMetadataObserver',
+            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver'),
+        jsonEncode(param));
+
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      MetadataObserverWrapper(observer),
+    );
   }
 
   @override
   void unregisterMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type}) async {
-    const apiType = 'RtcEngine_unregisterMediaMetadataObserver';
     final param = createParams({'type': type.value()});
 
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
+    await apiCaller.callIrisEventAsync(
+        const IrisEventObserverKey(
+            op: CallIrisEventOp.dispose,
+            registerName: 'RtcEngine_registerMediaMetadataObserver',
+            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver'),
+        jsonEncode(param));
 
-    _metadataObservers.remove(observer);
+    _eventLoop.removeEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      MetadataObserverWrapper(observer),
+    );
   }
 
   @override
@@ -668,8 +544,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required DirectCdnStreamingEventHandler eventHandler,
       required String publishUrl,
       required DirectCdnStreamingMediaOptions options}) async {
-    _directCdnStreamingEventHandler = eventHandler;
-
     const apiType = 'RtcEngine_startDirectCdnStreaming';
     final param =
         createParams({'publishUrl': publishUrl, 'options': options.toJson()});
@@ -684,13 +558,19 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
+
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      DirectCdnStreamingEventHandlerWrapper(eventHandler),
+    );
   }
 
   @override
   Future<void> stopDirectCdnStreaming() async {
+    _eventLoop.removeEventHandlers(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+    );
     await super.stopDirectCdnStreaming();
-
-    _directCdnStreamingEventHandler = null;
   }
 
   @override
@@ -705,20 +585,20 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   MediaEngine getMediaEngine() {
-    return getObjectFromPool(MediaEngineImpl) ??
-        media_engine_impl.MediaEngineImpl.create(this);
+    return _objectPool.putIfAbsent(MediaEngineImpl,
+        () => media_engine_impl.MediaEngineImpl.create(_eventLoop));
   }
 
   @override
   MediaRecorder getMediaRecorder() {
-    return getObjectFromPool(MediaRecorderImpl) ??
-        media_recorder_impl.MediaRecorderImpl.create(this);
+    return _objectPool.putIfAbsent(MediaRecorderImpl,
+        () => media_recorder_impl.MediaRecorderImpl.create(_eventLoop));
   }
 
   @override
   LocalSpatialAudioEngine getLocalSpatialAudioEngine() {
-    return getObjectFromPool(LocalSpatialAudioEngineImpl) ??
-        agora_spatial_audio_impl.LocalSpatialAudioEngineImpl.create(this);
+    return _objectPool.putIfAbsent(LocalSpatialAudioEngineImpl,
+        () => agora_spatial_audio_impl.LocalSpatialAudioEngineImpl.create());
   }
 
   @override
@@ -903,8 +783,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary,
       SimulcastStreamConfig? streamConfig}) async {
     final apiType = streamConfig == null
-        ? 'RtcEngine_enableDualStreamMode2'
-        : 'RtcEngine_enableDualStreamMode3';
+        ? 'RtcEngine_enableDualStreamMode'
+        : 'RtcEngine_enableDualStreamMode2';
     final param = createParams({
       'enabled': enabled,
       'sourceType': sourceType.value(),
@@ -997,7 +877,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
             unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver'),
         jsonEncode(param));
 
-    _eventHandlers.add(AudioEncodedFrameObserverWrapper(observer));
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      AudioEncodedFrameObserverWrapper(observer),
+    );
   }
 
   @override
@@ -1011,7 +894,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
             unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver'),
         jsonEncode(param));
 
-    _eventHandlers.remove(AudioEncodedFrameObserverWrapper(observer));
+    _eventLoop.removeEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      AudioEncodedFrameObserverWrapper(observer),
+    );
   }
 
   @override
@@ -1024,7 +910,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
             unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver'),
         jsonEncode(param));
 
-    _eventHandlers.add(AudioSpectrumObserverWrapper(observer));
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      AudioSpectrumObserverWrapper(observer),
+    );
   }
 
   @override
@@ -1037,7 +926,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
             unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver'),
         jsonEncode(param));
 
-    _eventHandlers.remove(AudioSpectrumObserverWrapper(observer));
+    _eventLoop.removeEventHandler(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+      AudioSpectrumObserverWrapper(observer),
+    );
   }
 
   /////////// debug ////////
@@ -1102,6 +994,6 @@ class VideoDeviceManagerImpl extends rtc_engine_binding.VideoDeviceManagerImpl
 
   @override
   Future<void> startDeviceTest(int hwnd) {
-    throw AgoraRtcException(code: ErrorCodeType.errNotSupported.value());
+    throw AgoraRtcException(code: -ErrorCodeType.errNotSupported.value());
   }
 }

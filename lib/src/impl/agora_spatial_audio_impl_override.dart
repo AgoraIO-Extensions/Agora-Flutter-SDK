@@ -2,22 +2,17 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/agora_spatial_audio_impl.dart'
     as spatial_audio_binding;
-import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 
 class LocalSpatialAudioEngineImpl extends spatial_audio_binding
     .LocalSpatialAudioEngineImpl implements AsyncDisposableObject {
-  LocalSpatialAudioEngineImpl._(this._rtcEngine) {
-    _rtcEngine.addToPool(LocalSpatialAudioEngineImpl, this);
-  }
+  LocalSpatialAudioEngineImpl._();
 
-  factory LocalSpatialAudioEngineImpl.create(RtcEngine rtcEngine) {
-    return LocalSpatialAudioEngineImpl._(rtcEngine);
+  factory LocalSpatialAudioEngineImpl.create() {
+    return LocalSpatialAudioEngineImpl._();
   }
-
-  final RtcEngine _rtcEngine;
 
   @override
   bool get isOverrideClassName => true;

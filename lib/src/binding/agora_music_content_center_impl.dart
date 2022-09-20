@@ -159,9 +159,6 @@ class MusicPlayerImpl extends MediaPlayerImpl implements MusicPlayer {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
   }
 }
 

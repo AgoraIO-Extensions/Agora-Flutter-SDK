@@ -204,6 +204,30 @@ extension ChannelMediaOptionsBufferExt on ChannelMediaOptions {
   }
 }
 
+extension LogUploadServerInfoBufferExt on LogUploadServerInfo {
+  LogUploadServerInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension AdvancedConfigInfoBufferExt on AdvancedConfigInfo {
+  AdvancedConfigInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension LocalAccessPointConfigurationBufferExt
     on LocalAccessPointConfiguration {
   LocalAccessPointConfiguration fillBuffers(List<Uint8List> bufferList) {
@@ -276,6 +300,18 @@ extension DirectCdnStreamingStatsBufferExt on DirectCdnStreamingStats {
 extension DirectCdnStreamingMediaOptionsBufferExt
     on DirectCdnStreamingMediaOptions {
   DirectCdnStreamingMediaOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension ExtensionInfoBufferExt on ExtensionInfo {
+  ExtensionInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -397,6 +433,18 @@ extension VideoSubscriptionOptionsBufferExt on VideoSubscriptionOptions {
 
 extension EncodedVideoFrameInfoBufferExt on EncodedVideoFrameInfo {
   EncodedVideoFrameInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension AdvanceOptionsBufferExt on AdvanceOptions {
+  AdvanceOptions fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -718,28 +766,11 @@ extension WlAccStatsBufferExt on WlAccStats {
 extension VideoCanvasBufferExt on VideoCanvas {
   VideoCanvas fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
-    Uint8List? priv;
-    if (bufferList.length > 0) {
-      priv = bufferList[0];
-    }
-    return VideoCanvas(
-        view: view,
-        renderMode: renderMode,
-        mirrorMode: mirrorMode,
-        uid: uid,
-        isScreenView: isScreenView,
-        priv: priv,
-        privSize: privSize,
-        sourceType: sourceType,
-        cropArea: cropArea,
-        setupMode: setupMode);
+    return this;
   }
 
   List<Uint8List> collectBufferList() {
     final bufferList = <Uint8List>[];
-    if (priv != null) {
-      bufferList.add(priv!);
-    }
     return bufferList;
   }
 }
@@ -1371,6 +1402,18 @@ extension InputSeiDataBufferExt on InputSeiData {
 
 extension RemoteVoicePositionInfoBufferExt on RemoteVoicePositionInfo {
   RemoteVoicePositionInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension SpatialAudioZoneBufferExt on SpatialAudioZone {
+  SpatialAudioZone fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

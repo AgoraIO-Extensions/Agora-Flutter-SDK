@@ -15,7 +15,10 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.4.0
   ffi: '>=1.1.2'
-  iris_event: ^1.2.0
+  iris_event: 
+    git: 
+      url: https://github.com/AgoraIO-Extensions/iris_event_flutter.git
+      ref: f4d81f6cd25f4380c30e351c09edf3fe10e418b2
   async: ^2.8.2
   meta: ^1.7.0
 dev_dependencies:
@@ -24,7 +27,7 @@ dev_dependencies:
   flutter_lints: ^1.0.0
   build_runner: ^2.1.7
   json_serializable: ^6.1.1
-  ffigen: '>=4.1.2'
+  ffigen: ^4.1.2
 flutter:
   plugin:
     platforms:

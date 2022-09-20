@@ -35,6 +35,7 @@ LocalVideoStats _$LocalVideoStatsFromJson(Map<String, dynamic> json) =>
       captureBrightnessLevel: $enumDecodeNullable(
           _$CaptureBrightnessLevelTypeEnumMap, json['captureBrightnessLevel']),
       dualStreamEnabled: json['dualStreamEnabled'] as bool?,
+      hwEncoderAccelerating: json['hwEncoderAccelerating'] as int?,
     );
 
 Map<String, dynamic> _$LocalVideoStatsToJson(LocalVideoStats instance) {
@@ -72,6 +73,7 @@ Map<String, dynamic> _$LocalVideoStatsToJson(LocalVideoStats instance) {
   writeNotNull('captureBrightnessLevel',
       _$CaptureBrightnessLevelTypeEnumMap[instance.captureBrightnessLevel]);
   writeNotNull('dualStreamEnabled', instance.dualStreamEnabled);
+  writeNotNull('hwEncoderAccelerating', instance.hwEncoderAccelerating);
   return val;
 }
 
@@ -119,6 +121,7 @@ RemoteVideoStats _$RemoteVideoStatsFromJson(Map<String, dynamic> json) =>
       totalActiveTime: json['totalActiveTime'] as int?,
       publishDuration: json['publishDuration'] as int?,
       superResolutionType: json['superResolutionType'] as int?,
+      mosValue: json['mosValue'] as int?,
     );
 
 Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) {
@@ -146,6 +149,7 @@ Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) {
   writeNotNull('totalActiveTime', instance.totalActiveTime);
   writeNotNull('publishDuration', instance.publishDuration);
   writeNotNull('superResolutionType', instance.superResolutionType);
+  writeNotNull('mosValue', instance.mosValue);
   return val;
 }
 
@@ -458,6 +462,7 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
       sourceTitle: json['sourceTitle'] as String?,
       primaryMonitor: json['primaryMonitor'] as bool?,
       isOccluded: json['isOccluded'] as bool?,
+      minimizeWindow: json['minimizeWindow'] as bool?,
     );
 
 Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
@@ -479,6 +484,7 @@ Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
   writeNotNull('sourceTitle', instance.sourceTitle);
   writeNotNull('primaryMonitor', instance.primaryMonitor);
   writeNotNull('isOccluded', instance.isOccluded);
+  writeNotNull('minimizeWindow', instance.minimizeWindow);
   return val;
 }
 
@@ -663,6 +669,51 @@ const _$ChannelProfileTypeEnumMap = {
   ChannelProfileType.channelProfileCommunication1v1: 4,
 };
 
+LogUploadServerInfo _$LogUploadServerInfoFromJson(Map<String, dynamic> json) =>
+    LogUploadServerInfo(
+      serverDomain: json['serverDomain'] as String?,
+      serverPath: json['serverPath'] as String?,
+      serverPort: json['serverPort'] as int?,
+      serverHttps: json['serverHttps'] as bool?,
+    );
+
+Map<String, dynamic> _$LogUploadServerInfoToJson(LogUploadServerInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('serverDomain', instance.serverDomain);
+  writeNotNull('serverPath', instance.serverPath);
+  writeNotNull('serverPort', instance.serverPort);
+  writeNotNull('serverHttps', instance.serverHttps);
+  return val;
+}
+
+AdvancedConfigInfo _$AdvancedConfigInfoFromJson(Map<String, dynamic> json) =>
+    AdvancedConfigInfo(
+      logUploadServer: json['logUploadServer'] == null
+          ? null
+          : LogUploadServerInfo.fromJson(
+              json['logUploadServer'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AdvancedConfigInfoToJson(AdvancedConfigInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('logUploadServer', instance.logUploadServer?.toJson());
+  return val;
+}
+
 LocalAccessPointConfiguration _$LocalAccessPointConfigurationFromJson(
         Map<String, dynamic> json) =>
     LocalAccessPointConfiguration(
@@ -675,6 +726,10 @@ LocalAccessPointConfiguration _$LocalAccessPointConfigurationFromJson(
       domainListSize: json['domainListSize'] as int?,
       verifyDomainName: json['verifyDomainName'] as String?,
       mode: $enumDecodeNullable(_$LocalProxyModeEnumMap, json['mode']),
+      advancedConfig: json['advancedConfig'] == null
+          ? null
+          : AdvancedConfigInfo.fromJson(
+              json['advancedConfig'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$LocalAccessPointConfigurationToJson(
@@ -693,6 +748,7 @@ Map<String, dynamic> _$LocalAccessPointConfigurationToJson(
   writeNotNull('domainListSize', instance.domainListSize);
   writeNotNull('verifyDomainName', instance.verifyDomainName);
   writeNotNull('mode', _$LocalProxyModeEnumMap[instance.mode]);
+  writeNotNull('advancedConfig', instance.advancedConfig?.toJson());
   return val;
 }
 
@@ -728,6 +784,7 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       appId: json['appId'] as String?,
       channelProfile: $enumDecodeNullable(
           _$ChannelProfileTypeEnumMap, json['channelProfile']),
+      license: json['license'] as String?,
       audioScenario: $enumDecodeNullable(
           _$AudioScenarioTypeEnumMap, json['audioScenario']),
       areaCode: json['areaCode'] as int?,
@@ -737,6 +794,7 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       threadPriority: $enumDecodeNullable(
           _$ThreadPriorityTypeEnumMap, json['threadPriority']),
       useExternalEglContext: json['useExternalEglContext'] as bool?,
+      domainLimit: json['domainLimit'] as bool?,
     );
 
 Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
@@ -751,6 +809,7 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull('appId', instance.appId);
   writeNotNull(
       'channelProfile', _$ChannelProfileTypeEnumMap[instance.channelProfile]);
+  writeNotNull('license', instance.license);
   writeNotNull(
       'audioScenario', _$AudioScenarioTypeEnumMap[instance.audioScenario]);
   writeNotNull('areaCode', instance.areaCode);
@@ -758,6 +817,7 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull(
       'threadPriority', _$ThreadPriorityTypeEnumMap[instance.threadPriority]);
   writeNotNull('useExternalEglContext', instance.useExternalEglContext);
+  writeNotNull('domainLimit', instance.domainLimit);
   return val;
 }
 
@@ -861,6 +921,49 @@ Map<String, dynamic> _$DirectCdnStreamingMediaOptionsToJson(
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   return val;
 }
+
+ExtensionInfo _$ExtensionInfoFromJson(Map<String, dynamic> json) =>
+    ExtensionInfo(
+      mediaSourceType: $enumDecodeNullable(
+          _$MediaSourceTypeEnumMap, json['mediaSourceType']),
+      remoteUid: json['remoteUid'] as int?,
+      channelId: json['channelId'] as String?,
+      localUid: json['localUid'] as int?,
+    );
+
+Map<String, dynamic> _$ExtensionInfoToJson(ExtensionInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'mediaSourceType', _$MediaSourceTypeEnumMap[instance.mediaSourceType]);
+  writeNotNull('remoteUid', instance.remoteUid);
+  writeNotNull('channelId', instance.channelId);
+  writeNotNull('localUid', instance.localUid);
+  return val;
+}
+
+const _$MediaSourceTypeEnumMap = {
+  MediaSourceType.audioPlayoutSource: 0,
+  MediaSourceType.audioRecordingSource: 1,
+  MediaSourceType.primaryCameraSource: 2,
+  MediaSourceType.secondaryCameraSource: 3,
+  MediaSourceType.primaryScreenSource: 4,
+  MediaSourceType.secondaryScreenSource: 5,
+  MediaSourceType.customVideoSource: 6,
+  MediaSourceType.mediaPlayerSource: 7,
+  MediaSourceType.rtcImagePngSource: 8,
+  MediaSourceType.rtcImageJpegSource: 9,
+  MediaSourceType.rtcImageGifSource: 10,
+  MediaSourceType.remoteVideoSource: 11,
+  MediaSourceType.transcodedVideoSource: 12,
+  MediaSourceType.unknownMediaSource: 100,
+};
 
 SDKBuildInfo _$SDKBuildInfoFromJson(Map<String, dynamic> json) => SDKBuildInfo(
       build: json['build'] as int?,

@@ -429,6 +429,77 @@ void audioDeviceManagerSmokeTestCases() {
   );
 
   testWidgets(
+    'setLoopbackDevice',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final audioDeviceManager = rtcEngine.getAudioDeviceManager();
+
+      try {
+        const String deviceId = "hello";
+        await audioDeviceManager.setLoopbackDevice(
+          deviceId,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setLoopbackDevice] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[setLoopbackDevice] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      audioDeviceManager.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'getLoopbackDevice',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final audioDeviceManager = rtcEngine.getAudioDeviceManager();
+
+      try {
+        await audioDeviceManager.getLoopbackDevice();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getLoopbackDevice] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[getLoopbackDevice] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      audioDeviceManager.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'setPlaybackDeviceMute',
     (WidgetTester tester) async {
       app.main();
@@ -849,6 +920,111 @@ void audioDeviceManagerSmokeTestCases() {
         expect(e is AgoraRtcException, true);
         debugPrint(
             '[followSystemRecordingDevice] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      audioDeviceManager.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'followSystemLoopbackDevice',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final audioDeviceManager = rtcEngine.getAudioDeviceManager();
+
+      try {
+        const bool enable = true;
+        await audioDeviceManager.followSystemLoopbackDevice(
+          enable,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[followSystemLoopbackDevice] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[followSystemLoopbackDevice] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      audioDeviceManager.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'getPlaybackDefaultDevice',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final audioDeviceManager = rtcEngine.getAudioDeviceManager();
+
+      try {
+        await audioDeviceManager.getPlaybackDefaultDevice();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getPlaybackDefaultDevice] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[getPlaybackDefaultDevice] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      audioDeviceManager.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'getRecordingDefaultDevice',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final audioDeviceManager = rtcEngine.getAudioDeviceManager();
+
+      try {
+        await audioDeviceManager.getRecordingDefaultDevice();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getRecordingDefaultDevice] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[getRecordingDefaultDevice] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       audioDeviceManager.release();

@@ -65,6 +65,17 @@ class RtcEngineGetCallIdJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineCreateDataStreamJson {
+  const RtcEngineCreateDataStreamJson(this.streamId);
+
+  @JsonKey(name: 'streamId')
+  final int streamId;
+  factory RtcEngineCreateDataStreamJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineCreateDataStreamJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$RtcEngineCreateDataStreamJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineGetUserInfoByUserAccountJson {
   const RtcEngineGetUserInfoByUserAccountJson(this.userInfo);
 
@@ -86,30 +97,6 @@ class RtcEngineGetUserInfoByUidJson {
   factory RtcEngineGetUserInfoByUidJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineGetUserInfoByUidJsonFromJson(json);
   Map<String, dynamic> toJson() => _$RtcEngineGetUserInfoByUidJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class RtcEngineSetAdvancedAudioOptionsJson {
-  const RtcEngineSetAdvancedAudioOptionsJson(this.options);
-
-  @JsonKey(name: 'options')
-  final AdvancedAudioOptions options;
-  factory RtcEngineSetAdvancedAudioOptionsJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineSetAdvancedAudioOptionsJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineSetAdvancedAudioOptionsJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class RtcEngineCreateDataStreamJson {
-  const RtcEngineCreateDataStreamJson(this.streamId);
-
-  @JsonKey(name: 'streamId')
-  final int streamId;
-  factory RtcEngineCreateDataStreamJson.fromJson(Map<String, dynamic> json) =>
-      _$RtcEngineCreateDataStreamJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$RtcEngineCreateDataStreamJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -206,6 +193,19 @@ class MediaPlayerCacheManagerGetCacheDirJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineExCreateDataStreamExJson {
+  const RtcEngineExCreateDataStreamExJson(this.streamId);
+
+  @JsonKey(name: 'streamId')
+  final int streamId;
+  factory RtcEngineExCreateDataStreamExJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineExCreateDataStreamExJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineExCreateDataStreamExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineExGetUserInfoByUserAccountExJson {
   const RtcEngineExGetUserInfoByUserAccountExJson(this.userInfo);
 
@@ -229,19 +229,6 @@ class RtcEngineExGetUserInfoByUidExJson {
       _$RtcEngineExGetUserInfoByUidExJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$RtcEngineExGetUserInfoByUidExJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class RtcEngineExCreateDataStreamExJson {
-  const RtcEngineExCreateDataStreamExJson(this.streamId);
-
-  @JsonKey(name: 'streamId')
-  final int streamId;
-  factory RtcEngineExCreateDataStreamExJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineExCreateDataStreamExJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineExCreateDataStreamExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -294,6 +281,19 @@ class AudioDeviceManagerGetRecordingDeviceVolumeJson {
       _$AudioDeviceManagerGetRecordingDeviceVolumeJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioDeviceManagerGetLoopbackDeviceJson {
+  const AudioDeviceManagerGetLoopbackDeviceJson(this.deviceId);
+
+  @JsonKey(name: 'deviceId')
+  final String deviceId;
+  factory AudioDeviceManagerGetLoopbackDeviceJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
