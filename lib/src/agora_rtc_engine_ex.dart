@@ -309,7 +309,7 @@ abstract class RtcEngineEx implements RtcEngine {
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection});
 
-  /// @nodoc
+  @override
   Future<void> enableWirelessAccelerate(bool enabled);
 
   /// Takes a snapshot of a video stream.
