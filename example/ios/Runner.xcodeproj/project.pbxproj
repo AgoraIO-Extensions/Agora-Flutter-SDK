@@ -507,7 +507,7 @@
 					"@executable_path/Frameworks",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample111;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
@@ -543,7 +543,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample111.ScreenSharing;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample.ScreenSharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -579,7 +579,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample111.ScreenSharing;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample.ScreenSharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -615,7 +615,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample111.ScreenSharing;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample.ScreenSharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -748,7 +748,7 @@
 					/usr/lib/swift,
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample111;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -774,7 +774,7 @@
 					"@executable_path/Frameworks",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample111;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.agoraRtcEngineExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
