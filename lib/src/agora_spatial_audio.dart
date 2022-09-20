@@ -95,7 +95,7 @@ abstract class BaseSpatialAudioEngine {
 }
 
 /// This class calculates user positions through the SDK to implement the spatial audio effect.
-///
+/// This class inherits from BaseSpatialAudioEngine . Before calling other APIs in this class, you need to call the initialize method to initialize this class.
 abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   /// Initializes LocalSpatialAudioEngine .
   /// Before calling other methods of the LocalSpatialAudioEngine class, you need to call this method to initialize LocalSpatialAudioEngine.The SDK supports creating only one LocalSpatialAudioEngine instance for an app.

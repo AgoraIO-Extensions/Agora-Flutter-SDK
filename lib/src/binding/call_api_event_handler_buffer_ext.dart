@@ -1404,3 +1404,64 @@ extension AgoraRhythmPlayerConfigBufferExt on AgoraRhythmPlayerConfig {
     return bufferList;
   }
 }
+
+extension MusicChartInfoBufferExt on MusicChartInfo {
+  MusicChartInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MvPropertyBufferExt on MvProperty {
+  MvProperty fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension ClimaxSegmentBufferExt on ClimaxSegment {
+  ClimaxSegment fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MusicBufferExt on Music {
+  Music fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MusicContentCenterConfigurationBufferExt
+    on MusicContentCenterConfiguration {
+  MusicContentCenterConfiguration fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}

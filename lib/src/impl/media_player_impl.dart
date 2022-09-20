@@ -77,11 +77,7 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
   final Set<IrisEventHandler> _eventHandlers = {};
 
   /// Create the [MediaPlayerImpl]
-  factory MediaPlayerImpl.create(int mediaPlayerId) {
-    final instance = MediaPlayerImpl._(mediaPlayerId);
-
-    return instance;
-  }
+  MediaPlayerImpl.create(int mediaPlayerId) : this._(mediaPlayerId);
 
   @protected
   @override

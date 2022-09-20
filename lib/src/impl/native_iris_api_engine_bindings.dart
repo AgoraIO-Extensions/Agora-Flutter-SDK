@@ -159,42 +159,51 @@ class NativeIrisApiEngineBinding {
     IrisVideoFrameBufferManagerPtr manager_ptr,
     int uid,
     ffi.Pointer<ffi.Int8> channel_id,
+    IrisVideoFrameBufferDelegateHandle handle,
   ) {
     return _DisableVideoFrameBufferByUid(
       manager_ptr,
       uid,
       channel_id,
+      handle,
     );
   }
 
   late final _DisableVideoFrameBufferByUidPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(IrisVideoFrameBufferManagerPtr, ffi.Uint32,
-              ffi.Pointer<ffi.Int8>)>>('DisableVideoFrameBufferByUid');
+          ffi.NativeFunction<
+              ffi.Void Function(IrisVideoFrameBufferManagerPtr, ffi.Uint32,
+                  ffi.Pointer<ffi.Int8>, IrisVideoFrameBufferDelegateHandle)>>(
+      'DisableVideoFrameBufferByUid');
   late final _DisableVideoFrameBufferByUid =
       _DisableVideoFrameBufferByUidPtr.asFunction<
-          void Function(
-              IrisVideoFrameBufferManagerPtr, int, ffi.Pointer<ffi.Int8>)>();
+          void Function(IrisVideoFrameBufferManagerPtr, int,
+              ffi.Pointer<ffi.Int8>, IrisVideoFrameBufferDelegateHandle)>();
 
   void DisableVideoFrameBufferByConfig(
     IrisVideoFrameBufferManagerPtr manager_ptr,
     ffi.Pointer<IrisVideoFrameBufferConfig> config,
+    IrisVideoFrameBufferDelegateHandle handle,
   ) {
     return _DisableVideoFrameBufferByConfig(
       manager_ptr,
       config,
+      handle,
     );
   }
 
   late final _DisableVideoFrameBufferByConfigPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(IrisVideoFrameBufferManagerPtr,
-                  ffi.Pointer<IrisVideoFrameBufferConfig>)>>(
+              ffi.Void Function(
+                  IrisVideoFrameBufferManagerPtr,
+                  ffi.Pointer<IrisVideoFrameBufferConfig>,
+                  IrisVideoFrameBufferDelegateHandle)>>(
       'DisableVideoFrameBufferByConfig');
   late final _DisableVideoFrameBufferByConfig =
       _DisableVideoFrameBufferByConfigPtr.asFunction<
-          void Function(IrisVideoFrameBufferManagerPtr,
-              ffi.Pointer<IrisVideoFrameBufferConfig>)>();
+          void Function(
+              IrisVideoFrameBufferManagerPtr,
+              ffi.Pointer<IrisVideoFrameBufferConfig>,
+              IrisVideoFrameBufferDelegateHandle)>();
 
   void DisableAllVideoFrameBuffer(
     IrisVideoFrameBufferManagerPtr manager_ptr,
@@ -1219,6 +1228,45 @@ class NativeIrisApiEngineBinding {
       'UnsetIrisCloudAudioEngineEventHandler');
   late final _UnsetIrisCloudAudioEngineEventHandler =
       _UnsetIrisCloudAudioEngineEventHandlerPtr.asFunction<
+          int Function(
+              IrisApiEnginePtr, ffi.Pointer<IrisEventHandlerHandle>)>();
+
+  IrisEventHandlerHandle SetMusicCenterEventHandler(
+    IrisApiEnginePtr engine_ptr,
+    ffi.Pointer<IrisCEventHandler> event_handler,
+  ) {
+    return _SetMusicCenterEventHandler(
+      engine_ptr,
+      event_handler,
+    );
+  }
+
+  late final _SetMusicCenterEventHandlerPtr = _lookup<
+      ffi.NativeFunction<
+          IrisEventHandlerHandle Function(IrisApiEnginePtr,
+              ffi.Pointer<IrisCEventHandler>)>>('SetMusicCenterEventHandler');
+  late final _SetMusicCenterEventHandler =
+      _SetMusicCenterEventHandlerPtr.asFunction<
+          IrisEventHandlerHandle Function(
+              IrisApiEnginePtr, ffi.Pointer<IrisCEventHandler>)>();
+
+  int UnsetMusicCenterEventHandler(
+    IrisApiEnginePtr engine_ptr,
+    ffi.Pointer<IrisEventHandlerHandle> handle,
+  ) {
+    return _UnsetMusicCenterEventHandler(
+      engine_ptr,
+      handle,
+    );
+  }
+
+  late final _UnsetMusicCenterEventHandlerPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int32 Function(
+                  IrisApiEnginePtr, ffi.Pointer<IrisEventHandlerHandle>)>>(
+      'UnsetMusicCenterEventHandler');
+  late final _UnsetMusicCenterEventHandler =
+      _UnsetMusicCenterEventHandlerPtr.asFunction<
           int Function(
               IrisApiEnginePtr, ffi.Pointer<IrisEventHandlerHandle>)>();
 }

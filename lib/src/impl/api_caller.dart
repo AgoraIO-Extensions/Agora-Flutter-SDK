@@ -888,6 +888,10 @@ class _SettableIrisEventHandler implements DisposableNativeIrisEventHandler {
       _irisEventHandlerPtr =
           nativeIrisApiEngineBinding.SetIrisMediaRecorderEventHandler(
               irisApiEnginePtr, irisCEventHandler);
+    } else if (key.registerName == 'MusicContentCenter_registerEventHandler') {
+      _irisEventHandlerPtr =
+          nativeIrisApiEngineBinding.SetMusicCenterEventHandler(
+              irisApiEnginePtr, irisCEventHandler);
     }
   }
 
@@ -904,6 +908,10 @@ class _SettableIrisEventHandler implements DisposableNativeIrisEventHandler {
   @override
   void dispose() {
     if (key.unregisterName == 'MediaRecorder_unsetMediaRecorderObserver') {
+      nativeIrisApiEngineBinding.UnsetIrisMediaRecorderEventHandler(
+          irisApiEnginePtr, _irisEventHandlerPtr);
+    } else if (key.unregisterName ==
+        'MusicContentCenter_unregisterEventHandler') {
       nativeIrisApiEngineBinding.UnsetIrisMediaRecorderEventHandler(
           irisApiEnginePtr, _irisEventHandlerPtr);
     }
