@@ -17,6 +17,7 @@ extension RtcEngineExt on RtcEngine {
     return p;
   }
 
+  /// @nodoc
   MusicContentCenter getMusicContentCenter() {
     return MusicContentCenterImpl.create(this);
   }
