@@ -105,7 +105,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
         clientRoleType: ClientRoleType.clientRoleBroadcaster,
         autoSubscribeAudio: true,
         autoSubscribeVideo: true,
-        publishMicrophoneTrack: false,
+        publishMicrophoneTrack: true,
         publishCameraTrack: false,
         publishMediaPlayerAudioTrack: true,
         publishMediaPlayerVideoTrack: true,
