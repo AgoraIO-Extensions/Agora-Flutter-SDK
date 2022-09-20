@@ -7,6 +7,7 @@ export 'src/agora_media_player_types.dart';
 export 'src/agora_media_player.dart';
 export 'src/agora_media_recorder.dart';
 export 'src/agora_media_streaming_source.dart';
+export 'src/agora_music_content_center.dart';
 export 'src/agora_rhythm_player.dart';
 export 'src/agora_rtc_engine_ex.dart';
 export 'src/agora_rtc_engine.dart';

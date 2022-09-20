@@ -2909,3 +2909,89 @@ Map<String, dynamic>
         <String, dynamic>{
           'volume': instance.volume,
         };
+
+MusicContentCenterEventHandlerOnMusicChartsResultJson
+    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnMusicChartsResultJson(
+          requestId: json['requestId'] as String?,
+          status: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+          result: (json['result'] as List<dynamic>?)
+              ?.map((e) => MusicChartInfo.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+
+Map<String, dynamic>
+    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(
+            MusicContentCenterEventHandlerOnMusicChartsResultJson instance) =>
+        <String, dynamic>{
+          'requestId': instance.requestId,
+          'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+          'result': instance.result?.map((e) => e.toJson()).toList(),
+        };
+
+const _$MusicContentCenterStatusCodeEnumMap = {
+  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
+};
+
+MusicContentCenterEventHandlerOnMusicCollectionResultJson
+    _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnMusicCollectionResultJson(
+          requestId: json['requestId'] as String?,
+          status: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+        );
+
+Map<String,
+    dynamic> _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(
+        MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+    };
+
+MusicContentCenterEventHandlerOnLyricResultJson
+    _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnLyricResultJson(
+          requestId: json['requestId'] as String?,
+          lyricUrl: json['lyricUrl'] as String?,
+        );
+
+Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
+        MusicContentCenterEventHandlerOnLyricResultJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'lyricUrl': instance.lyricUrl,
+    };
+
+MusicContentCenterEventHandlerOnPreLoadEventJson
+    _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnPreLoadEventJson(
+          songCode: json['songCode'] as int?,
+          percent: json['percent'] as int?,
+          status:
+              $enumDecodeNullable(_$PreloadStatusCodeEnumMap, json['status']),
+          msg: json['msg'] as String?,
+          lyricUrl: json['lyricUrl'] as String?,
+        );
+
+Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
+        MusicContentCenterEventHandlerOnPreLoadEventJson instance) =>
+    <String, dynamic>{
+      'songCode': instance.songCode,
+      'percent': instance.percent,
+      'status': _$PreloadStatusCodeEnumMap[instance.status],
+      'msg': instance.msg,
+      'lyricUrl': instance.lyricUrl,
+    };
+
+const _$PreloadStatusCodeEnumMap = {
+  PreloadStatusCode.kPreloadStatusCompleted: 0,
+  PreloadStatusCode.kPreloadStatusFailed: 1,
+  PreloadStatusCode.kPreloadStatusPreloading: 2,
+};

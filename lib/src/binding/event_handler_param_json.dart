@@ -4086,3 +4086,133 @@ extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
     return bufferList;
   }
 }
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnMusicChartsResultJson {
+  const MusicContentCenterEventHandlerOnMusicChartsResultJson(
+      {this.requestId, this.status, this.result});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'status')
+  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'result')
+  final List<MusicChartInfo>? result;
+  factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnMusicChartsResultJson {
+  MusicContentCenterEventHandlerOnMusicChartsResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
+  const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
+      {this.requestId, this.status, this.result});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'status')
+  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'result', ignore: true)
+  final MusicCollection? result;
+  factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnMusicCollectionResultJson {
+  MusicContentCenterEventHandlerOnMusicCollectionResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnLyricResultJson {
+  const MusicContentCenterEventHandlerOnLyricResultJson(
+      {this.requestId, this.lyricUrl});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'lyricUrl')
+  final String? lyricUrl;
+  factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnLyricResultJson {
+  MusicContentCenterEventHandlerOnLyricResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnPreLoadEventJson {
+  const MusicContentCenterEventHandlerOnPreLoadEventJson(
+      {this.songCode, this.percent, this.status, this.msg, this.lyricUrl});
+
+  @JsonKey(name: 'songCode')
+  final int? songCode;
+  @JsonKey(name: 'percent')
+  final int? percent;
+  @JsonKey(name: 'status')
+  final PreloadStatusCode? status;
+  @JsonKey(name: 'msg')
+  final String? msg;
+  @JsonKey(name: 'lyricUrl')
+  final String? lyricUrl;
+  factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnPreLoadEventJsonBufferExt
+    on MusicContentCenterEventHandlerOnPreLoadEventJson {
+  MusicContentCenterEventHandlerOnPreLoadEventJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}

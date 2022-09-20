@@ -2010,6 +2010,7 @@ const _$InterfaceIdTypeEnumMap = {
   InterfaceIdType.agoraIidCloudSpatialAudio: 10,
   InterfaceIdType.agoraIidLocalSpatialAudio: 11,
   InterfaceIdType.agoraIidMediaRecorder: 12,
+  InterfaceIdType.agoraIidMusicContentCenter: 13,
 };
 
 const _$QualityTypeEnumMap = {
@@ -2054,7 +2055,7 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$SimulcastStreamModeEnumMap = {
   SimulcastStreamMode.autoSimulcastStream: -1,
-  SimulcastStreamMode.disableSimulcastStrem: 0,
+  SimulcastStreamMode.disableSimulcastStream: 0,
   SimulcastStreamMode.enableSimulcastStream: 1,
 };
 
