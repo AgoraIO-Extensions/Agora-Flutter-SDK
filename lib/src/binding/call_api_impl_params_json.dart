@@ -321,3 +321,53 @@ class AudioDeviceManagerGetRecordingDeviceMuteJson {
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetRecordingDeviceMuteJsonToJson(this);
 }
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetMusicChartsJson {
+  const MusicContentCenterGetMusicChartsJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetMusicChartsJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetMusicChartsJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetMusicChartsJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetMusicCollectionByMusicChartIdJson {
+  const MusicContentCenterGetMusicCollectionByMusicChartIdJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetMusicCollectionByMusicChartIdJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterSearchMusicJson {
+  const MusicContentCenterSearchMusicJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterSearchMusicJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterSearchMusicJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterSearchMusicJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetLyricJson {
+  const MusicContentCenterGetLyricJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetLyricJson.fromJson(Map<String, dynamic> json) =>
+      _$MusicContentCenterGetLyricJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MusicContentCenterGetLyricJsonToJson(this);
+}

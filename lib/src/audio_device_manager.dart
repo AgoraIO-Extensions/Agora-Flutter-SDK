@@ -86,7 +86,10 @@ abstract class AudioDeviceManager {
   /// An AudioDeviceInfo object, which includes the device ID and device name.
   Future<AudioDeviceInfo> getRecordingDeviceInfo();
 
-  /// @nodoc
+  /// Sets the volume of the audio recording device.
+  ///
+  ///
+  /// * [volume]  The volume of the audio recording device. The value range is [0,255].
   Future<void> setRecordingDeviceVolume(int volume);
 
   /// @nodoc

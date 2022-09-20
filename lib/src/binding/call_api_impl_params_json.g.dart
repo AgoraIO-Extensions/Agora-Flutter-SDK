@@ -330,3 +330,53 @@ Map<String, dynamic> _$AudioDeviceManagerGetRecordingDeviceMuteJsonToJson(
     <String, dynamic>{
       'mute': instance.mute,
     };
+
+MusicContentCenterGetMusicChartsJson
+    _$MusicContentCenterGetMusicChartsJsonFromJson(Map<String, dynamic> json) =>
+        MusicContentCenterGetMusicChartsJson(
+          json['requestId'] as String,
+        );
+
+Map<String, dynamic> _$MusicContentCenterGetMusicChartsJsonToJson(
+        MusicContentCenterGetMusicChartsJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
+MusicContentCenterGetMusicCollectionByMusicChartIdJson
+    _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterGetMusicCollectionByMusicChartIdJson(
+          json['requestId'] as String,
+        );
+
+Map<String, dynamic>
+    _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonToJson(
+            MusicContentCenterGetMusicCollectionByMusicChartIdJson instance) =>
+        <String, dynamic>{
+          'requestId': instance.requestId,
+        };
+
+MusicContentCenterSearchMusicJson _$MusicContentCenterSearchMusicJsonFromJson(
+        Map<String, dynamic> json) =>
+    MusicContentCenterSearchMusicJson(
+      json['requestId'] as String,
+    );
+
+Map<String, dynamic> _$MusicContentCenterSearchMusicJsonToJson(
+        MusicContentCenterSearchMusicJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
+MusicContentCenterGetLyricJson _$MusicContentCenterGetLyricJsonFromJson(
+        Map<String, dynamic> json) =>
+    MusicContentCenterGetLyricJson(
+      json['requestId'] as String,
+    );
+
+Map<String, dynamic> _$MusicContentCenterGetLyricJsonToJson(
+        MusicContentCenterGetLyricJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };

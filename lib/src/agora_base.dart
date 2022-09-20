@@ -560,7 +560,7 @@ enum InterfaceIdType {
   @JsonValue(7)
   agoraIidRtcConnection,
 
-  /// @nodoc
+  /// This interface class is deprecated.
   @JsonValue(8)
   agoraIidSignalingEngine,
 
@@ -579,6 +579,10 @@ enum InterfaceIdType {
   /// The MediaRecorder interface class.
   @JsonValue(12)
   agoraIidMediaRecorder,
+
+  /// @nodoc
+  @JsonValue(13)
+  agoraIidMusicContentCenter,
 }
 
 /// @nodoc
@@ -1346,18 +1350,17 @@ extension VideoStreamTypeExt on VideoStreamType {
   }
 }
 
-/// Video subscription options.
-///
+/// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoSubscriptionOptions {
   /// @nodoc
   const VideoSubscriptionOptions({this.type, this.encodedFrameOnly});
 
-  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, meaning the high-quality video streams. See VideoStreamType .
+  /// @nodoc
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
-  /// Whether to subscribe to encoded video frames only:true: Subscribe to encoded video frames only (structured data).false: (Default) Subscribe to raw video frames.
+  /// @nodoc
   @JsonKey(name: 'encodedFrameOnly')
   final bool? encodedFrameOnly;
 
@@ -1551,7 +1554,7 @@ enum SimulcastStreamMode {
 
   /// @nodoc
   @JsonValue(0)
-  disableSimulcastStrem,
+  disableSimulcastStream,
 
   /// @nodoc
   @JsonValue(1)
@@ -4677,7 +4680,7 @@ enum VoiceBeautifierPreset {
   @JsonValue(0x01030800)
   timbreTransformationRinging,
 
-  /// A ultra-high quality voice, which makes the audio clearer and restores more details.To achieve better audio effect quality, Agora recommends that you set the profile of setAudioProfile [2/2] to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) and scenario to audioScenarioGameStreaming(3) before calling setVoiceBeautifierPreset .If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
+  /// A ultra-high quality voice, which makes the audio clearer and restores more details.To achieve better audio effect quality, Agora recommends that you set the profile of setAudioProfile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) and scenario to audioScenarioGameStreaming(3) before calling setVoiceBeautifierPreset .If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
   @JsonValue(0x01040100)
   ultraHighQualityVoice,
 }
@@ -4696,7 +4699,7 @@ extension VoiceBeautifierPresetExt on VoiceBeautifierPreset {
 }
 
 /// Preset audio effects.
-/// To get better audio effects, Agora recommends calling setAudioProfile [1/2] and setting the profile parameter as recommended below before using the preset audio effects.
+/// To get better audio effects, Agora recommends calling setAudioProfile and setting the profile parameter as recommended below before using the preset audio effects.
 @JsonEnum(alwaysCreate: true)
 enum AudioEffectPreset {
   /// Turn off voice effects, that is, use the original voice.

@@ -43,6 +43,7 @@ void main(List<String> arguments) {
     path.join(srcDir, 'agora_media_engine.dart'),
     path.join(srcDir, 'agora_spatial_audio.dart'),
     path.join(srcDir, 'agora_media_recorder.dart'),
+    path.join(srcDir, 'agora_music_content_center.dart'),
   ];
 
   final outDir = path.join(
@@ -486,6 +487,59 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'localSpatialAudioEngine',
+      outputDir: path.join(outDir, 'generated'),
+      skipMemberFunctions: [
+        'release',
+      ],
+    ),
+    TemplatedTestCase(
+      className: 'MusicContentCenter',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:integration_test_app/main.dart' as app;
+
+void musicContentCenterSmokeTestCases() {
+  {{TEST_CASES_CONTENT}} 
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    final musicContentCenter = rtcEngine.getMusicContentCenter();
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+      }
+      expect(e is AgoraRtcException, true);
+      debugPrint(
+        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+    }
+
+    await musicContentCenter.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'musicContentCenter',
       outputDir: path.join(outDir, 'generated'),
       skipMemberFunctions: [
         'release',
