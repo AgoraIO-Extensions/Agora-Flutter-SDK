@@ -16,8 +16,10 @@
 
 Agora.io provides building blocks for you to add real-time voice and video communications through a simple and powerful SDK. You can integrate the Agora SDK to enable real-time communications in your own application quickly.
 
-## NOTE
-The `main` branch is major update base on the Agora Native SDK 4.x, which introduces some break changes. If you want to get the legacy version(the version < 6.0.0), please visit the [master](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/tree/master) branch for reference.
+
+> NOTE: The `main` branch is major update base on the Agora Native SDK 4.x, which introduces some break changes. previous releases please see the following branches(the version < 6.0.0): 
+>
+> - [5.x](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/tree/master)
 
 ## Usage
 
