@@ -869,7 +869,7 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.CaptureInBackground: 6,
   LocalVideoStreamError.CaptureMultipleForegroundApps: 7,
   LocalVideoStreamError.DeviceNotFound: 8,
-  LocalVideoStreamError.LocalVideoStreamErrorCaptureDeviceDisconnected: 8,
+  LocalVideoStreamError.LocalVideoStreamErrorCaptureDeviceDisconnected: 9,
   LocalVideoStreamError.ScreenCaptureWindowMinmized: 11,
   LocalVideoStreamError.ScreenCaptureWindowClosed: 12,
   LocalVideoStreamError.LocalVideoStreamErrorDeviceInvalidId: 10,
@@ -1223,6 +1223,7 @@ const _$VideoRemoteStateReasonEnumMap = {
   VideoRemoteStateReason.RemoteOffline: 7,
   VideoRemoteStateReason.AudioFallback: 8,
   VideoRemoteStateReason.AudioFallbackRecovery: 9,
+  VideoRemoteStateReason.SDKInBackground: 10,
 };
 
 VideoRenderModeConverter _$VideoRenderModeConverterFromJson(

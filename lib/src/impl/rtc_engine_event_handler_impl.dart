@@ -175,8 +175,8 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
         break;
       case 'FacePositionChanged':
         if (facePositionChanged != null) {
-          final rectList = List<Map>.from(newData[2]);
-          final distanceList = List<int>.from(newData[3]);
+          final rectList = List<Map>.from(newData[2] ?? []);
+          final distanceList = List<int>.from(newData[3] ?? []);
           final faceInfos = List.generate(
             rectList.length,
             (index) {
