@@ -2793,6 +2793,12 @@ enum VideoRemoteStateReason {
   ///
   @JsonValue(9)
   AudioFallbackRecovery,
+
+  ///
+  /// 10: The SDK reports this error code to the local user when a remote user is using the iOS app and the app is in the background. In this case, the local user sees the remote user's video stuck.
+  ///
+  @JsonValue(10)
+  SDKInBackground,
 }
 
 ///
