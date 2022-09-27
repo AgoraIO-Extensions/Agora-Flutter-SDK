@@ -1,6 +1,12 @@
 
 
-# [5.3.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.2.0...v5.3.0) (2022-07-19)
+## [5.3.1](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.3.0...v5.3.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* fix 'Sending a message before the FlutterEngine has been run.' error ([d0d6fad](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/d0d6fad1f1177460c079059675fe5d2f15bcc2a2))
+* Fix [#738](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/738), [#752](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/752), [#739](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/739) ([#767](https://github.com/AgoraIO/Agora-Flutter-SDK/issues/767)) ([f665d5f](https://github.com/AgoraIO/Agora-Flutter-SDK/commit/f665d5fa7b892a8e21c7938590231e0efdd4f681))# [5.3.0](https://github.com/AgoraIO/Agora-Flutter-SDK/compare/v5.2.0...v5.3.0) (2022-07-19)
 
 
 ### Bug Fixes
