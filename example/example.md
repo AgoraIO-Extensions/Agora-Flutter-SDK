@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -56,29 +56,27 @@ class _MyAppState extends State<MyApp> {
             _remoteUid = remoteUid;
           });
         },
-        onUserOffline: (RtcConnection connection, int remoteUid,
-            UserOfflineReasonType reason) {
+        onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
           debugPrint("remote user $remoteUid left channel");
           setState(() {
             _remoteUid = null;
           });
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
-          debugPrint(
-              '[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
-      },
+          debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+        },
       ),
     );
 
-    await _engine.setClientRole(ClientRoleType.clientRoleBroadcaster);
+    await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
     await _engine.enableVideo();
     await _engine.startPreview();
 
     await _engine.joinChannel(
       token: token,
       channelId: channel,
-      info: '',
       uid: 0,
+      options: const ChannelMediaOptions(),
     );
   }
 
@@ -134,6 +132,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 }
+
 ```
 
 # More examples
