@@ -197,6 +197,24 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
+  Future<void> renewRtmToken(String token) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_renewRtmToken';
+    final param = createParams({'token': token});
+    final List<Uint8List> buffers = [];
+    final callApiResult = await apiCaller
+        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> release() async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_release';
