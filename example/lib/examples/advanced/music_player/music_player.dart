@@ -405,6 +405,25 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
             const SizedBox(
               height: 20,
             ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: _initRtmToken
+                        ? () async {
+                            await _musicContentCenter
+                                .renewRtmToken(_rtmTokenController.text);
+                          }
+                        : null,
+                    child: const Text('Renew Rtm Token'),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
               onPressed: _initRtmToken
                   ? () async {
