@@ -53,6 +53,43 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
+    'renewRtmToken',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+
+      try {
+        const String token = "hello";
+        await musicContentCenter.renewRtmToken(
+          token,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[renewRtmToken] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[renewRtmToken] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'registerEventHandler',
     (WidgetTester tester) async {
       app.main();
