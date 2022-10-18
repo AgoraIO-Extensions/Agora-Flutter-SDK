@@ -1,0 +1,31 @@
+name: Publish to Pub.dev 🚀
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publishing:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ format('{0}/{1}/versions/{2}', "https://pub.dev/packages", steps.publish.outputs.package, steps.publish.outputs.remoteVersion) }}
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Check Versions 🔎
+        run: |
+          set -eo pipefail
+          export LIB_VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+          export PUBSPEC_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          if [ "$LIB_VERSION" != "$PUBSPEC_VERSION" ]; then
+            echo "Version in 'pubspec.yaml' does not match tag.";
+            exit 1;
+          fi
+      - name: Publish Dart Package 🚢
+        id: publish
+        uses: k-paxian/dart-package-publisher@1.5
+        with:
+          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
