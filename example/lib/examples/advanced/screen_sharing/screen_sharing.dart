@@ -5,6 +5,7 @@ import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:agora_rtc_engine_example/components/remote_video_views_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// ScreenSharing Example
 class ScreenSharing extends StatefulWidget {
@@ -50,24 +51,46 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
     await _engine.setLogLevel(LogLevel.logLevelError);
 
     _engine.registerEventHandler(RtcEngineEventHandler(
-      onError: (ErrorCodeType err, String msg) {
-        logSink.log('[onError] err: $err, msg: $msg');
-      },
-      onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-        logSink.log(
-            '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
-        setState(() {
-          isJoined = true;
-        });
-      },
-      onLeaveChannel: (RtcConnection connection, RtcStats stats) {
-        logSink.log(
-            '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
-        setState(() {
-          isJoined = false;
-        });
-      },
-    ));
+        onError: (ErrorCodeType err, String msg) {
+      logSink.log('[onError] err: $err, msg: $msg');
+    }, onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+      logSink.log(
+          '[onJoinChannelSuccess] connection: ${connection.toJson()} elapsed: $elapsed');
+      setState(() {
+        isJoined = true;
+      });
+    }, onLeaveChannel: (RtcConnection connection, RtcStats stats) {
+      logSink.log(
+          '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
+      setState(() {
+        isJoined = false;
+      });
+    }, onLocalVideoStateChanged: (VideoSourceType source,
+            LocalVideoStreamState state, LocalVideoStreamError error) {
+      logSink.log(
+          '[onLocalVideoStateChanged] source: $source, state: $state, error: $error');
+      if (!(source == VideoSourceType.videoSourceScreen ||
+          source == VideoSourceType.videoSourceScreenPrimary)) {
+        return;
+      }
+
+      switch (state) {
+        case LocalVideoStreamState.localVideoStreamStateCapturing:
+        case LocalVideoStreamState.localVideoStreamStateEncoding:
+          setState(() {
+            _isScreenShared = true;
+          });
+          break;
+        case LocalVideoStreamState.localVideoStreamStateStopped:
+        case LocalVideoStreamState.localVideoStreamStateFailed:
+          setState(() {
+            _isScreenShared = false;
+          });
+          break;
+        default:
+          break;
+      }
+    }));
 
     await _engine.enableVideo();
     await _engine.setVideoEncoderConfiguration(
@@ -140,9 +163,6 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
   _leaveChannel() async {
     await _engine.stopScreenCapture();
     await _engine.leaveChannel();
-    setState(() {
-      _isScreenShared = false;
-    });
   }
 
   @override
@@ -254,15 +274,8 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                     if (isJoined) {
                       _updateScreenShareChannelMediaOptions();
                     }
-                    setState(() {
-                      _isScreenShared = !_isScreenShared;
-                    });
                   },
-                  onStopScreenShare: () {
-                    setState(() {
-                      _isScreenShared = !_isScreenShared;
-                    });
-                  }),
+                  onStopScreenShare: () {}),
             if (defaultTargetPlatform == TargetPlatform.windows ||
                 defaultTargetPlatform == TargetPlatform.macOS)
               ScreenShareDesktop(
@@ -272,15 +285,8 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                     if (isJoined) {
                       _updateScreenShareChannelMediaOptions();
                     }
-                    setState(() {
-                      _isScreenShared = !_isScreenShared;
-                    });
                   },
-                  onStopScreenShare: () {
-                    setState(() {
-                      _isScreenShared = !_isScreenShared;
-                    });
-                  }),
+                  onStopScreenShare: () {}),
           ],
         );
       },
@@ -308,6 +314,9 @@ class ScreenShareMobile extends StatefulWidget {
 
 class _ScreenShareMobileState extends State<ScreenShareMobile>
     implements ScreenShareInterface {
+  final MethodChannel _iosScreenShareChannel =
+      const MethodChannel('example_screensharing_ios');
+
   @override
   bool get isScreenShared => widget.isScreenShared;
 
@@ -346,6 +355,7 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
     await rtcEngine.startScreenCapture(
         const ScreenCaptureParameters2(captureAudio: true, captureVideo: true));
     await rtcEngine.startPreview(sourceType: VideoSourceType.videoSourceScreen);
+    _showRPSystemBroadcastPickerViewIfNeed();
     onStartScreenShared();
   }
 
@@ -355,6 +365,15 @@ class _ScreenShareMobileState extends State<ScreenShareMobile>
 
     await rtcEngine.stopScreenCapture();
     onStopScreenShare();
+  }
+
+  Future<void> _showRPSystemBroadcastPickerViewIfNeed() async {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return;
+    }
+
+    await _iosScreenShareChannel
+        .invokeMethod('showRPSystemBroadcastPickerView');
   }
 }
 
