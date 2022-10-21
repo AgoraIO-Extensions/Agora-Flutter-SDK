@@ -128,7 +128,6 @@ void main() {
       );
 
       await rtcEngine.enableVideo();
-      await rtcEngine.startPreview();
 
       await rtcEngine.joinChannel(
         token: '',
