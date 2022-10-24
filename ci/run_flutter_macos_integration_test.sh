@@ -3,9 +3,11 @@
 set -e
 set -x
 
+MY_PATH=$(dirname "$0")
+
 flutter packages get
 
-cd integration_test_app
+cd ${MY_PATH}/../test_shard/integration_test_app
 
 # pushd iris_integration_test
 # git submodule update

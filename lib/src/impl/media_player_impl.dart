@@ -115,6 +115,10 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
       for (final eh in _mediaPlayerSourceObservers) {
         eh.process(event, data, buffers);
       }
+
+      for (final eh in _eventHandlers) {
+        eh.onEvent(event, data, buffers);
+      }
     }
   }
 

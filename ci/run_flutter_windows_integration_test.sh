@@ -3,15 +3,19 @@
 set -e
 set -x
 
+MY_PATH=$(dirname "$0")
+
 flutter packages get
 
-cd integration_test_app
+cd ${MY_PATH}/../test_shard/integration_test_app
 
 # pushd iris_integration_test
 # git submodule update
 # popd
 
 flutter packages get
+
+cat pubspec.lock
 
 # It's a little tricky that you should run integration test one by one on flutter macOS/Windows
 for filename in integration_test/*.dart; do
