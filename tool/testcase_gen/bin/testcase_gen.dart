@@ -115,6 +115,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'setupRemoteVideo',
         'setupLocalVideo',
         'getEffectDuration',
+        'startPreview',
+        'stopPreview',
       ],
     ),
     TemplatedTestCase(
@@ -436,7 +438,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'release',
       ],
     ),
-        TemplatedTestCase(
+    TemplatedTestCase(
       className: 'LocalSpatialAudioEngine',
       testCaseFileTemplate: '''
 $defaultHeader

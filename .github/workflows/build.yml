@@ -42,7 +42,7 @@ jobs:
       matrix:
         version: ['2.10.5', '3.0.0']
     runs-on: macos-11
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -53,6 +53,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
+      - run: flutter config --enable-macos-desktop 
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2.21.0
         with:
@@ -68,7 +69,7 @@ jobs:
       matrix:
         version: ['2.10.5', '3.0.0']
     runs-on: macos-11
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -88,7 +89,7 @@ jobs:
       matrix:
         version: ['2.10.5', '3.0.0']
     runs-on: macos-11
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -106,7 +107,7 @@ jobs:
       matrix:
         version: ['2.10.5', '3.0.0']
     runs-on: windows-2019
-    timeout-minutes: 60
+    timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
@@ -193,7 +194,7 @@ jobs:
       matrix:
         version: ['2.10.5', '3.0.0']
     runs-on: macos-11
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
