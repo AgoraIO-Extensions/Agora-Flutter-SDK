@@ -33,11 +33,13 @@ dependencies:
   permission_handler: ^8.3.0
   path_provider: ^2.0.8
 
-  video_raw_data_example_plugin:
-    git:
-      url: https://github.com/AgoraIO-Extensions/RawDataPluginSample.git
-      path: frameworks/flutter/video_raw_data
-      ref: 0559907caf2f4d41f43353383b902eb6c67a1bff
+  # video_raw_data:
+  #   git:
+  #     url: https://github.com/AgoraIO-Extensions/RawDataPluginSample.git
+  #     path: frameworks/flutter/video_raw_data
+  #     ref: 0559907caf2f4d41f43353383b902eb6c67a1bff
+  video_raw_data:
+    path: ../../RawDataPluginSample/frameworks/flutter/video_raw_data
 
 dev_dependencies:
   flutter_test:

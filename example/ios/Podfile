@@ -50,7 +50,7 @@ target 'Runner' do
     # pod 'iris_event_handler', :path => File.join('.symlinks', 'plugins', 'iris_event', 'ios')
   end
 
-  pod 'VideoObserverPlugin', :path => File.join('.symlinks', 'plugins', 'video_raw_data_example_plugin', 'ios')
+  pod 'VideoObserverPlugin', :path => File.join('.symlinks', 'plugins', 'video_raw_data', 'ios')
 end
 
 target 'ScreenSharing' do
