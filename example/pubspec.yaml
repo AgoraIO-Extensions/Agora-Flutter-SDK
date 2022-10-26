@@ -37,7 +37,7 @@ dependencies:
     git:
       url: https://github.com/AgoraIO-Extensions/RawDataPluginSample.git
       path: frameworks/flutter/video_raw_data
-      ref: 8a8b1d06a211a6dcf844bf8167dc9954e25fac6a
+      ref: c2d34299254246122a059e4496cc1d5419713be4
 
 dev_dependencies:
   flutter_test:
