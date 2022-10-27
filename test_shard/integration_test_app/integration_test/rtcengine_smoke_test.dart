@@ -69,10 +69,9 @@ void main() {
       final eventCalled = await eventCalledCompleter.future;
       expect(eventCalled, isTrue);
 
-      // TODO(littlegnal): Remove comment after native 410 done
-      // rtcEngine.unregisterAudioEncodedFrameObserver(
-      //   observer,
-      // );
+      rtcEngine.unregisterAudioEncodedFrameObserver(
+        observer,
+      );
 
       await remoteUser.leaveChannel();
       await rtcEngine.leaveChannel();
