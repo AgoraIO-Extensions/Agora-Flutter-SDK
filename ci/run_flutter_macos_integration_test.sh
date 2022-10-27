@@ -5,13 +5,21 @@ set -x
 
 MY_PATH=$(dirname "$0")
 
+pushd ${MY_PATH}/../test_shard/fake_test_app
+
 flutter packages get
 
-cd ${MY_PATH}/../test_shard/integration_test_app
+# It's a little tricky that you should run integration test one by one on flutter macOS/Windows
+for filename in integration_test/*.dart; do
+    if [[ "$filename" == *.generated.dart  ]]; then
+        continue
+    fi
+    flutter test $filename -d macos
+done
 
-# pushd iris_integration_test
-# git submodule update
-# popd
+popd
+
+pushd ${MY_PATH}/../test_shard/integration_test_app
 
 flutter packages get
 
@@ -22,3 +30,5 @@ for filename in integration_test/*.dart; do
     fi
     flutter test $filename --dart-define=TEST_APP_ID="${TEST_APP_ID}" -d macos
 done
+
+popd

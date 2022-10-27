@@ -10,11 +10,11 @@ const int kBasicResultLength = 64 * 1024;
 
 ffi.DynamicLibrary _loadLib() {
   if (Platform.isWindows) {
-    return ffi.DynamicLibrary.open('AgoraRtcWrapper.dll');
+    return ffi.DynamicLibrary.open('IrisDebugger.dll');
   }
 
   if (Platform.isAndroid) {
-    return ffi.DynamicLibrary.open("libAgoraRtcWrapper.so");
+    return ffi.DynamicLibrary.open("libIrisDebugger.so");
   }
 
   return ffi.DynamicLibrary.process();

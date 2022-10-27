@@ -4,15 +4,12 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:integration_test/integration_test.dart';
-import 'generated/mediaengine_smoke_test.generated.dart' as generated;
 import 'package:integration_test_app/main.dart' as app;
 
 import 'package:integration_test_app/fake_remote_user.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  generated.mediaEngineSmokeTestCases();
 
   testWidgets(
     'registerAudioFrameObserver smoke test',
