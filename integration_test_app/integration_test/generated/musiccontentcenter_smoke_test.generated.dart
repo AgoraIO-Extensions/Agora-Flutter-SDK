@@ -53,7 +53,7 @@ void musicContentCenterSmokeTestCases() {
   );
 
   testWidgets(
-    'renewRtmToken',
+    'renewToken',
     (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
@@ -71,16 +71,15 @@ void musicContentCenterSmokeTestCases() {
 
       try {
         const String token = "hello";
-        await musicContentCenter.renewRtmToken(
+        await musicContentCenter.renewToken(
           token,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[renewRtmToken] error: ${e.toString()}');
+          debugPrint('[renewToken] error: ${e.toString()}');
         }
         expect(e is AgoraRtcException, true);
-        debugPrint(
-            '[renewRtmToken] errorcode: ${(e as AgoraRtcException).code}');
+        debugPrint('[renewToken] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await musicContentCenter.release();

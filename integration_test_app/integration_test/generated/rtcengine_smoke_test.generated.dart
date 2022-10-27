@@ -7327,7 +7327,7 @@ void rtcEngineSmokeTestCases() {
         const bool enabled = true;
         const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
         const String configEncryptionKey = "hello";
-        Uint8List configEncryptionKdfSalt = Uint8List.fromList([]);
+        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
         final EncryptionConfig config = EncryptionConfig(
           encryptionMode: configEncryptionMode,
           encryptionKey: configEncryptionKey,
@@ -7370,7 +7370,7 @@ void rtcEngineSmokeTestCases() {
         await rtcEngine.enableVideo();
 
         const int streamId = 10;
-        Uint8List data = Uint8List.fromList([]);
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int length = 10;
         await rtcEngine.sendStreamMessage(
           streamId: streamId,
@@ -9874,7 +9874,7 @@ void rtcEngineSmokeTestCases() {
 
         const int metadataUid = 10;
         const int metadataSize = 10;
-        Uint8List metadataBuffer = Uint8List.fromList([]);
+        Uint8List metadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int metadataTimeStampMs = 10;
         final Metadata metadata = Metadata(
           uid: metadataUid,
