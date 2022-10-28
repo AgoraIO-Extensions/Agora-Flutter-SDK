@@ -197,9 +197,9 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  Future<void> renewRtmToken(String token) async {
+  Future<void> renewToken(String token) async {
     final apiType =
-        '${isOverrideClassName ? className : 'MusicContentCenter'}_renewRtmToken';
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_renewToken';
     final param = createParams({'token': token});
     final List<Uint8List> buffers = [];
     final callApiResult = await apiCaller

@@ -413,7 +413,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
                     onPressed: _initRtmToken
                         ? () async {
                             await _musicContentCenter
-                                .renewRtmToken(_rtmTokenController.text);
+                                .renewToken(_rtmTokenController.text);
                           }
                         : null,
                     child: const Text('Renew Rtm Token'),
