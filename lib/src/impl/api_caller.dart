@@ -808,10 +808,9 @@ class _IrisEventHandlerObserver implements DisposableNativeIrisEventHandler {
 
   @override
   void dispose() {
+    if (key.unregisterName.isEmpty) return;
+    
     using((Arena arena) {
-      final ffi.Pointer<ffi.Int8> funcNamePointer =
-          key.unregisterName.toNativeUtf8(allocator: arena).cast<ffi.Int8>();
-
       apiCallExecutorBase.callIrisApi(key.unregisterName, params,
           bufferList: [BufferParam(_observerPtr.address, 1)]);
 

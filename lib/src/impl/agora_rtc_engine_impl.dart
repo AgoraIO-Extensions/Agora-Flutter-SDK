@@ -272,6 +272,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       _lifecycle = null;
     }
 
+    _eventLoop.removeEventHandlers(
+      const EventLoopEventHandlerKey(RtcEngineImpl),
+    );
     _eventLoop.terminate();
 
     await apiCaller.disposeAllEventHandlersAsync();
@@ -544,12 +547,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required DirectCdnStreamingEventHandler eventHandler,
       required String publishUrl,
       required DirectCdnStreamingMediaOptions options}) async {
-    const apiType = 'RtcEngine_startDirectCdnStreaming';
     final param =
         createParams({'publishUrl': publishUrl, 'options': options.toJson()});
 
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
+    final callApiResult = await apiCaller.callIrisEventAsync(
+        const IrisEventObserverKey(
+            op: CallIrisEventOp.create,
+            registerName: 'RtcEngine_startDirectCdnStreaming',
+            unregisterName: ''),
+        jsonEncode(param));
+
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -563,14 +570,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       const EventLoopEventHandlerKey(RtcEngineImpl),
       DirectCdnStreamingEventHandlerWrapper(eventHandler),
     );
-  }
-
-  @override
-  Future<void> stopDirectCdnStreaming() async {
-    _eventLoop.removeEventHandlers(
-      const EventLoopEventHandlerKey(RtcEngineImpl),
-    );
-    await super.stopDirectCdnStreaming();
   }
 
   @override
