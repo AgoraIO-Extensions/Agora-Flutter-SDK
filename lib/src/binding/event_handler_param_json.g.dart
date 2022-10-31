@@ -361,20 +361,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonToJson(
       'deviceState': _$MediaDeviceStateTypeEnumMap[instance.deviceState],
     };
 
-RtcEngineEventHandlerOnMediaDeviceChangedJson
-    _$RtcEngineEventHandlerOnMediaDeviceChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnMediaDeviceChangedJson(
-          deviceType:
-              $enumDecodeNullable(_$MediaDeviceTypeEnumMap, json['deviceType']),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnMediaDeviceChangedJsonToJson(
-        RtcEngineEventHandlerOnMediaDeviceChangedJson instance) =>
-    <String, dynamic>{
-      'deviceType': _$MediaDeviceTypeEnumMap[instance.deviceType],
-    };
-
 RtcEngineEventHandlerOnNetworkQualityJson
     _$RtcEngineEventHandlerOnNetworkQualityJsonFromJson(
             Map<String, dynamic> json) =>

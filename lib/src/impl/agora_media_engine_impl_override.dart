@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/src/agora_media_base.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
 import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart';
 import 'package:agora_rtc_engine/src/binding/agora_media_engine_impl.dart'
     as media_engine_impl_binding;
@@ -23,26 +24,34 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
 
   @override
   void registerAudioFrameObserver(AudioFrameObserver observer) async {
+    final eventHandlerWrapper = AudioFrameObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'MediaEngine_registerAudioFrameObserver',
-            unregisterName: 'MediaEngine_unregisterAudioFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'MediaEngine_registerAudioFrameObserver',
+          unregisterName: 'MediaEngine_unregisterAudioFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
-    _eventLoop.addEventHandler(const EventLoopEventHandlerKey(MediaEngineImpl),
-        AudioFrameObserverWrapper(observer));
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(MediaEngineImpl),
+      eventHandlerWrapper,
+    );
   }
 
   @override
   void registerVideoFrameObserver(VideoFrameObserver observer) async {
+    final eventHandlerWrapper = VideoFrameObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'MediaEngine_registerVideoFrameObserver',
-            unregisterName: 'MediaEngine_unregisterVideoFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'MediaEngine_registerVideoFrameObserver',
+          unregisterName: 'MediaEngine_unregisterVideoFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.addEventHandler(const EventLoopEventHandlerKey(MediaEngineImpl),
@@ -52,62 +61,79 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
   @override
   void registerVideoEncodedFrameObserver(
       VideoEncodedFrameObserver observer) async {
+    final eventHandlerWrapper = VideoEncodedFrameObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
-            unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
+          unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
-    _eventLoop.addEventHandler(const EventLoopEventHandlerKey(MediaEngineImpl),
-        VideoEncodedFrameObserverWrapper(observer));
+    _eventLoop.addEventHandler(
+      const EventLoopEventHandlerKey(MediaEngineImpl),
+      eventHandlerWrapper,
+    );
   }
 
   @override
   void unregisterAudioFrameObserver(AudioFrameObserver observer) async {
+    final eventHandlerWrapper = AudioFrameObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'MediaEngine_registerAudioFrameObserver',
-            unregisterName: 'MediaEngine_unregisterAudioFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'MediaEngine_registerAudioFrameObserver',
+          unregisterName: 'MediaEngine_unregisterAudioFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.removeEventHandler(
-        const EventLoopEventHandlerKey(MediaEngineImpl),
-        AudioFrameObserverWrapper(observer));
+      const EventLoopEventHandlerKey(MediaEngineImpl),
+      eventHandlerWrapper,
+    );
   }
 
   @override
   void unregisterVideoFrameObserver(VideoFrameObserver observer) async {
+    final eventHandlerWrapper = VideoFrameObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'MediaEngine_registerVideoFrameObserver',
-            unregisterName: 'MediaEngine_unregisterVideoFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'MediaEngine_registerVideoFrameObserver',
+          unregisterName: 'MediaEngine_unregisterVideoFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.removeEventHandler(
-        const EventLoopEventHandlerKey(MediaEngineImpl),
-        VideoFrameObserverWrapper(observer));
+      const EventLoopEventHandlerKey(MediaEngineImpl),
+      eventHandlerWrapper,
+    );
   }
 
   @override
   void unregisterVideoEncodedFrameObserver(
       VideoEncodedFrameObserver observer) async {
+    final eventHandlerWrapper = VideoEncodedFrameObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
-            unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
+          unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.removeEventHandler(
-        const EventLoopEventHandlerKey(MediaEngineImpl),
-        VideoEncodedFrameObserverWrapper(observer));
+      const EventLoopEventHandlerKey(MediaEngineImpl),
+      eventHandlerWrapper,
+    );
   }
 
   @override

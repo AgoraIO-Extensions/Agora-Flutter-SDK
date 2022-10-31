@@ -18,7 +18,6 @@ import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
 import 'package:agora_rtc_engine/src/impl/event_loop.dart';
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
-import 'package:iris_event/iris_event.dart';
 
 class MusicCollectionImpl extends MusicCollection {
   MusicCollectionImpl(this._musicCollectionJson);
@@ -181,33 +180,42 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   @override
   void registerEventHandler(MusicContentCenterEventHandler eventHandler) async {
     if (_musicContentCenterEventHandler != null) return;
+
     _musicContentCenterEventHandler = eventHandler;
+    final eventHandlerWrapper =
+        MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!);
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'MusicContentCenter_registerEventHandler',
-            unregisterName: 'MusicContentCenter_unregisterEventHandler'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'MusicContentCenter_registerEventHandler',
+          unregisterName: 'MusicContentCenter_unregisterEventHandler',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode({}));
 
     _eventLoop.addEventHandler(
       const EventLoopEventHandlerKey(MusicContentCenterImpl),
-      MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!),
+      eventHandlerWrapper,
     );
   }
 
   @override
   void unregisterEventHandler() async {
     if (_musicContentCenterEventHandler == null) return;
+    final eventHandlerWrapper =
+        MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!);
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'MusicContentCenter_registerEventHandler',
-            unregisterName: 'MusicContentCenter_unregisterEventHandler'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'MusicContentCenter_registerEventHandler',
+          unregisterName: 'MusicContentCenter_unregisterEventHandler',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode({}));
 
     _eventLoop.removeEventHandler(
       const EventLoopEventHandlerKey(MusicContentCenterImpl),
-      MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!),
+      eventHandlerWrapper,
     );
     _musicContentCenterEventHandler = null;
   }

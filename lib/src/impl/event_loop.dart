@@ -46,11 +46,16 @@ class EventLoop implements IrisEventHandler {
 
   @override
   void onEvent(String event, String data, List<Uint8List> buffers) {
+    bool handled = false;
     for (final es in _eventHandlers.values) {
       for (final e in es) {
         if (e.handleEvent(event, data, buffers)) {
-          return;
+          handled = true;
         }
+      }
+
+      if (handled) {
+        break;
       }
     }
   }
@@ -62,11 +67,11 @@ class EventLoop implements IrisEventHandler {
     events.add(eventHandler);
   }
 
-  void addEventHandlerIfTypeAbsent(
+  void addEventHandlerIfAbsent(
       EventLoopEventHandlerKey key, EventLoopEventHandler eventHandler) {
     final events =
         _eventHandlers.putIfAbsent(key, () => <EventLoopEventHandler>{});
-    if (events.isEmpty) {
+    if (!events.contains(eventHandler)) {
       events.add(eventHandler);
     }
   }

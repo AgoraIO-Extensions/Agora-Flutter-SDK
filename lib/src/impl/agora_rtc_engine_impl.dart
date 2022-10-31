@@ -293,34 +293,40 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
+    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'RtcEngine_registerEventHandler',
-            unregisterName: 'RtcEngine_unregisterEventHandler'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'RtcEngine_registerEventHandler',
+          unregisterName: 'RtcEngine_unregisterEventHandler',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.addEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      RtcEngineEventHandlerWrapper(eventHandler),
+      eventHandlerWrapper,
     );
   }
 
   @override
   void unregisterEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
+    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
     _eventLoop.removeEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      RtcEngineEventHandlerWrapper(eventHandler),
+      eventHandlerWrapper,
     );
 
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'RtcEngine_registerEventHandler',
-            unregisterName: 'RtcEngine_unregisterEventHandler'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'RtcEngine_registerEventHandler',
+          unregisterName: 'RtcEngine_unregisterEventHandler',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
   }
 
@@ -510,35 +516,41 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type}) async {
+    final eventHandlerWrapper = MetadataObserverWrapper(observer);
     final param = createParams({'type': type.value()});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'RtcEngine_registerMediaMetadataObserver',
-            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'RtcEngine_registerMediaMetadataObserver',
+          unregisterName: 'RtcEngine_unregisterMediaMetadataObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.addEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      MetadataObserverWrapper(observer),
+      eventHandlerWrapper,
     );
   }
 
   @override
   void unregisterMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type}) async {
+    final eventHandlerWrapper = MetadataObserverWrapper(observer);
     final param = createParams({'type': type.value()});
 
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'RtcEngine_registerMediaMetadataObserver',
-            unregisterName: 'RtcEngine_unregisterMediaMetadataObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'RtcEngine_registerMediaMetadataObserver',
+          unregisterName: 'RtcEngine_unregisterMediaMetadataObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.removeEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      MetadataObserverWrapper(observer),
+      eventHandlerWrapper,
     );
   }
 
@@ -547,14 +559,18 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required DirectCdnStreamingEventHandler eventHandler,
       required String publishUrl,
       required DirectCdnStreamingMediaOptions options}) async {
+    final eventHandlerWrapper =
+        DirectCdnStreamingEventHandlerWrapper(eventHandler);
     final param =
         createParams({'publishUrl': publishUrl, 'options': options.toJson()});
 
     final callApiResult = await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'RtcEngine_startDirectCdnStreaming',
-            unregisterName: ''),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'RtcEngine_startDirectCdnStreaming',
+          unregisterName: '',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     if (callApiResult.irisReturnCode < 0) {
@@ -568,7 +584,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     _eventLoop.addEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      DirectCdnStreamingEventHandlerWrapper(eventHandler),
+      eventHandlerWrapper,
     );
   }
 
@@ -868,66 +884,78 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   void registerAudioEncodedFrameObserver(
       {required AudioEncodedFrameObserverConfig config,
       required AudioEncodedFrameObserver observer}) async {
+    final eventHandlerWrapper = AudioEncodedFrameObserverWrapper(observer);
     final param = createParams({'config': config.toJson()});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'RtcEngine_registerAudioEncodedFrameObserver',
-            unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'RtcEngine_registerAudioEncodedFrameObserver',
+          unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.addEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      AudioEncodedFrameObserverWrapper(observer),
+      eventHandlerWrapper,
     );
   }
 
   @override
   void unregisterAudioEncodedFrameObserver(
       AudioEncodedFrameObserver observer) async {
+    final eventHandlerWrapper = AudioEncodedFrameObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'RtcEngine_registerAudioEncodedFrameObserver',
-            unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'RtcEngine_registerAudioEncodedFrameObserver',
+          unregisterName: 'RtcEngine_unregisterAudioEncodedFrameObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.removeEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      AudioEncodedFrameObserverWrapper(observer),
+      eventHandlerWrapper,
     );
   }
 
   @override
   void registerAudioSpectrumObserver(AudioSpectrumObserver observer) async {
+    final eventHandlerWrapper = AudioSpectrumObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.create,
-            registerName: 'RtcEngine_registerAudioSpectrumObserver',
-            unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.create,
+          registerName: 'RtcEngine_registerAudioSpectrumObserver',
+          unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.addEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      AudioSpectrumObserverWrapper(observer),
+      eventHandlerWrapper,
     );
   }
 
   @override
   void unregisterAudioSpectrumObserver(AudioSpectrumObserver observer) async {
+    final eventHandlerWrapper = AudioSpectrumObserverWrapper(observer);
     final param = createParams({});
     await apiCaller.callIrisEventAsync(
-        const IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
-            registerName: 'RtcEngine_registerAudioSpectrumObserver',
-            unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver'),
+        IrisEventObserverKey(
+          op: CallIrisEventOp.dispose,
+          registerName: 'RtcEngine_registerAudioSpectrumObserver',
+          unregisterName: 'RtcEngine_unregisterAudioSpectrumObserver',
+          handler: eventHandlerWrapper,
+        ),
         jsonEncode(param));
 
     _eventLoop.removeEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
-      AudioSpectrumObserverWrapper(observer),
+      eventHandlerWrapper,
     );
   }
 

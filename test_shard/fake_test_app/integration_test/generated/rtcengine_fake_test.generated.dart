@@ -8453,7 +8453,6 @@ void rtcEngineSmokeTestCases() {
           onAudioEffectFinished: (int soundId) {},
           onVideoDeviceStateChanged: (String deviceId,
               MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
-          onMediaDeviceChanged: (MediaDeviceType deviceType) {},
           onNetworkQuality: (RtcConnection connection, int remoteUid,
               QualityType txQuality, QualityType rxQuality) {},
           onIntraRequestReceived: (RtcConnection connection) {},
@@ -8666,7 +8665,6 @@ void rtcEngineSmokeTestCases() {
           onAudioEffectFinished: (int soundId) {},
           onVideoDeviceStateChanged: (String deviceId,
               MediaDeviceType deviceType, MediaDeviceStateType deviceState) {},
-          onMediaDeviceChanged: (MediaDeviceType deviceType) {},
           onNetworkQuality: (RtcConnection connection, int remoteUid,
               QualityType txQuality, QualityType rxQuality) {},
           onIntraRequestReceived: (RtcConnection connection) {},
@@ -11107,4 +11105,3 @@ void rtcEngineSmokeTestCases() {
     },
   );
 }
-

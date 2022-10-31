@@ -4,15 +4,17 @@ import 'dart:ffi' as ffi;
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/src/agora_base.dart';
+import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
 import 'package:async/async.dart';
 
 import 'package:agora_rtc_engine/src/impl/native_iris_api_engine_bindings.dart';
 import 'package:ffi/ffi.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:iris_event/iris_event.dart';
 
 import 'disposable_object.dart';
+import 'event_loop.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -716,13 +718,16 @@ class _SendableIrisEventHandler implements IrisEventHandler {
 }
 
 abstract class IrisEventKey {
-  const IrisEventKey(
-      {required this.registerName,
-      required this.unregisterName,
-      required this.op});
+  const IrisEventKey({
+    required this.registerName,
+    required this.unregisterName,
+    required this.op,
+    required this.handlerHash,
+  });
   final String registerName;
   final String unregisterName;
   final CallIrisEventOp op;
+  final int handlerHash;
 
   @override
   bool operator ==(Object other) {
@@ -731,11 +736,12 @@ abstract class IrisEventKey {
     }
     return other is IrisEventKey &&
         other.registerName == registerName &&
-        other.unregisterName == unregisterName;
+        other.unregisterName == unregisterName &&
+        other.handlerHash == handlerHash;
   }
 
   @override
-  int get hashCode => hashValues(registerName, unregisterName);
+  int get hashCode => Object.hash(registerName, unregisterName, handlerHash);
 }
 
 enum CallIrisEventOp {
@@ -744,22 +750,30 @@ enum CallIrisEventOp {
 }
 
 class IrisEventObserverKey extends IrisEventKey {
-  const IrisEventObserverKey(
-      {required String registerName,
-      required String unregisterName,
-      required CallIrisEventOp op})
-      : super(
-            registerName: registerName, unregisterName: unregisterName, op: op);
+  IrisEventObserverKey({
+    required String registerName,
+    required String unregisterName,
+    required CallIrisEventOp op,
+    required EventLoopEventHandler? handler,
+  }) : super(
+          registerName: registerName,
+          unregisterName: unregisterName,
+          op: op,
+          handlerHash: handler?.hashCode ?? 0,
+        );
 }
 
-class IrisEventHandlerKey extends IrisEventKey {
-  const IrisEventHandlerKey(
-      {required String registerName,
-      required String unregisterName,
-      required CallIrisEventOp op})
-      : super(
-            registerName: registerName, unregisterName: unregisterName, op: op);
-}
+// class IrisEventHandlerKey extends IrisEventKey {
+//   const IrisEventHandlerKey(
+//       {required String registerName,
+//       required String unregisterName,
+//       required CallIrisEventOp op})
+//       : super(
+//           registerName: registerName,
+//           unregisterName: unregisterName,
+//           op: op,
+//         );
+// }
 
 abstract class DisposableNativeIrisEventHandler implements DisposableObject {
   @override
@@ -818,35 +832,3 @@ class _IrisEventHandlerObserver implements DisposableNativeIrisEventHandler {
     });
   }
 }
-
-// class _SettableIrisEventHandler implements DisposableNativeIrisEventHandler {
-//   _SettableIrisEventHandler(
-//       {required this.nativeIrisApiEngineBinding,
-//       required this.irisApiEnginePtr,
-//       required this.irisCEventHandler,
-//       required this.key}) {
-//     if (key.registerName == 'MediaRecorder_setMediaRecorderObserver') {
-//       _irisEventHandlerPtr =
-//           nativeIrisApiEngineBinding.SetIrisMediaRecorderEventHandler(
-//               irisApiEnginePtr, irisCEventHandler);
-//     }
-//   }
-
-//   final NativeIrisApiEngineBinding nativeIrisApiEngineBinding;
-
-//   final IrisApiEnginePtr irisApiEnginePtr;
-
-//   final IrisEventKey key;
-
-//   final ffi.Pointer<IrisCEventHandler> irisCEventHandler;
-
-//   late final ffi.Pointer<ffi.Void> _irisEventHandlerPtr;
-
-//   @override
-//   void dispose() {
-//     if (key.unregisterName == 'MediaRecorder_unsetMediaRecorderObserver') {
-//       nativeIrisApiEngineBinding.UnsetIrisMediaRecorderEventHandler(
-//           irisApiEnginePtr, _irisEventHandlerPtr);
-//     }
-//   }
-// }
