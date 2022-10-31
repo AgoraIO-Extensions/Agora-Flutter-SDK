@@ -2311,4 +2311,10 @@ abstract class RtcEngine {
 
   /// @nodoc
   Future<void> enableSpatialAudio(bool enabled);
+
+  /// @nodoc
+  Future<void> customPublish(String role);
+
+  /// @nodoc
+  Future<void> customUnPublish(String role);
 }

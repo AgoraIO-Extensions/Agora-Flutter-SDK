@@ -96,7 +96,7 @@ class AgoraRtcEngineWeb {
 
     var element = ScriptElement()
       ..src =
-          'assets/packages/agora_rtc_engine/assets/AgoraRtcWrapper.bundle.js'
+          'assets/packages/agora_rtc_engine/assets/AgoraRtcWrapper.bundle.custom.js'
       ..type = 'application/javascript';
     late StreamSubscription<Event> loadSubscription;
     loadSubscription = element.onLoad.listen((event) {

@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:agora_rtc_engine/src/impl/api_types.dart';
+import 'package:agora_rtc_engine/src/impl/api_types.dart' 
+    if (dart.library.html) 'package:agora_rtc_engine/src/impl/api_types_for_web.dart';
 import 'package:agora_rtc_engine/src/classes.dart';
 import 'package:agora_rtc_engine/src/impl/media_recorder_impl.dart';
 import 'enum_converter.dart';
@@ -2084,6 +2085,28 @@ class RtcEngineImpl with MediaRecorderImplMixin implements RtcEngine {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetVideoSource.index,
       'params': jsonEncode({}),
+    });
+  }
+
+  @override
+  Future<void> customPublish(String role) {
+    return _invokeMethod('callApi', {
+      // 'apiType': ApiTypeEngine?.kEngineCustomPublish.index,
+      'apiType': ApiTypeEngine.values.byName('kEngineCustomPublish').index,
+      'params': jsonEncode({
+        'role': role,
+      }),
+    });
+  }
+
+  @override
+  Future<void> customUnPublish(String role) {
+    return _invokeMethod('callApi', {
+      // 'apiType': ApiTypeEngine?.kEngineCustomUnPublish.index,
+      'apiType': ApiTypeEngine.values.byName('kEngineCustomUnPublish').index,
+      'params': jsonEncode({
+        'role': role,
+      }),
     });
   }
 }
