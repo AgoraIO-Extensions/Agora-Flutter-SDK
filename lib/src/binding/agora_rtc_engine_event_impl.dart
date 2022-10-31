@@ -277,21 +277,6 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             deviceId, deviceType, deviceState);
         return true;
 
-      case 'onMediaDeviceChanged':
-        if (rtcEngineEventHandler.onMediaDeviceChanged == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        RtcEngineEventHandlerOnMediaDeviceChangedJson paramJson =
-            RtcEngineEventHandlerOnMediaDeviceChangedJson.fromJson(jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        MediaDeviceType? deviceType = paramJson.deviceType;
-        if (deviceType == null) {
-          return true;
-        }
-        rtcEngineEventHandler.onMediaDeviceChanged!(deviceType);
-        return true;
-
       case 'onNetworkQualityEx':
         if (rtcEngineEventHandler.onNetworkQuality == null) {
           return true;

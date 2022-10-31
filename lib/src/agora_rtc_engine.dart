@@ -1570,7 +1570,6 @@ class RtcEngineEventHandler {
     this.onAudioMixingFinished,
     this.onAudioEffectFinished,
     this.onVideoDeviceStateChanged,
-    this.onMediaDeviceChanged,
     this.onNetworkQuality,
     this.onIntraRequestReceived,
     this.onUplinkNetworkInfoUpdated,
@@ -1750,9 +1749,6 @@ class RtcEngineEventHandler {
   /// @nodoc
   final void Function(String deviceId, MediaDeviceType deviceType,
       MediaDeviceStateType deviceState)? onVideoDeviceStateChanged;
-
-  /// @nodoc
-  final void Function(MediaDeviceType deviceType)? onMediaDeviceChanged;
 
   /// Reports the last mile network quality of each user in the channel.
   /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server.The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times.txQuality is rxQuality is
@@ -3797,6 +3793,12 @@ abstract class RtcEngine {
   /// * [provider] The name of the extension provider.
   Future<void> setExtensionProviderProperty(
       {required String provider, required String key, required String value});
+
+  /// @nodoc
+  Future<void> registerExtension(
+      {required String provider,
+      required String extension,
+      MediaSourceType type = MediaSourceType.unknownMediaSource});
 
   /// Enables/Disables extensions.
   /// Ensure that you call this method before joining a channel.If you want to enable multiple extensions, you need to call this method multiple times.The data processing order of different extensions in the SDK is determined by the order in which the extensions are enabled. That is, the extension that is enabled first will process the data first.

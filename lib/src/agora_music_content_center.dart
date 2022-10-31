@@ -297,6 +297,9 @@ abstract class MusicContentCenter {
   Future<void> initialize(MusicContentCenterConfiguration configuration);
 
   /// @nodoc
+  Future<void> renewToken(String token);
+
+  /// @nodoc
   Future<void> release();
 
   /// @nodoc

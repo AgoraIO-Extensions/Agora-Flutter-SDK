@@ -809,7 +809,7 @@ class _IrisEventHandlerObserver implements DisposableNativeIrisEventHandler {
   @override
   void dispose() {
     if (key.unregisterName.isEmpty) return;
-    
+
     using((Arena arena) {
       apiCallExecutorBase.callIrisApi(key.unregisterName, params,
           bufferList: [BufferParam(_observerPtr.address, 1)]);

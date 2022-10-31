@@ -429,33 +429,6 @@ extension RtcEngineEventHandlerOnVideoDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineEventHandlerOnMediaDeviceChangedJson {
-  const RtcEngineEventHandlerOnMediaDeviceChangedJson({this.deviceType});
-
-  @JsonKey(name: 'deviceType')
-  final MediaDeviceType? deviceType;
-  factory RtcEngineEventHandlerOnMediaDeviceChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnMediaDeviceChangedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnMediaDeviceChangedJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnMediaDeviceChangedJsonBufferExt
-    on RtcEngineEventHandlerOnMediaDeviceChangedJson {
-  RtcEngineEventHandlerOnMediaDeviceChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnNetworkQualityJson {
   const RtcEngineEventHandlerOnNetworkQualityJson(
       {this.connection, this.remoteUid, this.txQuality, this.rxQuality});
