@@ -7,7 +7,6 @@ import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_engine.dart';
 import 'package:agora_rtc_engine/src/agora_media_player.dart';
 import 'package:agora_rtc_engine/src/agora_media_recorder.dart';
-import 'package:agora_rtc_engine/src/agora_music_content_center.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
@@ -20,8 +19,6 @@ import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_impl.dart'
 
 import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
     as media_recorder_impl;
-import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_override.dart'
-    as music_center_impl;
 import 'package:agora_rtc_engine/src/impl/agora_spatial_audio_impl_override.dart'
     as agora_spatial_audio_impl;
 import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
@@ -49,6 +46,10 @@ import 'global_video_view_controller.dart';
 import 'package:meta/meta.dart';
 
 // ignore_for_file: public_member_api_docs
+
+/// Borrow from https://github.com/dart-lang/sdk/issues/46264#issuecomment-1151476029
+/// Avoid `Warning: Operand of null-aware operation '?.' has type 'WidgetsBinding' which excludes null.`
+T? _ambiguate<T>(T? value) => value;
 
 class ObjectPool {
   ObjectPool();
@@ -226,7 +227,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     );
     // Compatible with 2.10
     // ignore: invalid_null_aware_operator
-    WidgetsBinding.instance?.addObserver(_lifecycle!);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(_lifecycle!);
 
     if (defaultTargetPlatform == TargetPlatform.android) {
       final externalFilesDir =
@@ -268,7 +269,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (_lifecycle != null) {
       // Compatible with 2.10
       // ignore: invalid_null_aware_operator
-      WidgetsBinding.instance?.removeObserver(_lifecycle!);
+      _ambiguate(WidgetsBinding.instance)?.removeObserver(_lifecycle!);
       _lifecycle = null;
     }
 
