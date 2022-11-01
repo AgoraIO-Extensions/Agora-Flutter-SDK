@@ -760,7 +760,7 @@ class IrisEventObserverKey extends IrisEventKey {
           registerName: registerName,
           unregisterName: unregisterName,
           op: op,
-          handlerHash: handler?.hashCode ?? 0,
+          handlerHash: 0,
         );
 }
 

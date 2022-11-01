@@ -178,20 +178,23 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
       MediaPlayerSourceObserver observer) async {
     final eventHandlerWrapper =
         MediaPlayerSourceObserverWrapper(getMediaPlayerId(), observer);
-    final param = createParams({});
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.dispose,
-          registerName: 'MediaPlayer_registerPlayerSourceObserver',
-          unregisterName: 'MediaPlayer_unregisterPlayerSourceObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
-
     _eventLoop.removeEventHandler(
       MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()),
       eventHandlerWrapper,
     );
+
+    if (_eventLoop.isEventHandlerEmpty(
+        MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()))) {
+      final param = createParams({});
+      await apiCaller.callIrisEventAsync(
+          IrisEventObserverKey(
+            op: CallIrisEventOp.dispose,
+            registerName: 'MediaPlayer_registerPlayerSourceObserver',
+            unregisterName: 'MediaPlayer_unregisterPlayerSourceObserver',
+            handler: eventHandlerWrapper,
+          ),
+          jsonEncode(param));
+    }
   }
 
   void destroy() {
@@ -260,20 +263,23 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
       MediaPlayerAudioFrameObserver observer) async {
     final eventHandlerWrapper =
         MediaPlayerAudioFrameObserverWrapper(getMediaPlayerId(), observer);
-    final param = createParams({});
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.dispose,
-          registerName: 'MediaPlayer_registerAudioFrameObserver',
-          unregisterName: 'MediaPlayer_unregisterAudioFrameObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
-
     _eventLoop.removeEventHandler(
       MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()),
       eventHandlerWrapper,
     );
+
+    if (_eventLoop.isEventHandlerEmpty(
+        MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()))) {
+      final param = createParams({});
+      await apiCaller.callIrisEventAsync(
+          IrisEventObserverKey(
+            op: CallIrisEventOp.dispose,
+            registerName: 'MediaPlayer_registerAudioFrameObserver',
+            unregisterName: 'MediaPlayer_unregisterAudioFrameObserver',
+            handler: eventHandlerWrapper,
+          ),
+          jsonEncode(param));
+    }
   }
 
   @override
@@ -302,20 +308,23 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
       MediaPlayerVideoFrameObserver observer) async {
     final eventHandlerWrapper =
         MediaPlayerVideoFrameObserverWrapper(getMediaPlayerId(), observer);
-    final param = createParams({});
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.dispose,
-          registerName: 'MediaPlayer_registerVideoFrameObserver',
-          unregisterName: 'MediaPlayer_unregisterVideoFrameObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
-
     _eventLoop.removeEventHandler(
       MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()),
       eventHandlerWrapper,
     );
+
+    if (_eventLoop.isEventHandlerEmpty(
+        MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()))) {
+      final param = createParams({});
+      await apiCaller.callIrisEventAsync(
+          IrisEventObserverKey(
+            op: CallIrisEventOp.dispose,
+            registerName: 'MediaPlayer_registerVideoFrameObserver',
+            unregisterName: 'MediaPlayer_unregisterVideoFrameObserver',
+            handler: eventHandlerWrapper,
+          ),
+          jsonEncode(param));
+    }
   }
 
   @override
@@ -346,21 +355,25 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
       AudioSpectrumObserver observer) async {
     final eventHandlerWrapper =
         AudioSpectrumObserverWrapper(getMediaPlayerId(), observer);
-    final param = createParams({});
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.dispose,
-          registerName: 'MediaPlayer_registerMediaPlayerAudioSpectrumObserver',
-          unregisterName:
-              'MediaPlayer_unregisterMediaPlayerAudioSpectrumObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
-
     _eventLoop.removeEventHandler(
       MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()),
       eventHandlerWrapper,
     );
+
+    if (_eventLoop.isEventHandlerEmpty(
+        MediaPlayerEventHandlerKey(MediaPlayerImpl, getMediaPlayerId()))) {
+      final param = createParams({});
+      await apiCaller.callIrisEventAsync(
+          IrisEventObserverKey(
+            op: CallIrisEventOp.dispose,
+            registerName:
+                'MediaPlayer_registerMediaPlayerAudioSpectrumObserver',
+            unregisterName:
+                'MediaPlayer_unregisterMediaPlayerAudioSpectrumObserver',
+            handler: eventHandlerWrapper,
+          ),
+          jsonEncode(param));
+    }
   }
 }
 
