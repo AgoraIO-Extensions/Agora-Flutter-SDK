@@ -38,7 +38,8 @@ class CallApiResult {
 
 Uint8List uint8ListFromPtr(int intPtr, int length) {
   final ptr = ffi.Pointer<ffi.Uint8>.fromAddress(intPtr);
-  return ptr.asTypedList(length);
+  final memoryList = ptr.asTypedList(length);
+  return Uint8List.fromList(memoryList);
 }
 
 ffi.Pointer<ffi.Void> uint8ListToPtr(Uint8List buffer) {
