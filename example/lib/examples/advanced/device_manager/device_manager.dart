@@ -117,9 +117,20 @@ class _State extends State<DeviceManager> {
     final dropDownMenus = <DropdownMenuItem<String>>[];
     for (var v in devices) {
       dropDownMenus.add(DropdownMenuItem(
-        child: Text(
-          v.deviceName!,
-          style: const TextStyle(fontSize: 13),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'deviceName: ${v.deviceName!}',
+              style: const TextStyle(fontSize: 10),
+            ),
+            Text(
+              'deviceId: ${v.deviceId!}',
+              style: const TextStyle(fontSize: 10),
+            ),
+          ],
         ),
         value: v.deviceId,
       ));
