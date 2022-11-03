@@ -86,7 +86,6 @@ class EventLoop implements IrisEventHandler {
     _eventHandlers.remove(key);
   }
 
-
   bool isEventHandlerEmpty(EventLoopEventHandlerKey key) {
     return _eventHandlers[key]?.isEmpty == true;
   }
