@@ -117,11 +117,6 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
       : super.create(mediaPlayerId, eventLoop);
 
   @override
-  Future<void> open({required String url, required int startPos}) {
-    throw UnsupportedError('Please use openWithSongCode instead.');
-  }
-
-  @override
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
     final apiType = '${isOverrideClassName ? className : 'MusicPlayer'}_open';
