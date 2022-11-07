@@ -277,7 +277,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
   Future<void> _initMusicCenter() async {
     await _musicContentCenter.initialize(MusicContentCenterConfiguration(
       appId: config.musicCenterAppId,
-      rtmToken: _rtmTokenController.text,
+      token: _rtmTokenController.text,
       mccUid: 123,
     ));
 
