@@ -30,12 +30,12 @@ void musicContentCenterSmokeTestCases() {
 
       try {
         const String configurationAppId = "hello";
-        const String configurationRtmToken = "hello";
+        const String configurationToken = "hello";
         const int configurationMccUid = 10;
         const MusicContentCenterConfiguration configuration =
             MusicContentCenterConfiguration(
           appId: configurationAppId,
-          rtmToken: configurationRtmToken,
+          token: configurationToken,
           mccUid: configurationMccUid,
         );
         await musicContentCenter.initialize(
@@ -44,6 +44,47 @@ void musicContentCenterSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[initialize] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'renewToken',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+
+      try {
+        const String token = "hello";
+        await musicContentCenter.renewToken(
+          token,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[renewToken] error: ${e.toString()}');
           rethrow;
         }
 

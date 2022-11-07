@@ -261,16 +261,15 @@ class MusicContentCenterEventHandler {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterConfiguration {
   /// @nodoc
-  const MusicContentCenterConfiguration(
-      {this.appId, this.rtmToken, this.mccUid});
+  const MusicContentCenterConfiguration({this.appId, this.token, this.mccUid});
 
   /// @nodoc
   @JsonKey(name: 'appId')
   final String? appId;
 
   /// @nodoc
-  @JsonKey(name: 'rtmToken')
-  final String? rtmToken;
+  @JsonKey(name: 'token')
+  final String? token;
 
   /// @nodoc
   @JsonKey(name: 'mccUid')

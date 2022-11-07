@@ -329,12 +329,13 @@ void rtcEngineExSmokeTestCases() {
             DegradationPreference.maintainQuality;
         const VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const CompressionPreference configCompressionPreference =
-            CompressionPreference.preferLowLatency;
         const EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
         const AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
         );
         const int configFrameRate = 10;
         const int configBitrate = 10;
@@ -348,7 +349,6 @@ void rtcEngineExSmokeTestCases() {
           orientationMode: configOrientationMode,
           degradationPreference: configDegradationPreference,
           mirrorMode: configMirrorMode,
-          compressionPreference: configCompressionPreference,
           advanceOptions: configAdvanceOptions,
         );
         const String connectionChannelId = "hello";

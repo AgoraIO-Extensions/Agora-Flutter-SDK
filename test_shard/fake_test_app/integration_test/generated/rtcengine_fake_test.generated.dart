@@ -952,12 +952,13 @@ void rtcEngineSmokeTestCases() {
             DegradationPreference.maintainQuality;
         const VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const CompressionPreference configCompressionPreference =
-            CompressionPreference.preferLowLatency;
         const EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
         const AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
         );
         const int configFrameRate = 10;
         const int configBitrate = 10;
@@ -971,7 +972,6 @@ void rtcEngineSmokeTestCases() {
           orientationMode: configOrientationMode,
           degradationPreference: configDegradationPreference,
           mirrorMode: configMirrorMode,
-          compressionPreference: configCompressionPreference,
           advanceOptions: configAdvanceOptions,
         );
         await rtcEngine.setVideoEncoderConfiguration(
@@ -5602,6 +5602,47 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'registerExtension',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const String provider = "hello";
+        const String extension = "hello";
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
+        await rtcEngine.registerExtension(
+          provider: provider,
+          extension: extension,
+          type: type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[registerExtension] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'enableExtension',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -7696,14 +7737,14 @@ void rtcEngineSmokeTestCases() {
             DegradationPreference.maintainQuality;
         const VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const CompressionPreference
-            videoOutputConfigurationCompressionPreference =
-            CompressionPreference.preferLowLatency;
         const EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
         const AdvanceOptions videoOutputConfigurationAdvanceOptions =
             AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
         );
         const int videoOutputConfigurationFrameRate = 10;
         const int videoOutputConfigurationBitrate = 10;
@@ -7718,7 +7759,6 @@ void rtcEngineSmokeTestCases() {
           orientationMode: videoOutputConfigurationOrientationMode,
           degradationPreference: videoOutputConfigurationDegradationPreference,
           mirrorMode: videoOutputConfigurationMirrorMode,
-          compressionPreference: videoOutputConfigurationCompressionPreference,
           advanceOptions: videoOutputConfigurationAdvanceOptions,
         );
         const int configStreamCount = 10;
@@ -7783,14 +7823,14 @@ void rtcEngineSmokeTestCases() {
             DegradationPreference.maintainQuality;
         const VideoMirrorModeType videoOutputConfigurationMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const CompressionPreference
-            videoOutputConfigurationCompressionPreference =
-            CompressionPreference.preferLowLatency;
         const EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
         const AdvanceOptions videoOutputConfigurationAdvanceOptions =
             AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
         );
         const int videoOutputConfigurationFrameRate = 10;
         const int videoOutputConfigurationBitrate = 10;
@@ -7805,7 +7845,6 @@ void rtcEngineSmokeTestCases() {
           orientationMode: videoOutputConfigurationOrientationMode,
           degradationPreference: videoOutputConfigurationDegradationPreference,
           mirrorMode: videoOutputConfigurationMirrorMode,
-          compressionPreference: videoOutputConfigurationCompressionPreference,
           advanceOptions: videoOutputConfigurationAdvanceOptions,
         );
         const int configStreamCount = 10;
@@ -9986,12 +10025,13 @@ void rtcEngineSmokeTestCases() {
             DegradationPreference.maintainQuality;
         const VideoMirrorModeType configMirrorMode =
             VideoMirrorModeType.videoMirrorModeAuto;
-        const CompressionPreference configCompressionPreference =
-            CompressionPreference.preferLowLatency;
         const EncodingPreference advanceOptionsEncodingPreference =
             EncodingPreference.preferAuto;
+        const CompressionPreference advanceOptionsCompressionPreference =
+            CompressionPreference.preferLowLatency;
         const AdvanceOptions configAdvanceOptions = AdvanceOptions(
           encodingPreference: advanceOptionsEncodingPreference,
+          compressionPreference: advanceOptionsCompressionPreference,
         );
         const int configFrameRate = 10;
         const int configBitrate = 10;
@@ -10005,7 +10045,6 @@ void rtcEngineSmokeTestCases() {
           orientationMode: configOrientationMode,
           degradationPreference: configDegradationPreference,
           mirrorMode: configMirrorMode,
-          compressionPreference: configCompressionPreference,
           advanceOptions: configAdvanceOptions,
         );
         await rtcEngine.setDirectCdnStreamingVideoConfiguration(
@@ -11105,3 +11144,4 @@ void rtcEngineSmokeTestCases() {
     },
   );
 }
+

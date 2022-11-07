@@ -1549,11 +1549,15 @@ extension EncodingPreferenceExt on EncodingPreference {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvanceOptions {
   /// @nodoc
-  const AdvanceOptions({this.encodingPreference});
+  const AdvanceOptions({this.encodingPreference, this.compressionPreference});
 
   /// @nodoc
   @JsonKey(name: 'encodingPreference')
   final EncodingPreference? encodingPreference;
+
+  /// @nodoc
+  @JsonKey(name: 'compressionPreference')
+  final CompressionPreference? compressionPreference;
 
   /// @nodoc
   factory AdvanceOptions.fromJson(Map<String, dynamic> json) =>
@@ -1607,7 +1611,6 @@ class VideoEncoderConfiguration {
       this.orientationMode,
       this.degradationPreference,
       this.mirrorMode,
-      this.compressionPreference,
       this.advanceOptions});
 
   /// The codec type of the local video stream. See VideoCodecType .
@@ -1641,10 +1644,6 @@ class VideoEncoderConfiguration {
   /// Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
-
-  /// @nodoc
-  @JsonKey(name: 'compressionPreference')
-  final CompressionPreference? compressionPreference;
 
   /// @nodoc
   @JsonKey(name: 'advanceOptions')

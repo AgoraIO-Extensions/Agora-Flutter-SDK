@@ -252,6 +252,8 @@ AdvanceOptions _$AdvanceOptionsFromJson(Map<String, dynamic> json) =>
     AdvanceOptions(
       encodingPreference: $enumDecodeNullable(
           _$EncodingPreferenceEnumMap, json['encodingPreference']),
+      compressionPreference: $enumDecodeNullable(
+          _$CompressionPreferenceEnumMap, json['compressionPreference']),
     );
 
 Map<String, dynamic> _$AdvanceOptionsToJson(AdvanceOptions instance) {
@@ -265,6 +267,8 @@ Map<String, dynamic> _$AdvanceOptionsToJson(AdvanceOptions instance) {
 
   writeNotNull('encodingPreference',
       _$EncodingPreferenceEnumMap[instance.encodingPreference]);
+  writeNotNull('compressionPreference',
+      _$CompressionPreferenceEnumMap[instance.compressionPreference]);
   return val;
 }
 
@@ -272,6 +276,11 @@ const _$EncodingPreferenceEnumMap = {
   EncodingPreference.preferAuto: -1,
   EncodingPreference.preferSoftware: 0,
   EncodingPreference.preferHardware: 1,
+};
+
+const _$CompressionPreferenceEnumMap = {
+  CompressionPreference.preferLowLatency: 0,
+  CompressionPreference.preferQuality: 1,
 };
 
 VideoEncoderConfiguration _$VideoEncoderConfigurationFromJson(
@@ -292,8 +301,6 @@ VideoEncoderConfiguration _$VideoEncoderConfigurationFromJson(
           _$DegradationPreferenceEnumMap, json['degradationPreference']),
       mirrorMode:
           $enumDecodeNullable(_$VideoMirrorModeTypeEnumMap, json['mirrorMode']),
-      compressionPreference: $enumDecodeNullable(
-          _$CompressionPreferenceEnumMap, json['compressionPreference']),
       advanceOptions: json['advanceOptions'] == null
           ? null
           : AdvanceOptions.fromJson(
@@ -320,8 +327,6 @@ Map<String, dynamic> _$VideoEncoderConfigurationToJson(
   writeNotNull('degradationPreference',
       _$DegradationPreferenceEnumMap[instance.degradationPreference]);
   writeNotNull('mirrorMode', _$VideoMirrorModeTypeEnumMap[instance.mirrorMode]);
-  writeNotNull('compressionPreference',
-      _$CompressionPreferenceEnumMap[instance.compressionPreference]);
   writeNotNull('advanceOptions', instance.advanceOptions?.toJson());
   return val;
 }
@@ -344,11 +349,6 @@ const _$VideoMirrorModeTypeEnumMap = {
   VideoMirrorModeType.videoMirrorModeAuto: 0,
   VideoMirrorModeType.videoMirrorModeEnabled: 1,
   VideoMirrorModeType.videoMirrorModeDisabled: 2,
-};
-
-const _$CompressionPreferenceEnumMap = {
-  CompressionPreference.preferLowLatency: 0,
-  CompressionPreference.preferQuality: 1,
 };
 
 DataStreamConfig _$DataStreamConfigFromJson(Map<String, dynamic> json) =>
