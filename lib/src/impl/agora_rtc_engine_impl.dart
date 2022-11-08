@@ -7,6 +7,7 @@ import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_engine.dart';
 import 'package:agora_rtc_engine/src/agora_media_player.dart';
 import 'package:agora_rtc_engine/src/agora_media_recorder.dart';
+import 'package:agora_rtc_engine/src/agora_music_content_center.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
@@ -16,6 +17,9 @@ import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_ex_impl.dart'
     as rtc_engine_ex_binding;
 import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_impl.dart'
     as rtc_engine_binding;
+
+import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_override.dart'
+    as mcci;
 
 import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
     as media_recorder_impl;
@@ -620,6 +624,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   LocalSpatialAudioEngine getLocalSpatialAudioEngine() {
     return _objectPool.putIfAbsent(LocalSpatialAudioEngineImpl,
         () => agora_spatial_audio_impl.LocalSpatialAudioEngineImpl.create());
+  }
+
+  @override
+  MusicContentCenter getMusicContentCenter() {
+    return mcci.MusicContentCenterImpl.create(this);
   }
 
   @override

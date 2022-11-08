@@ -5261,9 +5261,7 @@ class AudioEncodedFrameObserver {
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
   ///
   /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.
-  ///  1: Mono.
-  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
@@ -5275,9 +5273,7 @@ class AudioEncodedFrameObserver {
   /// After calling registerAudioEncodedFrameObserver and setting the audio profile as audioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
   ///
   /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.
-  ///  1: Mono.
-  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).

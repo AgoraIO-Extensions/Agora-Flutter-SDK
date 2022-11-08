@@ -49,8 +49,6 @@ target 'Runner' do
     pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
     # pod 'iris_event_handler', :path => File.join('.symlinks', 'plugins', 'iris_event', 'ios')
   end
-
-  pod 'VideoObserverPlugin', :path => File.join('.symlinks', 'plugins', 'video_raw_data', 'ios')
 end
 
 target 'ScreenSharing' do

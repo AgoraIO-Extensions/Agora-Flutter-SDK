@@ -4916,6 +4916,21 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  MusicContentCenter getMusicContentCenter() {
+// Implementation template
+// final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMusicContentCenter';
+// final param = createParams({// // });
+// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// if (callApiResult.irisReturnCode < 0) {
+// throw AgoraRtcException(code: callApiResult.irisReturnCode);
+// }
+// final rm = callApiResult.data;
+// final result = rm['result'];
+// return result as MusicContentCenter;
+    throw UnimplementedError('Unimplement for getMusicContentCenter');
+  }
+
+  @override
   MediaEngine getMediaEngine() {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMediaEngine';
