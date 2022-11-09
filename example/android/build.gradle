@@ -1,6 +1,6 @@
 buildscript {
     // Min kotlin version for Flutter SDK 3.x
-    ext.kotlin_version = '1.5.31'
+    ext.kotlin_version = '1.6.10'
     repositories {
         google()
         mavenCentral()

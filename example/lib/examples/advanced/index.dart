@@ -26,6 +26,7 @@ import 'join_multiple_channel/join_multiple_channel.dart';
 import 'media_recorder/media_recorder.dart';
 import 'precall_test/precall_test.dart';
 import 'process_audio_raw_data/process_audio_raw_data.dart';
+import 'rtm_chat/rtc_chat.dart';
 import 'send_metadata/send_metadata.dart';
 import 'set_content_inspect/set_content_inspect.dart';
 import 'start_rhythm_player/start_rhythm_player.dart';
@@ -85,4 +86,5 @@ final advanced = [
   },
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
+  {'name': 'RtmChat', 'widget': const RtmChat()},
 ];

@@ -2,7 +2,6 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'audio_device_manager.g.dart';
 
 /// The maximum length of the device ID.
-///
 @JsonEnum(alwaysCreate: true)
 enum MaxDeviceIdLengthType {
   /// The maximum length of the device ID is 512 bytes.
@@ -24,10 +23,8 @@ extension MaxDeviceIdLengthTypeExt on MaxDeviceIdLengthType {
 }
 
 /// Audio device management methods.
-///
 abstract class AudioDeviceManager {
   /// Enumerates the audio playback devices.
-  ///
   ///
   /// Returns
   /// Success: Returns an AudioDeviceInfo array, which includes all the audio playback devices.Failure: An empty array.
@@ -35,26 +32,22 @@ abstract class AudioDeviceManager {
 
   /// Enumerates the audio capture devices.
   ///
-  ///
   /// Returns
   /// Success: An AudioDeviceInfo array, which includes all the audio capture devices.Failure: An empty array.
   Future<List<AudioDeviceInfo>> enumerateRecordingDevices();
 
   /// Sets the audio playback device.
   ///
-  ///
-  /// * [deviceId] The ID of the specified audio playback device. You can get the device ID by calling enumeratePlaybackDevices . Plugging or unplugging the audio device does not change the value of deviceId.
+  /// * [deviceId] The ID of the specified audio playback device. You can get the device ID by calling enumeratePlaybackDevices . Connecting or disconnecting the audio device does not change the value of deviceId.
   Future<void> setPlaybackDevice(String deviceId);
 
   /// Retrieves the audio playback device associated with the device ID.
-  ///
   ///
   /// Returns
   /// The current audio playback device.
   Future<String> getPlaybackDevice();
 
   /// Retrieves the audio playback device associated with the device ID.
-  ///
   ///
   /// Returns
   /// An AudioDeviceInfo object, which contains the ID and device name of the audio devices.
@@ -68,12 +61,10 @@ abstract class AudioDeviceManager {
 
   /// Sets the audio recording device.
   ///
-  ///
   /// * [deviceId] The ID of the audio recording device. You can get the device ID by calling enumerateRecordingDevices . Plugging or unplugging the audio device does not change the value of deviceId.
   Future<void> setRecordingDevice(String deviceId);
 
   /// Gets the current audio recording device.
-  ///
   ///
   /// Returns
   /// The current audio recording device.
@@ -81,12 +72,13 @@ abstract class AudioDeviceManager {
 
   /// Retrieves the volume of the audio recording device.
   ///
-  ///
   /// Returns
   /// An AudioDeviceInfo object, which includes the device ID and device name.
   Future<AudioDeviceInfo> getRecordingDeviceInfo();
 
-  /// @nodoc
+  /// Sets the volume of the audio recording device.
+  ///
+  /// * [volume]  The volume of the audio recording device. The value range is [0,255].
   Future<void> setRecordingDeviceVolume(int volume);
 
   /// @nodoc
@@ -136,17 +128,14 @@ abstract class AudioDeviceManager {
 
   /// Sets the audio playback device used by the SDK to follow the system default audio playback device.
   ///
-  ///
   /// * [enable] Whether to follow the system default audio playback device:true: Follow. The SDK immediately switches the audio playback device when the system default audio playback device changes.false: Do not follow. The SDK switches the audio playback device to the system default audio playback device only when the currently used audio playback device is disconnected.
   Future<void> followSystemPlaybackDevice(bool enable);
 
   /// Sets the audio recording device used by the SDK to follow the system default audio recording device.
   ///
-  ///
   /// * [enable] Whether to follow the system default audio recording device:true: Follow. The SDK immediately switches the audio recording device when the system default audio recording device changes.false: Do not follow. The SDK switches the audio recording device to the system default audio recording device only when the currently used audio recording device is disconnected.
   Future<void> followSystemRecordingDevice(bool enable);
 
   /// Releases all the resources occupied by the AudioDeviceManager object.
-  ///
   Future<void> release();
 }

@@ -29,6 +29,58 @@ class VideoDeviceManagerGetCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineSetSubscribeAudioBlacklistJson {
+  const RtcEngineSetSubscribeAudioBlacklistJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineSetSubscribeAudioBlacklistJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineSetSubscribeAudioBlacklistJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineSetSubscribeAudioBlacklistJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineSetSubscribeAudioWhitelistJson {
+  const RtcEngineSetSubscribeAudioWhitelistJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineSetSubscribeAudioWhitelistJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineSetSubscribeAudioWhitelistJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineSetSubscribeAudioWhitelistJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineSetSubscribeVideoBlacklistJson {
+  const RtcEngineSetSubscribeVideoBlacklistJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineSetSubscribeVideoBlacklistJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineSetSubscribeVideoBlacklistJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineSetSubscribeVideoBlacklistJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineSetSubscribeVideoWhitelistJson {
+  const RtcEngineSetSubscribeVideoWhitelistJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineSetSubscribeVideoWhitelistJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineSetSubscribeVideoWhitelistJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineSetSubscribeVideoWhitelistJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineGetExtensionPropertyJson {
   const RtcEngineGetExtensionPropertyJson(this.value);
 
@@ -65,6 +117,17 @@ class RtcEngineGetCallIdJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineCreateDataStreamJson {
+  const RtcEngineCreateDataStreamJson(this.streamId);
+
+  @JsonKey(name: 'streamId')
+  final int streamId;
+  factory RtcEngineCreateDataStreamJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineCreateDataStreamJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$RtcEngineCreateDataStreamJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineGetUserInfoByUserAccountJson {
   const RtcEngineGetUserInfoByUserAccountJson(this.userInfo);
 
@@ -86,30 +149,6 @@ class RtcEngineGetUserInfoByUidJson {
   factory RtcEngineGetUserInfoByUidJson.fromJson(Map<String, dynamic> json) =>
       _$RtcEngineGetUserInfoByUidJsonFromJson(json);
   Map<String, dynamic> toJson() => _$RtcEngineGetUserInfoByUidJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class RtcEngineSetAdvancedAudioOptionsJson {
-  const RtcEngineSetAdvancedAudioOptionsJson(this.options);
-
-  @JsonKey(name: 'options')
-  final AdvancedAudioOptions options;
-  factory RtcEngineSetAdvancedAudioOptionsJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineSetAdvancedAudioOptionsJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineSetAdvancedAudioOptionsJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class RtcEngineCreateDataStreamJson {
-  const RtcEngineCreateDataStreamJson(this.streamId);
-
-  @JsonKey(name: 'streamId')
-  final int streamId;
-  factory RtcEngineCreateDataStreamJson.fromJson(Map<String, dynamic> json) =>
-      _$RtcEngineCreateDataStreamJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$RtcEngineCreateDataStreamJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -206,6 +245,71 @@ class MediaPlayerCacheManagerGetCacheDirJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineExSetSubscribeAudioBlacklistExJson {
+  const RtcEngineExSetSubscribeAudioBlacklistExJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineExSetSubscribeAudioBlacklistExJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineExSetSubscribeAudioBlacklistExJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineExSetSubscribeAudioBlacklistExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineExSetSubscribeAudioWhitelistExJson {
+  const RtcEngineExSetSubscribeAudioWhitelistExJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineExSetSubscribeAudioWhitelistExJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineExSetSubscribeAudioWhitelistExJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineExSetSubscribeAudioWhitelistExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineExSetSubscribeVideoBlacklistExJson {
+  const RtcEngineExSetSubscribeVideoBlacklistExJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineExSetSubscribeVideoBlacklistExJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineExSetSubscribeVideoBlacklistExJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineExSetSubscribeVideoBlacklistExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineExSetSubscribeVideoWhitelistExJson {
+  const RtcEngineExSetSubscribeVideoWhitelistExJson(this.uidList);
+
+  @JsonKey(name: 'uidList')
+  final List<int> uidList;
+  factory RtcEngineExSetSubscribeVideoWhitelistExJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineExSetSubscribeVideoWhitelistExJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineExSetSubscribeVideoWhitelistExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineExCreateDataStreamExJson {
+  const RtcEngineExCreateDataStreamExJson(this.streamId);
+
+  @JsonKey(name: 'streamId')
+  final int streamId;
+  factory RtcEngineExCreateDataStreamExJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineExCreateDataStreamExJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineExCreateDataStreamExJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineExGetUserInfoByUserAccountExJson {
   const RtcEngineExGetUserInfoByUserAccountExJson(this.userInfo);
 
@@ -229,19 +333,6 @@ class RtcEngineExGetUserInfoByUidExJson {
       _$RtcEngineExGetUserInfoByUidExJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$RtcEngineExGetUserInfoByUidExJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class RtcEngineExCreateDataStreamExJson {
-  const RtcEngineExCreateDataStreamExJson(this.streamId);
-
-  @JsonKey(name: 'streamId')
-  final int streamId;
-  factory RtcEngineExCreateDataStreamExJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineExCreateDataStreamExJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineExCreateDataStreamExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -297,6 +388,19 @@ class AudioDeviceManagerGetRecordingDeviceVolumeJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class AudioDeviceManagerGetLoopbackDeviceJson {
+  const AudioDeviceManagerGetLoopbackDeviceJson(this.deviceId);
+
+  @JsonKey(name: 'deviceId')
+  final String deviceId;
+  factory AudioDeviceManagerGetLoopbackDeviceJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class AudioDeviceManagerGetPlaybackDeviceMuteJson {
   const AudioDeviceManagerGetPlaybackDeviceMuteJson(this.mute);
 
@@ -320,4 +424,17 @@ class AudioDeviceManagerGetRecordingDeviceMuteJson {
       _$AudioDeviceManagerGetRecordingDeviceMuteJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetRecordingDeviceMuteJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class StreamChannelGetSubscribedUserListJson {
+  const StreamChannelGetSubscribedUserListJson(this.users);
+
+  @JsonKey(name: 'users')
+  final UserList users;
+  factory StreamChannelGetSubscribedUserListJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$StreamChannelGetSubscribedUserListJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$StreamChannelGetSubscribedUserListJsonToJson(this);
 }

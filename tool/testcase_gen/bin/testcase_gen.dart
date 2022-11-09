@@ -43,6 +43,8 @@ void main(List<String> arguments) {
     path.join(srcDir, 'agora_media_engine.dart'),
     path.join(srcDir, 'agora_spatial_audio.dart'),
     path.join(srcDir, 'agora_media_recorder.dart'),
+    path.join(srcDir, 'agora_rtm_client.dart'),
+    path.join(srcDir, 'agora_stream_channel.dart'),
   ];
 
   final outDir = path.join(
@@ -490,6 +492,110 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       skipMemberFunctions: [
         'release',
       ],
+    ),
+    TemplatedTestCase(
+      className: 'RtmClient',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:integration_test_app/main.dart' as app;
+
+void rtmClientSmokeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    RtmClient rtmClient = createAgoraRtmClient();
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+      }
+      expect(e is AgoraRtcException, true);
+      debugPrint(
+        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+    }
+
+    await rtmClient.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'rtmClient',
+      outputDir: path.join(outDir, 'generated'),
+      skipMemberFunctions: [],
+    ),
+    TemplatedTestCase(
+      className: 'StreamChannel',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:integration_test_app/main.dart' as app;
+
+void streamChannelSmokeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    RtmClient rtmClient = createAgoraRtmClient();
+    final streamChannel = await rtmClient.createStreamChannel('');
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+      }
+      expect(e is AgoraRtcException, true);
+      debugPrint(
+        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+    }
+
+    await streamChannel.release();
+    await rtmClient.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'streamChannel',
+      outputDir: path.join(outDir, 'generated'),
+      skipMemberFunctions: [],
     ),
   ];
 

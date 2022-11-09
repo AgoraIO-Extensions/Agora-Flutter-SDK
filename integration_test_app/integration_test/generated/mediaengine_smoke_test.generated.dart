@@ -169,7 +169,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerChannel = 10;
         const int frameChannels = 10;
         const int frameSamplesPerSec = 10;
-        Uint8List frameBuffer = Uint8List.fromList([]);
+        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
@@ -229,7 +229,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerChannel = 10;
         const int frameChannels = 10;
         const int frameSamplesPerSec = 10;
-        Uint8List frameBuffer = Uint8List.fromList([]);
+        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
@@ -284,7 +284,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerChannel = 10;
         const int frameChannels = 10;
         const int frameSamplesPerSec = 10;
-        Uint8List frameBuffer = Uint8List.fromList([]);
+        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
@@ -339,7 +339,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerChannel = 10;
         const int frameChannels = 10;
         const int frameSamplesPerSec = 10;
-        Uint8List frameBuffer = Uint8List.fromList([]);
+        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
@@ -394,7 +394,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerChannel = 10;
         const int frameChannels = 10;
         const int frameSamplesPerSec = 10;
-        Uint8List frameBuffer = Uint8List.fromList([]);
+        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
@@ -664,7 +664,7 @@ void mediaEngineSmokeTestCases() {
         const VideoBufferType frameType = VideoBufferType.videoBufferRawData;
         const VideoPixelFormat frameFormat = VideoPixelFormat.videoPixelDefault;
         const EglContextType frameEglType = EglContextType.eglContext10;
-        Uint8List frameBuffer = Uint8List.fromList([]);
+        Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameStride = 10;
         const int frameHeight = 10;
         const int frameCropLeft = 10;
@@ -675,7 +675,7 @@ void mediaEngineSmokeTestCases() {
         const int frameTimestamp = 10;
         const int frameTextureId = 10;
         const List<double> frameMatrix = [];
-        Uint8List frameMetadataBuffer = Uint8List.fromList([]);
+        Uint8List frameMetadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameMetadataSize = 10;
         final ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
@@ -733,7 +733,7 @@ void mediaEngineSmokeTestCases() {
       final mediaEngine = rtcEngine.getMediaEngine();
 
       try {
-        Uint8List imageBuffer = Uint8List.fromList([]);
+        Uint8List imageBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int length = 10;
         const VideoCodecType videoEncodedFrameInfoCodecType =
             VideoCodecType.videoCodecNone;
