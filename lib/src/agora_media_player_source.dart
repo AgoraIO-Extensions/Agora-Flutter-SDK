@@ -1,7 +1,6 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 
 /// Provides callbacks for media players.
-///
 class MediaPlayerSourceObserver {
   /// @nodoc
   const MediaPlayerSourceObserver({
@@ -57,7 +56,6 @@ class MediaPlayerSourceObserver {
 
   /// Reports the events of preloaded media resources.
   ///
-  ///
   /// * [src] The URL of the media resource.
   /// * [event] Events that occur when media resources are preloaded. See PlayerPreloadEvent .
   final void Function(String src, PlayerPreloadEvent event)? onPreloadEvent;
@@ -70,7 +68,6 @@ class MediaPlayerSourceObserver {
   final void Function()? onAgoraCDNTokenWillExpire;
 
   /// Occurs when the video bitrate of the media resource changes.
-  ///
   ///
   /// * [from] Information about the video bitrate of the media resource being played. See SrcInfo .
   /// * [to] Information about the changed video bitrate of media resource being played. See SrcInfo .

@@ -306,6 +306,20 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
 };
 
+RtcEngineEventHandlerOnAudioMixingPositionChangedJson
+    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnAudioMixingPositionChangedJson(
+          position: json['position'] as int?,
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(
+            RtcEngineEventHandlerOnAudioMixingPositionChangedJson instance) =>
+        <String, dynamic>{
+          'position': instance.position,
+        };
+
 RtcEngineEventHandlerOnAudioMixingFinishedJson
     _$RtcEngineEventHandlerOnAudioMixingFinishedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2362,6 +2376,22 @@ Map<String, dynamic> _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(
       'audioFrame': instance.audioFrame?.toJson(),
     };
 
+AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson(
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(
+            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) =>
+        <String, dynamic>{
+          'audioFrame': instance.audioFrame?.toJson(),
+        };
+
 AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
     _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2909,3 +2939,221 @@ Map<String, dynamic>
         <String, dynamic>{
           'volume': instance.volume,
         };
+
+RtmEventHandlerOnMessageEventJson _$RtmEventHandlerOnMessageEventJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtmEventHandlerOnMessageEventJson(
+      event: json['event'] == null
+          ? null
+          : MessageEvent.fromJson(json['event'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$RtmEventHandlerOnMessageEventJsonToJson(
+        RtmEventHandlerOnMessageEventJson instance) =>
+    <String, dynamic>{
+      'event': instance.event?.toJson(),
+    };
+
+RtmEventHandlerOnPresenceEventJson _$RtmEventHandlerOnPresenceEventJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtmEventHandlerOnPresenceEventJson(
+      event: json['event'] == null
+          ? null
+          : PresenceEvent.fromJson(json['event'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$RtmEventHandlerOnPresenceEventJsonToJson(
+        RtmEventHandlerOnPresenceEventJson instance) =>
+    <String, dynamic>{
+      'event': instance.event?.toJson(),
+    };
+
+RtmEventHandlerOnJoinResultJson _$RtmEventHandlerOnJoinResultJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtmEventHandlerOnJoinResultJson(
+      channelName: json['channelName'] as String?,
+      userId: json['userId'] as String?,
+      errorCode: $enumDecodeNullable(
+          _$StreamChannelErrorCodeEnumMap, json['errorCode']),
+    );
+
+Map<String, dynamic> _$RtmEventHandlerOnJoinResultJsonToJson(
+        RtmEventHandlerOnJoinResultJson instance) =>
+    <String, dynamic>{
+      'channelName': instance.channelName,
+      'userId': instance.userId,
+      'errorCode': _$StreamChannelErrorCodeEnumMap[instance.errorCode],
+    };
+
+const _$StreamChannelErrorCodeEnumMap = {
+  StreamChannelErrorCode.streamChannelErrorOk: 0,
+  StreamChannelErrorCode.streamChannelErrorExceedLimitation: 1,
+  StreamChannelErrorCode.streamChannelErrorUserNotExist: 2,
+};
+
+RtmEventHandlerOnLeaveResultJson _$RtmEventHandlerOnLeaveResultJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtmEventHandlerOnLeaveResultJson(
+      channelName: json['channelName'] as String?,
+      userId: json['userId'] as String?,
+      errorCode: $enumDecodeNullable(
+          _$StreamChannelErrorCodeEnumMap, json['errorCode']),
+    );
+
+Map<String, dynamic> _$RtmEventHandlerOnLeaveResultJsonToJson(
+        RtmEventHandlerOnLeaveResultJson instance) =>
+    <String, dynamic>{
+      'channelName': instance.channelName,
+      'userId': instance.userId,
+      'errorCode': _$StreamChannelErrorCodeEnumMap[instance.errorCode],
+    };
+
+RtmEventHandlerOnJoinTopicResultJson
+    _$RtmEventHandlerOnJoinTopicResultJsonFromJson(Map<String, dynamic> json) =>
+        RtmEventHandlerOnJoinTopicResultJson(
+          channelName: json['channelName'] as String?,
+          userId: json['userId'] as String?,
+          topic: json['topic'] as String?,
+          meta: json['meta'] as String?,
+          errorCode: $enumDecodeNullable(
+              _$StreamChannelErrorCodeEnumMap, json['errorCode']),
+        );
+
+Map<String, dynamic> _$RtmEventHandlerOnJoinTopicResultJsonToJson(
+        RtmEventHandlerOnJoinTopicResultJson instance) =>
+    <String, dynamic>{
+      'channelName': instance.channelName,
+      'userId': instance.userId,
+      'topic': instance.topic,
+      'meta': instance.meta,
+      'errorCode': _$StreamChannelErrorCodeEnumMap[instance.errorCode],
+    };
+
+RtmEventHandlerOnLeaveTopicResultJson
+    _$RtmEventHandlerOnLeaveTopicResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtmEventHandlerOnLeaveTopicResultJson(
+          channelName: json['channelName'] as String?,
+          userId: json['userId'] as String?,
+          topic: json['topic'] as String?,
+          meta: json['meta'] as String?,
+          errorCode: $enumDecodeNullable(
+              _$StreamChannelErrorCodeEnumMap, json['errorCode']),
+        );
+
+Map<String, dynamic> _$RtmEventHandlerOnLeaveTopicResultJsonToJson(
+        RtmEventHandlerOnLeaveTopicResultJson instance) =>
+    <String, dynamic>{
+      'channelName': instance.channelName,
+      'userId': instance.userId,
+      'topic': instance.topic,
+      'meta': instance.meta,
+      'errorCode': _$StreamChannelErrorCodeEnumMap[instance.errorCode],
+    };
+
+RtmEventHandlerOnTopicSubscribedJson
+    _$RtmEventHandlerOnTopicSubscribedJsonFromJson(Map<String, dynamic> json) =>
+        RtmEventHandlerOnTopicSubscribedJson(
+          channelName: json['channelName'] as String?,
+          userId: json['userId'] as String?,
+          topic: json['topic'] as String?,
+          succeedUsers: json['succeedUsers'] == null
+              ? null
+              : UserList.fromJson(json['succeedUsers'] as Map<String, dynamic>),
+          failedUsers: json['failedUsers'] == null
+              ? null
+              : UserList.fromJson(json['failedUsers'] as Map<String, dynamic>),
+          errorCode: $enumDecodeNullable(
+              _$StreamChannelErrorCodeEnumMap, json['errorCode']),
+        );
+
+Map<String, dynamic> _$RtmEventHandlerOnTopicSubscribedJsonToJson(
+        RtmEventHandlerOnTopicSubscribedJson instance) =>
+    <String, dynamic>{
+      'channelName': instance.channelName,
+      'userId': instance.userId,
+      'topic': instance.topic,
+      'succeedUsers': instance.succeedUsers?.toJson(),
+      'failedUsers': instance.failedUsers?.toJson(),
+      'errorCode': _$StreamChannelErrorCodeEnumMap[instance.errorCode],
+    };
+
+RtmEventHandlerOnTopicUnsubscribedJson
+    _$RtmEventHandlerOnTopicUnsubscribedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtmEventHandlerOnTopicUnsubscribedJson(
+          channelName: json['channelName'] as String?,
+          userId: json['userId'] as String?,
+          topic: json['topic'] as String?,
+          succeedUsers: json['succeedUsers'] == null
+              ? null
+              : UserList.fromJson(json['succeedUsers'] as Map<String, dynamic>),
+          failedUsers: json['failedUsers'] == null
+              ? null
+              : UserList.fromJson(json['failedUsers'] as Map<String, dynamic>),
+          errorCode: $enumDecodeNullable(
+              _$StreamChannelErrorCodeEnumMap, json['errorCode']),
+        );
+
+Map<String, dynamic> _$RtmEventHandlerOnTopicUnsubscribedJsonToJson(
+        RtmEventHandlerOnTopicUnsubscribedJson instance) =>
+    <String, dynamic>{
+      'channelName': instance.channelName,
+      'userId': instance.userId,
+      'topic': instance.topic,
+      'succeedUsers': instance.succeedUsers?.toJson(),
+      'failedUsers': instance.failedUsers?.toJson(),
+      'errorCode': _$StreamChannelErrorCodeEnumMap[instance.errorCode],
+    };
+
+RtmEventHandlerOnConnectionStateChangeJson
+    _$RtmEventHandlerOnConnectionStateChangeJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtmEventHandlerOnConnectionStateChangeJson(
+          channelName: json['channelName'] as String?,
+          state:
+              $enumDecodeNullable(_$RtmConnectionStateEnumMap, json['state']),
+          reason: $enumDecodeNullable(
+              _$RtmConnectionChangeReasonEnumMap, json['reason']),
+        );
+
+Map<String, dynamic> _$RtmEventHandlerOnConnectionStateChangeJsonToJson(
+        RtmEventHandlerOnConnectionStateChangeJson instance) =>
+    <String, dynamic>{
+      'channelName': instance.channelName,
+      'state': _$RtmConnectionStateEnumMap[instance.state],
+      'reason': _$RtmConnectionChangeReasonEnumMap[instance.reason],
+    };
+
+const _$RtmConnectionStateEnumMap = {
+  RtmConnectionState.rtmConnectionStateDisconnected: 1,
+  RtmConnectionState.rtmConnectionStateConnecting: 2,
+  RtmConnectionState.rtmConnectionStateConnected: 3,
+  RtmConnectionState.rtmConnectionStateReconnecting: 4,
+  RtmConnectionState.rtmConnectionStateFailed: 5,
+};
+
+const _$RtmConnectionChangeReasonEnumMap = {
+  RtmConnectionChangeReason.rtmConnectionChangedConnecting: 0,
+  RtmConnectionChangeReason.rtmConnectionChangedJoinSuccess: 1,
+  RtmConnectionChangeReason.rtmConnectionChangedInterrupted: 2,
+  RtmConnectionChangeReason.rtmConnectionChangedBannedByServer: 3,
+  RtmConnectionChangeReason.rtmConnectionChangedJoinFailed: 4,
+  RtmConnectionChangeReason.rtmConnectionChangedLeaveChannel: 5,
+  RtmConnectionChangeReason.rtmConnectionChangedInvalidAppId: 6,
+  RtmConnectionChangeReason.rtmConnectionChangedInvalidChannelName: 7,
+  RtmConnectionChangeReason.rtmConnectionChangedInvalidToken: 8,
+  RtmConnectionChangeReason.rtmConnectionChangedTokenExpired: 9,
+  RtmConnectionChangeReason.rtmConnectionChangedRejectedByServer: 10,
+  RtmConnectionChangeReason.rtmConnectionChangedSettingProxyServer: 11,
+  RtmConnectionChangeReason.rtmConnectionChangedRenewToken: 12,
+  RtmConnectionChangeReason.rtmConnectionChangedClientIpAddressChanged: 13,
+  RtmConnectionChangeReason.rtmConnectionChangedKeepAliveTimeout: 14,
+  RtmConnectionChangeReason.rtmConnectionChangedRejoinSuccess: 15,
+  RtmConnectionChangeReason.rtmConnectionChangedLost: 16,
+  RtmConnectionChangeReason.rtmConnectionChangedEchoTest: 17,
+  RtmConnectionChangeReason.rtmConnectionChangedClientIpAddressChangedByUser:
+      18,
+  RtmConnectionChangeReason.rtmConnectionChangedSameUidLogin: 19,
+  RtmConnectionChangeReason.rtmConnectionChangedTooManyBroadcasters: 20,
+};

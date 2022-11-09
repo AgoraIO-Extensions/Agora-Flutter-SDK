@@ -32,6 +32,58 @@ Map<String, dynamic> _$VideoDeviceManagerGetCapabilityJsonToJson(
       'capability': instance.capability.toJson(),
     };
 
+RtcEngineSetSubscribeAudioBlacklistJson
+    _$RtcEngineSetSubscribeAudioBlacklistJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineSetSubscribeAudioBlacklistJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineSetSubscribeAudioBlacklistJsonToJson(
+        RtcEngineSetSubscribeAudioBlacklistJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
+RtcEngineSetSubscribeAudioWhitelistJson
+    _$RtcEngineSetSubscribeAudioWhitelistJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineSetSubscribeAudioWhitelistJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineSetSubscribeAudioWhitelistJsonToJson(
+        RtcEngineSetSubscribeAudioWhitelistJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
+RtcEngineSetSubscribeVideoBlacklistJson
+    _$RtcEngineSetSubscribeVideoBlacklistJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineSetSubscribeVideoBlacklistJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineSetSubscribeVideoBlacklistJsonToJson(
+        RtcEngineSetSubscribeVideoBlacklistJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
+RtcEngineSetSubscribeVideoWhitelistJson
+    _$RtcEngineSetSubscribeVideoWhitelistJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineSetSubscribeVideoWhitelistJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineSetSubscribeVideoWhitelistJsonToJson(
+        RtcEngineSetSubscribeVideoWhitelistJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
 RtcEngineGetExtensionPropertyJson _$RtcEngineGetExtensionPropertyJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetExtensionPropertyJson(
@@ -68,6 +120,18 @@ Map<String, dynamic> _$RtcEngineGetCallIdJsonToJson(
       'callId': instance.callId,
     };
 
+RtcEngineCreateDataStreamJson _$RtcEngineCreateDataStreamJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtcEngineCreateDataStreamJson(
+      json['streamId'] as int,
+    );
+
+Map<String, dynamic> _$RtcEngineCreateDataStreamJsonToJson(
+        RtcEngineCreateDataStreamJson instance) =>
+    <String, dynamic>{
+      'streamId': instance.streamId,
+    };
+
 RtcEngineGetUserInfoByUserAccountJson
     _$RtcEngineGetUserInfoByUserAccountJsonFromJson(
             Map<String, dynamic> json) =>
@@ -91,31 +155,6 @@ Map<String, dynamic> _$RtcEngineGetUserInfoByUidJsonToJson(
         RtcEngineGetUserInfoByUidJson instance) =>
     <String, dynamic>{
       'userInfo': instance.userInfo.toJson(),
-    };
-
-RtcEngineSetAdvancedAudioOptionsJson
-    _$RtcEngineSetAdvancedAudioOptionsJsonFromJson(Map<String, dynamic> json) =>
-        RtcEngineSetAdvancedAudioOptionsJson(
-          AdvancedAudioOptions.fromJson(
-              json['options'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$RtcEngineSetAdvancedAudioOptionsJsonToJson(
-        RtcEngineSetAdvancedAudioOptionsJson instance) =>
-    <String, dynamic>{
-      'options': instance.options.toJson(),
-    };
-
-RtcEngineCreateDataStreamJson _$RtcEngineCreateDataStreamJsonFromJson(
-        Map<String, dynamic> json) =>
-    RtcEngineCreateDataStreamJson(
-      json['streamId'] as int,
-    );
-
-Map<String, dynamic> _$RtcEngineCreateDataStreamJsonToJson(
-        RtcEngineCreateDataStreamJson instance) =>
-    <String, dynamic>{
-      'streamId': instance.streamId,
     };
 
 MediaPlayerGetDurationJson _$MediaPlayerGetDurationJsonFromJson(
@@ -216,6 +255,70 @@ Map<String, dynamic> _$MediaPlayerCacheManagerGetCacheDirJsonToJson(
       'path': instance.path,
     };
 
+RtcEngineExSetSubscribeAudioBlacklistExJson
+    _$RtcEngineExSetSubscribeAudioBlacklistExJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineExSetSubscribeAudioBlacklistExJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineExSetSubscribeAudioBlacklistExJsonToJson(
+        RtcEngineExSetSubscribeAudioBlacklistExJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
+RtcEngineExSetSubscribeAudioWhitelistExJson
+    _$RtcEngineExSetSubscribeAudioWhitelistExJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineExSetSubscribeAudioWhitelistExJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineExSetSubscribeAudioWhitelistExJsonToJson(
+        RtcEngineExSetSubscribeAudioWhitelistExJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
+RtcEngineExSetSubscribeVideoBlacklistExJson
+    _$RtcEngineExSetSubscribeVideoBlacklistExJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineExSetSubscribeVideoBlacklistExJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineExSetSubscribeVideoBlacklistExJsonToJson(
+        RtcEngineExSetSubscribeVideoBlacklistExJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
+RtcEngineExSetSubscribeVideoWhitelistExJson
+    _$RtcEngineExSetSubscribeVideoWhitelistExJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineExSetSubscribeVideoWhitelistExJson(
+          (json['uidList'] as List<dynamic>).map((e) => e as int).toList(),
+        );
+
+Map<String, dynamic> _$RtcEngineExSetSubscribeVideoWhitelistExJsonToJson(
+        RtcEngineExSetSubscribeVideoWhitelistExJson instance) =>
+    <String, dynamic>{
+      'uidList': instance.uidList,
+    };
+
+RtcEngineExCreateDataStreamExJson _$RtcEngineExCreateDataStreamExJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtcEngineExCreateDataStreamExJson(
+      json['streamId'] as int,
+    );
+
+Map<String, dynamic> _$RtcEngineExCreateDataStreamExJsonToJson(
+        RtcEngineExCreateDataStreamExJson instance) =>
+    <String, dynamic>{
+      'streamId': instance.streamId,
+    };
+
 RtcEngineExGetUserInfoByUserAccountExJson
     _$RtcEngineExGetUserInfoByUserAccountExJsonFromJson(
             Map<String, dynamic> json) =>
@@ -239,18 +342,6 @@ Map<String, dynamic> _$RtcEngineExGetUserInfoByUidExJsonToJson(
         RtcEngineExGetUserInfoByUidExJson instance) =>
     <String, dynamic>{
       'userInfo': instance.userInfo.toJson(),
-    };
-
-RtcEngineExCreateDataStreamExJson _$RtcEngineExCreateDataStreamExJsonFromJson(
-        Map<String, dynamic> json) =>
-    RtcEngineExCreateDataStreamExJson(
-      json['streamId'] as int,
-    );
-
-Map<String, dynamic> _$RtcEngineExCreateDataStreamExJsonToJson(
-        RtcEngineExCreateDataStreamExJson instance) =>
-    <String, dynamic>{
-      'streamId': instance.streamId,
     };
 
 AudioDeviceManagerGetPlaybackDeviceJson
@@ -305,6 +396,19 @@ Map<String, dynamic> _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(
       'volume': instance.volume,
     };
 
+AudioDeviceManagerGetLoopbackDeviceJson
+    _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioDeviceManagerGetLoopbackDeviceJson(
+          json['deviceId'] as String,
+        );
+
+Map<String, dynamic> _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(
+        AudioDeviceManagerGetLoopbackDeviceJson instance) =>
+    <String, dynamic>{
+      'deviceId': instance.deviceId,
+    };
+
 AudioDeviceManagerGetPlaybackDeviceMuteJson
     _$AudioDeviceManagerGetPlaybackDeviceMuteJsonFromJson(
             Map<String, dynamic> json) =>
@@ -329,4 +433,17 @@ Map<String, dynamic> _$AudioDeviceManagerGetRecordingDeviceMuteJsonToJson(
         AudioDeviceManagerGetRecordingDeviceMuteJson instance) =>
     <String, dynamic>{
       'mute': instance.mute,
+    };
+
+StreamChannelGetSubscribedUserListJson
+    _$StreamChannelGetSubscribedUserListJsonFromJson(
+            Map<String, dynamic> json) =>
+        StreamChannelGetSubscribedUserListJson(
+          UserList.fromJson(json['users'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$StreamChannelGetSubscribedUserListJsonToJson(
+        StreamChannelGetSubscribedUserListJson instance) =>
+    <String, dynamic>{
+      'users': instance.users.toJson(),
     };

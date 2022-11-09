@@ -2,7 +2,6 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_spatial_audio.g.dart';
 
 /// The spatial position of the remote user or the media player.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RemoteVoicePositionInfo {
   /// @nodoc
@@ -88,14 +87,14 @@ abstract class BaseSpatialAudioEngine {
   Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 }
 
 /// This class calculates user positions through the SDK to implement the spatial audio effect.
-///
+/// This class inherits from BaseSpatialAudioEngine . Before calling other APIs in this class, you need to call the initialize method to initialize this class.
 abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   /// Initializes LocalSpatialAudioEngine .
   /// Before calling other methods of the LocalSpatialAudioEngine class, you need to call this method to initialize LocalSpatialAudioEngine.The SDK supports creating only one LocalSpatialAudioEngine instance for an app.

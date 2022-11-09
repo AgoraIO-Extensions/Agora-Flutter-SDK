@@ -318,6 +318,33 @@ extension RtcEngineEventHandlerOnAudioDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
+  const RtcEngineEventHandlerOnAudioMixingPositionChangedJson({this.position});
+
+  @JsonKey(name: 'position')
+  final int? position;
+  factory RtcEngineEventHandlerOnAudioMixingPositionChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnAudioMixingPositionChangedJsonBufferExt
+    on RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
+  RtcEngineEventHandlerOnAudioMixingPositionChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnAudioMixingFinishedJson {
   const RtcEngineEventHandlerOnAudioMixingFinishedJson();
 
@@ -3216,6 +3243,33 @@ extension AudioFrameObserverBaseOnMixedAudioFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  const AudioFrameObserverBaseOnEarMonitoringAudioFrameJson({this.audioFrame});
+
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(this);
+}
+
+extension AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonBufferExt
+    on AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  AudioFrameObserverBaseOnEarMonitoringAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
   const AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson(
       {this.channelId, this.uid, this.audioFrame});
@@ -4076,6 +4130,307 @@ class MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
 extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
     on MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
   MediaPlayerSourceObserverOnAudioVolumeIndicationJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnMessageEventJson {
+  const RtmEventHandlerOnMessageEventJson({this.event});
+
+  @JsonKey(name: 'event')
+  final MessageEvent? event;
+  factory RtmEventHandlerOnMessageEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnMessageEventJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnMessageEventJsonToJson(this);
+}
+
+extension RtmEventHandlerOnMessageEventJsonBufferExt
+    on RtmEventHandlerOnMessageEventJson {
+  RtmEventHandlerOnMessageEventJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnPresenceEventJson {
+  const RtmEventHandlerOnPresenceEventJson({this.event});
+
+  @JsonKey(name: 'event')
+  final PresenceEvent? event;
+  factory RtmEventHandlerOnPresenceEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnPresenceEventJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnPresenceEventJsonToJson(this);
+}
+
+extension RtmEventHandlerOnPresenceEventJsonBufferExt
+    on RtmEventHandlerOnPresenceEventJson {
+  RtmEventHandlerOnPresenceEventJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnJoinResultJson {
+  const RtmEventHandlerOnJoinResultJson(
+      {this.channelName, this.userId, this.errorCode});
+
+  @JsonKey(name: 'channelName')
+  final String? channelName;
+  @JsonKey(name: 'userId')
+  final String? userId;
+  @JsonKey(name: 'errorCode')
+  final StreamChannelErrorCode? errorCode;
+  factory RtmEventHandlerOnJoinResultJson.fromJson(Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnJoinResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnJoinResultJsonToJson(this);
+}
+
+extension RtmEventHandlerOnJoinResultJsonBufferExt
+    on RtmEventHandlerOnJoinResultJson {
+  RtmEventHandlerOnJoinResultJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnLeaveResultJson {
+  const RtmEventHandlerOnLeaveResultJson(
+      {this.channelName, this.userId, this.errorCode});
+
+  @JsonKey(name: 'channelName')
+  final String? channelName;
+  @JsonKey(name: 'userId')
+  final String? userId;
+  @JsonKey(name: 'errorCode')
+  final StreamChannelErrorCode? errorCode;
+  factory RtmEventHandlerOnLeaveResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnLeaveResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnLeaveResultJsonToJson(this);
+}
+
+extension RtmEventHandlerOnLeaveResultJsonBufferExt
+    on RtmEventHandlerOnLeaveResultJson {
+  RtmEventHandlerOnLeaveResultJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnJoinTopicResultJson {
+  const RtmEventHandlerOnJoinTopicResultJson(
+      {this.channelName, this.userId, this.topic, this.meta, this.errorCode});
+
+  @JsonKey(name: 'channelName')
+  final String? channelName;
+  @JsonKey(name: 'userId')
+  final String? userId;
+  @JsonKey(name: 'topic')
+  final String? topic;
+  @JsonKey(name: 'meta')
+  final String? meta;
+  @JsonKey(name: 'errorCode')
+  final StreamChannelErrorCode? errorCode;
+  factory RtmEventHandlerOnJoinTopicResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnJoinTopicResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnJoinTopicResultJsonToJson(this);
+}
+
+extension RtmEventHandlerOnJoinTopicResultJsonBufferExt
+    on RtmEventHandlerOnJoinTopicResultJson {
+  RtmEventHandlerOnJoinTopicResultJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnLeaveTopicResultJson {
+  const RtmEventHandlerOnLeaveTopicResultJson(
+      {this.channelName, this.userId, this.topic, this.meta, this.errorCode});
+
+  @JsonKey(name: 'channelName')
+  final String? channelName;
+  @JsonKey(name: 'userId')
+  final String? userId;
+  @JsonKey(name: 'topic')
+  final String? topic;
+  @JsonKey(name: 'meta')
+  final String? meta;
+  @JsonKey(name: 'errorCode')
+  final StreamChannelErrorCode? errorCode;
+  factory RtmEventHandlerOnLeaveTopicResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnLeaveTopicResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnLeaveTopicResultJsonToJson(this);
+}
+
+extension RtmEventHandlerOnLeaveTopicResultJsonBufferExt
+    on RtmEventHandlerOnLeaveTopicResultJson {
+  RtmEventHandlerOnLeaveTopicResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnTopicSubscribedJson {
+  const RtmEventHandlerOnTopicSubscribedJson(
+      {this.channelName,
+      this.userId,
+      this.topic,
+      this.succeedUsers,
+      this.failedUsers,
+      this.errorCode});
+
+  @JsonKey(name: 'channelName')
+  final String? channelName;
+  @JsonKey(name: 'userId')
+  final String? userId;
+  @JsonKey(name: 'topic')
+  final String? topic;
+  @JsonKey(name: 'succeedUsers')
+  final UserList? succeedUsers;
+  @JsonKey(name: 'failedUsers')
+  final UserList? failedUsers;
+  @JsonKey(name: 'errorCode')
+  final StreamChannelErrorCode? errorCode;
+  factory RtmEventHandlerOnTopicSubscribedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnTopicSubscribedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnTopicSubscribedJsonToJson(this);
+}
+
+extension RtmEventHandlerOnTopicSubscribedJsonBufferExt
+    on RtmEventHandlerOnTopicSubscribedJson {
+  RtmEventHandlerOnTopicSubscribedJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnTopicUnsubscribedJson {
+  const RtmEventHandlerOnTopicUnsubscribedJson(
+      {this.channelName,
+      this.userId,
+      this.topic,
+      this.succeedUsers,
+      this.failedUsers,
+      this.errorCode});
+
+  @JsonKey(name: 'channelName')
+  final String? channelName;
+  @JsonKey(name: 'userId')
+  final String? userId;
+  @JsonKey(name: 'topic')
+  final String? topic;
+  @JsonKey(name: 'succeedUsers')
+  final UserList? succeedUsers;
+  @JsonKey(name: 'failedUsers')
+  final UserList? failedUsers;
+  @JsonKey(name: 'errorCode')
+  final StreamChannelErrorCode? errorCode;
+  factory RtmEventHandlerOnTopicUnsubscribedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnTopicUnsubscribedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnTopicUnsubscribedJsonToJson(this);
+}
+
+extension RtmEventHandlerOnTopicUnsubscribedJsonBufferExt
+    on RtmEventHandlerOnTopicUnsubscribedJson {
+  RtmEventHandlerOnTopicUnsubscribedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtmEventHandlerOnConnectionStateChangeJson {
+  const RtmEventHandlerOnConnectionStateChangeJson(
+      {this.channelName, this.state, this.reason});
+
+  @JsonKey(name: 'channelName')
+  final String? channelName;
+  @JsonKey(name: 'state')
+  final RtmConnectionState? state;
+  @JsonKey(name: 'reason')
+  final RtmConnectionChangeReason? reason;
+  factory RtmEventHandlerOnConnectionStateChangeJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtmEventHandlerOnConnectionStateChangeJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtmEventHandlerOnConnectionStateChangeJsonToJson(this);
+}
+
+extension RtmEventHandlerOnConnectionStateChangeJsonBufferExt
+    on RtmEventHandlerOnConnectionStateChangeJson {
+  RtmEventHandlerOnConnectionStateChangeJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

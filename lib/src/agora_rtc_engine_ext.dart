@@ -1,7 +1,9 @@
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'package:agora_rtc_engine/src/impl/agora_rtm_client_impl_override.dart';
 import 'agora_media_player.dart';
 import 'agora_rtc_engine.dart';
 import 'agora_rtc_engine_ex.dart';
+import 'agora_rtm_client.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
 import 'impl/media_player_impl.dart';
 
@@ -17,7 +19,6 @@ extension RtcEngineExt on RtcEngine {
 }
 
 /// Error codes and error messages.
-///
 class AgoraRtcException implements Exception {
   /// @nodoc
   AgoraRtcException({required this.code, this.message});
@@ -57,4 +58,9 @@ RtcEngineEx createAgoraRtcEngineEx() {
 /// The MediaPlayerCacheManager instance.
 MediaPlayerCacheManager getMediaPlayerCacheManager(RtcEngine rtcEngine) {
   return MediaPlayerCacheManagerImpl.create(rtcEngine);
+}
+
+/// @nodoc
+RtmClient createAgoraRtmClient() {
+  return RtmClientImpl.create();
 }

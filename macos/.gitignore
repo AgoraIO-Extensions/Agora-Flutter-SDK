@@ -1,4 +1,5 @@
 libs/
 AgoraRtcWrapper.framework
+AgoraRtmWrapper.framework
 AgoraRtcWrapper.podspec
 zip_download_path/

@@ -378,7 +378,7 @@ void rtcEngineExSmokeTestCases() {
         const int canvasView = 10;
         const int canvasUid = 10;
         const bool canvasIsScreenView = true;
-        Uint8List canvasPriv = Uint8List.fromList([]);
+        Uint8List canvasPriv = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int canvasPrivSize = 10;
         final VideoCanvas canvas = VideoCanvas(
           view: canvasView,
@@ -1023,7 +1023,7 @@ void rtcEngineExSmokeTestCases() {
         const bool enabled = true;
         const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
         const String configEncryptionKey = "hello";
-        Uint8List configEncryptionKdfSalt = Uint8List.fromList([]);
+        Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
         final EncryptionConfig config = EncryptionConfig(
           encryptionMode: configEncryptionMode,
           encryptionKey: configEncryptionKey,
@@ -1065,7 +1065,7 @@ void rtcEngineExSmokeTestCases() {
 
       try {
         const int streamId = 10;
-        Uint8List data = Uint8List.fromList([]);
+        Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int length = 10;
         const String connectionChannelId = "hello";
         const int connectionLocalUid = 10;
