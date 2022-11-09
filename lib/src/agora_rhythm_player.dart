@@ -1,26 +1,26 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_rhythm_player.g.dart';
 
-/// @nodoc
+/// Virtual metronome state.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerStateType {
-  /// @nodoc
+  /// (810): The virtual metronome is not enabled or disabled already.
   @JsonValue(810)
   rhythmPlayerStateIdle,
 
-  /// @nodoc
+  /// 811: Opening the beat files.
   @JsonValue(811)
   rhythmPlayerStateOpening,
 
-  /// @nodoc
+  /// 812: Decoding the beat files.
   @JsonValue(812)
   rhythmPlayerStateDecoding,
 
-  /// @nodoc
+  /// 813: The beat files are playing.
   @JsonValue(813)
   rhythmPlayerStatePlaying,
 
-  /// @nodoc
+  /// 814: Failed to start virtual metronome. You can use the reported errorcodeerrorCode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
   @JsonValue(814)
   rhythmPlayerStateFailed,
 }
@@ -38,26 +38,26 @@ extension RhythmPlayerStateTypeExt on RhythmPlayerStateType {
   }
 }
 
-/// @nodoc
+/// Virtual Metronome error message.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerErrorType {
-  /// @nodoc
+  /// (0): The beat files are played normally without errors.
   @JsonValue(0)
   rhythmPlayerErrorOk,
 
-  /// @nodoc
+  /// 1: General error, no clear reason.
   @JsonValue(1)
   rhythmPlayerErrorFailed,
 
-  /// @nodoc
+  /// 801: There is an error when opening the beat files.
   @JsonValue(801)
   rhythmPlayerErrorCanNotOpen,
 
-  /// @nodoc
+  /// 802: There is an error when playing the beat files.
   @JsonValue(802)
   rhythmPlayerErrorCanNotPlay,
 
-  /// @nodoc
+  /// (803): The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
   @JsonValue(803)
   rhythmPlayerErrorFileOverDurationLimit,
 }
@@ -76,7 +76,6 @@ extension RhythmPlayerErrorTypeExt on RhythmPlayerErrorType {
 }
 
 /// The metronome configuration.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AgoraRhythmPlayerConfig {
   /// @nodoc

@@ -8,10 +8,11 @@ IRIS_PROJECT_PATH=$1
 BUILD_TYPE=$2
 ABIS="arm64-v8a armeabi-v7a x86_64"
 IRIS_TYPE="dcg"
+IRIS_RTM_TYPE="rtm"
 NATIVE_SDK_PATH_NAME=$3 # Agora_Native_SDK_for_Mac_rel.v3.8.201.2_39877_full_20220608_2158
 SCRIPTS_PATH=$(dirname "$0")
 
-bash $SCRIPTS_PATH/build-android-arch.sh $IRIS_PROJECT_PATH ALL $BUILD_TYPE
+bash ${IRIS_PROJECT_PATH}/rtm/ci/build-android.sh buildALL $BUILD_TYPE
 
 for ABI in ${ABIS};
 do
@@ -19,15 +20,18 @@ do
     # bash $IRIS_PROJECT_PATH/$IRIS_TYPE/ci/build-android.sh build $ABI $BUILD_TYPE
     mkdir -p "$AGORA_FLUTTER_PROJECT_PATH/android/libs/$ABI/"
      
-    cp -RP "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/$ABI/libAgoraRtcWrapper.so" \
+    cp -RP "$IRIS_PROJECT_PATH/build/android/$ABI/output/$IRIS_TYPE/$BUILD_TYPE/libAgoraRtcWrapper.so" \
           "$AGORA_FLUTTER_PROJECT_PATH/android/libs/$ABI/libAgoraRtcWrapper.so" 
+
+    cp -RP "$IRIS_PROJECT_PATH/build/android/$ABI/output/$IRIS_RTM_TYPE/$BUILD_TYPE/libAgoraRtmWrapper.so" \
+          "$AGORA_FLUTTER_PROJECT_PATH/android/libs/$ABI/libAgoraRtmWrapper.so" 
 done;
 
 # echo "Copying $IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.aar to $AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.aar"
 # cp -r "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.aar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.aar"
 
-echo "Copying $IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.jar to $AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.jar"
-cp -r "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.jar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.jar"
+# echo "Copying $IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.jar to $AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.jar"
+# cp -r "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.jar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.jar"
 
 for ABI in ${ABIS};
 do
@@ -50,7 +54,7 @@ cp -r "$IRIS_PROJECT_PATH/third_party/agora/$IRIS_TYPE/libs/$NATIVE_SDK_PATH_NAM
 # echo "Copying $IRIS_PROJECT_PATH/third_party/agora/rtc/libs/Agora_Native_SDK_for_Android_FULL/libs/agora-screensharing.aar to $AGORA_FLUTTER_PROJECT_PATH/android/libs/libs/agora-screensharing.aar"
 # cp -r "$IRIS_PROJECT_PATH/third_party/agora/rtc/libs/Agora_Native_SDK_for_Android_FULL/libs/agora-screensharing.aar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/agora-screensharing.aar"
 
-echo "Copying "$IRIS_PROJECT_PATH/third_party/agora/${IRIS_TYPE}/include/"" to "$AGORA_FLUTTER_PROJECT_PATH/integration_test_app/iris_integration_test/third_party/agora/rtc/include/"
+# echo "Copying "$IRIS_PROJECT_PATH/third_party/agora/${IRIS_TYPE}/include/"" to "$AGORA_FLUTTER_PROJECT_PATH/integration_test_app/iris_integration_test/third_party/agora/rtc/include/"
 # /Users/fenglang/codes/aw/iris/build/android/ALL_ARCHITECTURE/output/dcg/Debug/include
 # /Users/fenglang/codes/aw/iris/build/android/ALL_ARCHITECTURE/output/dcg/Debug/include
-cp -r "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/dcg/$BUILD_TYPE/include/" "$AGORA_FLUTTER_PROJECT_PATH/third_party/include/"
+# cp -r "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/dcg/$BUILD_TYPE/include/" "$AGORA_FLUTTER_PROJECT_PATH/third_party/include/"

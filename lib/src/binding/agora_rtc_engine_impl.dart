@@ -4454,9 +4454,8 @@ class RtcEngineImpl implements RtcEngine {
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
-    final setAdvancedAudioOptionsJson =
-        RtcEngineSetAdvancedAudioOptionsJson.fromJson(rm);
-    return setAdvancedAudioOptionsJson.options;
+
+    return const AdvancedAudioOptions();
   }
 
   @override

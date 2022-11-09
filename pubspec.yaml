@@ -18,6 +18,12 @@ dependencies:
   iris_event: ^1.2.0
   async: ^2.8.2
   meta: ^1.7.0
+
+  iris_method_channel:
+    git:
+      url: https://github.com/littleGnAl/iris_method_channel.git
+      ref: 9bd1c8f9b3a50db294ce6e64e59f94010e39d0f8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

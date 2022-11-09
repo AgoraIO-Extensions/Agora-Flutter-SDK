@@ -26,6 +26,7 @@ import 'package:agora_rtc_engine/src/impl/agora_spatial_audio_impl_override.dart
 import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
     as media_engine_impl;
 import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
+import 'package:agora_rtc_engine/src/impl/global_method_channel.dart';
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
 import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
@@ -250,12 +251,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     WidgetsBinding.instance?.addObserver(_lifecycle!);
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      final externalFilesDir =
-          await engineMethodChannel.invokeMethod('getExternalFilesDir');
+      final externalFilesDir = await GlobalMethodChannel.getIrisLogAbsolutePath();
       if (externalFilesDir != null) {
         try {
           // Reset the sdk log file to ensure the iris log path has been set
-          await setLogFile('$externalFilesDir/agorasdk.log');
+          await setLogFile(externalFilesDir);
         } catch (e) {
           debugPrint(
               '[RtcEngine] setLogFile fail, make sure the permission is granted.');

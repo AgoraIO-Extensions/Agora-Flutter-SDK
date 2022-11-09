@@ -5,38 +5,37 @@ part 'agora_media_player_types.g.dart';
 const kMaxCharBufferLength = 50;
 
 /// The playback state.
-///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerState {
   /// 0: The default state. The media player returns this state code before you open the media resource or after you stop the playback.
   @JsonValue(0)
   playerStateIdle,
 
-  /// Opening the media resource.
+  /// 1: The media resource is being opened.
   @JsonValue(1)
   playerStateOpening,
 
-  /// Opens the media resource successfully.
+  /// 2: Opens the media resource successfully.
   @JsonValue(2)
   playerStateOpenCompleted,
 
-  /// The media resource is playing.
+  /// 3: The media resource is playing.
   @JsonValue(3)
   playerStatePlaying,
 
-  /// Pauses the playback.
+  /// 4: Pauses the playback.
   @JsonValue(4)
   playerStatePaused,
 
-  /// The playback finishes.
+  /// 5: The playback finishes.
   @JsonValue(5)
   playerStatePlaybackCompleted,
 
-  /// The loop finishes.
+  /// 6: The loop finishes.
   @JsonValue(6)
   playerStatePlaybackAllLoopsCompleted,
 
-  /// The playback stops.
+  /// 7: The playback stops.
   @JsonValue(7)
   playerStateStopped,
 
@@ -87,7 +86,6 @@ extension MediaPlayerStateExt on MediaPlayerState {
 }
 
 /// Error codes of the media player.
-///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerError {
   /// 0: No error.
@@ -177,7 +175,6 @@ extension MediaPlayerErrorExt on MediaPlayerError {
 }
 
 /// The type of the media stream.
-///
 @JsonEnum(alwaysCreate: true)
 enum MediaStreamType {
   /// 0: The type is unknown.
@@ -211,7 +208,6 @@ extension MediaStreamTypeExt on MediaStreamType {
 }
 
 /// Media player events.
-///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerEvent {
   /// 0: The player begins to seek to a new playback position.
@@ -297,7 +293,6 @@ extension MediaPlayerEventExt on MediaPlayerEvent {
 }
 
 /// Events that occur when media resources are preloaded.
-///
 @JsonEnum(alwaysCreate: true)
 enum PlayerPreloadEvent {
   /// 0: Starts preloading media resources.
@@ -327,7 +322,6 @@ extension PlayerPreloadEventExt on PlayerPreloadEvent {
 }
 
 /// The detailed information of the media stream.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlayerStreamInfo {
   /// @nodoc
@@ -407,7 +401,6 @@ class PlayerStreamInfo {
 }
 
 /// Information about the video bitrate of the media resource being played.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SrcInfo {
   /// @nodoc
@@ -430,7 +423,6 @@ class SrcInfo {
 }
 
 /// The type of media metadata.
-///
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerMetadataType {
   /// 0: The type is unknown.
@@ -456,7 +448,6 @@ extension MediaPlayerMetadataTypeExt on MediaPlayerMetadataType {
 }
 
 /// Statistics about the media files being cached.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CacheStatistics {
   /// @nodoc
@@ -483,7 +474,6 @@ class CacheStatistics {
 }
 
 /// Information related to the media player.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlayerUpdatedInfo {
   /// @nodoc
@@ -510,7 +500,6 @@ class PlayerUpdatedInfo {
 }
 
 /// Information related to the media file to be played and the playback scenario configurations.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaSource {
   /// @nodoc
@@ -523,7 +512,7 @@ class MediaSource {
       this.isAgoraSource,
       this.isLiveSource});
 
-  /// The URL of the media file to be played.If you need to open a custom media resource, you do not have to pass in a value to the url.
+  /// The URL of the media file to be played.
   @JsonKey(name: 'url')
   final String? url;
 
@@ -531,7 +520,7 @@ class MediaSource {
   @JsonKey(name: 'uri')
   final String? uri;
 
-  /// The starting position (ms) for playback. The default value is 0.
+  /// The starting position (ms) for playback. Default value is 0.
   @JsonKey(name: 'startPos')
   final int? startPos;
 
@@ -543,11 +532,11 @@ class MediaSource {
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
 
-  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service:true: The media resource is a live stream or on-demand video distributed through Media Broadcast service.false: (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service.If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
+  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service:true: The media resource is a live stream or on-demand video distributed through Media Broadcast service.false: (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service.trueIf you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as ; otherwise, you don't need to set the isAgoraSource parameter.
   @JsonKey(name: 'isAgoraSource')
   final bool? isAgoraSource;
 
-  /// Whether the media resource to be opened is a live stream:true: The media resource is a live stream.false: (Default) The media resource is not a live stream.If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly.If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
+  /// Whether the media resource to be opened is a live stream:true: The media resource is a live stream.false: (Default) The media resource is not a live stream.trueIf the media resource you want to open is a live stream, Agora recommends that you set this parameter as so that the live stream can be loaded more quickly.trueIf the media resource you open is not a live stream, but you set isLiveSource as , the media resource is not to be loaded more quickly.
   @JsonKey(name: 'isLiveSource')
   final bool? isLiveSource;
 
