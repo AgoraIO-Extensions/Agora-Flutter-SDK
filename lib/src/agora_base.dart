@@ -1399,7 +1399,8 @@ extension VideoStreamTypeExt on VideoStreamType {
   }
 }
 
-/// @nodoc
+/// 视频订阅设置。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoSubscriptionOptions {
   /// @nodoc
@@ -1409,7 +1410,8 @@ class VideoSubscriptionOptions {
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
-  /// @nodoc
+  /// 是否仅订阅编码后的视频流：
+  ///  true：仅订阅编码后的视频数据（结构化数据），SDK 未对该视频数据做解码及渲染。false：（默认）订阅原始视频数据和编码后的数据。
   @JsonKey(name: 'encodedFrameOnly')
   final bool? encodedFrameOnly;
 
@@ -1439,7 +1441,7 @@ class EncodedVideoFrameInfo {
       this.uid,
       this.streamType});
 
-  /// The codec type of the local video stream. See VideoCodecType . The default value is videoCodecH264(2).
+  /// The codec type of the local video stream. See VideoCodecType . The default value is videoCodecH264 (2).
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
@@ -1491,14 +1493,15 @@ class EncodedVideoFrameInfo {
   Map<String, dynamic> toJson() => _$EncodedVideoFrameInfoToJson(this);
 }
 
-/// @nodoc
+/// 视频编码的压缩偏好类型。
+///
 @JsonEnum(alwaysCreate: true)
 enum CompressionPreference {
-  /// @nodoc
+  /// 0: 低延时偏好。SDK 会对视频帧进行压缩处理，以降低延时。该偏好适用于流畅性优先且允许画质降低的场景。
   @JsonValue(0)
   preferLowLatency,
 
-  /// @nodoc
+  /// 1:（默认）高质量偏好。SDK 会对视频帧进行压缩处理，同时保持视频质量。该偏好适用于画质优先的场景。
   @JsonValue(1)
   preferQuality,
 }
@@ -1516,18 +1519,19 @@ extension CompressionPreferenceExt on CompressionPreference {
   }
 }
 
-/// @nodoc
+/// 视频编码器偏好。
+///
 @JsonEnum(alwaysCreate: true)
 enum EncodingPreference {
-  /// @nodoc
+  /// -1：默认偏好。SDK 根据平台、设备类型等因素自动选择最优的编码类型进行编码。
   @JsonValue(-1)
   preferAuto,
 
-  /// @nodoc
+  /// 0：软件编码偏好。SDK 优先使用软件编码器进行视频编码。
   @JsonValue(0)
   preferSoftware,
 
-  /// @nodoc
+  /// 1：硬件编码偏好。SDK 优先使用硬件编码器进行视频编码。当设备不支持硬件编码时，SDK 会自动使用软件编码，并通过 onLocalVideoStats 回调中的 hwEncoderAccelerating 报告当前使用的视频编码器类型。
   @JsonValue(1)
   preferHardware,
 }
@@ -1545,17 +1549,18 @@ extension EncodingPreferenceExt on EncodingPreference {
   }
 }
 
-/// @nodoc
+/// 视频编码的高级选项。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AdvanceOptions {
   /// @nodoc
   const AdvanceOptions({this.encodingPreference, this.compressionPreference});
 
-  /// @nodoc
+  /// 视频编码器偏好。详见 EncodingPreference 。
   @JsonKey(name: 'encodingPreference')
   final EncodingPreference? encodingPreference;
 
-  /// @nodoc
+  /// 视频编码的压缩偏好。详见 CompressionPreference 。
   @JsonKey(name: 'compressionPreference')
   final CompressionPreference? compressionPreference;
 
@@ -1617,7 +1622,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The dimensions of the encoded video (px). This parameter measures the video encoding quality in the format of length × width.
+  /// The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
@@ -1680,18 +1685,19 @@ class DataStreamConfig {
   Map<String, dynamic> toJson() => _$DataStreamConfigToJson(this);
 }
 
-/// @nodoc
+/// 发送视频流的模式。
+///
 @JsonEnum(alwaysCreate: true)
 enum SimulcastStreamMode {
-  /// @nodoc
+  /// -1：默认不发送小流，直至收到接收端发起的订阅小流申请时，自动切换为发送小流模式。
   @JsonValue(-1)
   autoSimulcastStream,
 
-  /// @nodoc
+  /// 0：始终不发送小流。
   @JsonValue(0)
   disableSimulcastStream,
 
-  /// @nodoc
+  /// 1：始终发送小流。
   @JsonValue(1)
   enableSimulcastStream,
 }
@@ -2718,11 +2724,11 @@ enum LocalVideoStreamError {
   @JsonValue(5)
   localVideoStreamErrorEncodeFailure,
 
-  /// 6:(For iOS only)The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+  /// 6: (For iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
   @JsonValue(6)
   localVideoStreamErrorCaptureInbackground,
 
-  /// 7:(For iOS only)The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+  /// 7: (For iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
   @JsonValue(7)
   localVideoStreamErrorCaptureMultipleForegroundApps,
 
@@ -2734,7 +2740,7 @@ enum LocalVideoStreamError {
   @JsonValue(9)
   localVideoStreamErrorDeviceDisconnected,
 
-  /// 10:(macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
+  /// 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
   @JsonValue(10)
   localVideoStreamErrorDeviceInvalidId,
 
@@ -2742,11 +2748,11 @@ enum LocalVideoStreamError {
   @JsonValue(101)
   localVideoStreamErrorDeviceSystemPressure,
 
-  /// 11:(macOS only) The shared window is minimized when you call startScreenCaptureByWindowId to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, for example by maximizing this window.
+  /// 11: (macOS only) The shared window is minimized when you call startScreenCaptureByWindowId to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, for example by maximizing this window.
   @JsonValue(11)
   localVideoStreamErrorScreenCaptureWindowMinimized,
 
-  /// 12:(macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing.Common scenarios for reporting this error code:When the local user closes the shared window, the SDK reports this error code.The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.The local user watches a web video or reads a web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
+  /// 12: (macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing.Common scenarios for reporting this error code:When the local user closes the shared window, the SDK reports this error code.The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.The local user watches a web video or reads a web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
   @JsonValue(12)
   localVideoStreamErrorScreenCaptureWindowClosed,
 
@@ -3630,7 +3636,7 @@ class TranscodingUser {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is thewidth set in LiveTranscoding .
+  /// The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding .
   @JsonKey(name: 'x')
   final int? x;
 
@@ -3646,13 +3652,11 @@ class TranscodingUser {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The layer index number of the host's video. The value range is [0,100].
-  ///  0: (Default) The host's video is the bottom layer.100: The host's video is the top layer.If the value is less than 0 or greater than 100, the error ERR_INVALID_ARGUMENT is returned.Starting from v2.3, setting zOrder to 0 is supported.
+  /// The layer index number of the host's video. The value range is [0, 100].0: (Default) The host's video is the bottom layer.100: The host's video is the top layer.If the value is less than 0 or greater than 100, errInvalidArgument error is returned.Setting zOrder to 0 is supported.
   @JsonKey(name: 'zOrder')
   final int? zOrder;
 
-  /// The transparency of the host's video. The value range is [0.0,1.0].
-  ///  0.0: Completely transparent.1.0: (Default) Opaque.
+  /// The transparency of the host's video. The value range is [0.0,1.0].0.0: Completely transparent.1.0: (Default) Opaque.
   @JsonKey(name: 'alpha')
   final double? alpha;
 
@@ -4976,18 +4980,19 @@ extension VoiceConversionPresetExt on VoiceConversionPreset {
   }
 }
 
-/// @nodoc
+/// 预设的耳机均衡器类型。
+///
 @JsonEnum(alwaysCreate: true)
 enum HeadphoneEqualizerPreset {
-  /// @nodoc
+  /// 关闭耳机均衡器，收听原始音频。
   @JsonValue(0x00000000)
   headphoneEqualizerOff,
 
-  /// @nodoc
+  /// 使用头戴式耳机的均衡器。
   @JsonValue(0x04000001)
   headphoneEqualizerOverear,
 
-  /// @nodoc
+  /// 使用入耳式耳机的均衡器。
   @JsonValue(0x04000002)
   headphoneEqualizerInear,
 }
@@ -6192,7 +6197,8 @@ class ScreenCaptureParameters2 {
   Map<String, dynamic> toJson() => _$ScreenCaptureParameters2ToJson(this);
 }
 
-/// @nodoc
+/// 空间音效参数。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SpatialAudioParams {
   /// @nodoc

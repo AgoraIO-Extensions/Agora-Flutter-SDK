@@ -124,31 +124,75 @@ abstract class RtcEngineEx implements RtcEngine {
   Future<void> muteAllRemoteVideoStreamsEx(
       {required bool mute, required RtcConnection connection});
 
-  /// @nodoc
+  /// 设置音频订阅黑名单。
+  /// 你可以调用该方法指定不订阅的音频流。 该方法在加入频道前后均可调用。
+  ///  音频订阅黑名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的 autoSubscribeAudio 影响。
+  ///  设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。
+  ///  如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
+  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uidNumber] 黑名单用户 ID 列表中的用户数量。
+  /// * [uidList] 订阅黑名单的用户 ID 列表。
+  ///  如果你想指定不订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeAudioBlocklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  ///
   Future<void> setSubscribeAudioBlocklistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// 设置音频订阅白名单。
+  /// 你可以调用该方法指定想要订阅的音频流。 如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。该方法在加入频道前后均可调用。音频订阅白名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的 autoSubscribeAudio 的影响。
+  ///  设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
+  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uidNumber] 白名单用户 ID 列表中的用户数量。
+  /// * [uidList] 音频订阅白名单的用户 ID 列表。
+  ///  如果你想指定订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeAudioAllowlist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  ///
   Future<void> setSubscribeAudioAllowlistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// 设置视频订阅黑名单。
+  /// 你可以调用该方法指定不订阅的视频流。 如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
+  ///  设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。
+  ///  该方法在加入频道前后均可调用。
+  ///  视频订阅黑名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
+  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uidNumber] 黑名单用户 ID 列表中的用户数量。
+  /// * [uidList] 视频订阅黑名单的用户 ID 列表。
+  ///  如果你想指定不订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeVideoBlocklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
+  ///
   Future<void> setSubscribeVideoBlocklistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// 设置视频订阅白名单。
+  /// 你可以调用该方法指定想要订阅的视频流。如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
+  ///  设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
+  ///  该方法在加入频道前后均可调用。
+  ///  视频订阅白名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
+  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uidNumber] 白名单用户 ID 列表中的用户数量。
+  /// * [uidList] 视频订阅白名单的用户 ID 列表。如果你想指定仅订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeVideoAllowlist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid。
   Future<void> setSubscribeVideoAllowlistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// 设置远端视频流的订阅选项。
+  /// 当远端发送双流时，可调用此方法来设置远端视频流的订阅选项。
+  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [options] 视频流的订阅设置，详见 VideoSubscriptionOptions 。
+  /// * [uid] 远端用户 ID。
+  ///
+  /// Returns
+  /// 0: 方法调用成功。< 0: 方法调用失败。
   Future<void> setRemoteVideoSubscriptionOptionsEx(
       {required int uid,
       required VideoSubscriptionOptions options,
@@ -198,7 +242,15 @@ abstract class RtcEngineEx implements RtcEngine {
       required bool enabled,
       String? deviceName});
 
-  /// @nodoc
+  /// 调节本地播放的指定远端用户信号音量。
+  /// 你可以在通话中调用该方法调节指定远端用户在本地播放的音量。如需调节多个用户在本地播放的音量，则需多次调用该方法。该方法需要在加入频道后调用。该方法调节的是本地播放的指定远端用户混音后的音量。
+  ///
+  /// * [volume] 音乐文件音量范围为 0~100。100 （默认值）为原始文件音量。
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [uid] 远端用户 ID。
+  ///
+  /// Returns
+  /// 0: 方法调用成功。< 0: 方法调用失败。
   Future<void> adjustUserPlaybackSignalVolumeEx(
       {required int uid,
       required int volume,
@@ -277,7 +329,20 @@ abstract class RtcEngineEx implements RtcEngine {
       required int value,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// 启用用户音量提示。
+  /// 该方法允许 SDK 定期向 app 报告本地发流用户和瞬时音量最高的远端用户（最多 3 位）的音量相关信息。启用该方法后，只要频道内有发流用户， SDK 会在加入频道后按设置的时间间隔触发 onAudioVolumeIndication 回调。
+  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [reportVad] true：开启本地人声检测功能。开启后，onAudioVolumeIndication 回调的 vad 参数会报告是否在本地检测到人声。
+  ///  false：（默认）关闭本地人声检测功能。除引擎自动进行本地人声检测的场景外，onAudioVolumeIndication 回调的 vad 参数不会报告是否在本地检测到人声。
+  ///
+  /// * [smooth] 平滑系数，指定音量提示的灵敏度。取值范围为 [0,10]，建议值为 3。数字越大，波动越灵敏；数字越小，波动越平滑。
+  /// * [interval] 指定音量提示的时间间隔： ≤ 0: 禁用音量提示功能。
+  ///  > 0: 返回音量提示的间隔，单位为毫秒。该参数需要设为 200 的整数倍。如果取值低于 200，SDK 会自动调整为 200。
+  ///
+  ///
+  /// Returns
+  /// 0：方法调用成功。< 0：方法调用失败。
   Future<void> enableAudioVolumeIndicationEx(
       {required int interval,
       required int smooth,
@@ -337,7 +402,15 @@ abstract class RtcEngineEx implements RtcEngine {
       required int frameRate,
       required int bitrate});
 
-  /// @nodoc
+  /// 在发送端开启或关闭双流模式。
+  /// 该方法适用于发送端发送的所有类型的流，包括且不限于来自摄像头采集的视频流、屏幕共享流、自定义采集的视频流。如果需要在多频道场景下开启视频双流，可以调用 enableDualStreamModeEx 方法。该方法可以在加入频道前后调用。开启双流模式后，你可以在收流端调用 setRemoteVideoStreamType 选择接收视频大流或视频小流。你可以在发流端调用该方法开启或关闭双流模式。双流指视频大流和视频小流：
+  ///  视频大流：高分辨率、高帧率的视频流。视频小流：低分辨率、低帧率的视频流。
+  ///
+  /// * [connection] Connection 信息。详见 RtcConnection 。
+  /// * [streamConfig] 视频小流的配置。详见 SimulcastStreamConfig 。
+  ///
+  /// * [enabled] 是否开启双流模式： true: 开启双流模式。
+  ///  false: (默认) 关闭双流模式。
   Future<void> enableDualStreamModeEx(
       {required bool enabled,
       required SimulcastStreamConfig streamConfig,

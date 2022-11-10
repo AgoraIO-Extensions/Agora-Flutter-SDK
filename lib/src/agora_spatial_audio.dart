@@ -24,7 +24,8 @@ class RemoteVoicePositionInfo {
   Map<String, dynamic> toJson() => _$RemoteVoicePositionInfoToJson(this);
 }
 
-/// @nodoc
+/// 隔声区域的设置。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SpatialAudioZone {
   /// @nodoc
@@ -39,39 +40,39 @@ class SpatialAudioZone {
       this.upLength,
       this.audioAttenuation});
 
-  /// @nodoc
+  /// 隔声区域的 ID。
   @JsonKey(name: 'zoneSetId')
   final int? zoneSetId;
 
-  /// @nodoc
+  /// 隔声区域的空间中心点。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
   @JsonKey(name: 'position')
   final List<double>? position;
 
-  /// @nodoc
+  /// 以 position 为起点，向前的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
   @JsonKey(name: 'forward')
   final List<double>? forward;
 
-  /// @nodoc
+  /// 以 position 为起点，向右的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
   @JsonKey(name: 'right')
   final List<double>? right;
 
-  /// @nodoc
+  /// 以 position 为起点，向上的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
   @JsonKey(name: 'up')
   final List<double>? up;
 
-  /// @nodoc
+  /// 将整个隔声区域看做一个立方体，表示向前的边长，单位为游戏引擎的单位长度。
   @JsonKey(name: 'forwardLength')
   final double? forwardLength;
 
-  /// @nodoc
+  /// 将整个隔声区域看做一个立方体，表示向右的边长，单位为游戏引擎的单位长度。
   @JsonKey(name: 'rightLength')
   final double? rightLength;
 
-  /// @nodoc
+  /// 将整个隔声区域看做一个立方体，表示向上的边长，单位为游戏引擎的单位长度。
   @JsonKey(name: 'upLength')
   final double? upLength;
 
-  /// @nodoc
+  /// 隔声区域以内的用户和外部用户互通时的声音衰减系数，取值范围为 [0,1]。其中： 0：广播模式，即音量和音色均不随距离衰减，无论距离远近，本地用户听到的音量和音色都无变化。(0,0.5)：弱衰减模式，即音量和音色在传播过程中仅发生微弱衰减，跟真实环境相比，声音可以传播得更远。0.5：模拟音量在真实环境下的衰减，效果等同于不设置 audioAttenuation 参数。(0.5,1]：强衰减模式 (默认值为 1) ，即音量和音色在传播过程中发生迅速衰减。
   @JsonKey(name: 'audioAttenuation')
   final double? audioAttenuation;
 
@@ -147,16 +148,24 @@ abstract class BaseSpatialAudioEngine {
   Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
-  /// @nodoc
+  /// 设置隔声区域。
+  /// 在虚拟互动场景下，你可以通过该方法设置隔声区域和声音衰减系数。当音源（可以为用户或媒体播放器）跟听声者分属于隔声区域区域内部和外部时，会体验到类似真实环境中声音在遇到建筑隔断时的衰减效果。当音源跟听声者分属于隔声区域区域内部和外部时，声音的衰减效果由 SpatialAudioZone 中的声音衰减系数决定。如果用户或媒体播放器同在一个隔声区域内，则不受 SpatialAudioZone 的影响，声音的衰减效果由 setPlayerAttenuation 或 setRemoteAudioAttenuation 中的 attenuation 参数决定。如果不调用 setPlayerAttenuation 或 setRemoteAudioAttenuation，则 SDK 默认声音的衰减系数为 0.5，即模拟声音在真实环境下的衰减。如果音源跟接收者分别属于两个隔声区域，则接收者无法听到音源。如果多次调用该方法，以最后一次设置的隔声区域为准。
+  ///
+  /// * [zones] 隔声区域的设置。详见 SpatialAudioZone。
   Future<void> setZones(
       {required SpatialAudioZone zones, required int zoneCount});
 
-  /// @nodoc
+  /// 设置媒体播放器的声音衰减属性。
+  ///
+  ///
+  /// * [playerId] 媒体播放器 ID。
+  /// * [attenuation] 媒体播放器的声音衰减系数，取值范围为[0,1]。其中： 0：广播模式，即音量和音色均不随距离衰减，无论距离远近，本地用户听到的音量和音色都无变化。(0,0.5)：弱衰减模式，即音量和音色在传播过程中仅发生微弱衰减，跟真实环境相比，声音可以传播得更远。0.5：（默认）模拟音量在真实环境下的衰减，效果等同于不设置 attenuation 参数。(0.5,1]：强衰减模式，即音量和音色在传播过程中发生迅速衰减。
+  /// * [forceSet] 是否强制设定媒体播放器的声音衰减效果： true：强制使用 attenuation 设置媒体播放器的声音衰减效果，此时 SpatialAudioZone 中的 audioAttenuation 中设置的隔声区域衰减系数对媒体播放器不生效。false：不强制使用 attenuation 设置媒体播放器的声音衰减效果，分为以下两种情况。 如果音源和听声者分属于隔声区域内部和外部，则声音衰减效果由 SpatialAudioZone 中的 audioAttenuation 决定。 如果音源和听声者在同一个隔声区域内或同在隔声区域外，则声音衰减效果由该方法中的 attenuation 决定。
   Future<void> setPlayerAttenuation(
       {required int playerId,
       required double attenuation,

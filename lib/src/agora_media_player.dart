@@ -99,8 +99,7 @@ abstract class MediaPlayer {
   /// Selects the audio track used during playback.
   /// After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.You need to call this method after calling getStreamInfo to get the audio stream index value.
   ///
-  /// * [index
-  /// ] The index of the audio track.
+  /// * [index] The index of the audio track.
   Future<void> selectAudioTrack(int index);
 
   /// Sets the private options for the media player.
@@ -289,7 +288,10 @@ abstract class MediaPlayer {
   /// * [src] The URL of the media resource.
   Future<void> unloadSrc(String src);
 
-  /// @nodoc
+  /// 开启或关闭媒体播放器的空间音效。
+  /// 成功设置媒体播放器的空间音效参数后，SDK 会开启媒体播放器的空间音效，即本地用户听媒体资源会有空间感。如果需关闭媒体播放器的空间音效，你需要将 params 参数设为空。
+  ///
+  /// * [params] 媒体播放器的空间音效参数。详见 SpatialAudioParams 。
   Future<void> setSpatialAudioParams(SpatialAudioParams params);
 
   /// @nodoc

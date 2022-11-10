@@ -1,18 +1,19 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_music_content_center.g.dart';
 
-/// @nodoc
+/// 音乐资源的加载状态。
+///
 @JsonEnum(alwaysCreate: true)
 enum PreloadStatusCode {
-  /// @nodoc
+  /// 0：音乐资源加载完成。
   @JsonValue(0)
   kPreloadStatusCompleted,
 
-  /// @nodoc
+  /// 1：音乐资源加载失败。
   @JsonValue(1)
   kPreloadStatusFailed,
 
-  /// @nodoc
+  /// 2：音乐资源正在加载中。
   @JsonValue(2)
   kPreloadStatusPreloading,
 }
@@ -30,14 +31,15 @@ extension PreloadStatusCodeExt on PreloadStatusCode {
   }
 }
 
-/// @nodoc
+/// 音乐内容中心的请求状态码。
+///
 @JsonEnum(alwaysCreate: true)
 enum MusicContentCenterStatusCode {
-  /// @nodoc
+  /// 0：请求成功。
   @JsonValue(0)
   kMusicContentCenterStatusOk,
 
-  /// @nodoc
+  /// 1：请求失败。
   @JsonValue(1)
   kMusicContentCenterStatusErr,
 }
@@ -55,7 +57,8 @@ extension MusicContentCenterStatusCodeExt on MusicContentCenterStatusCode {
   }
 }
 
-/// @nodoc
+/// 音乐榜单的详细信息。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicChartInfo {
   /// @nodoc
@@ -86,17 +89,18 @@ abstract class MusicChartCollection {
   Future<MusicChartInfo> get(int index);
 }
 
-/// @nodoc
+/// MV 的属性。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MvProperty {
   /// @nodoc
   const MvProperty({this.resolution, this.bandwidth});
 
-  /// @nodoc
+  /// MV 的分辨率。
   @JsonKey(name: 'resolution')
   final String? resolution;
 
-  /// @nodoc
+  /// MV 的带宽，单位为 Kbps。
   @JsonKey(name: 'bandwidth')
   final String? bandwidth;
 
@@ -108,17 +112,18 @@ class MvProperty {
   Map<String, dynamic> toJson() => _$MvPropertyToJson(this);
 }
 
-/// @nodoc
+/// 音乐高潮片段设置。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ClimaxSegment {
   /// @nodoc
   const ClimaxSegment({this.startTimeMs, this.endTimeMs});
 
-  /// @nodoc
+  /// 音乐高潮片段的开始时间点，单位毫秒。
   @JsonKey(name: 'startTimeMs')
   final int? startTimeMs;
 
-  /// @nodoc
+  /// 音乐高潮片段的结束时间点，单位毫秒。
   @JsonKey(name: 'endTimeMs')
   final int? endTimeMs;
 
@@ -130,7 +135,8 @@ class ClimaxSegment {
   Map<String, dynamic> toJson() => _$ClimaxSegmentToJson(this);
 }
 
-/// @nodoc
+/// 音乐资源的详细信息。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Music {
   /// @nodoc
@@ -150,23 +156,23 @@ class Music {
       this.mvPropertyCount,
       this.mvPropertyList});
 
-  /// @nodoc
+  /// 音乐资源的编号，用于标识一个音乐资源。
   @JsonKey(name: 'songCode')
   final int? songCode;
 
-  /// @nodoc
+  /// 音乐资源名称。
   @JsonKey(name: 'name')
   final String? name;
 
-  /// @nodoc
+  /// 歌手名。
   @JsonKey(name: 'singer')
   final String? singer;
 
-  /// @nodoc
+  /// 音乐资源海报的下载地址。
   @JsonKey(name: 'poster')
   final String? poster;
 
-  /// @nodoc
+  /// 音乐资源发布的时间。
   @JsonKey(name: 'releaseTime')
   final String? releaseTime;
 
@@ -174,11 +180,11 @@ class Music {
   @JsonKey(name: 'durationS')
   final int? durationS;
 
-  /// @nodoc
+  /// 音乐资源类型： 1：左声道伴奏，右声道原唱的单音轨纯音频音源。2：只有伴唱的单音轨纯音频音源。3：只有原唱的单音轨纯音频音源。4：既有多音轨纯音频又有多音轨 MV 资源的音源。5：只有多音轨 MV 资源的音源。6：既有多音轨纯音频又有多音轨 MV 资源的音源（该音源受数字版权保护）。
   @JsonKey(name: 'type')
   final int? type;
 
-  /// @nodoc
+  /// 歌曲是否支持演唱评分功能： 1：歌曲支持演唱评分功能。2：歌曲不支持演唱评分功能。
   @JsonKey(name: 'pitchType')
   final int? pitchType;
 
@@ -213,7 +219,8 @@ class Music {
   Map<String, dynamic> toJson() => _$MusicToJson(this);
 }
 
-/// @nodoc
+/// 音乐资源列表的详细信息。
+///
 abstract class MusicCollection {
   /// @nodoc
   int getCount();
@@ -257,13 +264,14 @@ class MusicContentCenterEventHandler {
       String msg, String lyricUrl)? onPreLoadEvent;
 }
 
-/// @nodoc
+/// 音乐内容中心的设置。
+///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterConfiguration {
   /// @nodoc
   const MusicContentCenterConfiguration({this.appId, this.token, this.mccUid});
 
-  /// @nodoc
+  /// 已启用内容中心的项目的 App ID。
   @JsonKey(name: 'appId')
   final String? appId;
 
@@ -271,7 +279,7 @@ class MusicContentCenterConfiguration {
   @JsonKey(name: 'token')
   final String? token;
 
-  /// @nodoc
+  /// 使用音乐内容中心的用户 ID，该 ID 可以和你加入 RTC 频道时使用的 uid 一致，但不能为 0。
   @JsonKey(name: 'mccUid')
   final int? mccUid;
 

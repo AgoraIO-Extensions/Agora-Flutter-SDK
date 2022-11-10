@@ -1,26 +1,27 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_rhythm_player.g.dart';
 
-/// @nodoc
+/// 虚拟节拍器状态。
+///
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerStateType {
-  /// @nodoc
+  /// 810：虚拟节拍器未开启或已关闭。
   @JsonValue(810)
   rhythmPlayerStateIdle,
 
-  /// @nodoc
+  /// 811：正在打开节拍音频文件。
   @JsonValue(811)
   rhythmPlayerStateOpening,
 
-  /// @nodoc
+  /// 812：正在解码节拍音频文件。
   @JsonValue(812)
   rhythmPlayerStateDecoding,
 
-  /// @nodoc
+  /// 813：正在播放节拍音频文件。
   @JsonValue(813)
   rhythmPlayerStatePlaying,
 
-  /// @nodoc
+  /// 814：开启虚拟节拍器失败。你可以通过报告的错误码 errorCode 排查错误原因，也可以重新尝试开启虚拟节拍器。
   @JsonValue(814)
   rhythmPlayerStateFailed,
 }
@@ -38,26 +39,27 @@ extension RhythmPlayerStateTypeExt on RhythmPlayerStateType {
   }
 }
 
-/// @nodoc
+/// 虚拟节拍器错误信息。
+///
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerErrorType {
-  /// @nodoc
+  /// 0：正常播放节拍音频文件，没有错误。
   @JsonValue(0)
   rhythmPlayerErrorOk,
 
-  /// @nodoc
+  /// 1：一般性错误，没有明确原因。
   @JsonValue(1)
   rhythmPlayerErrorFailed,
 
-  /// @nodoc
+  /// 801：打开节拍音频文件出错。
   @JsonValue(801)
   rhythmPlayerErrorCanNotOpen,
 
-  /// @nodoc
+  /// 802：播放节拍音频文件出错。
   @JsonValue(802)
   rhythmPlayerErrorCanNotPlay,
 
-  /// @nodoc
+  /// 803：节拍音频文件时长超出限制。最大时长为 1.2 秒。
   @JsonValue(803)
   rhythmPlayerErrorFileOverDurationLimit,
 }

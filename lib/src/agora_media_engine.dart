@@ -39,7 +39,7 @@ extension AudioMixingDualMonoModeExt on AudioMixingDualMonoMode {
 ///
 abstract class MediaEngine {
   /// Registers an audio frame observer object.
-  /// Ensure that you call this method before joining a channel.
+  /// Call this method to register an audio frame observer object (register a callback). When you need the SDK to trigger onMixedAudioFrame , onRecordAudioFrame , onPlaybackAudioFrame or callback, you need to use this method to register the callbacks.Ensure that you call this method before joining a channel.
   ///
   /// * [observer] The observer object instance. See AudioFrameObserver . Agora recommends calling after receiving onLeaveChannel to release the audio observer object.
   void registerAudioFrameObserver(AudioFrameObserver observer);
