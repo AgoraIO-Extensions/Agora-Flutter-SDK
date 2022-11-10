@@ -2809,20 +2809,18 @@ class RtcEngineImpl implements RtcEngine {
   Future<void> enableExtension(
       {required String provider,
       required String extension,
-      required ExtensionInfo extensionInfo,
-      bool enable = true}) async {
+      bool enable = true,
+      MediaSourceType type = MediaSourceType.unknownMediaSource}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableExtension';
     final param = createParams({
       'provider': provider,
       'extension': extension,
-      'extensionInfo': extensionInfo.toJson(),
-      'enable': enable
+      'enable': enable,
+      'type': type.value()
     });
-    final List<Uint8List> buffers = [];
-    buffers.addAll(extensionInfo.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2834,22 +2832,20 @@ class RtcEngineImpl implements RtcEngine {
   Future<void> setExtensionProperty(
       {required String provider,
       required String extension,
-      required ExtensionInfo extensionInfo,
       required String key,
-      required String value}) async {
+      required String value,
+      MediaSourceType type = MediaSourceType.unknownMediaSource}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setExtensionProperty';
     final param = createParams({
       'provider': provider,
       'extension': extension,
-      'extensionInfo': extensionInfo.toJson(),
       'key': key,
-      'value': value
+      'value': value,
+      'type': type.value()
     });
-    final List<Uint8List> buffers = [];
-    buffers.addAll(extensionInfo.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2861,22 +2857,20 @@ class RtcEngineImpl implements RtcEngine {
   Future<String> getExtensionProperty(
       {required String provider,
       required String extension,
-      required ExtensionInfo extensionInfo,
       required String key,
-      required int bufLen}) async {
+      required int bufLen,
+      MediaSourceType type = MediaSourceType.unknownMediaSource}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getExtensionProperty';
     final param = createParams({
       'provider': provider,
       'extension': extension,
-      'extensionInfo': extensionInfo.toJson(),
       'key': key,
-      'buf_len': bufLen
+      'buf_len': bufLen,
+      'type': type.value()
     });
-    final List<Uint8List> buffers = [];
-    buffers.addAll(extensionInfo.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

@@ -276,18 +276,18 @@ extension ContentInspectTypeExt on ContentInspectType {
   }
 }
 
-/// ContentInspectModuleStructure to configure the type and frequency of the video content moderation module.
+/// ContentInspectModuleA structure used to configure the frequency of video screenshot and upload.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectModule {
   /// @nodoc
   const ContentInspectModule({this.type, this.interval});
 
-  /// The type of video content moderation module. See ContentInspectType .
+  /// Types of functional module. See ContentInspectType .
   @JsonKey(name: 'type')
   final ContentInspectType? type;
 
-  /// The frequency (in seconds) of video content moderation. The value should be set as larger than 0. If set as 0 (default), the video content is not inspected. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
+  /// The frequency (s) of video screenshot and upload. The value should be set as larger than 0. The default value is 0, the SDK does not take screenshots. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
   @JsonKey(name: 'interval')
   final int? interval;
 
@@ -299,22 +299,22 @@ class ContentInspectModule {
   Map<String, dynamic> toJson() => _$ContentInspectModuleToJson(this);
 }
 
-/// Configuration of video content moderation.
+/// Configuration of video screenshot and upload.
 ///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectConfig {
   /// @nodoc
   const ContentInspectConfig({this.extraInfo, this.modules, this.moduleCount});
 
-  /// Additional information for video content moderation, with a maximum length of 1024 bytes.The SDK sends the screenshots and additional information on the video content to the Agora content moderation server. Once the content moderation process is completed, the Agora content moderation server sends the additional information and the content moderation results to your server.
+  /// Additional information on the video content (maximum length: 1024 Bytes).The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
   @JsonKey(name: 'extraInfo')
   final String? extraInfo;
 
-  /// Video content moderation module. See ContentInspectModule .A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A video content moderation module can only be configured with one instance at most.
+  /// Functional module. See ContentInspectModule .A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
   @JsonKey(name: 'modules')
   final List<ContentInspectModule>? modules;
 
-  /// The number of video content moderation modules, that is, the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
+  /// The number of functional modules, that is,the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
   @JsonKey(name: 'moduleCount')
   final int? moduleCount;
 
@@ -699,7 +699,7 @@ extension VideoBufferTypeExt on VideoBufferType {
 }
 
 /// Configurations of the video frame.
-/// The video data format is YUV420. Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer but can modify the content of the buffer.
+/// The video data format is YUV420. Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoFrame {
   /// @nodoc
@@ -726,11 +726,11 @@ class VideoFrame {
   @JsonKey(name: 'type')
   final VideoPixelFormat? type;
 
-  /// The width of the video in pixels.
+  /// The width of the video, in pixels.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height of the video in pixels.
+  /// The height of the video, in pixels.
   @JsonKey(name: 'height')
   final int? height;
 
@@ -782,11 +782,11 @@ class VideoFrame {
   @JsonKey(name: 'textureId')
   final int? textureId;
 
-  /// This parameter only applies to video data in Texture format. Incoming 4 x 4 transformational matrix. The typical value is a unit matrix.
+  /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
-  /// Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame. The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).In the costom video renderer scenario, you can use this parameter to render the video background into various effects, such as: transparent, solid color, picture, video and so on.To use this parameter, contact .
+  /// Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame. The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).In the custom video renderer scenario, you can use this parameter to render the video background into various effects, such as transparent, solid color, picture, video, and so on.To use this parameter, contact .
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
@@ -869,7 +869,7 @@ class AudioFrameObserverBase {
   });
 
   /// Gets the captured audio frame.
-  ///
+  /// Before joining the channel, you need to call the registerAudioFrameObserver to register audio observer object, that is, register the onRecordAudioFrame callback.To ensure that the data format of captured audio frame is as expected, Agora recommends that you choose one of the following two methods to set the audio data format:If you call setRecordingAudioFrameParameters to set the acquired audio data format, the SDK calculates the sampling interval according to the parameters in this method, and triggers the onRecordAudioFrame callback according to the sampling interval.If you set the acquired audio data format in the return value of the callback, the SDK calculates the sampling interval according to the return value of the callback, and trigger the onRecordAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
@@ -879,8 +879,8 @@ class AudioFrameObserverBase {
   final void Function(String channelId, AudioFrame audioFrame)?
       onRecordAudioFrame;
 
-  /// Gets the audio frame for playback.
-  /// If you want to set the format of the audio frame for playback, Agora recommends that you call the registerAudioFrameObserver method to set the format of the audio frame after calling the setPlaybackAudioFrameParameters method to register an audio frame observer.
+  /// Gets the raw audio frame for playback.
+  /// Before joining the channel, you need to call the registerAudioFrameObserver to register audio observer object, that is, register the onPlaybackAudioFrame callback.To ensure that the data format of audio frame for playback is as expected, Agora recommends that you choose one of the following two methods to set the audio data format:If you call setPlaybackAudioFrameParameters to set the audio data format, the SDK calculates the sampling interval according to the parameters in this method, and triggers the onPlaybackAudioFrame callback according to the sampling interval.If you set the audio data format in the return value of the callback, the SDK calculates the sampling interval according to the return value of the callback, and triggers the onPlaybackAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
@@ -891,7 +891,7 @@ class AudioFrameObserverBase {
       onPlaybackAudioFrame;
 
   /// Retrieves the mixed captured and playback audio frame.
-  /// This callback only returns the single-channel data.If you want to set the format of the mixed captured and playback audio frame, Agora recommends you call the registerAudioFrameObserver method to set the format of the audio frames after calling the setMixedAudioFrameParameters method to register an audio frame observer.
+  /// Before joining the channel, you need to call the registerAudioFrameObserver to register audio observer object, that is, register the onMixedAudioFrame callback.This callback only reports single-channel data.To ensure that the data format of mixed captured and playback audio frame meets the expectations, Agora recommends that you choose one of the following two ways to set the data format:If you call setMixedAudioFrameParameters to set the audio data format, the SDK calculates the sampling interval according to the parameters in this method, and triggers the onMixedAudioFrame callback according to the sampling interval.If you set the audio data format in the return value of the callback, the SDK calculates the sampling interval according to the return value of the callback, and triggers the onMixedAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
@@ -1024,7 +1024,7 @@ extension AudioFramePositionExt on AudioFramePosition {
 }
 
 /// Audio data format.
-/// The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, and onMixedAudioFrame callbacks according to the sampling interval.Sample interval = samplePerCall/(sampleRate × channel).Ensure that the sample interval ≥ 0.01 (s).
+/// The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, onMixedAudioFrame, and callbacks according to the sampling interval.Sample interval (sec) = samplePerCall/(sampleRate × channel).Ensure that the sample interval ≥ 0.01 (s).
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioParams {
   /// @nodoc
@@ -1081,7 +1081,7 @@ class AudioFrameObserver extends AudioFrameObserverBase {
         );
 
   /// Retrieves the audio frame of a specified user before mixing.
-  ///
+  /// Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
   /// * [channelId] The channel ID.
   /// * [uid] The user ID of the specified user.
@@ -1205,13 +1205,13 @@ class VideoFrameObserver {
   });
 
   /// Occurs each time the SDK receives a video frame captured by the local camera.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.After pre-processing, you can send the processed video data back to the SDK through this callback.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onCaptureVideoFrame;
 
   /// Occurs each time the SDK receives a video frame before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onPreEncodeVideoFrame;
@@ -1221,29 +1221,32 @@ class VideoFrameObserver {
       onSecondaryCameraCaptureVideoFrame;
 
   /// Gets the video data captured from the second camera before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second camera before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second camera before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeCameraVideoFrame;
 
   /// Occurs each time the SDK receives a video frame captured by the screen.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data for screen sharing. You can then pre-process the data according to your scenarios.After pre-processing, you can send the processed video data back to the SDK through this callback.This callback does not support sending processed RGBA video data back to the SDK.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data for screen sharing. You can then pre-process the data according to your scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onScreenCaptureVideoFrame;
 
   /// Gets the video data captured from the screen before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the screen before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.This callback does not support sending processed RGBA video data back to the SDK.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)? onPreEncodeScreenVideoFrame;
 
   /// Gets the video data of the media player.
-  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.After pre-processing, you can send the processed video data back to the SDK by this callback.
+  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   /// * [mediaPlayerId] The ID of the media player.
+  ///
+  /// Returns
+  /// true: Sets the SDK to receive the video frame.false: Sets the SDK to discard the video frame.
   final void Function(VideoFrame videoFrame, int mediaPlayerId)?
       onMediaPlayerVideoFrame;
 
@@ -1252,14 +1255,14 @@ class VideoFrameObserver {
       onSecondaryScreenCaptureVideoFrame;
 
   /// Gets the video data captured from the second screen before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second screen before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeScreenVideoFrame;
 
   /// Occurs each time the SDK receives a video frame sent by the remote user.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding. You can then process the data according to your particular scenarios.This function only applies to the scenarios where the video processing mode is processModeReadOnly.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding. You can then process the data according to your particular scenarios.This function only applies to the scenarios where the video processing mode is processModeReadOnly.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   /// * [remoteUid] The ID of the remote user who sends the current video frame.

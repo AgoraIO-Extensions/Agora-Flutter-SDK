@@ -5661,23 +5661,13 @@ void rtcEngineSmokeTestCases() {
       try {
         const String provider = "hello";
         const String extension = "hello";
-        const MediaSourceType extensionInfoMediaSourceType =
-            MediaSourceType.audioPlayoutSource;
-        const int extensionInfoRemoteUid = 10;
-        const String extensionInfoChannelId = "hello";
-        const int extensionInfoLocalUid = 10;
-        const ExtensionInfo extensionInfo = ExtensionInfo(
-          mediaSourceType: extensionInfoMediaSourceType,
-          remoteUid: extensionInfoRemoteUid,
-          channelId: extensionInfoChannelId,
-          localUid: extensionInfoLocalUid,
-        );
         const bool enable = true;
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.enableExtension(
           provider: provider,
           extension: extension,
-          extensionInfo: extensionInfo,
           enable: enable,
+          type: type,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -5714,25 +5704,15 @@ void rtcEngineSmokeTestCases() {
       try {
         const String provider = "hello";
         const String extension = "hello";
-        const MediaSourceType extensionInfoMediaSourceType =
-            MediaSourceType.audioPlayoutSource;
-        const int extensionInfoRemoteUid = 10;
-        const String extensionInfoChannelId = "hello";
-        const int extensionInfoLocalUid = 10;
-        const ExtensionInfo extensionInfo = ExtensionInfo(
-          mediaSourceType: extensionInfoMediaSourceType,
-          remoteUid: extensionInfoRemoteUid,
-          channelId: extensionInfoChannelId,
-          localUid: extensionInfoLocalUid,
-        );
         const String key = "hello";
         const String value = "hello";
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.setExtensionProperty(
           provider: provider,
           extension: extension,
-          extensionInfo: extensionInfo,
           key: key,
           value: value,
+          type: type,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -5769,25 +5749,15 @@ void rtcEngineSmokeTestCases() {
       try {
         const String provider = "hello";
         const String extension = "hello";
-        const MediaSourceType extensionInfoMediaSourceType =
-            MediaSourceType.audioPlayoutSource;
-        const int extensionInfoRemoteUid = 10;
-        const String extensionInfoChannelId = "hello";
-        const int extensionInfoLocalUid = 10;
-        const ExtensionInfo extensionInfo = ExtensionInfo(
-          mediaSourceType: extensionInfoMediaSourceType,
-          remoteUid: extensionInfoRemoteUid,
-          channelId: extensionInfoChannelId,
-          localUid: extensionInfoLocalUid,
-        );
         const String key = "hello";
         const int bufLen = 10;
+        const MediaSourceType type = MediaSourceType.audioPlayoutSource;
         await rtcEngine.getExtensionProperty(
           provider: provider,
           extension: extension,
-          extensionInfo: extensionInfo,
           key: key,
           bufLen: bufLen,
+          type: type,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -10827,6 +10797,40 @@ void rtcEngineSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[getVideoDeviceManager] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'getMusicContentCenter',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        rtcEngine.getMusicContentCenter();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getMusicContentCenter] error: ${e.toString()}');
           rethrow;
         }
 
