@@ -2,7 +2,6 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_rtc_engine_ex.g.dart';
 
 /// Contains connection information.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcConnection {
   /// @nodoc
@@ -28,11 +27,11 @@ class RtcConnection {
 /// Inherited from RtcEngine .
 abstract class RtcEngineEx implements RtcEngine {
   /// Joins a channel with the connection ID.
-  /// You can call this method multiple times to join more than one channels.If you are already in a channel, you cannot rejoin it with the same user ID.If you want to join the same channel from different devices, ensure that the user IDs in all devices are different.Ensure that the app ID you use to generate the token is the same with the app ID used when creating the RtcEngine instance.
+  /// You can call this method multiple times to join more than one channel.If you are already in a channel, you cannot rejoin it with the same user ID.If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.Ensure that the app ID you use to generate the token is the same as RtcEngine the app ID used when creating the instance.
   ///
   /// * [options] The channel media options. See ChannelMediaOptions .
   /// * [token] The token generated on your server for authentication.
-  ///
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> joinChannelEx(
       {required String token,
       required RtcConnection connection,
@@ -40,13 +39,12 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Leaves a channel.
   ///
-  ///
   /// * [connection] The connection information. See RtcConnection .
+  /// * [options] The options for leaving the channel. See LeaveChannelOptions .This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
   Future<void> leaveChannelEx(
       {required RtcConnection connection, LeaveChannelOptions? options});
 
   /// Updates the channel media options after joining the channel.
-  ///
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [options] The channel media options. See ChannelMediaOptions .
@@ -108,47 +106,112 @@ abstract class RtcEngineEx implements RtcEngine {
       required VideoStreamType streamType,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Stops or resumes publishing the local audio stream.
+  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [mute] Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
   Future<void> muteLocalAudioStreamEx(
       {required bool mute, required RtcConnection connection});
 
-  /// @nodoc
+  /// Stops or resumes publishing the local video stream.
+  /// A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method does not affect any ongoing video recording, because it does not disable the camera.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
+  ///
+  /// Returns
+  /// 0: Success.< 0: Failure.
   Future<void> muteLocalVideoStreamEx(
       {required bool mute, required RtcConnection connection});
 
-  /// @nodoc
+  /// Stops or resumes subscribing to the audio streams of all remote users.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones who join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel [2/2] .
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users.
   Future<void> muteAllRemoteAudioStreamsEx(
       {required bool mute, required RtcConnection connection});
 
-  /// @nodoc
+  /// Stops or resumes subscribing to the video streams of all remote users.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [mute] Whether to stop subscribing to the video streams of all remote users.
+  ///  true: Stop subscribing to the video streams of all remote users.
+  ///  false: (Default) Subscribe to the audio streams of all remote users by default.
+  ///
+  /// Returns
+  /// 0: Success.< 0: Failure.
   Future<void> muteAllRemoteVideoStreamsEx(
       {required bool mute, required RtcConnection connection});
 
-  /// @nodoc
+  /// Set the blocklist of subscriptions for audio streams.
+  /// You can call this method to specify the audio streams of a user that you do not want to subscribe to. You can call this method either before or after joining a channel.
+  ///  The blocklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams , and autoSubscribeAudio in ChannelMediaOptions .
+  ///  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+  ///  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.
+  ///  If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
+  ///
   Future<void> setSubscribeAudioBlocklistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Sets the allowlist of subscriptions for audio streams.
+  /// You can call this method to specify the audio streams of a user that you want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .
+  ///  Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.
+  ///  If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
+  ///
   Future<void> setSubscribeAudioAllowlistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Set the blocklist of subscriptions for video streams.
+  /// You can call this method to specify the video streams of a user that you do not want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
+  ///  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+  ///  You can call this method either before or after joining a channel.
+  ///  The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.
+  ///  If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
+  ///
   Future<void> setSubscribeVideoBlocklistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Set the allowlist of subscriptions for video streams.
+  /// You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
+  ///  Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+  ///  You can call this method either before or after joining a channel.
+  ///  The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uidNumber] The number of users in the user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
   Future<void> setSubscribeVideoAllowlistEx(
       {required List<int> uidList,
       required int uidNumber,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Options for subscribing to remote video streams.
+  /// When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [options] The video subscription options. See VideoSubscriptionOptions .
+  /// * [uid] The user ID of the remote user.
   Future<void> setRemoteVideoSubscriptionOptionsEx(
       {required int uid,
       required VideoSubscriptionOptions options,
@@ -198,7 +261,12 @@ abstract class RtcEngineEx implements RtcEngine {
       required bool enabled,
       String? deviceName});
 
-  /// @nodoc
+  /// Adjusts the playback signal volume of a specified remote user.
+  /// You can call this method to adjust the playback volume of a specified remote user. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.Call this method after joining a channel.The playback volume here refers to the mixed volume of a specified remote user.
+  ///
+  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uid] The user ID of the remote user.
   Future<void> adjustUserPlaybackSignalVolumeEx(
       {required int uid,
       required int volume,
@@ -263,7 +331,6 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Removes the watermark image from the video stream.
   ///
-  ///
   /// * [connection] The connection information. See RtcConnection .
   Future<void> clearVideoWatermarkEx(RtcConnection connection);
 
@@ -277,49 +344,97 @@ abstract class RtcEngineEx implements RtcEngine {
       required int value,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Enables the reporting of users' volume indication.
+  /// This method enables the SDK to regularly report the volume information to the app of the local user who sends a stream and remote users (three users at most) whose instantaneous volumes are the highest. Once you call this method and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [reportVad] true: Enable the voice activity detection of the local user. Once it is enabled,the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user.
+  ///  false: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
+  ///
+  /// * [smooth] The smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
+  /// * [interval] Sets the time interval between two consecutive volume indications:
+  ///  ≤ 0: Disables the volume indication.
+  ///  > 0: Time interval (ms) between two consecutive volume indications. You need to set this parameter to an integer multiple of 200. If the value is lower than 200, the SDK automatically adjusts the value to 200.
+  ///
   Future<void> enableAudioVolumeIndicationEx(
       {required int interval,
       required int smooth,
       required bool reportVad,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Starts pushing media streams to a CDN without transcoding.
+  /// Ensure that you enable the media push service before using this function.
+  ///  Call this method after joining a channel.
+  ///  Only hosts in the LIVE_BROADCASTING profile can call this method.
+  ///  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+  ///  You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   Future<void> startRtmpStreamWithoutTranscodingEx(
       {required String url, required RtcConnection connection});
 
-  /// @nodoc
+  /// Starts Media Push and sets the transcoding configuration.
+  /// You can call this method to push a live audio-and-video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.Ensure that you enable the Media Push service before using this function. Call this method after joining a channel.Only hosts in the LIVE_BROADCASTING profile can call this method.If you want to retry pushing streams after a failed push, make sure to call stopRtmpStreamEx first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [transcoding] The transcoding configuration for media push. See LiveTranscoding .
+  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   Future<void> startRtmpStreamWithTranscodingEx(
       {required String url,
       required LiveTranscoding transcoding,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Updates the transcoding configuration.
+  /// After you start pushing media streams to CDN with transcoding, you can dynamically update the transcoding configuration according to the scenario. The SDK triggers the onTranscodingUpdated callback after the transcoding configuration is updated.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [transcoding] The transcoding configuration for media push. See LiveTranscoding .
+  ///
   Future<void> updateRtmpTranscodingEx(
       {required LiveTranscoding transcoding,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Stops pushing media streams to a CDN.
+  /// You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  ///
+  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   Future<void> stopRtmpStreamEx(
       {required String url, required RtcConnection connection});
 
-  /// @nodoc
+  /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
+  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the destination channel.If the onChannelMediaRelayStateChanged callback returnsrelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.The relaying media streams across channels function needs to be enabled.We do not support string user accounts in this API.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> startChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Updates the channels for media stream relay.
+  /// After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the updateChannelMediaRelay method.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the relayEventPacketUpdateDestChannel (7) state code.Call the method after successfully calling the startChannelMediaRelayEx method and receiving onChannelMediaRelayStateChanged (relayStateRunning, relayOk); otherwise, the method call fails.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
   Future<void> updateChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Stops the media stream relay. Once the relay stops, the host quits all the destination channels.
+  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports relayStateIdle (0) and relayOk (0), the host successfully stops the relay.If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the relayErrorServerNoResponse (2) or relayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> stopChannelMediaRelayEx(RtcConnection connection);
 
-  /// @nodoc
+  /// Pauses the media stream relay to all destination channels.
+  /// After the cross-channel media stream relay starts, you can call this method to pause relaying media streams to all destination channels; after the pause, if you want to resume the relay, call resumeAllChannelMediaRelay .After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback to report whether the media stream relay is successfully paused.Call this method after startChannelMediaRelayEx .
+  ///
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> pauseAllChannelMediaRelayEx(RtcConnection connection);
 
-  /// @nodoc
+  /// Resumes the media stream relay to all destination channels.
+  /// After calling the pauseAllChannelMediaRelayEx method, you can call this method to resume relaying media streams to all destination channels.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback to report whether the media stream relay is successfully resumed.Call this method after pauseAllChannelMediaRelayEx .
+  ///
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> resumeAllChannelMediaRelayEx(RtcConnection connection);
 
   /// @nodoc
@@ -337,13 +452,27 @@ abstract class RtcEngineEx implements RtcEngine {
       required int frameRate,
       required int bitrate});
 
-  /// @nodoc
+  /// Enables or disables dual-stream mode on the sender side.
+  /// This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.If you need to enable dual video streams in a multi-channel scenario, you can call the enableDualStreamModeEx method.You can call this method either before or after joining a channel.After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:High-quality video stream: High bitrate, high resolution.Low-quality video stream: Low bitrate, low resolution.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
+  ///
+  /// * [enabled] Whether to enable dual-stream mode:
+  ///  true: Enable dual-stream mode.
+  ///  false: (Default) Disable dual-stream mode.
   Future<void> enableDualStreamModeEx(
       {required bool enabled,
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Sets dual-stream mode on the sender side.
+  /// The SDK enables the low-quality video stream auto mode on the sender by default, which is equivalent to calling this method and setting the mode to autoSimulcastStream. If you want to modify this behavior, you can call this method and modify the mode to disableSimulcastStream(never sends low-quality video streams) or enableSimulcastStream(sends low-quality video streams).The difference and between this method and enableDualStreamModeEx is as follows:When calling this method and setting mode to disableSimulcastStream, it has the same effect as enableDualStreamModeEx(false).When calling this method and setting mode to enableSimulcastStream, it has the same effect as enableDualStreamModeEx(true).Both methods can be called before and after joining a channel. If they are used at the same time, the settings in the method called later shall prevail.
+  ///
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
+  ///
+  /// * [mode] The mode in which the video stream is sent. See SimulcastStreamMode .
   Future<void> setDualStreamModeEx(
       {required SimulcastStreamMode mode,
       required SimulcastStreamConfig streamConfig,
