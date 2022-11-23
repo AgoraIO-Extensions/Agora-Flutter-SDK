@@ -438,7 +438,7 @@ class LocalVideoStats {
   @JsonKey(name: 'txPacketLossRate')
   final int? txPacketLossRate;
 
-  /// @nodoc
+  /// The brightness level of the video image captured by the local camera. See CaptureBrightnessLevelType.
   @JsonKey(name: 'captureBrightnessLevel')
   final CaptureBrightnessLevelType? captureBrightnessLevel;
 
@@ -1205,7 +1205,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishCameraTrack')
   final bool? publishCameraTrack;
 
-  /// @nodoc
+  /// Whether to publish the video captured by the second camera: true: Publish the video captured by the second camera. false: (Default) Do not publish the video captured by the second camera.
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
@@ -1217,11 +1217,11 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishScreenCaptureVideo')
   final bool? publishScreenCaptureVideo;
 
-  /// @nodoc
+  /// Whether to publish the audio captured from the screen: true: Publish the audio captured from the screen. false: (Default) Do not publish the audio captured from the screen. This parameter applies to Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
 
-  /// @nodoc
+  /// Whether to publish the video captured from the screen: true: Publish the video captured from the screen. false: (Default) Do not publish the captured video from the screen.
   @JsonKey(name: 'publishScreenTrack')
   final bool? publishScreenTrack;
 
@@ -1986,6 +1986,8 @@ class RtcEngineEventHandler {
 
   /// Occurs when the state of virtual metronome changes.
   /// When the state of the virtual metronome changes, the SDK triggers this callback to report the current state of the virtual metronome. This callback indicates the state of the local audio stream and enables you to troubleshoot issues when audio exceptions occur.This callback is for Android and iOS only.
+  /// * [state] For the current virtual metronome status, see RhythmPlayerStateType.
+  /// * [errorCode] For the error codes and error messages related to virtual metronome errors, see RhythmPlayerErrorType.
   final void Function(
           RhythmPlayerStateType state, RhythmPlayerErrorType errorCode)?
       onRhythmPlayerStateChanged;
@@ -3017,6 +3019,7 @@ abstract class RtcEngine {
 
   /// Sets audio scenarios.
   /// You can call this method either before or after joining a channel.
+  /// * [scenario] The audio scenarios. See AudioScenarioType. Under different audio scenarios, the device uses different volume types.
   Future<void> setAudioScenario(AudioScenarioType scenario);
 
   /// Enables/Disables the local audio capture.

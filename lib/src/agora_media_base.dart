@@ -888,6 +888,7 @@ class AudioFrameObserverBase {
 
   /// Gets the in-ear monitoring audio frame.
   /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
+  /// * [audioFrame] The raw audio data. See AudioFrame .
   final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
 }
 

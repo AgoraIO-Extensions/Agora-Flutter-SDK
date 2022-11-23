@@ -1388,7 +1388,7 @@ class VideoSubscriptionOptions {
   /// @nodoc
   const VideoSubscriptionOptions({this.type, this.encodedFrameOnly});
 
-  /// @nodoc
+  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType.
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
@@ -4285,7 +4285,7 @@ class VideoCanvas {
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
-  /// @nodoc
+  /// Setting mode of the view. See VideoViewSetupMode.
   @JsonKey(name: 'setupMode')
   final VideoViewSetupMode? setupMode;
 
@@ -4297,7 +4297,7 @@ class VideoCanvas {
   @JsonKey(name: 'mediaPlayerId')
   final int? mediaPlayerId;
 
-  /// @nodoc
+  /// (Android and iOS only) (Optional) The display area for the video frame. See Rectangle. width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
@@ -4964,15 +4964,15 @@ class ScreenCaptureParameters {
   @JsonKey(name: 'excludeWindowCount')
   final int? excludeWindowCount;
 
-  /// The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
+  /// (For macOS and Windows only) The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
   @JsonKey(name: 'highLightWidth')
   final int? highLightWidth;
 
-  /// On macOS, COLOR_CLASS refers to NSColor.
+  /// (For macOS and Windows only) On Windows platforms, the color of the border in ARGB format. The default value is 0xFF8CBF26. On macOS, COLOR_CLASS refers to NSColor.
   @JsonKey(name: 'highLightColor')
   final int? highLightColor;
 
-  /// Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
+  /// (For macOS and Windows only) Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
   @JsonKey(name: 'enableHighLight')
   final bool? enableHighLight;
 
@@ -5492,15 +5492,15 @@ class ChannelMediaRelayConfiguration {
   const ChannelMediaRelayConfiguration(
       {this.srcInfo, this.destInfos, this.destCount});
 
-  /// @nodoc
+  /// The information of the source channel. See ChannelMediainfo.
   @JsonKey(name: 'srcInfo')
   final ChannelMediaInfo? srcInfo;
 
-  /// @nodoc
+  /// The information of the destination channel. See ChannelMediainfo.
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 
-  /// @nodoc
+  /// The number of destination channels. The default value is 0, and the value range is from 0 to 4. Ensure that the value of this parameter corresponds to the number of ChannelMediaInfo structs you define in destInfo.
   @JsonKey(name: 'destCount')
   final int? destCount;
 
