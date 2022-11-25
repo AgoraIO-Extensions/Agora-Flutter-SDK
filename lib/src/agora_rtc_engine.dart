@@ -2975,6 +2975,8 @@ abstract class RtcEngine {
   ///
   /// * [enabled] Whether to enable virtual background:true: Enable virtual background.false: Disable virtual background.
   /// * [backgroundSource] The custom background image. See VirtualBackgroundSource . To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
+  /// * [segproperty] Processing properties for background images. See SegmentationProperty.
+  /// * [type] The type of the video source. See MediaSourceType. In this method, this parameter supports only the following two settings: The default value is primaryCameraSource. If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   Future<void> enableVirtualBackground(
       {required bool enabled,
       required VirtualBackgroundSource backgroundSource,

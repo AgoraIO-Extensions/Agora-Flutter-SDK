@@ -121,7 +121,7 @@ abstract class MediaPlayer {
 
   /// Sets whether to mute the media file.
   ///
-  /// * [mute] Whether to mute the media file:true: Mute the media file.false: (Default) Unmute the media file.
+  /// * [muted] Whether to mute the media file:true: Mute the media file.false: (Default) Unmute the media file.
   Future<void> mute(bool muted);
 
   /// Reports whether the media resource is muted.
