@@ -5,6 +5,8 @@ set -x
 
 MY_PATH=$(dirname "$0")
 
+bash ${MY_PATH}/../scripts/download_unzip_iris_cdn_artifacts.sh ${IRIS_CDN_URL_MACOS} "MAC"
+
 pushd ${MY_PATH}/../test_shard/fake_test_app
 
 flutter packages get
