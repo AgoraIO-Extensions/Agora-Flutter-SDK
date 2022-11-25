@@ -136,17 +136,20 @@ abstract class BaseSpatialAudioEngine {
   Future<void> updatePlayerPositionInfo(
       {required int playerId, required RemoteVoicePositionInfo positionInfo});
 
-  /// @nodoc
+  /// Enables or disables the spatial audio effect for the media player.
+  /// After successfully setting the spatial audio effect parameters of the media player, the SDK enables the spatial audio effect for the media player, and the local user can hear the media resources with a sense of space.If you need to disable the spatial audio effect for the media player, set the params parameter to null.
+  ///
+  /// * [params] The spatial audio effect parameters of the media player. See SpatialAudioParams for details.
   Future<void> setParameters(String params);
 
   /// Stops or resumes publishing the local audio stream.
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to publish the local audio stream, Agora recommends calling this method instead of the muteLocalAudioStream method under RtcEngine .
+  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.Call this method after joinChannel .When using the spatial audio effect, if you need to set whether to publish the local audio stream, Agora recommends calling this method instead of the muteLocalAudioStream method under RtcEngine .
   ///
   /// * [mute] Whether to stop publishing the local audio stream.true: Stop publishing the local audio stream.false: Publish the local audio stream.
   Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
   ///
   /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
   Future<void> muteAllRemoteAudioStreams(bool mute);
@@ -169,7 +172,7 @@ abstract class BaseSpatialAudioEngine {
       required bool forceSet});
 
   /// Stops or resumes subscribing to the audio stream of a specified user.
-  /// Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio stream of a specified user, Agora recommends calling this method instead of the muteRemoteAudioStream method under RtcEngine .
+  /// Call this method after joinChannel .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio stream of a specified user, Agora recommends calling this method instead of the muteRemoteAudioStream method under RtcEngine .
   ///
   /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
   /// * [mute] Whether to subscribe to the specified remote user's audio stream.true: Stop subscribing to the audio stream of the specified user.false: (Default) Subscribe to the audio stream of the specified user. The SDK decides whether to subscribe according to the distance between the local user and the remote user.
@@ -184,7 +187,7 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   Future<void> initialize();
 
   /// Updates the spatial position of the specified remote user.
-  /// After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user.Call this method after the joinChannel [2/2] method.
+  /// After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user.Call this method after the joinChannel method.
   ///
   /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
   /// * [posInfo] The spatial position of the remote user. See RemoteVoicePositionInfo .
@@ -211,7 +214,10 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   /// After successfully calling this method, the local user no longer hears any remote users.After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial positions of all remote users.
   Future<void> clearRemotePositions();
 
-  /// @nodoc
+  /// Resumes the media stream relay to all destination channels.
+  /// After calling the pauseAllChannelMediaRelayEx method, you can call this method to resume relaying media streams to all destination channels.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback to report whether the media stream relay is successfully resumed.Call this method after pauseAllChannelMediaRelayEx .
+  ///
+  /// * [connection] The connection information. See RtcConnection .
   Future<void> clearRemotePositionsEx(RtcConnection connection);
 
   /// Sets the sound attenuation effect for the specified user.

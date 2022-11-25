@@ -102,7 +102,11 @@ abstract class MediaPlayer {
   /// * [value] The value of the key.
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
-  /// @nodoc
+  /// Sets the private options for the media player.
+  /// The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.Ensure that you call this method before open .If you need to push streams with SEI into the CDN, callsetPlayerOptionInInt ("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
   Future<void> setPlayerOptionInString(
       {required String key, required String value});
 
@@ -112,7 +116,10 @@ abstract class MediaPlayer {
   /// @nodoc
   Future<void> selectInternalSubtitle(int index);
 
-  /// @nodoc
+  /// Stops pushing media streams to a CDN.
+  /// You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  ///
+  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   Future<void> setExternalSubtitle(String url);
 
   /// Gets current playback state.
@@ -177,7 +184,9 @@ abstract class MediaPlayer {
   void registerMediaPlayerAudioSpectrumObserver(
       {required AudioSpectrumObserver observer, required int intervalInMS});
 
-  /// @nodoc
+  /// Unregisters an audio observer.
+  ///
+  /// * [observer] The audio observer. See MediaPlayerAudioFrameObserver .
   void unregisterMediaPlayerAudioSpectrumObserver(
       AudioSpectrumObserver observer);
 

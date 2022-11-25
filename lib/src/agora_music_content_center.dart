@@ -292,7 +292,10 @@ abstract class MusicPlayer implements MediaPlayer {
 
 /// @nodoc
 abstract class MusicContentCenter {
-  /// @nodoc
+  /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
+  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the destination channel.If the onChannelMediaRelayStateChanged callback returnsrelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelay method to quit the current relay.The relaying media streams across channels function needs to be enabled.We do not support string user accounts in this API.
+  ///
+  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
   Future<void> initialize(MusicContentCenterConfiguration configuration);
 
   /// @nodoc
@@ -301,7 +304,10 @@ abstract class MusicContentCenter {
   /// @nodoc
   Future<void> release();
 
-  /// @nodoc
+  /// Removes the specified IRtcEngineEventHandler instance.
+  /// This method removes the specified callback handler. For callback events that you want to listen for only once, call this method to remove the relevant callback handler after you have received them.
+  ///
+  /// * [eventHandler] The callback handler to be deleted. See RtcEngineEventHandler .
   void registerEventHandler(MusicContentCenterEventHandler eventHandler);
 
   /// @nodoc

@@ -96,8 +96,6 @@ abstract class MediaEngine {
       {required bool enabled,
       required bool useTexture,
       ExternalVideoSourceType sourceType = ExternalVideoSourceType.videoFrame,
-
-      /// @nodoc
       SenderOptions encodedVideoOption = const SenderOptions()});
 
   /// Sets the external captured audio parameters and chooses whether to publish the audio to the remote user.

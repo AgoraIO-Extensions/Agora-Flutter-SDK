@@ -53,7 +53,9 @@ abstract class AudioDeviceManager {
   /// An AudioDeviceInfo object, which contains the ID and device name of the audio devices.
   Future<AudioDeviceInfo> getPlaybackDeviceInfo();
 
-  /// @nodoc
+  /// Sets the volume of the audio recording device.
+  ///
+  /// * [volume]  The volume of the audio recording device. The value range is [0,255].
   Future<void> setPlaybackDeviceVolume(int volume);
 
   /// @nodoc
@@ -97,13 +99,19 @@ abstract class AudioDeviceManager {
   /// The ID of the current loopback device.
   Future<String> getLoopbackDevice();
 
-  /// @nodoc
+  /// Stops or resumes publishing the local video stream.
+  /// A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.This method does not affect any ongoing video recording, because it does not disable the camera.
+  ///
+  /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
   Future<void> setPlaybackDeviceMute(bool mute);
 
   /// @nodoc
   Future<bool> getPlaybackDeviceMute();
 
-  /// @nodoc
+  /// Stops or resumes publishing the local video stream.
+  /// A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.This method does not affect any ongoing video recording, because it does not disable the camera.
+  ///
+  /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
   Future<void> setRecordingDeviceMute(bool mute);
 
   /// @nodoc
