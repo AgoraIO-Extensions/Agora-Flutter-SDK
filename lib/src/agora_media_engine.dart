@@ -93,8 +93,6 @@ abstract class MediaEngine {
       {required bool enabled,
       required bool useTexture,
       ExternalVideoSourceType sourceType = ExternalVideoSourceType.videoFrame,
-
-      /// @nodoc
       SenderOptions encodedVideoOption = const SenderOptions()});
 
   /// Sets the external audio source parameters.
