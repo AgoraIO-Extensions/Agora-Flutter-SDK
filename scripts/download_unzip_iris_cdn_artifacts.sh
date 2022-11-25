@@ -8,8 +8,6 @@ PLATFORM=$2
 
 MY_PATH=$(dirname "$0")
 
-source ${MY_PATH}/../scripts/artifacts_version.sh
-
 ARTIFACTS_PATH="${MY_PATH}/../artifacts"
 mkdir -p ${ARTIFACTS_PATH}
 
