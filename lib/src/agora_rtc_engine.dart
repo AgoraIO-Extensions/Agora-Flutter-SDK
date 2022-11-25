@@ -2811,8 +2811,6 @@ abstract class RtcEngine {
   ///
   /// * [context] Configurations for the RtcEngine instance. See RtcEngineContext .
   ///
-  /// Returns
-  /// The RtcEngine instance, if the method call succeeds.An error code, if the call fails,.
   Future<void> initialize(RtcEngineContext context);
 
   /// Gets the SDK version.
@@ -3270,8 +3268,6 @@ abstract class RtcEngine {
   ///
   /// * [mode] The channel mode. See AudioMixingDualMonoMode .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode);
 
   /// Sets the pitch of the local music file.
@@ -3791,8 +3787,6 @@ abstract class RtcEngine {
   /// * [enable] Whether to enable the extension:true: Enable the extension.false: Disable the extension.
   /// * [type] Type of media source. See MediaSourceType . In this method, this parameter supports only the following two settings:The default value is unknownMediaSource.If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> enableExtension(
       {required String provider,
       required String extension,
@@ -4176,8 +4170,6 @@ abstract class RtcEngine {
   /// * [type] The video source type. See VideoSourceType .
   /// * [orientation] The clockwise rotation angle. See VideoOrientation .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setCameraDeviceOrientation(
       {required VideoSourceType type, required VideoOrientation orientation});
 
@@ -4493,8 +4485,8 @@ abstract class RtcEngine {
   /// Sets audio advanced options.
   /// If you have advanced audio processing requirements, such as capturing and sending stereo audio, you can call this method to set advanced audio options.This method is for Android and iOS only.Call this method after calling joinChannel [2/2] , enableAudio and enableLocalAudio .
   ///
-  /// Returns
-  /// The advanced options for audio. See AdvancedAudioOptions .
+  /// * [options] The advanced options for audio.  See AdvancedAudioOptions.
+  ///
   Future<void> setAdvancedAudioOptions(
       {required AdvancedAudioOptions options, int sourceType = 0});
 

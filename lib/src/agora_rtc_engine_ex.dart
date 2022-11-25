@@ -58,8 +58,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection .
   /// * [config] Video profile. See VideoEncoderConfiguration .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setVideoEncoderConfigurationEx(
       {required VideoEncoderConfiguration config,
       required RtcConnection connection});
@@ -79,8 +77,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [uid] The ID of the specified user.
   /// * [mute] Whether to stop receiving the audio stream of the specified user:true: Stop receiving the audio stream of the specified user.false: (Default) Resume receiving the audio stream of the specified user.
   ///
-  /// Returns
-  /// 0: Success. < 0: Failure.
   Future<void> muteRemoteAudioStreamEx(
       {required int uid,
       required bool mute,
@@ -93,8 +89,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [uid] The user ID of the remote user.
   /// * [mute] Whether to stop receiving the video stream of the specified user:true: Stop receiving the video stream of the specified user.false: (Default) Resume receiving the video stream of the specified user.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> muteRemoteVideoStreamEx(
       {required int uid,
       required bool mute,
@@ -129,8 +123,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection .
   /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> muteLocalVideoStreamEx(
       {required bool mute, required RtcConnection connection});
 
@@ -150,8 +142,6 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  true: Stop subscribing to the video streams of all remote users.
   ///  false: (Default) Subscribe to the audio streams of all remote users by default.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> muteAllRemoteVideoStreamsEx(
       {required bool mute, required RtcConnection connection});
 
@@ -234,8 +224,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [pan] The voice position of the remote user. The value ranges from -1.0 to 1.0:-1.0: The remote voice comes from the left.0.0: (Default) The remote voice comes from the front.1.0: The remote voice comes from the right.
   /// * [gain] The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setRemoteVoicePositionEx(
       {required int uid,
       required double pan,
@@ -263,8 +251,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [enabled] Sets whether to enable loopback audio capture:
   ///  true: Enable loopback audio capture.false: (Default) Disable loopback audio capture.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> enableLoopbackRecordingEx(
       {required RtcConnection connection,
       required bool enabled,
@@ -316,8 +302,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [data] The data to be sent.
   /// * [length] The length of the data.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> sendStreamMessageEx(
       {required int streamId,
       required Uint8List data,
@@ -331,8 +315,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [options] The options of the watermark image to be added.
   /// * [watermarkUrl] The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> addVideoWatermarkEx(
       {required String watermarkUrl,
       required WatermarkOptions options,

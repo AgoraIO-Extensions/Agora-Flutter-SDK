@@ -20,8 +20,6 @@ abstract class MediaPlayer {
   ///
   /// * [source] Media resources. See MediaSource .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> openWithMediaSource(MediaSource source);
 
   /// Plays the media file.
@@ -221,8 +219,6 @@ abstract class MediaPlayer {
   /// * [src] The URL of the media resource.
   /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch:true: Synchronize the playback position before and after the switch.false: (Default) Do not synchronize the playback position before and after the switch.Make sure to set this parameter as false if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> switchSrc({required String src, bool syncPts = true});
 
   /// Preloads a media resource.
