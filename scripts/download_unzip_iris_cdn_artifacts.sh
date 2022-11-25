@@ -27,18 +27,18 @@ popd
 
 UNZIP_PATH="${ARTIFACTS_PATH}/${DOWNLOAD_BASE_NAME}/iris_${VERSION}_DCG_${PLATFORM}"
 
-if [[ ${PLATFORM} == "Android" ]];then
-    pushd ${UNZIP_PATH}
-        ABIS="arm64-v8a armeabi-v7a x86_64"
-        for ABI in ${ABIS};
-        do
-            if [[ ! -d "${IRIS_TESTER_PATH}/android/libs/${ABI}" ]]; then
-                mkdir -p "${IRIS_TESTER_PATH}/android/libs/${ABI}"
-            fi
+pushd ${UNZIP_PATH}
 
-            cp -RP "ALL_ARCHITECTURE/Release/${ABI}/libIrisDebugger.so" "${IRIS_TESTER_PATH}/android/libs/${ABI}/libIrisDebugger.so"
-        done;
-    popd
+if [[ ${PLATFORM} == "Android" ]];then
+    ABIS="arm64-v8a armeabi-v7a x86_64"
+    for ABI in ${ABIS};
+    do
+        if [[ ! -d "${IRIS_TESTER_PATH}/android/libs/${ABI}" ]]; then
+            mkdir -p "${IRIS_TESTER_PATH}/android/libs/${ABI}"
+        fi
+
+        cp -RP "ALL_ARCHITECTURE/Release/${ABI}/libIrisDebugger.so" "${IRIS_TESTER_PATH}/android/libs/${ABI}/libIrisDebugger.so"
+    done;
 fi
 
 if [[ ${PLATFORM} == "MAC" ]];then
@@ -50,5 +50,7 @@ if [[ ${PLATFORM} == "iOS" ]];then
 fi
 
 if [[ ${PLATFORM} == "Windows" ]];then
-    cp -RP "x64/Release/Release/IrisDebugger.xcframework" "${IRIS_TESTER_PATH}/windows/IrisDebugger.dll"
+    cp -RP "x64/Release/Release/IrisDebugger.dll" "${IRIS_TESTER_PATH}/windows/IrisDebugger.dll"
 fi
+
+popd
