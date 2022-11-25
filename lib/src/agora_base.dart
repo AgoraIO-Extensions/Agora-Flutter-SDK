@@ -5156,9 +5156,6 @@ class AudioEncodedFrameObserver {
   /// Gets the encoded audio data of the local user.
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
   ///
-  /// * [channels] The number of channels.
-  ///  1: Mono.
-  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
@@ -5168,9 +5165,6 @@ class AudioEncodedFrameObserver {
   /// Gets the encoded audio data of all remote users.
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
   ///
-  /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
-  /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
@@ -5180,9 +5174,6 @@ class AudioEncodedFrameObserver {
   /// Gets the mixed and encoded audio data of the local and all remote users.
   /// After calling registerAudioEncodedFrameObserver and setting the audio profile as audioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
   ///
-  /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
-  /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
