@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-# set -x
+set -x
 
 CDN_URL=$1
 PLATFORM=$2
@@ -17,7 +17,7 @@ DOWNLOAD_NAME=${CDN_URL##*/}
 
 DOWNLOAD_BASE_NAME=${DOWNLOAD_NAME/.zip/""}
 
-curl -L "${CDN_URL}" > ${ARTIFACTS_PATH}/${DOWNLOAD_NAME}
+# curl -L "${CDN_URL}" > ${ARTIFACTS_PATH}/${DOWNLOAD_NAME}
 
 VERSION="$(cut -d'_' -f2 <<<"${DOWNLOAD_NAME}")"
 
@@ -27,8 +27,6 @@ popd
 
 UNZIP_PATH="${ARTIFACTS_PATH}/${DOWNLOAD_BASE_NAME}/iris_${VERSION}_DCG_${PLATFORM}"
 
-pushd ${UNZIP_PATH}
-
 if [[ ${PLATFORM} == "Android" ]];then
     ABIS="arm64-v8a armeabi-v7a x86_64"
     for ABI in ${ABIS};
@@ -37,20 +35,26 @@ if [[ ${PLATFORM} == "Android" ]];then
             mkdir -p "${IRIS_TESTER_PATH}/android/libs/${ABI}"
         fi
 
-        cp -RP "ALL_ARCHITECTURE/Release/${ABI}/libIrisDebugger.so" "${IRIS_TESTER_PATH}/android/libs/${ABI}/libIrisDebugger.so"
+        cp -RP "${UNZIP_PATH}/ALL_ARCHITECTURE/Release/${ABI}/libIrisDebugger.so" "${IRIS_TESTER_PATH}/android/libs/${ABI}/libIrisDebugger.so"
     done;
 fi
 
 if [[ ${PLATFORM} == "MAC" ]];then
-    cp -RP "MAC/Release/Release/IrisDebugger.framework" "${IRIS_TESTER_PATH}/macos/"
+    cp -RP "${UNZIP_PATH}/MAC/Release/Release/IrisDebugger.framework" "${IRIS_TESTER_PATH}/macos/"
 fi
 
 if [[ ${PLATFORM} == "iOS" ]];then
-    cp -RP "ALL_ARCHITECTURE/Release/Release/IrisDebugger.xcframework" "${IRIS_TESTER_PATH}/ios/"
+    cp -RP "${UNZIP_PATH}/ALL_ARCHITECTURE/Release/Release/IrisDebugger.xcframework" "${IRIS_TESTER_PATH}/ios/"
 fi
 
 if [[ ${PLATFORM} == "Windows" ]];then
-    cp -RP "x64/Release/Release/IrisDebugger.dll" "${IRIS_TESTER_PATH}/windows/IrisDebugger.dll"
+    cp -RP "${UNZIP_PATH}/x64/Release/Release/IrisDebugger.dll" "${IRIS_TESTER_PATH}/windows/IrisDebugger.dll"
 fi
 
-popd
+# pushd ${UNZIP_PATH}
+
+
+
+
+
+# popd
