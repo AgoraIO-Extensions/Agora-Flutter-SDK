@@ -36,7 +36,11 @@ if [[ ${PLATFORM} == "Android" ]];then
         fi
 
         cp -RP "${UNZIP_PATH}/ALL_ARCHITECTURE/Release/${ABI}/libIrisDebugger.so" "${IRIS_TESTER_PATH}/android/libs/${ABI}/libIrisDebugger.so"
+
+        ls ${IRIS_TESTER_PATH}/android/libs/${ABI}/
     done;
+
+    
 fi
 
 if [[ ${PLATFORM} == "MAC" ]];then
