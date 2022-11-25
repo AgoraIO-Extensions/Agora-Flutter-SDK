@@ -100,7 +100,16 @@ abstract class RtcEngineEx implements RtcEngine {
       required bool mute,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Sets the stream type of the remote video.
+  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamModeEx (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.
+  /// By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
+  /// The SDK enables the low-quality video stream auto mode on the sender by default (not actively sending low-quality video streams). The host at the receiving end can call this method to initiate a low-quality video stream stream request on the receiving end, and the sender automatically switches to the low-quality video stream mode after receiving the request.
+  /// The result of this method returns in the onApiCallExecuted callback.
+  ///
+  /// * [uid] The user ID.
+  /// * [streamType] The video stream type. See VideoStreamType.
+  /// * [connection] The connection information. See RtcConnection .
+  ///
   Future<void> setRemoteVideoStreamTypeEx(
       {required int uid,
       required VideoStreamType streamType,
