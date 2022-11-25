@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:math';
 
 import 'classes.dart';
 import 'impl/rtc_engine_impl.dart';
 import 'rtc_engine.dart';
+
+import 'package:flutter/foundation.dart';
 
 // ignore_for_file: non_constant_identifier_names
 
@@ -107,14 +110,26 @@ class Window {
 
   /// @nodoc
   factory Window.from(_Window _window) {
-    final name =
-        utf8.decode(Iterable<int>.generate(_kBasicResultLength, (index) {
-      return _window.name[index];
-    }).where((element) => element != 0).toList());
-    final owner_name =
-        utf8.decode(Iterable<int>.generate(_kBasicResultLength, (index) {
-      return _window.owner_name[index];
-    }).where((element) => element != 0).toList());
+    var name = "???name???";
+    var owner_name = "???owner_name???";
+
+    try {
+      name = utf8.decode(Iterable<int>.generate(_kBasicResultLength, (index) {
+        return _window.name[index];
+      }).where((element) => element != 0).toList());
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    try {
+      owner_name =
+          utf8.decode(Iterable<int>.generate(_kBasicResultLength, (index) {
+        return _window.owner_name[index];
+      }).where((element) => element != 0).toList());
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
     return Window._(_window.id, name, owner_name, _window.bounds.toRectangle(),
         _window.work_area.toRectangle());
   }
