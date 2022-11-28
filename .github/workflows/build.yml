@@ -166,6 +166,14 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r21e
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Run cmake build android
+        env:
+          ANDROID_NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk

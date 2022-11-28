@@ -30,19 +30,23 @@ void main() {
       Completer<bool> eventCalledCompleter = Completer();
       final AudioFrameObserver observer = AudioFrameObserver(
         onRecordAudioFrame: (String channelId, AudioFrame audioFrame) {
+          debugPrint('onRecordAudioFrame');
           if (eventCalledCompleter.isCompleted) return;
           eventCalledCompleter.complete(true);
         },
         onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) {
+          debugPrint('onPlaybackAudioFrame');
           if (eventCalledCompleter.isCompleted) return;
           eventCalledCompleter.complete(true);
         },
         onMixedAudioFrame: (String channelId, AudioFrame audioFrame) {
+          debugPrint('onMixedAudioFrame');
           if (eventCalledCompleter.isCompleted) return;
           eventCalledCompleter.complete(true);
         },
         onPlaybackAudioFrameBeforeMixing:
             (String channelId, int uid, AudioFrame audioFrame) {
+          debugPrint('onPlaybackAudioFrameBeforeMixing');
           if (eventCalledCompleter.isCompleted) return;
           eventCalledCompleter.complete(true);
         },
@@ -50,6 +54,16 @@ void main() {
       mediaEngine.registerAudioFrameObserver(
         observer,
       );
+      await rtcEngine.setPlaybackAudioFrameParameters(
+          sampleRate: 32000,
+          channel: 1,
+          mode: RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly,
+          samplesPerCall: 1024);
+      await rtcEngine.setRecordingAudioFrameParameters(
+          sampleRate: 32000,
+          channel: 1,
+          mode: RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly,
+          samplesPerCall: 1024);
 
       await rtcEngine.enableVideo();
 
