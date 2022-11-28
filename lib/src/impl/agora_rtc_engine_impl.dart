@@ -583,15 +583,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         ),
         jsonEncode(param));
 
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-
     _eventLoop.addEventHandler(
       const EventLoopEventHandlerKey(RtcEngineImpl),
       eventHandlerWrapper,
