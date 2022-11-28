@@ -11,7 +11,7 @@ on:
 jobs:
   flutter_codestyle_check:
     name: Flutter codestyle/analyze check
-    # if: contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts')
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
 
   integration_test_android:
     name: Run Flutter Android Integration Tests
-    # if: contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts')
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -60,7 +60,7 @@ jobs:
 
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
-    # if: contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts')
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -81,7 +81,7 @@ jobs:
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
-    # if: contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts')
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -100,7 +100,7 @@ jobs:
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
-    # if: contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts')
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
