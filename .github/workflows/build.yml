@@ -166,9 +166,10 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
-      - run: |
-        echo "ANDROID_NDK: ${ANDROID_NDK}"
-        echo "ANDROID_NDK_HOME: ${ANDROID_NDK_HOME}"
+      - name: kkkk
+        run: |
+          echo "ANDROID_NDK: ${ANDROID_NDK}"
+          echo "ANDROID_NDK_HOME: ${ANDROID_NDK_HOME}"
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
