@@ -91,6 +91,7 @@ void main() {
       await mediaEngine.release();
       await rtcEngine.release();
     },
+    skip: Platform.windows
   );
 
   testWidgets(
