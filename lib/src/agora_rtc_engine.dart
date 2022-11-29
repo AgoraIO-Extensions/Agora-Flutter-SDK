@@ -4573,7 +4573,9 @@ abstract class RtcEngine {
   /// * [observer] The encoded audio observer. See AudioEncodedFrameObserver .
   void unregisterAudioEncodedFrameObserver(AudioEncodedFrameObserver observer);
 
-  /// @nodoc
+  /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
+  ///
+  /// * [parameters] Pointer to the set parameters in a JSON string.
   Future<void> setParameters(String parameters);
 
   /// Gets the C++ handle of the native SDK.
