@@ -58,12 +58,15 @@ jobs:
         run: |
           source scripts/artifacts_version.sh
 
+          PROJECT_DIR=$(pwd)
+
           mkdir -p output
+          cd hoe
           dart pub get
           dart run hoe/bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
-            --project-dir=$(pwd) \
-            --artifacts-output-dir=output \
+            --project-dir=${PROJECT_DIR} \
+            --artifacts-output-dir=${PROJECT_DIR}/output \
             --platforms=android,macos \
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
@@ -106,12 +109,15 @@ jobs:
         run: |
           source scripts/artifacts_version.sh
 
+          PROJECT_DIR=$(pwd)
+
           mkdir -p output
+          cd hoe
           dart pub get
           dart run hoe/bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
-            --project-dir=$(pwd) \
-            --artifacts-output-dir=output \
+            --project-dir=${PROJECT_DIR} \
+            --artifacts-output-dir=${PROJECT_DIR}/output \
             --platforms=ios \
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
@@ -143,12 +149,15 @@ jobs:
         run: |
           source scripts/artifacts_version.sh
 
+          PROJECT_DIR=$(pwd)
+
           mkdir -p output
+          cd hoe
           dart pub get
           dart run hoe/bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
-            --project-dir=$(pwd) \
-            --artifacts-output-dir=output \
+            --project-dir=${PROJECT_DIR} \
+            --artifacts-output-dir=${PROJECT_DIR}/output \
             --platforms=macos \
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
@@ -178,15 +187,19 @@ jobs:
           repository: littleGnAl/hoe
           path: hoe
       - name: Download iris artifacts
+        shell: bash
         run: |
           source scripts/artifacts_version.sh
 
+          PROJECT_DIR=$(pwd)
+
           mkdir -p output
+          cd hoe
           dart pub get
           dart run hoe/bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
-            --project-dir=$(pwd) \
-            --artifacts-output-dir=output \
+            --project-dir=${PROJECT_DIR} \
+            --artifacts-output-dir=${PROJECT_DIR}/output \
             --platforms=windows \
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
