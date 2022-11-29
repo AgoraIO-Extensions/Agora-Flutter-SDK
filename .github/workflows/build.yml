@@ -14,6 +14,7 @@ on:
       - main
       - release/**
       - special/**
+      
 
 jobs:
   flutter_codestyle_check:
