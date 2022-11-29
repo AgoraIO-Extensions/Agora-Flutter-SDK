@@ -16,25 +16,25 @@ on:
       - special/**
 
 jobs:
-  flutter_codestyle_check:
-    name: Flutter codestyle/analyze check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: axel-op/dart-package-analyzer@v3
-        id: analysis
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Check scores
-        env:
-          TOTAL: ${{ steps.analysis.outputs.total }}
-          TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
-        run: |
-          if (( $TOTAL < 120 ))
-          then
-            echo Pub Score too low.
-            exit 1
-          fi 
+  # flutter_codestyle_check:
+  #   name: Flutter codestyle/analyze check
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: axel-op/dart-package-analyzer@v3
+  #       id: analysis
+  #       with:
+  #         githubToken: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Check scores
+  #       env:
+  #         TOTAL: ${{ steps.analysis.outputs.total }}
+  #         TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
+  #       run: |
+  #         if (( $TOTAL < 120 ))
+  #         then
+  #           echo Pub Score too low.
+  #           exit 1
+  #         fi 
 
   # integration_test_android:
   #   name: Run Flutter Android Integration Tests
@@ -153,7 +153,7 @@ jobs:
   
   build_android_windows:
     name: Build Android on Windows
-    needs: flutter_codestyle_check
+    # needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
