@@ -49,6 +49,26 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
+      - name: Checkout hoe
+        uses: actions/checkout@v3
+        with:
+          repository: littleGnAl/hoe
+          path: hoe
+      - name: Download iris artifacts
+        run: |
+          source scripts/artifacts_version.sh
+
+          mkdir -p output
+          dart pub get
+          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+            --setup-local-dev \
+            --project-dir=$(pwd) \
+            --artifacts-output-dir=output \
+            --platforms=android,macos \
+            --apple-package-name=io.agora.agoraRtcEngineExample \
+            --flutter-package-name=agora_rtc_engine \
+            --iris-android-cdn-url=${IRIS_CDN_URL_ANDROID} \
+            --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - run: flutter config --enable-macos-desktop 
       - name: run flutter android integration tests
         uses: reactivecircus/android-emulator-runner@v2.21.0
@@ -56,7 +76,7 @@ jobs:
           api-level: 31
           arch: x86_64
           profile: Nexus 6
-          script: bash ci/run_flutter_integration_test_android.sh
+          script: bash ci/run_flutter_integration_test_android.sh 0
 
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
@@ -77,7 +97,26 @@ jobs:
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
-      - run: bash ci/run_flutter_integration_test_ios.sh
+      - name: Checkout hoe
+        uses: actions/checkout@v3
+        with:
+          repository: littleGnAl/hoe
+          path: hoe
+      - name: Download iris artifacts
+        run: |
+          source scripts/artifacts_version.sh
+
+          mkdir -p output
+          dart pub get
+          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+            --setup-local-dev \
+            --project-dir=$(pwd) \
+            --artifacts-output-dir=output \
+            --platforms=ios \
+            --apple-package-name=io.agora.agoraRtcEngineExample \
+            --flutter-package-name=agora_rtc_engine \
+            --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
+      - run: bash ci/run_flutter_integration_test_ios.sh 0
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
@@ -95,8 +134,27 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
+      - name: Checkout hoe
+        uses: actions/checkout@v3
+        with:
+          repository: littleGnAl/hoe
+          path: hoe
+      - name: Download iris artifacts
+        run: |
+          source scripts/artifacts_version.sh
+
+          mkdir -p output
+          dart pub get
+          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+            --setup-local-dev \
+            --project-dir=$(pwd) \
+            --artifacts-output-dir=output \
+            --platforms=macos \
+            --apple-package-name=io.agora.agoraRtcEngineExample \
+            --flutter-package-name=agora_rtc_engine \
+            --iris-macos-cdn-url=${IRIS_CDN_URL_MACOS}
       - run: flutter config --enable-macos-desktop 
-      - run: bash ci/run_flutter_macos_integration_test.sh
+      - run: bash ci/run_flutter_macos_integration_test.sh 0
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
@@ -114,8 +172,27 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
+      - name: Checkout hoe
+        uses: actions/checkout@v3
+        with:
+          repository: littleGnAl/hoe
+          path: hoe
+      - name: Download iris artifacts
+        run: |
+          source scripts/artifacts_version.sh
+
+          mkdir -p output
+          dart pub get
+          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+            --setup-local-dev \
+            --project-dir=$(pwd) \
+            --artifacts-output-dir=output \
+            --platforms=windows \
+            --apple-package-name=io.agora.agoraRtcEngineExample \
+            --flutter-package-name=agora_rtc_engine \
+            --iris-windows-cdn-url=${IRIS_CDN_URL_WINDOWS}
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
         shell: bash
         run: |
-          bash ci/run_flutter_windows_integration_test.sh
+          bash ci/run_flutter_windows_integration_test.sh 0

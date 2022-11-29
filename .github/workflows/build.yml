@@ -15,7 +15,6 @@ on:
       - release/**
       - special/**
       
-
 jobs:
   flutter_codestyle_check:
     name: Flutter codestyle/analyze check
