@@ -22,7 +22,7 @@ for filename in integration_test/*.dart; do
     if [[ "$filename" == *.generated.dart  ]]; then
         continue
     fi
-    flutter test $filename -d windows
+    flutter test $filename -d windows -v
 done
 
 popd

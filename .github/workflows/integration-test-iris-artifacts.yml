@@ -212,6 +212,7 @@ jobs:
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
             --iris-windows-cdn-url=${IRIS_CDN_URL_WINDOWS}
+          ls test_shard/iris_tester/windows
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
         shell: bash
