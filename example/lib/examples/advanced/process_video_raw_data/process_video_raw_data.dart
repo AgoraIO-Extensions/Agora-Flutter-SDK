@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:video_raw_data/video_raw_data.dart';
 
 /// ProcessVideoRawData Example
+/// 
+/// Demonstrate how to process video raw data in C++, check `VideoRawDataController` 
+/// implementation in https://github.com/AgoraIO-Extensions/RawDataPluginSample/tree/main/frameworks/flutter/video_raw_data
 class ProcessVideoRawData extends StatefulWidget {
   /// Construct the [ProcessVideoRawData]
   const ProcessVideoRawData({Key? key}) : super(key: key);

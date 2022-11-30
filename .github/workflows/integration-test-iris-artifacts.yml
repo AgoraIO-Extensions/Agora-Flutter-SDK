@@ -63,7 +63,7 @@ jobs:
           mkdir -p output
           cd hoe
           dart pub get
-          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+          dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
             --project-dir=${PROJECT_DIR} \
             --artifacts-output-dir=${PROJECT_DIR}/output \
@@ -114,7 +114,7 @@ jobs:
           mkdir -p output
           cd hoe
           dart pub get
-          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+          dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
             --project-dir=${PROJECT_DIR} \
             --artifacts-output-dir=${PROJECT_DIR}/output \
@@ -154,7 +154,7 @@ jobs:
           mkdir -p output
           cd hoe
           dart pub get
-          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+          dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
             --project-dir=${PROJECT_DIR} \
             --artifacts-output-dir=${PROJECT_DIR}/output \
@@ -196,7 +196,7 @@ jobs:
           mkdir -p output
           cd hoe
           dart pub get
-          dart run hoe/bin/hoe.dart build-agora-flutter-example \
+          dart run bin/hoe.dart build-agora-flutter-example \
             --setup-local-dev \
             --project-dir=${PROJECT_DIR} \
             --artifacts-output-dir=${PROJECT_DIR}/output \
