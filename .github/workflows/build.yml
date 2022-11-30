@@ -186,4 +186,4 @@ jobs:
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign
         run: flutter build ios --no-codesign
-        working-directory: example
+        working-directory: example 
