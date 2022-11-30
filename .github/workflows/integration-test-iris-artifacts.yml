@@ -154,6 +154,10 @@ jobs:
 
           PROJECT_DIR=$(pwd)
 
+          echo "project dir: ${PROJECT_DIR}"
+
+          ls ${PROJECT_DIR}
+
           mkdir -p output
           cd hoe
           dart pub get
