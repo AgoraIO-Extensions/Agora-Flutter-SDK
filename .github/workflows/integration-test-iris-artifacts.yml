@@ -53,6 +53,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: littleGnAl/hoe
+          ref: littlegnal/update
           path: hoe
       - name: Download iris artifacts
         run: |
@@ -104,6 +105,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: littleGnAl/hoe
+          ref: littlegnal/update
           path: hoe
       - name: Download iris artifacts
         run: |
@@ -144,6 +146,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: littleGnAl/hoe
+          ref: littlegnal/update
           path: hoe
       - name: Download iris artifacts
         run: |
@@ -185,6 +188,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: littleGnAl/hoe
+          ref: littlegnal/update
           path: hoe
       - name: Download iris artifacts
         shell: bash
