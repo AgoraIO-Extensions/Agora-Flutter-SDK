@@ -2,7 +2,6 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_log.g.dart';
 
 /// The output log level of the SDK.
-///
 @JsonEnum(alwaysCreate: true)
 enum LogLevel {
   /// 0: Do not output any log information.
@@ -44,7 +43,6 @@ extension LogLevelExt on LogLevel {
 }
 
 /// The output log level of the SDK.
-///
 @JsonEnum(alwaysCreate: true)
 enum LogFilterType {
   /// 0: Do not output any log information.
@@ -99,7 +97,6 @@ const minLogSize = 128 * 1024;
 const defaultLogSizeInKb = 1024;
 
 /// Configuration of Agora SDK log files.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LogConfig {
   /// @nodoc

@@ -1,7 +1,6 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 
 /// Provides callbacks for media players.
-///
 class MediaPlayerSourceObserver {
   /// @nodoc
   const MediaPlayerSourceObserver({
@@ -57,7 +56,6 @@ class MediaPlayerSourceObserver {
 
   /// Reports the events of preloaded media resources.
   ///
-  ///
   /// * [src] The URL of the media resource.
   /// * [event] Events that occur when media resources are preloaded. See PlayerPreloadEvent .
   final void Function(String src, PlayerPreloadEvent event)? onPreloadEvent;
@@ -65,12 +63,10 @@ class MediaPlayerSourceObserver {
   /// @nodoc
   final void Function()? onCompleted;
 
-  /// Occurs when the token is about to expire.
-  /// If the ts is about to expire when you call the switchAgoraCDNLineByIndex method to switch the CDN route for playing the media resource, the SDK triggers this callback to remind you to renew the authentication information. You need to call the renewAgoraCDNSrcToken method to pass in the updated authentication information to update the authentication information of the media resource URL. After updating the authentication information, you need to call switchAgoraCDNLineByIndex to complete the route switching.
+  /// @nodoc
   final void Function()? onAgoraCDNTokenWillExpire;
 
   /// Occurs when the video bitrate of the media resource changes.
-  ///
   ///
   /// * [from] Information about the video bitrate of the media resource being played. See SrcInfo .
   /// * [to] Information about the changed video bitrate of media resource being played. See SrcInfo .
