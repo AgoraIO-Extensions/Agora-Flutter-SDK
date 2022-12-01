@@ -438,7 +438,7 @@ class LocalVideoStats {
   @JsonKey(name: 'txPacketLossRate')
   final int? txPacketLossRate;
 
-  /// @nodoc
+  /// The brightness level of the video image captured by the local camera. See CaptureBrightnessLevelType.
   @JsonKey(name: 'captureBrightnessLevel')
   final CaptureBrightnessLevelType? captureBrightnessLevel;
 
@@ -1205,7 +1205,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishCameraTrack')
   final bool? publishCameraTrack;
 
-  /// @nodoc
+  /// Whether to publish the video captured by the second camera: true: Publish the video captured by the second camera. false: (Default) Do not publish the video captured by the second camera.
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
@@ -1217,11 +1217,11 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishScreenCaptureVideo')
   final bool? publishScreenCaptureVideo;
 
-  /// @nodoc
+  /// Whether to publish the audio captured from the screen: true: Publish the audio captured from the screen. false: (Default) Do not publish the audio captured from the screen. This parameter applies to Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
 
-  /// @nodoc
+  /// Whether to publish the video captured from the screen: true: Publish the video captured from the screen. false: (Default) Do not publish the captured video from the screen.
   @JsonKey(name: 'publishScreenTrack')
   final bool? publishScreenTrack;
 
@@ -1986,6 +1986,8 @@ class RtcEngineEventHandler {
 
   /// Occurs when the state of virtual metronome changes.
   /// When the state of the virtual metronome changes, the SDK triggers this callback to report the current state of the virtual metronome. This callback indicates the state of the local audio stream and enables you to troubleshoot issues when audio exceptions occur.This callback is for Android and iOS only.
+  /// * [state] For the current virtual metronome status, see RhythmPlayerStateType.
+  /// * [errorCode] For the error codes and error messages related to virtual metronome errors, see RhythmPlayerErrorType.
   final void Function(
           RhythmPlayerStateType state, RhythmPlayerErrorType errorCode)?
       onRhythmPlayerStateChanged;
@@ -2809,8 +2811,6 @@ abstract class RtcEngine {
   ///
   /// * [context] Configurations for the RtcEngine instance. See RtcEngineContext .
   ///
-  /// Returns
-  /// The RtcEngine instance, if the method call succeeds.An error code, if the call fails,.
   Future<void> initialize(RtcEngineContext context);
 
   /// Gets the SDK version.
@@ -2847,6 +2847,7 @@ abstract class RtcEngine {
 
   /// Leaves a channel.
   /// This method releases all resources related to the session.This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.After joining the channel, you must call this method or leaveChannel to end the call, otherwise, the next call cannot be started.If you successfully call this method and leave the channel, the following callbacks are triggered:The local client: onLeaveChannel .The remote client: onUserOffline , if the user joining the channel is in the Communication profile, or is a host in the Live-broadcasting profile.If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
+  /// * [options] The options for leaving the channel. See LeaveChannelOptions .
   Future<void> leaveChannel({LeaveChannelOptions? options});
 
   /// Gets a new token when the current token expires after a period of time.
@@ -2905,6 +2906,7 @@ abstract class RtcEngine {
 
   /// Stops the local video preview.
   /// After calling startPreview to start the preview, if you want to close the local video preview, please call this method.Please call this method before joining a channel or after leaving a channel.
+  /// * [sourceType] The type of the video frame, see VideoSourceType.
   Future<void> stopPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
@@ -2973,6 +2975,8 @@ abstract class RtcEngine {
   ///
   /// * [enabled] Whether to enable virtual background:true: Enable virtual background.false: Disable virtual background.
   /// * [backgroundSource] The custom background image. See VirtualBackgroundSource . To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
+  /// * [segproperty] Processing properties for background images. See SegmentationProperty.
+  /// * [type] The type of the video source. See MediaSourceType. In this method, this parameter supports only the following two settings: The default value is primaryCameraSource. If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   Future<void> enableVirtualBackground(
       {required bool enabled,
       required VirtualBackgroundSource backgroundSource,
@@ -3011,12 +3015,14 @@ abstract class RtcEngine {
   /// You can call this method either before or after joining a channel.In scenarios requiring high-quality audio, such as online music tutoring, Agora recommends you set profile as audioProfileMusicHighQuality (4).If you want to set the audio scenario, call initialize and set RtcEngineContext struct.
   ///
   /// * [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfileType .
+  /// * [scenario] The audio scenarios. See AudioScenarioType.
   Future<void> setAudioProfile(
       {required AudioProfileType profile,
       AudioScenarioType scenario = AudioScenarioType.audioScenarioDefault});
 
   /// Sets audio scenarios.
   /// You can call this method either before or after joining a channel.
+  /// * [scenario] The audio scenarios. See AudioScenarioType. Under different audio scenarios, the device uses different volume types.
   Future<void> setAudioScenario(AudioScenarioType scenario);
 
   /// Enables/Disables the local audio capture.
@@ -3264,8 +3270,6 @@ abstract class RtcEngine {
   ///
   /// * [mode] The channel mode. See AudioMixingDualMonoMode .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setAudioMixingDualMonoMode(AudioMixingDualMonoMode mode);
 
   /// Sets the pitch of the local music file.
@@ -3572,7 +3576,7 @@ abstract class RtcEngine {
   /// Enables or disables dual-stream mode.
   /// You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:High-quality video stream: High bitrate, high resolution.Low-quality video stream: Low bitrate, low resolution.After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.If you need to enable dual video streams in a multi-channel scenario, you can call the enableDualStreamModeEx method.You can call this method either before or after joining a channel.
   ///
-  /// * [sourceType] The capture type of the custom video source. See VideoSourceType .
+  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig.
   /// * [enabled] Whether to enable dual-stream mode:true: Enable dual-stream mode.false: Disable dual-stream mode.
   Future<void> enableDualStreamMode(
       {required bool enabled, SimulcastStreamConfig? streamConfig});
@@ -3785,8 +3789,6 @@ abstract class RtcEngine {
   /// * [enable] Whether to enable the extension:true: Enable the extension.false: Disable the extension.
   /// * [type] Type of media source. See MediaSourceType . In this method, this parameter supports only the following two settings:The default value is unknownMediaSource.If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> enableExtension(
       {required String provider,
       required String extension,
@@ -4170,8 +4172,6 @@ abstract class RtcEngine {
   /// * [type] The video source type. See VideoSourceType .
   /// * [orientation] The clockwise rotation angle. See VideoOrientation .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setCameraDeviceOrientation(
       {required VideoSourceType type, required VideoOrientation orientation});
 
@@ -4340,6 +4340,7 @@ abstract class RtcEngine {
   ///  "!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   /// * [token] The token generated on your server for authentication.
   /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:All lowercase English letters: a to z.All uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&amp;", "(", ")", "+", "-", ":", ";", "&lt;", "= ", ".", "&gt;", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// * [options] The channel media options. See ChannelMediaOptions.
   Future<void> joinChannelWithUserAccount(
       {required String token,
       required String channelId,
@@ -4486,8 +4487,8 @@ abstract class RtcEngine {
   /// Sets audio advanced options.
   /// If you have advanced audio processing requirements, such as capturing and sending stereo audio, you can call this method to set advanced audio options.This method is for Android and iOS only.Call this method after calling joinChannel [2/2] , enableAudio and enableLocalAudio .
   ///
-  /// Returns
-  /// The advanced options for audio. See AdvancedAudioOptions .
+  /// * [options] The advanced options for audio.  See AdvancedAudioOptions.
+  ///
   Future<void> setAdvancedAudioOptions(
       {required AdvancedAudioOptions options, int sourceType = 0});
 
@@ -4572,7 +4573,9 @@ abstract class RtcEngine {
   /// * [observer] The encoded audio observer. See AudioEncodedFrameObserver .
   void unregisterAudioEncodedFrameObserver(AudioEncodedFrameObserver observer);
 
-  /// @nodoc
+  /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
+  ///
+  /// * [parameters] Pointer to the set parameters in a JSON string.
   Future<void> setParameters(String parameters);
 
   /// Gets the C++ handle of the native SDK.

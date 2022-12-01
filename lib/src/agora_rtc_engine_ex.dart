@@ -58,8 +58,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection .
   /// * [config] Video profile. See VideoEncoderConfiguration .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setVideoEncoderConfigurationEx(
       {required VideoEncoderConfiguration config,
       required RtcConnection connection});
@@ -79,8 +77,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [uid] The ID of the specified user.
   /// * [mute] Whether to stop receiving the audio stream of the specified user:true: Stop receiving the audio stream of the specified user.false: (Default) Resume receiving the audio stream of the specified user.
   ///
-  /// Returns
-  /// 0: Success. < 0: Failure.
   Future<void> muteRemoteAudioStreamEx(
       {required int uid,
       required bool mute,
@@ -93,14 +89,21 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [uid] The user ID of the remote user.
   /// * [mute] Whether to stop receiving the video stream of the specified user:true: Stop receiving the video stream of the specified user.false: (Default) Resume receiving the video stream of the specified user.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> muteRemoteVideoStreamEx(
       {required int uid,
       required bool mute,
       required RtcConnection connection});
 
-  /// @nodoc
+  /// Sets the stream type of the remote video.
+  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamModeEx (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate.
+  /// By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
+  /// The SDK enables the low-quality video stream auto mode on the sender by default (not actively sending low-quality video streams). The host at the receiving end can call this method to initiate a low-quality video stream stream request on the receiving end, and the sender automatically switches to the low-quality video stream mode after receiving the request.
+  /// The result of this method returns in the onApiCallExecuted callback.
+  ///
+  /// * [uid] The user ID.
+  /// * [streamType] The video stream type. See VideoStreamType.
+  /// * [connection] The connection information. See RtcConnection .
+  ///
   Future<void> setRemoteVideoStreamTypeEx(
       {required int uid,
       required VideoStreamType streamType,
@@ -120,8 +123,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection .
   /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> muteLocalVideoStreamEx(
       {required bool mute, required RtcConnection connection});
 
@@ -141,8 +142,6 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  true: Stop subscribing to the video streams of all remote users.
   ///  false: (Default) Subscribe to the audio streams of all remote users by default.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> muteAllRemoteVideoStreamsEx(
       {required bool mute, required RtcConnection connection});
 
@@ -225,8 +224,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [pan] The voice position of the remote user. The value ranges from -1.0 to 1.0:-1.0: The remote voice comes from the left.0.0: (Default) The remote voice comes from the front.1.0: The remote voice comes from the right.
   /// * [gain] The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> setRemoteVoicePositionEx(
       {required int uid,
       required double pan,
@@ -254,8 +251,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [enabled] Sets whether to enable loopback audio capture:
   ///  true: Enable loopback audio capture.false: (Default) Disable loopback audio capture.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> enableLoopbackRecordingEx(
       {required RtcConnection connection,
       required bool enabled,
@@ -307,8 +302,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [data] The data to be sent.
   /// * [length] The length of the data.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> sendStreamMessageEx(
       {required int streamId,
       required Uint8List data,
@@ -322,8 +315,6 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [options] The options of the watermark image to be added.
   /// * [watermarkUrl] The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.
   Future<void> addVideoWatermarkEx(
       {required String watermarkUrl,
       required WatermarkOptions options,
@@ -405,6 +396,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
   /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the destination channel.If the onChannelMediaRelayStateChanged callback returnsrelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.The relaying media streams across channels function needs to be enabled.We do not support string user accounts in this API.
   ///
+  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
   /// * [connection] The connection information. See RtcConnection .
   Future<void> startChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
