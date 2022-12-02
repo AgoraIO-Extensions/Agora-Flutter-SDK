@@ -25,6 +25,7 @@ class StreamChannelInfo {
     this.subscribeTopic,
     this.userList,
     this.receivedMessages,
+    this.subscribedUserList,
   );
 
   final String channelName;
@@ -34,6 +35,7 @@ class StreamChannelInfo {
   final Set<String> subscribeTopic;
   final Set<String> userList;
   final List<MessageEvent> receivedMessages;
+  final UserList subscribedUserList;
 
   StreamChannelInfo copyWith({
     String? channelName,
@@ -43,6 +45,7 @@ class StreamChannelInfo {
     Set<String>? subscribeTopic,
     Set<String>? userList,
     List<MessageEvent>? receivedMessages,
+    UserList? subscribedUserList,
   }) {
     return StreamChannelInfo(
       channelName ?? this.channelName,
@@ -52,6 +55,7 @@ class StreamChannelInfo {
       subscribeTopic ?? this.subscribeTopic,
       userList ?? this.userList,
       receivedMessages ?? this.receivedMessages,
+      subscribedUserList ?? this.subscribedUserList,
     );
   }
 }
@@ -69,8 +73,8 @@ class StreamChannelInfoMap
 
     state = {
       ...pre,
-      channelName:
-          StreamChannelInfo(channelName, streamChannel, false, {}, {}, {}, []),
+      channelName: StreamChannelInfo(
+          channelName, streamChannel, false, {}, {}, {}, [], const UserList()),
     };
   }
 
@@ -88,6 +92,7 @@ class StreamChannelInfoMap
     Set<String>? subscribeTopic,
     Set<String>? userList,
     List<MessageEvent>? receivedMessages,
+    UserList? subscribedUserList,
   }) {
     final pre = state;
     final preInfo = state[channelName]!;
@@ -97,6 +102,7 @@ class StreamChannelInfoMap
       subscribeTopic: subscribeTopic,
       userList: userList,
       receivedMessages: receivedMessages,
+      subscribedUserList: subscribedUserList,
     );
 
     state = Map.from(pre);
@@ -142,6 +148,7 @@ class RtmChatModel {
     Set<String>? subscribeTopic,
     Set<String>? userList,
     List<MessageEvent>? receivedMessages,
+    UserList? subscribedUserList,
   }) {
     ref.read(streamChannelInfoListProvider.notifier).updateStreamChannelInfo(
           channelName,
@@ -151,6 +158,7 @@ class RtmChatModel {
           subscribeTopic: subscribeTopic,
           userList: userList,
           receivedMessages: receivedMessages,
+          subscribedUserList: subscribedUserList,
         );
   }
 }
@@ -490,9 +498,15 @@ class _RtmChatConsumerWidgetState extends ConsumerState<RtmChatConsumerWidget> {
                                   final streamChannel = await _rtmClient
                                       .createStreamChannel(channelName);
 
-                                  _rtmChatModel.put(channelName, streamChannel);
+                                  // For demostrate StreamChannel.getChannelName only
+                                  final channelNameFromApi =
+                                      await streamChannel.getChannelName();
 
-                                  _streamChannel[channelName] = streamChannel;
+                                  _rtmChatModel.put(
+                                      channelNameFromApi, streamChannel);
+
+                                  _streamChannel[channelNameFromApi] =
+                                      streamChannel;
                                 });
                               }
                             : null,
@@ -540,6 +554,7 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
   late TextEditingController _topicMessageController;
   late TextEditingController _subscribeTopicController;
   late TextEditingController _subscribeUserController;
+  late TextEditingController _subscribeUserTopicController;
 
   @override
   void initState() {
@@ -549,6 +564,7 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
     _topicMessageController = TextEditingController();
     _subscribeTopicController = TextEditingController();
     _subscribeUserController = TextEditingController();
+    _subscribeUserTopicController = TextEditingController();
 
     _channelName = widget.channelName;
     _rtmChatModel = widget.rtmChatModel;
@@ -864,6 +880,69 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
                                   : null,
                               child: const Text('Unsubscribe'),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Subscribed User List',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _subscribeUserTopicController,
+                                decoration: const InputDecoration(
+                                    hintText:
+                                        'Input subscribed user list topic name'),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: streamChannelInfo.joined
+                                  ? () async {
+                                      final userList = await streamChannelInfo
+                                          .streamChannel
+                                          .getSubscribedUserList(
+                                              _subscribeUserTopicController
+                                                  .text);
+
+                                      ref
+                                          .read(_rtmChatModel
+                                              .streamChannelInfoListProvider
+                                              .notifier)
+                                          .updateStreamChannelInfo(
+                                              streamChannelInfo.channelName,
+                                              subscribedUserList: userList);
+                                    }
+                                  : null,
+                              child: const Text('getSubscribedUserList'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Wrap(
+                          spacing: 10,
+                          children: [
+                            for (final u in (streamChannelInfo
+                                    .subscribedUserList.users ??
+                                []))
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.green[200]!,
+                                    border: Border.all(
+                                      color: Colors.green[200]!,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20))),
+                                padding: const EdgeInsets.all(8),
+                                child: Text(u),
+                              ),
                           ],
                         ),
                         const SizedBox(
