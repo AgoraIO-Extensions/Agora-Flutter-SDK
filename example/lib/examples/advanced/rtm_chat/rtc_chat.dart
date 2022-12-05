@@ -904,21 +904,23 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
                             ElevatedButton(
                               onPressed: streamChannelInfo.joined
                                   ? () async {
-                                     _logCall('StreamChannel.getSubscribedUserList', () async {
-                                       final userList = await streamChannelInfo
-                                          .streamChannel
-                                          .getSubscribedUserList(
-                                              _subscribeUserTopicController
-                                                  .text);
+                                      _logCall(
+                                          'StreamChannel.getSubscribedUserList',
+                                          () async {
+                                        final userList = await streamChannelInfo
+                                            .streamChannel
+                                            .getSubscribedUserList(
+                                                _subscribeUserTopicController
+                                                    .text);
 
-                                      ref
-                                          .read(_rtmChatModel
-                                              .streamChannelInfoListProvider
-                                              .notifier)
-                                          .updateStreamChannelInfo(
-                                              streamChannelInfo.channelName,
-                                              subscribedUserList: userList);
-                                     });
+                                        ref
+                                            .read(_rtmChatModel
+                                                .streamChannelInfoListProvider
+                                                .notifier)
+                                            .updateStreamChannelInfo(
+                                                streamChannelInfo.channelName,
+                                                subscribedUserList: userList);
+                                      });
                                     }
                                   : null,
                               child: const Text('getSubscribedUserList'),
