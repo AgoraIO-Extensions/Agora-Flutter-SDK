@@ -106,7 +106,21 @@ class RtmClientImpl extends rtmc_binding.RtmClientImpl {
           logConfig: logConfigNew,
         );
       }
+    } else {
+      final filePath = await GlobalMethodChannel.getIrisLogAbsolutePath();
+      LogConfig logConfigNew = LogConfig(
+        filePath: filePath,
+      );
+
+      configNew = RtmConfig(
+        appId: configNew.appId,
+        userId: configNew.userId,
+        useStringUserId: configNew.useStringUserId,
+        eventHandler: configNew.eventHandler,
+        logConfig: logConfigNew,
+      );
     }
+
     final param = {'config': configNew.toJson()};
 
     if (configNew.eventHandler != null) {
