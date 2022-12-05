@@ -904,7 +904,8 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
                             ElevatedButton(
                               onPressed: streamChannelInfo.joined
                                   ? () async {
-                                      final userList = await streamChannelInfo
+                                     _logCall('StreamChannel.getSubscribedUserList', () async {
+                                       final userList = await streamChannelInfo
                                           .streamChannel
                                           .getSubscribedUserList(
                                               _subscribeUserTopicController
@@ -917,6 +918,7 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
                                           .updateStreamChannelInfo(
                                               streamChannelInfo.channelName,
                                               subscribedUserList: userList);
+                                     });
                                     }
                                   : null,
                               child: const Text('getSubscribedUserList'),
