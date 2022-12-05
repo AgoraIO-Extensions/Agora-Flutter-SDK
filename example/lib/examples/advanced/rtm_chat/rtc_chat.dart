@@ -707,7 +707,7 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
                                   ? () {
                                       _logCall('StreamChannel.joinTopic',
                                           () async {
-                                        streamChannel.joinTopic(
+                                        await streamChannel.joinTopic(
                                             topic: _topicController.text,
                                             options: const JoinTopicOptions());
                                       });
@@ -720,7 +720,7 @@ class _StreamChannelPageState extends State<StreamChannelPage> {
                                   ? () {
                                       _logCall('StreamChannel.leaveTopic',
                                           () async {
-                                        streamChannel
+                                        await streamChannel
                                             .leaveTopic(_topicController.text);
                                       });
                                     }
