@@ -139,8 +139,7 @@ void main() {
       await mediaPlayerController.dispose();
       await rtcEngine.release();
     },
-// TODO(littlegnal): This case is not work on github action, should be fixed in the future
-    skip: Platform.isAndroid,
+    skip: true,
   );
 
   testWidgets(
