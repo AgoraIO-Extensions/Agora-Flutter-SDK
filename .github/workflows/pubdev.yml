@@ -1,9 +1,8 @@
 name: Publish to Pub.dev 🚀
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [published]
 
 jobs:
   publishing:
