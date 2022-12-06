@@ -111,8 +111,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: "2c35ff2ab1cf5446fe1304dd075be00473af68e2"
-      resolved-ref: "2c35ff2ab1cf5446fe1304dd075be00473af68e2"
+      ref: ae9b56f711620276d93132c080b58b3749d9eb0f
+      resolved-ref: ae9b56f711620276d93132c080b58b3749d9eb0f
       url: "https://github.com/littleGnAl/iris_method_channel.git"
     source: git
     version: "0.1.0"
