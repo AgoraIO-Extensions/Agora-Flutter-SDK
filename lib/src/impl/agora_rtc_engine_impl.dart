@@ -574,7 +574,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     final param =
         createParams({'publishUrl': publishUrl, 'options': options.toJson()});
 
-    final callApiResult = await apiCaller.callIrisEventAsync(
+    await apiCaller.callIrisEventAsync(
         IrisEventObserverKey(
           op: CallIrisEventOp.create,
           registerName: 'RtcEngine_startDirectCdnStreaming',
