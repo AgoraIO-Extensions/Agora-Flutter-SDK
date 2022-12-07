@@ -63,7 +63,7 @@ void rtmClientSmokeTestCases() {
         const String configAppId = "hello";
         const String configUserId = "hello";
         const bool configUseStringUserId = true;
-        const RtmConfig config = RtmConfig(
+        final RtmConfig config = RtmConfig(
           appId: configAppId,
           userId: configUserId,
           useStringUserId: configUseStringUserId,
