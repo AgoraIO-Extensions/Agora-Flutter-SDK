@@ -16,4 +16,8 @@ rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/integration_test_app/macos/Flutter
 rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/integration_test_app/windows/Flutter/ephemeral
 rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/integration_test_app/ios/.symlinks
 
+rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/rendering_test/macos/Flutter/ephemeral
+rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/rendering_test/windows/Flutter/ephemeral
+rm -rf $AGORA_FLUTTER_PROJECT_PATH/test_shard/rendering_test/ios/.symlinks
+
 flutter packages pub run build_runner build --delete-conflicting-outputs
