@@ -57,17 +57,18 @@ class _HtmlElementViewController extends PlatformViewController
 }
 
 mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
-  MethodChannel? _methodChannel;
+  @protected
+  MethodChannel? methodChannel;
 
   int? _viewId;
 
   @protected
   MethodChannel? getMethodChannel() {
-    return _methodChannel;
+    return methodChannel;
   }
 
   void maybeCreateChannel(int viewId, String viewType) {
-    _methodChannel = MethodChannel('agora_rtc_ng/${viewType}_$viewId');
+    methodChannel = MethodChannel('agora_rtc_ng/${viewType}_$viewId');
   }
 
   @protected

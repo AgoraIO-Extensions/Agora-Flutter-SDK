@@ -3,15 +3,23 @@ import 'dart:async';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 
+import 'agora_video_view_render_test.dart';
+
 class RemoteVideoView extends StatefulWidget {
   const RemoteVideoView({
     Key? key,
     required this.onRendered,
     this.useFlutterTexture = false,
+    this.renderModeType,
+    this.mirrorModeType,
+    this.isRenderModeTest = true,
   }) : super(key: key);
 
   final Function(RtcEngineEx rtcEngine) onRendered;
   final bool useFlutterTexture;
+  final RenderModeType? renderModeType;
+  final VideoMirrorModeType? mirrorModeType;
+  final bool isRenderModeTest;
 
   @override
   State<RemoteVideoView> createState() => _RemoteVideoViewState();
@@ -75,10 +83,26 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
       ),
     );
 
-    mediaPlayerController = MediaPlayerController(
-      rtcEngine: rtcEngine,
-      canvas: const VideoCanvas(uid: 0),
-    );
+    if (widget.isRenderModeTest) {
+      mediaPlayerController = TestMediaPlayerController(
+        rtcEngine: rtcEngine,
+        canvas: VideoCanvas(
+          uid: 0,
+          renderMode: widget.renderModeType,
+          mirrorMode: widget.mirrorModeType,
+        ),
+      );
+    } else {
+      mediaPlayerController = MediaPlayerController(
+        rtcEngine: rtcEngine,
+        canvas: VideoCanvas(
+          uid: 0,
+          renderMode: widget.renderModeType,
+          mirrorMode: widget.mirrorModeType,
+        ),
+      );
+    }
+
     await mediaPlayerController.initialize();
 
     final mediaPlayerControllerPlayed = Completer<void>();
@@ -98,7 +122,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
     await mediaPlayerController.open(
         url:
-            'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4',
+            'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
         startPos: 0);
 
     await rtcEngine.joinChannelEx(
@@ -171,9 +195,10 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
               child: AgoraVideoView(
                 controller: VideoViewController.remote(
                   rtcEngine: rtcEngine,
-                  canvas: const VideoCanvas(
+                  canvas: VideoCanvas(
                     uid: _mpkRemoteUid,
-                    renderMode: RenderModeType.renderModeFit,
+                    renderMode: widget.renderModeType,
+                    mirrorMode: widget.mirrorModeType,
                   ),
                   connection: const RtcConnection(
                     channelId: _channelId,
