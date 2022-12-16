@@ -24,7 +24,6 @@ extension RtcEngineExt on RtcEngine {
 }
 
 /// Error codes and error messages.
-///
 class AgoraRtcException implements Exception {
   /// @nodoc
   AgoraRtcException({required this.code, this.message});

@@ -210,6 +210,69 @@ class BaseSpatialAudioEngineImpl implements BaseSpatialAudioEngine {
       throw AgoraRtcException(code: result);
     }
   }
+
+  @override
+  Future<void> setZones(
+      {required SpatialAudioZone zones, required int zoneCount}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'BaseSpatialAudioEngine'}_setZones';
+    final param =
+        createParams({'zones': zones.toJson(), 'zoneCount': zoneCount});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(zones.collectBufferList());
+    final callApiResult = await apiCaller
+        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setPlayerAttenuation(
+      {required int playerId,
+      required double attenuation,
+      required bool forceSet}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'BaseSpatialAudioEngine'}_setPlayerAttenuation';
+    final param = createParams({
+      'playerId': playerId,
+      'attenuation': attenuation,
+      'forceSet': forceSet
+    });
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> muteRemoteAudioStream(
+      {required int uid, required bool mute}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'BaseSpatialAudioEngine'}_muteRemoteAudioStream';
+    final param = createParams({'uid': uid, 'mute': mute});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
 }
 
 class LocalSpatialAudioEngineImpl extends BaseSpatialAudioEngineImpl
@@ -355,6 +418,27 @@ class LocalSpatialAudioEngineImpl extends BaseSpatialAudioEngineImpl
     buffers.addAll(connection.collectBufferList());
     final callApiResult = await apiCaller
         .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setRemoteAudioAttenuation(
+      {required int uid,
+      required double attenuation,
+      required bool forceSet}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_setRemoteAudioAttenuation';
+    final param = createParams(
+        {'uid': uid, 'attenuation': attenuation, 'forceSet': forceSet});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
