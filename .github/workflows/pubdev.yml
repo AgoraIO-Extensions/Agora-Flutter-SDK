@@ -7,9 +7,6 @@ on:
 jobs:
   publishing:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ format('{0}/{1}/versions/{2}', "https://pub.dev/packages", steps.publish.outputs.package, steps.publish.outputs.remoteVersion) }}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
