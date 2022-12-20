@@ -7,7 +7,7 @@
 #include <map>
 #include <mutex>
 
-#include <iris_rtc_cxx_api.h>
+#include <iris_rtc_c_api.h>
 #include "iris_rtc_raw_data.h"
 #include "iris_video_processor_cxx.h"
 
@@ -23,7 +23,6 @@ VideoViewController::VideoViewController(
             &flutter::StandardMethodCodec::GetInstance());
 
     // auto plugin = std::make_unique<AgoraRtcFlutterPlugin>();
-
 
     channel->SetMethodCallHandler([this](const auto &call, auto result)
                                   { this->HandleMethodCall(call, std::move(result)); });
@@ -42,18 +41,18 @@ void VideoViewController::HandleMethodCall(
     if (method.compare("attachVideoFrameBufferManager") == 0)
     {
         intptr_t irisRtcEnginePtr = std::get<intptr_t>(*method_call.arguments());
-        IrisApiEngine *irisApiEngine = reinterpret_cast<IrisApiEngine *>(irisRtcEnginePtr);
-        if (!videoFrameBufferManager_) {
+        if (!videoFrameBufferManager_)
+        {
             videoFrameBufferManager_ = new agora::iris::IrisVideoFrameBufferManager;
         }
-        irisApiEngine->Attach(videoFrameBufferManager_);
+        Attach((IrisApiEnginePtr)irisRtcEnginePtr, videoFrameBufferManager_);
         result->Success((intptr_t)videoFrameBufferManager_);
     }
     else if (method.compare("detachVideoFrameBufferManager") == 0)
     {
         intptr_t irisRtcEnginePtr = std::get<intptr_t>(*method_call.arguments());
-        IrisApiEngine *irisApiEngine = reinterpret_cast<IrisApiEngine *>(irisRtcEnginePtr);
-        irisApiEngine->Detach(videoFrameBufferManager_);
+
+        Detach((IrisApiEnginePtr)irisRtcEnginePtr, videoFrameBufferManager_);
 
         DeleteVideoFrameBufferManagerIfNeed();
         result->Success(flutter::EncodableValue(true));

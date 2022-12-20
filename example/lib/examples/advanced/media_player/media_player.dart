@@ -42,7 +42,7 @@ class _State extends State<MediaPlayer> {
     _channelIdController = TextEditingController(text: config.channelId);
     _textEditingController = TextEditingController(
         text:
-            'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/video/meta_live_mpk.mov');
+            'https://agoracdn.s3.us-west-1.amazonaws.com/videos/Agora.io-Interactions.mp4');
     _loopCountController = TextEditingController(text: '1');
     _streamInfoIndexController = TextEditingController(text: '1');
     _initEngine();

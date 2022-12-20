@@ -164,6 +164,16 @@ class _State extends State<ProcessAudioRawData> {
         'onPlaybackAudioFrame file output to: ${_playbackAudioFile.absolute.path}');
 
     _engine.getMediaEngine().registerAudioFrameObserver(_audioFrameObserver);
+    await _engine.setPlaybackAudioFrameParameters(
+        sampleRate: 32000,
+        channel: 1,
+        mode: RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly,
+        samplesPerCall: 1024);
+    await _engine.setRecordingAudioFrameParameters(
+        sampleRate: 32000,
+        channel: 1,
+        mode: RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly,
+        samplesPerCall: 1024);
   }
 
   void _stopAudioFrameRecord() {

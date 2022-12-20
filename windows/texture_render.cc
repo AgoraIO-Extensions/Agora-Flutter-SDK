@@ -3,7 +3,6 @@
 #include <functional>
 
 #include "iris_rtc_raw_data.h"
-#include "iris_rtc_raw_data.h"
 #include "iris_video_processor_cxx.h"
 
 using namespace flutter;

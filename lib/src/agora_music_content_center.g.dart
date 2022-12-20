@@ -121,7 +121,7 @@ MusicContentCenterConfiguration _$MusicContentCenterConfigurationFromJson(
         Map<String, dynamic> json) =>
     MusicContentCenterConfiguration(
       appId: json['appId'] as String?,
-      rtmToken: json['rtmToken'] as String?,
+      token: json['token'] as String?,
       mccUid: json['mccUid'] as int?,
     );
 
@@ -136,7 +136,7 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   }
 
   writeNotNull('appId', instance.appId);
-  writeNotNull('rtmToken', instance.rtmToken);
+  writeNotNull('token', instance.token);
   writeNotNull('mccUid', instance.mccUid);
   return val;
 }

@@ -1,77 +1,10 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
-import 'package:iris_event/iris_event.dart';
+import 'package:agora_rtc_engine/src/impl/event_loop.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 
-extension AudioEncodedFrameObserverExt on AudioEncodedFrameObserver {
-  void process(String event, String data, List<Uint8List> buffers) {
-    final jsonMap = jsonDecode(data);
-    switch (event) {
-      case 'AudioEncodedFrameObserver_OnRecordAudioEncodedFrame':
-        if (onRecordAudioEncodedFrame == null) break;
-        AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson paramJson =
-            AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        Uint8List? frameBuffer = paramJson.frameBuffer;
-        int? length = paramJson.length;
-        EncodedAudioFrameInfo? audioEncodedFrameInfo =
-            paramJson.audioEncodedFrameInfo;
-        if (frameBuffer == null ||
-            length == null ||
-            audioEncodedFrameInfo == null) {
-          break;
-        }
-        audioEncodedFrameInfo = audioEncodedFrameInfo.fillBuffers(buffers);
-        onRecordAudioEncodedFrame!(frameBuffer, length, audioEncodedFrameInfo);
-        break;
-
-      case 'AudioEncodedFrameObserver_OnPlaybackAudioEncodedFrame':
-        if (onPlaybackAudioEncodedFrame == null) break;
-        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson paramJson =
-            AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        Uint8List? frameBuffer = paramJson.frameBuffer;
-        int? length = paramJson.length;
-        EncodedAudioFrameInfo? audioEncodedFrameInfo =
-            paramJson.audioEncodedFrameInfo;
-        if (frameBuffer == null ||
-            length == null ||
-            audioEncodedFrameInfo == null) {
-          break;
-        }
-        audioEncodedFrameInfo = audioEncodedFrameInfo.fillBuffers(buffers);
-        onPlaybackAudioEncodedFrame!(
-            frameBuffer, length, audioEncodedFrameInfo);
-        break;
-
-      case 'AudioEncodedFrameObserver_OnMixedAudioEncodedFrame':
-        if (onMixedAudioEncodedFrame == null) break;
-        AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson paramJson =
-            AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        Uint8List? frameBuffer = paramJson.frameBuffer;
-        int? length = paramJson.length;
-        EncodedAudioFrameInfo? audioEncodedFrameInfo =
-            paramJson.audioEncodedFrameInfo;
-        if (frameBuffer == null ||
-            length == null ||
-            audioEncodedFrameInfo == null) {
-          break;
-        }
-        audioEncodedFrameInfo = audioEncodedFrameInfo.fillBuffers(buffers);
-        onMixedAudioEncodedFrame!(frameBuffer, length, audioEncodedFrameInfo);
-        break;
-      default:
-        break;
-    }
-  }
-}
-
-class AudioEncodedFrameObserverWrapper implements IrisEventHandler {
+class AudioEncodedFrameObserverWrapper implements EventLoopEventHandler {
   const AudioEncodedFrameObserverWrapper(this.audioEncodedFrameObserver);
   final AudioEncodedFrameObserver audioEncodedFrameObserver;
   @override
@@ -86,8 +19,90 @@ class AudioEncodedFrameObserverWrapper implements IrisEventHandler {
   @override
   int get hashCode => audioEncodedFrameObserver.hashCode;
   @override
-  void onEvent(String event, String data, List<Uint8List> buffers) {
-    if (!event.startsWith('AudioEncodedFrameObserver')) return;
-    audioEncodedFrameObserver.process(event, data, buffers);
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'OnRecordAudioEncodedFrame':
+        if (audioEncodedFrameObserver.onRecordAudioEncodedFrame == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson paramJson =
+            AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        Uint8List? frameBuffer = paramJson.frameBuffer;
+        int? length = paramJson.length;
+        EncodedAudioFrameInfo? audioEncodedFrameInfo =
+            paramJson.audioEncodedFrameInfo;
+        if (frameBuffer == null ||
+            length == null ||
+            audioEncodedFrameInfo == null) {
+          return true;
+        }
+        audioEncodedFrameInfo = audioEncodedFrameInfo.fillBuffers(buffers);
+        audioEncodedFrameObserver.onRecordAudioEncodedFrame!(
+            frameBuffer, length, audioEncodedFrameInfo);
+        return true;
+
+      case 'OnPlaybackAudioEncodedFrame':
+        if (audioEncodedFrameObserver.onPlaybackAudioEncodedFrame == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson paramJson =
+            AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        Uint8List? frameBuffer = paramJson.frameBuffer;
+        int? length = paramJson.length;
+        EncodedAudioFrameInfo? audioEncodedFrameInfo =
+            paramJson.audioEncodedFrameInfo;
+        if (frameBuffer == null ||
+            length == null ||
+            audioEncodedFrameInfo == null) {
+          return true;
+        }
+        audioEncodedFrameInfo = audioEncodedFrameInfo.fillBuffers(buffers);
+        audioEncodedFrameObserver.onPlaybackAudioEncodedFrame!(
+            frameBuffer, length, audioEncodedFrameInfo);
+        return true;
+
+      case 'OnMixedAudioEncodedFrame':
+        if (audioEncodedFrameObserver.onMixedAudioEncodedFrame == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson paramJson =
+            AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        Uint8List? frameBuffer = paramJson.frameBuffer;
+        int? length = paramJson.length;
+        EncodedAudioFrameInfo? audioEncodedFrameInfo =
+            paramJson.audioEncodedFrameInfo;
+        if (frameBuffer == null ||
+            length == null ||
+            audioEncodedFrameInfo == null) {
+          return true;
+        }
+        audioEncodedFrameInfo = audioEncodedFrameInfo.fillBuffers(buffers);
+        audioEncodedFrameObserver.onMixedAudioEncodedFrame!(
+            frameBuffer, length, audioEncodedFrameInfo);
+        return true;
+    }
+    return false;
+  }
+
+  @override
+  bool handleEvent(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    if (!eventName.startsWith('AudioEncodedFrameObserver')) return false;
+    final newEvent = eventName.replaceFirst('AudioEncodedFrameObserver_', '');
+    if (handleEventInternal(newEvent, eventData, buffers)) {
+      return true;
+    }
+
+    return false;
   }
 }

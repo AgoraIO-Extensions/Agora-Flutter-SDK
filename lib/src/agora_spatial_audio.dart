@@ -2,7 +2,6 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_spatial_audio.g.dart';
 
 /// The spatial position of the remote user or the media player.
-///
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RemoteVoicePositionInfo {
   /// @nodoc
@@ -22,6 +21,65 @@ class RemoteVoicePositionInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$RemoteVoicePositionInfoToJson(this);
+}
+
+/// Sound insulation area settings.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SpatialAudioZone {
+  /// @nodoc
+  const SpatialAudioZone(
+      {this.zoneSetId,
+      this.position,
+      this.forward,
+      this.right,
+      this.up,
+      this.forwardLength,
+      this.rightLength,
+      this.upLength,
+      this.audioAttenuation});
+
+  /// The ID of the sound insulation area.
+  @JsonKey(name: 'zoneSetId')
+  final int? zoneSetId;
+
+  /// The spatial center point of the sound insulation area. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  @JsonKey(name: 'position')
+  final List<double>? position;
+
+  /// Starting at position, the forward unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  @JsonKey(name: 'forward')
+  final List<double>? forward;
+
+  /// Starting at position, the right unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  @JsonKey(name: 'right')
+  final List<double>? right;
+
+  /// Starting at position, the up unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+  @JsonKey(name: 'up')
+  final List<double>? up;
+
+  /// The entire sound insulation area is regarded as a cube; this represents the length of the forward side in the unit length of the game engine.
+  @JsonKey(name: 'forwardLength')
+  final double? forwardLength;
+
+  /// The entire sound insulation area is regarded as a cube; this represents the length of the right side in the unit length of the game engine.
+  @JsonKey(name: 'rightLength')
+  final double? rightLength;
+
+  /// The entire sound insulation area is regarded as a cube; this represents the length of the up side in the unit length of the game engine.
+  @JsonKey(name: 'upLength')
+  final double? upLength;
+
+  /// The sound attenuation coefficient when users within the sound insulation area communicate with external users. The value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the audioAttenuation parameter.(0.5,1]: Strong attenuation mode (default value is 1), that is, the volume and timbre attenuate rapidly during propagation.
+  @JsonKey(name: 'audioAttenuation')
+  final double? audioAttenuation;
+
+  /// @nodoc
+  factory SpatialAudioZone.fromJson(Map<String, dynamic> json) =>
+      _$SpatialAudioZoneFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$SpatialAudioZoneToJson(this);
 }
 
 /// This class contains some of the APIs in the LocalSpatialAudioEngine class.
@@ -88,10 +146,35 @@ abstract class BaseSpatialAudioEngine {
   Future<void> muteLocalAudioStream(bool mute);
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method under RtcEngine .After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
   ///
-  /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
+  /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
   Future<void> muteAllRemoteAudioStreams(bool mute);
+
+  /// Sets the sound insulation area.
+  /// In virtual interactive scenarios, you can use this method to set the sound insulation area and sound attenuation coefficient. When the sound source (which can be the user or the media player) and the listener belong to the inside and outside of the sound insulation area, they can experience the attenuation effect of sound similar to the real environment when it encounters a building partition.When the sound source and the listener belong to the inside and outside of the sound insulation area, the sound attenuation effect is determined by the sound attenuation coefficient in SpatialAudioZone .If the user or media player is in the same sound insulation area, it is not affected by SpatialAudioZone, and the sound attenuation effect is determined by the attenuation parameter in setPlayerAttenuation or setRemoteAudioAttenuation. If you do not call setPlayerAttenuation or setRemoteAudioAttenuation, the default sound attenuation coefficient of the SDK is 0.5, which simulates the attenuation of the sound in the real environment.If the sound source and the receiver belong to two sound insulation areas, the receiver cannot hear the sound source.If this method is called multiple times, the last sound insulation area set takes effect.
+  ///
+  /// * [zones] Sound insulation area settings. See SpatialAudioZone.
+  /// * [zoneCount] The number of sound insulation areas.
+  Future<void> setZones(
+      {required SpatialAudioZone zones, required int zoneCount});
+
+  /// Sets the sound attenuation properties of the media player.
+  ///
+  /// * [playerId] The ID of the media player.
+  /// * [attenuation] The sound attenuation coefficient of the remote user or media player. The value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
+  /// * [forceSet] Whether to force the sound attenuation effect of the media player:true: Force attenuation to set the attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation in the SpatialAudioZone does not take effect for the user.false: Do not force attenuation e to set the user's sound attenuationffect, as shown in the following two cases.If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method.
+  Future<void> setPlayerAttenuation(
+      {required int playerId,
+      required double attenuation,
+      required bool forceSet});
+
+  /// Stops or resumes subscribing to the audio stream of a specified user.
+  /// Call this method after joinChannel [2/2] .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio stream of a specified user, Agora recommends calling this method instead of the muteRemoteAudioStream method under RtcEngine .
+  ///
+  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
+  /// * [mute] Whether to subscribe to the specified remote user's audio stream.true: Stop subscribing to the audio stream of the specified user.false: (Default) Subscribe to the audio stream of the specified user. The SDK decides whether to subscribe according to the distance between the local user and the remote user.
+  Future<void> muteRemoteAudioStream({required int uid, required bool mute});
 }
 
 /// This class calculates user positions through the SDK to implement the spatial audio effect.
@@ -131,4 +214,12 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
 
   /// @nodoc
   Future<void> clearRemotePositionsEx(RtcConnection connection);
+
+  /// Sets the sound attenuation effect for the specified user.
+  ///
+  /// * [uid] The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
+  /// * [attenuation] For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
+  /// * [forceSet] Whether to force the user's sound attenuation effect:true: Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation in the SpatialAudioZone does not take effect for the user.If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method.false: Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
+  Future<void> setRemoteAudioAttenuation(
+      {required int uid, required double attenuation, required bool forceSet});
 }

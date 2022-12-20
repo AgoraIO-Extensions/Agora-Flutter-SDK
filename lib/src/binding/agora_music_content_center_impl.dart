@@ -16,7 +16,7 @@ class MusicChartCollectionImpl implements MusicChartCollection {
 
   @override
   Future<int> getCount() async {
-    final apiType = '';
+    const apiType = '';
     final param = createParams({});
     final callApiResult =
         await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
@@ -30,7 +30,7 @@ class MusicChartCollectionImpl implements MusicChartCollection {
 
   @override
   Future<MusicChartInfo> get(int index) async {
-    final apiType = '';
+    const apiType = '';
     final param = createParams({'index': index});
     final callApiResult =
         await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
@@ -58,7 +58,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getCount() {
 // Implementation template
-// final apiType = '';
+// const apiType = '';
 // final param = createParams({// // });
 // final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
 // if (callApiResult.irisReturnCode < 0) {
@@ -73,7 +73,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getTotal() {
 // Implementation template
-// final apiType = '';
+// const apiType = '';
 // final param = createParams({// // });
 // final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
 // if (callApiResult.irisReturnCode < 0) {
@@ -88,7 +88,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getPage() {
 // Implementation template
-// final apiType = '';
+// const apiType = '';
 // final param = createParams({// // });
 // final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
 // if (callApiResult.irisReturnCode < 0) {
@@ -103,7 +103,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   int getPageSize() {
 // Implementation template
-// final apiType = '';
+// const apiType = '';
 // final param = createParams({// // });
 // final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
 // if (callApiResult.irisReturnCode < 0) {
@@ -118,7 +118,7 @@ class MusicCollectionImpl implements MusicCollection {
   @override
   Music getMusic(int index) {
 // Implementation template
-// final apiType = '';
+// const apiType = '';
 // final param = createParams({// 'index':index// });
 // final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
 // if (callApiResult.irisReturnCode < 0) {
@@ -159,9 +159,6 @@ class MusicPlayerImpl extends MediaPlayerImpl implements MusicPlayer {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
   }
 }
 
@@ -186,6 +183,23 @@ class MusicContentCenterImpl implements MusicContentCenter {
     buffers.addAll(configuration.collectBufferList());
     final callApiResult = await apiCaller
         .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> renewToken(String token) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MusicContentCenter'}_renewToken';
+    final param = createParams({'token': token});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

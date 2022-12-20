@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/components/rgba_image.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
@@ -417,8 +418,8 @@ class _ScreenShareDesktopState extends State<ScreenShareDesktop>
   RtcEngine get rtcEngine => widget.rtcEngine;
 
   Future<void> _initScreenCaptureSourceInfos() async {
-    SIZE thumbSize = const SIZE(width: 360, height: 240);
-    SIZE iconSize = const SIZE(width: 360, height: 240);
+    SIZE thumbSize = const SIZE(width: 50, height: 50);
+    SIZE iconSize = const SIZE(width: 50, height: 50);
     _screenCaptureSourceInfos = await rtcEngine.getScreenCaptureSources(
         thumbSize: thumbSize, iconSize: iconSize, includeScreen: true);
     _selectedScreenCaptureSourceInfo = _screenCaptureSourceInfos[0];
@@ -429,10 +430,42 @@ class _ScreenShareDesktopState extends State<ScreenShareDesktop>
     if (_screenCaptureSourceInfos.isEmpty) return Container();
     return DropdownButton<ScreenCaptureSourceInfo>(
         items: _screenCaptureSourceInfos.map((info) {
+          Widget image;
+          if (info.iconImage!.width! != 0 && info.iconImage!.height! != 0) {
+            image = Image(
+              image: RgbaImage(
+                info.iconImage!.buffer!,
+                width: info.iconImage!.width!,
+                height: info.iconImage!.height!,
+              ),
+            );
+          } else if (info.thumbImage!.width! != 0 &&
+              info.thumbImage!.height! != 0) {
+            image = Image(
+              image: RgbaImage(
+                info.thumbImage!.buffer!,
+                width: info.thumbImage!.width!,
+                height: info.thumbImage!.height!,
+              ),
+            );
+          } else {
+            image = const SizedBox(
+              width: 50,
+              height: 50,
+            );
+          }
+
           return DropdownMenuItem(
             value: info,
-            child: Text('${info.sourceName}',
-                style: const TextStyle(fontSize: 10)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                image,
+                Text('${info.sourceName}', style: const TextStyle(fontSize: 10))
+              ],
+            ),
           );
         }).toList(),
         value: _selectedScreenCaptureSourceInfo,
