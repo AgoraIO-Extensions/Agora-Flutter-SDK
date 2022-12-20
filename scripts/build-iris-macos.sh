@@ -22,7 +22,10 @@ fi
 
 echo "Copying $IRIS_PROJECT_PATH/build/mac/MAC/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.framework $AGORA_FLUTTER_PROJECT_PATH/macos/AgoraRtcWrapper.framework"
 cp -RP "$IRIS_PROJECT_PATH/build/mac/MAC/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.framework" "$AGORA_FLUTTER_PROJECT_PATH/macos/"
+cp -RP "$IRIS_PROJECT_PATH/build/mac/MAC/output/$IRIS_TYPE/$BUILD_TYPE/$BUILD_TYPE/IrisDebugger.framework" "$AGORA_FLUTTER_PROJECT_PATH/test_shard/iris_tester/macos/"
 
+rm -rf $AGORA_FLUTTER_PROJECT_PATH/third_party/include
+mkdir -p $AGORA_FLUTTER_PROJECT_PATH/third_party/include
 cp -RP $IRIS_PROJECT_PATH/build/mac/MAC/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.framework/Headers/* $AGORA_FLUTTER_PROJECT_PATH/third_party/include/
 
 if [[ -d "${AGORA_FLUTTER_PROJECT_PATH}/macos/libs" ]]; then

@@ -96,8 +96,8 @@ class _State extends State<PushEncodedVideoFrame> {
             '[onEncodedVideoFrameReceived] uid: $uid imageBuffer: $imageBuffer, length: $length, videoEncodedFrameInfo: ${videoEncodedFrameInfo.toJson()}');
         try {
           _showMyDialog(uid, utf8.decode(imageBuffer));
-        } catch (e) {
-          debugPrint(e.toString());
+        } catch (e, stacktrace) {
+          debugPrint('${e.toString()}\nstacktrace: $stacktrace');
         }
       },
     ));

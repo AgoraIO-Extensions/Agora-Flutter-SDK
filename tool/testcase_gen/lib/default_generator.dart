@@ -40,7 +40,7 @@ abstract class DefaultGenerator implements Generator {
     return '${parameter.type.type}<${parameter.type.typeArguments.join(', ')}>';
   }
 
-  void _createConstructorInitializerForMethodParameter(
+  String _createConstructorInitializerForMethodParameter(
     ParseResult parseResult,
     Parameter? rootParameter,
     Parameter parameter,
@@ -54,7 +54,7 @@ abstract class DefaultGenerator implements Generator {
       initializerBuilder.writeln(
           'const ${_getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${enumz.enumConstants[0].name};');
 
-      return;
+      return _concatParamName(rootParameter?.name, parameter.name);
     }
 
     stdout.writeln('parameter.type.type: ${parameter.type.type}');
@@ -62,7 +62,7 @@ abstract class DefaultGenerator implements Generator {
     final initBlockParameterListBuilder = StringBuffer();
     final initBlockBuilder = StringBuffer();
     if (parameterClass.constructors.isEmpty) {
-      return;
+      return '';
     }
 
     final constructor = parameterClass.constructors[0];
@@ -132,6 +132,7 @@ abstract class DefaultGenerator implements Generator {
 
     initializerBuilder.writeln(
         '$keywordPrefix ${_getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${initBlockBuilder.toString()};');
+    return _concatParamName(rootParameter?.name, parameter.name);
   }
 
   String generateWithTemplate({

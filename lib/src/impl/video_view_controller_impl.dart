@@ -15,12 +15,10 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
         canvas.renderMode == other.canvas.renderMode &&
         canvas.mirrorMode == other.canvas.mirrorMode &&
         canvas.uid == other.canvas.uid &&
-        canvas.isScreenView == other.canvas.isScreenView &&
-        canvas.priv == other.canvas.priv &&
-        canvas.privSize == other.canvas.privSize &&
         canvas.sourceType == other.canvas.sourceType &&
         canvas.cropArea == other.canvas.cropArea &&
-        canvas.setupMode == other.canvas.setupMode;
+        canvas.setupMode == other.canvas.setupMode &&
+        canvas.mediaPlayerId == other.canvas.mediaPlayerId;
     isSame = isSame &&
         connection?.channelId == other.connection?.channelId &&
         connection?.localUid == other.connection?.localUid;
@@ -65,12 +63,10 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       renderMode: canvas.renderMode,
       mirrorMode: canvas.mirrorMode,
       uid: canvas.uid,
-      isScreenView: canvas.isScreenView,
-      priv: canvas.priv,
-      privSize: canvas.privSize,
       sourceType: canvas.sourceType,
       cropArea: canvas.cropArea,
       setupMode: canvas.setupMode,
+      mediaPlayerId: canvas.mediaPlayerId,
     );
     if (canvas.uid != 0) {
       await rtcEngine.setupRemoteVideo(videoCanvas);
@@ -113,12 +109,10 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       renderMode: canvas.renderMode,
       mirrorMode: canvas.mirrorMode,
       uid: canvas.uid,
-      isScreenView: canvas.isScreenView,
-      priv: canvas.priv,
-      privSize: canvas.privSize,
       sourceType: canvas.sourceType,
       cropArea: canvas.cropArea,
       setupMode: canvas.setupMode,
+      mediaPlayerId: canvas.mediaPlayerId,
     );
     if (canvas.uid != 0) {
       if (connection != null) {

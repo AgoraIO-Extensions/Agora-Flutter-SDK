@@ -102,4 +102,34 @@ class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
   Future<void> release() async {
     _instance = null;
   }
+
+  @override
+  Future<AudioDeviceInfo> getPlaybackDefaultDevice() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDefaultDevice';
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+
+    return AudioDeviceInfo.fromJson(rm);
+  }
+
+  @override
+  Future<AudioDeviceInfo> getRecordingDefaultDevice() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDefaultDevice';
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+
+    return AudioDeviceInfo.fromJson(rm);
+  }
 }

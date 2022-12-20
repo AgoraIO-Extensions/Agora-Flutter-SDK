@@ -4,8 +4,12 @@ import 'package:agora_rtc_engine_example/components/example_actions_widget.dart'
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:video_raw_data/video_raw_data.dart';
 
 /// ProcessVideoRawData Example
+/// 
+/// Demonstrate how to process video raw data in C++, check `VideoRawDataController` 
+/// implementation in https://github.com/AgoraIO-Extensions/RawDataPluginSample/tree/main/frameworks/flutter/video_raw_data
 class ProcessVideoRawData extends StatefulWidget {
   /// Construct the [ProcessVideoRawData]
   const ProcessVideoRawData({Key? key}) : super(key: key);
@@ -25,6 +29,9 @@ class _State extends State<ProcessVideoRawData> {
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
 
+  final VideoRawDataController _videoRawDataController =
+      VideoRawDataController();
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +47,7 @@ class _State extends State<ProcessVideoRawData> {
   }
 
   Future<void> _dispose() async {
+    _videoRawDataController.dispose();
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -89,31 +97,9 @@ class _State extends State<ProcessVideoRawData> {
 
     await _engine.enableVideo();
 
-    _engine.getMediaEngine().registerVideoFrameObserver(
-          VideoFrameObserver(
-            onCaptureVideoFrame: (videoFrame) {
-              // logSink.log(
-              //     '[onCaptureVideoFrame] videoFrame: ${videoFrame.toJson()}');
-              debugPrint(
-                  '[onCaptureVideoFrame] videoFrame: ${videoFrame.toJson()}');
-            },
-            onRenderVideoFrame:
-                (String channelId, int remoteUid, VideoFrame videoFrame) {
-              // logSink.log(
-              //     '[onRenderVideoFrame] channelId: $channelId, remoteUid: $remoteUid, videoFrame: ${videoFrame.toJson()}');
-              debugPrint(
-                  '[onRenderVideoFrame] channelId: $channelId, remoteUid: $remoteUid, videoFrame: ${videoFrame.toJson()}');
-            },
-          ),
-        );
+    final nativeHandle = await _engine.getNativeHandle();
 
-    await _engine.setVideoEncoderConfiguration(
-      const VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 640, height: 360),
-        frameRate: 15,
-        bitrate: 800,
-      ),
-    );
+    _videoRawDataController.initialize(nativeHandle);
 
     await _engine.startPreview();
 
@@ -272,6 +258,5 @@ class _State extends State<ProcessVideoRawData> {
         );
       },
     );
-    
   }
 }

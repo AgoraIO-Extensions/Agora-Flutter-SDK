@@ -306,6 +306,20 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
 };
 
+RtcEngineEventHandlerOnAudioMixingPositionChangedJson
+    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnAudioMixingPositionChangedJson(
+          position: json['position'] as int?,
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(
+            RtcEngineEventHandlerOnAudioMixingPositionChangedJson instance) =>
+        <String, dynamic>{
+          'position': instance.position,
+        };
+
 RtcEngineEventHandlerOnAudioMixingFinishedJson
     _$RtcEngineEventHandlerOnAudioMixingFinishedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -345,20 +359,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnVideoDeviceStateChangedJsonToJson(
       'deviceId': instance.deviceId,
       'deviceType': _$MediaDeviceTypeEnumMap[instance.deviceType],
       'deviceState': _$MediaDeviceStateTypeEnumMap[instance.deviceState],
-    };
-
-RtcEngineEventHandlerOnMediaDeviceChangedJson
-    _$RtcEngineEventHandlerOnMediaDeviceChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnMediaDeviceChangedJson(
-          deviceType:
-              $enumDecodeNullable(_$MediaDeviceTypeEnumMap, json['deviceType']),
-        );
-
-Map<String, dynamic> _$RtcEngineEventHandlerOnMediaDeviceChangedJsonToJson(
-        RtcEngineEventHandlerOnMediaDeviceChangedJson instance) =>
-    <String, dynamic>{
-      'deviceType': _$MediaDeviceTypeEnumMap[instance.deviceType],
     };
 
 RtcEngineEventHandlerOnNetworkQualityJson
@@ -601,6 +601,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowOccluded: 13,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -1204,6 +1206,35 @@ Map<String, dynamic>
           'token': instance.token,
         };
 
+RtcEngineEventHandlerOnLicenseValidationFailureJson
+    _$RtcEngineEventHandlerOnLicenseValidationFailureJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnLicenseValidationFailureJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          reason:
+              $enumDecodeNullable(_$LicenseErrorTypeEnumMap, json['reason']),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnLicenseValidationFailureJsonToJson(
+            RtcEngineEventHandlerOnLicenseValidationFailureJson instance) =>
+        <String, dynamic>{
+          'connection': instance.connection?.toJson(),
+          'reason': _$LicenseErrorTypeEnumMap[instance.reason],
+        };
+
+const _$LicenseErrorTypeEnumMap = {
+  LicenseErrorType.licenseErrInvalid: 1,
+  LicenseErrorType.licenseErrExpire: 2,
+  LicenseErrorType.licenseErrMinutesExceed: 3,
+  LicenseErrorType.licenseErrLimitedPeriod: 4,
+  LicenseErrorType.licenseErrDiffDevices: 5,
+  LicenseErrorType.licenseErrInternal: 99,
+};
+
 RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson
     _$RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -1426,6 +1457,10 @@ RtcEngineEventHandlerOnClientRoleChangedJson
               $enumDecodeNullable(_$ClientRoleTypeEnumMap, json['oldRole']),
           newRole:
               $enumDecodeNullable(_$ClientRoleTypeEnumMap, json['newRole']),
+          newRoleOptions: json['newRoleOptions'] == null
+              ? null
+              : ClientRoleOptions.fromJson(
+                  json['newRoleOptions'] as Map<String, dynamic>),
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnClientRoleChangedJsonToJson(
@@ -1434,6 +1469,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnClientRoleChangedJsonToJson(
       'connection': instance.connection?.toJson(),
       'oldRole': _$ClientRoleTypeEnumMap[instance.oldRole],
       'newRole': _$ClientRoleTypeEnumMap[instance.newRole],
+      'newRoleOptions': instance.newRoleOptions?.toJson(),
     };
 
 const _$ClientRoleTypeEnumMap = {
@@ -1789,6 +1825,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedClientIpAddressChangedByUser: 18,
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
+  ConnectionChangedReasonType.connectionChangedLicenseVerifyFailed: 21,
 };
 
 RtcEngineEventHandlerOnWlAccMessageJson
@@ -2362,6 +2399,22 @@ Map<String, dynamic> _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(
       'audioFrame': instance.audioFrame?.toJson(),
     };
 
+AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson(
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(
+            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) =>
+        <String, dynamic>{
+          'audioFrame': instance.audioFrame?.toJson(),
+        };
+
 AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
     _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2909,3 +2962,89 @@ Map<String, dynamic>
         <String, dynamic>{
           'volume': instance.volume,
         };
+
+MusicContentCenterEventHandlerOnMusicChartsResultJson
+    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnMusicChartsResultJson(
+          requestId: json['requestId'] as String?,
+          status: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+          result: (json['result'] as List<dynamic>?)
+              ?.map((e) => MusicChartInfo.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        );
+
+Map<String, dynamic>
+    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(
+            MusicContentCenterEventHandlerOnMusicChartsResultJson instance) =>
+        <String, dynamic>{
+          'requestId': instance.requestId,
+          'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+          'result': instance.result?.map((e) => e.toJson()).toList(),
+        };
+
+const _$MusicContentCenterStatusCodeEnumMap = {
+  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
+};
+
+MusicContentCenterEventHandlerOnMusicCollectionResultJson
+    _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnMusicCollectionResultJson(
+          requestId: json['requestId'] as String?,
+          status: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+        );
+
+Map<String,
+    dynamic> _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(
+        MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+    };
+
+MusicContentCenterEventHandlerOnLyricResultJson
+    _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnLyricResultJson(
+          requestId: json['requestId'] as String?,
+          lyricUrl: json['lyricUrl'] as String?,
+        );
+
+Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
+        MusicContentCenterEventHandlerOnLyricResultJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'lyricUrl': instance.lyricUrl,
+    };
+
+MusicContentCenterEventHandlerOnPreLoadEventJson
+    _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnPreLoadEventJson(
+          songCode: json['songCode'] as int?,
+          percent: json['percent'] as int?,
+          status:
+              $enumDecodeNullable(_$PreloadStatusCodeEnumMap, json['status']),
+          msg: json['msg'] as String?,
+          lyricUrl: json['lyricUrl'] as String?,
+        );
+
+Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
+        MusicContentCenterEventHandlerOnPreLoadEventJson instance) =>
+    <String, dynamic>{
+      'songCode': instance.songCode,
+      'percent': instance.percent,
+      'status': _$PreloadStatusCodeEnumMap[instance.status],
+      'msg': instance.msg,
+      'lyricUrl': instance.lyricUrl,
+    };
+
+const _$PreloadStatusCodeEnumMap = {
+  PreloadStatusCode.kPreloadStatusCompleted: 0,
+  PreloadStatusCode.kPreloadStatusFailed: 1,
+  PreloadStatusCode.kPreloadStatusPreloading: 2,
+};
