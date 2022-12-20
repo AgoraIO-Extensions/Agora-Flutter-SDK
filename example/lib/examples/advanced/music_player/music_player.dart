@@ -36,6 +36,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
   String _searchMusicRequestId = '';
   String _musicCollectionRequestId = '';
   String _getLyricRequestId = '';
+  List<MusicCacheInfo> _musicCacheInfos = [];
 
   @override
   void initState() {
@@ -178,6 +179,9 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
     }
 
     final listChildren = collection.map(((e) {
+      final cached =
+          _musicCacheInfos.any((element) => element.songCode == e.songCode);
+
       return Container(
         height: 100,
         alignment: Alignment.center,
@@ -195,7 +199,25 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
             children: [
               Text('songCode: ${e.songCode!}'),
               Text('name: ${e.name}'),
-              Text('singer: ${e.singer}')
+              Text('singer: ${e.singer}'),
+              if (cached)
+                Row(
+                  children: [
+                    const Text(
+                      'cached',
+                      style: TextStyle(fontSize: 8, color: Colors.white),
+                    ),
+                    OutlinedButton(
+                      child: const Text(
+                        'remove cache',
+                        style: TextStyle(fontSize: 8, color: Colors.white),
+                      ),
+                      onPressed: () {
+                        _musicContentCenter.removeCache(e.songCode!);
+                      },
+                    ),
+                  ],
+                )
             ],
           ),
           onTap: () async {
@@ -274,53 +296,72 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
     );
   }
 
+  Future<void> _updateCaches() async {
+    _musicCacheInfos = await _musicContentCenter.getCaches(10);
+    setState(() {});
+  }
+
+  Future<void> _onMusicCollectionResult(
+      String requestId, MusicCollection result) async {
+    await _updateCaches();
+
+    if (_musicCollectionRequestId == requestId) {
+      setState(() {
+        _musicCollection = result;
+      });
+    } else if (_searchMusicRequestId == requestId) {
+      setState(() {
+        _searchedMusicCollection = result;
+      });
+    }
+  }
+
   Future<void> _initMusicCenter() async {
     await _musicContentCenter.initialize(MusicContentCenterConfiguration(
       appId: config.musicCenterAppId,
-      rtmToken: _rtmTokenController.text,
+      token: _rtmTokenController.text,
       mccUid: 123,
     ));
 
     _musicContentCenter.registerEventHandler(MusicContentCenterEventHandler(
-        onMusicChartsResult: (requestId, status, result) {
-      logSink.log(
-          '[onMusicChartsResult], requestId: $requestId, status: $status, result: ${result.toString()}');
-      if (status == MusicContentCenterStatusCode.kMusicContentCenterStatusOk) {
-        if (_currentRequestId == requestId) {
-          setState(() {
-            _musicChartInfos = result;
-          });
+      onMusicChartsResult: (requestId, status, result) {
+        logSink.log(
+            '[onMusicChartsResult], requestId: $requestId, status: $status, result: ${result.toString()}');
+        if (status ==
+            MusicContentCenterStatusCode.kMusicContentCenterStatusOk) {
+          if (_currentRequestId == requestId) {
+            setState(() {
+              _musicChartInfos = result;
+            });
+          }
         }
-      }
-    }, onMusicCollectionResult: (String requestId,
-            MusicContentCenterStatusCode status, MusicCollection result) {
-      logSink.log(
-          '[onMusicCollectionResult], requestId: $requestId, status: $status, result: ${result.toString()}');
+      },
+      onMusicCollectionResult: (String requestId,
+          MusicContentCenterStatusCode status, MusicCollection result) {
+        logSink.log(
+            '[onMusicCollectionResult], requestId: $requestId, status: $status, result: ${result.toString()}');
 
-      if (_musicCollectionRequestId == requestId) {
-        setState(() {
-          _musicCollection = result;
-        });
-      } else if (_searchMusicRequestId == requestId) {
-        setState(() {
-          _searchedMusicCollection = result;
-        });
-      }
-    }, onPreLoadEvent: (int songCode, int percent, PreloadStatusCode status,
-            String msg, String lyricUrl) {
-      logSink.log(
-          '[onPreLoadEvent], songCode: $songCode, percent: $percent status: $status, msg: $msg, lyricUrl: $lyricUrl');
-      if (_selectedMusic.songCode == songCode &&
-          status == PreloadStatusCode.kPreloadStatusCompleted) {
-        _preloadCompleted?.complete();
-        _preloadCompleted = null;
-      }
-    }, onLyricResult: (String requestId, String lyricUrl) {
-      if (_getLyricRequestId == requestId) {
-        _getLyricCompleted?.complete(lyricUrl);
-        _getLyricCompleted = null;
-      }
-    }));
+        _onMusicCollectionResult(requestId, result);
+      },
+      onPreLoadEvent: (int songCode, int percent, PreloadStatusCode status,
+          String msg, String lyricUrl) {
+        logSink.log(
+            '[onPreLoadEvent], songCode: $songCode, percent: $percent status: $status, msg: $msg, lyricUrl: $lyricUrl');
+        if (_selectedMusic.songCode == songCode &&
+            status == PreloadStatusCode.kPreloadStatusCompleted) {
+          _preloadCompleted?.complete();
+          _preloadCompleted = null;
+
+          _updateCaches();
+        }
+      },
+      onLyricResult: (String requestId, String lyricUrl) {
+        if (_getLyricRequestId == requestId) {
+          _getLyricCompleted?.complete(lyricUrl);
+          _getLyricCompleted = null;
+        }
+      },
+    ));
 
     _musicPlayer = await _musicContentCenter.createMusicPlayer();
 
@@ -428,6 +469,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
               onPressed: _initRtmToken
                   ? () async {
                       _searchedMusicCollection = null;
+                      _musicCacheInfos.clear();
                       _currentRequestId =
                           await _musicContentCenter.getMusicCharts();
                     }
@@ -447,6 +489,8 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
                   ? () async {
                       _musicChartInfos.clear();
                       _musicCollection = null;
+                      _musicCacheInfos.clear();
+
                       _searchMusicRequestId =
                           await _musicContentCenter.searchMusic(
                               keyWord: _searchMusicController.text,

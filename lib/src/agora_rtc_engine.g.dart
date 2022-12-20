@@ -104,6 +104,7 @@ RemoteVideoStats _$RemoteVideoStatsFromJson(Map<String, dynamic> json) =>
     RemoteVideoStats(
       uid: json['uid'] as int?,
       delay: json['delay'] as int?,
+      e2eDelay: json['e2eDelay'] as int?,
       width: json['width'] as int?,
       height: json['height'] as int?,
       receivedBitrate: json['receivedBitrate'] as int?,
@@ -132,6 +133,7 @@ Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) {
 
   writeNotNull('uid', instance.uid);
   writeNotNull('delay', instance.delay);
+  writeNotNull('e2eDelay', instance.e2eDelay);
   writeNotNull('width', instance.width);
   writeNotNull('height', instance.height);
   writeNotNull('receivedBitrate', instance.receivedBitrate);
@@ -458,6 +460,7 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
       sourceTitle: json['sourceTitle'] as String?,
       primaryMonitor: json['primaryMonitor'] as bool?,
       isOccluded: json['isOccluded'] as bool?,
+      minimizeWindow: json['minimizeWindow'] as bool?,
     );
 
 Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
@@ -479,6 +482,7 @@ Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
   writeNotNull('sourceTitle', instance.sourceTitle);
   writeNotNull('primaryMonitor', instance.primaryMonitor);
   writeNotNull('isOccluded', instance.isOccluded);
+  writeNotNull('minimizeWindow', instance.minimizeWindow);
   return val;
 }
 
@@ -728,6 +732,7 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       appId: json['appId'] as String?,
       channelProfile: $enumDecodeNullable(
           _$ChannelProfileTypeEnumMap, json['channelProfile']),
+      license: json['license'] as String?,
       audioScenario: $enumDecodeNullable(
           _$AudioScenarioTypeEnumMap, json['audioScenario']),
       areaCode: json['areaCode'] as int?,
@@ -737,6 +742,8 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       threadPriority: $enumDecodeNullable(
           _$ThreadPriorityTypeEnumMap, json['threadPriority']),
       useExternalEglContext: json['useExternalEglContext'] as bool?,
+      domainLimit: json['domainLimit'] as bool?,
+      autoRegisterAgoraExtensions: json['autoRegisterAgoraExtensions'] as bool?,
     );
 
 Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
@@ -751,6 +758,7 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull('appId', instance.appId);
   writeNotNull(
       'channelProfile', _$ChannelProfileTypeEnumMap[instance.channelProfile]);
+  writeNotNull('license', instance.license);
   writeNotNull(
       'audioScenario', _$AudioScenarioTypeEnumMap[instance.audioScenario]);
   writeNotNull('areaCode', instance.areaCode);
@@ -758,6 +766,9 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull(
       'threadPriority', _$ThreadPriorityTypeEnumMap[instance.threadPriority]);
   writeNotNull('useExternalEglContext', instance.useExternalEglContext);
+  writeNotNull('domainLimit', instance.domainLimit);
+  writeNotNull(
+      'autoRegisterAgoraExtensions', instance.autoRegisterAgoraExtensions);
   return val;
 }
 
@@ -861,6 +872,49 @@ Map<String, dynamic> _$DirectCdnStreamingMediaOptionsToJson(
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   return val;
 }
+
+ExtensionInfo _$ExtensionInfoFromJson(Map<String, dynamic> json) =>
+    ExtensionInfo(
+      mediaSourceType: $enumDecodeNullable(
+          _$MediaSourceTypeEnumMap, json['mediaSourceType']),
+      remoteUid: json['remoteUid'] as int?,
+      channelId: json['channelId'] as String?,
+      localUid: json['localUid'] as int?,
+    );
+
+Map<String, dynamic> _$ExtensionInfoToJson(ExtensionInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'mediaSourceType', _$MediaSourceTypeEnumMap[instance.mediaSourceType]);
+  writeNotNull('remoteUid', instance.remoteUid);
+  writeNotNull('channelId', instance.channelId);
+  writeNotNull('localUid', instance.localUid);
+  return val;
+}
+
+const _$MediaSourceTypeEnumMap = {
+  MediaSourceType.audioPlayoutSource: 0,
+  MediaSourceType.audioRecordingSource: 1,
+  MediaSourceType.primaryCameraSource: 2,
+  MediaSourceType.secondaryCameraSource: 3,
+  MediaSourceType.primaryScreenSource: 4,
+  MediaSourceType.secondaryScreenSource: 5,
+  MediaSourceType.customVideoSource: 6,
+  MediaSourceType.mediaPlayerSource: 7,
+  MediaSourceType.rtcImagePngSource: 8,
+  MediaSourceType.rtcImageJpegSource: 9,
+  MediaSourceType.rtcImageGifSource: 10,
+  MediaSourceType.remoteVideoSource: 11,
+  MediaSourceType.transcodedVideoSource: 12,
+  MediaSourceType.unknownMediaSource: 100,
+};
 
 SDKBuildInfo _$SDKBuildInfoFromJson(Map<String, dynamic> json) => SDKBuildInfo(
       build: json['build'] as int?,
