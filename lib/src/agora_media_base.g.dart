@@ -507,7 +507,6 @@ const _$VideoModulePositionEnumMap = {
   VideoModulePosition.positionPostCapturer: 1,
   VideoModulePosition.positionPreRenderer: 2,
   VideoModulePosition.positionPreEncoder: 4,
-  VideoModulePosition.positionPostFilters: 8,
 };
 
 const _$AudioFramePositionEnumMap = {
@@ -516,6 +515,7 @@ const _$AudioFramePositionEnumMap = {
   AudioFramePosition.audioFramePositionRecord: 2,
   AudioFramePosition.audioFramePositionMixed: 4,
   AudioFramePosition.audioFramePositionBeforeMixing: 8,
+  AudioFramePosition.audioFramePositionEarMonitoring: 16,
 };
 
 const _$VideoFrameProcessModeEnumMap = {

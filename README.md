@@ -72,11 +72,11 @@ The [agora_rtc_engine](https://pub.dev/packages/agora_rtc_engine) supports Andro
 
 ## API Reference Resources
 
-* [Flutter](https://docs.agora.io/en/video-call-4.x-beta/API%20Reference/flutter_ng/API/rtc_api_overview_ng.html)
-* [Android](https://docs-preprod.agora.io/en/video-call-4.x-beta/API%20Reference/java_ng/API/rtc_api_overview_ng.html)
-* [iOS/macOS](https://docs-preprod.agora.io/en/video-call-4.x-beta/API%20Reference/mac_ng/API/rtc_api_overview_ng.html)
-* [Windows](https://docs-preprod.agora.io/en/video-call-4.x-beta/API%20Reference/windows_ng/API/rtc_api_overview_ng.html)
-* [Web](https://docs.agora.io/en/Video/API%20Reference/web_ng/index.html)
+* [Flutter](https://api-ref.agora.io/en/voice-sdk/flutter/6.x/API/rtc_api_overview_ng.html)
+* [Android](https://api-ref.agora.io/en/voice-sdk/android/4.x/API/rtc_api_overview_ng.html)
+* [iOS/macOS](https://api-ref.agora.io/en/voice-sdk/ios/4.x/API/rtc_api_overview_ng.html)
+* [Windows](https://api-ref.agora.io/en/video-sdk/cpp/4.x/API/rtc_api_overview_ng.html)
+* [Web](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html)
 
 ## Feedback
 

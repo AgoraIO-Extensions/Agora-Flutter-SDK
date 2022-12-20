@@ -7,7 +7,7 @@ homepage: https://www.agora.io
 repository: https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/tree/main
 environment:
   sdk: '>=2.14.0 <3.0.0'
-  flutter: '>=2.0.0'
+  flutter: '>=2.5.0'
 dependencies:
   flutter:
     sdk: flutter
@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.4.0
   ffi: '>=1.1.2'
-  iris_event: ^1.2.0
+  iris_event: ^2.0.0
   async: ^2.8.2
   meta: ^1.7.0
 dev_dependencies:
@@ -24,7 +24,7 @@ dev_dependencies:
   flutter_lints: ^1.0.0
   build_runner: ^2.1.7
   json_serializable: ^6.1.1
-  ffigen: '>=4.1.2'
+  ffigen: ^4.1.2
 flutter:
   plugin:
     platforms:
@@ -37,6 +37,3 @@ flutter:
         pluginClass: AgoraRtcNgPlugin
       windows:
         pluginClass: AgoraRtcEnginePlugin
-      web:
-        pluginClass: AgoraRtcNgWeb
-        fileName: agora_rtc_engine_web.dart

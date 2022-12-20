@@ -318,6 +318,33 @@ extension RtcEngineEventHandlerOnAudioDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
+  const RtcEngineEventHandlerOnAudioMixingPositionChangedJson({this.position});
+
+  @JsonKey(name: 'position')
+  final int? position;
+  factory RtcEngineEventHandlerOnAudioMixingPositionChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnAudioMixingPositionChangedJsonBufferExt
+    on RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
+  RtcEngineEventHandlerOnAudioMixingPositionChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnAudioMixingFinishedJson {
   const RtcEngineEventHandlerOnAudioMixingFinishedJson();
 
@@ -390,33 +417,6 @@ class RtcEngineEventHandlerOnVideoDeviceStateChangedJson {
 extension RtcEngineEventHandlerOnVideoDeviceStateChangedJsonBufferExt
     on RtcEngineEventHandlerOnVideoDeviceStateChangedJson {
   RtcEngineEventHandlerOnVideoDeviceStateChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class RtcEngineEventHandlerOnMediaDeviceChangedJson {
-  const RtcEngineEventHandlerOnMediaDeviceChangedJson({this.deviceType});
-
-  @JsonKey(name: 'deviceType')
-  final MediaDeviceType? deviceType;
-  factory RtcEngineEventHandlerOnMediaDeviceChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnMediaDeviceChangedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnMediaDeviceChangedJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnMediaDeviceChangedJsonBufferExt
-    on RtcEngineEventHandlerOnMediaDeviceChangedJson {
-  RtcEngineEventHandlerOnMediaDeviceChangedJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -1649,6 +1649,36 @@ extension RtcEngineEventHandlerOnTokenPrivilegeWillExpireJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnLicenseValidationFailureJson {
+  const RtcEngineEventHandlerOnLicenseValidationFailureJson(
+      {this.connection, this.reason});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+  @JsonKey(name: 'reason')
+  final LicenseErrorType? reason;
+  factory RtcEngineEventHandlerOnLicenseValidationFailureJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnLicenseValidationFailureJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnLicenseValidationFailureJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnLicenseValidationFailureJsonBufferExt
+    on RtcEngineEventHandlerOnLicenseValidationFailureJson {
+  RtcEngineEventHandlerOnLicenseValidationFailureJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson {
   const RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson(
       {this.connection, this.elapsed});
@@ -1912,7 +1942,7 @@ extension RtcEngineEventHandlerOnSnapshotTakenJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnClientRoleChangedJson {
   const RtcEngineEventHandlerOnClientRoleChangedJson(
-      {this.connection, this.oldRole, this.newRole});
+      {this.connection, this.oldRole, this.newRole, this.newRoleOptions});
 
   @JsonKey(name: 'connection')
   final RtcConnection? connection;
@@ -1920,6 +1950,8 @@ class RtcEngineEventHandlerOnClientRoleChangedJson {
   final ClientRoleType? oldRole;
   @JsonKey(name: 'newRole')
   final ClientRoleType? newRole;
+  @JsonKey(name: 'newRoleOptions')
+  final ClientRoleOptions? newRoleOptions;
   factory RtcEngineEventHandlerOnClientRoleChangedJson.fromJson(
           Map<String, dynamic> json) =>
       _$RtcEngineEventHandlerOnClientRoleChangedJsonFromJson(json);
@@ -3216,6 +3248,33 @@ extension AudioFrameObserverBaseOnMixedAudioFrameJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  const AudioFrameObserverBaseOnEarMonitoringAudioFrameJson({this.audioFrame});
+
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(this);
+}
+
+extension AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonBufferExt
+    on AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  AudioFrameObserverBaseOnEarMonitoringAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
   const AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson(
       {this.channelId, this.uid, this.audioFrame});
@@ -4076,6 +4135,136 @@ class MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
 extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
     on MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
   MediaPlayerSourceObserverOnAudioVolumeIndicationJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnMusicChartsResultJson {
+  const MusicContentCenterEventHandlerOnMusicChartsResultJson(
+      {this.requestId, this.status, this.result});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'status')
+  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'result')
+  final List<MusicChartInfo>? result;
+  factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnMusicChartsResultJson {
+  MusicContentCenterEventHandlerOnMusicChartsResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
+  const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
+      {this.requestId, this.status, this.result});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'status')
+  final MusicContentCenterStatusCode? status;
+  @JsonKey(name: 'result', ignore: true)
+  final MusicCollection? result;
+  factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnMusicCollectionResultJson {
+  MusicContentCenterEventHandlerOnMusicCollectionResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnLyricResultJson {
+  const MusicContentCenterEventHandlerOnLyricResultJson(
+      {this.requestId, this.lyricUrl});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'lyricUrl')
+  final String? lyricUrl;
+  factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnLyricResultJson {
+  MusicContentCenterEventHandlerOnLyricResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnPreLoadEventJson {
+  const MusicContentCenterEventHandlerOnPreLoadEventJson(
+      {this.songCode, this.percent, this.status, this.msg, this.lyricUrl});
+
+  @JsonKey(name: 'songCode')
+  final int? songCode;
+  @JsonKey(name: 'percent')
+  final int? percent;
+  @JsonKey(name: 'status')
+  final PreloadStatusCode? status;
+  @JsonKey(name: 'msg')
+  final String? msg;
+  @JsonKey(name: 'lyricUrl')
+  final String? lyricUrl;
+  factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnPreLoadEventJsonBufferExt
+    on MusicContentCenterEventHandlerOnPreLoadEventJson {
+  MusicContentCenterEventHandlerOnPreLoadEventJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

@@ -12,6 +12,7 @@ export 'agora_spatial_audio.dart';
 export 'agora_rtc_engine_ex.dart';
 export 'audio_device_manager.dart';
 export 'agora_rhythm_player.dart';
+export 'agora_music_content_center.dart';
 export 'dart:convert';
 export 'dart:typed_data';
 export 'package:json_annotation/json_annotation.dart';

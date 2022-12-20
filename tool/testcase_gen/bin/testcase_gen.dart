@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:paraphrase/paraphrase.dart';
 import 'package:testcase_gen/default_generator.dart';
+import 'package:testcase_gen/fake_test_templated_generator.dart';
 import 'package:testcase_gen/generator.dart';
 import 'package:testcase_gen/media_recorder_observer_somke_test_generator.dart';
 import 'package:testcase_gen/rtc_channel_event_handler_smoke_test_generator.dart';
@@ -13,58 +15,20 @@ import 'package:file/local.dart';
 import 'package:path/path.dart' as path;
 import 'package:testcase_gen/templated_generator.dart';
 
-final List<Generator> generators = [
-  const RtcEngineSubProcessSmokeTestGenerator(),
-  const RtcEngineEventHandlerSomkeTestGenerator(),
-  const RtcDeviceManagerSmokeTestGenerator(),
-  const RtcChannelEventHandlerSomkeTestGenerator(),
-  const MediaRecorderObserverSomkeTestGenerator(),
-];
-
-const file.FileSystem fileSystem = LocalFileSystem();
-
-void main(List<String> arguments) {
-  final srcDir = path.join(
-    fileSystem.currentDirectory.absolute.path,
-    'lib',
-    'src',
-  );
-  final List<String> includedPaths = <String>[
-    path.join(srcDir, 'agora_base.dart'),
-    path.join(srcDir, 'agora_log.dart'),
-    path.join(srcDir, 'agora_media_base.dart'),
-    path.join(srcDir, 'agora_media_player.dart'),
-    path.join(srcDir, 'agora_media_player_types.dart'),
-    path.join(srcDir, 'agora_media_player_source.dart'),
-    path.join(srcDir, 'agora_rhythm_player.dart'),
-    path.join(srcDir, 'agora_rtc_engine.dart'),
-    path.join(srcDir, 'agora_rtc_engine_ex.dart'),
-    path.join(srcDir, 'audio_device_manager.dart'),
-    path.join(srcDir, 'agora_media_engine.dart'),
-    path.join(srcDir, 'agora_spatial_audio.dart'),
-    path.join(srcDir, 'agora_media_recorder.dart'),
-  ];
-
-  final outDir = path.join(
-    fileSystem.currentDirectory.absolute.path,
-    'integration_test_app',
-    'integration_test',
-  );
-
+List<TemplatedTestCase> _createIntegarationTestCases(String outputDir) {
   List<TemplatedTestCase> templatedTestCases = [
     TemplatedTestCase(
-      className: 'RtcEngine',
+      className: 'MediaPlayerCacheManager',
       testCaseFileTemplate: '''
 $defaultHeader
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:integration_test_app/main.dart' as app;
 
-void rtcEngineSmokeTestCases() {
-  {{TEST_CASES_CONTENT}}
+void mediaPlayerCacheManagerSmokeTestCases() {
+  {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
@@ -81,9 +45,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
 
+    final mediaPlayerCacheManager = getMediaPlayerCacheManager(rtcEngine);
+    
     try {
-      await rtcEngine.enableVideo();
-      
       {{TEST_CASE_BODY}}
     } catch (e) {
       if (e is! AgoraRtcException) {
@@ -91,7 +55,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       }
       expect(e is AgoraRtcException, true);
       debugPrint(
-            '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
     }
 
     await rtcEngine.release();
@@ -99,24 +63,78 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 //  skip: {{TEST_CASE_SKIP}},
 );
 ''',
+      methodInvokeObjectName: 'mediaPlayerCacheManager',
+      outputDir: outputDir,
+      skipMemberFunctions: [],
+    ),
+  ];
+  return templatedTestCases;
+}
+
+List<TemplatedTestCase> _createFakeTestCases(String outputDir) {
+  List<TemplatedTestCase> templatedTestCases = [
+    TemplatedTestCase(
+      className: 'RtcEngine',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+
+void rtcEngineSmokeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
+      }
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
+    }
+
+    await rtcEngine.release();
+  },
+);
+''',
       methodInvokeObjectName: 'rtcEngine',
-      outputDir: path.join(outDir, 'generated'),
+      outputDir: outputDir,
       skipMemberFunctions: [
-        'release',
-        'registerAudioEncodedFrameObserver',
-        'registerAudioSpectrumObserver',
-        'unregisterAudioSpectrumObserver',
-        'registerEventHandler',
-        'unregisterEventHandler',
-        'registerPacketObserver',
-        'registerMediaMetadataObserver',
-        'unregisterMediaMetadataObserver',
         'destroyMediaPlayer',
-        'setupRemoteVideo',
-        'setupLocalVideo',
-        'getEffectDuration',
-        'startPreview',
-        'stopPreview',
+        // These cases should handle the list size manually.
+        'setLocalAccessPoint',
+        'startChannelMediaRelay',
+        'updateChannelMediaRelay',
+        'setSubscribeAudioBlocklist',
+        'setSubscribeAudioAllowlist',
+        'setSubscribeVideoBlocklist',
+        'setSubscribeVideoAllowlist',
       ],
     ),
     TemplatedTestCase(
@@ -128,7 +146,9 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
-import 'package:integration_test_app/main.dart' as app;
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
 void rtcEngineExSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -136,8 +156,9 @@ void rtcEngineExSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -153,10 +174,13 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     } catch (e) {
       if (e is! AgoraRtcException) {
         debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
       }
-      expect(e is AgoraRtcException, true);
-      debugPrint(
-        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
     }
 
     await rtcEngineEx.release();
@@ -165,8 +189,16 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'rtcEngineEx',
-      outputDir: path.join(outDir, 'generated'),
-      skipMemberFunctions: [],
+      outputDir: outputDir,
+      skipMemberFunctions: [
+        // These cases should handle the list size manually.
+        'setSubscribeAudioBlocklistEx',
+        'setSubscribeAudioAllowlistEx',
+        'setSubscribeVideoBlocklistEx',
+        'setSubscribeVideoAllowlistEx',
+        'startChannelMediaRelayEx',
+        'updateChannelMediaRelayEx',
+      ],
     ),
     TemplatedTestCase(
       className: 'AudioDeviceManager',
@@ -176,7 +208,9 @@ $defaultHeader
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
-import 'package:integration_test_app/main.dart' as app;
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
 void audioDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -184,8 +218,9 @@ void audioDeviceManagerSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -203,23 +238,23 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     } catch (e) {
       if (e is! AgoraRtcException) {
         debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
       }
-      expect(e is AgoraRtcException, true);
-      debugPrint(
-        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
-    }
 
-    audioDeviceManager.release();
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
+    }
+    
+    await audioDeviceManager.release();
     await rtcEngine.release();
   },
-//  skip: {{TEST_CASE_SKIP}},
 );
 ''',
       methodInvokeObjectName: 'audioDeviceManager',
-      outputDir: path.join(outDir, 'generated'),
-      skipMemberFunctions: [
-        'release',
-      ],
+      outputDir: outputDir,
+      skipMemberFunctions: [],
     ),
     TemplatedTestCase(
       className: 'VideoDeviceManager',
@@ -229,7 +264,9 @@ $defaultHeader
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
-import 'package:integration_test_app/main.dart' as app;
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
 void videoDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -237,8 +274,9 @@ void videoDeviceManagerSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -256,23 +294,24 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     } catch (e) {
       if (e is! AgoraRtcException) {
         debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
       }
-      expect(e is AgoraRtcException, true);
-      debugPrint(
-        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
     }
 
-    videoDeviceManager.release();
+    await videoDeviceManager.release();
     await rtcEngine.release();
   },
 //  skip: {{TEST_CASE_SKIP}},
 );
 ''',
       methodInvokeObjectName: 'videoDeviceManager',
-      outputDir: path.join(outDir, 'generated'),
-      skipMemberFunctions: [
-        'release',
-      ],
+      outputDir: outputDir,
+      skipMemberFunctions: [],
     ),
     TemplatedTestCase(
       className: 'MediaPlayer',
@@ -283,7 +322,9 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
-import 'package:integration_test_app/main.dart' as app;
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
 void mediaPlayerControllerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -291,8 +332,9 @@ void mediaPlayerControllerSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -312,10 +354,13 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     } catch (e) {
       if (e is! AgoraRtcException) {
         debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
       }
-      expect(e is AgoraRtcException, true);
-      debugPrint(
-        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
     }
 
     await mediaPlayerController.dispose();
@@ -325,11 +370,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'mediaPlayerController',
-      outputDir: path.join(outDir, 'generated'),
-      skipMemberFunctions: [
-        'release',
-        'setView',
-      ],
+      outputDir: outputDir,
+      skipMemberFunctions: [],
     ),
     TemplatedTestCase(
       className: 'MediaEngine',
@@ -340,7 +382,9 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
-import 'package:integration_test_app/main.dart' as app;
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
 void mediaEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -348,8 +392,9 @@ void mediaEngineSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -367,10 +412,13 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     } catch (e) {
       if (e is! AgoraRtcException) {
         debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
       }
-      expect(e is AgoraRtcException, true);
-      debugPrint(
-        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
     }
 
     await mediaEngine.release();
@@ -380,10 +428,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'mediaEngine',
-      outputDir: path.join(outDir, 'generated'),
-      skipMemberFunctions: [
-        'release',
-      ],
+      outputDir: outputDir,
+      skipMemberFunctions: [],
     ),
     TemplatedTestCase(
       className: 'MediaRecorder',
@@ -393,7 +439,9 @@ $defaultHeader
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
-import 'package:integration_test_app/main.dart' as app;
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
 void mediaRecorderSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -401,8 +449,9 @@ void mediaRecorderSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -420,10 +469,13 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     } catch (e) {
       if (e is! AgoraRtcException) {
         debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
       }
-      expect(e is AgoraRtcException, true);
-      debugPrint(
-        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
     }
 
     await mediaRecorder.release();
@@ -433,10 +485,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'mediaRecorder',
-      outputDir: path.join(outDir, 'generated'),
-      skipMemberFunctions: [
-        'release',
-      ],
+      outputDir: outputDir,
+      skipMemberFunctions: [],
     ),
     TemplatedTestCase(
       className: 'LocalSpatialAudioEngine',
@@ -446,7 +496,9 @@ $defaultHeader
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
-import 'package:integration_test_app/main.dart' as app;
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
 void localSpatialAudioEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -454,8 +506,9 @@ void localSpatialAudioEngineSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    app.main();
-    await tester.pumpAndSettle();
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -473,10 +526,13 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     } catch (e) {
       if (e is! AgoraRtcException) {
         debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
       }
-      expect(e is AgoraRtcException, true);
-      debugPrint(
-        '[{{TEST_CASE_NAME}}] errorcode: \${(e as AgoraRtcException).code}');
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
     }
 
     await localSpatialAudioEngine.release();
@@ -486,20 +542,141 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 );
 ''',
       methodInvokeObjectName: 'localSpatialAudioEngine',
-      outputDir: path.join(outDir, 'generated'),
-      skipMemberFunctions: [
-        'release',
-      ],
+      outputDir: outputDir,
+      skipMemberFunctions: [],
+    ),
+    TemplatedTestCase(
+      className: 'MusicContentCenter',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:fake_test_app/main.dart' as app;
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+
+void musicContentCenterSmokeTestCases() {
+  {{TEST_CASES_CONTENT}} 
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    final musicContentCenter = rtcEngine.getMusicContentCenter();
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
+      }
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
+    }
+
+    await musicContentCenter.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'musicContentCenter',
+      outputDir: outputDir,
+      skipMemberFunctions: [],
     ),
   ];
+  return templatedTestCases;
+}
+
+final List<Generator> generators = [
+  const RtcEngineSubProcessSmokeTestGenerator(),
+  const RtcEngineEventHandlerSomkeTestGenerator(),
+  const RtcDeviceManagerSmokeTestGenerator(),
+  const RtcChannelEventHandlerSomkeTestGenerator(),
+  const MediaRecorderObserverSomkeTestGenerator(),
+];
+
+const file.FileSystem fileSystem = LocalFileSystem();
+
+void main(List<String> arguments) {
+  final parser = ArgParser();
+  parser.addFlag('gen-integration-test');
+  parser.addFlag('gen-fake-test');
+  parser.addOption('output-dir', mandatory: true);
+
+  final results = parser.parse(arguments);
+
+  final genIntegrationTest = results['gen-integration-test'] ?? false;
+  final genFakeTest = results['gen-fake-test'] ?? false;
+  final outputDir = results['output-dir']!;
+
+  final srcDir = path.join(
+    fileSystem.currentDirectory.absolute.path,
+    'lib',
+    'src',
+  );
+  final List<String> includedPaths = <String>[
+    path.join(srcDir, 'agora_base.dart'),
+    path.join(srcDir, 'agora_log.dart'),
+    path.join(srcDir, 'agora_media_base.dart'),
+    path.join(srcDir, 'agora_media_player.dart'),
+    path.join(srcDir, 'agora_media_player_types.dart'),
+    path.join(srcDir, 'agora_media_player_source.dart'),
+    path.join(srcDir, 'agora_rhythm_player.dart'),
+    path.join(srcDir, 'agora_rtc_engine.dart'),
+    path.join(srcDir, 'agora_rtc_engine_ex.dart'),
+    path.join(srcDir, 'audio_device_manager.dart'),
+    path.join(srcDir, 'agora_media_engine.dart'),
+    path.join(srcDir, 'agora_spatial_audio.dart'),
+    path.join(srcDir, 'agora_media_recorder.dart'),
+    path.join(srcDir, 'agora_music_content_center.dart'),
+  ];
+
+  // final outDir = path.join(
+  //   fileSystem.currentDirectory.absolute.path,
+  //   'integration_test_app',
+  //   'integration_test',
+  // );
+
+  List<TemplatedTestCase> templatedTestCases = [];
+  if (genIntegrationTest) {
+    templatedTestCases = _createIntegarationTestCases(outputDir);
+  } else if (genFakeTest) {
+    templatedTestCases = _createFakeTestCases(outputDir);
+  }
 
   Paraphrase paraphrase = Paraphrase(includedPaths: includedPaths);
   final parseResult = paraphrase.visit();
 
-  TemplatedGenerator generator = TemplatedGenerator(templatedTestCases);
+  Generator? generator;
+  if (genIntegrationTest) {
+    generator = TemplatedGenerator(templatedTestCases);
+  }
+  if (genFakeTest) {
+    generator = FakeTestTemplatedGenerator(templatedTestCases);
+  }
+
   final file = File('tmp');
   final fileSink = file.openWrite();
-  generator.generate(fileSink, parseResult);
+  generator?.generate(fileSink, parseResult);
 
   file.delete(recursive: true);
 }

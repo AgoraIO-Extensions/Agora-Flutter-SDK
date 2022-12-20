@@ -19,8 +19,6 @@ abstract class MediaRecorder {
   /// * [connection] The connection information. See RtcConnection .
   /// * [config] The recording configuration. See MediaRecorderConfiguration .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.2: The parameter is invalid. Ensure the following:The specified path of the recording file exists and is writable.The specified format of the recording file is supported.The maximum recording duration is correctly set.4: RtcEngine does not support the request. The recording is ongoing or the recording stops because an error occurs.7: A method is called before RtcEngine is initialized.
   Future<void> startRecording(
       {required RtcConnection connection,
       required MediaRecorderConfiguration config});
@@ -30,8 +28,6 @@ abstract class MediaRecorder {
   ///
   /// * [connection] The connection information. See RtcConnection .
   ///
-  /// Returns
-  /// 0: Success.< 0: Failure.-7: A method is called before RtcEngine is initialized.
   Future<void> stopRecording(RtcConnection connection);
 
   /// Release the MediaRecorder object.

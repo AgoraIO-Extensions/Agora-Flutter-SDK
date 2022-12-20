@@ -202,6 +202,7 @@ EncodedVideoFrameInfo _$EncodedVideoFrameInfoFromJson(
           $enumDecodeNullable(_$VideoOrientationEnumMap, json['rotation']),
       trackId: json['trackId'] as int?,
       captureTimeMs: json['captureTimeMs'] as int?,
+      decodeTimeMs: json['decodeTimeMs'] as int?,
       uid: json['uid'] as int?,
       streamType:
           $enumDecodeNullable(_$VideoStreamTypeEnumMap, json['streamType']),
@@ -225,6 +226,7 @@ Map<String, dynamic> _$EncodedVideoFrameInfoToJson(
   writeNotNull('rotation', _$VideoOrientationEnumMap[instance.rotation]);
   writeNotNull('trackId', instance.trackId);
   writeNotNull('captureTimeMs', instance.captureTimeMs);
+  writeNotNull('decodeTimeMs', instance.decodeTimeMs);
   writeNotNull('uid', instance.uid);
   writeNotNull('streamType', _$VideoStreamTypeEnumMap[instance.streamType]);
   return val;
@@ -246,6 +248,41 @@ const _$VideoOrientationEnumMap = {
   VideoOrientation.videoOrientation270: 270,
 };
 
+AdvanceOptions _$AdvanceOptionsFromJson(Map<String, dynamic> json) =>
+    AdvanceOptions(
+      encodingPreference: $enumDecodeNullable(
+          _$EncodingPreferenceEnumMap, json['encodingPreference']),
+      compressionPreference: $enumDecodeNullable(
+          _$CompressionPreferenceEnumMap, json['compressionPreference']),
+    );
+
+Map<String, dynamic> _$AdvanceOptionsToJson(AdvanceOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('encodingPreference',
+      _$EncodingPreferenceEnumMap[instance.encodingPreference]);
+  writeNotNull('compressionPreference',
+      _$CompressionPreferenceEnumMap[instance.compressionPreference]);
+  return val;
+}
+
+const _$EncodingPreferenceEnumMap = {
+  EncodingPreference.preferAuto: -1,
+  EncodingPreference.preferSoftware: 0,
+  EncodingPreference.preferHardware: 1,
+};
+
+const _$CompressionPreferenceEnumMap = {
+  CompressionPreference.preferLowLatency: 0,
+  CompressionPreference.preferQuality: 1,
+};
+
 VideoEncoderConfiguration _$VideoEncoderConfigurationFromJson(
         Map<String, dynamic> json) =>
     VideoEncoderConfiguration(
@@ -264,6 +301,10 @@ VideoEncoderConfiguration _$VideoEncoderConfigurationFromJson(
           _$DegradationPreferenceEnumMap, json['degradationPreference']),
       mirrorMode:
           $enumDecodeNullable(_$VideoMirrorModeTypeEnumMap, json['mirrorMode']),
+      advanceOptions: json['advanceOptions'] == null
+          ? null
+          : AdvanceOptions.fromJson(
+              json['advanceOptions'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$VideoEncoderConfigurationToJson(
@@ -286,6 +327,7 @@ Map<String, dynamic> _$VideoEncoderConfigurationToJson(
   writeNotNull('degradationPreference',
       _$DegradationPreferenceEnumMap[instance.degradationPreference]);
   writeNotNull('mirrorMode', _$VideoMirrorModeTypeEnumMap[instance.mirrorMode]);
+  writeNotNull('advanceOptions', instance.advanceOptions?.toJson());
   return val;
 }
 
@@ -336,7 +378,7 @@ SimulcastStreamConfig _$SimulcastStreamConfigFromJson(
           ? null
           : VideoDimensions.fromJson(
               json['dimensions'] as Map<String, dynamic>),
-      bitrate: json['bitrate'] as int?,
+      kBitrate: json['kBitrate'] as int?,
       framerate: json['framerate'] as int?,
     );
 
@@ -351,7 +393,7 @@ Map<String, dynamic> _$SimulcastStreamConfigToJson(
   }
 
   writeNotNull('dimensions', instance.dimensions?.toJson());
-  writeNotNull('bitrate', instance.bitrate);
+  writeNotNull('kBitrate', instance.kBitrate);
   writeNotNull('framerate', instance.framerate);
   return val;
 }
@@ -1029,6 +1071,7 @@ LocalTranscoderConfiguration _$LocalTranscoderConfigurationFromJson(
           ? null
           : VideoEncoderConfiguration.fromJson(
               json['videoOutputConfiguration'] as Map<String, dynamic>),
+      syncWithPrimaryCamera: json['syncWithPrimaryCamera'] as bool?,
     );
 
 Map<String, dynamic> _$LocalTranscoderConfigurationToJson(
@@ -1046,6 +1089,7 @@ Map<String, dynamic> _$LocalTranscoderConfigurationToJson(
       instance.videoInputStreams?.map((e) => e.toJson()).toList());
   writeNotNull(
       'videoOutputConfiguration', instance.videoOutputConfiguration?.toJson());
+  writeNotNull('syncWithPrimaryCamera', instance.syncWithPrimaryCamera);
   return val;
 }
 
@@ -1157,20 +1201,19 @@ Map<String, dynamic> _$WlAccStatsToJson(WlAccStats instance) {
 
 VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
       view: json['view'] as int?,
+      uid: json['uid'] as int?,
       renderMode:
           $enumDecodeNullable(_$RenderModeTypeEnumMap, json['renderMode']),
       mirrorMode:
           $enumDecodeNullable(_$VideoMirrorModeTypeEnumMap, json['mirrorMode']),
-      uid: json['uid'] as int?,
-      isScreenView: json['isScreenView'] as bool?,
-      privSize: json['priv_size'] as int?,
+      setupMode:
+          $enumDecodeNullable(_$VideoViewSetupModeEnumMap, json['setupMode']),
       sourceType:
           $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
+      mediaPlayerId: json['mediaPlayerId'] as int?,
       cropArea: json['cropArea'] == null
           ? null
           : Rectangle.fromJson(json['cropArea'] as Map<String, dynamic>),
-      setupMode:
-          $enumDecodeNullable(_$VideoViewSetupModeEnumMap, json['setupMode']),
     );
 
 Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
@@ -1183,14 +1226,13 @@ Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
   }
 
   writeNotNull('view', instance.view);
+  writeNotNull('uid', instance.uid);
   writeNotNull('renderMode', _$RenderModeTypeEnumMap[instance.renderMode]);
   writeNotNull('mirrorMode', _$VideoMirrorModeTypeEnumMap[instance.mirrorMode]);
-  writeNotNull('uid', instance.uid);
-  writeNotNull('isScreenView', instance.isScreenView);
-  writeNotNull('priv_size', instance.privSize);
-  writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
-  writeNotNull('cropArea', instance.cropArea?.toJson());
   writeNotNull('setupMode', _$VideoViewSetupModeEnumMap[instance.setupMode]);
+  writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
+  writeNotNull('mediaPlayerId', instance.mediaPlayerId);
+  writeNotNull('cropArea', instance.cropArea?.toJson());
   return val;
 }
 
@@ -1849,6 +1891,7 @@ SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
       enableBlur: json['enable_blur'] as bool?,
       enableAirAbsorb: json['enable_air_absorb'] as bool?,
       speakerAttenuation: (json['speaker_attenuation'] as num?)?.toDouble(),
+      enableDoppler: json['enable_doppler'] as bool?,
     );
 
 Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) {
@@ -1867,6 +1910,7 @@ Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) {
   writeNotNull('enable_blur', instance.enableBlur);
   writeNotNull('enable_air_absorb', instance.enableAirAbsorb);
   writeNotNull('speaker_attenuation', instance.speakerAttenuation);
+  writeNotNull('enable_doppler', instance.enableDoppler);
   return val;
 }
 
@@ -1980,6 +2024,15 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errVdmCameraNotAuthorized: 1501,
 };
 
+const _$LicenseErrorTypeEnumMap = {
+  LicenseErrorType.licenseErrInvalid: 1,
+  LicenseErrorType.licenseErrExpire: 2,
+  LicenseErrorType.licenseErrMinutesExceed: 3,
+  LicenseErrorType.licenseErrLimitedPeriod: 4,
+  LicenseErrorType.licenseErrDiffDevices: 5,
+  LicenseErrorType.licenseErrInternal: 99,
+};
+
 const _$AudioSessionOperationRestrictionEnumMap = {
   AudioSessionOperationRestriction.audioSessionOperationRestrictionNone: 0,
   AudioSessionOperationRestriction.audioSessionOperationRestrictionSetCategory:
@@ -2010,6 +2063,9 @@ const _$InterfaceIdTypeEnumMap = {
   InterfaceIdType.agoraIidCloudSpatialAudio: 10,
   InterfaceIdType.agoraIidLocalSpatialAudio: 11,
   InterfaceIdType.agoraIidMediaRecorder: 12,
+  InterfaceIdType.agoraIidStateSync: 13,
+  InterfaceIdType.agoraIidMetachatService: 14,
+  InterfaceIdType.agoraIidMusicContentCenter: 15,
 };
 
 const _$QualityTypeEnumMap = {
@@ -2054,7 +2110,7 @@ const _$H264PacketizeModeEnumMap = {
 
 const _$SimulcastStreamModeEnumMap = {
   SimulcastStreamMode.autoSimulcastStream: -1,
-  SimulcastStreamMode.disableSimulcastStrem: 0,
+  SimulcastStreamMode.disableSimulcastStream: 0,
   SimulcastStreamMode.enableSimulcastStream: 1,
 };
 
@@ -2162,6 +2218,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowOccluded: 13,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
 };
 
 const _$RemoteAudioStateEnumMap = {
@@ -2280,6 +2338,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedClientIpAddressChangedByUser: 18,
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
+  ConnectionChangedReasonType.connectionChangedLicenseVerifyFailed: 21,
 };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {
@@ -2357,6 +2416,12 @@ const _$VoiceConversionPresetEnumMap = {
   VoiceConversionPreset.voiceChangerSweet: 50397696,
   VoiceConversionPreset.voiceChangerSolid: 50397952,
   VoiceConversionPreset.voiceChangerBass: 50398208,
+};
+
+const _$HeadphoneEqualizerPresetEnumMap = {
+  HeadphoneEqualizerPreset.headphoneEqualizerOff: 0,
+  HeadphoneEqualizerPreset.headphoneEqualizerOverear: 67108865,
+  HeadphoneEqualizerPreset.headphoneEqualizerInear: 67108866,
 };
 
 const _$AreaCodeEnumMap = {

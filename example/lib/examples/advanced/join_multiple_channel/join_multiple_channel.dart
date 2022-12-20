@@ -179,14 +179,14 @@ class _State extends State<JoinMultipleChannel> {
 
   _leaveChannel0() async {
     if (isJoined0) {
-      await _engine.leaveChannelEx(_channel0);
+      await _engine.leaveChannelEx(connection: _channel0);
       await _engine.startPreview();
     }
   }
 
   _leaveChannel1() async {
     if (isJoined1) {
-      await _engine.leaveChannelEx(_channel1);
+      await _engine.leaveChannelEx(connection: _channel1);
       await _engine.startPreview();
     }
   }

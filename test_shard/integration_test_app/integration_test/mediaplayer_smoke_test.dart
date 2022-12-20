@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:integration_test/integration_test.dart';
-import 'generated/mediaplayer_smoke_test.generated.dart' as generated;
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  generated.mediaPlayerControllerSmokeTestCases();
 
   testWidgets(
     'registerAudioFrameObserver smoke test',
@@ -59,7 +56,7 @@ void main() {
 
       await mediaPlayerController.open(
           url:
-              'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/video/meta_live_mpk.mov',
+              'https://agoracdn.s3.us-west-1.amazonaws.com/videos/Agora.io-Interactions.mp4',
           startPos: 0);
 
       final eventCalled = await eventCalledCompleter.future;
@@ -125,7 +122,7 @@ void main() {
 
       await mediaPlayerController.open(
           url:
-              'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/video/meta_live_mpk.mov',
+              'https://agoracdn.s3.us-west-1.amazonaws.com/videos/Agora.io-Interactions.mp4',
           startPos: 0);
 
       final eventCalled = await eventCalledCompleter.future;
@@ -189,7 +186,7 @@ void main() {
 
       await mediaPlayerController.open(
           url:
-              'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/video/meta_live_mpk.mov',
+              'https://agoracdn.s3.us-west-1.amazonaws.com/videos/Agora.io-Interactions.mp4',
           startPos: 0);
 
       final eventCalled = await eventCalledCompleter.future;

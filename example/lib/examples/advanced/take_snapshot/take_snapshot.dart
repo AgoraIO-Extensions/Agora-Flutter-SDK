@@ -93,10 +93,12 @@ class _State extends State<TakeSnapshot> {
           int width, int height, int errCode) async {
         logSink.log(
             '[onSnapshotTaken] connection: ${connection.toJson()}, uid: $uid, filePath: $filePath, width: $width, height: $height, errCode: $errCode');
-        // await _snapshotImage?.image.evict();
 
         if (_snapshotPath.isNotEmpty) {
-          await File(_snapshotPath).delete();
+          final preSnapshotFile = File(_snapshotPath);
+          if (await preSnapshotFile.exists()) {
+            await preSnapshotFile.delete();
+          }
         }
 
         setState(() {

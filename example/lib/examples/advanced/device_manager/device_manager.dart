@@ -23,7 +23,6 @@ class _State extends State<DeviceManager> {
   late final VideoDeviceManager _videoDeviceManager;
   late TextEditingController _controller;
   late String _selectedDeviceId;
-  bool _isSetVideoDeviceEnabled = false;
 
   @override
   void initState() {
@@ -118,9 +117,20 @@ class _State extends State<DeviceManager> {
     final dropDownMenus = <DropdownMenuItem<String>>[];
     for (var v in devices) {
       dropDownMenus.add(DropdownMenuItem(
-        child: Text(
-          v.deviceName!,
-          style: const TextStyle(fontSize: 13),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'deviceName: ${v.deviceName!}',
+              style: const TextStyle(fontSize: 10),
+            ),
+            Text(
+              'deviceId: ${v.deviceId!}',
+              style: const TextStyle(fontSize: 10),
+            ),
+          ],
         ),
         value: v.deviceId,
       ));
@@ -130,7 +140,6 @@ class _State extends State<DeviceManager> {
       value: _selectedDeviceId,
       onChanged: (v) {
         setState(() {
-          _isSetVideoDeviceEnabled = _selectedDeviceId != v;
           _selectedDeviceId = v!;
         });
       },
@@ -139,9 +148,6 @@ class _State extends State<DeviceManager> {
 
   Future<void> _setVideoDevice(String deviceId) async {
     _videoDeviceManager.setDevice(deviceId);
-    setState(() {
-      _isSetVideoDeviceEnabled = false;
-    });
     logSink.log('setVideoDevice deviceId: $deviceId');
   }
 
@@ -190,11 +196,9 @@ class _State extends State<DeviceManager> {
               height: 20,
             ),
             ElevatedButton(
-              onPressed: _isSetVideoDeviceEnabled
-                  ? () {
-                      _setVideoDevice(_selectedDeviceId);
-                    }
-                  : null,
+              onPressed: () {
+                _setVideoDevice(_selectedDeviceId);
+              },
               child: const Text('Set video device'),
             ),
           ],
