@@ -183,8 +183,8 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
           _musicCacheInfos.any((element) => element.songCode == e.songCode);
 
       return Container(
-        height: 100,
-        alignment: Alignment.center,
+        height: 150,
+        alignment: Alignment.topLeft,
         margin: const EdgeInsets.all(4),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -201,22 +201,33 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
               Text('name: ${e.name}'),
               Text('singer: ${e.singer}'),
               if (cached)
-                Row(
-                  children: [
-                    const Text(
-                      'cached',
-                      style: TextStyle(fontSize: 8, color: Colors.white),
-                    ),
-                    OutlinedButton(
-                      child: const Text(
-                        'remove cache',
+                Container(
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.green[300]!,
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  ),
+                  margin: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.all(4),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'cached',
                         style: TextStyle(fontSize: 8, color: Colors.white),
                       ),
-                      onPressed: () {
-                        _musicContentCenter.removeCache(e.songCode!);
-                      },
-                    ),
-                  ],
+                      const SizedBox(width: 5),
+                      OutlinedButton(
+                        child: const Text(
+                          'remove cache',
+                          style: TextStyle(fontSize: 8, color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          await _musicContentCenter.removeCache(e.songCode!);
+                          _updateCaches();
+                        },
+                      )
+                    ],
+                  ),
                 )
             ],
           ),
@@ -287,7 +298,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
     })).toList();
 
     return SizedBox(
-      height: 100,
+      height: 150,
       child: ListView(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
