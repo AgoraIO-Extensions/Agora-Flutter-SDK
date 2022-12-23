@@ -25,7 +25,7 @@ void main() {
         appId: engineAppId,
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
-      
+
       await rtcEngine.enableVideo();
 
       Completer<bool> eventCalledCompleter = Completer();
@@ -77,140 +77,280 @@ void main() {
     },
   );
 
-  testWidgets(
-    'registerEventHandler multiple times',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
+  group('registerEventHandler/unregisterEventHandler', () {
+    testWidgets(
+      'registerEventHandler multiple times',
+      (WidgetTester tester) async {
+        app.main();
+        await tester.pumpAndSettle();
 
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
+        String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+            defaultValue: '<YOUR_APP_ID>');
 
-      RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+        RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+        await rtcEngine.initialize(RtcEngineContext(
+          appId: engineAppId,
+          areaCode: AreaCode.areaCodeGlob.value(),
+        ));
 
-      Completer<bool> event1CalledCompleter = Completer();
-      Completer<bool> event2CalledCompleter = Completer();
+        Completer<bool> event1CalledCompleter = Completer();
+        Completer<bool> event2CalledCompleter = Completer();
 
-      rtcEngine.registerEventHandler(RtcEngineEventHandler(
-        onUserJoined: (connection, remoteUid, elapsed) {
-          if (event1CalledCompleter.isCompleted) {
-            return;
-          }
+        final eventHandler1 = RtcEngineEventHandler(
+          onUserJoined: (connection, remoteUid, elapsed) {
+            if (event1CalledCompleter.isCompleted) {
+              return;
+            }
 
-          event1CalledCompleter.complete(true);
-        },
-      ));
+            event1CalledCompleter.complete(true);
+          },
+        );
 
-      rtcEngine.registerEventHandler(RtcEngineEventHandler(
-        onUserJoined: (connection, remoteUid, elapsed) {
-          if (event2CalledCompleter.isCompleted) {
-            return;
-          }
+        rtcEngine.registerEventHandler(eventHandler1);
 
-          event2CalledCompleter.complete(true);
-        },
-      ));
+        final eventHandler2 = RtcEngineEventHandler(
+          onUserJoined: (connection, remoteUid, elapsed) {
+            if (event2CalledCompleter.isCompleted) {
+              return;
+            }
 
-      await rtcEngine.enableVideo();
+            event2CalledCompleter.complete(true);
+          },
+        );
 
-      await rtcEngine.joinChannel(
-        token: '',
-        channelId: 'testonaction',
-        uid: 0,
-        options: const ChannelMediaOptions(
-          channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-          clientRoleType: ClientRoleType.clientRoleBroadcaster,
-        ),
-      );
+        rtcEngine.registerEventHandler(eventHandler2);
 
-      final remoteUser = FakeRemoteUser(rtcEngine);
-      await remoteUser.joinChannel(remoteUid: 123);
+        await rtcEngine.enableVideo();
 
-      expect(await event1CalledCompleter.future, isTrue);
-      expect(await event2CalledCompleter.future, isTrue);
+        await rtcEngine.joinChannel(
+          token: '',
+          channelId: 'testonaction',
+          uid: 0,
+          options: const ChannelMediaOptions(
+            channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+            clientRoleType: ClientRoleType.clientRoleBroadcaster,
+          ),
+        );
 
-      await remoteUser.leaveChannel();
-      await rtcEngine.leaveChannel();
-      await rtcEngine.release();
-    },
-  );
+        final remoteUser = FakeRemoteUser(rtcEngine);
+        await remoteUser.joinChannel(remoteUid: 123);
 
-  testWidgets(
-    'unregisterEventHandler smoke test',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
+        expect(await event1CalledCompleter.future, isTrue);
+        expect(await event2CalledCompleter.future, isTrue);
 
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
+        rtcEngine.unregisterEventHandler(eventHandler1);
+        rtcEngine.unregisterEventHandler(eventHandler2);
 
-      RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+        await remoteUser.leaveChannel();
+        await rtcEngine.leaveChannel();
+        await rtcEngine.release();
+      },
+    );
 
-      Completer<bool> event1CalledCompleter = Completer();
-      Completer<bool> event2CalledCompleter = Completer();
+    testWidgets(
+      'registerEventHandler and then unregisterEventHandler',
+      (WidgetTester tester) async {
+        app.main();
+        await tester.pumpAndSettle();
 
-      final eventHandler1 = RtcEngineEventHandler(
-        onUserJoined: (connection, remoteUid, elapsed) {
-          if (event1CalledCompleter.isCompleted) {
-            return;
-          }
+        String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+            defaultValue: '<YOUR_APP_ID>');
 
-          event1CalledCompleter.complete(true);
-        },
-      );
+        RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+        await rtcEngine.initialize(RtcEngineContext(
+          appId: engineAppId,
+          areaCode: AreaCode.areaCodeGlob.value(),
+        ));
 
-      rtcEngine.registerEventHandler(eventHandler1);
+        Completer<bool> event1CalledCompleter = Completer();
 
-      bool event2Called = false;
+        final eventHandler1 = RtcEngineEventHandler(
+          onUserJoined: (connection, remoteUid, elapsed) {
+            if (event1CalledCompleter.isCompleted) {
+              return;
+            }
 
-      final eventHandler2 = RtcEngineEventHandler(
-        onUserJoined: (connection, remoteUid, elapsed) {
-          event2Called = true;
-        },
-      );
+            event1CalledCompleter.complete(true);
+          },
+        );
 
-      // Delay 2 seconds to ensure the rtcEngine.registerEventHandler(eventHandler1) call completed.
-      await Future.delayed(const Duration(seconds: 2));
+        rtcEngine.registerEventHandler(eventHandler1);
 
-      rtcEngine.registerEventHandler(eventHandler2);
+        await rtcEngine.enableVideo();
 
-      // Delay 2 seconds to ensure the rtcEngine.registerEventHandler(eventHandler2) call completed.
-      await Future.delayed(const Duration(seconds: 2));
-      rtcEngine.unregisterEventHandler(eventHandler2);
+        await rtcEngine.joinChannel(
+          token: '',
+          channelId: 'testonaction',
+          uid: 0,
+          options: const ChannelMediaOptions(
+            channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+            clientRoleType: ClientRoleType.clientRoleBroadcaster,
+          ),
+        );
 
-      await rtcEngine.enableVideo();
+        final remoteUser = FakeRemoteUser(rtcEngine);
+        await remoteUser.joinChannel(remoteUid: 123);
 
-      await rtcEngine.joinChannel(
-        token: '',
-        channelId: 'testonaction',
-        uid: 0,
-        options: const ChannelMediaOptions(
-          channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-          clientRoleType: ClientRoleType.clientRoleBroadcaster,
-        ),
-      );
+        expect(await event1CalledCompleter.future, isTrue);
 
-      final remoteUser = FakeRemoteUser(rtcEngine);
-      await remoteUser.joinChannel(remoteUid: 123);
+        rtcEngine.unregisterEventHandler(eventHandler1);
 
-      expect(await event1CalledCompleter.future, isTrue);
+        await remoteUser.leaveChannel();
+        await rtcEngine.leaveChannel();
+        await rtcEngine.release();
+      },
+    );
 
-      // Delay 2 seconds to ensure the event2Called be triggered.
-      await Future.delayed(const Duration(seconds: 2));
+    testWidgets(
+      'registerEventHandler and then unregisterEventHandler multiple times',
+      (WidgetTester tester) async {
+        app.main();
+        await tester.pumpAndSettle();
 
-      expect(event2Called, isFalse);
+        String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+            defaultValue: '<YOUR_APP_ID>');
 
-      await remoteUser.leaveChannel();
-      await rtcEngine.leaveChannel();
-      await rtcEngine.release();
-    },
-  );
+        RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+        await rtcEngine.initialize(RtcEngineContext(
+          appId: engineAppId,
+          areaCode: AreaCode.areaCodeGlob.value(),
+        ));
+
+        Completer<bool> event1CalledCompleter = Completer();
+        Completer<bool> event2CalledCompleter = Completer();
+
+        final eventHandler1 = RtcEngineEventHandler(
+          onUserJoined: (connection, remoteUid, elapsed) {
+            if (event1CalledCompleter.isCompleted) {
+              return;
+            }
+
+            event1CalledCompleter.complete(true);
+          },
+        );
+
+        rtcEngine.registerEventHandler(eventHandler1);
+
+        // Delay 2 seconds to ensure the rtcEngine.registerEventHandler(eventHandler1) call completed.
+        await Future.delayed(const Duration(seconds: 2));
+
+        rtcEngine.unregisterEventHandler(eventHandler1);
+
+        final eventHandler2 = RtcEngineEventHandler(
+          onUserJoined: (connection, remoteUid, elapsed) {
+            if (event2CalledCompleter.isCompleted) {
+              return;
+            }
+
+            event2CalledCompleter.complete(true);
+          },
+        );
+
+        rtcEngine.registerEventHandler(eventHandler2);
+
+        // Delay 2 seconds to ensure the rtcEngine.registerEventHandler(eventHandler2) call completed.
+        await Future.delayed(const Duration(seconds: 2));
+
+        rtcEngine.unregisterEventHandler(eventHandler2);
+
+        await rtcEngine.enableVideo();
+
+        await rtcEngine.joinChannel(
+          token: '',
+          channelId: 'testonaction',
+          uid: 0,
+          options: const ChannelMediaOptions(
+            channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+            clientRoleType: ClientRoleType.clientRoleBroadcaster,
+          ),
+        );
+
+        final remoteUser = FakeRemoteUser(rtcEngine);
+        await remoteUser.joinChannel(remoteUid: 123);
+
+        expect(event1CalledCompleter.isCompleted, isFalse);
+        expect(event2CalledCompleter.isCompleted, isFalse);
+
+        await remoteUser.leaveChannel();
+        await rtcEngine.leaveChannel();
+        await rtcEngine.release();
+      },
+    );
+
+    testWidgets(
+      'registerEventHandler twice and then unregisterEventHandler one event handler',
+      (WidgetTester tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+            defaultValue: '<YOUR_APP_ID>');
+
+        RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+        await rtcEngine.initialize(RtcEngineContext(
+          appId: engineAppId,
+          areaCode: AreaCode.areaCodeGlob.value(),
+        ));
+
+        Completer<bool> event1CalledCompleter = Completer();
+
+        final eventHandler1 = RtcEngineEventHandler(
+          onUserJoined: (connection, remoteUid, elapsed) {
+            if (event1CalledCompleter.isCompleted) {
+              return;
+            }
+
+            event1CalledCompleter.complete(true);
+          },
+        );
+
+        rtcEngine.registerEventHandler(eventHandler1);
+
+        bool event2Called = false;
+
+        final eventHandler2 = RtcEngineEventHandler(
+          onUserJoined: (connection, remoteUid, elapsed) {
+            event2Called = true;
+          },
+        );
+
+        // Delay 2 seconds to ensure the rtcEngine.registerEventHandler(eventHandler1) call completed.
+        await Future.delayed(const Duration(seconds: 2));
+
+        rtcEngine.registerEventHandler(eventHandler2);
+
+        // Delay 2 seconds to ensure the rtcEngine.registerEventHandler(eventHandler2) call completed.
+        await Future.delayed(const Duration(seconds: 2));
+        rtcEngine.unregisterEventHandler(eventHandler2);
+
+        await rtcEngine.enableVideo();
+
+        await rtcEngine.joinChannel(
+          token: '',
+          channelId: 'testonaction',
+          uid: 0,
+          options: const ChannelMediaOptions(
+            channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+            clientRoleType: ClientRoleType.clientRoleBroadcaster,
+          ),
+        );
+
+        final remoteUser = FakeRemoteUser(rtcEngine);
+        await remoteUser.joinChannel(remoteUid: 123);
+
+        expect(await event1CalledCompleter.future, isTrue);
+
+        // Delay 2 seconds to ensure the event2Called be triggered.
+        await Future.delayed(const Duration(seconds: 2));
+
+        expect(event2Called, isFalse);
+
+        rtcEngine.unregisterEventHandler(eventHandler1);
+
+        await remoteUser.leaveChannel();
+        await rtcEngine.leaveChannel();
+        await rtcEngine.release();
+      },
+    );
+  });
 }
