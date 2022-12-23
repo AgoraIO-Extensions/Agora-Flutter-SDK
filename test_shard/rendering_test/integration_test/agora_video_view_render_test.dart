@@ -191,6 +191,7 @@ void main() {
             final onFrameCompleter = Completer();
 
             await tester.pumpWidget(RemoteVideoView(
+              renderModeType: RenderModeType.renderModeFit,
               onRendered: (RtcEngineEx rtcEngine) async {
                 if (onFrameCompleter.isCompleted) {
                   return;
