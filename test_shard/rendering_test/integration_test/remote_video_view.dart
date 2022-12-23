@@ -13,6 +13,8 @@ class RemoteVideoView extends StatefulWidget {
     this.renderModeType,
     this.mirrorModeType,
     this.isRenderModeTest = true,
+    this.url =
+        'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4',
   }) : super(key: key);
 
   final Function(RtcEngineEx rtcEngine) onRendered;
@@ -20,6 +22,7 @@ class RemoteVideoView extends StatefulWidget {
   final RenderModeType? renderModeType;
   final VideoMirrorModeType? mirrorModeType;
   final bool isRenderModeTest;
+  final String url;
 
   @override
   State<RemoteVideoView> createState() => _RemoteVideoViewState();
@@ -120,11 +123,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
     mediaPlayerController
         .registerPlayerSourceObserver(mediaPlayerSourceObserver);
 
-    final url = widget.isRenderModeTest
-        ? 'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4'
-        : 'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4';
-
-    await mediaPlayerController.open(url: url, startPos: 0);
+    await mediaPlayerController.open(url: widget.url, startPos: 0);
 
     await rtcEngine.joinChannelEx(
       token: '',

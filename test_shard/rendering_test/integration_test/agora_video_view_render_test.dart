@@ -106,12 +106,7 @@ Future<void> matchScreenShotDesktop(
         );
         debugPrint('compareImages result: $result');
 
-        if (Platform.isWindows) {
-          // Need more tolerance on Windows
-          expect(result < 0.01, isTrue);
-        } else {
-          expect(result, 0.0);
-        }
+        expect(result < 0.01, isTrue);
       }
 
       return;
@@ -313,6 +308,8 @@ void main() {
             await tester.pumpWidget(LocalVideoView(
               useFlutterTexture: true,
               isRenderModeTest: false,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
                   return;
@@ -343,6 +340,8 @@ void main() {
 
             await tester.pumpWidget(LocalVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
                   return;
@@ -373,6 +372,8 @@ void main() {
 
             await tester.pumpWidget(LocalVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               renderModeType: RenderModeType.renderModeHidden,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
@@ -404,6 +405,8 @@ void main() {
 
             await tester.pumpWidget(LocalVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               renderModeType: RenderModeType.renderModeFit,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
@@ -435,6 +438,8 @@ void main() {
 
             await tester.pumpWidget(LocalVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               renderModeType: RenderModeType.renderModeAdaptive,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
@@ -466,6 +471,8 @@ void main() {
 
             await tester.pumpWidget(LocalVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               mirrorModeType: VideoMirrorModeType.videoMirrorModeDisabled,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
@@ -499,6 +506,8 @@ void main() {
 
             await tester.pumpWidget(RemoteVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
                   return;
@@ -528,6 +537,8 @@ void main() {
 
             await tester.pumpWidget(RemoteVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
                   return;
@@ -557,6 +568,8 @@ void main() {
 
             await tester.pumpWidget(RemoteVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               renderModeType: RenderModeType.renderModeHidden,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
@@ -587,6 +600,8 @@ void main() {
 
             await tester.pumpWidget(RemoteVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               renderModeType: RenderModeType.renderModeFit,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
@@ -617,6 +632,8 @@ void main() {
 
             await tester.pumpWidget(RemoteVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               renderModeType: RenderModeType.renderModeAdaptive,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {
@@ -647,6 +664,8 @@ void main() {
 
             await tester.pumpWidget(RemoteVideoView(
               useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
               mirrorModeType: VideoMirrorModeType.videoMirrorModeEnabled,
               onRendered: (RtcEngineEx engine) async {
                 if (onFrameCompleter.isCompleted) {

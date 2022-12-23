@@ -13,6 +13,8 @@ class LocalVideoView extends StatefulWidget {
     this.renderModeType,
     this.mirrorModeType,
     this.isRenderModeTest = true,
+    this.url =
+        'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4',
   }) : super(key: key);
 
   final Function(RtcEngineEx rtcEngine) onRendered;
@@ -20,6 +22,7 @@ class LocalVideoView extends StatefulWidget {
   final RenderModeType? renderModeType;
   final VideoMirrorModeType? mirrorModeType;
   final bool isRenderModeTest;
+  final String url;
 
   @override
   State<LocalVideoView> createState() => _LocalVideoViewState();
@@ -104,11 +107,7 @@ class _LocalVideoViewState extends State<LocalVideoView> {
     mediaPlayerController
         .registerPlayerSourceObserver(mediaPlayerSourceObserver);
 
-    final url = widget.isRenderModeTest
-        ? 'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4'
-        : 'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4';
-
-    await mediaPlayerController.open(url: url, startPos: 0);
+    await mediaPlayerController.open(url: widget.url, startPos: 0);
 
     await mediaPlayerControllerPlayed.future;
 
