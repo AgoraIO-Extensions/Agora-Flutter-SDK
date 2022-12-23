@@ -120,10 +120,11 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
     mediaPlayerController
         .registerPlayerSourceObserver(mediaPlayerSourceObserver);
 
-    await mediaPlayerController.open(
-        url:
-            'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
-        startPos: 0);
+    final url = widget.isRenderModeTest
+        ? 'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4'
+        : 'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4';
+
+    await mediaPlayerController.open(url: url, startPos: 0);
 
     await rtcEngine.joinChannelEx(
       token: '',
