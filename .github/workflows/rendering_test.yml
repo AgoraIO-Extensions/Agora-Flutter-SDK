@@ -8,6 +8,7 @@ on:
       - main
       - release/**
       - special/**
+      - dev/**
 
 jobs:
   # Temporarily disable android screenshot test at this time, see EP-232.
