@@ -181,7 +181,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void maybeCreateChannel(int viewId, String viewType) {
-    if (defaultTargetPlatform != TargetPlatform.macOS) {
+    if (!(defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.iOS)) {
       return;
     }
 
@@ -256,7 +257,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   @override
   Widget build(BuildContext context) {
     if (widget.controller.getTextureId() != kTextureNotInit) {
-      if (defaultTargetPlatform != TargetPlatform.macOS) {
+      if (!(defaultTargetPlatform == TargetPlatform.macOS ||
+          defaultTargetPlatform == TargetPlatform.iOS)) {
         return buildTexure(widget.controller.getTextureId());
       }
 
