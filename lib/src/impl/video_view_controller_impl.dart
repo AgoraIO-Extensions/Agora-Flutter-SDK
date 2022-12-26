@@ -32,6 +32,14 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
       (defaultTargetPlatform == TargetPlatform.macOS ||
           defaultTargetPlatform == TargetPlatform.windows) ||
       useFlutterTexture;
+
+  @internal
+  bool get shouldHandlerRenderMode =>
+      this is VideoViewControllerBaseMixin &&
+      (this as VideoViewControllerBaseMixin).shouldHandlerRenderMode;
+
+  @internal
+  bool get isLocalUid => canvas.uid == 0;
 }
 
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
@@ -125,4 +133,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       await rtcEngine.setupLocalVideo(videoCanvas);
     }
   }
+
+  @internal
+  bool get shouldHandlerRenderMode => true;
 }

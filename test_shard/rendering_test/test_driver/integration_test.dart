@@ -45,6 +45,8 @@ Future<void> main() async {
         algorithm: PixelMatching(tolerance: 0.3),
       );
 
+      stdout.writeln('compareImages result: $result');
+
       return result == 0.0;
     },
   );

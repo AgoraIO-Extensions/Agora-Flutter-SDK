@@ -19,44 +19,33 @@ class MediaPlayerControllerImpl
   MediaPlayer? _mediaPlayer;
 
   final RtcEngine _rtcEngine;
-  // set rtcEngine(RtcEngine rtcEngine) {
-  //   _rtcEngine = rtcEngine;
-  // }
 
   @override
   RtcEngine get rtcEngine => _rtcEngine;
 
   final VideoCanvas _canvas;
-  // set canvas(VideoCanvas canvas) {
-  //   _canvas = canvas;
-  // }
 
   @override
   VideoCanvas get canvas => _canvas;
 
   final RtcConnection? _connection;
-  // set connection(RtcConnection? connection) {
-  //   _connection = connection;
-  // }
 
   @override
   RtcConnection? get connection => _connection;
 
   final bool _useFlutterTexture;
-  // set useFlutterTexture(bool useFlutterTexture) {
-  //   _useFlutterTexture = useFlutterTexture;
-  // }
 
   @override
   bool get useFlutterTexture => _useFlutterTexture;
 
   final bool _useAndroidSurfaceView;
-  // set useAndroidSurfaceView(bool useAndroidSurfaceView) {
-  //   _useAndroidSurfaceView = useAndroidSurfaceView;
-  // }
 
   @override
   bool get useAndroidSurfaceView => _useAndroidSurfaceView;
+
+  /// MediaPlayer does not support render mode and always Fit the video by default
+  @override
+  bool get shouldHandlerRenderMode => false;
 
   @override
   Future<void> adjustPlayoutVolume(int volume) {

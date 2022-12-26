@@ -2,24 +2,33 @@ import 'dart:async';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'agora_video_view_render_test.dart';
 
 class LocalVideoView extends StatefulWidget {
   const LocalVideoView({
     Key? key,
     required this.onRendered,
     this.useFlutterTexture = false,
+    this.renderModeType,
+    this.mirrorModeType,
+    this.isRenderModeTest = true,
+    this.url =
+        'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4',
   }) : super(key: key);
 
   final Function(RtcEngineEx rtcEngine) onRendered;
   final bool useFlutterTexture;
+  final RenderModeType? renderModeType;
+  final VideoMirrorModeType? mirrorModeType;
+  final bool isRenderModeTest;
+  final String url;
 
   @override
   State<LocalVideoView> createState() => _LocalVideoViewState();
 }
 
 class _LocalVideoViewState extends State<LocalVideoView> {
-  // late final RtcEngineEventHandler rtcEngineEventHandler;
   late final RtcEngineEx rtcEngine;
   late final MediaPlayerController mediaPlayerController;
   late final MediaPlayerVideoFrameObserver observer;
@@ -44,17 +53,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
 
-    // rtcEngineEventHandler = RtcEngineEventHandler(
-    //   onFirstLocalVideoFrame: (connection, width, height, elapsed) {
-    //     print('bbbb');
-    //     if (!widget.useFlutterTexture) {
-    //       widget.onFirstFrame();
-    //     }
-    //   },
-    // );
-
-    // rtcEngine.registerEventHandler(rtcEngineEventHandler);
-
     await rtcEngine.setVideoEncoderConfiguration(
       const VideoEncoderConfiguration(
         dimensions: VideoDimensions(width: 640, height: 360),
@@ -63,14 +61,28 @@ class _LocalVideoViewState extends State<LocalVideoView> {
       ),
     );
 
-    mediaPlayerController = MediaPlayerController(
-      rtcEngine: rtcEngine,
-      canvas: const VideoCanvas(
-        uid: 0,
-        renderMode: RenderModeType.renderModeFit,
-      ),
-      useFlutterTexture: widget.useFlutterTexture,
-    );
+    if (widget.isRenderModeTest) {
+      mediaPlayerController = TestMediaPlayerController(
+        rtcEngine: rtcEngine,
+        canvas: VideoCanvas(
+          uid: 0,
+          renderMode: widget.renderModeType,
+          mirrorMode: widget.mirrorModeType,
+        ),
+        useFlutterTexture: widget.useFlutterTexture,
+      );
+    } else {
+      mediaPlayerController = MediaPlayerController(
+        rtcEngine: rtcEngine,
+        canvas: VideoCanvas(
+          uid: 0,
+          renderMode: widget.renderModeType,
+          mirrorMode: widget.mirrorModeType,
+        ),
+        useFlutterTexture: widget.useFlutterTexture,
+      );
+    }
+
     await mediaPlayerController.initialize();
 
     observer = MediaPlayerVideoFrameObserver(
@@ -95,10 +107,7 @@ class _LocalVideoViewState extends State<LocalVideoView> {
     mediaPlayerController
         .registerPlayerSourceObserver(mediaPlayerSourceObserver);
 
-    await mediaPlayerController.open(
-        url:
-            'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt.mp4',
-        startPos: 0);
+    await mediaPlayerController.open(url: widget.url, startPos: 0);
 
     await mediaPlayerControllerPlayed.future;
 
@@ -114,7 +123,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
   }
 
   Future<void> _dispose() async {
-    // rtcEngine.unregisterEventHandler(rtcEngineEventHandler);
     mediaPlayerController.unregisterVideoFrameObserver(observer);
     await mediaPlayerController.dispose();
     await rtcEngine.release();

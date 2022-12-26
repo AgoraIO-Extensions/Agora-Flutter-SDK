@@ -21,6 +21,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _data = [...basic, ...advanced];
 
+  bool _showPerformanceOverlay = false;
+
   bool _isConfigInvalid() {
     return config.appId == '<YOUR_APP_ID>' ||
         config.token == '<YOUR_TOKEN>' ||
@@ -43,12 +45,31 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      showPerformanceOverlay: _showPerformanceOverlay,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('APIExample'),
+          actions: [
+            ToggleButtons(
+              color: Colors.grey[300],
+              selectedColor: Colors.white,
+              renderBorder: false,
+              children: const [
+                Icon(
+                  Icons.data_thresholding_outlined,
+                )
+              ],
+              isSelected: [_showPerformanceOverlay],
+              onPressed: (index) {
+                setState(() {
+                  _showPerformanceOverlay = !_showPerformanceOverlay;
+                });
+              },
+            )
+          ],
         ),
         body: _isConfigInvalid()
             ? const InvalidConfigWidget()
