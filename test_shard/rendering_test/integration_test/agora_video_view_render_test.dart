@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/src/impl/media_player_controller_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +14,20 @@ import 'package:image/image.dart' as img;
 
 import 'local_video_view.dart';
 import 'remote_video_view.dart';
+
+class TestMediaPlayerController extends MediaPlayerControllerImpl {
+  TestMediaPlayerController(
+      {required RtcEngine rtcEngine,
+      required VideoCanvas canvas,
+      RtcConnection? connection,
+      bool useFlutterTexture = false,
+      bool useAndroidSurfaceView = false})
+      : super(rtcEngine, canvas, connection, useFlutterTexture,
+            useAndroidSurfaceView);
+
+  @override
+  bool get shouldHandlerRenderMode => true;
+}
 
 Future<void> waitDisposed(
   WidgetTester tester,
@@ -91,12 +106,7 @@ Future<void> matchScreenShotDesktop(
         );
         debugPrint('compareImages result: $result');
 
-        if (Platform.isWindows) {
-          // Need more tolerance on Windows
-          expect(result < 0.01, isTrue);
-        } else {
-          expect(result, 0.0);
-        }
+        expect(result < 0.01, isTrue);
       }
 
       return;
@@ -181,6 +191,7 @@ void main() {
             final onFrameCompleter = Completer();
 
             await tester.pumpWidget(RemoteVideoView(
+              renderModeType: RenderModeType.renderModeFit,
               onRendered: (RtcEngineEx rtcEngine) async {
                 if (onFrameCompleter.isCompleted) {
                   return;
@@ -234,7 +245,7 @@ void main() {
 
               await waitDisposed(tester, binding);
             },
-            // Flutter texture with software rendering on simulator is not supported.
+            // TODO(littlegnal): Flutter texture with software rendering on simulator is not supported.
             // The log like below:
             // Flutter: Attempted to composite external texture sources using the software backend.
             // This backend is only used on simulators. This feature is only available
@@ -272,7 +283,7 @@ void main() {
             },
           );
         },
-        // Flutter texture with software rendering on simulator is not supported.
+        // TODO(littlegnal): Flutter texture with software rendering on simulator is not supported.
         // The log like below:
         // Flutter: Attempted to composite external texture sources using the software backend.
         // This backend is only used on simulators. This feature is only available
@@ -286,66 +297,398 @@ void main() {
   );
 
   group(
-    'AgoraVideoView macOS',
+    'AgoraVideoView macOS screenshot test',
     () {
-      testWidgets(
-        'local rendering screenshot test',
-        (WidgetTester tester) async {
-          final onFrameCompleter = Completer();
-          late RtcEngineEx rtcEngine;
+      group('local rendering', () {
+        testWidgets(
+          'do not handle render mode',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
 
-          await tester.pumpWidget(LocalVideoView(
-            useFlutterTexture: true,
-            onRendered: (RtcEngineEx engine) async {
-              if (onFrameCompleter.isCompleted) {
-                return;
-              }
+            await tester.pumpWidget(LocalVideoView(
+              useFlutterTexture: true,
+              isRenderModeTest: false,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
 
-              rtcEngine = engine;
-              onFrameCompleter.complete();
-            },
-          ));
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
 
-          await tester.pumpAndSettle(const Duration(seconds: 10));
+            await tester.pumpAndSettle(const Duration(seconds: 10));
 
-          await onFrameCompleter.future;
-          await tester.pumpAndSettle(const Duration(seconds: 10));
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
 
-          await matchScreenShotDesktop(
-              rtcEngine, 'macos.agora_video_view_render.texture.local');
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.local.donot_handle_rendermode');
 
-          await waitDisposed(tester, binding);
-        },
-      );
+            await waitDisposed(tester, binding);
+          },
+        );
 
-      testWidgets(
-        'remote rendering screenshot test',
-        (WidgetTester tester) async {
-          final onFrameCompleter = Completer();
-          late RtcEngineEx rtcEngine;
+        testWidgets(
+          'render mode default',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
 
-          await tester.pumpWidget(RemoteVideoView(
-            useFlutterTexture: true,
-            onRendered: (RtcEngineEx engine) async {
-              if (onFrameCompleter.isCompleted) {
-                return;
-              }
-              rtcEngine = engine;
-              onFrameCompleter.complete();
-            },
-          ));
+            await tester.pumpWidget(LocalVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
 
-          await tester.pumpAndSettle(const Duration(seconds: 10));
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
 
-          await onFrameCompleter.future;
-          await tester.pumpAndSettle(const Duration(seconds: 10));
+            await tester.pumpAndSettle(const Duration(seconds: 10));
 
-          await matchScreenShotDesktop(
-              rtcEngine, 'macos.agora_video_view_render.texture.remote');
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
 
-          await waitDisposed(tester, binding);
-        },
-      );
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.local.with_default_rendermode');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode renderModeHidden',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(LocalVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              renderModeType: RenderModeType.renderModeHidden,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.local.with_rendermodehidden');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode renderModeFit',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(LocalVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              renderModeType: RenderModeType.renderModeFit,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.local.with_rendermodefit');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode renderModeAdaptive',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(LocalVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              renderModeType: RenderModeType.renderModeAdaptive,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.local.with_rendermodeadaptive');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode default and videoMirrorModeDisabled',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(LocalVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              mirrorModeType: VideoMirrorModeType.videoMirrorModeDisabled,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+      });
+
+      group('remote rendering', () {
+        testWidgets(
+          'do not handle render mode',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(RemoteVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.remote.donot_handle_rendermode');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode default',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(RemoteVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.remote.with_default_rendermode');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode renderModeHidden',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(RemoteVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              renderModeType: RenderModeType.renderModeHidden,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.remote.with_rendermodehidden');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode renderModeFit',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(RemoteVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              renderModeType: RenderModeType.renderModeFit,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.remote.with_rendermodefit');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode renderModeAdaptive',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(RemoteVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              renderModeType: RenderModeType.renderModeAdaptive,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.remote.with_rendermodeadaptive');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+
+        testWidgets(
+          'render mode default and videoMirrorModeDisabled',
+          (WidgetTester tester) async {
+            final onFrameCompleter = Completer();
+            late RtcEngineEx rtcEngine;
+
+            await tester.pumpWidget(RemoteVideoView(
+              useFlutterTexture: true,
+              url:
+                  'https://download.agora.io/demo/test/agoravideoview_rendering_test_solid_spilt_asymmetrical.mp4',
+              mirrorModeType: VideoMirrorModeType.videoMirrorModeEnabled,
+              onRendered: (RtcEngineEx engine) async {
+                if (onFrameCompleter.isCompleted) {
+                  return;
+                }
+                rtcEngine = engine;
+                onFrameCompleter.complete();
+              },
+            ));
+
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await onFrameCompleter.future;
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+
+            await matchScreenShotDesktop(rtcEngine,
+                'macos.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
+
+            await waitDisposed(tester, binding);
+          },
+        );
+      });
     },
     skip: !Platform.isMacOS,
   );
