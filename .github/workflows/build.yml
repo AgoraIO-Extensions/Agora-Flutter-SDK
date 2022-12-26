@@ -18,7 +18,10 @@ on:
 jobs:
   flutter_codestyle_check:
     name: Flutter codestyle/analyze check
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,7 +42,10 @@ jobs:
 
   integration_test_android:
     name: Run Flutter Android Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -67,7 +73,10 @@ jobs:
 
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -88,7 +97,10 @@ jobs:
 
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -107,7 +119,10 @@ jobs:
 
   integration_test_windows:
     name: Run Flutter Windows Integration Tests
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -129,7 +144,10 @@ jobs:
 
   build_android_windows:
     name: Build Android on Windows
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -150,7 +168,10 @@ jobs:
 
   build_android_ubuntu:
     name: Build Android on Ubuntu
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
@@ -171,7 +192,10 @@ jobs:
 
   build_ios:
     name: Build iOS
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
+    if: |
+      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
+          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
+           contains(github.event_name, 'pull_request')) }}
     needs: flutter_codestyle_check
     strategy:
       matrix:
