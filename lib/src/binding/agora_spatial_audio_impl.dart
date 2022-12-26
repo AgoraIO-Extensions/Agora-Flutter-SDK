@@ -213,13 +213,16 @@ class BaseSpatialAudioEngineImpl implements BaseSpatialAudioEngine {
 
   @override
   Future<void> setZones(
-      {required SpatialAudioZone zones, required int zoneCount}) async {
+      {required List<SpatialAudioZone> zones, required int zoneCount}) async {
     final apiType =
         '${isOverrideClassName ? className : 'BaseSpatialAudioEngine'}_setZones';
+    final zonesJsonList = zones.map((e) => e.toJson()).toList();
     final param =
-        createParams({'zones': zones.toJson(), 'zoneCount': zoneCount});
+        createParams({'zones': zonesJsonList, 'zoneCount': zoneCount});
     final List<Uint8List> buffers = [];
-    buffers.addAll(zones.collectBufferList());
+    for (final e in zones) {
+      buffers.addAll(e.collectBufferList());
+    }
     final callApiResult = await apiCaller
         .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
     if (callApiResult.irisReturnCode < 0) {

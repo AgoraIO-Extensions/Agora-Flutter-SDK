@@ -2028,7 +2028,7 @@ class RtcEngineEventHandler {
   /// When the state of the local audio stream changes (including the state of the audio capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local audio stream, and allows you to troubleshoot issues when audio exceptions occur.When the state is localAudioStreamStateFailed (3), you can view the error information in the error parameter.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [state] The state of the local audio. See localaudiostreamstate .
+  /// * [state] The state of the local audio. See LocalAudioStreamState .
   /// * [error] Local audio state error codes. See LocalAudioStreamError .
   final void Function(RtcConnection connection, LocalAudioStreamState state,
       LocalAudioStreamError error)? onLocalAudioStateChanged;
@@ -2963,7 +2963,7 @@ abstract class RtcEngine {
   Future<void> disableAudio();
 
   /// Sets the audio profile and audio scenario.
-  /// Deprecated:This method is deprecated. If you need to set the audio profile, use setAudioProfile ; if you need to set the audio scenario, use setAudioScenario .You can call this method either before or after joining a channel.In scenarios requiring high-quality audio, such as online music tutoring, Agora recommends you set profile as audioProfileMusicHighQuality(4)and scenario as audioScenarioGameStreaming(3).
+  /// You can call this method either before or after joining a channel.In scenarios requiring high-quality audio, such as online music tutoring, Agora recommends you set profile as audioProfileMusicHighQuality(4)and scenario as audioScenarioGameStreaming(3).
   ///
   /// * [profile] The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfileType .
   /// * [scenario] The audio scenarios. See AudioScenarioType . Under different audio scenarios, the device uses different volume types.
@@ -4376,7 +4376,7 @@ abstract class RtcEngine {
   Future<void> takeSnapshot({required int uid, required String filePath});
 
   /// Enables or disables video screenshot and upload.
-  /// When video screenshot and upload function is enabled, the SDK takes screenshots and upload videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig . After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.Before calling this method, ensure that you contact to enbale Agora video screenshot and upload service. This method relies on the video screenshot and upload dynamic library libagora_ci_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  /// When video screenshot and upload function is enabled, the SDK takes screenshots and upload videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig . After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.Before calling this method, ensure that you contact to enbale Agora video screenshot and upload service. This method relies on the video screenshot and upload dynamic library libagora_content_inspect_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
   /// * [enabled] Whether to enable video screenshot and uploadvideo true: Enables video screenshot and upload. false: Disables video screenshot and upload.
   /// * [config] Configuration of video screenshot and upload. See ContentInspectConfig .
@@ -4871,7 +4871,7 @@ class SDKBuildInfo {
   @JsonKey(name: 'build')
   final int? build;
 
-  /// SDK version information. String, such as 4.0.0.
+  /// SDK version information. String, such as 6.0.0.
   @JsonKey(name: 'version')
   final String? version;
 
