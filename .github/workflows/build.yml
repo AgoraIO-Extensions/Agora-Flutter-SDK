@@ -2,18 +2,16 @@ name: CI
 
 on:
   pull_request_target:
-    types: [opened, synchronize]
+    types: [opened, labeled, synchronize]
     branches: 
       - main
-    
-  push:
-    branches: 
-      - main
+  
   pull_request:
     branches: 
       - main
       - release/**
       - special/**
+      - dev/**
       
 jobs:
   flutter_codestyle_check:
