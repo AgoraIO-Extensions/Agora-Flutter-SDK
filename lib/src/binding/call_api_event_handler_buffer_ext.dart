@@ -286,6 +286,18 @@ extension DirectCdnStreamingMediaOptionsBufferExt
   }
 }
 
+extension ExtensionInfoBufferExt on ExtensionInfo {
+  ExtensionInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension SDKBuildInfoBufferExt on SDKBuildInfo {
   SDKBuildInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -397,6 +409,18 @@ extension VideoSubscriptionOptionsBufferExt on VideoSubscriptionOptions {
 
 extension EncodedVideoFrameInfoBufferExt on EncodedVideoFrameInfo {
   EncodedVideoFrameInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension CodecCapInfoBufferExt on CodecCapInfo {
+  CodecCapInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -1091,6 +1115,10 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     if (bufferList.length > 1) {
       metadataBuffer = bufferList[1];
     }
+    Uint8List? alphaBuffer;
+    if (bufferList.length > 2) {
+      alphaBuffer = bufferList[2];
+    }
     return ExternalVideoFrame(
         type: type,
         format: format,
@@ -1107,7 +1135,8 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         textureId: textureId,
         matrix: matrix,
         metadataBuffer: metadataBuffer,
-        metadataSize: metadataSize);
+        metadataSize: metadataSize,
+        alphaBuffer: alphaBuffer);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1117,6 +1146,9 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     }
     if (metadataBuffer != null) {
       bufferList.add(metadataBuffer!);
+    }
+    if (alphaBuffer != null) {
+      bufferList.add(alphaBuffer!);
     }
     return bufferList;
   }
@@ -1381,6 +1413,18 @@ extension RemoteVoicePositionInfoBufferExt on RemoteVoicePositionInfo {
   }
 }
 
+extension SpatialAudioZoneBufferExt on SpatialAudioZone {
+  SpatialAudioZone fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension RtcConnectionBufferExt on RtcConnection {
   RtcConnection fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -1407,6 +1451,18 @@ extension AgoraRhythmPlayerConfigBufferExt on AgoraRhythmPlayerConfig {
 
 extension MusicChartInfoBufferExt on MusicChartInfo {
   MusicChartInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MusicCacheInfoBufferExt on MusicCacheInfo {
+  MusicCacheInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../impl/agora_video_view_impl.dart';
 
 /// The AgoraVideoView Class for rendering local and remote video.
-///
 class AgoraVideoView extends StatefulWidget {
   /// @nodoc
   const AgoraVideoView({Key? key, required this.controller}) : super(key: key);

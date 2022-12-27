@@ -33,3 +33,45 @@ Map<String, dynamic> _$RemoteVoicePositionInfoToJson(
   writeNotNull('forward', instance.forward);
   return val;
 }
+
+SpatialAudioZone _$SpatialAudioZoneFromJson(Map<String, dynamic> json) =>
+    SpatialAudioZone(
+      zoneSetId: json['zoneSetId'] as int?,
+      position: (json['position'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      forward: (json['forward'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      right: (json['right'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      up: (json['up'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      forwardLength: (json['forwardLength'] as num?)?.toDouble(),
+      rightLength: (json['rightLength'] as num?)?.toDouble(),
+      upLength: (json['upLength'] as num?)?.toDouble(),
+      audioAttenuation: (json['audioAttenuation'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$SpatialAudioZoneToJson(SpatialAudioZone instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('zoneSetId', instance.zoneSetId);
+  writeNotNull('position', instance.position);
+  writeNotNull('forward', instance.forward);
+  writeNotNull('right', instance.right);
+  writeNotNull('up', instance.up);
+  writeNotNull('forwardLength', instance.forwardLength);
+  writeNotNull('rightLength', instance.rightLength);
+  writeNotNull('upLength', instance.upLength);
+  writeNotNull('audioAttenuation', instance.audioAttenuation);
+  return val;
+}
