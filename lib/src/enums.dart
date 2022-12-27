@@ -1894,6 +1894,10 @@ enum ErrorCode {
   /// @nodoc
   @JsonValue(1736)
   ErrNotSupportedMutiGpuExcludeWindow,
+
+  /// @nodoc
+  @JsonValue(99991)
+  CustomCanceledScreenCapture,
 }
 
 ///
