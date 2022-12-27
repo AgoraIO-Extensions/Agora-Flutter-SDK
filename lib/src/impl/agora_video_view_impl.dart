@@ -181,11 +181,6 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void maybeCreateChannel(int viewId, String viewType) {
-    if (!(defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS)) {
-      return;
-    }
-
     // Only handle render mode on macos at this time
     final textureId = widget.controller.getTextureId();
     methodChannel = MethodChannel('agora_rtc_engine/texture_render_$textureId');
@@ -257,11 +252,6 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
   @override
   Widget build(BuildContext context) {
     if (widget.controller.getTextureId() != kTextureNotInit) {
-      if (!(defaultTargetPlatform == TargetPlatform.macOS ||
-          defaultTargetPlatform == TargetPlatform.iOS)) {
-        return buildTexure(widget.controller.getTextureId());
-      }
-
       // Only handle render mode on macos at this time
       if (_height != 0 && _width != 0) {
         Widget result = buildTexure(widget.controller.getTextureId());

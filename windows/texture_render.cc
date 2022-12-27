@@ -21,6 +21,11 @@ TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
       pixel_buffer_(new FlutterDesktopPixelBuffer{nullptr, 0, 0})
 {
     texture_id_ = registrar_->RegisterTexture(&texture_);
+
+    method_channel_ = std::make_unique<MethodChannel<EncodableValue>>(
+        messenger,
+        "agora_rtc_engine/texture_render_" + std::to_string(texture_id_),
+        &flutter::StandardMethodCodec::GetInstance());
 }
 
 TextureRender::~TextureRender()
@@ -43,6 +48,11 @@ void TextureRender::OnVideoFrameReceived(const IrisVideoFrame &video_frame,
             delete[] pixel_buffer_->buffer;
         }
         pixel_buffer_->buffer = new uint8_t[video_frame.y_buffer_length];
+
+        flutter::EncodableMap args = {
+            {EncodableValue("width"), EncodableValue(video_frame.width)},
+            {EncodableValue("height"), EncodableValue(video_frame.height)}};
+        method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(args)));
     }
     memcpy((void *)pixel_buffer_->buffer, video_frame.y_buffer,
            video_frame.y_buffer_length);

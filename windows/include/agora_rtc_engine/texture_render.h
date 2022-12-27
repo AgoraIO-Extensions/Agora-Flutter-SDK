@@ -40,6 +40,7 @@ public:
     flutter::TextureRegistrar *registrar_;
     agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager_;
     flutter::TextureVariant texture_;
+    std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> method_channel_;
     int64_t texture_id_ = -1;
     // std::unique_ptr<flutter::MethodCall<flutter::EncodableValue>> channel_;
     // unsigned int uid_;
