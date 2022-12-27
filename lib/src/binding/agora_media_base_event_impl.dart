@@ -49,6 +49,20 @@ extension AudioFrameObserverBaseExt on AudioFrameObserverBase {
         audioFrame = audioFrame.fillBuffers(buffers);
         onMixedAudioFrame!(channelId, audioFrame);
         break;
+
+      case 'AudioFrameObserverBase_onEarMonitoringAudioFrame':
+        if (onEarMonitoringAudioFrame == null) break;
+        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson paramJson =
+            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        AudioFrame? audioFrame = paramJson.audioFrame;
+        if (audioFrame == null) {
+          break;
+        }
+        audioFrame = audioFrame.fillBuffers(buffers);
+        onEarMonitoringAudioFrame!(audioFrame);
+        break;
       default:
         break;
     }
@@ -183,7 +197,7 @@ extension VideoEncodedFrameObserverExt on VideoEncodedFrameObserver {
   void process(String event, String data, List<Uint8List> buffers) {
     final jsonMap = jsonDecode(data);
     switch (event) {
-      case 'VideoEncodedFrameObserver_OnEncodedVideoFrameReceived':
+      case 'VideoEncodedFrameObserver_onEncodedVideoFrameReceived':
         if (onEncodedVideoFrameReceived == null) break;
         VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson paramJson =
             VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson.fromJson(

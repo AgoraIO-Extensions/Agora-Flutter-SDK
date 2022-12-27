@@ -169,6 +169,19 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
         onAudioDeviceStateChanged!(deviceId, deviceType, deviceState);
         break;
 
+      case 'onAudioMixingPositionChanged':
+        if (onAudioMixingPositionChanged == null) break;
+        RtcEngineEventHandlerOnAudioMixingPositionChangedJson paramJson =
+            RtcEngineEventHandlerOnAudioMixingPositionChangedJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        int? position = paramJson.position;
+        if (position == null) {
+          break;
+        }
+        onAudioMixingPositionChanged!(position);
+        break;
+
       case 'onAudioMixingFinished':
         if (onAudioMixingFinished == null) break;
         RtcEngineEventHandlerOnAudioMixingFinishedJson paramJson =
@@ -817,6 +830,21 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
         onTokenPrivilegeWillExpire!(connection, token);
         break;
 
+      case 'onLicenseValidationFailureEx':
+        if (onLicenseValidationFailure == null) break;
+        RtcEngineEventHandlerOnLicenseValidationFailureJson paramJson =
+            RtcEngineEventHandlerOnLicenseValidationFailureJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        RtcConnection? connection = paramJson.connection;
+        LicenseErrorType? reason = paramJson.reason;
+        if (connection == null || reason == null) {
+          break;
+        }
+        connection = connection.fillBuffers(buffers);
+        onLicenseValidationFailure!(connection, reason);
+        break;
+
       case 'onFirstLocalAudioFramePublishedEx':
         if (onFirstLocalAudioFramePublished == null) break;
         RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson paramJson =
@@ -1443,6 +1471,21 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
         }
         connection = connection.fillBuffers(buffers);
         onUserAccountUpdated!(connection, remoteUid, userAccount);
+        break;
+
+      case 'onLocalVideoTranscoderError':
+        if (onLocalVideoTranscoderError == null) break;
+        RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson paramJson =
+            RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        TranscodingVideoStream? stream = paramJson.stream;
+        VideoTranscoderError? error = paramJson.error;
+        if (stream == null || error == null) {
+          break;
+        }
+        stream = stream.fillBuffers(buffers);
+        onLocalVideoTranscoderError!(stream, error);
         break;
       default:
         break;

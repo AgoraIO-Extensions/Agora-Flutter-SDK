@@ -33,6 +33,8 @@ import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
 import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
     as audio_device_manager_impl;
+import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_override.dart'
+    as mcc_impl;
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/services.dart' show MethodChannel;
@@ -719,6 +721,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   LocalSpatialAudioEngine getLocalSpatialAudioEngine() {
     return getObjectFromPool(LocalSpatialAudioEngineImpl) ??
         agora_spatial_audio_impl.LocalSpatialAudioEngineImpl.create(this);
+  }
+
+  @override
+  MusicContentCenter getMusicContentCenter() {
+    return mcc_impl.MusicContentCenterImpl.create(this);
   }
 
   @override

@@ -1,9 +1,5 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import 'agora_media_player.dart';
-import 'agora_rtc_engine.dart';
-import 'agora_rtc_engine_ex.dart';
-import 'impl/agora_music_content_center_impl_override.dart';
 import 'impl/agora_rtc_engine_impl.dart' as impl;
 import 'impl/media_player_impl.dart';
 
@@ -16,15 +12,9 @@ extension RtcEngineExt on RtcEngine {
         .invokeMethod<String>('getAssetAbsolutePath', assetPath);
     return p;
   }
-
-  /// @nodoc
-  MusicContentCenter getMusicContentCenter() {
-    return MusicContentCenterImpl.create(this);
-  }
 }
 
 /// Error codes and error messages.
-///
 class AgoraRtcException implements Exception {
   /// @nodoc
   AgoraRtcException({required this.code, this.message});
@@ -40,7 +30,7 @@ class AgoraRtcException implements Exception {
 }
 
 /// Creates the RtcEngine object.
-/// Currently, the Agora RTC SDK v4.0.0 supports creating only one RtcEngine object for an app.
+/// Currently, the Agora RTC v6.x SDK supports creating only one RtcEngine object for an app.
 ///
 /// Returns
 /// RtcEngine object.
@@ -49,7 +39,7 @@ RtcEngine createAgoraRtcEngine() {
 }
 
 /// Creates an RtcEngineEx object.
-/// Currentluy, the Agora RTC v4.x SDK supports creating only one RtcEngineEx object for each app.
+/// Currentluy, the Agora RTC v6.x SDK supports creating only one RtcEngineEx object for each app.
 ///
 /// Returns
 /// An RtcEngineEx object.

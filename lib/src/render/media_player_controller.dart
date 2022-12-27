@@ -6,7 +6,6 @@ import 'package:agora_rtc_engine/src/impl/media_player_controller_impl.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 
 /// The AgoraVideoView controller used to render the video for the media player.
-///
 abstract class MediaPlayerController
     implements MediaPlayer, VideoViewControllerBase {
   /// @nodoc

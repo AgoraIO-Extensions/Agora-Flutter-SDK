@@ -98,17 +98,24 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _leaveChannel() async {
+    isJoined = false;
+    openMicrophone = true;
+    enableSpeakerphone = true;
+    playEffect = false;
+    _enableInEarMonitoring = false;
+    _recordingVolume = 100;
+    _playbackVolume = 100;
+    _inEarMonitoringVolume = 100;
+
+    if (_enableInEarMonitoring) {
+      await _engine.enableInEarMonitoring(
+          enabled: false,
+          includeAudioFilters: EarMonitoringFilterType.earMonitoringFilterNone);
+      await _engine.adjustRecordingSignalVolume(_recordingVolume.toInt());
+      await _engine.adjustPlaybackSignalVolume(_playbackVolume.toInt());
+    }
     await _engine.leaveChannel();
-    setState(() {
-      isJoined = false;
-      openMicrophone = true;
-      enableSpeakerphone = true;
-      playEffect = false;
-      _enableInEarMonitoring = false;
-      _recordingVolume = 100;
-      _playbackVolume = 100;
-      _inEarMonitoringVolume = 100;
-    });
+    setState(() {});
   }
 
   _switchMicrophone() async {

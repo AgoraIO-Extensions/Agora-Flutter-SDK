@@ -620,6 +620,88 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
+    'setPlayerOptionInInt',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        const String key = "hello";
+        const int value = 10;
+        await mediaPlayerController.setPlayerOptionInInt(
+          key: key,
+          value: value,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setPlayerOptionInInt] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[setPlayerOptionInInt] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'setPlayerOptionInString',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        const String key = "hello";
+        const String value = "hello";
+        await mediaPlayerController.setPlayerOptionInString(
+          key: key,
+          value: value,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setPlayerOptionInString] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[setPlayerOptionInString] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'takeScreenshot',
     (WidgetTester tester) async {
       app.main();
@@ -1794,6 +1876,7 @@ void mediaPlayerControllerSmokeTestCases() {
         const bool paramsEnableBlur = true;
         const bool paramsEnableAirAbsorb = true;
         const double paramsSpeakerAttenuation = 10.0;
+        const bool paramsEnableDoppler = true;
         const SpatialAudioParams params = SpatialAudioParams(
           speakerAzimuth: paramsSpeakerAzimuth,
           speakerElevation: paramsSpeakerElevation,
@@ -1802,6 +1885,7 @@ void mediaPlayerControllerSmokeTestCases() {
           enableBlur: paramsEnableBlur,
           enableAirAbsorb: paramsEnableAirAbsorb,
           speakerAttenuation: paramsSpeakerAttenuation,
+          enableDoppler: paramsEnableDoppler,
         );
         await mediaPlayerController.setSpatialAudioParams(
           params,
@@ -2022,88 +2106,6 @@ void mediaPlayerControllerSmokeTestCases() {
         expect(e is AgoraRtcException, true);
         debugPrint(
             '[unregisterVideoFrameObserver] errorcode: ${(e as AgoraRtcException).code}');
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'setPlayerOptionInInt',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        const String key = "hello";
-        const int value = 10;
-        await mediaPlayerController.setPlayerOptionInInt(
-          key: key,
-          value: value,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setPlayerOptionInInt] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint(
-            '[setPlayerOptionInInt] errorcode: ${(e as AgoraRtcException).code}');
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'setPlayerOptionInString',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        const String key = "hello";
-        const String value = "hello";
-        await mediaPlayerController.setPlayerOptionInString(
-          key: key,
-          value: value,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setPlayerOptionInString] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint(
-            '[setPlayerOptionInString] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await mediaPlayerController.dispose();

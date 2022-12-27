@@ -318,6 +318,33 @@ extension RtcEngineEventHandlerOnAudioDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
+  const RtcEngineEventHandlerOnAudioMixingPositionChangedJson({this.position});
+
+  @JsonKey(name: 'position')
+  final int? position;
+  factory RtcEngineEventHandlerOnAudioMixingPositionChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnAudioMixingPositionChangedJsonBufferExt
+    on RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
+  RtcEngineEventHandlerOnAudioMixingPositionChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnAudioMixingFinishedJson {
   const RtcEngineEventHandlerOnAudioMixingFinishedJson();
 
@@ -1649,6 +1676,36 @@ extension RtcEngineEventHandlerOnTokenPrivilegeWillExpireJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnLicenseValidationFailureJson {
+  const RtcEngineEventHandlerOnLicenseValidationFailureJson(
+      {this.connection, this.reason});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+  @JsonKey(name: 'reason')
+  final LicenseErrorType? reason;
+  factory RtcEngineEventHandlerOnLicenseValidationFailureJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnLicenseValidationFailureJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnLicenseValidationFailureJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnLicenseValidationFailureJsonBufferExt
+    on RtcEngineEventHandlerOnLicenseValidationFailureJson {
+  RtcEngineEventHandlerOnLicenseValidationFailureJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson {
   const RtcEngineEventHandlerOnFirstLocalAudioFramePublishedJson(
       {this.connection, this.elapsed});
@@ -2910,6 +2967,36 @@ extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
+  const RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
+      {this.stream, this.error});
+
+  @JsonKey(name: 'stream')
+  final TranscodingVideoStream? stream;
+  @JsonKey(name: 'error')
+  final VideoTranscoderError? error;
+  factory RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonBufferExt
+    on RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
+  RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class MetadataObserverOnMetadataReceivedJson {
   const MetadataObserverOnMetadataReceivedJson({this.metadata});
 
@@ -3204,6 +3291,33 @@ class AudioFrameObserverBaseOnMixedAudioFrameJson {
 extension AudioFrameObserverBaseOnMixedAudioFrameJsonBufferExt
     on AudioFrameObserverBaseOnMixedAudioFrameJson {
   AudioFrameObserverBaseOnMixedAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  const AudioFrameObserverBaseOnEarMonitoringAudioFrameJson({this.audioFrame});
+
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(this);
+}
+
+extension AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonBufferExt
+    on AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  AudioFrameObserverBaseOnEarMonitoringAudioFrameJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
