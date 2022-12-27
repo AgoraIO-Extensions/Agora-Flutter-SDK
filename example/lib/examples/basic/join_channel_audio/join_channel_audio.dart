@@ -98,6 +98,11 @@ class _State extends State<JoinChannelAudio> {
   }
 
   _leaveChannel() async {
+    if (_enableInEarMonitoring) {
+      await _engine.enableInEarMonitoring(
+          enabled: false,
+          includeAudioFilters: EarMonitoringFilterType.earMonitoringFilterNone);
+    }
     await _engine.leaveChannel();
     setState(() {
       isJoined = false;
