@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_style/dart_style.dart';
 import 'package:paraphrase/paraphrase.dart';
 import 'package:testcase_gen/generator.dart';
+import 'package:meta/meta.dart';
 
 const ignoreForFile = '// ignore_for_file: '
     'deprecated_member_use,'
@@ -17,7 +18,8 @@ $ignoreForFile
 abstract class DefaultGenerator implements Generator {
   const DefaultGenerator();
 
-  GeneratorConfig? _getConfig(
+@protected
+  GeneratorConfig? getConfig(
       List<GeneratorConfig> configs, String methodName) {
     for (final config in configs) {
       if (config.name == methodName) {
@@ -32,7 +34,8 @@ abstract class DefaultGenerator implements Generator {
     return '$prefix${name[0].toUpperCase()}${name.substring(1)}';
   }
 
-  String _getParamType(Parameter parameter) {
+@protected
+  String getParamType(Parameter parameter) {
     if (parameter.type.typeArguments.isEmpty) {
       return parameter.type.type;
     }
@@ -40,7 +43,8 @@ abstract class DefaultGenerator implements Generator {
     return '${parameter.type.type}<${parameter.type.typeArguments.join(', ')}>';
   }
 
-  String _createConstructorInitializerForMethodParameter(
+  @protected
+  String createConstructorInitializerForMethodParameter(
     ParseResult parseResult,
     Parameter? rootParameter,
     Parameter parameter,
@@ -52,7 +56,7 @@ abstract class DefaultGenerator implements Generator {
       final enumz = parseResult.getEnum(parameter.type.type)[0];
 
       initializerBuilder.writeln(
-          'const ${_getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${enumz.enumConstants[0].name};');
+          'const ${getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${enumz.enumConstants[0].name};');
 
       return _concatParamName(rootParameter?.name, parameter.name);
     }
@@ -85,18 +89,18 @@ abstract class DefaultGenerator implements Generator {
 
           initBlockBuilder.write('${cp.name}:($functionParamsList) { },');
         } else if (cp.isPrimitiveType) {
-          if (_getParamType(cp) == 'Uint8List') {
+          if (getParamType(cp) == 'Uint8List') {
             shouldBeConst = false;
             initBlockParameterListBuilder.writeln(
-                '${_getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+                '${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
           } else {
             initBlockParameterListBuilder.writeln(
-                'const ${_getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+                'const ${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
           }
 
           initBlockBuilder.write('${cp.name}: $adjustedParamName,');
         } else {
-          _createConstructorInitializerForMethodParameter(
+          createConstructorInitializerForMethodParameter(
               parseResult, parameter, cp, initializerBuilder);
           initBlockBuilder.write('${cp.name}: $adjustedParamName,');
         }
@@ -108,17 +112,17 @@ abstract class DefaultGenerator implements Generator {
 
           initBlockBuilder.write('${cp.name}:($functionParamsList) { },');
         } else if (cp.isPrimitiveType) {
-          if (_getParamType(cp) == 'Uint8List') {
+          if (getParamType(cp) == 'Uint8List') {
             initBlockParameterListBuilder.writeln(
-                '${_getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+                '${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
           } else {
             initBlockParameterListBuilder.writeln(
-                'const ${_getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
+                'const ${getParamType(cp)} $adjustedParamName = ${cp.primitiveDefualtValue()};');
           }
 
           initBlockBuilder.write('$adjustedParamName,');
         } else {
-          _createConstructorInitializerForMethodParameter(
+          createConstructorInitializerForMethodParameter(
               parseResult, parameter, cp, initializerBuilder);
           initBlockBuilder.write('$adjustedParamName,');
         }
@@ -131,7 +135,7 @@ abstract class DefaultGenerator implements Generator {
     final keywordPrefix = shouldBeConst ? 'const' : 'final';
 
     initializerBuilder.writeln(
-        '$keywordPrefix ${_getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${initBlockBuilder.toString()};');
+        '$keywordPrefix ${getParamType(parameter)} ${_concatParamName(rootParameter?.name, parameter.name)} = ${initBlockBuilder.toString()};');
     return _concatParamName(rootParameter?.name, parameter.name);
   }
 
@@ -153,7 +157,7 @@ abstract class DefaultGenerator implements Generator {
         continue;
       }
 
-      final config = _getConfig(configs, methodName);
+      final config = getConfig(configs, methodName);
       if (config?.donotGenerate == true) continue;
       if (methodName.startsWith('_')) continue;
       if (methodName.startsWith('create')) continue;
@@ -165,16 +169,16 @@ abstract class DefaultGenerator implements Generator {
           continue;
         }
         if (parameter.isPrimitiveType) {
-          final parameterType = _getParamType(parameter);
+          final parameterType = getParamType(parameter);
           if (parameterType == 'Uint8List') {
             pb.writeln(
-                '${_getParamType(parameter)} ${parameter.name} = ${parameter.primitiveDefualtValue()};');
+                '${getParamType(parameter)} ${parameter.name} = ${parameter.primitiveDefualtValue()};');
           } else {
             pb.writeln(
-                'const ${_getParamType(parameter)} ${parameter.name} = ${parameter.primitiveDefualtValue()};');
+                'const ${getParamType(parameter)} ${parameter.name} = ${parameter.primitiveDefualtValue()};');
           }
         } else {
-          _createConstructorInitializerForMethodParameter(
+          createConstructorInitializerForMethodParameter(
               parseResult, null, parameter, pb);
         }
       }

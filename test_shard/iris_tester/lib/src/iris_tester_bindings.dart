@@ -31,6 +31,16 @@ class NativeIrisTesterBinding {
   late final _CreateDebugApiEngine =
       _CreateDebugApiEnginePtr.asFunction<IrisApiEnginePtr Function()>();
 
+  ffi.Pointer<ffi.Void> CreateFakeRtcEngine() {
+    return _CreateFakeRtcEngine();
+  }
+
+  late final _CreateFakeRtcEnginePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function()>>(
+          'CreateFakeRtcEngine');
+  late final _CreateFakeRtcEngine =
+      _CreateFakeRtcEnginePtr.asFunction<ffi.Pointer<ffi.Void> Function()>();
+
   void MockApiResult(
     ffi.Pointer<ffi.Int8> apiType,
     ffi.Pointer<ffi.Int8> param,
@@ -95,19 +105,58 @@ class NativeIrisTesterBinding {
       int Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int,
           ffi.Pointer<ffi.Pointer<ffi.Void>>, int)>();
 
-  void FireEvent(
-    ffi.Pointer<ffi.Int8> event_name,
+  int TriggerEventWithFakeApiEngine(
+    ffi.Pointer<ffi.Void> api_engine,
+    ffi.Pointer<ApiParam> param,
   ) {
-    return _FireEvent(
-      event_name,
+    return _TriggerEventWithFakeApiEngine(
+      api_engine,
+      param,
     );
   }
 
-  late final _FireEventPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Int8>)>>(
-          'FireEvent');
-  late final _FireEvent =
-      _FireEventPtr.asFunction<void Function(ffi.Pointer<ffi.Int8>)>();
+  late final _TriggerEventWithFakeApiEnginePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(ffi.Pointer<ffi.Void>,
+              ffi.Pointer<ApiParam>)>>('TriggerEventWithFakeApiEngine');
+  late final _TriggerEventWithFakeApiEngine = _TriggerEventWithFakeApiEnginePtr
+      .asFunction<int Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ApiParam>)>();
+
+  int TriggerEventWithFakeRtcEngine(
+    ffi.Pointer<ffi.Void> rtc_engine,
+    ffi.Pointer<ApiParam> param,
+  ) {
+    return _TriggerEventWithFakeRtcEngine(
+      rtc_engine,
+      param,
+    );
+  }
+
+  late final _TriggerEventWithFakeRtcEnginePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(ffi.Pointer<ffi.Void>,
+              ffi.Pointer<ApiParam>)>>('TriggerEventWithFakeRtcEngine');
+  late final _TriggerEventWithFakeRtcEngine = _TriggerEventWithFakeRtcEnginePtr
+      .asFunction<int Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ApiParam>)>();
 }
 
 typedef IrisApiEnginePtr = ffi.Pointer<ffi.Void>;
+typedef ApiParam = EventParam;
+
+class EventParam extends ffi.Struct {
+  external ffi.Pointer<ffi.Int8> event;
+
+  external ffi.Pointer<ffi.Int8> data;
+
+  @ffi.Uint32()
+  external int data_size;
+
+  external ffi.Pointer<ffi.Int8> result;
+
+  external ffi.Pointer<ffi.Pointer<ffi.Void>> buffer;
+
+  external ffi.Pointer<ffi.Uint32> length;
+
+  @ffi.Uint32()
+  external int buffer_count;
+}
