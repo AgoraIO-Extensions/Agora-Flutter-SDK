@@ -545,6 +545,66 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       outputDir: outputDir,
       skipMemberFunctions: [],
     ),
+    // paraphrase not support find the base class of class at this time, so we define the base class here
+    TemplatedTestCase(
+      className: 'BaseSpatialAudioEngine',
+      testCaseFileTemplate: '''
+$defaultHeader
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:iris_tester/iris_tester.dart';
+import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+
+void localSpatialAudioEngineSmokeTestCases() {
+  {{TEST_CASES_CONTENT}}
+}
+''',
+      testCaseTemplate: '''
+testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
+    final irisTester = IrisTester();
+    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+      defaultValue: '<YOUR_APP_ID>');
+
+    RtcEngine rtcEngine = createAgoraRtcEngine();
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
+    
+    try {
+      {{TEST_CASE_BODY}}
+    } catch (e) {
+      if (e is! AgoraRtcException) {
+        debugPrint('[{{TEST_CASE_NAME}}] error: \${e.toString()}');
+        rethrow;
+      }
+
+      if (e.code != -4) {
+        // Only not supported error supported.
+        rethrow;
+      }
+    }
+
+    await localSpatialAudioEngine.release();
+    await rtcEngine.release();
+  },
+//  skip: {{TEST_CASE_SKIP}},
+);
+''',
+      methodInvokeObjectName: 'localSpatialAudioEngine',
+      outputDir: outputDir,
+      skipMemberFunctions: [
+        'updateSelfPosition',
+        'updateSelfPositionEx',
+      ],
+    ),
     TemplatedTestCase(
       className: 'MusicContentCenter',
       testCaseFileTemplate: '''
