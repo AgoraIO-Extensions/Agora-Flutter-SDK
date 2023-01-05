@@ -157,7 +157,7 @@ abstract class BaseSpatialAudioEngine {
   /// * [zones] Sound insulation area settings. See SpatialAudioZone.
   /// * [zoneCount] The number of sound insulation areas.
   Future<void> setZones(
-      {required SpatialAudioZone zones, required int zoneCount});
+      {required List<SpatialAudioZone> zones, required int zoneCount});
 
   /// Sets the sound attenuation properties of the media player.
   ///
