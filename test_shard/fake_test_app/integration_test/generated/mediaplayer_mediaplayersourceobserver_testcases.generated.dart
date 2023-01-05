@@ -6,13 +6,11 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
-void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
+void generatedTestCases() {
   testWidgets(
     'onPlayerSourceStateChanged',
     (WidgetTester tester) async {
@@ -42,7 +40,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const MediaPlayerState state = MediaPlayerState.playerStateIdle;
@@ -67,7 +65,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -101,7 +99,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int positionMs = 10;
@@ -123,7 +121,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -158,7 +156,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const MediaPlayerEvent eventCode =
@@ -185,7 +183,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -219,7 +217,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         Uint8List data = Uint8List.fromList([1, 2, 3, 4, 5]);
@@ -243,7 +241,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -277,7 +275,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int playCachedBuffer = 10;
@@ -299,7 +297,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -333,7 +331,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String src = "hello";
@@ -358,7 +356,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -392,7 +390,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         final eventJson = {};
@@ -410,7 +408,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -444,7 +442,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         final eventJson = {};
@@ -463,7 +461,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -497,7 +495,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int fromBitrateInKbps = 10;
@@ -531,7 +529,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -565,7 +563,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int cacheStatisticsFileSize = 10;
@@ -601,7 +599,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -635,7 +633,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int volume = 10;
@@ -658,7 +656,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },

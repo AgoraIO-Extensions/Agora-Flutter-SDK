@@ -6,13 +6,11 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
-void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
+void generatedTestCases() {
   testWidgets(
     'onJoinChannelSuccess',
     (WidgetTester tester) async {
@@ -38,7 +36,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -69,7 +67,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -100,7 +98,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -131,7 +129,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -163,7 +161,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String channel = "hello";
@@ -195,7 +193,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -226,7 +224,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const ErrorCodeType err = ErrorCodeType.errOk;
@@ -252,7 +250,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -284,7 +282,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -321,7 +319,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -352,7 +350,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const LastmileProbeResultState resultState =
@@ -402,7 +400,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -434,7 +432,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -469,7 +467,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -500,7 +498,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -605,7 +603,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -636,7 +634,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -741,7 +739,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -773,7 +771,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String deviceId = "hello";
@@ -803,7 +801,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -834,7 +832,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int position = 10;
@@ -860,7 +858,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -891,7 +889,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         final eventJson = {};
@@ -911,7 +909,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -942,7 +940,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int soundId = 10;
@@ -966,7 +964,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -998,7 +996,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String deviceId = "hello";
@@ -1028,7 +1026,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1060,7 +1058,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1095,7 +1093,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1126,7 +1124,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1155,7 +1153,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1186,7 +1184,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int infoVideoEncoderTargetBitrateBps = 10;
@@ -1214,7 +1212,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1245,7 +1243,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int infoLastmileBufferDelayTimeMs = 10;
@@ -1282,7 +1280,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1313,7 +1311,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const QualityType quality = QualityType.qualityUnknown;
@@ -1337,7 +1335,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1369,7 +1367,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1404,7 +1402,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1436,7 +1434,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1469,7 +1467,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1501,7 +1499,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1539,7 +1537,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1575,7 +1573,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1615,7 +1613,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1647,7 +1645,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
@@ -1677,7 +1675,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1712,7 +1710,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1751,7 +1749,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1783,7 +1781,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1820,7 +1818,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1851,7 +1849,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1884,7 +1882,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1916,7 +1914,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -1950,7 +1948,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -1981,7 +1979,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2014,7 +2012,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2045,7 +2043,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2078,7 +2076,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2110,7 +2108,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2143,7 +2141,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2175,7 +2173,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2208,7 +2206,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2240,7 +2238,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2273,7 +2271,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2304,7 +2302,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const ErrorCodeType err = ErrorCodeType.errOk;
@@ -2332,7 +2330,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2363,7 +2361,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2407,7 +2405,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2438,7 +2436,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2500,7 +2498,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2531,7 +2529,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2611,7 +2609,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2642,7 +2640,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -2709,7 +2707,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2740,7 +2738,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         final eventJson = {};
@@ -2760,7 +2758,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2791,7 +2789,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int x = 10;
@@ -2821,7 +2819,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2852,7 +2850,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int x = 10;
@@ -2884,7 +2882,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -2916,7 +2914,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int imageWidth = 10;
@@ -2957,12 +2955,10 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
-    // TODO(littlegnal): Enable after the API definition fixed.
-    skip: true,
   );
 
   testWidgets(
@@ -2990,7 +2986,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         final eventJson = {};
@@ -3010,7 +3006,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3042,7 +3038,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const AudioMixingStateType state =
@@ -3071,7 +3067,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3103,7 +3099,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const RhythmPlayerStateType state =
@@ -3132,7 +3128,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3163,7 +3159,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3192,7 +3188,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3223,7 +3219,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3252,7 +3248,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3283,7 +3279,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3312,7 +3308,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3344,7 +3340,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3383,7 +3379,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3415,7 +3411,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3454,7 +3450,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3485,7 +3481,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3514,7 +3510,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3545,7 +3541,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3577,7 +3573,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3609,7 +3605,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3641,7 +3637,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3673,7 +3669,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3706,7 +3702,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3738,7 +3734,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3771,7 +3767,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3803,7 +3799,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3837,7 +3833,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3869,7 +3865,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3904,7 +3900,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -3939,7 +3935,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -3978,7 +3974,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4009,7 +4005,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -4040,7 +4036,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4071,7 +4067,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const ContentInspectResult result =
@@ -4096,7 +4092,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4128,7 +4124,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -4167,7 +4163,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4199,7 +4195,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -4238,7 +4234,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4270,7 +4266,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -4304,7 +4300,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4336,7 +4332,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const MediaDeviceType deviceType = MediaDeviceType.unknownAudioDevice;
@@ -4365,7 +4361,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4397,7 +4393,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String url = "hello";
@@ -4429,7 +4425,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4460,7 +4456,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String url = "hello";
@@ -4487,7 +4483,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4518,7 +4514,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         final eventJson = {};
@@ -4538,7 +4534,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4569,7 +4565,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int routing = 10;
@@ -4593,7 +4589,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4625,7 +4621,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const ChannelMediaRelayState state =
@@ -4654,7 +4650,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4685,7 +4681,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const ChannelMediaRelayEvent code =
@@ -4710,7 +4706,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4741,7 +4737,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const bool isFallbackOrRecover = true;
@@ -4768,7 +4764,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4800,7 +4796,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int uid = 10;
@@ -4829,7 +4825,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4861,7 +4857,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -4900,7 +4896,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -4932,7 +4928,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -4971,7 +4967,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5003,7 +4999,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -5038,7 +5034,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5070,7 +5066,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -5107,7 +5103,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5139,7 +5135,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -5186,7 +5182,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5217,7 +5213,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -5248,7 +5244,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5280,7 +5276,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -5312,7 +5308,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5343,7 +5339,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const PermissionType permissionType = PermissionType.recordAudio;
@@ -5367,7 +5363,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5398,7 +5394,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int uid = 10;
@@ -5424,7 +5420,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5455,7 +5451,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int uid = 10;
@@ -5486,7 +5482,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5518,7 +5514,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -5553,7 +5549,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5588,7 +5584,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String channel = "hello";
@@ -5622,7 +5618,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5657,7 +5653,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String channel = "hello";
@@ -5691,7 +5687,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5725,7 +5721,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String channel = "hello";
@@ -5756,7 +5752,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5791,7 +5787,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
@@ -5824,7 +5820,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5856,7 +5852,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String provider = "hello";
@@ -5886,7 +5882,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5917,7 +5913,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String provider = "hello";
@@ -5943,7 +5939,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -5974,7 +5970,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String provider = "hello";
@@ -6000,7 +5996,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -6032,7 +6028,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String provider = "hello";
@@ -6062,7 +6058,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
@@ -6094,7 +6090,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const String connectionChannelId = "hello";
@@ -6127,9 +6123,10 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },
   );
 }
+

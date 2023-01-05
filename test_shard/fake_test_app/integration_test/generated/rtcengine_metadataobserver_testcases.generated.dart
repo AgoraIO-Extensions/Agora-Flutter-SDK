@@ -6,13 +6,11 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:agora_rtc_engine/src/impl/api_caller.dart';
 
-void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
+void generatedTestCases() {
   testWidgets(
     'onMetadataReceived',
     (WidgetTester tester) async {
@@ -41,7 +39,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
       );
 
 // Delay 500 milliseconds to ensure the registerMediaMetadataObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       {
         const int metadataUid = 10;
@@ -75,7 +73,7 @@ void generatedTestCases(IntegrationTestWidgetsFlutterBinding binding) {
         );
       }
 // Delay 500 milliseconds to ensure the unregisterMediaMetadataObserver call completed.
-      await binding.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       await rtcEngine.release();
     },

@@ -27,28 +27,26 @@ import 'generated/musiccontentcenter_musiccontentcentereventhandler_testcases.ge
     as musiccontentcenter_musiccontentcentereventhandler;
 
 void main() {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
 // RtcEngine events
-  rtcengine_rtcengineeventhandler.generatedTestCases(binding);
-  rtcengine_audiospectrumobserver.generatedTestCases(binding);
-  rtcengine_audioencodedframeobserver.generatedTestCases(binding);
-  rtcengine_metadataobserver.generatedTestCases(binding);
+  rtcengine_rtcengineeventhandler.generatedTestCases();
+  rtcengine_audiospectrumobserver.generatedTestCases();
+  rtcengine_audioencodedframeobserver.generatedTestCases();
+  rtcengine_metadataobserver.generatedTestCases();
 
 // MediaEngine events
-  mediaengine_audioframeobserver.generatedTestCases(binding);
-  mediaengine_videoframeobserver.generatedTestCases(binding);
-  mediaengine_videoencodedframeobserver.generatedTestCases(binding);
+  mediaengine_audioframeobserver.generatedTestCases();
+  mediaengine_videoframeobserver.generatedTestCases();
+  mediaengine_videoencodedframeobserver.generatedTestCases();
 
   // MediaPlayerController events
-  mediaplayer_audiospectrumobserver.generatedTestCases(binding);
-  mediaplayer_mediaplayeraudioframeobserver.generatedTestCases(binding);
-  mediaplayer_mediaplayersourceobserver.generatedTestCases(binding);
-  mediaplayer_mediaplayervideoframeobserver.generatedTestCases(binding);
+  mediaplayer_audiospectrumobserver.generatedTestCases();
+  mediaplayer_mediaplayeraudioframeobserver.generatedTestCases();
+  mediaplayer_mediaplayersourceobserver.generatedTestCases();
+  mediaplayer_mediaplayervideoframeobserver.generatedTestCases();
 
   // MediaRecorder events
-  mediarecorder_mediarecorderobserver.generatedTestCases(binding);
+  mediarecorder_mediarecorderobserver.generatedTestCases();
 
   // MusicContentCenter events
-  musiccontentcenter_musiccontentcentereventhandler.generatedTestCases(binding);
+  musiccontentcenter_musiccontentcentereventhandler.generatedTestCases();
 }

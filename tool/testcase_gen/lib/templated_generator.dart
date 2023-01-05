@@ -232,7 +232,7 @@ final $eventHandlerName = ${eventHandlerClazz.name}(
 $registerFunctionImpl
 
 // Delay 500 milliseconds to ensure the $registerFunctionName call completed.
-await binding.delayed(const Duration(milliseconds: 500));
+await Future.delayed(const Duration(milliseconds: 500));
 
 ${fireEventImplBuffer.toString()}
 
@@ -243,7 +243,7 @@ expect(eventCalled, isTrue);
   $unregisterFunctionImpl
 }
 // Delay 500 milliseconds to ensure the $unregisterFunctionName call completed.
-await binding.delayed(const Duration(milliseconds: 500));
+await Future.delayed(const Duration(milliseconds: 500));
 ''');
 
       String testCase =
