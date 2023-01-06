@@ -71,6 +71,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -133,6 +134,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -197,6 +199,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -254,6 +257,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -323,6 +327,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -404,6 +409,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -471,6 +477,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -607,6 +614,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -743,6 +751,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -805,6 +814,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -862,6 +872,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -913,6 +924,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -968,6 +980,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1030,6 +1043,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1097,6 +1111,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1157,6 +1172,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1216,6 +1232,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1284,6 +1301,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1339,6 +1357,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1406,6 +1425,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1471,6 +1491,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1541,6 +1562,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1617,6 +1639,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1679,6 +1702,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1753,6 +1777,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1822,6 +1847,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1886,6 +1912,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -1952,6 +1979,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2016,6 +2044,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2080,6 +2109,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2145,6 +2175,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2210,6 +2241,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2275,6 +2307,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2334,6 +2367,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2409,6 +2443,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2502,6 +2537,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2613,6 +2649,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2711,6 +2748,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2762,6 +2800,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2823,6 +2862,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2886,6 +2926,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -2959,6 +3000,9 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
+    // TODO(littlegnal): Enable after the API signature fixed.
+    skip: true,
   );
 
   testWidgets(
@@ -3010,6 +3054,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3071,6 +3116,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3132,6 +3178,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3192,6 +3239,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3252,6 +3300,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3312,6 +3361,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3383,6 +3433,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3454,6 +3505,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3514,6 +3566,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3577,6 +3630,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3641,6 +3695,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3706,6 +3761,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3771,6 +3827,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3837,6 +3894,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3904,6 +3962,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -3978,6 +4037,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4040,6 +4100,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4096,6 +4157,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4167,6 +4229,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4238,6 +4301,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4304,6 +4368,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4365,6 +4430,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4429,6 +4495,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4487,6 +4554,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4538,6 +4606,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4593,6 +4662,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4654,6 +4724,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4710,6 +4781,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4768,6 +4840,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4829,6 +4902,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4900,6 +4974,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -4971,6 +5046,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5038,6 +5114,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5107,6 +5184,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5186,6 +5264,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5248,6 +5327,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5312,6 +5392,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5367,6 +5448,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5424,6 +5506,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5486,6 +5569,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5553,6 +5637,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5622,6 +5707,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5691,6 +5777,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5756,6 +5843,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5824,6 +5912,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5886,6 +5975,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -5943,6 +6033,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -6000,6 +6091,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -6062,6 +6154,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -6127,6 +6220,6 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 }
-

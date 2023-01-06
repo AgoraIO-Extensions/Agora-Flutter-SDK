@@ -73,6 +73,7 @@ void generatedTestCases() {
       await musicContentCenter.release();
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -135,6 +136,7 @@ void generatedTestCases() {
       await musicContentCenter.release();
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -194,6 +196,7 @@ void generatedTestCases() {
       await musicContentCenter.release();
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -261,6 +264,7 @@ void generatedTestCases() {
       await musicContentCenter.release();
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 }
 

@@ -73,6 +73,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 
   testWidgets(
@@ -134,6 +135,7 @@ void generatedTestCases() {
 
       await rtcEngine.release();
     },
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 }
 

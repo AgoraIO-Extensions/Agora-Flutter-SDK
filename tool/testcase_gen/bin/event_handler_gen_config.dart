@@ -37,6 +37,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -79,6 +80,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -121,6 +123,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -162,6 +165,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -204,6 +208,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaEngine',
@@ -246,6 +251,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaEngine',
@@ -288,6 +294,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaEngine',
@@ -332,6 +339,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -376,6 +384,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -420,6 +429,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -464,6 +474,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -508,6 +519,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       await mediaRecorder.release();
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'mediaRecorder',
@@ -555,6 +567,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       await musicContentCenter.release();
       await rtcEngine.release();
   },
+  timeout: const Timeout(Duration(minutes: 1)),
 );
 ''',
       callerObjName: 'musicContentCenter',
