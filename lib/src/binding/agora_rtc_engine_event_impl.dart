@@ -1047,6 +1047,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         RtcConnection? connection = paramJson.connection;
         int? userId = paramJson.userId;
         int? elapsed = paramJson.elapsed;
+        print('[onFirstRemoteAudioFrameEx] connection: $connection, userId: $userId, elapsed: $elapsed.');
         if (connection == null || userId == null || elapsed == null) {
           return true;
         }

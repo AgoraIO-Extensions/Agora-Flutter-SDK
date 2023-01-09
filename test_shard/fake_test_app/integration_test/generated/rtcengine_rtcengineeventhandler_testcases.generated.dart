@@ -3817,6 +3817,8 @@ void generatedTestCases() {
       final eventCalled = await onFirstRemoteAudioFrameCompleter.future;
       expect(eventCalled, isTrue);
 
+      print('Test log after callback called.');
+
       {
         rtcEngine.unregisterEventHandler(
           theRtcEngineEventHandler,
