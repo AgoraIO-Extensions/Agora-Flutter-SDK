@@ -1,11 +1,6 @@
 name: CI
 
 on:
-  pull_request_target:
-    types: [opened, labeled, synchronize]
-    branches: 
-      - main
-  
   pull_request:
     branches: 
       - main
