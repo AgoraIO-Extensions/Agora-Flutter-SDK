@@ -3817,8 +3817,6 @@ void generatedTestCases() {
       final eventCalled = await onFirstRemoteAudioFrameCompleter.future;
       expect(eventCalled, isTrue);
 
-      print('Test log after callback called.');
-
       {
         rtcEngine.unregisterEventHandler(
           theRtcEngineEventHandler,
@@ -3830,6 +3828,8 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
+    // TODO(littlegnal): Enable after iris fixed.
+    skip: true,
   );
 
   testWidgets(
