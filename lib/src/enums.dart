@@ -1587,6 +1587,10 @@ enum ErrorCode {
   NotInitialized,
 
   /// @nodoc
+  @JsonValue(8)
+  InvalidState,
+
+  /// @nodoc
   @JsonValue(9)
   NoPermission,
 

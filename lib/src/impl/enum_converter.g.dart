@@ -707,6 +707,7 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.Refused: 5,
   ErrorCode.BufferTooSmall: 6,
   ErrorCode.NotInitialized: 7,
+  ErrorCode.InvalidState: 8,
   ErrorCode.NoPermission: 9,
   ErrorCode.TimedOut: 10,
   ErrorCode.Canceled: 11,
