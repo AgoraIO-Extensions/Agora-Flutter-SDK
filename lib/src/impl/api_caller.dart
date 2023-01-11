@@ -29,11 +29,14 @@ void setMockIrisApiEngineIntPtr(int? mockIrisApiEngineIntPtr) {
 const int kBasicResultLength = 64 * 1024;
 
 class CallApiResult {
-  CallApiResult({required this.irisReturnCode, required this.data});
+  CallApiResult({required this.irisReturnCode, required this.data, this.rawData = ''});
 
   final int irisReturnCode;
 
   final Map<String, dynamic> data;
+
+  // TODO(littlegnal): Remove rawData after EP-253 landed.
+  final String rawData;
 }
 
 Uint8List uint8ListFromPtr(int intPtr, int length) {
@@ -448,7 +451,7 @@ class _ApiCallExecutorInternal implements _ApiCallExecutorBase {
 
         final resultMap = Map<String, dynamic>.from(jsonDecode(result));
 
-        return CallApiResult(irisReturnCode: irisReturnCode, data: resultMap);
+        return CallApiResult(irisReturnCode: irisReturnCode, data: resultMap, rawData: result);
       } catch (e) {
         debugPrint(
             '[_ApiCallExecutor] $funcName, params: $params\nerror: ${e.toString()}');
