@@ -1081,6 +1081,46 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _eventHandlers.remove(AudioSpectrumObserverWrapper(observer));
   }
 
+  @override
+  Future<int> getNativeHandle() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getNativeHandle';
+
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+
+    // In 64-bits system, the native handle ptr value (unsigned long 64) can be 2^64 - 1,
+    // which may greater than the dart int max value (2^63 - 1), so we can not decode
+    // the json with big int native handle ptr value and parse it directly.
+    //
+    // After dart sdk 2.0 support parse hexadecimal in unsigned int64 range.
+    // https://github.com/dart-lang/language/blob/ee1135e0c22391cee17bf3ee262d6a04582d25de/archive/newsletter/20170929.md#semantics
+    //
+    // So we retrive the native handle ptr value from the json string directly, and
+    // parse an int from hexadecimal here.
+    final rawJsonStr = callApiResult.rawData;
+    // TODO(littlegnal): Replace retrive nativeHandleIntPtr logic after EP-253 landed.
+    final rawJsonStrSplit = rawJsonStr.split(',');
+    String resultStr = '';
+    for (final s in rawJsonStrSplit) {
+      if (s.contains('result')) {
+        resultStr = s;
+      }
+    }
+    final nativeHandleIntPtr =
+        resultStr.substring(resultStr.indexOf(':') + 1, resultStr.length - 1);
+
+    BigInt nativeHandleBI = BigInt.parse(nativeHandleIntPtr);
+    int nativeHandleBIHexInt =
+        int.parse('0x${nativeHandleBI.toRadixString(16)}');
+
+    return nativeHandleBIHexInt;
+  }
+
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported
