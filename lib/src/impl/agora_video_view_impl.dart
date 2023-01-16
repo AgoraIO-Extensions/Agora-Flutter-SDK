@@ -77,9 +77,8 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
   @override
   void dispose() {
-    super.dispose();
-
     _disposeRender();
+    super.dispose();
   }
 
   @override
@@ -92,7 +91,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   Future<void> _didUpdateWidget(
       covariant AgoraRtcRenderPlatformView oldWidget) async {
     if (!oldWidget.controller.isSame(widget.controller)) {
-      await oldWidget.controller.dispose();
+      await oldWidget.controller.disposeRender();
       await _setupVideo();
     }
   }
@@ -111,7 +110,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     _nativeViewIntPtr =
         (await getMethodChannel()!.invokeMethod<int>('getNativeViewPtr'))!;
     if (!mounted) return;
-    widget.controller.setupView(_nativeViewIntPtr);
+    await widget.controller.setupView(_nativeViewIntPtr);
   }
 
   Future<void> _disposeRender() async {
@@ -175,8 +174,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   @override
   void dispose() {
-    super.dispose();
     widget.controller.disposeRender();
+    super.dispose();
   }
 
   @override
