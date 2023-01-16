@@ -2117,21 +2117,21 @@ enum LocalVideoStreamError {
   LocalVideoStreamErrorScreenCaptureWindowOccluded,
 
   ///
-  /// 13: (iOS only) The screen sharing extension process starts.
+  /// 14: (iOS only) The screen sharing extension process starts.
   ///
-  @JsonValue(13)
+  @JsonValue(14)
   LocalVideoStreamErrorExtensionCaptureStarted,
 
   ///
-  /// 14: (iOS only) The screen sharing extension process ends.
+  /// 15: (iOS only) The screen sharing extension process ends.
   ///
-  @JsonValue(14)
+  @JsonValue(15)
   LocalVideoStreamErrorExtensionCaptureStoped,
 
   ///
-  /// 15: (iOS only) The screen sharing extension process quits unexpectedly.
+  /// 16: (iOS only) The screen sharing extension process quits unexpectedly.
   ///
-  @JsonValue(15)
+  @JsonValue(16)
   LocalVideoStreamErrorExtensionCaptureDisconnected,
 
   /// @nodoc

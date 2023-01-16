@@ -875,9 +875,9 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.ScreenCaptureWindowClosed: 12,
   LocalVideoStreamError.LocalVideoStreamErrorDeviceInvalidId: 10,
   LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowOccluded: 13,
-  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStarted: 13,
-  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStoped: 14,
-  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureDisconnected: 15,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStarted: 14,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureStoped: 15,
+  LocalVideoStreamError.LocalVideoStreamErrorExtensionCaptureDisconnected: 16,
   LocalVideoStreamError.LocalVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
 };
