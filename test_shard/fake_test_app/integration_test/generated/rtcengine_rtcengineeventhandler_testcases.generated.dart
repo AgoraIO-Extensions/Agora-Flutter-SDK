@@ -8,7 +8,7 @@ import 'dart:typed_data';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void generatedTestCases() {
   testWidgets(
@@ -16,7 +16,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -79,7 +79,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -142,7 +142,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -207,7 +207,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -265,7 +265,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -335,7 +335,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -417,7 +417,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -485,7 +485,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -622,7 +622,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -759,7 +759,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -822,7 +822,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -880,7 +880,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -932,7 +932,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -988,7 +988,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1051,7 +1051,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1119,7 +1119,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1180,7 +1180,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1240,7 +1240,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1309,7 +1309,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1365,7 +1365,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1433,7 +1433,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1499,7 +1499,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1570,7 +1570,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1647,7 +1647,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1710,7 +1710,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1785,7 +1785,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1855,7 +1855,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1920,7 +1920,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -1987,7 +1987,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2052,7 +2052,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2117,7 +2117,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2183,7 +2183,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2249,7 +2249,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2315,7 +2315,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2375,7 +2375,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2451,7 +2451,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2545,7 +2545,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2657,7 +2657,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2756,7 +2756,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2808,7 +2808,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2870,7 +2870,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -2934,7 +2934,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3010,7 +3010,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3062,7 +3062,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3124,7 +3124,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3186,7 +3186,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3247,7 +3247,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3308,7 +3308,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3369,7 +3369,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3441,7 +3441,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3513,7 +3513,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3574,7 +3574,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3638,7 +3638,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3703,7 +3703,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3769,7 +3769,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3837,7 +3837,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3904,7 +3904,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -3972,7 +3972,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4047,7 +4047,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4110,7 +4110,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4167,7 +4167,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4239,7 +4239,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4311,7 +4311,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4378,7 +4378,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4440,7 +4440,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4505,7 +4505,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4564,7 +4564,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4616,7 +4616,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4672,7 +4672,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4734,7 +4734,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4791,7 +4791,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4850,7 +4850,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4912,7 +4912,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -4984,7 +4984,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5056,7 +5056,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5124,7 +5124,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5194,7 +5194,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5274,7 +5274,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5337,7 +5337,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5402,7 +5402,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5458,7 +5458,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5516,7 +5516,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5579,7 +5579,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5647,7 +5647,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5717,7 +5717,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5787,7 +5787,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5853,7 +5853,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5922,7 +5922,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -5985,7 +5985,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6043,7 +6043,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6101,7 +6101,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
@@ -6164,7 +6164,7 @@ void generatedTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(

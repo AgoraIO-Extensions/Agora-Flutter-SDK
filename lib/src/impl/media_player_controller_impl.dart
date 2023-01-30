@@ -348,8 +348,8 @@ class MediaPlayerControllerImpl
 
   @override
   Future<void> dispose() async {
-    (_mediaPlayer as MediaPlayerImpl).destroy();
-    super.dispose();
+    await (_mediaPlayer as MediaPlayerImpl).destroy();
+    await super.dispose();
     await rtcEngine.destroyMediaPlayer(this);
   }
 

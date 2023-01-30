@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //       final irisTester = IrisTester();
 //       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-//       setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+//       setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
 //       RtcEngine rtcEngine = createAgoraRtcEngine();
 //       await rtcEngine.initialize(RtcEngineContext(
