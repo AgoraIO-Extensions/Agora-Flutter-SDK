@@ -20,7 +20,7 @@ dependencies:
   iris_method_channel:
     git:
       url: https://github.com/littleGnAl/iris_method_channel.git
-      ref: 52bb7b4
+      ref: c5b59390030b028bc4dd52b184be34477cc80ed9
 dev_dependencies:
   flutter_test:
     sdk: flutter
