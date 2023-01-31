@@ -61,22 +61,6 @@ ios_integration_test_task:
   create_ios_simulator_script:
     - xcrun simctl list
     - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-X com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
-  run_ios_test_script:
-    - flutter doctor -v
-    - bash ci/run_flutter_integration_test_ios.sh
-    - bash ci/rendering_test_ios.sh
-
-ios_build_task:
-  <<: *organization_filter
-
-  matrix:
-    - name: macos-monterey-xcode:13
-      macos_instance:
-        image: ghcr.io/cirruslabs/macos-monterey-xcode:13
-
-    - name: macos-ventura-xcode:14
-      macos_instance:
-        image: ghcr.io/cirruslabs/macos-ventura-xcode:14
 
   matrix:
     - name: FLUTTER_VERSION 2.10.5
@@ -96,16 +80,46 @@ ios_build_task:
     - git fetch
     - git checkout ${FLUTTER_VERSION} && flutter precache
 
+  run_ios_test_script:
+    - flutter doctor -v
+    - bash ci/run_flutter_integration_test_ios.sh
+    - bash ci/rendering_test_ios.sh
+
+ios_build_task:
+  <<: *organization_filter
+
   matrix:
-    - name: Build on arm macOS
-      build_ios_arm64_script:
-        - flutter doctor -v
-        - cd example
-        - flutter packages get
-        - flutter build ios --no-codesign
-    - name: Build on x86_64 macOS
-      build_ios_arm64_script:
-        - cd example
-        - arch -x86_64 flutter doctor -v
-        - arch -x86_64 flutter packages get
-        - arch -x86_64 flutter build ios --no-codesign
+    - name: macos-monterey-xcode:13
+      macos_instance:
+        image: ghcr.io/cirruslabs/macos-monterey-xcode:13
+
+  matrix:
+    - name: FLUTTER_VERSION 2.10.5
+      env:
+        FLUTTER_VERSION: 2.10.5
+    - name: FLUTTER_VERSION 3.0.0
+      env:
+        FLUTTER_VERSION: 3.0.0
+    - name: FLUTTER_VERSION 3.3.0
+      env:
+        FLUTTER_VERSION: 3.3.0
+    - name: FLUTTER_VERSION 3.7.0
+      env:
+        FLUTTER_VERSION: 3.7.0
+  switch_flutter_version_script:
+    - cd ${FLUTTER_SDK_DIR}
+    - git fetch
+    - git checkout ${FLUTTER_VERSION} && flutter precache
+
+  build_ios_x86_64_script:
+    - cd example
+    - arch -x86_64 flutter doctor -v
+    - arch -x86_64 flutter packages get
+    - arch -x86_64 flutter build ios --no-codesign
+
+  build_ios_arm64_script:
+    - cd example
+    - flutter doctor -v
+    - flutter clean
+    - flutter packages get
+    - flutter build ios --no-codesign
