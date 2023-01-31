@@ -64,30 +64,6 @@ jobs:
           profile: Nexus 6
           script: bash ci/run_flutter_integration_test_android.sh
 
-  integration_test_ios:
-    name: Run Flutter iOS Integration Tests
-    if: |
-      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
-          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
-           contains(github.event_name, 'pull_request')) }}
-    needs: flutter_codestyle_check
-    strategy:
-      matrix:
-        version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
-    timeout-minutes: 120
-    env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
-    steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: ${{ matrix.version }}
-      - uses: futureware-tech/simulator-action@v1
-        with:
-          model: 'iPhone 13 Pro Max'
-      - run: bash ci/run_flutter_integration_test_ios.sh
-
   integration_test_macos:
     name: Run Flutter macOS Integration Tests
     if: |
@@ -182,25 +158,3 @@ jobs:
       - name: Run flutter build apk
         run: flutter build apk
         working-directory: example
-
-  build_ios:
-    name: Build iOS
-    if: |
-      ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
-          ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
-           contains(github.event_name, 'pull_request')) }}
-    needs: flutter_codestyle_check
-    strategy:
-      matrix:
-        version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: ${{ matrix.version }}
-      - run: flutter pub get
-      - name: Run flutter build ios --no-codesign
-        run: flutter build ios --no-codesign
-        working-directory: example 
