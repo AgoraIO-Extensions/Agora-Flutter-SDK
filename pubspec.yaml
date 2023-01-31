@@ -17,10 +17,7 @@ dependencies:
   ffi: '>=1.1.2'
   async: ^2.8.2
   meta: ^1.7.0
-  iris_method_channel:
-    git:
-      url: https://github.com/littleGnAl/iris_method_channel.git
-      ref: c5b59390030b028bc4dd52b184be34477cc80ed9
+  iris_method_channel: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
