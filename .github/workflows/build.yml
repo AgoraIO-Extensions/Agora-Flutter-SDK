@@ -30,7 +30,7 @@ jobs:
           if (( $TOTAL < 120 ))
           then
             echo Pub Score too low.
-            # exit 1
+            exit 1
           fi 
 
   integration_test_android:
