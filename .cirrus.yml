@@ -1,0 +1,111 @@
+environment:
+  TEST_APP_ID: ENCRYPTED[!9f287ddc756b7c12b282fa965f66f0c957b193154a0e08436eef3befb926b91355c86f28938fd836977fdee4a336ccce!]
+  # The flutter sdk is located in /Users/admin/flutter by default in cirrus cis
+  FLUTTER_SDK_DIR: /Users/admin/flutter
+
+organization_filter: &organization_filter
+  only_if: $CIRRUS_REPO_OWNER == 'AgoraIO-Extensions'
+
+flutter_container: &flutter_container
+  container:
+    image: cirrusci/flutter:latest
+    cpu: 8
+    memory: 16G
+    kvm: true
+
+default_macos_container: &default_macos_container
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:14
+
+# default_macos_container: &default_macos_container
+#   matrix:
+#     - name: macos-monterey-xcode:13
+#       macos_instance:
+#         image: ghcr.io/cirruslabs/macos-monterey-xcode:13
+
+#     - name: macos-monterey-xcode:14
+#       macos_instance:
+#         image: ghcr.io/cirruslabs/macos-monterey-xcode:14
+
+#     - name: macos-ventura-xcode:14
+#       macos_instance:
+#         image: ghcr.io/cirruslabs/macos-ventura-xcode:14
+
+
+# TODO(littlegnal): Complete iOS build first
+# android_integratinon_test_task:
+#   <<: *default_macos_container
+#   create_device_script:
+#     - sdkmanager --install "system-images;android-31;google_apis;x86"
+#     - echo no | avdmanager create avd -n test -k "system-images;android-31;google_apis;x86"
+#   start_emulator_background_script:
+#     $ANDROID_HOME/emulator/emulator
+#         -avd test
+#         -no-audio
+#         -no-window
+#   wait_for_emulator_script:
+#     adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 3; done; input keyevent 82'
+#   disable_animations_script:
+#     - adb shell settings put global window_animation_scale 0.0
+#     - adb shell settings put global transition_animation_scale 0.0
+#     - adb shell settings put global animator_duration_scale 0.0
+#   run_android_test_script:
+#     - flutter doctor -v
+#     - flutter config --enable-macos-desktop 
+#     - bash ci/run_flutter_integration_test_android.sh
+
+ios_integration_test_task:
+  <<: *organization_filter
+  <<: *default_macos_container
+
+  create_ios_simulator_script:
+    - xcrun simctl list
+    - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-X com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
+  run_ios_test_script:
+    - flutter doctor -v
+    - bash ci/run_flutter_integration_test_ios.sh
+    - bash ci/rendering_test_ios.sh
+
+ios_build_task:
+  <<: *organization_filter
+
+  matrix:
+    - name: macos-monterey-xcode:13
+      macos_instance:
+        image: ghcr.io/cirruslabs/macos-monterey-xcode:13
+
+    - name: macos-ventura-xcode:14
+      macos_instance:
+        image: ghcr.io/cirruslabs/macos-ventura-xcode:14
+
+  matrix:
+    - name: FLUTTER_VERSION 2.10.5
+      env:
+        FLUTTER_VERSION: 2.10.5
+    - name: FLUTTER_VERSION 3.0.0
+      env:
+        FLUTTER_VERSION: 3.0.0
+    - name: FLUTTER_VERSION 3.3.0
+      env:
+        FLUTTER_VERSION: 3.3.0
+    - name: FLUTTER_VERSION 3.7.0
+      env:
+        FLUTTER_VERSION: 3.7.0
+  switch_flutter_version_script:
+    - cd ${FLUTTER_SDK_DIR}
+    - git fetch
+    - git checkout ${FLUTTER_VERSION} && flutter precache
+
+  matrix:
+    - name: Build on arm macOS
+      build_ios_arm64_script:
+        - flutter doctor -v
+        - cd example
+        - flutter packages get
+        - flutter build ios --no-codesign
+    - name: Build on x86_64 macOS
+      build_ios_arm64_script:
+        - cd example
+        - arch -x86_64 flutter doctor -v
+        - arch -x86_64 flutter packages get
+        - arch -x86_64 flutter build ios --no-codesign
