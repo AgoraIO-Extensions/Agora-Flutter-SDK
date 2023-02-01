@@ -5,8 +5,7 @@ import 'package:agora_rtc_engine/src/binding/agora_media_recorder_impl.dart'
 import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart'
     as media_base_event_b;
 
-import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
-import 'package:agora_rtc_engine/src/impl/event_loop.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 
@@ -60,14 +59,16 @@ class MediaRecorderObserverWrapperOverride
 }
 
 class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
-    implements AsyncDisposableObject {
-  MediaRecorderImpl._(this._eventLoop);
+    with ScopedDisposableObjectMixin {
+  MediaRecorderImpl._(IrisMethodChannel irisMethodChannel)
+      : super(irisMethodChannel);
 
-  factory MediaRecorderImpl.create(EventLoop eventLoop) {
-    return MediaRecorderImpl._(eventLoop);
+  factory MediaRecorderImpl.create(IrisMethodChannel irisMethodChannel) {
+    return MediaRecorderImpl._(irisMethodChannel);
   }
 
-  final EventLoop _eventLoop;
+  final TypedScopedKey _mediaRecorderScopedKey =
+      const TypedScopedKey(MediaRecorderImpl);
 
   @override
   Future<void> setMediaRecorderObserver(
@@ -82,38 +83,25 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
 
     final eventHandlerWrapper =
         MediaRecorderObserverWrapperOverride(connection, callback);
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.create,
-          registerName: 'MediaRecorder_setMediaRecorderObserver',
-          unregisterName: 'MediaRecorder_unsetMediaRecorderObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
 
-    _eventLoop.addEventHandlerIfAbsent(
-      const EventLoopEventHandlerKey(MediaRecorderImpl),
-      eventHandlerWrapper,
-    );
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaRecorderScopedKey,
+            registerName: 'MediaRecorder_setMediaRecorderObserver',
+            unregisterName: 'MediaRecorder_unsetMediaRecorderObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
   }
 
   @override
   Future<void> release() async {
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.dispose,
-          registerName: 'MediaRecorder_setMediaRecorderObserver',
-          unregisterName: 'MediaRecorder_unsetMediaRecorderObserver',
-          handler: null,
-        ),
-        jsonEncode({}));
-    _eventLoop.removeEventHandlers(
-      const EventLoopEventHandlerKey(MediaRecorderImpl),
-    );
+    markDisposed();
+
+    await irisMethodChannel.unregisterEventHandlers(_mediaRecorderScopedKey);
   }
 
   @override
-  Future<void> disposeAsync() async {
+  Future<void> dispose() async {
     await release();
   }
 }

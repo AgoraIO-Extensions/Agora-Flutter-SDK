@@ -1,6 +1,6 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
-import 'package:agora_rtc_engine/src/impl/event_loop.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 

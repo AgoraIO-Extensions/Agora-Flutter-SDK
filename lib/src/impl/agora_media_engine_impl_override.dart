@@ -6,56 +6,48 @@ import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
 import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart';
 import 'package:agora_rtc_engine/src/binding/agora_media_engine_impl.dart'
     as media_engine_impl_binding;
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
-import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
-import 'package:agora_rtc_engine/src/impl/event_loop.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 
 class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
-    implements AsyncDisposableObject {
-  MediaEngineImpl._(this._eventLoop);
+    with ScopedDisposableObjectMixin {
+  MediaEngineImpl._(IrisMethodChannel irisMethodChannel)
+      : super(irisMethodChannel);
 
-  factory MediaEngineImpl.create(EventLoop eventLoop) {
-    return MediaEngineImpl._(eventLoop);
+  factory MediaEngineImpl.create(IrisMethodChannel irisMethodChannel) {
+    return MediaEngineImpl._(irisMethodChannel);
   }
 
-  final EventLoop _eventLoop;
+  final TypedScopedKey _mediaEngineScopedKey =
+      const TypedScopedKey(MediaEngineImpl);
 
   @override
   void registerAudioFrameObserver(AudioFrameObserver observer) async {
     final eventHandlerWrapper = AudioFrameObserverWrapper(observer);
     final param = createParams({});
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.create,
-          registerName: 'MediaEngine_registerAudioFrameObserver',
-          unregisterName: 'MediaEngine_unregisterAudioFrameObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
 
-    _eventLoop.addEventHandler(
-      const EventLoopEventHandlerKey(MediaEngineImpl),
-      eventHandlerWrapper,
-    );
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
+            registerName: 'MediaEngine_registerAudioFrameObserver',
+            unregisterName: 'MediaEngine_unregisterAudioFrameObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
   }
 
   @override
   void registerVideoFrameObserver(VideoFrameObserver observer) async {
     final eventHandlerWrapper = VideoFrameObserverWrapper(observer);
     final param = createParams({});
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.create,
-          registerName: 'MediaEngine_registerVideoFrameObserver',
-          unregisterName: 'MediaEngine_unregisterVideoFrameObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
 
-    _eventLoop.addEventHandler(const EventLoopEventHandlerKey(MediaEngineImpl),
-        VideoFrameObserverWrapper(observer));
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
+            registerName: 'MediaEngine_registerVideoFrameObserver',
+            unregisterName: 'MediaEngine_unregisterVideoFrameObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
   }
 
   @override
@@ -63,86 +55,56 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
       VideoEncodedFrameObserver observer) async {
     final eventHandlerWrapper = VideoEncodedFrameObserverWrapper(observer);
     final param = createParams({});
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.create,
-          registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
-          unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode(param));
 
-    _eventLoop.addEventHandler(
-      const EventLoopEventHandlerKey(MediaEngineImpl),
-      eventHandlerWrapper,
-    );
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
+            registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
+            unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
   }
 
   @override
   void unregisterAudioFrameObserver(AudioFrameObserver observer) async {
     final eventHandlerWrapper = AudioFrameObserverWrapper(observer);
-    _eventLoop.removeEventHandler(
-      const EventLoopEventHandlerKey(MediaEngineImpl),
-      eventHandlerWrapper,
-    );
-
     final param = createParams({});
-    if (_eventLoop
-        .isEventHandlerEmpty(const EventLoopEventHandlerKey(MediaEngineImpl))) {
-      await apiCaller.callIrisEventAsync(
-          IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
+
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
             registerName: 'MediaEngine_registerAudioFrameObserver',
             unregisterName: 'MediaEngine_unregisterAudioFrameObserver',
-            handler: eventHandlerWrapper,
-          ),
-          jsonEncode(param));
-    }
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
   }
 
   @override
   void unregisterVideoFrameObserver(VideoFrameObserver observer) async {
     final eventHandlerWrapper = VideoFrameObserverWrapper(observer);
-    _eventLoop.removeEventHandler(
-      const EventLoopEventHandlerKey(MediaEngineImpl),
-      eventHandlerWrapper,
-    );
+    final param = createParams({});
 
-    if (_eventLoop
-        .isEventHandlerEmpty(const EventLoopEventHandlerKey(MediaEngineImpl))) {
-      final param = createParams({});
-      await apiCaller.callIrisEventAsync(
-          IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
+    await irisMethodChannel.unregisterEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
             registerName: 'MediaEngine_registerVideoFrameObserver',
             unregisterName: 'MediaEngine_unregisterVideoFrameObserver',
-            handler: eventHandlerWrapper,
-          ),
-          jsonEncode(param));
-    }
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
   }
 
   @override
   void unregisterVideoEncodedFrameObserver(
       VideoEncodedFrameObserver observer) async {
     final eventHandlerWrapper = VideoEncodedFrameObserverWrapper(observer);
-    _eventLoop.removeEventHandler(
-      const EventLoopEventHandlerKey(MediaEngineImpl),
-      eventHandlerWrapper,
-    );
-
-    if (_eventLoop
-        .isEventHandlerEmpty(const EventLoopEventHandlerKey(MediaEngineImpl))) {
-      final param = createParams({});
-      await apiCaller.callIrisEventAsync(
-          IrisEventObserverKey(
-            op: CallIrisEventOp.dispose,
+    final param = createParams({});
+    await irisMethodChannel.unregisterEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaEngineScopedKey,
             registerName: 'MediaEngine_registerVideoEncodedFrameObserver',
             unregisterName: 'MediaEngine_unregisterVideoEncodedFrameObserver',
-            handler: eventHandlerWrapper,
-          ),
-          jsonEncode(param));
-    }
+            handler: eventHandlerWrapper),
+        jsonEncode(param));
   }
 
   @override
@@ -154,13 +116,12 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     json['metadata_buffer'] = 0;
     final param = createParams({'frame': json, 'videoTrackId': videoTrackId});
     final List<Uint8List> buffers = [];
-    final bufferList = <Uint8List>[];
     // This is a little tricky that the buffers length must be 3
     buffers.add(frame.buffer ?? Uint8List.fromList([]));
     buffers.add(Uint8List.fromList([]));
     buffers.add(frame.metadataBuffer ?? Uint8List.fromList([]));
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
 
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
@@ -174,13 +135,13 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
 
   @override
   Future<void> release() async {
-    _eventLoop.removeEventHandlers(
-      const EventLoopEventHandlerKey(MediaEngineImpl),
-    );
+    markDisposed();
+
+    await irisMethodChannel.unregisterEventHandlers(_mediaEngineScopedKey);
   }
 
   @override
-  Future<void> disposeAsync() async {
+  Future<void> dispose() async {
     await release();
   }
 }

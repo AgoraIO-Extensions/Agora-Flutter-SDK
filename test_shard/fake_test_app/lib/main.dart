@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:path/path.dart' as path;
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _init() async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');

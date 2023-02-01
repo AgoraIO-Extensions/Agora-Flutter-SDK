@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void videoDeviceManagerSmokeTestCases() {
   testWidgets(
@@ -15,7 +15,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -53,7 +53,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -94,7 +94,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -132,7 +132,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -173,7 +173,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -216,7 +216,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -257,7 +257,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -295,7 +295,7 @@ void videoDeviceManagerSmokeTestCases() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');

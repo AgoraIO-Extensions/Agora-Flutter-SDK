@@ -71,7 +71,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void rtcEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -81,7 +81,7 @@ void rtcEngineSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -136,7 +136,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void rtcEngineExSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -146,7 +146,7 @@ void rtcEngineExSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -199,7 +199,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void audioDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -209,7 +209,7 @@ void audioDeviceManagerSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -256,7 +256,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void videoDeviceManagerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -266,7 +266,7 @@ void videoDeviceManagerSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -315,7 +315,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void mediaPlayerControllerSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -325,7 +325,7 @@ void mediaPlayerControllerSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -376,7 +376,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void mediaEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -386,7 +386,7 @@ void mediaEngineSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -434,7 +434,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void mediaRecorderSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -444,7 +444,7 @@ void mediaRecorderSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -492,7 +492,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void localSpatialAudioEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -502,7 +502,7 @@ void localSpatialAudioEngineSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -550,7 +550,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void localSpatialAudioEngineSmokeTestCases() {
   {{TEST_CASES_CONTENT}}
@@ -560,7 +560,7 @@ void localSpatialAudioEngineSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
@@ -611,7 +611,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fake_test_app/main.dart' as app;
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void musicContentCenterSmokeTestCases() {
   {{TEST_CASES_CONTENT}} 
@@ -621,7 +621,7 @@ void musicContentCenterSmokeTestCases() {
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     final irisTester = IrisTester();
     final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');

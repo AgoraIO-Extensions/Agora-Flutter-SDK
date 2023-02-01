@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 import 'generated/localspatialaudioengine_fake_test.generated.dart'
     as generated;
 import 'generated/basespatialaudioengine_fake_test.generated.dart'
@@ -20,7 +20,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -66,7 +66,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');

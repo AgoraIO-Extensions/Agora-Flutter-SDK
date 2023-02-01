@@ -15,9 +15,9 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.4.0
   ffi: '>=1.1.2'
-  iris_event: ^2.0.0
   async: ^2.8.2
   meta: ^1.7.0
+  iris_method_channel: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

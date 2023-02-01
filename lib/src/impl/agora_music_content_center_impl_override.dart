@@ -13,11 +13,9 @@ import 'package:agora_rtc_engine/src/binding/event_handler_param_json.dart';
 
 import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_json.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
-import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
-import 'package:agora_rtc_engine/src/impl/event_loop.dart';
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 class MusicCollectionImpl extends MusicCollection {
   MusicCollectionImpl(this._musicCollectionJson);
@@ -113,16 +111,16 @@ class MusicContentCenterEventHandlerWrapper
 
 class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
     implements MusicPlayer {
-  MusicPlayerImpl.create(int mediaPlayerId, EventLoop eventLoop)
-      : super.create(mediaPlayerId, eventLoop);
+  MusicPlayerImpl.create(int mediaPlayerId, IrisMethodChannel irisMethodChannel)
+      : super.create(mediaPlayerId, irisMethodChannel);
 
   @override
   Future<void> openWithSongCode(
       {required int songCode, int startPos = 0}) async {
     final apiType = '${isOverrideClassName ? className : 'MusicPlayer'}_open';
     final param = createParams({'songCode': songCode, 'startPos': startPos});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -135,17 +133,20 @@ class MusicPlayerImpl extends media_player_impl.MediaPlayerImpl
 }
 
 class MusicContentCenterImpl extends binding.MusicContentCenterImpl
-    implements AsyncDisposableObject {
-  MusicContentCenterImpl._(this._rtcEngine, this._eventLoop);
+    with ScopedDisposableObjectMixin {
+  MusicContentCenterImpl._(RtcEngine rtcEngine)
+      : _rtcEngine = rtcEngine,
+        super(rtcEngine.irisMethodChannel);
 
   factory MusicContentCenterImpl.create(RtcEngine rtcEngine) {
-    return rtcEngine.objectPool.putIfAbsent(MusicContentCenterImpl,
-        () => MusicContentCenterImpl._(rtcEngine, rtcEngine.eventLoop));
+    return rtcEngine.objectPool.putIfAbsent(
+        _musicContentCenterScopeKey, () => MusicContentCenterImpl._(rtcEngine));
   }
 
   final RtcEngine _rtcEngine;
 
-  final EventLoop _eventLoop;
+  static const _musicContentCenterScopeKey =
+      TypedScopedKey(MusicContentCenterImpl);
 
   final Map<int, MusicPlayerImpl> _musicPlayers = {};
 
@@ -156,8 +157,8 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_createMusicPlayer';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -165,7 +166,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     final result = rm['result'];
     final musicPlayerId = result as int;
 
-    final mp = MusicPlayerImpl.create(musicPlayerId, _rtcEngine.eventLoop);
+    final mp = MusicPlayerImpl.create(musicPlayerId, irisMethodChannel);
 
     _musicPlayers.putIfAbsent(musicPlayerId, () => mp);
 
@@ -179,19 +180,14 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     _musicContentCenterEventHandler = eventHandler;
     final eventHandlerWrapper =
         MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!);
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.create,
-          registerName: 'MusicContentCenter_registerEventHandler',
-          unregisterName: 'MusicContentCenter_unregisterEventHandler',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode({}));
 
-    _eventLoop.addEventHandler(
-      const EventLoopEventHandlerKey(MusicContentCenterImpl),
-      eventHandlerWrapper,
-    );
+    await irisMethodChannel.registerEventHandler(
+        ScopedEvent(
+            scopedKey: _musicContentCenterScopeKey,
+            registerName: 'MusicContentCenter_registerEventHandler',
+            unregisterName: 'MusicContentCenter_unregisterEventHandler',
+            handler: eventHandlerWrapper),
+        jsonEncode({}));
   }
 
   @override
@@ -199,20 +195,15 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     if (_musicContentCenterEventHandler == null) return;
     final eventHandlerWrapper =
         MusicContentCenterEventHandlerWrapper(_musicContentCenterEventHandler!);
-    await apiCaller.callIrisEventAsync(
-        IrisEventObserverKey(
-          op: CallIrisEventOp.dispose,
-          registerName: 'MusicContentCenter_registerEventHandler',
-          unregisterName: 'MusicContentCenter_unregisterEventHandler',
-          handler: eventHandlerWrapper,
-        ),
-        jsonEncode({}));
-
-    _eventLoop.removeEventHandler(
-      const EventLoopEventHandlerKey(MusicContentCenterImpl),
-      eventHandlerWrapper,
-    );
     _musicContentCenterEventHandler = null;
+
+    await irisMethodChannel.unregisterEventHandler(
+        ScopedEvent(
+            scopedKey: _musicContentCenterScopeKey,
+            registerName: 'MusicContentCenter_registerEventHandler',
+            unregisterName: 'MusicContentCenter_unregisterEventHandler',
+            handler: eventHandlerWrapper),
+        jsonEncode({}));
   }
 
   void removeMusicPlayerById(int musicPlayerId) {
@@ -221,6 +212,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
 
   @override
   Future<void> release() async {
+    markDisposed();
     try {
       // Allow error for super call
       await super.release();
@@ -237,7 +229,7 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
   }
 
   @override
-  Future<void> disposeAsync() async {
+  Future<void> dispose() async {
     await release();
   }
 
@@ -246,8 +238,8 @@ class MusicContentCenterImpl extends binding.MusicContentCenterImpl
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_isPreloaded';
     final param = createParams({'songCode': songCode});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

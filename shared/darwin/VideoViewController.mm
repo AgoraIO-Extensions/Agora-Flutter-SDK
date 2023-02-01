@@ -128,10 +128,11 @@
 }
 
 - (void)dealloc {
-    if (self.videoFrameBufferManager) {
-        delete self.videoFrameBufferManager;
-        self.videoFrameBufferManager = nil;
-    }
+    // TODO(littlegnal): Manage IrisVideoFrameBufferManager on dart side.
+    // if (self.videoFrameBufferManager) {
+    //     delete self.videoFrameBufferManager;
+    //     self.videoFrameBufferManager = nil;
+    // }
 }
 
 @end
