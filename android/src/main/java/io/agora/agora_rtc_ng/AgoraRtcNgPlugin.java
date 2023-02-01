@@ -14,10 +14,6 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler {
 
-    static {
-        System.loadLibrary("AgoraRtcWrapper");
-    }
-
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
     private VideoViewController videoViewController;
