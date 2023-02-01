@@ -15,4 +15,3 @@ export 'agora_music_content_center_event_impl.dart';
 export 'event_handler_param_json.dart';
 export 'call_api_impl_params_json.dart';
 export 'call_api_event_handler_buffer_ext.dart';
-export 'package:agora_rtc_engine/src/impl/api_caller.dart';

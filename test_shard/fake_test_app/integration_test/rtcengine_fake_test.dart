@@ -12,7 +12,7 @@ import 'package:iris_tester/iris_tester.dart';
 import 'generated/rtcengine_fake_test.generated.dart' as generated;
 // import 'package:integration_test_app/main.dart' as app;
 import 'package:path/path.dart' as path;
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 // import 'package:fake_test_app/fake_remote_user.dart';
 
@@ -26,7 +26,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -80,7 +80,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -134,7 +134,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -200,7 +200,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -239,7 +239,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -278,7 +278,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -317,7 +317,7 @@ void main() {
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisApiEngineIntPtr(debugApiEngineIntPtr);
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');

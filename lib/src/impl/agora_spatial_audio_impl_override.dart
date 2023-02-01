@@ -1,17 +1,21 @@
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
-import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
 import 'package:agora_rtc_engine/src/binding/agora_spatial_audio_impl.dart'
     as spatial_audio_binding;
-import 'package:agora_rtc_engine/src/impl/disposable_object.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs, unused_local_variable
 
 class LocalSpatialAudioEngineImpl extends spatial_audio_binding
-    .LocalSpatialAudioEngineImpl implements AsyncDisposableObject {
-  LocalSpatialAudioEngineImpl._();
+    .LocalSpatialAudioEngineImpl with ScopedDisposableObjectMixin {
+  LocalSpatialAudioEngineImpl._(IrisMethodChannel irisMethodChannel)
+      : super(irisMethodChannel);
 
-  factory LocalSpatialAudioEngineImpl.create() {
-    return LocalSpatialAudioEngineImpl._();
+  factory LocalSpatialAudioEngineImpl.create(
+      IrisMethodChannel irisMethodChannel) {
+    return LocalSpatialAudioEngineImpl._(irisMethodChannel);
   }
 
   @override
@@ -23,8 +27,8 @@ class LocalSpatialAudioEngineImpl extends spatial_audio_binding
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_initialize';
     final param = createParams({});
     final List<Uint8List> buffers = [];
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -40,12 +44,12 @@ class LocalSpatialAudioEngineImpl extends spatial_audio_binding
     final apiType =
         '${isOverrideClassName ? className : 'LocalSpatialAudioEngine'}_release';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
   }
 
   @override
-  Future<void> disposeAsync() async {
+  Future<void> dispose() async {
     await release();
   }
 }

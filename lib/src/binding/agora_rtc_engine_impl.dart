@@ -1,8 +1,14 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 // ignore_for_file: public_member_api_docs, unused_local_variable, annotate_overrides
 
 class VideoDeviceManagerImpl implements VideoDeviceManager {
+  VideoDeviceManagerImpl(this.irisMethodChannel);
+
+  @protected
+  final IrisMethodChannel irisMethodChannel;
+
   @protected
   Map<String, dynamic> createParams(Map<String, dynamic> param) {
     return param;
@@ -19,8 +25,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_enumerateVideoDevices';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -34,8 +40,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_setDevice';
     final param = createParams({'deviceIdUTF8': deviceIdUTF8});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -51,8 +57,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_getDevice';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -70,8 +76,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_numberOfCapabilities';
     final param = createParams({'deviceIdUTF8': deviceIdUTF8});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -92,8 +98,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
       'deviceIdUTF8': deviceIdUTF8,
       'deviceCapabilityNumber': deviceCapabilityNumber
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -111,8 +117,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_startDeviceTest';
     final param = createParams({'hwnd': hwnd});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -128,8 +134,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_stopDeviceTest';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -145,8 +151,8 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_release';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -159,6 +165,11 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
 }
 
 class RtcEngineImpl implements RtcEngine {
+  RtcEngineImpl(this.irisMethodChannel);
+
+  @protected
+  final IrisMethodChannel irisMethodChannel;
+
   @protected
   Map<String, dynamic> createParams(Map<String, dynamic> param) {
     return param;
@@ -174,8 +185,8 @@ class RtcEngineImpl implements RtcEngine {
   Future<void> release({bool sync = false}) async {
     final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_release';
     final param = createParams({'sync': sync});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -193,8 +204,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'context': context.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(context.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -210,8 +221,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getVersion';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -225,8 +236,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getErrorDescription';
     final param = createParams({'code': code});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -251,8 +262,8 @@ class RtcEngineImpl implements RtcEngine {
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -267,8 +278,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'options': options.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -288,8 +299,8 @@ class RtcEngineImpl implements RtcEngine {
     if (options != null) {
       buffers.addAll(options.collectBufferList());
     }
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -302,8 +313,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_renewToken';
     final param = createParams({'token': token});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -319,8 +330,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setChannelProfile';
     final param = createParams({'profile': profile.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -342,8 +353,8 @@ class RtcEngineImpl implements RtcEngine {
     if (options != null) {
       buffers.addAll(options.collectBufferList());
     }
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -356,8 +367,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startEchoTest';
     final param = createParams({'intervalInSeconds': intervalInSeconds});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -370,8 +381,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopEchoTest';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -391,8 +402,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'enabled': enabled, 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -408,8 +419,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableVideo';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -425,8 +436,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_disableVideo';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -444,8 +455,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startPreview';
     final param = createParams({'sourceType': sourceType.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -460,8 +471,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopPreview';
     final param = createParams({'sourceType': sourceType.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -476,8 +487,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -493,8 +504,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopLastmileProbeTest';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -513,8 +524,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -539,8 +550,8 @@ class RtcEngineImpl implements RtcEngine {
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -565,8 +576,8 @@ class RtcEngineImpl implements RtcEngine {
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -591,8 +602,8 @@ class RtcEngineImpl implements RtcEngine {
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -617,8 +628,8 @@ class RtcEngineImpl implements RtcEngine {
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -646,8 +657,8 @@ class RtcEngineImpl implements RtcEngine {
     final List<Uint8List> buffers = [];
     buffers.addAll(backgroundSource.collectBufferList());
     buffers.addAll(segproperty.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -664,8 +675,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableRemoteSuperResolution';
     final param = createParams({'userId': userId, 'enable': enable});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -683,8 +694,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'canvas': canvas.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(canvas.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -702,8 +713,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'canvas': canvas.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(canvas.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -719,8 +730,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableAudio';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -736,8 +747,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_disableAudio';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -757,8 +768,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioProfile';
     final param = createParams(
         {'profile': profile.value(), 'scenario': scenario.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -771,8 +782,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioScenario';
     final param = createParams({'scenario': scenario.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -788,8 +799,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableLocalAudio';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -805,8 +816,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_muteLocalAudioStream';
     final param = createParams({'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -822,8 +833,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_muteAllRemoteAudioStreams';
     final param = createParams({'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -839,8 +850,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setDefaultMuteAllRemoteAudioStreams';
     final param = createParams({'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -857,8 +868,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_muteRemoteAudioStream';
     final param = createParams({'uid': uid, 'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -874,8 +885,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_muteLocalVideoStream';
     final param = createParams({'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -891,8 +902,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableLocalVideo';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -908,8 +919,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_muteAllRemoteVideoStreams';
     final param = createParams({'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -925,8 +936,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setDefaultMuteAllRemoteVideoStreams';
     final param = createParams({'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -943,8 +954,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_muteRemoteVideoStream';
     final param = createParams({'uid': uid, 'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -961,8 +972,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteVideoStreamType';
     final param = createParams({'uid': uid, 'streamType': streamType.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -981,8 +992,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'uid': uid, 'options': options.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -999,8 +1010,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteDefaultVideoStreamType';
     final param = createParams({'streamType': streamType.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1017,8 +1028,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setSubscribeAudioBlocklist';
     final param = createParams({'uidList': uidList, 'uidNumber': uidNumber});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1035,8 +1046,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setSubscribeAudioAllowlist';
     final param = createParams({'uidList': uidList, 'uidNumber': uidNumber});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1053,8 +1064,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setSubscribeVideoBlocklist';
     final param = createParams({'uidList': uidList, 'uidNumber': uidNumber});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1071,8 +1082,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setSubscribeVideoAllowlist';
     final param = createParams({'uidList': uidList, 'uidNumber': uidNumber});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1092,8 +1103,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_enableAudioVolumeIndication';
     final param = createParams(
         {'interval': interval, 'smooth': smooth, 'reportVad': reportVad});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1111,8 +1122,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1129,7 +1140,7 @@ class RtcEngineImpl implements RtcEngine {
 // final param = createParams({// 'config':config.toJson(), 'observer':observer// });
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:buffers);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:buffers));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -1147,8 +1158,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopAudioRecording';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1164,8 +1175,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_createMediaPlayer';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1179,8 +1190,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_destroyMediaPlayer';
     final param = createParams({'media_player': mediaPlayer});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1205,8 +1216,8 @@ class RtcEngineImpl implements RtcEngine {
       'cycle': cycle,
       'startPos': startPos
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1219,8 +1230,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopAudioMixing';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1236,8 +1247,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_pauseAudioMixing';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1253,8 +1264,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_resumeAudioMixing';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1270,8 +1281,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_selectAudioTrack';
     final param = createParams({'index': index});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1287,8 +1298,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getAudioTrackCount';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1302,8 +1313,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustAudioMixingVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1319,8 +1330,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustAudioMixingPublishVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1336,8 +1347,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getAudioMixingPublishVolume';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1351,8 +1362,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustAudioMixingPlayoutVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1368,8 +1379,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getAudioMixingPlayoutVolume';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1383,8 +1394,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getAudioMixingDuration';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1398,8 +1409,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getAudioMixingCurrentPosition';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1413,8 +1424,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioMixingPosition';
     final param = createParams({'pos': pos});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1430,8 +1441,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioMixingDualMonoMode';
     final param = createParams({'mode': mode.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1447,8 +1458,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioMixingPitch';
     final param = createParams({'pitch': pitch});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1464,8 +1475,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getEffectsVolume';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1479,8 +1490,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setEffectsVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1500,8 +1511,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_preloadEffect';
     final param = createParams(
         {'soundId': soundId, 'filePath': filePath, 'startPos': startPos});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1534,8 +1545,8 @@ class RtcEngineImpl implements RtcEngine {
       'publish': publish,
       'startPos': startPos
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1562,8 +1573,8 @@ class RtcEngineImpl implements RtcEngine {
       'gain': gain,
       'publish': publish
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1579,8 +1590,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getVolumeOfEffect';
     final param = createParams({'soundId': soundId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1595,8 +1606,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setVolumeOfEffect';
     final param = createParams({'soundId': soundId, 'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1612,8 +1623,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_pauseEffect';
     final param = createParams({'soundId': soundId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1629,8 +1640,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_pauseAllEffects';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1646,8 +1657,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_resumeEffect';
     final param = createParams({'soundId': soundId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1663,8 +1674,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_resumeAllEffects';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1680,8 +1691,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopEffect';
     final param = createParams({'soundId': soundId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1697,8 +1708,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopAllEffects';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1714,8 +1725,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_unloadEffect';
     final param = createParams({'soundId': soundId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1731,8 +1742,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_unloadAllEffects';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1748,8 +1759,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getEffectDuration';
     final param = createParams({'filePath': filePath});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1764,8 +1775,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setEffectPosition';
     final param = createParams({'soundId': soundId, 'pos': pos});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1781,8 +1792,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getEffectCurrentPosition';
     final param = createParams({'soundId': soundId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1796,8 +1807,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableSoundPositionIndication';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1814,8 +1825,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteVoicePosition';
     final param = createParams({'uid': uid, 'pan': pan, 'gain': gain});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1831,8 +1842,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableSpatialAudio';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1851,8 +1862,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'uid': uid, 'params': params.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(params.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1868,8 +1879,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setVoiceBeautifierPreset';
     final param = createParams({'preset': preset.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1885,8 +1896,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioEffectPreset';
     final param = createParams({'preset': preset.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1902,8 +1913,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setVoiceConversionPreset';
     final param = createParams({'preset': preset.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1923,8 +1934,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioEffectParameters';
     final param = createParams(
         {'preset': preset.value(), 'param1': param1, 'param2': param2});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1944,8 +1955,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setVoiceBeautifierParameters';
     final param = createParams(
         {'preset': preset.value(), 'param1': param1, 'param2': param2});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1965,8 +1976,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setVoiceConversionParameters';
     final param = createParams(
         {'preset': preset.value(), 'param1': param1, 'param2': param2});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -1982,8 +1993,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLocalVoicePitch';
     final param = createParams({'pitch': pitch});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2002,8 +2013,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setLocalVoiceEqualization';
     final param = createParams(
         {'bandFrequency': bandFrequency.value(), 'bandGain': bandGain});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2021,8 +2032,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setLocalVoiceReverb';
     final param =
         createParams({'reverbKey': reverbKey.value(), 'value': value});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2038,8 +2049,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setHeadphoneEQPreset';
     final param = createParams({'preset': preset.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2056,8 +2067,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setHeadphoneEQParameters';
     final param = createParams({'lowGain': lowGain, 'highGain': highGain});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2073,8 +2084,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLogFile';
     final param = createParams({'filePath': filePath});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2090,8 +2101,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLogFilter';
     final param = createParams({'filter': filter.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2107,8 +2118,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLogLevel';
     final param = createParams({'level': level.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2124,8 +2135,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLogFileSize';
     final param = createParams({'fileSizeInKBytes': fileSizeInKBytes});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2141,8 +2152,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_uploadLogFile';
     final param = createParams({'requestId': requestId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2162,8 +2173,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setLocalRenderMode';
     final param = createParams(
         {'renderMode': renderMode.value(), 'mirrorMode': mirrorMode.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2183,8 +2194,8 @@ class RtcEngineImpl implements RtcEngine {
       'renderMode': renderMode.value(),
       'mirrorMode': mirrorMode.value()
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2200,8 +2211,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLocalVideoMirrorMode';
     final param = createParams({'mirrorMode': mirrorMode.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2223,8 +2234,8 @@ class RtcEngineImpl implements RtcEngine {
     if (streamConfig != null) {
       buffers.addAll(streamConfig.collectBufferList());
     }
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2244,8 +2255,8 @@ class RtcEngineImpl implements RtcEngine {
     if (streamConfig != null) {
       buffers.addAll(streamConfig.collectBufferList());
     }
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2260,8 +2271,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_enableEchoCancellationExternal';
     final param = createParams(
         {'enabled': enabled, 'audioSourceDelay': audioSourceDelay});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2278,8 +2289,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableCustomAudioLocalPlayback';
     final param = createParams({'sourceId': sourceId, 'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2297,8 +2308,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2314,8 +2325,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopPrimaryCustomAudioTrack';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2333,8 +2344,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2350,8 +2361,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopSecondaryCustomAudioTrack';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2376,8 +2387,8 @@ class RtcEngineImpl implements RtcEngine {
       'mode': mode.value(),
       'samplesPerCall': samplesPerCall
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2402,8 +2413,8 @@ class RtcEngineImpl implements RtcEngine {
       'mode': mode.value(),
       'samplesPerCall': samplesPerCall
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2426,8 +2437,8 @@ class RtcEngineImpl implements RtcEngine {
       'channel': channel,
       'samplesPerCall': samplesPerCall
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2452,8 +2463,8 @@ class RtcEngineImpl implements RtcEngine {
       'mode': mode.value(),
       'samplesPerCall': samplesPerCall
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2470,8 +2481,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setPlaybackAudioFrameBeforeMixingParameters';
     final param = createParams({'sampleRate': sampleRate, 'channel': channel});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2487,8 +2498,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableAudioSpectrumMonitor';
     final param = createParams({'intervalInMS': intervalInMS});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2504,8 +2515,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_disableAudioSpectrumMonitor';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2521,7 +2532,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_registerAudioSpectrumObserver';
 // final param = createParams({// 'observer':observer// });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -2538,7 +2549,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_unregisterAudioSpectrumObserver';
 // final param = createParams({// 'observer':observer// });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -2555,8 +2566,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustRecordingSignalVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2572,8 +2583,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_muteRecordingSignal';
     final param = createParams({'mute': mute});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2589,8 +2600,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustPlaybackSignalVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2607,8 +2618,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustUserPlaybackSignalVolume';
     final param = createParams({'uid': uid, 'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2625,8 +2636,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setLocalPublishFallbackOption';
     final param = createParams({'option': option.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2643,8 +2654,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteSubscribeFallbackOption';
     final param = createParams({'option': option.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2661,8 +2672,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableLoopbackRecording';
     final param = createParams({'enabled': enabled, 'deviceName': deviceName});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2678,8 +2689,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustLoopbackSignalVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2695,8 +2706,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getLoopbackRecordingVolume';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2715,8 +2726,8 @@ class RtcEngineImpl implements RtcEngine {
       'enabled': enabled,
       'includeAudioFilters': includeAudioFilters.value()
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2732,8 +2743,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setInEarMonitoringVolume';
     final param = createParams({'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2751,8 +2762,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_loadExtensionProvider';
     final param =
         createParams({'path': path, 'unload_after_use': unloadAfterUse});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2772,8 +2783,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setExtensionProviderProperty';
     final param =
         createParams({'provider': provider, 'key': key, 'value': value});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2793,8 +2804,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_registerExtension';
     final param = createParams(
         {'provider': provider, 'extension': extension, 'type': type.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2819,8 +2830,8 @@ class RtcEngineImpl implements RtcEngine {
       'enable': enable,
       'type': type.value()
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2844,8 +2855,8 @@ class RtcEngineImpl implements RtcEngine {
       'value': value,
       'type': type.value()
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2869,8 +2880,8 @@ class RtcEngineImpl implements RtcEngine {
       'buf_len': bufLen,
       'type': type.value()
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2892,8 +2903,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2909,8 +2920,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_createCustomVideoTrack';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2926,8 +2937,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'sender_option': senderOption.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(senderOption.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2941,8 +2952,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_destroyCustomVideoTrack';
     final param = createParams({'video_track_id': videoTrackId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2958,8 +2969,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_destroyCustomEncodedVideoTrack';
     final param = createParams({'video_track_id': videoTrackId});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2975,8 +2986,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_switchCamera';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2992,8 +3003,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraZoomSupported';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3007,8 +3018,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraFaceDetectSupported';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3022,8 +3033,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraTorchSupported';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3037,8 +3048,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraFocusSupported';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3052,8 +3063,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraAutoFocusFaceModeSupported';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3067,8 +3078,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setCameraZoomFactor';
     final param = createParams({'factor': factor});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3084,8 +3095,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableFaceDetection';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3101,8 +3112,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getCameraMaxZoomFactor';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3118,8 +3129,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setCameraFocusPositionInPreview';
     final param =
         createParams({'positionX': positionX, 'positionY': positionY});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3135,8 +3146,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setCameraTorchOn';
     final param = createParams({'isOn': isOn});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3152,8 +3163,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setCameraAutoFocusFaceModeEnabled';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3169,8 +3180,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraExposurePositionSupported';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3189,8 +3200,8 @@ class RtcEngineImpl implements RtcEngine {
       'positionXinView': positionXinView,
       'positionYinView': positionYinView
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3206,8 +3217,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraAutoExposureFaceModeSupported';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3221,8 +3232,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setCameraAutoExposureFaceModeEnabled';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3238,8 +3249,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setDefaultAudioRouteToSpeakerphone';
     final param = createParams({'defaultToSpeaker': defaultToSpeaker});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3255,8 +3266,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setEnableSpeakerphone';
     final param = createParams({'speakerOn': speakerOn});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3272,8 +3283,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isSpeakerphoneEnabled';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3297,8 +3308,8 @@ class RtcEngineImpl implements RtcEngine {
     final List<Uint8List> buffers = [];
     buffers.addAll(thumbSize.collectBufferList());
     buffers.addAll(iconSize.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3313,8 +3324,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setAudioSessionOperationRestriction';
     final param = createParams({'restriction': restriction.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3340,8 +3351,8 @@ class RtcEngineImpl implements RtcEngine {
     final List<Uint8List> buffers = [];
     buffers.addAll(regionRect.collectBufferList());
     buffers.addAll(captureParams.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3368,8 +3379,8 @@ class RtcEngineImpl implements RtcEngine {
     buffers.addAll(screenRect.collectBufferList());
     buffers.addAll(regionRect.collectBufferList());
     buffers.addAll(captureParams.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3385,8 +3396,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getAudioDeviceInfo';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3414,8 +3425,8 @@ class RtcEngineImpl implements RtcEngine {
     final List<Uint8List> buffers = [];
     buffers.addAll(regionRect.collectBufferList());
     buffers.addAll(captureParams.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3431,8 +3442,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setScreenCaptureContentHint';
     final param = createParams({'contentHint': contentHint.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3449,8 +3460,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setScreenCaptureScenario';
     final param = createParams({'screenScenario': screenScenario.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3468,8 +3479,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'regionRect': regionRect.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(regionRect.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3488,8 +3499,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'captureParams': captureParams.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(captureParams.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3508,8 +3519,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'captureParams': captureParams.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(captureParams.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3528,8 +3539,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'captureParams': captureParams.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(captureParams.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3545,8 +3556,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCapture';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3562,8 +3573,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getCallId';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3584,8 +3595,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_rate';
     final param = createParams(
         {'callId': callId, 'rating': rating, 'description': description});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3601,8 +3612,8 @@ class RtcEngineImpl implements RtcEngine {
       {required String callId, required String description}) async {
     final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_complain';
     final param = createParams({'callId': callId, 'description': description});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3618,8 +3629,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startRtmpStreamWithoutTranscoding';
     final param = createParams({'url': url});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3639,8 +3650,8 @@ class RtcEngineImpl implements RtcEngine {
         createParams({'url': url, 'transcoding': transcoding.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(transcoding.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3658,8 +3669,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'transcoding': transcoding.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(transcoding.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3675,8 +3686,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopRtmpStream';
     final param = createParams({'url': url});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3695,8 +3706,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3715,8 +3726,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3732,8 +3743,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopLocalVideoTranscoder';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3752,8 +3763,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3772,8 +3783,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3789,8 +3800,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopPrimaryCameraCapture';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3806,8 +3817,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopSecondaryCameraCapture';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3826,8 +3837,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setCameraDeviceOrientation';
     final param = createParams(
         {'type': type.value(), 'orientation': orientation.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3846,8 +3857,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setScreenCaptureOrientation';
     final param = createParams(
         {'type': type.value(), 'orientation': orientation.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3866,8 +3877,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3886,8 +3897,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3903,8 +3914,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopPrimaryScreenCapture';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3920,8 +3931,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopSecondaryScreenCapture';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3937,8 +3948,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getConnectionState';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -3952,7 +3963,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_registerEventHandler';
 // final param = createParams({// 'eventHandler':eventHandler// });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -3969,7 +3980,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_unregisterEventHandler';
 // final param = createParams({// 'eventHandler':eventHandler// });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -3988,8 +3999,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_setRemoteUserPriority';
     final param =
         createParams({'uid': uid, 'userPriority': userPriority.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4005,8 +4016,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setEncryptionMode';
     final param = createParams({'encryptionMode': encryptionMode});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4022,8 +4033,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setEncryptionSecret';
     final param = createParams({'secret': secret});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4042,8 +4053,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'enabled': enabled, 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4061,8 +4072,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4085,8 +4096,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'streamId': streamId, 'length': length});
     final List<Uint8List> buffers = [];
     buffers.add(data);
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4106,8 +4117,8 @@ class RtcEngineImpl implements RtcEngine {
         {'watermarkUrl': watermarkUrl, 'options': options.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4120,8 +4131,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_clearVideoWatermarks';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4137,8 +4148,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_pauseAudio';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4154,8 +4165,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_resumeAudio';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4171,8 +4182,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableWebSdkInteroperability';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4199,8 +4210,8 @@ class RtcEngineImpl implements RtcEngine {
       'label': label,
       'value': value
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4217,7 +4228,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_registerMediaMetadataObserver';
 // final param = createParams({// 'observer':observer, 'type':type// });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4235,7 +4246,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_unregisterMediaMetadataObserver';
 // final param = createParams({// 'observer':observer, 'type':type// });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4267,8 +4278,8 @@ class RtcEngineImpl implements RtcEngine {
       'duration_ms': durationMs,
       'auto_upload': autoUpload
     });
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4288,8 +4299,8 @@ class RtcEngineImpl implements RtcEngine {
         '${isOverrideClassName ? className : 'RtcEngine'}_stopAudioFrameDump';
     final param = createParams(
         {'channel_id': channelId, 'user_id': userId, 'location': location});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4306,8 +4317,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_registerLocalUserAccount';
     final param = createParams({'appId': appId, 'userAccount': userAccount});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4336,8 +4347,8 @@ class RtcEngineImpl implements RtcEngine {
     if (options != null) {
       buffers.addAll(options.collectBufferList());
     }
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4361,8 +4372,8 @@ class RtcEngineImpl implements RtcEngine {
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4378,8 +4389,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getUserInfoByUserAccount';
     final param = createParams({'userAccount': userAccount});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4398,8 +4409,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getUserInfoByUid';
     final param = createParams({'uid': uid});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4420,8 +4431,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'configuration': configuration.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(configuration.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4440,8 +4451,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'configuration': configuration.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(configuration.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4457,8 +4468,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopChannelMediaRelay';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4474,8 +4485,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_pauseAllChannelMediaRelay';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4491,8 +4502,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_resumeAllChannelMediaRelay';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4509,8 +4520,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setDirectCdnStreamingAudioConfiguration';
     final param = createParams({'profile': profile.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4529,8 +4540,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4555,8 +4566,8 @@ class RtcEngineImpl implements RtcEngine {
     });
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4572,8 +4583,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopDirectCdnStreaming';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4592,8 +4603,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'options': options.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4615,8 +4626,8 @@ class RtcEngineImpl implements RtcEngine {
         {'sound1': sound1, 'sound2': sound2, 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4632,8 +4643,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopRhythmPlayer';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4651,8 +4662,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4669,8 +4680,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_takeSnapshot';
     final param = createParams({'uid': uid, 'filePath': filePath});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4689,8 +4700,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'enabled': enabled, 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4707,8 +4718,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustCustomAudioPublishVolume';
     final param = createParams({'sourceId': sourceId, 'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4725,8 +4736,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_adjustCustomAudioPlayoutVolume';
     final param = createParams({'sourceId': sourceId, 'volume': volume});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4742,8 +4753,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setCloudProxy';
     final param = createParams({'proxyType': proxyType.value()});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4761,8 +4772,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4782,8 +4793,8 @@ class RtcEngineImpl implements RtcEngine {
         createParams({'options': options.toJson(), 'sourceType': sourceType});
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4800,8 +4811,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setAVSyncSource';
     final param = createParams({'channelId': channelId, 'uid': uid});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4820,8 +4831,8 @@ class RtcEngineImpl implements RtcEngine {
     final param = createParams({'enable': enable, 'options': options.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(options.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4837,8 +4848,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getCurrentMonotonicTimeInMs';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4852,8 +4863,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_enableWirelessAccelerate';
     final param = createParams({'enabled': enabled});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4869,8 +4880,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getNetworkType';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4884,7 +4895,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getAudioDeviceManager';
 // final param = createParams({// // });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4899,7 +4910,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getVideoDeviceManager';
 // final param = createParams({// // });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4914,7 +4925,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMusicContentCenter';
 // final param = createParams({// // });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4929,7 +4940,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMediaEngine';
 // final param = createParams({// // });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4944,7 +4955,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getMediaRecorder';
 // final param = createParams({// // });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4959,7 +4970,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getLocalSpatialAudioEngine';
 // final param = createParams({// // });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -4978,8 +4989,8 @@ class RtcEngineImpl implements RtcEngine {
         {'metadata': metadata.toJson(), 'source_type': sourceType.value()});
     final List<Uint8List> buffers = [];
     buffers.addAll(metadata.collectBufferList());
-    final callApiResult = await apiCaller
-        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -4992,8 +5003,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setMaxMetadataSize';
     final param = createParams({'size': size});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -5006,7 +5017,7 @@ class RtcEngineImpl implements RtcEngine {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_unregisterAudioEncodedFrameObserver';
 // final param = createParams({// 'observer':observer// });
-// final callApiResult =  apiCaller.callIrisApi(apiType, jsonEncode(param), buffers:null);
+// final callApiResult =  irisMethodChannel.invokeMethod(IrisMethodCall(apiType, jsonEncode(param), buffers:null));
 // if (callApiResult.irisReturnCode < 0) {
 // throw AgoraRtcException(code: callApiResult.irisReturnCode);
 // }
@@ -5021,8 +5032,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setParameters';
     final param = createParams({'parameters': parameters});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -5035,8 +5046,8 @@ class RtcEngineImpl implements RtcEngine {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getNativeHandle';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }

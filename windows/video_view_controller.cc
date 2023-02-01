@@ -84,6 +84,7 @@ void VideoViewController::HandleMethodCall(
 
 void VideoViewController::DeleteVideoFrameBufferManagerIfNeed()
 {
+    // TODO(littlegnal): Manage IrisVideoFrameBufferManager on dart side.
     if (videoFrameBufferManager_)
     {
         delete videoFrameBufferManager_;

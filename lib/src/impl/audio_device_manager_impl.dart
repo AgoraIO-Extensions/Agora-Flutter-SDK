@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:agora_rtc_engine/src/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
-import 'package:agora_rtc_engine/src/impl/api_caller.dart';
+import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/audio_device_manager.dart';
 import 'package:agora_rtc_engine/src/binding/audio_device_manager_impl.dart'
     as audio_device_manager_impl_binding;
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -20,26 +21,28 @@ extension DeviceInfoListExt on List<AudioDeviceInfo> {
   }
 }
 
-class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
-    .AudioDeviceManagerImpl implements AudioDeviceManager {
-  static AudioDeviceManagerImpl? _instance;
+class AudioDeviceManagerImpl
+    extends audio_device_manager_impl_binding.AudioDeviceManagerImpl
+    with ScopedDisposableObjectMixin
+    implements AudioDeviceManager {
+  AudioDeviceManagerImpl._(RtcEngine rtcEngine)
+      : super(rtcEngine.irisMethodChannel);
 
-  AudioDeviceManagerImpl._();
-
-  static AudioDeviceManager create() {
-    if (_instance != null) return _instance!;
-
-    _instance = AudioDeviceManagerImpl._();
-
-    return _instance!;
+  static AudioDeviceManager create(RtcEngine rtcEngine) {
+    return rtcEngine.objectPool.putIfAbsent<AudioDeviceManagerImpl>(
+        _audioDeviceManagerScopedKey,
+        () => AudioDeviceManagerImpl._(rtcEngine));
   }
+
+  static const _audioDeviceManagerScopedKey =
+      TypedScopedKey(AudioDeviceManagerImpl);
 
   @override
   Future<List<AudioDeviceInfo>> enumeratePlaybackDevices() async {
     const apiType = 'AudioDeviceManager_enumeratePlaybackDevices';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -56,8 +59,8 @@ class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
   Future<List<AudioDeviceInfo>> enumerateRecordingDevices() async {
     const apiType = 'AudioDeviceManager_enumerateRecordingDevices';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -74,8 +77,8 @@ class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
   Future<AudioDeviceInfo> getPlaybackDeviceInfo() async {
     const apiType = 'AudioDeviceManager_getPlaybackDeviceInfo';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -88,8 +91,8 @@ class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
   Future<AudioDeviceInfo> getRecordingDeviceInfo() async {
     const apiType = 'AudioDeviceManager_getRecordingDeviceInfo';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param));
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -100,7 +103,7 @@ class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
 
   @override
   Future<void> release() async {
-    _instance = null;
+    markDisposed();
   }
 
   @override
@@ -108,8 +111,8 @@ class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
     final apiType =
         '${isOverrideClassName ? className : 'AudioDeviceManager'}_getPlaybackDefaultDevice';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -123,13 +126,18 @@ class AudioDeviceManagerImpl extends audio_device_manager_impl_binding
     final apiType =
         '${isOverrideClassName ? className : 'AudioDeviceManager'}_getRecordingDefaultDevice';
     final param = createParams({});
-    final callApiResult =
-        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    final callApiResult = await irisMethodChannel
+        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
     final rm = callApiResult.data;
 
     return AudioDeviceInfo.fromJson(rm);
+  }
+
+  @override
+  Future<void> dispose() async {
+    return release();
   }
 }
