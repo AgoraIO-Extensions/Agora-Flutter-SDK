@@ -8,17 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
-// import 'package:path_provider/path_provider.dart';
 import 'generated/rtcengine_fake_test.generated.dart' as generated;
-// import 'package:integration_test_app/main.dart' as app;
 import 'package:path/path.dart' as path;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-// import 'package:fake_test_app/fake_remote_user.dart';
-
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
+void testCases() {
   generated.rtcEngineSmokeTestCases();
 
   testWidgets(

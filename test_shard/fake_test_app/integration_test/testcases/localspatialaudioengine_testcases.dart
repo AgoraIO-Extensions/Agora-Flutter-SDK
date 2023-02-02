@@ -9,9 +9,7 @@ import 'generated/localspatialaudioengine_fake_test.generated.dart'
 import 'generated/basespatialaudioengine_fake_test.generated.dart'
     as basespatialaudioengine;
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
+void testCases() {
   generated.localSpatialAudioEngineSmokeTestCases();
   basespatialaudioengine.localSpatialAudioEngineSmokeTestCases();
 

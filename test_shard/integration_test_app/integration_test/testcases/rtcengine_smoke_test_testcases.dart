@@ -8,8 +8,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/fake_remote_user.dart';
 import 'package:integration_test_app/main.dart' as app;
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+void testCases() {
 
   testWidgets(
     'registerAudioEncodedFrameObserver smoke test',
