@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
-import 'generated/rtcengine_fake_test.generated.dart' as generated;
+import '../generated/rtcengine_fake_test.generated.dart' as generated;
 import 'package:path/path.dart' as path;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
