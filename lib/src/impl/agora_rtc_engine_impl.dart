@@ -210,26 +210,19 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     // ignore: invalid_null_aware_operator
     _ambiguate(WidgetsBinding.instance)?.addObserver(_lifecycle!);
 
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      final externalFilesDir =
-          await engineMethodChannel.invokeMethod('getExternalFilesDir');
-      if (externalFilesDir != null) {
-        try {
-          // Reset the sdk log file to ensure the iris log path has been set
-          await setLogFile('$externalFilesDir/agorasdk.log');
-        } catch (e) {
-          debugPrint(
-              '[RtcEngine] setLogFile fail, make sure the permission is granted.');
-        }
-      }
-    }
-
     await _globalVideoViewController
         .attachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
   }
 
   @override
   Future<void> initialize(RtcEngineContext context) async {
+    String externalFilesDir = '';
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      final androidInitResult =
+          await engineMethodChannel.invokeMethod('androidInit');
+      externalFilesDir = androidInitResult['externalFilesDir'] ?? '';
+    }
+
     await irisMethodChannel
         .initilize(IrisApiEngineNativeBindingDelegateProvider());
     await super.initialize(context);
@@ -238,6 +231,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       'RtcEngine_setAppType',
       jsonEncode({'appType': 4}),
     ));
+
+    if (externalFilesDir.isNotEmpty) {
+      try {
+        // Reset the sdk log file to ensure the iris log path has been set
+        await setLogFile('$externalFilesDir/agorasdk.log');
+      } catch (e) {
+        debugPrint(
+            '[RtcEngine] setLogFile fail, make sure the permission is granted.');
+      }
+    }
 
     await _initializeInternal(context);
   }

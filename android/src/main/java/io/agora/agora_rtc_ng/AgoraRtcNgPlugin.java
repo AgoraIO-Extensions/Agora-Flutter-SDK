@@ -7,16 +7,13 @@ import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler {
-
-    static {
-        System.loadLibrary("AgoraRtcWrapper");
-    }
 
     private MethodChannel channel;
     private WeakReference<FlutterPluginBinding> flutterPluginBindingRef;
@@ -59,12 +56,20 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if ("getAssetAbsolutePath".equals(call.method)) {
             getAssetAbsolutePath(call, result);
-        } else if ("getExternalFilesDir".equals(call.method)) {
+        } else if ("androidInit".equals(call.method)) {
+            // dart ffi DynamicLibrary.open do not trigger JNI_OnLoad in iris, so we need call java
+            // System.loadLibrary here to trigger the JNI_OnLoad explicitly.
+            System.loadLibrary("AgoraRtcWrapper");
+
+            String externalFilesDir;
             if (applicationContext != null) {
-                result.success(applicationContext.getExternalFilesDir(null).getAbsolutePath());
+                externalFilesDir = applicationContext.getExternalFilesDir(null).getAbsolutePath();
             } else {
-                result.error("", "Application context is null", null);
+                externalFilesDir = "";
             }
+            result.success(new HashMap<String, String>() {{
+                put("externalFilesDir", externalFilesDir);
+            }});
         } else {
             result.notImplemented();
         }
