@@ -30,9 +30,7 @@ class _RenderViewWidgetState extends State<_RenderViewWidget> {
   }
 }
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
+void testCases() {
   testWidgets('Show Local AgoraVideoView pressure test',
       (WidgetTester tester) async {
     app.main();

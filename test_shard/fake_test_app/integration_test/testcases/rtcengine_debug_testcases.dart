@@ -9,9 +9,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine_debug.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
+void testCases() {
   testWidgets(
     'startDumpVideo/stopDumpVideo fake test',
     (WidgetTester tester) async {
