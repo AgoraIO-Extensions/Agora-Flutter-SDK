@@ -6,12 +6,10 @@ import 'package:integration_test/integration_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 
 import 'package:integration_test/integration_test.dart';
-import 'generated/rtcengineex_fake_test.generated.dart' as generated;
+import '../generated/rtcengineex_fake_test.generated.dart' as generated;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
+void testCases() {
   generated.rtcEngineExSmokeTestCases();
 
   testWidgets(
