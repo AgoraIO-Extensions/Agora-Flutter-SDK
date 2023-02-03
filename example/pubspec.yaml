@@ -30,7 +30,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  permission_handler: ^8.3.0
+  permission_handler: ^10.2.0
   path_provider: ^2.0.8
 
   video_raw_data:
