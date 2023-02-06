@@ -19,9 +19,11 @@ class GlobalVideoViewController {
   int get videoFrameBufferManagerIntPtr => _videoFrameBufferManagerIntPtr;
 
   Future<void> attachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
-    if (_videoFrameBufferManagerIntPtr == 0 &&
-        (defaultTargetPlatform == TargetPlatform.macOS ||
-            defaultTargetPlatform == TargetPlatform.iOS)) {
+    if (_videoFrameBufferManagerIntPtr != 0) {
+      return;
+    }
+    if (defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
       final CallApiResult result =
           await irisMethodChannel.invokeMethod(IrisMethodCall(
         'CreateIrisVideoFrameBufferManager',
@@ -40,9 +42,11 @@ class GlobalVideoViewController {
   }
 
   Future<void> detachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
-    if (_videoFrameBufferManagerIntPtr != 0 &&
-        (defaultTargetPlatform == TargetPlatform.macOS ||
-            defaultTargetPlatform == TargetPlatform.iOS)) {
+    if (_videoFrameBufferManagerIntPtr == 0) {
+      return;
+    }
+    if (defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
       await irisMethodChannel.invokeMethod(IrisMethodCall(
         'FreeIrisVideoFrameBufferManager',
         jsonEncode({
