@@ -10,21 +10,6 @@ default_macos_container: &default_macos_container
   macos_instance:
     image: ghcr.io/cirruslabs/macos-ventura-xcode:14
 
-# default_macos_container: &default_macos_container
-#   matrix:
-#     - name: macos-monterey-xcode:13
-#       macos_instance:
-#         image: ghcr.io/cirruslabs/macos-monterey-xcode:13
-
-#     - name: macos-monterey-xcode:14
-#       macos_instance:
-#         image: ghcr.io/cirruslabs/macos-monterey-xcode:14
-
-#     - name: macos-ventura-xcode:14
-#       macos_instance:
-#         image: ghcr.io/cirruslabs/macos-ventura-xcode:14
-
-
 android_integratinon_test_task:
   container:
     # Only run min support flutter sdk 2.10.5, and latest flutter sdk version
@@ -89,88 +74,16 @@ android_build_task:
     - flutter packages get
     - flutter build apk
 
-# TODO(littlegnal): Complete after Android migration completed.
-# ios_integration_test_task:
-#   <<: *organization_filter
-#   <<: *default_macos_container
+ios_rendering_test_task:
+  <<: *organization_filter
+  <<: *default_macos_container
 
-#   create_ios_simulator_script:
-#     - xcrun simctl list
-#     - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-X com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
+  create_ios_simulator_script:
+    - xcrun simctl list
+    # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone-13-Pro-Max.
+    # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
+    - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
 
-#   matrix:
-#     - name: FLUTTER_VERSION 2.10.5
-#       env:
-#         FLUTTER_VERSION: 2.10.5
-#     - name: FLUTTER_VERSION 3.0.0
-#       env:
-#         FLUTTER_VERSION: 3.0.0
-#     - name: FLUTTER_VERSION 3.3.0
-#       env:
-#         FLUTTER_VERSION: 3.3.0
-#     - name: FLUTTER_VERSION 3.7.0
-#       env:
-#         FLUTTER_VERSION: 3.7.0
-#   switch_flutter_version_script:
-#     - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
-#     - git fetch
-#     - git checkout ${FLUTTER_VERSION} && flutter precache
-
-#   run_ios_test_script:
-#     - flutter doctor -v
-#     - bash ci/run_flutter_integration_test_ios.sh
-
-# ios_rendering_test_task:
-#   <<: *organization_filter
-#   <<: *default_macos_container
-
-#   create_ios_simulator_script:
-#     - xcrun simctl list
-#     - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-X com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
-
-#   switch_flutter_version_script:
-#     - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
-#     - git fetch
-#     - git checkout 3.0.0 && flutter precache
-
-#   run_ios_test_script:
-#     - bash ci/rendering_test_ios.sh
-
-# ios_build_task:
-#   <<: *organization_filter
-
-#   matrix:
-#     - name: macos-monterey-xcode:13
-#       macos_instance:
-#         image: ghcr.io/cirruslabs/macos-monterey-xcode:13
-
-#   matrix:
-#     - name: FLUTTER_VERSION 2.10.5
-#       env:
-#         FLUTTER_VERSION: 2.10.5
-#     - name: FLUTTER_VERSION 3.0.0
-#       env:
-#         FLUTTER_VERSION: 3.0.0
-#     - name: FLUTTER_VERSION 3.3.0
-#       env:
-#         FLUTTER_VERSION: 3.3.0
-#     - name: FLUTTER_VERSION 3.7.0
-#       env:
-#         FLUTTER_VERSION: 3.7.0
-#   switch_flutter_version_script:
-#     - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
-#     - git fetch
-#     - git checkout ${FLUTTER_VERSION} && flutter precache
-
-#   build_ios_x86_64_script:
-#     - cd example
-#     - arch -x86_64 flutter doctor -v
-#     - arch -x86_64 flutter packages get
-#     - arch -x86_64 flutter build ios --no-codesign
-
-#   build_ios_arm64_script:
-#     - cd example
-#     - flutter doctor -v
-#     - flutter clean
-#     - flutter packages get
-#     - flutter build ios --no-codesign
+  run_ios_test_script:
+    - flutter doctor -v
+    - bash ci/rendering_test_ios.sh
