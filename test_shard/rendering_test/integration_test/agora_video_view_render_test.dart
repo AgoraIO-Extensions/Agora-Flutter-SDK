@@ -590,14 +590,6 @@ void main() {
             );
           });
         },
-        // TODO(littlegnal): Flutter texture with software rendering on simulator is not supported.
-        // The log like below:
-        // Flutter: Attempted to composite external texture sources using the software backend.
-        // This backend is only used on simulators. This feature is only available
-        // on actual devices where OpenGL or Metal is used for rendering.
-        //
-        // Temporily skip flutter texture rendering test on ios at this time.
-        skip: true,
       );
     },
     skip: !Platform.isIOS,
