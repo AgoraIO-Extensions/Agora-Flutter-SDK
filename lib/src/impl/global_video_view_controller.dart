@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 // ignore_for_file: public_member_api_docs
 
 class GlobalVideoViewController {
-  GlobalVideoViewController();
+  GlobalVideoViewController(this.irisMethodChannel);
+
+  final IrisMethodChannel irisMethodChannel;
 
   final MethodChannel methodChannel =
       const MethodChannel('agora_rtc_ng/video_view_controller');
@@ -13,6 +19,20 @@ class GlobalVideoViewController {
   int get videoFrameBufferManagerIntPtr => _videoFrameBufferManagerIntPtr;
 
   Future<void> attachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
+    if (_videoFrameBufferManagerIntPtr == 0 &&
+        (defaultTargetPlatform == TargetPlatform.macOS ||
+            defaultTargetPlatform == TargetPlatform.iOS)) {
+      final CallApiResult result =
+          await irisMethodChannel.invokeMethod(IrisMethodCall(
+        'CreateIrisVideoFrameBufferManager',
+        jsonEncode({'irisRtcEngineNativeHandle': irisRtcEngineIntPtr}),
+      ));
+      _videoFrameBufferManagerIntPtr =
+          result.data['videoFrameBufferManagerNativeHandle'] ?? 0;
+
+      return;
+    }
+
     final videoFrameBufferManagerIntPtr = await methodChannel.invokeMethod<int>(
         'attachVideoFrameBufferManager', irisRtcEngineIntPtr);
 
@@ -20,6 +40,21 @@ class GlobalVideoViewController {
   }
 
   Future<void> detachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
+    if (_videoFrameBufferManagerIntPtr != 0 &&
+        (defaultTargetPlatform == TargetPlatform.macOS ||
+            defaultTargetPlatform == TargetPlatform.iOS)) {
+      await irisMethodChannel.invokeMethod(IrisMethodCall(
+        'FreeIrisVideoFrameBufferManager',
+        jsonEncode({
+          'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
+          'videoFrameBufferManagerNativeHandle': _videoFrameBufferManagerIntPtr,
+        }),
+      ));
+      _videoFrameBufferManagerIntPtr = 0;
+
+      return;
+    }
+
     await methodChannel.invokeMethod(
         'detachVideoFrameBufferManager', irisRtcEngineIntPtr);
   }
@@ -28,6 +63,7 @@ class GlobalVideoViewController {
       int uid, String channelId, int videoSourceType) async {
     final textureId =
         await methodChannel.invokeMethod<int>('createTextureRender', {
+      'videoFrameBufferManagerNativeHandle': _videoFrameBufferManagerIntPtr,
       'uid': uid,
       'channelId': channelId,
       'videoSourceType': videoSourceType,
