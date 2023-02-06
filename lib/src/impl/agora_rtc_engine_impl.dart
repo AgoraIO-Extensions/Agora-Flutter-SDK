@@ -170,16 +170,15 @@ class _Lifecycle with WidgetsBindingObserver {
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._(IrisMethodChannel irisMethodChannel)
-      : super(irisMethodChannel);
+      : super(irisMethodChannel) {
+    _globalVideoViewController = GlobalVideoViewController(irisMethodChannel);
+  }
 
   static RtcEngineImpl? _instance;
 
-  // final IrisMethodChannel irisMethodChannel;
-
   final _rtcEngineImplScopedKey = const TypedScopedKey(RtcEngineImpl);
 
-  final GlobalVideoViewController _globalVideoViewController =
-      GlobalVideoViewController();
+  late final GlobalVideoViewController _globalVideoViewController;
 
   final ScopedObjects _objectPool = ScopedObjects();
 
