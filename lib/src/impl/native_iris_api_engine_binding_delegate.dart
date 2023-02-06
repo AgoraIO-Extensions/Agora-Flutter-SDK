@@ -128,6 +128,8 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
           _binding.FreeIrisVideoFrameBufferManager(
               ffi.Pointer<ffi.Void>.fromAddress(videoFrameBufferManagerIntPtr));
 
+          _response(param, {});
+
           return 0;
         }
       default:
