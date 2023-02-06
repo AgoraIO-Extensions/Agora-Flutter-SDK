@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ffi' as ffi;
 
+import 'package:ffi/ffi.dart';
+
 import 'native_iris_api_engine_bindings.dart' as bindings;
 import 'package:iris_method_channel/iris_method_channel.dart';
 
@@ -47,6 +49,24 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
     return _binding.CreateIrisApiEngine(enginePtr);
   }
 
+  void _response(ffi.Pointer<ApiParam> param, Map<String, Object> result) {
+    using<void>((Arena arena) {
+      final ffi.Pointer<Utf8> resultMapPointerUtf8 =
+          jsonEncode(result).toNativeUtf8(allocator: arena);
+      final ffi.Pointer<ffi.Int8> resultMapPointerInt8 =
+          resultMapPointerUtf8.cast();
+
+      for (int i = 0; i < kBasicResultLength; i++) {
+        if (i >= resultMapPointerUtf8.length) {
+          break;
+        }
+
+        param.ref.result[i] = resultMapPointerInt8[i];
+      }
+    });
+  }
+
+  /// The value of `methoCall.funcName` should be same as the C function name
   int _interceptCall(
     IrisMethodCall methodCall,
     ffi.Pointer<ffi.Void> apiEnginePtr,
@@ -71,6 +91,46 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
           final videoFrameBufferManagerIntPtr = data['nativeHandle'];
           return _binding.StopDumpVideo(
               ffi.Pointer<ffi.Void>.fromAddress(videoFrameBufferManagerIntPtr));
+        }
+      case 'CreateIrisVideoFrameBufferManager':
+        {
+          final data = jsonDecode(methodCall.params);
+          assert(data.containsKey('irisRtcEngineNativeHandle'));
+          final irisRtcEngineNativeHandle =
+              data['irisRtcEngineNativeHandle'] as int;
+
+          final bufferManager = _binding.CreateIrisVideoFrameBufferManager();
+          _binding.Attach(
+            ffi.Pointer<ffi.Void>.fromAddress(irisRtcEngineNativeHandle),
+            bufferManager,
+          );
+
+          final result = {
+            'videoFrameBufferManagerNativeHandle': bufferManager.address
+          };
+          _response(param, result);
+
+          return 0;
+        }
+      case 'FreeIrisVideoFrameBufferManager':
+        {
+          final data = jsonDecode(methodCall.params);
+          final videoFrameBufferManagerIntPtr =
+              data['videoFrameBufferManagerNativeHandle'] as int;
+          final irisRtcEngineNativeHandle =
+              data['irisRtcEngineNativeHandle'] as int;
+
+          _binding.Detach(
+            ffi.Pointer<ffi.Void>.fromAddress(irisRtcEngineNativeHandle),
+            ffi.Pointer<ffi.Void>.fromAddress(videoFrameBufferManagerIntPtr),
+          );
+
+          _binding.FreeIrisVideoFrameBufferManager(
+              ffi.Pointer<ffi.Void>.fromAddress(videoFrameBufferManagerIntPtr));
+
+          _response(param, {});
+
+          return 0;
         }
       default:
         break;
