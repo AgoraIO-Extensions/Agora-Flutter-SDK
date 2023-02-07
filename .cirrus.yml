@@ -12,6 +12,8 @@ default_macos_container: &default_macos_container
     image: ghcr.io/cirruslabs/macos-ventura-xcode:14
 
 android_integratinon_test_task:
+  <<: *default_filters
+  
   container:
     # Only run min support flutter sdk 2.10.5, and latest flutter sdk version
     matrix:
