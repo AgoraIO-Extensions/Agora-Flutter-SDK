@@ -14,15 +14,12 @@
 VideoViewController::VideoViewController(
     flutter::TextureRegistrar *texture_registrar,
     flutter::BinaryMessenger *messenger) : texture_registrar_(texture_registrar),
-                                           messenger_(messenger),
-                                           videoFrameBufferManager_(nullptr)
+                                           messenger_(messenger)
 {
     auto channel =
         std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
             messenger_, "agora_rtc_ng/video_view_controller",
             &flutter::StandardMethodCodec::GetInstance());
-
-    // auto plugin = std::make_unique<AgoraRtcFlutterPlugin>();
 
     channel->SetMethodCallHandler([this](const auto &call, auto result)
                                   { this->HandleMethodCall(call, std::move(result)); });
@@ -38,34 +35,16 @@ void VideoViewController::HandleMethodCall(
 {
     auto method = method_call.method_name();
 
-    if (method.compare("attachVideoFrameBufferManager") == 0)
-    {
-        intptr_t irisRtcEnginePtr = std::get<intptr_t>(*method_call.arguments());
-        if (!videoFrameBufferManager_)
-        {
-            videoFrameBufferManager_ = new agora::iris::IrisVideoFrameBufferManager;
-        }
-        Attach((IrisApiEnginePtr)irisRtcEnginePtr, videoFrameBufferManager_);
-        result->Success((intptr_t)videoFrameBufferManager_);
-    }
-    else if (method.compare("detachVideoFrameBufferManager") == 0)
-    {
-        intptr_t irisRtcEnginePtr = std::get<intptr_t>(*method_call.arguments());
-
-        Detach((IrisApiEnginePtr)irisRtcEnginePtr, videoFrameBufferManager_);
-
-        DeleteVideoFrameBufferManagerIfNeed();
-        result->Success(flutter::EncodableValue(true));
-    }
-    else if (method.compare("createTextureRender") == 0)
+    if (method.compare("createTextureRender") == 0)
     {
         auto arguments = std::get<flutter::EncodableMap>(*method_call.arguments());
+        intptr_t &videoFrameBufferManagerNativeHandle = std::get<intptr_t>(arguments[flutter::EncodableValue("videoFrameBufferManagerNativeHandle")]);
         auto uidValue = arguments[flutter::EncodableValue("uid")];
         auto uid = uidValue.LongValue();
         auto &channelId = std::get<std::string>(arguments[flutter::EncodableValue("channelId")]);
         auto videoSourceType = std::get<int32_t>(arguments[flutter::EncodableValue("videoSourceType")]);
 
-        auto textureId = CreateTextureRender(static_cast<unsigned int>(uid), channelId, videoSourceType);
+        auto textureId = CreateTextureRender(videoFrameBufferManagerNativeHandle, static_cast<unsigned int>(uid), channelId, videoSourceType);
 
         result->Success(flutter::EncodableValue(textureId));
     }
@@ -82,18 +61,6 @@ void VideoViewController::HandleMethodCall(
     }
 }
 
-void VideoViewController::DeleteVideoFrameBufferManagerIfNeed()
-{
-    // TODO(littlegnal): Manage IrisVideoFrameBufferManager on dart side.
-    if (videoFrameBufferManager_)
-    {
-        delete videoFrameBufferManager_;
-        videoFrameBufferManager_ = nullptr;
-    }
-
-    renderers_.clear();
-}
-
 int64_t VideoViewController::CreatePlatformRender()
 {
     return 0;
@@ -105,14 +72,16 @@ bool VideoViewController::DestroyPlatformRender(int64_t platformRenderId)
 }
 
 int64_t VideoViewController::CreateTextureRender(
+    const intptr_t &videoFrameBufferManagerNativeHandle,
     unsigned int uid,
     const std::string &channelId,
     unsigned int videoSourceType)
 {
+    agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager = reinterpret_cast<agora::iris::IrisVideoFrameBufferManager *>(videoFrameBufferManagerNativeHandle);
     std::unique_ptr<TextureRender> textureRender = std::make_unique<TextureRender>(
         messenger_,
         texture_registrar_,
-        videoFrameBufferManager_);
+        videoFrameBufferManager);
     int64_t texture_id = textureRender->texture_id();
 
     textureRender.get()->UpdateData(uid, channelId, videoSourceType);

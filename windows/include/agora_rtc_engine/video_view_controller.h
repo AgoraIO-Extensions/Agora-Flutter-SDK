@@ -16,21 +16,22 @@ private:
     flutter::BinaryMessenger *messenger_;
     flutter::TextureRegistrar *texture_registrar_;
     std::map<int64_t, std::unique_ptr<TextureRender>> renderers_;
-    agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager_;
 
     void HandleMethodCall(
         const flutter::MethodCall<flutter::EncodableValue> &method_call,
         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 
-    void DeleteVideoFrameBufferManagerIfNeed() ;
-
     int64_t CreatePlatformRender();
 
-    bool DestroyPlatformRender(int64_t platformRenderId) ;
+    bool DestroyPlatformRender(int64_t platformRenderId);
 
-    int64_t CreateTextureRender(unsigned int uid, const std::string &channelId, unsigned int videoSourceType) ;
+    int64_t CreateTextureRender(
+        const intptr_t &videoFrameBufferManagerNativeHandle,
+        unsigned int uid,
+        const std::string &channelId,
+        unsigned int videoSourceType);
 
-    bool DestroyTextureRender(int64_t textureId) ;
+    bool DestroyTextureRender(int64_t textureId);
 
 public:
     VideoViewController(flutter::TextureRegistrar *texture_registrar, flutter::BinaryMessenger *messenger_);
