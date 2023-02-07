@@ -1,12 +1,11 @@
-only_if: $CIRRUS_PR != '' && ($CIRRUS_BASE_BRANCH == 'main' || $CIRRUS_BASE_BRANCH =~ 'release/.*' || $CIRRUS_BASE_BRANCH =~ 'special/.*' || $CIRRUS_BASE_BRANCH =~ 'dev/.*')
-
 environment:
   TEST_APP_ID: ENCRYPTED[!9f287ddc756b7c12b282fa965f66f0c957b193154a0e08436eef3befb926b91355c86f28938fd836977fdee4a336ccce!]
   # The flutter sdk is located in /Users/admin/flutter by default in cirrus cis
   MACOS_HOST_FLUTTER_SDK_DIR: /Users/admin/flutter
 
-organization_filter: &organization_filter
+default_filters: &default_filters
   only_if: $CIRRUS_REPO_OWNER == 'AgoraIO-Extensions'
+  only_if: $CIRRUS_PR != '' && ($CIRRUS_BASE_BRANCH == 'main' || $CIRRUS_BASE_BRANCH =~ 'release/.*' || $CIRRUS_BASE_BRANCH =~ 'special/.*' || $CIRRUS_BASE_BRANCH =~ 'dev/.*')
 
 default_macos_container: &default_macos_container
   macos_instance:
@@ -42,7 +41,7 @@ android_integratinon_test_task:
     - bash ci/run_flutter_integration_test_android.sh
 
 android_build_task:
-  <<: *organization_filter
+  <<: *default_filters
   <<: *default_macos_container
 
   matrix:
@@ -77,7 +76,7 @@ android_build_task:
     - flutter build apk
 
 ios_rendering_test_task:
-  <<: *organization_filter
+  <<: *default_filters
   <<: *default_macos_container
 
   create_ios_simulator_script:
