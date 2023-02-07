@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
@@ -22,45 +21,28 @@ class GlobalVideoViewController {
     if (_videoFrameBufferManagerIntPtr != 0) {
       return;
     }
-    if (defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
-      final CallApiResult result =
-          await irisMethodChannel.invokeMethod(IrisMethodCall(
-        'CreateIrisVideoFrameBufferManager',
-        jsonEncode({'irisRtcEngineNativeHandle': irisRtcEngineIntPtr}),
-      ));
-      _videoFrameBufferManagerIntPtr =
-          result.data['videoFrameBufferManagerNativeHandle'] ?? 0;
 
-      return;
-    }
-
-    final videoFrameBufferManagerIntPtr = await methodChannel.invokeMethod<int>(
-        'attachVideoFrameBufferManager', irisRtcEngineIntPtr);
-
-    _videoFrameBufferManagerIntPtr = videoFrameBufferManagerIntPtr ?? 0;
+    final CallApiResult result =
+        await irisMethodChannel.invokeMethod(IrisMethodCall(
+      'CreateIrisVideoFrameBufferManager',
+      jsonEncode({'irisRtcEngineNativeHandle': irisRtcEngineIntPtr}),
+    ));
+    _videoFrameBufferManagerIntPtr =
+        result.data['videoFrameBufferManagerNativeHandle'] ?? 0;
   }
 
   Future<void> detachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
     if (_videoFrameBufferManagerIntPtr == 0) {
       return;
     }
-    if (defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
-      await irisMethodChannel.invokeMethod(IrisMethodCall(
-        'FreeIrisVideoFrameBufferManager',
-        jsonEncode({
-          'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
-          'videoFrameBufferManagerNativeHandle': _videoFrameBufferManagerIntPtr,
-        }),
-      ));
-      _videoFrameBufferManagerIntPtr = 0;
-
-      return;
-    }
-
-    await methodChannel.invokeMethod(
-        'detachVideoFrameBufferManager', irisRtcEngineIntPtr);
+    await irisMethodChannel.invokeMethod(IrisMethodCall(
+      'FreeIrisVideoFrameBufferManager',
+      jsonEncode({
+        'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
+        'videoFrameBufferManagerNativeHandle': _videoFrameBufferManagerIntPtr,
+      }),
+    ));
+    _videoFrameBufferManagerIntPtr = 0;
   }
 
   Future<int> createTextureRender(
