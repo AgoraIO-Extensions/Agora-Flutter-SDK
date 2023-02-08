@@ -4,14 +4,15 @@ environment:
   MACOS_HOST_FLUTTER_SDK_DIR: /Users/admin/flutter
 
 default_filters: &default_filters
-  only_if: $CIRRUS_REPO_OWNER == 'AgoraIO-Extensions'
-  only_if: $CIRRUS_PR != '' && ($CIRRUS_BASE_BRANCH == 'main' || $CIRRUS_BASE_BRANCH =~ 'release/.*' || $CIRRUS_BASE_BRANCH =~ 'special/.*' || $CIRRUS_BASE_BRANCH =~ 'dev/.*')
+  only_if: $CIRRUS_REPO_OWNER == 'AgoraIO-Extensions' && $CIRRUS_PR != '' && ($CIRRUS_BASE_BRANCH == 'main' || $CIRRUS_BASE_BRANCH =~ 'release/.*' || $CIRRUS_BASE_BRANCH =~ 'special/.*' || $CIRRUS_BASE_BRANCH =~ 'dev/.*')
 
 default_macos_container: &default_macos_container
   macos_instance:
     image: ghcr.io/cirruslabs/macos-ventura-xcode:14
 
 android_integratinon_test_task:
+  <<: *default_filters
+
   container:
     # Only run min support flutter sdk 2.10.5, and latest flutter sdk version
     matrix:
