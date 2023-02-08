@@ -74,14 +74,20 @@ namespace agora_rtc_ng
   {
     if (method_call.method_name().compare("getAssetAbsolutePath") == 0)
     {
-      auto asset_path = std::get<std::string>(*method_call.arguments());
+      const auto *asset_path = std::get_if<std::string>(method_call.arguments());
+      if (!asset_path)
+      {
+        result->Error("Invalid arguments", "No asset_path provided.");
+        return;
+      }
+
       char exe_path[MAX_PATH];
       GetModuleFileNameA(NULL, exe_path, MAX_PATH);
 
       if (exe_path)
       {
         // The real asset path: <exe path>/data/flutter_assets/<asset_path>
-        auto realPath = std::filesystem::path(exe_path).parent_path() / std::filesystem::path("data") / std::filesystem::path("flutter_assets") / std::filesystem::path(asset_path);
+        auto realPath = std::filesystem::path(exe_path).parent_path() / std::filesystem::path("data") / std::filesystem::path("flutter_assets") / std::filesystem::path(*asset_path);
         result->Success(flutter::EncodableValue(realPath.u8string()));
       }
       else
