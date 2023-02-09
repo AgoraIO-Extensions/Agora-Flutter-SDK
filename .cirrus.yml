@@ -4,7 +4,7 @@ environment:
   MACOS_HOST_FLUTTER_SDK_DIR: /Users/admin/flutter
 
 default_filters: &default_filters
-  only_if: $CIRRUS_REPO_OWNER == 'AgoraIO-Extensions' && $CIRRUS_PR != '' && ($CIRRUS_BASE_BRANCH == 'main' || $CIRRUS_BASE_BRANCH =~ 'release/.*' || $CIRRUS_BASE_BRANCH =~ 'special/.*' || $CIRRUS_BASE_BRANCH =~ 'dev/.*')
+  only_if: $CIRRUS_REPO_OWNER == 'AgoraIO-Extensions' && $CIRRUS_PR != ''
 
 default_macos_container: &default_macos_container
   macos_instance:
