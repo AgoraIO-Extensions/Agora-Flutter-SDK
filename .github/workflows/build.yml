@@ -193,14 +193,14 @@ jobs:
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
-      - run: flutter pub get
+      - run: flutter packages get
       - name: Run flutter build ios --no-codesign
-        run: flutter build ios --no-codesign
+        run: flutter build ios --no-codesign --verbose
         working-directory: example
