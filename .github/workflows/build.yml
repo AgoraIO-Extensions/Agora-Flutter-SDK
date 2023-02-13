@@ -200,7 +200,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: ${{ matrix.version }}
-      - run: flutter pub get
+      - run: flutter packages get
       - name: Run flutter build ios --no-codesign
-        run: flutter build ios --no-codesign
+        run: flutter build ios --no-codesign --verbose
         working-directory: example
