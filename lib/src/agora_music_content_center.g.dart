@@ -28,6 +28,32 @@ Map<String, dynamic> _$MusicChartInfoToJson(MusicChartInfo instance) {
   return val;
 }
 
+MusicCacheInfo _$MusicCacheInfoFromJson(Map<String, dynamic> json) =>
+    MusicCacheInfo(
+      songCode: json['songCode'] as int?,
+      status:
+          $enumDecodeNullable(_$MusicCacheStatusTypeEnumMap, json['status']),
+    );
+
+Map<String, dynamic> _$MusicCacheInfoToJson(MusicCacheInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('songCode', instance.songCode);
+  writeNotNull('status', _$MusicCacheStatusTypeEnumMap[instance.status]);
+  return val;
+}
+
+const _$MusicCacheStatusTypeEnumMap = {
+  MusicCacheStatusType.musicCacheStatusTypeCached: 0,
+  MusicCacheStatusType.musicCacheStatusTypeCaching: 1,
+};
+
 MvProperty _$MvPropertyFromJson(Map<String, dynamic> json) => MvProperty(
       resolution: json['resolution'] as String?,
       bandwidth: json['bandwidth'] as String?,
@@ -123,6 +149,7 @@ MusicContentCenterConfiguration _$MusicContentCenterConfigurationFromJson(
       appId: json['appId'] as String?,
       token: json['token'] as String?,
       mccUid: json['mccUid'] as int?,
+      maxCacheSize: json['maxCacheSize'] as int?,
     );
 
 Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
@@ -138,6 +165,7 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   writeNotNull('appId', instance.appId);
   writeNotNull('token', instance.token);
   writeNotNull('mccUid', instance.mccUid);
+  writeNotNull('maxCacheSize', instance.maxCacheSize);
   return val;
 }
 
@@ -145,9 +173,16 @@ const _$PreloadStatusCodeEnumMap = {
   PreloadStatusCode.kPreloadStatusCompleted: 0,
   PreloadStatusCode.kPreloadStatusFailed: 1,
   PreloadStatusCode.kPreloadStatusPreloading: 2,
+  PreloadStatusCode.kPreloadStatusRemoved: 3,
 };
 
 const _$MusicContentCenterStatusCodeEnumMap = {
   MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
   MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrGateway: 2,
+  MusicContentCenterStatusCode
+      .kMusicContentCenterStatusErrPermissionAndResource: 3,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
 };

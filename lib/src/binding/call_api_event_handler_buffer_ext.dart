@@ -1027,6 +1027,18 @@ extension ScreenCaptureParameters2BufferExt on ScreenCaptureParameters2 {
   }
 }
 
+extension VideoRenderingTracingInfoBufferExt on VideoRenderingTracingInfo {
+  VideoRenderingTracingInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension SpatialAudioParamsBufferExt on SpatialAudioParams {
   SpatialAudioParams fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -1122,6 +1134,10 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     if (bufferList.length > 1) {
       metadataBuffer = bufferList[1];
     }
+    Uint8List? alphaBuffer;
+    if (bufferList.length > 2) {
+      alphaBuffer = bufferList[2];
+    }
     return ExternalVideoFrame(
         type: type,
         format: format,
@@ -1138,7 +1154,8 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         textureId: textureId,
         matrix: matrix,
         metadataBuffer: metadataBuffer,
-        metadataSize: metadataSize);
+        metadataSize: metadataSize,
+        alphaBuffer: alphaBuffer);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1148,6 +1165,9 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     }
     if (metadataBuffer != null) {
       bufferList.add(metadataBuffer!);
+    }
+    if (alphaBuffer != null) {
+      bufferList.add(alphaBuffer!);
     }
     return bufferList;
   }
@@ -1176,6 +1196,10 @@ extension VideoFrameBufferExt on VideoFrame {
     if (bufferList.length > 4) {
       alphaBuffer = bufferList[4];
     }
+    Uint8List? pixelBuffer;
+    if (bufferList.length > 5) {
+      pixelBuffer = bufferList[5];
+    }
     return VideoFrame(
         type: type,
         width: width,
@@ -1193,7 +1217,8 @@ extension VideoFrameBufferExt on VideoFrame {
         metadataSize: metadataSize,
         textureId: textureId,
         matrix: matrix,
-        alphaBuffer: alphaBuffer);
+        alphaBuffer: alphaBuffer,
+        pixelBuffer: pixelBuffer);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1212,6 +1237,9 @@ extension VideoFrameBufferExt on VideoFrame {
     }
     if (alphaBuffer != null) {
       bufferList.add(alphaBuffer!);
+    }
+    if (pixelBuffer != null) {
+      bufferList.add(pixelBuffer!);
     }
     return bufferList;
   }
@@ -1450,6 +1478,18 @@ extension AgoraRhythmPlayerConfigBufferExt on AgoraRhythmPlayerConfig {
 
 extension MusicChartInfoBufferExt on MusicChartInfo {
   MusicChartInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension MusicCacheInfoBufferExt on MusicCacheInfo {
+  MusicCacheInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }

@@ -282,45 +282,52 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
     ));
 
     _musicContentCenter.registerEventHandler(MusicContentCenterEventHandler(
-        onMusicChartsResult: (requestId, status, result) {
-      logSink.log(
-          '[onMusicChartsResult], requestId: $requestId, status: $status, result: ${result.toString()}');
-      if (status == MusicContentCenterStatusCode.kMusicContentCenterStatusOk) {
-        if (_currentRequestId == requestId) {
+      onMusicChartsResult: (String requestId, List<MusicChartInfo> result,
+          MusicContentCenterStatusCode errorCode) {
+        logSink.log(
+            '[onMusicChartsResult], requestId: $requestId, errorCode: $errorCode, result: ${result.toString()}');
+        if (errorCode ==
+            MusicContentCenterStatusCode.kMusicContentCenterStatusOk) {
+          if (_currentRequestId == requestId) {
+            setState(() {
+              _musicChartInfos = result;
+            });
+          }
+        }
+      },
+      onMusicCollectionResult: (String requestId, MusicCollection result,
+          MusicContentCenterStatusCode errorCode) {
+        logSink.log(
+            '[onMusicCollectionResult], requestId: $requestId, errorCode: $errorCode, result: ${result.toString()}');
+
+        if (_musicCollectionRequestId == requestId) {
           setState(() {
-            _musicChartInfos = result;
+            _musicCollection = result;
+          });
+        } else if (_searchMusicRequestId == requestId) {
+          setState(() {
+            _searchedMusicCollection = result;
           });
         }
-      }
-    }, onMusicCollectionResult: (String requestId,
-            MusicContentCenterStatusCode status, MusicCollection result) {
-      logSink.log(
-          '[onMusicCollectionResult], requestId: $requestId, status: $status, result: ${result.toString()}');
-
-      if (_musicCollectionRequestId == requestId) {
-        setState(() {
-          _musicCollection = result;
-        });
-      } else if (_searchMusicRequestId == requestId) {
-        setState(() {
-          _searchedMusicCollection = result;
-        });
-      }
-    }, onPreLoadEvent: (int songCode, int percent, PreloadStatusCode status,
-            String msg, String lyricUrl) {
-      logSink.log(
-          '[onPreLoadEvent], songCode: $songCode, percent: $percent status: $status, msg: $msg, lyricUrl: $lyricUrl');
-      if (_selectedMusic.songCode == songCode &&
-          status == PreloadStatusCode.kPreloadStatusCompleted) {
-        _preloadCompleted?.complete();
-        _preloadCompleted = null;
-      }
-    }, onLyricResult: (String requestId, String lyricUrl) {
-      if (_getLyricRequestId == requestId) {
-        _getLyricCompleted?.complete(lyricUrl);
-        _getLyricCompleted = null;
-      }
-    }));
+      },
+      onPreLoadEvent: (int songCode, int percent, String lyricUrl,
+          PreloadStatusCode status, MusicContentCenterStatusCode errorCode) {
+        logSink.log(
+            '[onPreLoadEvent], songCode: $songCode, percent: $percent status: $status, errorCode: $errorCode, lyricUrl: $lyricUrl');
+        if (_selectedMusic.songCode == songCode &&
+            status == PreloadStatusCode.kPreloadStatusCompleted) {
+          _preloadCompleted?.complete();
+          _preloadCompleted = null;
+        }
+      },
+      onLyricResult: (String requestId, String lyricUrl,
+          MusicContentCenterStatusCode errorCode) {
+        if (_getLyricRequestId == requestId) {
+          _getLyricCompleted?.complete(lyricUrl);
+          _getLyricCompleted = null;
+        }
+      },
+    ));
 
     _musicPlayer = await _musicContentCenter.createMusicPlayer();
 

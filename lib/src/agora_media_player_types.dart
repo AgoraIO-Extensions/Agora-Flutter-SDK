@@ -520,7 +520,7 @@ class MediaSource {
   @JsonKey(name: 'uri')
   final String? uri;
 
-  /// The starting position (ms) for playback. Default value is 0.
+  /// The starting position (ms) for playback. The default value is 0.
   @JsonKey(name: 'startPos')
   final int? startPos;
 
@@ -532,11 +532,11 @@ class MediaSource {
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
 
-  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service:true: The media resource is a live stream or on-demand video distributed through Media Broadcast service.false: (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service.If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as ; otherwise, you don't need to set the isAgoraSource parameter.true
+  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service:true: The media resource to be played is a live or on-demand video distributed through Media Broadcast service.false: (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service.If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
   @JsonKey(name: 'isAgoraSource')
   final bool? isAgoraSource;
 
-  /// Whether the media resource to be opened is a live stream:true: The media resource is a live stream.false: (Default) The media resource is not a live stream.trueIf the media resource you want to open is a live stream, Agora recommends that you set this parameter as so that the live stream can be loaded more quickly.trueIf the media resource you open is not a live stream, but you set isLiveSource as , the media resource is not to be loaded more quickly.
+  /// Whether the media resource to be opened is a live stream:true: The media resource is a live stream.false: (Default) The media resource is not a live stream.If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly.If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
   @JsonKey(name: 'isLiveSource')
   final bool? isLiveSource;
 

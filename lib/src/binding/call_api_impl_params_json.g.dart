@@ -369,6 +369,20 @@ Map<String, dynamic> _$MusicContentCenterSearchMusicJsonToJson(
       'requestId': instance.requestId,
     };
 
+MusicContentCenterGetCachesJson _$MusicContentCenterGetCachesJsonFromJson(
+        Map<String, dynamic> json) =>
+    MusicContentCenterGetCachesJson(
+      (json['cacheInfo'] as List<dynamic>)
+          .map((e) => MusicCacheInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$MusicContentCenterGetCachesJsonToJson(
+        MusicContentCenterGetCachesJson instance) =>
+    <String, dynamic>{
+      'cacheInfo': instance.cacheInfo.map((e) => e.toJson()).toList(),
+    };
+
 MusicContentCenterGetLyricJson _$MusicContentCenterGetLyricJsonFromJson(
         Map<String, dynamic> json) =>
     MusicContentCenterGetLyricJson(
