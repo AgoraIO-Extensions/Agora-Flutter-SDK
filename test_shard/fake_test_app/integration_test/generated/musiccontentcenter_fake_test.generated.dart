@@ -32,11 +32,13 @@ void musicContentCenterSmokeTestCases() {
         const String configurationAppId = "hello";
         const String configurationToken = "hello";
         const int configurationMccUid = 10;
+        const int configurationMaxCacheSize = 10;
         const MusicContentCenterConfiguration configuration =
             MusicContentCenterConfiguration(
           appId: configurationAppId,
           token: configurationToken,
           mccUid: configurationMccUid,
+          maxCacheSize: configurationMaxCacheSize,
         );
         await musicContentCenter.initialize(
           configuration,
@@ -159,13 +161,17 @@ void musicContentCenterSmokeTestCases() {
       try {
         final MusicContentCenterEventHandler eventHandler =
             MusicContentCenterEventHandler(
-          onMusicChartsResult: (String requestId,
-              MusicContentCenterStatusCode status, List result) {},
-          onMusicCollectionResult: (String requestId,
-              MusicContentCenterStatusCode status, MusicCollection result) {},
-          onLyricResult: (String requestId, String lyricUrl) {},
-          onPreLoadEvent: (int songCode, int percent, PreloadStatusCode status,
-              String msg, String lyricUrl) {},
+          onMusicChartsResult: (String requestId, List result,
+              MusicContentCenterStatusCode errorCode) {},
+          onMusicCollectionResult: (String requestId, MusicCollection result,
+              MusicContentCenterStatusCode errorCode) {},
+          onLyricResult: (String requestId, String lyricUrl,
+              MusicContentCenterStatusCode errorCode) {},
+          onPreLoadEvent: (int songCode,
+              int percent,
+              String lyricUrl,
+              PreloadStatusCode status,
+              MusicContentCenterStatusCode errorCode) {},
         );
         musicContentCenter.registerEventHandler(
           eventHandler,
@@ -387,6 +393,88 @@ void musicContentCenterSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[preload] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'removeCache',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+
+      try {
+        const int songCode = 10;
+        await musicContentCenter.removeCache(
+          songCode,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[removeCache] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'getCaches',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+
+      try {
+        const int cacheInfoSize = 10;
+        await musicContentCenter.getCaches(
+          cacheInfoSize,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getCaches] error: ${e.toString()}');
           rethrow;
         }
 
