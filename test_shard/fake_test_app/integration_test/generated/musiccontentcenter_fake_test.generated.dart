@@ -487,7 +487,8 @@ void musicContentCenterSmokeTestCases() {
       await musicContentCenter.release();
       await rtcEngine.release();
     },
- skip: true,
+    // TODO(littlegnal): Skip before when iris_debugger fixed.
+    skip: true,
   );
 
   testWidgets(
