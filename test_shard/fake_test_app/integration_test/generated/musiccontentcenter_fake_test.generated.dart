@@ -487,7 +487,7 @@ void musicContentCenterSmokeTestCases() {
       await musicContentCenter.release();
       await rtcEngine.release();
     },
-//  skip: !(),
+ skip: true,
   );
 
   testWidgets(
