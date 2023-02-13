@@ -193,7 +193,7 @@ jobs:
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v1
