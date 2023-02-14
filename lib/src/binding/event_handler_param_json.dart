@@ -1300,9 +1300,9 @@ class RtcEngineEventHandlerOnFacePositionChangedJson {
   @JsonKey(name: 'imageHeight')
   final int? imageHeight;
   @JsonKey(name: 'vecRectangle')
-  final Rectangle? vecRectangle;
+  final List<Rectangle>? vecRectangle;
   @JsonKey(name: 'vecDistance')
-  final int? vecDistance;
+  final List<int>? vecDistance;
   @JsonKey(name: 'numFaces')
   final int? numFaces;
   factory RtcEngineEventHandlerOnFacePositionChangedJson.fromJson(
@@ -2942,6 +2942,40 @@ extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
+  const RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
+      {this.connection, this.uid, this.currentEvent, this.tracingInfo});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+  @JsonKey(name: 'uid')
+  final int? uid;
+  @JsonKey(name: 'currentEvent')
+  final MediaTraceEvent? currentEvent;
+  @JsonKey(name: 'tracingInfo')
+  final VideoRenderingTracingInfo? tracingInfo;
+  factory RtcEngineEventHandlerOnVideoRenderingTracingResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnVideoRenderingTracingResultJsonBufferExt
+    on RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
+  RtcEngineEventHandlerOnVideoRenderingTracingResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class MetadataObserverOnMetadataReceivedJson {
   const MetadataObserverOnMetadataReceivedJson({this.metadata});
 
@@ -4149,14 +4183,14 @@ extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnMusicChartsResultJson {
   const MusicContentCenterEventHandlerOnMusicChartsResultJson(
-      {this.requestId, this.status, this.result});
+      {this.requestId, this.result, this.errorCode});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
   @JsonKey(name: 'result')
   final List<MusicChartInfo>? result;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
@@ -4181,14 +4215,14 @@ extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
   const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
-      {this.requestId, this.status, this.result});
+      {this.requestId, this.result, this.errorCode});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
   @JsonKey(name: 'result', ignore: true)
   final MusicCollection? result;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
@@ -4213,12 +4247,14 @@ extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnLyricResultJson {
   const MusicContentCenterEventHandlerOnLyricResultJson(
-      {this.requestId, this.lyricUrl});
+      {this.requestId, this.lyricUrl, this.errorCode});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
@@ -4243,18 +4279,22 @@ extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnPreLoadEventJson {
   const MusicContentCenterEventHandlerOnPreLoadEventJson(
-      {this.songCode, this.percent, this.status, this.msg, this.lyricUrl});
+      {this.songCode,
+      this.percent,
+      this.lyricUrl,
+      this.status,
+      this.errorCode});
 
   @JsonKey(name: 'songCode')
   final int? songCode;
   @JsonKey(name: 'percent')
   final int? percent;
-  @JsonKey(name: 'status')
-  final PreloadStatusCode? status;
-  @JsonKey(name: 'msg')
-  final String? msg;
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
+  @JsonKey(name: 'status')
+  final PreloadStatusCode? status;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);

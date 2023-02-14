@@ -173,9 +173,9 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
 }
 
 class IrisApiEngineNativeBindingDelegateProvider
-    implements NativeBindingDelegateProvider {
+    extends NativeBindingsProvider {
   @override
-  NativeBindingDelegate provide() {
+  NativeBindingDelegate provideNativeBindingDelegate() {
     return NativeIrisApiEngineBindingsDelegate();
   }
 }

@@ -120,7 +120,6 @@ RemoteVideoStats _$RemoteVideoStatsFromJson(Map<String, dynamic> json) =>
       avSyncTimeMs: json['avSyncTimeMs'] as int?,
       totalActiveTime: json['totalActiveTime'] as int?,
       publishDuration: json['publishDuration'] as int?,
-      superResolutionType: json['superResolutionType'] as int?,
       mosValue: json['mosValue'] as int?,
     );
 
@@ -148,7 +147,6 @@ Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) {
   writeNotNull('avSyncTimeMs', instance.avSyncTimeMs);
   writeNotNull('totalActiveTime', instance.totalActiveTime);
   writeNotNull('publishDuration', instance.publishDuration);
-  writeNotNull('superResolutionType', instance.superResolutionType);
   writeNotNull('mosValue', instance.mosValue);
   return val;
 }

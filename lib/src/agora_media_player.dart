@@ -19,7 +19,6 @@ abstract class MediaPlayer {
   /// This method supports opening media files of different sources, including a custom media source, and allows you to configure the playback scenarios.
   ///
   /// * [source] Media resources. See MediaSource .
-  ///
   Future<void> openWithMediaSource(MediaSource source);
 
   /// Plays the media file.
@@ -218,7 +217,6 @@ abstract class MediaPlayer {
   ///
   /// * [src] The URL of the media resource.
   /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch:true: Synchronize the playback position before and after the switch.false: (Default) Do not synchronize the playback position before and after the switch.Make sure to set this parameter as false if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
-  ///
   Future<void> switchSrc({required String src, bool syncPts = true});
 
   /// Preloads a media resource.
@@ -243,7 +241,7 @@ abstract class MediaPlayer {
   /// Enables or disables the spatial audio effect for the media player.
   /// After successfully setting the spatial audio effect parameters of the media player, the SDK enables the spatial audio effect for the media player, and the local user can hear the media resources with a sense of space.If you need to disable the spatial audio effect for the media player, set the params parameter to null.
   ///
-  /// * [params] The spatial audio effect parameters of the media player. See SpatialAudioParams for details.
+  /// * [params] The spatial audio effect parameters of the media player. See SpatialAudioParams .
   Future<void> setSpatialAudioParams(SpatialAudioParams params);
 
   /// @nodoc

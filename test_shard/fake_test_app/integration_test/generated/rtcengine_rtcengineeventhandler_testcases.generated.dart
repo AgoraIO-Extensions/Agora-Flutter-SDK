@@ -2702,7 +2702,6 @@ void generatedTestCases() {
         const int statsAvSyncTimeMs = 10;
         const int statsTotalActiveTime = 10;
         const int statsPublishDuration = 10;
-        const int statsSuperResolutionType = 10;
         const int statsMosValue = 10;
         const RemoteVideoStats stats = RemoteVideoStats(
           uid: statsUid,
@@ -2720,7 +2719,6 @@ void generatedTestCases() {
           avSyncTimeMs: statsAvSyncTimeMs,
           totalActiveTime: statsTotalActiveTime,
           publishDuration: statsPublishDuration,
-          superResolutionType: statsSuperResolutionType,
           mosValue: statsMosValue,
         );
 
@@ -2945,7 +2943,7 @@ void generatedTestCases() {
       final onFacePositionChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onFacePositionChanged: (int imageWidth, int imageHeight,
-            Rectangle vecRectangle, int vecDistance, int numFaces) {
+            List vecRectangle, List vecDistance, int numFaces) {
           onFacePositionChangedCompleter.complete(true);
         },
       );
@@ -2960,23 +2958,14 @@ void generatedTestCases() {
       {
         const int imageWidth = 10;
         const int imageHeight = 10;
-        const int vecRectangleX = 10;
-        const int vecRectangleY = 10;
-        const int vecRectangleWidth = 10;
-        const int vecRectangleHeight = 10;
-        const Rectangle vecRectangle = Rectangle(
-          x: vecRectangleX,
-          y: vecRectangleY,
-          width: vecRectangleWidth,
-          height: vecRectangleHeight,
-        );
-        const int vecDistance = 10;
+        const List<Rectangle> vecRectangle = [];
+        const List<int> vecDistance = [];
         const int numFaces = 10;
 
         final eventJson = {
           'imageWidth': imageWidth,
           'imageHeight': imageHeight,
-          'vecRectangle': vecRectangle.toJson(),
+          'vecRectangle': vecRectangle,
           'vecDistance': vecDistance,
           'numFaces': numFaces,
         };
@@ -3001,8 +2990,6 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    // TODO(littlegnal): Enable after the API signature fixed.
-    skip: true,
   );
 
   testWidgets(
@@ -3828,8 +3815,6 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    // TODO(littlegnal): Enable after iris fixed.
-    skip: true,
   );
 
   testWidgets(
@@ -6224,4 +6209,93 @@ void generatedTestCases() {
     },
     timeout: const Timeout(Duration(minutes: 1)),
   );
+
+  testWidgets(
+    'onVideoRenderingTracingResult',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onVideoRenderingTracingResultCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onVideoRenderingTracingResult: (RtcConnection connection,
+            int uid,
+            MediaTraceEvent currentEvent,
+            VideoRenderingTracingInfo tracingInfo) {
+          onVideoRenderingTracingResultCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        const MediaTraceEvent currentEvent =
+            MediaTraceEvent.mediaTraceEventVideoRendered;
+        const int tracingInfoElapsedTime = 10;
+        const int tracingInfoStart2JoinChannel = 10;
+        const int tracingInfoJoin2JoinSuccess = 10;
+        const int tracingInfoJoinSuccess2RemoteJoined = 10;
+        const int tracingInfoRemoteJoined2SetView = 10;
+        const int tracingInfoRemoteJoined2UnmuteVideo = 10;
+        const int tracingInfoRemoteJoined2PacketReceived = 10;
+        const VideoRenderingTracingInfo tracingInfo = VideoRenderingTracingInfo(
+          elapsedTime: tracingInfoElapsedTime,
+          start2JoinChannel: tracingInfoStart2JoinChannel,
+          join2JoinSuccess: tracingInfoJoin2JoinSuccess,
+          joinSuccess2RemoteJoined: tracingInfoJoinSuccess2RemoteJoined,
+          remoteJoined2SetView: tracingInfoRemoteJoined2SetView,
+          remoteJoined2UnmuteVideo: tracingInfoRemoteJoined2UnmuteVideo,
+          remoteJoined2PacketReceived: tracingInfoRemoteJoined2PacketReceived,
+        );
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'currentEvent': currentEvent.value(),
+          'tracingInfo': tracingInfo.toJson(),
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onVideoRenderingTracingResult',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onVideoRenderingTracingResult',
+            params: eventJson);
+      }
+
+      final eventCalled = await onVideoRenderingTracingResultCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
 }
+

@@ -1882,6 +1882,39 @@ Map<String, dynamic> _$ScreenCaptureParameters2ToJson(
   return val;
 }
 
+VideoRenderingTracingInfo _$VideoRenderingTracingInfoFromJson(
+        Map<String, dynamic> json) =>
+    VideoRenderingTracingInfo(
+      elapsedTime: json['elapsedTime'] as int?,
+      start2JoinChannel: json['start2JoinChannel'] as int?,
+      join2JoinSuccess: json['join2JoinSuccess'] as int?,
+      joinSuccess2RemoteJoined: json['joinSuccess2RemoteJoined'] as int?,
+      remoteJoined2SetView: json['remoteJoined2SetView'] as int?,
+      remoteJoined2UnmuteVideo: json['remoteJoined2UnmuteVideo'] as int?,
+      remoteJoined2PacketReceived: json['remoteJoined2PacketReceived'] as int?,
+    );
+
+Map<String, dynamic> _$VideoRenderingTracingInfoToJson(
+    VideoRenderingTracingInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('elapsedTime', instance.elapsedTime);
+  writeNotNull('start2JoinChannel', instance.start2JoinChannel);
+  writeNotNull('join2JoinSuccess', instance.join2JoinSuccess);
+  writeNotNull('joinSuccess2RemoteJoined', instance.joinSuccess2RemoteJoined);
+  writeNotNull('remoteJoined2SetView', instance.remoteJoined2SetView);
+  writeNotNull('remoteJoined2UnmuteVideo', instance.remoteJoined2UnmuteVideo);
+  writeNotNull(
+      'remoteJoined2PacketReceived', instance.remoteJoined2PacketReceived);
+  return val;
+}
+
 SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
     SpatialAudioParams(
       speakerAzimuth: (json['speaker_azimuth'] as num?)?.toDouble(),
@@ -2338,7 +2371,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedClientIpAddressChangedByUser: 18,
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
-  ConnectionChangedReasonType.connectionChangedLicenseVerifyFailed: 21,
+  ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
 };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {
@@ -2534,4 +2567,9 @@ const _$ThreadPriorityTypeEnumMap = {
   ThreadPriorityType.high: 3,
   ThreadPriorityType.highest: 4,
   ThreadPriorityType.critical: 5,
+};
+
+const _$MediaTraceEventEnumMap = {
+  MediaTraceEvent.mediaTraceEventVideoRendered: 0,
+  MediaTraceEvent.mediaTraceEventVideoDecoded: 1,
 };

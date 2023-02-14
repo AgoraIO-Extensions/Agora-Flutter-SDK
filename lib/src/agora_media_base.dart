@@ -557,7 +557,8 @@ class ExternalVideoFrame {
       this.textureId,
       this.matrix,
       this.metadataBuffer,
-      this.metadataSize});
+      this.metadataSize,
+      this.alphaBuffer});
 
   /// The video type. See VideoBufferType .
   @JsonKey(name: 'type')
@@ -622,6 +623,10 @@ class ExternalVideoFrame {
   /// This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
   @JsonKey(name: 'metadata_size')
   final int? metadataSize;
+
+  /// @nodoc
+  @JsonKey(name: 'alphaBuffer', ignore: true)
+  final Uint8List? alphaBuffer;
 
   /// @nodoc
   factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>
@@ -707,7 +712,8 @@ class VideoFrame {
       this.metadataSize,
       this.textureId,
       this.matrix,
-      this.alphaBuffer});
+      this.alphaBuffer,
+      this.pixelBuffer});
 
   /// The pixel format. See VideoPixelFormat .
   @JsonKey(name: 'type')
@@ -776,6 +782,10 @@ class VideoFrame {
   /// @nodoc
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
+
+  /// @nodoc
+  @JsonKey(name: 'pixelBuffer', ignore: true)
+  final Uint8List? pixelBuffer;
 
   /// @nodoc
   factory VideoFrame.fromJson(Map<String, dynamic> json) =>
@@ -888,7 +898,6 @@ class AudioFrameObserverBase {
 
   /// Gets the in-ear monitoring audio frame.
   /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
-  /// * [audioFrame] The raw audio data. See AudioFrame .
   final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
 }
 
@@ -1219,10 +1228,13 @@ class VideoFrameObserver {
   final void Function(VideoFrame videoFrame)? onPreEncodeScreenVideoFrame;
 
   /// Gets the video data of the media player.
-  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.This callback only supports read-only mode.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   /// * [mediaPlayerId] The ID of the media player.
+  ///
+  /// Returns
+  /// true: Reserved for future use.false: Reserved for future use.
   final void Function(VideoFrame videoFrame, int mediaPlayerId)?
       onMediaPlayerVideoFrame;
 

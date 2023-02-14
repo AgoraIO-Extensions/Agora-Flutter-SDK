@@ -733,6 +733,7 @@ void mediaEngineSmokeTestCases() {
         const List<double> frameMatrix = [];
         Uint8List frameMetadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameMetadataSize = 10;
+        Uint8List frameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
           format: frameFormat,
@@ -750,6 +751,7 @@ void mediaEngineSmokeTestCases() {
           matrix: frameMatrix,
           metadataBuffer: frameMetadataBuffer,
           metadataSize: frameMetadataSize,
+          alphaBuffer: frameAlphaBuffer,
         );
         const int videoTrackId = 10;
         await mediaEngine.pushVideoFrame(
