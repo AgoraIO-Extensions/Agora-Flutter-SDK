@@ -978,11 +978,12 @@ RtcEngineEventHandlerOnFacePositionChangedJson
         RtcEngineEventHandlerOnFacePositionChangedJson(
           imageWidth: json['imageWidth'] as int?,
           imageHeight: json['imageHeight'] as int?,
-          vecRectangle: json['vecRectangle'] == null
-              ? null
-              : Rectangle.fromJson(
-                  json['vecRectangle'] as Map<String, dynamic>),
-          vecDistance: json['vecDistance'] as int?,
+          vecRectangle: (json['vecRectangle'] as List<dynamic>?)
+              ?.map((e) => Rectangle.fromJson(e as Map<String, dynamic>))
+              .toList(),
+          vecDistance: (json['vecDistance'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList(),
           numFaces: json['numFaces'] as int?,
         );
 
@@ -991,7 +992,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFacePositionChangedJsonToJson(
     <String, dynamic>{
       'imageWidth': instance.imageWidth,
       'imageHeight': instance.imageHeight,
-      'vecRectangle': instance.vecRectangle?.toJson(),
+      'vecRectangle': instance.vecRectangle?.map((e) => e.toJson()).toList(),
       'vecDistance': instance.vecDistance,
       'numFaces': instance.numFaces,
     };
@@ -1825,7 +1826,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedClientIpAddressChangedByUser: 18,
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
-  ConnectionChangedReasonType.connectionChangedLicenseVerifyFailed: 21,
+  ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
 };
 
 RtcEngineEventHandlerOnWlAccMessageJson
@@ -2219,6 +2220,38 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(
       'remoteUid': instance.remoteUid,
       'userAccount': instance.userAccount,
     };
+
+RtcEngineEventHandlerOnVideoRenderingTracingResultJson
+    _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
+          connection: json['connection'] == null
+              ? null
+              : RtcConnection.fromJson(
+                  json['connection'] as Map<String, dynamic>),
+          uid: json['uid'] as int?,
+          currentEvent: $enumDecodeNullable(
+              _$MediaTraceEventEnumMap, json['currentEvent']),
+          tracingInfo: json['tracingInfo'] == null
+              ? null
+              : VideoRenderingTracingInfo.fromJson(
+                  json['tracingInfo'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(
+            RtcEngineEventHandlerOnVideoRenderingTracingResultJson instance) =>
+        <String, dynamic>{
+          'connection': instance.connection?.toJson(),
+          'uid': instance.uid,
+          'currentEvent': _$MediaTraceEventEnumMap[instance.currentEvent],
+          'tracingInfo': instance.tracingInfo?.toJson(),
+        };
+
+const _$MediaTraceEventEnumMap = {
+  MediaTraceEvent.mediaTraceEventVideoRendered: 0,
+  MediaTraceEvent.mediaTraceEventVideoDecoded: 1,
+};
 
 MetadataObserverOnMetadataReceivedJson
     _$MetadataObserverOnMetadataReceivedJsonFromJson(
@@ -2968,11 +3001,11 @@ MusicContentCenterEventHandlerOnMusicChartsResultJson
             Map<String, dynamic> json) =>
         MusicContentCenterEventHandlerOnMusicChartsResultJson(
           requestId: json['requestId'] as String?,
-          status: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['status']),
           result: (json['result'] as List<dynamic>?)
               ?.map((e) => MusicChartInfo.fromJson(e as Map<String, dynamic>))
               .toList(),
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['error_code']),
         );
 
 Map<String, dynamic>
@@ -2980,13 +3013,20 @@ Map<String, dynamic>
             MusicContentCenterEventHandlerOnMusicChartsResultJson instance) =>
         <String, dynamic>{
           'requestId': instance.requestId,
-          'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
           'result': instance.result?.map((e) => e.toJson()).toList(),
+          'error_code':
+              _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
         };
 
 const _$MusicContentCenterStatusCodeEnumMap = {
   MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
   MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrGateway: 2,
+  MusicContentCenterStatusCode
+      .kMusicContentCenterStatusErrPermissionAndResource: 3,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
 };
 
 MusicContentCenterEventHandlerOnMusicCollectionResultJson
@@ -2994,8 +3034,8 @@ MusicContentCenterEventHandlerOnMusicCollectionResultJson
             Map<String, dynamic> json) =>
         MusicContentCenterEventHandlerOnMusicCollectionResultJson(
           requestId: json['requestId'] as String?,
-          status: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['status']),
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['error_code']),
         );
 
 Map<String,
@@ -3003,7 +3043,7 @@ Map<String,
         MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'status': _$MusicContentCenterStatusCodeEnumMap[instance.status],
+      'error_code': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
     };
 
 MusicContentCenterEventHandlerOnLyricResultJson
@@ -3012,6 +3052,8 @@ MusicContentCenterEventHandlerOnLyricResultJson
         MusicContentCenterEventHandlerOnLyricResultJson(
           requestId: json['requestId'] as String?,
           lyricUrl: json['lyricUrl'] as String?,
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['error_code']),
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
@@ -3019,6 +3061,7 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
     <String, dynamic>{
       'requestId': instance.requestId,
       'lyricUrl': instance.lyricUrl,
+      'error_code': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
     };
 
 MusicContentCenterEventHandlerOnPreLoadEventJson
@@ -3027,10 +3070,11 @@ MusicContentCenterEventHandlerOnPreLoadEventJson
         MusicContentCenterEventHandlerOnPreLoadEventJson(
           songCode: json['songCode'] as int?,
           percent: json['percent'] as int?,
+          lyricUrl: json['lyricUrl'] as String?,
           status:
               $enumDecodeNullable(_$PreloadStatusCodeEnumMap, json['status']),
-          msg: json['msg'] as String?,
-          lyricUrl: json['lyricUrl'] as String?,
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['error_code']),
         );
 
 Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
@@ -3038,13 +3082,14 @@ Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
     <String, dynamic>{
       'songCode': instance.songCode,
       'percent': instance.percent,
-      'status': _$PreloadStatusCodeEnumMap[instance.status],
-      'msg': instance.msg,
       'lyricUrl': instance.lyricUrl,
+      'status': _$PreloadStatusCodeEnumMap[instance.status],
+      'error_code': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
     };
 
 const _$PreloadStatusCodeEnumMap = {
   PreloadStatusCode.kPreloadStatusCompleted: 0,
   PreloadStatusCode.kPreloadStatusFailed: 1,
   PreloadStatusCode.kPreloadStatusPreloading: 2,
+  PreloadStatusCode.kPreloadStatusRemoved: 3,
 };

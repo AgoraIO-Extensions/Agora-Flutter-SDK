@@ -803,8 +803,8 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         paramJson = paramJson.fillBuffers(buffers);
         int? imageWidth = paramJson.imageWidth;
         int? imageHeight = paramJson.imageHeight;
-        Rectangle? vecRectangle = paramJson.vecRectangle;
-        int? vecDistance = paramJson.vecDistance;
+        List<Rectangle>? vecRectangle = paramJson.vecRectangle;
+        List<int>? vecDistance = paramJson.vecDistance;
         int? numFaces = paramJson.numFaces;
         if (imageWidth == null ||
             imageHeight == null ||
@@ -813,7 +813,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             numFaces == null) {
           return true;
         }
-        vecRectangle = vecRectangle.fillBuffers(buffers);
+        vecRectangle = vecRectangle.map((e) => e.fillBuffers(buffers)).toList();
         rtcEngineEventHandler.onFacePositionChanged!(
             imageWidth, imageHeight, vecRectangle, vecDistance, numFaces);
         return true;
@@ -1783,6 +1783,31 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         connection = connection.fillBuffers(buffers);
         rtcEngineEventHandler.onUserAccountUpdated!(
             connection, remoteUid, userAccount);
+        return true;
+
+      case 'onVideoRenderingTracingResultEx':
+        if (rtcEngineEventHandler.onVideoRenderingTracingResult == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnVideoRenderingTracingResultJson paramJson =
+            RtcEngineEventHandlerOnVideoRenderingTracingResultJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        RtcConnection? connection = paramJson.connection;
+        int? uid = paramJson.uid;
+        MediaTraceEvent? currentEvent = paramJson.currentEvent;
+        VideoRenderingTracingInfo? tracingInfo = paramJson.tracingInfo;
+        if (connection == null ||
+            uid == null ||
+            currentEvent == null ||
+            tracingInfo == null) {
+          return true;
+        }
+        connection = connection.fillBuffers(buffers);
+        tracingInfo = tracingInfo.fillBuffers(buffers);
+        rtcEngineEventHandler.onVideoRenderingTracingResult!(
+            connection, uid, currentEvent, tracingInfo);
         return true;
     }
     return false;

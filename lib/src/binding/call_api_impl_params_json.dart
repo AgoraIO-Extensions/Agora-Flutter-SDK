@@ -362,6 +362,18 @@ class MusicContentCenterSearchMusicJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetCachesJson {
+  const MusicContentCenterGetCachesJson(this.cacheInfo);
+
+  @JsonKey(name: 'cacheInfo')
+  final List<MusicCacheInfo> cacheInfo;
+  factory MusicContentCenterGetCachesJson.fromJson(Map<String, dynamic> json) =>
+      _$MusicContentCenterGetCachesJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetCachesJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class MusicContentCenterGetLyricJson {
   const MusicContentCenterGetLyricJson(this.requestId);
 

@@ -1249,45 +1249,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableRemoteSuperResolution',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int userId = 10;
-        const bool enable = true;
-        await rtcEngine.enableRemoteSuperResolution(
-          userId: userId,
-          enable: enable,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableRemoteSuperResolution] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'setupRemoteVideo',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -8516,7 +8477,7 @@ void rtcEngineSmokeTestCases() {
           onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
-              Rectangle vecRectangle, int vecDistance, int numFaces) {},
+              List vecRectangle, List vecDistance, int numFaces) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
@@ -8617,6 +8578,10 @@ void rtcEngineSmokeTestCases() {
               (String provider, String extension, int error, String message) {},
           onUserAccountUpdated:
               (RtcConnection connection, int remoteUid, String userAccount) {},
+          onVideoRenderingTracingResult: (RtcConnection connection,
+              int uid,
+              MediaTraceEvent currentEvent,
+              VideoRenderingTracingInfo tracingInfo) {},
         );
         rtcEngine.registerEventHandler(
           eventHandler,
@@ -8728,7 +8693,7 @@ void rtcEngineSmokeTestCases() {
           onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
-              Rectangle vecRectangle, int vecDistance, int numFaces) {},
+              List vecRectangle, List vecDistance, int numFaces) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
@@ -8829,6 +8794,10 @@ void rtcEngineSmokeTestCases() {
               (String provider, String extension, int error, String message) {},
           onUserAccountUpdated:
               (RtcConnection connection, int remoteUid, String userAccount) {},
+          onVideoRenderingTracingResult: (RtcConnection connection,
+              int uid,
+              MediaTraceEvent currentEvent,
+              VideoRenderingTracingInfo tracingInfo) {},
         );
         rtcEngine.unregisterEventHandler(
           eventHandler,
@@ -10743,6 +10712,111 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'setParameters',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const String parameters = "hello";
+        await rtcEngine.setParameters(
+          parameters,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setParameters] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'startMediaRenderingTracing',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.startMediaRenderingTracing();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[startMediaRenderingTracing] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'enableInstantMediaRendering',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.enableInstantMediaRendering();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[enableInstantMediaRendering] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'getAudioDeviceManager',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -11064,43 +11138,6 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[unregisterAudioEncodedFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'setParameters',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String parameters = "hello";
-        await rtcEngine.setParameters(
-          parameters,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setParameters] error: ${e.toString()}');
           rethrow;
         }
 

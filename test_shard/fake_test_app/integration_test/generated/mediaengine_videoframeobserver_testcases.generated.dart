@@ -59,6 +59,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -77,6 +78,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -151,6 +153,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -169,6 +172,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -243,6 +247,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -261,6 +266,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -337,6 +343,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -355,6 +362,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -431,6 +439,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -449,6 +458,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -523,6 +533,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -541,6 +552,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -615,6 +627,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -633,6 +646,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
         const int mediaPlayerId = 10;
 
@@ -709,6 +723,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -727,6 +742,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -803,6 +819,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -821,6 +838,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -900,6 +918,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -918,6 +937,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {
@@ -994,6 +1014,7 @@ void generatedTestCases() {
         const int videoFrameTextureId = 10;
         const List<double> videoFrameMatrix = [];
         Uint8List videoFrameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List videoFramePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame videoFrame = VideoFrame(
           type: videoFrameType,
           width: videoFrameWidth,
@@ -1012,6 +1033,7 @@ void generatedTestCases() {
           textureId: videoFrameTextureId,
           matrix: videoFrameMatrix,
           alphaBuffer: videoFrameAlphaBuffer,
+          pixelBuffer: videoFramePixelBuffer,
         );
 
         final eventJson = {

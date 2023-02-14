@@ -18,7 +18,6 @@ abstract class MediaRecorder {
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [config] The recording configuration. See MediaRecorderConfiguration .
-  ///
   Future<void> startRecording(
       {required RtcConnection connection,
       required MediaRecorderConfiguration config});
@@ -27,7 +26,6 @@ abstract class MediaRecorder {
   /// After calling startRecording , if you want to stop the recording, you must call this method; otherwise, the generated recording files may not be playable.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  ///
   Future<void> stopRecording(RtcConnection connection);
 
   /// Release the MediaRecorder object.
