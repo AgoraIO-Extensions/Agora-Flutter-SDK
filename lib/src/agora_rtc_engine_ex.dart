@@ -27,7 +27,7 @@ class RtcConnection {
 /// Inherited from RtcEngine .
 abstract class RtcEngineEx implements RtcEngine {
   /// Joins a channel with the connection ID.
-  /// You can call this method multiple times to join more than one channel.If you are already in a channel, you cannot rejoin it with the same user ID.If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.Ensure that the app ID you use to generate the token is the same as RtcEngine the app ID used when creating the instance.
+  /// You can call this method multiple times to join more than one channel.If you are already in a channel, you cannot rejoin it with the same user ID.If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.Ensure that the app ID you use to generate the token is the same as the app ID used when creating the RtcEngine instance.
   ///
   /// * [options] The channel media options. See ChannelMediaOptions .
   /// * [token] The token generated on your server for authentication.
@@ -81,14 +81,11 @@ abstract class RtcEngineEx implements RtcEngine {
   /// A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method does not affect any ongoing video recording, because it does not disable the camera.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [mute] Whether to stop publishing the local video stream.
-  ///  true: Stop publishing the local video stream.
-  ///  false: (Default) Publish the local video stream.
+  /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
   Future<void> muteLocalVideoStreamEx(
       {required bool mute, required RtcConnection connection});
 
   /// Stops or resumes receiving the audio stream of a specified user.
-  /// This method is used to stops or resumes receiving the audio stream of a specified user. You can call this method before or after joining a channel. If a user leaves a channel, the settings in this method become invalid.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [uid] The ID of the specified user.
@@ -99,10 +96,10 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Stops or resumes subscribing to the audio streams of all remote users.
-  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones who join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+  /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users.
+  /// * [mute] Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
   Future<void> muteAllRemoteAudioStreamsEx(
       {required bool mute, required RtcConnection connection});
 
@@ -121,7 +118,9 @@ abstract class RtcEngineEx implements RtcEngine {
   /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [mute] Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
+  /// * [mute] Whether to stop subscribing to the video streams of all remote users.
+  ///  true: Stop subscribing to the video streams of all remote users.
+  ///  false: (Default) Subscribe to the audio streams of all remote users by default.
   Future<void> muteAllRemoteVideoStreamsEx(
       {required bool mute, required RtcConnection connection});
 
@@ -210,6 +209,17 @@ abstract class RtcEngineEx implements RtcEngine {
       required bool enabled,
       String? deviceName});
 
+  /// Adjusts the playback signal volume of a specified remote user.
+  /// You can call this method to adjust the playback volume of a specified remote user. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.Call this method after joining a channel.The playback volume here refers to the mixed volume of a specified remote user.
+  ///
+  /// * [volume] Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
+  /// * [connection] The connection information. See RtcConnection .
+  /// * [uid] The user ID of the remote user.
+  Future<void> adjustUserPlaybackSignalVolumeEx(
+      {required int uid,
+      required int volume,
+      required RtcConnection connection});
+
   /// Gets the current connection state of the SDK.
   /// You can call this method either before or after joining a channel.
   ///
@@ -251,7 +261,7 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Adds a watermark image to the local video.
-  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfigurationEx method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than the setVideoEncoderConfigurationEx dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that you have called enableVideo before calling this method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
+  /// This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a local video or CDN live stream. The newly added watermark image replaces the previous one.The watermark coordinatesare dependent on the settings in the setVideoEncoderConfigurationEx method:If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.When setting the watermark position, the region must be less than the setVideoEncoderConfigurationEx dimensions set in the method; otherwise, the watermark image will be cropped.Ensure that you have called enableVideo before calling this method.This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [options] The options of the watermark image to be added.
@@ -295,66 +305,61 @@ abstract class RtcEngineEx implements RtcEngine {
       required RtcConnection connection});
 
   /// Starts pushing media streams to a CDN without transcoding.
-  /// Ensure that you enable the media push service before using this function.
+  /// Ensure that you enable the Media Push service before using this function. See Enable Media Push.
   ///  Call this method after joining a channel.
   ///  Only hosts in the LIVE_BROADCASTING profile can call this method.
   ///  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-  ///  You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  ///  Agora recommends that you use the server-side Media Push function. You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   Future<void> startRtmpStreamWithoutTranscodingEx(
       {required String url, required RtcConnection connection});
 
   /// Starts Media Push and sets the transcoding configuration.
-  /// You can call this method to push a live audio-and-video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.Ensure that you enable the Media Push service before using this function. Call this method after joining a channel.Only hosts in the LIVE_BROADCASTING profile can call this method.If you want to retry pushing streams after a failed push, make sure to call stopRtmpStreamEx first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+  /// Agora recommends that you use the server-side Media Push function. You can call this method to push a live audio-and-video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.Ensure that you enable the Media Push service before using this function. Call this method after joining a channel.Only hosts in the LIVE_BROADCASTING profile can call this method.If you want to retry pushing streams after a failed push, make sure to call stopRtmpStreamEx first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [transcoding] The transcoding configuration for media push. See LiveTranscoding .
+  /// * [transcoding] The transcoding configuration for Media Push. See LiveTranscoding .
   ///
-  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   Future<void> startRtmpStreamWithTranscodingEx(
       {required String url,
       required LiveTranscoding transcoding,
       required RtcConnection connection});
 
   /// Updates the transcoding configuration.
-  /// After you start pushing media streams to CDN with transcoding, you can dynamically update the transcoding configuration according to the scenario. The SDK triggers the onTranscodingUpdated callback after the transcoding configuration is updated.
+  /// Agora recommends that you use the server-side Media Push function. After you start pushing media streams to CDN with transcoding, you can dynamically update the transcoding configuration according to the scenario. The SDK triggers the onTranscodingUpdated callback after the transcoding configuration is updated.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [transcoding] The transcoding configuration for media push. See LiveTranscoding .
+  /// * [transcoding] The transcoding configuration for Media Push. See LiveTranscoding .
   ///
   Future<void> updateRtmpTranscodingEx(
       {required LiveTranscoding transcoding,
       required RtcConnection connection});
 
   /// Stops pushing media streams to a CDN.
-  /// You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  /// Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
   ///
-  /// * [url] The address of media push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
   Future<void> stopRtmpStreamEx(
       {required String url, required RtcConnection connection});
 
   /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
   /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the destination channel.If the onChannelMediaRelayStateChanged callback returnsrelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.The relaying media streams across channels function needs to be enabled.We do not support string user accounts in this API.
-  ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
   Future<void> startChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
 
   /// Updates the channels for media stream relay.
   /// After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the updateChannelMediaRelay method.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the relayEventPacketUpdateDestChannel (7) state code.Call the method after successfully calling the startChannelMediaRelayEx method and receiving onChannelMediaRelayStateChanged (relayStateRunning, relayOk); otherwise, the method call fails.
-  ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
   Future<void> updateChannelMediaRelayEx(
       {required ChannelMediaRelayConfiguration configuration,
       required RtcConnection connection});
 
   /// Stops the media stream relay. Once the relay stops, the host quits all the destination channels.
-  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports relayStateIdle (0) and relayOk (0), the host successfully stops the relay.If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the relayErrorServerNoResponse (2) or relayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
+  /// After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports relayStateIdle (0) and relayOk (0), the host successfully stops the relay.
+  ///  If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the relayErrorServerNoResponse (2) or relayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
   ///
   /// * [connection] The connection information. See RtcConnection .
   Future<void> stopChannelMediaRelayEx(RtcConnection connection);
@@ -387,28 +392,24 @@ abstract class RtcEngineEx implements RtcEngine {
       required int bitrate});
 
   /// Enables or disables dual-stream mode on the sender side.
-  /// After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.
-  ///  You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:
-  ///  High-quality video stream: High bitrate, high resolution.
-  ///  Low-quality video stream: Low bitrate, low resolution. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
+  /// After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:High-quality video stream: High bitrate, high resolution.Low-quality video stream: Low bitrate, low resolution.This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
-  /// * [enabled] Whether to enable dual-stream mode:true: Enable dual-stream mode.false: (Default) Disable dual-stream mode.
+  ///
+  /// * [enabled] Whether to enable dual-stream mode:
+  ///  true: Enable dual-stream mode.
+  ///  false: (Default) Disable dual-stream mode.
   Future<void> enableDualStreamModeEx(
-      {required bool enabled,
+      {required VideoSourceType sourceType,
+      required bool enabled,
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection});
 
-  /// Sets dual-stream mode on the sender side.
-  /// The SDK enables the low-quality video stream auto mode on the sender by default, which is equivalent to calling this method and setting the mode to autoSimulcastStream. If you want to modify this behavior, you can call this method and modify the mode to disableSimulcastStream(never sends low-quality video streams) or enableSimulcastStream(sends low-quality video streams).The difference and between this method and enableDualStreamModeEx is as follows:When calling this method and setting mode to disableSimulcastStream, it has the same effect as enableDualStreamModeEx(false).When calling this method and setting mode to enableSimulcastStream, it has the same effect as enableDualStreamModeEx(true).Both methods can be called before and after joining a channel. If they are used at the same time, the settings in the method called later shall prevail.
-  ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
-  ///
-  /// * [mode] The mode in which the video stream is sent. See SimulcastStreamMode .
+  /// @nodoc
   Future<void> setDualStreamModeEx(
-      {required SimulcastStreamMode mode,
+      {required VideoSourceType sourceType,
+      required SimulcastStreamMode mode,
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection});
 

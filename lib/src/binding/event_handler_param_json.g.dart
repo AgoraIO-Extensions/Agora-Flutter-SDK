@@ -306,20 +306,6 @@ const _$MediaDeviceStateTypeEnumMap = {
   MediaDeviceStateType.mediaDeviceStateUnplugged: 8,
 };
 
-RtcEngineEventHandlerOnAudioMixingPositionChangedJson
-    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnAudioMixingPositionChangedJson(
-          position: json['position'] as int?,
-        );
-
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(
-            RtcEngineEventHandlerOnAudioMixingPositionChangedJson instance) =>
-        <String, dynamic>{
-          'position': instance.position,
-        };
-
 RtcEngineEventHandlerOnAudioMixingFinishedJson
     _$RtcEngineEventHandlerOnAudioMixingFinishedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -603,7 +589,7 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNoPermission: 2,
   LocalVideoStreamError.localVideoStreamErrorDeviceBusy: 3,
   LocalVideoStreamError.localVideoStreamErrorCaptureFailure: 4,
-  LocalVideoStreamError.localVideoStreamErrorCodecNotSupport: 5,
+  LocalVideoStreamError.localVideoStreamErrorEncodeFailure: 5,
   LocalVideoStreamError.localVideoStreamErrorCaptureInbackground: 6,
   LocalVideoStreamError.localVideoStreamErrorCaptureMultipleForegroundApps: 7,
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
@@ -615,8 +601,6 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowOccluded: 13,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -666,7 +650,6 @@ const _$RemoteVideoStateReasonEnumMap = {
   RemoteVideoStateReason.remoteVideoStateReasonVideoStreamTypeChangeToLow: 10,
   RemoteVideoStateReason.remoteVideoStateReasonVideoStreamTypeChangeToHigh: 11,
   RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground: 12,
-  RemoteVideoStateReason.remoteVideoStateReasonCodecNotSupport: 13,
 };
 
 RtcEngineEventHandlerOnFirstRemoteVideoFrameJson
@@ -993,11 +976,12 @@ RtcEngineEventHandlerOnFacePositionChangedJson
         RtcEngineEventHandlerOnFacePositionChangedJson(
           imageWidth: json['imageWidth'] as int?,
           imageHeight: json['imageHeight'] as int?,
-          vecRectangle: json['vecRectangle'] == null
-              ? null
-              : Rectangle.fromJson(
-                  json['vecRectangle'] as Map<String, dynamic>),
-          vecDistance: json['vecDistance'] as int?,
+          vecRectangle: (json['vecRectangle'] as List<dynamic>?)
+              ?.map((e) => Rectangle.fromJson(e as Map<String, dynamic>))
+              .toList(),
+          vecDistance: (json['vecDistance'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList(),
           numFaces: json['numFaces'] as int?,
         );
 
@@ -1006,7 +990,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFacePositionChangedJsonToJson(
     <String, dynamic>{
       'imageWidth': instance.imageWidth,
       'imageHeight': instance.imageHeight,
-      'vecRectangle': instance.vecRectangle?.toJson(),
+      'vecRectangle': instance.vecRectangle?.map((e) => e.toJson()).toList(),
       'vecDistance': instance.vecDistance,
       'numFaces': instance.numFaces,
     };
@@ -2230,36 +2214,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnUserAccountUpdatedJsonToJson(
       'userAccount': instance.userAccount,
     };
 
-RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson
-    _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(
-            Map<String, dynamic> json) =>
-        RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
-          stream: json['stream'] == null
-              ? null
-              : TranscodingVideoStream.fromJson(
-                  json['stream'] as Map<String, dynamic>),
-          error:
-              $enumDecodeNullable(_$VideoTranscoderErrorEnumMap, json['error']),
-        );
-
-Map<String, dynamic>
-    _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(
-            RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson instance) =>
-        <String, dynamic>{
-          'stream': instance.stream?.toJson(),
-          'error': _$VideoTranscoderErrorEnumMap[instance.error],
-        };
-
-const _$VideoTranscoderErrorEnumMap = {
-  VideoTranscoderError.vtErrOk: 0,
-  VideoTranscoderError.vtErrVideoSourceNotReady: 1,
-  VideoTranscoderError.vtErrInvalidMediaSourceType: 2,
-  VideoTranscoderError.vtErrInvalidImagePath: 3,
-  VideoTranscoderError.vtErrUnsupportImageFormat: 4,
-  VideoTranscoderError.vtErrInvalidLayout: 5,
-  VideoTranscoderError.vtErrInternal: 20,
-};
-
 MetadataObserverOnMetadataReceivedJson
     _$MetadataObserverOnMetadataReceivedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -2438,22 +2392,6 @@ Map<String, dynamic> _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(
       'channelId': instance.channelId,
       'audioFrame': instance.audioFrame?.toJson(),
     };
-
-AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
-    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson(
-          audioFrame: json['audioFrame'] == null
-              ? null
-              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(
-            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) =>
-        <String, dynamic>{
-          'audioFrame': instance.audioFrame?.toJson(),
-        };
 
 AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
     _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(

@@ -120,6 +120,7 @@ RemoteVideoStats _$RemoteVideoStatsFromJson(Map<String, dynamic> json) =>
       totalActiveTime: json['totalActiveTime'] as int?,
       publishDuration: json['publishDuration'] as int?,
       superResolutionType: json['superResolutionType'] as int?,
+      rxVideoBytes: json['rxVideoBytes'] as int?,
     );
 
 Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) {
@@ -148,6 +149,7 @@ Map<String, dynamic> _$RemoteVideoStatsToJson(RemoteVideoStats instance) {
   writeNotNull('totalActiveTime', instance.totalActiveTime);
   writeNotNull('publishDuration', instance.publishDuration);
   writeNotNull('superResolutionType', instance.superResolutionType);
+  writeNotNull('rxVideoBytes', instance.rxVideoBytes);
   return val;
 }
 
@@ -460,7 +462,6 @@ ScreenCaptureSourceInfo _$ScreenCaptureSourceInfoFromJson(
       sourceTitle: json['sourceTitle'] as String?,
       primaryMonitor: json['primaryMonitor'] as bool?,
       isOccluded: json['isOccluded'] as bool?,
-      minimizeWindow: json['minimizeWindow'] as bool?,
     );
 
 Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
@@ -482,7 +483,6 @@ Map<String, dynamic> _$ScreenCaptureSourceInfoToJson(
   writeNotNull('sourceTitle', instance.sourceTitle);
   writeNotNull('primaryMonitor', instance.primaryMonitor);
   writeNotNull('isOccluded', instance.isOccluded);
-  writeNotNull('minimizeWindow', instance.minimizeWindow);
   return val;
 }
 
@@ -581,6 +581,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       audioDelayMs: json['audioDelayMs'] as int?,
       mediaPlayerAudioDelayMs: json['mediaPlayerAudioDelayMs'] as int?,
       token: json['token'] as String?,
+      identity: json['identity'] as String?,
       enableBuiltInMediaEncryption:
           json['enableBuiltInMediaEncryption'] as bool?,
       publishRhythmPlayerTrack: json['publishRhythmPlayerTrack'] as bool?,
@@ -640,6 +641,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('audioDelayMs', instance.audioDelayMs);
   writeNotNull('mediaPlayerAudioDelayMs', instance.mediaPlayerAudioDelayMs);
   writeNotNull('token', instance.token);
+  writeNotNull('identity', instance.identity);
   writeNotNull(
       'enableBuiltInMediaEncryption', instance.enableBuiltInMediaEncryption);
   writeNotNull('publishRhythmPlayerTrack', instance.publishRhythmPlayerTrack);
@@ -742,8 +744,6 @@ RtcEngineContext _$RtcEngineContextFromJson(Map<String, dynamic> json) =>
       threadPriority: $enumDecodeNullable(
           _$ThreadPriorityTypeEnumMap, json['threadPriority']),
       useExternalEglContext: json['useExternalEglContext'] as bool?,
-      domainLimit: json['domainLimit'] as bool?,
-      autoRegisterAgoraExtensions: json['autoRegisterAgoraExtensions'] as bool?,
     );
 
 Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
@@ -766,9 +766,6 @@ Map<String, dynamic> _$RtcEngineContextToJson(RtcEngineContext instance) {
   writeNotNull(
       'threadPriority', _$ThreadPriorityTypeEnumMap[instance.threadPriority]);
   writeNotNull('useExternalEglContext', instance.useExternalEglContext);
-  writeNotNull('domainLimit', instance.domainLimit);
-  writeNotNull(
-      'autoRegisterAgoraExtensions', instance.autoRegisterAgoraExtensions);
   return val;
 }
 
@@ -872,49 +869,6 @@ Map<String, dynamic> _$DirectCdnStreamingMediaOptionsToJson(
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   return val;
 }
-
-ExtensionInfo _$ExtensionInfoFromJson(Map<String, dynamic> json) =>
-    ExtensionInfo(
-      mediaSourceType: $enumDecodeNullable(
-          _$MediaSourceTypeEnumMap, json['mediaSourceType']),
-      remoteUid: json['remoteUid'] as int?,
-      channelId: json['channelId'] as String?,
-      localUid: json['localUid'] as int?,
-    );
-
-Map<String, dynamic> _$ExtensionInfoToJson(ExtensionInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull(
-      'mediaSourceType', _$MediaSourceTypeEnumMap[instance.mediaSourceType]);
-  writeNotNull('remoteUid', instance.remoteUid);
-  writeNotNull('channelId', instance.channelId);
-  writeNotNull('localUid', instance.localUid);
-  return val;
-}
-
-const _$MediaSourceTypeEnumMap = {
-  MediaSourceType.audioPlayoutSource: 0,
-  MediaSourceType.audioRecordingSource: 1,
-  MediaSourceType.primaryCameraSource: 2,
-  MediaSourceType.secondaryCameraSource: 3,
-  MediaSourceType.primaryScreenSource: 4,
-  MediaSourceType.secondaryScreenSource: 5,
-  MediaSourceType.customVideoSource: 6,
-  MediaSourceType.mediaPlayerSource: 7,
-  MediaSourceType.rtcImagePngSource: 8,
-  MediaSourceType.rtcImageJpegSource: 9,
-  MediaSourceType.rtcImageGifSource: 10,
-  MediaSourceType.remoteVideoSource: 11,
-  MediaSourceType.transcodedVideoSource: 12,
-  MediaSourceType.unknownMediaSource: 100,
-};
 
 SDKBuildInfo _$SDKBuildInfoFromJson(Map<String, dynamic> json) => SDKBuildInfo(
       build: json['build'] as int?,

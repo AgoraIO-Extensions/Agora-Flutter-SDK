@@ -528,6 +528,29 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
+  Future<void> adjustUserPlaybackSignalVolumeEx(
+      {required int uid,
+      required int volume,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_adjustUserPlaybackSignalVolumeEx';
+    final param = createParams(
+        {'uid': uid, 'volume': volume, 'connection': connection.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await apiCaller
+        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<ConnectionStateType> getConnectionStateEx(
       RtcConnection connection) async {
     final apiType =
@@ -1006,12 +1029,14 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
 
   @override
   Future<void> enableDualStreamModeEx(
-      {required bool enabled,
+      {required VideoSourceType sourceType,
+      required bool enabled,
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngineEx'}_enableDualStreamModeEx';
     final param = createParams({
+      'sourceType': sourceType.value(),
       'enabled': enabled,
       'streamConfig': streamConfig.toJson(),
       'connection': connection.toJson()
@@ -1033,12 +1058,14 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
 
   @override
   Future<void> setDualStreamModeEx(
-      {required SimulcastStreamMode mode,
+      {required VideoSourceType sourceType,
+      required SimulcastStreamMode mode,
       required SimulcastStreamConfig streamConfig,
       required RtcConnection connection}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngineEx'}_setDualStreamModeEx';
     final param = createParams({
+      'sourceType': sourceType.value(),
       'mode': mode.value(),
       'streamConfig': streamConfig.toJson(),
       'connection': connection.toJson()

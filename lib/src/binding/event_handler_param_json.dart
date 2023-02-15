@@ -318,33 +318,6 @@ extension RtcEngineEventHandlerOnAudioDeviceStateChangedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
-  const RtcEngineEventHandlerOnAudioMixingPositionChangedJson({this.position});
-
-  @JsonKey(name: 'position')
-  final int? position;
-  factory RtcEngineEventHandlerOnAudioMixingPositionChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnAudioMixingPositionChangedJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnAudioMixingPositionChangedJsonBufferExt
-    on RtcEngineEventHandlerOnAudioMixingPositionChangedJson {
-  RtcEngineEventHandlerOnAudioMixingPositionChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnAudioMixingFinishedJson {
   const RtcEngineEventHandlerOnAudioMixingFinishedJson();
 
@@ -1327,9 +1300,9 @@ class RtcEngineEventHandlerOnFacePositionChangedJson {
   @JsonKey(name: 'imageHeight')
   final int? imageHeight;
   @JsonKey(name: 'vecRectangle')
-  final Rectangle? vecRectangle;
+  final List<Rectangle>? vecRectangle;
   @JsonKey(name: 'vecDistance')
-  final int? vecDistance;
+  final List<int>? vecDistance;
   @JsonKey(name: 'numFaces')
   final int? numFaces;
   factory RtcEngineEventHandlerOnFacePositionChangedJson.fromJson(
@@ -2967,36 +2940,6 @@ extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
-  const RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
-      {this.stream, this.error});
-
-  @JsonKey(name: 'stream')
-  final TranscodingVideoStream? stream;
-  @JsonKey(name: 'error')
-  final VideoTranscoderError? error;
-  factory RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonBufferExt
-    on RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
-  RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class MetadataObserverOnMetadataReceivedJson {
   const MetadataObserverOnMetadataReceivedJson({this.metadata});
 
@@ -3291,33 +3234,6 @@ class AudioFrameObserverBaseOnMixedAudioFrameJson {
 extension AudioFrameObserverBaseOnMixedAudioFrameJsonBufferExt
     on AudioFrameObserverBaseOnMixedAudioFrameJson {
   AudioFrameObserverBaseOnMixedAudioFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
-  const AudioFrameObserverBaseOnEarMonitoringAudioFrameJson({this.audioFrame});
-
-  @JsonKey(name: 'audioFrame')
-  final AudioFrame? audioFrame;
-  factory AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(this);
-}
-
-extension AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonBufferExt
-    on AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
-  AudioFrameObserverBaseOnEarMonitoringAudioFrameJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

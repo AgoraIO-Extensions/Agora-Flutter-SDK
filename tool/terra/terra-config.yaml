@@ -1,4 +1,4 @@
-include: shared:rtc_4.0.1.5/shared_configs.yaml
+include: shared:rtc_4.0.0.229/shared_configs.yaml
 
 language: dart
 
