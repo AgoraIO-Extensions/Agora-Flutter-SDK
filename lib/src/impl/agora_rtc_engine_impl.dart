@@ -35,7 +35,8 @@ import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
     as audio_device_manager_impl;
 import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
 import 'package:agora_rtc_engine/src/impl/native_iris_api_engine_binding_delegate.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform;
+import 'package:flutter/foundation.dart'
+    show ChangeNotifier, defaultTargetPlatform;
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/widgets.dart'
     show
@@ -168,6 +169,19 @@ class _Lifecycle with WidgetsBindingObserver {
   }
 }
 
+class _RtcEngineState extends ChangeNotifier {
+  bool _isInitialzed = false;
+  bool get isInitialzed => _isInitialzed;
+  set isInitialzed(bool value) {
+    if (_isInitialzed == value) {
+      return;
+    }
+
+    _isInitialzed = value;
+    notifyListeners();
+  }
+}
+
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._(IrisMethodChannel irisMethodChannel)
@@ -176,6 +190,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   static RtcEngineImpl? _instance;
+
+  final _RtcEngineState _rtcEngineState = _RtcEngineState();
+  @internal
+  bool get isInitialzed => _rtcEngineState.isInitialzed;
 
   final _rtcEngineImplScopedKey = const TypedScopedKey(RtcEngineImpl);
 
@@ -260,6 +278,16 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
 
     await _initializeInternal(context);
+  }
+
+  @internal
+  void addInitializedCompletedListener(VoidCallback listener) {
+    _rtcEngineState.addListener(listener);
+  }
+
+  @internal
+  void removeInitializedCompletedListener(VoidCallback listener) {
+    _rtcEngineState.removeListener(listener);
   }
 
   @override
