@@ -9780,6 +9780,39 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'getNtpTimeInMs',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.enableVideo();
+
+        await rtcEngine.getNtpTimeInMs();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getNtpTimeInMs] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[getNtpTimeInMs] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'getAudioDeviceManager',
     (WidgetTester tester) async {
       app.main();

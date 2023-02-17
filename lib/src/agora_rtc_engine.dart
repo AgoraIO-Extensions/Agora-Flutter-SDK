@@ -4358,6 +4358,9 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> enableWirelessAccelerate(bool enabled);
 
+  /// @nodoc
+  Future<int> getNtpTimeInMs();
+
   /// Gets the AudioDeviceManager object to manage audio devices.
   ///
   /// Returns

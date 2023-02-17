@@ -4789,6 +4789,21 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<int> getNtpTimeInMs() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getNtpTimeInMs';
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
   AudioDeviceManager getAudioDeviceManager() {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getAudioDeviceManager';
