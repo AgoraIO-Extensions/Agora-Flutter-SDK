@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data' show Uint8List;
+import 'dart:ffi' as ffi;
 
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
@@ -211,6 +212,23 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await _globalVideoViewController
         .attachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
+
+    irisMethodChannel.addHotRestartListener(_hotRestartListener);
+  }
+
+  void _hotRestartListener(Object? message) {
+    assert(() {
+      // Free `IrisVideoFrameBufferManager` when hot restart
+      final nativeBindingDelegate = IrisApiEngineNativeBindingDelegateProvider()
+              .provideNativeBindingDelegate()
+          as NativeIrisApiEngineBindingsDelegate;
+      nativeBindingDelegate.initialize();
+      nativeBindingDelegate.binding.FreeIrisVideoFrameBufferManager(
+          ffi.Pointer.fromAddress(
+              _globalVideoViewController.videoFrameBufferManagerIntPtr));
+
+      return true;
+    }());
   }
 
   @override
@@ -262,7 +280,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await super.release(sync: sync);
 
-    // await apiCaller.disposeAsync();
+    irisMethodChannel.removeHotRestartListener(_hotRestartListener);
 
     await irisMethodChannel.dispose();
     _instance = null;
