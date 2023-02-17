@@ -27,6 +27,7 @@ ffi.DynamicLibrary _loadLib() {
 
 class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
   late final bindings.NativeIrisApiEngineBinding _binding;
+  bindings.NativeIrisApiEngineBinding get binding => _binding;
 
   @override
   void initialize() {
@@ -173,9 +174,9 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
 }
 
 class IrisApiEngineNativeBindingDelegateProvider
-    implements NativeBindingDelegateProvider {
+    extends NativeBindingsProvider {
   @override
-  NativeBindingDelegate provide() {
+  NativeBindingDelegate provideNativeBindingDelegate() {
     return NativeIrisApiEngineBindingsDelegate();
   }
 }
