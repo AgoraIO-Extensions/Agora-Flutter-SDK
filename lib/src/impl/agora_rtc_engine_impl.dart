@@ -232,6 +232,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         .attachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
 
     irisMethodChannel.addHotRestartListener(_hotRestartListener);
+
+    _rtcEngineState.isInitialzed = true;
   }
 
   void _hotRestartListener(Object? message) {
@@ -300,6 +302,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       _ambiguate(WidgetsBinding.instance)?.removeObserver(_lifecycle!);
       _lifecycle = null;
     }
+
+    _rtcEngineState.dispose();
 
     await _objectPool.clear();
 
