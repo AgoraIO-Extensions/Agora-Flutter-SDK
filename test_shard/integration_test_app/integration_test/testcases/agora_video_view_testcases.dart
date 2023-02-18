@@ -1,19 +1,17 @@
+import 'dart:io';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
-import 'package:integration_test_app/main.dart' as app;
 
 class _RenderViewWidget extends StatefulWidget {
   const _RenderViewWidget({
     Key? key,
-    required this.rtcEngine,
     required this.builder,
   }) : super(key: key);
 
   final Function(BuildContext context, RtcEngine engine) builder;
-
-  final RtcEngine rtcEngine;
 
   @override
   State<_RenderViewWidget> createState() => _RenderViewWidgetState();
@@ -67,7 +65,7 @@ class _RenderViewWidgetState extends State<_RenderViewWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: widget.builder(context, widget.rtcEngine),
+        body: widget.builder(context, _engine),
       ),
     );
   }
@@ -78,7 +76,6 @@ void testCases() {
     'Show local AgoraVideoView after RtcEngine.initialize',
     (WidgetTester tester) async {
       await tester.pumpWidget(_RenderViewWidget(
-        rtcEngine: rtcEngine,
         builder: (context, engine) {
           return SizedBox(
             height: 100,
