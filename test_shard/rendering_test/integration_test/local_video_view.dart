@@ -126,6 +126,9 @@ class _LocalVideoViewState extends State<LocalVideoView> {
     mediaPlayerController.unregisterVideoFrameObserver(observer);
     await mediaPlayerController.dispose();
     await rtcEngine.release();
+
+    print('mediaPlayerController.dispose');
+    print('rtcEngine.release()');
   }
 
   @override

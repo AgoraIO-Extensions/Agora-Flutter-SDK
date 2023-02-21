@@ -37,6 +37,8 @@ Future<void> waitDisposed(
   // so that the previous RtcEngine can be released before the next test case start.
   await tester.pumpWidget(Container());
   await binding.delayed(const Duration(seconds: 1));
+
+  print('waitDisposed');
 }
 
 Future<void> matchScreenShotDesktop(
