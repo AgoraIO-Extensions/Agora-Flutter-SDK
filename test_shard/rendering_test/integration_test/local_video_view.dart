@@ -69,6 +69,8 @@ class _LocalVideoViewState extends State<LocalVideoView> {
       );
     }
 
+    print('rtcEngine.initialize');
+
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
@@ -82,7 +84,10 @@ class _LocalVideoViewState extends State<LocalVideoView> {
       ),
     );
 
+    print('mediaPlayerController.initialize');
     await mediaPlayerController.initialize();
+
+    print('mediaPlayerController.initialize 222');
 
     observer = MediaPlayerVideoFrameObserver(
       onFrame: (frame) {
