@@ -45,6 +45,21 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
 
+  @internal
+  bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
+
+  @internal
+  void addInitializedCompletedListener(VoidCallback listener) {
+    final engine = rtcEngine as RtcEngineImpl;
+    engine.addInitializedCompletedListener(listener);
+  }
+
+  @internal
+  void removeInitializedCompletedListener(VoidCallback listener) {
+    final engine = rtcEngine as RtcEngineImpl;
+    engine.removeInitializedCompletedListener(listener);
+  }
+
   @override
   int getTextureId() => _textureId;
 

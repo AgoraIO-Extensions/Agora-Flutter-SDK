@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
+
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
 import 'package:agora_rtc_engine/src/render/agora_video_view.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
@@ -11,9 +12,57 @@ import 'agora_rtc_renderer.dart';
 
 // ignore_for_file: public_member_api_docs
 
-class AgoraVideoViewState extends State<AgoraVideoView> with RtcRenderMixin {
+class AgoraVideoViewState extends State<AgoraVideoView> {
+  AgoraVideoViewState() {
+    _listener = () {
+      bool isInitialzed = _controller(widget.controller).isInitialzed;
+      if (isInitialzed != _isInitialzed) {
+        setState(() {
+          _isInitialzed = isInitialzed;
+        });
+      }
+    };
+  }
+
+  late VoidCallback _listener;
+  late bool _isInitialzed;
+
+  VideoViewControllerBaseMixin _controller(VideoViewControllerBase controller) {
+    return controller as VideoViewControllerBaseMixin;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isInitialzed = _controller(widget.controller).isInitialzed;
+    _controller(widget.controller).addInitializedCompletedListener(_listener);
+  }
+
+  @override
+  void didUpdateWidget(covariant AgoraVideoView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _controller(oldWidget.controller)
+        .removeInitializedCompletedListener(_listener);
+    // Refresh the `_isInitialzed` to the current widget.controller `isInitialzed`
+    _isInitialzed = _controller(widget.controller).isInitialzed;
+    _controller(widget.controller).addInitializedCompletedListener(_listener);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    _controller(widget.controller)
+        .removeInitializedCompletedListener(_listener);
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!_isInitialzed) {
+      return Container();
+    }
+
     if (defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.windows) {
       return AgoraRtcRenderTexture(
