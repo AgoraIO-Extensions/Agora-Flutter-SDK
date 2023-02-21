@@ -33,7 +33,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
   late final MediaPlayerController mediaPlayerController;
   late final MediaPlayerVideoFrameObserver observer;
   late final MediaPlayerSourceObserver mediaPlayerSourceObserver;
-  bool isInit = false;
 
   @override
   void initState() {
@@ -110,10 +109,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
     await mediaPlayerController.open(url: widget.url, startPos: 0);
 
     await mediaPlayerControllerPlayed.future;
-
-    setState(() {
-      isInit = true;
-    });
   }
 
   @override
@@ -130,9 +125,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isInit) {
-      return Container();
-    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
