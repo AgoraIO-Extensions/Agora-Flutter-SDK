@@ -29,6 +29,12 @@ class TestMediaPlayerController extends MediaPlayerControllerImpl {
   bool get shouldHandlerRenderMode => true;
 }
 
+Future<void> waitFrame(WidgetTester tester) async {
+  await tester.pumpAndSettle(const Duration(seconds: 10));
+  // Need `pumpAndSettle` again since there's a `setState` logic inside the `AgoraVideoView`
+  await tester.pumpAndSettle(const Duration(seconds: 10));
+}
+
 Future<void> waitDisposed(
   WidgetTester tester,
   IntegrationTestWidgetsFlutterBinding binding,
@@ -37,8 +43,6 @@ Future<void> waitDisposed(
   // so that the previous RtcEngine can be released before the next test case start.
   await tester.pumpWidget(Container());
   await binding.delayed(const Duration(seconds: 1));
-
-  print('waitDisposed');
 }
 
 Future<void> matchScreenShotDesktop(
@@ -140,7 +144,7 @@ void main() {
           await tester.pumpAndSettle(const Duration(seconds: 10));
 
           await onFrameCompleter.future;
-          await tester.pumpAndSettle(const Duration(seconds: 10));
+          await waitFrame(tester);
 
           await binding.convertFlutterSurfaceToImage();
           await tester.pumpAndSettle();
@@ -178,7 +182,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await tester.pumpAndSettle();
 
@@ -210,7 +214,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await binding.takeScreenshot(
                 'ios.agora_video_view_render.platformview.remote');
@@ -246,7 +250,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.local.donot_handle_rendermode');
@@ -276,7 +280,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.local.with_default_rendermode');
@@ -307,7 +311,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.local.with_rendermodehidden');
@@ -338,7 +342,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.local.with_rendermodefit');
@@ -369,7 +373,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.local.with_rendermodeadaptive');
@@ -400,7 +404,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
@@ -432,7 +436,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.remote.donot_handle_rendermode');
@@ -462,7 +466,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.remote.with_default_rendermode');
@@ -492,7 +496,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.remote.with_rendermodehidden');
@@ -522,7 +526,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.remote.with_rendermodefit');
@@ -552,7 +556,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.remote.with_rendermodeadaptive');
@@ -582,7 +586,7 @@ void main() {
                 await tester.pumpAndSettle(const Duration(seconds: 10));
 
                 await onFrameCompleter.future;
-                await tester.pumpAndSettle(const Duration(seconds: 10));
+                await waitFrame(tester);
 
                 await binding.takeScreenshot(
                     'ios.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
@@ -625,7 +629,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.donot_handle_rendermode');
@@ -657,16 +661,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            print('await onFrameCompleter.future');
-            await tester.pumpAndSettle(const Duration(seconds: 10));
-            print('await onFrameCompleter.future 222');
-            await tester.pumpAndSettle(const Duration(seconds: 10));
-            print('await onFrameCompleter.future 333');
-            await tester.pumpAndSettle(const Duration(seconds: 10));
-            print('matchScreenShotDesktop');
-            await matchScreenShotDesktop(rtcEngine,
-                'macos.agora_video_view_render.texture.local.with_default_rendermode');
-            print('matchScreenShotDesktop 22');
+            await waitFrame(tester);
 
             await waitDisposed(tester, binding);
           },
@@ -696,9 +691,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
-            print('await onFrameCompleter.future render mode renderModeHidden');
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_rendermodehidden');
@@ -731,7 +724,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_rendermodefit');
@@ -764,7 +757,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_rendermodeadaptive');
@@ -797,7 +790,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
@@ -830,7 +823,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.donot_handle_rendermode');
@@ -861,7 +854,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_default_rendermode');
@@ -893,7 +886,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_rendermodehidden');
@@ -925,7 +918,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_rendermodefit');
@@ -957,7 +950,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_rendermodeadaptive');
@@ -989,7 +982,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
@@ -1030,7 +1023,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.donot_handle_rendermode');
@@ -1062,7 +1055,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_default_rendermode');
@@ -1095,7 +1088,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_rendermodehidden');
@@ -1128,7 +1121,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_rendermodefit');
@@ -1161,7 +1154,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_rendermodeadaptive');
@@ -1194,7 +1187,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
@@ -1228,7 +1221,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.donot_handle_rendermode');
@@ -1259,7 +1252,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_default_rendermode');
@@ -1291,7 +1284,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_rendermodehidden');
@@ -1323,7 +1316,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_rendermodefit');
@@ -1355,7 +1348,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_rendermodeadaptive');
@@ -1387,7 +1380,7 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
-            await tester.pumpAndSettle(const Duration(seconds: 10));
+            await waitFrame(tester);
 
             await matchScreenShotDesktop(rtcEngine,
                 'windows.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
