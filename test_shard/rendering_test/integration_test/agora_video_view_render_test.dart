@@ -697,6 +697,8 @@ void main() {
 
             await onFrameCompleter.future;
             await tester.pumpAndSettle(const Duration(seconds: 10));
+            print('await onFrameCompleter.future render mode renderModeHidden');
+            await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_rendermodehidden');
