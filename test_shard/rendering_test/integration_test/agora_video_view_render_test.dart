@@ -657,10 +657,16 @@ void main() {
             await tester.pumpAndSettle(const Duration(seconds: 10));
 
             await onFrameCompleter.future;
+            print('await onFrameCompleter.future');
             await tester.pumpAndSettle(const Duration(seconds: 10));
-
+            print('await onFrameCompleter.future 222');
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+            print('await onFrameCompleter.future 333');
+            await tester.pumpAndSettle(const Duration(seconds: 10));
+            print('matchScreenShotDesktop');
             await matchScreenShotDesktop(rtcEngine,
                 'macos.agora_video_view_render.texture.local.with_default_rendermode');
+            print('matchScreenShotDesktop 22');
 
             await waitDisposed(tester, binding);
           },
