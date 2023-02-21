@@ -33,7 +33,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
   late final MediaPlayerController mediaPlayerController;
   late final MediaPlayerVideoFrameObserver observer;
   late final MediaPlayerSourceObserver mediaPlayerSourceObserver;
-  bool isInit = false;
 
   @override
   void initState() {
@@ -47,19 +46,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
         defaultValue: '<YOUR_APP_ID>');
 
     rtcEngine = createAgoraRtcEngineEx();
-
-    await rtcEngine.initialize(RtcEngineContext(
-      appId: engineAppId,
-      areaCode: AreaCode.areaCodeGlob.value(),
-    ));
-
-    await rtcEngine.setVideoEncoderConfiguration(
-      const VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 640, height: 360),
-        frameRate: 15,
-        bitrate: 800,
-      ),
-    );
 
     if (widget.isRenderModeTest) {
       mediaPlayerController = TestMediaPlayerController(
@@ -82,6 +68,19 @@ class _LocalVideoViewState extends State<LocalVideoView> {
         useFlutterTexture: widget.useFlutterTexture,
       );
     }
+
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    await rtcEngine.setVideoEncoderConfiguration(
+      const VideoEncoderConfiguration(
+        dimensions: VideoDimensions(width: 640, height: 360),
+        frameRate: 15,
+        bitrate: 800,
+      ),
+    );
 
     await mediaPlayerController.initialize();
 
@@ -110,10 +109,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
     await mediaPlayerController.open(url: widget.url, startPos: 0);
 
     await mediaPlayerControllerPlayed.future;
-
-    setState(() {
-      isInit = true;
-    });
   }
 
   @override
@@ -130,9 +125,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isInit) {
-      return Container();
-    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

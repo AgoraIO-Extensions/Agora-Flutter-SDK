@@ -53,6 +53,26 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
 
     rtcEngine = createAgoraRtcEngineEx();
 
+    if (widget.isRenderModeTest) {
+      mediaPlayerController = TestMediaPlayerController(
+        rtcEngine: rtcEngine,
+        canvas: VideoCanvas(
+          uid: 0,
+          renderMode: widget.renderModeType,
+          mirrorMode: widget.mirrorModeType,
+        ),
+      );
+    } else {
+      mediaPlayerController = MediaPlayerController(
+        rtcEngine: rtcEngine,
+        canvas: VideoCanvas(
+          uid: 0,
+          renderMode: widget.renderModeType,
+          mirrorMode: widget.mirrorModeType,
+        ),
+      );
+    }
+
     await rtcEngine.initialize(RtcEngineContext(
       appId: engineAppId,
       areaCode: AreaCode.areaCodeGlob.value(),
@@ -85,26 +105,6 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
         bitrate: 800,
       ),
     );
-
-    if (widget.isRenderModeTest) {
-      mediaPlayerController = TestMediaPlayerController(
-        rtcEngine: rtcEngine,
-        canvas: VideoCanvas(
-          uid: 0,
-          renderMode: widget.renderModeType,
-          mirrorMode: widget.mirrorModeType,
-        ),
-      );
-    } else {
-      mediaPlayerController = MediaPlayerController(
-        rtcEngine: rtcEngine,
-        canvas: VideoCanvas(
-          uid: 0,
-          renderMode: widget.renderModeType,
-          mirrorMode: widget.mirrorModeType,
-        ),
-      );
-    }
 
     await mediaPlayerController.initialize();
 

@@ -9,6 +9,7 @@ import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart';
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
 import 'package:agora_rtc_engine/src/render/media_player_controller.dart';
+import 'package:flutter/foundation.dart';
 
 class MediaPlayerControllerImpl
     with VideoViewControllerBaseMixin
@@ -19,6 +20,10 @@ class MediaPlayerControllerImpl
   MediaPlayer? _mediaPlayer;
 
   final RtcEngine _rtcEngine;
+
+  final InitializationState _initState = InitializationState();
+  @override
+  bool get isInitialzed => _initState.isInitialzed;
 
   @override
   RtcEngine get rtcEngine => _rtcEngine;
@@ -329,6 +334,17 @@ class MediaPlayerControllerImpl
   @override
   Future<void> initialize() async {
     _mediaPlayer = await rtcEngine.createMediaPlayer();
+    _initState.isInitialzed = true;
+  }
+
+  @override
+  void addInitializedCompletedListener(VoidCallback listener) {
+    _initState.addListener(listener);
+  }
+
+  @override
+  void removeInitializedCompletedListener(VoidCallback listener) {
+    _initState.removeListener(listener);
   }
 
   @override
@@ -348,6 +364,7 @@ class MediaPlayerControllerImpl
 
   @override
   Future<void> dispose() async {
+    _initState.dispose();
     await (_mediaPlayer as MediaPlayerImpl).destroy();
     await super.dispose();
     await rtcEngine.destroyMediaPlayer(this);
