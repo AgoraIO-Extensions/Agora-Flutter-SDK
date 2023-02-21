@@ -47,19 +47,6 @@ class _LocalVideoViewState extends State<LocalVideoView> {
 
     rtcEngine = createAgoraRtcEngineEx();
 
-    await rtcEngine.initialize(RtcEngineContext(
-      appId: engineAppId,
-      areaCode: AreaCode.areaCodeGlob.value(),
-    ));
-
-    await rtcEngine.setVideoEncoderConfiguration(
-      const VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 640, height: 360),
-        frameRate: 15,
-        bitrate: 800,
-      ),
-    );
-
     if (widget.isRenderModeTest) {
       mediaPlayerController = TestMediaPlayerController(
         rtcEngine: rtcEngine,
@@ -81,6 +68,19 @@ class _LocalVideoViewState extends State<LocalVideoView> {
         useFlutterTexture: widget.useFlutterTexture,
       );
     }
+
+    await rtcEngine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    await rtcEngine.setVideoEncoderConfiguration(
+      const VideoEncoderConfiguration(
+        dimensions: VideoDimensions(width: 640, height: 360),
+        frameRate: 15,
+        bitrate: 800,
+      ),
+    );
 
     await mediaPlayerController.initialize();
 

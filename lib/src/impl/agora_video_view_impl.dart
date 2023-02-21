@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'agora_rtc_engine_impl.dart';
 import 'agora_rtc_renderer.dart';
 
 // ignore_for_file: public_member_api_docs
@@ -16,7 +15,7 @@ import 'agora_rtc_renderer.dart';
 class AgoraVideoViewState extends State<AgoraVideoView> {
   AgoraVideoViewState() {
     _listener = () {
-      bool isInitialzed = _rtcEngine(widget.controller).isInitialzed;
+      bool isInitialzed = _controller(widget.controller).isInitialzed;
       if (isInitialzed != _isInitialzed) {
         setState(() {
           _isInitialzed = isInitialzed;
@@ -28,33 +27,34 @@ class AgoraVideoViewState extends State<AgoraVideoView> {
   late VoidCallback _listener;
   late bool _isInitialzed;
 
-  RtcEngineImpl _rtcEngine(VideoViewControllerBase controller) {
-    return controller.rtcEngine as RtcEngineImpl;
+  VideoViewControllerBaseMixin _controller(VideoViewControllerBase controller) {
+    return controller as VideoViewControllerBaseMixin;
   }
 
   @override
   void initState() {
     super.initState();
 
-    _isInitialzed = _rtcEngine(widget.controller).isInitialzed;
-    (widget.controller.rtcEngine as RtcEngineImpl)
-        .addInitializedCompletedListener(_listener);
+    _isInitialzed = _controller(widget.controller).isInitialzed;
+    _controller(widget.controller).addInitializedCompletedListener(_listener);
   }
 
   @override
   void didUpdateWidget(covariant AgoraVideoView oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _rtcEngine(oldWidget.controller)
+    _controller(oldWidget.controller)
         .removeInitializedCompletedListener(_listener);
-    _isInitialzed = _rtcEngine(oldWidget.controller).isInitialzed;
-    _rtcEngine(oldWidget.controller).addInitializedCompletedListener(_listener);
+    // Refresh the `_isInitialzed` to the current widget.controller `isInitialzed`
+    _isInitialzed = _controller(widget.controller).isInitialzed;
+    _controller(widget.controller).addInitializedCompletedListener(_listener);
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    _rtcEngine(widget.controller).removeInitializedCompletedListener(_listener);
+    _controller(widget.controller)
+        .removeInitializedCompletedListener(_listener);
   }
 
   @override

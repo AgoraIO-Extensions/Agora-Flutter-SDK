@@ -169,7 +169,8 @@ class _Lifecycle with WidgetsBindingObserver {
   }
 }
 
-class _RtcEngineState extends ChangeNotifier {
+@internal
+class InitializationState extends ChangeNotifier {
   bool _isInitialzed = false;
   bool get isInitialzed => _isInitialzed;
   set isInitialzed(bool value) {
@@ -191,7 +192,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   static RtcEngineImpl? _instance;
 
-  final _RtcEngineState _rtcEngineState = _RtcEngineState();
+  final InitializationState _rtcEngineState = InitializationState();
   @internal
   bool get isInitialzed => _rtcEngineState.isInitialzed;
 
