@@ -31,7 +31,6 @@ void mediaEngineSmokeTestCases() {
           onRecordAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onMixedAudioFrame: (String channelId, AudioFrame audioFrame) {},
-          onEarMonitoringAudioFrame: (AudioFrame audioFrame) {},
           onPlaybackAudioFrameBeforeMixing:
               (String channelId, int uid, AudioFrame audioFrame) {},
         );
@@ -678,7 +677,6 @@ void mediaEngineSmokeTestCases() {
         const List<double> frameMatrix = [];
         Uint8List frameMetadataBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameMetadataSize = 10;
-        Uint8List frameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final ExternalVideoFrame frame = ExternalVideoFrame(
           type: frameType,
           format: frameFormat,
@@ -696,7 +694,6 @@ void mediaEngineSmokeTestCases() {
           matrix: frameMatrix,
           metadataBuffer: frameMetadataBuffer,
           metadataSize: frameMetadataSize,
-          alphaBuffer: frameAlphaBuffer,
         );
         const int videoTrackId = 10;
         await mediaEngine.pushVideoFrame(
@@ -751,7 +748,6 @@ void mediaEngineSmokeTestCases() {
         const int videoEncodedFrameInfoFramesPerSecond = 10;
         const int videoEncodedFrameInfoTrackId = 10;
         const int videoEncodedFrameInfoCaptureTimeMs = 10;
-        const int videoEncodedFrameInfoDecodeTimeMs = 10;
         const int videoEncodedFrameInfoUid = 10;
         const EncodedVideoFrameInfo videoEncodedFrameInfo =
             EncodedVideoFrameInfo(
@@ -763,7 +759,6 @@ void mediaEngineSmokeTestCases() {
           rotation: videoEncodedFrameInfoRotation,
           trackId: videoEncodedFrameInfoTrackId,
           captureTimeMs: videoEncodedFrameInfoCaptureTimeMs,
-          decodeTimeMs: videoEncodedFrameInfoDecodeTimeMs,
           uid: videoEncodedFrameInfoUid,
           streamType: videoEncodedFrameInfoStreamType,
         );
@@ -811,7 +806,6 @@ void mediaEngineSmokeTestCases() {
           onRecordAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onMixedAudioFrame: (String channelId, AudioFrame audioFrame) {},
-          onEarMonitoringAudioFrame: (AudioFrame audioFrame) {},
           onPlaybackAudioFrameBeforeMixing:
               (String channelId, int uid, AudioFrame audioFrame) {},
         );

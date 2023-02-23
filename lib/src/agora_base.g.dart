@@ -202,7 +202,6 @@ EncodedVideoFrameInfo _$EncodedVideoFrameInfoFromJson(
           $enumDecodeNullable(_$VideoOrientationEnumMap, json['rotation']),
       trackId: json['trackId'] as int?,
       captureTimeMs: json['captureTimeMs'] as int?,
-      decodeTimeMs: json['decodeTimeMs'] as int?,
       uid: json['uid'] as int?,
       streamType:
           $enumDecodeNullable(_$VideoStreamTypeEnumMap, json['streamType']),
@@ -226,7 +225,6 @@ Map<String, dynamic> _$EncodedVideoFrameInfoToJson(
   writeNotNull('rotation', _$VideoOrientationEnumMap[instance.rotation]);
   writeNotNull('trackId', instance.trackId);
   writeNotNull('captureTimeMs', instance.captureTimeMs);
-  writeNotNull('decodeTimeMs', instance.decodeTimeMs);
   writeNotNull('uid', instance.uid);
   writeNotNull('streamType', _$VideoStreamTypeEnumMap[instance.streamType]);
   return val;
@@ -247,26 +245,6 @@ const _$VideoOrientationEnumMap = {
   VideoOrientation.videoOrientation180: 180,
   VideoOrientation.videoOrientation270: 270,
 };
-
-CodecCapInfo _$CodecCapInfoFromJson(Map<String, dynamic> json) => CodecCapInfo(
-      codecType:
-          $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codec_type']),
-      codecCapMask: json['codec_cap_mask'] as int?,
-    );
-
-Map<String, dynamic> _$CodecCapInfoToJson(CodecCapInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('codec_type', _$VideoCodecTypeEnumMap[instance.codecType]);
-  writeNotNull('codec_cap_mask', instance.codecCapMask);
-  return val;
-}
 
 VideoEncoderConfiguration _$VideoEncoderConfigurationFromJson(
         Map<String, dynamic> json) =>
@@ -358,7 +336,7 @@ SimulcastStreamConfig _$SimulcastStreamConfigFromJson(
           ? null
           : VideoDimensions.fromJson(
               json['dimensions'] as Map<String, dynamic>),
-      kBitrate: json['kBitrate'] as int?,
+      bitrate: json['bitrate'] as int?,
       framerate: json['framerate'] as int?,
     );
 
@@ -373,7 +351,7 @@ Map<String, dynamic> _$SimulcastStreamConfigToJson(
   }
 
   writeNotNull('dimensions', instance.dimensions?.toJson());
-  writeNotNull('kBitrate', instance.kBitrate);
+  writeNotNull('bitrate', instance.bitrate);
   writeNotNull('framerate', instance.framerate);
   return val;
 }
@@ -599,10 +577,13 @@ RemoteAudioStats _$RemoteAudioStatsFromJson(Map<String, dynamic> json) =>
       totalFrozenTime: json['totalFrozenTime'] as int?,
       frozenRate: json['frozenRate'] as int?,
       mosValue: json['mosValue'] as int?,
+      frozenRateByCustomPlcCount: json['frozenRateByCustomPlcCount'] as int?,
+      plcCount: json['plcCount'] as int?,
       totalActiveTime: json['totalActiveTime'] as int?,
       publishDuration: json['publishDuration'] as int?,
       qoeQuality: json['qoeQuality'] as int?,
       qualityChangedReason: json['qualityChangedReason'] as int?,
+      rxAudioBytes: json['rxAudioBytes'] as int?,
     );
 
 Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
@@ -625,10 +606,14 @@ Map<String, dynamic> _$RemoteAudioStatsToJson(RemoteAudioStats instance) {
   writeNotNull('totalFrozenTime', instance.totalFrozenTime);
   writeNotNull('frozenRate', instance.frozenRate);
   writeNotNull('mosValue', instance.mosValue);
+  writeNotNull(
+      'frozenRateByCustomPlcCount', instance.frozenRateByCustomPlcCount);
+  writeNotNull('plcCount', instance.plcCount);
   writeNotNull('totalActiveTime', instance.totalActiveTime);
   writeNotNull('publishDuration', instance.publishDuration);
   writeNotNull('qoeQuality', instance.qoeQuality);
   writeNotNull('qualityChangedReason', instance.qualityChangedReason);
+  writeNotNull('rxAudioBytes', instance.rxAudioBytes);
   return val;
 }
 
@@ -774,6 +759,7 @@ LocalAudioStats _$LocalAudioStatsFromJson(Map<String, dynamic> json) =>
       internalCodec: json['internalCodec'] as int?,
       txPacketLossRate: json['txPacketLossRate'] as int?,
       audioDeviceDelay: json['audioDeviceDelay'] as int?,
+      audioPlayoutDelay: json['audioPlayoutDelay'] as int?,
     );
 
 Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
@@ -791,6 +777,7 @@ Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
   writeNotNull('internalCodec', instance.internalCodec);
   writeNotNull('txPacketLossRate', instance.txPacketLossRate);
   writeNotNull('audioDeviceDelay', instance.audioDeviceDelay);
+  writeNotNull('audioPlayoutDelay', instance.audioPlayoutDelay);
   return val;
 }
 
@@ -990,7 +977,6 @@ TranscodingVideoStream _$TranscodingVideoStreamFromJson(
           $enumDecodeNullable(_$MediaSourceTypeEnumMap, json['sourceType']),
       remoteUserUid: json['remoteUserUid'] as int?,
       imageUrl: json['imageUrl'] as String?,
-      mediaPlayerId: json['mediaPlayerId'] as int?,
       x: json['x'] as int?,
       y: json['y'] as int?,
       width: json['width'] as int?,
@@ -1013,7 +999,6 @@ Map<String, dynamic> _$TranscodingVideoStreamToJson(
   writeNotNull('sourceType', _$MediaSourceTypeEnumMap[instance.sourceType]);
   writeNotNull('remoteUserUid', instance.remoteUserUid);
   writeNotNull('imageUrl', instance.imageUrl);
-  writeNotNull('mediaPlayerId', instance.mediaPlayerId);
   writeNotNull('x', instance.x);
   writeNotNull('y', instance.y);
   writeNotNull('width', instance.width);
@@ -1045,7 +1030,7 @@ LocalTranscoderConfiguration _$LocalTranscoderConfigurationFromJson(
         Map<String, dynamic> json) =>
     LocalTranscoderConfiguration(
       streamCount: json['streamCount'] as int?,
-      videoInputStreams: (json['videoInputStreams'] as List<dynamic>?)
+      videoInputStreams: (json['VideoInputStreams'] as List<dynamic>?)
           ?.map(
               (e) => TranscodingVideoStream.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -1053,7 +1038,6 @@ LocalTranscoderConfiguration _$LocalTranscoderConfigurationFromJson(
           ? null
           : VideoEncoderConfiguration.fromJson(
               json['videoOutputConfiguration'] as Map<String, dynamic>),
-      syncWithPrimaryCamera: json['sync_with_primary_camera'] as bool?,
     );
 
 Map<String, dynamic> _$LocalTranscoderConfigurationToJson(
@@ -1067,11 +1051,10 @@ Map<String, dynamic> _$LocalTranscoderConfigurationToJson(
   }
 
   writeNotNull('streamCount', instance.streamCount);
-  writeNotNull('videoInputStreams',
+  writeNotNull('VideoInputStreams',
       instance.videoInputStreams?.map((e) => e.toJson()).toList());
   writeNotNull(
       'videoOutputConfiguration', instance.videoOutputConfiguration?.toJson());
-  writeNotNull('sync_with_primary_camera', instance.syncWithPrimaryCamera);
   return val;
 }
 
@@ -1875,7 +1858,6 @@ SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
       enableBlur: json['enable_blur'] as bool?,
       enableAirAbsorb: json['enable_air_absorb'] as bool?,
       speakerAttenuation: (json['speaker_attenuation'] as num?)?.toDouble(),
-      enableDoppler: json['enable_doppler'] as bool?,
     );
 
 Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) {
@@ -1894,7 +1876,6 @@ Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) {
   writeNotNull('enable_blur', instance.enableBlur);
   writeNotNull('enable_air_absorb', instance.enableAirAbsorb);
   writeNotNull('speaker_attenuation', instance.speakerAttenuation);
-  writeNotNull('enable_doppler', instance.enableDoppler);
   return val;
 }
 
@@ -2047,9 +2028,7 @@ const _$InterfaceIdTypeEnumMap = {
   InterfaceIdType.agoraIidCloudSpatialAudio: 10,
   InterfaceIdType.agoraIidLocalSpatialAudio: 11,
   InterfaceIdType.agoraIidMediaRecorder: 12,
-  InterfaceIdType.agoraIidStateSync: 13,
-  InterfaceIdType.agoraIidMetachatService: 14,
-  InterfaceIdType.agoraIidMusicContentCenter: 15,
+  InterfaceIdType.agoraIidMusicContentCenter: 13,
 };
 
 const _$QualityTypeEnumMap = {
@@ -2090,14 +2069,6 @@ const _$FrameHeightEnumMap = {
 const _$H264PacketizeModeEnumMap = {
   H264PacketizeMode.nonInterleaved: 0,
   H264PacketizeMode.singleNalUnit: 1,
-};
-
-const _$CodecCapMaskEnumMap = {
-  CodecCapMask.codecCapMaskNone: 0,
-  CodecCapMask.codecCapMaskHwDec: 1,
-  CodecCapMask.codecCapMaskHwEnc: 2,
-  CodecCapMask.codecCapMaskSwDec: 4,
-  CodecCapMask.codecCapMaskSwEnc: 8,
 };
 
 const _$SimulcastStreamModeEnumMap = {
@@ -2198,7 +2169,7 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNoPermission: 2,
   LocalVideoStreamError.localVideoStreamErrorDeviceBusy: 3,
   LocalVideoStreamError.localVideoStreamErrorCaptureFailure: 4,
-  LocalVideoStreamError.localVideoStreamErrorCodecNotSupport: 5,
+  LocalVideoStreamError.localVideoStreamErrorEncodeFailure: 5,
   LocalVideoStreamError.localVideoStreamErrorCaptureInbackground: 6,
   LocalVideoStreamError.localVideoStreamErrorCaptureMultipleForegroundApps: 7,
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
@@ -2210,8 +2181,6 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowOccluded: 13,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowNotSupported:
       20,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
-  LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
 };
 
 const _$RemoteAudioStateEnumMap = {
@@ -2255,7 +2224,6 @@ const _$RemoteVideoStateReasonEnumMap = {
   RemoteVideoStateReason.remoteVideoStateReasonVideoStreamTypeChangeToLow: 10,
   RemoteVideoStateReason.remoteVideoStateReasonVideoStreamTypeChangeToHigh: 11,
   RemoteVideoStateReason.remoteVideoStateReasonSdkInBackground: 12,
-  RemoteVideoStateReason.remoteVideoStateReasonCodecNotSupport: 13,
 };
 
 const _$RemoteUserStateEnumMap = {
@@ -2307,16 +2275,6 @@ const _$ConnectionStateTypeEnumMap = {
   ConnectionStateType.connectionStateConnected: 3,
   ConnectionStateType.connectionStateReconnecting: 4,
   ConnectionStateType.connectionStateFailed: 5,
-};
-
-const _$VideoTranscoderErrorEnumMap = {
-  VideoTranscoderError.vtErrOk: 0,
-  VideoTranscoderError.vtErrVideoSourceNotReady: 1,
-  VideoTranscoderError.vtErrInvalidMediaSourceType: 2,
-  VideoTranscoderError.vtErrInvalidImagePath: 3,
-  VideoTranscoderError.vtErrUnsupportImageFormat: 4,
-  VideoTranscoderError.vtErrInvalidLayout: 5,
-  VideoTranscoderError.vtErrInternal: 20,
 };
 
 const _$ConnectionChangedReasonTypeEnumMap = {
@@ -2419,12 +2377,6 @@ const _$VoiceConversionPresetEnumMap = {
   VoiceConversionPreset.voiceChangerSweet: 50397696,
   VoiceConversionPreset.voiceChangerSolid: 50397952,
   VoiceConversionPreset.voiceChangerBass: 50398208,
-};
-
-const _$HeadphoneEqualizerPresetEnumMap = {
-  HeadphoneEqualizerPreset.headphoneEqualizerOff: 0,
-  HeadphoneEqualizerPreset.headphoneEqualizerOverear: 67108865,
-  HeadphoneEqualizerPreset.headphoneEqualizerInear: 67108866,
 };
 
 const _$AreaCodeEnumMap = {

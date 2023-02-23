@@ -292,46 +292,5 @@ void localSpatialAudioEngineSmokeTestCases() {
     },
 //  skip: !(),
   );
-
-  testWidgets(
-    'setRemoteAudioAttenuation',
-    (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final localSpatialAudioEngine = rtcEngine.getLocalSpatialAudioEngine();
-
-      try {
-        const int uid = 10;
-        const double attenuation = 10.0;
-        const bool forceSet = true;
-        await localSpatialAudioEngine.setRemoteAudioAttenuation(
-          uid: uid,
-          attenuation: attenuation,
-          forceSet: forceSet,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setRemoteAudioAttenuation] error: ${e.toString()}');
-        }
-        expect(e is AgoraRtcException, true);
-        debugPrint(
-            '[setRemoteAudioAttenuation] errorcode: ${(e as AgoraRtcException).code}');
-      }
-
-      await localSpatialAudioEngine.release();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
 }
 

@@ -768,6 +768,40 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
+  Future<void> joinChannelByAppId(
+      {required String appId,
+      required String channelId,
+      required String info,
+      required int uid,
+      required ChannelMediaOptions options}) async {
+    String apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_joinChannelByAppId';
+    if (info.isNotEmpty) {
+      apiType =
+          '${isOverrideClassName ? className : 'RtcEngine'}_joinChannelByAppId2';
+    }
+    final param = createParams({
+      'appId': appId,
+      'channelId': channelId,
+      'info': info,
+      'uid': uid,
+      'options': options.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(options.collectBufferList());
+    final callApiResult = await apiCaller
+        .callIrisApi(apiType, jsonEncode(param), buffers: buffers);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> leaveChannel({LeaveChannelOptions? options}) async {
     final apiType =
         options == null ? 'RtcEngine_leaveChannel' : 'RtcEngine_leaveChannel2';

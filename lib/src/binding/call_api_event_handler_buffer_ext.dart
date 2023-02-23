@@ -286,18 +286,6 @@ extension DirectCdnStreamingMediaOptionsBufferExt
   }
 }
 
-extension ExtensionInfoBufferExt on ExtensionInfo {
-  ExtensionInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
 extension SDKBuildInfoBufferExt on SDKBuildInfo {
   SDKBuildInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -409,18 +397,6 @@ extension VideoSubscriptionOptionsBufferExt on VideoSubscriptionOptions {
 
 extension EncodedVideoFrameInfoBufferExt on EncodedVideoFrameInfo {
   EncodedVideoFrameInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension CodecCapInfoBufferExt on CodecCapInfo {
-  CodecCapInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -1115,10 +1091,6 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     if (bufferList.length > 1) {
       metadataBuffer = bufferList[1];
     }
-    Uint8List? alphaBuffer;
-    if (bufferList.length > 2) {
-      alphaBuffer = bufferList[2];
-    }
     return ExternalVideoFrame(
         type: type,
         format: format,
@@ -1135,8 +1107,7 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         textureId: textureId,
         matrix: matrix,
         metadataBuffer: metadataBuffer,
-        metadataSize: metadataSize,
-        alphaBuffer: alphaBuffer);
+        metadataSize: metadataSize);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1146,9 +1117,6 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
     }
     if (metadataBuffer != null) {
       bufferList.add(metadataBuffer!);
-    }
-    if (alphaBuffer != null) {
-      bufferList.add(alphaBuffer!);
     }
     return bufferList;
   }
@@ -1403,18 +1371,6 @@ extension InputSeiDataBufferExt on InputSeiData {
 
 extension RemoteVoicePositionInfoBufferExt on RemoteVoicePositionInfo {
   RemoteVoicePositionInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension SpatialAudioZoneBufferExt on SpatialAudioZone {
-  SpatialAudioZone fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
