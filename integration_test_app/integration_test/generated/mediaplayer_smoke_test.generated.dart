@@ -1876,7 +1876,6 @@ void mediaPlayerControllerSmokeTestCases() {
         const bool paramsEnableBlur = true;
         const bool paramsEnableAirAbsorb = true;
         const double paramsSpeakerAttenuation = 10.0;
-        const bool paramsEnableDoppler = true;
         const SpatialAudioParams params = SpatialAudioParams(
           speakerAzimuth: paramsSpeakerAzimuth,
           speakerElevation: paramsSpeakerElevation,
@@ -1885,7 +1884,6 @@ void mediaPlayerControllerSmokeTestCases() {
           enableBlur: paramsEnableBlur,
           enableAirAbsorb: paramsEnableAirAbsorb,
           speakerAttenuation: paramsSpeakerAttenuation,
-          enableDoppler: paramsEnableDoppler,
         );
         await mediaPlayerController.setSpatialAudioParams(
           params,

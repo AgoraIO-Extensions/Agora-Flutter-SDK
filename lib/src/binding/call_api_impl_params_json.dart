@@ -29,19 +29,6 @@ class VideoDeviceManagerGetCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineQueryCodecCapabilityJson {
-  const RtcEngineQueryCodecCapabilityJson(this.codecInfo);
-
-  @JsonKey(name: 'codec_info')
-  final CodecCapInfo codecInfo;
-  factory RtcEngineQueryCodecCapabilityJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineQueryCodecCapabilityJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineQueryCodecCapabilityJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
 class RtcEngineGetExtensionPropertyJson {
   const RtcEngineGetExtensionPropertyJson(this.value);
 
@@ -294,19 +281,6 @@ class AudioDeviceManagerGetRecordingDeviceVolumeJson {
       _$AudioDeviceManagerGetRecordingDeviceVolumeJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetLoopbackDeviceJson {
-  const AudioDeviceManagerGetLoopbackDeviceJson(this.deviceId);
-
-  @JsonKey(name: 'deviceId')
-  final String deviceId;
-  factory AudioDeviceManagerGetLoopbackDeviceJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

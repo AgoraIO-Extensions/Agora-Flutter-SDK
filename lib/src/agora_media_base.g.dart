@@ -516,7 +516,6 @@ const _$AudioFramePositionEnumMap = {
   AudioFramePosition.audioFramePositionRecord: 2,
   AudioFramePosition.audioFramePositionMixed: 4,
   AudioFramePosition.audioFramePositionBeforeMixing: 8,
-  AudioFramePosition.audioFramePositionEarMonitoring: 16,
 };
 
 const _$VideoFrameProcessModeEnumMap = {

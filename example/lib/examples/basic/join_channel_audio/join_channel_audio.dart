@@ -72,6 +72,12 @@ class _State extends State<JoinChannelAudio> {
           isJoined = false;
         });
       },
+      onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {
+        logSink.log(
+            '[onLocalAudioStats] connection: ${connection.toJson()} stats: ${stats.toJson()}');
+
+        _logNtpTimeInMs();
+      },
     ));
 
     await _engine.enableAudio();
@@ -80,6 +86,11 @@ class _State extends State<JoinChannelAudio> {
       profile: AudioProfileType.audioProfileDefault,
       scenario: AudioScenarioType.audioScenarioGameStreaming,
     );
+  }
+
+  Future<void> _logNtpTimeInMs() async {
+    final ntpTimeInMs = await _engine.getNtpTimeInMs();
+    logSink.log('getNtpTimeInMs: $ntpTimeInMs');
   }
 
   _joinChannel() async {

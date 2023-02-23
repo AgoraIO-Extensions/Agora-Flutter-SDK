@@ -169,19 +169,6 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
         onAudioDeviceStateChanged!(deviceId, deviceType, deviceState);
         break;
 
-      case 'onAudioMixingPositionChanged':
-        if (onAudioMixingPositionChanged == null) break;
-        RtcEngineEventHandlerOnAudioMixingPositionChangedJson paramJson =
-            RtcEngineEventHandlerOnAudioMixingPositionChangedJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        int? position = paramJson.position;
-        if (position == null) {
-          break;
-        }
-        onAudioMixingPositionChanged!(position);
-        break;
-
       case 'onAudioMixingFinished':
         if (onAudioMixingFinished == null) break;
         RtcEngineEventHandlerOnAudioMixingFinishedJson paramJson =
@@ -665,8 +652,8 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
         paramJson = paramJson.fillBuffers(buffers);
         int? imageWidth = paramJson.imageWidth;
         int? imageHeight = paramJson.imageHeight;
-        Rectangle? vecRectangle = paramJson.vecRectangle;
-        int? vecDistance = paramJson.vecDistance;
+        List<Rectangle>? vecRectangle = paramJson.vecRectangle;
+        List<int>? vecDistance = paramJson.vecDistance;
         int? numFaces = paramJson.numFaces;
         if (imageWidth == null ||
             imageHeight == null ||
@@ -675,7 +662,7 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
             numFaces == null) {
           break;
         }
-        vecRectangle = vecRectangle.fillBuffers(buffers);
+        vecRectangle = vecRectangle.map((e) => e.fillBuffers(buffers)).toList();
         onFacePositionChanged!(
             imageWidth, imageHeight, vecRectangle, vecDistance, numFaces);
         break;
@@ -1471,21 +1458,6 @@ extension RtcEngineEventHandlerExt on RtcEngineEventHandler {
         }
         connection = connection.fillBuffers(buffers);
         onUserAccountUpdated!(connection, remoteUid, userAccount);
-        break;
-
-      case 'onLocalVideoTranscoderError':
-        if (onLocalVideoTranscoderError == null) break;
-        RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson paramJson =
-            RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        TranscodingVideoStream? stream = paramJson.stream;
-        VideoTranscoderError? error = paramJson.error;
-        if (stream == null || error == null) {
-          break;
-        }
-        stream = stream.fillBuffers(buffers);
-        onLocalVideoTranscoderError!(stream, error);
         break;
       default:
         break;

@@ -64,6 +64,7 @@ void rtcEngineExSmokeTestCases() {
         const int optionsAudioDelayMs = 10;
         const int optionsMediaPlayerAudioDelayMs = 10;
         const String optionsToken = "hello";
+        const String optionsIdentity = "hello";
         const bool optionsEnableBuiltInMediaEncryption = true;
         const bool optionsPublishRhythmPlayerTrack = true;
         const bool optionsIsInteractiveAudience = true;
@@ -99,6 +100,7 @@ void rtcEngineExSmokeTestCases() {
           audioDelayMs: optionsAudioDelayMs,
           mediaPlayerAudioDelayMs: optionsMediaPlayerAudioDelayMs,
           token: optionsToken,
+          identity: optionsIdentity,
           enableBuiltInMediaEncryption: optionsEnableBuiltInMediaEncryption,
           publishRhythmPlayerTrack: optionsPublishRhythmPlayerTrack,
           isInteractiveAudience: optionsIsInteractiveAudience,
@@ -211,6 +213,7 @@ void rtcEngineExSmokeTestCases() {
         const int optionsAudioDelayMs = 10;
         const int optionsMediaPlayerAudioDelayMs = 10;
         const String optionsToken = "hello";
+        const String optionsIdentity = "hello";
         const bool optionsEnableBuiltInMediaEncryption = true;
         const bool optionsPublishRhythmPlayerTrack = true;
         const bool optionsIsInteractiveAudience = true;
@@ -246,6 +249,7 @@ void rtcEngineExSmokeTestCases() {
           audioDelayMs: optionsAudioDelayMs,
           mediaPlayerAudioDelayMs: optionsMediaPlayerAudioDelayMs,
           token: optionsToken,
+          identity: optionsIdentity,
           enableBuiltInMediaEncryption: optionsEnableBuiltInMediaEncryption,
           publishRhythmPlayerTrack: optionsPublishRhythmPlayerTrack,
           isInteractiveAudience: optionsIsInteractiveAudience,
@@ -999,7 +1003,6 @@ void rtcEngineExSmokeTestCases() {
         const bool paramsEnableBlur = true;
         const bool paramsEnableAirAbsorb = true;
         const double paramsSpeakerAttenuation = 10.0;
-        const bool paramsEnableDoppler = true;
         const SpatialAudioParams params = SpatialAudioParams(
           speakerAzimuth: paramsSpeakerAzimuth,
           speakerElevation: paramsSpeakerElevation,
@@ -1008,7 +1011,6 @@ void rtcEngineExSmokeTestCases() {
           enableBlur: paramsEnableBlur,
           enableAirAbsorb: paramsEnableAirAbsorb,
           speakerAttenuation: paramsSpeakerAttenuation,
-          enableDoppler: paramsEnableDoppler,
         );
         const String connectionChannelId = "hello";
         const int connectionLocalUid = 10;
@@ -1118,6 +1120,50 @@ void rtcEngineExSmokeTestCases() {
         expect(e is AgoraRtcException, true);
         debugPrint(
             '[enableLoopbackRecordingEx] errorcode: ${(e as AgoraRtcException).code}');
+      }
+
+      await rtcEngineEx.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'adjustUserPlaybackSignalVolumeEx',
+    (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngineEx rtcEngineEx = createAgoraRtcEngineEx();
+      await rtcEngineEx.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const int uid = 10;
+        const int volume = 10;
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        await rtcEngineEx.adjustUserPlaybackSignalVolumeEx(
+          uid: uid,
+          volume: volume,
+          connection: connection,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint(
+              '[adjustUserPlaybackSignalVolumeEx] error: ${e.toString()}');
+        }
+        expect(e is AgoraRtcException, true);
+        debugPrint(
+            '[adjustUserPlaybackSignalVolumeEx] errorcode: ${(e as AgoraRtcException).code}');
       }
 
       await rtcEngineEx.release();
@@ -2109,6 +2155,8 @@ void rtcEngineExSmokeTestCases() {
       ));
 
       try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
         const bool enabled = true;
         const int dimensionsWidth = 10;
         const int dimensionsHeight = 10;
@@ -2116,11 +2164,11 @@ void rtcEngineExSmokeTestCases() {
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int streamConfigKBitrate = 10;
+        const int streamConfigBitrate = 10;
         const int streamConfigFramerate = 10;
         const SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
           dimensions: streamConfigDimensions,
-          kBitrate: streamConfigKBitrate,
+          bitrate: streamConfigBitrate,
           framerate: streamConfigFramerate,
         );
         const String connectionChannelId = "hello";
@@ -2130,6 +2178,7 @@ void rtcEngineExSmokeTestCases() {
           localUid: connectionLocalUid,
         );
         await rtcEngineEx.enableDualStreamModeEx(
+          sourceType: sourceType,
           enabled: enabled,
           streamConfig: streamConfig,
           connection: connection,
@@ -2164,6 +2213,8 @@ void rtcEngineExSmokeTestCases() {
       ));
 
       try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
         const SimulcastStreamMode mode =
             SimulcastStreamMode.autoSimulcastStream;
         const int dimensionsWidth = 10;
@@ -2172,11 +2223,11 @@ void rtcEngineExSmokeTestCases() {
           width: dimensionsWidth,
           height: dimensionsHeight,
         );
-        const int streamConfigKBitrate = 10;
+        const int streamConfigBitrate = 10;
         const int streamConfigFramerate = 10;
         const SimulcastStreamConfig streamConfig = SimulcastStreamConfig(
           dimensions: streamConfigDimensions,
-          kBitrate: streamConfigKBitrate,
+          bitrate: streamConfigBitrate,
           framerate: streamConfigFramerate,
         );
         const String connectionChannelId = "hello";
@@ -2186,6 +2237,7 @@ void rtcEngineExSmokeTestCases() {
           localUid: connectionLocalUid,
         );
         await rtcEngineEx.setDualStreamModeEx(
+          sourceType: sourceType,
           mode: mode,
           streamConfig: streamConfig,
           connection: connection,

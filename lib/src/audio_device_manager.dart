@@ -84,19 +84,6 @@ abstract class AudioDeviceManager {
   /// @nodoc
   Future<int> getRecordingDeviceVolume();
 
-  /// Sets the loopback device.
-  /// The SDK uses the current playback device as the loopback device by default. If you want to specify another audio device as the loopback device, call this method, and set deviceId to the loopback device you want to specify.This method applies to Windows only.The scenarios where this method is applicable are as follows:Use app A to play music through a Bluetooth headset; when using app B for a video conference, play through the speakers.If the loopback device is set as the Bluetooth headset, the SDK publishes the music in app A to the remote end.If the loopback device is set as the speaker, the SDK does not publish the music in app A to the remote end.If you set the loopback device as the Bluetooth headset, and then use a wired headset to play the music in app A, you need to call this method again, set the loopback device as the wired headset, and the SDK continues to publish the music in app A to remote end.
-  ///
-  /// * [deviceId] Specifies the loopback device of the SDK. You can get the device ID by calling enumeratePlaybackDevices . Connecting or disconnecting the audio device does not change the value of deviceId.The maximum length is MaxDeviceIdLengthType .
-  Future<void> setLoopbackDevice(String deviceId);
-
-  /// Gets the current loopback device.
-  /// This method applies to Windows only.
-  ///
-  /// Returns
-  /// The ID of the current loopback device.
-  Future<String> getLoopbackDevice();
-
   /// @nodoc
   Future<void> setPlaybackDeviceMute(bool mute);
 
@@ -120,7 +107,7 @@ abstract class AudioDeviceManager {
   Future<void> stopPlaybackDeviceTest();
 
   /// Starts the audio capture device test.
-  /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device.This method is for Windows and macOS only.Ensure that you call this method before joining a channel.
+  /// This method tests whether the audio capture device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device.Ensure that you call this method before joining a channel.
   ///
   /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
   Future<void> startRecordingDeviceTest(int indicationInterval);
@@ -148,12 +135,6 @@ abstract class AudioDeviceManager {
   ///
   /// * [enable] Whether to follow the system default audio recording device:true: Follow. The SDK immediately switches the audio recording device when the system default audio recording device changes.false: Do not follow. The SDK switches the audio recording device to the system default audio recording device only when the currently used audio recording device is disconnected.
   Future<void> followSystemRecordingDevice(bool enable);
-
-  /// Sets whether the loopback device follows the system default playback device.
-  /// This method applies to Windows only.
-  ///
-  /// * [enable] Whether to follow the system default audio playback device:true: Follow. When the default playback device of the system is changed, the SDK immediately switches to the loopback device.false: Do not follow. The SDK switches the audio loopback device to the system default audio playback device only when the current audio playback device is disconnected.
-  Future<void> followSystemLoopbackDevice(bool enable);
 
   /// Releases all the resources occupied by the AudioDeviceManager object.
   Future<void> release();

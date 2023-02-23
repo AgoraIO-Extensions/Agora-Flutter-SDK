@@ -20,7 +20,7 @@ enum RhythmPlayerStateType {
   @JsonValue(813)
   rhythmPlayerStatePlaying,
 
-  /// 814: Failed to start virtual metronome. You can use the reported errorcode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
+  /// 814: Failed to start virtual metronome. You can use the reported errorCode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
   @JsonValue(814)
   rhythmPlayerStateFailed,
 }

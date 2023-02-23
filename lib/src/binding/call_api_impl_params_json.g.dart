@@ -32,18 +32,6 @@ Map<String, dynamic> _$VideoDeviceManagerGetCapabilityJsonToJson(
       'capability': instance.capability.toJson(),
     };
 
-RtcEngineQueryCodecCapabilityJson _$RtcEngineQueryCodecCapabilityJsonFromJson(
-        Map<String, dynamic> json) =>
-    RtcEngineQueryCodecCapabilityJson(
-      CodecCapInfo.fromJson(json['codec_info'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$RtcEngineQueryCodecCapabilityJsonToJson(
-        RtcEngineQueryCodecCapabilityJson instance) =>
-    <String, dynamic>{
-      'codec_info': instance.codecInfo.toJson(),
-    };
-
 RtcEngineGetExtensionPropertyJson _$RtcEngineGetExtensionPropertyJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetExtensionPropertyJson(
@@ -302,19 +290,6 @@ Map<String, dynamic> _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(
         AudioDeviceManagerGetRecordingDeviceVolumeJson instance) =>
     <String, dynamic>{
       'volume': instance.volume,
-    };
-
-AudioDeviceManagerGetLoopbackDeviceJson
-    _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioDeviceManagerGetLoopbackDeviceJson(
-          json['deviceId'] as String,
-        );
-
-Map<String, dynamic> _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(
-        AudioDeviceManagerGetLoopbackDeviceJson instance) =>
-    <String, dynamic>{
-      'deviceId': instance.deviceId,
     };
 
 AudioDeviceManagerGetPlaybackDeviceMuteJson

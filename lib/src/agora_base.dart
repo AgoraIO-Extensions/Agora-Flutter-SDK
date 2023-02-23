@@ -617,14 +617,6 @@ enum InterfaceIdType {
 
   /// @nodoc
   @JsonValue(13)
-  agoraIidStateSync,
-
-  /// @nodoc
-  @JsonValue(14)
-  agoraIidMetachatService,
-
-  /// @nodoc
-  @JsonValue(15)
   agoraIidMusicContentCenter,
 }
 
@@ -1386,7 +1378,7 @@ class VideoSubscriptionOptions {
   /// @nodoc
   const VideoSubscriptionOptions({this.type, this.encodedFrameOnly});
 
-  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType .
+  /// @nodoc
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
@@ -1415,7 +1407,6 @@ class EncodedVideoFrameInfo {
       this.rotation,
       this.trackId,
       this.captureTimeMs,
-      this.decodeTimeMs,
       this.uid,
       this.streamType});
 
@@ -1450,10 +1441,6 @@ class EncodedVideoFrameInfo {
   /// The Unix timestamp (ms) for capturing the external encoded video frames.
   @JsonKey(name: 'captureTimeMs')
   final int? captureTimeMs;
-
-  /// @nodoc
-  @JsonKey(name: 'decodeTimeMs')
-  final int? decodeTimeMs;
 
   /// The user ID to push the externally encoded video frame.
   @JsonKey(name: 'uid')
@@ -1500,65 +1487,6 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   }
 }
 
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum CodecCapMask {
-  /// @nodoc
-  @JsonValue(0)
-  codecCapMaskNone,
-
-  /// @nodoc
-  @JsonValue(1 << 0)
-  codecCapMaskHwDec,
-
-  /// @nodoc
-  @JsonValue(1 << 1)
-  codecCapMaskHwEnc,
-
-  /// @nodoc
-  @JsonValue(1 << 2)
-  codecCapMaskSwDec,
-
-  /// @nodoc
-  @JsonValue(1 << 3)
-  codecCapMaskSwEnc,
-}
-
-/// @nodoc
-extension CodecCapMaskExt on CodecCapMask {
-  /// @nodoc
-  static CodecCapMask fromValue(int value) {
-    return $enumDecode(_$CodecCapMaskEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$CodecCapMaskEnumMap[this]!;
-  }
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class CodecCapInfo {
-  /// @nodoc
-  const CodecCapInfo({this.codecType, this.codecCapMask});
-
-  /// @nodoc
-  @JsonKey(name: 'codec_type')
-  final VideoCodecType? codecType;
-
-  /// @nodoc
-  @JsonKey(name: 'codec_cap_mask')
-  final int? codecCapMask;
-
-  /// @nodoc
-  factory CodecCapInfo.fromJson(Map<String, dynamic> json) =>
-      _$CodecCapInfoFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$CodecCapInfoToJson(this);
-}
-
 /// Video encoder configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoEncoderConfiguration {
@@ -1577,7 +1505,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
+  /// The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 960 × 540. You can set a custom value.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
@@ -1585,7 +1513,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. : (Recommended) Standard bitrate mode. In this mode, the video bitrate is twice the base bitrate.: Adaptive bitrate mode In this mode, the video bitrate is the same as the base bitrate. If you choose this mode in the LIVE_BROADCASTING profile, the video frame rate may be lower than the set value.
+  /// The encoding bitrate (Kbps) of the video. : (Recommended) Standard bitrate mode. In this mode, the bitrates of the live broadcasting profile is higher than that of the communication profile. : Adaptive bitrate mode In this mode, the bitrates of the live broadcasting profile equals that of the communication profile. If this mode is selected, the video frame rate of live broadcasting scenarios may be lower than the set value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
@@ -1669,15 +1597,15 @@ extension SimulcastStreamModeExt on SimulcastStreamMode {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SimulcastStreamConfig {
   /// @nodoc
-  const SimulcastStreamConfig({this.dimensions, this.kBitrate, this.framerate});
+  const SimulcastStreamConfig({this.dimensions, this.bitrate, this.framerate});
 
   /// The video dimension. See VideoDimensions . The default value is 160 × 120.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// @nodoc
-  @JsonKey(name: 'kBitrate')
-  final int? kBitrate;
+  /// Video receive bitrate (Kbps). The default value is 65.
+  @JsonKey(name: 'bitrate')
+  final int? bitrate;
 
   /// The capture frame rate (fps) of the local video. The default value is 5.
   @JsonKey(name: 'framerate')
@@ -2214,10 +2142,13 @@ class RemoteAudioStats {
       this.totalFrozenTime,
       this.frozenRate,
       this.mosValue,
+      this.frozenRateByCustomPlcCount,
+      this.plcCount,
       this.totalActiveTime,
       this.publishDuration,
       this.qoeQuality,
-      this.qualityChangedReason});
+      this.qualityChangedReason,
+      this.rxAudioBytes});
 
   /// The user ID of the remote user.
   @JsonKey(name: 'uid')
@@ -2263,6 +2194,14 @@ class RemoteAudioStats {
   @JsonKey(name: 'mosValue')
   final int? mosValue;
 
+  /// @nodoc
+  @JsonKey(name: 'frozenRateByCustomPlcCount')
+  final int? frozenRateByCustomPlcCount;
+
+  /// @nodoc
+  @JsonKey(name: 'plcCount')
+  final int? plcCount;
+
   /// The total active time (ms) between the start of the audio call and the callback of the remote user.The active time refers to the total duration of the remote user without the mute state.
   @JsonKey(name: 'totalActiveTime')
   final int? totalActiveTime;
@@ -2278,6 +2217,10 @@ class RemoteAudioStats {
   /// Reasons why the QoE of the local user when receiving a remote audio stream is poor. See ExperiencePoorReason .
   @JsonKey(name: 'qualityChangedReason')
   final int? qualityChangedReason;
+
+  /// @nodoc
+  @JsonKey(name: 'rxAudioBytes')
+  final int? rxAudioBytes;
 
   /// @nodoc
   factory RemoteAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -2648,9 +2591,9 @@ enum LocalVideoStreamError {
   @JsonValue(4)
   localVideoStreamErrorCaptureFailure,
 
-  /// @nodoc
+  /// 5: The local video encoding fails.
   @JsonValue(5)
-  localVideoStreamErrorCodecNotSupport,
+  localVideoStreamErrorEncodeFailure,
 
   /// 6: (For iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
   @JsonValue(6)
@@ -2691,14 +2634,6 @@ enum LocalVideoStreamError {
   /// @nodoc
   @JsonValue(20)
   localVideoStreamErrorScreenCaptureWindowNotSupported,
-
-  /// @nodoc
-  @JsonValue(21)
-  localVideoStreamErrorScreenCaptureFailure,
-
-  /// @nodoc
-  @JsonValue(22)
-  localVideoStreamErrorScreenCaptureNoPermission,
 }
 
 /// @nodoc
@@ -2891,10 +2826,6 @@ enum RemoteVideoStateReason {
   /// @nodoc
   @JsonValue(12)
   remoteVideoStateReasonSdkInBackground,
-
-  /// @nodoc
-  @JsonValue(13)
-  remoteVideoStateReasonCodecNotSupport,
 }
 
 /// @nodoc
@@ -3231,7 +3162,8 @@ class LocalAudioStats {
       this.sentBitrate,
       this.internalCodec,
       this.txPacketLossRate,
-      this.audioDeviceDelay});
+      this.audioDeviceDelay,
+      this.audioPlayoutDelay});
 
   /// The number of audio channels.
   @JsonKey(name: 'numChannels')
@@ -3256,6 +3188,10 @@ class LocalAudioStats {
   /// The delay of the audio device module when playing or recording audio.
   @JsonKey(name: 'audioDeviceDelay')
   final int? audioDeviceDelay;
+
+  /// @nodoc
+  @JsonKey(name: 'audioPlayoutDelay')
+  final int? audioPlayoutDelay;
 
   /// @nodoc
   factory LocalAudioStats.fromJson(Map<String, dynamic> json) =>
@@ -3634,7 +3570,7 @@ class LiveTranscoding {
   @JsonKey(name: 'videoFramerate')
   final int? videoFramerate;
 
-  /// DeprecatedThis parameter is deprecated.Latency mode:true: Low latency with unassured quality.false: (Default) High latency with assured quality.
+  /// DeprecatedThis member is deprecated.Latency mode:true: Low latency with unassured quality.false: (Default) High latency with assured quality.
   @JsonKey(name: 'lowLatency')
   final bool? lowLatency;
 
@@ -3666,7 +3602,7 @@ class LiveTranscoding {
   @JsonKey(name: 'transcodingExtraInfo')
   final String? transcodingExtraInfo;
 
-  /// DeprecatedThis parameter is deprecated.The metadata sent to the CDN client.
+  /// DeprecatedObsolete and not recommended for use.The metadata sent to the CDN client.
   @JsonKey(name: 'metadata')
   final String? metadata;
 
@@ -3726,7 +3662,6 @@ class TranscodingVideoStream {
       {this.sourceType,
       this.remoteUserUid,
       this.imageUrl,
-      this.mediaPlayerId,
       this.x,
       this.y,
       this.width,
@@ -3746,10 +3681,6 @@ class TranscodingVideoStream {
   /// The URL of the image.
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
-
-  /// @nodoc
-  @JsonKey(name: 'mediaPlayerId')
-  final int? mediaPlayerId;
 
   /// The horizontal displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
   @JsonKey(name: 'x')
@@ -3794,15 +3725,14 @@ class LocalTranscoderConfiguration {
   const LocalTranscoderConfiguration(
       {this.streamCount,
       this.videoInputStreams,
-      this.videoOutputConfiguration,
-      this.syncWithPrimaryCamera});
+      this.videoOutputConfiguration});
 
   /// The number of the video streams for the video mixing on the local client.
   @JsonKey(name: 'streamCount')
   final int? streamCount;
 
   /// The video streams for the video mixing on the local client. See TranscodingVideoStream .
-  @JsonKey(name: 'videoInputStreams')
+  @JsonKey(name: 'VideoInputStreams')
   final List<TranscodingVideoStream>? videoInputStreams;
 
   /// The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration .
@@ -3810,60 +3740,11 @@ class LocalTranscoderConfiguration {
   final VideoEncoderConfiguration? videoOutputConfiguration;
 
   /// @nodoc
-  @JsonKey(name: 'sync_with_primary_camera')
-  final bool? syncWithPrimaryCamera;
-
-  /// @nodoc
   factory LocalTranscoderConfiguration.fromJson(Map<String, dynamic> json) =>
       _$LocalTranscoderConfigurationFromJson(json);
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$LocalTranscoderConfigurationToJson(this);
-}
-
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum VideoTranscoderError {
-  /// @nodoc
-  @JsonValue(0)
-  vtErrOk,
-
-  /// @nodoc
-  @JsonValue(1)
-  vtErrVideoSourceNotReady,
-
-  /// @nodoc
-  @JsonValue(2)
-  vtErrInvalidMediaSourceType,
-
-  /// @nodoc
-  @JsonValue(3)
-  vtErrInvalidImagePath,
-
-  /// @nodoc
-  @JsonValue(4)
-  vtErrUnsupportImageFormat,
-
-  /// @nodoc
-  @JsonValue(5)
-  vtErrInvalidLayout,
-
-  /// @nodoc
-  @JsonValue(20)
-  vtErrInternal,
-}
-
-/// @nodoc
-extension VideoTranscoderErrorExt on VideoTranscoderError {
-  /// @nodoc
-  static VideoTranscoderError fromValue(int value) {
-    return $enumDecode(_$VideoTranscoderErrorEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$VideoTranscoderErrorEnumMap[this]!;
-  }
 }
 
 /// Configurations of the last-mile network test.
@@ -4018,11 +3899,11 @@ enum ConnectionChangedReasonType {
   @JsonValue(6)
   connectionChangedInvalidAppId,
 
-  /// 7: The connection failed since channel name is not valid. Please rejoin the channel with a valid channel name.
+  /// 7: The connection failed since channel name is not valid. Rejoin the channel with a valid channel name.
   @JsonValue(7)
   connectionChangedInvalidChannelName,
 
-  /// 8: The connection failed because the token is not valid. Typical reasons include:The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.The uid specified when calling joinChannel to join the channel is inconsistent with the uid passed in when generating the token.
+  /// 8: The connection failed because the token is not valid. Possible reasons are as follows:The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.The uid specified when calling joinChannel to join the channel is inconsistent with the uid passed in when generating the token.
   @JsonValue(8)
   connectionChangedInvalidToken,
 
@@ -4030,7 +3911,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(9)
   connectionChangedTokenExpired,
 
-  /// 10: The connection is rejected by server. Typical reasons include:The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.The user tries to join the channel when conducting a pre-call test. The user needs to call the channel after the call test ends.
+  /// 10: The connection is rejected by server. Possible reasons are as follows:The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.The user tries to join a channel while a test call is in progress. The user needs to join the channel after the call test ends.
   @JsonValue(10)
   connectionChangedRejectedByServer,
 
@@ -4050,7 +3931,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(14)
   connectionChangedKeepAliveTimeout,
 
-  /// 15: The SDK has rejoined the channel successfully.
+  /// 15: The user has rejoined the channel successfully.
   @JsonValue(15)
   connectionChangedRejoinSuccess,
 
@@ -4930,35 +4811,6 @@ extension VoiceConversionPresetExt on VoiceConversionPreset {
   }
 }
 
-/// Preset headphone equalizer types.
-@JsonEnum(alwaysCreate: true)
-enum HeadphoneEqualizerPreset {
-  /// The headphone equalizer is disabled, and the original audio is heard.
-  @JsonValue(0x00000000)
-  headphoneEqualizerOff,
-
-  /// An equalizer is used for headphones.
-  @JsonValue(0x04000001)
-  headphoneEqualizerOverear,
-
-  /// An equalizer is used for in-ear headphones.
-  @JsonValue(0x04000002)
-  headphoneEqualizerInear,
-}
-
-/// @nodoc
-extension HeadphoneEqualizerPresetExt on HeadphoneEqualizerPreset {
-  /// @nodoc
-  static HeadphoneEqualizerPreset fromValue(int value) {
-    return $enumDecode(_$HeadphoneEqualizerPresetEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$HeadphoneEqualizerPresetEnumMap[this]!;
-  }
-}
-
 /// Screen sharing configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenCaptureParameters {
@@ -4975,7 +4827,7 @@ class ScreenCaptureParameters {
       this.highLightColor,
       this.enableHighLight});
 
-  /// The maximum dimensions to encode the shared region. If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.If the value of the screen dimensions is higher than that of dimensions, for example, 2000 × 1500, the SDK uses the maximum value under dimensions with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 × 1080.
+  /// The maximum dimensions to encode the shared region. VideoDimensions . The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges.If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.If the value of the screen dimensions is higher than that of dimensions, for example, 2000 × 1500, the SDK uses the maximum value under dimensions with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 × 1080.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
@@ -5003,15 +4855,15 @@ class ScreenCaptureParameters {
   @JsonKey(name: 'excludeWindowCount')
   final int? excludeWindowCount;
 
-  /// (For macOS and Windows only) The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
+  /// The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
   @JsonKey(name: 'highLightWidth')
   final int? highLightWidth;
 
-  /// (For macOS and Windows only) On Windows platforms, the color of the border in ARGB format. The default value is 0xFF8CBF26.
+  /// On macOS, COLOR_CLASS refers to NSColor.
   @JsonKey(name: 'highLightColor')
   final int? highLightColor;
 
-  /// (For macOS and Windows only) Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
+  /// Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
   @JsonKey(name: 'enableHighLight')
   final bool? enableHighLight;
 
@@ -5195,7 +5047,9 @@ class AudioEncodedFrameObserver {
   /// Gets the encoded audio data of the local user.
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
   ///
-  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [channels] The number of channels.
+  ///  1: Mono.
+  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
@@ -5526,22 +5380,22 @@ class ChannelMediaInfo {
   Map<String, dynamic> toJson() => _$ChannelMediaInfoToJson(this);
 }
 
-/// Configuration information of relaying media streams across channels.
+/// Configuration of cross channel media relay.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChannelMediaRelayConfiguration {
   /// @nodoc
   const ChannelMediaRelayConfiguration(
       {this.srcInfo, this.destInfos, this.destCount});
 
-  /// The information of the source channel ChannelMediaInfo . It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.uid: The unique user ID to identify the relay stream in the source channel. The default value is 0, which means the SDK generates a random uid. You must set it as 0.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.
+  /// @nodoc
   @JsonKey(name: 'srcInfo')
   final ChannelMediaInfo? srcInfo;
 
-  /// The information of the destination channel ChannelMediaInfo. It contains the following members:channelName: The name of the destination channel.uid: The unique user ID to identify the relay stream in the destination channel. The value ranges from 0 to (2 32-1). To avoid user ID conflicts, this user ID must be different from any other user ID in the destination channel. The default value is 0, which means the SDK generates a random user ID. Do not set this parameter as the user ID of the host in the destination channel, and ensure that this user ID is different from any other user ID in the channel.token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid.
+  /// @nodoc
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 
-  /// The number of destination channels. The default value is 0, and the value range is from 0 to 4. Ensure that the value of this parameter corresponds to the number of ChannelMediaInfo structs you define in destInfo.
+  /// @nodoc
   @JsonKey(name: 'destCount')
   final int? destCount;
 
@@ -6134,40 +5988,35 @@ class SpatialAudioParams {
       this.speakerOrientation,
       this.enableBlur,
       this.enableAirAbsorb,
-      this.speakerAttenuation,
-      this.enableDoppler});
+      this.speakerAttenuation});
 
-  /// The azimuth angle of the remote user or media player relative to the local user. The value range is [0,360], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means directly in front on the horizontal plane.90: 90 degrees, which means directly to the left on the horizontal plane.180: 180 degrees, which means directly behind on the horizontal plane.270: 270 degrees, which means directly to the right on the horizontal plane.360: 360 degrees, which means directly in front on the horizontal plane.
+  /// @nodoc
   @JsonKey(name: 'speaker_azimuth')
   final double? speakerAzimuth;
 
-  /// The elevation angle of the remote user or media player relative to the local user. The value range is [-90,90], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the horizontal plane is not rotated.-90: -90 degrees, which means that the horizontal plane is rotated 90 degrees downwards.90: 90 degrees, which means that the horizontal plane is rotated 90 degrees upwards.
+  /// @nodoc
   @JsonKey(name: 'speaker_elevation')
   final double? speakerElevation;
 
-  /// The distance of the remote user or media player relative to the local user. The value range is [1,50], and the unit is meters. The default value is 1 meter.
+  /// @nodoc
   @JsonKey(name: 'speaker_distance')
   final double? speakerDistance;
 
-  /// The orientation of the remote user or media player relative to the local user. The value range is [0,180], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the sound source and listener face the same direction.180: 180 degrees, which means that the sound source and listener face each other.
+  /// @nodoc
   @JsonKey(name: 'speaker_orientation')
   final int? speakerOrientation;
 
-  /// Whether to enable audio blurring:true: Enable audio blurring.false: (Default) Disable audio blurring.
+  /// @nodoc
   @JsonKey(name: 'enable_blur')
   final bool? enableBlur;
 
-  /// Whether to enable air absorption, that is, to simulate the sound attenuation effect of sound transmitting in the air; under a certain transmission distance, the attenuation speed of high-frequency sound is fast, and the attenuation speed of low-frequency sound is slow.true: (Default) Enable air absorption. Make sure that the value of speaker_attenuation is not 0; otherwise, this setting does not take effect.false: Disable air absorption.
+  /// @nodoc
   @JsonKey(name: 'enable_air_absorb')
   final bool? enableAirAbsorb;
 
-  /// The sound attenuation coefficient of the remote user or media player. The value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, where the volume and timbre only have a weak attenuation during the propagation, and the sound can travel farther than that in a real environment. enable_air_absorb needs to be enabled at the same time. 0.5: (Default) Simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, where volume and timbre attenuate rapidly during the propagation. enable_air_absorb needs to be enabled at the same time.
+  /// @nodoc
   @JsonKey(name: 'speaker_attenuation')
   final double? speakerAttenuation;
-
-  /// Whether to enable the Doppler effect: When there is a relative displacement between the sound source and the receiver of the sound source, the tone heard by the receiver changes.true: Enable the Doppler effect.false: (Default) Disable the Doppler effect.This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, cohosting, or online KTV).When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo , updateSelfPosition , and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
-  @JsonKey(name: 'enable_doppler')
-  final bool? enableDoppler;
 
   /// @nodoc
   factory SpatialAudioParams.fromJson(Map<String, dynamic> json) =>
