@@ -17,7 +17,7 @@ dependencies:
   ffi: '>=1.1.2'
   async: ^2.8.2
   meta: ^1.7.0
-  iris_method_channel: ^1.1.0-rc.2
+  iris_method_channel: ^1.1.0-rc.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
