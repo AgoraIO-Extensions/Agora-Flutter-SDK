@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:mockito/mockito.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-class FakeIrisMethodChannel extends Fake implements IrisMethodChannel {
+class FakeIrisMethodChannel extends IrisMethodChannel {
   final List<IrisMethodCall> methodCallQueue = [];
 
   @override

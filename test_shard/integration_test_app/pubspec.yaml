@@ -56,9 +56,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 
-  # Use ^4.1.3 to compatible our dart sdk constrants
-  mockito: ^4.1.3
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
