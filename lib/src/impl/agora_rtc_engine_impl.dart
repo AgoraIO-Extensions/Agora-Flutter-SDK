@@ -207,10 +207,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @internal
   final MethodChannel engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
-  static RtcEngineEx create() {
+  static RtcEngineEx create({IrisMethodChannel? irisMethodChannel}) {
     if (_instance != null) return _instance!;
 
-    _instance = RtcEngineImpl._(IrisMethodChannel());
+    _instance = RtcEngineImpl._(irisMethodChannel ?? IrisMethodChannel());
 
     return _instance!;
   }

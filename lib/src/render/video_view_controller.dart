@@ -71,7 +71,9 @@ class VideoViewController
       required this.connection,
       this.useFlutterTexture = false,
       this.useAndroidSurfaceView = false})
-      : assert(connection.channelId != null);
+      : assert(canvas.uid != null && canvas.uid != 0,
+            'Remote uid can not be null or 0'),
+        assert(connection.channelId != null);
 
   @override
   final RtcEngine rtcEngine;
