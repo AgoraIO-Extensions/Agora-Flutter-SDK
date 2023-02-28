@@ -1,6 +1,10 @@
 # Rendering test need integration_test with takeSnapshot functions, so need flutter sdk >= 3.0.0
 name: Rendering test
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     types: [opened, labeled, synchronize]
