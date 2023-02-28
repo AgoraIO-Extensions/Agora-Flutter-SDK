@@ -670,24 +670,6 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> enableRemoteSuperResolution(
-      {required int userId, required bool enable}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_enableRemoteSuperResolution';
-    final param = createParams({'userId': userId, 'enable': enable});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
   Future<void> setupRemoteVideo(VideoCanvas canvas) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setupRemoteVideo';

@@ -1249,45 +1249,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableRemoteSuperResolution',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int userId = 10;
-        const bool enable = true;
-        await rtcEngine.enableRemoteSuperResolution(
-          userId: userId,
-          enable: enable,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableRemoteSuperResolution] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'setupRemoteVideo',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
