@@ -52,7 +52,7 @@ dependencies {
     api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
   } else {
     api 'io.agora.rtc:agora-special-full:3.7.2.70'
-    api 'io.agora.rtc:iris-rtc:3.7.2.70-dev.1'
+    api 'io.agora.rtc:iris-rtc:3.7.2.70-build.1'
   }
 
   implementation 'io.agora.rtc:full-screen-sharing:3.7.2.70'
