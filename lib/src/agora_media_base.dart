@@ -860,7 +860,7 @@ class AudioFrameObserverBase {
   /// * [channelId] The channel ID.
   ///
   /// Returns
-  /// Reserved for future use.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(String channelId, AudioFrame audioFrame)?
       onRecordAudioFrame;
 
@@ -871,7 +871,7 @@ class AudioFrameObserverBase {
   /// * [channelId] The channel ID.
   ///
   /// Returns
-  /// Reserved for future use.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(String channelId, AudioFrame audioFrame)?
       onPlaybackAudioFrame;
 
@@ -882,13 +882,15 @@ class AudioFrameObserverBase {
   /// * [channelId] The channel ID.
   ///
   /// Returns
-  /// Reserved for future use.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(String channelId, AudioFrame audioFrame)?
       onMixedAudioFrame;
 
   /// Gets the in-ear monitoring audio frame.
   /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
-  /// * [audioFrame] The raw audio data. See AudioFrame .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
 }
 
@@ -1072,7 +1074,7 @@ class AudioFrameObserver extends AudioFrameObserverBase {
   /// * [audioFrame] The raw audio data. See AudioFrame .
   ///
   /// Returns
-  /// Reserved for future use.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(String channelId, int uid, AudioFrame audioFrame)?
       onPlaybackAudioFrameBeforeMixing;
 }
@@ -1130,9 +1132,12 @@ class AudioSpectrumObserver {
   });
 
   /// Gets the statistics of a local audio spectrum.
-  /// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
+  /// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrumcallback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
   /// * [data] The audio spectrum data of the local user. See AudioSpectrumData .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(AudioSpectrumData data)? onLocalAudioSpectrum;
 
   /// Gets the remote audio spectrum.
@@ -1140,6 +1145,9 @@ class AudioSpectrumObserver {
   ///
   /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo . The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
   /// * [spectrumNumber] The number of remote users.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(
           List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?
       onRemoteAudioSpectrum;
@@ -1187,6 +1195,9 @@ class VideoFrameObserver {
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, Agora does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(VideoFrame videoFrame)? onCaptureVideoFrame;
 
   /// Occurs each time the SDK receives a video frame before encoding.
@@ -1203,6 +1214,9 @@ class VideoFrameObserver {
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second camera before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeCameraVideoFrame;
 
@@ -1210,19 +1224,28 @@ class VideoFrameObserver {
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data for screen sharing. You can then pre-process the data according to your scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(VideoFrame videoFrame)? onScreenCaptureVideoFrame;
 
   /// Gets the video data captured from the screen before encoding.
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(VideoFrame videoFrame)? onPreEncodeScreenVideoFrame;
 
   /// Gets the video data of the media player.
-  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.This callback only supports read-only mode.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
   /// * [mediaPlayerId] The ID of the media player.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(VideoFrame videoFrame, int mediaPlayerId)?
       onMediaPlayerVideoFrame;
 
@@ -1234,6 +1257,9 @@ class VideoFrameObserver {
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeScreenVideoFrame;
 
@@ -1243,6 +1269,9 @@ class VideoFrameObserver {
   /// * [videoFrame] The video frame. See VideoFrame .
   /// * [remoteUid] The user ID of the remote user who sends the current video frame.
   /// * [channelId] The channel ID.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
   final void Function(String channelId, int remoteUid, VideoFrame videoFrame)?
       onRenderVideoFrame;
 
