@@ -303,7 +303,7 @@ void testCases() {
       await tester.pumpAndSettle(const Duration(seconds: 10));
 
       await tester.pumpWidget(Container());
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
     },
     skip: Platform.isAndroid,
   );
