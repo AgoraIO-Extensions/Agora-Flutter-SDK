@@ -39,7 +39,6 @@ jobs:
       ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
           ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
            contains(github.event_name, 'pull_request')) }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
@@ -63,7 +62,6 @@ jobs:
       ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
           ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
            contains(github.event_name, 'pull_request')) }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
@@ -85,7 +83,6 @@ jobs:
       ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
           ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
            contains(github.event_name, 'pull_request')) }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
@@ -110,7 +107,6 @@ jobs:
       ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
           ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
            contains(github.event_name, 'pull_request')) }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
@@ -134,7 +130,6 @@ jobs:
       ${{ !contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') && 
           ((contains(github.event_name, 'pull_request_target') && contains(github.event.pull_request.labels.*.name, 'external:contribution')) || 
            contains(github.event_name, 'pull_request')) }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
