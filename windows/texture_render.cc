@@ -30,7 +30,6 @@ TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
 
 TextureRender::~TextureRender()
 {
-    Dispose();
 }
 
 int64_t TextureRender::texture_id() { return texture_id_; }
