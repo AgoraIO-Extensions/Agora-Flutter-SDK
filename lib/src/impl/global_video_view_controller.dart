@@ -42,9 +42,9 @@ class GlobalVideoViewController {
 
     _isDetachVFBMing = true;
 
-    // Need wait for all `destroyTextureRender` functions are called completed before 
+    // Need wait for all `destroyTextureRender` functions are called completed before
     // `FreeIrisVideoFrameBufferManager`, if not, the `destroyTextureRender`(call
-    // `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in native side) and 
+    // `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in native side) and
     // `FreeIrisVideoFrameBufferManager` will be called parallelly, which will cause crash.
     for (final completer in _destroyTextureRenderCompleters.values) {
       if (!completer.isCompleted) {
