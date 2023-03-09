@@ -284,6 +284,47 @@ void testCases() {
   );
 
   testWidgets(
+    'onAgoraVideoViewCreated should be called after AgoraVideoView created',
+    (WidgetTester tester) async {
+      final rtcEngine = createAgoraRtcEngine();
+      final videoViewCreatedCompleter = Completer<bool>();
+
+      await tester.pumpWidget(_RenderViewWidget(
+        rtcEngine: rtcEngine,
+        builder: (context, engine) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+              onAgoraVideoViewCreated: (viewId) {
+                if (!videoViewCreatedCompleter.isCompleted) {
+                  videoViewCreatedCompleter.complete(true);
+                }
+              },
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+      // pumpAndSettle again to ensure the `AgoraVideoView` shown
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+      final videoViewCreatedCalled = await videoViewCreatedCompleter.future;
+      expect(videoViewCreatedCalled, isTrue);
+
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+      expect(find.byType(AgoraVideoView), findsNothing);
+    },
+  );
+
+  testWidgets(
     'Show multiple and then dispose AgoraVideoViews with no error',
     (WidgetTester tester) async {
       final readyRender = Completer<void>();

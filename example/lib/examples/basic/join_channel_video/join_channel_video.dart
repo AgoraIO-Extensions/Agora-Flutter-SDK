@@ -16,7 +16,6 @@ class JoinChannelVideo extends StatefulWidget {
 
 class _State extends State<JoinChannelVideo> {
   late final RtcEngine _engine;
-  bool _isReadyPreview = false;
 
   bool isJoined = false, switchCamera = true, switchRender = true;
   Set<int> remoteUid = {};
@@ -96,12 +95,6 @@ class _State extends State<JoinChannelVideo> {
         bitrate: 0,
       ),
     );
-
-    await _engine.startPreview();
-
-    setState(() {
-      _isReadyPreview = true;
-    });
   }
 
   Future<void> _joinChannel() async {
@@ -131,7 +124,6 @@ class _State extends State<JoinChannelVideo> {
   Widget build(BuildContext context) {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
-        if (!_isReadyPreview) return Container();
         return Stack(
           children: [
             AgoraVideoView(
@@ -141,6 +133,9 @@ class _State extends State<JoinChannelVideo> {
                 useFlutterTexture: _isUseFlutterTexture,
                 useAndroidSurfaceView: _isUseAndroidSurfaceView,
               ),
+              onAgoraVideoViewCreated: (viewId) {
+                _engine.startPreview();
+              },
             ),
             Align(
               alignment: Alignment.topLeft,
