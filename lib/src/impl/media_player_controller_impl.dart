@@ -358,7 +358,7 @@ class MediaPlayerControllerImpl
   }
 
   @override
-  Future<void> setupView(int nativeViewPtr) async {
+  Future<void> setupNativeViewInternal(int nativeViewPtr) async {
     return setView(nativeViewPtr);
   }
 
@@ -371,7 +371,7 @@ class MediaPlayerControllerImpl
   }
 
   @override
-  Future<void> disposeRender() async {
+  Future<void> disposeRenderInternal() async {
     if (shouldUseFlutterTexture) {
       await super.disposeRender();
     }

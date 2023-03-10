@@ -45,6 +45,9 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
 
+  bool _isSetupView = false;
+  bool _isDisposeRender = false;
+
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
 
@@ -69,11 +72,13 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   }
 
   @override
-  Future<void> dispose() async {}
+  Future<void> dispose() async {
+    _isDisposeRender = true;
+    _isSetupView = false;
+  }
 
-  @internal
-  @override
-  Future<void> disposeRender() async {
+  @protected
+  Future<void> disposeRenderInternal() async {
     if (shouldUseFlutterTexture) {
       await rtcEngine.globalVideoViewController
           .destroyTextureRender(getTextureId());
@@ -103,6 +108,18 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     }
   }
 
+  @internal
+  @override
+  Future<void> disposeRender() async {
+    if (!_isSetupView) {
+      return;
+    }
+    _isDisposeRender = true;
+    _isSetupView = false;
+
+    await disposeRenderInternal();
+  }
+
   @protected
   @override
   Future<int> createTextureRender(
@@ -130,8 +147,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     } else {}
   }
 
-  @override
-  Future<void> setupView(int nativeViewPtr) async {
+  @protected
+  Future<void> setupNativeViewInternal(int nativeViewPtr) async {
     VideoCanvas videoCanvas = VideoCanvas(
       view: nativeViewPtr,
       renderMode: canvas.renderMode,
@@ -152,6 +169,17 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     } else {
       await rtcEngine.setupLocalVideo(videoCanvas);
     }
+  }
+
+  @override
+  Future<void> setupView(int nativeViewPtr) async {
+    if (_isDisposeRender) {
+      return;
+    }
+
+    await setupNativeViewInternal(nativeViewPtr);
+
+    _isSetupView = true;
   }
 
   @internal
