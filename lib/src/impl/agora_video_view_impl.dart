@@ -12,6 +12,9 @@ import 'agora_rtc_renderer.dart';
 
 // ignore_for_file: public_member_api_docs
 
+/// Callback when [AgoraVideoView] created.
+typedef AgoraVideoViewCreatedCallback = void Function(int viewId);
+
 VideoViewControllerBaseMixin _controller(VideoViewControllerBase controller) {
   return controller as VideoViewControllerBaseMixin;
 }
