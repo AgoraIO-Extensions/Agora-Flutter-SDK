@@ -25,6 +25,8 @@ class _State extends State<JoinChannelVideo> {
   bool _isUseAndroidSurfaceView = false;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
+  VideoMirrorModeType _videoMirrorMode =
+      VideoMirrorModeType.videoMirrorModeAuto;
 
   @override
   void initState() {
@@ -183,6 +185,17 @@ class _State extends State<JoinChannelVideo> {
                 ))
             .toList();
 
+        final videoMirrorModeDropdownItems = VideoMirrorModeType.values
+            .map(
+              (e) => DropdownMenuItem(
+                child: Text(
+                  e.toString().split('.')[1],
+                ),
+                value: e,
+              ),
+            )
+            .toList();
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,6 +250,22 @@ class _State extends State<JoinChannelVideo> {
                         ]),
                 ],
               ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text('VideoMirrorModeType: '),
+            DropdownButton<VideoMirrorModeType>(
+              items: videoMirrorModeDropdownItems,
+              value: _videoMirrorMode,
+              onChanged: (v) {
+                _videoMirrorMode = v!;
+                _engine.setCameraCapturerConfiguration(
+                    CameraCapturerConfiguration(mirrorMode: _videoMirrorMode));
+                setState(() {
+            
+                });
+              },
+            ),
             const SizedBox(
               height: 20,
             ),
