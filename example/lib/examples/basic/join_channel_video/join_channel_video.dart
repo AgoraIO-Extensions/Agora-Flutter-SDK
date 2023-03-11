@@ -261,9 +261,7 @@ class _State extends State<JoinChannelVideo> {
                 _videoMirrorMode = v!;
                 _engine.setCameraCapturerConfiguration(
                     CameraCapturerConfiguration(mirrorMode: _videoMirrorMode));
-                setState(() {
-            
-                });
+                setState(() {});
               },
             ),
             const SizedBox(
