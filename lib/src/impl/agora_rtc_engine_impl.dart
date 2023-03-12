@@ -932,6 +932,25 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return nativeHandleBIHexInt;
   }
 
+  @override
+  Future<void> setupLocalVideo(VideoCanvas canvas) async {
+    if (_instance == null) return;
+    return super.setupLocalVideo(canvas);
+  }
+
+  @override
+  Future<void> setupRemoteVideo(VideoCanvas canvas) async {
+    if (_instance == null) return;
+    return super.setupRemoteVideo(canvas);
+  }
+
+  @override
+  Future<void> setupRemoteVideoEx(
+      {required VideoCanvas canvas, required RtcConnection connection}) async {
+    if (_instance == null) return;
+    return super.setupRemoteVideoEx(canvas: canvas, connection: connection);
+  }
+
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported
