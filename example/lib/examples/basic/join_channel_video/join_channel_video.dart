@@ -99,11 +99,13 @@ class _State extends State<JoinChannelVideo> {
       ),
     );
 
-    await _engine.startPreview();
-
     setState(() {
       _isReadyPreview = true;
     });
+  }
+
+  Future<void> _startPreview() async {
+    await _engine.startPreview();
   }
 
   Future<void> _joinChannel() async {
@@ -278,6 +280,20 @@ class _State extends State<JoinChannelVideo> {
                         _channelProfileType = v!;
                       });
                     },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: _startPreview,
+                    child: const Text('Start Preview'),
+                  ),
+                )
+              ],
             ),
             const SizedBox(
               height: 20,
