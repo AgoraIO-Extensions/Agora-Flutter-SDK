@@ -333,6 +333,8 @@ CameraCapturerConfiguration _$CameraCapturerConfigurationFromJson(
     CameraCapturerConfiguration(
       cameraDirection: $enumDecodeNullable(
           _$CameraDirectionEnumMap, json['cameraDirection']),
+      mirrorMode:
+          $enumDecodeNullable(_$VideoMirrorModeTypeEnumMap, json['mirrorMode']),
       deviceId: json['deviceId'] as String?,
       format: json['format'] == null
           ? null
@@ -352,6 +354,7 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
 
   writeNotNull(
       'cameraDirection', _$CameraDirectionEnumMap[instance.cameraDirection]);
+  writeNotNull('mirrorMode', _$VideoMirrorModeTypeEnumMap[instance.mirrorMode]);
   writeNotNull('deviceId', instance.deviceId);
   writeNotNull('format', instance.format?.toJson());
   writeNotNull(
@@ -362,6 +365,12 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
 const _$CameraDirectionEnumMap = {
   CameraDirection.cameraRear: 0,
   CameraDirection.cameraFront: 1,
+};
+
+const _$VideoMirrorModeTypeEnumMap = {
+  VideoMirrorModeType.videoMirrorModeAuto: 0,
+  VideoMirrorModeType.videoMirrorModeEnabled: 1,
+  VideoMirrorModeType.videoMirrorModeDisabled: 2,
 };
 
 ScreenCaptureConfiguration _$ScreenCaptureConfigurationFromJson(
@@ -535,12 +544,6 @@ Map<String, dynamic> _$ImageTrackOptionsToJson(ImageTrackOptions instance) {
   writeNotNull('mirrorMode', _$VideoMirrorModeTypeEnumMap[instance.mirrorMode]);
   return val;
 }
-
-const _$VideoMirrorModeTypeEnumMap = {
-  VideoMirrorModeType.videoMirrorModeAuto: 0,
-  VideoMirrorModeType.videoMirrorModeEnabled: 1,
-  VideoMirrorModeType.videoMirrorModeDisabled: 2,
-};
 
 ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
     ChannelMediaOptions(
