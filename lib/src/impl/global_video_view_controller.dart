@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:agora_rtc_engine/src/impl/video_view_controller_impl.dart';
@@ -18,9 +17,6 @@ class GlobalVideoViewController {
   int _videoFrameBufferManagerIntPtr = 0;
   int get videoFrameBufferManagerIntPtr => _videoFrameBufferManagerIntPtr;
 
-  final Map<int, Completer<void>> _destroyTextureRenderCompleters = {};
-  bool _isDetachVFBMing = false;
-
   Future<void> attachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
     if (_videoFrameBufferManagerIntPtr != 0) {
       return;
@@ -39,20 +35,6 @@ class GlobalVideoViewController {
     if (_videoFrameBufferManagerIntPtr == 0) {
       return;
     }
-
-    _isDetachVFBMing = true;
-
-    // Need wait for all `destroyTextureRender` functions are called completed before
-    // `FreeIrisVideoFrameBufferManager`, if not, the `destroyTextureRender`(call
-    // `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in native side) and
-    // `FreeIrisVideoFrameBufferManager` will be called parallelly, which will cause crash.
-    for (final completer in _destroyTextureRenderCompleters.values) {
-      if (!completer.isCompleted) {
-        await completer.future;
-      }
-    }
-    _destroyTextureRenderCompleters.clear();
-
     await irisMethodChannel.invokeMethod(IrisMethodCall(
       'FreeIrisVideoFrameBufferManager',
       jsonEncode({
@@ -107,17 +89,7 @@ class GlobalVideoViewController {
     });
   }
 
-  /// Call `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in the native side
   Future<void> destroyTextureRender(int textureId) async {
-    _destroyTextureRenderCompleters.putIfAbsent(
-        textureId, () => Completer<void>());
-
     await methodChannel.invokeMethod('destroyTextureRender', textureId);
-
-    _destroyTextureRenderCompleters[textureId]?.complete(null);
-
-    if (!_isDetachVFBMing) {
-      _destroyTextureRenderCompleters.remove(textureId);
-    }
   }
 }

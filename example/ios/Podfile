@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '11.0'
+platform :ios, '9.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -49,11 +49,16 @@ target 'Runner' do
     pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
     # pod 'iris_event_handler', :path => File.join('.symlinks', 'plugins', 'iris_event', 'ios')
   end
+end
 
-  target 'ScreenSharing' do
-    use_frameworks!
-    use_modular_headers!
-    inherit! :search_paths
+target 'ScreenSharing' do
+  use_frameworks!
+  use_modular_headers!
+  
+  if plugin_dev != nil
+    pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
+  else
+    pod 'AgoraRtcEngine_iOS', '4.1.0'
   end
 end
 

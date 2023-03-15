@@ -154,6 +154,21 @@ extension MetadataObserverExt on MetadataObserver {
   }
 }
 
+class _Lifecycle with WidgetsBindingObserver {
+  const _Lifecycle(this.onDestroy);
+
+  final VoidCallback onDestroy;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.detached) {
+      onDestroy();
+    }
+  }
+}
+
 @internal
 class InitializationState extends ChangeNotifier {
   bool _isInitialzed = false;
@@ -187,6 +202,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   final ScopedObjects _objectPool = ScopedObjects();
 
+  _Lifecycle? _lifecycle;
+
   @internal
   final MethodChannel engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
@@ -203,6 +220,15 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   Future<void> _initializeInternal(RtcEngineContext context) async {
+    _lifecycle ??= _Lifecycle(
+      () {
+        release(sync: true);
+      },
+    );
+    // Compatible with 2.10
+    // ignore: invalid_null_aware_operator
+    _ambiguate(WidgetsBinding.instance)?.addObserver(_lifecycle!);
+
     await _globalVideoViewController
         .attachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
 
@@ -270,6 +296,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   Future<void> release({bool sync = false}) async {
     if (_instance == null) return;
+
+    if (_lifecycle != null) {
+      // Compatible with 2.10
+      // ignore: invalid_null_aware_operator
+      _ambiguate(WidgetsBinding.instance)?.removeObserver(_lifecycle!);
+      _lifecycle = null;
+    }
 
     _rtcEngineState.dispose();
 
