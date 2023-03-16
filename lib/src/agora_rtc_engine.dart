@@ -4415,6 +4415,13 @@ abstract class RtcEngine {
   ///
   /// * [parameters] Pointer to the set parameters in a JSON string.
   Future<void> setParameters(String parameters);
+
+  /// Gets the C++ handle of the native SDK.
+  /// This method retrieves the C++ handle of the SDK, for example for registering the audio and video frame observer.
+  ///
+  /// Returns
+  /// The native handle of the SDK.
+  Future<int> getNativeHandle();
 }
 
 /// @nodoc
