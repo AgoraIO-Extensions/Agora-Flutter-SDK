@@ -4953,4 +4953,19 @@ class RtcEngineImpl implements RtcEngine {
     final rm = callApiResult.data;
     final result = rm['result'];
   }
+
+  @override
+  Future<int> getNativeHandle() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_getNativeHandle';
+    final param = createParams({});
+    final callApiResult =
+        await apiCaller.callIrisApi(apiType, jsonEncode(param), buffers: null);
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
 }
