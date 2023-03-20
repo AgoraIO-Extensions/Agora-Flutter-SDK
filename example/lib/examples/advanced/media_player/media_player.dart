@@ -124,8 +124,9 @@ class _State extends State<MediaPlayer> {
 
           setState(() {});
         },
-        onPositionChanged: (int position) {
-          logSink.log('[onPositionChanged] position: $position');
+        onPositionChanged: (int position, int timestamp) {
+          logSink.log(
+              '[onPositionChanged] position: $position, timestamp: $timestamp');
 
           setState(() {
             _seekPos = position;

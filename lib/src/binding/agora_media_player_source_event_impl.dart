@@ -27,11 +27,12 @@ extension MediaPlayerSourceObserverExt on MediaPlayerSourceObserver {
         MediaPlayerSourceObserverOnPositionChangedJson paramJson =
             MediaPlayerSourceObserverOnPositionChangedJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        int? positionMs = paramJson.positionMs;
-        if (positionMs == null) {
+        int? position = paramJson.position;
+        int? timestamp = paramJson.timestamp;
+        if (position == null || timestamp == null) {
           break;
         }
-        onPositionChanged!(positionMs);
+        onPositionChanged!(position, timestamp);
         break;
 
       case 'MediaPlayerSourceObserver_onPlayerEvent':

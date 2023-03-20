@@ -3833,11 +3833,15 @@ extension MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonBufferExt
 
 @JsonSerializable(explicitToJson: true)
 class MediaPlayerSourceObserverOnPositionChangedJson {
-  const MediaPlayerSourceObserverOnPositionChangedJson({this.positionMs});
+  const MediaPlayerSourceObserverOnPositionChangedJson(
+      {this.position, this.timestamp});
 
-  @JsonKey(name: 'position_ms')
-  final int? positionMs;
-  factory MediaPlayerSourceObserverOnPositionChangedJson.fromJson(
+  @JsonKey(name: 'position')
+  final int? position;
+
+  @JsonKey(name: 'timestamp')
+  final int? timestamp;
+factory MediaPlayerSourceObserverOnPositionChangedJson.fromJson(
           Map<String, dynamic> json) =>
       _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(json);
   Map<String, dynamic> toJson() =>

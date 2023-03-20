@@ -28,8 +28,9 @@ class MediaPlayerSourceObserver {
   /// Reports current playback progress.
   /// When playing media files, the SDK triggers this callback every one second to report current playback progress.
   ///
-  /// * [position] The playback position (ms) of media files.
-  final void Function(int positionMs)? onPositionChanged;
+  /// * [position] Current playback progress (milisecond).
+  /// * [timestamp] Current NTP(Network Time Protocol) time (milisecond).
+  final void Function(int position, int timestamp)? onPositionChanged;
 
   /// Reports the playback event.
   /// After calling the seek method, the SDK triggers the callback to report the results of the seek operation.

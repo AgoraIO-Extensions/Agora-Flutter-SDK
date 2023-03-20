@@ -2777,13 +2777,15 @@ MediaPlayerSourceObserverOnPositionChangedJson
     _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(
             Map<String, dynamic> json) =>
         MediaPlayerSourceObserverOnPositionChangedJson(
-          positionMs: json['position_ms'] as int?,
+          position: json['position'] as int?,
+          timestamp: json['timestamp'] as int?,
         );
 
 Map<String, dynamic> _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(
         MediaPlayerSourceObserverOnPositionChangedJson instance) =>
     <String, dynamic>{
-      'position_ms': instance.positionMs,
+      'position': instance.position,
+      'timestamp': instance.timestamp,
     };
 
 MediaPlayerSourceObserverOnPlayerEventJson
