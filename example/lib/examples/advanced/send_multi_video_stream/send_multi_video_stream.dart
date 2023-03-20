@@ -104,8 +104,9 @@ class _State extends State<SendMultiVideoStream> {
             });
           }
         },
-        onPositionChanged: (int position) {
-          logSink.log('[onPositionChanged] position: $position');
+        onPositionChanged: (int position, int timestamp) {
+          logSink.log(
+              '[onPositionChanged] position: $position, timestamp: $timestamp');
         },
         onPlayerEvent:
             (MediaPlayerEvent eventCode, int elapsedTime, String message) {
