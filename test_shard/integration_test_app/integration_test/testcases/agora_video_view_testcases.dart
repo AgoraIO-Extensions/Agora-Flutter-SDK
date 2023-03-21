@@ -236,6 +236,7 @@ void testCases() {
   testWidgets(
     'Show local AgoraVideoView after RtcEngine.initialize',
     (WidgetTester tester) async {
+      final videoViewCreatedCompleter = Completer<void>();
       final irisMethodChannel = FakeIrisMethodChannel();
       final rtcEngine =
           RtcEngineImpl.create(irisMethodChannel: irisMethodChannel);
@@ -251,6 +252,11 @@ void testCases() {
                 rtcEngine: engine,
                 canvas: const VideoCanvas(uid: 0),
               ),
+              onAgoraVideoViewCreated: (viewId) {
+                if (!videoViewCreatedCompleter.isCompleted) {
+                  videoViewCreatedCompleter.complete(null);
+                }
+              },
             ),
           );
         },
@@ -260,13 +266,7 @@ void testCases() {
       // pumpAndSettle again to ensure the `AgoraVideoView` shown
       await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        expect(find.byType(AndroidView), findsOneWidget);
-      }
-
-      if (defaultTargetPlatform == TargetPlatform.iOS) {
-        expect(find.byType(UiKitView), findsOneWidget);
-      }
+      await videoViewCreatedCompleter.future;
 
       final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
           .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
@@ -322,6 +322,7 @@ void testCases() {
 
       await tester.pumpWidget(Container());
       await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+      await Future.delayed(const Duration(seconds: 5));
 
       expect(find.byType(AgoraVideoView), findsNothing);
     },
@@ -464,6 +465,7 @@ void testCases() {
 
       await tester.pumpWidget(Container());
       await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+      await Future.delayed(const Duration(seconds: 5));
     },
     skip: !(Platform.isAndroid || Platform.isIOS),
   );
