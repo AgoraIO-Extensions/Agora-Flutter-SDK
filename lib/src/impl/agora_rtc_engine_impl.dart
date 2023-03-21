@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data' show Uint8List;
 import 'dart:ffi' as ffi;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
@@ -18,48 +18,35 @@ import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_ex_impl.dart'
     as rtc_engine_ex_binding;
 import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_impl.dart'
     as rtc_engine_binding;
-
-import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_override.dart'
-    as mcci;
-
-import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
-    as media_recorder_impl;
-import 'package:agora_rtc_engine/src/impl/agora_spatial_audio_impl_override.dart'
-    as agora_spatial_audio_impl;
+import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
 import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
     as media_engine_impl;
-
-import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
-    as media_player_impl;
+import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
+    as media_recorder_impl;
+import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_override.dart'
+    as mcci;
+import 'package:agora_rtc_engine/src/impl/agora_spatial_audio_impl_override.dart'
+    as agora_spatial_audio_impl;
 import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
     as audio_device_manager_impl;
-import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
+    as media_player_impl;
 import 'package:agora_rtc_engine/src/impl/native_iris_api_engine_binding_delegate.dart';
 import 'package:flutter/foundation.dart'
     show ChangeNotifier, defaultTargetPlatform;
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/widgets.dart'
-    show
-        WidgetsBindingObserver,
-        VoidCallback,
-        AppLifecycleState,
-        WidgetsBinding,
-        TargetPlatform,
-        debugPrint;
+    show VoidCallback, TargetPlatform, debugPrint;
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:meta/meta.dart';
 
 import 'global_video_view_controller.dart';
-import 'package:meta/meta.dart';
 
 // ignore_for_file: public_member_api_docs
 
-/// Borrow from https://github.com/dart-lang/sdk/issues/46264#issuecomment-1151476029
-/// Avoid `Warning: Operand of null-aware operation '?.' has type 'WidgetsBinding' which excludes null.`
-T? _ambiguate<T>(T? value) => value;
-
 extension RtcEngineExt on RtcEngine {
   GlobalVideoViewController get globalVideoViewController =>
-      (this as RtcEngineImpl)._globalVideoViewController;
+      (this as RtcEngineImpl)._globalVideoViewController!;
 
   ScopedObjects get objectPool => (this as RtcEngineImpl)._objectPool;
 
@@ -171,24 +158,32 @@ class InitializationState extends ChangeNotifier {
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._(IrisMethodChannel irisMethodChannel)
-      : super(irisMethodChannel) {
-    _globalVideoViewController = GlobalVideoViewController(irisMethodChannel);
-  }
+      : super(irisMethodChannel);
 
   static RtcEngineImpl? _instance;
 
-  final InitializationState _rtcEngineState = InitializationState();
+  InitializationState? _rtcEngineStateInternal;
+  InitializationState get _rtcEngineState {
+    _rtcEngineStateInternal ??= InitializationState();
+    return _rtcEngineStateInternal!;
+  }
+
   @internal
   bool get isInitialzed => _rtcEngineState.isInitialzed;
 
+  bool _isReleased = false;
+
+  Completer<void>? _initializingCompleter;
+  Completer<void>? _releasingCompleter;
+
   final _rtcEngineImplScopedKey = const TypedScopedKey(RtcEngineImpl);
 
-  late final GlobalVideoViewController _globalVideoViewController;
+  GlobalVideoViewController? _globalVideoViewController;
 
   final ScopedObjects _objectPool = ScopedObjects();
 
   @internal
-  final MethodChannel engineMethodChannel = const MethodChannel('agora_rtc_ng');
+  late MethodChannel engineMethodChannel;
 
   static RtcEngineEx create({IrisMethodChannel? irisMethodChannel}) {
     if (_instance != null) return _instance!;
@@ -203,12 +198,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   Future<void> _initializeInternal(RtcEngineContext context) async {
-    await _globalVideoViewController
+    _globalVideoViewController ??= GlobalVideoViewController(irisMethodChannel);
+    await _globalVideoViewController!
         .attachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
 
     irisMethodChannel.addHotRestartListener(_hotRestartListener);
-
-    _rtcEngineState.isInitialzed = true;
   }
 
   void _hotRestartListener(Object? message) {
@@ -220,7 +214,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       nativeBindingDelegate.initialize();
       nativeBindingDelegate.binding.FreeIrisVideoFrameBufferManager(
           ffi.Pointer.fromAddress(
-              _globalVideoViewController.videoFrameBufferManagerIntPtr));
+              _globalVideoViewController!.videoFrameBufferManagerIntPtr));
 
       return true;
     }());
@@ -228,6 +222,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> initialize(RtcEngineContext context) async {
+    // The `RtcEngine` is a singleton, a new `initialize` should be called after the
+    // previous `release` is completed, or the following API calls maybe call to the
+    // previous `RtcEngine` instance, which maybe cause some unexpected error. so we
+    // should wait for the previous `release` function is completed here.
+    if (_releasingCompleter != null && !_releasingCompleter!.isCompleted) {
+      await _releasingCompleter?.future;
+    }
+
+    _initializingCompleter = Completer<void>();
+    engineMethodChannel = const MethodChannel('agora_rtc_ng');
+
     String externalFilesDir = '';
     if (defaultTargetPlatform == TargetPlatform.android) {
       final androidInitResult =
@@ -255,6 +260,11 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
 
     await _initializeInternal(context);
+
+    _rtcEngineState.isInitialzed = true;
+    _isReleased = false;
+    _initializingCompleter?.complete(null);
+    _initializingCompleter = null;
   }
 
   @internal
@@ -269,21 +279,34 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> release({bool sync = false}) async {
-    if (_instance == null) return;
+    if (_isReleased) return;
 
-    _rtcEngineState.dispose();
+    // Same as explanation inside `initialize`. We should wait for
+    // the `initialize` function is completed here.
+    if (_initializingCompleter != null &&
+        !_initializingCompleter!.isCompleted) {
+      await _initializingCompleter?.future;
+    }
+
+    _releasingCompleter = Completer<void>();
+
+    _rtcEngineStateInternal?.dispose();
+    _rtcEngineStateInternal = null;
 
     await _objectPool.clear();
 
-    await _globalVideoViewController
+    await _globalVideoViewController!
         .detachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
+    _globalVideoViewController = null;
 
     await super.release(sync: sync);
 
     irisMethodChannel.removeHotRestartListener(_hotRestartListener);
 
     await irisMethodChannel.dispose();
-    _instance = null;
+    _isReleased = true;
+    _releasingCompleter?.complete(null);
+    _releasingCompleter = null;
   }
 
   @override
@@ -958,7 +981,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       'StartDumpVideo',
       jsonEncode({
         'nativeHandle':
-            _globalVideoViewController.videoFrameBufferManagerIntPtr,
+            _globalVideoViewController!.videoFrameBufferManagerIntPtr,
         'type': type,
         'dir': dir,
       }),
@@ -969,7 +992,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await irisMethodChannel.invokeMethod(IrisMethodCall(
       'StopDumpVideo',
       jsonEncode({
-        'nativeHandle': _globalVideoViewController.videoFrameBufferManagerIntPtr
+        'nativeHandle':
+            _globalVideoViewController!.videoFrameBufferManagerIntPtr
       }),
     ));
   }

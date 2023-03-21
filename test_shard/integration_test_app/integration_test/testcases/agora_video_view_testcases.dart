@@ -278,6 +278,9 @@ void testCases() {
       await tester.pumpWidget(Container());
       await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
+      // Delay 5 seconds to ensure that previous Widget.dipose call completed.
+      await Future.delayed(const Duration(seconds: 5));
+
       expect(find.byType(AgoraVideoView), findsNothing);
     },
     skip: !(Platform.isAndroid || Platform.isIOS),
