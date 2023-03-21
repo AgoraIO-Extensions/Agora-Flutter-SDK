@@ -38,6 +38,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _requestPermissionIfNeed() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
+      //
       await [Permission.microphone, Permission.camera].request();
     }
   }
