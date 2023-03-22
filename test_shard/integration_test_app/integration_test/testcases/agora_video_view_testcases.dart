@@ -9,6 +9,70 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import '../fake/fake_iris_method_channel.dart';
 
+class _RenderViewWidget extends StatefulWidget {
+  const _RenderViewWidget({
+    Key? key,
+    required this.builder,
+  }) : super(key: key);
+
+  final Function(BuildContext context, RtcEngine engine) builder;
+
+  @override
+  State<_RenderViewWidget> createState() => _RenderViewWidgetState();
+}
+
+class _RenderViewWidgetState extends State<_RenderViewWidget> {
+  late final RtcEngine _engine;
+
+  @override
+  void initState() {
+    super.initState();
+    _initEngine();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _dispose();
+  }
+
+  Future<void> _dispose() async {
+    await _engine.leaveChannel();
+    await _engine.release();
+  }
+
+  Future<void> _initEngine() async {
+    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+        defaultValue: '<YOUR_APP_ID>');
+
+    _engine = createAgoraRtcEngine();
+    await _engine.initialize(RtcEngineContext(
+      appId: engineAppId,
+      areaCode: AreaCode.areaCodeGlob.value(),
+    ));
+
+    try {
+      await _engine.enableVideo();
+      await _engine.startPreview();
+    } catch (e) {}
+
+    await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    await _engine.setAudioProfile(
+      profile: AudioProfileType.audioProfileDefault,
+      scenario: AudioScenarioType.audioScenarioGameStreaming,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: widget.builder(context, _engine),
+      ),
+    );
+  }
+}
+
 class MultipleVideoViewWithFlutterTexture extends StatefulWidget {
   const MultipleVideoViewWithFlutterTexture({
     Key? key,
@@ -164,6 +228,46 @@ class _MultipleVideoViewWithFlutterTextureState
 }
 
 void testCases() {
+  testWidgets(
+    'onAgoraVideoViewCreated should be called after AgoraVideoView created',
+    (WidgetTester tester) async {
+      final videoViewCreatedCompleter = Completer<bool>();
+
+      await tester.pumpWidget(_RenderViewWidget(
+        builder: (context, engine) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+              onAgoraVideoViewCreated: (viewId) {
+                if (!videoViewCreatedCompleter.isCompleted) {
+                  videoViewCreatedCompleter.complete(true);
+                }
+              },
+            ),
+          );
+        },
+      ));
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+      // pumpAndSettle again to ensure the `AgoraVideoView` shown
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+      final videoViewCreatedCalled = await videoViewCreatedCompleter.future;
+      expect(videoViewCreatedCalled, isTrue);
+
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+      await Future.delayed(const Duration(seconds: 5));
+
+      expect(find.byType(AgoraVideoView), findsNothing);
+    },
+  );
+
   testWidgets(
     'Show multiple and then dispose AgoraVideoViews with no error',
     (WidgetTester tester) async {
