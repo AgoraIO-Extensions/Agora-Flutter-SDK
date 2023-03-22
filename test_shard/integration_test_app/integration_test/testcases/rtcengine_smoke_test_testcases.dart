@@ -9,7 +9,6 @@ import 'package:integration_test_app/fake_remote_user.dart';
 import 'package:integration_test_app/main.dart' as app;
 
 void testCases() {
-
   testWidgets(
     'registerAudioEncodedFrameObserver smoke test',
     (WidgetTester tester) async {
@@ -349,6 +348,27 @@ void testCases() {
         await remoteUser.leaveChannel();
         await rtcEngine.leaveChannel();
         await rtcEngine.release();
+      },
+    );
+
+    testWidgets(
+      'call setupLocalVideo after released do not throw error',
+      (WidgetTester tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+            defaultValue: '<YOUR_APP_ID>');
+
+        RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+        await rtcEngine.initialize(RtcEngineContext(
+          appId: engineAppId,
+          areaCode: AreaCode.areaCodeGlob.value(),
+        ));
+
+        await rtcEngine.release();
+
+        await rtcEngine.setupLocalVideo(const VideoCanvas());
       },
     );
   });
