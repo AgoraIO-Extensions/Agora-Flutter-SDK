@@ -8,7 +8,7 @@ on:
 jobs:
   release_special_if_merged:
     if: ${{ github.event.pull_request.merged == true && 
-            contains(github.event.pull_request.labels.*.name, 'ci:release_special') }}
+            contains(github.event.pull_request.labels.*.name, 'ci:ready_release_special') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
