@@ -48,8 +48,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
   } else {
      api 'io.agora.rtc:iris-rtc:4.0.0.132-build.1'
-     api 'io.agora.rtc:agora-special-full:4.0.0.132'
-     implementation 'io.agora.rtc:full-screen-sharing:4.0.0.132'
+     api 'io.agora.rtc:agora-special-full:4.0.0.132.1'
+     implementation 'io.agora.rtc:full-screen-sharing:4.0.0.132.1'
   }
 }
 
