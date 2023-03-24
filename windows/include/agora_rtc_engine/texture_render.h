@@ -21,32 +21,36 @@ public:
 
     int64_t texture_id();
 
-    virtual void OnVideoFrameReceived(const IrisVideoFrame& video_frame,
-        const IrisVideoFrameBufferConfig* config,
-        bool resize) override;
+    virtual void OnVideoFrameReceived(const IrisVideoFrame &video_frame,
+                                      const IrisVideoFrameBufferConfig *config,
+                                      bool resize) override;
 
     void UpdateData(unsigned int uid, const std::string &channelId, unsigned int videoSourceType);
 
-    void Dispose();
+    // Checks if texture registrar, texture id and texture are available.
+    bool TextureRegistered()
+    {
+        return registrar_ && texture_ && texture_id_ > -1;
+    }
 
 private:
-    // void HandleMethodCall(
-    //     const flutter::MethodCall<flutter::EncodableValue> &method_call,
-    //     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-
     const FlutterDesktopPixelBuffer *CopyPixelBuffer(size_t width, size_t height);
 
 public:
     flutter::TextureRegistrar *registrar_;
     agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager_;
-    flutter::TextureVariant texture_;
     std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> method_channel_;
+
     int64_t texture_id_ = -1;
-    // std::unique_ptr<flutter::MethodCall<flutter::EncodableValue>> channel_;
-    // unsigned int uid_;
-    // std::string channel_id_;
-    std::mutex mutex_;
-    FlutterDesktopPixelBuffer *pixel_buffer_;
+
+    uint32_t frame_width_ = 0;
+    uint32_t frame_height_ = 0;
+
+    std::mutex buffer_mutex_;
+    std::vector<uint8_t> buffer_;
+    std::unique_ptr<flutter::TextureVariant> texture_;
+    std::unique_ptr<FlutterDesktopPixelBuffer> flutter_desktop_pixel_buffer_ =
+        nullptr;
 };
 
 #endif // TEXTURE_RENDER_H_
