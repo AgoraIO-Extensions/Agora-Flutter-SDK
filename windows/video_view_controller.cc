@@ -151,8 +151,6 @@ bool VideoViewController::DestroyTextureRender(int64_t textureId)
   auto it = renderers_.find(textureId);
   if (it != renderers_.end())
   {
-    it->second.get()->Dispose();
-
     renderers_.erase(it);
     return true;
   }
