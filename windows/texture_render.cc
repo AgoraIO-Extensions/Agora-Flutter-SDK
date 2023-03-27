@@ -40,7 +40,7 @@ TextureRender::~TextureRender()
         videoFrameBufferManager_ = nullptr;
     }
 
-    const std::lock_guard<std::mutex> lock(buffer_mutex_);
+    semaphore_.Wait();
 
     if (registrar_ && texture_id_ != -1)
     {
@@ -86,7 +86,9 @@ void TextureRender::OnVideoFrameReceived(const IrisVideoFrame &video_frame,
 const FlutterDesktopPixelBuffer *
 TextureRender::CopyPixelBuffer(size_t width, size_t height)
 {
-    std::unique_lock<std::mutex> buffer_lock(buffer_mutex_);
+    std::lock_guard<std::mutex> buffer_lock(buffer_mutex_);
+
+    semaphore_.Increace();
 
     if (!TextureRegistered())
     {
@@ -102,8 +104,8 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
         flutter_desktop_pixel_buffer_->release_callback =
             [](void *release_context)
         {
-            auto mutex = reinterpret_cast<std::mutex *>(release_context);
-            mutex->unlock();
+            auto mutex = reinterpret_cast<::Semaphore *>(release_context);
+            mutex->Decreace();
         };
     }
 
@@ -112,7 +114,7 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
     flutter_desktop_pixel_buffer_->height = frame_height_;
 
     // Releases unique_lock and set mutex pointer for release context.
-    flutter_desktop_pixel_buffer_->release_context = buffer_lock.release();
+    flutter_desktop_pixel_buffer_->release_context = &semaphore_;
 
     return flutter_desktop_pixel_buffer_.get();
 }

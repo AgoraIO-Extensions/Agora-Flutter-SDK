@@ -7,9 +7,45 @@
 #include <flutter/texture_registrar.h>
 #include <map>
 #include <mutex>
+#include <shared_mutex>
 
 #include "iris_rtc_raw_data.h"
 #include "iris_video_processor_cxx.h"
+
+namespace
+{
+    class Semaphore
+    {
+    public:
+        explicit Semaphore(int count = 0) : count_(count) {}
+
+        void Decreace()
+        {
+            std::unique_lock<std::mutex> lock(mutex_);
+            --count_;
+            cv_.notify_one();
+        }
+
+        void Increace()
+        {
+            std::unique_lock<std::mutex> lock(mutex_);
+            ++count_;
+            cv_.notify_one();
+        }
+
+        void Wait()
+        {
+            std::unique_lock<std::mutex> lock(mutex_);
+            cv_.wait(lock, [=]
+                     { return count_ == 0; });
+        }
+
+    private:
+        std::mutex mutex_;
+        std::condition_variable cv_;
+        int count_;
+    };
+}
 
 class TextureRender : public agora::iris::IrisVideoFrameBufferDelegate
 {
@@ -51,6 +87,8 @@ public:
     std::unique_ptr<flutter::TextureVariant> texture_;
     std::unique_ptr<FlutterDesktopPixelBuffer> flutter_desktop_pixel_buffer_ =
         nullptr;
+
+    ::Semaphore semaphore_;
 };
 
 #endif // TEXTURE_RENDER_H_
