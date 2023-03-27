@@ -63,6 +63,11 @@ void TextureRender::OnVideoFrameReceived(const IrisVideoFrame &video_frame,
     const uint32_t pixels_total = video_frame.width * video_frame.height;
     const uint32_t data_size = pixels_total * bytes_per_pixel;
 
+    if (data_size == 0)
+    {
+        return;
+    }
+
     if (buffer_.size() != data_size)
     {
         buffer_.resize(data_size);
@@ -88,12 +93,17 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
 {
     std::lock_guard<std::mutex> buffer_lock(buffer_mutex_);
 
-    semaphore_.Increace();
-
     if (!TextureRegistered())
     {
         return nullptr;
     }
+
+    if (frame_width_ == 0 || frame_height_ == 0)
+    {
+        return nullptr;
+    }
+
+    semaphore_.Increace();
 
     if (!flutter_desktop_pixel_buffer_)
     {
@@ -104,7 +114,7 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
         flutter_desktop_pixel_buffer_->release_callback =
             [](void *release_context)
         {
-            auto mutex = reinterpret_cast<::Semaphore *>(release_context);
+            auto mutex = static_cast<::Semaphore *>(release_context);
             mutex->Decreace();
         };
     }
