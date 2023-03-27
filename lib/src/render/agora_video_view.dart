@@ -15,7 +15,7 @@ class AgoraVideoView extends StatefulWidget {
   /// Controls the type of video to render:If you want to render video of the RtcEngine, see VideoViewController .If you want to render video of the media player, see MediaPlayerController .
   final VideoViewControllerBase controller;
 
-  /// Callback when [AgoraVideoView] created.
+  /// @nodoc
   final void Function(int viewId)? onAgoraVideoViewCreated;
 
   @override
