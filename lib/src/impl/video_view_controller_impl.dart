@@ -45,7 +45,7 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
 
-  bool _isSetupView = false;
+  bool _isCreatedRender = false;
   bool _isDisposeRender = false;
 
   @internal
@@ -74,7 +74,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @override
   Future<void> dispose() async {
     _isDisposeRender = true;
-    _isSetupView = false;
+    _isCreatedRender = false;
   }
 
   @protected
@@ -111,11 +111,11 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @internal
   @override
   Future<void> disposeRender() async {
-    if (!_isSetupView) {
+    if (!_isCreatedRender || _isDisposeRender) {
       return;
     }
     _isDisposeRender = true;
-    _isSetupView = false;
+    _isCreatedRender = false;
 
     await disposeRenderInternal();
   }
@@ -126,12 +126,20 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     int uid,
     String channelId,
     int videoSourceType,
-  ) {
-    return rtcEngine.globalVideoViewController.createTextureRender(
+  ) async {
+    if (_isCreatedRender) {
+      return kTextureNotInit;
+    }
+    final textureId =
+        await rtcEngine.globalVideoViewController.createTextureRender(
       uid,
       channelId,
       videoSourceType,
     );
+
+    _isCreatedRender = true;
+
+    return textureId;
   }
 
   @override
@@ -173,13 +181,13 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @override
   Future<void> setupView(int nativeViewPtr) async {
-    if (_isDisposeRender) {
+    if (_isCreatedRender) {
       return;
     }
 
     await setupNativeViewInternal(nativeViewPtr);
 
-    _isSetupView = true;
+    _isCreatedRender = true;
   }
 
   @internal
