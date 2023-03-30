@@ -573,10 +573,10 @@ extension RtcEngineEventHandlerOnLastmileQualityJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnFirstLocalVideoFrameJson {
   const RtcEngineEventHandlerOnFirstLocalVideoFrameJson(
-      {this.connection, this.width, this.height, this.elapsed});
+      {this.source, this.width, this.height, this.elapsed});
 
-  @JsonKey(name: 'connection')
-  final RtcConnection? connection;
+  @JsonKey(name: 'source')
+  final VideoSourceType? source;
   @JsonKey(name: 'width')
   final int? width;
   @JsonKey(name: 'height')

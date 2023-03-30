@@ -72,7 +72,7 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
   }
 
   @override
-  Future<void> numberOfCapabilities(String deviceIdUTF8) async {
+  Future<int> numberOfCapabilities(String deviceIdUTF8) async {
     final apiType =
         '${isOverrideClassName ? className : 'VideoDeviceManager'}_numberOfCapabilities';
     final param = createParams({'deviceIdUTF8': deviceIdUTF8});
@@ -83,9 +83,7 @@ class VideoDeviceManagerImpl implements VideoDeviceManager {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
+    return result as int;
   }
 
   @override

@@ -1376,7 +1376,7 @@ void generatedTestCases() {
       final onFirstLocalVideoFrameCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onFirstLocalVideoFrame:
-            (RtcConnection connection, int width, int height, int elapsed) {
+            (VideoSourceType source, int width, int height, int elapsed) {
           onFirstLocalVideoFrameCompleter.complete(true);
         },
       );
@@ -1389,18 +1389,13 @@ void generatedTestCases() {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
+        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
         const int width = 10;
         const int height = 10;
         const int elapsed = 10;
 
         final eventJson = {
-          'connection': connection.toJson(),
+          'source': source.value(),
           'width': width,
           'height': height,
           'elapsed': elapsed,
@@ -6225,3 +6220,4 @@ void generatedTestCases() {
     timeout: const Timeout(Duration(minutes: 1)),
   );
 }
+
