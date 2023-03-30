@@ -365,7 +365,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onLastmileQuality!(quality);
         return true;
 
-      case 'onFirstLocalVideoFrameEx':
+      case 'onFirstLocalVideoFrame':
         if (rtcEngineEventHandler.onFirstLocalVideoFrame == null) {
           return true;
         }
@@ -373,19 +373,18 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         RtcEngineEventHandlerOnFirstLocalVideoFrameJson paramJson =
             RtcEngineEventHandlerOnFirstLocalVideoFrameJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        RtcConnection? connection = paramJson.connection;
+        VideoSourceType? source = paramJson.source;
         int? width = paramJson.width;
         int? height = paramJson.height;
         int? elapsed = paramJson.elapsed;
-        if (connection == null ||
+        if (source == null ||
             width == null ||
             height == null ||
             elapsed == null) {
           return true;
         }
-        connection = connection.fillBuffers(buffers);
         rtcEngineEventHandler.onFirstLocalVideoFrame!(
-            connection, width, height, elapsed);
+            source, width, height, elapsed);
         return true;
 
       case 'onFirstLocalVideoFramePublishedEx':

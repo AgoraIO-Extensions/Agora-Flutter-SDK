@@ -3,10 +3,8 @@ include: shared:rtc_4.1.0/shared_configs.yaml
 language: dart
 
 legacy_renders:
-  - DartSyntaxRender
+  - DartSyntaxRenderBeforeNative420
   - DartEventHandlerParamJsonRender
-  # - DartCallApiRender
-  # - DartEventHandlerRender
   - DartCallApiIrisMethodChannelRender
   - DartEventHandlerIrisMethodChannelRender
   - DartStructToJsonSerializableRender

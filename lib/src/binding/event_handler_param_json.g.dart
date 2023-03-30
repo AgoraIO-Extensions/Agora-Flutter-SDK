@@ -452,10 +452,7 @@ RtcEngineEventHandlerOnFirstLocalVideoFrameJson
     _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonFromJson(
             Map<String, dynamic> json) =>
         RtcEngineEventHandlerOnFirstLocalVideoFrameJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
+          source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
           width: json['width'] as int?,
           height: json['height'] as int?,
           elapsed: json['elapsed'] as int?,
@@ -464,11 +461,28 @@ RtcEngineEventHandlerOnFirstLocalVideoFrameJson
 Map<String, dynamic> _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonToJson(
         RtcEngineEventHandlerOnFirstLocalVideoFrameJson instance) =>
     <String, dynamic>{
-      'connection': instance.connection?.toJson(),
+      'source': _$VideoSourceTypeEnumMap[instance.source],
       'width': instance.width,
       'height': instance.height,
       'elapsed': instance.elapsed,
     };
+
+const _$VideoSourceTypeEnumMap = {
+  VideoSourceType.videoSourceCameraPrimary: 0,
+  VideoSourceType.videoSourceCamera: 0,
+  VideoSourceType.videoSourceCameraSecondary: 1,
+  VideoSourceType.videoSourceScreenPrimary: 2,
+  VideoSourceType.videoSourceScreen: 2,
+  VideoSourceType.videoSourceScreenSecondary: 3,
+  VideoSourceType.videoSourceCustom: 4,
+  VideoSourceType.videoSourceMediaPlayer: 5,
+  VideoSourceType.videoSourceRtcImagePng: 6,
+  VideoSourceType.videoSourceRtcImageJpeg: 7,
+  VideoSourceType.videoSourceRtcImageGif: 8,
+  VideoSourceType.videoSourceRemote: 9,
+  VideoSourceType.videoSourceTranscoded: 10,
+  VideoSourceType.videoSourceUnknown: 100,
+};
 
 RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson
     _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonFromJson(
@@ -539,23 +553,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnVideoSizeChangedJsonToJson(
       'height': instance.height,
       'rotation': instance.rotation,
     };
-
-const _$VideoSourceTypeEnumMap = {
-  VideoSourceType.videoSourceCameraPrimary: 0,
-  VideoSourceType.videoSourceCamera: 0,
-  VideoSourceType.videoSourceCameraSecondary: 1,
-  VideoSourceType.videoSourceScreenPrimary: 2,
-  VideoSourceType.videoSourceScreen: 2,
-  VideoSourceType.videoSourceScreenSecondary: 3,
-  VideoSourceType.videoSourceCustom: 4,
-  VideoSourceType.videoSourceMediaPlayer: 5,
-  VideoSourceType.videoSourceRtcImagePng: 6,
-  VideoSourceType.videoSourceRtcImageJpeg: 7,
-  VideoSourceType.videoSourceRtcImageGif: 8,
-  VideoSourceType.videoSourceRemote: 9,
-  VideoSourceType.videoSourceTranscoded: 10,
-  VideoSourceType.videoSourceUnknown: 100,
-};
 
 RtcEngineEventHandlerOnLocalVideoStateChangedJson
     _$RtcEngineEventHandlerOnLocalVideoStateChangedJsonFromJson(
