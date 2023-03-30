@@ -8469,7 +8469,7 @@ void rtcEngineSmokeTestCases() {
           onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
           onLastmileQuality: (QualityType quality) {},
           onFirstLocalVideoFrame:
-              (RtcConnection connection, int width, int height, int elapsed) {},
+              (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
               (RtcConnection connection, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
@@ -8681,7 +8681,7 @@ void rtcEngineSmokeTestCases() {
           onDownlinkNetworkInfoUpdated: (DownlinkNetworkInfo info) {},
           onLastmileQuality: (QualityType quality) {},
           onFirstLocalVideoFrame:
-              (RtcConnection connection, int width, int height, int elapsed) {},
+              (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
               (RtcConnection connection, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,

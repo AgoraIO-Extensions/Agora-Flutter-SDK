@@ -1779,7 +1779,7 @@ class RtcEngineEventHandler {
   /// * [height] The height (px) of the first local video frame.
   /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel [2/2] until the SDK triggers this callback. If you call startPreview before calling joinChannel [2/2], then this parameter is the time elapsed from calling the startPreview method until the SDK triggers this callback.
   final void Function(
-          RtcConnection connection, int width, int height, int elapsed)?
+          VideoSourceType source, int width, int height, int elapsed)?
       onFirstLocalVideoFrame;
 
   /// Occurs when the first video frame is published.
@@ -2403,7 +2403,7 @@ abstract class VideoDeviceManager {
   /// Video capture devices may support multiple video formats, and each format supports different combinations of video frame width, video frame height, and frame rate.You can call this method to get how many video formats the specified video capture device can support, and then call getCapability to get the specific video frame information in the specified video format.
   ///
   /// * [deviceIdUTF8] The ID of the video capture device.
-  Future<void> numberOfCapabilities(String deviceIdUTF8);
+  Future<int> numberOfCapabilities(String deviceIdUTF8);
 
   /// Gets the detailed video frame information of the video capture device in the specified video format.
   /// After calling numberOfCapabilities to get the number of video formats supported by the video capture device, you can call this method to get the specific video frame information supported by the specified index number.
