@@ -82,7 +82,13 @@ abstract class MusicChartCollection {
   /// @nodoc
   Future<int> getCount();
 
-  /// @nodoc
+  /// Gets the detailed information of the media stream.
+  /// Call this method after calling getStreamCount .
+  ///
+  /// * [index] The index of the media stream.
+  ///
+  /// Returns
+  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
   Future<MusicChartInfo> get(int index);
 }
 
