@@ -128,7 +128,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     int videoSourceType,
   ) async {
     if (_isCreatedRender) {
-      return kTextureNotInit;
+      return _textureId;
     }
     final textureId =
         await rtcEngine.globalVideoViewController.createTextureRender(
@@ -138,6 +138,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     );
 
     _isCreatedRender = true;
+    _isDisposeRender = false;
 
     return textureId;
   }

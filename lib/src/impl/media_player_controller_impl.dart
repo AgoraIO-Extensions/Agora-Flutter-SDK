@@ -350,7 +350,7 @@ class MediaPlayerControllerImpl
   @override
   Future<int> createTextureRender(
       int uid, String channelId, int videoSourceType) {
-    return rtcEngine.globalVideoViewController.createTextureRender(
+    return super.createTextureRender(
       getMediaPlayerId(),
       channelId,
       videoSourceType,
@@ -373,7 +373,7 @@ class MediaPlayerControllerImpl
   @override
   Future<void> disposeRenderInternal() async {
     if (shouldUseFlutterTexture) {
-      await super.disposeRender();
+      await super.disposeRenderInternal();
     }
   }
 }
