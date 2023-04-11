@@ -1169,7 +1169,7 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<MediaPlayer> createMediaPlayer() async {
+  Future<MediaPlayer?> createMediaPlayer() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_createMediaPlayer';
     final param = createParams({});

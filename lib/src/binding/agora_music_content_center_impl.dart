@@ -281,7 +281,7 @@ class MusicContentCenterImpl implements MusicContentCenter {
   }
 
   @override
-  Future<MusicPlayer> createMusicPlayer() async {
+  Future<MusicPlayer?> createMusicPlayer() async {
     final apiType =
         '${isOverrideClassName ? className : 'MusicContentCenter'}_createMusicPlayer';
     final param = createParams({});
