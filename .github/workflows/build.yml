@@ -21,7 +21,7 @@ jobs:
            contains(github.event_name, 'pull_request')) }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: axel-op/dart-package-analyzer@v3
         id: analysis
         with:
@@ -46,15 +46,16 @@ jobs:
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
@@ -69,15 +70,16 @@ jobs:
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - run: flutter config --enable-macos-desktop 
       - run: bash ci/run_flutter_macos_integration_test.sh
 
@@ -95,10 +97,11 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - run: flutter config --enable-windows-desktop
       - name: Run windows integration test
         shell: bash
@@ -116,13 +119,14 @@ jobs:
         version: ['2.10.5', '3.0.0']
     runs-on: windows-2019
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v1
         with:
           java-version: '11'
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - run: flutter pub get
       - name: Run flutter build apk
         run: flutter build apk
@@ -140,10 +144,11 @@ jobs:
     runs-on: macos-12
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign
         run: flutter build ios --no-codesign
