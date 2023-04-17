@@ -20,18 +20,19 @@ jobs:
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v1
         with:
           java-version: '11'
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - name: Checkout hoe
         uses: actions/checkout@v3
         with:
@@ -74,15 +75,16 @@ jobs:
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - uses: futureware-tech/simulator-action@v1
         with:
           model: 'iPhone 13 Pro Max'
@@ -117,15 +119,16 @@ jobs:
     strategy:
       matrix:
         version: ['2.10.5', '3.0.0']
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - name: Checkout hoe
         uses: actions/checkout@v3
         with:
@@ -167,10 +170,11 @@ jobs:
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
     steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.version }}
+          cache: true
       - name: Checkout hoe
         uses: actions/checkout@v3
         with:
