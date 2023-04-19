@@ -182,6 +182,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   final ScopedObjects _objectPool = ScopedObjects();
 
+  DirectCdnStreamingEventHandlerWrapper? _directCdnStreamingEventHandlerWrapper;
+
   @internal
   late MethodChannel engineMethodChannel;
 
@@ -558,7 +560,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       {required DirectCdnStreamingEventHandler eventHandler,
       required String publishUrl,
       required DirectCdnStreamingMediaOptions options}) async {
-    final eventHandlerWrapper =
+    _directCdnStreamingEventHandlerWrapper =
         DirectCdnStreamingEventHandlerWrapper(eventHandler);
     final param =
         createParams({'publishUrl': publishUrl, 'options': options.toJson()});
@@ -567,9 +569,27 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         ScopedEvent(
             scopedKey: _rtcEngineImplScopedKey,
             registerName: 'RtcEngine_startDirectCdnStreaming',
-            unregisterName: '',
-            handler: eventHandlerWrapper),
+            unregisterName: 'RtcEngine_stopDirectCdnStreaming',
+            handler: _directCdnStreamingEventHandlerWrapper!),
         jsonEncode(param));
+  }
+
+  @override
+  Future<void> stopDirectCdnStreaming() async {
+    if (_directCdnStreamingEventHandlerWrapper == null) {
+      return;
+    }
+
+    final param = createParams({});
+    await irisMethodChannel.unregisterEventHandler(
+        ScopedEvent(
+            scopedKey: _rtcEngineImplScopedKey,
+            registerName: 'RtcEngine_startDirectCdnStreaming',
+            unregisterName: 'RtcEngine_stopDirectCdnStreaming',
+            handler: _directCdnStreamingEventHandlerWrapper!),
+        jsonEncode(param));
+
+    _directCdnStreamingEventHandlerWrapper = null;
   }
 
   @override
