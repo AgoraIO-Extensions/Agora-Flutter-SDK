@@ -58,7 +58,7 @@ target 'ScreenSharing' do
   if plugin_dev != nil
     pod 'AgoraRtcWrapper', :path => File.join('.symlinks', 'plugins', 'agora_rtc_engine', 'ios')
   else
-    pod 'AgoraAudio_Special_iOS', '4.1.0.BASIC'
+    pod 'AgoraAudio_Special_iOS', '4.1.1.3.ABASIC'
   end
 end
 
