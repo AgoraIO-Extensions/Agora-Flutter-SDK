@@ -686,7 +686,7 @@ extension VideoBufferTypeExt on VideoBufferType {
 }
 
 /// Configurations of the video frame.
-/// The video data format is YUV420. Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
+/// Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoFrame {
   /// @nodoc
@@ -858,9 +858,6 @@ class AudioFrameObserverBase {
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onRecordAudioFrame;
 
@@ -869,9 +866,6 @@ class AudioFrameObserverBase {
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onPlaybackAudioFrame;
 
@@ -880,15 +874,11 @@ class AudioFrameObserverBase {
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onMixedAudioFrame;
 
   /// Gets the in-ear monitoring audio frame.
   /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
-  /// * [audioFrame] The raw audio data. See AudioFrame .
   final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
 }
 
@@ -1070,9 +1060,6 @@ class AudioFrameObserver extends AudioFrameObserverBase {
   /// * [channelId] The channel ID.
   /// * [uid] The user ID of the specified user.
   /// * [audioFrame] The raw audio data. See AudioFrame .
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, int uid, AudioFrame audioFrame)?
       onPlaybackAudioFrameBeforeMixing;
 }
@@ -1184,15 +1171,15 @@ class VideoFrameObserver {
   });
 
   /// Occurs each time the SDK receives a video frame captured by the local camera.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, Agora does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
   final void Function(VideoFrame videoFrame)? onCaptureVideoFrame;
 
   /// Occurs each time the SDK receives a video frame before encoding.
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
   final void Function(VideoFrame videoFrame)? onPreEncodeVideoFrame;
 
   /// @nodoc
@@ -1202,27 +1189,27 @@ class VideoFrameObserver {
   /// Gets the video data captured from the second camera before encoding.
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second camera before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeCameraVideoFrame;
 
   /// Occurs each time the SDK receives a video frame captured by the screen.
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data for screen sharing. You can then pre-process the data according to your scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
   final void Function(VideoFrame videoFrame)? onScreenCaptureVideoFrame;
 
   /// Gets the video data captured from the screen before encoding.
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:
+  ///  Android: texture
+  ///  iOS: cvPixelBuffer
+  ///  macOS: YUV 420
+  ///  Windows: YUV 420
   final void Function(VideoFrame videoFrame)? onPreEncodeScreenVideoFrame;
 
-  /// Gets the video data of the media player.
-  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  /// * [mediaPlayerId] The ID of the media player.
+  /// @nodoc
   final void Function(VideoFrame videoFrame, int mediaPlayerId)?
       onMediaPlayerVideoFrame;
 
@@ -1233,14 +1220,18 @@ class VideoFrameObserver {
   /// Gets the video data captured from the second screen before encoding.
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
   final void Function(VideoFrame videoFrame)?
       onSecondaryPreEncodeScreenVideoFrame;
 
   /// Occurs each time the SDK receives a video frame sent by the remote user.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding. You can then process the data according to your particular scenarios.If the video data type you get is RGBA, Agora does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:
+  ///  Android: texture
+  ///  iOS: cvPixelBuffer
+  ///  macOS: YUV 420
+  ///  Windows: YUV 420
   /// * [remoteUid] The user ID of the remote user who sends the current video frame.
   /// * [channelId] The channel ID.
   final void Function(String channelId, int remoteUid, VideoFrame videoFrame)?
