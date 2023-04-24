@@ -15,6 +15,14 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install release-it
+        run: |
+          npm install -g release-it
+          npm install -g release-it/bumper
+          npm install -g release-it/conventional-changelog
       - name: git config
         run: |
           git config user.name "${GITHUB_ACTOR}"
@@ -23,9 +31,14 @@ jobs:
           PUBSPEC_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
           echo "pubspec version: ${PUBSPEC_VERSION}"
 
-          TAG_NAME=v${PUBSPEC_VERSION}
-          TAG_MSG="Release ${PUBSPEC_VERSION}"
-          git tag -a ${TAG_NAME} -m ${TAG_MSG}
-          git push origin ${TAG_NAME}
+          release-it ${PUBSPEC_VERSION} \
+            --no-git.commit \
+            --'git.commitMessage="chore: release ${version}"' \
+            --git.tag \
+            --'git.tagAnnotation="Release ${version}"' \
+            --git.push \
+            --no-github.release \
+            --no-github.web \
+            --ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
