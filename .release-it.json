@@ -3,9 +3,6 @@
     "commitMessage": "chore: release ${version}",
     "tagName": "v${version}"
   },
-  "github": {
-    "release": true
-  },
   "plugins": {
     "@release-it/conventional-changelog": {
       "preset": "angular",
