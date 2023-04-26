@@ -1,0 +1,52 @@
+name: Release to Github release/pub.dev and tag 🚀
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  release_if_merged:
+    if: ${{ github.event.pull_request.merged == true && 
+            github.event.pull_request.base.ref == 'main' && 
+            contains(github.event.pull_request.labels.*.name, 'ci:prepare_release') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install release-it
+        run: |
+          npm install -g release-it
+          npm install -g release-it/bumper
+          npm install -g release-it/conventional-changelog
+      - name: git config
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - run: |
+          PUBSPEC_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          echo "pubspec version: ${PUBSPEC_VERSION}"
+
+          release-it ${PUBSPEC_VERSION} \
+            --no-git.commit \
+            --'git.commitMessage="chore: release ${version}"' \
+            --git.tag \
+            --'git.tagAnnotation="Release ${version}"' \
+            --git.push \
+            --github.release \
+            --no-github.web \
+            --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish Dart Package 🚢
+        id: publish
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
+          force: true # We have checked the `dart pub publish --dry-run` `in build.yaml`, it's ok to force publish here.
