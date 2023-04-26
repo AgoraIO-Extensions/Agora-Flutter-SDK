@@ -37,6 +37,18 @@ jobs:
             exit 1
           fi 
 
+  pub_publish_check:
+    name: pub publish check
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.7.0'
+          cache: true
+      - run: bash ci/dart_pub_publish_check.sh
+
   integration_test_ios:
     name: Run Flutter iOS Integration Tests
     if: |
