@@ -49,4 +49,4 @@ jobs:
         with:
           accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
-          force: true # We have checked the `dart pub publish --dry-run` `in ci.yaml`, it's ok to force publish here.
+          force: true # We have checked the `dart pub publish --dry-run` `in build.yaml`, it's ok to force publish here.
