@@ -1,0 +1,84 @@
+# This action will create a change logs via release-it and open a pull request, 
+# after the PR is merged, the action release.yml will be trigger.
+name: Prepare release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_branch:
+        description: The branch to be released
+        type: string
+        required: true
+        default: 'main'
+
+      version:
+        description: 'The version to be released'
+        required: true
+        type: string
+
+jobs:
+  prepare_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.release_branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install release-it
+        run: |
+          npm install -g release-it
+          npm install -g release-it/bumper
+          npm install -g release-it/conventional-changelog
+      - name: git config
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - run: |
+          release-it ${{ inputs.version }} \
+            --git.commit \
+            --'git.commitMessage="chore: release ${version}"' \
+            --no-git.tag \
+            --'git.tagAnnotation="Release ${version}"' \
+            --no-git.push \
+            --no-github.release \
+            --no-github.web \
+            --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get current version of pubspec.yaml
+        id: pubspec
+        run: |
+          PUBSPEC_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
+          echo "pubspec version: ${PUBSPEC_VERSION}"
+          echo "{version}=${PUBSPEC_VERSION}" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: release ${{ inputs.version }}"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: prepare-release-${{ inputs.version }}
+          base: main
+          delete-branch: true
+          title: "chore: release ${{ inputs.version }}"
+          body: |
+            Prepare releasing **${{ inputs.version }}**
+
+            After this pull request is merged, the following steps below will be going on:
+
+            * Create tag for **${{ inputs.version }}**
+            * Publish to pub.dev
+            * Create Github release for **${{ inputs.version }}**
+
+            *This pull request is opened by bot*
+          labels: |
+            ci:skip
+            ci:prepare_release
+          reviewers: |
+            littleGnAl
