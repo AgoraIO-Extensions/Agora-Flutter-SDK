@@ -35,6 +35,7 @@ jobs:
             --no-git.commit \
             --'git.commitMessage="chore: release ${version}"' \
             --git.tag \
+            --'git.tagName="${version}"' \
             --'git.tagAnnotation="Release ${version}"' \
             --git.push \
             --no-github.release \
