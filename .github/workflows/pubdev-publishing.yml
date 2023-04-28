@@ -26,7 +26,7 @@ jobs:
           echo "LIB_VERSION: ${LIB_VERSION}"
           export PUBSPEC_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
           echo "PUBSPEC_VERSION: ${PUBSPEC_VERSION}"
-          if [ "$LIB_VERSION" != "v${PUBSPEC_VERSION}" ]; then
+          if [ "$LIB_VERSION" != "${PUBSPEC_VERSION}" ]; then
             echo "Version in 'pubspec.yaml' does not match tag.";
             exit 1;
           fi
