@@ -1,13 +1,21 @@
 {
-  "git": {
-    "commitMessage": "chore: release ${version}",
-    "tagName": "${version}"
-  },
   "plugins": {
     "@release-it/conventional-changelog": {
-      "preset": "angular",
       "infile": "CHANGELOG.md",
-      "header": "# Changelog"
+      "header": "# Changelog",
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          {
+            "type": "feat",
+            "section": "Features"
+          },
+          {
+            "type": "fix",
+            "section": "Bug Fixes"
+          }
+        ]
+      }
     },
     "@release-it/bumper": {
       "in": "pubspec.yaml",
