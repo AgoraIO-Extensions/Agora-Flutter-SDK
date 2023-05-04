@@ -74,75 +74,10 @@ class MediaEngineImpl implements MediaEngine {
 
   @override
   Future<void> pushAudioFrame(
-      {required MediaSourceType type,
-      required AudioFrame frame,
-      bool wrap = false,
-      int sourceId = 0}) async {
+      {required AudioFrame frame, int trackId = 0}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_pushAudioFrame';
-    final param = createParams({
-      'type': type.value(),
-      'frame': frame.toJson(),
-      'wrap': wrap,
-      'sourceId': sourceId
-    });
-    final List<Uint8List> buffers = [];
-    buffers.addAll(frame.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> pushCaptureAudioFrame(AudioFrame frame) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_pushCaptureAudioFrame';
-    final param = createParams({'frame': frame.toJson()});
-    final List<Uint8List> buffers = [];
-    buffers.addAll(frame.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> pushReverseAudioFrame(AudioFrame frame) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_pushReverseAudioFrame';
-    final param = createParams({'frame': frame.toJson()});
-    final List<Uint8List> buffers = [];
-    buffers.addAll(frame.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> pushDirectAudioFrame(AudioFrame frame) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_pushDirectAudioFrame';
-    final param = createParams({'frame': frame.toJson()});
+    final param = createParams({'frame': frame.toJson(), 'trackId': trackId});
     final List<Uint8List> buffers = [];
     buffers.addAll(frame.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -209,7 +144,6 @@ class MediaEngineImpl implements MediaEngine {
       {required bool enabled,
       required int sampleRate,
       required int channels,
-      int sourceNumber = 1,
       bool localPlayback = false,
       bool publish = true}) async {
     final apiType =
@@ -218,10 +152,46 @@ class MediaEngineImpl implements MediaEngine {
       'enabled': enabled,
       'sampleRate': sampleRate,
       'channels': channels,
-      'sourceNumber': sourceNumber,
       'localPlayback': localPlayback,
       'publish': publish
     });
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<int> createCustomAudioTrack(
+      {required AudioTrackType trackType,
+      required AudioTrackConfig config}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_createCustomAudioTrack';
+    final param = createParams(
+        {'trackType': trackType.value(), 'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<void> destroyCustomAudioTrack(int trackId) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'MediaEngine'}_destroyCustomAudioTrack';
+    final param = createParams({'trackId': trackId});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -257,29 +227,10 @@ class MediaEngineImpl implements MediaEngine {
 
   @override
   Future<void> enableCustomAudioLocalPlayback(
-      {required int sourceId, required bool enabled}) async {
+      {required int trackId, required bool enabled}) async {
     final apiType =
         '${isOverrideClassName ? className : 'MediaEngine'}_enableCustomAudioLocalPlayback';
-    final param = createParams({'sourceId': sourceId, 'enabled': enabled});
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> setDirectExternalAudioSource(
-      {required bool enable, bool localPlayback = false}) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'MediaEngine'}_setDirectExternalAudioSource';
-    final param =
-        createParams({'enable': enable, 'localPlayback': localPlayback});
+    final param = createParams({'trackId': trackId, 'enabled': enabled});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {

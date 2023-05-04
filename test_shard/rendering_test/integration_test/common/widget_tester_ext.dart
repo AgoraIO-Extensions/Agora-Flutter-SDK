@@ -3,9 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 Future<void> waitFrame(WidgetTester tester) async {
-  await tester.pumpAndSettle(const Duration(seconds: 10));
-  // Need `pumpAndSettle` again since there's a `setState` logic inside the `AgoraVideoView`
-  await tester.pumpAndSettle(const Duration(seconds: 10));
+  // Call `pumpAndSettle` more times to ensure the video rendered
+  for (int i = 0; i < 5; i++) {
+    await tester.pumpAndSettle(const Duration(seconds: 10));
+  }
 }
 
 Future<void> waitDisposed(

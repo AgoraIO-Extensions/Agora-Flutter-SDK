@@ -15,7 +15,7 @@ build() {
   mkdir -p ./build/ios/"$1"
   cd ./build/ios/"$1" || exit
   if [ "$1" = "OS64COMBINED" ]; then
-    archs="armv7 arm64"
+    archs="arm64"
   elif [ "$1" = "SIMULATOR64" ]; then
     archs="x86_64"
     #    archs="arm64 x86_64"

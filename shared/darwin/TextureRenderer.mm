@@ -1,8 +1,10 @@
 #import <Foundation/Foundation.h>
 #import "TextureRenderer.h"
-#import <AgoraRtcWrapper/iris_video_processor_cxx.h>
-#import <AgoraRtcWrapper/iris_rtc_raw_data.h>
-#import <Foundation/Foundation.h>
+#import <AgoraRtcWrapper/iris_rtc_rendering_cxx.h>
+#import <AgoraRtcKit/IAgoraMediaEngine.h>
+#import <AgoraRtcKit/AgoraMediaBase.h>
+
+#import <stdio.h>
 
 using namespace agora::iris;
 
@@ -12,47 +14,53 @@ using namespace agora::iris;
 @property(nonatomic, strong) FlutterMethodChannel *channel;
 @property(nonatomic) CVPixelBufferRef buffer_cache;
 @property(nonatomic, strong) dispatch_semaphore_t lock;
-@property(nonatomic) agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager;
-@property(nonatomic) NSDictionary *cvBufferProperties;
+@property(nonatomic) agora::iris::IrisRtcRendering *irisRtcRendering;
+@property(nonatomic, assign) int delegateId;
+@property(nonatomic, assign) BOOL isDirtyBuffer;
 
 @end
 
 namespace {
-class RendererDelegate : public IrisVideoFrameBufferDelegate {
+class RendererDelegate : public agora::iris::VideoFrameObserverDelegate {
 public:
-  RendererDelegate(void *renderer) : renderer_(renderer) {}
-
-  void OnVideoFrameReceived(const IrisVideoFrame &video_frame,
-                            const IrisVideoFrameBufferConfig *config,
-                            bool resize) override {
+  RendererDelegate(void *renderer) : renderer_(renderer) { }
+    
+  void OnVideoFrameReceived(const void *videoFrame,
+                            const IrisRtcVideoFrameConfig &config, bool resize) override {
     @autoreleasepool {
         TextureRender *renderer = (__bridge TextureRender *)renderer_;
         
-        if (renderer.buffer_cache != NULL && resize) {
-            CVBufferRelease(renderer.buffer_cache);
-            renderer.buffer_cache = NULL;
+        agora::media::base::VideoFrame *vf = (agora::media::base::VideoFrame *)videoFrame;
+        
+        if (vf->width == 0 || vf->height == 0) {
+            return;
         }
         
-        CVPixelBufferRef buffer = renderer.buffer_cache;
-        if (renderer.buffer_cache == NULL) {
-            CVPixelBufferCreate(kCFAllocatorDefault, video_frame.width,
-                                video_frame.height, kCVPixelFormatType_32BGRA,
-                                (__bridge CFDictionaryRef)renderer.cvBufferProperties, &buffer);
-            
-            [renderer.channel invokeMethod:@"onSizeChanged"
-                                 arguments:@{@"width": @(video_frame.width),
-                                             @"height": @(video_frame.height)}];
-        }
-        
-        CVPixelBufferLockBaseAddress(buffer, 0);
-        void *copyBaseAddress = CVPixelBufferGetBaseAddress(buffer);
-        memcpy(copyBaseAddress, video_frame.y_buffer,
-               video_frame.y_buffer_length);
-        CVPixelBufferUnlockBaseAddress(buffer, 0);
-        
-        renderer.buffer_cache = buffer;
 
-        [renderer.textureRegistry textureFrameAvailable:renderer.textureId];
+        CVPixelBufferRef _Nullable pixelBuffer = reinterpret_cast<CVPixelBufferRef>(vf->pixelBuffer);
+        if (pixelBuffer) {
+            if (resize) {
+                [renderer.channel invokeMethod:@"onSizeChanged"
+                                     arguments:@{@"width": @(vf->width),
+                                                 @"height": @(vf->height)}];
+            }
+            
+            dispatch_semaphore_wait(renderer.lock, DISPATCH_TIME_FOREVER);
+            if (!renderer.isDirtyBuffer) {
+                // Ensure the previous retained `CVPixelBufferRef` be released.
+                if (renderer.buffer_cache) {
+                    CVBufferRelease(renderer.buffer_cache);
+                }
+                
+                renderer.buffer_cache = CVPixelBufferRetain(pixelBuffer);
+                renderer.isDirtyBuffer = YES;
+            }
+            dispatch_semaphore_signal(renderer.lock);
+            
+            if (renderer.isDirtyBuffer) {
+                [renderer.textureRegistry textureFrameAvailable:renderer.textureId];
+            }
+        }
     }
   }
 
@@ -71,11 +79,11 @@ public:
 
 - (instancetype) initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
                                messenger:(NSObject<FlutterBinaryMessenger> *)messenger
-                 videoFrameBufferManager:(void *)manager {
+                  irisRtcRenderingHandle:(void *)irisRtcRenderingHandle {
     self = [super init];
     if (self) {
       self.textureRegistry = textureRegistry;
-        self.videoFrameBufferManager = (IrisVideoFrameBufferManager *)manager;
+      self.irisRtcRendering = (agora::iris::IrisRtcRendering *)irisRtcRenderingHandle;
       self.textureId = [self.textureRegistry registerTexture:self];
       self.channel = [FlutterMethodChannel
           methodChannelWithName:
@@ -85,50 +93,48 @@ public:
 
       self.lock = dispatch_semaphore_create(1);
         
-      self.cvBufferProperties = @{
-          (__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA),
-          (__bridge NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{},
-          (__bridge NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
-          (__bridge NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
-        };
-        
       self.delegate = new ::RendererDelegate((__bridge void *)self);
+      self.buffer_cache = NULL;
+      self.isDirtyBuffer = YES;
     }
     return self;
 }
 
-- (void)updateData:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType {
-    IrisVideoFrameBuffer buffer(kVideoFrameTypeBGRA,
-                                      self.delegate, 16);
-    IrisVideoFrameBufferConfig config;
-      
-    config.id = [uid unsignedIntValue];
-    config.type = (IrisVideoSourceType)[videoSourceType intValue];
+- (void)updateData:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType videoViewSetupMode:(NSNumber *)videoViewSetupMode {
+    IrisRtcVideoFrameConfig config;
+    config.video_frame_format = agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_CVPIXEL_NV12;
+    config.uid = [uid unsignedIntValue];
+    config.video_source_type = [videoSourceType intValue];
+    if (channelId && (NSNull *)channelId != [NSNull null]) {
+      strcpy(config.channelId, [channelId UTF8String]);
+    } else {
+      strcpy(config.channelId, "");
+    }
+    config.video_view_setup_mode = [videoViewSetupMode intValue];
     
-      if (channelId && (NSNull *)channelId != [NSNull null]) {
-          strcpy(config.key, [channelId UTF8String]);
-          
-      } else {
-          strcpy(config.key, "");
-      }
-    
-    self.videoFrameBufferManager->EnableVideoFrameBuffer(buffer, &config);
+    self.delegateId = self.irisRtcRendering->AddVideoFrameObserverDelegate(config, self.delegate);
 }
 
 - (void)dispose {
-    self.videoFrameBufferManager->DisableVideoFrameBuffer(self.delegate);
+    self.irisRtcRendering->RemoveVideoFrameObserverDelegate(self.delegateId);
     if (self.delegate) {
         delete self.delegate;
+        self.delegate = NULL;
     }
     [self.textureRegistry unregisterTexture:self.textureId];
-    if (self.buffer_cache) {
+    if (self.isDirtyBuffer) {
       CVPixelBufferRelease(self.buffer_cache);
       self.buffer_cache = NULL;
     }
 }
 
 - (CVPixelBufferRef _Nullable)copyPixelBuffer {
-    return CVPixelBufferRetain(self.buffer_cache);
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    CVPixelBufferRef buffer_temp = CVPixelBufferRetain(self.buffer_cache);
+    self.isDirtyBuffer = NO;
+    dispatch_semaphore_signal(self.lock);
+    
+    return buffer_temp;
 }
 
 - (void)onTextureUnregistered:(NSObject<FlutterTexture> *)texture {

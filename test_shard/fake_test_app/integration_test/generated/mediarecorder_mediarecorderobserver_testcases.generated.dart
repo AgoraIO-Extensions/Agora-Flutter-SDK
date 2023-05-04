@@ -10,49 +10,43 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onRecorderStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaRecorder = rtcEngine.getMediaRecorder();
+      final mediaRecorder = (await rtcEngine.createMediaRecorder(
+          RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       final onRecorderStateChangedCompleter = Completer<bool>();
       final theMediaRecorderObserver = MediaRecorderObserver(
-        onRecorderStateChanged: (RecorderState state, RecorderErrorCode error) {
+        onRecorderStateChanged: (String channelId, int uid, RecorderState state,
+            RecorderErrorCode error) {
           onRecorderStateChangedCompleter.complete(true);
         },
       );
 
-      const String connectionChannelId = "hello";
-      const int connectionLocalUid = 10;
-      const RtcConnection connection = RtcConnection(
-        channelId: connectionChannelId,
-        localUid: connectionLocalUid,
-      );
-
       await mediaRecorder.setMediaRecorderObserver(
-        connection: connection,
-        callback: theMediaRecorderObserver,
+        theMediaRecorderObserver,
       );
 
 // Delay 500 milliseconds to ensure the setMediaRecorderObserver call completed.
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
+        const String channelId = "hello";
+        const int uid = 10;
         const RecorderState state = RecorderState.recorderStateError;
         const RecorderErrorCode error = RecorderErrorCode.recorderErrorNone;
 
         final eventJson = {
+          'channelId': channelId,
+          'uid': uid,
           'state': state.value(),
           'error': error.value(),
         };
@@ -68,7 +62,7 @@ void generatedTestCases() {
 // Delay 500 milliseconds to ensure the  call completed.
       await Future.delayed(const Duration(milliseconds: 500));
 
-      await mediaRecorder.release();
+      await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
@@ -77,41 +71,32 @@ void generatedTestCases() {
   testWidgets(
     'onRecorderInfoUpdated',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaRecorder = rtcEngine.getMediaRecorder();
+      final mediaRecorder = (await rtcEngine.createMediaRecorder(
+          RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       final onRecorderInfoUpdatedCompleter = Completer<bool>();
       final theMediaRecorderObserver = MediaRecorderObserver(
-        onRecorderInfoUpdated: (RecorderInfo info) {
+        onRecorderInfoUpdated: (String channelId, int uid, RecorderInfo info) {
           onRecorderInfoUpdatedCompleter.complete(true);
         },
       );
 
-      const String connectionChannelId = "hello";
-      const int connectionLocalUid = 10;
-      const RtcConnection connection = RtcConnection(
-        channelId: connectionChannelId,
-        localUid: connectionLocalUid,
-      );
-
       await mediaRecorder.setMediaRecorderObserver(
-        connection: connection,
-        callback: theMediaRecorderObserver,
+        theMediaRecorderObserver,
       );
 
 // Delay 500 milliseconds to ensure the setMediaRecorderObserver call completed.
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
+        const String channelId = "hello";
+        const int uid = 10;
         const String infoFileName = "hello";
         const int infoDurationMs = 10;
         const int infoFileSize = 10;
@@ -122,6 +107,8 @@ void generatedTestCases() {
         );
 
         final eventJson = {
+          'channelId': channelId,
+          'uid': uid,
           'info': info.toJson(),
         };
 
@@ -136,7 +123,7 @@ void generatedTestCases() {
 // Delay 500 milliseconds to ensure the  call completed.
       await Future.delayed(const Duration(milliseconds: 500));
 
-      await mediaRecorder.release();
+      await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),

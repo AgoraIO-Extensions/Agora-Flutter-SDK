@@ -2,7 +2,7 @@
 #import "VideoViewController.h"
 #import "TextureRenderer.h"
 #import <AgoraRtcWrapper/iris_engine_base.h>
-#import <AgoraRtcWrapper/iris_video_processor_cxx.h>
+#import <AgoraRtcWrapper/iris_rtc_rendering_cxx.h>
 
 @interface VideoViewController ()
 @property(nonatomic, weak) NSObject<FlutterTextureRegistry> *textureRegistry;
@@ -44,29 +44,22 @@
 - (void)onMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
   if ([@"createTextureRender" isEqualToString:call.method]) {
       NSDictionary *data = call.arguments;
-      NSNumber *videoFrameBufferManagerNativeHandle = data[@"videoFrameBufferManagerNativeHandle"];
+      NSNumber *irisRtcRenderingHandle = data[@"irisRtcRenderingHandle"];
       NSNumber *uid = data[@"uid"];
       NSString *channelId = data[@"channelId"];
       NSNumber *videoSourceType = data[@"videoSourceType"];
+      NSNumber *videoViewSetupMode = data[@"videoViewSetupMode"];
 
-      int64_t textureId = [self createTextureRender:(intptr_t)[videoFrameBufferManagerNativeHandle longLongValue]
+      int64_t textureId = [self createTextureRender:(intptr_t)[irisRtcRenderingHandle longLongValue]
                                                 uid:uid
                                           channelId:channelId
-                                    videoSourceType:videoSourceType];
+                                    videoSourceType:videoSourceType
+                                 videoViewSetupMode:videoViewSetupMode];
       result(@(textureId));
   } else if ([@"destroyTextureRender" isEqualToString:call.method]) {
       NSNumber *textureIdValue = call.arguments;
       BOOL success = [self destroyTextureRender: [textureIdValue longLongValue]];
       result(@(success));
-  } else if ([@"updateTextureRenderData" isEqualToString:call.method]) {
-      NSDictionary *data = call.arguments;
-      int64_t textureId = [data[@"uid"] longLongValue];
-      NSNumber *uid = data[@"uid"];
-      NSString *channelId = data[@"channelId"];
-      NSNumber *videoSourceType = data[@"videoSourceType"];
-      
-      [self updateTextureRenderData:textureId uid:uid channelId:channelId  videoSourceType:videoSourceType];
-      result(@(YES));
   }
 }
 
@@ -78,23 +71,20 @@
     return true;
 }
 
-- (int64_t)createTextureRender:(intptr_t)videoFrameBufferManagerIntPtr
+- (int64_t)createTextureRender:(intptr_t)irisRtcRenderingHandle
                            uid:(NSNumber *)uid
                      channelId:(NSString *)channelId
-               videoSourceType:(NSNumber *)videoSourceType {
-    agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager = reinterpret_cast<agora::iris::IrisVideoFrameBufferManager *>(videoFrameBufferManagerIntPtr);
+               videoSourceType:(NSNumber *)videoSourceType
+            videoViewSetupMode:(NSNumber *)videoViewSetupMode {
+    agora::iris::IrisRtcRendering *irisRtcRendering = reinterpret_cast<agora::iris::IrisRtcRendering *>(irisRtcRenderingHandle);
     TextureRender *textureRender = [[TextureRender alloc]
         initWithTextureRegistry:self.textureRegistry
                       messenger:self.messenger
-                       videoFrameBufferManager:videoFrameBufferManager];
+         irisRtcRenderingHandle:irisRtcRendering];
     int64_t textureId = [textureRender textureId];
-    [textureRender updateData:uid channelId:channelId videoSourceType:videoSourceType];
+    [textureRender updateData:uid channelId:channelId videoSourceType:videoSourceType videoViewSetupMode:videoViewSetupMode];
     self.textureRenders[@(textureId)] = textureRender;
     return textureId;
-}
-
-- (void)updateTextureRenderData:(int64_t)textureId uid:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType {
-    [self.textureRenders[@(textureId)] updateData:uid channelId:channelId videoSourceType:videoSourceType];
 }
 
 - (BOOL)destroyTextureRender:(int64_t)textureId {

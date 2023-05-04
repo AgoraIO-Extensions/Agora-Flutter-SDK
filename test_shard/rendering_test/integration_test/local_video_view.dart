@@ -33,6 +33,7 @@ class _LocalVideoViewState extends State<LocalVideoView> {
   late final MediaPlayerController mediaPlayerController;
   late final MediaPlayerVideoFrameObserver observer;
   late final MediaPlayerSourceObserver mediaPlayerSourceObserver;
+  bool _isOnFrameCalled = false;
 
   @override
   void initState() {

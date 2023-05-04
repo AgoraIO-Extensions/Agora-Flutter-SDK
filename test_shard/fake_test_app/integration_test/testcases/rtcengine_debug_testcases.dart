@@ -13,10 +13,6 @@ void testCases() {
   testWidgets(
     'startDumpVideo/stopDumpVideo fake test',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 

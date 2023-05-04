@@ -35,7 +35,7 @@ if [[ ${PLATFORM} == "Android" ]];then
             mkdir -p "${IRIS_TESTER_PATH}/android/libs/${ABI}"
         fi
 
-        cp -RP "${UNZIP_PATH}/ALL_ARCHITECTURE/Release/${ABI}/libIrisDebugger.so" "${IRIS_TESTER_PATH}/android/libs/${ABI}/libIrisDebugger.so"
+        cp -RP "${UNZIP_PATH}/Debugger/ALL_ARCHITECTURE/${ABI}/libIrisDebugger.so" "${IRIS_TESTER_PATH}/android/libs/${ABI}/libIrisDebugger.so"
 
         ls ${IRIS_TESTER_PATH}/android/libs/${ABI}/
     done;
@@ -44,15 +44,16 @@ if [[ ${PLATFORM} == "Android" ]];then
 fi
 
 if [[ ${PLATFORM} == "MAC" ]];then
-    cp -RP "${UNZIP_PATH}/MAC/Release/Release/IrisDebugger.framework" "${IRIS_TESTER_PATH}/macos/"
+    cp -RP "${UNZIP_PATH}/Debugger/MAC/IrisDebugger.framework" "${IRIS_TESTER_PATH}/macos/"
 fi
 
 if [[ ${PLATFORM} == "iOS" ]];then
-    cp -RP "${UNZIP_PATH}/ALL_ARCHITECTURE/Release/Release/IrisDebugger.xcframework" "${IRIS_TESTER_PATH}/ios/"
+    cp -RP "${UNZIP_PATH}/Debugger/ALL_ARCHITECTURE/IrisDebugger.xcframework" "${IRIS_TESTER_PATH}/ios/"
 fi
 
 if [[ ${PLATFORM} == "Windows" ]];then
-    cp -RP "${UNZIP_PATH}/x64/Release/Release/IrisDebugger.dll" "${IRIS_TESTER_PATH}/windows/IrisDebugger.dll"
+    cp -RP "${UNZIP_PATH}/Debugger/x64/IrisDebugger.dll" "${IRIS_TESTER_PATH}/windows/IrisDebugger.dll"
+    cp -RP "${UNZIP_PATH}/Debugger/x64/IrisDebugger.lib" "${IRIS_TESTER_PATH}/windows/IrisDebugger.lib"
 fi
 
 # pushd ${UNZIP_PATH}

@@ -17,16 +17,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -45,6 +41,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       eventPrefixOverride: 'RtcEngineEventHandlerEx',
       registerFunctionName: 'registerEventHandler',
       unregisterFunctionName: 'unregisterEventHandler',
+      skipMemberFunctions: [
+        'onFacePositionChanged',
+      ],
     ),
     EventHandlerTemplatedTestCase(
       callerObjClassName: 'RtcEngine',
@@ -60,16 +59,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -87,7 +82,6 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       outputDir: outputDir,
       registerFunctionName: 'registerAudioEncodedFrameObserver',
       unregisterFunctionName: 'unregisterAudioEncodedFrameObserver',
-      isUpperFirstCaseOfEventName: true,
     ),
     EventHandlerTemplatedTestCase(
       callerObjClassName: 'RtcEngine',
@@ -103,16 +97,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -145,16 +135,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -187,16 +173,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -230,16 +212,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -273,16 +251,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -316,16 +290,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -361,16 +331,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -394,7 +360,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
     ),
     EventHandlerTemplatedTestCase(
       callerObjClassName: 'MediaPlayer',
-      className: 'MediaPlayerAudioFrameObserver',
+      className: 'AudioPcmFrameSink',
       testCaseFileTemplate: '''
 $defaultHeader
 
@@ -406,16 +372,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -451,16 +413,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -496,27 +454,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaRecorder = rtcEngine.getMediaRecorder();
+      final mediaRecorder = (await rtcEngine.createMediaRecorder(
+        RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       {{TEST_CASE_BODY}}
 
-      await mediaRecorder.release();
+      await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
   },
   timeout: const Timeout(Duration(minutes: 1)),
@@ -541,16 +496,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   {{TEST_CASES_CONTENT}} 
 }
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',

@@ -174,8 +174,11 @@ class MediaPlayerControllerImpl
   }
 
   @override
-  void registerAudioFrameObserver(MediaPlayerAudioFrameObserver observer) {
-    _mediaPlayer?.registerAudioFrameObserver(observer);
+  void registerAudioFrameObserver(
+      {required AudioPcmFrameSink observer,
+      RawAudioFrameOpModeType mode =
+          RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly}) {
+    _mediaPlayer?.registerAudioFrameObserver(observer: observer, mode: mode);
   }
 
   @override
@@ -308,7 +311,7 @@ class MediaPlayerControllerImpl
   }
 
   @override
-  void unregisterAudioFrameObserver(MediaPlayerAudioFrameObserver observer) {
+  void unregisterAudioFrameObserver(AudioPcmFrameSink observer) {
     _mediaPlayer?.unregisterAudioFrameObserver(observer);
   }
 
@@ -349,12 +352,9 @@ class MediaPlayerControllerImpl
 
   @override
   Future<int> createTextureRender(
-      int uid, String channelId, int videoSourceType) {
+      int uid, String channelId, int videoSourceType, int videoViewSetupMode) {
     return super.createTextureRender(
-      getMediaPlayerId(),
-      channelId,
-      videoSourceType,
-    );
+        getMediaPlayerId(), channelId, videoSourceType, videoViewSetupMode);
   }
 
   @override

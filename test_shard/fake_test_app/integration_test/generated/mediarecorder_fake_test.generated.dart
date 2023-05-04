@@ -13,10 +13,6 @@ void mediaRecorderSmokeTestCases() {
   testWidgets(
     'setMediaRecorderObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -26,23 +22,18 @@ void mediaRecorderSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaRecorder = rtcEngine.getMediaRecorder();
+      final mediaRecorder = (await rtcEngine.createMediaRecorder(
+          RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
         final MediaRecorderObserver callback = MediaRecorderObserver(
-          onRecorderStateChanged:
-              (RecorderState state, RecorderErrorCode error) {},
-          onRecorderInfoUpdated: (RecorderInfo info) {},
+          onRecorderStateChanged: (String channelId, int uid,
+              RecorderState state, RecorderErrorCode error) {},
+          onRecorderInfoUpdated:
+              (String channelId, int uid, RecorderInfo info) {},
         );
         await mediaRecorder.setMediaRecorderObserver(
-          connection: connection,
-          callback: callback,
+          callback,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -56,7 +47,7 @@ void mediaRecorderSmokeTestCases() {
         }
       }
 
-      await mediaRecorder.release();
+      await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
     },
 //  skip: !(),
@@ -65,10 +56,6 @@ void mediaRecorderSmokeTestCases() {
   testWidgets(
     'startRecording',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -78,15 +65,10 @@ void mediaRecorderSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaRecorder = rtcEngine.getMediaRecorder();
+      final mediaRecorder = (await rtcEngine.createMediaRecorder(
+          RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
         const MediaRecorderContainerFormat configContainerFormat =
             MediaRecorderContainerFormat.formatMp4;
         const MediaRecorderStreamType configStreamType =
@@ -102,8 +84,7 @@ void mediaRecorderSmokeTestCases() {
           recorderInfoUpdateInterval: configRecorderInfoUpdateInterval,
         );
         await mediaRecorder.startRecording(
-          connection: connection,
-          config: config,
+          config,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -117,7 +98,7 @@ void mediaRecorderSmokeTestCases() {
         }
       }
 
-      await mediaRecorder.release();
+      await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
     },
 //  skip: !(),
@@ -126,10 +107,6 @@ void mediaRecorderSmokeTestCases() {
   testWidgets(
     'stopRecording',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -139,18 +116,11 @@ void mediaRecorderSmokeTestCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaRecorder = rtcEngine.getMediaRecorder();
+      final mediaRecorder = (await rtcEngine.createMediaRecorder(
+          RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
 
       try {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
-        await mediaRecorder.stopRecording(
-          connection,
-        );
+        await mediaRecorder.stopRecording();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[stopRecording] error: ${e.toString()}');
@@ -163,45 +133,7 @@ void mediaRecorderSmokeTestCases() {
         }
       }
 
-      await mediaRecorder.release();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'release',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaRecorder = rtcEngine.getMediaRecorder();
-
-      try {
-        await mediaRecorder.release();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[release] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaRecorder.release();
+      await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
     },
 //  skip: !(),

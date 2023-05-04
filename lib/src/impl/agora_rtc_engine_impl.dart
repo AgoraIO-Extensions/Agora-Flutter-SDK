@@ -44,6 +44,29 @@ import 'global_video_view_controller.dart';
 
 // ignore_for_file: public_member_api_docs
 
+int? _mockRtcEngineNativeHandle;
+@visibleForTesting
+void setMockRtcEngineNativeHandle(int? mockRtcEngineNativeHandle) {
+  assert(() {
+    _mockRtcEngineNativeHandle = mockRtcEngineNativeHandle;
+    return true;
+  }());
+}
+
+// In 64-bits system, the native handle ptr value (unsigned long 64) can be 2^64 - 1,
+// which may greater than the dart int max value (2^63 - 1), so we can not decode
+// the json with big int native handle ptr value and parse it directly.
+//
+// After dart sdk 2.0 support parse hexadecimal in unsigned int64 range.
+// https://github.com/dart-lang/language/blob/ee1135e0c22391cee17bf3ee262d6a04582d25de/archive/newsletter/20170929.md#semantics
+//
+// So we retrive the native handle ptr value from the json string directly, and
+// parse an int from hexadecimal here.
+int _string2IntPtr(String stringPtr) {
+  BigInt nativeHandleBI = BigInt.parse(stringPtr);
+  return int.parse('0x${nativeHandleBI.toRadixString(16)}');
+}
+
 extension RtcEngineExt on RtcEngine {
   GlobalVideoViewController get globalVideoViewController =>
       (this as RtcEngineImpl)._globalVideoViewController!;
@@ -190,7 +213,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   static RtcEngineEx create({IrisMethodChannel? irisMethodChannel}) {
     if (_instance != null) return _instance!;
 
-    _instance = RtcEngineImpl._(irisMethodChannel ?? IrisMethodChannel());
+    _instance = RtcEngineImpl._(irisMethodChannel ??
+        IrisMethodChannel(IrisApiEngineNativeBindingDelegateProvider()));
 
     return _instance!;
   }
@@ -214,9 +238,9 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
               .provideNativeBindingDelegate()
           as NativeIrisApiEngineBindingsDelegate;
       nativeBindingDelegate.initialize();
-      nativeBindingDelegate.binding.FreeIrisVideoFrameBufferManager(
+      nativeBindingDelegate.binding.FreeIrisRtcRendering(
           ffi.Pointer.fromAddress(
-              _globalVideoViewController!.videoFrameBufferManagerIntPtr));
+              _globalVideoViewController!.irisRtcRenderingHandle));
 
       return true;
     }());
@@ -242,8 +266,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       externalFilesDir = androidInitResult['externalFilesDir'] ?? '';
     }
 
-    await irisMethodChannel
-        .initilize(IrisApiEngineNativeBindingDelegateProvider());
+    List<int> args = [];
+    assert(() {
+      if (_mockRtcEngineNativeHandle != null) {
+        args.add(_mockRtcEngineNativeHandle!);
+      }
+      return true;
+    }());
+
+    await irisMethodChannel.initilize(args);
+    await _initializeInternal(context);
+
     await super.initialize(context);
 
     await irisMethodChannel.invokeMethod(IrisMethodCall(
@@ -260,8 +293,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
             '[RtcEngine] setLogFile fail, make sure the permission is granted.');
       }
     }
-
-    await _initializeInternal(context);
 
     _rtcEngineState.isInitialzed = true;
     _isReleased = false;
@@ -300,6 +331,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await _globalVideoViewController!
         .detachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
     _globalVideoViewController = null;
+
+    await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
     await super.release(sync: sync);
 
@@ -342,13 +375,13 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
-  Future<MediaPlayer> createMediaPlayer() async {
+  Future<MediaPlayer?> createMediaPlayer() async {
     const apiType = 'RtcEngine_createMediaPlayer';
     final param = createParams({});
     final callApiResult = await irisMethodChannel
         .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
     if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+      return null;
     }
     final rm = callApiResult.data;
     final result = rm['result'];
@@ -610,13 +643,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
-  MediaRecorder getMediaRecorder() {
-    return _objectPool.putIfAbsent<media_recorder_impl.MediaRecorderImpl>(
-        const TypedScopedKey(MediaRecorderImpl),
-        () => media_recorder_impl.MediaRecorderImpl.create(irisMethodChannel));
-  }
-
-  @override
   LocalSpatialAudioEngine getLocalSpatialAudioEngine() {
     return _objectPool
         .putIfAbsent<agora_spatial_audio_impl.LocalSpatialAudioEngineImpl>(
@@ -707,18 +733,15 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
-  Future<void> startEchoTest({int intervalInSeconds = 10}) async {
-    const apiType = 'RtcEngine_startEchoTest2';
-    final param = createParams({'intervalInSeconds': intervalInSeconds});
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
+  Future<void> startEchoTest(EchoTestConfiguration config) async {
+    const apiType = 'RtcEngine_startEchoTest3';
+    final param = createParams({'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
     }
   }
 
@@ -986,36 +1009,105 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     final nativeHandleIntPtr =
         resultStr.substring(resultStr.indexOf(':') + 1, resultStr.length - 1);
 
-    BigInt nativeHandleBI = BigInt.parse(nativeHandleIntPtr);
-    int nativeHandleBIHexInt =
-        int.parse('0x${nativeHandleBI.toRadixString(16)}');
+    int nativeHandleBIHexInt = _string2IntPtr(nativeHandleIntPtr);
 
     return nativeHandleBIHexInt;
+  }
+
+  @override
+  Future<MediaRecorder?> createMediaRecorder(RecorderStreamInfo info) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_createMediaRecorder';
+    final param = createParams({'info': info.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(info.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return media_recorder_impl.MediaRecorderImpl.fromNativeHandle(
+        irisMethodChannel, result);
+  }
+
+  @override
+  Future<void> destroyMediaRecorder(MediaRecorder mediaRecorder) async {
+    final impl = mediaRecorder as media_recorder_impl.MediaRecorderImpl;
+
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_destroyMediaRecorder';
+    final param = createParams({'nativeHandle': impl.strNativeHandle});
+    await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+  }
+
+  @override
+  Future<void> startScreenCaptureBySourceType(
+      {required VideoSourceType sourceType,
+      required ScreenCaptureConfiguration config}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture2';
+    final param = createParams(
+        {'sourceType': sourceType.value(), 'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCapture2';
+    final param = createParams({'sourceType': sourceType.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
   }
 
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported
   Future<void> startDumpVideo(int type, String dir) async {
-    await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'StartDumpVideo',
-      jsonEncode({
-        'nativeHandle':
-            _globalVideoViewController!.videoFrameBufferManagerIntPtr,
-        'type': type,
-        'dir': dir,
-      }),
-    ));
+    await setParameters(
+        "{\"engine.video.enable_video_dump\":{\"mode\": 0, \"enable\": true");
+
+    // await irisMethodChannel.invokeMethod(IrisMethodCall(
+    //   'StartDumpVideo',
+    //   jsonEncode({
+    //     'nativeHandle': _globalVideoViewController!.irisRtcRenderingHandle,
+    //     'type': type,
+    //     'dir': dir,
+    //   }),
+    // ));
   }
 
   Future<void> stopDumpVideo() async {
-    await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'StopDumpVideo',
-      jsonEncode({
-        'nativeHandle':
-            _globalVideoViewController!.videoFrameBufferManagerIntPtr
-      }),
-    ));
+    await setParameters(
+        "{\"engine.video.enable_video_dump\":{\"mode\": 0, \"enable\": false");
+
+    // await irisMethodChannel.invokeMethod(IrisMethodCall(
+    //   'StopDumpVideo',
+    //   jsonEncode(
+    //       {'nativeHandle': _globalVideoViewController!.irisRtcRenderingHandle}),
+    // ));
   }
 
   //////////////////////////

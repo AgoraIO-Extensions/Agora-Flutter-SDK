@@ -120,6 +120,7 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     buffers.add(frame.buffer ?? Uint8List.fromList([]));
     buffers.add(Uint8List.fromList([]));
     buffers.add(frame.metadataBuffer ?? Uint8List.fromList([]));
+    buffers.add(frame.alphaBuffer ?? Uint8List.fromList([]));
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
 

@@ -12,20 +12,24 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed
 set(PLUGIN_NAME "agora_rtc_engine_plugin")
 
-set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.1.0_DCG_Windows_Video_20221220_0216.zip")
-set(IRIS_SDK_DOWNLOAD_NAME "iris_4.1.0_DCG_Windows")
+set(IRIS_SDK_DOWNLOAD_URL "https://download.agora.io/sdk/release/iris_4.2.0-dev.13_DCG_Windows_Video_20230426_0712.zip")
+set(IRIS_SDK_DOWNLOAD_NAME "iris_4.2.0-dev.13_DCG_Windows")
 set(RTC_SDK_DOWNLOAD_NAME "Agora_Native_SDK_for_Windows_FULL")
 set(IRIS_SDK_VERSION "v3_6_2_fix.1")
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+
 set(IRIS_DOWNLOAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/iris")
 
 set(IRIS_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/x64")
 set(IRIS_SDK_BIN_PATH "${IRIS_SDK_PATH}/Release")
-set(RTC_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/DCG")
-set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/${RTC_SDK_DOWNLOAD_NAME}/sdk/x86_64")
+set(RTC_SDK_PATH "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/DCG/${RTC_SDK_DOWNLOAD_NAME}/sdk")
+set(RTC_SDK_BIN_PATH "${RTC_SDK_PATH}/x86_64")
+
+message("RTC_SDK_PATH: ${RTC_SDK_PATH}")
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.plugin_dev")
     # Download and extract the SDK binary distribution (executes DownloadSDK.cmake).
@@ -63,8 +67,9 @@ target_compile_definitions(${PLUGIN_NAME} PRIVATE FLUTTER_PLUGIN_IMPL)
 target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
   PRIVATE
-  "${IRIS_SDK_PATH}/include"
-  )
+  "${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/include"
+)
+
 target_link_libraries(${PLUGIN_NAME} PRIVATE
   flutter
   flutter_wrapper_plugin
@@ -87,6 +92,13 @@ foreach (RTC_LIB ${RTC_LIBS})
 
     list(APPEND BUNDLED_LIBRARIES ${RTC_LIB})
 endforeach (RTC_LIB ${RTC_LIBS})
+
+message("include dir: ${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/include")
+file(GLOB HEADERS ${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/include/*.h)
+foreach (HEADER ${HEADERS})
+    message("Dir: ${IRIS_DOWNLOAD_PATH}/${IRIS_SDK_DOWNLOAD_NAME}/include")
+    message("Header: ${HEADER}")
+endforeach (HEADER ${HEADERS})
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an

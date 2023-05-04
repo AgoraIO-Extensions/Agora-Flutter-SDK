@@ -14,7 +14,7 @@ build() {
   cd "$root_path" || exit
   mkdir -p ./build/mac/"$1"
   cd ./build/mac/"$1" || exit
-  archs="arm64 x86_64"
+  archs="x86_64"
   cmake \
     -G "Xcode" \
     -DCMAKE_TOOLCHAIN_FILE="$root_path"/cmake/ios.toolchain.cmake \

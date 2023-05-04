@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/src/agora_base.dart';
+import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
@@ -126,6 +127,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     int uid,
     String channelId,
     int videoSourceType,
+    int videoViewSetupMode,
   ) async {
     if (_isCreatedRender) {
       return _textureId;
@@ -135,6 +137,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       uid,
       channelId,
       videoSourceType,
+      videoViewSetupMode,
     );
 
     _isCreatedRender = true;
@@ -151,6 +154,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
           canvas.uid!,
           connection?.channelId ?? '',
           canvas.sourceType?.value() ?? getVideoSourceType(),
+          canvas.setupMode?.value() ??
+              VideoViewSetupMode.videoViewSetupReplace.value(),
         );
       }
     } else {}

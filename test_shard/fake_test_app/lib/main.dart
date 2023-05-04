@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-    @override
+  @override
   void initState() {
     super.initState();
 
@@ -80,25 +80,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _init() async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+    // final irisTester = IrisTester();
+    // final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+    // setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
+    // String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+    //     defaultValue: '<YOUR_APP_ID>');
 
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
+    // RtcEngine rtcEngine = createAgoraRtcEngine();
+    // await rtcEngine.initialize(RtcEngineContext(
+    //   appId: engineAppId,
+    //   areaCode: AreaCode.areaCodeGlob.value(),
+    // ));
 
-      final audioDeviceManager = rtcEngine.getAudioDeviceManager();
+    // final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
-      await audioDeviceManager.getRecordingDefaultDevice();
+    // await audioDeviceManager.getRecordingDefaultDevice();
 
-      await audioDeviceManager.release();
-      await rtcEngine.release();
+    // await audioDeviceManager.release();
+    // await rtcEngine.release();
   }
 
   @override

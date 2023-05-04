@@ -16,7 +16,7 @@ class _State extends State<MediaPlayer> {
   late final RtcEngineEx _engine;
   bool _isReadyPreview = false;
 
-  late final MediaPlayerController _mediaPlayerController;
+  late MediaPlayerController _mediaPlayerController;
 
   late final TextEditingController _textEditingController;
 
@@ -65,6 +65,8 @@ class _State extends State<MediaPlayer> {
 
   Future<void> _initEngine() async {
     _engine = createAgoraRtcEngineEx();
+    _mediaPlayerController = MediaPlayerController(
+        rtcEngine: _engine, canvas: const VideoCanvas(uid: 0));
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,

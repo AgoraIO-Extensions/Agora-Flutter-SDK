@@ -7,7 +7,6 @@ import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
 
 void testCases() {
-
   testWidgets(
     'registerAudioFrameObserver smoke test',
     (WidgetTester tester) async {
@@ -40,15 +39,14 @@ void testCases() {
           .registerPlayerSourceObserver(mediaPlayerSourceObserver);
 
       Completer<bool>? eventCalledCompleter = Completer();
-      final MediaPlayerAudioFrameObserver observer =
-          MediaPlayerAudioFrameObserver(
+      final AudioPcmFrameSink observer = AudioPcmFrameSink(
         onFrame: (AudioPcmFrame frame) {
           if (eventCalledCompleter == null) return;
           eventCalledCompleter.complete(true);
         },
       );
       mediaPlayerController.registerAudioFrameObserver(
-        observer,
+        observer: observer,
       );
 
       await rtcEngine.enableVideo();

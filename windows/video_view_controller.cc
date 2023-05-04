@@ -8,8 +8,6 @@
 #include <mutex>
 
 #include <iris_rtc_c_api.h>
-#include "iris_rtc_raw_data.h"
-#include "iris_video_processor_cxx.h"
 
 template <typename T>
 static bool GetValueFromEncodableMap(const flutter::EncodableMap *map,
@@ -60,10 +58,10 @@ void VideoViewController::HandleMethodCall(
       return;
     }
 
-    intptr_t videoFrameBufferManagerNativeHandle;
-    if (!GetValueFromEncodableMap(arguments, "videoFrameBufferManagerNativeHandle", videoFrameBufferManagerNativeHandle))
+    intptr_t irisRtcRenderingHandle;
+    if (!GetValueFromEncodableMap(arguments, "irisRtcRenderingHandle", irisRtcRenderingHandle))
     {
-      result->Error("Invalid arguments", "No videoFrameBufferManagerNativeHandle provided.");
+      result->Error("Invalid arguments", "No irisRtcRenderingHandle provided.");
       return;
     }
 
@@ -95,7 +93,14 @@ void VideoViewController::HandleMethodCall(
       return;
     }
 
-    auto textureId = CreateTextureRender(videoFrameBufferManagerNativeHandle, static_cast<unsigned int>(uid), channelId, videoSourceType);
+    int32_t videoViewSetupMode;
+    if (!GetValueFromEncodableMap(arguments, "videoViewSetupMode", videoViewSetupMode))
+    {
+      result->Error("Invalid arguments", "No videoViewSetupMode provided.");
+      return;
+    }
+
+    auto textureId = CreateTextureRender(irisRtcRenderingHandle, static_cast<unsigned int>(uid), channelId, videoSourceType, videoViewSetupMode);
 
     result->Success(flutter::EncodableValue(textureId));
   }
@@ -128,19 +133,20 @@ bool VideoViewController::DestroyPlatformRender(int64_t platformRenderId)
 }
 
 int64_t VideoViewController::CreateTextureRender(
-    const intptr_t &videoFrameBufferManagerNativeHandle,
+    const intptr_t &irisRtcRenderingHandle,
     unsigned int uid,
     const std::string &channelId,
-    unsigned int videoSourceType)
+    unsigned int videoSourceType,
+    unsigned int videoViewSetupMode)
 {
-  agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager = reinterpret_cast<agora::iris::IrisVideoFrameBufferManager *>(videoFrameBufferManagerNativeHandle);
+  agora::iris::IrisRtcRendering *iris_rtc_rendering = reinterpret_cast<agora::iris::IrisRtcRendering *>(irisRtcRenderingHandle);
   std::unique_ptr<TextureRender> textureRender = std::make_unique<TextureRender>(
       messenger_,
       texture_registrar_,
-      videoFrameBufferManager);
+      iris_rtc_rendering);
   int64_t texture_id = textureRender->texture_id();
 
-  textureRender.get()->UpdateData(uid, channelId, videoSourceType);
+  textureRender.get()->UpdateData(uid, channelId, videoSourceType, videoViewSetupMode);
 
   renderers_[texture_id] = std::move(textureRender);
   return texture_id;
@@ -151,6 +157,7 @@ bool VideoViewController::DestroyTextureRender(int64_t textureId)
   auto it = renderers_.find(textureId);
   if (it != renderers_.end())
   {
+    it->second->Dispose();
     renderers_.erase(it);
     return true;
   }

@@ -38,8 +38,6 @@ final advanced = [
   {'name': 'Advanced'},
   {'name': 'AudioMixing', 'widget': const AudioMixing()},
   {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
-  // if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-  //   {'name': 'CustomCaptureAudio', 'widget': const CustomCaptureAudio()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'DeviceManager', 'widget': const DeviceManager()},
   {'name': 'JoinMultipleChannel', 'widget': const JoinMultipleChannel()},
@@ -69,15 +67,14 @@ final advanced = [
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'SendMultiCameraStream', 'widget': const SendMultiCameraStream()},
   {'name': 'StartRhythmPlayer', 'widget': const StartRhythmPlayer()},
-  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
-    {
-      'name': 'StartLocalVideoTranscoder',
-      'widget': const StartLocalVideoTranscoder()
-    },
+  {
+    'name': 'StartLocalVideoTranscoder',
+    'widget': const StartLocalVideoTranscoder()
+  },
   {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
   {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
   {'name': 'AudioSpectrum', 'widget': const AudioSpectrum()},
-  {'name': 'MediaRecorder', 'widget': const MediaRecorder()},
+  {'name': 'MediaRecorder', 'widget': const MediaRecorderExample()},
   {'name': 'PushVideoFrame', 'widget': const PushVideoFrame()},
   // {'name': 'PushAudioFrame', 'widget': const PushAudioFrame()},
   {'name': 'PushEncodedVideoFrame', 'widget': const PushEncodedVideoFrame()},
@@ -87,5 +84,6 @@ final advanced = [
   },
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
-  {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
+  if (Platform.isAndroid || Platform.isIOS)
+    {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
 ];
