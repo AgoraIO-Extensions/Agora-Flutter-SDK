@@ -84,7 +84,7 @@ If you have any problems or suggestions regarding the sample projects, feel free
 
 ## How to contribute
 
-To help work on this sdk, please refer to [CONTRIBUTING.md](https://github.com/AgoraIO/agora_rtc_engine/blob/main/CONTRIBUTING.md).
+To help work on this sdk, please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Related resources
 
