@@ -2,10 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
 class FakeIrisMethodChannel extends IrisMethodChannel {
+  FakeIrisMethodChannel(NativeBindingsProvider provider) : super(provider);
   final List<IrisMethodCall> methodCallQueue = [];
 
   @override
-  Future<void> initilize(NativeBindingsProvider provider) async {}
+  Future<InitilizationResult?> initilize(List<int> args) async {
+    return null;
+  }
 
   @override
   Future<CallApiResult> invokeMethod(IrisMethodCall methodCall) async {

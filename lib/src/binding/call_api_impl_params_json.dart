@@ -29,6 +29,19 @@ class VideoDeviceManagerGetCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineQueryCodecCapabilityJson {
+  const RtcEngineQueryCodecCapabilityJson(this.codecInfo);
+
+  @JsonKey(name: 'codecInfo')
+  final List<CodecCapInfo> codecInfo;
+  factory RtcEngineQueryCodecCapabilityJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineQueryCodecCapabilityJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineQueryCodecCapabilityJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineGetExtensionPropertyJson {
   const RtcEngineGetExtensionPropertyJson(this.value);
 
@@ -359,6 +372,18 @@ class MusicContentCenterSearchMusicJson {
       _$MusicContentCenterSearchMusicJsonFromJson(json);
   Map<String, dynamic> toJson() =>
       _$MusicContentCenterSearchMusicJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetCachesJson {
+  const MusicContentCenterGetCachesJson(this.cacheInfo);
+
+  @JsonKey(name: 'cacheInfo')
+  final List<MusicCacheInfo> cacheInfo;
+  factory MusicContentCenterGetCachesJson.fromJson(Map<String, dynamic> json) =>
+      _$MusicContentCenterGetCachesJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetCachesJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

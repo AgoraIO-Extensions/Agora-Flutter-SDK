@@ -14,6 +14,7 @@ abstract class TemplatedTestCase {
     required this.testCaseTemplate,
     required this.outputDir,
     this.outputFileSuffixName = 'testcases',
+    this.skipMemberFunctions = const [],
   });
 
   final String className;
@@ -21,6 +22,7 @@ abstract class TemplatedTestCase {
   final String testCaseTemplate;
   final String outputDir;
   final String outputFileSuffixName;
+  final List<String> skipMemberFunctions;
 }
 
 class MethoCallTemplatedTestCase extends TemplatedTestCase {
@@ -30,7 +32,7 @@ class MethoCallTemplatedTestCase extends TemplatedTestCase {
     required String testCaseTemplate,
     required String outputDir,
     required this.methodInvokeObjectName,
-    this.skipMemberFunctions = const [],
+    List<String> skipMemberFunctions = const [],
     required String outputFileSuffixName,
   }) : super(
           className: className,
@@ -38,10 +40,10 @@ class MethoCallTemplatedTestCase extends TemplatedTestCase {
           testCaseTemplate: testCaseTemplate,
           outputDir: outputDir,
           outputFileSuffixName: outputFileSuffixName,
+          skipMemberFunctions: skipMemberFunctions,
         );
 
   final String methodInvokeObjectName;
-  final List<String> skipMemberFunctions;
 }
 
 class EventHandlerTemplatedTestCase extends TemplatedTestCase {
@@ -56,11 +58,13 @@ class EventHandlerTemplatedTestCase extends TemplatedTestCase {
     required this.registerFunctionName,
     required this.unregisterFunctionName,
     this.isUpperFirstCaseOfEventName = false,
+    List<String> skipMemberFunctions = const [],
   }) : super(
           className: className,
           testCaseFileTemplate: testCaseFileTemplate,
           testCaseTemplate: testCaseTemplate,
           outputDir: outputDir,
+          skipMemberFunctions: skipMemberFunctions,
         );
 
   final String callerObjClassName;
@@ -95,10 +99,26 @@ class TemplatedGenerator extends DefaultGenerator {
         outputFileName =
             '${templated.className.toLowerCase()}_${templated.outputFileSuffixName}.generated.dart';
       } else if (templated is EventHandlerTemplatedTestCase) {
+        late Clazz templatedCallerObjClazz;
+        late Clazz templatedClazz;
+        try {
+          templatedCallerObjClazz =
+              parseResult.getClazz(templated.callerObjClassName)[0];
+        } catch (e) {
+          stderr.writeln(
+              'Can not find the callerObjClassName: ${templated.callerObjClassName}, make sure the class name is correct.');
+        }
+
+        try {
+          templatedClazz = parseResult.getClazz(templated.className)[0];
+        } catch (e) {
+          stderr.writeln(
+              'Can not find the className: ${templated.className}, make sure the class name is correct.');
+        }
         output = _generateEventHandlerCasesWithTemplate(
           parseResult: parseResult,
-          callerObjClazz: parseResult.getClazz(templated.callerObjClassName)[0],
-          eventHandlerClazz: parseResult.getClazz(templated.className)[0],
+          callerObjClazz: templatedCallerObjClazz,
+          eventHandlerClazz: templatedClazz,
           testCaseTemplate: templated.testCaseFileTemplate,
           testCasesContentTemplate: templated.testCaseTemplate,
           callerObjName: templated.callerObjName,
@@ -106,6 +126,7 @@ class TemplatedGenerator extends DefaultGenerator {
           registerFunctionName: templated.registerFunctionName,
           unregisterFunctionName: templated.unregisterFunctionName,
           isUpperFirstCaseOfEventName: templated.isUpperFirstCaseOfEventName,
+          skipMemberFunctions: templated.skipMemberFunctions,
         );
         outputFileName =
             '${templated.callerObjClassName.toLowerCase()}_${templated.className.toLowerCase()}_${templated.outputFileSuffixName}.generated.dart';
@@ -136,6 +157,7 @@ class TemplatedGenerator extends DefaultGenerator {
     required String registerFunctionName,
     required String unregisterFunctionName,
     required bool isUpperFirstCaseOfEventName,
+    List<String> skipMemberFunctions = const [],
   }) {
     // final fields = clazz.fields;
     final eventHandlerName = 'the${eventHandlerClazz.name}';
@@ -167,6 +189,10 @@ class TemplatedGenerator extends DefaultGenerator {
           .join(', ');
 
       String eventName = field.name;
+
+      if (skipMemberFunctions.contains(eventName)) {
+        continue;
+      }
 
       StringBuffer jsonBuffer = StringBuffer();
       StringBuffer pb = StringBuffer();
@@ -277,7 +303,6 @@ await Future.delayed(const Duration(milliseconds: 500));
 
       if (functionName == methodName) {
         StringBuffer pb = StringBuffer();
-
 
         _createParameterInitializedList(
             parseResult, pb, method.parameters, [eventHandlerClazz.name]);

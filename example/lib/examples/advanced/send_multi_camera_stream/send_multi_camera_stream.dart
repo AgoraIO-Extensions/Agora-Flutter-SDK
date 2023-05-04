@@ -38,10 +38,7 @@ class _State extends State<SendMultiCameraStream> {
   }
 
   Future<void> _dispose() async {
-    // await _localVideoController.dispose();
-    await _engine.stopPrimaryCameraCapture();
-    await _engine.stopSecondaryCameraCapture();
-    await _engine.leaveChannel();
+    await _leaveChannel();
     await _engine.release();
   }
 
@@ -101,14 +98,16 @@ class _State extends State<SendMultiCameraStream> {
     await _engine.enableVideo();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
-    await _engine.startPrimaryCameraCapture(CameraCapturerConfiguration(
-      deviceId: _videoDeviceInfos[0].deviceId,
-      format: VideoFormat(
-        width: 640,
-        height: 320,
-        fps: FrameRate.frameRateFps10.value(),
-      ),
-    ));
+    await _engine.startCameraCapture(
+        sourceType: VideoSourceType.videoSourceCameraPrimary,
+        config: CameraCapturerConfiguration(
+          deviceId: _videoDeviceInfos[0].deviceId,
+          format: VideoFormat(
+            width: 640,
+            height: 320,
+            fps: FrameRate.frameRateFps10.value(),
+          ),
+        ));
 
     await _engine.startPreview();
 
@@ -140,11 +139,10 @@ class _State extends State<SendMultiCameraStream> {
     }
   }
 
-  void _leaveChannel() async {
-    await _engine.stopSecondaryCameraCapture();
-    await _engine.stopPrimaryCameraCapture();
+  Future<void> _leaveChannel() async {
+    await _engine.stopCameraCapture(VideoSourceType.videoSourceCameraPrimary);
+    await _engine.stopCameraCapture(VideoSourceType.videoSourceCameraSecondary);
     await _engine.leaveChannel();
-    // setState(() {});
   }
 
   @override
@@ -228,17 +226,20 @@ class _State extends State<SendMultiCameraStream> {
                               !_isStartSecondaryCameraDevice;
 
                           if (_isStartSecondaryCameraDevice) {
-                            _engine.startSecondaryCameraCapture(
-                                CameraCapturerConfiguration(
-                              deviceId: _videoDeviceInfos[1].deviceId,
-                              format: VideoFormat(
-                                width: 640,
-                                height: 320,
-                                fps: FrameRate.frameRateFps10.value(),
-                              ),
-                            ));
+                            _engine.startCameraCapture(
+                                sourceType:
+                                    VideoSourceType.videoSourceCameraSecondary,
+                                config: CameraCapturerConfiguration(
+                                  deviceId: _videoDeviceInfos[1].deviceId,
+                                  format: VideoFormat(
+                                    width: 640,
+                                    height: 320,
+                                    fps: FrameRate.frameRateFps10.value(),
+                                  ),
+                                ));
                           } else {
-                            _engine.stopSecondaryCameraCapture();
+                            _engine.stopCameraCapture(
+                                VideoSourceType.videoSourceCameraSecondary);
                           }
 
                           setState(() {});

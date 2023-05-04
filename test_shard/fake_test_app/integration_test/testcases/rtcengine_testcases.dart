@@ -18,10 +18,6 @@ void testCases() {
   testWidgets(
     'startChannelMediaRelay',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -72,10 +68,6 @@ void testCases() {
   testWidgets(
     'updateChannelMediaRelay',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -126,10 +118,6 @@ void testCases() {
   testWidgets(
     'setLocalAccessPoint',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -192,10 +180,6 @@ void testCases() {
   testWidgets(
     'setSubscribeAudioBlocklist',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -231,10 +215,6 @@ void testCases() {
   testWidgets(
     'setSubscribeAudioAllowlist',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -270,10 +250,6 @@ void testCases() {
   testWidgets(
     'setSubscribeVideoBlocklist',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -309,10 +285,6 @@ void testCases() {
   testWidgets(
     'setSubscribeVideoAllowlist',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -332,6 +304,148 @@ void testCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[setSubscribeVideoAllowlist] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'createMediaRecorder',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaRecorder = await rtcEngine
+          .createMediaRecorder(RecorderStreamInfo(channelId: 'hello', uid: 0));
+
+      await rtcEngine.destroyMediaRecorder(mediaRecorder!);
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'queryCodecCapability',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const int size = 0;
+        await rtcEngine.queryCodecCapability(
+          size,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[queryCodecCapability] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'setHighPriorityUserList',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const List<int> uidList = [1];
+        const int uidNum = 1;
+        const StreamFallbackOptions option =
+            StreamFallbackOptions.streamFallbackOptionDisabled;
+        await rtcEngine.setHighPriorityUserList(
+          uidList: uidList,
+          uidNum: uidNum,
+          option: option,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setHighPriorityUserList] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'startOrUpdateChannelMediaRelay',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const String srcInfoChannelName = "hello";
+        const String srcInfoToken = "hello";
+        const int srcInfoUid = 10;
+        const ChannelMediaInfo configurationSrcInfo = ChannelMediaInfo(
+          channelName: srcInfoChannelName,
+          token: srcInfoToken,
+          uid: srcInfoUid,
+        );
+        const List<ChannelMediaInfo> configurationDestInfos = [
+          configurationSrcInfo
+        ];
+        const int configurationDestCount = 1;
+        const ChannelMediaRelayConfiguration configuration =
+            ChannelMediaRelayConfiguration(
+          srcInfo: configurationSrcInfo,
+          destInfos: configurationDestInfos,
+          destCount: configurationDestCount,
+        );
+        await rtcEngine.startOrUpdateChannelMediaRelay(
+          configuration,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[startOrUpdateChannelMediaRelay] error: ${e.toString()}');
           rethrow;
         }
 

@@ -8,24 +8,23 @@
 #include <map>
 #include <mutex>
 
-#include "iris_rtc_raw_data.h"
-#include "iris_video_processor_cxx.h"
+#include "iris_rtc_rendering_cxx.h"
 
-class TextureRender : public agora::iris::IrisVideoFrameBufferDelegate
+class TextureRender : public agora::iris::VideoFrameObserverDelegate
 {
 public:
     TextureRender(flutter::BinaryMessenger *messenger,
                   flutter::TextureRegistrar *registrar,
-                  agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager);
+                  agora::iris::IrisRtcRendering *iris_rtc_rendering);
     virtual ~TextureRender();
 
     int64_t texture_id();
 
-    virtual void OnVideoFrameReceived(const IrisVideoFrame &video_frame,
-                                      const IrisVideoFrameBufferConfig *config,
+    virtual void OnVideoFrameReceived(const void *videoFrame,
+                                      const IrisRtcVideoFrameConfig &config,
                                       bool resize) override;
 
-    void UpdateData(unsigned int uid, const std::string &channelId, unsigned int videoSourceType);
+    void UpdateData(unsigned int uid, const std::string &channelId, unsigned int videoSourceType, unsigned int videoViewSetupMode);
 
     // Checks if texture registrar, texture id and texture are available.
     bool TextureRegistered()
@@ -33,12 +32,14 @@ public:
         return registrar_ && texture_ && texture_id_ > -1;
     }
 
+    void Dispose();
+
 private:
     const FlutterDesktopPixelBuffer *CopyPixelBuffer(size_t width, size_t height);
 
 public:
     flutter::TextureRegistrar *registrar_;
-    agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager_;
+    agora::iris::IrisRtcRendering *iris_rtc_rendering_;
     std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> method_channel_;
 
     int64_t texture_id_ = -1;
@@ -51,6 +52,12 @@ public:
     std::unique_ptr<flutter::TextureVariant> texture_;
     std::unique_ptr<FlutterDesktopPixelBuffer> flutter_desktop_pixel_buffer_ =
         nullptr;
+
+    // IrisRtcVideoFrameConfig config_;
+
+    int delegate_id_;
+
+    bool is_dirty_;
 };
 
 #endif // TEXTURE_RENDER_H_

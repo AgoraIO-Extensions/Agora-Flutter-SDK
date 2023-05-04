@@ -10,14 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onJoinChannelSuccess',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -77,10 +73,6 @@ void generatedTestCases() {
   testWidgets(
     'onRejoinChannelSuccess',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -140,10 +132,6 @@ void generatedTestCases() {
   testWidgets(
     'onProxyConnected',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -205,10 +193,6 @@ void generatedTestCases() {
   testWidgets(
     'onError',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -263,10 +247,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioQuality',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -333,10 +313,6 @@ void generatedTestCases() {
   testWidgets(
     'onLastmileProbeResult',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -415,10 +391,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioVolumeIndication',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -483,10 +455,6 @@ void generatedTestCases() {
   testWidgets(
     'onLeaveChannel',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -620,10 +588,6 @@ void generatedTestCases() {
   testWidgets(
     'onRtcStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -757,10 +721,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioDeviceStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -820,10 +780,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioMixingPositionChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -878,10 +834,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioMixingFinished',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -930,10 +882,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioEffectFinished',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -986,10 +934,6 @@ void generatedTestCases() {
   testWidgets(
     'onVideoDeviceStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1049,10 +993,6 @@ void generatedTestCases() {
   testWidgets(
     'onNetworkQuality',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1117,10 +1057,6 @@ void generatedTestCases() {
   testWidgets(
     'onIntraRequestReceived',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1178,10 +1114,6 @@ void generatedTestCases() {
   testWidgets(
     'onUplinkNetworkInfoUpdated',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1238,10 +1170,6 @@ void generatedTestCases() {
   testWidgets(
     'onDownlinkNetworkInfoUpdated',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1307,10 +1235,6 @@ void generatedTestCases() {
   testWidgets(
     'onLastmileQuality',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1363,10 +1287,6 @@ void generatedTestCases() {
   testWidgets(
     'onFirstLocalVideoFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1426,10 +1346,6 @@ void generatedTestCases() {
   testWidgets(
     'onFirstLocalVideoFramePublished',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1492,10 +1408,6 @@ void generatedTestCases() {
   testWidgets(
     'onFirstRemoteVideoDecoded',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1563,10 +1475,6 @@ void generatedTestCases() {
   testWidgets(
     'onVideoSizeChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1640,10 +1548,6 @@ void generatedTestCases() {
   testWidgets(
     'onLocalVideoStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1703,10 +1607,6 @@ void generatedTestCases() {
   testWidgets(
     'onRemoteVideoStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1778,10 +1678,6 @@ void generatedTestCases() {
   testWidgets(
     'onFirstRemoteVideoFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1848,10 +1744,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserJoined',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1913,10 +1805,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserOffline',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -1980,10 +1868,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserMuteAudio',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2045,10 +1929,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserMuteVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2110,10 +1990,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserEnableVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2176,10 +2052,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2242,10 +2114,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserEnableLocalVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2306,72 +2174,8 @@ void generatedTestCases() {
   );
 
   testWidgets(
-    'onApiCallExecuted',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final onApiCallExecutedCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onApiCallExecuted: (ErrorCodeType err, String api, String result) {
-          onApiCallExecutedCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const ErrorCodeType err = ErrorCodeType.errOk;
-        const String api = "hello";
-        const String result = "hello";
-
-        final eventJson = {
-          'err': err.value(),
-          'api': api,
-          'result': result,
-        };
-
-        irisTester.fireEvent('RtcEngineEventHandler_onApiCallExecuted',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onApiCallExecuted',
-            params: eventJson);
-      }
-
-      final eventCalled = await onApiCallExecutedCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 1)),
-  );
-
-  testWidgets(
     'onLocalAudioStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2444,10 +2248,6 @@ void generatedTestCases() {
   testWidgets(
     'onRemoteAudioStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2486,10 +2286,13 @@ void generatedTestCases() {
         const int statsTotalFrozenTime = 10;
         const int statsFrozenRate = 10;
         const int statsMosValue = 10;
+        const int statsFrozenRateByCustomPlcCount = 10;
+        const int statsPlcCount = 10;
         const int statsTotalActiveTime = 10;
         const int statsPublishDuration = 10;
         const int statsQoeQuality = 10;
         const int statsQualityChangedReason = 10;
+        const int statsRxAudioBytes = 10;
         const RemoteAudioStats stats = RemoteAudioStats(
           uid: statsUid,
           quality: statsQuality,
@@ -2502,10 +2305,13 @@ void generatedTestCases() {
           totalFrozenTime: statsTotalFrozenTime,
           frozenRate: statsFrozenRate,
           mosValue: statsMosValue,
+          frozenRateByCustomPlcCount: statsFrozenRateByCustomPlcCount,
+          plcCount: statsPlcCount,
           totalActiveTime: statsTotalActiveTime,
           publishDuration: statsPublishDuration,
           qoeQuality: statsQoeQuality,
           qualityChangedReason: statsQualityChangedReason,
+          rxAudioBytes: statsRxAudioBytes,
         );
 
         final eventJson = {
@@ -2538,10 +2344,6 @@ void generatedTestCases() {
   testWidgets(
     'onLocalVideoStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2650,10 +2452,6 @@ void generatedTestCases() {
   testWidgets(
     'onRemoteVideoStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2685,6 +2483,7 @@ void generatedTestCases() {
             VideoStreamType.videoStreamHigh;
         const int statsUid = 10;
         const int statsDelay = 10;
+        const int statsE2eDelay = 10;
         const int statsWidth = 10;
         const int statsHeight = 10;
         const int statsReceivedBitrate = 10;
@@ -2697,11 +2496,12 @@ void generatedTestCases() {
         const int statsAvSyncTimeMs = 10;
         const int statsTotalActiveTime = 10;
         const int statsPublishDuration = 10;
-        const int statsSuperResolutionType = 10;
         const int statsMosValue = 10;
+        const int statsRxVideoBytes = 10;
         const RemoteVideoStats stats = RemoteVideoStats(
           uid: statsUid,
           delay: statsDelay,
+          e2eDelay: statsE2eDelay,
           width: statsWidth,
           height: statsHeight,
           receivedBitrate: statsReceivedBitrate,
@@ -2715,8 +2515,8 @@ void generatedTestCases() {
           avSyncTimeMs: statsAvSyncTimeMs,
           totalActiveTime: statsTotalActiveTime,
           publishDuration: statsPublishDuration,
-          superResolutionType: statsSuperResolutionType,
           mosValue: statsMosValue,
+          rxVideoBytes: statsRxVideoBytes,
         );
 
         final eventJson = {
@@ -2749,10 +2549,6 @@ void generatedTestCases() {
   testWidgets(
     'onCameraReady',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2801,10 +2597,6 @@ void generatedTestCases() {
   testWidgets(
     'onCameraFocusAreaChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2863,10 +2655,6 @@ void generatedTestCases() {
   testWidgets(
     'onCameraExposureAreaChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -2925,88 +2713,8 @@ void generatedTestCases() {
   );
 
   testWidgets(
-    'onFacePositionChanged',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final onFacePositionChangedCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onFacePositionChanged: (int imageWidth, int imageHeight,
-            Rectangle vecRectangle, int vecDistance, int numFaces) {
-          onFacePositionChangedCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const int imageWidth = 10;
-        const int imageHeight = 10;
-        const int vecRectangleX = 10;
-        const int vecRectangleY = 10;
-        const int vecRectangleWidth = 10;
-        const int vecRectangleHeight = 10;
-        const Rectangle vecRectangle = Rectangle(
-          x: vecRectangleX,
-          y: vecRectangleY,
-          width: vecRectangleWidth,
-          height: vecRectangleHeight,
-        );
-        const int vecDistance = 10;
-        const int numFaces = 10;
-
-        final eventJson = {
-          'imageWidth': imageWidth,
-          'imageHeight': imageHeight,
-          'vecRectangle': vecRectangle.toJson(),
-          'vecDistance': vecDistance,
-          'numFaces': numFaces,
-        };
-
-        irisTester.fireEvent('RtcEngineEventHandler_onFacePositionChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onFacePositionChanged',
-            params: eventJson);
-      }
-
-      final eventCalled = await onFacePositionChangedCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 1)),
-    // TODO(littlegnal): Enable after the API signature fixed.
-    skip: true,
-  );
-
-  testWidgets(
     'onVideoStopped',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3055,10 +2763,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioMixingStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3117,10 +2821,6 @@ void generatedTestCases() {
   testWidgets(
     'onRhythmPlayerStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3179,10 +2879,6 @@ void generatedTestCases() {
   testWidgets(
     'onConnectionLost',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3240,10 +2936,6 @@ void generatedTestCases() {
   testWidgets(
     'onConnectionInterrupted',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3301,10 +2993,6 @@ void generatedTestCases() {
   testWidgets(
     'onConnectionBanned',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3362,10 +3050,6 @@ void generatedTestCases() {
   testWidgets(
     'onStreamMessage',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3434,10 +3118,6 @@ void generatedTestCases() {
   testWidgets(
     'onStreamMessageError',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3506,10 +3186,6 @@ void generatedTestCases() {
   testWidgets(
     'onRequestToken',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3567,10 +3243,6 @@ void generatedTestCases() {
   testWidgets(
     'onTokenPrivilegeWillExpire',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3631,10 +3303,6 @@ void generatedTestCases() {
   testWidgets(
     'onLicenseValidationFailure',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3696,10 +3364,6 @@ void generatedTestCases() {
   testWidgets(
     'onFirstLocalAudioFramePublished',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3762,10 +3426,6 @@ void generatedTestCases() {
   testWidgets(
     'onFirstRemoteAudioFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3823,17 +3483,11 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    // TODO(littlegnal): Enable after iris fixed.
-    skip: true,
   );
 
   testWidgets(
     'onFirstRemoteAudioDecoded',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3897,10 +3551,6 @@ void generatedTestCases() {
   testWidgets(
     'onLocalAudioStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -3965,10 +3615,6 @@ void generatedTestCases() {
   testWidgets(
     'onRemoteAudioStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4040,10 +3686,6 @@ void generatedTestCases() {
   testWidgets(
     'onActiveSpeaker',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4103,10 +3745,6 @@ void generatedTestCases() {
   testWidgets(
     'onContentInspectResult',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4160,10 +3798,6 @@ void generatedTestCases() {
   testWidgets(
     'onSnapshotTaken',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4232,10 +3866,6 @@ void generatedTestCases() {
   testWidgets(
     'onClientRoleChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4304,10 +3934,6 @@ void generatedTestCases() {
   testWidgets(
     'onClientRoleChangeFailed',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4371,10 +3997,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioDeviceVolumeChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4433,10 +4055,6 @@ void generatedTestCases() {
   testWidgets(
     'onRtmpStreamingStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4498,10 +4116,6 @@ void generatedTestCases() {
   testWidgets(
     'onRtmpStreamingEvent',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4557,10 +4171,6 @@ void generatedTestCases() {
   testWidgets(
     'onTranscodingUpdated',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4609,10 +4219,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioRoutingChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4665,10 +4271,6 @@ void generatedTestCases() {
   testWidgets(
     'onChannelMediaRelayStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4727,10 +4329,6 @@ void generatedTestCases() {
   testWidgets(
     'onChannelMediaRelayEvent',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4784,10 +4382,6 @@ void generatedTestCases() {
   testWidgets(
     'onLocalPublishFallbackToAudioOnly',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4843,10 +4437,6 @@ void generatedTestCases() {
   testWidgets(
     'onRemoteSubscribeFallbackToAudioOnly',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4905,10 +4495,6 @@ void generatedTestCases() {
   testWidgets(
     'onRemoteAudioTransportStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -4977,10 +4563,6 @@ void generatedTestCases() {
   testWidgets(
     'onRemoteVideoTransportStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5049,10 +4631,6 @@ void generatedTestCases() {
   testWidgets(
     'onConnectionStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5117,10 +4695,6 @@ void generatedTestCases() {
   testWidgets(
     'onWlAccMessage',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5187,10 +4761,6 @@ void generatedTestCases() {
   testWidgets(
     'onWlAccStats',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5267,10 +4837,6 @@ void generatedTestCases() {
   testWidgets(
     'onNetworkTypeChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5330,10 +4896,6 @@ void generatedTestCases() {
   testWidgets(
     'onEncryptionError',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5395,10 +4957,6 @@ void generatedTestCases() {
   testWidgets(
     'onPermissionError',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5451,10 +5009,6 @@ void generatedTestCases() {
   testWidgets(
     'onLocalUserRegistered',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5509,10 +5063,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserInfoUpdated',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5572,10 +5122,6 @@ void generatedTestCases() {
   testWidgets(
     'onUploadLogResult',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5640,10 +5186,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioSubscribeStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5710,10 +5252,6 @@ void generatedTestCases() {
   testWidgets(
     'onVideoSubscribeStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5780,10 +5318,6 @@ void generatedTestCases() {
   testWidgets(
     'onAudioPublishStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5846,10 +5380,6 @@ void generatedTestCases() {
   testWidgets(
     'onVideoPublishStateChanged',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5915,10 +5445,6 @@ void generatedTestCases() {
   testWidgets(
     'onExtensionEvent',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -5978,10 +5504,6 @@ void generatedTestCases() {
   testWidgets(
     'onExtensionStarted',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -6036,10 +5558,6 @@ void generatedTestCases() {
   testWidgets(
     'onExtensionStopped',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -6094,10 +5612,6 @@ void generatedTestCases() {
   testWidgets(
     'onExtensionError',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -6157,10 +5671,6 @@ void generatedTestCases() {
   testWidgets(
     'onUserAccountUpdated',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -6205,6 +5715,171 @@ void generatedTestCases() {
       }
 
       final eventCalled = await onUserAccountUpdatedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onLocalVideoTranscoderError',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onLocalVideoTranscoderErrorCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onLocalVideoTranscoderError:
+            (TranscodingVideoStream stream, VideoTranscoderError error) {
+          onLocalVideoTranscoderErrorCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const VideoSourceType streamSourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        const int streamRemoteUserUid = 10;
+        const String streamImageUrl = "hello";
+        const int streamMediaPlayerId = 10;
+        const int streamX = 10;
+        const int streamY = 10;
+        const int streamWidth = 10;
+        const int streamHeight = 10;
+        const int streamZOrder = 10;
+        const double streamAlpha = 10.0;
+        const bool streamMirror = true;
+        const TranscodingVideoStream stream = TranscodingVideoStream(
+          sourceType: streamSourceType,
+          remoteUserUid: streamRemoteUserUid,
+          imageUrl: streamImageUrl,
+          mediaPlayerId: streamMediaPlayerId,
+          x: streamX,
+          y: streamY,
+          width: streamWidth,
+          height: streamHeight,
+          zOrder: streamZOrder,
+          alpha: streamAlpha,
+          mirror: streamMirror,
+        );
+        const VideoTranscoderError error = VideoTranscoderError.vtErrOk;
+
+        final eventJson = {
+          'stream': stream.toJson(),
+          'error': error.value(),
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onLocalVideoTranscoderError',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onLocalVideoTranscoderError',
+            params: eventJson);
+      }
+
+      final eventCalled = await onLocalVideoTranscoderErrorCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onVideoRenderingTracingResult',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onVideoRenderingTracingResultCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onVideoRenderingTracingResult: (RtcConnection connection,
+            int uid,
+            MediaTraceEvent currentEvent,
+            VideoRenderingTracingInfo tracingInfo) {
+          onVideoRenderingTracingResultCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        const MediaTraceEvent currentEvent =
+            MediaTraceEvent.mediaTraceEventVideoRendered;
+        const int tracingInfoElapsedTime = 10;
+        const int tracingInfoStart2JoinChannel = 10;
+        const int tracingInfoJoin2JoinSuccess = 10;
+        const int tracingInfoJoinSuccess2RemoteJoined = 10;
+        const int tracingInfoRemoteJoined2SetView = 10;
+        const int tracingInfoRemoteJoined2UnmuteVideo = 10;
+        const int tracingInfoRemoteJoined2PacketReceived = 10;
+        const VideoRenderingTracingInfo tracingInfo = VideoRenderingTracingInfo(
+          elapsedTime: tracingInfoElapsedTime,
+          start2JoinChannel: tracingInfoStart2JoinChannel,
+          join2JoinSuccess: tracingInfoJoin2JoinSuccess,
+          joinSuccess2RemoteJoined: tracingInfoJoinSuccess2RemoteJoined,
+          remoteJoined2SetView: tracingInfoRemoteJoined2SetView,
+          remoteJoined2UnmuteVideo: tracingInfoRemoteJoined2UnmuteVideo,
+          remoteJoined2PacketReceived: tracingInfoRemoteJoined2PacketReceived,
+        );
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'currentEvent': currentEvent.value(),
+          'tracingInfo': tracingInfo.toJson(),
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onVideoRenderingTracingResult',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onVideoRenderingTracingResult',
+            params: eventJson);
+      }
+
+      final eventCalled = await onVideoRenderingTracingResultCompleter.future;
       expect(eventCalled, isTrue);
 
       {

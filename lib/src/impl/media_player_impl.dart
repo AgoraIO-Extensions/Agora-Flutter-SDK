@@ -38,21 +38,21 @@ class _MediaPlayerScopedKey extends TypedScopedKey {
   int get hashCode => Object.hash(type, mediaPlayerId);
 }
 
-class MediaPlayerAudioFrameObserverWrapper
-    extends media_player_event_binding.MediaPlayerAudioFrameObserverWrapper {
-  const MediaPlayerAudioFrameObserverWrapper(this.mediaPlayerId,
-      MediaPlayerAudioFrameObserver mediaPlayerAudioFrameObserver)
-      : super(mediaPlayerAudioFrameObserver);
+class AudioPcmFrameSinkWrapper
+    extends media_base_event_binding.AudioPcmFrameSinkWrapper {
+  const AudioPcmFrameSinkWrapper(
+      this.mediaPlayerId, AudioPcmFrameSink audioPcmFrameSink)
+      : super(audioPcmFrameSink);
 
   final int mediaPlayerId;
 
   @override
-  bool handleEvent(
+  bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     final jsonMap = Map<String, dynamic>.from(jsonDecode(eventData));
     if (jsonMap.containsKey('playerId') &&
         jsonMap['playerId'] == mediaPlayerId) {
-      return super.handleEvent(eventName, eventData, buffers);
+      return super.handleEventInternal(eventName, eventData, buffers);
     }
 
     return false;
@@ -68,12 +68,12 @@ class MediaPlayerVideoFrameObserverWrapper
   final int mediaPlayerId;
 
   @override
-  bool handleEvent(
+  bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     final jsonMap = Map<String, dynamic>.from(jsonDecode(eventData));
     if (jsonMap.containsKey('playerId') &&
         jsonMap['playerId'] == mediaPlayerId) {
-      return super.handleEvent(eventName, eventData, buffers);
+      return super.handleEventInternal(eventName, eventData, buffers);
     }
 
     return false;
@@ -90,12 +90,12 @@ class MediaPlayerSourceObserverWrapper
   final int mediaPlayerId;
 
   @override
-  bool handleEvent(
+  bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     final jsonMap = Map<String, dynamic>.from(jsonDecode(eventData));
     if (jsonMap.containsKey('playerId') &&
         jsonMap['playerId'] == mediaPlayerId) {
-      return super.handleEvent(eventName, eventData, buffers);
+      return super.handleEventInternal(eventName, eventData, buffers);
     }
 
     return false;
@@ -111,13 +111,14 @@ class AudioSpectrumObserverWrapper
   final int mediaPlayerId;
 
   @override
-  bool handleEvent(
+  bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     final jsonMap = Map<String, dynamic>.from(jsonDecode(eventData));
     if (jsonMap.containsKey('playerId') &&
         jsonMap['playerId'] == mediaPlayerId) {
-      return super.handleEvent(eventName, eventData, buffers);
+      return super.handleEventInternal(eventName, eventData, buffers);
     }
+
     return false;
   }
 }
@@ -223,9 +224,11 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
 
   @override
   void registerAudioFrameObserver(
-      MediaPlayerAudioFrameObserver observer) async {
+      {required AudioPcmFrameSink observer,
+      RawAudioFrameOpModeType mode =
+          RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly}) async {
     final eventHandlerWrapper =
-        MediaPlayerAudioFrameObserverWrapper(getMediaPlayerId(), observer);
+        AudioPcmFrameSinkWrapper(getMediaPlayerId(), observer);
     final param = createParams({});
 
     await irisMethodChannel.registerEventHandler(
@@ -238,10 +241,9 @@ class MediaPlayerImpl extends agora_media_player_impl_binding.MediaPlayerImpl
   }
 
   @override
-  void unregisterAudioFrameObserver(
-      MediaPlayerAudioFrameObserver observer) async {
+  void unregisterAudioFrameObserver(AudioPcmFrameSink observer) async {
     final eventHandlerWrapper =
-        MediaPlayerAudioFrameObserverWrapper(getMediaPlayerId(), observer);
+        AudioPcmFrameSinkWrapper(getMediaPlayerId(), observer);
     final param = createParams({});
 
     await irisMethodChannel.unregisterEventHandler(

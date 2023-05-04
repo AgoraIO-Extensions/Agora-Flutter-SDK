@@ -12,9 +12,9 @@
 - (instancetype)
 initWithTextureRegistry:(NSObject<FlutterTextureRegistry> *)textureRegistry
                   messenger:(NSObject<FlutterBinaryMessenger> *)messenger
-    videoFrameBufferManager:(void *)manager;
+irisRtcRenderingHandle:(void *)irisRtcRenderingHandle;
 
-- (void)updateData:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType;
+- (void)updateData:(NSNumber *)uid channelId:(NSString *)channelId videoSourceType:(NSNumber *)videoSourceType videoViewSetupMode:(NSNumber *)videoViewSetupMode;
 
 - (void)dispose;
 

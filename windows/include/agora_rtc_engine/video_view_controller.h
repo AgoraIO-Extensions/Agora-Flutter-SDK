@@ -26,10 +26,11 @@ private:
     bool DestroyPlatformRender(int64_t platformRenderId);
 
     int64_t CreateTextureRender(
-        const intptr_t &videoFrameBufferManagerNativeHandle,
+        const intptr_t &irisRtcRenderingHandle,
         unsigned int uid,
         const std::string &channelId,
-        unsigned int videoSourceType);
+        unsigned int videoSourceType, 
+        unsigned int videoViewSetupMode);
 
     bool DestroyTextureRender(int64_t textureId);
 

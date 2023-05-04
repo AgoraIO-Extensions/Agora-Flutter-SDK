@@ -10,14 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -59,6 +55,7 @@ void generatedTestCases() {
         const int frameTextureId = 10;
         const List<double> frameMatrix = [];
         Uint8List frameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List framePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame frame = VideoFrame(
           type: frameType,
           width: frameWidth,
@@ -77,6 +74,7 @@ void generatedTestCases() {
           textureId: frameTextureId,
           matrix: frameMatrix,
           alphaBuffer: frameAlphaBuffer,
+          pixelBuffer: framePixelBuffer,
         );
 
         final eventJson = {

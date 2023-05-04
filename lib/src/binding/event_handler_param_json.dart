@@ -1042,38 +1042,6 @@ extension RtcEngineEventHandlerOnUserEnableLocalVideoJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineEventHandlerOnApiCallExecutedJson {
-  const RtcEngineEventHandlerOnApiCallExecutedJson(
-      {this.err, this.api, this.result});
-
-  @JsonKey(name: 'err')
-  final ErrorCodeType? err;
-  @JsonKey(name: 'api')
-  final String? api;
-  @JsonKey(name: 'result')
-  final String? result;
-  factory RtcEngineEventHandlerOnApiCallExecutedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$RtcEngineEventHandlerOnApiCallExecutedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$RtcEngineEventHandlerOnApiCallExecutedJsonToJson(this);
-}
-
-extension RtcEngineEventHandlerOnApiCallExecutedJsonBufferExt
-    on RtcEngineEventHandlerOnApiCallExecutedJson {
-  RtcEngineEventHandlerOnApiCallExecutedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnLocalAudioStatsJson {
   const RtcEngineEventHandlerOnLocalAudioStatsJson(
       {this.connection, this.stats});
@@ -1300,9 +1268,9 @@ class RtcEngineEventHandlerOnFacePositionChangedJson {
   @JsonKey(name: 'imageHeight')
   final int? imageHeight;
   @JsonKey(name: 'vecRectangle')
-  final Rectangle? vecRectangle;
+  final List<Rectangle>? vecRectangle;
   @JsonKey(name: 'vecDistance')
-  final int? vecDistance;
+  final List<int>? vecDistance;
   @JsonKey(name: 'numFaces')
   final int? numFaces;
   factory RtcEngineEventHandlerOnFacePositionChangedJson.fromJson(
@@ -2942,6 +2910,70 @@ extension RtcEngineEventHandlerOnUserAccountUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
+  const RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson(
+      {this.stream, this.error});
+
+  @JsonKey(name: 'stream')
+  final TranscodingVideoStream? stream;
+  @JsonKey(name: 'error')
+  final VideoTranscoderError? error;
+  factory RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnLocalVideoTranscoderErrorJsonBufferExt
+    on RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson {
+  RtcEngineEventHandlerOnLocalVideoTranscoderErrorJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
+  const RtcEngineEventHandlerOnVideoRenderingTracingResultJson(
+      {this.connection, this.uid, this.currentEvent, this.tracingInfo});
+
+  @JsonKey(name: 'connection')
+  final RtcConnection? connection;
+  @JsonKey(name: 'uid')
+  final int? uid;
+  @JsonKey(name: 'currentEvent')
+  final MediaTraceEvent? currentEvent;
+  @JsonKey(name: 'tracingInfo')
+  final VideoRenderingTracingInfo? tracingInfo;
+  factory RtcEngineEventHandlerOnVideoRenderingTracingResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnVideoRenderingTracingResultJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnVideoRenderingTracingResultJsonBufferExt
+    on RtcEngineEventHandlerOnVideoRenderingTracingResultJson {
+  RtcEngineEventHandlerOnVideoRenderingTracingResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class MetadataObserverOnMetadataReceivedJson {
   const MetadataObserverOnMetadataReceivedJson({this.metadata});
 
@@ -3153,6 +3185,30 @@ extension AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonBufferExt
     if (frameBuffer != null) {
       bufferList.add(frameBuffer!);
     }
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioPcmFrameSinkOnFrameJson {
+  const AudioPcmFrameSinkOnFrameJson({this.frame});
+
+  @JsonKey(name: 'frame')
+  final AudioPcmFrame? frame;
+  factory AudioPcmFrameSinkOnFrameJson.fromJson(Map<String, dynamic> json) =>
+      _$AudioPcmFrameSinkOnFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$AudioPcmFrameSinkOnFrameJsonToJson(this);
+}
+
+extension AudioPcmFrameSinkOnFrameJsonBufferExt
+    on AudioPcmFrameSinkOnFrameJson {
+  AudioPcmFrameSinkOnFrameJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
     return bufferList;
   }
 }
@@ -3410,8 +3466,11 @@ extension VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonBufferExt
 
 @JsonSerializable(explicitToJson: true)
 class VideoFrameObserverOnCaptureVideoFrameJson {
-  const VideoFrameObserverOnCaptureVideoFrameJson({this.videoFrame});
+  const VideoFrameObserverOnCaptureVideoFrameJson(
+      {this.sourceType, this.videoFrame});
 
+  @JsonKey(name: 'sourceType')
+  final VideoSourceType? sourceType;
   @JsonKey(name: 'videoFrame')
   final VideoFrame? videoFrame;
   factory VideoFrameObserverOnCaptureVideoFrameJson.fromJson(
@@ -3437,8 +3496,11 @@ extension VideoFrameObserverOnCaptureVideoFrameJsonBufferExt
 
 @JsonSerializable(explicitToJson: true)
 class VideoFrameObserverOnPreEncodeVideoFrameJson {
-  const VideoFrameObserverOnPreEncodeVideoFrameJson({this.videoFrame});
+  const VideoFrameObserverOnPreEncodeVideoFrameJson(
+      {this.sourceType, this.videoFrame});
 
+  @JsonKey(name: 'sourceType')
+  final VideoSourceType? sourceType;
   @JsonKey(name: 'videoFrame')
   final VideoFrame? videoFrame;
   factory VideoFrameObserverOnPreEncodeVideoFrameJson.fromJson(
@@ -3451,117 +3513,6 @@ class VideoFrameObserverOnPreEncodeVideoFrameJson {
 extension VideoFrameObserverOnPreEncodeVideoFrameJsonBufferExt
     on VideoFrameObserverOnPreEncodeVideoFrameJson {
   VideoFrameObserverOnPreEncodeVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJson {
-  const VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJson(
-      {this.videoFrame});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJsonBufferExt
-    on VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJson {
-  VideoFrameObserverOnSecondaryCameraCaptureVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJson {
-  const VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJson(
-      {this.videoFrame});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJsonFromJson(
-          json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJsonBufferExt
-    on VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJson {
-  VideoFrameObserverOnSecondaryPreEncodeCameraVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnScreenCaptureVideoFrameJson {
-  const VideoFrameObserverOnScreenCaptureVideoFrameJson({this.videoFrame});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnScreenCaptureVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnScreenCaptureVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnScreenCaptureVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnScreenCaptureVideoFrameJsonBufferExt
-    on VideoFrameObserverOnScreenCaptureVideoFrameJson {
-  VideoFrameObserverOnScreenCaptureVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnPreEncodeScreenVideoFrameJson {
-  const VideoFrameObserverOnPreEncodeScreenVideoFrameJson({this.videoFrame});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnPreEncodeScreenVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnPreEncodeScreenVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnPreEncodeScreenVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnPreEncodeScreenVideoFrameJsonBufferExt
-    on VideoFrameObserverOnPreEncodeScreenVideoFrameJson {
-  VideoFrameObserverOnPreEncodeScreenVideoFrameJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -3592,63 +3543,6 @@ class VideoFrameObserverOnMediaPlayerVideoFrameJson {
 extension VideoFrameObserverOnMediaPlayerVideoFrameJsonBufferExt
     on VideoFrameObserverOnMediaPlayerVideoFrameJson {
   VideoFrameObserverOnMediaPlayerVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJson {
-  const VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJson(
-      {this.videoFrame});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJsonBufferExt
-    on VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJson {
-  VideoFrameObserverOnSecondaryScreenCaptureVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJson {
-  const VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJson(
-      {this.videoFrame});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJsonFromJson(
-          json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJsonBufferExt
-    on VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJson {
-  VideoFrameObserverOnSecondaryPreEncodeScreenVideoFrameJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -3722,8 +3616,12 @@ extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MediaRecorderObserverOnRecorderStateChangedJson {
   const MediaRecorderObserverOnRecorderStateChangedJson(
-      {this.state, this.error});
+      {this.channelId, this.uid, this.state, this.error});
 
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'uid')
+  final int? uid;
   @JsonKey(name: 'state')
   final RecorderState? state;
   @JsonKey(name: 'error')
@@ -3751,8 +3649,13 @@ extension MediaRecorderObserverOnRecorderStateChangedJsonBufferExt
 
 @JsonSerializable(explicitToJson: true)
 class MediaRecorderObserverOnRecorderInfoUpdatedJson {
-  const MediaRecorderObserverOnRecorderInfoUpdatedJson({this.info});
+  const MediaRecorderObserverOnRecorderInfoUpdatedJson(
+      {this.channelId, this.uid, this.info});
 
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'uid')
+  final int? uid;
   @JsonKey(name: 'info')
   final RecorderInfo? info;
   factory MediaRecorderObserverOnRecorderInfoUpdatedJson.fromJson(
@@ -3765,33 +3668,6 @@ class MediaRecorderObserverOnRecorderInfoUpdatedJson {
 extension MediaRecorderObserverOnRecorderInfoUpdatedJsonBufferExt
     on MediaRecorderObserverOnRecorderInfoUpdatedJson {
   MediaRecorderObserverOnRecorderInfoUpdatedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerAudioFrameObserverOnFrameJson {
-  const MediaPlayerAudioFrameObserverOnFrameJson({this.frame});
-
-  @JsonKey(name: 'frame')
-  final AudioPcmFrame? frame;
-  factory MediaPlayerAudioFrameObserverOnFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerAudioFrameObserverOnFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerAudioFrameObserverOnFrameJsonToJson(this);
-}
-
-extension MediaPlayerAudioFrameObserverOnFrameJsonBufferExt
-    on MediaPlayerAudioFrameObserverOnFrameJson {
-  MediaPlayerAudioFrameObserverOnFrameJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
@@ -4149,14 +4025,14 @@ extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnMusicChartsResultJson {
   const MusicContentCenterEventHandlerOnMusicChartsResultJson(
-      {this.requestId, this.status, this.result});
+      {this.requestId, this.result, this.errorCode});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
   @JsonKey(name: 'result')
   final List<MusicChartInfo>? result;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
@@ -4181,14 +4057,14 @@ extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
   const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
-      {this.requestId, this.status, this.result});
+      {this.requestId, this.result, this.errorCode});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
-  @JsonKey(name: 'status')
-  final MusicContentCenterStatusCode? status;
   @JsonKey(name: 'result', ignore: true)
   final MusicCollection? result;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
@@ -4213,12 +4089,14 @@ extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnLyricResultJson {
   const MusicContentCenterEventHandlerOnLyricResultJson(
-      {this.requestId, this.lyricUrl});
+      {this.requestId, this.lyricUrl, this.errorCode});
 
   @JsonKey(name: 'requestId')
   final String? requestId;
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
@@ -4243,18 +4121,22 @@ extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
 @JsonSerializable(explicitToJson: true)
 class MusicContentCenterEventHandlerOnPreLoadEventJson {
   const MusicContentCenterEventHandlerOnPreLoadEventJson(
-      {this.songCode, this.percent, this.status, this.msg, this.lyricUrl});
+      {this.songCode,
+      this.percent,
+      this.lyricUrl,
+      this.status,
+      this.errorCode});
 
   @JsonKey(name: 'songCode')
   final int? songCode;
   @JsonKey(name: 'percent')
   final int? percent;
-  @JsonKey(name: 'status')
-  final PreloadStatusCode? status;
-  @JsonKey(name: 'msg')
-  final String? msg;
   @JsonKey(name: 'lyricUrl')
   final String? lyricUrl;
+  @JsonKey(name: 'status')
+  final PreloadStatusCode? status;
+  @JsonKey(name: 'error_code')
+  final MusicContentCenterStatusCode? errorCode;
   factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
           Map<String, dynamic> json) =>
       _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);

@@ -14,10 +14,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'release',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -51,10 +47,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'initialize',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -84,6 +76,7 @@ void rtcEngineSmokeTestCases() {
         const int contextAreaCode = 10;
         const bool contextUseExternalEglContext = true;
         const bool contextDomainLimit = true;
+        const bool contextAutoRegisterAgoraExtensions = true;
         const RtcEngineContext context = RtcEngineContext(
           appId: contextAppId,
           channelProfile: contextChannelProfile,
@@ -94,6 +87,7 @@ void rtcEngineSmokeTestCases() {
           threadPriority: contextThreadPriority,
           useExternalEglContext: contextUseExternalEglContext,
           domainLimit: contextDomainLimit,
+          autoRegisterAgoraExtensions: contextAutoRegisterAgoraExtensions,
         );
         await rtcEngine.initialize(
           context,
@@ -117,10 +111,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getVersion',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -151,10 +141,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getErrorDescription',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -188,10 +174,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'joinChannel',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -221,15 +203,12 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioSourceId = 10;
-        const bool optionsPublishCustomAudioTrackEnableAec = true;
-        const bool optionsPublishDirectCustomAudioTrack = true;
-        const bool optionsPublishCustomAudioTrackAec = true;
+        const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomVideoTrack = true;
         const bool optionsPublishEncodedVideoTrack = true;
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishTranscodedVideoTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -251,16 +230,12 @@ void rtcEngineSmokeTestCases() {
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomAudioSourceId: optionsPublishCustomAudioSourceId,
-          publishCustomAudioTrackEnableAec:
-              optionsPublishCustomAudioTrackEnableAec,
-          publishDirectCustomAudioTrack: optionsPublishDirectCustomAudioTrack,
-          publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
+          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
-          publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -303,10 +278,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'updateChannelMediaOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -333,15 +304,12 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioSourceId = 10;
-        const bool optionsPublishCustomAudioTrackEnableAec = true;
-        const bool optionsPublishDirectCustomAudioTrack = true;
-        const bool optionsPublishCustomAudioTrackAec = true;
+        const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomVideoTrack = true;
         const bool optionsPublishEncodedVideoTrack = true;
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishTranscodedVideoTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -363,16 +331,12 @@ void rtcEngineSmokeTestCases() {
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomAudioSourceId: optionsPublishCustomAudioSourceId,
-          publishCustomAudioTrackEnableAec:
-              optionsPublishCustomAudioTrackEnableAec,
-          publishDirectCustomAudioTrack: optionsPublishDirectCustomAudioTrack,
-          publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
+          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
-          publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -412,10 +376,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'leaveChannel',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -456,10 +416,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'renewToken',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -493,10 +449,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setChannelProfile',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -531,10 +483,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setClientRole',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -574,10 +522,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startEchoTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -588,9 +532,22 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const int intervalInSeconds = 10;
+        const int configView = 10;
+        const bool configEnableAudio = true;
+        const bool configEnableVideo = true;
+        const String configToken = "hello";
+        const String configChannelId = "hello";
+        const int configIntervalInSeconds = 10;
+        const EchoTestConfiguration config = EchoTestConfiguration(
+          view: configView,
+          enableAudio: configEnableAudio,
+          enableVideo: configEnableVideo,
+          token: configToken,
+          channelId: configChannelId,
+          intervalInSeconds: configIntervalInSeconds,
+        );
         await rtcEngine.startEchoTest(
-          intervalInSeconds: intervalInSeconds,
+          config,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -611,10 +568,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopEchoTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -645,10 +598,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableMultiCamera',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -701,10 +650,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -735,10 +680,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'disableVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -769,10 +710,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startPreview',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -807,10 +744,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopPreview',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -845,10 +778,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startLastmileProbeTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -891,10 +820,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopLastmileProbeTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -925,10 +850,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setVideoEncoderConfiguration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -996,10 +917,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setBeautyEffectOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1049,10 +966,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLowlightEnhanceOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1097,10 +1010,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setVideoDenoiserOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1145,10 +1054,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setColorEnhanceOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1191,10 +1096,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableVirtualBackground',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1207,7 +1108,7 @@ void rtcEngineSmokeTestCases() {
       try {
         const bool enabled = true;
         const BackgroundSourceType backgroundSourceBackgroundSourceType =
-            BackgroundSourceType.backgroundColor;
+            BackgroundSourceType.backgroundNone;
         const BackgroundBlurDegree backgroundSourceBlurDegree =
             BackgroundBlurDegree.blurDegreeLow;
         const int backgroundSourceColor = 10;
@@ -1249,51 +1150,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableRemoteSuperResolution',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int userId = 10;
-        const bool enable = true;
-        await rtcEngine.enableRemoteSuperResolution(
-          userId: userId,
-          enable: enable,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableRemoteSuperResolution] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'setupRemoteVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1324,6 +1182,7 @@ void rtcEngineSmokeTestCases() {
         const int canvasView = 10;
         const int canvasUid = 10;
         const int canvasMediaPlayerId = 10;
+        const bool canvasEnableAlphaMask = true;
         const VideoCanvas canvas = VideoCanvas(
           view: canvasView,
           uid: canvasUid,
@@ -1333,6 +1192,7 @@ void rtcEngineSmokeTestCases() {
           sourceType: canvasSourceType,
           mediaPlayerId: canvasMediaPlayerId,
           cropArea: canvasCropArea,
+          enableAlphaMask: canvasEnableAlphaMask,
         );
         await rtcEngine.setupRemoteVideo(
           canvas,
@@ -1356,10 +1216,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setupLocalVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1390,6 +1246,7 @@ void rtcEngineSmokeTestCases() {
         const int canvasView = 10;
         const int canvasUid = 10;
         const int canvasMediaPlayerId = 10;
+        const bool canvasEnableAlphaMask = true;
         const VideoCanvas canvas = VideoCanvas(
           view: canvasView,
           uid: canvasUid,
@@ -1399,6 +1256,7 @@ void rtcEngineSmokeTestCases() {
           sourceType: canvasSourceType,
           mediaPlayerId: canvasMediaPlayerId,
           cropArea: canvasCropArea,
+          enableAlphaMask: canvasEnableAlphaMask,
         );
         await rtcEngine.setupLocalVideo(
           canvas,
@@ -1420,12 +1278,42 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'setVideoScenario',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const VideoApplicationScenarioType scenarioType =
+            VideoApplicationScenarioType.applicationScenarioGeneral;
+        await rtcEngine.setVideoScenario(
+          scenarioType,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setVideoScenario] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'enableAudio',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1456,10 +1344,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'disableAudio',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1490,10 +1374,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioProfile',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1530,10 +1410,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioScenario',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1568,10 +1444,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableLocalAudio',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1605,10 +1477,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'muteLocalAudioStream',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1642,10 +1510,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'muteAllRemoteAudioStreams',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1679,10 +1543,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setDefaultMuteAllRemoteAudioStreams',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1717,10 +1577,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'muteRemoteAudioStream',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1756,10 +1612,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'muteLocalVideoStream',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1793,10 +1645,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableLocalVideo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1830,10 +1678,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'muteAllRemoteVideoStreams',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1867,10 +1711,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setDefaultMuteAllRemoteVideoStreams',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1905,10 +1745,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'muteRemoteVideoStream',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1944,10 +1780,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteVideoStreamType',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1983,10 +1815,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteVideoSubscriptionOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2028,10 +1856,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteDefaultVideoStreamType',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2066,10 +1890,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableAudioVolumeIndication',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2107,10 +1927,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startAudioRecording',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2159,10 +1975,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'registerAudioEncodedFrameObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2215,10 +2027,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopAudioRecording',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2249,10 +2057,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startAudioMixing',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2292,10 +2096,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopAudioMixing',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2326,10 +2126,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'pauseAudioMixing',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2360,10 +2156,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'resumeAudioMixing',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2394,10 +2186,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'selectAudioTrack',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2431,10 +2219,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getAudioTrackCount',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2465,10 +2249,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustAudioMixingVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2502,10 +2282,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustAudioMixingPublishVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2539,10 +2315,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getAudioMixingPublishVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2573,10 +2345,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustAudioMixingPlayoutVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2610,10 +2378,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getAudioMixingPlayoutVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2644,10 +2408,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getAudioMixingDuration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2678,10 +2438,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getAudioMixingCurrentPosition',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2712,10 +2468,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioMixingPosition',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2749,10 +2501,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioMixingDualMonoMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2787,10 +2535,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioMixingPitch',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2824,10 +2568,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getEffectsVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2858,10 +2598,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setEffectsVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2895,10 +2631,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'preloadEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2936,10 +2668,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'playEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2987,10 +2715,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'playAllEffects',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3032,10 +2756,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getVolumeOfEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3069,10 +2789,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setVolumeOfEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3108,10 +2824,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'pauseEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3145,10 +2857,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'pauseAllEffects',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3179,10 +2887,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'resumeEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3216,10 +2920,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'resumeAllEffects',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3250,10 +2950,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3287,10 +2983,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopAllEffects',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3321,10 +3013,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'unloadEffect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3358,10 +3046,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'unloadAllEffects',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3392,10 +3076,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getEffectDuration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3429,10 +3109,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setEffectPosition',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3468,10 +3144,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getEffectCurrentPosition',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3505,10 +3177,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableSoundPositionIndication',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3542,10 +3210,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteVoicePosition',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3583,10 +3247,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableSpatialAudio',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3620,10 +3280,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteUserSpatialAudioParams',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3677,10 +3333,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setVoiceBeautifierPreset',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3715,10 +3367,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioEffectPreset',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3752,10 +3400,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setVoiceConversionPreset',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3790,10 +3434,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioEffectParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3831,10 +3471,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setVoiceBeautifierParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3873,10 +3509,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setVoiceConversionParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3915,10 +3547,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLocalVoicePitch',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3950,12 +3578,41 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'setLocalVoiceFormant',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const double formantRatio = 10.0;
+        await rtcEngine.setLocalVoiceFormant(
+          formantRatio,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setLocalVoiceFormant] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'setLocalVoiceEqualization',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -3992,10 +3649,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLocalVoiceReverb',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4031,10 +3684,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setHeadphoneEQPreset',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4069,10 +3718,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setHeadphoneEQParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4108,10 +3753,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLogFile',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4145,10 +3786,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLogFilter',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4182,10 +3819,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLogLevel',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4219,10 +3852,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLogFileSize',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4256,10 +3885,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'uploadLogFile',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4293,10 +3918,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLocalRenderMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4333,10 +3954,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteRenderMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4375,10 +3992,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLocalVideoMirrorMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4413,10 +4026,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableDualStreamMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4464,10 +4073,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setDualStreamMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4514,51 +4119,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'enableEchoCancellationExternal',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool enabled = true;
-        const int audioSourceDelay = 10;
-        await rtcEngine.enableEchoCancellationExternal(
-          enabled: enabled,
-          audioSourceDelay: audioSourceDelay,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[enableEchoCancellationExternal] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'enableCustomAudioLocalPlayback',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4569,10 +4131,10 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const int sourceId = 10;
+        const int trackId = 10;
         const bool enabled = true;
         await rtcEngine.enableCustomAudioLocalPlayback(
-          sourceId: sourceId,
+          trackId: trackId,
           enabled: enabled,
         );
       } catch (e) {
@@ -4592,160 +4154,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startPrimaryCustomAudioTrack',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool configEnableLocalPlayback = true;
-        const AudioTrackConfig config = AudioTrackConfig(
-          enableLocalPlayback: configEnableLocalPlayback,
-        );
-        await rtcEngine.startPrimaryCustomAudioTrack(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startPrimaryCustomAudioTrack] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopPrimaryCustomAudioTrack',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopPrimaryCustomAudioTrack();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopPrimaryCustomAudioTrack] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startSecondaryCustomAudioTrack',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const bool configEnableLocalPlayback = true;
-        const AudioTrackConfig config = AudioTrackConfig(
-          enableLocalPlayback: configEnableLocalPlayback,
-        );
-        await rtcEngine.startSecondaryCustomAudioTrack(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startSecondaryCustomAudioTrack] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopSecondaryCustomAudioTrack',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopSecondaryCustomAudioTrack();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopSecondaryCustomAudioTrack] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'setRecordingAudioFrameParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4787,10 +4197,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setPlaybackAudioFrameParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4832,10 +4238,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setMixedAudioFrameParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4873,10 +4275,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setEarMonitoringAudioFrameParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4918,10 +4316,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setPlaybackAudioFrameBeforeMixingParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4958,10 +4352,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableAudioSpectrumMonitor',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -4995,10 +4385,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'disableAudioSpectrumMonitor',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5029,10 +4415,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'registerAudioSpectrumObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5069,10 +4451,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'unregisterAudioSpectrumObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5110,10 +4488,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustRecordingSignalVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5147,10 +4521,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'muteRecordingSignal',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5184,10 +4554,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustPlaybackSignalVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5221,10 +4587,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustUserPlaybackSignalVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5260,10 +4622,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setLocalPublishFallbackOption',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5298,10 +4656,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteSubscribeFallbackOption',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5337,10 +4691,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableLoopbackRecording',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5376,10 +4726,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustLoopbackSignalVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5413,10 +4759,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getLoopbackRecordingVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5447,10 +4789,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableInEarMonitoring',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5487,10 +4825,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setInEarMonitoringVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5524,10 +4858,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'loadExtensionProvider',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5563,10 +4893,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setExtensionProviderProperty',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5604,10 +4930,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'registerExtension',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5645,10 +4967,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableExtension',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5688,10 +5006,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setExtensionProperty',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5733,10 +5047,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getExtensionProperty',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5778,10 +5088,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraCapturerConfiguration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5832,10 +5138,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'destroyCustomVideoTrack',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5869,10 +5171,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'destroyCustomEncodedVideoTrack',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5906,10 +5204,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'switchCamera',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5940,10 +5234,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isCameraZoomSupported',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -5974,10 +5264,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isCameraFaceDetectSupported',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6008,10 +5294,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isCameraTorchSupported',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6042,10 +5324,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isCameraFocusSupported',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6076,10 +5354,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isCameraAutoFocusFaceModeSupported',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6111,10 +5385,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraZoomFactor',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6148,10 +5418,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableFaceDetection',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6185,10 +5451,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getCameraMaxZoomFactor',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6219,10 +5481,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraFocusPositionInPreview',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6259,10 +5517,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraTorchOn',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6296,10 +5550,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraAutoFocusFaceModeEnabled',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6334,10 +5584,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isCameraExposurePositionSupported',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6369,10 +5615,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraExposurePosition',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6408,10 +5650,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isCameraAutoExposureFaceModeSupported',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6443,10 +5681,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraAutoExposureFaceModeEnabled',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6481,10 +5715,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setDefaultAudioRouteToSpeakerphone',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6519,10 +5749,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setEnableSpeakerphone',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6556,10 +5782,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'isSpeakerphoneEnabled',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6590,10 +5812,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getScreenCaptureSources',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6641,10 +5859,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAudioSessionOperationRestriction',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6681,10 +5895,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startScreenCaptureByDisplayId',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6757,10 +5967,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startScreenCaptureByScreenRect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6842,10 +6048,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getAudioDeviceInfo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6876,10 +6078,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startScreenCaptureByWindowId',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6952,10 +6150,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setScreenCaptureContentHint',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -6987,50 +6181,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setScreenCaptureScenario',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const ScreenScenarioType screenScenario =
-            ScreenScenarioType.screenScenarioDocument;
-        await rtcEngine.setScreenCaptureScenario(
-          screenScenario,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setScreenCaptureScenario] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'updateScreenCaptureRegion',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7073,10 +6225,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'updateScreenCaptureParameters',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7136,10 +6284,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startScreenCapture',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7204,12 +6348,101 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'startScreenCaptureBySourceType',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        const int screenRectX = 10;
+        const int screenRectY = 10;
+        const int screenRectWidth = 10;
+        const int screenRectHeight = 10;
+        const Rectangle configScreenRect = Rectangle(
+          x: screenRectX,
+          y: screenRectY,
+          width: screenRectWidth,
+          height: screenRectHeight,
+        );
+        const int dimensionsWidth = 10;
+        const int dimensionsHeight = 10;
+        const VideoDimensions paramsDimensions = VideoDimensions(
+          width: dimensionsWidth,
+          height: dimensionsHeight,
+        );
+        const int paramsFrameRate = 10;
+        const int paramsBitrate = 10;
+        const bool paramsCaptureMouseCursor = true;
+        const bool paramsWindowFocus = true;
+        const List<int> paramsExcludeWindowList = [];
+        const int paramsExcludeWindowCount = 10;
+        const int paramsHighLightWidth = 10;
+        const int paramsHighLightColor = 10;
+        const bool paramsEnableHighLight = true;
+        const ScreenCaptureParameters configParams = ScreenCaptureParameters(
+          dimensions: paramsDimensions,
+          frameRate: paramsFrameRate,
+          bitrate: paramsBitrate,
+          captureMouseCursor: paramsCaptureMouseCursor,
+          windowFocus: paramsWindowFocus,
+          excludeWindowList: paramsExcludeWindowList,
+          excludeWindowCount: paramsExcludeWindowCount,
+          highLightWidth: paramsHighLightWidth,
+          highLightColor: paramsHighLightColor,
+          enableHighLight: paramsEnableHighLight,
+        );
+        const int regionRectX = 10;
+        const int regionRectY = 10;
+        const int regionRectWidth = 10;
+        const int regionRectHeight = 10;
+        const Rectangle configRegionRect = Rectangle(
+          x: regionRectX,
+          y: regionRectY,
+          width: regionRectWidth,
+          height: regionRectHeight,
+        );
+        const bool configIsCaptureWindow = true;
+        const int configDisplayId = 10;
+        const int configWindowId = 10;
+        const ScreenCaptureConfiguration config = ScreenCaptureConfiguration(
+          isCaptureWindow: configIsCaptureWindow,
+          displayId: configDisplayId,
+          screenRect: configScreenRect,
+          windowId: configWindowId,
+          params: configParams,
+          regionRect: configRegionRect,
+        );
+        await rtcEngine.startScreenCaptureBySourceType(
+          sourceType: sourceType,
+          config: config,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[startScreenCaptureBySourceType] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'updateScreenCapture',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7274,12 +6507,72 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'queryScreenCaptureCapability',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.queryScreenCaptureCapability();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[queryScreenCaptureCapability] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'setScreenCaptureScenario',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const ScreenScenarioType screenScenario =
+            ScreenScenarioType.screenScenarioDocument;
+        await rtcEngine.setScreenCaptureScenario(
+          screenScenario,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setScreenCaptureScenario] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'stopScreenCapture',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7308,12 +6601,42 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'stopScreenCaptureBySourceType',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        await rtcEngine.stopScreenCaptureBySourceType(
+          sourceType,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[stopScreenCaptureBySourceType] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'getCallId',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7344,10 +6667,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'rate',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7385,10 +6704,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'complain',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7424,10 +6739,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startRtmpStreamWithoutTranscoding',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7462,10 +6773,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startRtmpStreamWithTranscoding',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7552,10 +6859,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'updateRtmpTranscoding',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7640,10 +6943,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopRtmpStream',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7677,10 +6976,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startLocalVideoTranscoder',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7763,10 +7058,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'updateLocalTranscoderConfiguration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7850,10 +7141,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopLocalVideoTranscoder',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7882,12 +7169,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startPrimaryCameraCapture',
+    'startCameraCapture',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7898,6 +7181,8 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
         const CameraDirection configCameraDirection =
             CameraDirection.cameraRear;
         const int formatWidth = 10;
@@ -7916,12 +7201,13 @@ void rtcEngineSmokeTestCases() {
           format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
         );
-        await rtcEngine.startPrimaryCameraCapture(
-          config,
+        await rtcEngine.startCameraCapture(
+          sourceType: sourceType,
+          config: config,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startPrimaryCameraCapture] error: ${e.toString()}');
+          debugPrint('[startCameraCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -7936,12 +7222,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startSecondaryCameraCapture',
+    'stopCameraCapture',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -7952,98 +7234,14 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const CameraDirection configCameraDirection =
-            CameraDirection.cameraRear;
-        const int formatWidth = 10;
-        const int formatHeight = 10;
-        const int formatFps = 10;
-        const VideoFormat configFormat = VideoFormat(
-          width: formatWidth,
-          height: formatHeight,
-          fps: formatFps,
-        );
-        const String configDeviceId = "hello";
-        const bool configFollowEncodeDimensionRatio = true;
-        const CameraCapturerConfiguration config = CameraCapturerConfiguration(
-          cameraDirection: configCameraDirection,
-          deviceId: configDeviceId,
-          format: configFormat,
-          followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
-        );
-        await rtcEngine.startSecondaryCameraCapture(
-          config,
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        await rtcEngine.stopCameraCapture(
+          sourceType,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[startSecondaryCameraCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopPrimaryCameraCapture',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopPrimaryCameraCapture();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopPrimaryCameraCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopSecondaryCameraCapture',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopSecondaryCameraCapture();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopSecondaryCameraCapture] error: ${e.toString()}');
+          debugPrint('[stopCameraCapture] error: ${e.toString()}');
           rethrow;
         }
 
@@ -8060,10 +7258,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCameraDeviceOrientation',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8099,10 +7293,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setScreenCaptureOrientation',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8136,268 +7326,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'startPrimaryScreenCapture',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int screenRectX = 10;
-        const int screenRectY = 10;
-        const int screenRectWidth = 10;
-        const int screenRectHeight = 10;
-        const Rectangle configScreenRect = Rectangle(
-          x: screenRectX,
-          y: screenRectY,
-          width: screenRectWidth,
-          height: screenRectHeight,
-        );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions paramsDimensions = VideoDimensions(
-          width: dimensionsWidth,
-          height: dimensionsHeight,
-        );
-        const int paramsFrameRate = 10;
-        const int paramsBitrate = 10;
-        const bool paramsCaptureMouseCursor = true;
-        const bool paramsWindowFocus = true;
-        const List<int> paramsExcludeWindowList = [];
-        const int paramsExcludeWindowCount = 10;
-        const int paramsHighLightWidth = 10;
-        const int paramsHighLightColor = 10;
-        const bool paramsEnableHighLight = true;
-        const ScreenCaptureParameters configParams = ScreenCaptureParameters(
-          dimensions: paramsDimensions,
-          frameRate: paramsFrameRate,
-          bitrate: paramsBitrate,
-          captureMouseCursor: paramsCaptureMouseCursor,
-          windowFocus: paramsWindowFocus,
-          excludeWindowList: paramsExcludeWindowList,
-          excludeWindowCount: paramsExcludeWindowCount,
-          highLightWidth: paramsHighLightWidth,
-          highLightColor: paramsHighLightColor,
-          enableHighLight: paramsEnableHighLight,
-        );
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle configRegionRect = Rectangle(
-          x: regionRectX,
-          y: regionRectY,
-          width: regionRectWidth,
-          height: regionRectHeight,
-        );
-        const bool configIsCaptureWindow = true;
-        const int configDisplayId = 10;
-        const int configWindowId = 10;
-        const ScreenCaptureConfiguration config = ScreenCaptureConfiguration(
-          isCaptureWindow: configIsCaptureWindow,
-          displayId: configDisplayId,
-          screenRect: configScreenRect,
-          windowId: configWindowId,
-          params: configParams,
-          regionRect: configRegionRect,
-        );
-        await rtcEngine.startPrimaryScreenCapture(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startPrimaryScreenCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startSecondaryScreenCapture',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const int screenRectX = 10;
-        const int screenRectY = 10;
-        const int screenRectWidth = 10;
-        const int screenRectHeight = 10;
-        const Rectangle configScreenRect = Rectangle(
-          x: screenRectX,
-          y: screenRectY,
-          width: screenRectWidth,
-          height: screenRectHeight,
-        );
-        const int dimensionsWidth = 10;
-        const int dimensionsHeight = 10;
-        const VideoDimensions paramsDimensions = VideoDimensions(
-          width: dimensionsWidth,
-          height: dimensionsHeight,
-        );
-        const int paramsFrameRate = 10;
-        const int paramsBitrate = 10;
-        const bool paramsCaptureMouseCursor = true;
-        const bool paramsWindowFocus = true;
-        const List<int> paramsExcludeWindowList = [];
-        const int paramsExcludeWindowCount = 10;
-        const int paramsHighLightWidth = 10;
-        const int paramsHighLightColor = 10;
-        const bool paramsEnableHighLight = true;
-        const ScreenCaptureParameters configParams = ScreenCaptureParameters(
-          dimensions: paramsDimensions,
-          frameRate: paramsFrameRate,
-          bitrate: paramsBitrate,
-          captureMouseCursor: paramsCaptureMouseCursor,
-          windowFocus: paramsWindowFocus,
-          excludeWindowList: paramsExcludeWindowList,
-          excludeWindowCount: paramsExcludeWindowCount,
-          highLightWidth: paramsHighLightWidth,
-          highLightColor: paramsHighLightColor,
-          enableHighLight: paramsEnableHighLight,
-        );
-        const int regionRectX = 10;
-        const int regionRectY = 10;
-        const int regionRectWidth = 10;
-        const int regionRectHeight = 10;
-        const Rectangle configRegionRect = Rectangle(
-          x: regionRectX,
-          y: regionRectY,
-          width: regionRectWidth,
-          height: regionRectHeight,
-        );
-        const bool configIsCaptureWindow = true;
-        const int configDisplayId = 10;
-        const int configWindowId = 10;
-        const ScreenCaptureConfiguration config = ScreenCaptureConfiguration(
-          isCaptureWindow: configIsCaptureWindow,
-          displayId: configDisplayId,
-          screenRect: configScreenRect,
-          windowId: configWindowId,
-          params: configParams,
-          regionRect: configRegionRect,
-        );
-        await rtcEngine.startSecondaryScreenCapture(
-          config,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startSecondaryScreenCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopPrimaryScreenCapture',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopPrimaryScreenCapture();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopPrimaryScreenCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'stopSecondaryScreenCapture',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        await rtcEngine.stopSecondaryScreenCapture();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[stopSecondaryScreenCapture] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'getConnectionState',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8428,10 +7358,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'registerEventHandler',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8503,7 +7429,6 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, int remoteUid, int state) {},
           onUserEnableLocalVideo:
               (RtcConnection connection, int remoteUid, bool enabled) {},
-          onApiCallExecuted: (ErrorCodeType err, String api, String result) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
           onRemoteAudioStats:
@@ -8516,7 +7441,7 @@ void rtcEngineSmokeTestCases() {
           onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
-              Rectangle vecRectangle, int vecDistance, int numFaces) {},
+              List vecRectangle, List vecDistance, int numFaces) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
@@ -8617,6 +7542,12 @@ void rtcEngineSmokeTestCases() {
               (String provider, String extension, int error, String message) {},
           onUserAccountUpdated:
               (RtcConnection connection, int remoteUid, String userAccount) {},
+          onLocalVideoTranscoderError:
+              (TranscodingVideoStream stream, VideoTranscoderError error) {},
+          onVideoRenderingTracingResult: (RtcConnection connection,
+              int uid,
+              MediaTraceEvent currentEvent,
+              VideoRenderingTracingInfo tracingInfo) {},
         );
         rtcEngine.registerEventHandler(
           eventHandler,
@@ -8640,10 +7571,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'unregisterEventHandler',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8715,7 +7642,6 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, int remoteUid, int state) {},
           onUserEnableLocalVideo:
               (RtcConnection connection, int remoteUid, bool enabled) {},
-          onApiCallExecuted: (ErrorCodeType err, String api, String result) {},
           onLocalAudioStats:
               (RtcConnection connection, LocalAudioStats stats) {},
           onRemoteAudioStats:
@@ -8728,7 +7654,7 @@ void rtcEngineSmokeTestCases() {
           onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
-              Rectangle vecRectangle, int vecDistance, int numFaces) {},
+              List vecRectangle, List vecDistance, int numFaces) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
@@ -8829,6 +7755,12 @@ void rtcEngineSmokeTestCases() {
               (String provider, String extension, int error, String message) {},
           onUserAccountUpdated:
               (RtcConnection connection, int remoteUid, String userAccount) {},
+          onLocalVideoTranscoderError:
+              (TranscodingVideoStream stream, VideoTranscoderError error) {},
+          onVideoRenderingTracingResult: (RtcConnection connection,
+              int uid,
+              MediaTraceEvent currentEvent,
+              VideoRenderingTracingInfo tracingInfo) {},
         );
         rtcEngine.unregisterEventHandler(
           eventHandler,
@@ -8852,10 +7784,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setRemoteUserPriority',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8891,10 +7819,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setEncryptionMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8928,10 +7852,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setEncryptionSecret',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -8965,10 +7885,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableEncryption',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9011,10 +7927,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'sendStreamMessage',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9052,10 +7964,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'addVideoWatermark',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9128,10 +8036,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'clearVideoWatermarks',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9162,10 +8066,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'pauseAudio',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9196,10 +8096,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'resumeAudio',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9230,10 +8126,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableWebSdkInteroperability',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9267,10 +8159,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'sendCustomReportMessage',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9312,10 +8200,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'registerMediaMetadataObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9353,10 +8237,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'unregisterMediaMetadataObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9395,10 +8275,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startAudioFrameDump',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9444,10 +8320,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopAudioFrameDump',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9483,12 +8355,43 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'setAINSMode',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const bool enabled = true;
+        const AudioAinsMode mode = AudioAinsMode.ainsModeBalanced;
+        await rtcEngine.setAINSMode(
+          enabled: enabled,
+          mode: mode,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setAINSMode] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'registerLocalUserAccount',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9524,10 +8427,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'joinChannelWithUserAccount',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9557,15 +8456,12 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioSourceId = 10;
-        const bool optionsPublishCustomAudioTrackEnableAec = true;
-        const bool optionsPublishDirectCustomAudioTrack = true;
-        const bool optionsPublishCustomAudioTrackAec = true;
+        const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomVideoTrack = true;
         const bool optionsPublishEncodedVideoTrack = true;
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishTranscodedVideoTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -9587,16 +8483,12 @@ void rtcEngineSmokeTestCases() {
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomAudioSourceId: optionsPublishCustomAudioSourceId,
-          publishCustomAudioTrackEnableAec:
-              optionsPublishCustomAudioTrackEnableAec,
-          publishDirectCustomAudioTrack: optionsPublishDirectCustomAudioTrack,
-          publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
+          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
-          publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -9639,10 +8531,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'joinChannelWithUserAccountEx',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9672,15 +8560,12 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
-        const int optionsPublishCustomAudioSourceId = 10;
-        const bool optionsPublishCustomAudioTrackEnableAec = true;
-        const bool optionsPublishDirectCustomAudioTrack = true;
-        const bool optionsPublishCustomAudioTrackAec = true;
+        const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomVideoTrack = true;
         const bool optionsPublishEncodedVideoTrack = true;
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
-        const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishTranscodedVideoTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -9702,16 +8587,12 @@ void rtcEngineSmokeTestCases() {
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
-          publishCustomAudioSourceId: optionsPublishCustomAudioSourceId,
-          publishCustomAudioTrackEnableAec:
-              optionsPublishCustomAudioTrackEnableAec,
-          publishDirectCustomAudioTrack: optionsPublishDirectCustomAudioTrack,
-          publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
+          publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
           publishEncodedVideoTrack: optionsPublishEncodedVideoTrack,
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
-          publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishTranscodedVideoTrack: optionsPublishTranscodedVideoTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -9754,10 +8635,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getUserInfoByUserAccount',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9791,10 +8668,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getUserInfoByUid',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9828,10 +8701,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopChannelMediaRelay',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9862,10 +8731,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'pauseAllChannelMediaRelay',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9896,10 +8761,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'resumeAllChannelMediaRelay',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9930,10 +8791,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setDirectCdnStreamingAudioConfiguration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -9968,10 +8825,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setDirectCdnStreamingVideoConfiguration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10040,10 +8893,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startDirectCdnStreaming',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10102,10 +8951,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopDirectCdnStreaming',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10136,10 +8981,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'updateDirectCdnStreamingMediaOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10190,10 +9031,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'startRhythmPlayer',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10236,10 +9073,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'stopRhythmPlayer',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10270,10 +9103,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'configRhythmPlayer',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10312,10 +9141,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'takeSnapshot',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10351,10 +9176,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableContentInspect',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10397,10 +9218,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustCustomAudioPublishVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10411,10 +9228,10 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const int sourceId = 10;
+        const int trackId = 10;
         const int volume = 10;
         await rtcEngine.adjustCustomAudioPublishVolume(
-          sourceId: sourceId,
+          trackId: trackId,
           volume: volume,
         );
       } catch (e) {
@@ -10436,10 +9253,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'adjustCustomAudioPlayoutVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10450,10 +9263,10 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const int sourceId = 10;
+        const int trackId = 10;
         const int volume = 10;
         await rtcEngine.adjustCustomAudioPlayoutVolume(
-          sourceId: sourceId,
+          trackId: trackId,
           volume: volume,
         );
       } catch (e) {
@@ -10475,10 +9288,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setCloudProxy',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10512,10 +9321,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAdvancedAudioOptions',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10554,10 +9359,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setAVSyncSource',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10593,10 +9394,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableVideoImageSource',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10640,10 +9437,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getCurrentMonotonicTimeInMs',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10674,10 +9467,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'enableWirelessAccelerate',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10711,10 +9500,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getNetworkType',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10743,12 +9528,131 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'setParameters',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const String parameters = "hello";
+        await rtcEngine.setParameters(
+          parameters,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setParameters] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'startMediaRenderingTracing',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.startMediaRenderingTracing();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[startMediaRenderingTracing] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'enableInstantMediaRendering',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.enableInstantMediaRendering();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[enableInstantMediaRendering] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'getNtpWallTimeInMs',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.getNtpWallTimeInMs();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getNtpWallTimeInMs] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'getAudioDeviceManager',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10779,10 +9683,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getVideoDeviceManager',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10813,10 +9713,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getMusicContentCenter',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10847,10 +9743,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'getMediaEngine',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10879,46 +9771,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getMediaRecorder',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        rtcEngine.getMediaRecorder();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getMediaRecorder] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'getLocalSpatialAudioEngine',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10949,10 +9803,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'sendMetaData',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -10998,10 +9848,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'setMaxMetadataSize',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -11035,10 +9881,6 @@ void rtcEngineSmokeTestCases() {
   testWidgets(
     'unregisterAudioEncodedFrameObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -11078,49 +9920,8 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'setParameters',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String parameters = "hello";
-        await rtcEngine.setParameters(
-          parameters,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[setParameters] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'getNativeHandle',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 

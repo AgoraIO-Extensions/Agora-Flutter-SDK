@@ -36,18 +36,20 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
   }
 
   @override
-  ffi.Pointer<ffi.Void> createNativeApiEngine(
-      List<ffi.Pointer<ffi.Void>>? args) {
+  CreateNativeApiEngineResult createNativeApiEngine(
+      List<ffi.Pointer<ffi.Void>> args) {
     ffi.Pointer<ffi.Void> enginePtr = ffi.nullptr;
     assert(() {
-      if (args != null && args.isNotEmpty) {
+      if (args.isNotEmpty) {
         assert(args.length == 1);
         enginePtr = args[0];
       }
       return true;
     }());
 
-    return _binding.CreateIrisApiEngine(enginePtr);
+    final apiEnginePtr = _binding.CreateIrisApiEngine(enginePtr);
+
+    return CreateNativeApiEngineResult(apiEnginePtr);
   }
 
   void _response(ffi.Pointer<ApiParam> param, Map<String, Object> result) {
@@ -93,40 +95,27 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
           return _binding.StopDumpVideo(
               ffi.Pointer<ffi.Void>.fromAddress(videoFrameBufferManagerIntPtr));
         }
-      case 'CreateIrisVideoFrameBufferManager':
+      case 'CreateIrisRtcRendering':
         {
           final data = jsonDecode(methodCall.params);
           assert(data.containsKey('irisRtcEngineNativeHandle'));
           final irisRtcEngineNativeHandle =
               data['irisRtcEngineNativeHandle'] as int;
 
-          final bufferManager = _binding.CreateIrisVideoFrameBufferManager();
-          _binding.Attach(
-            ffi.Pointer<ffi.Void>.fromAddress(irisRtcEngineNativeHandle),
-            bufferManager,
-          );
+          final bufferManager = _binding.CreateIrisRtcRendering(
+              ffi.Pointer<ffi.Void>.fromAddress(irisRtcEngineNativeHandle));
 
-          final result = {
-            'videoFrameBufferManagerNativeHandle': bufferManager.address
-          };
+          final result = {'irisRtcRenderingHandle': bufferManager.address};
           _response(param, result);
 
           return 0;
         }
-      case 'FreeIrisVideoFrameBufferManager':
+      case 'FreeIrisRtcRendering':
         {
           final data = jsonDecode(methodCall.params);
           final videoFrameBufferManagerIntPtr =
-              data['videoFrameBufferManagerNativeHandle'] as int;
-          final irisRtcEngineNativeHandle =
-              data['irisRtcEngineNativeHandle'] as int;
-
-          _binding.Detach(
-            ffi.Pointer<ffi.Void>.fromAddress(irisRtcEngineNativeHandle),
-            ffi.Pointer<ffi.Void>.fromAddress(videoFrameBufferManagerIntPtr),
-          );
-
-          _binding.FreeIrisVideoFrameBufferManager(
+              data['irisRtcRenderingHandle'] as int;
+          _binding.FreeIrisRtcRendering(
               ffi.Pointer<ffi.Void>.fromAddress(videoFrameBufferManagerIntPtr));
 
           _response(param, {});

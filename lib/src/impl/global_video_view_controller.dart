@@ -15,28 +15,27 @@ class GlobalVideoViewController {
   final MethodChannel methodChannel =
       const MethodChannel('agora_rtc_ng/video_view_controller');
 
-  int _videoFrameBufferManagerIntPtr = 0;
-  int get videoFrameBufferManagerIntPtr => _videoFrameBufferManagerIntPtr;
+  int _irisRtcRenderingHandle = 0;
+  int get irisRtcRenderingHandle => _irisRtcRenderingHandle;
 
   final Map<int, Completer<void>> _destroyTextureRenderCompleters = {};
   bool _isDetachVFBMing = false;
 
   Future<void> attachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
-    if (_videoFrameBufferManagerIntPtr != 0) {
+    if (_irisRtcRenderingHandle != 0) {
       return;
     }
 
     final CallApiResult result =
         await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'CreateIrisVideoFrameBufferManager',
+      'CreateIrisRtcRendering',
       jsonEncode({'irisRtcEngineNativeHandle': irisRtcEngineIntPtr}),
     ));
-    _videoFrameBufferManagerIntPtr =
-        result.data['videoFrameBufferManagerNativeHandle'] ?? 0;
+    _irisRtcRenderingHandle = result.data['irisRtcRenderingHandle'] ?? 0;
   }
 
   Future<void> detachVideoFrameBufferManager(int irisRtcEngineIntPtr) async {
-    if (_videoFrameBufferManagerIntPtr == 0) {
+    if (_irisRtcRenderingHandle == 0) {
       return;
     }
 
@@ -54,57 +53,26 @@ class GlobalVideoViewController {
     _destroyTextureRenderCompleters.clear();
 
     await irisMethodChannel.invokeMethod(IrisMethodCall(
-      'FreeIrisVideoFrameBufferManager',
+      'FreeIrisRtcRendering',
       jsonEncode({
         'irisRtcEngineNativeHandle': irisRtcEngineIntPtr,
-        'videoFrameBufferManagerNativeHandle': _videoFrameBufferManagerIntPtr,
+        'irisRtcRenderingHandle': _irisRtcRenderingHandle,
       }),
     ));
-    _videoFrameBufferManagerIntPtr = 0;
+    _irisRtcRenderingHandle = 0;
   }
 
-  Future<int> createTextureRender(
-      int uid, String channelId, int videoSourceType) async {
+  Future<int> createTextureRender(int uid, String channelId,
+      int videoSourceType, int videoViewSetupMode) async {
     final textureId =
         await methodChannel.invokeMethod<int>('createTextureRender', {
-      'videoFrameBufferManagerNativeHandle': _videoFrameBufferManagerIntPtr,
+      'irisRtcRenderingHandle': _irisRtcRenderingHandle,
       'uid': uid,
       'channelId': channelId,
       'videoSourceType': videoSourceType,
+      'videoViewSetupMode': videoViewSetupMode,
     });
     return textureId ?? kTextureNotInit;
-  }
-
-  /// [videoSourceType] definition:
-  ///
-  /// ```c++
-  /// typedef enum IrisVideoSourceType {
-  ///   kVideoSourceTypeCameraPrimary,
-  ///   kVideoSourceTypeCameraSecondary,
-  ///   kVideoSourceTypeScreenPrimary,
-  ///   kVideoSourceTypeScreenSecondary,
-  ///   kVideoSourceTypeCustom,
-  ///   kVideoSourceTypeMediaPlayer,
-  ///   kVideoSourceTypeRtcImagePng,
-  ///   kVideoSourceTypeRtcImageJpeg,
-  ///   kVideoSourceTypeRtcImageGif,
-  ///   kVideoSourceTypeRemote,
-  ///   kVideoSourceTypeTranscoded,
-  ///   kVideoSourceTypePreEncode,
-  ///   kVideoSourceTypePreEncodeSecondaryCamera,
-  ///   kVideoSourceTypePreEncodeScreen,
-  ///   kVideoSourceTypePreEncodeSecondaryScreen,
-  ///   kVideoSourceTypeUnknown,
-  /// } IrisVideoSourceType;
-  /// ```
-  Future<void> updateTextureRenderData(
-      int textureId, int uid, String channelId, int videoSourceType) async {
-    await methodChannel.invokeMethod('updateTextureRenderData', {
-      'textureId': textureId,
-      'uid': uid,
-      'channelId': channelId,
-      'videoSourceType': videoSourceType,
-    });
   }
 
   /// Call `IrisVideoFrameBufferManager.DisableVideoFrameBuffer` in the native side

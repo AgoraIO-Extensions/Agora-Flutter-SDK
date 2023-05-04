@@ -10,14 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onMusicChartsResult',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -31,8 +27,8 @@ void generatedTestCases() {
 
       final onMusicChartsResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
-        onMusicChartsResult: (String requestId,
-            MusicContentCenterStatusCode status, List result) {
+        onMusicChartsResult: (String requestId, List result,
+            MusicContentCenterStatusCode errorCode) {
           onMusicChartsResultCompleter.complete(true);
         },
       );
@@ -46,14 +42,14 @@ void generatedTestCases() {
 
       {
         const String requestId = "hello";
-        const MusicContentCenterStatusCode status =
-            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
         const List<MusicChartInfo> result = [];
+        const MusicContentCenterStatusCode errorCode =
+            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
-          'status': status.value(),
           'result': result,
+          'errorCode': errorCode.value(),
         };
 
         irisTester.fireEvent(
@@ -79,10 +75,6 @@ void generatedTestCases() {
   testWidgets(
     'onMusicCollectionResult',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -96,8 +88,8 @@ void generatedTestCases() {
 
       final onMusicCollectionResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
-        onMusicCollectionResult: (String requestId,
-            MusicContentCenterStatusCode status, MusicCollection result) {
+        onMusicCollectionResult: (String requestId, MusicCollection result,
+            MusicContentCenterStatusCode errorCode) {
           onMusicCollectionResultCompleter.complete(true);
         },
       );
@@ -111,12 +103,12 @@ void generatedTestCases() {
 
       {
         const String requestId = "hello";
-        const MusicContentCenterStatusCode status =
+        const MusicContentCenterStatusCode errorCode =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
-          'status': status.value(),
+          'errorCode': errorCode.value(),
         };
 
         irisTester.fireEvent(
@@ -142,10 +134,6 @@ void generatedTestCases() {
   testWidgets(
     'onLyricResult',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -159,7 +147,8 @@ void generatedTestCases() {
 
       final onLyricResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
-        onLyricResult: (String requestId, String lyricUrl) {
+        onLyricResult: (String requestId, String lyricUrl,
+            MusicContentCenterStatusCode errorCode) {
           onLyricResultCompleter.complete(true);
         },
       );
@@ -174,10 +163,13 @@ void generatedTestCases() {
       {
         const String requestId = "hello";
         const String lyricUrl = "hello";
+        const MusicContentCenterStatusCode errorCode =
+            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
           'lyricUrl': lyricUrl,
+          'errorCode': errorCode.value(),
         };
 
         irisTester.fireEvent('MusicContentCenterEventHandler_onLyricResult',
@@ -202,10 +194,6 @@ void generatedTestCases() {
   testWidgets(
     'onPreLoadEvent',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -219,8 +207,8 @@ void generatedTestCases() {
 
       final onPreLoadEventCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
-        onPreLoadEvent: (int songCode, int percent, PreloadStatusCode status,
-            String msg, String lyricUrl) {
+        onPreLoadEvent: (int songCode, int percent, String lyricUrl,
+            PreloadStatusCode status, MusicContentCenterStatusCode errorCode) {
           onPreLoadEventCompleter.complete(true);
         },
       );
@@ -235,17 +223,18 @@ void generatedTestCases() {
       {
         const int songCode = 10;
         const int percent = 10;
+        const String lyricUrl = "hello";
         const PreloadStatusCode status =
             PreloadStatusCode.kPreloadStatusCompleted;
-        const String msg = "hello";
-        const String lyricUrl = "hello";
+        const MusicContentCenterStatusCode errorCode =
+            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'songCode': songCode,
           'percent': percent,
-          'status': status.value(),
-          'msg': msg,
           'lyricUrl': lyricUrl,
+          'status': status.value(),
+          'errorCode': errorCode.value(),
         };
 
         irisTester.fireEvent('MusicContentCenterEventHandler_onPreLoadEvent',

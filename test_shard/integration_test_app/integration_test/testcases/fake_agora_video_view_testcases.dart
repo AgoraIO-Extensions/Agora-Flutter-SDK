@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'package:agora_rtc_engine/src/impl/native_iris_api_engine_binding_delegate.dart';
 import '../fake/fake_iris_method_channel.dart';
 
 class _RenderViewWidget extends StatefulWidget {
@@ -78,7 +79,8 @@ class _RenderViewWidgetState extends State<_RenderViewWidget> {
 
 void testCases() {
   group('Test with FakeIrisMethodChannel', () {
-    final FakeIrisMethodChannel irisMethodChannel = FakeIrisMethodChannel();
+    final FakeIrisMethodChannel irisMethodChannel =
+        FakeIrisMethodChannel(IrisApiEngineNativeBindingDelegateProvider());
     final RtcEngine rtcEngine =
         RtcEngineImpl.create(irisMethodChannel: irisMethodChannel);
 
@@ -136,8 +138,6 @@ void testCases() {
       },
       skip: !(Platform.isAndroid || Platform.isIOS),
     );
-
-
 
     testWidgets(
       'Switch local/remote AgoraVideoView with RtcConnection',

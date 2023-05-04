@@ -27,22 +27,20 @@ class IrisTester {
   IrisTester({NativeIrisTesterBinding? nativeIrisTesterBinding}) {
     _nativeIrisTesterBinding =
         nativeIrisTesterBinding ?? NativeIrisTesterBinding(_loadLib());
-    _debugApiEnginePtr = _nativeIrisTesterBinding.CreateDebugApiEngine();
   }
   late final NativeIrisTesterBinding _nativeIrisTesterBinding;
-  late final ffi.Pointer<ffi.Void> _debugApiEnginePtr;
+  late ffi.Pointer<ffi.Void> _fakeRtcEngineHandle;
 
-  @Deprecated('Use getDebugApiEngineNativeHandle instead.')
-  int createDebugApiEngine() {
-    return _debugApiEnginePtr.address;
+  int getfakeRtcEngineHandle() {
+    return _fakeRtcEngineHandle.address;
   }
 
-  int getDebugApiEngineNativeHandle() {
-    return _debugApiEnginePtr.address;
+  void initialize() {
+    _fakeRtcEngineHandle = _nativeIrisTesterBinding.CreateFakeRtcEngine();
   }
 
   void dispose() {
-    calloc.free(_debugApiEnginePtr);
+    calloc.free(_fakeRtcEngineHandle);
   }
 
   void expectCalled(String funcName, String params) {
@@ -94,8 +92,8 @@ class IrisTester {
         ..ref.length = bufferListLengthPtr
         ..ref.buffer_count = bufferLength;
 
-      final ret = _nativeIrisTesterBinding.TriggerEventWithFakeApiEngine(
-          _debugApiEnginePtr, apiParam);
+      final ret = _nativeIrisTesterBinding.TriggerEventWithFakeRtcEngine(
+          _fakeRtcEngineHandle, apiParam);
 
       if (ret != 0) {
         debugPrint(

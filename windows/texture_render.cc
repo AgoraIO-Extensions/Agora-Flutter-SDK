@@ -2,18 +2,17 @@
 
 #include <functional>
 
-#include "iris_rtc_raw_data.h"
-#include "iris_video_processor_cxx.h"
+#include "AgoraMediaBase.h"
 
 using namespace flutter;
-using namespace agora::iris;
-using namespace agora::iris::rtc;
 
 TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
                              flutter::TextureRegistrar *registrar,
-                             agora::iris::IrisVideoFrameBufferManager *videoFrameBufferManager)
+                             agora::iris::IrisRtcRendering *iris_rtc_rendering)
     : registrar_(registrar),
-      videoFrameBufferManager_(videoFrameBufferManager)
+      iris_rtc_rendering_(iris_rtc_rendering),
+      delegate_id_(agora::iris::INVALID_DELEGATE_ID),
+      is_dirty_(false)
 {
     // Create flutter desktop pixelbuffer texture;
     texture_ =
@@ -34,50 +33,43 @@ TextureRender::TextureRender(flutter::BinaryMessenger *messenger,
 
 TextureRender::~TextureRender()
 {
-    if (videoFrameBufferManager_)
-    {
-        videoFrameBufferManager_->DisableVideoFrameBuffer(this);
-        videoFrameBufferManager_ = nullptr;
-    }
-
-    const std::lock_guard<std::mutex> lock(buffer_mutex_);
-
-    if (registrar_ && texture_id_ != -1)
-    {
-        registrar_->UnregisterTexture(texture_id_);
-
-        registrar_ = nullptr;
-        texture_id_ = -1;
-    }
+    Dispose();
 }
 
 int64_t TextureRender::texture_id() { return texture_id_; }
 
-void TextureRender::OnVideoFrameReceived(const IrisVideoFrame &video_frame,
-                                         const IrisVideoFrameBufferConfig *config,
+void TextureRender::OnVideoFrameReceived(const void *videoFrame,
+                                         const IrisRtcVideoFrameConfig &config,
                                          bool resize)
 {
     std::lock_guard<std::mutex> lock_guard(buffer_mutex_);
 
-    const uint32_t bytes_per_pixel = 4;
-    const uint32_t pixels_total = video_frame.width * video_frame.height;
-    const uint32_t data_size = pixels_total * bytes_per_pixel;
-
-    if (buffer_.size() != data_size)
+    if (!is_dirty_)
     {
-        buffer_.resize(data_size);
+        const agora::media::base::VideoFrame *video_frame = static_cast<const agora::media::base::VideoFrame *>(videoFrame);
 
-        flutter::EncodableMap args = {
-            {EncodableValue("width"), EncodableValue(video_frame.width)},
-            {EncodableValue("height"), EncodableValue(video_frame.height)}};
-        method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(args)));
+        const uint32_t bytes_per_pixel = 4;
+        const uint32_t pixels_total = video_frame->width * video_frame->height;
+        const uint32_t data_size = pixels_total * bytes_per_pixel;
+
+        if (buffer_.size() != data_size)
+        {
+            buffer_.resize(data_size);
+
+            flutter::EncodableMap args = {
+                {EncodableValue("width"), EncodableValue(video_frame->width)},
+                {EncodableValue("height"), EncodableValue(video_frame->height)}};
+            method_channel_->InvokeMethod("onSizeChanged", std::make_unique<EncodableValue>(EncodableValue(args)));
+        }
+
+        std::copy(static_cast<uint8_t *>(video_frame->yBuffer), static_cast<uint8_t *>(video_frame->yBuffer) + data_size, buffer_.data());
+
+        frame_width_ = video_frame->width;
+        frame_height_ = video_frame->height;
+
+        is_dirty_ = true;
     }
-
-    std::copy(static_cast<uint8_t *>(video_frame.y_buffer), static_cast<uint8_t *>(video_frame.y_buffer) + data_size, buffer_.data());
-
-    frame_width_ = video_frame.width;
-    frame_height_ = video_frame.height;
-    if (TextureRegistered())
+    if (TextureRegistered() && is_dirty_)
     {
         registrar_->MarkTextureFrameAvailable(texture_id_);
     }
@@ -88,7 +80,14 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
 {
     std::unique_lock<std::mutex> buffer_lock(buffer_mutex_);
 
+    is_dirty_ = false;
+
     if (!TextureRegistered())
+    {
+        return nullptr;
+    }
+
+    if (frame_width_ == 0 || frame_height_ == 0)
     {
         return nullptr;
     }
@@ -117,24 +116,43 @@ TextureRender::CopyPixelBuffer(size_t width, size_t height)
     return flutter_desktop_pixel_buffer_.get();
 }
 
-void TextureRender::UpdateData(unsigned int uid, const std::string &channelId, unsigned int videoSourceType)
+void TextureRender::UpdateData(unsigned int uid, const std::string &channelId, unsigned int videoSourceType, unsigned int videoViewSetupMode)
 {
-    IrisVideoFrameBuffer buffer(kVideoFrameTypeRGBA, this, 16);
-    IrisVideoFrameBufferConfig config;
-
-    config.id = uid;
-    config.type = (IrisVideoSourceType)videoSourceType;
-
+    IrisRtcVideoFrameConfig config;
+    config.uid = uid;
+    config.video_source_type = videoSourceType;
+    config.video_frame_format = agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_RGBA;
     if (!channelId.empty())
     {
-        strcpy_s(config.key, channelId.c_str());
+        strcpy_s(config.channelId, channelId.c_str());
     }
     else
     {
-        strcpy_s(config.key, "");
+        strcpy_s(config.channelId, "");
     }
-    if (videoFrameBufferManager_)
+    config.video_view_setup_mode = videoViewSetupMode;
+
+    if (iris_rtc_rendering_)
     {
-        videoFrameBufferManager_->EnableVideoFrameBuffer(buffer, &config);
+        delegate_id_ = iris_rtc_rendering_->AddVideoFrameObserverDelegate(config, this);
+    }
+}
+
+void TextureRender::Dispose()
+{
+    if (iris_rtc_rendering_)
+    {
+        iris_rtc_rendering_->RemoveVideoFrameObserverDelegate(delegate_id_);
+        iris_rtc_rendering_ = nullptr;
+    }
+
+    const std::lock_guard<std::mutex> lock(buffer_mutex_);
+
+    if (registrar_ && texture_id_ != -1)
+    {
+        registrar_->UnregisterTexture(texture_id_);
+
+        registrar_ = nullptr;
+        texture_id_ = -1;
     }
 }

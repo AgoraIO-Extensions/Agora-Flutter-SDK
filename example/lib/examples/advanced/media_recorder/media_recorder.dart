@@ -11,15 +11,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 
 /// MediaRecorder Example
-class MediaRecorder extends StatefulWidget {
+class MediaRecorderExample extends StatefulWidget {
   /// @nodoc
-  const MediaRecorder({Key? key}) : super(key: key);
+  const MediaRecorderExample({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<MediaRecorder> {
+class _State extends State<MediaRecorderExample> {
   late final RtcEngine _engine;
 
   bool isJoined = false, switchCamera = true, switchRender = true;
@@ -28,6 +28,7 @@ class _State extends State<MediaRecorder> {
   bool _isStartedMediaRecording = false;
   String _recordingFileStoragePath = '';
   bool _isReadyPreview = false;
+  MediaRecorder? _mediaRecorder;
 
   @override
   void initState() {
@@ -43,7 +44,9 @@ class _State extends State<MediaRecorder> {
   }
 
   Future<void> _dispose() async {
-    await _engine.getMediaRecorder().release();
+    if (_mediaRecorder != null) {
+      await _engine.destroyMediaRecorder(_mediaRecorder!);
+    }
     await _engine.release();
   }
 
@@ -52,7 +55,6 @@ class _State extends State<MediaRecorder> {
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
-    await _engine.setLogFilter(LogFilterType.logFilterError);
 
     _engine.registerEventHandler(RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
@@ -116,25 +118,27 @@ class _State extends State<MediaRecorder> {
   }
 
   Future<void> _startMediaRecording() async {
-    await _engine.getMediaRecorder().setMediaRecorderObserver(
-        connection: RtcConnection(channelId: _controller.text, localUid: 0),
-        callback: MediaRecorderObserver(
-          onRecorderStateChanged:
-              (RecorderState state, RecorderErrorCode error) {
-            logSink.log('onRecorderStateChanged state: $state, error: $error');
-          },
-          onRecorderInfoUpdated: (RecorderInfo info) {
-            logSink.log('onRecorderInfoUpdated info: ${info.toJson()}');
-          },
-        ));
+    _mediaRecorder ??= await _engine.createMediaRecorder(
+        RecorderStreamInfo(channelId: _controller.text, uid: 0));
+
+    await _mediaRecorder?.setMediaRecorderObserver(MediaRecorderObserver(
+      onRecorderStateChanged: (String channelId, int uid, RecorderState state,
+          RecorderErrorCode error) {
+        logSink.log(
+            'onRecorderStateChanged channelId: $channelId, uid: $uid state: $state, error: $error');
+      },
+      onRecorderInfoUpdated: (String channelId, int uid, RecorderInfo info) {
+        logSink.log(
+            'onRecorderInfoUpdated channelId: $channelId, uid: $uid, info: ${info.toJson()}');
+      },
+    ));
 
     Directory appDocDir = Platform.isAndroid
         ? (await getExternalStorageDirectory())!
         : await getApplicationDocumentsDirectory();
     String p = path.join(appDocDir.path, 'example.mp4');
-    await _engine.getMediaRecorder().startRecording(
-        connection: RtcConnection(channelId: _controller.text, localUid: 0),
-        config: MediaRecorderConfiguration(storagePath: p));
+    await _mediaRecorder
+        ?.startRecording(MediaRecorderConfiguration(storagePath: p));
     setState(() {
       _recordingFileStoragePath = 'Recording file storage path: $p';
       _isStartedMediaRecording = true;
@@ -142,9 +146,7 @@ class _State extends State<MediaRecorder> {
   }
 
   Future<void> _stopMediaRecording() async {
-    await _engine
-        .getMediaRecorder()
-        .stopRecording(RtcConnection(channelId: _controller.text, localUid: 0));
+    await _mediaRecorder?.stopRecording();
     setState(() {
       _recordingFileStoragePath = '';
       _isStartedMediaRecording = false;

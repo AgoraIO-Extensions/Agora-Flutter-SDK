@@ -326,7 +326,8 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
     final sourceTypeInt = sourceType.value();
     // int value of `VideoSourceType.videoSourceScreen` and `VideoSourceType.videoSourceScreenPrimary` is the same
     return sourceTypeInt == VideoSourceType.videoSourceScreenPrimary.value() ||
-        sourceTypeInt == VideoSourceType.videoSourceScreenSecondary.value();
+        sourceTypeInt == VideoSourceType.videoSourceScreenSecondary.value() ||
+        sourceTypeInt == VideoSourceType.videoSourceTranscoded.value();
   }
 
   Widget _applyMirrorMode(VideoMirrorModeType mirrorMode, Widget child,

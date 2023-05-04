@@ -16,10 +16,11 @@
 
 - (BOOL)destroyPlatformRender:(int64_t)platformRenderId;
 
-- (int64_t)createTextureRender:(intptr_t)videoFrameBufferManagerIntPtr
+- (int64_t)createTextureRender:(intptr_t)irisRtcRenderingHandle
                            uid:(NSNumber *)uid
                      channelId:(NSString *)channelId
-               videoSourceType:(NSNumber *)videoSourceType;
+               videoSourceType:(NSNumber *)videoSourceType
+            videoViewSetupMode:(NSNumber *)videoViewSetupMode;
 
 - (BOOL)destroyTextureRender:(int64_t)textureId;
 
