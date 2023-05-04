@@ -10,7 +10,9 @@ publish_to: none
 
 dependencies:
   paraphrase: 
-    path: /Users/fenglang/codes/prototype/paraphrase
+    git:
+      url: https://github.com/littleGnAl/paraphrase.git
+      ref: main
 
   args: ^2.3.1
 
