@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/components/rgba_image.dart';
+import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
@@ -94,13 +95,6 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
     }));
 
     await _engine.enableVideo();
-    await _engine.setVideoEncoderConfiguration(
-      const VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 1920, height: 1080),
-        frameRate: 15,
-        bitrate: 0,
-      ),
-    );
     await _engine.startPreview();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
@@ -254,6 +248,27 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
             TextField(
               controller: _screenShareUidController,
               decoration: const InputDecoration(hintText: 'Screen Sharing Uid'),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            BasicVideoConfigurationWidget(
+              rtcEngine: _engine,
+              title: 'Video Encoder Configuration',
+              setConfigButtonText: const Text(
+                'setVideoEncoderConfiguration',
+                style: TextStyle(fontSize: 10),
+              ),
+              onConfigChanged: (width, height, frameRate, bitrate) {
+                _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
+                  dimensions: VideoDimensions(width: width, height: height),
+                  frameRate: frameRate,
+                  bitrate: bitrate,
+                ));
+              },
+            ),
+            const SizedBox(
+              height: 20,
             ),
             Row(
               children: [
