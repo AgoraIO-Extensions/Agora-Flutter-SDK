@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine_example/components/basic_video_configuration_widget.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
@@ -87,14 +88,6 @@ class _State extends State<JoinChannelVideo> {
     ));
 
     await _engine.enableVideo();
-
-    await _engine.setVideoEncoderConfiguration(
-      const VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 640, height: 360),
-        frameRate: 15,
-        bitrate: 0,
-      ),
-    );
   }
 
   Future<void> _joinChannel() async {
@@ -246,6 +239,24 @@ class _State extends State<JoinChannelVideo> {
                         _channelProfileType = v!;
                       });
                     },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            BasicVideoConfigurationWidget(
+              rtcEngine: _engine,
+              title: 'Video Encoder Configuration',
+              setConfigButtonText: const Text(
+                'setVideoEncoderConfiguration',
+                style: TextStyle(fontSize: 10),
+              ),
+              onConfigChanged: (width, height, frameRate, bitrate) {
+                _engine.setVideoEncoderConfiguration(VideoEncoderConfiguration(
+                  dimensions: VideoDimensions(width: width, height: height),
+                  frameRate: frameRate,
+                  bitrate: bitrate,
+                ));
+              },
             ),
             const SizedBox(
               height: 20,
