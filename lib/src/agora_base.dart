@@ -542,9 +542,7 @@ enum UserOfflineReasonType {
   @JsonValue(0)
   userOfflineQuit,
 
-  /// 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time.
-  /// If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
-  ///
+  /// 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time.If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
   @JsonValue(1)
   userOfflineDropped,
 
@@ -1388,7 +1386,7 @@ class VideoSubscriptionOptions {
   /// @nodoc
   const VideoSubscriptionOptions({this.type, this.encodedFrameOnly});
 
-  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType.
+  /// @nodoc
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
@@ -1502,7 +1500,7 @@ extension CompressionPreferenceExt on CompressionPreference {
 /// Video encoder preference.
 @JsonEnum(alwaysCreate: true)
 enum EncodingPreference {
-  /// -1: Default preference. The SDK automatically selects the optimal encoding type for encoding based on factors such as platform and device type.
+  /// -1: Adaptive preference. The SDK automatically selects the optimal encoding type for encoding based on factors such as platform and device type.
   @JsonValue(-1)
   preferAuto,
 
@@ -1598,7 +1596,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
+  /// The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 960 × 540. You can set a custom value.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
@@ -1606,7 +1604,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. : (Recommended) Standard bitrate mode. In this mode, the video bitrate is twice the base bitrate.: Adaptive bitrate mode In this mode, the video bitrate is the same as the base bitrate. If you choose this mode in the LIVE_BROADCASTING profile, the video frame rate may be lower than the set value.
+  /// The encoding bitrate (Kbps) of the video. : (Recommended) Standard bitrate mode. In this mode, the bitrates of the live broadcasting profile is higher than that of the communication profile. : Adaptive bitrate mode In this mode, the bitrates of the live broadcasting profile equals that of the communication profile. If this mode is selected, the video frame rate of live broadcasting scenarios may be lower than the set value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
@@ -1622,7 +1620,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'degradationPreference')
   final DegradationPreference? degradationPreference;
 
-  /// Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
+  /// By default, the video is not mirrored.
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
@@ -3387,7 +3385,7 @@ enum RtmpStreamPublishErrorType {
   @JsonValue(14)
   rtmpStreamPublishErrorNetDown,
 
-  /// 15: Your App ID does not have permission to use the CDN live streaming function.
+  /// @nodoc
   @JsonValue(15)
   rtmpStreamPublishErrorInvalidAppid,
 
@@ -3522,11 +3520,11 @@ class LiveStreamAdvancedFeature {
 /// Connection states.
 @JsonEnum(alwaysCreate: true)
 enum ConnectionStateType {
-  /// 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases:Theinitial state before calling the joinChannel [2/2] method.The app calls the leaveChannel method.
+  /// 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases:Theinitial state before calling the joinChannel method.The app calls the leaveChannel method.
   @JsonValue(1)
   connectionStateDisconnected,
 
-  /// 2: The SDK is connecting to the Agora edge server. This state indicates that the SDK is establishing a connection with the specified channel after the app calls joinChannel [2/2].If the SDK successfully joins the channel, it triggers the onConnectionStateChanged callback and the connection state switches to connectionStateConnected.After the connection is established, the SDK also initializes the media and triggers onJoinChannelSuccess when everything is ready.
+  /// 2: The SDK is connecting to the Agora edge server. This state indicates that the SDK is establishing a connection with the specified channel after the app calls joinChannel.If the SDK successfully joins the channel, it triggers the onConnectionStateChanged callback and the connection state switches to connectionStateConnected.After the connection is established, the SDK also initializes the media and triggers onJoinChannelSuccess when everything is ready.
   @JsonValue(2)
   connectionStateConnecting,
 
@@ -3538,7 +3536,7 @@ enum ConnectionStateType {
   @JsonValue(4)
   connectionStateReconnecting,
 
-  /// 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel.You can call joinChannel [2/2] to rejoin the channel.If the SDK is banned from joining the channel by the Agora edge server through the RESTful API, the SDK triggers the onConnectionStateChanged callback.
+  /// 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel.You can call joinChannel to rejoin the channel.If the SDK is banned from joining the channel by the Agora edge server through the RESTful API, the SDK triggers the onConnectionStateChanged callback.
   @JsonValue(5)
   connectionStateFailed,
 }
@@ -3655,7 +3653,7 @@ class LiveTranscoding {
   @JsonKey(name: 'videoFramerate')
   final int? videoFramerate;
 
-  /// DeprecatedThis parameter is deprecated.Latency mode:true: Low latency with unassured quality.false: (Default) High latency with assured quality.
+  /// DeprecatedThis member is deprecated.Latency mode:true: Low latency with unassured quality.false: (Default) High latency with assured quality.
   @JsonKey(name: 'lowLatency')
   final bool? lowLatency;
 
@@ -3687,7 +3685,7 @@ class LiveTranscoding {
   @JsonKey(name: 'transcodingExtraInfo')
   final String? transcodingExtraInfo;
 
-  /// DeprecatedThis parameter is deprecated.The metadata sent to the CDN client.
+  /// DeprecatedObsolete and not recommended for use.The metadata sent to the CDN client.
   @JsonKey(name: 'metadata')
   final String? metadata;
 
@@ -3989,11 +3987,11 @@ enum ConnectionChangedReasonType {
   @JsonValue(6)
   connectionChangedInvalidAppId,
 
-  /// 7: The connection failed since channel name is not valid. Please rejoin the channel with a valid channel name.
+  /// 7: The connection failed since channel name is not valid. Rejoin the channel with a valid channel name.
   @JsonValue(7)
   connectionChangedInvalidChannelName,
 
-  /// 8: The connection failed because the token is not valid. Typical reasons include:The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.The uid specified when calling joinChannel [2/2] to join the channel is inconsistent with the uid passed in when generating the token.
+  /// 8: The connection failed because the token is not valid. Possible reasons are as follows:The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.The uid specified when calling joinChannel to join the channel is inconsistent with the uid passed in when generating the token.
   @JsonValue(8)
   connectionChangedInvalidToken,
 
@@ -4001,7 +3999,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(9)
   connectionChangedTokenExpired,
 
-  /// 10: The connection is rejected by server. Typical reasons include:The user is already in the channel and still calls a method, for example, joinChannel [2/2], to join the channel. Stop calling this method to clear this error.The user tries to join the channel when conducting a pre-call test. The user needs to call the channel after the call test ends.
+  /// 10: The connection is rejected by server. Possible reasons are as follows:The user is already in the channel and still calls a method, for example, joinChannel, to join the channel. Stop calling this method to clear this error.The user tries to join a channel while a test call is in progress. The user needs to join the channel after the call test ends.
   @JsonValue(10)
   connectionChangedRejectedByServer,
 
@@ -4021,7 +4019,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(14)
   connectionChangedKeepAliveTimeout,
 
-  /// 15: The SDK has rejoined the channel successfully.
+  /// 15: The user has rejoined the channel successfully.
   @JsonValue(15)
   connectionChangedRejoinSuccess,
 
@@ -4285,7 +4283,7 @@ class VideoCanvas {
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
-  /// Setting mode of the view. See VideoViewSetupMode.
+  /// @nodoc
   @JsonKey(name: 'setupMode')
   final VideoViewSetupMode? setupMode;
 
@@ -4293,11 +4291,11 @@ class VideoCanvas {
   @JsonKey(name: 'sourceType')
   final VideoSourceType? sourceType;
 
-  /// The ID of the media player. You can get the media player ID by calling getMediaPlayerId .
+  /// The ID of the media player. You can get the Device ID by calling getMediaPlayerId .
   @JsonKey(name: 'mediaPlayerId')
   final int? mediaPlayerId;
 
-  /// (Android and iOS only) (Optional) The display area for the video frame. See Rectangle. width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
+  /// @nodoc
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
@@ -4964,15 +4962,15 @@ class ScreenCaptureParameters {
   @JsonKey(name: 'excludeWindowCount')
   final int? excludeWindowCount;
 
-  /// (For macOS and Windows only) The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
+  /// The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
   @JsonKey(name: 'highLightWidth')
   final int? highLightWidth;
 
-  /// (For macOS and Windows only) On Windows platforms, the color of the border in ARGB format. The default value is 0xFF8CBF26. On macOS, COLOR_CLASS refers to NSColor.
+  /// On macOS, COLOR_CLASS refers to NSColor.
   @JsonKey(name: 'highLightColor')
   final int? highLightColor;
 
-  /// (For macOS and Windows only) Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
+  /// Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
   @JsonKey(name: 'enableHighLight')
   final bool? enableHighLight;
 
@@ -5075,7 +5073,7 @@ extension AudioEncodedFrameObserverPositionExt
   }
 }
 
-/// Recording configuration.
+/// Recording configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioRecordingConfiguration {
   /// @nodoc
@@ -5087,13 +5085,11 @@ class AudioRecordingConfiguration {
       this.quality,
       this.recordingChannel});
 
-  /// The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4.
-  ///  Ensure that the path for the recording file exists and is writable.
+  /// The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4.Ensure that the directory for the log files exists and is writable.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// Whether to encode the audio data:
-  ///  true: Encode audio data in AAC.false: (Default) Do not encode audio data, but save the recorded audio data directly.
+  /// @nodoc
   @JsonKey(name: 'encode')
   final bool? encode;
 
@@ -5101,7 +5097,7 @@ class AudioRecordingConfiguration {
   @JsonKey(name: 'sampleRate')
   final int? sampleRate;
 
-  /// Recording content. See AudioFileRecordingType .
+  /// The recording content. See AudioFileRecordingType .
   @JsonKey(name: 'fileRecordingType')
   final AudioFileRecordingType? fileRecordingType;
 
@@ -5109,7 +5105,7 @@ class AudioRecordingConfiguration {
   @JsonKey(name: 'quality')
   final AudioRecordingQualityType? quality;
 
-  /// The audio channel of recording: The parameter supports the following values:1: (Default) Mono.2: Stereo.The actual recorded audio channel is related to the audio channel that you capture.If the captured audio is mono and recordingChannel is 2, the recorded audio is the dual-channel data that is copied from mono data, not stereo.If the captured audio is dual channel and recordingChannel is 1, the recorded audio is the mono data that is mixed by dual-channel data.The integration scheme also affects the final recorded audio channel. Therefore, to record in stereo, technical support for assistance.
+  /// The audio channel of recording: The parameter supports the following values:1: (Default) Mono.2: Stereo.The actual recorded audio channel is related to the audio channel that you capture.If the captured audio is mono and recordingChannel is 2, the recorded audio is the dual-channel data that is copied from mono data, not stereo.If the captured audio is dual channel and recordingChannel is 1, the recorded audio is the mono data that is mixed by dual-channel data.The integration scheme also affects the final recorded audio channel. If you need to record in stereo, contact .
   @JsonKey(name: 'recordingChannel')
   final int? recordingChannel;
 
@@ -5156,6 +5152,9 @@ class AudioEncodedFrameObserver {
   /// Gets the encoded audio data of the local user.
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
   ///
+  /// * [channels] The number of channels.
+  ///  1: Mono.
+  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
@@ -5165,6 +5164,9 @@ class AudioEncodedFrameObserver {
   /// Gets the encoded audio data of all remote users.
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
   ///
+  /// * [samplesPerSec] Recording sample rate (Hz).
+  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
@@ -5174,6 +5176,9 @@ class AudioEncodedFrameObserver {
   /// Gets the mixed and encoded audio data of the local and all remote users.
   /// After calling registerAudioEncodedFrameObserver and setting the audio profile as audioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
   ///
+  /// * [samplesPerSec] Recording sample rate (Hz).
+  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
@@ -5351,11 +5356,11 @@ enum ChannelMediaRelayEvent {
   @JsonValue(2)
   relayEventPacketJoinedSrcChannel,
 
-  /// 3: The user joins the destination channel.
+  /// 3: The user joins the target channel.
   @JsonValue(3)
   relayEventPacketJoinedDestChannel,
 
-  /// 4: The SDK starts relaying the media stream to the destination channel.
+  /// 4: The SDK starts relaying the media stream to the target channel.
   @JsonValue(4)
   relayEventPacketSentToDestChannel,
 
@@ -5367,7 +5372,7 @@ enum ChannelMediaRelayEvent {
   @JsonValue(6)
   relayEventPacketReceivedAudioFromSrc,
 
-  /// 7: The destination channel is updated.
+  /// 7: The target channel is updated.
   @JsonValue(7)
   relayEventPacketUpdateDestChannel,
 
@@ -5375,11 +5380,11 @@ enum ChannelMediaRelayEvent {
   @JsonValue(8)
   relayEventPacketUpdateDestChannelRefused,
 
-  /// 9: The destination channel does not change, which means that the destination channel fails to be updated.
+  /// 9: The target channel does not change, which means that the target channel fails to be updated.
   @JsonValue(9)
   relayEventPacketUpdateDestChannelNotChange,
 
-  /// 10: The destination channel name is NULL.
+  /// 10: The target channel name is NULL.
   @JsonValue(10)
   relayEventPacketUpdateDestChannelIsNull,
 
@@ -5387,19 +5392,19 @@ enum ChannelMediaRelayEvent {
   @JsonValue(11)
   relayEventVideoProfileUpdate,
 
-  /// 12: The SDK successfully pauses relaying the media stream to destination channels.
+  /// 12: The SDK successfully pauses relaying the media stream to target channels.
   @JsonValue(12)
   relayEventPauseSendPacketToDestChannelSuccess,
 
-  /// 13: The SDK fails to pause relaying the media stream to destination channels.
+  /// 13: The SDK fails to pause relaying the media stream to target channels.
   @JsonValue(13)
   relayEventPauseSendPacketToDestChannelFailed,
 
-  /// 14: The SDK successfully resumes relaying the media stream to destination channels.
+  /// 14: The SDK successfully resumes relaying the media stream to target channels.
   @JsonValue(14)
   relayEventResumeSendPacketToDestChannelSuccess,
 
-  /// 15: The SDK fails to resume relaying the media stream to destination channels.
+  /// 15: The SDK fails to resume relaying the media stream to target channels.
   @JsonValue(15)
   relayEventResumeSendPacketToDestChannelFailed,
 }
@@ -5476,22 +5481,22 @@ class ChannelMediaInfo {
   Map<String, dynamic> toJson() => _$ChannelMediaInfoToJson(this);
 }
 
-/// Configuration information of relaying media streams across channels.
+/// Configuration of cross channel media relay.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChannelMediaRelayConfiguration {
   /// @nodoc
   const ChannelMediaRelayConfiguration(
       {this.srcInfo, this.destInfos, this.destCount});
 
-  /// The information of the source channel. See ChannelMediainfo.
+  /// @nodoc
   @JsonKey(name: 'srcInfo')
   final ChannelMediaInfo? srcInfo;
 
-  /// The information of the destination channel. See ChannelMediainfo.
+  /// @nodoc
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 
-  /// The number of destination channels. The default value is 0, and the value range is from 0 to 4. Ensure that the value of this parameter corresponds to the number of ChannelMediaInfo structs you define in destInfo.
+  /// @nodoc
   @JsonKey(name: 'destCount')
   final int? destCount;
 
@@ -6087,35 +6092,35 @@ class SpatialAudioParams {
       this.speakerAttenuation,
       this.enableDoppler});
 
-  /// The azimuth angle of the remote user or media player relative to the local user. The value range is [0,360], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means directly in front on the horizontal plane.90: 90 degrees, which means directly to the left on the horizontal plane.180: 180 degrees, which means directly behind on the horizontal plane.270: 270 degrees, which means directly to the right on the horizontal plane.360: 360 degrees, which means directly in front on the horizontal plane.
+  /// @nodoc
   @JsonKey(name: 'speaker_azimuth')
   final double? speakerAzimuth;
 
-  /// The elevation angle of the remote user or media player relative to the local user. The value range is [-90,90], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the horizontal plane is not rotated.-90: -90 degrees, which means that the horizontal plane is rotated 90 degrees downwards.90: 90 degrees, which means that the horizontal plane is rotated 90 degrees upwards.
+  /// @nodoc
   @JsonKey(name: 'speaker_elevation')
   final double? speakerElevation;
 
-  /// The distance of the remote user or media player relative to the local user. The value range is [1,50], and the unit is meters. The default value is 1 meter.
+  /// @nodoc
   @JsonKey(name: 'speaker_distance')
   final double? speakerDistance;
 
-  /// The orientation of the remote user or media player relative to the local user. The value range is [0,180], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the sound source and listener face the same direction.180: 180 degrees, which means that the sound source and listener face each other.
+  /// @nodoc
   @JsonKey(name: 'speaker_orientation')
   final int? speakerOrientation;
 
-  /// Whether to enable audio blurring:true: Enable audio blurring.false: (Default) Disable audio blurring.
+  /// @nodoc
   @JsonKey(name: 'enable_blur')
   final bool? enableBlur;
 
-  /// Whether to enable air absorption, that is, to simulate the sound attenuation effect of sound transmitting in the air; under a certain transmission distance, the attenuation speed of high-frequency sound is fast, and the attenuation speed of low-frequency sound is slow.true: (Default) Enable air absorption. Make sure that the value of speaker_attenuation is not 0; otherwise, this setting does not take effect.false: Disable air absorption.
+  /// @nodoc
   @JsonKey(name: 'enable_air_absorb')
   final bool? enableAirAbsorb;
 
-  /// The sound attenuation coefficient of the remote user or media player. The value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, where the volume and timbre only have a weak attenuation during the propagation, and the sound can travel farther than that in a real environment. enable_air_absorb needs to be enabled at the same time. 0.5: (Default) Simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, where volume and timbre attenuate rapidly during the propagation. enable_air_absorb needs to be enabled at the same time.
+  /// @nodoc
   @JsonKey(name: 'speaker_attenuation')
   final double? speakerAttenuation;
 
-  /// Whether to enable the Doppler effect: When there is a relative displacement between the sound source and the receiver of the sound source, the tone heard by the receiver changes.true: Enable the Doppler effect.false: (Default) Disable the Doppler effect.This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, cohosting, or online KTV).When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo , updateSelfPosition , and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
+  /// @nodoc
   @JsonKey(name: 'enable_doppler')
   final bool? enableDoppler;
 
