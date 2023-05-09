@@ -84,7 +84,7 @@ class MusicCollectionImpl implements MusicCollection {
   }
 
   @override
-  void getTotal() {
+  int getTotal() {
 // Implementation template
 // final apiType = '';
 // final param = createParams({// // });
@@ -94,14 +94,12 @@ class MusicCollectionImpl implements MusicCollection {
 // }
 // final rm = callApiResult.data;
 // final result = rm['result'];
-// if (result < 0) {
-// throw AgoraRtcException(code: result);
-// }
+// return result as int;
     throw UnimplementedError('Unimplement for getTotal');
   }
 
   @override
-  void getPage() {
+  int getPage() {
 // Implementation template
 // final apiType = '';
 // final param = createParams({// // });
@@ -111,9 +109,7 @@ class MusicCollectionImpl implements MusicCollection {
 // }
 // final rm = callApiResult.data;
 // final result = rm['result'];
-// if (result < 0) {
-// throw AgoraRtcException(code: result);
-// }
+// return result as int;
     throw UnimplementedError('Unimplement for getPage');
   }
 

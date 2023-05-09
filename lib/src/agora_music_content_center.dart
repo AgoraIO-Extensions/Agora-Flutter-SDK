@@ -290,10 +290,10 @@ abstract class MusicCollection {
   int getCount();
 
   /// @nodoc
-  void getTotal();
+  int getTotal();
 
   /// @nodoc
-  void getPage();
+  int getPage();
 
   /// @nodoc
   int getPageSize();
