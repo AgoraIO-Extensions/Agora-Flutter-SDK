@@ -975,11 +975,12 @@ RtcEngineEventHandlerOnFacePositionChangedJson
         RtcEngineEventHandlerOnFacePositionChangedJson(
           imageWidth: json['imageWidth'] as int?,
           imageHeight: json['imageHeight'] as int?,
-          vecRectangle: json['vecRectangle'] == null
-              ? null
-              : Rectangle.fromJson(
-                  json['vecRectangle'] as Map<String, dynamic>),
-          vecDistance: json['vecDistance'] as int?,
+          vecRectangle: (json['vecRectangle'] as List<dynamic>?)
+              ?.map((e) => Rectangle.fromJson(e as Map<String, dynamic>))
+              .toList(),
+          vecDistance: (json['vecDistance'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList(),
           numFaces: json['numFaces'] as int?,
         );
 
@@ -988,7 +989,7 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFacePositionChangedJsonToJson(
     <String, dynamic>{
       'imageWidth': instance.imageWidth,
       'imageHeight': instance.imageHeight,
-      'vecRectangle': instance.vecRectangle?.toJson(),
+      'vecRectangle': instance.vecRectangle?.map((e) => e.toJson()).toList(),
       'vecDistance': instance.vecDistance,
       'numFaces': instance.numFaces,
     };
