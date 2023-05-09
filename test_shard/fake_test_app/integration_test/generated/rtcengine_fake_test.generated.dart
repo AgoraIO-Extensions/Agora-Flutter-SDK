@@ -8516,7 +8516,7 @@ void rtcEngineSmokeTestCases() {
           onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
-              Rectangle vecRectangle, int vecDistance, int numFaces) {},
+              List vecRectangle, List vecDistance, int numFaces) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},
@@ -8728,7 +8728,7 @@ void rtcEngineSmokeTestCases() {
           onCameraFocusAreaChanged: (int x, int y, int width, int height) {},
           onCameraExposureAreaChanged: (int x, int y, int width, int height) {},
           onFacePositionChanged: (int imageWidth, int imageHeight,
-              Rectangle vecRectangle, int vecDistance, int numFaces) {},
+              List vecRectangle, List vecDistance, int numFaces) {},
           onVideoStopped: () {},
           onAudioMixingStateChanged:
               (AudioMixingStateType state, AudioMixingReasonType reason) {},

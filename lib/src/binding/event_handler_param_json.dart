@@ -1300,9 +1300,9 @@ class RtcEngineEventHandlerOnFacePositionChangedJson {
   @JsonKey(name: 'imageHeight')
   final int? imageHeight;
   @JsonKey(name: 'vecRectangle')
-  final Rectangle? vecRectangle;
+  final List<Rectangle>? vecRectangle;
   @JsonKey(name: 'vecDistance')
-  final int? vecDistance;
+  final List<int>? vecDistance;
   @JsonKey(name: 'numFaces')
   final int? numFaces;
   factory RtcEngineEventHandlerOnFacePositionChangedJson.fromJson(

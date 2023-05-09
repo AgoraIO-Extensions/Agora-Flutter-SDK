@@ -1969,8 +1969,12 @@ class RtcEngineEventHandler {
   /// * [vecRectangle] The information of the detected human face. See Rectangle .
   /// * [vecDistance] The distance between the human face and the device screen (cm).
   /// * [numFaces] The number of faces detected. If the value is 0, it means that no human face is detected.
-  final void Function(int imageWidth, int imageHeight, Rectangle vecRectangle,
-      int vecDistance, int numFaces)? onFacePositionChanged;
+  final void Function(
+      int imageWidth,
+      int imageHeight,
+      List<Rectangle> vecRectangle,
+      List<int> vecDistance,
+      int numFaces)? onFacePositionChanged;
 
   /// Occurs when the video stops playing.
   /// Deprecated:Use localVideoStreamStateStopped(0) in the onLocalVideoStateChanged callback instead.The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.

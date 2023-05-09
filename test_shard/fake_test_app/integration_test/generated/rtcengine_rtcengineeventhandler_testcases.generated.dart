@@ -2940,7 +2940,7 @@ void generatedTestCases() {
       final onFacePositionChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onFacePositionChanged: (int imageWidth, int imageHeight,
-            Rectangle vecRectangle, int vecDistance, int numFaces) {
+            List vecRectangle, List vecDistance, int numFaces) {
           onFacePositionChangedCompleter.complete(true);
         },
       );
@@ -2955,23 +2955,14 @@ void generatedTestCases() {
       {
         const int imageWidth = 10;
         const int imageHeight = 10;
-        const int vecRectangleX = 10;
-        const int vecRectangleY = 10;
-        const int vecRectangleWidth = 10;
-        const int vecRectangleHeight = 10;
-        const Rectangle vecRectangle = Rectangle(
-          x: vecRectangleX,
-          y: vecRectangleY,
-          width: vecRectangleWidth,
-          height: vecRectangleHeight,
-        );
-        const int vecDistance = 10;
+        const List<Rectangle> vecRectangle = [];
+        const List<int> vecDistance = [];
         const int numFaces = 10;
 
         final eventJson = {
           'imageWidth': imageWidth,
           'imageHeight': imageHeight,
-          'vecRectangle': vecRectangle.toJson(),
+          'vecRectangle': vecRectangle,
           'vecDistance': vecDistance,
           'numFaces': numFaces,
         };
@@ -2996,8 +2987,6 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    // TODO(littlegnal): Enable after the API signature fixed.
-    skip: true,
   );
 
   testWidgets(

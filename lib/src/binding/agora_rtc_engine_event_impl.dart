@@ -802,8 +802,8 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         paramJson = paramJson.fillBuffers(buffers);
         int? imageWidth = paramJson.imageWidth;
         int? imageHeight = paramJson.imageHeight;
-        Rectangle? vecRectangle = paramJson.vecRectangle;
-        int? vecDistance = paramJson.vecDistance;
+        List<Rectangle>? vecRectangle = paramJson.vecRectangle;
+        List<int>? vecDistance = paramJson.vecDistance;
         int? numFaces = paramJson.numFaces;
         if (imageWidth == null ||
             imageHeight == null ||
@@ -812,7 +812,7 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
             numFaces == null) {
           return true;
         }
-        vecRectangle = vecRectangle.fillBuffers(buffers);
+        vecRectangle = vecRectangle.map((e) => e.fillBuffers(buffers)).toList();
         rtcEngineEventHandler.onFacePositionChanged!(
             imageWidth, imageHeight, vecRectangle, vecDistance, numFaces);
         return true;
