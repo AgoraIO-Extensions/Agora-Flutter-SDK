@@ -1811,7 +1811,7 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> getEffectDuration(String filePath) async {
+  Future<int> getEffectDuration(String filePath) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getEffectDuration';
     final param = createParams({'filePath': filePath});
@@ -1822,9 +1822,7 @@ class RtcEngineImpl implements RtcEngine {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
+    return result as int;
   }
 
   @override
@@ -1846,7 +1844,7 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> getEffectCurrentPosition(int soundId) async {
+  Future<int> getEffectCurrentPosition(int soundId) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getEffectCurrentPosition';
     final param = createParams({'soundId': soundId});
@@ -1857,9 +1855,7 @@ class RtcEngineImpl implements RtcEngine {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
+    return result as int;
   }
 
   @override
@@ -4854,7 +4850,7 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> getNetworkType() async {
+  Future<int> getNetworkType() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_getNetworkType';
     final param = createParams({});
@@ -4865,9 +4861,7 @@ class RtcEngineImpl implements RtcEngine {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
+    return result as int;
   }
 
   @override

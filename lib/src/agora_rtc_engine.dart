@@ -3724,7 +3724,7 @@ abstract class RtcEngine {
   ///
   /// Returns
   /// The total duration (ms) of the specified audio effect file, if the method call succeeds.< 0: Failure.
-  Future<void> getEffectDuration(String filePath);
+  Future<int> getEffectDuration(String filePath);
 
   /// Sets the playback position of an audio effect file.
   /// After a successful setting, the local audio effect file starts playing at the specified position.Call this method after playEffect.
@@ -3743,7 +3743,7 @@ abstract class RtcEngine {
   ///
   /// Returns
   /// The playback position (ms) of the specified audio effect file, if the method call succeeds.< 0: Failure.
-  Future<void> getEffectCurrentPosition(int soundId);
+  Future<int> getEffectCurrentPosition(int soundId);
 
   /// Enables or disables stereo panning for remote users.
   /// Ensure that you call this method before joining a channel to enable stereo panning for remote users so that the local user can track the position of a remote user by calling setRemoteVoicePosition.
@@ -5191,7 +5191,7 @@ abstract class RtcEngine {
   ///
   /// Returns
   /// ≥ 0: The method call is successful, and the local network connection type is returned.0: The SDK disconnects from the network.1: The network type is LAN.2: The network type is Wi-Fi (including hotspots).3: The network type is mobile 2G.4: The network type is mobile 3G.5: The network type is mobile 4G.6: The network type is mobile 5G.< 0: The method call failed with an error code.-1: The network type is unknown.
-  Future<void> getNetworkType();
+  Future<int> getNetworkType();
 
   /// Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
   ///
