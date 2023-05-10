@@ -1252,7 +1252,7 @@ class NativeIrisApiEngineBinding {
 
   int UnsetMusicCenterEventHandler(
     IrisApiEnginePtr engine_ptr,
-    ffi.Pointer<IrisEventHandlerHandle> handle,
+    IrisEventHandlerHandle handle,
   ) {
     return _UnsetMusicCenterEventHandler(
       engine_ptr,
@@ -1263,12 +1263,12 @@ class NativeIrisApiEngineBinding {
   late final _UnsetMusicCenterEventHandlerPtr = _lookup<
           ffi.NativeFunction<
               ffi.Int32 Function(
-                  IrisApiEnginePtr, ffi.Pointer<IrisEventHandlerHandle>)>>(
+                  IrisApiEnginePtr, IrisEventHandlerHandle)>>(
       'UnsetMusicCenterEventHandler');
   late final _UnsetMusicCenterEventHandler =
       _UnsetMusicCenterEventHandlerPtr.asFunction<
           int Function(
-              IrisApiEnginePtr, ffi.Pointer<IrisEventHandlerHandle>)>();
+              IrisApiEnginePtr, IrisEventHandlerHandle)>();
 }
 
 abstract class IrisAppType {
