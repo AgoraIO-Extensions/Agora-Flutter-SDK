@@ -17,7 +17,7 @@ android_integratinon_test_task:
     # Only run min support flutter sdk 2.10.5, and latest flutter sdk version
     matrix:
       - image: cirrusci/flutter:2.10.5 # min supported version
-      - image: cirrusci/flutter:3.7.0 # latest supported version
+      - image: cirrusci/flutter:3.10.0 # latest supported version
     cpu: 8
     memory: 16G
     kvm: true
@@ -58,6 +58,9 @@ android_build_task:
     - name: FLUTTER_VERSION 3.7.0
       env:
         FLUTTER_VERSION: 3.7.0
+    - name: FLUTTER_VERSION 3.10.0
+      env:
+        FLUTTER_VERSION: 3.10.0
   switch_flutter_version_script:
     - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
     - git fetch
