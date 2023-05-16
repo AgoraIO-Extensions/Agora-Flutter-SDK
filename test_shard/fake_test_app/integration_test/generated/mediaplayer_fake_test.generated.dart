@@ -1401,6 +1401,190 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
+    'registerAudioFrameObserver',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerAudioFrameObserver observer =
+            MediaPlayerAudioFrameObserver(
+          onFrame: (AudioPcmFrame frame) {},
+        );
+        mediaPlayerController.registerAudioFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[registerAudioFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'unregisterAudioFrameObserver',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerAudioFrameObserver observer =
+            MediaPlayerAudioFrameObserver(
+          onFrame: (AudioPcmFrame frame) {},
+        );
+        mediaPlayerController.unregisterAudioFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[unregisterAudioFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'registerVideoFrameObserver',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerVideoFrameObserver observer =
+            MediaPlayerVideoFrameObserver(
+          onFrame: (VideoFrame frame) {},
+        );
+        mediaPlayerController.registerVideoFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[registerVideoFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'unregisterVideoFrameObserver',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerVideoFrameObserver observer =
+            MediaPlayerVideoFrameObserver(
+          onFrame: (VideoFrame frame) {},
+        );
+        mediaPlayerController.unregisterVideoFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[unregisterVideoFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'registerMediaPlayerAudioSpectrumObserver',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -2202,7 +2386,7 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
-    'registerAudioFrameObserver',
+    'setAudioPlaybackDelay',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
       final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
@@ -2222,154 +2406,13 @@ void mediaPlayerControllerSmokeTestCases() {
       await mediaPlayerController.initialize();
 
       try {
-        final MediaPlayerAudioFrameObserver observer =
-            MediaPlayerAudioFrameObserver(
-          onFrame: (AudioPcmFrame frame) {},
-        );
-        mediaPlayerController.registerAudioFrameObserver(
-          observer,
+        const int delayMs = 10;
+        await mediaPlayerController.setAudioPlaybackDelay(
+          delayMs,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
-          debugPrint('[registerAudioFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'unregisterAudioFrameObserver',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        final MediaPlayerAudioFrameObserver observer =
-            MediaPlayerAudioFrameObserver(
-          onFrame: (AudioPcmFrame frame) {},
-        );
-        mediaPlayerController.unregisterAudioFrameObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[unregisterAudioFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'registerVideoFrameObserver',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        final MediaPlayerVideoFrameObserver observer =
-            MediaPlayerVideoFrameObserver(
-          onFrame: (VideoFrame frame) {},
-        );
-        mediaPlayerController.registerVideoFrameObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[registerVideoFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'unregisterVideoFrameObserver',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        final MediaPlayerVideoFrameObserver observer =
-            MediaPlayerVideoFrameObserver(
-          onFrame: (VideoFrame frame) {},
-        );
-        mediaPlayerController.unregisterVideoFrameObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[unregisterVideoFrameObserver] error: ${e.toString()}');
+          debugPrint('[setAudioPlaybackDelay] error: ${e.toString()}');
           rethrow;
         }
 

@@ -59,6 +59,7 @@ void generatedTestCases() {
         const int frameTextureId = 10;
         const List<double> frameMatrix = [];
         Uint8List frameAlphaBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
+        Uint8List framePixelBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         final VideoFrame frame = VideoFrame(
           type: frameType,
           width: frameWidth,
@@ -77,6 +78,7 @@ void generatedTestCases() {
           textureId: frameTextureId,
           matrix: frameMatrix,
           alphaBuffer: frameAlphaBuffer,
+          pixelBuffer: framePixelBuffer,
         );
 
         final eventJson = {
