@@ -993,6 +993,45 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     return nativeHandleBIHexInt;
   }
 
+  @override
+  Future<void> startScreenCaptureBySourceType(
+      {required VideoSourceType sourceType,
+      required ScreenCaptureConfiguration config}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture2';
+    final param = createParams(
+        {'sourceType': sourceType.value(), 'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCapture2';
+    final param = createParams({'sourceType': sourceType.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported
