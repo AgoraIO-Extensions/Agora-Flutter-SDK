@@ -153,7 +153,13 @@ abstract class MusicChartCollection {
   /// @nodoc
   Future<int> getCount();
 
-  /// @nodoc
+  /// Gets the detailed information of the media stream.
+  /// Call this method after calling getStreamCount .
+  ///
+  /// * [index] The index of the media stream.
+  ///
+  /// Returns
+  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
   Future<MusicChartInfo> get(int index);
 }
 
@@ -411,10 +417,17 @@ abstract class MusicContentCenter {
   /// @nodoc
   Future<void> preload({required int songCode, String? jsonOption});
 
-  /// @nodoc
+  /// 删除已缓存的音乐资源。
+  /// 你可以调用该方法删除某一已缓存的音乐资源，如需删除多个音乐资源，你可以多次调用该方法。 The cached media file currently being played will not be deleted.
+  ///
+  /// * [songCode] 待删除的音乐资源的编号。
+  ///
+  /// Returns
+  /// 0: 方法调用成功，音乐资源已删除。< 0: Failure.
   Future<void> removeCache(int songCode);
 
-  /// @nodoc
+  /// 获取已缓存的音乐资源信息。
+  /// 当你不再需要使用已缓存的音乐资源时，你需要及时释放内存以防止内存泄漏。
   Future<List<MusicCacheInfo>> getCaches(int cacheInfoSize);
 
   /// @nodoc

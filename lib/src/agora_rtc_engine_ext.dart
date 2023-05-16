@@ -7,7 +7,12 @@ import 'impl/media_player_impl.dart';
 
 /// @nodoc
 extension RtcEngineExt on RtcEngine {
-  /// @nodoc
+  /// Obtain the actual absolute path of the Asset through the relative path of the Asset.
+  ///
+  /// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.
+  ///
+  /// Returns
+  /// The actual path of the Asset.
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     final p = await impl.engineMethodChannel
@@ -31,7 +36,7 @@ class AgoraRtcException implements Exception {
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-/// Creates an RtcEngine object.
+/// Creates an RtcEngine object. Creates an object.
 /// Currently, the Agora RTC SDK v6.x supports creating only one RtcEngine object for each app.
 ///
 /// Returns

@@ -11,11 +11,11 @@ abstract class MediaPlayer {
   /// Opens the media resource.
   /// This method is called asynchronously.If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting playerStateOpenCompleted before calling the play method to play the file.
   ///
-  /// * [url] The path of the media file. Both local path and online path are supported.On the Android platform, if you need to open a file in URI format, use open .
+  /// * [url] The path of the media file. Both local path and online path are supported.
   /// * [startPos] The starting position (ms) for playback. Default value is 0.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> open({required String url, required int startPos});
 
   /// Opens a media file and configures the playback scenarios.
@@ -24,32 +24,32 @@ abstract class MediaPlayer {
   /// * [source] Media resources. See MediaSource .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> openWithMediaSource(MediaSource source);
 
   /// Plays the media file.
   /// After calling open or seek, you can call this method to play the media file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> play();
 
   /// Pauses the playback.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> pause();
 
   /// Stops playing the media track.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> stop();
 
   /// Resumes playing the media file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> resume();
 
   /// Seeks to a new playback position.
@@ -58,7 +58,7 @@ abstract class MediaPlayer {
   /// * [newPos] The new playback position (ms).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> seek(int newPos);
 
   /// Sets the pitch of the current media resource.
@@ -67,7 +67,7 @@ abstract class MediaPlayer {
   /// * [pitch] Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setAudioPitch(int pitch);
 
   /// Gets the duration of the media resource.
@@ -104,7 +104,7 @@ abstract class MediaPlayer {
   /// * [loopCount] The number of times the audio effect loops:
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setLoopCount(int loopCount);
 
   /// Sets the channel mode of the current audio file.
@@ -113,17 +113,16 @@ abstract class MediaPlayer {
   /// * [speed] The playback speed. Agora recommends that you limit this value to between 50 and 400, defined as follows:50: Half the original speed.100: The original speed.400: 4 times the original speed.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setPlaybackSpeed(int speed);
 
   /// Selects the audio track used during playback.
   /// After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.You need to call this method after calling getStreamInfo to get the audio stream index value.
   ///
-  /// * [index
-  /// ] The index of the audio track.
+  /// * [index] The index of the audio track.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> selectAudioTrack(int index);
 
   /// Sets the private options for the media player.
@@ -133,20 +132,39 @@ abstract class MediaPlayer {
   /// * [value] The value of the key.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
-  /// @nodoc
+  /// Sets the private options for the media player.
+  /// The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.Ensure that you call this method before open .If you need to push streams with SEI into the CDN, call setPlayerOptionInInt("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
+  ///
+  /// * [key] The key of the option.
+  /// * [value] The value of the key.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setPlayerOptionInString(
       {required String key, required String value});
 
   /// @nodoc
   Future<void> takeScreenshot(String filename);
 
-  /// @nodoc
+  /// Gets the detailed information of the media stream.
+  /// Call this method after calling getStreamCount .
+  ///
+  /// * [index] The index of the media stream.
+  ///
+  /// Returns
+  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
   Future<void> selectInternalSubtitle(int index);
 
-  /// @nodoc
+  /// Stops pushing media streams to a CDN.
+  /// Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  ///
+  /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setExternalSubtitle(String url);
 
   /// Gets current playback state.
@@ -160,7 +178,7 @@ abstract class MediaPlayer {
   /// * [muted] Whether to mute the media file:true: Mute the media file.false: (Default) Unmute the media file.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> mute(bool muted);
 
   /// Reports whether the media resource is muted.
@@ -174,7 +192,7 @@ abstract class MediaPlayer {
   /// * [volume] The local playback volume, which ranges from 0 to 100:0: Mute.100: (Default) The original volume.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> adjustPlayoutVolume(int volume);
 
   /// Gets the local playback volume.
@@ -189,19 +207,19 @@ abstract class MediaPlayer {
   /// * [volume] The volume, which ranges from 0 to 400:0: Mute.100: (Default) The original volume.400: Four times the original volume (amplifying the audio signals by four times).
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> adjustPublishSignalVolume(int volume);
 
   /// Gets the volume of the media file for publishing.
   ///
   /// Returns
-  /// The remote playback volume, if the method call succeeds.< 0: Failure.
+  /// ≥ 0: The remote playback volume.< 0: Failure.
   Future<int> getPublishSignalVolume();
 
   /// Sets the view.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setView(int view);
 
   /// Sets the render mode of the media player.
@@ -209,7 +227,7 @@ abstract class MediaPlayer {
   /// * [renderMode] Sets the render mode of the view. See RenderModeType .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setRenderMode(RenderModeType renderMode);
 
   /// Registers a media player observer.
@@ -217,7 +235,7 @@ abstract class MediaPlayer {
   /// * [observer] The player observer, listening for events during the playback. See MediaPlayerSourceObserver .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   void registerPlayerSourceObserver(MediaPlayerSourceObserver observer);
 
   /// Releases a media player observer.
@@ -225,27 +243,26 @@ abstract class MediaPlayer {
   /// * [observer] The player observer, listening for events during the playback. See MediaPlayerSourceObserver .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   void unregisterPlayerSourceObserver(MediaPlayerSourceObserver observer);
 
   /// Registers an audio frame observer object.
-  /// You need to implement the MediaPlayerAudioFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
   ///
-  /// * [observer] The audio frame observer, reporting the reception of each audio frame. See MediaPlayerAudioFrameObserver .
+  /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   void registerAudioFrameObserver(
       {required AudioPcmFrameSink observer,
       RawAudioFrameOpModeType mode =
           RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly});
 
-  /// Unregisters an audio observer.
+  /// Unregisters an audio frame observer.
   ///
-  /// * [observer] The audio observer. See MediaPlayerAudioFrameObserver .
+  /// * [observer] The audio observer. See AudioPcmFrameSink .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   void unregisterAudioFrameObserver(AudioPcmFrameSink observer);
 
   /// Registers a video frame observer object.
@@ -254,7 +271,7 @@ abstract class MediaPlayer {
   /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   void registerVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
   /// Unregisters the video frame observer.
@@ -262,14 +279,19 @@ abstract class MediaPlayer {
   /// * [observer] The video observer, reporting the reception of each video frame. See MediaPlayerVideoFrameObserver .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   void unregisterVideoFrameObserver(MediaPlayerVideoFrameObserver observer);
 
   /// @nodoc
   void registerMediaPlayerAudioSpectrumObserver(
       {required AudioSpectrumObserver observer, required int intervalInMS});
 
-  /// @nodoc
+  /// Unregisters the video frame observer.
+  ///
+  /// * [observer] The video observer, reporting the reception of each video frame. See VideoFrameObserver .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   void unregisterMediaPlayerAudioSpectrumObserver(
       AudioSpectrumObserver observer);
 
@@ -279,13 +301,16 @@ abstract class MediaPlayer {
   /// * [mode] The channel mode. See AudioDualMonoMode .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setAudioDualMonoMode(AudioDualMonoMode mode);
 
   /// @nodoc
   Future<String> getPlayerSdkVersion();
 
-  /// @nodoc
+  /// Gets the path of the media resource being played.
+  ///
+  /// Returns
+  /// The path of the media resource being played.
   Future<String> getPlaySrc();
 
   /// @nodoc
@@ -317,7 +342,7 @@ abstract class MediaPlayer {
   /// * [syncPts] Whether to synchronize the playback position (ms) before and after the switch:true: Synchronize the playback position before and after the switch.false: (Default) Do not synchronize the playback position before and after the switch.Make sure to set this parameter as false if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> switchSrc({required String src, bool syncPts = true});
 
   /// Preloads a media resource.
@@ -327,7 +352,7 @@ abstract class MediaPlayer {
   /// * [startPos] The starting position (ms) for playing after the media resource is preloaded to the playlist. When preloading a live stream, set this parameter to 0.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> preloadSrc({required String src, required int startPos});
 
   /// Plays preloaded media resources.
@@ -336,7 +361,7 @@ abstract class MediaPlayer {
   /// * [src] The URL of the media resource in the playlist must be consistent with the src set by the preloadSrc method; otherwise, the media resource cannot be played.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> playPreloadedSrc(String src);
 
   /// Unloads media resources that are preloaded.
@@ -345,7 +370,7 @@ abstract class MediaPlayer {
   /// * [src] The URL of the media resource.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> unloadSrc(String src);
 
   /// Enables or disables the spatial audio effect for the media player.
@@ -354,7 +379,7 @@ abstract class MediaPlayer {
   /// * [params] The spatial audio effect parameters of the media player. See SpatialAudioParams .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setSpatialAudioParams(SpatialAudioParams params);
 
   /// @nodoc
@@ -368,14 +393,14 @@ abstract class MediaPlayerCacheManager {
   /// The cached media file currently being played will not be deleted.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure. See MediaPlayerError .
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure. See MediaPlayerError .
   Future<void> removeAllCaches();
 
   /// Deletes a cached media file that is the least recently used.
   /// You can call this method to delete a cached media file when the storage space for the cached files is about to reach its limit. After you call this method, the SDK deletes the cached media file that is least used.The cached media file currently being played will not be deleted.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly. < 0: Failure. See MediaPlayerError .
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure. See MediaPlayerError .
   Future<void> removeOldCache();
 
   /// Deletes a cached media file.
@@ -384,7 +409,7 @@ abstract class MediaPlayerCacheManager {
   /// * [uri] The URI (Uniform Resource Identifier) of the media file to be deleted.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly. < 0: Failure. See MediaPlayerError .
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure. See MediaPlayerError .
   Future<void> removeCacheByUri(String uri);
 
   /// Sets the storage path for the media files that you want to cache.
@@ -393,7 +418,7 @@ abstract class MediaPlayerCacheManager {
   /// * [path] The absolute path of the media files to be cached. Ensure that the directory for the media files exists and is writable.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly. < 0: Failure. See MediaPlayerError .
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure. See MediaPlayerError .
   Future<void> setCacheDir(String path);
 
   /// Sets the maximum number of media files that can be cached.
@@ -401,7 +426,7 @@ abstract class MediaPlayerCacheManager {
   /// * [count] The maximum number of media files that can be cached. The default value is 1,000.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure. See MediaPlayerError .
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure. See MediaPlayerError .
   Future<void> setMaxCacheFileCount(int count);
 
   /// Sets the maximum size of the aggregate storage space for cached media files.
@@ -409,7 +434,7 @@ abstract class MediaPlayerCacheManager {
   /// * [cacheSize] The maximum size (bytes) of the aggregate storage space for cached media files. The default value is 1 GB.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly.< 0: Failure. See MediaPlayerError .
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure. See MediaPlayerError .
   Future<void> setMaxCacheFileSize(int cacheSize);
 
   /// Sets whether to delete cached media files automatically.
@@ -418,7 +443,7 @@ abstract class MediaPlayerCacheManager {
   /// * [enable] Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; you need to catch the exception and handle it accordingly. < 0: Failure. See MediaPlayerError .
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure. See MediaPlayerError .
   Future<void> enableAutoRemoveCache(bool enable);
 
   /// Gets the storage path of the cached media files.
