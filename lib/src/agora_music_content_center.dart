@@ -15,6 +15,10 @@ enum PreloadStatusCode {
   /// @nodoc
   @JsonValue(2)
   kPreloadStatusPreloading,
+
+  /// @nodoc
+  @JsonValue(3)
+  kPreloadStatusRemoved,
 }
 
 /// @nodoc
@@ -40,6 +44,26 @@ enum MusicContentCenterStatusCode {
   /// @nodoc
   @JsonValue(1)
   kMusicContentCenterStatusErr,
+
+  /// @nodoc
+  @JsonValue(2)
+  kMusicContentCenterStatusErrGateway,
+
+  /// @nodoc
+  @JsonValue(3)
+  kMusicContentCenterStatusErrPermissionAndResource,
+
+  /// @nodoc
+  @JsonValue(4)
+  kMusicContentCenterStatusErrInternalDataParse,
+
+  /// @nodoc
+  @JsonValue(5)
+  kMusicContentCenterStatusErrMusicLoading,
+
+  /// @nodoc
+  @JsonValue(6)
+  kMusicContentCenterStatusErrMusicDecryption,
 }
 
 /// @nodoc
@@ -75,6 +99,53 @@ class MusicChartInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$MusicChartInfoToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MusicCacheStatusType {
+  /// @nodoc
+  @JsonValue(0)
+  musicCacheStatusTypeCached,
+
+  /// @nodoc
+  @JsonValue(1)
+  musicCacheStatusTypeCaching,
+}
+
+/// @nodoc
+extension MusicCacheStatusTypeExt on MusicCacheStatusType {
+  /// @nodoc
+  static MusicCacheStatusType fromValue(int value) {
+    return $enumDecode(_$MusicCacheStatusTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MusicCacheStatusTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class MusicCacheInfo {
+  /// @nodoc
+  const MusicCacheInfo({this.songCode, this.status});
+
+  /// @nodoc
+  @JsonKey(name: 'songCode')
+  final int? songCode;
+
+  /// @nodoc
+  @JsonKey(name: 'status')
+  final MusicCacheStatusType? status;
+
+  /// @nodoc
+  factory MusicCacheInfo.fromJson(Map<String, dynamic> json) =>
+      _$MusicCacheInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$MusicCacheInfoToJson(this);
 }
 
 /// @nodoc
@@ -242,26 +313,32 @@ class MusicContentCenterEventHandler {
   });
 
   /// @nodoc
-  final void Function(String requestId, MusicContentCenterStatusCode status,
-      List<MusicChartInfo> result)? onMusicChartsResult;
+  final void Function(String requestId, List<MusicChartInfo> result,
+      MusicContentCenterStatusCode errorCode)? onMusicChartsResult;
 
   /// @nodoc
-  final void Function(String requestId, MusicContentCenterStatusCode status,
-      MusicCollection result)? onMusicCollectionResult;
+  final void Function(String requestId, MusicCollection result,
+      MusicContentCenterStatusCode errorCode)? onMusicCollectionResult;
 
   /// @nodoc
-  final void Function(String requestId, String lyricUrl)? onLyricResult;
+  final void Function(String requestId, String lyricUrl,
+      MusicContentCenterStatusCode errorCode)? onLyricResult;
 
   /// @nodoc
-  final void Function(int songCode, int percent, PreloadStatusCode status,
-      String msg, String lyricUrl)? onPreLoadEvent;
+  final void Function(
+      int songCode,
+      int percent,
+      String lyricUrl,
+      PreloadStatusCode status,
+      MusicContentCenterStatusCode errorCode)? onPreLoadEvent;
 }
 
 /// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MusicContentCenterConfiguration {
   /// @nodoc
-  const MusicContentCenterConfiguration({this.appId, this.token, this.mccUid});
+  const MusicContentCenterConfiguration(
+      {this.appId, this.token, this.mccUid, this.maxCacheSize});
 
   /// @nodoc
   @JsonKey(name: 'appId')
@@ -274,6 +351,10 @@ class MusicContentCenterConfiguration {
   /// @nodoc
   @JsonKey(name: 'mccUid')
   final int? mccUid;
+
+  /// @nodoc
+  @JsonKey(name: 'maxCacheSize')
+  final int? maxCacheSize;
 
   /// @nodoc
   factory MusicContentCenterConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -329,6 +410,19 @@ abstract class MusicContentCenter {
 
   /// @nodoc
   Future<void> preload({required int songCode, String? jsonOption});
+
+  /// 删除已缓存的音乐资源。
+  /// 你可以调用该方法删除某一已缓存的音乐资源，如需删除多个音乐资源，你可以多次调用该方法。 The cached media file currently being played will not be deleted.
+  ///
+  /// * [songCode] 待删除的音乐资源的编号。
+  ///
+  /// Returns
+  /// 0: 方法调用成功，音乐资源已删除。< 0: Failure.
+  Future<void> removeCache(int songCode);
+
+  /// 获取已缓存的音乐资源信息。
+  /// 当你不再需要使用已缓存的音乐资源时，你需要及时释放内存以防止内存泄漏。
+  Future<List<MusicCacheInfo>> getCaches(int cacheInfoSize);
 
   /// @nodoc
   Future<bool> isPreloaded(int songCode);

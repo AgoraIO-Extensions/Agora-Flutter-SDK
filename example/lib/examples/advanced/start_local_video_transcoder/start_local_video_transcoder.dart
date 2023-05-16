@@ -189,7 +189,7 @@ class _State extends State<StartLocalVideoTranscoder> {
     if (!(defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS)) {
       transcodingVideoStreams.add(const TranscodingVideoStream(
-          sourceType: MediaSourceType.primaryCameraSource,
+          sourceType: VideoSourceType.videoSourceCameraPrimary,
           width: 640,
           height: 320));
 
@@ -197,7 +197,9 @@ class _State extends State<StartLocalVideoTranscoder> {
         format: const VideoFormat(width: 640, height: 320, fps: 30),
         deviceId: _videoDevices[0].deviceId,
       );
-      await _engine.startPrimaryCameraCapture(config);
+
+      await _engine.startCameraCapture(
+          type: VideoSourceType.videoSourceCameraPrimary, config: config);
     }
 
     await _engine
@@ -210,14 +212,15 @@ class _State extends State<StartLocalVideoTranscoder> {
     }
 
     if (_isSecondaryCameraSource) {
-      await _engine.stopSecondaryCameraCapture();
+      await _engine
+          .stopCameraCapture(VideoSourceType.videoSourceCameraSecondary);
     }
 
     if (_isPrimaryScreenSource) {
       await _engine.stopScreenCapture();
     }
 
-    await _engine.stopPrimaryCameraCapture();
+    await _engine.stopCameraCapture(VideoSourceType.videoSourceCameraPrimary);
     await _engine.stopLocalVideoTranscoder();
     transcodingVideoStreams.clear();
     _isSecondaryCameraSource = false;
@@ -267,15 +270,16 @@ class _State extends State<StartLocalVideoTranscoder> {
                         _videoDevices.length >= 2
                     ? (v) async {
                         if (!v) {
-                          await _engine.stopSecondaryCameraCapture();
+                          await _engine.stopCameraCapture(
+                              VideoSourceType.videoSourceCameraSecondary);
                           transcodingVideoStreams.removeWhere((element) =>
                               element.sourceType ==
-                              MediaSourceType.secondaryCameraSource);
+                              VideoSourceType.videoSourceCameraSecondary);
                         } else {
                           transcodingVideoStreams.add(
                               const TranscodingVideoStream(
-                                  sourceType:
-                                      MediaSourceType.secondaryCameraSource,
+                                  sourceType: VideoSourceType
+                                      .videoSourceCameraSecondary,
                                   width: 360,
                                   height: 240));
 
@@ -284,7 +288,10 @@ class _State extends State<StartLocalVideoTranscoder> {
                                 width: 640, height: 320, fps: 30),
                             deviceId: _videoDevices[1].deviceId,
                           );
-                          await _engine.startSecondaryCameraCapture(config);
+
+                          await _engine.startCameraCapture(
+                              type: VideoSourceType.videoSourceCameraSecondary,
+                              config: config);
                         }
 
                         await _engine.updateLocalTranscoderConfiguration(
@@ -312,7 +319,7 @@ class _State extends State<StartLocalVideoTranscoder> {
                           await _engine.stopScreenCapture();
                           transcodingVideoStreams.removeWhere((element) =>
                               element.sourceType ==
-                              MediaSourceType.primaryScreenSource);
+                              VideoSourceType.videoSourceScreenPrimary);
                         } else {
                           SIZE t = const SIZE(width: 360, height: 240);
 
@@ -343,10 +350,11 @@ class _State extends State<StartLocalVideoTranscoder> {
                                     captureMouseCursor: true, frameRate: 30),
                               );
                             }
+
                             transcodingVideoStreams.add(
                                 const TranscodingVideoStream(
-                                    sourceType:
-                                        MediaSourceType.primaryScreenSource,
+                                    sourceType: VideoSourceType
+                                        .videoSourceScreenPrimary,
                                     x: 110,
                                     y: 110,
                                     width: 200,
@@ -382,7 +390,7 @@ class _State extends State<StartLocalVideoTranscoder> {
                         await _mediaPlayerController.stop();
                         transcodingVideoStreams.removeWhere((element) =>
                             element.sourceType ==
-                            MediaSourceType.mediaPlayerSource);
+                            VideoSourceType.videoSourceMediaPlayer);
                       } else {
                         _mediaPlayerSourceObserver ??=
                             MediaPlayerSourceObserver(
@@ -403,7 +411,7 @@ class _State extends State<StartLocalVideoTranscoder> {
                         );
 
                         transcodingVideoStreams.add(TranscodingVideoStream(
-                          sourceType: MediaSourceType.mediaPlayerSource,
+                          sourceType: VideoSourceType.videoSourceMediaPlayer,
                           imageUrl: _mediaPlayerController
                               .getMediaPlayerId()
                               .toString(),
@@ -455,10 +463,10 @@ class _State extends State<StartLocalVideoTranscoder> {
                       if (!v) {
                         transcodingVideoStreams.removeWhere((element) =>
                             element.sourceType ==
-                            MediaSourceType.rtcImagePngSource);
+                            VideoSourceType.videoSourceRtcImagePng);
                       } else {
                         transcodingVideoStreams.add(TranscodingVideoStream(
-                            sourceType: MediaSourceType.rtcImagePngSource,
+                            sourceType: VideoSourceType.videoSourceRtcImagePng,
                             imageUrl: _pngFilePath,
                             x: 220,
                             y: 60,
@@ -496,10 +504,10 @@ class _State extends State<StartLocalVideoTranscoder> {
                       if (!v) {
                         transcodingVideoStreams.removeWhere((element) =>
                             element.sourceType ==
-                            MediaSourceType.rtcImageJpegSource);
+                            VideoSourceType.videoSourceRtcImageJpeg);
                       } else {
                         transcodingVideoStreams.add(TranscodingVideoStream(
-                            sourceType: MediaSourceType.rtcImageJpegSource,
+                            sourceType: VideoSourceType.videoSourceRtcImageJpeg,
                             imageUrl: _jpgFilePath,
                             x: 360,
                             y: 0,
@@ -537,10 +545,10 @@ class _State extends State<StartLocalVideoTranscoder> {
                       if (!v) {
                         transcodingVideoStreams.removeWhere((element) =>
                             element.sourceType ==
-                            MediaSourceType.rtcImageGifSource);
+                            VideoSourceType.videoSourceRtcImageGif);
                       } else {
                         transcodingVideoStreams.add(TranscodingVideoStream(
-                          sourceType: MediaSourceType.rtcImageGifSource,
+                          sourceType: VideoSourceType.videoSourceRtcImageGif,
                           imageUrl: _gifFilePath,
                           x: 360,
                           y: 0,

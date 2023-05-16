@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/src/agora_base.dart';
+import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';

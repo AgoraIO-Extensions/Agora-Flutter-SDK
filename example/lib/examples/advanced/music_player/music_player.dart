@@ -282,7 +282,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
     ));
 
     _musicContentCenter.registerEventHandler(MusicContentCenterEventHandler(
-        onMusicChartsResult: (requestId, status, result) {
+        onMusicChartsResult: (requestId, result, status) {
       logSink.log(
           '[onMusicChartsResult], requestId: $requestId, status: $status, result: ${result.toString()}');
       if (status == MusicContentCenterStatusCode.kMusicContentCenterStatusOk) {
@@ -292,10 +292,10 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
           });
         }
       }
-    }, onMusicCollectionResult: (String requestId,
-            MusicContentCenterStatusCode status, MusicCollection result) {
+    }, onMusicCollectionResult: (String requestId, MusicCollection result,
+            MusicContentCenterStatusCode errorCode) {
       logSink.log(
-          '[onMusicCollectionResult], requestId: $requestId, status: $status, result: ${result.toString()}');
+          '[onMusicCollectionResult], requestId: $requestId, errorCode: $errorCode, result: ${result.toString()}');
 
       if (_musicCollectionRequestId == requestId) {
         setState(() {
@@ -306,16 +306,17 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
           _searchedMusicCollection = result;
         });
       }
-    }, onPreLoadEvent: (int songCode, int percent, PreloadStatusCode status,
-            String msg, String lyricUrl) {
+    }, onPreLoadEvent: (int songCode, int percent, String lyricUrl,
+            PreloadStatusCode status, MusicContentCenterStatusCode errorCode) {
       logSink.log(
-          '[onPreLoadEvent], songCode: $songCode, percent: $percent status: $status, msg: $msg, lyricUrl: $lyricUrl');
+          '[onPreLoadEvent], songCode: $songCode, percent: $percent status: $status, errorCode: $errorCode, lyricUrl: $lyricUrl');
       if (_selectedMusic.songCode == songCode &&
           status == PreloadStatusCode.kPreloadStatusCompleted) {
         _preloadCompleted?.complete();
         _preloadCompleted = null;
       }
-    }, onLyricResult: (String requestId, String lyricUrl) {
+    }, onLyricResult: (String requestId, String lyricUrl,
+            MusicContentCenterStatusCode errorCode) {
       if (_getLyricRequestId == requestId) {
         _getLyricCompleted?.complete(lyricUrl);
         _getLyricCompleted = null;

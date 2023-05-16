@@ -70,14 +70,14 @@ class MusicContentCenterEventHandlerWrapper
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
-        MusicContentCenterStatusCode? status = paramJson.status;
+        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
         List<MusicChartInfo>? result = paramJson.result;
-        if (requestId == null || status == null || result == null) {
+        if (requestId == null || errorCode == null || result == null) {
           return true;
         }
         result = result.map((e) => e.fillBuffers(buffers)).toList();
         musicContentCenterEventHandler.onMusicChartsResult!(
-            requestId, status, result);
+            requestId, result, errorCode);
 
         return true;
 
@@ -91,8 +91,8 @@ class MusicContentCenterEventHandlerWrapper
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
-        MusicContentCenterStatusCode? status = paramJson.status;
-        if (requestId == null || status == null) {
+        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
+        if (requestId == null || errorCode == null) {
           return true;
         }
 
@@ -101,7 +101,7 @@ class MusicContentCenterEventHandlerWrapper
         final musicCollectionImpl = MusicCollectionImpl(musicCollectionJson);
 
         musicContentCenterEventHandler.onMusicCollectionResult!(
-            requestId, status, musicCollectionImpl);
+            requestId, musicCollectionImpl, errorCode);
         return true;
     }
 
