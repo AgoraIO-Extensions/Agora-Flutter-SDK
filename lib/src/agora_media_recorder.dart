@@ -1,36 +1,41 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 
-/// Used for recording audio and video on the client.
-/// MediaRecorder can record the following:
-///  The audio captured by the local microphone and encoded in AAC format.The video captured by the local camera and encoded by the SDK.
+/// This class provides APIs for local and remote recording.
 abstract class MediaRecorder {
-  /// Registers one MediaRecorderObserver object.
-  /// Make sure the RtcEngine is initialized before you call this method.
+  /// Registers one MediaRecorderObserver oberver.
+  /// This method is used to set the callbacks of audio and video recording, so as to notify the app of the recording status and information of the audio and video stream during recording.Before calling this method, ensure the following:The RtcEngine object is created and initialized.The recording object is created through createMediaRecorder .
   ///
-  /// * [connection] The connection information. See RtcConnection .
-  /// * [callback] The callbacks for recording local audio and video streams. See MediaRecorderObserver .
+  /// * [callback] The callbacks for recording audio and video streams. See MediaRecorderObserver .
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setMediaRecorderObserver(
       {required RtcConnection connection,
       required MediaRecorderObserver callback});
 
-  /// Starts recording the local audio and video.
-  /// After successfully getting the MediaRecorder object by calling getMediaRecorder , you can call this method to enable the recoridng of the local audio and video.This method can record the audio captured by the local microphone and encoded in AAC format, and the video captured by the local camera and encoded in H.264 format. The SDK can generate a recording file only when it detects audio and video streams; when there are no audio and video streams to be recorded or the audio and video streams are interrupted for more than five seconds, the SDK stops the recording and triggers the onRecorderStateChanged(recorderStateError, recorderErrorNoStream) callback.Once the recording is started, if the video resolution is changed, the SDK stops the recording; if the sampling rate and audio channel changes, the SDK continues recording and generates audio files respectively.Call this method after joining a channel.
+  /// Creates a data stream.
+  /// Creates a data stream. Each user can create up to five data streams in a single channel.Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
   ///
   /// * [connection] The connection information. See RtcConnection .
-  /// * [config] The recording configuration. See MediaRecorderConfiguration .
+  /// * [config] The configurations for the data stream. See DataStreamConfig .
   ///
+  /// Returns
+  /// ID of the created data stream, if the method call succeeds.< 0: Failure.
   Future<void> startRecording(
       {required RtcConnection connection,
       required MediaRecorderConfiguration config});
 
-  /// Stops recording the local audio and video.
-  /// After calling startRecording , if you want to stop the recording, you must call this method; otherwise, the generated recording files may not be playable.
+  /// Enables tracing the video frame rendering process.
+  /// By default, the SDK starts tracing the video rendering event automatically when the local user successfully joins the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
+  ///  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
+  ///  The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
   ///
   /// * [connection] The connection information. See RtcConnection .
   ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> stopRecording(RtcConnection connection);
 
-  /// Release the MediaRecorder object.
-  /// This method releases the MediaRecorder object and all resources used by the RtcEngine object. After calling this method, if you need to start recording again, you need to call getMediaRecorder again to get the MediaRecorder object.
+  /// @nodoc
   Future<void> release();
 }
