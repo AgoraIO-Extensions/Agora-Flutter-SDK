@@ -247,7 +247,7 @@ enum ErrorCodeType {
   @JsonValue(17)
   errJoinChannelRejected,
 
-  /// 18: Fails to leave the channel. Possible reasons include the following:The user has left the channel before calling the method. Stop calling this method to clear this error.The user calls the method to leave the channel before joining the channel. In this case, no extra operation is needed.
+  /// 18: Fails to leave the channel. Possible reasons include the following:The user has left the channel before calling the leaveChannel method. Stop calling this method to clear this error.The user calls the leaveChannel method to leave the channel before joining the channel. In this case, no extra operation is needed.
   @JsonValue(18)
   errLeaveChannelRejected,
 
@@ -1785,7 +1785,7 @@ class SimulcastStreamConfig {
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// @nodoc
+  /// Video receive bitrate (Kbps), represented by an instantaneous value. The default value is 65.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
@@ -3375,7 +3375,7 @@ enum RtmpStreamPublishErrorType {
   @JsonValue(16)
   rtmpStreamPublishErrorInvalidPrivilege,
 
-  /// 100: The streaming has been stopped normally. After you stop the media push, the SDK returns this value.
+  /// 100: The streaming has been stopped normally. After you stop the Media Push, the SDK returns this value.
   @JsonValue(100)
   rtmpStreamUnpublishErrorOk,
 }
@@ -4593,15 +4593,15 @@ class VirtualBackgroundSource {
   @JsonKey(name: 'background_source_type')
   final BackgroundSourceType? backgroundSourceType;
 
-  /// The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image isbackgroundColor .
+  /// The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is backgroundColor.
   @JsonKey(name: 'color')
   final int? color;
 
-  /// The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image isbackgroundImg .
+  /// The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is backgroundImg.
   @JsonKey(name: 'source')
   final String? source;
 
-  /// The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image isbackgroundBlur .
+  /// The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is backgroundBlur.
   @JsonKey(name: 'blur_degree')
   final BackgroundBlurDegree? blurDegree;
 

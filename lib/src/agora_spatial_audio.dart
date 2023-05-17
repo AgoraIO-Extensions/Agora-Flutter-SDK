@@ -151,13 +151,7 @@ abstract class BaseSpatialAudioEngine {
   Future<void> updatePlayerPositionInfo(
       {required int playerId, required RemoteVoicePositionInfo positionInfo});
 
-  /// Enables or disables the spatial audio effect for the media player.
-  /// After successfully setting the spatial audio effect parameters of the media player, the SDK enables the spatial audio effect for the media player, and the local user can hear the media resources with a sense of space.If you need to disable the spatial audio effect for the media player, set the params parameter to null.
-  ///
-  /// * [params] The spatial audio effect parameters of the media player. See SpatialAudioParams .
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> setParameters(String params);
 
   /// Stops or resumes publishing the local audio stream.
@@ -260,15 +254,7 @@ abstract class LocalSpatialAudioEngine implements BaseSpatialAudioEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> clearRemotePositions();
 
-  /// Enables tracing the video frame rendering process.
-  /// By default, the SDK starts tracing the video rendering event automatically when the local user successfully joins the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
-  ///  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
-  ///  The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
-  ///
-  /// * [connection] The connection information. See RtcConnection .
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> clearRemotePositionsEx(RtcConnection connection);
 
   /// Sets the sound attenuation effect for the specified user.

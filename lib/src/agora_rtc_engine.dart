@@ -1740,17 +1740,17 @@ class RtcEngineEventHandler {
   /// Occurs when a user rejoins the channel.
   /// When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.
   ///
-  /// * [elapsed] Time elapsed (ms) from the local user calling the or joinChannel method until this callback is triggered.
+  /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
   final void Function(RtcConnection connection, int elapsed)?
       onRejoinChannelSuccess;
 
   /// Reports the proxy connection state.
-  /// You can use this callback to listen for the state of the SDK connecting to a proxy. For example, when a user calls setCloudProxy and joins a channel successfully, the SDK triggers this callback to report the user ID, the proxy type connected, and the time elapsed fromthe user calling until this callback is triggered.
+  /// You can use this callback to listen for the state of the SDK connecting to a proxy. For example, when a user calls setCloudProxy and joins a channel successfully, the SDK triggers this callback to report the user ID, the proxy type connected, and the time elapsed fromthe user calling joinChannel until this callback is triggered.
   ///
   /// * [channel] The channel name.
   /// * [uid] The user ID.
   /// * [localProxyIp] Reserved for future use.
-  /// * [elapsed] The time elapsed (ms) from the user calling until this callback is triggered.
+  /// * [elapsed] The time elapsed (ms) from the user calling joinChannel until this callback is triggered.
   final void Function(String channel, int uid, ProxyType proxyType,
       String localProxyIp, int elapsed)? onProxyConnected;
 
@@ -2027,6 +2027,7 @@ class RtcEngineEventHandler {
   /// Reports the statistics of the video stream sent by each remote users.
   /// Reports the statistics of the video stream from the remote users. The SDK triggers this callback once every two seconds for each remote user. If a channel has multiple users/hosts sending video streams, the SDK triggers this callback as many times.
   ///
+  /// * [connection] The connection information. See RtcConnection .
   /// * [stats] Statistics of the remote video stream. See RemoteVideoStats .
   final void Function(RtcConnection connection, RemoteVideoStats stats)?
       onRemoteVideoStats;
@@ -2147,7 +2148,7 @@ class RtcEngineEventHandler {
       onLicenseValidationFailure;
 
   /// Occurs when the first audio frame is published.
-  /// The SDK triggers this callback under one of the following circumstances:The local client enables the audio module and calls joinChannel successfully.The local client calls muteLocalAudioStream (true) and muteLocalAudioStreamfalse() in sequence.The local client calls disableAudio and enableAudio in sequence.
+  /// The SDK triggers this callback under one of the following circumstances:The local client enables the audio module and calls joinChannel successfully.The local client calls muteLocalAudioStream (true) and muteLocalAudioStream(false) in sequence.The local client calls disableAudio and enableAudio in sequence.
   ///
   /// * [connection] The connection information. See RtcConnection .
   /// * [elapsed] Time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
@@ -3041,10 +3042,10 @@ abstract class RtcEngine {
   Future<void> setClientRole(
       {required ClientRoleType role, ClientRoleOptions? options});
 
-  /// Sets the video encoder configuration.
-  /// Sets the encoder configuration for the local video.You can call this method either before or after joining a channel. If the user does not need to reset the video encoding properties after joining the channel, Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.
+  /// Starts an audio call test.
+  /// This method starts an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly. To conduct the test, let the user speak for a while, and the recording is played back within the set interval. If the user can hear the recording within the interval, the audio devices and network connection are working properly.Call this method before joining a channel.After calling startEchoTest, you must call stopEchoTest to end the test. Otherwise, the app cannot perform the next echo test, and you cannot join the channel.In the live streaming channels, only a host can call this method.
   ///
-  /// * [config] Video profile. See VideoEncoderConfiguration .
+  /// * [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back. The value range is [2, 10].
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
@@ -3126,15 +3127,15 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
 
-  /// Sets low-light enhancement.
-  /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.Both this method and setExtensionProperty can turn on low-light enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  /// Sets the image enhancement options.
+  /// Enables or disables image enhancement, and sets the options.Call this method before calling enableVideo or .This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
-  /// * [enabled] Whether to enable low-light enhancement function:true: Enable low-light enhancement function.false: (Default) Disable low-light enhancement function.
-  /// * [options] The low-light enhancement options. See LowlightEnhanceOptions .
-  /// * [type] The type of the video source. See MediaSourceType .
+  /// * [enabled] Whether to enable the image enhancement function:true: Enable the image enhancement function.false: (Default) Disable the image enhancement function.
+  /// * [options] The image enhancement options. See BeautyOptions .
+  /// * [type] The type of the video source, see MediaSourceType .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.errNotSupported(4): The current device version is below Android 5.0, and this operation is not supported.
   Future<void> setBeautyEffectOptions(
       {required bool enabled,
       required BeautyOptions options,
@@ -3154,11 +3155,11 @@ abstract class RtcEngine {
       required LowlightEnhanceOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
-  /// Sets low-light enhancement.
-  /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.Both this method and setExtensionProperty can turn on low-light enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  /// Sets video noise reduction.
+  /// Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding.You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.Call this method after calling enableVideo .Video noise reduction has certain requirements for equipment performance. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.Both this method and setExtensionProperty can turn on video noise reduction function:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
-  /// * [enabled] Whether to enable low-light enhancement function:true: Enable low-light enhancement function.false: (Default) Disable low-light enhancement function.
-  /// * [options] The low-light enhancement options. See LowlightEnhanceOptions .
+  /// * [enabled] Whether to enable video noise reduction:true: Enable video noise reduction.false: (Default) Disable video noise reduction.
+  /// * [options] The video noise reduction options. See VideoDenoiserOptions .
   /// * [type] The type of the video source. See MediaSourceType .
   ///
   /// Returns
@@ -3168,11 +3169,11 @@ abstract class RtcEngine {
       required VideoDenoiserOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
 
-  /// Sets low-light enhancement.
-  /// The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.Both this method and setExtensionProperty can turn on low-light enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  /// Sets color enhancement.
+  /// The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid.You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.Call this method after calling enableVideo .The color enhancement feature has certain performance requirements on devices. With color enhancement turned on, Agora recommends that you change the color enhancement level to one that consumes less performance or turn off color enhancement if your device is experiencing severe heat problems.Both this method and setExtensionProperty can enable color enhancement:When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
-  /// * [enabled] Whether to enable low-light enhancement function:true: Enable low-light enhancement function.false: (Default) Disable low-light enhancement function.
-  /// * [options] The low-light enhancement options. See LowlightEnhanceOptions .
+  /// * [enabled] Whether to enable color enhancement:true Enable color enhancement.false: (Default) Disable color enhancement.
+  /// * [options] The color enhancement options. See ColorEnhanceOptions .
   /// * [type] The type of the video source. See MediaSourceType .
   ///
   /// Returns
@@ -3287,13 +3288,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
   Future<void> muteAllRemoteAudioStreams(bool mute);
 
-  /// Stops or resumes publishing the local audio stream.
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
-  ///
-  /// * [mute] Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
+  /// @nodoc
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool mute);
 
   /// Stops or resumes subscribing to the audio stream of a specified user.
@@ -3333,13 +3328,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
   Future<void> muteAllRemoteVideoStreams(bool mute);
 
-  /// Stops or resumes publishing the local audio stream.
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
-  ///
-  /// * [mute] Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
+  /// @nodoc
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
 
   /// Stops or resumes subscribing to the video stream of a specified user.
@@ -3422,13 +3411,10 @@ abstract class RtcEngine {
   Future<void> setSubscribeVideoBlocklist(
       {required List<int> uidList, required int uidNumber});
 
-  /// Set the blocklist of subscriptions for video streams.
-  /// You can call this method to specify the video streams of a user that you do not want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-  ///  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-  ///  You can call this method either before or after joining a channel.
-  ///  The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+  /// Set the allowlist of subscriptions for video streams.
+  /// You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
   ///
-  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
   /// * [uidNumber] The number of users in the user ID list.
   ///
   /// Returns
@@ -3914,15 +3900,7 @@ abstract class RtcEngine {
       required int param1,
       required int param2});
 
-  /// Sets parameters for SDK preset audio effects.
-  /// Call this method to set the following parameters for the local user who sends an audio stream:3D voice effect: Sets the cycle period of the 3D voice effect.Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches. Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively.After setting the audio parameters, all users in the channel can hear the effect.You can call this method either before or after joining a channel.To get better audio effect quality, Agora recommends setting the scenario parameter of setAudioProfile as audioScenarioGameStreaming(3) before calling this method.Do not set the profile parameter in setAudioProfile to audioProfileSpeechStandard(1)audioProfileIot or (6), or the method does not take effect.This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.After calling setAudioEffectParameters, Agora does not recommend you to call the following methods, otherwise the effect set by setAudioEffectParameters will be overwritten: setAudioEffectPreset setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
-  ///
-  /// * [preset] The options for SDK preset audio effects:roomAcoustics3dVoice, 3D voice effect:Call setAudioProfile and set the profile parameter in to audioProfileMusicStandardStereo(3) or audioProfileMusicHighQualityStereo(5) before setting this enumerator; otherwise, the enumerator setting does not take effect.If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.pitchCorrection, Pitch correction effect: To achieve better audio effect quality, Agora recommends setting the profile parameter in setAudioProfile to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) before setting this enumerator.
-  /// * [param1] If you set preset to roomAcoustics3dVoice, param1 sets the cycle period of the 3D voice effect. The value range is [1,60] and the unit is seconds. The default value is 10, indicating that the voice moves around you every 10 seconds.If you set preset to pitchCorrection, param1 indicates the basic mode of the pitch correction effect:1: (Default) Natural major scale.2: Natural minor scale.3: Japanese pentatonic scale.
-  /// * [param2] If you set preset to roomAcoustics3dVoice , you need to set param2 to 0.If you set preset to pitchCorrection, param2 indicates the tonic pitch of the pitch correction effect:1: A2: A#3: B4: (Default) C5: C#6: D7: D#8: E9: F10: F#11: G12: G#
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> setVoiceConversionParameters(
       {required VoiceConversionPreset preset,
       required int param1,
@@ -4187,12 +4165,11 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   void registerAudioSpectrumObserver(AudioSpectrumObserver observer);
 
-  /// Unregisters the video frame observer.
-  ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See VideoFrameObserver .
+  /// Unregisters the audio spectrum observer.
+  /// After calling registerAudioSpectrumObserver , if you want to disable audio spectrum monitoring, you can call this method.You can call this method either before or after joining a channel.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   void unregisterAudioSpectrumObserver(AudioSpectrumObserver observer);
 
   /// Adjusts the capturing signal volume.
@@ -4407,12 +4384,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> destroyCustomVideoTrack(int videoTrackId);
 
-  /// Destroys the specified video track.
-  ///
-  /// * [videoTrackId] The video track ID returned by calling the createCustomVideoTrack method.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> destroyCustomEncodedVideoTrack(int videoTrackId);
 
   /// Switches between front and rear cameras.
@@ -4870,14 +4842,7 @@ abstract class RtcEngine {
   Future<void> setCameraDeviceOrientation(
       {required VideoSourceType type, required VideoOrientation orientation});
 
-  /// Sets the rotation angle of the captured video.
-  /// This method applies to Windows only.When the video capture device does not have the gravity sensing function, you can call this method to manually adjust the rotation angle of the captured video.
-  ///
-  /// * [type] The video source type. See VideoSourceType .
-  /// * [orientation] The clockwise rotation angle. See VideoOrientation .
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> setScreenCaptureOrientation(
       {required VideoSourceType type, required VideoOrientation orientation});
 
@@ -5015,9 +4980,7 @@ abstract class RtcEngine {
   void registerMediaMetadataObserver(
       {required MetadataObserver observer, required MetadataType type});
 
-  /// Registers the metadata observer.
-  /// You need to implement the MetadataObserver class and specify the metadata type in this method. This method enables you to add synchronized metadata in the video stream for more diversified
-  ///  live interactive streaming, such as sending shopping links, digital coupons, and online quizzes.Call this method before joinChannel.
+  /// Unregisters the specified metadata observer.
   ///
   /// * [observer] The metadata observer. See MetadataObserver .
   /// * [type] The metadata type. The SDK currently only supports videoMetadata.
@@ -5066,15 +5029,27 @@ abstract class RtcEngine {
       {required String appId, required String userAccount});
 
   /// Joins the channel with a user account, and configures whether to automatically subscribe to audio or video streams after joining the channel.
-  /// To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type. Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods.This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: The onUserJoined callback, if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.
+  /// This method allows a user to join the channel with the user account. After the user successfully joins the channel, the SDK triggers the following callbacks:The local client: onLocalUserRegistered , onJoinChannelSuccess and onConnectionStateChanged callbacks.The remote client: The onUserJoined callback, if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods.To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
   ///
   /// * [token] The token generated on your server for authentication.
-  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:All lowercase English letters: a to z.All uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "= ", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+  /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
+  ///  All lowercase English letters: a to z.
+  ///  All uppercase English letters: A to Z.
+  ///  All numeric characters: 0 to 9.
+  ///  Space
+  ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "= ", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   /// * [userAccount] The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):The 26 lowercase English letters: a to z.The 26 uppercase English letters: A to Z.All numeric characters: 0 to 9.Space"!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "= ", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
   /// * [options] The channel media options. See ChannelMediaOptions .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
+  ///  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
+  ///  -3: Failes to initialize the RtcEngine object. You need to reinitialize the RtcEngine object.
+  ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
+  ///  -8: The internal state of the RtcEngine object is wrong. The typical cause is that you call this method to join the channel without calling startEchoTest to stop the test after calling stopEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
+  ///  -17: The request to join the channel is rejected. The typical cause is that the user is in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected(1) state.
+  ///  -102: The channel name is invalid. You need to pass in a valid channelname in channelId to rejoin the channel.
+  ///  -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
   Future<void> joinChannelWithUserAccount(
       {required String token,
       required String channelId,
@@ -5207,13 +5182,7 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> stopDirectCdnStreaming();
 
-  /// Sets audio advanced options.
-  /// If you have advanced audio processing requirements, such as capturing and sending stereo audio, you can call this method to set advanced audio options.Call this method after calling joinChannel , enableAudio and enableLocalAudio .
-  ///
-  /// * [options] The advanced options for audio. See AdvancedAudioOptions .
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> updateDirectCdnStreamingMediaOptions(
       DirectCdnStreamingMediaOptions options);
 
@@ -5279,14 +5248,7 @@ abstract class RtcEngine {
   Future<void> adjustCustomAudioPublishVolume(
       {required int trackId, required int volume});
 
-  /// Adjusts the volume of the custom external audio source when it is published in the channel.
-  /// Ensure you have called the createCustomAudioTrack method to create an external audio track before calling this method.If you want to change the volume of the audio to be published, you need to call this method again.
-  ///
-  /// * [trackId] The audio track ID. Set this parameter to the custom audio track ID returned in createCustomAudioTrack.
-  /// * [volume] The volume of the audio source. The value can range from 0 to 100. 0 means mute; 100 means the original volume.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> adjustCustomAudioPlayoutVolume(
       {required int trackId, required int volume});
 
@@ -5333,13 +5295,7 @@ abstract class RtcEngine {
   /// ≥0: The method call is successful, and returns the current Monotonic Time of the SDK (in milliseconds).< 0: Failure.
   Future<int> getCurrentMonotonicTimeInMs();
 
-  /// Sets whether to enable auto exposure.
-  /// This method applies to iOS only.Call this method before calling joinChannel , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
-  ///
-  /// * [enabled] Whether to enable auto exposure:true: Enable auto exposure.false: Disable auto exposure.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> enableWirelessAccelerate(bool enabled);
 
   /// Gets the type of the local network connection.

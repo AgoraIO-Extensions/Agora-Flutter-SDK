@@ -135,36 +135,17 @@ abstract class MediaPlayer {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> setPlayerOptionInInt({required String key, required int value});
 
-  /// Sets the private options for the media player.
-  /// The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.Ensure that you call this method before open .If you need to push streams with SEI into the CDN, call setPlayerOptionInInt("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
-  ///
-  /// * [key] The key of the option.
-  /// * [value] The value of the key.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> setPlayerOptionInString(
       {required String key, required String value});
 
   /// @nodoc
   Future<void> takeScreenshot(String filename);
 
-  /// Gets the detailed information of the media stream.
-  /// Call this method after calling getStreamCount .
-  ///
-  /// * [index] The index of the media stream.
-  ///
-  /// Returns
-  /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
+  /// @nodoc
   Future<void> selectInternalSubtitle(int index);
 
-  /// Stops pushing media streams to a CDN.
-  /// Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
-  ///
-  /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> setExternalSubtitle(String url);
 
   /// Gets current playback state.
@@ -248,6 +229,7 @@ abstract class MediaPlayer {
 
   /// Registers an audio frame observer object.
   ///
+  /// * [observer] The audio frame observer, reporting the reception of each audio frame. See AudioPcmFrameSink .
   /// * [mode] The use mode of the audio frame. See RawAudioFrameOpModeType .
   ///
   /// Returns
@@ -286,12 +268,7 @@ abstract class MediaPlayer {
   void registerMediaPlayerAudioSpectrumObserver(
       {required AudioSpectrumObserver observer, required int intervalInMS});
 
-  /// Unregisters the video frame observer.
-  ///
-  /// * [observer] The video observer, reporting the reception of each video frame. See VideoFrameObserver .
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  /// @nodoc
   void unregisterMediaPlayerAudioSpectrumObserver(
       AudioSpectrumObserver observer);
 

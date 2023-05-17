@@ -61,13 +61,7 @@ abstract class AudioDeviceManager {
   /// An AudioDeviceInfo object, which contains the ID and device name of the audio devices.
   Future<AudioDeviceInfo> getPlaybackDeviceInfo();
 
-  /// Adjusts the volume of audio mixing for publishing.
-  /// This method adjusts the volume of audio mixing for publishing (sending to other users).Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(audioMixingStatePlaying) callback.
-  ///
-  /// * [volume] The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> setPlaybackDeviceVolume(int volume);
 
   /// @nodoc
@@ -124,25 +118,13 @@ abstract class AudioDeviceManager {
   /// The ID of the current loopback device.
   Future<String> getLoopbackDevice();
 
-  /// Stops or resumes publishing the local audio stream.
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
-  ///
-  /// * [mute] Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
+  /// @nodoc
   Future<void> setPlaybackDeviceMute(bool mute);
 
   /// @nodoc
   Future<bool> getPlaybackDeviceMute();
 
-  /// Stops or resumes publishing the local audio stream.
-  /// This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
-  ///
-  /// * [mute] Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
+  /// @nodoc
   Future<void> setRecordingDeviceMute(bool mute);
 
   /// @nodoc

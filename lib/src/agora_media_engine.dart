@@ -122,23 +122,11 @@ abstract class MediaEngine {
       bool localPlayback = false,
       bool publish = true});
 
-  /// Creates a customized audio track.
-  /// When you need to publish multiple custom captured videos in the channel, you can refer to the following steps:Call this method to create a video track and get the video track ID.In ChannelMediaOptions of each channel, set customVideoTrackId to the video track ID that you want to publish, and set publishCustomVideoTrack to true.If you call pushAudioFrame trackId as the video track ID set in step 2, you can publish the corresponding custom video source in multiple channels.
-  ///
-  /// * [trackType] The type of the custom audio track. See AudioTrackType .
-  /// * [config] The configuration of the custom audio track. See AudioTrackConfig .
-  ///
-  /// Returns
-  /// If the method call is successful, the video track ID is returned as the unique identifier of the video track.If the method call fails, a negative value is returned.
+  /// @nodoc
   Future<int> createCustomAudioTrack(
       {required AudioTrackType trackType, required AudioTrackConfig config});
 
-  /// Destroys the specified video track.
-  ///
-  /// * [trackId] The custom audio track ID returned in createCustomAudioTrack .
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> destroyCustomAudioTrack(int trackId);
 
   /// Sets the external audio sink.
