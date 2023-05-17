@@ -87,6 +87,14 @@ class _State extends State<JoinChannelVideo> {
           remoteUid.clear();
         });
       },
+      onFirstLocalVideoFrame:
+          (VideoSourceType source, int width, int height, int elapsed) {
+        if (source.value() == VideoSourceType.videoSourceCamera.value()) {
+          if (Platform.isAndroid || Platform.isIOS) {
+            _engine.enableFaceDetection(true);
+          }
+        }
+      },
       onFacePositionChanged: (
         int imageWidth,
         int imageHeight,
@@ -104,9 +112,6 @@ class _State extends State<JoinChannelVideo> {
 
     await _engine.enableVideo();
     await _engine.startPreview();
-    if (Platform.isAndroid || Platform.isIOS) {
-      await _engine.enableFaceDetection(true);
-    }
   }
 
   Future<void> _joinChannel() async {
