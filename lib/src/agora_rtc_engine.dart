@@ -4629,7 +4629,7 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   Future<void> startScreenCaptureBySourceType(
-      {required VideoSourceType sourceType,
+      {required VideoSourceType type,
       required ScreenCaptureConfiguration config});
 
   /// Updates the screen capturing parameters.
@@ -4671,7 +4671,7 @@ abstract class RtcEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
-  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType);
+  Future<void> stopScreenCaptureBySourceType(VideoSourceType type);
 
   /// Retrieves the call ID.
   /// When a user joins a channel on a client, a callId is generated to identify the call from the client. Some methods, such as rate and complain , must be called after the call ends to submit feedback to the SDK. These methods require the callId parameter.Call this method after joining a channel.

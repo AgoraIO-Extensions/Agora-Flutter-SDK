@@ -3442,12 +3442,12 @@ class RtcEngineImpl implements RtcEngine {
 
   @override
   Future<void> startScreenCaptureBySourceType(
-      {required VideoSourceType sourceType,
+      {required VideoSourceType type,
       required ScreenCaptureConfiguration config}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCaptureBySourceType';
     final param = createParams(
-        {'sourceType': sourceType.value(), 'config': config.toJson()});
+        {'type': type.value(), 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -3527,10 +3527,10 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType) async {
+  Future<void> stopScreenCaptureBySourceType(VideoSourceType type) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCaptureBySourceType';
-    final param = createParams({'sourceType': sourceType.value()});
+    final param = createParams({'type': type.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
