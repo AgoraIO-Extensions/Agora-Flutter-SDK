@@ -594,7 +594,7 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNoPermission: 2,
   LocalVideoStreamError.localVideoStreamErrorDeviceBusy: 3,
   LocalVideoStreamError.localVideoStreamErrorCaptureFailure: 4,
-  LocalVideoStreamError.localVideoStreamErrorCodecNotSupport: 5,
+  LocalVideoStreamError.localVideoStreamErrorEncodeFailure: 5,
   LocalVideoStreamError.localVideoStreamErrorCaptureInbackground: 6,
   LocalVideoStreamError.localVideoStreamErrorCaptureMultipleForegroundApps: 7,
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,

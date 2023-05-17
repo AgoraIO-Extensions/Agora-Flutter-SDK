@@ -2653,7 +2653,7 @@ enum LocalVideoStreamError {
 
   /// @nodoc
   @JsonValue(5)
-  localVideoStreamErrorCodecNotSupport,
+  localVideoStreamErrorEncodeFailure,
 
   /// 6: (For iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
   @JsonValue(6)
