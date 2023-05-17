@@ -17,24 +17,24 @@ class MediaPlayerSourceObserver {
     this.onAudioVolumeIndication,
   });
 
-  /// Reports the playback state change.
+  /// Reports the changes of playback state.
   /// When the state of the media player changes, the SDK triggers this callback to report the current playback state.
   ///
-  /// * [state] The playback state, see MediaPlayerState .
+  /// * [state] The playback state. See MediaPlayerState .
   /// * [ec] The error code. See MediaPlayerError .
   final void Function(MediaPlayerState state, MediaPlayerError ec)?
       onPlayerSourceStateChanged;
 
   /// Reports current playback progress.
-  /// When playing media files, the SDK triggers this callback every one second to report current playback progress.
+  /// When playing media files, the SDK triggers this callback every two second to report current playback progress.
   ///
   /// * [position] The playback position (ms) of media files.
   final void Function(int positionMs)? onPositionChanged;
 
-  /// Reports the playback event.
+  /// Reports the player events.
   /// After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
   ///
-  /// * [eventCode] The playback event. See MediaPlayerEvent .
+  /// * [eventCode] The player events. See MediaPlayerEvent .
   /// * [elapsedTime] The time (ms) when the event occurs.
   /// * [message] Information about the event.
   final void Function(
