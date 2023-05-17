@@ -85,9 +85,24 @@ class _State extends State<JoinChannelVideo> {
           remoteUid.clear();
         });
       },
+      onFacePositionChanged: (
+        int imageWidth,
+        int imageHeight,
+        List<Rectangle> vecRectangle,
+        List<int> vecDistance,
+        int numFaces,
+      ) {
+        String vecRectangleString =
+            vecRectangle.map((e) => e.toJson()).toList().toString();
+        String vecDistanceString = vecDistance.toString();
+        logSink.log(
+            '[onFacePositionChanged] imageWidth: $imageWidth imageHeight: $imageHeight vecRectangle: $vecRectangleString vecDistance: $vecDistanceString numFaces: $numFaces');
+      },
     ));
 
     await _engine.enableVideo();
+    await _engine.startPreview();
+    await _engine.enableFaceDetection(true);
   }
 
   Future<void> _joinChannel() async {
@@ -126,9 +141,7 @@ class _State extends State<JoinChannelVideo> {
                 useFlutterTexture: _isUseFlutterTexture,
                 useAndroidSurfaceView: _isUseAndroidSurfaceView,
               ),
-              onAgoraVideoViewCreated: (viewId) {
-                _engine.startPreview();
-              },
+              onAgoraVideoViewCreated: (viewId) {},
             ),
             Align(
               alignment: Alignment.topLeft,
