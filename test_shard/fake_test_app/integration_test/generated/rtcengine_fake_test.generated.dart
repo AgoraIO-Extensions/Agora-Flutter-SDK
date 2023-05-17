@@ -222,7 +222,6 @@ void rtcEngineSmokeTestCases() {
 
       await rtcEngine.release();
     },
-    skip: true,
   );
 
   testWidgets(
@@ -7025,8 +7024,7 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
+        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
         const int screenRectX = 10;
         const int screenRectY = 10;
         const int screenRectWidth = 10;
@@ -7086,7 +7084,7 @@ void rtcEngineSmokeTestCases() {
           regionRect: configRegionRect,
         );
         await rtcEngine.startScreenCaptureBySourceType(
-          sourceType: sourceType,
+          type: type,
           config: config,
         );
       } catch (e) {
@@ -7298,10 +7296,9 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const VideoSourceType sourceType =
-            VideoSourceType.videoSourceCameraPrimary;
+        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
         await rtcEngine.stopScreenCaptureBySourceType(
-          sourceType,
+          type,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -10962,3 +10959,4 @@ void rtcEngineSmokeTestCases() {
     },
   );
 }
+
