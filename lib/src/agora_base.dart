@@ -199,7 +199,7 @@ enum ErrorCodeType {
   @JsonValue(3)
   errNotReady,
 
-  /// 4: RtcEngine does not support the request. Possible reasons include the following:The built-in encryption mode is incorrect, or the SDK fails to load the external encryption library. Check the encryption mode setting, or reload the external encryption library.
+  /// 4: The RtcEngine does not support the request. Possible reasons include the following:The built-in encryption mode is incorrect, or the SDK fails to load the external encryption library. Check the encryption mode setting, or reload the external encryption library.
   @JsonValue(4)
   errNotSupported,
 
@@ -215,7 +215,7 @@ enum ErrorCodeType {
   @JsonValue(7)
   errNotInitialized,
 
-  /// @nodoc
+  /// 8: Invalid state.
   @JsonValue(8)
   errInvalidState,
 
@@ -243,11 +243,11 @@ enum ErrorCodeType {
   @JsonValue(14)
   errNetDown,
 
-  /// 17: The request to join the channel is rejected. Possible reasons include the following:The user is already in the channel. Agora recommends using the onConnectionStateChanged callback to get whether the user is in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected(1) state.After calling startEchoTest for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
+  /// 17: The request to join the channel is rejected. Possible reasons include the following:The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the connectionStateDisconnected(1) state.After calling for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
   @JsonValue(17)
   errJoinChannelRejected,
 
-  /// 18: Fails to leave the channel. Possible reasons include the following:The user has left the channel before calling the leaveChannel [1/2] method. Stop calling this method to clear this error.The user calls the leaveChannel [1/2] method to leave the channel before joining the channel. In this case, no extra operation is needed.
+  /// 18: Fails to leave the channel. Possible reasons include the following:The user has left the channel before calling the leaveChannel method. Stop calling this method to clear this error.The user calls the leaveChannel method to leave the channel before joining the channel. In this case, no extra operation is needed.
   @JsonValue(18)
   errLeaveChannelRejected,
 
@@ -283,7 +283,7 @@ enum ErrorCodeType {
   @JsonValue(109)
   errTokenExpired,
 
-  /// 110: Invalid token Typical reasons include the following:App Certificate is enabled in Agora Console, but the code still uses App ID for authentication. Once App Certificate is enabled for a project, you must use token-based authentication.The uid used to generate the token is not the same as the uid used to join the channel.Deprecated:This enumerator is deprecated. Use connectionChangedInvalidToken(8) in the onConnectionStateChanged callback instead.
+  /// 110: Invalid token. Typical reasons include the following:App Certificate is enabled in Agora Console, but the code still uses App ID for authentication. Once App Certificate is enabled for a project, you must use token-based authentication.The uid used to generate the token is not the same as the uid used to join the channel.Deprecated:This enumerator is deprecated. Use connectionChangedInvalidToken(8) in the onConnectionStateChanged callback instead.
   @JsonValue(110)
   errInvalidToken,
 
@@ -672,7 +672,7 @@ enum QualityType {
   @JsonValue(6)
   qualityDown,
 
-  /// 7: Users cannot detect the network quality. (Not in use.)
+  /// 7: Users cannot detect the network quality (not in use).
   @JsonValue(7)
   qualityUnsupported,
 
@@ -752,7 +752,7 @@ extension VideoOrientationExt on VideoOrientation {
   }
 }
 
-/// Video frame rate.
+/// The video frame rate.
 @JsonEnum(alwaysCreate: true)
 enum FrameRate {
   /// 1: 1 fps
@@ -980,18 +980,18 @@ const defaultMinBitrate = -1;
 /// @nodoc
 const defaultMinBitrateEqualToTargetBitrate = -2;
 
-/// @nodoc
+/// The highest frame rate supported by the screen sharing device.
 @JsonEnum(alwaysCreate: true)
 enum ScreenCaptureFramerateCapability {
-  /// @nodoc
+  /// 0: The device supports the frame rate of up to 15 fps.
   @JsonValue(0)
   screenCaptureFramerateCapability15Fps,
 
-  /// @nodoc
+  /// 1: The device supports the frame rate of up to 30 fps.
   @JsonValue(1)
   screenCaptureFramerateCapability30Fps,
 
-  /// @nodoc
+  /// 2: The device supports the frame rate of up to 60 fps.
   @JsonValue(2)
   screenCaptureFramerateCapability60Fps,
 }
@@ -1020,7 +1020,7 @@ enum VideoCodecType {
   @JsonValue(1)
   videoCodecVp8,
 
-  /// 2: Standard H.264.
+  /// 2: (Default) Standard H.264.
   @JsonValue(2)
   videoCodecH264,
 
@@ -1288,7 +1288,7 @@ class EncodedAudioFrameInfo {
       this.advancedSettings,
       this.captureTimeMs});
 
-  /// Audio Codec type: AudioCodecType
+  /// Audio Codec type: AudioCodecType .
   @JsonKey(name: 'codec')
   final AudioCodecType? codec;
 
@@ -1415,7 +1415,7 @@ class VideoSubscriptionOptions {
   /// @nodoc
   const VideoSubscriptionOptions({this.type, this.encodedFrameOnly});
 
-  /// @nodoc
+  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType .
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
@@ -1508,7 +1508,6 @@ enum CompressionPreference {
   preferLowLatency,
 
   /// 1: (Default) High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
-  ///
   @JsonValue(1)
   preferQuality,
 }
@@ -1580,7 +1579,7 @@ class AdvanceOptions {
 /// Video mirror mode.
 @JsonEnum(alwaysCreate: true)
 enum VideoMirrorModeType {
-  /// 0: (Default) The SDK determines the mirror mode.
+  /// 0: The SDK determines the mirror mode.For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.For the remote user: The mirror mode is disabled by default.
   @JsonValue(0)
   videoMirrorModeAuto,
 
@@ -1606,26 +1605,26 @@ extension VideoMirrorModeTypeExt on VideoMirrorModeType {
   }
 }
 
-/// @nodoc
+/// The bit mask that indicates the device codec capability.
 @JsonEnum(alwaysCreate: true)
 enum CodecCapMask {
-  /// @nodoc
+  /// (0): The device does not support encoding or decoding.
   @JsonValue(0)
   codecCapMaskNone,
 
-  /// @nodoc
+  /// (1 << 0): The device supports hardware decoding.
   @JsonValue(1 << 0)
   codecCapMaskHwDec,
 
-  /// @nodoc
+  /// (1 << 1): The device supports hardware encoding.
   @JsonValue(1 << 1)
   codecCapMaskHwEnc,
 
-  /// @nodoc
+  /// (1 << 2): The device supports software decoding.
   @JsonValue(1 << 2)
   codecCapMaskSwDec,
 
-  /// @nodoc
+  /// (1 << 3): The device supports software ecoding.
   @JsonValue(1 << 3)
   codecCapMaskSwEnc,
 }
@@ -1643,17 +1642,17 @@ extension CodecCapMaskExt on CodecCapMask {
   }
 }
 
-/// @nodoc
+/// The codec capability of the device.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CodecCapInfo {
   /// @nodoc
   const CodecCapInfo({this.codecType, this.codecCapMask});
 
-  /// @nodoc
+  /// The video codec types. See VideoCodecType .
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// @nodoc
+  /// The bit mask of the codec type. See CodecCapMask .
   @JsonKey(name: 'codecCapMask')
   final int? codecCapMask;
 
@@ -1708,7 +1707,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'degradationPreference')
   final DegradationPreference? degradationPreference;
 
-  /// By default, the video is not mirrored.
+  /// Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
@@ -1786,11 +1785,11 @@ class SimulcastStreamConfig {
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// @nodoc
+  /// Video receive bitrate (Kbps), represented by an instantaneous value. The default value is 65.
   @JsonKey(name: 'kBitrate')
   final int? kBitrate;
 
-  /// The capture frame rate (fps) of the local video. The default value is 5.
+  /// The frame rate (fps) of the local video. The default value is 5.
   @JsonKey(name: 'framerate')
   final int? framerate;
 
@@ -1874,11 +1873,11 @@ class WatermarkOptions {
   @JsonKey(name: 'visibleInPreview')
   final bool? visibleInPreview;
 
-  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See fitModeCoverPosition for details.
+  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See Rectangle .
   @JsonKey(name: 'positionInLandscapeMode')
   final Rectangle? positionInLandscapeMode;
 
-  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See fitModeCoverPosition for details.
+  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See Rectangle .
   @JsonKey(name: 'positionInPortraitMode')
   final Rectangle? positionInPortraitMode;
 
@@ -1898,7 +1897,7 @@ class WatermarkOptions {
   Map<String, dynamic> toJson() => _$WatermarkOptionsToJson(this);
 }
 
-/// Statistics of the channel.
+/// Statistics of a call session.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcStats {
   /// @nodoc
@@ -1941,15 +1940,15 @@ class RtcStats {
   @JsonKey(name: 'duration')
   final int? duration;
 
-  /// Total number of bytes transmitted, represented by an aggregate value.
+  /// The number of bytes sent.
   @JsonKey(name: 'txBytes')
   final int? txBytes;
 
-  /// Total number of bytes received, represented by an aggregate value.
+  /// The number of bytes received.
   @JsonKey(name: 'rxBytes')
   final int? rxBytes;
 
-  /// Total number of audio bytes sent, represented by an aggregate value.
+  /// The total number of audio bytes sent, represented by an aggregate value.
   @JsonKey(name: 'txAudioBytes')
   final int? txAudioBytes;
 
@@ -1973,7 +1972,7 @@ class RtcStats {
   @JsonKey(name: 'rxKBitRate')
   final int? rxKBitRate;
 
-  /// Audio receive bitrate (Kbps), represented by an instantaneous value.
+  /// The bitrate (Kbps) of receiving the audio.
   @JsonKey(name: 'rxAudioKBitRate')
   final int? rxAudioKBitRate;
 
@@ -1981,7 +1980,7 @@ class RtcStats {
   @JsonKey(name: 'txAudioKBitRate')
   final int? txAudioKBitRate;
 
-  /// Video receive bitrate (Kbps), represented by an instantaneous value.
+  /// The bitrate (Kbps) of receiving the video.
   @JsonKey(name: 'rxVideoKBitRate')
   final int? rxVideoKBitRate;
 
@@ -1989,7 +1988,7 @@ class RtcStats {
   @JsonKey(name: 'txVideoKBitRate')
   final int? txVideoKBitRate;
 
-  /// The client-to-server delay (ms).
+  /// The client-to-server delay (milliseconds).
   @JsonKey(name: 'lastmileDelay')
   final int? lastmileDelay;
 
@@ -1997,7 +1996,7 @@ class RtcStats {
   @JsonKey(name: 'userCount')
   final int? userCount;
 
-  /// Application CPU usage (%).The value of cpuTotalUsage is always reported as 0 in the onLeaveChannel callback.As of Android 8.1, you cannot get the CPU usage from this attribute due to system limitations.
+  /// Application CPU usage (%).The value of cpuAppUsage is always reported as 0 in the onLeaveChannel callback.As of Android 8.1, you cannot get the CPU usage from this attribute due to system limitations.
   @JsonKey(name: 'cpuAppUsage')
   final double? cpuAppUsage;
 
@@ -2005,7 +2004,7 @@ class RtcStats {
   @JsonKey(name: 'cpuTotalUsage')
   final double? cpuTotalUsage;
 
-  /// The round-trip time delay (ms) from the client to the local router.On Android, to get gatewayRtt, ensure that you add the android.permission.ACCESS_WIFI_STATE permission after </application> in the AndroidManifest.xml file in your project.
+  /// The round-trip time delay (ms) from the client to the local router.This property is disabled on devices running iOS 14 or later, and enabled on devices running versions earlier than iOS 14 by default. To enable this property on devices running iOS 14 or later, .On Android, to get gatewayRtt, ensure that you add the android.permission.ACCESS_WIFI_STATE permission after </application> in the AndroidManifest.xml file in your project.
   @JsonKey(name: 'gatewayRtt')
   final int? gatewayRtt;
 
@@ -2156,7 +2155,7 @@ extension AudienceLatencyLevelTypeExt on AudienceLatencyLevelType {
   }
 }
 
-/// The detailed options of a user.
+/// Setting of user role properties.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ClientRoleOptions {
   /// @nodoc
@@ -2236,18 +2235,18 @@ extension ExperiencePoorReasonExt on ExperiencePoorReason {
   }
 }
 
-/// @nodoc
+/// AI noise reduction modes.
 @JsonEnum(alwaysCreate: true)
 enum AudioAinsMode {
-  /// @nodoc
+  /// 0: (Default) Balance mode. This mode allows for a balanced performance on noice reduction and time delay.
   @JsonValue(0)
   ainsModeBalanced,
 
-  /// @nodoc
+  /// 1: Aggressive mode. In scenarios where high performance on noise reduction is required, such as live streaming outdoor events, This mode reduces nosies more dramatically, but may sometimes affect the original character of the audio.
   @JsonValue(1)
   ainsModeAggressive,
 
-  /// @nodoc
+  /// 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive mode. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real-time.
   @JsonValue(2)
   ainsModeUltralowlatency,
 }
@@ -2321,11 +2320,11 @@ enum AudioScenarioType {
   @JsonValue(0)
   audioScenarioDefault,
 
-  /// 3: High-quality audio scenario, where users mainly play music.
+  /// 3: High-quality audio scenario, where users mainly play music. For example, instrument tutoring.
   @JsonValue(3)
   audioScenarioGameStreaming,
 
-  /// 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. In this scenario, audience members receive a pop-up window to request permission of using microphones.
+  /// 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios. In this scenario, audience members receive a pop-up window to request permission of using microphones.
   @JsonValue(5)
   audioScenarioChatroom,
 
@@ -2443,14 +2442,14 @@ extension ScreenScenarioTypeExt on ScreenScenarioType {
   }
 }
 
-/// @nodoc
+/// The video application scenarios.
 @JsonEnum(alwaysCreate: true)
 enum VideoApplicationScenarioType {
-  /// @nodoc
+  /// 0: (Default) The general scenario.
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// @nodoc
+  /// If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.If someone subscribes to the high-quality stream, the SDK resets the high-quality stream to the VideoEncoderConfiguration configuration used in the most recent calling of setVideoEncoderConfiguration . If no configuration has been set by the user previously, the following values are used:Resolution: (Windows and macOS) 1280 × 720; (Android and iOS) 960 × 540Frame rate: 15 fpsBitrate: (Windows and macOS) 1600 Kbps; (Android and iOS) 1000 KbpsThe SDK monitors the number of subscribers to the low-quality video stream in real time and dynamically enables or disables it based on the number of subscribers.If the user has called setDualStreamMode to set that never send low-quality video stream (disableSimulcastStream), the dynamic adjustment of the low-quality stream in meeting scenarios will not take effect.If nobody subscribes to the low-quality stream, the SDK automatically disables it to save upstream bandwidth.If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:Resolution: 480 × 272Frame rate: 15 fpsBitrate: 500 Kbps1: The meeting scenario.
   @JsonValue(1)
   applicationScenarioMeeting,
 }
@@ -2651,7 +2650,7 @@ enum LocalVideoStreamError {
   @JsonValue(4)
   localVideoStreamErrorCaptureFailure,
 
-  /// @nodoc
+  /// 5: The local video encoding fails.
   @JsonValue(5)
   localVideoStreamErrorEncodeFailure,
 
@@ -2667,7 +2666,7 @@ enum LocalVideoStreamError {
   @JsonValue(8)
   localVideoStreamErrorDeviceNotFound,
 
-  /// 9: (For macOS only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// 9:(For macOS only) The video capture device currently in use is disconnected (such as being unplugged).
   @JsonValue(9)
   localVideoStreamErrorDeviceDisconnected,
 
@@ -2803,7 +2802,7 @@ extension RemoteAudioStateReasonExt on RemoteAudioStateReason {
   }
 }
 
-/// The state of the remote video.
+/// The state of the remote video stream.
 @JsonEnum(alwaysCreate: true)
 enum RemoteVideoState {
   /// 0: The remote video is in the initial state. The SDK reports this state in the case of remoteVideoStateReasonLocalMuted, remoteVideoStateReasonRemoteMuted, or remoteVideoStateReasonRemoteOffline.
@@ -2814,7 +2813,7 @@ enum RemoteVideoState {
   @JsonValue(1)
   remoteVideoStateStarting,
 
-  /// 2: The remote video stream is decoded and plays normally. The SDK reports this state in the case of remoteVideoStateReasonNetworkRecovery, remoteVideoStateReasonLocalUnmuted, remoteVideoStateReasonRemoteUnmuted or remoteVideoStateReasonAudioFallbackRecovery.
+  /// 2: The remote video stream is decoded and plays normally. The SDK reports this state in the case of remoteVideoStateReasonNetworkRecovery, remoteVideoStateReasonLocalUnmuted, remoteVideoStateReasonRemoteUnmuted, or remoteVideoStateReasonAudioFallbackRecovery.
   @JsonValue(2)
   remoteVideoStateDecoding,
 
@@ -2851,7 +2850,7 @@ enum RemoteVideoStateReason {
   @JsonValue(1)
   remoteVideoStateReasonNetworkCongestion,
 
-  /// 2: Network recovery.
+  /// 2: Network is recovered.
   @JsonValue(2)
   remoteVideoStateReasonNetworkRecovery,
 
@@ -2891,7 +2890,7 @@ enum RemoteVideoStateReason {
   @JsonValue(11)
   remoteVideoStateReasonVideoStreamTypeChangeToHigh,
 
-  /// @nodoc
+  /// 12: (iOS only) The remote user's app has switched to the background.
   @JsonValue(12)
   remoteVideoStateReasonSdkInBackground,
 
@@ -3048,11 +3047,11 @@ class AudioVolumeInfo {
   /// @nodoc
   const AudioVolumeInfo({this.uid, this.volume, this.vad, this.voicePitch});
 
-  /// The user ID.In the local user's callback, uid = 0.In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is one of the three highest.
+  /// The user ID.In the local user's callback, uid is 0.In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is the highest.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The volume of the user. The value ranges between 0 (lowest volume) and 255 (highest volume).
+  /// The volume of the user. The value ranges between 0 (the lowest volume) and 255 (the highest volume). If the local user enables audio capturing and calls muteLocalAudioStream and set it as true to mute, the value of volume indicates the volume of locally captured audio signal.
   @JsonKey(name: 'volume')
   final int? volume;
 
@@ -3275,7 +3274,7 @@ enum RtmpStreamPublishState {
   @JsonValue(0)
   rtmpStreamPublishStateIdle,
 
-  /// 1: The SDK is connecting to Agora's streaming server and the CDN server.
+  /// 1: The streaming server and CDN server are being connected.
   @JsonValue(1)
   rtmpStreamPublishStateConnecting,
 
@@ -3283,16 +3282,15 @@ enum RtmpStreamPublishState {
   @JsonValue(2)
   rtmpStreamPublishStateRunning,
 
-  /// 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.If the SDK successfully resumes the streaming, rtmpStreamPublishStateRunning(2) returns.
-  /// If the streaming does not resume within 60 seconds or server errors occur, rtmpStreamPublishStateFailure(4) returns. You can also reconnect to the server by calling the stopRtmpStream method.
+  /// 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.If the SDK successfully resumes the streaming, rtmpStreamPublishStateRunning(2) returns.If the streaming does not resume within 60 seconds or server errors occur, rtmpStreamPublishStateFailure(4) returns. If you feel that 60 seconds is too long, you can also actively try to reconnect.
   @JsonValue(3)
   rtmpStreamPublishStateRecovering,
 
-  /// 4: The RTMP or RTMPS streaming fails. See the errCode parameter for the detailed error information.
+  /// 4: The RTMP or RTMPS streaming fails. After a failure, you can troubleshoot the cause of the error through the returned error code.
   @JsonValue(4)
   rtmpStreamPublishStateFailure,
 
-  /// 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call stopRtmpStream to stop the streaming normally, the SDK reports the streaming state as rtmpStreamPublishStateDisconnecting and rtmpStreamPublishStateIdle in sequence.
+  /// 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call stopRtmpStream to stop the Media Push normally, the SDK reports the Media Push state as rtmpStreamPublishStateDisconnecting and rtmpStreamPublishStateIdle in sequence.
   @JsonValue(5)
   rtmpStreamPublishStateDisconnecting,
 }
@@ -3313,7 +3311,7 @@ extension RtmpStreamPublishStateExt on RtmpStreamPublishState {
 /// Error codes of the RTMP or RTMPS streaming.
 @JsonEnum(alwaysCreate: true)
 enum RtmpStreamPublishErrorType {
-  /// 0: The RTMP or RTMPS streaming publishes successfully.
+  /// 0: The RTMP or RTMPS streaming has not started or has ended.
   @JsonValue(0)
   rtmpStreamPublishErrorOk,
 
@@ -3325,11 +3323,11 @@ enum RtmpStreamPublishErrorType {
   @JsonValue(2)
   rtmpStreamPublishErrorEncryptedStreamNotAllowed,
 
-  /// 3: Timeout for the RTMP or RTMPS streaming. Try to publish the streaming again.
+  /// 3: Timeout for the RTMP or RTMPS streaming.
   @JsonValue(3)
   rtmpStreamPublishErrorConnectionTimeout,
 
-  /// 4: An error occurs in Agora's streaming server. Try to publish the streaming again.
+  /// 4: An error occurs in Agora's streaming server.
   @JsonValue(4)
   rtmpStreamPublishErrorInternalServerError,
 
@@ -3337,7 +3335,7 @@ enum RtmpStreamPublishErrorType {
   @JsonValue(5)
   rtmpStreamPublishErrorRtmpServerError,
 
-  /// 6: The RTMP or RTMPS streaming publishing requests are too frequent.
+  /// 6: The RTMP or RTMPS streaming publishes too frequently.
   @JsonValue(6)
   rtmpStreamPublishErrorTooOften,
 
@@ -3357,11 +3355,11 @@ enum RtmpStreamPublishErrorType {
   @JsonValue(10)
   rtmpStreamPublishErrorFormatNotSupported,
 
-  /// 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your app code logic.
+  /// 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
   @JsonValue(11)
   rtmpStreamPublishErrorNotBroadcaster,
 
-  /// 13: The updateRtmpTranscoding or setLiveTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
+  /// 13: The updateRtmpTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
   @JsonValue(13)
   rtmpStreamPublishErrorTranscodingNoMixStream,
 
@@ -3373,11 +3371,11 @@ enum RtmpStreamPublishErrorType {
   @JsonValue(15)
   rtmpStreamPublishErrorInvalidAppid,
 
-  /// @nodoc
+  /// 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
   @JsonValue(16)
   rtmpStreamPublishErrorInvalidPrivilege,
 
-  /// 100: The streaming has been stopped normally. After you call stopRtmpStream to stop streaming, the SDK returns this value.
+  /// 100: The streaming has been stopped normally. After you stop the Media Push, the SDK returns this value.
   @JsonValue(100)
   rtmpStreamUnpublishErrorOk,
 }
@@ -3395,14 +3393,14 @@ extension RtmpStreamPublishErrorTypeExt on RtmpStreamPublishErrorType {
   }
 }
 
-/// Events during the media push.
+/// Events during the Media Push.
 @JsonEnum(alwaysCreate: true)
 enum RtmpStreamingEvent {
-  /// 1: An error occurs when you add a background image or a watermark image in the media push.
+  /// 1: An error occurs when you add a background image or a watermark image in the Media Push.
   @JsonValue(1)
   rtmpStreamingEventFailedLoadImage,
 
-  /// 2: The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
+  /// 2: The streaming URL is already being used for Media Push. If you want to start new streaming, use a new streaming URL.
   @JsonValue(2)
   rtmpStreamingEventUrlAlreadyInUse,
 
@@ -3466,7 +3464,7 @@ class RtcImage {
   @JsonKey(name: 'zOrder')
   final int? zOrder;
 
-  /// The transparency of the watermark or background image. The value ranges between 0.0 and 1.0:0.0: Completely transparent.1.0: (Default) Opaque.
+  /// The transparency of the watermark or background image. The range of the value is [0.0,1.0]:0.0: Completely transparent.1.0: (Default) Opaque.
   @JsonKey(name: 'alpha')
   final double? alpha;
 
@@ -3721,7 +3719,7 @@ class LiveTranscoding {
   Map<String, dynamic> toJson() => _$LiveTranscodingToJson(this);
 }
 
-/// The video streams for the video mixing on the local client.
+/// The video streams for local video mixing.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class TranscodingVideoStream {
   /// @nodoc
@@ -3738,47 +3736,47 @@ class TranscodingVideoStream {
       this.alpha,
       this.mirror});
 
-  /// The source type of video for the video mixing on the local client. See VideoSourceType .
+  /// The video source type for local video mixing. See VideoSourceType .
   @JsonKey(name: 'sourceType')
   final VideoSourceType? sourceType;
 
-  /// The ID of the remote user.Use this parameter only when the source type of the video for the video mixing on the local client is videoSourceRemote.
+  /// The user ID of the remote user.Use this parameter only when the source type is videoSourceRemote for local video mixing.
   @JsonKey(name: 'remoteUserUid')
   final int? remoteUserUid;
 
-  /// The URL of the image.
+  /// The URL of the image.Use this parameter only when the source type is the image for local video mixing.
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
-  /// @nodoc
+  /// (Optional) Media player ID. Use the parameter only when you set sourceType to videoSourceMediaPlayer.
   @JsonKey(name: 'mediaPlayerId')
   final int? mediaPlayerId;
 
-  /// The horizontal displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
+  /// The relative lateral displacement of the top left corner of the video for local video mixing to the origin (the top left corner of the canvas).
   @JsonKey(name: 'x')
   final int? x;
 
-  /// The vertical displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
+  /// The relative longitudinal displacement of the top left corner of the captured video to the origin (the top left corner of the canvas).
   @JsonKey(name: 'y')
   final int? y;
 
-  /// The width (px) of the video for the video mixing on the local client.
+  /// The width (px) of the video for local video mixing on the canvas.
   @JsonKey(name: 'width')
   final int? width;
 
-  /// The height (px) of the video for the video mixing on the local client.
+  /// The height (px) of the video for local video mixing on the canvas.
   @JsonKey(name: 'height')
   final int? height;
 
-  /// The number of the layer to which the video for the video mixing on the local client belongs. The value range is [0,100].0: (Default) The layer is at the bottom.100: The layer is at the top.
+  /// The number of the layer to which the video for the local video mixing belongs. The value range is [0, 100].0: (Default) The layer is at the bottom.100: The layer is at the top.
   @JsonKey(name: 'zOrder')
   final int? zOrder;
 
-  /// The transparency of the video for the video mixing on the local client. The value range is [0.0,1.0]. 0.0 means the transparency is completely transparent. 1.0 means the transparency is opaque.
+  /// The transparency of the video for local video mixing. The value range is [0.0, 1.0]. 0.0 indicates that the video is completely transparent, and 1.0 indicates that it is opaque.
   @JsonKey(name: 'alpha')
   final double? alpha;
 
-  /// Whether to mirror the video for the video mixing on the local client.true: Mirror the captured video.false: (Default) Do not mirror the captured video.The paramter only works for videos with the source type CAMERA
+  /// Whether to mirror the video for the local video mixing.true: Mirror the video for the local video mixing.false: (Default) Do not mirror the video for the local video mixing.This parameter only takes effect on video source types that are cameras.
   @JsonKey(name: 'mirror')
   final bool? mirror;
 
@@ -3804,11 +3802,11 @@ class LocalTranscoderConfiguration {
   @JsonKey(name: 'streamCount')
   final int? streamCount;
 
-  /// The video streams for the video mixing on the local client. See TranscodingVideoStream .
+  /// The video streams for local video mixing. See TranscodingVideoStream .
   @JsonKey(name: 'videoInputStreams')
   final List<TranscodingVideoStream>? videoInputStreams;
 
-  /// The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration .
+  /// The encoding configuration of the mixed video stream after the local video mixing. See VideoEncoderConfiguration .
   @JsonKey(name: 'videoOutputConfiguration')
   final VideoEncoderConfiguration? videoOutputConfiguration;
 
@@ -3824,34 +3822,34 @@ class LocalTranscoderConfiguration {
   Map<String, dynamic> toJson() => _$LocalTranscoderConfigurationToJson(this);
 }
 
-/// @nodoc
+/// The error code of the local video mixing failure.
 @JsonEnum(alwaysCreate: true)
 enum VideoTranscoderError {
   /// @nodoc
   @JsonValue(0)
   vtErrOk,
 
-  /// @nodoc
+  /// 1: The selected video source has not started video capture. You need to create a video track for it and start video capture.
   @JsonValue(1)
   vtErrVideoSourceNotReady,
 
-  /// @nodoc
+  /// 2: The video source type is invalid. You need to re-specify the supported video source type.
   @JsonValue(2)
   vtErrInvalidVideoSourceType,
 
-  /// @nodoc
+  /// 3: The image path is invalid. You need to re-specify the correct image path.
   @JsonValue(3)
   vtErrInvalidImagePath,
 
-  /// @nodoc
+  /// 4: The image format is invalid. Make sure the image format is one of PNG, JPEG, or GIF.
   @JsonValue(4)
   vtErrUnsupportImageFormat,
 
-  /// @nodoc
+  /// 5: The video encoding resolution after video mixing is invalid.
   @JsonValue(5)
   vtErrInvalidLayout,
 
-  /// @nodoc
+  /// 20: Unknown internal error.
   @JsonValue(20)
   vtErrInternal,
 }
@@ -3966,7 +3964,7 @@ class LastmileProbeResult {
   const LastmileProbeResult(
       {this.state, this.uplinkReport, this.downlinkReport, this.rtt});
 
-  /// The status of the last-mile probe test. See LastmileProbeResultState .
+  /// The status of the last-mile network tests. See LastmileProbeResultState .
   @JsonKey(name: 'state')
   final LastmileProbeResultState? state;
 
@@ -4065,15 +4063,15 @@ enum ConnectionChangedReasonType {
   @JsonValue(17)
   connectionChangedEchoTest,
 
-  /// @nodoc
+  /// 18: The local IP address was changed by the user.
   @JsonValue(18)
   connectionChangedClientIpAddressChangedByUser,
 
-  /// @nodoc
+  /// 19: The user joined the same channel from different devices with the same UID.
   @JsonValue(19)
   connectionChangedSameUidLogin,
 
-  /// @nodoc
+  /// 20: The number of hosts in the channel has reached the upper limit.
   @JsonValue(20)
   connectionChangedTooManyBroadcasters,
 
@@ -4287,7 +4285,7 @@ extension VideoViewSetupModeExt on VideoViewSetupMode {
   }
 }
 
-/// Attributes of video canvas object.
+/// Attributes of the video canvas object.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoCanvas {
   /// @nodoc
@@ -4318,11 +4316,11 @@ class VideoCanvas {
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
-  /// @nodoc
+  /// Setting mode of the view. See VideoViewSetupMode .
   @JsonKey(name: 'setupMode')
   final VideoViewSetupMode? setupMode;
 
-  /// The type of the video frame, see VideoSourceType .
+  /// The type of the video source. See VideoSourceType .
   @JsonKey(name: 'sourceType')
   final VideoSourceType? sourceType;
 
@@ -4330,11 +4328,11 @@ class VideoCanvas {
   @JsonKey(name: 'mediaPlayerId')
   final int? mediaPlayerId;
 
-  /// @nodoc
+  /// (Optional) Display area of the video frame, see Rectangle . width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
-  /// @nodoc
+  /// (Optional) Whether the receiver enables alpha mask rendering:true: The receiver enables alpha mask rendering.false: (default) The receiver disables alpha mask rendering.Alpha mask rendering can create images with transparent effects and extract portraits from videos. When used in combination with other methods, you can implement effects such as picture-in-picture and watermarking.This property applies to macOS only.The receiver can render alpha channel information only when the sender enables alpha transmission.To enable alpha transmission, .
   @JsonKey(name: 'enableAlphaMask')
   final bool? enableAlphaMask;
 
@@ -4357,7 +4355,7 @@ class BeautyOptions {
       this.rednessLevel,
       this.sharpnessLevel});
 
-  /// The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark.
+  /// The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark. See LighteningContrastLevel .
   @JsonKey(name: 'lighteningContrastLevel')
   final LighteningContrastLevel? lighteningContrastLevel;
 
@@ -4365,11 +4363,11 @@ class BeautyOptions {
   @JsonKey(name: 'lighteningLevel')
   final double? lighteningLevel;
 
-  /// The smoothness level, in the range [0.0,1.0], where 0.0 means the original smoothness. The default value is 0.0. The higher the value, the greater the smoothness level.
+  /// The smoothness level, in the range [0.0,1.0], where 0.0 means the original smoothness. The default value is 0.0. The greater the value, the greater the smoothness level.
   @JsonKey(name: 'smoothnessLevel')
   final double? smoothnessLevel;
 
-  /// The redness level, in the range [0.0,1.0], where 0.0 means the original redness. The default value is 0.0. The higher the value, the greater the redness level.
+  /// The redness level, in the range [0.0,1.0], where 0.0 means the original redness. The default value is 0.0. The larger the value, the greater the redness level.
   @JsonKey(name: 'rednessLevel')
   final double? rednessLevel;
 
@@ -4584,14 +4582,14 @@ class ColorEnhanceOptions {
   Map<String, dynamic> toJson() => _$ColorEnhanceOptionsToJson(this);
 }
 
-/// The custom background image.
+/// The custom background.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VirtualBackgroundSource {
   /// @nodoc
   const VirtualBackgroundSource(
       {this.backgroundSourceType, this.color, this.source, this.blurDegree});
 
-  /// The type of the custom background image. See backgroundSourceType .
+  /// The custom background. See backgroundSourceType .
   @JsonKey(name: 'background_source_type')
   final BackgroundSourceType? backgroundSourceType;
 
@@ -4615,10 +4613,10 @@ class VirtualBackgroundSource {
   Map<String, dynamic> toJson() => _$VirtualBackgroundSourceToJson(this);
 }
 
-/// The type of the custom background image.
+/// The custom background.
 @JsonEnum(alwaysCreate: true)
 enum BackgroundSourceType {
-  /// @nodoc
+  /// 0: Process the background as alpha information without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
   @JsonValue(0)
   backgroundNone,
 
@@ -4626,15 +4624,15 @@ enum BackgroundSourceType {
   @JsonValue(1)
   backgroundColor,
 
-  /// The background image is a file in PNG or JPG format.
+  /// 2: The background is an image in PNG or JPG format.
   @JsonValue(2)
   backgroundImg,
 
-  /// The background image is the blurred background.
+  /// 3: The background is a blurred version of the original background.
   @JsonValue(3)
   backgroundBlur,
 
-  /// @nodoc
+  /// 4: The background is a local video in MP4, AVI, MKV, FLV, or other supported formats.
   @JsonValue(4)
   backgroundVideo,
 }
@@ -4659,11 +4657,11 @@ enum BackgroundBlurDegree {
   @JsonValue(1)
   blurDegreeLow,
 
-  /// The degree of blurring applied to the custom background image is medium. It is difficult for the user to recognize details in the background.
+  /// 2: The degree of blurring applied to the custom background image is medium. It is difficult for the user to recognize details in the background.
   @JsonValue(2)
   blurDegreeMedium,
 
-  /// (Default) The degree of blurring applied to the custom background image is high. The user can barely see any distinguishing features in the background.
+  /// 3: (Default) The degree of blurring applied to the custom background image is high. The user can barely see any distinguishing features in the background.
   @JsonValue(3)
   blurDegreeHigh,
 }
@@ -4728,18 +4726,18 @@ extension SegModelTypeExt on SegModelType {
   }
 }
 
-/// @nodoc
+/// The type of the audio track.
 @JsonEnum(alwaysCreate: true)
 enum AudioTrackType {
   /// @nodoc
   @JsonValue(-1)
   audioTrackInvalid,
 
-  /// @nodoc
+  /// 0: Mixable audio tracks. You can publish multiple mixable audio tracks in one channel, and SDK will automatically mix these tracks into one. The latency of mixable audio tracks is higher than that of direct audio tracks.
   @JsonValue(0)
   audioTrackMixable,
 
-  /// @nodoc
+  /// 1: Direct audio tracks. When creating multiple audio tracks of this type, each direct audio track can only be published in one channel and cannot be mixed with others. The latency of direct audio tracks is lower than that of mixable audio tracks.
   @JsonValue(1)
   audioTrackDirect,
 }
@@ -4757,13 +4755,13 @@ extension AudioTrackTypeExt on AudioTrackType {
   }
 }
 
-/// @nodoc
+/// The configuration of custom audio tracks.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioTrackConfig {
   /// @nodoc
   const AudioTrackConfig({this.enableLocalPlayback});
 
-  /// @nodoc
+  /// Whether to enable the local audio-playback device:true: (Default) Enable the local audio-playback device.false: Do not enable the local audio-playback device.
   @JsonKey(name: 'enableLocalPlayback')
   final bool? enableLocalPlayback;
 
@@ -5072,7 +5070,7 @@ class ScreenCaptureParameters {
       this.highLightColor,
       this.enableHighLight});
 
-  /// The maximum dimensions to encode the shared region. VideoDimensions . The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges.If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.If the value of the screen dimensions is higher than that of dimensions, for example, 2000 × 1500, the SDK uses the maximum value under dimensions with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 × 1080.
+  /// The video encoding resolution of the shared screen stream. See VideoDimensions . The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges.If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.If the value of the screen dimensions is higher than that of dimensions, for example, 2000 × 1500, the SDK uses the maximum value under dimensions with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 × 1080.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
@@ -5100,15 +5098,15 @@ class ScreenCaptureParameters {
   @JsonKey(name: 'excludeWindowCount')
   final int? excludeWindowCount;
 
-  /// The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
+  /// (For macOS and Windows only) The width (px) of the border. The default value is 5, and the value range is (0, 50].This parameter only takes effect when highLighted is set to true.
   @JsonKey(name: 'highLightWidth')
   final int? highLightWidth;
 
-  /// On macOS, COLOR_CLASS refers to NSColor.
+  /// (For macOS and Windows only)On Windows platforms, the color of the border in ARGB format. The default value is 0xFF8CBF26.On macOS, COLOR_CLASS refers to NSColor.
   @JsonKey(name: 'highLightColor')
   final int? highLightColor;
 
-  /// Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
+  /// (For macOS and Windows only) Whether to place a border around the shared window or screen:true: Place a border.false: (Default) Do not place a border.When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set this parameter to true.
   @JsonKey(name: 'enableHighLight')
   final bool? enableHighLight;
 
@@ -5227,7 +5225,7 @@ class AudioRecordingConfiguration {
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// @nodoc
+  /// Whether to encode the audio data:true: Encode audio data in AAC.false: (Default) Do not encode audio data, but save the recorded audio data directly.
   @JsonKey(name: 'encode')
   final bool? encode;
 
@@ -5255,7 +5253,7 @@ class AudioRecordingConfiguration {
   Map<String, dynamic> toJson() => _$AudioRecordingConfigurationToJson(this);
 }
 
-/// Observer settings for encoded audio.
+/// Observer settings for the encoded audio.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioEncodedFrameObserverConfig {
   /// @nodoc
@@ -5290,7 +5288,9 @@ class AudioEncodedFrameObserver {
   /// Gets the encoded audio data of the local user.
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
   ///
-  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [channels] The number of channels.
+  ///  1: Mono.
+  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
   /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
@@ -5301,9 +5301,7 @@ class AudioEncodedFrameObserver {
   /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
   ///
   /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.
-  ///  1: Mono.
-  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
@@ -5315,7 +5313,9 @@ class AudioEncodedFrameObserver {
   /// After calling registerAudioEncodedFrameObserver and setting the audio profile as audioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
   ///
   /// * [samplesPerSec] Recording sample rate (Hz).
-  /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+  /// * [channels] The number of channels.
+  ///  1: Mono.
+  ///  2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
@@ -5626,15 +5626,15 @@ class ChannelMediaRelayConfiguration {
   const ChannelMediaRelayConfiguration(
       {this.srcInfo, this.destInfos, this.destCount});
 
-  /// @nodoc
+  /// The information of the source channel. See ChannelMediaInfo . It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.uid: The unique user ID to identify the relay stream in the source channel. Agora recommends leaving the default value of 0 unchanged.
   @JsonKey(name: 'srcInfo')
   final ChannelMediaInfo? srcInfo;
 
-  /// @nodoc
+  /// The information of the target channel ChannelMediaInfo. It contains the following members:channelName: The name of the target channel.token: The token for joining the target channel. It is generated with the channelName and uid you set in destInfos.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid.If the token of any target channel expires, the whole media relay stops; hence Agora recommends that you specify the same expiration time for the tokens of all the target channels.uid: The unique user ID to identify the relay stream in the target channel. The value ranges from 0 to (2 32-1). To avoid user ID conflicts, this user ID must be different from any other user ID in the target channel. The default value is 0, which means the SDK generates a random user ID.
   @JsonKey(name: 'destInfos')
   final List<ChannelMediaInfo>? destInfos;
 
-  /// @nodoc
+  /// The number of target channels. The default value is 0, and the value range is from 0 to 4. Ensure that the value of this parameter corresponds to the number of ChannelMediaInfo structs you define in destInfo.
   @JsonKey(name: 'destCount')
   final int? destCount;
 
@@ -5652,7 +5652,7 @@ class UplinkNetworkInfo {
   /// @nodoc
   const UplinkNetworkInfo({this.videoEncoderTargetBitrateBps});
 
-  /// @nodoc
+  /// The target video encoder bitrate (bps).
   @JsonKey(name: 'video_encoder_target_bitrate_bps')
   final int? videoEncoderTargetBitrateBps;
 
@@ -6016,7 +6016,7 @@ class EchoTestConfiguration {
   @JsonKey(name: 'enableVideo')
   final bool? enableVideo;
 
-  /// @nodoc
+  /// The token used to secure the audio and video call loop test. If you do not enable App Certificate in Agora Console, you do not need to pass a value in this parameter; if you have enabled App Certificate in Agora Console, you must pass a token in this parameter; the uid used when you generate the token must be 0xFFFFFFFF, and the channel name used must be the channel name that identifies each audio and video call loop tested. For server-side token generation, see .
   @JsonKey(name: 'token')
   final String? token;
 
@@ -6024,7 +6024,7 @@ class EchoTestConfiguration {
   @JsonKey(name: 'channelId')
   final String? channelId;
 
-  /// @nodoc
+  /// The time interval (s) between when you start the call and when the recording plays back. The value range is [2, 10], and the default value is 2.
   @JsonKey(name: 'intervalInSeconds')
   final int? intervalInSeconds;
 
@@ -6221,14 +6221,14 @@ class ScreenCaptureParameters2 {
   Map<String, dynamic> toJson() => _$ScreenCaptureParameters2ToJson(this);
 }
 
-/// @nodoc
+/// The rendering state of the media frame.`
 @JsonEnum(alwaysCreate: true)
 enum MediaTraceEvent {
-  /// @nodoc
+  /// 0: The video frame has been rendered.
   @JsonValue(0)
   mediaTraceEventVideoRendered,
 
-  /// @nodoc
+  /// 1: The video frame has been decoded.
   @JsonValue(1)
   mediaTraceEventVideoDecoded,
 }
@@ -6246,7 +6246,7 @@ extension MediaTraceEventExt on MediaTraceEvent {
   }
 }
 
-/// @nodoc
+/// Indicators during video frame rendering progress.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoRenderingTracingInfo {
   /// @nodoc
@@ -6259,31 +6259,31 @@ class VideoRenderingTracingInfo {
       this.remoteJoined2UnmuteVideo,
       this.remoteJoined2PacketReceived});
 
-  /// @nodoc
+  /// The time interval from calling the startMediaRenderingTracing method to SDK triggering the onVideoRenderingTracingResult callback. The unit is milliseconds. Agora recommends you call startMediaRenderingTracing before joining a channel.
   @JsonKey(name: 'elapsedTime')
   final int? elapsedTime;
 
-  /// @nodoc
+  /// The time interval from calling startMediaRenderingTracing to calling joinChannel . The unit is milliseconds. A negative number means to call joinChannel after calling startMediaRenderingTracing.
   @JsonKey(name: 'start2JoinChannel')
   final int? start2JoinChannel;
 
-  /// @nodoc
+  /// Time interval from calling joinChannel to successfully joining the channel. The unit is milliseconds.
   @JsonKey(name: 'join2JoinSuccess')
   final int? join2JoinSuccess;
 
-  /// @nodoc
+  /// If the local user calls startMediaRenderingTracing before successfully joining the channel, this value is the time interval from the local user successfully joining the channel to the remote user joining the channel. The unit is milliseconds.If the local user calls startMediaRenderingTracing after successfully joining the channel, the value is the time interval from calling startMediaRenderingTracing to when the remote user joins the channel. The unit is milliseconds.If the local user calls startMediaRenderingTracing after the remote user joins the channel, the value is 0 and meaningless.In order to reduce the time of rendering the first frame for remote users, Agora recommends that the local user joins the channel when the remote user is in the channel to reduce this value.
   @JsonKey(name: 'joinSuccess2RemoteJoined')
   final int? joinSuccess2RemoteJoined;
 
-  /// @nodoc
+  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval from when the remote user joins the channel to when the local user sets the remote view. The unit is milliseconds.If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval from calling startMediaRenderingTracing to setting the remote view. The unit is milliseconds.If the local user calls startMediaRenderingTracing after setting the remote view, the value is 0 and has no effect.In order to reduce the time of rendering the first frame for remote users, Agora recommends that the local user sets the remote view before the remote user joins the channel, or sets the remote view immediately after the remote user joins the channel to reduce this value.
   @JsonKey(name: 'remoteJoined2SetView')
   final int? remoteJoined2SetView;
 
-  /// @nodoc
+  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval from the remote user joining the channel to subscribing to the remote video stream. The unit is milliseconds.If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval from calling startMediaRenderingTracing to subscribing to the remote video stream. The unit is milliseconds.If the local user calls startMediaRenderingTracing after subscribing to the remote video stream, the value is 0 and has no effect.In order to reduce the time of rendering the first frame for remote users, Agora recommends that after the remote user joins the channel, the local user immediately subscribes to the remote video stream to reduce this value.
   @JsonKey(name: 'remoteJoined2UnmuteVideo')
   final int? remoteJoined2UnmuteVideo;
 
-  /// @nodoc
+  /// If the local user calls startMediaRenderingTracing before the remote user joins the channel, this value is the time interval from when the remote user joins the channel to when the local user receives the remote video stream. The unit is milliseconds.If the local user calls startMediaRenderingTracing after the remote user joins the channel, this value is the time interval from calling startMediaRenderingTracing to receiving the remote video stream. The unit is milliseconds.If the local user calls startMediaRenderingTracing after receiving the remote video stream, the value is 0 and has no effect.In order to reduce the time of rendering the first frame for remote users, Agora recommends that the remote user publishes video streams immediately after joining the channel, and the local user immediately subscribes to remote video streams to reduce this value.
   @JsonKey(name: 'remoteJoined2PacketReceived')
   final int? remoteJoined2PacketReceived;
 
@@ -6320,17 +6320,17 @@ extension ConfigFetchTypeExt on ConfigFetchType {
   }
 }
 
-/// @nodoc
+/// The information about the media streams to be recorded.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RecorderStreamInfo {
   /// @nodoc
   const RecorderStreamInfo({this.channelId, this.uid});
 
-  /// @nodoc
+  /// The name of the channel in which the media streams publish.
   @JsonKey(name: 'channelId')
   final String? channelId;
 
-  /// @nodoc
+  /// The ID of the user whose media streams you want to record.
   @JsonKey(name: 'uid')
   final int? uid;
 
