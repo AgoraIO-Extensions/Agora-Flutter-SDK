@@ -30,7 +30,7 @@ class MediaPlayerSourceObserver {
   ///
   /// * [position] Current playback progress (milisecond).
   /// * [timestamp] Current NTP(Network Time Protocol) time (milisecond).
-  final void Function(int position, int timestamp)? onPositionChanged;
+  final void Function(int positionMs, int timestamp)? onPositionChanged;
 
   /// Reports the player events.
   /// After calling the seek method, the SDK triggers the callback to report the results of the seek operation.

@@ -90,7 +90,7 @@ void generatedTestCases() {
 
       final onPositionChangedCompleter = Completer<bool>();
       final theMediaPlayerSourceObserver = MediaPlayerSourceObserver(
-        onPositionChanged: (int position, int timestamp) {
+        onPositionChanged: (int positionMs, int timestamp) {
           onPositionChangedCompleter.complete(true);
         },
       );
@@ -103,11 +103,11 @@ void generatedTestCases() {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int position = 10;
+        const int positionMs = 10;
         const int timestamp = 10;
 
         final eventJson = {
-          'position': position,
+          'positionMs': positionMs,
           'timestamp': timestamp,
         };
 
@@ -129,7 +129,6 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    skip: true,
   );
 
   testWidgets(
