@@ -49,7 +49,7 @@ class _State extends State<SpatialAudioWithMediaPlayer> {
   void _dispose() async {
     await _engine.getLocalSpatialAudioEngine().release();
     await _mediaPlayerController.dispose();
-    
+
     await _engine.release();
   }
 
@@ -127,8 +127,9 @@ class _State extends State<SpatialAudioWithMediaPlayer> {
             });
           }
         },
-        onPositionChanged: (int position) {
-          logSink.log('[onPositionChanged] position: $position');
+        onPositionChanged: (int position, int timestamp) {
+          logSink.log(
+              '[onPositionChanged] position: $position timestamp: $timestamp');
         },
         onPlayerEvent:
             (MediaPlayerEvent eventCode, int elapsedTime, String message) {

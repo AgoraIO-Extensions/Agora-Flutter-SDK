@@ -115,6 +115,8 @@ class _State extends State<JoinChannelVideo> {
         clientRoleType: ClientRoleType.clientRoleBroadcaster,
       ),
     );
+
+    await _engine.enableFaceDetection(true);
   }
 
   Future<void> _leaveChannel() async {

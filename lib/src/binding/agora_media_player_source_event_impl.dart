@@ -48,11 +48,12 @@ class MediaPlayerSourceObserverWrapper implements EventLoopEventHandler {
         MediaPlayerSourceObserverOnPositionChangedJson paramJson =
             MediaPlayerSourceObserverOnPositionChangedJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
-        int? positionMs = paramJson.positionMs;
-        if (positionMs == null) {
-          return true;
+        int? position = paramJson.position;
+        int? timestamp = paramJson.timestamp;
+        if (position == null || timestamp == null) {
+          break;
         }
-        mediaPlayerSourceObserver.onPositionChanged!(positionMs);
+        mediaPlayerSourceObserver.onPositionChanged!(position, timestamp);
         return true;
 
       case 'onPlayerEvent':

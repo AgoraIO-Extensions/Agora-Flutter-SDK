@@ -1310,7 +1310,7 @@ void mediaPlayerControllerSmokeTestCases() {
         final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
               (MediaPlayerState state, MediaPlayerError ec) {},
-          onPositionChanged: (int positionMs) {},
+          onPositionChanged: (int position, int timestamp) {},
           onPlayerEvent:
               (MediaPlayerEvent eventCode, int elapsedTime, String message) {},
           onMetaData: (Uint8List data, int length) {},
@@ -1367,7 +1367,7 @@ void mediaPlayerControllerSmokeTestCases() {
         final MediaPlayerSourceObserver observer = MediaPlayerSourceObserver(
           onPlayerSourceStateChanged:
               (MediaPlayerState state, MediaPlayerError ec) {},
-          onPositionChanged: (int positionMs) {},
+          onPositionChanged: (int position, int timestamp) {},
           onPlayerEvent:
               (MediaPlayerEvent eventCode, int elapsedTime, String message) {},
           onMetaData: (Uint8List data, int length) {},

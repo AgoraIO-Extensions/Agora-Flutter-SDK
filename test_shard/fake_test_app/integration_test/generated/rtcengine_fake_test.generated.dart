@@ -222,7 +222,6 @@ void rtcEngineSmokeTestCases() {
 
       await rtcEngine.release();
     },
-    skip: true,
   );
 
   testWidgets(
@@ -10960,3 +10959,4 @@ void rtcEngineSmokeTestCases() {
     },
   );
 }
+
