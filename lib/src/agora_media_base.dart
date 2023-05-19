@@ -65,19 +65,19 @@ enum VideoSourceType {
   @JsonValue(10)
   videoSourceTranscoded,
 
-  /// @nodoc
+  /// 11: (For Windows and macOS only) The third camera.
   @JsonValue(11)
   videoSourceCameraThird,
 
-  /// @nodoc
+  /// 12: (For Windows and macOS only) The fourth camera.
   @JsonValue(12)
   videoSourceCameraFourth,
 
-  /// @nodoc
+  /// 13: (For Windows and macOS only) The third screen.
   @JsonValue(13)
   videoSourceScreenThird,
 
-  /// @nodoc
+  /// 14: (For Windows and macOS only) The fourth screen.
   @JsonValue(14)
   videoSourceScreenFourth,
 
@@ -1515,7 +1515,7 @@ extension RecorderErrorCodeExt on RecorderErrorCode {
   }
 }
 
-/// The recording configuration.
+/// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaRecorderConfiguration {
   /// @nodoc
@@ -1526,23 +1526,23 @@ class MediaRecorderConfiguration {
       this.maxDurationMs,
       this.recorderInfoUpdateInterval});
 
-  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /App Sandbox/Library/Caches/example.mp4macOS: ～/Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/agorasdk.mp4Ensure that the directory for the log files exists and is writable.
+  /// @nodoc
   @JsonKey(name: 'storagePath')
   final String? storagePath;
 
-  /// The format of the recording file. See MediaRecorderContainerFormat .
+  /// @nodoc
   @JsonKey(name: 'containerFormat')
   final MediaRecorderContainerFormat? containerFormat;
 
-  /// The recording content. See MediaRecorderStreamType .
+  /// @nodoc
   @JsonKey(name: 'streamType')
   final MediaRecorderStreamType? streamType;
 
-  /// The maximum recording duration, in milliseconds. The default value is 120000.
+  /// @nodoc
   @JsonKey(name: 'maxDurationMs')
   final int? maxDurationMs;
 
-  /// The interval (ms) of updating the recording information. The value range is [1000,10000]. Based on the value you set in this parameter, the SDK triggers the onRecorderInfoUpdated callback to report the updated recording information.
+  /// @nodoc
   @JsonKey(name: 'recorderInfoUpdateInterval')
   final int? recorderInfoUpdateInterval;
 
@@ -1554,21 +1554,21 @@ class MediaRecorderConfiguration {
   Map<String, dynamic> toJson() => _$MediaRecorderConfigurationToJson(this);
 }
 
-/// The information about the file that is recorded.
+/// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RecorderInfo {
   /// @nodoc
   const RecorderInfo({this.fileName, this.durationMs, this.fileSize});
 
-  /// The absolute path of the recording file.
+  /// @nodoc
   @JsonKey(name: 'fileName')
   final String? fileName;
 
-  /// The recording duration (ms).
+  /// @nodoc
   @JsonKey(name: 'durationMs')
   final int? durationMs;
 
-  /// The size (byte) of the recording file.
+  /// @nodoc
   @JsonKey(name: 'fileSize')
   final int? fileSize;
 
@@ -1580,7 +1580,7 @@ class RecorderInfo {
   Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
 }
 
-/// Provides callback events for audio and video recording.
+/// @nodoc
 class MediaRecorderObserver {
   /// @nodoc
   const MediaRecorderObserver({
@@ -1588,22 +1588,11 @@ class MediaRecorderObserver {
     this.onRecorderInfoUpdated,
   });
 
-  /// Occurs when the recording state changes.
-  /// When the recording state changes, the SDK triggers this callback to report the current recording state and the reason for the change.
-  ///
-  /// * [channelId] The channel name.
-  /// * [uid] The user ID.
-  /// * [state] The current recording state. See RecorderState .
-  /// * [error] The reason for the state change. See RecorderErrorCode .
+  /// @nodoc
   final void Function(String channelId, int uid, RecorderState state,
       RecorderErrorCode error)? onRecorderStateChanged;
 
-  /// Occurs when the recording information is updated.
-  /// After you successfully enable the audio and video recording, the SDK periodically triggers this callback based on the value of recorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
-  ///
-  /// * [uid] The user ID.
-  /// * [channelId] The channel name.
-  /// * [info] The information about the file that is recorded. See RecorderInfo .
+  /// @nodoc
   final void Function(String channelId, int uid, RecorderInfo info)?
       onRecorderInfoUpdated;
 }

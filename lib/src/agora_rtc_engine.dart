@@ -2848,13 +2848,21 @@ class DirectCdnStreamingEventHandler {
     this.onDirectCdnStreamingStats,
   });
 
-  /// @nodoc
+  /// Occurs when the CDN streaming state changes.
+  /// When the host directly pushes streams to the CDN, if the streaming state changes, the SDK triggers this callback to report the changed streaming state, error codes, and other information. You can troubleshoot issues by referring to this callback.
+  ///
+  /// * [state] The current CDN streaming state. See DirectCdnStreamingState .
+  /// * [error] The CDN streaming error. See DirectCdnStreamingError .
+  /// * [message] The information about the changed streaming state.
   final void Function(
       DirectCdnStreamingState state,
       DirectCdnStreamingError error,
       String message)? onDirectCdnStreamingStateChanged;
 
-  /// @nodoc
+  /// Reports the CDN streaming statistics.
+  /// When the host directly pushes media streams to the CDN, the SDK triggers this callback every one second.
+  ///
+  /// * [stats] The statistics of the current CDN streaming. See DirectCdnStreamingStats .
   final void Function(DirectCdnStreamingStats stats)? onDirectCdnStreamingStats;
 }
 
@@ -3042,13 +3050,13 @@ abstract class RtcEngine {
   Future<void> setClientRole(
       {required ClientRoleType role, ClientRoleOptions? options});
 
-  /// Starts an audio call test.
-  /// This method starts an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly. To conduct the test, let the user speak for a while, and the recording is played back within the set interval. If the user can hear the recording within the interval, the audio devices and network connection are working properly.Call this method before joining a channel.After calling startEchoTest, you must call stopEchoTest to end the test. Otherwise, the app cannot perform the next echo test, and you cannot join the channel.In the live streaming channels, only a host can call this method.
+  /// Starts an audio device loopback test.
+  /// To test whether the user's local sending and receiving streams are normal, you can call this method to perform an audio and video call loop test, which tests whether the audio and video devices and the user's upstream and downstream networks are working properly.After starting the test, the user needs to make a sound or face the camera. The audio or video is output after about two seconds. If the audio playback is normal, the audio device and the user's upstream and downstream networks are working properly; if the video playback is normal, the video device and the user's upstream and downstream networks are working properly.You can call this method either before or after joining a channel.After calling this method, call stopEchoTest to end the test; otherwise, the user cannot perform the next audio and video call loop test and cannot join the channel.In live streaming scenarios, this method only applies to hosts.
   ///
-  /// * [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back. The value range is [2, 10].
+  /// * [config] The configuration of the audio and video call loop test. See EchoTestConfiguration .
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// 0: Success.< 0: Failure.
   Future<void> startEchoTest(EchoTestConfiguration config);
 
   /// Stops the audio call test.
@@ -3473,22 +3481,10 @@ abstract class RtcEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
   Future<void> destroyMediaPlayer(MediaPlayer mediaPlayer);
 
-  /// Creates a recording object for audio and video recording.
-  /// Before you start recording, you need to call this method to create a recording object. Agora SDKs support recording the audio and video streams of both local and remote users. You can call this method as needed to create muitiple recording objects and specify the streams that you want to record through the info parameter.After successfully creating a recording object, you need to call setMediaRecorderObserver to register a recording observer to listen for recording callbacks, and then call startRecording to start recording.
-  ///
-  /// * [info] The information about the media streams you want to record. See RecorderStreamInfo .
-  ///
-  /// Returns
-  /// The MediaRecorder object, if the method call succeeds.An empty pointer, if the method call fails.
+  /// @nodoc
   Future<MediaRecorder?> createMediaRecorder(RecorderStreamInfo info);
 
-  /// Destroys a recording object for audio and video recording.
-  /// When you do not need to record any audio and video streams, you can call this method to destroy the recording object. Before you call this method, if you are recording a media stream, you need to call stopRecording to stop recording.
-  ///
-  /// * [mediaRecorder] The recording object to be destroyed.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.
+  /// @nodoc
   Future<void> destroyMediaRecorder(MediaRecorder mediaRecorder);
 
   /// Starts playing the music file.
@@ -4813,7 +4809,7 @@ abstract class RtcEngine {
   /// Starts camera capture.
   /// You can call this method to start capturing video from one or more cameras by specifying sourceType.On the iOS platform, if you want to disable multi-camera capture, you need to call enableMultiCamera and set enabled to true before calling this method.
   ///
-  /// * [sourceType] The type of the video source. See VideoSourceType .On Android and iOS platforms, you can capture video from up to 2 cameras, provided the device has dual cameras or supports an external camera.On Windows and macOS platforms, you can capture video from up to 4 cameras.
+  /// * [sourceType] The type of the video source. See VideoSourceType .On the mobile platforms, you can capture video from up to 2 cameras, provided the device has dual cameras or supports an external camera.On the desktop platforms, you can capture video from up to 4 cameras.
   /// * [config] The configuration of the video capture. See CameraCapturerConfiguration .On the iOS platform, this parameter has no practical function. Use the config parameter in enableMultiCamera instead to set the video capture configuration.
   ///
   /// Returns
@@ -5007,7 +5003,7 @@ abstract class RtcEngine {
       required String location});
 
   /// Sets whether to enable the AI ​​noise reduction function and set the noise reduction mode.
-  /// You can call this method to enable AI noise reduction function. Once enabled, the SDK automatically detects and reduce stationary and non-stationary noises from your audio on the premise of ensuring the quality of human voice. Stationary noises refers to noise signal with constant average statistical properties and negligibly small fluctuations of level within the period of observation. Common sources of stationary noises are:Television;Air conditioner;Machinery, etc.Non-stationary noises refers to noise signal with huge fluctuations of level within the period of observation, Common source of non-stationary noises are:Thunder;Explosion;Cracking, etc.
+  /// You can call this method to enable AI noise reduction function. Once enabled, the SDK automatically detects and reduces stationary and non-stationary noise from your audio on the premise of ensuring the quality of human voice. Stationary noise refers to noise signal with constant average statistical properties and negligibly small fluctuations of level within the period of observation. Common sources of stationary noises are:Television;Air conditioner;Machinery, etc.Non-stationary noise refers to noise signal with huge fluctuations of level within the period of observation. Common sources of non-stationary noises are:Thunder;Explosion;Cracking, etc.
   ///
   /// * [enabled] Whether to enable the AI noise reduction function:true: Enable the AI noise reduction.false: (Default) Disable the AI noise reduction.
   /// * [mode] The AI noise reduction modes. See AudioAinsMode .

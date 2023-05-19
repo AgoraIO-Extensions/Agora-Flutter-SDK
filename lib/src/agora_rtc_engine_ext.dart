@@ -7,7 +7,12 @@ import 'impl/media_player_impl.dart';
 
 /// @nodoc
 extension RtcEngineExt on RtcEngine {
-  /// @nodoc
+  /// Obtains the actual absolute path of the Asset through the relative path of the Asset.
+  ///
+  /// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.
+  ///
+  /// Returns
+  /// The actual path of the Asset.
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     final p = await impl.engineMethodChannel

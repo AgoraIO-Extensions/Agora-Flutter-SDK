@@ -2246,7 +2246,7 @@ enum AudioAinsMode {
   @JsonValue(1)
   ainsModeAggressive,
 
-  /// 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive mode. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real-time.
+  /// 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real time.
   @JsonValue(2)
   ainsModeUltralowlatency,
 }
@@ -6320,17 +6320,17 @@ extension ConfigFetchTypeExt on ConfigFetchType {
   }
 }
 
-/// The information about the media streams to be recorded.
+/// @nodoc
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RecorderStreamInfo {
   /// @nodoc
   const RecorderStreamInfo({this.channelId, this.uid});
 
-  /// The name of the channel in which the media streams publish.
+  /// @nodoc
   @JsonKey(name: 'channelId')
   final String? channelId;
 
-  /// The ID of the user whose media streams you want to record.
+  /// @nodoc
   @JsonKey(name: 'uid')
   final int? uid;
 
