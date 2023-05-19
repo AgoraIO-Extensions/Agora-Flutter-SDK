@@ -1,5 +1,12 @@
 # Changelog
 
+### [6.1.1+1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v6.1.1...v6.1.1+1) (2023-05-19)
+
+
+### Bug Fixes
+
+* Fix build error due to iris_method_channel break change ([7841c26](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7841c2604d8c60da1dfff67cc859d694026c8f10))
+
 ### [6.1.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v6.1.0...v6.1.1) (2023-04-28)
 
 
