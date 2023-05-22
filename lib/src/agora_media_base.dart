@@ -2,10 +2,102 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'agora_media_base.g.dart';
 
 /// @nodoc
+const invalidTrackId = 0xffffffff;
+
+/// @nodoc
 const defaultConnectionId = 0;
 
 /// @nodoc
 const dummyConnectionId = 4294967295;
+
+/// The type of the video source.
+@JsonEnum(alwaysCreate: true)
+enum VideoSourceType {
+  /// 0: (Default) The primary camera.
+  @JsonValue(0)
+  videoSourceCameraPrimary,
+
+  /// 0: (Default) The primary camera.
+  @JsonValue(0)
+  videoSourceCamera,
+
+  /// 1: The secondary camera.
+  @JsonValue(1)
+  videoSourceCameraSecondary,
+
+  /// 2: The primary screen.
+  @JsonValue(2)
+  videoSourceScreenPrimary,
+
+  /// 2: The primary screen.
+  @JsonValue(2)
+  videoSourceScreen,
+
+  /// 3: The secondary screen.
+  @JsonValue(3)
+  videoSourceScreenSecondary,
+
+  /// 4: A custom video source.
+  @JsonValue(4)
+  videoSourceCustom,
+
+  /// 5: The media player.
+  @JsonValue(5)
+  videoSourceMediaPlayer,
+
+  /// 6: One PNG image.
+  @JsonValue(6)
+  videoSourceRtcImagePng,
+
+  /// 7: One JPEG image.
+  @JsonValue(7)
+  videoSourceRtcImageJpeg,
+
+  /// 8: One GIF image.
+  @JsonValue(8)
+  videoSourceRtcImageGif,
+
+  /// 9: One remote video acquired by the network.
+  @JsonValue(9)
+  videoSourceRemote,
+
+  /// 10: One transcoded video source.
+  @JsonValue(10)
+  videoSourceTranscoded,
+
+  /// @nodoc
+  @JsonValue(11)
+  videoSourceCameraThird,
+
+  /// @nodoc
+  @JsonValue(12)
+  videoSourceCameraFourth,
+
+  /// @nodoc
+  @JsonValue(13)
+  videoSourceScreenThird,
+
+  /// @nodoc
+  @JsonValue(14)
+  videoSourceScreenFourth,
+
+  /// 100: An unknown video source.
+  @JsonValue(100)
+  videoSourceUnknown,
+}
+
+/// @nodoc
+extension VideoSourceTypeExt on VideoSourceType {
+  /// @nodoc
+  static VideoSourceType fromValue(int value) {
+    return $enumDecode(_$VideoSourceTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoSourceTypeEnumMap[this]!;
+  }
+}
 
 /// The type of the audio route.
 @JsonEnum(alwaysCreate: true)
@@ -398,7 +490,7 @@ class AudioPcmFrame {
   @JsonKey(name: 'bytes_per_sample')
   final BytesPerSample? bytesPerSample;
 
-  /// The video frame.
+  /// The audio frame.
   @JsonKey(name: 'data_')
   final List<int>? data;
 
@@ -537,6 +629,35 @@ extension RenderModeTypeExt on RenderModeType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraVideoSourceType {
+  /// @nodoc
+  @JsonValue(0)
+  cameraSourceFront,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraSourceBack,
+
+  /// @nodoc
+  @JsonValue(2)
+  videoSourceUnspecified,
+}
+
+/// @nodoc
+extension CameraVideoSourceTypeExt on CameraVideoSourceType {
+  /// @nodoc
+  static CameraVideoSourceType fromValue(int value) {
+    return $enumDecode(_$CameraVideoSourceTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraVideoSourceTypeEnumMap[this]!;
+  }
+}
+
 /// The external video frame.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ExternalVideoFrame {
@@ -557,7 +678,8 @@ class ExternalVideoFrame {
       this.textureId,
       this.matrix,
       this.metadataBuffer,
-      this.metadataSize});
+      this.metadataSize,
+      this.alphaBuffer});
 
   /// The video type. See VideoBufferType .
   @JsonKey(name: 'type')
@@ -603,15 +725,15 @@ class ExternalVideoFrame {
   @JsonKey(name: 'timestamp')
   final int? timestamp;
 
-  /// This parameter only applies to video data in Texture format. Texture ID of the frame.
+  /// This parameter only applies to video data in Texture format. Texture ID of the video frame.
   @JsonKey(name: 'eglType')
   final EglContextType? eglType;
 
-  /// This parameter only applies to video data in Texture format. Incoming 4 x 4 transformational matrix. The typical value is a unit matrix.
+  /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'textureId')
   final int? textureId;
 
-  /// This parameter only applies to video data in Texture format. Incoming 4 x 4 transformational matrix. The typical value is a unit matrix.
+  /// This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
   @JsonKey(name: 'matrix')
   final List<double>? matrix;
 
@@ -622,6 +744,10 @@ class ExternalVideoFrame {
   /// This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
   @JsonKey(name: 'metadata_size')
   final int? metadataSize;
+
+  /// @nodoc
+  @JsonKey(name: 'alphaBuffer', ignore: true)
+  final Uint8List? alphaBuffer;
 
   /// @nodoc
   factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>
@@ -686,7 +812,7 @@ extension VideoBufferTypeExt on VideoBufferType {
 }
 
 /// Configurations of the video frame.
-/// The video data format is YUV420. Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
+/// Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoFrame {
   /// @nodoc
@@ -707,7 +833,8 @@ class VideoFrame {
       this.metadataSize,
       this.textureId,
       this.matrix,
-      this.alphaBuffer});
+      this.alphaBuffer,
+      this.pixelBuffer});
 
   /// The pixel format. See VideoPixelFormat .
   @JsonKey(name: 'type')
@@ -776,6 +903,10 @@ class VideoFrame {
   /// @nodoc
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
+
+  /// @nodoc
+  @JsonKey(name: 'pixelBuffer', ignore: true)
+  final Uint8List? pixelBuffer;
 
   /// @nodoc
   factory VideoFrame.fromJson(Map<String, dynamic> json) =>
@@ -858,9 +989,6 @@ class AudioFrameObserverBase {
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onRecordAudioFrame;
 
@@ -869,9 +997,6 @@ class AudioFrameObserverBase {
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onPlaybackAudioFrame;
 
@@ -880,14 +1005,12 @@ class AudioFrameObserverBase {
   ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   /// * [channelId] The channel ID.
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, AudioFrame audioFrame)?
       onMixedAudioFrame;
 
   /// Gets the in-ear monitoring audio frame.
   /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
+  ///
   /// * [audioFrame] The raw audio data. See AudioFrame .
   final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
 }
@@ -935,7 +1058,7 @@ class AudioFrame {
   @JsonKey(name: 'samplesPerChannel')
   final int? samplesPerChannel;
 
-  /// The number of bytes per audio sample, which is usually 16-bit (2 bytes).
+  /// The number of bytes per sample. The number of bytes per audio sample, which is usually 16-bit (2-byte).
   @JsonKey(name: 'bytesPerSample')
   final BytesPerSample? bytesPerSample;
 
@@ -947,7 +1070,7 @@ class AudioFrame {
   @JsonKey(name: 'samplesPerSec')
   final int? samplesPerSec;
 
-  /// The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved.The size of the data buffer is as follows: buffer = samples ×channels × bytesPerSample.
+  /// The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved.The size of the data buffer is as follows: buffer = samples × channels × bytesPerSample.
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
@@ -1070,9 +1193,6 @@ class AudioFrameObserver extends AudioFrameObserverBase {
   /// * [channelId] The channel ID.
   /// * [uid] The user ID of the specified user.
   /// * [audioFrame] The raw audio data. See AudioFrame .
-  ///
-  /// Returns
-  /// Reserved for future use.
   final void Function(String channelId, int uid, AudioFrame audioFrame)?
       onPlaybackAudioFrameBeforeMixing;
 }
@@ -1109,7 +1229,7 @@ class UserAudioSpectrumInfo {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Audio spectrum information of the remote user.See AudioSpectrumData .
+  /// Audio spectrum information of the remote user. See AudioSpectrumData .
   @JsonKey(name: 'spectrumData')
   final AudioSpectrumData? spectrumData;
 
@@ -1172,75 +1292,39 @@ class VideoFrameObserver {
   const VideoFrameObserver({
     this.onCaptureVideoFrame,
     this.onPreEncodeVideoFrame,
-    this.onSecondaryCameraCaptureVideoFrame,
-    this.onSecondaryPreEncodeCameraVideoFrame,
-    this.onScreenCaptureVideoFrame,
-    this.onPreEncodeScreenVideoFrame,
     this.onMediaPlayerVideoFrame,
-    this.onSecondaryScreenCaptureVideoFrame,
-    this.onSecondaryPreEncodeScreenVideoFrame,
     this.onRenderVideoFrame,
     this.onTranscodedVideoFrame,
   });
 
   /// Occurs each time the SDK receives a video frame captured by the local camera.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, Agora does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  final void Function(VideoFrame videoFrame)? onCaptureVideoFrame;
+  /// * [sourceType] The type of the video source. See VideoSourceType .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
+  final void Function(VideoSourceType type, VideoFrame videoFrame)?
+      onCaptureVideoFrame;
 
   /// Occurs each time the SDK receives a video frame before encoding.
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  final void Function(VideoFrame videoFrame)? onPreEncodeVideoFrame;
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:
+  ///  Android: texture
+  ///  iOS: cvPixelBuffer
+  ///  macOS: YUV 420
+  ///  Windows: YUV 420
+  /// * [sourceType] The type of the video source. See VideoSourceType .
+  final void Function(VideoSourceType type, VideoFrame videoFrame)?
+      onPreEncodeVideoFrame;
 
   /// @nodoc
-  final void Function(VideoFrame videoFrame)?
-      onSecondaryCameraCaptureVideoFrame;
-
-  /// Gets the video data captured from the second camera before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second camera before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  final void Function(VideoFrame videoFrame)?
-      onSecondaryPreEncodeCameraVideoFrame;
-
-  /// Occurs each time the SDK receives a video frame captured by the screen.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data for screen sharing. You can then pre-process the data according to your scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  final void Function(VideoFrame videoFrame)? onScreenCaptureVideoFrame;
-
-  /// Gets the video data captured from the screen before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  final void Function(VideoFrame videoFrame)? onPreEncodeScreenVideoFrame;
-
-  /// Gets the video data of the media player.
-  /// After you successfully register the video frame observer and calling the createMediaPlayer method, the SDK triggers this callback each time when it receives a video frame. In this callback, you can get the video data of the media player. You can then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  /// * [mediaPlayerId] The ID of the media player.
   final void Function(VideoFrame videoFrame, int mediaPlayerId)?
       onMediaPlayerVideoFrame;
 
-  /// @nodoc
-  final void Function(VideoFrame videoFrame)?
-      onSecondaryScreenCaptureVideoFrame;
-
-  /// Gets the video data captured from the second screen before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured from the second screen before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
-  ///
-  /// * [videoFrame] The video frame. See VideoFrame .
-  final void Function(VideoFrame videoFrame)?
-      onSecondaryPreEncodeScreenVideoFrame;
-
   /// Occurs each time the SDK receives a video frame sent by the remote user.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding. You can then process the data according to your particular scenarios.If the video data type you get is RGBA, Agora does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .
+  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
   /// * [remoteUid] The user ID of the remote user who sends the current video frame.
   /// * [channelId] The channel ID.
   final void Function(String channelId, int remoteUid, VideoFrame videoFrame)?
@@ -1416,7 +1500,7 @@ extension RecorderErrorCodeExt on RecorderErrorCode {
   }
 }
 
-/// Configurations for the local audio and video recording.
+/// The recording configuration.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaRecorderConfiguration {
   /// @nodoc
@@ -1427,7 +1511,7 @@ class MediaRecorderConfiguration {
       this.maxDurationMs,
       this.recorderInfoUpdateInterval});
 
-  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /App Sandbox/Library/Caches/example.mp4macOS: /Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/example.mp4Ensure that the directory for the log files exists and is writable.
+  /// The absolute path (including the filename extensions) of the recording file. For example:Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4iOS: /App Sandbox/Library/Caches/example.mp4macOS: ～/Library/Logs/example.mp4Android: /storage/emulated/0/Android/data/<package name>/files/agorasdk.mp4Ensure that the directory for the log files exists and is writable.
   @JsonKey(name: 'storagePath')
   final String? storagePath;
 
@@ -1469,7 +1553,7 @@ class RecorderInfo {
   @JsonKey(name: 'durationMs')
   final int? durationMs;
 
-  /// The size (bytes) of the recording file.
+  /// The size (byte) of the recording file.
   @JsonKey(name: 'fileSize')
   final int? fileSize;
 
@@ -1481,7 +1565,7 @@ class RecorderInfo {
   Map<String, dynamic> toJson() => _$RecorderInfoToJson(this);
 }
 
-/// The MediaRecorderObserver class.
+/// Provides callback events for audio and video recording.
 class MediaRecorderObserver {
   /// @nodoc
   const MediaRecorderObserver({
@@ -1490,16 +1574,20 @@ class MediaRecorderObserver {
   });
 
   /// Occurs when the recording state changes.
-  /// When the local audio or video recording state changes, the SDK triggers this callback to report the current recording state and the reason for the change.
+  /// When the recording state changes, the SDK triggers this callback to report the current recording state and the reason for the change.
   ///
+  /// * [channelId] The channel name.
+  /// * [uid] The user ID.
   /// * [state] The current recording state. See RecorderState .
   /// * [error] The reason for the state change. See RecorderErrorCode .
   final void Function(RecorderState state, RecorderErrorCode error)?
       onRecorderStateChanged;
 
   /// Occurs when the recording information is updated.
-  /// After you successfully enable the local audio and video recording, the SDK periodically triggers this callback based on the value of recorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
+  /// After you successfully enable the audio and video recording, the SDK periodically triggers this callback based on the value of recorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
   ///
+  /// * [uid] The user ID.
+  /// * [channelId] The channel name.
   /// * [info] The information about the file that is recorded. See RecorderInfo .
   final void Function(RecorderInfo info)? onRecorderInfoUpdated;
 }

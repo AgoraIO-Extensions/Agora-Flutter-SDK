@@ -90,7 +90,7 @@ void generatedTestCases() {
 
       final onPositionChangedCompleter = Completer<bool>();
       final theMediaPlayerSourceObserver = MediaPlayerSourceObserver(
-        onPositionChanged: (int positionMs) {
+        onPositionChanged: (int positionMs, int timestamp) {
           onPositionChangedCompleter.complete(true);
         },
       );
@@ -104,9 +104,11 @@ void generatedTestCases() {
 
       {
         const int positionMs = 10;
+        const int timestamp = 10;
 
         final eventJson = {
           'positionMs': positionMs,
+          'timestamp': timestamp,
         };
 
         irisTester.fireEvent('MediaPlayerSourceObserver_onPositionChanged',

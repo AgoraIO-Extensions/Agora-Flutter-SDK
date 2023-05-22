@@ -329,6 +329,11 @@ class MediaPlayerControllerImpl
   }
 
   @override
+  Future<void> setAudioPlaybackDelay(int delayMs) async {
+    _mediaPlayer?.setAudioPlaybackDelay(delayMs);
+  }
+
+  @override
   int getVideoSourceType() => VideoSourceType.videoSourceMediaPlayer.value();
 
   @override

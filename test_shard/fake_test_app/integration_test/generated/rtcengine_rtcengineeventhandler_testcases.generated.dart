@@ -2405,6 +2405,7 @@ void generatedTestCases() {
         const int statsInternalCodec = 10;
         const int statsTxPacketLossRate = 10;
         const int statsAudioDeviceDelay = 10;
+        const int statsAudioPlayoutDelay = 10;
         const LocalAudioStats stats = LocalAudioStats(
           numChannels: statsNumChannels,
           sentSampleRate: statsSentSampleRate,
@@ -2412,6 +2413,7 @@ void generatedTestCases() {
           internalCodec: statsInternalCodec,
           txPacketLossRate: statsTxPacketLossRate,
           audioDeviceDelay: statsAudioDeviceDelay,
+          audioPlayoutDelay: statsAudioPlayoutDelay,
         );
 
         final eventJson = {
@@ -2490,6 +2492,7 @@ void generatedTestCases() {
         const int statsPublishDuration = 10;
         const int statsQoeQuality = 10;
         const int statsQualityChangedReason = 10;
+        const int statsRxAudioBytes = 10;
         const RemoteAudioStats stats = RemoteAudioStats(
           uid: statsUid,
           quality: statsQuality,
@@ -2506,6 +2509,7 @@ void generatedTestCases() {
           publishDuration: statsPublishDuration,
           qoeQuality: statsQoeQuality,
           qualityChangedReason: statsQualityChangedReason,
+          rxAudioBytes: statsRxAudioBytes,
         );
 
         final eventJson = {
@@ -2697,8 +2701,8 @@ void generatedTestCases() {
         const int statsAvSyncTimeMs = 10;
         const int statsTotalActiveTime = 10;
         const int statsPublishDuration = 10;
-        const int statsSuperResolutionType = 10;
         const int statsMosValue = 10;
+        const int statsRxVideoBytes = 10;
         const RemoteVideoStats stats = RemoteVideoStats(
           uid: statsUid,
           delay: statsDelay,
@@ -2715,8 +2719,8 @@ void generatedTestCases() {
           avSyncTimeMs: statsAvSyncTimeMs,
           totalActiveTime: statsTotalActiveTime,
           publishDuration: statsPublishDuration,
-          superResolutionType: statsSuperResolutionType,
           mosValue: statsMosValue,
+          rxVideoBytes: statsRxVideoBytes,
         );
 
         final eventJson = {
@@ -2940,7 +2944,7 @@ void generatedTestCases() {
       final onFacePositionChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
         onFacePositionChanged: (int imageWidth, int imageHeight,
-            Rectangle vecRectangle, int vecDistance, int numFaces) {
+            List vecRectangle, List vecDistance, int numFaces) {
           onFacePositionChangedCompleter.complete(true);
         },
       );
@@ -2955,23 +2959,14 @@ void generatedTestCases() {
       {
         const int imageWidth = 10;
         const int imageHeight = 10;
-        const int vecRectangleX = 10;
-        const int vecRectangleY = 10;
-        const int vecRectangleWidth = 10;
-        const int vecRectangleHeight = 10;
-        const Rectangle vecRectangle = Rectangle(
-          x: vecRectangleX,
-          y: vecRectangleY,
-          width: vecRectangleWidth,
-          height: vecRectangleHeight,
-        );
-        const int vecDistance = 10;
+        const List<Rectangle> vecRectangle = [];
+        const List<int> vecDistance = [];
         const int numFaces = 10;
 
         final eventJson = {
           'imageWidth': imageWidth,
           'imageHeight': imageHeight,
-          'vecRectangle': vecRectangle.toJson(),
+          'vecRectangle': vecRectangle,
           'vecDistance': vecDistance,
           'numFaces': numFaces,
         };
@@ -2996,8 +2991,6 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    // TODO(littlegnal): Enable after the API signature fixed.
-    skip: true,
   );
 
   testWidgets(
@@ -3823,8 +3816,6 @@ void generatedTestCases() {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    // TODO(littlegnal): Enable after iris fixed.
-    skip: true,
   );
 
   testWidgets(
@@ -6205,6 +6196,179 @@ void generatedTestCases() {
       }
 
       final eventCalled = await onUserAccountUpdatedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onVideoRenderingTracingResult',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onVideoRenderingTracingResultCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onVideoRenderingTracingResult: (RtcConnection connection,
+            int uid,
+            MediaTraceEvent currentEvent,
+            VideoRenderingTracingInfo tracingInfo) {
+          onVideoRenderingTracingResultCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        const MediaTraceEvent currentEvent =
+            MediaTraceEvent.mediaTraceEventVideoRendered;
+        const int tracingInfoElapsedTime = 10;
+        const int tracingInfoStart2JoinChannel = 10;
+        const int tracingInfoJoin2JoinSuccess = 10;
+        const int tracingInfoJoinSuccess2RemoteJoined = 10;
+        const int tracingInfoRemoteJoined2SetView = 10;
+        const int tracingInfoRemoteJoined2UnmuteVideo = 10;
+        const int tracingInfoRemoteJoined2PacketReceived = 10;
+        const VideoRenderingTracingInfo tracingInfo = VideoRenderingTracingInfo(
+          elapsedTime: tracingInfoElapsedTime,
+          start2JoinChannel: tracingInfoStart2JoinChannel,
+          join2JoinSuccess: tracingInfoJoin2JoinSuccess,
+          joinSuccess2RemoteJoined: tracingInfoJoinSuccess2RemoteJoined,
+          remoteJoined2SetView: tracingInfoRemoteJoined2SetView,
+          remoteJoined2UnmuteVideo: tracingInfoRemoteJoined2UnmuteVideo,
+          remoteJoined2PacketReceived: tracingInfoRemoteJoined2PacketReceived,
+        );
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'currentEvent': currentEvent.value(),
+          'tracingInfo': tracingInfo.toJson(),
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onVideoRenderingTracingResult',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onVideoRenderingTracingResult',
+            params: eventJson);
+      }
+
+      final eventCalled = await onVideoRenderingTracingResultCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onLocalVideoTranscoderError',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onLocalVideoTranscoderErrorCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onLocalVideoTranscoderError:
+            (TranscodingVideoStream stream, VideoTranscoderError error) {
+          onLocalVideoTranscoderErrorCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const VideoSourceType streamSourceType =
+            VideoSourceType.videoSourceCameraPrimary;
+        const int streamRemoteUserUid = 10;
+        const String streamImageUrl = "hello";
+        const int streamMediaPlayerId = 10;
+        const int streamX = 10;
+        const int streamY = 10;
+        const int streamWidth = 10;
+        const int streamHeight = 10;
+        const int streamZOrder = 10;
+        const double streamAlpha = 10.0;
+        const bool streamMirror = true;
+        const TranscodingVideoStream stream = TranscodingVideoStream(
+          sourceType: streamSourceType,
+          remoteUserUid: streamRemoteUserUid,
+          imageUrl: streamImageUrl,
+          mediaPlayerId: streamMediaPlayerId,
+          x: streamX,
+          y: streamY,
+          width: streamWidth,
+          height: streamHeight,
+          zOrder: streamZOrder,
+          alpha: streamAlpha,
+          mirror: streamMirror,
+        );
+        const VideoTranscoderError error = VideoTranscoderError.vtErrOk;
+
+        final eventJson = {
+          'stream': stream.toJson(),
+          'error': error.value(),
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onLocalVideoTranscoderError',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onLocalVideoTranscoderError',
+            params: eventJson);
+      }
+
+      final eventCalled = await onLocalVideoTranscoderErrorCompleter.future;
       expect(eventCalled, isTrue);
 
       {

@@ -113,7 +113,7 @@ void testCases() {
     Completer<bool> onPreEncodeVideoFrameCalledCompleter = Completer();
 
     final VideoFrameObserver observer = VideoFrameObserver(
-        onCaptureVideoFrame: (videoFrame) {
+        onCaptureVideoFrame: (VideoSourceType type, VideoFrame videoFrame) {
       debugPrint('[onCaptureVideoFrame] videoFrame: ${videoFrame.toJson()}');
       if (eventCalledCompleter.isCompleted) return;
       eventCalledCompleter.complete(true);
@@ -125,7 +125,7 @@ void testCases() {
           '[onRenderVideoFrame] channelId: $channelId, remoteUid: $remoteUid, videoFrame: ${videoFrame.toJson()}');
       if (onRenderVideoFrameCalledCompleter.isCompleted) return;
       onRenderVideoFrameCalledCompleter.complete(true);
-    }, onPreEncodeVideoFrame: (VideoFrame videoFrame) {
+    }, onPreEncodeVideoFrame: (VideoSourceType type, VideoFrame videoFrame) {
       debugPrint('[onPreEncodeVideoFrame] videoFrame: ${videoFrame.toJson()}');
       if (onPreEncodeVideoFrameCalledCompleter.isCompleted) return;
       onPreEncodeVideoFrameCalledCompleter.complete(true);
