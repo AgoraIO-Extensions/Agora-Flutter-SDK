@@ -200,10 +200,17 @@ class _State extends State<StartLocalVideoTranscoder> {
 
       await _engine.startCameraCapture(
           sourceType: VideoSourceType.videoSourceCameraPrimary, config: config);
+    } else {
+      transcodingVideoStreams.add(const TranscodingVideoStream(
+          sourceType: VideoSourceType.videoSourceCameraPrimary,
+          width: 160,
+          height: 320));
     }
 
     await _engine
         .startLocalVideoTranscoder(_createLocalTranscoderConfiguration());
+    await _engine.startPreview(
+        sourceType: VideoSourceType.videoSourceTranscoded);
   }
 
   Future<void> _stopLocalVideoTranscoder() async {
@@ -590,6 +597,7 @@ class _State extends State<StartLocalVideoTranscoder> {
                 canvas: const VideoCanvas(
                   uid: 0,
                   sourceType: VideoSourceType.videoSourceTranscoded,
+                  renderMode: RenderModeType.renderModeFit,
                 ),
               ),
             ),
