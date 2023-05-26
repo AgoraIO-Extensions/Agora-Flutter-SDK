@@ -54,6 +54,89 @@ class NativeIrisApiEngineBinding {
   late final _InitIrisLogger = _InitIrisLoggerPtr.asFunction<
       void Function(ffi.Pointer<ffi.Int8>, int, int)>();
 
+  IrisRtcRenderingHandle CreateIrisRtcRendering(
+    ffi.Pointer<ffi.Void> iris_api_engine_handle,
+  ) {
+    return _CreateIrisRtcRendering(
+      iris_api_engine_handle,
+    );
+  }
+
+  late final _CreateIrisRtcRenderingPtr = _lookup<
+      ffi.NativeFunction<
+          IrisRtcRenderingHandle Function(
+              ffi.Pointer<ffi.Void>)>>('CreateIrisRtcRendering');
+  late final _CreateIrisRtcRendering = _CreateIrisRtcRenderingPtr.asFunction<
+      IrisRtcRenderingHandle Function(ffi.Pointer<ffi.Void>)>();
+
+  void FreeIrisRtcRendering(
+    IrisRtcRenderingHandle handle,
+  ) {
+    return _FreeIrisRtcRendering(
+      handle,
+    );
+  }
+
+  late final _FreeIrisRtcRenderingPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(IrisRtcRenderingHandle)>>(
+          'FreeIrisRtcRendering');
+  late final _FreeIrisRtcRendering = _FreeIrisRtcRenderingPtr.asFunction<
+      void Function(IrisRtcRenderingHandle)>();
+
+  /// See `IrisRtcRendering::AddVideoFrameCacheKey`
+  void AddVideoFrameCacheKey(
+    IrisRtcRenderingHandle handle,
+    IrisRtcVideoFrameConfig arg1,
+  ) {
+    return _AddVideoFrameCacheKey(
+      handle,
+      arg1,
+    );
+  }
+
+  late final _AddVideoFrameCacheKeyPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(IrisRtcRenderingHandle,
+              IrisRtcVideoFrameConfig)>>('AddVideoFrameCacheKey');
+  late final _AddVideoFrameCacheKey = _AddVideoFrameCacheKeyPtr.asFunction<
+      void Function(IrisRtcRenderingHandle, IrisRtcVideoFrameConfig)>();
+
+  void RemoveVideoFrameCacheKey(
+    IrisRtcRenderingHandle handle,
+    IrisRtcVideoFrameConfig arg1,
+  ) {
+    return _RemoveVideoFrameCacheKey(
+      handle,
+      arg1,
+    );
+  }
+
+  late final _RemoveVideoFrameCacheKeyPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(IrisRtcRenderingHandle,
+              IrisRtcVideoFrameConfig)>>('RemoveVideoFrameCacheKey');
+  late final _RemoveVideoFrameCacheKey =
+      _RemoveVideoFrameCacheKeyPtr.asFunction<
+          void Function(IrisRtcRenderingHandle, IrisRtcVideoFrameConfig)>();
+
+  /// See `IrisRtcRendering::GetVideoFrameCache`
+  int GetVideoFrameCache(
+    IrisRtcRenderingHandle handle,
+    IrisRtcVideoFrameConfig arg1,
+  ) {
+    return _GetVideoFrameCache(
+      handle,
+      arg1,
+    );
+  }
+
+  late final _GetVideoFrameCachePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(IrisRtcRenderingHandle,
+              IrisRtcVideoFrameConfig)>>('GetVideoFrameCache');
+  late final _GetVideoFrameCache = _GetVideoFrameCachePtr.asFunction<
+      int Function(IrisRtcRenderingHandle, IrisRtcVideoFrameConfig)>();
+
   IrisVideoFrameBufferManagerPtr CreateIrisVideoFrameBufferManager() {
     return _CreateIrisVideoFrameBufferManager();
   }
@@ -438,11 +521,13 @@ abstract class IrisAppType {
 }
 
 abstract class IrisLogLevel {
-  static const int levelTrace = 0;
-  static const int levelDebug = 1;
-  static const int levelInfo = 2;
-  static const int levelWarn = 3;
-  static const int levelErr = 4;
+  static const int LOG_LEVEL_TRACE = 0;
+  static const int LOG_LEVEL_DEBUG = 1;
+  static const int LOG_LEVEL_INFO = 2;
+  static const int LOG_LEVEL_WARN = 3;
+  static const int LOG_LEVEL_ERROR = 4;
+  static const int LOG_LEVEL_CRITICAL = 5;
+  static const int LOG_LEVEL_OFF = 6;
 }
 
 class EventParam extends ffi.Struct {
@@ -470,11 +555,87 @@ class IrisCEventHandler extends ffi.Struct {
 typedef Func_Event = ffi
     .Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<EventParam>)>>;
 
+/// The agora::media::base::VideoFrame C projection but remove some unsupported property in C,
+/// e.g., agora::media::base::VideoFrame.sharedContext, agora::media::base::VideoFrame.textureId, etc.
+///
+/// NOTE: If the agora::media::base::VideoFrame is updated, make sure this struct be up to date.
+/// TODO(littlegnal): maybe we can use terra to generate the C projection.
+class IrisCVideoFrame extends ffi.Struct {
+  /// The agora::media::base::VideoFrame.type, but convert it to int type
+  @ffi.Int32()
+  external int type;
+
+  @ffi.Int32()
+  external int width;
+
+  @ffi.Int32()
+  external int height;
+
+  @ffi.Int32()
+  external int yStride;
+
+  @ffi.Int32()
+  external int uStride;
+
+  @ffi.Int32()
+  external int vStride;
+
+  external ffi.Pointer<ffi.Uint8> yBuffer;
+
+  external ffi.Pointer<ffi.Uint8> uBuffer;
+
+  external ffi.Pointer<ffi.Uint8> vBuffer;
+
+  @ffi.Int32()
+  external int rotation;
+
+  @ffi.Int64()
+  external int renderTimeMs;
+
+  @ffi.Int32()
+  external int avsync_type;
+
+  external ffi.Pointer<ffi.Uint8> metadata_buffer;
+
+  @ffi.Int32()
+  external int metadata_size;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<ffi.Float> matrix;
+
+  external ffi.Pointer<ffi.Uint8> alphaBuffer;
+}
+
+class IrisRtcVideoFrameConfig extends ffi.Struct {
+  /// int value of agora::rtc::VIDEO_SOURCE_TYPE
+  @ffi.Int32()
+  external int video_source_type;
+
+  /// int value of agora::media::base::VIDEO_PIXEL_FORMAT. use in convertFrame()
+  @ffi.Int32()
+  external int video_frame_format;
+
+  @ffi.Uint32()
+  external int uid;
+
+  @ffi.Array.multi([512])
+  external ffi.Array<ffi.Int8> channelId;
+}
+
+abstract class GET_VIDEO_FRAME_CACHE_RETURN_TYPE {
+  static const int OK = 0;
+  static const int RESIZED = 1;
+  static const int NO_CACHE = 2;
+}
+
+typedef IrisRtcRenderingHandle = ffi.Pointer<ffi.Void>;
+
 abstract class IRIS_VIDEO_PROCESS_ERR {
   static const int ERR_OK = 0;
   static const int ERR_NULL_POINTER = 1;
   static const int ERR_SIZE_NOT_MATCHING = 2;
   static const int ERR_BUFFER_EMPTY = 5;
+  static const int ERR_FRAM_TYPE_NOT_MATCHING = 6;
 }
 
 class IrisVideoFrameBufferConfig extends ffi.Struct {
@@ -500,11 +661,19 @@ abstract class IrisVideoSourceType {
   static const int kVideoSourceTypeRtcImageGif = 8;
   static const int kVideoSourceTypeRemote = 9;
   static const int kVideoSourceTypeTranscoded = 10;
-  static const int kVideoSourceTypePreEncode = 11;
-  static const int kVideoSourceTypePreEncodeSecondaryCamera = 12;
-  static const int kVideoSourceTypePreEncodeScreen = 13;
-  static const int kVideoSourceTypePreEncodeSecondaryScreen = 14;
-  static const int kVideoSourceTypeUnknown = 15;
+  static const int kVideoSourceTypeCameraThird = 11;
+  static const int kVideoSourceTypeCameraFourth = 12;
+  static const int kVideoSourceTypeScreenThird = 13;
+  static const int kVideoSourceTypeScreenFourth = 14;
+  static const int kVideoSourceTypePreEncodeCameraPrimary = 40;
+  static const int kVideoSourceTypePreEncodeCameraSecondary = 41;
+  static const int kVideoSourceTypePreEncodeCameraThird = 42;
+  static const int kVideoSourceTypePreEncodeCameraFourth = 43;
+  static const int kVideoSourceTypePreEncodeScreenPrimary = 44;
+  static const int kVideoSourceTypePreEncodeScreenSecondary = 45;
+  static const int kVideoSourceTypePreEncodeScreenThrid = 46;
+  static const int kVideoSourceTypePreEncodeScreenFourth = 47;
+  static const int kVideoSourceTypeUnknown = 100;
 }
 
 class IrisCVideoFrameBuffer extends ffi.Struct {
@@ -518,10 +687,10 @@ class IrisCVideoFrameBuffer extends ffi.Struct {
 }
 
 abstract class IrisVideoFrameType {
-  static const int kVideoFrameTypeYUV420 = 0;
-  static const int kVideoFrameTypeYUV422 = 1;
-  static const int kVideoFrameTypeRGBA = 2;
-  static const int kVideoFrameTypeBGRA = 3;
+  static const int kVideoFrameTypeYUV420 = 1;
+  static const int kVideoFrameTypeYUV422 = 16;
+  static const int kVideoFrameTypeRGBA = 4;
+  static const int kVideoFrameTypeBGRA = 2;
 }
 
 typedef Func_VideoFrame = ffi.Pointer<
@@ -584,6 +753,8 @@ class IrisVideoFrame extends ffi.Struct {
 
   @ffi.Array.multi([16])
   external ffi.Array<ffi.Float> matrix;
+
+  external ffi.Pointer<ffi.Void> alphaBuffer;
 }
 
 typedef IrisVideoFrameBufferManagerPtr = ffi.Pointer<ffi.Void>;
@@ -602,3 +773,5 @@ const int kBasicResultLength = 65536;
 const int kEventResultLenght = 1024;
 
 const int kBasicStringLength = 512;
+
+const int kDefaultLogFileSize = 5242880;

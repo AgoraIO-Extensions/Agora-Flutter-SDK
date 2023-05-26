@@ -107,6 +107,10 @@ class _State extends State<SetBeautyEffect> with KeepRemoteVideoViewsMixin {
 
     await _engine.enableVideo();
 
+    await _engine.enableExtension(
+        provider: "agora_video_filters_clear_vision",
+        extension: "clear_vision");
+
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
     await _engine.startPreview();

@@ -1,0 +1,19 @@
+name: 'NativeIrisApiEngineBinding'
+description: 'Bindings to IrisApiEngine'
+
+output: 'lib/src/impl/native_iris_api_engine_bindings.dart'
+
+headers:
+  entry-points:
+    - 'tmp_ffi_gen_include/iris_rtc_c_api.h'
+  include-directives:
+    - 'tmp_ffi_gen_include/iris_rtc_c_api.h'
+    - 'tmp_ffi_gen_include/iris_base.h'
+    - 'tmp_ffi_gen_include/iris_video_processor_c.h'
+    - 'tmp_ffi_gen_include/iris_rtc_rendering_c.h'
+
+preamble: |
+  // ignore_for_file: camel_case_types, non_constant_identifier_names
+
+llvm-path:
+  - '/usr/local/opt/llvm'

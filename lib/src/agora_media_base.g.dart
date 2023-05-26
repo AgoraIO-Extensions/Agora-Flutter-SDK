@@ -447,6 +447,27 @@ Map<String, dynamic> _$RecorderInfoToJson(RecorderInfo instance) {
   return val;
 }
 
+const _$VideoSourceTypeEnumMap = {
+  VideoSourceType.videoSourceCameraPrimary: 0,
+  VideoSourceType.videoSourceCamera: 0,
+  VideoSourceType.videoSourceCameraSecondary: 1,
+  VideoSourceType.videoSourceScreenPrimary: 2,
+  VideoSourceType.videoSourceScreen: 2,
+  VideoSourceType.videoSourceScreenSecondary: 3,
+  VideoSourceType.videoSourceCustom: 4,
+  VideoSourceType.videoSourceMediaPlayer: 5,
+  VideoSourceType.videoSourceRtcImagePng: 6,
+  VideoSourceType.videoSourceRtcImageJpeg: 7,
+  VideoSourceType.videoSourceRtcImageGif: 8,
+  VideoSourceType.videoSourceRemote: 9,
+  VideoSourceType.videoSourceTranscoded: 10,
+  VideoSourceType.videoSourceCameraThird: 11,
+  VideoSourceType.videoSourceCameraFourth: 12,
+  VideoSourceType.videoSourceScreenThird: 13,
+  VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceUnknown: 100,
+};
+
 const _$AudioRouteEnumMap = {
   AudioRoute.routeDefault: -1,
   AudioRoute.routeHeadset: 0,
@@ -495,6 +516,12 @@ const _$RenderModeTypeEnumMap = {
   RenderModeType.renderModeHidden: 1,
   RenderModeType.renderModeFit: 2,
   RenderModeType.renderModeAdaptive: 3,
+};
+
+const _$CameraVideoSourceTypeEnumMap = {
+  CameraVideoSourceType.cameraSourceFront: 0,
+  CameraVideoSourceType.cameraSourceBack: 1,
+  CameraVideoSourceType.videoSourceUnspecified: 2,
 };
 
 const _$MediaPlayerSourceTypeEnumMap = {

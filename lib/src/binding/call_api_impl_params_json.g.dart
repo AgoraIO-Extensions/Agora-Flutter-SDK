@@ -32,6 +32,20 @@ Map<String, dynamic> _$VideoDeviceManagerGetCapabilityJsonToJson(
       'capability': instance.capability.toJson(),
     };
 
+RtcEngineQueryCodecCapabilityJson _$RtcEngineQueryCodecCapabilityJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtcEngineQueryCodecCapabilityJson(
+      (json['codecInfo'] as List<dynamic>)
+          .map((e) => CodecCapInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$RtcEngineQueryCodecCapabilityJsonToJson(
+        RtcEngineQueryCodecCapabilityJson instance) =>
+    <String, dynamic>{
+      'codecInfo': instance.codecInfo.map((e) => e.toJson()).toList(),
+    };
+
 RtcEngineGetExtensionPropertyJson _$RtcEngineGetExtensionPropertyJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetExtensionPropertyJson(
@@ -367,6 +381,20 @@ Map<String, dynamic> _$MusicContentCenterSearchMusicJsonToJson(
         MusicContentCenterSearchMusicJson instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
+    };
+
+MusicContentCenterGetCachesJson _$MusicContentCenterGetCachesJsonFromJson(
+        Map<String, dynamic> json) =>
+    MusicContentCenterGetCachesJson(
+      (json['cacheInfo'] as List<dynamic>)
+          .map((e) => MusicCacheInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$MusicContentCenterGetCachesJsonToJson(
+        MusicContentCenterGetCachesJson instance) =>
+    <String, dynamic>{
+      'cacheInfo': instance.cacheInfo.map((e) => e.toJson()).toList(),
     };
 
 MusicContentCenterGetLyricJson _$MusicContentCenterGetLyricJsonFromJson(

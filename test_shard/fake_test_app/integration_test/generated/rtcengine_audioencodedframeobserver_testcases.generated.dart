@@ -10,14 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onRecordAudioEncodedFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -85,7 +81,7 @@ void generatedTestCases() {
         };
 
         irisTester.fireEvent(
-            'AudioEncodedFrameObserver_OnRecordAudioEncodedFrame',
+            'AudioEncodedFrameObserver_onRecordAudioEncodedFrame',
             params: eventJson);
       }
 
@@ -108,10 +104,6 @@ void generatedTestCases() {
   testWidgets(
     'onPlaybackAudioEncodedFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -179,7 +171,7 @@ void generatedTestCases() {
         };
 
         irisTester.fireEvent(
-            'AudioEncodedFrameObserver_OnPlaybackAudioEncodedFrame',
+            'AudioEncodedFrameObserver_onPlaybackAudioEncodedFrame',
             params: eventJson);
       }
 
@@ -202,10 +194,6 @@ void generatedTestCases() {
   testWidgets(
     'onMixedAudioEncodedFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -273,7 +261,7 @@ void generatedTestCases() {
         };
 
         irisTester.fireEvent(
-            'AudioEncodedFrameObserver_OnMixedAudioEncodedFrame',
+            'AudioEncodedFrameObserver_onMixedAudioEncodedFrame',
             params: eventJson);
       }
 

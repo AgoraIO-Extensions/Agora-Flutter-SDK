@@ -80,9 +80,15 @@ class _RtmpStreamingState extends State<RtmpStreaming> {
           _remoteUid = 0;
         });
       },
-      onLeaveChannel: (RtcConnection connection, RtcStats stats) {
+      onLeaveChannel: (RtcConnection connection, RtcStats stats) async {
         logSink.log(
             '[onLeaveChannel] connection: ${connection.toJson()} stats: ${stats.toJson()}');
+
+        if (_isStreaming && _rtmpUrlController.text.isNotEmpty) {
+          await _engine.stopRtmpStream(_rtmpUrlController.text);
+          _isStreaming = false;
+        }
+
         setState(() {
           isJoined = false;
         });

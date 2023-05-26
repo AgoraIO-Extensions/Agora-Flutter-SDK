@@ -1,5 +1,7 @@
-import 'package:agora_rtc_engine/src/binding_forward_export.dart';
-import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:agora_rtc_engine/src/agora_media_base.dart';
 import 'package:agora_rtc_engine/src/binding/agora_media_recorder_impl.dart'
     as media_recorder_impl_binding;
 import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart'
@@ -12,11 +14,11 @@ import 'package:iris_method_channel/iris_method_channel.dart';
 class MediaRecorderObserverWrapperOverride
     extends media_base_event_b.MediaRecorderObserverWrapper {
   const MediaRecorderObserverWrapperOverride(
-    this.connection,
+    this.strNativeHandle,
     MediaRecorderObserver mediaRecorderObserver,
   ) : super(mediaRecorderObserver);
 
-  final RtcConnection connection;
+  final String strNativeHandle;
 
   @override
   bool operator ==(Object other) {
@@ -25,64 +27,56 @@ class MediaRecorderObserverWrapperOverride
     }
     return other is MediaRecorderObserverWrapperOverride &&
         other.mediaRecorderObserver == mediaRecorderObserver &&
-        other.connection == connection;
+        other.strNativeHandle == strNativeHandle;
   }
 
   @override
-  int get hashCode => Object.hash(mediaRecorderObserver, connection);
+  int get hashCode => Object.hash(mediaRecorderObserver, strNativeHandle);
 
   @override
-  bool handleEvent(
+  bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
-    if (!eventName.startsWith('MediaRecorderObserver')) return false;
-    final newEvent = eventName.replaceFirst('MediaRecorderObserver_', '');
-
     final jsonMap = jsonDecode(eventData);
-    final ct = jsonMap['connection'];
-    if (ct == null) {
+    final ct = jsonMap['nativeHandle'];
+    if (ct == null || ct != strNativeHandle) {
       return false;
     }
 
-    final rtcConnection = RtcConnection.fromJson(ct);
-
-    if (rtcConnection.channelId != connection.channelId ||
-        rtcConnection.localUid != connection.localUid) {
-      return false;
-    }
-
-    if (handleEventInternal(newEvent, eventData, buffers)) {
-      return true;
-    }
-
-    return false;
+    return super.handleEventInternal(eventName, eventData, buffers);
   }
 }
 
 class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
     with ScopedDisposableObjectMixin {
-  MediaRecorderImpl._(IrisMethodChannel irisMethodChannel)
+  MediaRecorderImpl._(IrisMethodChannel irisMethodChannel, this.strNativeHandle)
       : super(irisMethodChannel);
 
-  factory MediaRecorderImpl.create(IrisMethodChannel irisMethodChannel) {
-    return MediaRecorderImpl._(irisMethodChannel);
+  factory MediaRecorderImpl.fromNativeHandle(
+      IrisMethodChannel irisMethodChannel, String strNativeHandle) {
+    return MediaRecorderImpl._(irisMethodChannel, strNativeHandle);
   }
 
   final TypedScopedKey _mediaRecorderScopedKey =
       const TypedScopedKey(MediaRecorderImpl);
 
+  final String strNativeHandle;
+
   @override
-  Future<void> setMediaRecorderObserver(
-      {required RtcConnection connection,
-      required MediaRecorderObserver callback}) async {
+  Map<String, dynamic> createParams(Map<String, dynamic> param) {
+    return {
+      'nativeHandle': strNativeHandle,
+      ...param,
+    };
+  }
+
+  @override
+  Future<void> setMediaRecorderObserver(MediaRecorderObserver callback) async {
     const apiType = 'MediaRecorder_setMediaRecorderObserver';
 
-    final param = createParams({'connection': connection.toJson()});
-
-    final List<Uint8List> buffers = [];
-    buffers.addAll(connection.collectBufferList());
+    final param = createParams({});
 
     final eventHandlerWrapper =
-        MediaRecorderObserverWrapperOverride(connection, callback);
+        MediaRecorderObserverWrapperOverride(strNativeHandle, callback);
 
     await irisMethodChannel.registerEventHandler(
         ScopedEvent(
@@ -94,14 +88,7 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
   }
 
   @override
-  Future<void> release() async {
-    markDisposed();
-
-    await irisMethodChannel.unregisterEventHandlers(_mediaRecorderScopedKey);
-  }
-
-  @override
   Future<void> dispose() async {
-    await release();
+    await irisMethodChannel.unregisterEventHandlers(_mediaRecorderScopedKey);
   }
 }

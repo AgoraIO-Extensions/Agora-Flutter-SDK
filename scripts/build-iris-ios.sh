@@ -39,4 +39,4 @@ rm -rf ${AGORA_FLUTTER_PROJECT_PATH}/ios/libs/ALL_ARCHITECTURE
 # fi
 # cp -RP "$IRIS_PROJECT_PATH/third_party/agora/rtc/include/" "$AGORA_FLUTTER_PROJECT_PATH/integration_test_app/iris_integration_test/third_party/agora/rtc/include"
 
-cp -RP "${IRIS_PROJECT_PATH}/build/ios/ALL_ARCHITECTURE/output/dcg/${BUILD_TYPE}/AgoraRtcWrapper.xcframework" "$AGORA_FLUTTER_PROJECT_PATH/ios/"
+cp -RP "${IRIS_PROJECT_PATH}/build/ios/ALL_ARCHITECTURE/output/dcg/${BUILD_TYPE}/AgoraRtcWrapper.xcframework" "$AGORA_FLUTTER_PROJECT_PATH/ios/libs"

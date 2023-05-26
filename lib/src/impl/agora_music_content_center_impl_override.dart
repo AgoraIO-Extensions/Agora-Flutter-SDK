@@ -8,7 +8,6 @@ import 'package:agora_rtc_engine/src/binding/agora_music_content_center_event_im
     as event_binding;
 import 'package:agora_rtc_engine/src/binding/agora_music_content_center_impl.dart'
     as binding;
-import 'package:agora_rtc_engine/src/binding/call_api_event_handler_buffer_ext.dart';
 import 'package:agora_rtc_engine/src/binding/event_handler_param_json.dart';
 
 import 'package:agora_rtc_engine/src/impl/agora_music_content_center_impl_json.dart';
@@ -60,27 +59,6 @@ class MusicContentCenterEventHandlerWrapper
   bool handleEventInternal(
       String eventName, String eventData, List<Uint8List> buffers) {
     switch (eventName) {
-      case 'onMusicChartsResult':
-        if (musicContentCenterEventHandler.onMusicChartsResult == null) {
-          return true;
-        }
-        final jsonMap = jsonDecode(eventData);
-        MusicContentCenterEventHandlerOnMusicChartsResultJson paramJson =
-            MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
-                jsonMap);
-        paramJson = paramJson.fillBuffers(buffers);
-        String? requestId = paramJson.requestId;
-        MusicContentCenterStatusCode? status = paramJson.status;
-        List<MusicChartInfo>? result = paramJson.result;
-        if (requestId == null || status == null || result == null) {
-          return true;
-        }
-        result = result.map((e) => e.fillBuffers(buffers)).toList();
-        musicContentCenterEventHandler.onMusicChartsResult!(
-            requestId, status, result);
-
-        return true;
-
       case 'onMusicCollectionResult':
         if (musicContentCenterEventHandler.onMusicCollectionResult == null) {
           return true;
@@ -91,8 +69,8 @@ class MusicContentCenterEventHandlerWrapper
                 jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
-        MusicContentCenterStatusCode? status = paramJson.status;
-        if (requestId == null || status == null) {
+        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
+        if (requestId == null || errorCode == null) {
           return true;
         }
 
@@ -101,7 +79,7 @@ class MusicContentCenterEventHandlerWrapper
         final musicCollectionImpl = MusicCollectionImpl(musicCollectionJson);
 
         musicContentCenterEventHandler.onMusicCollectionResult!(
-            requestId, status, musicCollectionImpl);
+            requestId, musicCollectionImpl, errorCode);
         return true;
     }
 

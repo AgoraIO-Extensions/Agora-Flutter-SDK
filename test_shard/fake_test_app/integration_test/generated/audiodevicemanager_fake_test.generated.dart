@@ -13,10 +13,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'enumeratePlaybackDevices',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -50,10 +46,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'enumerateRecordingDevices',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -87,10 +79,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'setPlaybackDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -127,10 +115,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getPlaybackDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -164,10 +148,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getPlaybackDeviceInfo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -201,10 +181,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'setPlaybackDeviceVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -241,10 +217,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getPlaybackDeviceVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -278,10 +250,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'setRecordingDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -318,10 +286,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getRecordingDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -355,10 +319,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getRecordingDeviceInfo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -392,10 +352,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'setRecordingDeviceVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -432,10 +388,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getRecordingDeviceVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -469,10 +421,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'setLoopbackDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -509,10 +457,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getLoopbackDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -546,10 +490,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'setPlaybackDeviceMute',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -586,10 +526,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getPlaybackDeviceMute',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -623,10 +559,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'setRecordingDeviceMute',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -663,10 +595,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getRecordingDeviceMute',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -700,10 +628,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'startPlaybackDeviceTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -740,10 +664,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'stopPlaybackDeviceTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -777,10 +697,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'startRecordingDeviceTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -817,10 +733,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'stopRecordingDeviceTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -854,10 +766,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'startAudioDeviceLoopbackTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -894,10 +802,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'stopAudioDeviceLoopbackTest',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -931,10 +835,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'followSystemPlaybackDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -971,10 +871,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'followSystemRecordingDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1011,10 +907,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'followSystemLoopbackDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1051,10 +943,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'release',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1088,10 +976,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getPlaybackDefaultDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1125,10 +1009,6 @@ void audioDeviceManagerSmokeTestCases() {
   testWidgets(
     'getRecordingDefaultDevice',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 

@@ -79,10 +79,6 @@ void rtcEngineSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -114,6 +110,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       outputDir: outputDir,
       skipMemberFunctions: [
         'destroyMediaPlayer',
+        'destroyMediaRecorder',
         // These cases should handle the list size manually.
         'setLocalAccessPoint',
         'startChannelMediaRelay',
@@ -122,6 +119,9 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'setSubscribeAudioAllowlist',
         'setSubscribeVideoBlocklist',
         'setSubscribeVideoAllowlist',
+        'queryCodecCapability',
+        'setHighPriorityUserList',
+        'startOrUpdateChannelMediaRelay',
       ],
       outputFileSuffixName: 'fake_test',
     ),
@@ -144,10 +144,6 @@ void rtcEngineExSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -186,6 +182,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
         'setSubscribeVideoAllowlistEx',
         'startChannelMediaRelayEx',
         'updateChannelMediaRelayEx',
+        'startOrUpdateChannelMediaRelayEx',
+        'setHighPriorityUserListEx',
       ],
       outputFileSuffixName: 'fake_test',
     ),
@@ -207,10 +205,6 @@ void audioDeviceManagerSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -264,10 +258,6 @@ void videoDeviceManagerSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -323,10 +313,6 @@ void mediaPlayerControllerSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -384,10 +370,6 @@ void mediaEngineSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -442,10 +424,6 @@ void mediaRecorderSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -455,7 +433,8 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
 
-    final mediaRecorder = rtcEngine.getMediaRecorder();
+    final mediaRecorder = (await rtcEngine.createMediaRecorder(
+      RecorderStreamInfo(channelId: 'hello', uid: 0)))!;
     
     try {
       {{TEST_CASE_BODY}}
@@ -471,7 +450,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       }
     }
 
-    await mediaRecorder.release();
+    await rtcEngine.destroyMediaRecorder(mediaRecorder);
     await rtcEngine.release();
   },
 //  skip: {{TEST_CASE_SKIP}},
@@ -500,10 +479,6 @@ void localSpatialAudioEngineSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -558,10 +533,6 @@ void localSpatialAudioEngineSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 
@@ -619,10 +590,6 @@ void musicContentCenterSmokeTestCases() {
 ''',
       testCaseTemplate: '''
 testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
-    final irisTester = IrisTester();
-    final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-    setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
     String engineAppId = const String.fromEnvironment('TEST_APP_ID',
       defaultValue: '<YOUR_APP_ID>');
 

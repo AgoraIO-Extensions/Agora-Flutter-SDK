@@ -14,10 +14,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getMediaPlayerId',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -54,10 +50,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'open',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -99,10 +91,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'openWithMediaSource',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -157,10 +145,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'play',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -197,10 +181,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'pause',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -237,10 +217,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'stop',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -277,10 +253,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'resume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -317,10 +289,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'seek',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -360,10 +328,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setAudioPitch',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -403,10 +367,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getDuration',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -443,10 +403,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getPlayPosition',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -483,10 +439,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getStreamCount',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -523,10 +475,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getStreamInfo',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -566,10 +514,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setLoopCount',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -609,10 +553,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setPlaybackSpeed',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -652,10 +592,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'selectAudioTrack',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -695,10 +631,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setPlayerOptionInInt',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -740,10 +672,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setPlayerOptionInString',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -785,10 +713,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'takeScreenshot',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -828,10 +752,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'selectInternalSubtitle',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -871,10 +791,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setExternalSubtitle',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -914,10 +830,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getState',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -954,10 +866,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'mute',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -997,10 +905,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getMute',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1037,10 +941,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'adjustPlayoutVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1080,10 +980,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getPlayoutVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1120,10 +1016,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'adjustPublishSignalVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1163,10 +1055,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getPublishSignalVolume',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1203,10 +1091,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setView',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1246,10 +1130,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setRenderMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1289,10 +1169,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'registerPlayerSourceObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1346,10 +1222,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'unregisterPlayerSourceObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1401,12 +1273,177 @@ void mediaPlayerControllerSmokeTestCases() {
   );
 
   testWidgets(
+    'registerAudioFrameObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final AudioPcmFrameSink observer = AudioPcmFrameSink(
+          onFrame: (AudioPcmFrame frame) {},
+        );
+        const RawAudioFrameOpModeType mode =
+            RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly;
+        mediaPlayerController.registerAudioFrameObserver(
+          observer: observer,
+          mode: mode,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[registerAudioFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'unregisterAudioFrameObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final AudioPcmFrameSink observer = AudioPcmFrameSink(
+          onFrame: (AudioPcmFrame frame) {},
+        );
+        mediaPlayerController.unregisterAudioFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[unregisterAudioFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'registerVideoFrameObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerVideoFrameObserver observer =
+            MediaPlayerVideoFrameObserver(
+          onFrame: (VideoFrame frame) {},
+        );
+        mediaPlayerController.registerVideoFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[registerVideoFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'unregisterVideoFrameObserver',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        final MediaPlayerVideoFrameObserver observer =
+            MediaPlayerVideoFrameObserver(
+          onFrame: (VideoFrame frame) {},
+        );
+        mediaPlayerController.unregisterVideoFrameObserver(
+          observer,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[unregisterVideoFrameObserver] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
     'registerMediaPlayerAudioSpectrumObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1452,10 +1489,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'unregisterMediaPlayerAudioSpectrumObserver',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1499,10 +1532,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setAudioDualMonoMode',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1542,10 +1571,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getPlayerSdkVersion',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1582,10 +1607,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getPlaySrc',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1622,10 +1643,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'openWithAgoraCDNSrc',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1667,10 +1684,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getAgoraCDNLineCount',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1707,10 +1720,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'switchAgoraCDNLineByIndex',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1750,10 +1759,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'getCurrentAgoraCDNIndex',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1790,10 +1795,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'enableAutoSwitchAgoraCDN',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1833,10 +1834,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'renewAgoraCDNSrcToken',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1878,10 +1875,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'switchAgoraCDNSrc',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1923,10 +1916,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'switchSrc',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -1968,10 +1957,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'preloadSrc',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2013,10 +1998,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'playPreloadedSrc',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2056,10 +2037,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'unloadSrc',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2099,10 +2076,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setSpatialAudioParams',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2159,10 +2132,6 @@ void mediaPlayerControllerSmokeTestCases() {
   testWidgets(
     'setSoundPositionParams',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
 
@@ -2186,190 +2155,6 @@ void mediaPlayerControllerSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[setSoundPositionParams] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'registerAudioFrameObserver',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        final MediaPlayerAudioFrameObserver observer =
-            MediaPlayerAudioFrameObserver(
-          onFrame: (AudioPcmFrame frame) {},
-        );
-        mediaPlayerController.registerAudioFrameObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[registerAudioFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'unregisterAudioFrameObserver',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        final MediaPlayerAudioFrameObserver observer =
-            MediaPlayerAudioFrameObserver(
-          onFrame: (AudioPcmFrame frame) {},
-        );
-        mediaPlayerController.unregisterAudioFrameObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[unregisterAudioFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'registerVideoFrameObserver',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        final MediaPlayerVideoFrameObserver observer =
-            MediaPlayerVideoFrameObserver(
-          onFrame: (VideoFrame frame) {},
-        );
-        mediaPlayerController.registerVideoFrameObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[registerVideoFrameObserver] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await mediaPlayerController.dispose();
-      await rtcEngine.release();
-    },
-//  skip: !(),
-  );
-
-  testWidgets(
-    'unregisterVideoFrameObserver',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final mediaPlayerController = MediaPlayerController(
-          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
-      await mediaPlayerController.initialize();
-
-      try {
-        final MediaPlayerVideoFrameObserver observer =
-            MediaPlayerVideoFrameObserver(
-          onFrame: (VideoFrame frame) {},
-        );
-        mediaPlayerController.unregisterVideoFrameObserver(
-          observer,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[unregisterVideoFrameObserver] error: ${e.toString()}');
           rethrow;
         }
 

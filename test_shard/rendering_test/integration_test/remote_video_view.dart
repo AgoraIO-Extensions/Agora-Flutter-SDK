@@ -35,6 +35,7 @@ class _RemoteVideoViewState extends State<RemoteVideoView> {
   late final MediaPlayerSourceObserver mediaPlayerSourceObserver;
   late final VideoFrameObserver videoFrameObserver;
   bool isMpkJoined = false;
+  bool _isOnFrameCalled = false;
 
   static const int _myUid = 12345;
   static const int _mpkRemoteUid = 67890;

@@ -10,14 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
-void generatedTestCases() {
+void generatedTestCases(IrisTester irisTester) {
   testWidgets(
     'onFrame',
     (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
       RtcEngine rtcEngine = createAgoraRtcEngine();
       await rtcEngine.initialize(RtcEngineContext(
         appId: 'app_id',
@@ -28,14 +24,18 @@ void generatedTestCases() {
       await mediaPlayerController.initialize();
 
       final onFrameCompleter = Completer<bool>();
-      final theMediaPlayerAudioFrameObserver = MediaPlayerAudioFrameObserver(
+      final theAudioPcmFrameSink = AudioPcmFrameSink(
         onFrame: (AudioPcmFrame frame) {
           onFrameCompleter.complete(true);
         },
       );
 
+      const RawAudioFrameOpModeType mode =
+          RawAudioFrameOpModeType.rawAudioFrameOpModeReadOnly;
+
       mediaPlayerController.registerAudioFrameObserver(
-        theMediaPlayerAudioFrameObserver,
+        observer: theAudioPcmFrameSink,
+        mode: mode,
       );
 
 // Delay 500 milliseconds to ensure the registerAudioFrameObserver call completed.
@@ -62,8 +62,7 @@ void generatedTestCases() {
           'frame': frame.toJson(),
         };
 
-        irisTester.fireEvent('MediaPlayerAudioFrameObserver_onFrame',
-            params: eventJson);
+        irisTester.fireEvent('AudioPcmFrameSink_onFrame', params: eventJson);
       }
 
       final eventCalled = await onFrameCompleter.future;
@@ -71,7 +70,7 @@ void generatedTestCases() {
 
       {
         mediaPlayerController.unregisterAudioFrameObserver(
-          theMediaPlayerAudioFrameObserver,
+          theAudioPcmFrameSink,
         );
       }
 // Delay 500 milliseconds to ensure the unregisterAudioFrameObserver call completed.
