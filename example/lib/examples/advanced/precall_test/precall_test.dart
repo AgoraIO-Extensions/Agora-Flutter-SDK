@@ -250,7 +250,8 @@ class _State extends State<PreCallTest> {
 
                       if (_isStartEchoTest) {
                         await _engine.startEchoTest(
-                            const EchoTestConfiguration(intervalInSeconds: 10));
+                            const EchoTestConfiguration(
+                            intervalInSeconds: 10, channelId: 'test'));
                       } else {
                         await _engine.stopEchoTest();
                       }
