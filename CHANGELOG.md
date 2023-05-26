@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.2.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.1.1+1...6.2.0) (2023-05-26)
+
+
+### Features
+
+* upgrade native sdk 4.2.0 ([#1071](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1071)) ([1c2813a](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/1c2813ada6eb9443ee9c14802a73e0c416172f3a)), closes [#1106](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1106)
+
 ### [6.1.1+1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/v6.1.1...v6.1.1+1) (2023-05-19)
 
 
