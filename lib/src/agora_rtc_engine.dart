@@ -5002,11 +5002,11 @@ abstract class RtcEngine {
       required int userId,
       required String location});
 
-  /// Sets whether to enable the AI ​​noise reduction function and set the noise reduction mode.
-  /// You can call this method to enable AI noise reduction function. Once enabled, the SDK automatically detects and reduces stationary and non-stationary noise from your audio on the premise of ensuring the quality of human voice. Stationary noise refers to noise signal with constant average statistical properties and negligibly small fluctuations of level within the period of observation. Common sources of stationary noises are:Television;Air conditioner;Machinery, etc.Non-stationary noise refers to noise signal with huge fluctuations of level within the period of observation. Common sources of non-stationary noises are:Thunder;Explosion;Cracking, etc.
+  /// Sets whether to enable the AI ​​noise suppression function and set the noise suppression mode.
+  /// You can call this method to enable AI noise suppression function. Once enabled, the SDK automatically detects and reduces stationary and non-stationary noise from your audio on the premise of ensuring the quality of human voice. Stationary noise refers to noise signal with constant average statistical properties and negligibly small fluctuations of level within the period of observation. Common sources of stationary noises are:Television;Air conditioner;Machinery, etc.Non-stationary noise refers to noise signal with huge fluctuations of level within the period of observation. Common sources of non-stationary noises are:Thunder;Explosion;Cracking, etc.
   ///
-  /// * [enabled] Whether to enable the AI noise reduction function:true: Enable the AI noise reduction.false: (Default) Disable the AI noise reduction.
-  /// * [mode] The AI noise reduction modes. See AudioAinsMode .
+  /// * [enabled] Whether to enable the AI noise suppression function:true: Enable the AI noise suppression.false: (Default) Disable the AI noise suppression.
+  /// * [mode] The AI noise suppression modes. See AudioAinsMode .
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.< 0: Failure.

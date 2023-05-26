@@ -1399,10 +1399,10 @@ extension ExternalVideoSourceTypeExt on ExternalVideoSourceType {
   }
 }
 
-/// The format of the recording file.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderContainerFormat {
-  /// 1: (Default) MP4.
+  /// @nodoc
   @JsonValue(1)
   formatMp4,
 }
