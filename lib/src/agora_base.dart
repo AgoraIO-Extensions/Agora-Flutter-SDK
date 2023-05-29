@@ -2235,18 +2235,18 @@ extension ExperiencePoorReasonExt on ExperiencePoorReason {
   }
 }
 
-/// AI noise reduction modes.
+/// AI noise suppression modes.
 @JsonEnum(alwaysCreate: true)
 enum AudioAinsMode {
-  /// 0: (Default) Balance mode. This mode allows for a balanced performance on noice reduction and time delay.
+  /// 0: (Default) Balance mode. This mode allows for a balanced performance on noice suppression and time delay.
   @JsonValue(0)
   ainsModeBalanced,
 
-  /// 1: Aggressive mode. In scenarios where high performance on noise reduction is required, such as live streaming outdoor events, This mode reduces nosies more dramatically, but may sometimes affect the original character of the audio.
+  /// 1: Aggressive mode. In scenarios where high performance on noise suppression is required, such as live streaming outdoor events, this mode reduces nosie more dramatically, but may sometimes affect the original character of the audio.
   @JsonValue(1)
   ainsModeAggressive,
 
-  /// 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real time.
+  /// 2: Aggressive mode with low latency. The noise suppression delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise suppression with low latency, such as sing together online in real time.
   @JsonValue(2)
   ainsModeUltralowlatency,
 }
