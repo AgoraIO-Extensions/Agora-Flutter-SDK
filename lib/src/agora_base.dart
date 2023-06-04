@@ -180,6 +180,7 @@ extension WarnCodeTypeExt on WarnCodeType {
 }
 
 /// Error codes.
+///
 /// An error code indicates that the SDK encountered an unrecoverable error that requires application intervention. For example, an error is returned when the camera fails to open, and the app needs to inform the user that the camera cannot be used.
 @JsonEnum(alwaysCreate: true)
 enum ErrorCodeType {
@@ -279,7 +280,7 @@ enum ErrorCodeType {
   @JsonValue(103)
   errNoServerResources,
 
-  /// 109: The current token has expired. Apply for a new token on the server and call renewToken .Deprecated:This enumerator is deprecated. Use connectionChangedTokenExpired(9) in the onConnectionStateChanged callback instead.
+  /// 109: The current token has expired. Apply for a new token on the server and call renewToken.Deprecated:This enumerator is deprecated. Use connectionChangedTokenExpired(9) in the onConnectionStateChanged callback instead.
   @JsonValue(109)
   errTokenExpired,
 
@@ -920,7 +921,7 @@ enum DegradationPreference {
   @JsonValue(1)
   maintainFramerate,
 
-  /// 2: Reduces the video frame rate and video resolution simultaneously during video encoding under limited bandwidth. The maintainBalanced has a lower reduction than maintainQuality and maintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged .
+  /// 2: Reduces the video frame rate and video resolution simultaneously during video encoding under limited bandwidth. The maintainBalanced has a lower reduction than maintainQuality and maintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged.
   @JsonValue(2)
   maintainBalanced,
 
@@ -1230,11 +1231,11 @@ extension AudioEncodingTypeExt on AudioEncodingType {
 /// The adaptation mode of the watermark.
 @JsonEnum(alwaysCreate: true)
 enum WatermarkFitMode {
-  /// Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions . The settings in WatermarkRatio are invalid.
+  /// Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
   @JsonValue(0)
   fitModeCoverPosition,
 
-  /// Use the value you set in WatermarkRatio . The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
+  /// Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
   @JsonValue(1)
   fitModeUseImageRatio,
 }
@@ -1288,7 +1289,7 @@ class EncodedAudioFrameInfo {
       this.advancedSettings,
       this.captureTimeMs});
 
-  /// Audio Codec type: AudioCodecType .
+  /// Audio Codec type: AudioCodecType.
   @JsonKey(name: 'codec')
   final AudioCodecType? codec;
 
@@ -1415,7 +1416,7 @@ class VideoSubscriptionOptions {
   /// @nodoc
   const VideoSubscriptionOptions({this.type, this.encodedFrameOnly});
 
-  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType .
+  /// The video stream type that you want to subscribe to. The default value is videoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType.
   @JsonKey(name: 'type')
   final VideoStreamType? type;
 
@@ -1448,7 +1449,7 @@ class EncodedVideoFrameInfo {
       this.uid,
       this.streamType});
 
-  /// The codec type of the local video stream. See VideoCodecType . The default value is videoCodecH264 (2).
+  /// The codec type of the local video stream. See VideoCodecType. The default value is videoCodecH264 (2).
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
@@ -1464,11 +1465,11 @@ class EncodedVideoFrameInfo {
   @JsonKey(name: 'framesPerSecond')
   final int? framesPerSecond;
 
-  /// The video frame type. See VideoFrameType .
+  /// The video frame type. See VideoFrameType.
   @JsonKey(name: 'frameType')
   final VideoFrameType? frameType;
 
-  /// The rotation information of the video frame. See VideoOrientation .
+  /// The rotation information of the video frame. See VideoOrientation.
   @JsonKey(name: 'rotation')
   final VideoOrientation? rotation;
 
@@ -1488,7 +1489,7 @@ class EncodedVideoFrameInfo {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The type of video streams. See VideoStreamType .
+  /// The type of video streams. See VideoStreamType.
   @JsonKey(name: 'streamType')
   final VideoStreamType? streamType;
 
@@ -1560,11 +1561,11 @@ class AdvanceOptions {
   /// @nodoc
   const AdvanceOptions({this.encodingPreference, this.compressionPreference});
 
-  /// Video encoder preference. See EncodingPreference .
+  /// Video encoder preference. See EncodingPreference.
   @JsonKey(name: 'encodingPreference')
   final EncodingPreference? encodingPreference;
 
-  /// Compression preference for video encoding. See CompressionPreference .
+  /// Compression preference for video encoding. See CompressionPreference.
   @JsonKey(name: 'compressionPreference')
   final CompressionPreference? compressionPreference;
 
@@ -1648,11 +1649,11 @@ class CodecCapInfo {
   /// @nodoc
   const CodecCapInfo({this.codecType, this.codecCapMask});
 
-  /// The video codec types. See VideoCodecType .
+  /// The video codec types. See VideoCodecType.
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The bit mask of the codec type. See CodecCapMask .
+  /// The bit mask of the codec type. See CodecCapMask.
   @JsonKey(name: 'codecCapMask')
   final int? codecCapMask;
 
@@ -1679,15 +1680,15 @@ class VideoEncoderConfiguration {
       this.mirrorMode,
       this.advanceOptions});
 
-  /// The codec type of the local video stream. See VideoCodecType .
+  /// The codec type of the local video stream. See VideoCodecType.
   @JsonKey(name: 'codecType')
   final VideoCodecType? codecType;
 
-  /// The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 960 × 540. You can set a custom value.
+  /// The dimensions of the encoded video (px). See VideoDimensions. This parameter measures the video encoding quality in the format of length × width. The default value is 960 × 540. You can set a custom value.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
-  /// The frame rate (fps) of the encoding video frame. The default value is 15. See FrameRate .
+  /// The frame rate (fps) of the encoding video frame. The default value is 15. See FrameRate.
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
@@ -1699,19 +1700,19 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'minBitrate')
   final int? minBitrate;
 
-  /// The orientation mode of the encoded video. See OrientationMode .
+  /// The orientation mode of the encoded video. See OrientationMode.
   @JsonKey(name: 'orientationMode')
   final OrientationMode? orientationMode;
 
-  /// Video degradation preference under limited bandwidth. See DegradationPreference .
+  /// Video degradation preference under limited bandwidth. See DegradationPreference.
   @JsonKey(name: 'degradationPreference')
   final DegradationPreference? degradationPreference;
 
-  /// Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
+  /// Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType.By default, the video is not mirrored.
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
-  /// Advanced options for video encoding. See AdvanceOptions .
+  /// Advanced options for video encoding. See AdvanceOptions.
   @JsonKey(name: 'advanceOptions')
   final AdvanceOptions? advanceOptions;
 
@@ -1724,6 +1725,7 @@ class VideoEncoderConfiguration {
 }
 
 /// The configurations for the data stream.
+///
 /// The following table shows the SDK behaviors under different parameter settings:
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class DataStreamConfig {
@@ -1781,7 +1783,7 @@ class SimulcastStreamConfig {
   /// @nodoc
   const SimulcastStreamConfig({this.dimensions, this.kBitrate, this.framerate});
 
-  /// The video dimension. See VideoDimensions . The default value is 160 × 120.
+  /// The video dimension. See VideoDimensions. The default value is 160 × 120.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
@@ -1832,7 +1834,8 @@ class Rectangle {
 }
 
 /// The position and size of the watermark on the screen.
-/// The position and size of the watermark on the screen are determined by xRatio, yRatio, and widthRatio:(xRatio, yRatio) refers to the coordinates of the upper left corner of the watermark, which determines the distance from the upper left corner of the watermark to the upper left corner of the screen.The widthRatio determines the width of the watermark.
+///
+/// The position and size of the watermark on the screen are determined by xRatio , yRatio , and widthRatio : ( xRatio , yRatio ) refers to the coordinates of the upper left corner of the watermark, which determines the distance from the upper left corner of the watermark to the upper left corner of the screen. The widthRatio determines the width of the watermark.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class WatermarkRatio {
   /// @nodoc
@@ -1873,19 +1876,19 @@ class WatermarkOptions {
   @JsonKey(name: 'visibleInPreview')
   final bool? visibleInPreview;
 
-  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See Rectangle .
+  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See Rectangle.
   @JsonKey(name: 'positionInLandscapeMode')
   final Rectangle? positionInLandscapeMode;
 
-  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See Rectangle .
+  /// When the adaptation mode of the watermark is fitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See Rectangle.
   @JsonKey(name: 'positionInPortraitMode')
   final Rectangle? positionInPortraitMode;
 
-  /// When the watermark adaptation mode is fitModeUseImageRatio, this parameter is used to set the watermark coordinates. See WatermarkRatio .
+  /// When the watermark adaptation mode is fitModeUseImageRatio, this parameter is used to set the watermark coordinates. See WatermarkRatio.
   @JsonKey(name: 'watermarkRatio')
   final WatermarkRatio? watermarkRatio;
 
-  /// The adaptation mode of the watermark. See WatermarkFitMode .
+  /// The adaptation mode of the watermark. See WatermarkFitMode.
   @JsonKey(name: 'mode')
   final WatermarkFitMode? mode;
 
@@ -2161,7 +2164,7 @@ class ClientRoleOptions {
   /// @nodoc
   const ClientRoleOptions({this.audienceLatencyLevel});
 
-  /// The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType .
+  /// The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType.
   @JsonKey(name: 'audienceLatencyLevel')
   final AudienceLatencyLevelType? audienceLatencyLevel;
 
@@ -2235,18 +2238,18 @@ extension ExperiencePoorReasonExt on ExperiencePoorReason {
   }
 }
 
-/// AI noise reduction modes.
+/// AI noise suppression modes.
 @JsonEnum(alwaysCreate: true)
 enum AudioAinsMode {
-  /// 0: (Default) Balance mode. This mode allows for a balanced performance on noice reduction and time delay.
+  /// 0: (Default) Balance mode. This mode allows for a balanced performance on noice suppression and time delay.
   @JsonValue(0)
   ainsModeBalanced,
 
-  /// 1: Aggressive mode. In scenarios where high performance on noise reduction is required, such as live streaming outdoor events, This mode reduces nosies more dramatically, but may sometimes affect the original character of the audio.
+  /// 1: Aggressive mode. In scenarios where high performance on noise suppression is required, such as live streaming outdoor events, this mode reduces nosie more dramatically, but may sometimes affect the original character of the audio.
   @JsonValue(1)
   ainsModeAggressive,
 
-  /// 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real time.
+  /// 2: Aggressive mode with low latency. The noise suppression delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise suppression with low latency, such as sing together online in real time.
   @JsonValue(2)
   ainsModeUltralowlatency,
 }
@@ -2449,7 +2452,7 @@ enum VideoApplicationScenarioType {
   @JsonValue(0)
   applicationScenarioGeneral,
 
-  /// If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.If someone subscribes to the high-quality stream, the SDK resets the high-quality stream to the VideoEncoderConfiguration configuration used in the most recent calling of setVideoEncoderConfiguration . If no configuration has been set by the user previously, the following values are used:Resolution: (Windows and macOS) 1280 × 720; (Android and iOS) 960 × 540Frame rate: 15 fpsBitrate: (Windows and macOS) 1600 Kbps; (Android and iOS) 1000 KbpsThe SDK monitors the number of subscribers to the low-quality video stream in real time and dynamically enables or disables it based on the number of subscribers.If the user has called setDualStreamMode to set that never send low-quality video stream (disableSimulcastStream), the dynamic adjustment of the low-quality stream in meeting scenarios will not take effect.If nobody subscribes to the low-quality stream, the SDK automatically disables it to save upstream bandwidth.If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:Resolution: 480 × 272Frame rate: 15 fpsBitrate: 500 Kbps1: The meeting scenario.
+  /// If set to applicationScenarioMeeting (1), the SDK automatically enables the following strategies:In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.If someone subscribes to the high-quality stream, the SDK resets the high-quality stream to the VideoEncoderConfiguration configuration used in the most recent calling of setVideoEncoderConfiguration. If no configuration has been set by the user previously, the following values are used:Resolution: (Windows and macOS) 1280 × 720; (Android and iOS) 960 × 540Frame rate: 15 fpsBitrate: (Windows and macOS) 1600 Kbps; (Android and iOS) 1000 KbpsThe SDK monitors the number of subscribers to the low-quality video stream in real time and dynamically enables or disables it based on the number of subscribers.If the user has called setDualStreamMode to set that never send low-quality video stream (disableSimulcastStream), the dynamic adjustment of the low-quality stream in meeting scenarios will not take effect.If nobody subscribes to the low-quality stream, the SDK automatically disables it to save upstream bandwidth.If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:Resolution: 480 × 272Frame rate: 15 fpsBitrate: 500 Kbps1: The meeting scenario.
   @JsonValue(1)
   applicationScenarioMeeting,
 }
@@ -3055,7 +3058,7 @@ class AudioVolumeInfo {
   @JsonKey(name: 'volume')
   final int? volume;
 
-  /// Voice activity status of the local user.0: The local user is not speaking.1: The local user is speaking.The vad parameter does not report the voice activity status of remote users. In a remote user's callback, the value of vad is always 1.To use this parameter, you must set reportVad to true when calling enableAudioVolumeIndication .
+  /// Voice activity status of the local user.0: The local user is not speaking.1: The local user is speaking.The vad parameter does not report the voice activity status of remote users. In a remote user's callback, the value of vad is always 1.To use this parameter, you must set reportVad to true when calling enableAudioVolumeIndication.
   @JsonKey(name: 'vad')
   final int? vad;
 
@@ -3072,6 +3075,7 @@ class AudioVolumeInfo {
 }
 
 /// The audio device information.
+///
 /// This class is for Android only.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class DeviceInfo {
@@ -3427,6 +3431,7 @@ extension RtmpStreamingEventExt on RtmpStreamingEvent {
 }
 
 /// Image properties.
+///
 /// This class sets the properties of the watermark and background images in the live video.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class RtcImage {
@@ -3477,6 +3482,7 @@ class RtcImage {
 }
 
 /// The configuration for advanced features of the RTMP or RTMPS streaming with transcoding.
+///
 /// If you want to enable the advanced features of streaming with transcoding, contact .
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LiveStreamAdvancedFeature {
@@ -3514,7 +3520,7 @@ enum ConnectionStateType {
   @JsonValue(3)
   connectionStateConnected,
 
-  /// 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.If the SDK cannot rejoin the channel within 10 seconds, it triggers onConnectionLost , stays in the connectionStateReconnecting state, and keeps rejoining the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the onConnectionStateChanged callback, switches to the connectionStateFailed state, and stops rejoining the channel.
+  /// 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.If the SDK cannot rejoin the channel within 10 seconds, it triggers onConnectionLost, stays in the connectionStateReconnecting state, and keeps rejoining the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the onConnectionStateChanged callback, switches to the connectionStateFailed state, and stops rejoining the channel.
   @JsonValue(4)
   connectionStateReconnecting,
 
@@ -3554,11 +3560,11 @@ class TranscodingUser {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding .
+  /// The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding.
   @JsonKey(name: 'x')
   final int? x;
 
-  /// The y coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, height], where height is the height set in LiveTranscoding .
+  /// The y coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, height], where height is the height set in LiveTranscoding.
   @JsonKey(name: 'y')
   final int? y;
 
@@ -3651,7 +3657,7 @@ class LiveTranscoding {
   @JsonKey(name: 'backgroundColor')
   final int? backgroundColor;
 
-  /// Video codec profile types for Media Push. See VideoCodecTypeForStream .
+  /// Video codec profile types for Media Push. See VideoCodecTypeForStream.
   @JsonKey(name: 'videoCodecType')
   final VideoCodecTypeForStream? videoCodecType;
 
@@ -3659,7 +3665,7 @@ class LiveTranscoding {
   @JsonKey(name: 'userCount')
   final int? userCount;
 
-  /// Manages the user layout configuration in the Media Push. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser .
+  /// Manages the user layout configuration in the Media Push. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser.
   @JsonKey(name: 'transcodingUsers')
   final List<TranscodingUser>? transcodingUsers;
 
@@ -3671,7 +3677,7 @@ class LiveTranscoding {
   @JsonKey(name: 'metadata')
   final String? metadata;
 
-  /// The watermark on the live video. The image format needs to be PNG. See RtcImage .You can add one watermark, or add multiple watermarks using an array.
+  /// The watermark on the live video. The image format needs to be PNG. See RtcImage.You can add one watermark, or add multiple watermarks using an array.
   @JsonKey(name: 'watermark')
   final List<RtcImage>? watermark;
 
@@ -3679,7 +3685,7 @@ class LiveTranscoding {
   @JsonKey(name: 'watermarkCount')
   final int? watermarkCount;
 
-  /// The number of background images on the live video. The image format needs to be PNG. See RtcImage .You can add a background image or use an array to add multiple background images. This parameter is used with backgroundImageCount.
+  /// The number of background images on the live video. The image format needs to be PNG. See RtcImage.You can add a background image or use an array to add multiple background images. This parameter is used with backgroundImageCount.
   @JsonKey(name: 'backgroundImage')
   final List<RtcImage>? backgroundImage;
 
@@ -3687,7 +3693,7 @@ class LiveTranscoding {
   @JsonKey(name: 'backgroundImageCount')
   final int? backgroundImageCount;
 
-  /// The audio sampling rate (Hz) of the output media stream. See AudioSampleRateType .
+  /// The audio sampling rate (Hz) of the output media stream. See AudioSampleRateType.
   @JsonKey(name: 'audioSampleRate')
   final AudioSampleRateType? audioSampleRate;
 
@@ -3699,11 +3705,11 @@ class LiveTranscoding {
   @JsonKey(name: 'audioChannels')
   final int? audioChannels;
 
-  /// Audio codec profile type for Media Push. See AudioCodecProfileType .
+  /// Audio codec profile type for Media Push. See AudioCodecProfileType.
   @JsonKey(name: 'audioCodecProfile')
   final AudioCodecProfileType? audioCodecProfile;
 
-  /// Advanced features of the Media Push with transcoding. See LiveStreamAdvancedFeature .
+  /// Advanced features of the Media Push with transcoding. See LiveStreamAdvancedFeature.
   @JsonKey(name: 'advancedFeatures')
   final List<LiveStreamAdvancedFeature>? advancedFeatures;
 
@@ -3736,7 +3742,7 @@ class TranscodingVideoStream {
       this.alpha,
       this.mirror});
 
-  /// The video source type for local video mixing. See VideoSourceType .
+  /// The video source type for local video mixing. See VideoSourceType.
   @JsonKey(name: 'sourceType')
   final VideoSourceType? sourceType;
 
@@ -3802,11 +3808,11 @@ class LocalTranscoderConfiguration {
   @JsonKey(name: 'streamCount')
   final int? streamCount;
 
-  /// The video streams for local video mixing. See TranscodingVideoStream .
+  /// The video streams for local video mixing. See TranscodingVideoStream.
   @JsonKey(name: 'videoInputStreams')
   final List<TranscodingVideoStream>? videoInputStreams;
 
-  /// The encoding configuration of the mixed video stream after the local video mixing. See VideoEncoderConfiguration .
+  /// The encoding configuration of the mixed video stream after the local video mixing. See VideoEncoderConfiguration.
   @JsonKey(name: 'videoOutputConfiguration')
   final VideoEncoderConfiguration? videoOutputConfiguration;
 
@@ -3964,15 +3970,15 @@ class LastmileProbeResult {
   const LastmileProbeResult(
       {this.state, this.uplinkReport, this.downlinkReport, this.rtt});
 
-  /// The status of the last-mile network tests. See LastmileProbeResultState .
+  /// The status of the last-mile network tests. See LastmileProbeResultState.
   @JsonKey(name: 'state')
   final LastmileProbeResultState? state;
 
-  /// Results of the uplink last-mile network test. See LastmileProbeOneWayResult .
+  /// Results of the uplink last-mile network test. See LastmileProbeOneWayResult.
   @JsonKey(name: 'uplinkReport')
   final LastmileProbeOneWayResult? uplinkReport;
 
-  /// Results of the downlink last-mile network test. See LastmileProbeOneWayResult .
+  /// Results of the downlink last-mile network test. See LastmileProbeOneWayResult.
   @JsonKey(name: 'downlinkReport')
   final LastmileProbeOneWayResult? downlinkReport;
 
@@ -4308,27 +4314,27 @@ class VideoCanvas {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// The rendering mode of the video. See RenderModeType .
+  /// The rendering mode of the video. See RenderModeType.
   @JsonKey(name: 'renderMode')
   final RenderModeType? renderMode;
 
-  /// The mirror mode of the view. See VideoMirrorModeType .For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.For the remote user: The mirror mode is disabled by default.
+  /// The mirror mode of the view. See VideoMirrorModeType.For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.For the remote user: The mirror mode is disabled by default.
   @JsonKey(name: 'mirrorMode')
   final VideoMirrorModeType? mirrorMode;
 
-  /// Setting mode of the view. See VideoViewSetupMode .
+  /// Setting mode of the view. See VideoViewSetupMode.
   @JsonKey(name: 'setupMode')
   final VideoViewSetupMode? setupMode;
 
-  /// The type of the video source. See VideoSourceType .
+  /// The type of the video source. See VideoSourceType.
   @JsonKey(name: 'sourceType')
   final VideoSourceType? sourceType;
 
-  /// The ID of the media player. You can get the Device ID by calling getMediaPlayerId .
+  /// The ID of the media player. You can get the Device ID by calling getMediaPlayerId.
   @JsonKey(name: 'mediaPlayerId')
   final int? mediaPlayerId;
 
-  /// (Optional) Display area of the video frame, see Rectangle . width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
+  /// (Optional) Display area of the video frame, see Rectangle. width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
   @JsonKey(name: 'cropArea')
   final Rectangle? cropArea;
 
@@ -4355,7 +4361,7 @@ class BeautyOptions {
       this.rednessLevel,
       this.sharpnessLevel});
 
-  /// The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark. See LighteningContrastLevel .
+  /// The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark. See LighteningContrastLevel.
   @JsonKey(name: 'lighteningContrastLevel')
   final LighteningContrastLevel? lighteningContrastLevel;
 
@@ -4418,11 +4424,11 @@ class LowlightEnhanceOptions {
   /// @nodoc
   const LowlightEnhanceOptions({this.mode, this.level});
 
-  /// The low-light enhancement mode. See LowLightEnhanceMode .
+  /// The low-light enhancement mode. See LowLightEnhanceMode.
   @JsonKey(name: 'mode')
   final LowLightEnhanceMode? mode;
 
-  /// The low-light enhancement level. See LowLightEnhanceLevel .
+  /// The low-light enhancement level. See LowLightEnhanceLevel.
   @JsonKey(name: 'level')
   final LowLightEnhanceLevel? level;
 
@@ -4589,7 +4595,7 @@ class VirtualBackgroundSource {
   const VirtualBackgroundSource(
       {this.backgroundSourceType, this.color, this.source, this.blurDegree});
 
-  /// The custom background. See backgroundSourceType .
+  /// The custom background. See backgroundSourceType.
   @JsonKey(name: 'background_source_type')
   final BackgroundSourceType? backgroundSourceType;
 
@@ -4685,7 +4691,7 @@ class SegmentationProperty {
   /// @nodoc
   const SegmentationProperty({this.modelType, this.greenCapacity});
 
-  /// The type of algorithms to user for background processing. See SegModelType .
+  /// The type of algorithms to user for background processing. See SegModelType.
   @JsonKey(name: 'modelType')
   final SegModelType? modelType;
 
@@ -4792,7 +4798,7 @@ enum VoiceBeautifierPreset {
   @JsonValue(0x01010300)
   chatBeautifierVitality,
 
-  /// Singing beautifier effect.If you call setVoiceBeautifierPreset (singingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.If you call setVoiceBeautifierParameters (singingBeautifier, param1, param2), you can beautify a male or female-sounding voice and add a reverberation effect.
+  /// Singing beautifier effect.If you call setVoiceBeautifierPreset(singingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.If you call setVoiceBeautifierParameters(singingBeautifier, param1, param2), you can beautify a male or female-sounding voice and add a reverberation effect.
   @JsonValue(0x01020100)
   singingBeautifier,
 
@@ -4828,7 +4834,7 @@ enum VoiceBeautifierPreset {
   @JsonValue(0x01030800)
   timbreTransformationRinging,
 
-  /// A ultra-high quality voice, which makes the audio clearer and restores more details.To achieve better audio effect quality, Agora recommends that you set the profile of to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) and scenario to audioScenarioGameStreaming(3) before calling setVoiceBeautifierPreset .If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
+  /// A ultra-high quality voice, which makes the audio clearer and restores more details.To achieve better audio effect quality, Agora recommends that you set the profile of to audioProfileMusicHighQuality(4) or audioProfileMusicHighQualityStereo(5) and scenario to audioScenarioGameStreaming(3) before calling setVoiceBeautifierPreset.If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
   @JsonValue(0x01040100)
   ultraHighQualityVoice,
 }
@@ -4847,6 +4853,7 @@ extension VoiceBeautifierPresetExt on VoiceBeautifierPreset {
 }
 
 /// Preset audio effects.
+///
 /// To get better audio effects, Agora recommends calling setAudioProfile and setting the profile parameter as recommended below before using the preset audio effects.
 @JsonEnum(alwaysCreate: true)
 enum AudioEffectPreset {
@@ -5070,7 +5077,7 @@ class ScreenCaptureParameters {
       this.highLightColor,
       this.enableHighLight});
 
-  /// The video encoding resolution of the shared screen stream. See VideoDimensions . The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges.If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.If the value of the screen dimensions is higher than that of dimensions, for example, 2000 × 1500, the SDK uses the maximum value under dimensions with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 × 1080.
+  /// The video encoding resolution of the shared screen stream. See VideoDimensions. The default value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges.If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose dimensions is set to 1920 × 1080:If the value of the screen dimensions is lower than that of dimensions, for example, 1000 × 1000 pixels, the SDK uses the screen dimensions, that is, 1000 × 1000 pixels, for encoding.If the value of the screen dimensions is higher than that of dimensions, for example, 2000 × 1500, the SDK uses the maximum value under dimensions with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 × 1080.
   @JsonKey(name: 'dimensions')
   final VideoDimensions? dimensions;
 
@@ -5151,7 +5158,7 @@ extension AudioRecordingQualityTypeExt on AudioRecordingQualityType {
   }
 }
 
-/// Recording content. Set in startAudioRecording .
+/// Recording content. Set in startAudioRecording.
 @JsonEnum(alwaysCreate: true)
 enum AudioFileRecordingType {
   /// 1: Only records the audio of the local user.
@@ -5233,11 +5240,11 @@ class AudioRecordingConfiguration {
   @JsonKey(name: 'sampleRate')
   final int? sampleRate;
 
-  /// The recording content. See AudioFileRecordingType .
+  /// The recording content. See AudioFileRecordingType.
   @JsonKey(name: 'fileRecordingType')
   final AudioFileRecordingType? fileRecordingType;
 
-  /// Recording quality. See audiorecordingqualitytype .Note: This parameter applies to AAC files only.
+  /// Recording quality. See audiorecordingqualitytype.Note: This parameter applies to AAC files only.
   @JsonKey(name: 'quality')
   final AudioRecordingQualityType? quality;
 
@@ -5259,11 +5266,11 @@ class AudioEncodedFrameObserverConfig {
   /// @nodoc
   const AudioEncodedFrameObserverConfig({this.postionType, this.encodingType});
 
-  /// Audio profile. See AudioEncodedFrameObserverPosition .
+  /// Audio profile. See AudioEncodedFrameObserverPosition.
   @JsonKey(name: 'postionType')
   final AudioEncodedFrameObserverPosition? postionType;
 
-  /// Audio encoding type. See AudioEncodingType .
+  /// Audio encoding type. See AudioEncodingType.
   @JsonKey(name: 'encodingType')
   final AudioEncodingType? encodingType;
 
@@ -5286,31 +5293,34 @@ class AudioEncodedFrameObserver {
   });
 
   /// Gets the encoded audio data of the local user.
-  /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
+  ///
+  /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionRecord , you can get the encoded audio data of the local user from this callback.
   ///
   /// * [channels] The number of channels.
   ///  1: Mono.
   ///  2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
-  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
+  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo.
   final void Function(Uint8List frameBuffer, int length,
       EncodedAudioFrameInfo audioEncodedFrameInfo)? onRecordAudioEncodedFrame;
 
   /// Gets the encoded audio data of all remote users.
-  /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
+  ///
+  /// After calling registerAudioEncodedFrameObserver and setting the encoded audio as audioEncodedFrameObserverPositionPlayback , you can get encoded audio data of all remote users through this callback.
   ///
   /// * [samplesPerSec] Recording sample rate (Hz).
   /// * [channels] The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
   /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
-  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
+  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo.
   final void Function(Uint8List frameBuffer, int length,
       EncodedAudioFrameInfo audioEncodedFrameInfo)? onPlaybackAudioEncodedFrame;
 
   /// Gets the mixed and encoded audio data of the local and all remote users.
-  /// After calling registerAudioEncodedFrameObserver and setting the audio profile as audioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
+  ///
+  /// After calling registerAudioEncodedFrameObserver and setting the audio profile as audioEncodedFrameObserverPositionMixed , you can get the mixed and encoded audio data of the local and all remote users through this callback.
   ///
   /// * [samplesPerSec] Recording sample rate (Hz).
   /// * [channels] The number of channels.
@@ -5319,7 +5329,7 @@ class AudioEncodedFrameObserver {
   /// * [samplesPerChannel] The number of samples per channel in the audio frame.
   /// * [frameBuffer] The audio buffer.
   /// * [length] The data length (byte).
-  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo .
+  /// * [audioEncodedFrameInfo] Audio information after encoding. See EncodedAudioFrameInfo.
   final void Function(Uint8List frameBuffer, int length,
       EncodedAudioFrameInfo audioEncodedFrameInfo)? onMixedAudioEncodedFrame;
 }
@@ -5563,7 +5573,7 @@ extension ChannelMediaRelayEventExt on ChannelMediaRelayEvent {
 /// The state code of the channel media relay.
 @JsonEnum(alwaysCreate: true)
 enum ChannelMediaRelayState {
-  /// 0: The initial state. After you successfully stop the channel media relay by calling stopChannelMediaRelay , the onChannelMediaRelayStateChanged callback returns this state.
+  /// 0: The initial state. After you successfully stop the channel media relay by calling stopChannelMediaRelay, the onChannelMediaRelayStateChanged callback returns this state.
   @JsonValue(0)
   relayStateIdle,
 
@@ -5626,7 +5636,7 @@ class ChannelMediaRelayConfiguration {
   const ChannelMediaRelayConfiguration(
       {this.srcInfo, this.destInfos, this.destCount});
 
-  /// The information of the source channel. See ChannelMediaInfo . It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.uid: The unique user ID to identify the relay stream in the source channel. Agora recommends leaving the default value of 0 unchanged.
+  /// The information of the source channel. See ChannelMediaInfo. It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.uid: The unique user ID to identify the relay stream in the source channel. Agora recommends leaving the default value of 0 unchanged.
   @JsonKey(name: 'srcInfo')
   final ChannelMediaInfo? srcInfo;
 
@@ -5738,6 +5748,7 @@ class PeerDownlinkInfo {
 }
 
 /// The built-in encryption mode.
+///
 /// Agora recommends using aes128Gcm2 or aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
 @JsonEnum(alwaysCreate: true)
 enum EncryptionMode {
@@ -5798,7 +5809,7 @@ class EncryptionConfig {
   const EncryptionConfig(
       {this.encryptionMode, this.encryptionKey, this.encryptionKdfSalt});
 
-  /// The built-in encryption mode. See EncryptionMode . Agora recommends using aes128Gcm2 or aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
+  /// The built-in encryption mode. See EncryptionMode. Agora recommends using aes128Gcm2 or aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
   @JsonKey(name: 'encryptionMode')
   final EncryptionMode? encryptionMode;
 
@@ -5933,7 +5944,7 @@ enum StreamSubscribeState {
   @JsonValue(0)
   subStateIdle,
 
-  /// 1: Fails to subscribe to the remote stream. Possible reasons:The remote user:Calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media stream.Calls disableAudio or disableVideo to disable the local audio or video module.Calls enableLocalAudio (false) or enableLocalVideo (false) to disable local audio or video capture.The role of the remote user is audience.The local user calls the following methods to stop receiving remote streams:Call muteRemoteAudioStream (true) or muteAllRemoteAudioStreams (true) to stop receiving the remote audio stream.Call muteRemoteVideoStream (true) or muteAllRemoteVideoStreams (true) to stop receiving the remote video stream.
+  /// 1: Fails to subscribe to the remote stream. Possible reasons:The remote user:Calls muteLocalAudioStream(true) or muteLocalVideoStream(true) to stop sending local media stream.Calls disableAudio or disableVideo to disable the local audio or video module.Calls enableLocalAudio(false) or enableLocalVideo(false) to disable local audio or video capture.The role of the remote user is audience.The local user calls the following methods to stop receiving remote streams:Call muteRemoteAudioStream(true) or muteAllRemoteAudioStreams(true) to stop receiving the remote audio stream.Call muteRemoteVideoStream(true) or muteAllRemoteVideoStreams(true) to stop receiving the remote video stream.
   @JsonValue(1)
   subStateNoSubscribed,
 
@@ -5966,7 +5977,7 @@ enum StreamPublishState {
   @JsonValue(0)
   pubStateIdle,
 
-  /// 1: Fails to publish the local stream. Possible reasons:The local user calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.The local user calls disableAudio or disableVideo to disable the local audio or video module.The local user calls enableLocalAudio (false) or enableLocalVideo (false) to disable the local audio or video capture.The role of the local user is audience.
+  /// 1: Fails to publish the local stream. Possible reasons:The local user calls muteLocalAudioStream(true) or muteLocalVideoStream(true) to stop sending local media streams.The local user calls disableAudio or disableVideo to disable the local audio or video module.The local user calls enableLocalAudio(false) or enableLocalVideo(false) to disable the local audio or video capture.The role of the local user is audience.
   @JsonValue(1)
   pubStateNoPublished,
 
@@ -6046,7 +6057,7 @@ class UserInfo {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// User account. The maximum data length is MaxUserAccountLengthType .
+  /// User account. The maximum data length is MaxUserAccountLengthType.
   @JsonKey(name: 'userAccount')
   final String? userAccount;
 
@@ -6160,7 +6171,8 @@ class ScreenVideoParameters {
 }
 
 /// The audio configuration for the shared screen stream.
-/// Only available where captureAudio is true.
+///
+/// Only available where captureAudio is true .
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ScreenAudioParameters {
   /// @nodoc
@@ -6201,7 +6213,7 @@ class ScreenCaptureParameters2 {
   @JsonKey(name: 'captureAudio')
   final bool? captureAudio;
 
-  /// The audio configuration for the shared screen stream. See ScreenAudioParameters .This parameter only takes effect when captureAudio is true.
+  /// The audio configuration for the shared screen stream. See ScreenAudioParameters.This parameter only takes effect when captureAudio is true.
   @JsonKey(name: 'audioParams')
   final ScreenAudioParameters? audioParams;
 
@@ -6209,7 +6221,7 @@ class ScreenCaptureParameters2 {
   @JsonKey(name: 'captureVideo')
   final bool? captureVideo;
 
-  /// The video configuration for the shared screen stream. See ScreenVideoParameters .This parameter only takes effect when captureVideo is true.
+  /// The video configuration for the shared screen stream. See ScreenVideoParameters.This parameter only takes effect when captureVideo is true.
   @JsonKey(name: 'videoParams')
   final ScreenVideoParameters? videoParams;
 
@@ -6263,7 +6275,7 @@ class VideoRenderingTracingInfo {
   @JsonKey(name: 'elapsedTime')
   final int? elapsedTime;
 
-  /// The time interval from calling startMediaRenderingTracing to calling joinChannel . The unit is milliseconds. A negative number means to call joinChannel after calling startMediaRenderingTracing.
+  /// The time interval from calling startMediaRenderingTracing to calling joinChannel. The unit is milliseconds. A negative number means to call joinChannel after calling startMediaRenderingTracing.
   @JsonKey(name: 'start2JoinChannel')
   final int? start2JoinChannel;
 
