@@ -19,7 +19,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     strategy:
       matrix:
-        version: ['2.10.5', '3.10.0']
+        version: ['2.10.5', '3.10.3']
     runs-on: macos-12
     timeout-minutes: 120
     env:
@@ -74,7 +74,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     strategy:
       matrix:
-        version: ['2.10.5', '3.10.0']
+        version: ['2.10.5', '3.10.3']
     runs-on: macos-12
     timeout-minutes: 120
     env:
@@ -118,7 +118,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     strategy:
       matrix:
-        version: ['2.10.5', '3.10.0']
+        version: ['2.10.5', '3.10.3']
     runs-on: macos-12
     timeout-minutes: 120
     env:
@@ -164,7 +164,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
     strategy:
       matrix:
-        version: ['2.10.5', '3.10.0']
+        version: ['2.10.5', '3.10.3']
     runs-on: windows-2019
     timeout-minutes: 120
     env:
