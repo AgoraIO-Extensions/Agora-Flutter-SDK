@@ -344,7 +344,7 @@ class PlayerStreamInfo {
   @JsonKey(name: 'streamIndex')
   final int? streamIndex;
 
-  /// The type of the media stream. See MediaStreamType .
+  /// The type of the media stream. See MediaStreamType.
   @JsonKey(name: 'streamType')
   final MediaStreamType? streamType;
 
@@ -487,7 +487,7 @@ class PlayerUpdatedInfo {
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// The statistics about the media file being cached.If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics .
+  /// The statistics about the media file being cached.If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'cacheStatistics')
   final CacheStatistics? cacheStatistics;
 
@@ -528,7 +528,7 @@ class MediaSource {
   @JsonKey(name: 'autoPlay')
   final bool? autoPlay;
 
-  /// Whether to cache the media file when it is being played:true:Enables caching.false: (Default) Disables caching.Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics .
+  /// Whether to cache the media file when it is being played:true:Enables caching.false: (Default) Disables caching.Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
 
