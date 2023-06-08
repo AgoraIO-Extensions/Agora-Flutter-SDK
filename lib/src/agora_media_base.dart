@@ -369,7 +369,7 @@ class ContentInspectModule {
   /// @nodoc
   const ContentInspectModule({this.type, this.interval});
 
-  /// Types of functional module. See ContentInspectType .
+  /// Types of functional module. See ContentInspectType.
   @JsonKey(name: 'type')
   final ContentInspectType? type;
 
@@ -395,7 +395,7 @@ class ContentInspectConfig {
   @JsonKey(name: 'extraInfo')
   final String? extraInfo;
 
-  /// Functional module. See ContentInspectModule .A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
+  /// Functional module. See ContentInspectModule.A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
   @JsonKey(name: 'modules')
   final List<ContentInspectModule>? modules;
 
@@ -681,11 +681,11 @@ class ExternalVideoFrame {
       this.metadataSize,
       this.alphaBuffer});
 
-  /// The video type. See VideoBufferType .
+  /// The video type. See VideoBufferType.
   @JsonKey(name: 'type')
   final VideoBufferType? type;
 
-  /// The pixel format. See VideoPixelFormat .
+  /// The pixel format. See VideoPixelFormat.
   @JsonKey(name: 'format')
   final VideoPixelFormat? format;
 
@@ -812,6 +812,7 @@ extension VideoBufferTypeExt on VideoBufferType {
 }
 
 /// Configurations of the video frame.
+///
 /// Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VideoFrame {
@@ -836,7 +837,7 @@ class VideoFrame {
       this.alphaBuffer,
       this.pixelBuffer});
 
-  /// The pixel format. See VideoPixelFormat .
+  /// The pixel format. See VideoPixelFormat.
   @JsonKey(name: 'type')
   final VideoPixelFormat? type;
 
@@ -975,6 +976,7 @@ extension VideoModulePositionExt on VideoModulePosition {
 }
 
 /// This class is used to get raw PCM audio.
+///
 /// You can inherit this class and implement the onFrame callback to get raw PCM audio.
 class AudioPcmFrameSink {
   /// @nodoc
@@ -983,6 +985,7 @@ class AudioPcmFrameSink {
   });
 
   /// Occurs each time the player receives an audio frame.
+  ///
   /// After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
   ///
   /// * [frame] The audio frame information. See AudioPcmFrame.
@@ -1000,33 +1003,37 @@ class AudioFrameObserverBase {
   });
 
   /// Gets the captured audio frame.
-  /// To ensure that the data format of captured audio frame is as expected, Agora recommends that you set the audio data format as follows: After calling setRecordingAudioFrameParameters to set the audio data format, call registerAudioFrameObserver to register the audio observer object, the SDK will calculate the sampling interval according to the parameters set in this method, and triggers the onRecordAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
-  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// To ensure that the data format of captured audio frame is as expected, Agora recommends that you set the audio data format as follows: After calling setRecordingAudioFrameParameters to set the audio data format, call registerAudioFrameObserver to register the audio observer object, the SDK will calculate the sampling interval according to the parameters set in this method, and triggers the onRecordAudioFrame callback according to the sampling interval. Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
+  ///
+  /// * [audioFrame] The raw audio data. See AudioFrame.
   /// * [channelId] The channel ID.
   final void Function(String channelId, AudioFrame audioFrame)?
       onRecordAudioFrame;
 
   /// Gets the raw audio frame for playback.
-  /// To ensure that the data format of audio frame for playback is as expected, Agora recommends that you set the audio data format as follows: After calling setPlaybackAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onPlaybackAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
-  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// To ensure that the data format of audio frame for playback is as expected, Agora recommends that you set the audio data format as follows: After calling setPlaybackAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onPlaybackAudioFrame callback according to the sampling interval. Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
+  ///
+  /// * [audioFrame] The raw audio data. See AudioFrame.
   /// * [channelId] The channel ID.
   final void Function(String channelId, AudioFrame audioFrame)?
       onPlaybackAudioFrame;
 
   /// Retrieves the mixed captured and playback audio frame.
-  /// To ensure that the data format of mixed captured and playback audio frame meets the expectations, Agora recommends that you set the data format as follows: After calling setMixedAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onMixedAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
-  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// To ensure that the data format of mixed captured and playback audio frame meets the expectations, Agora recommends that you set the data format as follows: After calling setMixedAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onMixedAudioFrame callback according to the sampling interval. Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
+  ///
+  /// * [audioFrame] The raw audio data. See AudioFrame.
   /// * [channelId] The channel ID.
   final void Function(String channelId, AudioFrame audioFrame)?
       onMixedAudioFrame;
 
   /// Gets the in-ear monitoring audio frame.
-  /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
-  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval. Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
+  ///
+  /// * [audioFrame] The raw audio data. See AudioFrame.
   final void Function(AudioFrame audioFrame)? onEarMonitoringAudioFrame;
 }
 
@@ -1065,7 +1072,7 @@ class AudioFrame {
       this.renderTimeMs,
       this.avsyncType});
 
-  /// The type of the audio frame. See AudioFrameType .
+  /// The type of the audio frame. See AudioFrameType.
   @JsonKey(name: 'type')
   final AudioFrameType? type;
 
@@ -1147,7 +1154,8 @@ extension AudioFramePositionExt on AudioFramePosition {
 }
 
 /// Audio data format.
-/// The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, onMixedAudioFrame, and onEarMonitoringAudioFrame callbacks according to the sampling interval.Sample interval (sec) = samplePerCall/(sampleRate × channel).Ensure that the sample interval ≥ 0.01 (s).
+///
+/// The SDK calculates the sampling interval through the samplesPerCall , sampleRate , and channel parameters in AudioParams , and triggers the onRecordAudioFrame , onPlaybackAudioFrame , onMixedAudioFrame , and onEarMonitoringAudioFrame callbacks according to the sampling interval. Sample interval (sec) = samplePerCall /( sampleRate × channel ) . Ensure that the sample interval ≥ 0.01 (s).
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AudioParams {
   /// @nodoc
@@ -1162,7 +1170,7 @@ class AudioParams {
   @JsonKey(name: 'channels')
   final int? channels;
 
-  /// The use mode of the audio data. See RawAudioFrameOpModeType .
+  /// The use mode of the audio data. See RawAudioFrameOpModeType.
   @JsonKey(name: 'mode')
   final RawAudioFrameOpModeType? mode;
 
@@ -1203,11 +1211,12 @@ class AudioFrameObserver extends AudioFrameObserverBase {
         );
 
   /// Retrieves the audio frame of a specified user before mixing.
+  ///
   /// Due to the limitations of Flutter, this callback does not support sending processed audio data back to the SDK.
   ///
   /// * [channelId] The channel ID.
   /// * [uid] The user ID of the specified user.
-  /// * [audioFrame] The raw audio data. See AudioFrame .
+  /// * [audioFrame] The raw audio data. See AudioFrame.
   final void Function(String channelId, int uid, AudioFrame audioFrame)?
       onPlaybackAudioFrameBeforeMixing;
 }
@@ -1244,7 +1253,7 @@ class UserAudioSpectrumInfo {
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Audio spectrum information of the remote user. See AudioSpectrumData .
+  /// Audio spectrum information of the remote user. See AudioSpectrumData.
   @JsonKey(name: 'spectrumData')
   final AudioSpectrumData? spectrumData;
 
@@ -1265,15 +1274,17 @@ class AudioSpectrumObserver {
   });
 
   /// Gets the statistics of a local audio spectrum.
+  ///
   /// After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [data] The audio spectrum data of the local user. See AudioSpectrumData .
+  /// * [data] The audio spectrum data of the local user. See AudioSpectrumData.
   final void Function(AudioSpectrumData data)? onLocalAudioSpectrum;
 
   /// Gets the remote audio spectrum.
+  ///
   /// After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the AudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
   ///
-  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo . The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+  /// * [spectrums] The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
   /// * [spectrumNumber] The number of remote users.
   final void Function(
           List<UserAudioSpectrumInfo> spectrums, int spectrumNumber)?
@@ -1288,12 +1299,13 @@ class VideoEncodedFrameObserver {
   });
 
   /// Reports that the receiver has received the to-be-decoded video frame sent by the remote end.
-  /// If you call the setRemoteVideoSubscriptionOptions method and set encodedFrameOnly to true, the SDK triggers this callback locally to report the received encoded video frame information.
+  ///
+  /// If you call the setRemoteVideoSubscriptionOptions method and set encodedFrameOnly to true , the SDK triggers this callback locally to report the received encoded video frame information.
   ///
   /// * [uid] The user ID of the remote user.
   /// * [imageBuffer] The encoded video image buffer.
   /// * [length] The data length of the video image.
-  /// * [videoEncodedFrameInfo] For the information of the encoded video frame, see EncodedVideoFrameInfo .
+  /// * [videoEncodedFrameInfo] For the information of the encoded video frame, see EncodedVideoFrameInfo.
   ///
   /// Returns
   /// Reserved for future use.
@@ -1313,22 +1325,20 @@ class VideoFrameObserver {
   });
 
   /// Occurs each time the SDK receives a video frame captured by the local camera.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [sourceType] The type of the video source. See VideoSourceType .
-  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios. The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified. If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel. Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  ///
+  /// * [sourceType] The type of the video source. See VideoSourceType.
+  /// * [videoFrame] The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
   final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
       onCaptureVideoFrame;
 
   /// Occurs each time the SDK receives a video frame before encoding.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: texture
-  ///  iOS: cvPixelBuffer
-  ///  macOS: YUV 420
-  ///  Windows: YUV 420
-  /// * [sourceType] The type of the video source. See VideoSourceType .
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios. Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK. The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
+  ///
+  /// * [videoFrame] The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
+  /// * [sourceType] The type of the video source. See VideoSourceType.
   final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
       onPreEncodeVideoFrame;
 
@@ -1337,9 +1347,14 @@ class VideoFrameObserver {
       onMediaPlayerVideoFrame;
 
   /// Occurs each time the SDK receives a video frame sent by the remote user.
-  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
+  /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios. If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel. Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
+  ///
+  /// * [videoFrame] The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:
+  ///  Android: texture
+  ///  iOS: cvPixelBuffer
+  ///  macOS: YUV 420
+  ///  Windows: YUV 420
   /// * [remoteUid] The user ID of the remote user who sends the current video frame.
   /// * [channelId] The channel ID.
   final void Function(String channelId, int remoteUid, VideoFrame videoFrame)?
@@ -1399,10 +1414,10 @@ extension ExternalVideoSourceTypeExt on ExternalVideoSourceType {
   }
 }
 
-/// The format of the recording file.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
 enum MediaRecorderContainerFormat {
-  /// 1: (Default) MP4.
+  /// @nodoc
   @JsonValue(1)
   formatMp4,
 }
