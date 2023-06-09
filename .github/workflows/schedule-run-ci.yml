@@ -9,7 +9,7 @@
 name: Schedule run ci
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened, labeled, synchronize]
 
 jobs:
