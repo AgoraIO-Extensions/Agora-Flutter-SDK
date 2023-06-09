@@ -8,10 +8,6 @@
 # label "ci:schedule_run_ci" to allow the external contributor to run the CI.
 name: Schedule run ci
 
-concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
-
 on:
   pull_request:
     types: [opened, reopened, labeled, synchronize]
