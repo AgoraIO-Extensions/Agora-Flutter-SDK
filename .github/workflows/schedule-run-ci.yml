@@ -1,0 +1,74 @@
+# This workflow is aim to let external contributors to run the integration tests.
+# * Check if the user is a external or internal contributor or not (who is in the org or not).
+# * If the user is a internal contributor, label it with "ci:schedule_run_ci".
+# * If the user is a external contributor, remove the label "ci:schedule_run_ci" for each push.
+# * The PR with label "ci:schedule_run_ci" can trigger the `workflows/build.yml`.
+# 
+# If the user is a external contributor, the repo owener or the users with write access should response for add the 
+# label "ci:schedule_run_ci" to allow the external contributor to run the CI.
+name: Schedule run ci
+
+on:
+  pull_request:
+
+jobs:
+  check_permission:
+    name: Check permission
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check if external contributors
+        id: check-contributors-result
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.LABEL_ACTION_PAT }}
+          script: |
+            const org = "AgoraIO-Extensions"
+            let userName = ${{ github.event.pull_request.user.login }}
+
+            // see https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#check-organization-membership-for-a-user
+            const response = await github.request(`GET /orgs/${org}/members/${userName}`, {
+                org: org,
+                username: userName,
+                headers: {
+                  'X-GitHub-Api-Version': '2022-11-28'
+                }
+              })
+
+            if (response.status == 204) {
+                console.log(`Internal contributor: ${userName}`);
+                console.log(`Add label: ci:schedule_run_ci`);
+
+                const prNumber = ${{ github.event.number }}
+                await github.rest.issues.addLabels({
+                    issue_number: prNumber,
+                    owner: 'AgoraIO-Extensions',
+                    repo: 'Agora-Flutter-SDK',
+                    labels: ['ci:schedule_run_ci']
+                  })
+            }
+
+            console.log(`Not a internal contributor: ${response.data}`);
+
+            // 0: internal contributors
+            // 1: external contributors
+            return response.status == 204 ? 0 : 1
+      - name: Remove label ci:schedule_run_ci if necessary
+        # If the external contributor push a new commit, remove the label: ci:schedule_run_ci
+        if: ${{ github.event_name == 'push' && steps.check-contributors-result.outputs.result == 1 }}
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.LABEL_ACTION_PAT }}
+          repo: 'AgoraIO-Extensions'
+          number: 'Agora-Flutter-SDK'
+          labels: ci:schedule_run_ci
+
+
+  schedule_ci:
+    name: Schedule run ci
+    needs: check_permission
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:schedule_run_ci') }}
+    uses: ./.github/workflows/build.yml
+    secrets:
+      MY_APP_ID: ${{ secrets.MY_APP_ID }}
+            
