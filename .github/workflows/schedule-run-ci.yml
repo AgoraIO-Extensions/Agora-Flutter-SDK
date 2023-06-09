@@ -58,11 +58,10 @@ jobs:
             // 1: external contributors
             return response.status == 204 ? 0 : 1
 
-      - run: echo ${{ github.event.action }}
-
       - name: Remove label ci:schedule_run_ci if necessary
-        # If the external contributor (1) push a new commit, remove the label: ci:schedule_run_ci
-        if: ${{ github.event_name == 'push' && steps.check-contributors-result.outputs.result == 1 }}
+        # If the external contributor (steps.check-contributors-result.outputs.result == 1) push a new commit (github.event.action == 'synchronize'), 
+        # remove the label: ci:schedule_run_ci to avoid the contributor do some harmful things.
+        if: ${{ github.event.action == 'synchronize' && steps.check-contributors-result.outputs.result == 1 }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           github_token: ${{ secrets.LABEL_ACTION_PAT }}
