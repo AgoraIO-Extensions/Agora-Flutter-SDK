@@ -10,6 +10,7 @@ name: Schedule run ci
 
 on:
   pull_request:
+    types: [opened, reopened, labeled, synchronize]
 
 jobs:
   check_permission:
