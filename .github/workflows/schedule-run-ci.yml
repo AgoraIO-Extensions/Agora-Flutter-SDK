@@ -25,10 +25,12 @@ jobs:
           debug: true
           script: |
             const org = "AgoraIO-Extensions"
-            let userName = ${{ github.event.pull_request.user.login }}
+            const userName = "${{ github.event.pull_request.user.login }}"
 
             // see https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#check-organization-membership-for-a-user
-            const response = await github.request(`GET /orgs/${org}/members/${userName}`, {
+            const response = await github.request('GET /orgs/{org}/members/{username}', {
+                org: org,
+                username: userName,
                 headers: {
                   'X-GitHub-Api-Version': '2022-11-28'
                 }
