@@ -58,6 +58,8 @@ jobs:
             // 1: external contributors
             return response.status == 204 ? 0 : 1
 
+      - run: echo ${{ github.event_name }}
+
       - name: Remove label ci:schedule_run_ci if necessary
         # If the external contributor (1) push a new commit, remove the label: ci:schedule_run_ci
         if: ${{ github.event_name == 'push' && steps.check-contributors-result.outputs.result == 1 }}
