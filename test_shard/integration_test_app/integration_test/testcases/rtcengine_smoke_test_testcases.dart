@@ -371,5 +371,24 @@ void testCases() {
         await rtcEngine.setupLocalVideo(const VideoCanvas());
       },
     );
+
+    testWidgets(
+      'call release without calling initialize directly, do not thorw error',
+      (WidgetTester tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+            defaultValue: '<YOUR_APP_ID>');
+
+        RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+        await rtcEngine.release();
+
+        await rtcEngine.initialize(RtcEngineContext(
+          appId: engineAppId,
+          areaCode: AreaCode.areaCodeGlob.value(),
+        ));
+      },
+    );
   });
 }

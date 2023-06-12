@@ -312,13 +312,15 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> release({bool sync = false}) async {
-    if (_isReleased) return;
-
     // Same as explanation inside `initialize`. We should wait for
     // the `initialize` function is completed here.
     if (_initializingCompleter != null &&
         !_initializingCompleter!.isCompleted) {
       await _initializingCompleter?.future;
+    }
+
+    if (!_rtcEngineState.isInitialzed || _isReleased) {
+      return;
     }
 
     _releasingCompleter = Completer<void>();
@@ -328,8 +330,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
     await _objectPool.clear();
 
-    await _globalVideoViewController!
-        .detachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
+    await _globalVideoViewController
+        ?.detachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
     _globalVideoViewController = null;
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
