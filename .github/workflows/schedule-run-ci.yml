@@ -80,6 +80,9 @@ jobs:
             const repo = 'Agora-Flutter-SDK'
             const prNumber = "${{ github.event.number }}"
 
+            const theAction = ${{ github.event.action }}
+            const checkContributorResult = ${{ steps.check-contributors-result.outputs.result }}
+
             // see https://docs.github.com/en/rest/issues/labels?apiVersion=2022-11-28
             const response = await github.request('GET /repos/{owner}/{repo}/issues/{issue_number}/labels', {
                 owner: owner,
@@ -101,6 +104,15 @@ jobs:
                 let name = label.name
                 if ("ci:schedule_run_ci" == name) {
                     console.log(`Found label ci:schedule_run_ci, return.`);
+                    
+                    // The label: "ci:schedule_run_ci" is added automatically for internal contributors, which will 
+                    // trigger the action="labeled" when the label is added, skip the action="labeled" to avoid schedule run ci
+                    // multiple times.
+                    if (theAction == 'labeled' && checkContributorResult == 0) {
+                      console.log(`Labeled ci:schedule_run_ci by CI for internal contributors, skip the run.`);
+                      return 1;
+                    }
+
                     return 0;
                 }
             }
