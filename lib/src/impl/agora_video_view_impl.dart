@@ -78,6 +78,8 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
 
   VoidCallback? _listener;
 
+  bool _isDisposed = false;
+
   @override
   void initState() {
     super.initState();
@@ -139,7 +141,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   }
 
   Future<void> _setupNativeView() async {
-    if (_nativeViewIntPtr == 0) {
+    if (_isDisposed || _nativeViewIntPtr == 0) {
       return;
     }
 
@@ -167,6 +169,9 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   }
 
   Future<void> _disposeRender() async {
+    _isDisposed = true;
+    _nativeViewIntPtr = 0;
+
     await widget.controller.disposeRender();
     await getMethodChannel()?.invokeMethod<int>('deleteNativeViewPtr');
   }

@@ -97,15 +97,19 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       setupMode: canvas.setupMode,
       mediaPlayerId: canvas.mediaPlayerId,
     );
-    if (canvas.uid != 0) {
-      if (connection != null && rtcEngine is RtcEngineEx) {
-        await (rtcEngine as RtcEngineEx)
-            .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+    try {
+      if (canvas.uid != 0) {
+        if (connection != null && rtcEngine is RtcEngineEx) {
+          await (rtcEngine as RtcEngineEx)
+              .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+        } else {
+          await rtcEngine.setupRemoteVideo(videoCanvas);
+        }
       } else {
-        await rtcEngine.setupRemoteVideo(videoCanvas);
+        await rtcEngine.setupLocalVideo(videoCanvas);
       }
-    } else {
-      await rtcEngine.setupLocalVideo(videoCanvas);
+    } catch (e) {
+      debugPrint('disposeRenderInternal error: ${e.toString()}');
     }
   }
 
@@ -158,7 +162,9 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
               VideoViewSetupMode.videoViewSetupReplace.value(),
         );
       }
-    } else {}
+    } else {
+      // do nothing if platform view rendering
+    }
   }
 
   @protected
@@ -173,15 +179,19 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       setupMode: canvas.setupMode,
       mediaPlayerId: canvas.mediaPlayerId,
     );
-    if (canvas.uid != 0) {
-      if (connection != null) {
-        await (rtcEngine as RtcEngineEx)
-            .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+    try {
+      if (canvas.uid != 0) {
+        if (connection != null) {
+          await (rtcEngine as RtcEngineEx)
+              .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+        } else {
+          await rtcEngine.setupRemoteVideo(videoCanvas);
+        }
       } else {
-        await rtcEngine.setupRemoteVideo(videoCanvas);
+        await rtcEngine.setupLocalVideo(videoCanvas);
       }
-    } else {
-      await rtcEngine.setupLocalVideo(videoCanvas);
+    } catch (e) {
+      debugPrint('setupNativeViewInternal error: ${e.toString()}');
     }
   }
 

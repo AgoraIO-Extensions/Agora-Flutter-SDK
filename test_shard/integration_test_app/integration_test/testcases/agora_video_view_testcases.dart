@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/foundation.dart';
@@ -294,4 +295,34 @@ void testCases() {
     },
     skip: Platform.isAndroid,
   );
+
+  testWidgets('Show Local AgoraVideoView pressure test',
+      (WidgetTester tester) async {
+    for (int i = 0; i < 5; i++) {
+      await tester.pumpWidget(_RenderViewWidget(
+        builder: (context, engine) {
+          return SizedBox(
+            height: 100,
+            width: 100,
+            child: AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+            ),
+          );
+        },
+      ));
+
+      final random = Random();
+      final waitDuration = random.nextInt(5000);
+
+      await tester.pumpAndSettle(Duration(milliseconds: waitDuration));
+
+      await tester.pumpWidget(Container());
+      await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+    }
+
+    expect(find.byType(AgoraVideoView), findsNothing);
+  });
 }
