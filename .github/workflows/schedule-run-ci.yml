@@ -80,7 +80,7 @@ jobs:
             const repo = 'Agora-Flutter-SDK'
             const prNumber = "${{ github.event.number }}"
 
-            const theAction = ${{ github.event.action }}
+            const theAction = "${{ github.event.action }}"
             const checkContributorResult = ${{ steps.check-contributors-result.outputs.result }}
 
             // see https://docs.github.com/en/rest/issues/labels?apiVersion=2022-11-28
