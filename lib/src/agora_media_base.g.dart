@@ -282,6 +282,7 @@ AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       samplesPerSec: json['samplesPerSec'] as int?,
       renderTimeMs: json['renderTimeMs'] as int?,
       avsyncType: json['avsync_type'] as int?,
+      presentationMs: json['presentationMs'] as int?,
     );
 
 Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
@@ -301,6 +302,7 @@ Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
   writeNotNull('samplesPerSec', instance.samplesPerSec);
   writeNotNull('renderTimeMs', instance.renderTimeMs);
   writeNotNull('avsync_type', instance.avsyncType);
+  writeNotNull('presentationMs', instance.presentationMs);
   return val;
 }
 

@@ -48,6 +48,7 @@ void generatedTestCases(IrisTester irisTester) {
         Uint8List audioFrameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int audioFrameRenderTimeMs = 10;
         const int audioFrameAvsyncType = 10;
+        const int audioFramePresentationMs = 10;
         final AudioFrame audioFrame = AudioFrame(
           type: audioFrameType,
           samplesPerChannel: audioFrameSamplesPerChannel,
@@ -57,6 +58,7 @@ void generatedTestCases(IrisTester irisTester) {
           buffer: audioFrameBuffer,
           renderTimeMs: audioFrameRenderTimeMs,
           avsyncType: audioFrameAvsyncType,
+          presentationMs: audioFramePresentationMs,
         );
 
         final eventJson = {

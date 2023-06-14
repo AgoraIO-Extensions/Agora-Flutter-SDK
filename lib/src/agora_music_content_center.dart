@@ -309,6 +309,7 @@ class MusicContentCenterEventHandler {
     this.onMusicChartsResult,
     this.onMusicCollectionResult,
     this.onLyricResult,
+    this.onSongSimpleInfoResult,
     this.onPreLoadEvent,
   });
 
@@ -321,11 +322,16 @@ class MusicContentCenterEventHandler {
       MusicContentCenterStatusCode errorCode)? onMusicCollectionResult;
 
   /// @nodoc
-  final void Function(String requestId, String lyricUrl,
+  final void Function(String requestId, int songCode, String lyricUrl,
       MusicContentCenterStatusCode errorCode)? onLyricResult;
 
   /// @nodoc
+  final void Function(String requestId, int songCode, String simpleInfo,
+      MusicContentCenterStatusCode errorCode)? onSongSimpleInfoResult;
+
+  /// @nodoc
   final void Function(
+      String requestId,
       int songCode,
       int percent,
       String lyricUrl,
@@ -409,7 +415,7 @@ abstract class MusicContentCenter {
       String? jsonOption});
 
   /// @nodoc
-  Future<void> preload({required int songCode, String? jsonOption});
+  Future<String> preload(int songCode);
 
   /// @nodoc
   Future<void> removeCache(int songCode);
@@ -422,4 +428,11 @@ abstract class MusicContentCenter {
 
   /// @nodoc
   Future<String> getLyric({required int songCode, int lyricType = 0});
+
+  /// @nodoc
+  Future<String> getSongSimpleInfo(int songCode);
+
+  /// @nodoc
+  Future<int> getInternalSongCode(
+      {required int songCode, required String jsonOption});
 }
