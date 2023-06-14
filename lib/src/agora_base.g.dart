@@ -283,10 +283,46 @@ const _$CompressionPreferenceEnumMap = {
   CompressionPreference.preferQuality: 1,
 };
 
+CodecCapLevels _$CodecCapLevelsFromJson(Map<String, dynamic> json) =>
+    CodecCapLevels(
+      hwDecodingLevel: $enumDecodeNullable(
+          _$VideoCodecCapabilityLevelEnumMap, json['hwDecodingLevel']),
+      swDecodingLevel: $enumDecodeNullable(
+          _$VideoCodecCapabilityLevelEnumMap, json['swDecodingLevel']),
+    );
+
+Map<String, dynamic> _$CodecCapLevelsToJson(CodecCapLevels instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('hwDecodingLevel',
+      _$VideoCodecCapabilityLevelEnumMap[instance.hwDecodingLevel]);
+  writeNotNull('swDecodingLevel',
+      _$VideoCodecCapabilityLevelEnumMap[instance.swDecodingLevel]);
+  return val;
+}
+
+const _$VideoCodecCapabilityLevelEnumMap = {
+  VideoCodecCapabilityLevel.codecCapabilityLevelUnspecified: -1,
+  VideoCodecCapabilityLevel.codecCapabilityLevelBasicSupport: 5,
+  VideoCodecCapabilityLevel.codecCapabilityLevel1080p30fps: 10,
+  VideoCodecCapabilityLevel.codecCapabilityLevel1080p60fps: 20,
+  VideoCodecCapabilityLevel.codecCapabilityLevel4k60fps: 30,
+};
+
 CodecCapInfo _$CodecCapInfoFromJson(Map<String, dynamic> json) => CodecCapInfo(
       codecType:
           $enumDecodeNullable(_$VideoCodecTypeEnumMap, json['codecType']),
       codecCapMask: json['codecCapMask'] as int?,
+      codecLevels: json['codecLevels'] == null
+          ? null
+          : CodecCapLevels.fromJson(
+              json['codecLevels'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CodecCapInfoToJson(CodecCapInfo instance) {
@@ -300,6 +336,7 @@ Map<String, dynamic> _$CodecCapInfoToJson(CodecCapInfo instance) {
 
   writeNotNull('codecType', _$VideoCodecTypeEnumMap[instance.codecType]);
   writeNotNull('codecCapMask', instance.codecCapMask);
+  writeNotNull('codecLevels', instance.codecLevels?.toJson());
   return val;
 }
 
@@ -1165,6 +1202,7 @@ Map<String, dynamic> _$WlAccStatsToJson(WlAccStats instance) {
 VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
       view: json['view'] as int?,
       uid: json['uid'] as int?,
+      backgroundColor: json['backgroundColor'] as int?,
       renderMode:
           $enumDecodeNullable(_$RenderModeTypeEnumMap, json['renderMode']),
       mirrorMode:
@@ -1191,6 +1229,7 @@ Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
 
   writeNotNull('view', instance.view);
   writeNotNull('uid', instance.uid);
+  writeNotNull('backgroundColor', instance.backgroundColor);
   writeNotNull('renderMode', _$RenderModeTypeEnumMap[instance.renderMode]);
   writeNotNull('mirrorMode', _$VideoMirrorModeTypeEnumMap[instance.mirrorMode]);
   writeNotNull('setupMode', _$VideoViewSetupModeEnumMap[instance.setupMode]);
@@ -1921,6 +1960,94 @@ Map<String, dynamic> _$RecorderStreamInfoToJson(RecorderStreamInfo instance) {
   writeNotNull('uid', instance.uid);
   return val;
 }
+
+LogUploadServerInfo _$LogUploadServerInfoFromJson(Map<String, dynamic> json) =>
+    LogUploadServerInfo(
+      serverDomain: json['serverDomain'] as String?,
+      serverPath: json['serverPath'] as String?,
+      serverPort: json['serverPort'] as int?,
+      serverHttps: json['serverHttps'] as bool?,
+    );
+
+Map<String, dynamic> _$LogUploadServerInfoToJson(LogUploadServerInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('serverDomain', instance.serverDomain);
+  writeNotNull('serverPath', instance.serverPath);
+  writeNotNull('serverPort', instance.serverPort);
+  writeNotNull('serverHttps', instance.serverHttps);
+  return val;
+}
+
+AdvancedConfigInfo _$AdvancedConfigInfoFromJson(Map<String, dynamic> json) =>
+    AdvancedConfigInfo(
+      logUploadServer: json['logUploadServer'] == null
+          ? null
+          : LogUploadServerInfo.fromJson(
+              json['logUploadServer'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AdvancedConfigInfoToJson(AdvancedConfigInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('logUploadServer', instance.logUploadServer?.toJson());
+  return val;
+}
+
+LocalAccessPointConfiguration _$LocalAccessPointConfigurationFromJson(
+        Map<String, dynamic> json) =>
+    LocalAccessPointConfiguration(
+      ipList:
+          (json['ipList'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      ipListSize: json['ipListSize'] as int?,
+      domainList: (json['domainList'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      domainListSize: json['domainListSize'] as int?,
+      verifyDomainName: json['verifyDomainName'] as String?,
+      mode: $enumDecodeNullable(_$LocalProxyModeEnumMap, json['mode']),
+      advancedConfig: json['advancedConfig'] == null
+          ? null
+          : AdvancedConfigInfo.fromJson(
+              json['advancedConfig'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$LocalAccessPointConfigurationToJson(
+    LocalAccessPointConfiguration instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('ipList', instance.ipList);
+  writeNotNull('ipListSize', instance.ipListSize);
+  writeNotNull('domainList', instance.domainList);
+  writeNotNull('domainListSize', instance.domainListSize);
+  writeNotNull('verifyDomainName', instance.verifyDomainName);
+  writeNotNull('mode', _$LocalProxyModeEnumMap[instance.mode]);
+  writeNotNull('advancedConfig', instance.advancedConfig?.toJson());
+  return val;
+}
+
+const _$LocalProxyModeEnumMap = {
+  LocalProxyMode.connectivityFirst: 0,
+  LocalProxyMode.localOnly: 1,
+};
 
 SpatialAudioParams _$SpatialAudioParamsFromJson(Map<String, dynamic> json) =>
     SpatialAudioParams(

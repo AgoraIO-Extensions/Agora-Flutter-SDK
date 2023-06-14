@@ -1070,7 +1070,8 @@ class AudioFrame {
       this.samplesPerSec,
       this.buffer,
       this.renderTimeMs,
-      this.avsyncType});
+      this.avsyncType,
+      this.presentationMs});
 
   /// The type of the audio frame. See AudioFrameType.
   @JsonKey(name: 'type')
@@ -1103,6 +1104,10 @@ class AudioFrame {
   /// Reserved for future use.
   @JsonKey(name: 'avsync_type')
   final int? avsyncType;
+
+  /// @nodoc
+  @JsonKey(name: 'presentationMs')
+  final int? presentationMs;
 
   /// @nodoc
   factory AudioFrame.fromJson(Map<String, dynamic> json) =>

@@ -149,9 +149,12 @@ void musicContentCenterSmokeTestCases() {
               MusicContentCenterStatusCode errorCode) {},
           onMusicCollectionResult: (String requestId, MusicCollection result,
               MusicContentCenterStatusCode errorCode) {},
-          onLyricResult: (String requestId, String lyricUrl,
+          onLyricResult: (String requestId, int songCode, String lyricUrl,
               MusicContentCenterStatusCode errorCode) {},
-          onPreLoadEvent: (int songCode,
+          onSongSimpleInfoResult: (String requestId, int songCode,
+              String simpleInfo, MusicContentCenterStatusCode errorCode) {},
+          onPreLoadEvent: (String requestId,
+              int songCode,
               int percent,
               String lyricUrl,
               PreloadStatusCode status,
@@ -349,10 +352,8 @@ void musicContentCenterSmokeTestCases() {
 
       try {
         const int songCode = 10;
-        const String jsonOption = "hello";
         await musicContentCenter.preload(
-          songCode: songCode,
-          jsonOption: jsonOption,
+          songCode,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -507,6 +508,82 @@ void musicContentCenterSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[getLyric] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'getSongSimpleInfo',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+
+      try {
+        const int songCode = 10;
+        await musicContentCenter.getSongSimpleInfo(
+          songCode,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getSongSimpleInfo] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'getInternalSongCode',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+
+      try {
+        const int songCode = 10;
+        const String jsonOption = "hello";
+        await musicContentCenter.getInternalSongCode(
+          songCode: songCode,
+          jsonOption: jsonOption,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[getInternalSongCode] error: ${e.toString()}');
           rethrow;
         }
 
