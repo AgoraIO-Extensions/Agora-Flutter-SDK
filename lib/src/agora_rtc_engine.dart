@@ -1281,11 +1281,15 @@ class ChannelMediaOptions {
   const ChannelMediaOptions(
       {this.publishCameraTrack,
       this.publishSecondaryCameraTrack,
+      this.publishThirdCameraTrack,
+      this.publishFourthCameraTrack,
       this.publishMicrophoneTrack,
       this.publishScreenCaptureVideo,
       this.publishScreenCaptureAudio,
       this.publishScreenTrack,
       this.publishSecondaryScreenTrack,
+      this.publishThirdScreenTrack,
+      this.publishFourthScreenTrack,
       this.publishCustomAudioTrack,
       this.publishCustomAudioTrackId,
       this.publishCustomVideoTrack,
@@ -1318,6 +1322,14 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
+  /// @nodoc
+  @JsonKey(name: 'publishThirdCameraTrack')
+  final bool? publishThirdCameraTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishFourthCameraTrack')
+  final bool? publishFourthCameraTrack;
+
   /// Whether to publish the audio captured by the microphone:true: Publish the audio captured by the microphone.false: Do not publish the audio captured by the microphone.
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
@@ -1337,6 +1349,14 @@ class ChannelMediaOptions {
   /// Whether to publish the video captured from the second screen:true: Publish the video captured from the second screen.false: Do not publish the video captured from the second screen.
   @JsonKey(name: 'publishSecondaryScreenTrack')
   final bool? publishSecondaryScreenTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishThirdScreenTrack')
+  final bool? publishThirdScreenTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishFourthScreenTrack')
+  final bool? publishFourthScreenTrack;
 
   /// Whether to publish the audio captured from a custom source:true: Publish the audio captured from the custom source.false: Do not publish the captured audio from a custom source.
   @JsonKey(name: 'publishCustomAudioTrack')
@@ -1438,31 +1458,6 @@ class ChannelMediaOptions {
   Map<String, dynamic> toJson() => _$ChannelMediaOptionsToJson(this);
 }
 
-/// @nodoc
-@JsonEnum(alwaysCreate: true)
-enum LocalProxyMode {
-  /// @nodoc
-  @JsonValue(0)
-  connectivityFirst,
-
-  /// @nodoc
-  @JsonValue(1)
-  localOnly,
-}
-
-/// @nodoc
-extension LocalProxyModeExt on LocalProxyMode {
-  /// @nodoc
-  static LocalProxyMode fromValue(int value) {
-    return $enumDecode(_$LocalProxyModeEnumMap, value);
-  }
-
-  /// @nodoc
-  int value() {
-    return _$LocalProxyModeEnumMap[this]!;
-  }
-}
-
 /// The cloud proxy type.
 @JsonEnum(alwaysCreate: true)
 enum ProxyType {
@@ -1506,104 +1501,6 @@ extension ProxyTypeExt on ProxyType {
   int value() {
     return _$ProxyTypeEnumMap[this]!;
   }
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class LogUploadServerInfo {
-  /// @nodoc
-  const LogUploadServerInfo(
-      {this.serverDomain, this.serverPath, this.serverPort, this.serverHttps});
-
-  /// @nodoc
-  @JsonKey(name: 'serverDomain')
-  final String? serverDomain;
-
-  /// @nodoc
-  @JsonKey(name: 'serverPath')
-  final String? serverPath;
-
-  /// @nodoc
-  @JsonKey(name: 'serverPort')
-  final int? serverPort;
-
-  /// @nodoc
-  @JsonKey(name: 'serverHttps')
-  final bool? serverHttps;
-
-  /// @nodoc
-  factory LogUploadServerInfo.fromJson(Map<String, dynamic> json) =>
-      _$LogUploadServerInfoFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$LogUploadServerInfoToJson(this);
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AdvancedConfigInfo {
-  /// @nodoc
-  const AdvancedConfigInfo({this.logUploadServer});
-
-  /// @nodoc
-  @JsonKey(name: 'logUploadServer')
-  final LogUploadServerInfo? logUploadServer;
-
-  /// @nodoc
-  factory AdvancedConfigInfo.fromJson(Map<String, dynamic> json) =>
-      _$AdvancedConfigInfoFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$AdvancedConfigInfoToJson(this);
-}
-
-/// @nodoc
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class LocalAccessPointConfiguration {
-  /// @nodoc
-  const LocalAccessPointConfiguration(
-      {this.ipList,
-      this.ipListSize,
-      this.domainList,
-      this.domainListSize,
-      this.verifyDomainName,
-      this.mode,
-      this.advancedConfig});
-
-  /// @nodoc
-  @JsonKey(name: 'ipList')
-  final List<String>? ipList;
-
-  /// @nodoc
-  @JsonKey(name: 'ipListSize')
-  final int? ipListSize;
-
-  /// @nodoc
-  @JsonKey(name: 'domainList')
-  final List<String>? domainList;
-
-  /// @nodoc
-  @JsonKey(name: 'domainListSize')
-  final int? domainListSize;
-
-  /// @nodoc
-  @JsonKey(name: 'verifyDomainName')
-  final String? verifyDomainName;
-
-  /// @nodoc
-  @JsonKey(name: 'mode')
-  final LocalProxyMode? mode;
-
-  /// @nodoc
-  @JsonKey(name: 'advancedConfig')
-  final AdvancedConfigInfo? advancedConfig;
-
-  /// @nodoc
-  factory LocalAccessPointConfiguration.fromJson(Map<String, dynamic> json) =>
-      _$LocalAccessPointConfigurationFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$LocalAccessPointConfigurationToJson(this);
 }
 
 /// The options for leaving a channel.
@@ -3075,6 +2972,19 @@ abstract class RtcEngine {
   /// Returns
   /// One CodecCapInfo array indicating the video encoding capability of the device, if the method call succeeds. If the call timeouts, please modify the call logic and do not invoke the method in the main thread.
   Future<List<CodecCapInfo>> queryCodecCapability(int size);
+
+  /// @nodoc
+  Future<void> preloadChannel(
+      {required String token, required String channelId, required int uid});
+
+  /// @nodoc
+  Future<void> preloadChannelWithUserAccount(
+      {required String token,
+      required String channelId,
+      required String userAccount});
+
+  /// @nodoc
+  Future<void> updatePreloadChannelToken(String token);
 
   /// Joins a channel with media options.
   ///
@@ -4694,6 +4604,12 @@ abstract class RtcEngine {
   Future<void> setCameraExposurePosition(
       {required double positionXinView, required double positionYinView});
 
+  /// @nodoc
+  Future<bool> isCameraExposureSupported();
+
+  /// @nodoc
+  Future<void> setCameraExposureFactor(double value);
+
   /// Checks whether the device supports auto exposure.
   ///
   /// This method applies to iOS only. Call this method before calling joinChannel , enableVideo , or enableLocalVideo , depending on which method you use to turn on your local camera.
@@ -4739,6 +4655,9 @@ abstract class RtcEngine {
   /// Returns
   /// true : The speakerphone is enabled, and the audio plays from the speakerphone. false : The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
   Future<bool> isSpeakerphoneEnabled();
+
+  /// @nodoc
+  Future<void> setRouteInCommunicationMode(int route);
 
   /// Gets a list of shareable screens and windows.
   ///

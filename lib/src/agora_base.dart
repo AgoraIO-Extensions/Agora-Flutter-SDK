@@ -1010,6 +1010,43 @@ extension ScreenCaptureFramerateCapabilityExt
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum VideoCodecCapabilityLevel {
+  /// @nodoc
+  @JsonValue(-1)
+  codecCapabilityLevelUnspecified,
+
+  /// @nodoc
+  @JsonValue(5)
+  codecCapabilityLevelBasicSupport,
+
+  /// @nodoc
+  @JsonValue(10)
+  codecCapabilityLevel1080p30fps,
+
+  /// @nodoc
+  @JsonValue(20)
+  codecCapabilityLevel1080p60fps,
+
+  /// @nodoc
+  @JsonValue(30)
+  codecCapabilityLevel4k60fps,
+}
+
+/// @nodoc
+extension VideoCodecCapabilityLevelExt on VideoCodecCapabilityLevel {
+  /// @nodoc
+  static VideoCodecCapabilityLevel fromValue(int value) {
+    return $enumDecode(_$VideoCodecCapabilityLevelEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$VideoCodecCapabilityLevelEnumMap[this]!;
+  }
+}
+
 /// Video codec types.
 @JsonEnum(alwaysCreate: true)
 enum VideoCodecType {
@@ -1643,11 +1680,33 @@ extension CodecCapMaskExt on CodecCapMask {
   }
 }
 
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class CodecCapLevels {
+  /// @nodoc
+  const CodecCapLevels({this.hwDecodingLevel, this.swDecodingLevel});
+
+  /// @nodoc
+  @JsonKey(name: 'hwDecodingLevel')
+  final VideoCodecCapabilityLevel? hwDecodingLevel;
+
+  /// @nodoc
+  @JsonKey(name: 'swDecodingLevel')
+  final VideoCodecCapabilityLevel? swDecodingLevel;
+
+  /// @nodoc
+  factory CodecCapLevels.fromJson(Map<String, dynamic> json) =>
+      _$CodecCapLevelsFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$CodecCapLevelsToJson(this);
+}
+
 /// The codec capability of the device.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CodecCapInfo {
   /// @nodoc
-  const CodecCapInfo({this.codecType, this.codecCapMask});
+  const CodecCapInfo({this.codecType, this.codecCapMask, this.codecLevels});
 
   /// The video codec types. See VideoCodecType.
   @JsonKey(name: 'codecType')
@@ -1656,6 +1715,10 @@ class CodecCapInfo {
   /// The bit mask of the codec type. See CodecCapMask.
   @JsonKey(name: 'codecCapMask')
   final int? codecCapMask;
+
+  /// @nodoc
+  @JsonKey(name: 'codecLevels')
+  final CodecCapLevels? codecLevels;
 
   /// @nodoc
   factory CodecCapInfo.fromJson(Map<String, dynamic> json) =>
@@ -4298,6 +4361,7 @@ class VideoCanvas {
   const VideoCanvas(
       {this.view,
       this.uid,
+      this.backgroundColor,
       this.renderMode,
       this.mirrorMode,
       this.setupMode,
@@ -4313,6 +4377,10 @@ class VideoCanvas {
   /// The user ID.
   @JsonKey(name: 'uid')
   final int? uid;
+
+  /// @nodoc
+  @JsonKey(name: 'backgroundColor')
+  final int? backgroundColor;
 
   /// The rendering mode of the video. See RenderModeType.
   @JsonKey(name: 'renderMode')
@@ -6354,6 +6422,129 @@ class RecorderStreamInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$RecorderStreamInfoToJson(this);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum LocalProxyMode {
+  /// @nodoc
+  @JsonValue(0)
+  connectivityFirst,
+
+  /// @nodoc
+  @JsonValue(1)
+  localOnly,
+}
+
+/// @nodoc
+extension LocalProxyModeExt on LocalProxyMode {
+  /// @nodoc
+  static LocalProxyMode fromValue(int value) {
+    return $enumDecode(_$LocalProxyModeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$LocalProxyModeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LogUploadServerInfo {
+  /// @nodoc
+  const LogUploadServerInfo(
+      {this.serverDomain, this.serverPath, this.serverPort, this.serverHttps});
+
+  /// @nodoc
+  @JsonKey(name: 'serverDomain')
+  final String? serverDomain;
+
+  /// @nodoc
+  @JsonKey(name: 'serverPath')
+  final String? serverPath;
+
+  /// @nodoc
+  @JsonKey(name: 'serverPort')
+  final int? serverPort;
+
+  /// @nodoc
+  @JsonKey(name: 'serverHttps')
+  final bool? serverHttps;
+
+  /// @nodoc
+  factory LogUploadServerInfo.fromJson(Map<String, dynamic> json) =>
+      _$LogUploadServerInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$LogUploadServerInfoToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class AdvancedConfigInfo {
+  /// @nodoc
+  const AdvancedConfigInfo({this.logUploadServer});
+
+  /// @nodoc
+  @JsonKey(name: 'logUploadServer')
+  final LogUploadServerInfo? logUploadServer;
+
+  /// @nodoc
+  factory AdvancedConfigInfo.fromJson(Map<String, dynamic> json) =>
+      _$AdvancedConfigInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$AdvancedConfigInfoToJson(this);
+}
+
+/// @nodoc
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class LocalAccessPointConfiguration {
+  /// @nodoc
+  const LocalAccessPointConfiguration(
+      {this.ipList,
+      this.ipListSize,
+      this.domainList,
+      this.domainListSize,
+      this.verifyDomainName,
+      this.mode,
+      this.advancedConfig});
+
+  /// @nodoc
+  @JsonKey(name: 'ipList')
+  final List<String>? ipList;
+
+  /// @nodoc
+  @JsonKey(name: 'ipListSize')
+  final int? ipListSize;
+
+  /// @nodoc
+  @JsonKey(name: 'domainList')
+  final List<String>? domainList;
+
+  /// @nodoc
+  @JsonKey(name: 'domainListSize')
+  final int? domainListSize;
+
+  /// @nodoc
+  @JsonKey(name: 'verifyDomainName')
+  final String? verifyDomainName;
+
+  /// @nodoc
+  @JsonKey(name: 'mode')
+  final LocalProxyMode? mode;
+
+  /// @nodoc
+  @JsonKey(name: 'advancedConfig')
+  final AdvancedConfigInfo? advancedConfig;
+
+  /// @nodoc
+  factory LocalAccessPointConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$LocalAccessPointConfigurationFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$LocalAccessPointConfigurationToJson(this);
 }
 
 /// The spatial audio parameters.

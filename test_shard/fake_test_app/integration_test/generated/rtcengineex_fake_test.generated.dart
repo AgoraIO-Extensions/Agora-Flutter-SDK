@@ -41,11 +41,15 @@ void rtcEngineExSmokeTestCases() {
             ChannelProfileType.channelProfileCommunication;
         const bool optionsPublishCameraTrack = true;
         const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
         const bool optionsPublishMicrophoneTrack = true;
         const bool optionsPublishScreenCaptureVideo = true;
         const bool optionsPublishScreenCaptureAudio = true;
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
         const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomVideoTrack = true;
@@ -68,11 +72,15 @@ void rtcEngineExSmokeTestCases() {
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
@@ -190,11 +198,15 @@ void rtcEngineExSmokeTestCases() {
             ChannelProfileType.channelProfileCommunication;
         const bool optionsPublishCameraTrack = true;
         const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
         const bool optionsPublishMicrophoneTrack = true;
         const bool optionsPublishScreenCaptureVideo = true;
         const bool optionsPublishScreenCaptureAudio = true;
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
         const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomVideoTrack = true;
@@ -217,11 +229,15 @@ void rtcEngineExSmokeTestCases() {
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomVideoTrack: optionsPublishCustomVideoTrack,
@@ -380,11 +396,13 @@ void rtcEngineExSmokeTestCases() {
         );
         const int canvasView = 10;
         const int canvasUid = 10;
+        const int canvasBackgroundColor = 10;
         const int canvasMediaPlayerId = 10;
         const bool canvasEnableAlphaMask = true;
         const VideoCanvas canvas = VideoCanvas(
           view: canvasView,
           uid: canvasUid,
+          backgroundColor: canvasBackgroundColor,
           renderMode: canvasRenderMode,
           mirrorMode: canvasMirrorMode,
           setupMode: canvasSetupMode,
