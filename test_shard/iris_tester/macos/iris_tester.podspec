@@ -16,8 +16,7 @@ A new Flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*', '../cxx/src/*.h'
   s.dependency 'FlutterMacOS'
-  s.dependency 'IrisDebugger'
-  # s.libraries = 'iris_tester', 'c++', 'resolv'
+  s.vendored_frameworks = 'IrisDebugger.framework'
 
   s.platform = :osx, '10.11'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
