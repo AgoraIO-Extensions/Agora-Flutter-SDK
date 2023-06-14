@@ -205,43 +205,6 @@ extension ChannelMediaOptionsBufferExt on ChannelMediaOptions {
   }
 }
 
-extension LogUploadServerInfoBufferExt on LogUploadServerInfo {
-  LogUploadServerInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension AdvancedConfigInfoBufferExt on AdvancedConfigInfo {
-  AdvancedConfigInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension LocalAccessPointConfigurationBufferExt
-    on LocalAccessPointConfiguration {
-  LocalAccessPointConfiguration fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
 extension LeaveChannelOptionsBufferExt on LeaveChannelOptions {
   LeaveChannelOptions fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -446,6 +409,18 @@ extension EncodedVideoFrameInfoBufferExt on EncodedVideoFrameInfo {
 
 extension AdvanceOptionsBufferExt on AdvanceOptions {
   AdvanceOptions fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension CodecCapLevelsBufferExt on CodecCapLevels {
+  CodecCapLevels fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
@@ -1064,6 +1039,43 @@ extension RecorderStreamInfoBufferExt on RecorderStreamInfo {
   }
 }
 
+extension LogUploadServerInfoBufferExt on LogUploadServerInfo {
+  LogUploadServerInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension AdvancedConfigInfoBufferExt on AdvancedConfigInfo {
+  AdvancedConfigInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+extension LocalAccessPointConfigurationBufferExt
+    on LocalAccessPointConfiguration {
+  LocalAccessPointConfiguration fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension SpatialAudioParamsBufferExt on SpatialAudioParams {
   SpatialAudioParams fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -1285,7 +1297,8 @@ extension AudioFrameBufferExt on AudioFrame {
         samplesPerSec: samplesPerSec,
         buffer: buffer,
         renderTimeMs: renderTimeMs,
-        avsyncType: avsyncType);
+        avsyncType: avsyncType,
+        presentationMs: presentationMs);
   }
 
   List<Uint8List> collectBufferList() {

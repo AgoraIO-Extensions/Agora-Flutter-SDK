@@ -267,6 +267,59 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<void> preloadChannel(
+      {required String token,
+      required String channelId,
+      required int uid}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannel';
+    final param =
+        createParams({'token': token, 'channelId': channelId, 'uid': uid});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+  }
+
+  @override
+  Future<void> preloadChannelWithUserAccount(
+      {required String token,
+      required String channelId,
+      required String userAccount}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannelWithUserAccount';
+    final param = createParams(
+        {'token': token, 'channelId': channelId, 'userAccount': userAccount});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+  }
+
+  @override
+  Future<void> updatePreloadChannelToken(String token) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_updatePreloadChannelToken';
+    final param = createParams({'token': token});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> joinChannel(
       {required String token,
       required String channelId,
@@ -3216,6 +3269,38 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<bool> isCameraExposureSupported() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_isCameraExposureSupported';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as bool;
+  }
+
+  @override
+  Future<void> setCameraExposureFactor(double value) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setCameraExposureFactor';
+    final param = createParams({'value': value});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<bool> isCameraAutoExposureFaceModeSupported() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraAutoExposureFaceModeSupported';
@@ -3294,6 +3379,23 @@ class RtcEngineImpl implements RtcEngine {
     final rm = callApiResult.data;
     final result = rm['result'];
     return result as bool;
+  }
+
+  @override
+  Future<void> setRouteInCommunicationMode(int route) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setRouteInCommunicationMode';
+    final param = createParams({'route': route});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
   }
 
   @override
