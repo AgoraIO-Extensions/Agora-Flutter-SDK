@@ -206,8 +206,7 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
             if (!isPreloaded) {
               _preloadCompleted = Completer();
               _getLyricCompleted = Completer();
-              await _musicContentCenter.preload(
-                  songCode: _selectedMusic.songCode!);
+              await _musicContentCenter.preload(_selectedMusic.songCode!);
               _getLyricRequestId = await _musicContentCenter.getLyric(
                   songCode: _selectedMusic.songCode!);
             } else {
@@ -310,18 +309,30 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
           });
         }
       },
-      onPreLoadEvent: (int songCode, int percent, String lyricUrl,
-          PreloadStatusCode status, MusicContentCenterStatusCode errorCode) {
+      onPreLoadEvent: (
+        String requestId,
+        int songCode,
+        int percent,
+        String lyricUrl,
+        PreloadStatusCode status,
+        MusicContentCenterStatusCode errorCode,
+      ) {
         logSink.log(
-            '[onPreLoadEvent], songCode: $songCode, percent: $percent status: $status, errorCode: $errorCode, lyricUrl: $lyricUrl');
+            '[onPreLoadEvent], requestId: $requestId songCode: $songCode, percent: $percent status: $status, errorCode: $errorCode, lyricUrl: $lyricUrl');
         if (_selectedMusic.songCode == songCode &&
             status == PreloadStatusCode.kPreloadStatusCompleted) {
           _preloadCompleted?.complete();
           _preloadCompleted = null;
         }
       },
-      onLyricResult: (String requestId, String lyricUrl,
-          MusicContentCenterStatusCode errorCode) {
+      onLyricResult: (
+        String requestId,
+        int songCode,
+        String lyricUrl,
+        MusicContentCenterStatusCode errorCode,
+      ) {
+        logSink.log(
+            '[onLyricResult], requestId: $requestId songCode: $songCode, lyricUrl: $lyricUrl errorCode: $errorCode');
         if (_getLyricRequestId == requestId) {
           _getLyricCompleted?.complete(lyricUrl);
           _getLyricCompleted = null;
