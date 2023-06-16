@@ -1,24 +1,22 @@
 # This workflow is aim to let external contributors to run the integration tests.
 # * Check if the user is a external or internal contributor or not (who is in the org or not).
-# * If the user is a internal contributor, label it with "ci:schedule_run_ci".
 # * If the user is a external contributor, remove the label "ci:schedule_run_ci" for each push.
 # * The PR with label "ci:schedule_run_ci" can trigger the `workflows/build.yml`.
 # 
 # If the user is a external contributor, the repo owener or the users with write access should response for add the 
 # label "ci:schedule_run_ci" to allow the external contributor to run the CI.
-name: Schedule run ci
+name: Schedule run ci external
 
 on:
   pull_request_target:
-    types: [opened, reopened, labeled, synchronize]
+    types: [labeled, synchronize]
 
 jobs:
   check_permission:
     name: Check permission
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    outputs:
-        is_schedule_run_ci: ${{ steps.check-label-step.outputs.result }}
     steps:
       - name: Check if external contributors
         id: check-contributors-result
@@ -69,60 +67,10 @@ jobs:
           number: 'Agora-Flutter-SDK'
           labels: ci:schedule_run_ci
 
-      - name: Check if labeled ci:schedule_run_ci
-        id: check-label-step
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.LABEL_ACTION_PAT }}
-          debug: true
-          script: |
-            const owner = "AgoraIO-Extensions"
-            const repo = 'Agora-Flutter-SDK'
-            const prNumber = "${{ github.event.number }}"
-
-            const theAction = "${{ github.event.action }}"
-            const checkContributorResult = ${{ steps.check-contributors-result.outputs.result }}
-
-            // see https://docs.github.com/en/rest/issues/labels?apiVersion=2022-11-28
-            const response = await github.request('GET /repos/{owner}/{repo}/issues/{issue_number}/labels', {
-                owner: owner,
-                repo: repo,
-                issue_number: prNumber,
-                headers: {
-                  'X-GitHub-Api-Version': '2022-11-28'
-                }
-              })
-
-            if (response.status != 200) {
-              return 1;
-            }
-
-            console.log(`response.data: ${response.data}`);
-
-            const labels = response.data;
-            for (let label of labels) {
-                let name = label.name
-                if ("ci:schedule_run_ci" == name) {
-                    console.log(`Found label ci:schedule_run_ci, return.`);
-                    
-                    // The label: "ci:schedule_run_ci" is added automatically for internal contributors, which will 
-                    // trigger the action="labeled" when the label is added, skip the action="labeled" to avoid schedule run ci
-                    // multiple times.
-                    if (theAction == 'labeled' && checkContributorResult == 0) {
-                      console.log(`Labeled ci:schedule_run_ci by CI for internal contributors, skip the run.`);
-                      return 1;
-                    }
-
-                    return 0;
-                }
-            }
-
-            return 1;
-
   schedule_ci:
-    name: Schedule run ci
+    name: Schedule run ci for external contributors
     needs: check_permission
-    if: ${{ needs.check_permission.outputs.is_schedule_run_ci == 0 }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:schedule_run_ci') }}
     uses: ./.github/workflows/build.yml
     secrets:
       MY_APP_ID: ${{ secrets.MY_APP_ID }}
