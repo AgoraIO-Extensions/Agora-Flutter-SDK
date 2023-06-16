@@ -202,47 +202,6 @@ jobs:
   #         disk-size: 8192M
   #         script: bash ci/rendering_test_android.sh
 
-  rendering_test_ios:
-    name: Run Flutter iOS Rendering Tests
-    strategy:
-      matrix:
-        version: ['3.0.0']
-    runs-on: macos-13 # Rendering test on ios simulator need macos 13+
-    timeout-minutes: 120
-    env:
-      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
-    steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: ${{ matrix.version }}
-      - uses: futureware-tech/simulator-action@v2
-        with:
-          model: 'iPhone 13 Pro Max'
-      - name: Checkout hoe
-        uses: actions/checkout@v3
-        with:
-          repository: littleGnAl/hoe
-          ref: littlegnal/update
-          path: hoe
-      - name: Download iris artifacts
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'integration_test:iris_artifacts') }}
-        run: |
-          source scripts/artifacts_version.sh
-          PROJECT_DIR=$(pwd)
-          mkdir -p output
-          cd hoe
-          dart pub get
-          dart run bin/hoe.dart build-agora-flutter-example \
-            --setup-local-dev \
-            --project-dir=${PROJECT_DIR} \
-            --artifacts-output-dir=${PROJECT_DIR}/output \
-            --platforms=ios \
-            --apple-package-name=io.agora.agoraRtcEngineExample \
-            --flutter-package-name=agora_rtc_engine \
-            --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
-      - run: bash ci/rendering_test_ios.sh
-
   rendering_test_macos:
     name: Run Flutter macOS Rendering Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}

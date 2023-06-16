@@ -75,3 +75,17 @@ android_build_task:
     - flutter clean
     - flutter packages get
     - flutter build apk
+
+ios_rendering_test_task:
+  <<: *default_filters
+  <<: *default_macos_container
+
+  create_ios_simulator_script:
+    - xcrun simctl list
+    # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone-13-Pro-Max.
+    # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
+    - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
+
+  run_ios_test_script:
+    - flutter doctor -v
+    - bash ci/rendering_test_ios.sh
