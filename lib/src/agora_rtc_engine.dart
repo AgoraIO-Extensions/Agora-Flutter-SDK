@@ -1322,7 +1322,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishMicrophoneTrack')
   final bool? publishMicrophoneTrack;
 
-  /// Whether to publish the video captured from the screen:true: Publish the video captured from the screen.false: Do not publish the captured video from the screen.This parameter applies to Android and iOS only.
+  /// Whether to publish the video captured from the screen:true: Publish the video captured from the screen.false: Do not publish the video captured from the screen.This parameter applies to Android and iOS only.
   @JsonKey(name: 'publishScreenCaptureVideo')
   final bool? publishScreenCaptureVideo;
 
@@ -1374,7 +1374,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'autoSubscribeVideo')
   final bool? autoSubscribeVideo;
 
-  /// Whether to enable audio capturing or playback:true: Do not enable audio capturing or playback.false: Do not enable audio capturing or playback.
+  /// Whether to enable audio capturing or playback:true: Do not enable audio capturing or playback.false: Do not enable audio capturing or playback.If you need to publish the audio streams captured by your microphone, ensure this parameter is set as true.
   @JsonKey(name: 'enableAudioRecordingOrPlayout')
   final bool? enableAudioRecordingOrPlayout;
 
@@ -2178,7 +2178,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the token expires.
   ///
-  /// When the token expires during a call, the SDK triggers this callback to remind the app to renew the token. Once you receive this callback, you need to generate a new token on your app server, and call joinChannel to rejoin the channel.
+  /// When the token expires during a call, the SDK triggers this callback to remind the app to renew the token. When receiving this callback, you need to generate a new token on your token server and you can renew your token through one of the following ways: Call renewToken to pass in the new token. Call to leave the current channel and then pass in the new token when you call joinChannel to join a channel.
   ///
   /// * [connection] The connection information. See RtcConnection.
   final void Function(RtcConnection connection)? onRequestToken;
@@ -4626,7 +4626,7 @@ abstract class RtcEngine {
 
   /// Enables or disables face detection for the local user.
   ///
-  /// You can call this method either before or after joining a channel. This method is for Android and iOS only. Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following: The width and height of the local video. The position of the human face in the local view. The distance between the human face and the screen. This method needs to be called after the camera is started (for example, by calling joinChannel ).
+  /// You can call this method either before or after joining a channel. This method is for Android and iOS only. Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following: The width and height of the local video. The position of the human face in the local view. The distance between the human face and the screen. This method needs to be called after the camera is started (for example, by calling enableVideo ).
   ///
   /// * [enabled] Whether to enable face detection for the local user:true: Enable face detection.false: (Default) Disable face detection.
   ///
