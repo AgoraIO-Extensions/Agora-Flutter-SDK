@@ -179,7 +179,7 @@ abstract class AudioDeviceManager {
 
   /// Starts an audio device loopback test.
   ///
-  /// This method tests whether the local audio capture device and playback device are working properly. After starting the test, the audio capture device records the local audio, and the audio playback device plays the captured audio. The SDK triggers two independent onAudioVolumeIndication callbacks at the time interval set in this method, which reports the volume information of the capture device ( uid = 0) and the volume information of the playback device ( uid = 1) respectively. This method is for Windows and macOS only. Ensure that you call this method before joining a channel. This method tests local audio devices and does not report the network conditions.
+  /// This method tests whether the local audio capture device and playback device are working properly. After starting the test, the audio capture device records the local audio, and the audio playback device plays the captured audio. The SDK triggers two independent onAudioVolumeIndication callbacks at the time interval set in this method, which reports the volume information of the capture device ( uid = 0) and the volume information of the playback device ( uid = 1) respectively. This method is for Windows and macOS only. You can call this method either before or after joining a channel. This method only takes effect when called by the host. This method tests local audio devices and does not report the network conditions. When you finished testing, call stopAudioDeviceLoopbackTest to stop the audio device loopback test.
   ///
   /// * [indicationInterval] The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends setting a value greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
   ///
@@ -189,7 +189,7 @@ abstract class AudioDeviceManager {
 
   /// Stops the audio device loopback test.
   ///
-  /// This method is for Windows and macOS only. Ensure that you call this method before joining a channel. Ensure that you call this method to stop the loopback test after calling the startAudioDeviceLoopbackTest method.
+  /// This method is for Windows and macOS only. You can call this method either before or after joining a channel. This method only takes effect when called by the host. Ensure that you call this method to stop the loopback test after calling the startAudioDeviceLoopbackTest method.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
