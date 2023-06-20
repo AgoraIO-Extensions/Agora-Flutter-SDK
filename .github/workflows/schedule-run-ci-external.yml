@@ -37,7 +37,7 @@ jobs:
                 }
               })
 
-            console.log(`Not a internal contributor: ${response.data}`);
+            console.log(`response: ${response.data}`);
             if (response.status == 204) {
                 console.log(`Internal contributor: ${userName}`);
             } else {
