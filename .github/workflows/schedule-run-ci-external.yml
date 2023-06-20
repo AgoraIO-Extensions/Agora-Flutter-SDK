@@ -37,19 +37,11 @@ jobs:
                 }
               })
 
+            console.log(`Not a internal contributor: ${response.data}`);
             if (response.status == 204) {
                 console.log(`Internal contributor: ${userName}`);
-                console.log(`Add label: ci:schedule_run_ci`);
-
-                const prNumber = ${{ github.event.number }}
-                await github.rest.issues.addLabels({
-                    issue_number: prNumber,
-                    owner: 'AgoraIO-Extensions',
-                    repo: 'Agora-Flutter-SDK',
-                    labels: ['ci:schedule_run_ci']
-                  })
             } else {
-                console.log(`Not a internal contributor: ${response.data}`);
+                console.log(`External contributor: ${userName}`);
             }
 
             // 0: internal contributors
