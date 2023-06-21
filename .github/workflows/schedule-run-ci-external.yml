@@ -62,7 +62,7 @@ jobs:
   schedule_ci:
     name: Schedule run ci for external contributors
     needs: check_permission
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:schedule_run_ci') }}
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:schedule_run_ci') }}
     uses: ./.github/workflows/build.yml
     secrets:
       MY_APP_ID: ${{ secrets.MY_APP_ID }}
