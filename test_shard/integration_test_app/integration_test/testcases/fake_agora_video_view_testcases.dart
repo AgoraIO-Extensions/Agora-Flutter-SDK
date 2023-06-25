@@ -88,7 +88,6 @@ void testCases() {
       irisMethodChannel.reset();
     });
 
-    tearDown(() {});
     testWidgets(
       'Show local AgoraVideoView after RtcEngine.initialize',
       (WidgetTester tester) async {
@@ -135,6 +134,81 @@ void testCases() {
         await Future.delayed(const Duration(seconds: 5));
 
         expect(find.byType(AgoraVideoView), findsNothing);
+
+        // Check `VideoViewControllerBaseMixin`'s `disposeRender` called
+        final disposeLocalVideoCalls = irisMethodChannel.methodCallQueue
+            .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+            .toList();
+
+        final disposeLocalVideoCallsJsonMap =
+            jsonDecode(disposeLocalVideoCalls[1].params);
+        expect(disposeLocalVideoCallsJsonMap['canvas']['view'] == 0, isTrue);
+      },
+      skip: !(Platform.isAndroid || Platform.isIOS),
+    );
+
+    testWidgets(
+      'Show/Dispose local AgoraVideoView multiple times with a reused VideoViewController',
+      (WidgetTester tester) async {
+        VideoViewController videoViewController = VideoViewController(
+          rtcEngine: rtcEngine,
+          canvas: const VideoCanvas(uid: 0),
+        );
+
+        for (int i = 0; i < 5; i++) {
+          irisMethodChannel.reset();
+          expect(irisMethodChannel.methodCallQueue.isEmpty, isTrue);
+
+          final videoViewCreatedCompleter = Completer<void>();
+
+          await tester.pumpWidget(_RenderViewWidget(
+            rtcEngine: rtcEngine,
+            builder: (context, engine) {
+              return SizedBox(
+                height: 100,
+                width: 100,
+                child: AgoraVideoView(
+                  controller: videoViewController,
+                  onAgoraVideoViewCreated: (viewId) {
+                    if (!videoViewCreatedCompleter.isCompleted) {
+                      videoViewCreatedCompleter.complete(null);
+                    }
+                  },
+                ),
+              );
+            },
+          ));
+
+          await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+          // pumpAndSettle again to ensure the `AgoraVideoView` shown
+          await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+          await videoViewCreatedCompleter.future;
+
+          final setupLocalVideoCalls = irisMethodChannel.methodCallQueue
+              .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+              .toList();
+
+          final jsonMap2 = jsonDecode(setupLocalVideoCalls[0].params);
+          expect(jsonMap2['canvas']['view'] != 0, isTrue);
+
+          await tester.pumpWidget(Container());
+          await tester.pumpAndSettle(const Duration(milliseconds: 5000));
+
+          // Delay 5 seconds to ensure that previous Widget.dipose call completed.
+          await Future.delayed(const Duration(seconds: 5));
+
+          expect(find.byType(AgoraVideoView), findsNothing);
+
+          // Check `VideoViewControllerBaseMixin`'s `disposeRender` called
+          final disposeLocalVideoCalls = irisMethodChannel.methodCallQueue
+              .where((e) => e.funcName == 'RtcEngine_setupLocalVideo')
+              .toList();
+
+          final disposeLocalVideoCallsJsonMap =
+              jsonDecode(disposeLocalVideoCalls[1].params);
+          expect(disposeLocalVideoCallsJsonMap['canvas']['view'] == 0, isTrue);
+        }
       },
       skip: !(Platform.isAndroid || Platform.isIOS),
     );
