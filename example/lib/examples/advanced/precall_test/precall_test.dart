@@ -192,7 +192,7 @@ class _State extends State<PreCallTest> {
     );
   }
 
-  Future<void> _setVideoDevice(String deviceId) async {
+  Future<void> _setRecordingDevice(String deviceId) async {
     await _audioDeviceManager.setRecordingDevice(deviceId);
 
     setState(() {
@@ -249,8 +249,7 @@ class _State extends State<PreCallTest> {
                       _isStartEchoTest = !_isStartEchoTest;
 
                       if (_isStartEchoTest) {
-                        await _engine.startEchoTest(
-                            const EchoTestConfiguration(
+                        await _engine.startEchoTest(const EchoTestConfiguration(
                             intervalInSeconds: 10, channelId: 'test'));
                       } else {
                         await _engine.stopEchoTest();
@@ -276,10 +275,10 @@ class _State extends State<PreCallTest> {
             ElevatedButton(
               onPressed: _isSetRecordingDeviceEnabled
                   ? () {
-                      _setVideoDevice(_selectedRecordingDeviceId);
+                      _setRecordingDevice(_selectedRecordingDeviceId);
                     }
                   : null,
-              child: const Text('Set video device'),
+              child: const Text('Set recording device'),
             ),
             const SizedBox(
               height: 20,
