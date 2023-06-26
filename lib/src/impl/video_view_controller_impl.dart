@@ -194,6 +194,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     await setupNativeViewInternal(nativeViewPtr);
 
     _isCreatedRender = true;
+    _isDisposeRender = false;
   }
 
   @internal
