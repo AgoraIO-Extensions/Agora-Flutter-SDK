@@ -1337,7 +1337,11 @@ class VideoFrameObserver {
   ///
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios. Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK. The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
-  /// * [videoFrame] The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffermacOS: YUV 420Windows: YUV 420
+  /// * [videoFrame] The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:
+  ///  Android: texture
+  ///  iOS: cvPixelBuffer
+  ///  macOS: YUV 420
+  ///  Windows: YUV 420
   /// * [sourceType] The type of the video source. See VideoSourceType.
   final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
       onPreEncodeVideoFrame;
