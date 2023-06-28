@@ -67,9 +67,13 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @override
   int getTextureId() => _textureId;
 
-  @override
-  void setTextureId(int textureId) {
-    _textureId = textureId;
+  @internal
+  void updateController(VideoViewControllerBase oldController) {
+    assert(oldController is VideoViewControllerBaseMixin);
+    final oldControllerMixin = oldController as VideoViewControllerBaseMixin;
+    _textureId = oldControllerMixin.getTextureId();
+    _isCreatedRender = oldControllerMixin._isCreatedRender;
+    _isDisposeRender = oldControllerMixin._isDisposeRender;
   }
 
   @override
