@@ -149,9 +149,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// A successful call of this method triggers the onUserMuteVideo callback on the remote client. This method does not affect any ongoing video recording, because it does not disable the camera.
   ///
-  /// * [mute] Whether to stop publishing the local video stream.
-  ///  true: Stop publishing the local video stream.
-  ///  false: (Default) Publish the local video stream.
+  /// * [mute] Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -175,7 +173,9 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
   ///
-  /// * [mute] Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
+  /// * [mute] Whether to stop subscribing to the video streams of all remote users.
+  ///  true: Stop subscribing to the video streams of all remote users.
+  ///  false: (Default) Subscribe to the audio streams of all remote users by default.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -187,7 +187,8 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// You can call this method to specify the audio streams of a user that you do not want to subscribe to. You can call this method either before or after joining a channel. The blocklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams , and autoSubscribeAudio in ChannelMediaOptions . Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
   ///
-  /// * [uidList] The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you do not want to subscribe to.
+  ///  If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
   /// * [uidNumber] The number of users in the user ID list.
   /// * [connection] The connection information. See RtcConnection.
   ///
@@ -202,8 +203,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// You can call this method to specify the audio streams of a user that you want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect. You can call this method either before or after joining a channel. The allowlist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions . Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
   ///
-  /// * [uidList] The user ID list of users that you want to subscribe to.
-  ///  If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
+  /// * [uidList] The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
   /// * [uidNumber] The number of users in the user ID list.
   /// * [connection] The connection information. See RtcConnection.
   ///
@@ -306,8 +306,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [enabled] Sets whether to enable loopback audio capture:true: Enable loopback audio capturing.false: (Default) Disable loopback audio capturing.
-  /// * [deviceName] macOS: The device name of the virtual sound card. The default value is set to NULL, which means using AgoraALD for loopback audio capturing.
-  ///  Windows: The device name of the sound card. The default is set to NULL, which means the SDK uses the sound card of your device for loopback audio capturing.
+  /// * [deviceName] macOS: The device name of the virtual sound card. The default value is set to NULL, which means using AgoraALD for loopback audio capturing.Windows: The device name of the sound card. The default is set to NULL, which means the SDK uses the sound card of your device for loopback audio capturing.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
@@ -423,9 +422,12 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// This method enables the SDK to regularly report the volume information to the app of the local user who sends a stream and remote users (three users at most) whose instantaneous volumes are the highest. Once you call this method and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method.
   ///
-  /// * [interval] Sets the time interval between two consecutive volume indications:≤ 0: Disables the volume indication.> 0: Time interval (ms) between two consecutive volume indications. The lowest value is 50.
+  /// * [interval] Sets the time interval between two consecutive volume indications:
+  ///  ≤ 0: Disables the volume indication.
+  ///  > 0: Time interval (ms) between two consecutive volume indications. The lowest value is 50.
   /// * [smooth] The smoothing factor that sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
-  /// * [reportVad] true: Enables the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user.false: (Default) Disables the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
+  /// * [reportVad] true: Enables the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user.
+  ///  false: (Default) Disables the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
@@ -444,10 +446,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// * [connection] The connection information. See RtcConnection.
   ///
   /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure.
-  ///  -2: The URL is null or the string length is 0.
-  ///  -7: The SDK is not initialized before calling this method.
-  ///  -19: The Media Push URL is already in use, use another URL instead.
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly. < 0: Failure. -2: The URL is null or the string length is 0. -7: The SDK is not initialized before calling this method. -19: The Media Push URL is already in use, use another URL instead.
   Future<void> startRtmpStreamWithoutTranscodingEx(
       {required String url, required RtcConnection connection});
 
@@ -571,9 +570,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side. You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream: High-quality video stream: High bitrate, high resolution. Low-quality video stream: Low bitrate, low resolution. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
   ///
-  /// * [enabled] Whether to enable dual-stream mode:
-  ///  true: Enable dual-stream mode.
-  ///  false: (Default) Disable dual-stream mode.
+  /// * [enabled] Whether to enable dual-stream mode:true: Enable dual-stream mode.false: (Default) Disable dual-stream mode.
   /// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig.
   /// * [connection] The connection information. See RtcConnection.
   ///
