@@ -238,11 +238,9 @@ jobs:
             --apple-package-name=io.agora.agoraRtcEngineExample \
             --flutter-package-name=agora_rtc_engine \
             --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
-      - run: |
-          xcrun simctl list
-          # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone-13-Pro-Max.
-          # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
-          xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-2 | xargs xcrun simctl boot
+        - uses: futureware-tech/simulator-action@v2
+          with:
+            model: 'iPhone 14 Pro Max'
       - run: bash ci/rendering_test_ios.sh
 
   rendering_test_macos:
