@@ -25,9 +25,6 @@ abstract class VideoViewControllerBase {
   bool get useAndroidSurfaceView;
 
   @internal
-  void setTextureId(int textureId);
-
-  @internal
   int getTextureId();
 
   @internal
