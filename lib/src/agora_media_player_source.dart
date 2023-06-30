@@ -38,15 +38,15 @@ class MediaPlayerSourceObserver {
   /// After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
   ///
   /// * [eventCode] The player events. See MediaPlayerEvent.
-  /// * [elapsedTime] The time (ms) when the event occurs.
+  /// * [elapsedTime] The time (ms) when  the event occurs.
   /// * [message] Information about the event.
   final void Function(
           MediaPlayerEvent eventCode, int elapsedTime, String message)?
       onPlayerEvent;
 
-  /// Occurs when the media metadata is received.
+  /// Occurs when  the media metadata is received.
   ///
-  /// The callback occurs when the player receives the media metadata and reports the detailed information of the media metadata.
+  /// The callback occurs when  the player receives the media metadata and   reports the detailed information of the media metadata.
   ///
   /// * [data] The detailed data of the media metadata.
   /// * [length] The data length (bytes).
@@ -54,7 +54,9 @@ class MediaPlayerSourceObserver {
 
   /// Reports the playback duration that the buffered data can support.
   ///
-  /// When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support. When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns playerEventBufferLow . When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns playerEventBufferRecover .
+  /// When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support.
+  ///  When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns playerEventBufferLow.
+  ///  When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns playerEventBufferRecover.
   ///
   /// * [playCachedBuffer] The playback duration (ms) that the buffered data can support.
   final void Function(int playCachedBuffer)? onPlayBufferUpdated;
@@ -62,7 +64,7 @@ class MediaPlayerSourceObserver {
   /// Reports the events of preloaded media resources.
   ///
   /// * [src] The URL of the media resource.
-  /// * [event] Events that occur when media resources are preloaded. See PlayerPreloadEvent.
+  /// * [event] Events that occur when  media resources are preloaded. See PlayerPreloadEvent.
   final void Function(String src, PlayerPreloadEvent event)? onPreloadEvent;
 
   /// @nodoc
@@ -71,13 +73,13 @@ class MediaPlayerSourceObserver {
   /// @nodoc
   final void Function()? onAgoraCDNTokenWillExpire;
 
-  /// Occurs when the video bitrate of the media resource changes.
+  /// Occurs when  the video bitrate of the media resource changes.
   ///
   /// * [from] Information about the video bitrate of the media resource being played. See SrcInfo.
   /// * [to] Information about the changed video bitrate of media resource being played. See SrcInfo.
   final void Function(SrcInfo from, SrcInfo to)? onPlayerSrcInfoChanged;
 
-  /// Occurs when information related to the media player changes.
+  /// Occurs when  information related to the media player changes.
   ///
   /// When the information about the media player changes, the SDK triggers this callback. You can use this callback for troubleshooting.
   ///

@@ -7,7 +7,7 @@ const kMaxCharBufferLength = 50;
 /// The playback state.
 @JsonEnum(alwaysCreate: true)
 enum MediaPlayerState {
-  /// 0: The default state. The media player returns this state code before you open the media resource or after you stop the playback.
+  /// 0: The default state. The media player returns this state code before you open the media resource or   after you stop the playback.
   @JsonValue(0)
   playerStateIdle,
 
@@ -108,7 +108,7 @@ enum MediaPlayerError {
   @JsonValue(-4)
   playerErrorInvalidMediaSource,
 
-  /// -5: The media stream type is unknown.
+  /// -5: The  media stream type is unknown.
   @JsonValue(-5)
   playerErrorUnknownStreamType,
 
@@ -132,7 +132,7 @@ enum MediaPlayerError {
   @JsonValue(-10)
   playerErrorUrlNotFound,
 
-  /// -11: Invalid connection between the player and the Agora Server.
+  /// -11: Invalid connection between the player and   the Agora Server.
   @JsonValue(-11)
   playerErrorInvalidConnectionState,
 
@@ -218,7 +218,7 @@ enum MediaPlayerEvent {
   @JsonValue(1)
   playerEventSeekComplete,
 
-  /// 2: An error occurs when seeking to a new playback position.
+  /// 2: An error occurs when  seeking to a new playback position.
   @JsonValue(2)
   playerEventSeekError,
 
@@ -234,11 +234,11 @@ enum MediaPlayerEvent {
   @JsonValue(7)
   playerEventBufferRecover,
 
-  /// 8: The audio or video playback freezes.
+  /// 8: The audio or   video playback freezes.
   @JsonValue(8)
   playerEventFreezeStart,
 
-  /// 9: The audio or video playback resumes without freezing.
+  /// 9: The audio or   video playback resumes without freezing.
   @JsonValue(9)
   playerEventFreezeStop,
 
@@ -292,7 +292,7 @@ extension MediaPlayerEventExt on MediaPlayerEvent {
   }
 }
 
-/// Events that occur when media resources are preloaded.
+/// Events that occur when  media resources are preloaded.
 @JsonEnum(alwaysCreate: true)
 enum PlayerPreloadEvent {
   /// 0: Starts preloading media resources.
@@ -303,7 +303,7 @@ enum PlayerPreloadEvent {
   @JsonValue(1)
   playerPreloadEventComplete,
 
-  /// 2: An error occurs when preloading media resources.
+  /// 2: An error occurs when  preloading media resources.
   @JsonValue(2)
   playerPreloadEventError,
 }
@@ -356,35 +356,35 @@ class PlayerStreamInfo {
   @JsonKey(name: 'language')
   final String? language;
 
-  /// This parameter only takes effect for video streams, and indicates the video frame rate (fps).
+  /// This parameter only takes effect for video streams, and   indicates the video frame rate (fps).
   @JsonKey(name: 'videoFrameRate')
   final int? videoFrameRate;
 
-  /// This parameter only takes effect for video streams, and indicates the video bitrate (bps).
+  /// This parameter only takes effect for video streams, and   indicates the video bitrate (bps).
   @JsonKey(name: 'videoBitRate')
   final int? videoBitRate;
 
-  /// This parameter only takes effect for video streams, and indicates the video width (pixel).
+  /// This parameter only takes effect for video streams, and   indicates the video width (pixel).
   @JsonKey(name: 'videoWidth')
   final int? videoWidth;
 
-  /// This parameter only takes effect for video streams, and indicates the video height (pixel).
+  /// This parameter only takes effect for video streams, and   indicates the video height (pixel).
   @JsonKey(name: 'videoHeight')
   final int? videoHeight;
 
-  /// This parameter only takes effect for video streams, and indicates the video rotation angle.
+  /// This parameter only takes effect for video streams, and   indicates the video rotation angle.
   @JsonKey(name: 'videoRotation')
   final int? videoRotation;
 
-  /// This parameter only takes effect for audio streams, and indicates the audio sample rate (Hz).
+  /// This parameter only takes effect for audio streams, and   indicates the audio sample rate (Hz).
   @JsonKey(name: 'audioSampleRate')
   final int? audioSampleRate;
 
-  /// This parameter only takes effect for audio streams, and indicates the audio channel number.
+  /// This parameter only takes effect for audio streams, and   indicates the audio channel number.
   @JsonKey(name: 'audioChannels')
   final int? audioChannels;
 
-  /// This parameter only takes effect for audio streams, and indicates the bit number of each audio sample.
+  /// This parameter only takes effect for audio streams, and   indicates the bit number of each audio sample.
   @JsonKey(name: 'audioBitsPerSample')
   final int? audioBitsPerSample;
 
@@ -487,7 +487,7 @@ class PlayerUpdatedInfo {
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// The statistics about the media file being cached.If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
+  /// The statistics about the media file being cached. If you call the openWithMediaSource method and   set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'cacheStatistics')
   final CacheStatistics? cacheStatistics;
 
@@ -499,7 +499,7 @@ class PlayerUpdatedInfo {
   Map<String, dynamic> toJson() => _$PlayerUpdatedInfoToJson(this);
 }
 
-/// Information related to the media file to be played and the playback scenario configurations.
+/// Information related to the media file to be played and   the playback scenario configurations.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MediaSource {
   /// @nodoc
@@ -524,19 +524,22 @@ class MediaSource {
   @JsonKey(name: 'startPos')
   final int? startPos;
 
-  /// Whether to enable autoplay once the media file is opened:true: (Default) Enables autoplay.false: Disables autoplay.If autoplay is disabled, you need to call the play method to play a media file after it is opened.
+  /// Whether to enable autoplay once the media file is opened: true : (Default) Enables autoplay. false : Disables autoplay. If autoplay is disabled, you need to call the play method to play a media file after it is opened.
   @JsonKey(name: 'autoPlay')
   final bool? autoPlay;
 
-  /// Whether to cache the media file when it is being played:true:Enables caching.false: (Default) Disables caching.Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
+  /// Whether to cache the media file when  it is being played: true :Enables caching. false : (Default) Disables caching.
+  ///  Agora only supports caching on-demand audio and   video streams that are not transmitted in HLS protocol.
+  ///  If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.
+  ///  If you enable this function, the Media Player caches part of the media file being played on your local device, and   you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
 
-  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service:true: The media resource to be played is a live or on-demand video distributed through Media Broadcast service.false: (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service.If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
+  /// Whether the media resource to be opened is a live stream or   on-demand video distributed through Media Broadcast service: true : The media resource to be played is a live or   on-demand video distributed through Media Broadcast service. false : (Default) The media resource is not a live stream or   on-demand video distributed through Media Broadcast service. If you need to open a live stream or   on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and   set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
   @JsonKey(name: 'isAgoraSource')
   final bool? isAgoraSource;
 
-  /// Whether the media resource to be opened is a live stream:true: The media resource is a live stream.false: (Default) The media resource is not a live stream.If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly.If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
+  /// Whether the media resource to be opened is a live stream: true : The media resource is a live stream. false : (Default) The media resource is not a live stream. If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly. If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
   @JsonKey(name: 'isLiveSource')
   final bool? isLiveSource;
 

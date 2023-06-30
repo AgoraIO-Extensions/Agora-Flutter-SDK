@@ -25,6 +25,7 @@ abstract class MediaPlayerController
 
   /// Creates a MediaPlayerController.
   ///
-  /// Make sure the RtcEngine is initialized before you call this method. Make sure to call this method before calling other APIs in MediaPlayer .
+  /// Make sure the RtcEngine is initialized before you call this method.
+  ///  Make sure to call this method before calling other APIs in MediaPlayer.
   Future<void> initialize();
 }

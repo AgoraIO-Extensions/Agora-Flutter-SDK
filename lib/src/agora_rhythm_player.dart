@@ -4,7 +4,7 @@ part 'agora_rhythm_player.g.dart';
 /// Virtual metronome state.
 @JsonEnum(alwaysCreate: true)
 enum RhythmPlayerStateType {
-  /// (810): The virtual metronome is not enabled or disabled already.
+  /// (810): The virtual metronome is not enabled or   disabled already.
   @JsonValue(810)
   rhythmPlayerStateIdle,
 
@@ -20,7 +20,7 @@ enum RhythmPlayerStateType {
   @JsonValue(813)
   rhythmPlayerStatePlaying,
 
-  /// 814: Failed to start virtual metronome. You can use the reported errorCode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
+  /// 814: Failed to start virtual metronome. You can use the reported errorCode to troubleshoot the cause of the error, or   you can try to start the virtual metronome again.
   @JsonValue(814)
   rhythmPlayerStateFailed,
 }
@@ -49,11 +49,11 @@ enum RhythmPlayerErrorType {
   @JsonValue(1)
   rhythmPlayerErrorFailed,
 
-  /// 801: There is an error when opening the beat files.
+  /// 801: There is an error when  opening the beat files.
   @JsonValue(801)
   rhythmPlayerErrorCanNotOpen,
 
-  /// 802: There is an error when playing the beat files.
+  /// 802: There is an error when  playing the beat files.
   @JsonValue(802)
   rhythmPlayerErrorCanNotPlay,
 
@@ -81,7 +81,7 @@ class AgoraRhythmPlayerConfig {
   /// @nodoc
   const AgoraRhythmPlayerConfig({this.beatsPerMeasure, this.beatsPerMinute});
 
-  /// The number of beats per measure, which ranges from 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
+  /// The number of beats per measure, which ranges from 1 to 9. The default value is 4, which means that each measure contains one downbeat and   three upbeats.
   @JsonKey(name: 'beatsPerMeasure')
   final int? beatsPerMeasure;
 
