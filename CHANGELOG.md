@@ -1,5 +1,20 @@
 # Changelog
 
+### [6.2.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.0...6.2.1) (2023-06-30)
+
+
+### Features
+
+* upgrade native sdk 4.2.1 ([#1161](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1161)) ([fbfeb12](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/fbfeb12aef15ac9a1484c3b987b83b06f7abec20))
+
+
+### Bug Fixes
+
+* do not setup native view if the widget is disposed in platform view rendering ([8fcadea](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/8fcadea2376efb247ffda87fdeccf994d4be31a3))
+* Fix AgoraVideoView not showing correctly when reusing the same VideoViewController ([#1169](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1169)) ([6f79203](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/6f792039b90d408d6a258aa2a9e11ab0284c11f7))
+* Fix VideoViewController state not correct when the AgoraVideoView is reused ([37e4a21](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/37e4a21eb30e4603a2fe850fe304550a63b8c687))
+* no-op if call RtcEngine.release without calling RtcEngine.initialize directly ([95d29ae](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/95d29aeee5ab6dd6c620e38cd5d18b33bc4e06d9))
+
 ## [6.2.0](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.1.1+1...6.2.0) (2023-05-26)
 
 
