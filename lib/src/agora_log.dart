@@ -8,15 +8,15 @@ enum LogLevel {
   @JsonValue(0x0000)
   logLevelNone,
 
-  /// 0x0001: (Default) Output FATAL, ERROR, WARN, and INFO level log information. We recommend setting your log filter to this level.
+  /// 0x0001: (Default) Output FATAL, ERROR, WARN, and   INFO level log information. We recommend setting your log filter to this level.
   @JsonValue(0x0001)
   logLevelInfo,
 
-  /// 0x0002: Output FATAL, ERROR, and WARN level log information.
+  /// 0x0002: Output FATAL, ERROR, and   WARN level log information.
   @JsonValue(0x0002)
   logLevelWarn,
 
-  /// 0x0004: Output FATAL and ERROR level log information.
+  /// 0x0004: Output FATAL and   ERROR level log information.
   @JsonValue(0x0004)
   logLevelError,
 
@@ -53,15 +53,15 @@ enum LogFilterType {
   @JsonValue(0x080f)
   logFilterDebug,
 
-  /// 0x000f: Output logFilterCritical, logFilterError, logFilterWarn, and logFilterInfo level log information. We recommend setting your log filter to this level.
+  /// 0x000f: Output logFilterCritical, logFilterError, logFilterWarn, and   logFilterInfo level log information. We recommend setting your log filter to this level.
   @JsonValue(0x000f)
   logFilterInfo,
 
-  /// 0x000e: Output logFilterCritical, logFilterError, and logFilterWarn level log information.
+  /// 0x000e: Output logFilterCritical, logFilterError, and   logFilterWarn level log information.
   @JsonValue(0x000e)
   logFilterWarn,
 
-  /// 0x000c: Output logFilterCritical and logFilterError level log information.
+  /// 0x000c: Output logFilterCritical and   logFilterError level log information.
   @JsonValue(0x000c)
   logFilterError,
 
@@ -102,15 +102,15 @@ class LogConfig {
   /// @nodoc
   const LogConfig({this.filePath, this.fileSizeInKB, this.level});
 
-  /// The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files.
+  /// The complete path of the log files. Ensure that the path for the log file exists and   is writable. You can use this parameter to rename the log files.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// The size (KB) of an agorasdk.log file. The value range is [128,1024]. The default value is 1,024 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 1,024 KB, the SDK automatically adjusts it to 1,024 KB.
+  /// The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 2,048 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
   @JsonKey(name: 'fileSizeInKB')
   final int? fileSizeInKB;
 
-  /// The output level of the SDK log file. See LogLevel.For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
+  /// The output level of the SDK log file. See LogLevel. For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and   WARN.
   @JsonKey(name: 'level')
   final LogLevel? level;
 
