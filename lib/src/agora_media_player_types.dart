@@ -487,7 +487,7 @@ class PlayerUpdatedInfo {
   @JsonKey(name: 'deviceId')
   final String? deviceId;
 
-  /// The statistics about the media file being cached.If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
+  /// The statistics about the media file being cached. If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'cacheStatistics')
   final CacheStatistics? cacheStatistics;
 
@@ -524,19 +524,22 @@ class MediaSource {
   @JsonKey(name: 'startPos')
   final int? startPos;
 
-  /// Whether to enable autoplay once the media file is opened:true: (Default) Enables autoplay.false: Disables autoplay.If autoplay is disabled, you need to call the play method to play a media file after it is opened.
+  /// Whether to enable autoplay once the media file is opened: true : (Default) Enables autoplay. false : Disables autoplay. If autoplay is disabled, you need to call the play method to play a media file after it is opened.
   @JsonKey(name: 'autoPlay')
   final bool? autoPlay;
 
-  /// Whether to cache the media file when it is being played:true:Enables caching.false: (Default) Disables caching.Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
+  /// Whether to cache the media file when it is being played: true :Enables caching. false : (Default) Disables caching.
+  ///  Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.
+  ///  If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.
+  ///  If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
   @JsonKey(name: 'enableCache')
   final bool? enableCache;
 
-  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service:true: The media resource to be played is a live or on-demand video distributed through Media Broadcast service.false: (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service.If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
+  /// Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service: true : The media resource to be played is a live or on-demand video distributed through Media Broadcast service. false : (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service. If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
   @JsonKey(name: 'isAgoraSource')
   final bool? isAgoraSource;
 
-  /// Whether the media resource to be opened is a live stream:true: The media resource is a live stream.false: (Default) The media resource is not a live stream.If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly.If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
+  /// Whether the media resource to be opened is a live stream: true : The media resource is a live stream. false : (Default) The media resource is not a live stream. If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly. If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
   @JsonKey(name: 'isLiveSource')
   final bool? isLiveSource;
 
