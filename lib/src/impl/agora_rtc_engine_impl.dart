@@ -1038,6 +1038,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   Future<void> destroyMediaRecorder(MediaRecorder mediaRecorder) async {
     final impl = mediaRecorder as media_recorder_impl.MediaRecorderImpl;
 
+    await impl.dispose();
+
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_destroyMediaRecorder';
     final param = createParams({'nativeHandle': impl.strNativeHandle});
