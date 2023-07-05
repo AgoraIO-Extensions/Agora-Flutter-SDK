@@ -46,20 +46,42 @@ class MediaRecorderObserverWrapperOverride
   }
 }
 
+class _MediaRecorderScopedKey extends TypedScopedKey {
+  const _MediaRecorderScopedKey(Type type, this.strNativeHandle) : super(type);
+  final String strNativeHandle;
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is _MediaRecorderScopedKey &&
+        other.type == type &&
+        other.strNativeHandle == strNativeHandle;
+  }
+
+  @override
+  int get hashCode => Object.hash(type, strNativeHandle);
+}
+
 class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
     with ScopedDisposableObjectMixin {
   MediaRecorderImpl._(IrisMethodChannel irisMethodChannel, this.strNativeHandle)
-      : super(irisMethodChannel);
+      : super(irisMethodChannel) {
+    _mediaRecorderScopedKey =
+        _MediaRecorderScopedKey(MediaRecorderImpl, strNativeHandle);
+  }
 
   factory MediaRecorderImpl.fromNativeHandle(
       IrisMethodChannel irisMethodChannel, String strNativeHandle) {
     return MediaRecorderImpl._(irisMethodChannel, strNativeHandle);
   }
 
-  final TypedScopedKey _mediaRecorderScopedKey =
-      const TypedScopedKey(MediaRecorderImpl);
+  late final TypedScopedKey _mediaRecorderScopedKey;
 
   final String strNativeHandle;
+
+  MediaRecorderObserverWrapperOverride? _mediaRecorderObserver;
 
   @override
   Map<String, dynamic> createParams(Map<String, dynamic> param) {
@@ -75,7 +97,7 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
 
     final param = createParams({});
 
-    final eventHandlerWrapper =
+    _mediaRecorderObserver =
         MediaRecorderObserverWrapperOverride(strNativeHandle, callback);
 
     await irisMethodChannel.registerEventHandler(
@@ -83,12 +105,24 @@ class MediaRecorderImpl extends media_recorder_impl_binding.MediaRecorderImpl
             scopedKey: _mediaRecorderScopedKey,
             registerName: 'MediaRecorder_setMediaRecorderObserver',
             unregisterName: 'MediaRecorder_unsetMediaRecorderObserver',
-            handler: eventHandlerWrapper),
+            handler: _mediaRecorderObserver!),
         jsonEncode(param));
   }
 
   @override
   Future<void> dispose() async {
-    await irisMethodChannel.unregisterEventHandlers(_mediaRecorderScopedKey);
+    if (_mediaRecorderObserver == null) {
+      return;
+    }
+
+    final param = createParams({});
+    await irisMethodChannel.unregisterEventHandler(
+        ScopedEvent(
+            scopedKey: _mediaRecorderScopedKey,
+            registerName: 'MediaRecorder_setMediaRecorderObserver',
+            unregisterName: 'MediaRecorder_unsetMediaRecorderObserver',
+            handler: _mediaRecorderObserver!),
+        jsonEncode(param));
+    _mediaRecorderObserver = null;
   }
 }

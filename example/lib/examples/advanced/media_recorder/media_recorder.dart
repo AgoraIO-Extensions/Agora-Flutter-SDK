@@ -44,9 +44,6 @@ class _State extends State<MediaRecorderExample> {
   }
 
   Future<void> _dispose() async {
-    if (_mediaRecorder != null) {
-      await _engine.destroyMediaRecorder(_mediaRecorder!);
-    }
     await _engine.release();
   }
 
@@ -146,7 +143,11 @@ class _State extends State<MediaRecorderExample> {
   }
 
   Future<void> _stopMediaRecording() async {
-    await _mediaRecorder?.stopRecording();
+    if (_mediaRecorder != null) {
+      await _mediaRecorder!.stopRecording();
+      await _engine.destroyMediaRecorder(_mediaRecorder!);
+      _mediaRecorder = null;
+    }
     setState(() {
       _recordingFileStoragePath = '';
       _isStartedMediaRecording = false;
