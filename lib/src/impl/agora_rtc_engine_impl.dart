@@ -35,8 +35,7 @@ import 'package:agora_rtc_engine/src/impl/native_iris_api_engine_binding_delegat
 import 'package:flutter/foundation.dart'
     show ChangeNotifier, defaultTargetPlatform;
 import 'package:flutter/services.dart' show MethodChannel;
-import 'package:flutter/widgets.dart'
-    show VoidCallback, TargetPlatform, debugPrint;
+import 'package:flutter/widgets.dart' show VoidCallback, TargetPlatform;
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:meta/meta.dart';
 
