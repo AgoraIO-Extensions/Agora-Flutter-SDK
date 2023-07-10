@@ -259,11 +259,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _initializingCompleter = Completer<void>();
     engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
-    String externalFilesDir = '';
     if (defaultTargetPlatform == TargetPlatform.android) {
-      final androidInitResult =
-          await engineMethodChannel.invokeMethod('androidInit');
-      externalFilesDir = androidInitResult['externalFilesDir'] ?? '';
+      await engineMethodChannel.invokeMethod('androidInit');
     }
 
     List<int> args = [];
@@ -283,16 +280,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       'RtcEngine_setAppType',
       jsonEncode({'appType': 4}),
     ));
-
-    if (externalFilesDir.isNotEmpty) {
-      try {
-        // Reset the sdk log file to ensure the iris log path has been set
-        await setLogFile('$externalFilesDir/agorasdk.log');
-      } catch (e) {
-        debugPrint(
-            '[RtcEngine] setLogFile fail, make sure the permission is granted.');
-      }
-    }
 
     _rtcEngineState.isInitialzed = true;
     _isReleased = false;
