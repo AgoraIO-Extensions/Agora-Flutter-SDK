@@ -2444,6 +2444,7 @@ const _$NetworkTypeEnumMap = {
   NetworkType.networkTypeMobile2g: 3,
   NetworkType.networkTypeMobile3g: 4,
   NetworkType.networkTypeMobile4g: 5,
+  NetworkType.networkTypeMobile5g: 6,
 };
 
 const _$AudioTrackTypeEnumMap = {

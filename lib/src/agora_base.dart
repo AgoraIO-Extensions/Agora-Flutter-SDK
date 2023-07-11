@@ -4247,6 +4247,10 @@ enum NetworkType {
   /// 5: The network type is mobile 4G.
   @JsonValue(5)
   networkTypeMobile4g,
+
+  /// 6: The network type is mobile 5G.
+  @JsonValue(6)
+  networkTypeMobile5g,
 }
 
 /// @nodoc
