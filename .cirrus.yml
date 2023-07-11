@@ -41,6 +41,35 @@ android_integratinon_test_task:
     - flutter doctor -v
     - bash ci/run_flutter_integration_test_android.sh
 
+android_build_task:
+  <<: *default_filters
+  <<: *default_macos_container
+
+  matrix:
+    - name: FLUTTER_VERSION 2.10.5
+      env:
+        FLUTTER_VERSION: 2.10.5
+    - name: FLUTTER_VERSION 3.7.0
+      env:
+        FLUTTER_VERSION: 3.7.0
+  switch_flutter_version_script:
+    - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
+    - git fetch
+    - git checkout ${FLUTTER_VERSION} && flutter precache
+
+  build_android_x86_64_script:
+    - cd example
+    - arch -x86_64 flutter doctor -v
+    - arch -x86_64 flutter packages get
+    - arch -x86_64 flutter build apk
+
+  build_android_arm64_script:
+    - cd example
+    - flutter doctor -v
+    - flutter clean
+    - flutter packages get
+    - flutter build apk
+
 ios_rendering_test_task:
   <<: *default_filters
   <<: *default_macos_container
