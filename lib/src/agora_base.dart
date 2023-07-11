@@ -6426,7 +6426,7 @@ class ScreenCaptureParameters2 {
   Map<String, dynamic> toJson() => _$ScreenCaptureParameters2ToJson(this);
 }
 
-/// The rendering state of the media frame. `
+/// The rendering state of the media frame.
 @JsonEnum(alwaysCreate: true)
 enum MediaTraceEvent {
   /// 0: The video frame has been rendered.

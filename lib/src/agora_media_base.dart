@@ -363,7 +363,7 @@ extension ContentInspectTypeExt on ContentInspectType {
   }
 }
 
-/// ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
+/// A ContentInspectModule structure used to configure the frequency of video screenshot and upload.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectModule {
   /// @nodoc

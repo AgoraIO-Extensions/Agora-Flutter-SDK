@@ -1320,15 +1320,15 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishCameraTrack')
   final bool? publishCameraTrack;
 
-  /// Whether to publish the video captured by the second camera: true : Publish the video captured by the second camera. false : (Default) Do not publish the video captured by the second camera.
+  /// Whether to publish the video captured by the second camera: true : Publish the video captured by the second camera. false : Do not publish the video captured by the second camera.
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
-  /// Whether to publish the video captured by the second camera: true : Publish the video captured by the second camera. false : Do not publish the video captured by the second camera. This method is for Windows and macOS only.
+  /// Whether to publish the video captured by the third camera: true : Publish the video captured by the third camera. false : Do not publish the video captured by the third camera. This method is for Windows and macOS only.
   @JsonKey(name: 'publishThirdCameraTrack')
   final bool? publishThirdCameraTrack;
 
-  /// Whether to publish the video captured by the second camera: true : Publish the video captured by the second camera. false : Do not publish the video captured by the second camera. This method is for Windows and macOS only.
+  /// Whether to publish the video captured by the fourth camera: true : Publish the video captured by the fourth camera. false : Do not publish the video captured by the fourth camera. This method is for Windows and macOS only.
   @JsonKey(name: 'publishFourthCameraTrack')
   final bool? publishFourthCameraTrack;
 
@@ -1352,11 +1352,11 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishSecondaryScreenTrack')
   final bool? publishSecondaryScreenTrack;
 
-  /// Whether to publish the video captured from the second screen: true : Publish the captured video from the second screen. false : Do not publish the video captured from the second screen. This method is for Windows and macOS only.
+  /// Whether to publish the video captured from the third screen: true : Publish the captured video from the third screen. false : Do not publish the video captured from the third screen. This method is for Windows and macOS only.
   @JsonKey(name: 'publishThirdScreenTrack')
   final bool? publishThirdScreenTrack;
 
-  /// Whether to publish the video captured from the second screen: true : Publish the captured video from the second screen. false : Do not publish the video captured from the second screen. This method is for Windows and macOS only.
+  /// Whether to publish the video captured from the fourth screen: true : Publish the captured video from the fourth screen. false : Do not publish the video captured from the fourth screen. This method is for Windows and macOS only.
   @JsonKey(name: 'publishFourthScreenTrack')
   final bool? publishFourthScreenTrack;
 
@@ -1536,7 +1536,7 @@ class LeaveChannelOptions {
   Map<String, dynamic> toJson() => _$LeaveChannelOptionsToJson(this);
 }
 
-/// RtcEngineEventHandler The SDK uses the interface to send event notifications to your app. Your app can get those notifications through methods that inherit this interface.
+/// The SDK uses the RtcEngineEventHandler interface to send event notifications to your app. Your app can get those notifications through methods that inherit this interface.
 class RtcEngineEventHandler {
   /// @nodoc
   const RtcEngineEventHandler({
