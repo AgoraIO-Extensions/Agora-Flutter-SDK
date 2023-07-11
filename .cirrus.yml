@@ -49,12 +49,6 @@ android_build_task:
     - name: FLUTTER_VERSION 2.10.5
       env:
         FLUTTER_VERSION: 2.10.5
-    - name: FLUTTER_VERSION 3.0.0
-      env:
-        FLUTTER_VERSION: 3.0.0
-    - name: FLUTTER_VERSION 3.3.0
-      env:
-        FLUTTER_VERSION: 3.3.0
     - name: FLUTTER_VERSION 3.7.0
       env:
         FLUTTER_VERSION: 3.7.0
@@ -75,3 +69,23 @@ android_build_task:
     - flutter clean
     - flutter packages get
     - flutter build apk
+
+ios_rendering_test_task:
+  <<: *default_filters
+  <<: *default_macos_container
+
+  switch_flutter_version_script:
+    - export FLUTTER_VERSION=3.0.0
+    - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
+    - git fetch
+    - git checkout ${FLUTTER_VERSION} && flutter precache
+
+  create_ios_simulator_script:
+    - xcrun simctl list
+    # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone-13-Pro-Max.
+    # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
+    - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
+
+  run_ios_test_script:
+    - flutter doctor -v
+    - bash ci/rendering_test_ios.sh
