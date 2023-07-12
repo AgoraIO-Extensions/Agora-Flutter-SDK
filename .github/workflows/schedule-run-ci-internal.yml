@@ -9,24 +9,27 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     outputs:
-        is_schedule_run_ci: ${{ steps.check-label-step.outputs.result }}
+        is_schedule_run_ci: ${{ steps.check-label-step.outputs.is_schedule_run_ci }}
     steps:
       - name: Check for Secret availability
         id: check-label-step
         # perform secret check & put boolean result as an output
         shell: bash
         run: |
-          if [ "${{ secrets.MY_APP_ID }}" != '' ]; then
-            echo "is_schedule_run_ci=0" >> $GITHUB_OUTPUT;
-          else
+          APP_ID="${{ secrets.MY_APP_ID }}"
+          if [ ! -z "${APP_ID}" ]; then
             echo "is_schedule_run_ci=1" >> $GITHUB_OUTPUT;
+            echo "secrets.MY_APP_ID is not empty, PR opened by the internal contributors"
+          else
+            echo "is_schedule_run_ci=-1" >> $GITHUB_OUTPUT;
+            echo "secrets.MY_APP_ID is empty, PR opened by the external contributors"
           fi
 
   schedule_ci:
     name: Schedule run ci
     needs: check_permission
     # If the PR requested by a external contributor, the secrets.MY_APP_ID should be empty, and skip this workflow
-    if: ${{ needs.check_permission.outputs.is_schedule_run_ci == 0 }}
+    if: ${{ needs.check_permission.outputs.is_schedule_run_ci == 1 }}
     uses: ./.github/workflows/build.yml
     secrets:
       MY_APP_ID: ${{ secrets.MY_APP_ID }}
