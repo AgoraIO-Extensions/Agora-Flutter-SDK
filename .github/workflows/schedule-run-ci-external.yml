@@ -28,30 +28,41 @@ jobs:
             const org = "AgoraIO-Extensions"
             const userName = "${{ github.event.pull_request.user.login }}"
 
-            // see https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#check-organization-membership-for-a-user
-            const response = await github.request('GET /orgs/{org}/members/{username}', {
-                org: org,
-                username: userName,
-                headers: {
-                  'X-GitHub-Api-Version': '2022-11-28'
-                }
-              })
+            let contributorStatus = -1; // unknown
 
-            console.log(`response: ${response.data}`);
-            if (response.status == 204) {
-                console.log(`Internal contributor: ${userName}`);
-            } else {
-                console.log(`External contributor: ${userName}`);
+            try {
+              // see https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#check-organization-membership-for-a-user
+              const response = await github.request('GET /orgs/{org}/members/{username}', {
+                  org: org,
+                  username: userName,
+                  headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                  }
+                })
+
+              console.log(`response: ${response.data}`);
+              if (response.status == 204) {
+                  console.log(`Internal contributor: ${userName}`);
+              } else {
+                  console.log(`External contributor: ${userName}`);
+              }
+
+              // 0: internal contributors
+              // 1: external contributors
+              contributorStatus = response.status == 204 ? 0 : 1
+            } catch (error) {
+              console.log(`Error: ${error.message}`);
+              // 404 mean external contributors
+              contributorStatus = error.status == 404 ? 1 : contributorStatus
+              console.log(`contributorStatus: ${contributorStatus}`);
             }
 
-            // 0: internal contributors
-            // 1: external contributors
-            return response.status == 204 ? 0 : 1
+            return contributorStatus;
 
       - name: Remove label ci:schedule_run_ci if necessary
-        # If the external contributor (steps.check-contributors-result.outputs.result == 1) push a new commit (github.event.action == 'synchronize'), 
+        # If the external contributor (steps.check-contributors-result.outputs.result > 0) push a new commit (github.event.action == 'synchronize'), 
         # remove the label: ci:schedule_run_ci to avoid the contributor do some harmful things.
-        if: ${{ github.event.action == 'synchronize' && steps.check-contributors-result.outputs.result == 1 }}
+        if: ${{ github.event.action == 'synchronize' && steps.check-contributors-result.outputs.result > 0 }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           github_token: ${{ secrets.LABEL_ACTION_PAT }}
