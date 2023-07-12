@@ -75,7 +75,7 @@ ios_rendering_test_task:
   <<: *default_macos_container
 
   switch_flutter_version_script:
-    - export FLUTTER_VERSION=3.0.0
+    - export FLUTTER_VERSION=3.10.5
     - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
     - git fetch
     - git checkout ${FLUTTER_VERSION} && flutter precache
