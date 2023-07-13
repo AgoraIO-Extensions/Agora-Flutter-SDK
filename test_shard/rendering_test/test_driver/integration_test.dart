@@ -8,7 +8,8 @@ const _udpateGoldenKey = 'UPDATE_GOLDEN';
 
 Future<void> main() async {
   await integrationDriver(
-    onScreenshot: (String screenshotName, List<int> screenshotBytes) async {
+    onScreenshot: (String screenshotName, List<int> screenshotBytes,
+        [Map<String, Object?>? args]) async {
       final screenshotPath = 'screenshot/$screenshotName.png';
 
       final srcImage = decodeImage(screenshotBytes);

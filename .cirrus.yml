@@ -75,16 +75,16 @@ ios_rendering_test_task:
   <<: *default_macos_container
 
   switch_flutter_version_script:
-    - export FLUTTER_VERSION=3.0.0
+    - export FLUTTER_VERSION=3.10.5
     - cd ${MACOS_HOST_FLUTTER_SDK_DIR}
     - git fetch
     - git checkout ${FLUTTER_VERSION} && flutter precache
 
   create_ios_simulator_script:
     - xcrun simctl list
-    # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone-13-Pro-Max.
+    # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone 14 Pro Max.
     # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
-    - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
+    - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
 
   run_ios_test_script:
     - flutter doctor -v

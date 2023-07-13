@@ -2,21 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/impl/media_player_controller_impl.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:image/image.dart';
-import 'package:image_compare/image_compare.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:path/path.dart' as path;
-import 'package:image/image.dart' as img;
 
 import 'common/fake_camera_local_video_view.dart';
 import 'common/screenshot_matcher_ext.dart';
 import 'common/widget_tester_ext.dart';
-import 'local_video_view.dart';
-import 'remote_video_view.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
