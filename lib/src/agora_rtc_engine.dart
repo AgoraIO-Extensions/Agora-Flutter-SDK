@@ -1186,11 +1186,11 @@ class ScreenCaptureSourceInfo {
   @JsonKey(name: 'sourceName')
   final String? sourceName;
 
-  /// The image content of the thumbnail. See ThumbImageBuffer
+  /// The image content of the thumbnail. See ThumbImageBuffer.
   @JsonKey(name: 'thumbImage')
   final ThumbImageBuffer? thumbImage;
 
-  /// The image content of the icon. See ThumbImageBuffer
+  /// The image content of the icon. See ThumbImageBuffer.
   @JsonKey(name: 'iconImage')
   final ThumbImageBuffer? iconImage;
 
@@ -1428,7 +1428,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'mediaPlayerAudioDelayMs')
   final int? mediaPlayerAudioDelayMs;
 
-  /// (Optional) The token generated on your server for authentication. See
+  /// (Optional) The token generated on your server for authentication.
   ///  This parameter takes effect only when calling updateChannelMediaOptions or updateChannelMediaOptionsEx.
   ///  Ensure that the App ID, channel name, and user name used for creating the token are the same as those used by the initialize method for initializing the RTC engine, and those used by the joinChannel and joinChannelEx methods for joining the channel.
   @JsonKey(name: 'token')
@@ -1765,7 +1765,7 @@ class RtcEngineEventHandler {
 
   /// Reports the last mile network quality of each user in the channel.
   ///
-  /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server. The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times. txQuality is rxQuality is
+  /// This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server. The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times. txQuality is when the user is not sending a stream; rxQuality is when the user is not receiving a stream.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [remoteUid] The user ID. The network quality of the user with this user ID is reported. If the uid is 0, the local network quality is reported.
@@ -3047,7 +3047,7 @@ abstract class RtcEngine {
   ///  If the call timeouts, please modify the call logic and do not invoke the method in the main thread.
   Future<List<CodecCapInfo>> queryCodecCapability(int size);
 
-  /// Preloads a channel with token, channelId uid
+  /// Preloads a channel with token, channelId, and uid.
   ///
   /// When audience members need to switch between different channels frequently, calling the method can help shortening the time of joining a channel, thus reducing the time it takes for audience members to hear and see the host. As it may take a while for the SDK to preload a channel, Agora recommends that you call this method as soon as possible after obtaining the channel name and user ID to join a channel.
   ///  When calling this method, ensure you set the user role as audience and do not set the audio scenario as audioScenarioChorus, otherwise, this method does not take effect.
@@ -3077,7 +3077,7 @@ abstract class RtcEngine {
   Future<void> preloadChannel(
       {required String token, required String channelId, required int uid});
 
-  /// Preloads a channel with token, channelId userAccount.
+  /// Preloads a channel with token, channelId, and userAccount.
   ///
   /// When audience members need to switch between different channels frequently, calling the method can help shortening the time of joining a channel, thus reducing the time it takes for audience members to hear and see the host. As it may take a while for the SDK to preload a channel, Agora recommends that you call this method as soon as possible after obtaining the channel name and user ID to join a channel. If you join a preloaded channel, leave it and want to rejoin the same channel, you do not need to call this method unless the token for preloading the channel expires.
   ///  Failing to preload a channel does not mean that you can't join a channel, nor will it increase the time of joining a channel.
@@ -5129,7 +5129,7 @@ abstract class RtcEngine {
   /// You can call this method either before or after joining a channel. This method is for Android and iOS only. Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following:
   ///  The width and height of the local video.
   ///  The position of the human face in the local view.
-  ///  The distance between the human face and the screen. This method needs to be called after the camera is started (for example, by calling enableVideo).
+  ///  The distance between the human face and the screen. This method needs to be called after the camera is started (for example, by calling or enableVideo).
   ///
   /// * [enabled] Whether to enable face detection for the local user: true : Enable face detection. false : (Default) Disable face detection.
   ///
@@ -5369,7 +5369,7 @@ abstract class RtcEngine {
   ///  Call this method after joining a channel, and then call updateChannelMediaOptions and set publishScreenTrack or publishSecondaryScreenTrack to true to start screen sharing. Deprecated: This method is deprecated. Use startScreenCaptureByDisplayId instead. Agora strongly recommends using startScreenCaptureByDisplayId if you need to start screen sharing on a device connected to another display. This method shares a screen or part of the screen. You need to specify the area of the screen to be shared. This method applies to Windows only.
   ///
   /// * [screenRect] Sets the relative location of the screen to the virtual screen.
-  /// * [regionRect] Rectangle. If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
+  /// * [regionRect] Sets the relative location of the region to the screen. If you do not set this parameter, the SDK shares the whole screen. See Rectangle. If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
   /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters.
   ///
   /// Returns
@@ -5447,7 +5447,7 @@ abstract class RtcEngine {
   /// This method is for Windows and macOS only.
   ///  Call this method after starting screen sharing or window sharing.
   ///
-  /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters
+  /// * [captureParams] The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
@@ -5666,7 +5666,7 @@ abstract class RtcEngine {
   ///  On the Windows platform, it supports up to 4 video streams captured by cameras + 4 screen sharing streams.
   ///  On the macOS platform, it supports up to 4 video streams captured by cameras + 1 screen sharing stream.
   ///  On Android and iOS platforms, it supports video streams captured by up to 2 cameras (the device itself needs to support dual cameras or supports external cameras) + 1 screen sharing stream.
-  ///  If you need to mix the locally collected video streams, you need to call this method after startCameraCapture or startScreenCaptureBySourceType
+  ///  If you need to mix the locally collected video streams, you need to call this method after startCameraCapture or startScreenCaptureBySourceType.
   ///  If you want to publish the mixed video stream to the channel, you need to set publishTranscodedVideoTrack in ChannelMediaOptions to true when calling joinChannel or updateChannelMediaOptions.
   ///
   /// * [config] Configuration of the local video mixing, see LocalTranscoderConfiguration.
@@ -5680,7 +5680,7 @@ abstract class RtcEngine {
 
   /// Updates the local video mixing configuration.
   ///
-  /// After calling startLocalVideoTranscoder, call this method if you want to update the local video mixing configuration. If you want to update the video source type used for local video mixing, such as adding a second camera or screen to capture video, you need to call this method after startCameraCapture or startScreenCaptureBySourceType
+  /// After calling startLocalVideoTranscoder, call this method if you want to update the local video mixing configuration. If you want to update the video source type used for local video mixing, such as adding a second camera or screen to capture video, you need to call this method after startCameraCapture or startScreenCaptureBySourceType.
   ///
   /// * [config] Configuration of the local video mixing, see LocalTranscoderConfiguration.
   ///
@@ -6284,7 +6284,7 @@ abstract class RtcEngine {
   /// When video screenshot and upload function is enabled, the SDK takes screenshots and upload videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service. Before calling this method, ensure that the video screenshot upload service has been activated. Before calling this method, ensure that Video content moderation service has been activated.
   ///  This method relies on the video screenshot and upload dynamic library libagora_content_inspect_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
-  /// * [enabled] Whether to enable video screenshot and upload true : Enables video screenshot and upload. false : Disables video screenshot and upload.
+  /// * [enabled] Whether to enable video screenshot and upload : true : Enables video screenshot and upload. false : Disables video screenshot and upload.
   /// * [config] Configuration of video screenshot and upload. See ContentInspectConfig.
   ///
   /// Returns

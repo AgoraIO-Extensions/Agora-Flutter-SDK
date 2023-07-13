@@ -154,7 +154,7 @@ abstract class MediaEngine {
   /// When you need to publish multiple custom captured audios in the channel, you can refer to the following steps:
   ///  Call this method to create a custom audio track and get the audio track ID.
   ///  In ChannelMediaOptions of each channel, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
-  ///  If you call pushAudioFrame trackId as the audio track ID set in step 2, you can publish the corresponding custom audio source in multiple channels.
+  ///  If you call pushAudioFrame, and specify trackId as the audio track ID set in step 2, you can publish the corresponding custom audio source in multiple channels.
   ///
   /// * [trackType] The type of the custom audio track. See AudioTrackType.
   /// * [config] The configuration of the custom audio track. See AudioTrackConfig.

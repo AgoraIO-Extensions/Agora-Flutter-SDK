@@ -210,11 +210,11 @@ class AudioParameters {
 /// The use mode of the audio data.
 @JsonEnum(alwaysCreate: true)
 enum RawAudioFrameOpModeType {
-  /// 0: Read-only mode,
+  /// 0: Read-only mode, For example, when users acquire the data with the Agora SDK, then start the media push.
   @JsonValue(0)
   rawAudioFrameOpModeReadOnly,
 
-  /// 2: Read and write mode,
+  /// 2: Read and write mode, For example, when users have their own audio-effect processing module and perform some voice preprocessing, such as a voice change.
   @JsonValue(2)
   rawAudioFrameOpModeReadWrite,
 }
