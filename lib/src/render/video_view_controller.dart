@@ -7,7 +7,10 @@ import 'package:meta/meta.dart';
 
 /// A AgoraVideoView controller for rendering local and remote video.
 ///
-/// On different platforms, the default view corresponding to this class is different: Android: . If you want to use , set the useAndroidSurfaceView property to true . iOS: . If you want to use Flutter Texture, set the useFlutterTexture property to true . macOS and Windows: .
+/// On different platforms, the default view corresponding to this class is different:
+///  Android:. If you want to use, set the useAndroidSurfaceView property to true.
+///  iOS:. If you want to use Flutter Texture, set the useFlutterTexture property to true.
+///  macOS and Windows:.
 abstract class VideoViewControllerBase {
   /// RtcEngine.
   RtcEngine get rtcEngine;
@@ -18,10 +21,10 @@ abstract class VideoViewControllerBase {
   /// The connection information. See RtcConnection.
   RtcConnection? get connection;
 
-  /// Whether to use FlutterTexture to render video:true: Use FlutterTexture to render video.false: Do not use FlutterTexture to render video.FlutterTexture applies to iOS, macOS and Windows platforms.
+  /// Whether to use FlutterTexture to render video: true : Use FlutterTexture to render video. false : Do not use FlutterTexture to render video. FlutterTexture applies to iOS, macOS and Windows platforms.
   bool get useFlutterTexture;
 
-  /// Whether to use Android SurfaceView to render video:true: Use Android SurfaceView to render video.false: Do not use Android SurfaceView to render video.Android SurfaceView applies to Android platform only.
+  /// Whether to use Android SurfaceView to render video: true : Use Android SurfaceView to render video. false : Do not use Android SurfaceView to render video. Android SurfaceView applies to Android platform only.
   bool get useAndroidSurfaceView;
 
   @internal
@@ -53,7 +56,10 @@ abstract class VideoViewControllerBase {
 
 /// A AgoraVideoView controller for rendering local and remote video.
 ///
-/// On different platforms, the default view corresponding to this class is different: Android: . If you want to use , set the useAndroidSurfaceView property to true . iOS: . If you want to use Flutter Texture, set the useFlutterTexture property to true . macOS and Windows: .
+/// On different platforms, the default view corresponding to this class is different:
+///  Android:. If you want to use, set the useAndroidSurfaceView property to true.
+///  iOS:. If you want to use Flutter Texture, set the useFlutterTexture property to true.
+///  macOS and Windows:.
 class VideoViewController
     with VideoViewControllerBaseMixin
     implements VideoViewControllerBase {
