@@ -2,13 +2,18 @@
 
 @interface AgoraSurfaceView : NSObject <FlutterPlatformView>
 
+@property(nonatomic, strong) VideoViewController *controller;
+
 @property(nonatomic, strong) UIView *surfaceView;
 
 @property(nonatomic, strong) FlutterMethodChannel *methodChannel;
 
 @property(nonatomic) NSString *viewType;
 
+@property(nonatomic) int64_t platformViewId;
+
 - (instancetype)initWith:(NSObject<FlutterBinaryMessenger> *)messenger
+              controller:(VideoViewController *)controller
                    frame:(CGRect)frame
                   viewId:(int64_t)viewId
                     args:(NSDictionary *)args;
@@ -18,12 +23,15 @@
 @implementation AgoraSurfaceView
 
 - (instancetype)initWith:(NSObject<FlutterBinaryMessenger> *)messenger
+              controller:(VideoViewController *)controller
                    frame:(CGRect)frame
                   viewId:(int64_t)viewId
                     args:(NSDictionary *)args {
   if (self = [super init]) {
-      self.viewType = [args objectForKey:@"viewType"];
-    self.surfaceView = [[UIView alloc] initWithFrame:frame];
+    self.controller = controller;
+    self.viewType = [args objectForKey:@"viewType"];
+    self.surfaceView = (UIView *)[self.controller createPlatformRender:viewId frame:frame];
+    self.platformViewId = viewId;
     self.methodChannel = [FlutterMethodChannel
         methodChannelWithName:
             [NSString
@@ -52,7 +60,8 @@
 }
 
 - (void)dealloc {
-//  [self.methodChannel setMethodCallHandler:nil];
+    [self.controller dePlatformRenderRef:self.platformViewId];
+    self.surfaceView = NULL;
 }
 
 - (nonnull UIView *)view {
@@ -61,9 +70,20 @@
 
 - (void)onMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
   if ([@"getNativeViewPtr" isEqualToString:call.method]) {
-      result(@((uint64_t)self.surfaceView));
+      if (self.surfaceView) {
+          // Add ref to ensure the `self.surfaceView` not be released by ARC, which will be
+          // de-ref by the `VideoViewController.dePlatformRenderRef`.
+          [self.controller addPlatformRenderRef:self.platformViewId];
+          uint64_t viewId = (uint64_t)self.surfaceView;
+          result(@(viewId));
+      } else {
+          result(@(0));
+      }
+      
+
   } else if ([@"deleteNativeViewPtr" isEqualToString:call.method]) {
       // Do nothing
+      result(@(0));
   }
 }
 
@@ -72,14 +92,17 @@
 @interface AgoraSurfaceViewFactory ()
 
 @property(nonatomic, strong) NSObject<FlutterBinaryMessenger> *messenger;
+@property(nonatomic, strong) VideoViewController *controller;
 
 @end
 
 @implementation AgoraSurfaceViewFactory
 
-- (instancetype)initWith:(NSObject<FlutterBinaryMessenger> *)messenger {
+- (instancetype)initWith:(NSObject<FlutterBinaryMessenger> *)messenger
+              controller:(VideoViewController *)controller {
   if (self = [super init]) {
     self.messenger = messenger;
+    self.controller = controller;
   }
   return self;
 }
@@ -88,6 +111,7 @@
                                             viewIdentifier:(int64_t)viewId
                                                  arguments:(id _Nullable)args {
   return [[AgoraSurfaceView alloc] initWith:self.messenger
+                                 controller:self.controller
                                       frame:frame
                                      viewId:viewId
                                        args:args];

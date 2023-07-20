@@ -88,4 +88,12 @@ class GlobalVideoViewController {
       _destroyTextureRenderCompleters.remove(textureId);
     }
   }
+
+  /// Decrease the ref count of the native view(`UIView` in iOS) of the `platformViewId`.
+  /// Put this function here since the the `MethodChannel` in the `AgoraVideoView` is released
+  /// after `AgoraVideoView.dispose`, so the `MethodChannel.invokeMethod` will never return
+  /// after `AgoraVideoView.dispose`.
+  Future<void> dePlatformRenderRef(int platformViewId) async {
+    await methodChannel.invokeMethod('dePlatfromViewRef', platformViewId);
+  }
 }

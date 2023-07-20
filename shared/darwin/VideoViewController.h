@@ -12,9 +12,13 @@
 - (instancetype)initWith:(NSObject<FlutterTextureRegistry> *)textureRegistry
                messenger: (NSObject<FlutterBinaryMessenger> *)messenger;
 
-- (int64_t)createPlatformRender;
+- (id)createPlatformRender:(int64_t)platformViewId frame:(CGRect)frame;
 
-- (BOOL)destroyPlatformRender:(int64_t)platformRenderId;
+- (BOOL)destroyPlatformRender:(int64_t)platformViewId;
+
+- (BOOL)addPlatformRenderRef:(int64_t)platformViewId;
+
+- (BOOL)dePlatformRenderRef:(int64_t)platformViewId;
 
 - (int64_t)createTextureRender:(intptr_t)irisRtcRenderingHandle
                            uid:(NSNumber *)uid

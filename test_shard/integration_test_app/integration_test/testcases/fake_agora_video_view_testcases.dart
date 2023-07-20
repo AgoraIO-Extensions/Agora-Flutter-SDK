@@ -692,5 +692,63 @@ void testCases() {
     //   },
     //   skip: Platform.isAndroid,
     // );
+
+    testWidgets(
+      'dispose AgoraVideoView not crash before setupLocalVideo/setupRemoteVideo[Ex] call is completed',
+      (WidgetTester tester) async {
+        // This case simulate the `AgoraVideoView` is disposed before setupLocalVideo/setupRemoteVideo[Ex]
+        // is completed.
+
+        irisMethodChannel.config = irisMethodChannel.config.copyWith(
+          isFakeInitilize: false,
+          isFakeInvokeMethod: false,
+          isFakeGetNativeHandle: false,
+          isFakeAddHotRestartListener: false,
+          isFakeRemoveHotRestartListener: false,
+          isFakeDispose: false,
+          delayInvokeMethod: {
+            'RtcEngine_setupLocalVideo': 5000
+          }, // delay the `RtcEngine_setupLocalVideo` to 5s, make it complete after `Widget.dispose` more easier
+        );
+
+        await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: SizedBox(
+            height: 100,
+            width: 100,
+            child: AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: rtcEngine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
+            ),
+          )),
+        ));
+
+        await tester.pumpAndSettle();
+
+        String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+            defaultValue: '<YOUR_APP_ID>');
+
+        await rtcEngine.initialize(RtcEngineContext(
+          appId: engineAppId,
+          areaCode: AreaCode.areaCodeGlob.value(),
+        ));
+
+        // The `AgoraVideoView` will call the `RtcEngine.setupLocalVideo` after `RtcEngine.initialize`,
+        // pump a `Container` to trigger the `dispose` of `AgoraVideoView`. We have blocked the `RtcEngine.setupLocalVideo`
+        // with 5s, the `AgoraVideoView.dipose` should be called before the `RtcEngine.setupLocalVideo`.
+        await tester.pumpWidget(Container());
+        await tester.pumpAndSettle();
+        // pumpAndSettle again to ensure the flutter PlatformView's `dispose` called that inside `AgoraVideoView`
+        await tester.pumpAndSettle();
+        await Future.delayed(const Duration(seconds: 5));
+
+        expect(find.byType(AgoraVideoView), findsNothing);
+
+        await rtcEngine.release();
+      },
+      skip: !(Platform.isAndroid || Platform.isIOS),
+    );
   });
 }
