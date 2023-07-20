@@ -19,11 +19,12 @@
   instance.registrar = registrar;
   [registrar addMethodCallDelegate:instance channel:channel];
     
-    [registrar registerViewFactory:[[AgoraSurfaceViewFactory alloc]
-                                       initWith:[registrar messenger]]
-                            withId:@"AgoraSurfaceView"];
+  instance.videoViewController = [[VideoViewController alloc] initWith:registrar.textures messenger:registrar.messenger];
     
-    instance.videoViewController = [[VideoViewController alloc] initWith:registrar.textures messenger:registrar.messenger];
+  [registrar registerViewFactory:[[AgoraSurfaceViewFactory alloc]
+                        initWith:[registrar messenger]
+                      controller:instance.videoViewController]
+                          withId:@"AgoraSurfaceView"];
 }
 
 - (void)getAssetAbsolutePath:(FlutterMethodCall *)call

@@ -45,8 +45,8 @@ import 'global_video_view_controller.dart';
 // ignore_for_file: public_member_api_docs
 
 extension RtcEngineExt on RtcEngine {
-  GlobalVideoViewController get globalVideoViewController =>
-      (this as RtcEngineImpl)._globalVideoViewController!;
+  GlobalVideoViewController? get globalVideoViewController =>
+      (this as RtcEngineImpl)._globalVideoViewController;
 
   ScopedObjects get objectPool => (this as RtcEngineImpl)._objectPool;
 
