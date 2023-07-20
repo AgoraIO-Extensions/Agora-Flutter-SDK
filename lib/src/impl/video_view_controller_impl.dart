@@ -82,7 +82,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   Future<void> disposeRenderInternal() async {
     if (shouldUseFlutterTexture) {
       await rtcEngine.globalVideoViewController
-          .destroyTextureRender(getTextureId());
+          ?.destroyTextureRender(getTextureId());
       _textureId = kTextureNotInit;
       return;
     }
@@ -128,11 +128,15 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     String channelId,
     int videoSourceType,
   ) async {
+    if (rtcEngine.globalVideoViewController == null) {
+      return kTextureNotInit;
+    }
+
     if (_isCreatedRender) {
       return _textureId;
     }
     final textureId =
-        await rtcEngine.globalVideoViewController.createTextureRender(
+        await rtcEngine.globalVideoViewController!.createTextureRender(
       uid,
       channelId,
       videoSourceType,
@@ -190,6 +194,11 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     await setupNativeViewInternal(nativeViewPtr);
 
     _isCreatedRender = true;
+  }
+
+  Future<void> dePlatformRenderRef(int platformViewId) async {
+    await rtcEngine.globalVideoViewController
+        ?.dePlatformRenderRef(platformViewId);
   }
 
   @internal
