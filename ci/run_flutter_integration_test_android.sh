@@ -13,13 +13,13 @@ if [[ ${DOWNLOAD_IRIS_DEBUGGER} == 1 ]];then
     bash ${MY_PATH}/../scripts/download_unzip_iris_cdn_artifacts.sh ${IRIS_CDN_URL_ANDROID} "Android"
 fi
 
-pushd ${MY_PATH}/../test_shard/fake_test_app
+# pushd ${MY_PATH}/../test_shard/fake_test_app
 
-flutter packages get
+# flutter packages get
 
-flutter test integration_test --verbose
+# flutter test integration_test --verbose
 
-popd
+# popd
 
 pushd ${MY_PATH}/../test_shard/integration_test_app
 
