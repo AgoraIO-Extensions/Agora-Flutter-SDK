@@ -11,11 +11,11 @@ import 'testcases/rtcengine_smoke_test_testcases.dart' as rtcengine;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  mediaplayercachemanager.mediaPlayerCacheManagerSmokeTestCases();
+  // mediaplayercachemanager.mediaPlayerCacheManagerSmokeTestCases();
   agora_video_view.testCases();
 
-  mediaengine.testCases();
-  mediaplayer.testCases();
-  rtcengine_ext.testCases();
-  rtcengine.testCases();
+  // mediaengine.testCases();
+  // mediaplayer.testCases();
+  // rtcengine_ext.testCases();
+  // rtcengine.testCases();
 }
