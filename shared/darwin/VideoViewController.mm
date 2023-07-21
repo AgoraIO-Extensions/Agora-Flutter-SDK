@@ -83,6 +83,7 @@
     
     // Not supported on macOS
     NSAssert(false, @"NOT SUPPORTED");
+    return NULL;
 }
 
 - (BOOL)destroyView:(int64_t)viewId {
