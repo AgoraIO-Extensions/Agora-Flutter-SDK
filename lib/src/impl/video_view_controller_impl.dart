@@ -87,25 +87,29 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       return;
     }
 
-    VideoCanvas videoCanvas = VideoCanvas(
-      view: 0, // null
-      renderMode: canvas.renderMode,
-      mirrorMode: canvas.mirrorMode,
-      uid: canvas.uid,
-      sourceType: canvas.sourceType,
-      cropArea: canvas.cropArea,
-      setupMode: canvas.setupMode,
-      mediaPlayerId: canvas.mediaPlayerId,
-    );
-    if (canvas.uid != 0) {
-      if (connection != null && rtcEngine is RtcEngineEx) {
-        await (rtcEngine as RtcEngineEx)
-            .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+    try {
+      VideoCanvas videoCanvas = VideoCanvas(
+        view: 0, // null
+        renderMode: canvas.renderMode,
+        mirrorMode: canvas.mirrorMode,
+        uid: canvas.uid,
+        sourceType: canvas.sourceType,
+        cropArea: canvas.cropArea,
+        setupMode: canvas.setupMode,
+        mediaPlayerId: canvas.mediaPlayerId,
+      );
+      if (canvas.uid != 0) {
+        if (connection != null && rtcEngine is RtcEngineEx) {
+          await (rtcEngine as RtcEngineEx)
+              .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+        } else {
+          await rtcEngine.setupRemoteVideo(videoCanvas);
+        }
       } else {
-        await rtcEngine.setupRemoteVideo(videoCanvas);
+        await rtcEngine.setupLocalVideo(videoCanvas);
       }
-    } else {
-      await rtcEngine.setupLocalVideo(videoCanvas);
+    } catch (e) {
+      debugPrint('disposeRenderInternal error: ${e.toString()}');
     }
   }
 
@@ -163,25 +167,29 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @protected
   Future<void> setupNativeViewInternal(int nativeViewPtr) async {
-    VideoCanvas videoCanvas = VideoCanvas(
-      view: nativeViewPtr,
-      renderMode: canvas.renderMode,
-      mirrorMode: canvas.mirrorMode,
-      uid: canvas.uid,
-      sourceType: canvas.sourceType,
-      cropArea: canvas.cropArea,
-      setupMode: canvas.setupMode,
-      mediaPlayerId: canvas.mediaPlayerId,
-    );
-    if (canvas.uid != 0) {
-      if (connection != null) {
-        await (rtcEngine as RtcEngineEx)
-            .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+    try {
+      VideoCanvas videoCanvas = VideoCanvas(
+        view: nativeViewPtr,
+        renderMode: canvas.renderMode,
+        mirrorMode: canvas.mirrorMode,
+        uid: canvas.uid,
+        sourceType: canvas.sourceType,
+        cropArea: canvas.cropArea,
+        setupMode: canvas.setupMode,
+        mediaPlayerId: canvas.mediaPlayerId,
+      );
+      if (canvas.uid != 0) {
+        if (connection != null) {
+          await (rtcEngine as RtcEngineEx)
+              .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
+        } else {
+          await rtcEngine.setupRemoteVideo(videoCanvas);
+        }
       } else {
-        await rtcEngine.setupRemoteVideo(videoCanvas);
+        await rtcEngine.setupLocalVideo(videoCanvas);
       }
-    } else {
-      await rtcEngine.setupLocalVideo(videoCanvas);
+    } catch (e) {
+      debugPrint('setupNativeViewInternal error: ${e.toString()}');
     }
   }
 
