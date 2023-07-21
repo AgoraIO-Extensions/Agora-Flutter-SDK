@@ -87,7 +87,7 @@ class FakeGlobalVideoViewController {
   FakeGlobalVideoViewController(
       this.rtcEngine, this.testDefaultBinaryMessenger) {
     testDefaultBinaryMessenger.setMockMethodCallHandler(
-        rtcEngine.globalVideoViewController.methodChannel, ((message) async {
+        rtcEngine.globalVideoViewController!.methodChannel, ((message) async {
       methodCallQueue.add(message);
 
       if (message.method == 'createTextureRender') {
@@ -110,7 +110,7 @@ class FakeGlobalVideoViewController {
 
   void dispose() {
     testDefaultBinaryMessenger.setMockMethodCallHandler(
-        rtcEngine.globalVideoViewController.methodChannel, null);
+        rtcEngine.globalVideoViewController!.methodChannel, null);
     reset();
   }
 }
