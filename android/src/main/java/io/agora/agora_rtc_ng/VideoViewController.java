@@ -40,11 +40,13 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
             case "detachVideoFrameBufferManager":
                 result.success(true);
                 break;
+            case "dePlatfromViewRef":
+                result.success(true);
+                break;
 
             case "createTextureRender":
             case "destroyTextureRender":
             case "updateTextureRenderData":
-            case "dePlatfromViewRef":
             default:
                 result.notImplemented();
                 break;
