@@ -44,6 +44,7 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
             case "createTextureRender":
             case "destroyTextureRender":
             case "updateTextureRenderData":
+            case "dePlatfromViewRef":
             default:
                 result.notImplemented();
                 break;
