@@ -1,7 +1,6 @@
 package io.agora.agora_rtc_ng;
 
 import android.content.Context;
-import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -9,7 +8,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import io.agora.iris.IrisApiEngine;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -23,14 +21,18 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
     private final BinaryMessenger messenger;
     private final PlatformViewProvider viewProvider;
 
+    private final VideoViewController controller;
+
     AgoraPlatformViewFactory(
             String viewType,
             BinaryMessenger messenger,
-            PlatformViewProvider viewProvider) {
+            PlatformViewProvider viewProvider,
+            VideoViewController controller) {
         super(StandardMessageCodec.INSTANCE);
         this.viewType = viewType;
         this.messenger = messenger;
         this.viewProvider = viewProvider;
+        this.controller = controller;
     }
 
     interface PlatformViewProvider {
@@ -59,34 +61,41 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
 
         private final MethodChannel methodChannel;
 
+        private final VideoViewController controller;
 
-        private long platformViewPtr;
+        private SimpleRef viewRef;
+
+        private final int platformViewId;
 
         AgoraPlatformView(Context context,
                           String viewType,
                           int viewId,
                           PlatformViewProvider viewProvider,
-                          BinaryMessenger messenger) {
+                          BinaryMessenger messenger,
+                          VideoViewController controller) {
             methodChannel = new MethodChannel(messenger, "agora_rtc_ng/" + viewType + "_" + viewId);
             methodChannel.setMethodCallHandler(this);
-            innerView = viewProvider.provide(context);
+            this.controller = controller;
+            this.platformViewId = viewId;
+            this.viewRef = controller.createPlatformRender(viewId, context, viewProvider);
+
+            innerView = (View) viewRef.getValue();
             parentView = new FrameLayout(context);
             parentView.addView(innerView);
-
-            platformViewPtr = IrisApiEngine.GetJObjectAddress(innerView);
         }
 
         @Override
         public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
             if (call.method.equals("getNativeViewPtr")) {
+                long platformViewPtr = 0L;
+                if (viewRef != null) {
+                    this.controller.addPlatformRenderRef(this.platformViewId);
+                    platformViewPtr = viewRef.getNativeHandle();
+                }
+
                 result.success(platformViewPtr);
             } else if (call.method.equals("deleteNativeViewPtr")) {
-                if (platformViewPtr != 0L) {
-                    IrisApiEngine.FreeJObjectByAddress(platformViewPtr);
-                    platformViewPtr = 0;
-                }
-                parentView.removeAllViews();
-                innerView = null;
+                // Do nothing.
                 result.success(0);
             }
         }
@@ -99,7 +108,11 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
 
         @Override
         public void dispose() {
-
+            this.controller.dePlatformRenderRef(this.platformViewId);
+            viewRef = null;
+            parentView.removeAllViews();
+            parentView = null;
+            innerView = null;
         }
     }
 
@@ -111,7 +124,8 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
                 viewType,
                 viewId,
                 viewProvider,
-                messenger
+                messenger,
+                this.controller
         );
     }
 }
