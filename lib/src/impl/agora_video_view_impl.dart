@@ -73,6 +73,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   static const String _viewTypeAgoraTextureView = 'AgoraTextureView';
   static const String _viewTypeAgoraSurfaceView = 'AgoraSurfaceView';
 
+  int _platformViewId = 0;
   int _nativeViewIntPtr = 0;
   late String _viewType;
 
@@ -137,6 +138,7 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     return buildPlatformView(
       viewType: _viewType,
       onPlatformViewCreated: (int id) {
+        _platformViewId = id;
         _setupVideo();
       },
     );
@@ -147,7 +149,15 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
       return;
     }
 
-    await widget.controller.setupView(_nativeViewIntPtr);
+    try {
+      await widget.controller.setupView(_nativeViewIntPtr);
+    } catch (e) {
+      debugPrint(
+          '[AgoraVideoView] error when widget.controller.setupView: ${e.toString()}');
+    } finally {
+      await _controller(widget.controller).dePlatformRenderRef(_platformViewId);
+    }
+
     widget.onAgoraVideoViewCreated?.call(_nativeViewIntPtr);
   }
 
@@ -175,7 +185,6 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
     _nativeViewIntPtr = 0;
 
     await widget.controller.disposeRender();
-    await getMethodChannel()?.invokeMethod<int>('deleteNativeViewPtr');
   }
 }
 

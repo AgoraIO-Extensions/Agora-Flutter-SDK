@@ -67,8 +67,8 @@ int _string2IntPtr(String stringPtr) {
 }
 
 extension RtcEngineExt on RtcEngine {
-  GlobalVideoViewController get globalVideoViewController =>
-      (this as RtcEngineImpl)._globalVideoViewController!;
+  GlobalVideoViewController? get globalVideoViewController =>
+      (this as RtcEngineImpl)._globalVideoViewController;
 
   ScopedObjects get objectPool => (this as RtcEngineImpl)._objectPool;
 
