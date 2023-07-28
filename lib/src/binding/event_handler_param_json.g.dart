@@ -496,10 +496,7 @@ RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson
     _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonFromJson(
             Map<String, dynamic> json) =>
         RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
+          source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
           elapsed: json['elapsed'] as int?,
         );
 
@@ -507,7 +504,7 @@ Map<String,
     dynamic> _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonToJson(
         RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson instance) =>
     <String, dynamic>{
-      'connection': instance.connection?.toJson(),
+      'source': _$VideoSourceTypeEnumMap[instance.source],
       'elapsed': instance.elapsed,
     };
 
@@ -876,10 +873,7 @@ RtcEngineEventHandlerOnLocalVideoStatsJson
     _$RtcEngineEventHandlerOnLocalVideoStatsJsonFromJson(
             Map<String, dynamic> json) =>
         RtcEngineEventHandlerOnLocalVideoStatsJson(
-          connection: json['connection'] == null
-              ? null
-              : RtcConnection.fromJson(
-                  json['connection'] as Map<String, dynamic>),
+          source: $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['source']),
           stats: json['stats'] == null
               ? null
               : LocalVideoStats.fromJson(json['stats'] as Map<String, dynamic>),
@@ -888,7 +882,7 @@ RtcEngineEventHandlerOnLocalVideoStatsJson
 Map<String, dynamic> _$RtcEngineEventHandlerOnLocalVideoStatsJsonToJson(
         RtcEngineEventHandlerOnLocalVideoStatsJson instance) =>
     <String, dynamic>{
-      'connection': instance.connection?.toJson(),
+      'source': _$VideoSourceTypeEnumMap[instance.source],
       'stats': instance.stats?.toJson(),
     };
 

@@ -4022,10 +4022,7 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const String requestId = "hello";
-        await rtcEngine.uploadLogFile(
-          requestId,
-        );
+        await rtcEngine.uploadLogFile();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[uploadLogFile] error: ${e.toString()}');
@@ -5817,9 +5814,9 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const double value = 10.0;
+        const double factor = 10.0;
         await rtcEngine.setCameraExposureFactor(
-          value,
+          factor,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -7620,7 +7617,7 @@ void rtcEngineSmokeTestCases() {
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
-              (RtcConnection connection, int elapsed) {},
+              (VideoSourceType source, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
               int width, int height, int elapsed) {},
           onVideoSizeChanged: (RtcConnection connection,
@@ -7656,8 +7653,7 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, LocalAudioStats stats) {},
           onRemoteAudioStats:
               (RtcConnection connection, RemoteAudioStats stats) {},
-          onLocalVideoStats:
-              (RtcConnection connection, LocalVideoStats stats) {},
+          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
@@ -7833,7 +7829,7 @@ void rtcEngineSmokeTestCases() {
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
-              (RtcConnection connection, int elapsed) {},
+              (VideoSourceType source, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
               int width, int height, int elapsed) {},
           onVideoSizeChanged: (RtcConnection connection,
@@ -7869,8 +7865,7 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, LocalAudioStats stats) {},
           onRemoteAudioStats:
               (RtcConnection connection, RemoteAudioStats stats) {},
-          onLocalVideoStats:
-              (RtcConnection connection, LocalVideoStats stats) {},
+          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},

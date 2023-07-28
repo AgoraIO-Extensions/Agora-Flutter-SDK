@@ -46,6 +46,18 @@ Map<String, dynamic> _$RtcEngineQueryCodecCapabilityJsonToJson(
       'codecInfo': instance.codecInfo.map((e) => e.toJson()).toList(),
     };
 
+RtcEngineUploadLogFileJson _$RtcEngineUploadLogFileJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtcEngineUploadLogFileJson(
+      json['requestId'] as String,
+    );
+
+Map<String, dynamic> _$RtcEngineUploadLogFileJsonToJson(
+        RtcEngineUploadLogFileJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
 RtcEngineGetExtensionPropertyJson _$RtcEngineGetExtensionPropertyJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetExtensionPropertyJson(

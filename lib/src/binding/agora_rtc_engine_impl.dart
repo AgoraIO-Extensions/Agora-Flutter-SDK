@@ -2274,10 +2274,10 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> uploadLogFile(String requestId) async {
+  Future<String> uploadLogFile() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_uploadLogFile';
-    final param = createParams({'requestId': requestId});
+    final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -2288,6 +2288,8 @@ class RtcEngineImpl implements RtcEngine {
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
+    final uploadLogFileJson = RtcEngineUploadLogFileJson.fromJson(rm);
+    return uploadLogFileJson.requestId;
   }
 
   @override
@@ -3284,10 +3286,10 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> setCameraExposureFactor(double value) async {
+  Future<void> setCameraExposureFactor(double factor) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_setCameraExposureFactor';
-    final param = createParams({'value': value});
+    final param = createParams({'factor': factor});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {

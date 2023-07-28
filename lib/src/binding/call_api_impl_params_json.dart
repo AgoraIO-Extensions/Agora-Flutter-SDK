@@ -43,6 +43,17 @@ class RtcEngineQueryCodecCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineUploadLogFileJson {
+  const RtcEngineUploadLogFileJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory RtcEngineUploadLogFileJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineUploadLogFileJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$RtcEngineUploadLogFileJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineGetExtensionPropertyJson {
   const RtcEngineGetExtensionPropertyJson(this.value);
 

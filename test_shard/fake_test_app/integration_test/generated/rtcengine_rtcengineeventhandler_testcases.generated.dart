@@ -1354,8 +1354,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       final onFirstLocalVideoFramePublishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onFirstLocalVideoFramePublished:
-            (RtcConnection connection, int elapsed) {
+        onFirstLocalVideoFramePublished: (VideoSourceType source, int elapsed) {
           onFirstLocalVideoFramePublishedCompleter.complete(true);
         },
       );
@@ -1368,16 +1367,11 @@ void generatedTestCases(IrisTester irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
+        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
         const int elapsed = 10;
 
         final eventJson = {
-          'connection': connection.toJson(),
+          'source': source.value(),
           'elapsed': elapsed,
         };
 
@@ -2352,7 +2346,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       final onLocalVideoStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onLocalVideoStats: (RtcConnection connection, LocalVideoStats stats) {
+        onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {
           onLocalVideoStatsCompleter.complete(true);
         },
       );
@@ -2365,12 +2359,7 @@ void generatedTestCases(IrisTester irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
+        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
         const QualityAdaptIndication statsQualityAdaptIndication =
             QualityAdaptIndication.adaptNone;
         const VideoCodecType statsCodecType = VideoCodecType.videoCodecNone;
@@ -2423,7 +2412,7 @@ void generatedTestCases(IrisTester irisTester) {
         );
 
         final eventJson = {
-          'connection': connection.toJson(),
+          'source': source.value(),
           'stats': stats.toJson(),
         };
 
