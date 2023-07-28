@@ -46,9 +46,6 @@ extension VideoViewControllerBaseExt on VideoViewControllerBase {
 mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   int _textureId = kTextureNotInit;
 
-  bool _isCreatedRender = false;
-  bool _isDisposeRender = false;
-
   @internal
   bool get isInitialzed => (rtcEngine as RtcEngineImpl).isInitialzed;
 
@@ -72,14 +69,10 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     assert(oldController is VideoViewControllerBaseMixin);
     final oldControllerMixin = oldController as VideoViewControllerBaseMixin;
     _textureId = oldControllerMixin.getTextureId();
-    _isCreatedRender = oldControllerMixin._isCreatedRender;
-    _isDisposeRender = oldControllerMixin._isDisposeRender;
   }
 
   @override
   Future<void> dispose() async {
-    _isDisposeRender = true;
-    _isCreatedRender = false;
   }
 
   @protected
@@ -120,12 +113,6 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   @internal
   @override
   Future<void> disposeRender() async {
-    if (!_isCreatedRender || _isDisposeRender) {
-      return;
-    }
-    _isDisposeRender = true;
-    _isCreatedRender = false;
-
     await disposeRenderInternal();
   }
 
@@ -141,9 +128,6 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       return kTextureNotInit;
     }
 
-    if (_isCreatedRender) {
-      return _textureId;
-    }
     final textureId =
         await rtcEngine.globalVideoViewController!.createTextureRender(
       uid,
@@ -151,9 +135,6 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       videoSourceType,
       videoViewSetupMode,
     );
-
-    _isCreatedRender = true;
-    _isDisposeRender = false;
 
     return textureId;
   }
@@ -205,14 +186,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
 
   @override
   Future<void> setupView(int nativeViewPtr) async {
-    if (_isCreatedRender) {
-      return;
-    }
-
     await setupNativeViewInternal(nativeViewPtr);
-
-    _isCreatedRender = true;
-    _isDisposeRender = false;
   }
 
   Future<void> dePlatformRenderRef(int platformViewId) async {
