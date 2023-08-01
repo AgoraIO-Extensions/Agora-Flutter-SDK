@@ -1,5 +1,21 @@
 # Changelog
 
+## [6.2.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.1...6.2.2) (2023-08-01)
+
+
+### Features
+
+* Upgrade native sdk 4.2.2 ([#1142](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1142)) ([3e04fd5](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/3e04fd52fbecd63dc126d044d8570a2b6219c217))
+
+
+### Bug Fixes
+
+* [android] Fix reset the log file in RtcEngine.initialize cause incorrect log file path ([#1201](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1201)) ([b437bee](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/b437beed39a2ee284a6ff8353a1b0f84703862af))
+* [android/ios] Fix crash due to AgoraVideoView.dispose call before RtcEngine.setupxxVideo is completed ([#1224](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1224)) ([f50c4e4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/f50c4e4a89d64090fc6dac25e9999392abbf4327))
+* ArgumentError: Invalid argument(s): `6` is not one of the supported values ([25471b8](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/25471b86f39ad14e7d7c624c5266121289b0e43c))
+* Fix MediaRecorder.startRecording return -4 after the previous destroy ([76d4dc4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/76d4dc442a4997e7b05e9b9ddfc018845859bf48))
+* Fix VideoViewControllerBaseMixin state in-correct issue ([10038b8](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/10038b87a8297d23addbec6124f69e7e7032f297))
+
 ### [6.2.1](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.0...6.2.1) (2023-06-30)
 
 
