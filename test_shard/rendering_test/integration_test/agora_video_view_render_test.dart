@@ -6,6 +6,8 @@ import 'package:agora_rtc_engine/src/impl/media_player_controller_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import 'common/fake_camera_local_video_view.dart';
+import 'common/fake_camera_remote_video_view.dart';
 import 'common/screenshot_matcher_ext.dart';
 import 'common/widget_tester_ext.dart';
 import 'local_video_view.dart';
@@ -31,34 +33,470 @@ void main() {
   group(
     'AgoraVideoView Android',
     () {
-      testWidgets(
-        'AgoraVideoView local rendering screenshot test',
-        (WidgetTester tester) async {
-          final onFrameCompleter = Completer();
+      group('flutter texture', () {
+        group('local rendering', () {
+          testWidgets(
+            'render mode default',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
 
-          await tester.pumpWidget(LocalVideoView(
-            onRendered: (RtcEngineEx rtcEngine) async {
-              if (onFrameCompleter.isCompleted) {
-                return;
-              }
+              await tester.pumpWidget(FakeCameraLocalVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context) {
+                    return AgoraVideoView(
+                      controller: VideoViewController(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        canvas: const VideoCanvas(
+                          uid: 0,
+                          sourceType: VideoSourceType.videoSourceCustom,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview(
+                          sourceType: VideoSourceType.videoSourceCustom);
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
 
-              onFrameCompleter.complete();
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.local.with_default_rendermode');
+
+              await waitDisposed(tester, binding);
             },
-          ));
+          );
 
-          await tester.pumpAndSettle(const Duration(seconds: 10));
+          testWidgets(
+            'render mode renderModeHidden',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
 
-          await onFrameCompleter.future;
-          await waitFrame(tester);
+              await tester.pumpWidget(FakeCameraLocalVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context) {
+                    return AgoraVideoView(
+                      controller: VideoViewController(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        canvas: const VideoCanvas(
+                          uid: 0,
+                          sourceType: VideoSourceType.videoSourceCustom,
+                          renderMode: RenderModeType.renderModeHidden,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview(
+                          sourceType: VideoSourceType.videoSourceCustom);
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
 
-          await binding.convertFlutterSurfaceToImage();
-          await tester.pumpAndSettle();
+              await tester.pumpAndSettle(const Duration(seconds: 10));
 
-          await binding.takeScreenshot('android.agora_video_view_render.local');
+              await onFrameCompleter.future;
+              await waitFrame(tester);
 
-          await waitDisposed(tester, binding);
-        },
-      );
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.local.with_rendermodehidden');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+
+          testWidgets(
+            'render mode renderModeFit',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraLocalVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context) {
+                    return AgoraVideoView(
+                      controller: VideoViewController(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        canvas: const VideoCanvas(
+                          uid: 0,
+                          sourceType: VideoSourceType.videoSourceCustom,
+                          renderMode: RenderModeType.renderModeFit,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview(
+                          sourceType: VideoSourceType.videoSourceCustom);
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.local.with_rendermodefit');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+
+          testWidgets(
+            'render mode renderModeAdaptive',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraLocalVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context) {
+                    return AgoraVideoView(
+                      controller: VideoViewController(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        canvas: const VideoCanvas(
+                          uid: 0,
+                          sourceType: VideoSourceType.videoSourceCustom,
+                          renderMode: RenderModeType.renderModeAdaptive,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview(
+                          sourceType: VideoSourceType.videoSourceCustom);
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.local.with_rendermodeadaptive');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+
+          testWidgets(
+            'render mode default and videoMirrorModeDisabled',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraLocalVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context) {
+                    return AgoraVideoView(
+                      controller: VideoViewController(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        canvas: const VideoCanvas(
+                            uid: 0,
+                            sourceType: VideoSourceType.videoSourceCustom,
+                            mirrorMode:
+                                VideoMirrorModeType.videoMirrorModeDisabled),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview(
+                          sourceType: VideoSourceType.videoSourceCustom);
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.local.with_default_rendermode.with_videomirrormodedisabled');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+        });
+
+        group('remote rendering', () {
+          testWidgets(
+            'render mode default',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraRemoteVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context, channelId, localUid, remoteUid) {
+                    return AgoraVideoView(
+                      controller: VideoViewController.remote(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        connection: RtcConnection(
+                            channelId: channelId, localUid: localUid),
+                        canvas: VideoCanvas(
+                          uid: remoteUid,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview();
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.remote.with_default_rendermode');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+
+          testWidgets(
+            'render mode renderModeHidden',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraRemoteVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context, channelId, localUid, remoteUid) {
+                    return AgoraVideoView(
+                      controller: VideoViewController.remote(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        connection: RtcConnection(
+                            channelId: channelId, localUid: localUid),
+                        canvas: VideoCanvas(
+                          uid: remoteUid,
+                          renderMode: RenderModeType.renderModeHidden,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview();
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.remote.with_rendermodehidden');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+
+          testWidgets(
+            'render mode renderModeFit',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraRemoteVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context, channelId, localUid, remoteUid) {
+                    return AgoraVideoView(
+                      controller: VideoViewController.remote(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        connection: RtcConnection(
+                            channelId: channelId, localUid: localUid),
+                        canvas: VideoCanvas(
+                          uid: remoteUid,
+                          renderMode: RenderModeType.renderModeFit,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview();
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.remote.with_rendermodefit');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+
+          testWidgets(
+            'render mode renderModeAdaptive',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraRemoteVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context, channelId, localUid, remoteUid) {
+                    return AgoraVideoView(
+                      controller: VideoViewController.remote(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        connection: RtcConnection(
+                            channelId: channelId, localUid: localUid),
+                        canvas: VideoCanvas(
+                          uid: remoteUid,
+                          renderMode: RenderModeType.renderModeAdaptive,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview();
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.remote.with_rendermodeadaptive');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+
+          testWidgets(
+            'render mode default and videoMirrorModeDisabled',
+            (WidgetTester tester) async {
+              final onFrameCompleter = Completer();
+              final RtcEngineEx rtcEngine = createAgoraRtcEngineEx();
+
+              await tester.pumpWidget(FakeCameraRemoteVideoView(
+                  rtcEngine: rtcEngine,
+                  builder: (context, channelId, localUid, remoteUid) {
+                    return AgoraVideoView(
+                      controller: VideoViewController.remote(
+                        rtcEngine: rtcEngine,
+                        useFlutterTexture: true,
+                        connection: RtcConnection(
+                            channelId: channelId, localUid: localUid),
+                        canvas: VideoCanvas(
+                          uid: remoteUid,
+                          mirrorMode:
+                              VideoMirrorModeType.videoMirrorModeEnabled,
+                        ),
+                      ),
+                    );
+                  },
+                  onFirstFrame: () async {
+                    if (!onFrameCompleter.isCompleted) {
+                      await rtcEngine.startPreview();
+                      onFrameCompleter.complete(null);
+                    }
+                  }));
+
+              await tester.pumpAndSettle(const Duration(seconds: 10));
+
+              await onFrameCompleter.future;
+              await waitFrame(tester);
+
+              // This is required prior to taking the screenshot (Android only).
+              await binding.convertFlutterSurfaceToImage();
+              // Trigger a frame.
+              await tester.pumpAndSettle();
+
+              await binding.takeScreenshot(
+                  'android.agora_video_view_render.texture.remote.with_default_rendermodede.with_videoMirrorModeEnabled');
+
+              await waitDisposed(tester, binding);
+            },
+          );
+        });
+      });
     },
     skip: !Platform.isAndroid,
   );

@@ -12,6 +12,7 @@ import io.agora.iris.IrisApiEngine;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
+import io.flutter.view.TextureRegistry;
 
 class SimpleRef {
     private Object value;
@@ -98,10 +99,17 @@ class PlatformRenderPool {
 
 public class VideoViewController implements MethodChannel.MethodCallHandler {
 
+    private final TextureRegistry textureRegistry;
+    private final BinaryMessenger binaryMessenger;
+
     private final MethodChannel methodChannel;
     private final PlatformRenderPool pool;
 
-    VideoViewController(BinaryMessenger binaryMessenger) {
+    private final Map<Long, TextureRenderer> textureRendererMap = new HashMap<>();
+
+    VideoViewController(TextureRegistry textureRegistry, BinaryMessenger binaryMessenger) {
+        this.textureRegistry = textureRegistry;
+        this.binaryMessenger = binaryMessenger;
         methodChannel = new MethodChannel(binaryMessenger, "agora_rtc_ng/video_view_controller");
         methodChannel.setMethodCallHandler(this);
         pool = new PlatformRenderPool();
@@ -126,11 +134,34 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
         return this.pool.deViewRef(platformViewId);
     }
 
-    private long createTextureRender() {
-        return 0L;
+    private long createTextureRender(
+            long irisRtcRenderingHandle,
+            long uid,
+            String channelId,
+            int videoSourceType,
+            int videoViewSetupMode) {
+        final TextureRenderer textureRenderer = new TextureRenderer(
+                textureRegistry,
+                binaryMessenger,
+                irisRtcRenderingHandle,
+                uid,
+                channelId,
+                videoSourceType,
+                videoViewSetupMode);
+        final long textureId = textureRenderer.getTextureId();
+        textureRendererMap.put(textureId, textureRenderer);
+
+        return textureId;
     }
 
-    private boolean destroyTextureRender(long textureId){
+    private boolean destroyTextureRender(long textureId) {
+        final TextureRenderer textureRenderer = textureRendererMap.get(textureId);
+        if (textureRenderer != null) {
+            textureRenderer.dispose();
+            textureRendererMap.remove(textureId);
+            return true;
+        }
+
         return false;
     }
 
@@ -148,14 +179,44 @@ public class VideoViewController implements MethodChannel.MethodCallHandler {
                 this.dePlatformRenderRef(platformViewId);
                 result.success(true);
                 break;
+            case "createTextureRender": {
+                final Map<?, ?> args = (Map<?, ?>) call.arguments;
 
-            case "createTextureRender":
-            case "destroyTextureRender":
+                @SuppressWarnings("ConstantConditions")
+                final long irisRtcRenderingHandle = getLong(args.get("irisRtcRenderingHandle"));
+                @SuppressWarnings("ConstantConditions")
+                final long uid = getLong(args.get("uid"));
+                final String channelId = (String) args.get("channelId");
+                final int videoSourceType = (int) args.get("videoSourceType");
+                final int videoViewSetupMode = (int) args.get("videoViewSetupMode");
+
+                final long textureId = createTextureRender(
+                        irisRtcRenderingHandle,
+                        uid,
+                        channelId,
+                        videoSourceType,
+                        videoViewSetupMode);
+                result.success(textureId);
+                break;
+            }
+            case "destroyTextureRender": {
+                final long textureId = getLong(call.arguments);
+                final boolean success = destroyTextureRender(textureId);
+                result.success(success);
+                break;
+            }
             case "updateTextureRenderData":
             default:
                 result.notImplemented();
                 break;
         }
+    }
+
+    /**
+     * Flutter may convert a long to int type in java, we force parse a long value via this function
+     */
+    private long getLong(Object value) {
+        return Long.parseLong(value.toString());
     }
 
     public void dispose() {

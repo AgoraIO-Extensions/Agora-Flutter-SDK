@@ -27,7 +27,9 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "agora_rtc_ng");
         channel.setMethodCallHandler(this);
         flutterPluginBindingRef = new WeakReference<>(flutterPluginBinding);
-        videoViewController = new VideoViewController(flutterPluginBinding.getBinaryMessenger());
+        videoViewController = new VideoViewController(
+                flutterPluginBinding.getTextureRegistry(),
+                flutterPluginBinding.getBinaryMessenger());
 
         flutterPluginBinding.getPlatformViewRegistry().registerViewFactory(
                 "AgoraTextureView",
@@ -44,8 +46,6 @@ public class AgoraRtcNgPlugin implements FlutterPlugin, MethodChannel.MethodCall
                         flutterPluginBinding.getBinaryMessenger(),
                         new AgoraPlatformViewFactory.PlatformViewProviderSurfaceView(),
                         this.videoViewController));
-
-
     }
 
     @Override
