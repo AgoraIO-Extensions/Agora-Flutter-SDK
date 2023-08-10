@@ -187,42 +187,23 @@ class _State extends State<JoinChannelVideo> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  if (defaultTargetPlatform == TargetPlatform.iOS)
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('Rendered by Flutter texture: '),
-                          Switch(
-                            value: _isUseFlutterTexture,
-                            onChanged: isJoined
-                                ? null
-                                : (changed) {
-                                    setState(() {
-                                      _isUseFlutterTexture = changed;
-                                    });
-                                  },
-                          )
-                        ]),
-                  if (defaultTargetPlatform == TargetPlatform.android)
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('Rendered by Android SurfaceView: '),
-                          Switch(
-                            value: _isUseAndroidSurfaceView,
-                            onChanged: isJoined
-                                ? null
-                                : (changed) {
-                                    setState(() {
-                                      _isUseAndroidSurfaceView = changed;
-                                    });
-                                  },
-                          ),
-                        ]),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Rendered by Flutter texture: '),
+                        Switch(
+                          value: _isUseFlutterTexture,
+                          onChanged: isJoined
+                              ? null
+                              : (changed) {
+                                  setState(() {
+                                    _isUseFlutterTexture = changed;
+                                  });
+                                },
+                        )
+                      ]),
                 ],
               ),
             const SizedBox(

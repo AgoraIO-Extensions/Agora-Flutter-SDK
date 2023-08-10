@@ -28,6 +28,7 @@
 .packages
 build/
 third_party/
+!android/src/main/cpp/third_party/
 
 **/flutter/ephemeral/*
 **/generated_plugin_registrant.cc
@@ -35,3 +36,5 @@ third_party/
 **/generated_plugins.cmake
 **/GeneratedPluginRegistrant.swift
 **/.plugin_dev
+
+.ccls-cache/
