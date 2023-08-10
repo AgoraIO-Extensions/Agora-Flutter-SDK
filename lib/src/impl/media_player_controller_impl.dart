@@ -381,4 +381,12 @@ class MediaPlayerControllerImpl
       await super.disposeRenderInternal();
     }
   }
+
+  @override
+  Future<void> selectMultiAudioTrack(
+      {required int playoutTrackIndex, required int publishTrackIndex}) {
+    return _mediaPlayer!.selectMultiAudioTrack(
+        playoutTrackIndex: playoutTrackIndex,
+        publishTrackIndex: publishTrackIndex);
+  }
 }

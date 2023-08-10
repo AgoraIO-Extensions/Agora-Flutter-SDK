@@ -91,6 +91,29 @@ class AudioEncodedFrameObserverWrapper implements EventLoopEventHandler {
         audioEncodedFrameObserver.onMixedAudioEncodedFrame!(
             frameBuffer, length, audioEncodedFrameInfo);
         return true;
+
+      case 'OnPublishAudioEncodedFrame':
+        if (audioEncodedFrameObserver.onPublishAudioEncodedFrame == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        AudioEncodedFrameObserverOnPublishAudioEncodedFrameJson paramJson =
+            AudioEncodedFrameObserverOnPublishAudioEncodedFrameJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        Uint8List? frameBuffer = paramJson.frameBuffer;
+        int? length = paramJson.length;
+        EncodedAudioFrameInfo? audioEncodedFrameInfo =
+            paramJson.audioEncodedFrameInfo;
+        if (frameBuffer == null ||
+            length == null ||
+            audioEncodedFrameInfo == null) {
+          return true;
+        }
+        audioEncodedFrameInfo = audioEncodedFrameInfo.fillBuffers(buffers);
+        audioEncodedFrameObserver.onPublishAudioEncodedFrame!(
+            frameBuffer, length, audioEncodedFrameInfo);
+        return true;
     }
     return false;
   }

@@ -43,6 +43,17 @@ class RtcEngineQueryCodecCapabilityJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineUploadLogFileJson {
+  const RtcEngineUploadLogFileJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory RtcEngineUploadLogFileJson.fromJson(Map<String, dynamic> json) =>
+      _$RtcEngineUploadLogFileJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$RtcEngineUploadLogFileJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineGetExtensionPropertyJson {
   const RtcEngineGetExtensionPropertyJson(this.value);
 
@@ -376,6 +387,19 @@ class MusicContentCenterSearchMusicJson {
 }
 
 @JsonSerializable(explicitToJson: true)
+class MusicContentCenterPreloadWithSongCodeJson {
+  const MusicContentCenterPreloadWithSongCodeJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterPreloadWithSongCodeJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterPreloadWithSongCodeJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterPreloadWithSongCodeJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class MusicContentCenterGetCachesJson {
   const MusicContentCenterGetCachesJson(this.cacheInfo);
 
@@ -396,4 +420,30 @@ class MusicContentCenterGetLyricJson {
   factory MusicContentCenterGetLyricJson.fromJson(Map<String, dynamic> json) =>
       _$MusicContentCenterGetLyricJsonFromJson(json);
   Map<String, dynamic> toJson() => _$MusicContentCenterGetLyricJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetSongSimpleInfoJson {
+  const MusicContentCenterGetSongSimpleInfoJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetSongSimpleInfoJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetSongSimpleInfoJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetSongSimpleInfoJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetInternalSongCodeJson {
+  const MusicContentCenterGetInternalSongCodeJson(this.internalSongCode);
+
+  @JsonKey(name: 'internalSongCode')
+  final int internalSongCode;
+  factory MusicContentCenterGetInternalSongCodeJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetInternalSongCodeJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetInternalSongCodeJsonToJson(this);
 }

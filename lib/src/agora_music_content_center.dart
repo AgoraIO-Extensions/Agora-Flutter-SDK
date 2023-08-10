@@ -64,6 +64,10 @@ enum MusicContentCenterStatusCode {
   /// @nodoc
   @JsonValue(6)
   kMusicContentCenterStatusErrMusicDecryption,
+
+  /// @nodoc
+  @JsonValue(7)
+  kMusicContentCenterStatusErHttpInternalError,
 }
 
 /// @nodoc
@@ -309,6 +313,7 @@ class MusicContentCenterEventHandler {
     this.onMusicChartsResult,
     this.onMusicCollectionResult,
     this.onLyricResult,
+    this.onSongSimpleInfoResult,
     this.onPreLoadEvent,
   });
 
@@ -321,11 +326,16 @@ class MusicContentCenterEventHandler {
       MusicContentCenterStatusCode errorCode)? onMusicCollectionResult;
 
   /// @nodoc
-  final void Function(String requestId, String lyricUrl,
+  final void Function(String requestId, int songCode, String lyricUrl,
       MusicContentCenterStatusCode errorCode)? onLyricResult;
 
   /// @nodoc
+  final void Function(String requestId, int songCode, String simpleInfo,
+      MusicContentCenterStatusCode errorCode)? onSongSimpleInfoResult;
+
+  /// @nodoc
   final void Function(
+      String requestId,
       int songCode,
       int percent,
       String lyricUrl,
@@ -338,7 +348,7 @@ class MusicContentCenterEventHandler {
 class MusicContentCenterConfiguration {
   /// @nodoc
   const MusicContentCenterConfiguration(
-      {this.appId, this.token, this.mccUid, this.maxCacheSize});
+      {this.appId, this.token, this.mccUid, this.maxCacheSize, this.mccDomain});
 
   /// @nodoc
   @JsonKey(name: 'appId')
@@ -355,6 +365,10 @@ class MusicContentCenterConfiguration {
   /// @nodoc
   @JsonKey(name: 'maxCacheSize')
   final int? maxCacheSize;
+
+  /// @nodoc
+  @JsonKey(name: 'mccDomain')
+  final String? mccDomain;
 
   /// @nodoc
   factory MusicContentCenterConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -411,17 +425,13 @@ abstract class MusicContentCenter {
   /// @nodoc
   Future<void> preload({required int songCode, String? jsonOption});
 
-  /// 删除已缓存的音乐资源。
-  /// 你可以调用该方法删除某一已缓存的音乐资源，如需删除多个音乐资源，你可以多次调用该方法。 The cached media file currently being played will not be deleted.
-  ///
-  /// * [songCode] 待删除的音乐资源的编号。
-  ///
-  /// Returns
-  /// 0: 方法调用成功，音乐资源已删除。< 0: Failure.
+  /// @nodoc
+  Future<String> preloadWithSongCode(int songCode);
+
+  /// @nodoc
   Future<void> removeCache(int songCode);
 
-  /// 获取已缓存的音乐资源信息。
-  /// 当你不再需要使用已缓存的音乐资源时，你需要及时释放内存以防止内存泄漏。
+  /// @nodoc
   Future<List<MusicCacheInfo>> getCaches(int cacheInfoSize);
 
   /// @nodoc
@@ -429,4 +439,11 @@ abstract class MusicContentCenter {
 
   /// @nodoc
   Future<String> getLyric({required int songCode, int lyricType = 0});
+
+  /// @nodoc
+  Future<String> getSongSimpleInfo(int songCode);
+
+  /// @nodoc
+  Future<int> getInternalSongCode(
+      {required int songCode, required String jsonOption});
 }
