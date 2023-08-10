@@ -51,6 +51,7 @@ void generatedTestCases() {
         const int audioFrameSamplesPerSec = 10;
         Uint8List audioFrameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int audioFrameRenderTimeMs = 10;
+        const int audioFrameAudioTrackNumber = 10;
         const int audioFrameAvsyncType = 10;
         final AudioFrame audioFrame = AudioFrame(
           type: audioFrameType,
@@ -60,6 +61,7 @@ void generatedTestCases() {
           samplesPerSec: audioFrameSamplesPerSec,
           buffer: audioFrameBuffer,
           renderTimeMs: audioFrameRenderTimeMs,
+          audioTrackNumber: audioFrameAudioTrackNumber,
           avsyncType: audioFrameAvsyncType,
         );
 

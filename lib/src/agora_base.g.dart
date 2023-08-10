@@ -773,6 +773,7 @@ LocalAudioStats _$LocalAudioStatsFromJson(Map<String, dynamic> json) =>
       txPacketLossRate: json['txPacketLossRate'] as int?,
       audioDeviceDelay: json['audioDeviceDelay'] as int?,
       audioPlayoutDelay: json['audioPlayoutDelay'] as int?,
+      earMonitorDelay: json['earMonitorDelay'] as int?,
     );
 
 Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
@@ -791,6 +792,7 @@ Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
   writeNotNull('txPacketLossRate', instance.txPacketLossRate);
   writeNotNull('audioDeviceDelay', instance.audioDeviceDelay);
   writeNotNull('audioPlayoutDelay', instance.audioPlayoutDelay);
+  writeNotNull('earMonitorDelay', instance.earMonitorDelay);
   return val;
 }
 
@@ -1499,6 +1501,7 @@ const _$AudioFileRecordingTypeEnumMap = {
   AudioFileRecordingType.audioFileRecordingMic: 1,
   AudioFileRecordingType.audioFileRecordingPlayback: 2,
   AudioFileRecordingType.audioFileRecordingMixed: 3,
+  AudioFileRecordingType.audioFileRecordingPublish: 4,
 };
 
 const _$AudioRecordingQualityTypeEnumMap = {
@@ -2013,6 +2016,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errEncryptedStreamNotAllowedPublish: 130,
   ErrorCodeType.errLicenseCredentialInvalid: 131,
   ErrorCodeType.errInvalidUserAccount: 134,
+  ErrorCodeType.errCertVerifyFailure: 135,
   ErrorCodeType.errModuleNotFound: 157,
   ErrorCodeType.errCertRaw: 157,
   ErrorCodeType.errCertJsonPart: 158,
@@ -2385,6 +2389,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
   ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
+  ConnectionChangedReasonType.connectionChangedCertificationVeryfyFailure: 22,
 };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {
@@ -2455,6 +2460,7 @@ const _$AudioEffectPresetEnumMap = {
   AudioEffectPreset.roomAcousticsEthereal: 33621760,
   AudioEffectPreset.roomAcoustics3dVoice: 33622016,
   AudioEffectPreset.roomAcousticsVirtualSurroundSound: 33622272,
+  AudioEffectPreset.roomAcousticsChorus: 33623296,
   AudioEffectPreset.voiceChangerEffectUncle: 33685760,
   AudioEffectPreset.voiceChangerEffectOldman: 33686016,
   AudioEffectPreset.voiceChangerEffectBoy: 33686272,
