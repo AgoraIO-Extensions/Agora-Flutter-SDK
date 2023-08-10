@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.agora.agora_rtc_ng_example">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
    <application
         android:label="agora_rtc_ng_example"
-        android:name="${applicationName}"
+        android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -30,5 +33,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <service
+           android:name=".ExampleService"
+           android:exported="false"
+           android:foregroundServiceType="mediaPlayback|microphone"
+           android:stopWithTask="false" />
     </application>
 </manifest>
