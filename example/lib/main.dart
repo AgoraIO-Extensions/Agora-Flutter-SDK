@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:agora_rtc_engine_example/components/android_foreground_service_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -87,19 +90,24 @@ class _MyAppState extends State<MyApp> {
                         )
                       : ListTile(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Scaffold(
-                                          appBar: AppBar(
-                                            title: Text(
-                                                _data[index]['name'] as String),
-                                            // ignore: prefer_const_literals_to_create_immutables
-                                            actions: [const LogActionWidget()],
-                                          ),
-                                          body:
-                                              _data[index]['widget'] as Widget?,
-                                        )));
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              Widget widget = Scaffold(
+                                appBar: AppBar(
+                                  title: Text(_data[index]['name'] as String),
+                                  // ignore: prefer_const_literals_to_create_immutables
+                                  actions: [const LogActionWidget()],
+                                ),
+                                body: _data[index]['widget'] as Widget?,
+                              );
+
+                              if (Platform.isAndroid) {
+                                widget = AndroidForegroundServiceWidget(
+                                    child: widget);
+                              }
+
+                              return widget;
+                            }));
                           },
                           title: Text(
                             _data[index]['name'] as String,
