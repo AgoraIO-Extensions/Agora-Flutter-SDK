@@ -11,7 +11,7 @@ IRIS_TYPE="dcg"
 NATIVE_SDK_PATH_NAME=$3 # Agora_Native_SDK_for_Mac_rel.v3.8.201.2_39877_full_20220608_2158
 SCRIPTS_PATH=$(dirname "$0")
 
-bash $SCRIPTS_PATH/build-android-arch.sh $IRIS_PROJECT_PATH ALL $BUILD_TYPE
+bash ${IRIS_PROJECT_PATH}/ci/build-android.sh buildALL $BUILD_TYPE
 
 for ABI in ${ABIS};
 do
@@ -19,7 +19,7 @@ do
     # bash $IRIS_PROJECT_PATH/$IRIS_TYPE/ci/build-android.sh build $ABI $BUILD_TYPE
     mkdir -p "$AGORA_FLUTTER_PROJECT_PATH/android/libs/$ABI/"
      
-    cp -RP "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/$ABI/libAgoraRtcWrapper.so" \
+    cp -RP "$IRIS_PROJECT_PATH/build/android/$IRIS_TYPE/ALL_ARCHITECTURE/output/$BUILD_TYPE/$ABI/libAgoraRtcWrapper.so" \
           "$AGORA_FLUTTER_PROJECT_PATH/android/libs/$ABI/libAgoraRtcWrapper.so" 
 
     if [ -f "${IRIS_PROJECT_PATH}/build/android/ALL_ARCHITECTURE/output/${IRIS_TYPE}/${BUILD_TYPE}/${ABI}/libIrisDebugger.so" ]; then
@@ -29,10 +29,10 @@ do
 done;
 
 # echo "Copying $IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.aar to $AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.aar"
-# cp -r "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.aar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.aar"
+# cp -r "$IRIS_PROJECT_PATH/build/android/$IRIS_TYPE/ALL_ARCHITECTURE/output/$BUILD_TYPE/AgoraRtcWrapper.aar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.aar"
 
 echo "Copying $IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.jar to $AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.jar"
-cp -r "$IRIS_PROJECT_PATH/build/android/ALL_ARCHITECTURE/output/$IRIS_TYPE/$BUILD_TYPE/AgoraRtcWrapper.jar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.jar"
+cp -r "$IRIS_PROJECT_PATH/build/android/$IRIS_TYPE/ALL_ARCHITECTURE/output/$BUILD_TYPE/AgoraRtcWrapper.jar" "$AGORA_FLUTTER_PROJECT_PATH/android/libs/AgoraRtcWrapper.jar"
 
 for ABI in ${ABIS};
 do

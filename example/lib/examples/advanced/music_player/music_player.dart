@@ -206,8 +206,8 @@ class _MusicPlayerExampleState extends State<MusicPlayerExample> {
             if (!isPreloaded) {
               _preloadCompleted = Completer();
               _getLyricCompleted = Completer();
-              await _musicContentCenter.preload(
-                  songCode: _selectedMusic.songCode!);
+              await _musicContentCenter
+                  .preloadWithSongCode(_selectedMusic.songCode!);
               _getLyricRequestId = await _musicContentCenter.getLyric(
                   songCode: _selectedMusic.songCode!);
             } else {
