@@ -34,7 +34,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
   ///  Ensure that the app ID you use to generate the token is the same as the app ID used when creating the RtcEngine instance.
   ///
-  /// * [token] The token generated on your server for authentication.
+  /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
   /// * [connection] The connection information. See RtcConnection.
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
@@ -57,7 +57,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// This method lets the user leave the channel, for example, by hanging up or exiting the call. After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call. This method can be called whether or not a call is currently in progress. This method releases all resources related to the session. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
   ///  If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-  ///  Calling leaveChannel will leave the channels when calling joinChannel and joinChannelEx at the same time.
+  ///  If you want to leave the channels that you joined by calling joinChannel and joinChannelEx, call the leaveChannel method.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [options] The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
@@ -420,7 +420,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Creates a data stream.
   ///
-  /// Creates a data stream. Each user can create up to five data streams in a single channel. Compared with createDataStreamEx, this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
+  /// Creates a data stream. Each user can create up to five data streams in a single channel.
   ///
   /// * [config] The configurations for the data stream. See DataStreamConfig.
   /// * [connection] The connection information. See RtcConnection.
