@@ -999,8 +999,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       required ScreenCaptureConfiguration config}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture2';
-    final param = createParams(
-        {'type': type.value(), 'config': config.toJson()});
+    final param =
+        createParams({'type': type.value(), 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(

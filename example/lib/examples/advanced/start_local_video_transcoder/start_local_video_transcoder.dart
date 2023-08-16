@@ -412,9 +412,8 @@ class _State extends State<StartLocalVideoTranscoder> {
 
                         transcodingVideoStreams.add(TranscodingVideoStream(
                           sourceType: VideoSourceType.videoSourceMediaPlayer,
-                          imageUrl: _mediaPlayerController
-                              .getMediaPlayerId()
-                              .toString(),
+                          mediaPlayerId:
+                              _mediaPlayerController.getMediaPlayerId(),
                           width: 360,
                           height: 240,
                           zOrder: 10,

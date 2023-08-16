@@ -159,7 +159,7 @@ void generatedTestCases() {
 
       final onLyricResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
-        onLyricResult: (String requestId, String lyricUrl,
+        onLyricResult: (String requestId, int songCode, String lyricUrl,
             MusicContentCenterStatusCode errorCode) {
           onLyricResultCompleter.complete(true);
         },
@@ -174,12 +174,14 @@ void generatedTestCases() {
 
       {
         const String requestId = "hello";
+        const int songCode = 10;
         const String lyricUrl = "hello";
         const MusicContentCenterStatusCode errorCode =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
+          'songCode': songCode,
           'lyricUrl': lyricUrl,
           'errorCode': errorCode.value(),
         };
@@ -189,6 +191,73 @@ void generatedTestCases() {
       }
 
       final eventCalled = await onLyricResultCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        musicContentCenter.unregisterEventHandler();
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await musicContentCenter.release();
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onSongSimpleInfoResult',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final musicContentCenter = rtcEngine.getMusicContentCenter();
+      const musicContentCenterConfiguration = MusicContentCenterConfiguration(
+          appId: 'app_id', token: 'token', mccUid: 10);
+      await musicContentCenter.initialize(musicContentCenterConfiguration);
+
+      final onSongSimpleInfoResultCompleter = Completer<bool>();
+      final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
+        onSongSimpleInfoResult: (String requestId, int songCode,
+            String simpleInfo, MusicContentCenterStatusCode errorCode) {
+          onSongSimpleInfoResultCompleter.complete(true);
+        },
+      );
+
+      musicContentCenter.registerEventHandler(
+        theMusicContentCenterEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String requestId = "hello";
+        const int songCode = 10;
+        const String simpleInfo = "hello";
+        const MusicContentCenterStatusCode errorCode =
+            MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
+
+        final eventJson = {
+          'requestId': requestId,
+          'songCode': songCode,
+          'simpleInfo': simpleInfo,
+          'errorCode': errorCode.value(),
+        };
+
+        irisTester.fireEvent(
+            'MusicContentCenterEventHandler_onSongSimpleInfoResult',
+            params: eventJson);
+      }
+
+      final eventCalled = await onSongSimpleInfoResultCompleter.future;
       expect(eventCalled, isTrue);
 
       {
@@ -223,8 +292,12 @@ void generatedTestCases() {
 
       final onPreLoadEventCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
-        onPreLoadEvent: (int songCode, int percent, String lyricUrl,
-            PreloadStatusCode status, MusicContentCenterStatusCode errorCode) {
+        onPreLoadEvent: (String requestId,
+            int songCode,
+            int percent,
+            String lyricUrl,
+            PreloadStatusCode status,
+            MusicContentCenterStatusCode errorCode) {
           onPreLoadEventCompleter.complete(true);
         },
       );
@@ -237,6 +310,7 @@ void generatedTestCases() {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
+        const String requestId = "hello";
         const int songCode = 10;
         const int percent = 10;
         const String lyricUrl = "hello";
@@ -246,6 +320,7 @@ void generatedTestCases() {
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
+          'requestId': requestId,
           'songCode': songCode,
           'percent': percent,
           'lyricUrl': lyricUrl,

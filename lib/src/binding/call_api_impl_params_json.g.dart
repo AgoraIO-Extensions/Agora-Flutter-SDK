@@ -46,6 +46,18 @@ Map<String, dynamic> _$RtcEngineQueryCodecCapabilityJsonToJson(
       'codec_info': instance.codecInfo.map((e) => e.toJson()).toList(),
     };
 
+RtcEngineUploadLogFileJson _$RtcEngineUploadLogFileJsonFromJson(
+        Map<String, dynamic> json) =>
+    RtcEngineUploadLogFileJson(
+      json['requestId'] as String,
+    );
+
+Map<String, dynamic> _$RtcEngineUploadLogFileJsonToJson(
+        RtcEngineUploadLogFileJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
 RtcEngineGetExtensionPropertyJson _$RtcEngineGetExtensionPropertyJsonFromJson(
         Map<String, dynamic> json) =>
     RtcEngineGetExtensionPropertyJson(
@@ -383,6 +395,19 @@ Map<String, dynamic> _$MusicContentCenterSearchMusicJsonToJson(
       'requestId': instance.requestId,
     };
 
+MusicContentCenterPreloadWithSongCodeJson
+    _$MusicContentCenterPreloadWithSongCodeJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterPreloadWithSongCodeJson(
+          json['requestId'] as String,
+        );
+
+Map<String, dynamic> _$MusicContentCenterPreloadWithSongCodeJsonToJson(
+        MusicContentCenterPreloadWithSongCodeJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
 MusicContentCenterGetCachesJson _$MusicContentCenterGetCachesJsonFromJson(
         Map<String, dynamic> json) =>
     MusicContentCenterGetCachesJson(
@@ -407,4 +432,30 @@ Map<String, dynamic> _$MusicContentCenterGetLyricJsonToJson(
         MusicContentCenterGetLyricJson instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
+    };
+
+MusicContentCenterGetSongSimpleInfoJson
+    _$MusicContentCenterGetSongSimpleInfoJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterGetSongSimpleInfoJson(
+          json['requestId'] as String,
+        );
+
+Map<String, dynamic> _$MusicContentCenterGetSongSimpleInfoJsonToJson(
+        MusicContentCenterGetSongSimpleInfoJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+    };
+
+MusicContentCenterGetInternalSongCodeJson
+    _$MusicContentCenterGetInternalSongCodeJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterGetInternalSongCodeJson(
+          json['internalSongCode'] as int,
+        );
+
+Map<String, dynamic> _$MusicContentCenterGetInternalSongCodeJsonToJson(
+        MusicContentCenterGetInternalSongCodeJson instance) =>
+    <String, dynamic>{
+      'internalSongCode': instance.internalSongCode,
     };

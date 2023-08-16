@@ -106,11 +106,11 @@ class LogConfig {
   @JsonKey(name: 'filePath')
   final String? filePath;
 
-  /// The size (KB) of an agorasdk.log file. The value range is [128,1024]. The default value is 1,024 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 1,024 KB, the SDK automatically adjusts it to 1,024 KB.
+  /// The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 2,048 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
   @JsonKey(name: 'fileSizeInKB')
   final int? fileSizeInKB;
 
-  /// The output level of the SDK log file. See LogLevel .For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
+  /// The output level of the SDK log file. See LogLevel. For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
   @JsonKey(name: 'level')
   final LogLevel? level;
 

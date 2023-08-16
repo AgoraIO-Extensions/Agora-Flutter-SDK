@@ -7,7 +7,12 @@ import 'impl/media_player_impl.dart';
 
 /// @nodoc
 extension RtcEngineExt on RtcEngine {
-  /// @nodoc
+  /// Obtains the actual absolute path of the Asset through the relative path of the Asset.
+  ///
+  /// * [assetPath] The flutter -> assets field configured in the pubspec.yaml file.
+  ///
+  /// Returns
+  /// The actual path of the Asset.
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     final p = await impl.engineMethodChannel
@@ -21,7 +26,7 @@ class AgoraRtcException implements Exception {
   /// @nodoc
   AgoraRtcException({required this.code, this.message});
 
-  /// The error code. See ErrorCodeType .
+  /// The error code. See ErrorCodeType.
   final int code;
 
   /// The error message.
@@ -31,7 +36,8 @@ class AgoraRtcException implements Exception {
   String toString() => 'AgoraRtcException($code, $message)';
 }
 
-/// Creates an RtcEngine object. Creates an object.
+/// Creates one RtcEngine object.
+///
 /// Currently, the Agora RTC SDK v6.x supports creating only one RtcEngine object for each app.
 ///
 /// Returns
@@ -40,7 +46,8 @@ RtcEngine createAgoraRtcEngine() {
   return impl.RtcEngineImpl.create();
 }
 
-/// Creates an RtcEngineEx object.
+/// Creates one RtcEngineEx object.
+///
 /// Currently, the Agora RTC v6.x SDK supports creating only one RtcEngineEx object for each app.
 ///
 /// Returns
@@ -50,7 +57,8 @@ RtcEngineEx createAgoraRtcEngineEx() {
 }
 
 /// Gets one MediaPlayerCacheManager instance.
-/// When you successfully call this method, the SDK returns a media player cache manager instance. The cache manager is a singleton pattern. Therefore, multiple calls to this method returns the same instance.Make sure the RtcEngine is initialized before you call this method.
+///
+/// When you successfully call this method, the SDK returns a media player cache manager instance. The cache manager is a singleton pattern. Therefore, multiple calls to this method returns the same instance. Make sure the RtcEngine is initialized before you call this method.
 ///
 /// Returns
 /// The MediaPlayerCacheManager instance.

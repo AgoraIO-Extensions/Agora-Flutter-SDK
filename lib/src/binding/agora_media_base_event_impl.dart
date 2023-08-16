@@ -40,6 +40,23 @@ class AudioFrameObserverBaseWrapper implements EventLoopEventHandler {
         audioFrameObserverBase.onRecordAudioFrame!(channelId, audioFrame);
         return true;
 
+      case 'onPublishAudioFrame':
+        if (audioFrameObserverBase.onPublishAudioFrame == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        AudioFrameObserverBaseOnPublishAudioFrameJson paramJson =
+            AudioFrameObserverBaseOnPublishAudioFrameJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        String? channelId = paramJson.channelId;
+        AudioFrame? audioFrame = paramJson.audioFrame;
+        if (channelId == null || audioFrame == null) {
+          return true;
+        }
+        audioFrame = audioFrame.fillBuffers(buffers);
+        audioFrameObserverBase.onPublishAudioFrame!(channelId, audioFrame);
+        return true;
+
       case 'onPlaybackAudioFrame':
         if (audioFrameObserverBase.onPlaybackAudioFrame == null) {
           return true;

@@ -1273,6 +1273,7 @@ extension AudioFrameBufferExt on AudioFrame {
         samplesPerSec: samplesPerSec,
         buffer: buffer,
         renderTimeMs: renderTimeMs,
+        audioTrackNumber: audioTrackNumber,
         avsyncType: avsyncType);
   }
 

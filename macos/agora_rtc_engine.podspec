@@ -17,7 +17,7 @@ A new flutter plugin project.
   s.dependency 'FlutterMacOS'
   #   s.dependency 'AgoraRtcWrapper'
   s.dependency 'AgoraRtcEngine_macOS', '4.1.0'
-  s.dependency 'AgoraIrisRTC_macOS', '4.1.0-rc.2'
+  s.dependency 'AgoraIrisRTC_macOS', '4.1.1.147-build.4'
 
   s.platform = :osx, '10.11'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
