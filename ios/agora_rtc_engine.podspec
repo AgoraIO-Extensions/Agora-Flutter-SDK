@@ -19,7 +19,6 @@ Pod::Spec.new do |s|
   s.dependency 'Flutter'
   s.dependency 'AgoraIrisRTC_iOS', '4.1.1.147-build.4'
   s.dependency 'AgoraRtcEngine_Special_iOS', '4.1.1.13.MINI.VIDEO'
-  s.weak_frameworks = 'AgoraAiEchoCancellationExtension', 'AgoraAiNoiseSuppressionExtension', 'AgoraAudioBeautyExtension', 'AgoraClearVisionExtension', 'AgoraContentInspectExtension', 'AgoraDrmLoaderExtension', 'AgoraFaceDetectionExtension', 'AgoraReplayKitExtension', 'AgoraSpatialAudioExtension', 'AgoraVideoQualityAnalyzerExtension', 'AgoraVideoSegmentationExtension'
   # s.dependency 'AgoraRtcWrapper'
   s.platform = :ios, '9.0'
   s.swift_version = '5.0'
