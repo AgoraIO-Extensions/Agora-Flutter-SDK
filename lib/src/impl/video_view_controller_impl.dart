@@ -72,8 +72,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   }
 
   @override
-  Future<void> dispose() async {
-  }
+  Future<void> dispose() async {}
 
   @protected
   Future<void> disposeRenderInternal() async {
