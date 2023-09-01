@@ -160,7 +160,7 @@ jobs:
         with:
           flutter-version: ${{ matrix.version }}
           cache: true
-      - run: flutter pub get
+      - run: flutter packages get
       - name: Run flutter build web
         run: flutter build web
         working-directory: example
