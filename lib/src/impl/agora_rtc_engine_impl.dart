@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi' as ffi;
-import 'dart:typed_data' show Uint8List;
+import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
@@ -14,11 +13,17 @@ import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';
 import 'package:agora_rtc_engine/src/agora_spatial_audio.dart';
 import 'package:agora_rtc_engine/src/audio_device_manager.dart';
+import 'package:agora_rtc_engine/src/binding/agora_base_event_impl.dart';
+import 'package:agora_rtc_engine/src/binding/agora_media_base_event_impl.dart';
+import 'package:agora_rtc_engine/src/binding/agora_media_engine_impl.dart';
+import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_event_impl.dart';
 import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_ex_impl.dart'
     as rtc_engine_ex_binding;
 import 'package:agora_rtc_engine/src/binding/agora_rtc_engine_impl.dart'
     as rtc_engine_binding;
-import 'package:agora_rtc_engine/src/binding/impl_forward_export.dart';
+import 'package:agora_rtc_engine/src/binding/agora_spatial_audio_impl.dart';
+import 'package:agora_rtc_engine/src/binding/call_api_event_handler_buffer_ext.dart';
+import 'package:agora_rtc_engine/src/binding/event_handler_param_json.dart';
 import 'package:agora_rtc_engine/src/impl/agora_media_engine_impl_override.dart'
     as media_engine_impl;
 import 'package:agora_rtc_engine/src/impl/agora_media_recorder_impl_override.dart'
@@ -31,15 +36,15 @@ import 'package:agora_rtc_engine/src/impl/audio_device_manager_impl.dart'
     as audio_device_manager_impl;
 import 'package:agora_rtc_engine/src/impl/media_player_impl.dart'
     as media_player_impl;
-import 'package:agora_rtc_engine/src/impl/native_iris_api_engine_binding_delegate.dart';
+import 'package:agora_rtc_engine/src/impl/platform/platform_bindings_provider.dart';
 import 'package:flutter/foundation.dart'
-    show ChangeNotifier, defaultTargetPlatform;
+    show ChangeNotifier, debugPrint, defaultTargetPlatform, kIsWeb;
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/widgets.dart' show VoidCallback, TargetPlatform;
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:meta/meta.dart';
 
-import 'global_video_view_controller.dart';
+import 'platform/global_video_view_controller.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -67,8 +72,8 @@ int _string2IntPtr(String stringPtr) {
 }
 
 extension RtcEngineExt on RtcEngine {
-  GlobalVideoViewController? get globalVideoViewController =>
-      (this as RtcEngineImpl)._globalVideoViewController;
+  GlobalVideoViewControllerPlatfrom? get globalVideoViewController =>
+      (this as RtcEngineImpl).globalVideoViewController;
 
   ScopedObjects get objectPool => (this as RtcEngineImpl)._objectPool;
 
@@ -200,7 +205,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   final _rtcEngineImplScopedKey = const TypedScopedKey(RtcEngineImpl);
 
-  GlobalVideoViewController? _globalVideoViewController;
+  GlobalVideoViewControllerPlatfrom? _globalVideoViewController;
+  GlobalVideoViewControllerPlatfrom get globalVideoViewController {
+    _globalVideoViewController ??=
+        createGlobalVideoViewController(irisMethodChannel, this);
+    return _globalVideoViewController!;
+  }
 
   final ScopedObjects _objectPool = ScopedObjects();
 
@@ -213,7 +223,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (_instance != null) return _instance!;
 
     _instance = RtcEngineImpl._(irisMethodChannel ??
-        IrisMethodChannel(IrisApiEngineNativeBindingDelegateProvider()));
+        IrisMethodChannel(createPlatformBindingsProvider()));
 
     return _instance!;
   }
@@ -223,26 +233,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   Future<void> _initializeInternal(RtcEngineContext context) async {
-    _globalVideoViewController ??= GlobalVideoViewController(irisMethodChannel);
-    await _globalVideoViewController!
-        .attachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
-
-    irisMethodChannel.addHotRestartListener(_hotRestartListener);
-  }
-
-  void _hotRestartListener(Object? message) {
-    assert(() {
-      // Free `IrisVideoFrameBufferManager` when hot restart
-      final nativeBindingDelegate = IrisApiEngineNativeBindingDelegateProvider()
-              .provideNativeBindingDelegate()
-          as NativeIrisApiEngineBindingsDelegate;
-      nativeBindingDelegate.initialize();
-      nativeBindingDelegate.binding.FreeIrisRtcRendering(
-          ffi.Pointer.fromAddress(
-              _globalVideoViewController!.irisRtcRenderingHandle));
-
-      return true;
-    }());
+    await globalVideoViewController
+        .attachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
   }
 
   @override
@@ -317,14 +309,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     await _objectPool.clear();
 
     await _globalVideoViewController
-        ?.detachVideoFrameBufferManager(irisMethodChannel.getNativeHandle());
+        ?.detachVideoFrameBufferManager(irisMethodChannel.getApiEngineHandle());
     _globalVideoViewController = null;
 
     await irisMethodChannel.unregisterEventHandlers(_rtcEngineImplScopedKey);
 
     await super.release(sync: sync);
-
-    irisMethodChannel.removeHotRestartListener(_hotRestartListener);
 
     await irisMethodChannel.dispose();
     _isReleased = true;
@@ -392,31 +382,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
-  Future<void> sendStreamMessage(
-      {required int streamId,
-      required Uint8List data,
-      required int length}) async {
-    const apiType = 'RtcEngine_sendStreamMessage';
-    final dataPtr = uint8ListToPtr(data);
-    final param = createParams(
-        {'streamId': streamId, 'data': dataPtr.address, 'length': length});
-
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: [data]));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-
-    freePointer(dataPtr);
-    final result = rm['result'];
-
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
@@ -520,30 +485,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
         jsonEncode({'sources': sourcesIntPtr})));
 
     return output;
-  }
-
-  @override
-  Future<void> sendMetaData(
-      {required Metadata metadata, required VideoSourceType sourceType}) async {
-    assert(metadata.buffer != null);
-    const apiType = 'RtcEngine_sendMetaData';
-    final dataPtr = uint8ListToPtr(metadata.buffer!);
-    final metadataMap = metadata.toJson();
-    metadataMap['buffer'] = dataPtr.address;
-    final param = createParams(
-        {'metadata': metadataMap, 'source_type': sourceType.value()});
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    freePointer(dataPtr);
-    final result = rm['result'];
-
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
   }
 
   @override
@@ -1086,6 +1027,131 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
+  }
+
+  Future<void> setupVideoView(Object viewHandle, VideoCanvas videoCanvas,
+      {RtcConnection? connection}) async {
+    Object view = viewHandle;
+    if (kIsWeb) {
+      view = 0;
+    }
+
+    VideoCanvas newVideoCanvas = VideoCanvas(
+      view: view as int,
+      renderMode: videoCanvas.renderMode,
+      mirrorMode: videoCanvas.mirrorMode,
+      uid: videoCanvas.uid,
+      sourceType: videoCanvas.sourceType,
+      cropArea: videoCanvas.cropArea,
+      setupMode: videoCanvas.setupMode,
+      mediaPlayerId: videoCanvas.mediaPlayerId,
+    );
+    try {
+      if (newVideoCanvas.uid != 0) {
+        if (connection != null) {
+          await _setupRemoteVideoExCompat(
+              viewHandle, newVideoCanvas, connection);
+        } else {
+          await _setupRemoteVideoCompat(viewHandle, newVideoCanvas);
+        }
+      } else {
+        await _setupLocalVideoCompat(viewHandle, newVideoCanvas);
+      }
+    } catch (e) {
+      debugPrint('setupNativeViewInternal error: ${e.toString()}');
+    }
+  }
+
+  Future<void> _setupRemoteVideoExCompat(
+      Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
+    if (kIsWeb) {
+      return _setupRemoteVideoExWeb(viewHandle, canvas, connection);
+    }
+    return setupRemoteVideoEx(canvas: canvas, connection: connection);
+  }
+
+  Future<void> _setupRemoteVideoCompat(
+      Object viewHandle, VideoCanvas canvas) async {
+    if (kIsWeb) {
+      return _setupRemoteVideoWeb(viewHandle, canvas);
+    }
+    return setupRemoteVideo(canvas);
+  }
+
+  Future<void> _setupLocalVideoCompat(
+      Object viewHandle, VideoCanvas canvas) async {
+    if (kIsWeb) {
+      return _setupLocalVideoWeb(canvas, viewHandle);
+    }
+    return setupLocalVideo(canvas);
+  }
+
+  Map<String, dynamic> _createParamsWeb(Object viewHandle, VideoCanvas canvas,
+      {RtcConnection? connection}) {
+    // The type of the `VideoCanvas.view` is `String` on web
+    final param = createParams({
+      'canvas': canvas.toJson()..['view'] = (viewHandle as String),
+      if (connection != null) 'connection': connection.toJson(),
+    });
+    return param;
+  }
+
+  Future<void> _setupRemoteVideoExWeb(
+      Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_setupRemoteVideoEx';
+    final param = _createParamsWeb(viewHandle, canvas, connection: connection);
+    final List<Uint8List> buffers = [];
+    buffers.addAll(canvas.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  Future<void> _setupRemoteVideoWeb(
+      Object viewHandle, VideoCanvas canvas) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setupRemoteVideo';
+    final param = _createParamsWeb(viewHandle, canvas);
+    final List<Uint8List> buffers = [];
+    buffers.addAll(canvas.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  Future<void> _setupLocalVideoWeb(
+      VideoCanvas canvas, Object viewHandle) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setupLocalVideo';
+    // The type of the `VideoCanvas.view` is `String` on web
+    final param = _createParamsWeb(viewHandle, canvas);
+    final List<Uint8List> buffers = [];
+    buffers.addAll(canvas.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(
+      apiType,
+      jsonEncode(param),
+      rawBufferParams: [BufferParam(BufferParamHandle(viewHandle), 1)],
+    ));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    return;
   }
 
   /////////// debug ////////

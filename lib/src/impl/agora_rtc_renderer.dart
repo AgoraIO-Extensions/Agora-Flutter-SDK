@@ -78,6 +78,19 @@ mixin RtcRenderMixin<T extends StatefulWidget> on State<T> {
     PlatformViewCreatedCallback? onPlatformViewCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
+    
+    // `kIsWeb` check needs put first, since `defaultTargetPlatform == TargetPlatform.android` or
+    // `defaultTargetPlatform == TargetPlatform.iOS` is true in mobile web.
+    if (kIsWeb) {
+      return HtmlElementView(
+        viewType: viewType,
+        onPlatformViewCreated: _onPlatformViewCreated(
+          viewType,
+          onPlatformViewCreated,
+        ),
+      );
+    }
+
     if (defaultTargetPlatform == TargetPlatform.android) {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,

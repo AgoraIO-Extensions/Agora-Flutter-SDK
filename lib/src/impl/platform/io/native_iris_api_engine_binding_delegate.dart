@@ -6,6 +6,8 @@ import 'package:ffi/ffi.dart';
 
 import 'native_iris_api_engine_bindings.dart' as bindings;
 import 'package:iris_method_channel/iris_method_channel.dart';
+import 'package:iris_method_channel/iris_method_channel_bindings_io.dart'
+    as iris_bindings;
 
 // ignore_for_file: public_member_api_docs
 
@@ -25,7 +27,8 @@ ffi.DynamicLibrary _loadLib() {
   return ffi.DynamicLibrary.process();
 }
 
-class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
+class NativeIrisApiEngineBindingsDelegate
+    extends PlatformBindingsDelegateInterface {
   late final bindings.NativeIrisApiEngineBinding _binding;
   bindings.NativeIrisApiEngineBinding get binding => _binding;
 
@@ -36,23 +39,23 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
   }
 
   @override
-  CreateNativeApiEngineResult createNativeApiEngine(
-      List<ffi.Pointer<ffi.Void>> args) {
+  CreateApiEngineResult createApiEngine(List<Object> args) {
     ffi.Pointer<ffi.Void> enginePtr = ffi.nullptr;
     assert(() {
       if (args.isNotEmpty) {
         assert(args.length == 1);
-        enginePtr = args[0];
+        enginePtr = args[0] as ffi.Pointer<ffi.Void>;
       }
       return true;
     }());
 
     final apiEnginePtr = _binding.CreateIrisApiEngine(enginePtr);
 
-    return CreateNativeApiEngineResult(apiEnginePtr);
+    return CreateApiEngineResult(IrisApiEngineHandle(apiEnginePtr));
   }
 
-  void _response(ffi.Pointer<ApiParam> param, Map<String, Object> result) {
+  void _response(
+      ffi.Pointer<iris_bindings.ApiParam> param, Map<String, Object> result) {
     using<void>((Arena arena) {
       final ffi.Pointer<Utf8> resultMapPointerUtf8 =
           jsonEncode(result).toNativeUtf8(allocator: arena);
@@ -73,7 +76,7 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
   int _interceptCall(
     IrisMethodCall methodCall,
     ffi.Pointer<ffi.Void> apiEnginePtr,
-    ffi.Pointer<ApiParam> param,
+    ffi.Pointer<iris_bindings.ApiParam> param,
   ) {
     switch (methodCall.funcName) {
       case 'StartDumpVideo':
@@ -131,41 +134,52 @@ class NativeIrisApiEngineBindingsDelegate extends NativeBindingDelegate {
   @override
   int callApi(
     IrisMethodCall methodCall,
-    ffi.Pointer<ffi.Void> apiEnginePtr,
-    ffi.Pointer<ApiParam> param,
+    IrisApiEngineHandle apiEnginePtr,
+    IrisApiParamHandle param,
   ) {
-    final interceptRet = _interceptCall(methodCall, apiEnginePtr, param);
+    final nApiEnginePtr = apiEnginePtr() as ffi.Pointer<ffi.Void>;
+    final nParam = param() as ffi.Pointer<iris_bindings.ApiParam>;
+    final interceptRet = _interceptCall(methodCall, nApiEnginePtr, nParam);
     if (interceptRet != _doNotInterceptCall) {
       return interceptRet;
     }
 
-    return _binding.CallIrisApi(apiEnginePtr, param.cast());
+    return _binding.CallIrisApi(nApiEnginePtr, nParam.cast());
   }
 
   @override
-  ffi.Pointer<ffi.Void> createIrisEventHandler(
-    ffi.Pointer<IrisCEventHandler> eventHandler,
+  IrisEventHandlerHandle createIrisEventHandler(
+    IrisCEventHandlerHandle eventHandler,
   ) {
-    return _binding.CreateIrisEventHandler(eventHandler.cast());
+    return IrisEventHandlerHandle(_binding.CreateIrisEventHandler(
+        (eventHandler() as ffi.Pointer<iris_bindings.IrisCEventHandler>).cast()));
   }
 
   @override
   void destroyIrisEventHandler(
-    ffi.Pointer<ffi.Void> handler,
+    IrisEventHandlerHandle handler,
   ) {
-    _binding.DestroyIrisEventHandler(handler);
+    _binding.DestroyIrisEventHandler(handler() as ffi.Pointer<ffi.Void>);
   }
 
   @override
-  void destroyNativeApiEngine(ffi.Pointer<ffi.Void> apiEnginePtr) {
-    _binding.DestroyIrisApiEngine(apiEnginePtr);
+  void destroyNativeApiEngine(IrisApiEngineHandle apiEnginePtr) {
+    _binding.DestroyIrisApiEngine(apiEnginePtr() as ffi.Pointer<ffi.Void>);
+  }
+
+  @override
+  Future<CallApiResult> callApiAsync(IrisMethodCall methodCall,
+      IrisApiEngineHandle apiEnginePtr, IrisApiParamHandle param) {
+    throw UnsupportedError(
+        '`callApiAsync` not support on native implementation.');
   }
 }
 
 class IrisApiEngineNativeBindingDelegateProvider
-    extends NativeBindingsProvider {
+    extends PlatformBindingsProvider {
+
   @override
-  NativeBindingDelegate provideNativeBindingDelegate() {
+  PlatformBindingsDelegateInterface provideNativeBindingDelegate() {
     return NativeIrisApiEngineBindingsDelegate();
   }
 }

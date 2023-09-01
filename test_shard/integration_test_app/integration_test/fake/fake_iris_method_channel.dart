@@ -45,7 +45,7 @@ class FakeIrisMethodChannelConfig {
 }
 
 class FakeIrisMethodChannel extends IrisMethodChannel {
-  FakeIrisMethodChannel(NativeBindingsProvider provider) : super(provider);
+  FakeIrisMethodChannel(PlatformBindingsProvider provider) : super(provider);
   final List<IrisMethodCall> methodCallQueue = [];
 
   FakeIrisMethodChannelConfig _config = const FakeIrisMethodChannelConfig();
@@ -86,11 +86,11 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
   }
 
   @override
-  int getNativeHandle() {
+  int getApiEngineHandle() {
     if (_config.isFakeGetNativeHandle) {
       return 100;
     }
-    return super.getNativeHandle();
+    return super.getApiEngineHandle();
   }
 
   @override

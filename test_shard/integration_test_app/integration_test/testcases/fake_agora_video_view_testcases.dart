@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
-import 'package:agora_rtc_engine/src/impl/native_iris_api_engine_binding_delegate.dart';
 import '../fake/fake_iris_method_channel.dart';
+import 'package:agora_rtc_engine/src/impl/platform/io/global_video_view_controller_platform_io.dart';
+import 'package:agora_rtc_engine/src/impl/platform/io/native_iris_api_engine_binding_delegate.dart';
 
 class _RenderViewWidget extends StatefulWidget {
   const _RenderViewWidget({
@@ -87,7 +88,8 @@ class FakeGlobalVideoViewController {
   FakeGlobalVideoViewController(
       this.rtcEngine, this.testDefaultBinaryMessenger) {
     testDefaultBinaryMessenger.setMockMethodCallHandler(
-        rtcEngine.globalVideoViewController!.methodChannel, ((message) async {
+        (rtcEngine.globalVideoViewController! as GlobalVideoViewControllerIO)
+            .methodChannel, ((message) async {
       methodCallQueue.add(message);
 
       if (message.method == 'createTextureRender') {
@@ -110,7 +112,9 @@ class FakeGlobalVideoViewController {
 
   void dispose() {
     testDefaultBinaryMessenger.setMockMethodCallHandler(
-        rtcEngine.globalVideoViewController!.methodChannel, null);
+        (rtcEngine.globalVideoViewController! as GlobalVideoViewControllerIO)
+            .methodChannel,
+        null);
     reset();
   }
 }
@@ -436,8 +440,8 @@ void testCases() {
       skip: !(Platform.isAndroid || Platform.isIOS),
     );
 
-    // TODO(littlegnal): The texture rendering test case are crash, since it need to call the 
-    // real `IrisMethodChannel` implementation, but not just implement a fake `GlobalVideoViewController`. 
+    // TODO(littlegnal): The texture rendering test case are crash, since it need to call the
+    // real `IrisMethodChannel` implementation, but not just implement a fake `GlobalVideoViewController`.
     // Need figure it out how to re-enable these test cases it the future.
     //
     // group(

@@ -22,6 +22,14 @@ VideoViewControllerBaseMixin _controller(VideoViewControllerBase controller) {
 class AgoraVideoViewState extends State<AgoraVideoView> {
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return AgoraRtcRenderPlatformView(
+        key: widget.key,
+        controller: widget.controller,
+        onAgoraVideoViewCreated: widget.onAgoraVideoViewCreated,
+      );
+    }
+
     if (defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.windows) {
       return AgoraRtcRenderTexture(
@@ -80,7 +88,9 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   void initState() {
     super.initState();
 
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    if (kIsWeb) {
+      _viewType = _viewTypeAgoraSurfaceView;
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
       if (widget.controller.useAndroidSurfaceView) {
         _viewType = _viewTypeAgoraSurfaceView;
       } else {
@@ -140,10 +150,15 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   }
 
   Future<void> _setupNativeView() async {
-    if (_isDisposed || _nativeViewIntPtr == 0) {
+    if (_isDisposed) {
       return;
     }
 
+    // On web, the `_nativeViewIntPtr` is assigned with the platform view id, so
+    // the initialize value is 0, only check the 0(null value) on non-web.
+    if (!kIsWeb && _nativeViewIntPtr == 0) {
+      return;
+    }
     try {
       await widget.controller.setupView(_nativeViewIntPtr);
     } catch (e) {
@@ -157,8 +172,14 @@ class _AgoraRtcRenderPlatformViewState extends State<AgoraRtcRenderPlatformView>
   }
 
   Future<void> _setupVideo() async {
-    _nativeViewIntPtr =
-        (await getMethodChannel()!.invokeMethod<int>('getNativeViewPtr'))!;
+    if (kIsWeb) {
+      // On web, we maintain the platform view id and `HtmlElement` mapping internally
+      _nativeViewIntPtr = _platformViewId;
+    } else {
+      _nativeViewIntPtr =
+          (await getMethodChannel()!.invokeMethod<int>('getNativeViewPtr'))!;
+    }
+
     if (!mounted) return;
     if (!_controller(widget.controller).isInitialzed) {
       _listener ??= () {

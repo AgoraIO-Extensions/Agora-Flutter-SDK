@@ -88,6 +88,7 @@ class _State extends State<JoinChannelVideo> {
     ));
 
     await _engine.enableVideo();
+    await _engine.startPreview();
   }
 
   Future<void> _joinChannel() async {
