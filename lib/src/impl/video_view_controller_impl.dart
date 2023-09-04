@@ -84,7 +84,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
     }
 
     await rtcEngine.globalVideoViewController
-        ?.setupVideoView(kNullViewHandle, canvas);
+        ?.setupVideoView(kNullViewHandle, canvas, connection: connection);
   }
 
   @internal
