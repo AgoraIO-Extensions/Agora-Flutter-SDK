@@ -17,10 +17,7 @@ dependencies:
   ffi: '>=1.1.2'
   async: ^2.8.2
   meta: ^1.7.0
-  iris_method_channel:
-    git:
-      url: https://github.com/AgoraIO-Extensions/iris_method_channel_flutter.git
-      ref: 1567a88a345a1cbd66e302af5733b70ed9ccea63
+  iris_method_channel: 2.0.0-dev.1
 
 dev_dependencies:
   flutter_test:
