@@ -1,7 +1,7 @@
 import 'package:agora_rtc_engine/src/agora_base.dart';
 import 'package:agora_rtc_engine/src/agora_media_base.dart';
-import 'package:agora_rtc_engine/src/agora_rtc_engine_ex.dart';
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller.dart';
 import 'package:agora_rtc_engine/src/render/video_view_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
@@ -72,8 +72,7 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
   }
 
   @override
-  Future<void> dispose() async {
-  }
+  Future<void> dispose() async {}
 
   @protected
   Future<void> disposeRenderInternal() async {
@@ -84,30 +83,8 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
       return;
     }
 
-    VideoCanvas videoCanvas = VideoCanvas(
-      view: 0, // null
-      renderMode: canvas.renderMode,
-      mirrorMode: canvas.mirrorMode,
-      uid: canvas.uid,
-      sourceType: canvas.sourceType,
-      cropArea: canvas.cropArea,
-      setupMode: canvas.setupMode,
-      mediaPlayerId: canvas.mediaPlayerId,
-    );
-    try {
-      if (canvas.uid != 0) {
-        if (connection != null && rtcEngine is RtcEngineEx) {
-          await (rtcEngine as RtcEngineEx)
-              .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
-        } else {
-          await rtcEngine.setupRemoteVideo(videoCanvas);
-        }
-      } else {
-        await rtcEngine.setupLocalVideo(videoCanvas);
-      }
-    } catch (e) {
-      debugPrint('disposeRenderInternal error: ${e.toString()}');
-    }
+    await rtcEngine.globalVideoViewController
+        ?.setupVideoView(kNullViewHandle, canvas, connection: connection);
   }
 
   @internal
@@ -152,41 +129,17 @@ mixin VideoViewControllerBaseMixin implements VideoViewControllerBase {
         );
       }
     } else {
-      // do nothing if platform view rendering
-    }
-  }
-
-  @protected
-  Future<void> setupNativeViewInternal(int nativeViewPtr) async {
-    VideoCanvas videoCanvas = VideoCanvas(
-      view: nativeViewPtr,
-      renderMode: canvas.renderMode,
-      mirrorMode: canvas.mirrorMode,
-      uid: canvas.uid,
-      sourceType: canvas.sourceType,
-      cropArea: canvas.cropArea,
-      setupMode: canvas.setupMode,
-      mediaPlayerId: canvas.mediaPlayerId,
-    );
-    try {
-      if (canvas.uid != 0) {
-        if (connection != null) {
-          await (rtcEngine as RtcEngineEx)
-              .setupRemoteVideoEx(canvas: videoCanvas, connection: connection!);
-        } else {
-          await rtcEngine.setupRemoteVideo(videoCanvas);
-        }
-      } else {
-        await rtcEngine.setupLocalVideo(videoCanvas);
+      if (kIsWeb) {
+        // Make sure the `platformViewRegistry.registerViewFactory` is called.
+        rtcEngine.globalVideoViewController;
       }
-    } catch (e) {
-      debugPrint('setupNativeViewInternal error: ${e.toString()}');
     }
   }
 
   @override
   Future<void> setupView(int nativeViewPtr) async {
-    await setupNativeViewInternal(nativeViewPtr);
+    await rtcEngine.globalVideoViewController
+        ?.setupVideoView(nativeViewPtr, canvas, connection: connection);
   }
 
   Future<void> dePlatformRenderRef(int platformViewId) async {

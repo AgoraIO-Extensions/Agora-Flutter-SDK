@@ -146,6 +146,25 @@ jobs:
         run: flutter build ios --no-codesign
         working-directory: example
 
+  build_web:
+    name: Build Web
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      matrix:
+        version: ['2.10.5', '3.0.0']
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.version }}
+          cache: true
+      - run: flutter packages get
+      - name: Run flutter build web
+        run: flutter build web
+        working-directory: example
+
   # Run android rendering test in macos is more stable
   rendering_test_android:
     name: Run Flutter Android Rendering Tests

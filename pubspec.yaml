@@ -17,7 +17,8 @@ dependencies:
   ffi: '>=1.1.2'
   async: ^2.8.2
   meta: ^1.7.0
-  iris_method_channel: 1.2.2
+  iris_method_channel: 2.0.0-dev.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -37,3 +38,7 @@ flutter:
         pluginClass: AgoraRtcNgPlugin
       windows:
         pluginClass: AgoraRtcEnginePlugin
+      # TODO(littlegnal): Enable it when the web support come to beta
+      # web:
+      #   pluginClass: AgoraRtcEngineWeb
+      #   fileName: agora_rtc_engine_web.dart

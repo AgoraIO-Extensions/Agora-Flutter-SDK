@@ -27,7 +27,7 @@ import 'media_player/media_player.dart';
 import 'media_recorder/media_recorder.dart';
 import 'precall_test/precall_test.dart';
 import 'process_audio_raw_data/process_audio_raw_data.dart';
-import 'process_video_raw_data/process_video_raw_data.dart';
+import 'process_video_raw_data/process_video_raw_data_export.dart';
 import 'send_metadata/send_metadata.dart';
 import 'set_content_inspect/set_content_inspect.dart';
 import 'start_rhythm_player/start_rhythm_player.dart';
@@ -71,7 +71,8 @@ final advanced = [
     'name': 'StartLocalVideoTranscoder',
     'widget': const StartLocalVideoTranscoder()
   },
-  {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
+  if (!kIsWeb)
+    {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
   {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
   {'name': 'AudioSpectrum', 'widget': const AudioSpectrum()},
   {'name': 'MediaRecorder', 'widget': const MediaRecorderExample()},
@@ -84,6 +85,6 @@ final advanced = [
   },
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
-  if (Platform.isAndroid || Platform.isIOS)
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},
 ];
