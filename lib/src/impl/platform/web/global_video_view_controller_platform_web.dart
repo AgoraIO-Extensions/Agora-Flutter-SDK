@@ -4,7 +4,6 @@ import 'dart:html';
 import 'dart:ui' as ui;
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
 import 'package:agora_rtc_engine/src/impl/platform/global_video_view_controller_platform.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 
@@ -21,12 +20,11 @@ final Map<int, HtmlElement> _viewMap = {};
 
 class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
   GlobalVideoViewControllerWeb(
-      IrisMethodChannel irisMethodChannel, RtcEngineImpl rtcEngine)
+      IrisMethodChannel irisMethodChannel, RtcEngine rtcEngine)
       : super(irisMethodChannel, rtcEngine) {
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(_platformRendererViewType,
         (int viewId) {
-
       final div = DivElement()
         ..id = _getViewType(viewId)
         ..style.width = '100%'
@@ -52,8 +50,6 @@ class GlobalVideoViewControllerWeb extends GlobalVideoViewControllerPlatfrom {
 
     final div = _viewMap[viewId]!;
 
-    await rtcEngine.setupVideoView(div.id, videoCanvas, connection: connection);
-
-    if (viewHandle == kNullViewHandle) {}
+    await super.setupVideoView(div.id, videoCanvas, connection: connection);
   }
 }

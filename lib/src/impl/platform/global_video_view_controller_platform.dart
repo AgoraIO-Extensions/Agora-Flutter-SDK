@@ -16,7 +16,7 @@ abstract class GlobalVideoViewControllerPlatfrom {
 
   final IrisMethodChannel irisMethodChannel;
 
-  final RtcEngineImpl rtcEngine;
+  final RtcEngine rtcEngine;
 
   int get irisRtcRenderingHandle => 0;
 
@@ -42,32 +42,10 @@ abstract class GlobalVideoViewControllerPlatfrom {
 
   Future<void> setupVideoView(Object viewHandle, VideoCanvas videoCanvas,
       {RtcConnection? connection}) async {
-    Object view = viewHandle;
-
-    VideoCanvas newVideoCanvas = VideoCanvas(
-      view: view as int,
-      renderMode: videoCanvas.renderMode,
-      mirrorMode: videoCanvas.mirrorMode,
-      uid: videoCanvas.uid,
-      sourceType: videoCanvas.sourceType,
-      cropArea: videoCanvas.cropArea,
-      setupMode: videoCanvas.setupMode,
-      mediaPlayerId: videoCanvas.mediaPlayerId,
+    await rtcEngine.setupVideoView(
+      viewHandle,
+      videoCanvas,
+      connection: connection,
     );
-
-    try {
-      if (newVideoCanvas.uid != 0) {
-        if (connection != null) {
-          await rtcEngine.setupRemoteVideoEx(
-              canvas: newVideoCanvas, connection: connection);
-        } else {
-          await rtcEngine.setupRemoteVideo(newVideoCanvas);
-        }
-      } else {
-        await rtcEngine.setupLocalVideo(newVideoCanvas);
-      }
-    } catch (e) {
-      debugPrint('setupNativeViewInternal error: ${e.toString()}');
-    }
   }
 }

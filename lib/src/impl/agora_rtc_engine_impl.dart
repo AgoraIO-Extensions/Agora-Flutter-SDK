@@ -79,6 +79,129 @@ extension RtcEngineExt on RtcEngine {
 
   IrisMethodChannel get irisMethodChannel =>
       (this as RtcEngineImpl)._getIrisMethodChannel();
+
+  Future<void> setupVideoView(Object viewHandle, VideoCanvas videoCanvas,
+      {RtcConnection? connection}) async {
+    Object view = viewHandle;
+    if (kIsWeb) {
+      view = 0;
+    }
+
+    VideoCanvas newVideoCanvas = VideoCanvas(
+      view: view as int,
+      renderMode: videoCanvas.renderMode,
+      mirrorMode: videoCanvas.mirrorMode,
+      uid: videoCanvas.uid,
+      sourceType: videoCanvas.sourceType,
+      cropArea: videoCanvas.cropArea,
+      setupMode: videoCanvas.setupMode,
+      mediaPlayerId: videoCanvas.mediaPlayerId,
+    );
+    try {
+      if (newVideoCanvas.uid != 0) {
+        if (connection != null) {
+          await _setupRemoteVideoExCompat(
+              viewHandle, newVideoCanvas, connection);
+        } else {
+          await _setupRemoteVideoCompat(viewHandle, newVideoCanvas);
+        }
+      } else {
+        await _setupLocalVideoCompat(viewHandle, newVideoCanvas);
+      }
+    } catch (e) {
+      debugPrint('setupVideoView error: ${e.toString()}');
+    }
+  }
+
+  Future<void> _setupRemoteVideoExCompat(
+      Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
+    if (kIsWeb) {
+      return _setupRemoteVideoExWeb(viewHandle, canvas, connection);
+    }
+    return (this as RtcEngineImpl)
+        .setupRemoteVideoEx(canvas: canvas, connection: connection);
+  }
+
+  Future<void> _setupRemoteVideoCompat(
+      Object viewHandle, VideoCanvas canvas) async {
+    if (kIsWeb) {
+      return _setupRemoteVideoWeb(viewHandle, canvas);
+    }
+    return setupRemoteVideo(canvas);
+  }
+
+  Future<void> _setupLocalVideoCompat(
+      Object viewHandle, VideoCanvas canvas) async {
+    if (kIsWeb) {
+      return _setupLocalVideoWeb(canvas, viewHandle);
+    }
+    return setupLocalVideo(canvas);
+  }
+
+  Map<String, dynamic> _createParamsWeb(Object viewHandle, VideoCanvas canvas,
+      {RtcConnection? connection}) {
+    // The type of the `VideoCanvas.view` is `String` on web
+    final param = {
+      'canvas': canvas.toJson()..['view'] = (viewHandle as String),
+      if (connection != null) 'connection': connection.toJson(),
+    };
+    return param;
+  }
+
+  Future<void> _setupRemoteVideoExWeb(
+      Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
+    const apiType = 'RtcEngineEx_setupRemoteVideoEx';
+    final param = _createParamsWeb(viewHandle, canvas, connection: connection);
+    final List<Uint8List> buffers = [];
+    buffers.addAll(canvas.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  Future<void> _setupRemoteVideoWeb(
+      Object viewHandle, VideoCanvas canvas) async {
+    const apiType = 'RtcEngine_setupRemoteVideo';
+    final param = _createParamsWeb(viewHandle, canvas);
+    final List<Uint8List> buffers = [];
+    buffers.addAll(canvas.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  Future<void> _setupLocalVideoWeb(
+      VideoCanvas canvas, Object viewHandle) async {
+    const apiType = 'RtcEngine_setupLocalVideo';
+    // The type of the `VideoCanvas.view` is `String` on web
+    final param = _createParamsWeb(viewHandle, canvas);
+    final List<Uint8List> buffers = [];
+    buffers.addAll(canvas.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(
+      apiType,
+      jsonEncode(param),
+      rawBufferParams: [BufferParam(BufferParamHandle(viewHandle), 1)],
+    ));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    return;
+  }
 }
 
 extension ThumbImageBufferExt on ThumbImageBuffer {
@@ -1027,131 +1150,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
-  }
-
-  Future<void> setupVideoView(Object viewHandle, VideoCanvas videoCanvas,
-      {RtcConnection? connection}) async {
-    Object view = viewHandle;
-    if (kIsWeb) {
-      view = 0;
-    }
-
-    VideoCanvas newVideoCanvas = VideoCanvas(
-      view: view as int,
-      renderMode: videoCanvas.renderMode,
-      mirrorMode: videoCanvas.mirrorMode,
-      uid: videoCanvas.uid,
-      sourceType: videoCanvas.sourceType,
-      cropArea: videoCanvas.cropArea,
-      setupMode: videoCanvas.setupMode,
-      mediaPlayerId: videoCanvas.mediaPlayerId,
-    );
-    try {
-      if (newVideoCanvas.uid != 0) {
-        if (connection != null) {
-          await _setupRemoteVideoExCompat(
-              viewHandle, newVideoCanvas, connection);
-        } else {
-          await _setupRemoteVideoCompat(viewHandle, newVideoCanvas);
-        }
-      } else {
-        await _setupLocalVideoCompat(viewHandle, newVideoCanvas);
-      }
-    } catch (e) {
-      debugPrint('setupNativeViewInternal error: ${e.toString()}');
-    }
-  }
-
-  Future<void> _setupRemoteVideoExCompat(
-      Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
-    if (kIsWeb) {
-      return _setupRemoteVideoExWeb(viewHandle, canvas, connection);
-    }
-    return setupRemoteVideoEx(canvas: canvas, connection: connection);
-  }
-
-  Future<void> _setupRemoteVideoCompat(
-      Object viewHandle, VideoCanvas canvas) async {
-    if (kIsWeb) {
-      return _setupRemoteVideoWeb(viewHandle, canvas);
-    }
-    return setupRemoteVideo(canvas);
-  }
-
-  Future<void> _setupLocalVideoCompat(
-      Object viewHandle, VideoCanvas canvas) async {
-    if (kIsWeb) {
-      return _setupLocalVideoWeb(canvas, viewHandle);
-    }
-    return setupLocalVideo(canvas);
-  }
-
-  Map<String, dynamic> _createParamsWeb(Object viewHandle, VideoCanvas canvas,
-      {RtcConnection? connection}) {
-    // The type of the `VideoCanvas.view` is `String` on web
-    final param = createParams({
-      'canvas': canvas.toJson()..['view'] = (viewHandle as String),
-      if (connection != null) 'connection': connection.toJson(),
-    });
-    return param;
-  }
-
-  Future<void> _setupRemoteVideoExWeb(
-      Object viewHandle, VideoCanvas canvas, RtcConnection connection) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngineEx'}_setupRemoteVideoEx';
-    final param = _createParamsWeb(viewHandle, canvas, connection: connection);
-    final List<Uint8List> buffers = [];
-    buffers.addAll(canvas.collectBufferList());
-    buffers.addAll(connection.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  Future<void> _setupRemoteVideoWeb(
-      Object viewHandle, VideoCanvas canvas) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setupRemoteVideo';
-    final param = _createParamsWeb(viewHandle, canvas);
-    final List<Uint8List> buffers = [];
-    buffers.addAll(canvas.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  Future<void> _setupLocalVideoWeb(
-      VideoCanvas canvas, Object viewHandle) async {
-    final apiType =
-        '${isOverrideClassName ? className : 'RtcEngine'}_setupLocalVideo';
-    // The type of the `VideoCanvas.view` is `String` on web
-    final param = _createParamsWeb(viewHandle, canvas);
-    final List<Uint8List> buffers = [];
-    buffers.addAll(canvas.collectBufferList());
-    final callApiResult = await irisMethodChannel.invokeMethod(IrisMethodCall(
-      apiType,
-      jsonEncode(param),
-      rawBufferParams: [BufferParam(BufferParamHandle(viewHandle), 1)],
-    ));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    return;
   }
 
   /////////// debug ////////
