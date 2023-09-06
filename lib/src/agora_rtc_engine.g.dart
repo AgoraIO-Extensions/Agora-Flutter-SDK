@@ -1073,6 +1073,11 @@ const _$ProxyTypeEnumMap = {
   ProxyType.httpsProxyType: 6,
 };
 
+const _$FeatureTypeEnumMap = {
+  FeatureType.videoVirtualBackground: 1,
+  FeatureType.videoBeautyEffect: 2,
+};
+
 const _$MetadataTypeEnumMap = {
   MetadataType.unknownMetadata: -1,
   MetadataType.videoMetadata: 0,

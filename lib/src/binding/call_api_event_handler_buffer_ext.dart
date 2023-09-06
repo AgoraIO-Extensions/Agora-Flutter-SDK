@@ -1192,7 +1192,8 @@ extension ExternalVideoFrameBufferExt on ExternalVideoFrame {
         matrix: matrix,
         metadataBuffer: metadataBuffer,
         metadataSize: metadataSize,
-        alphaBuffer: alphaBuffer);
+        alphaBuffer: alphaBuffer,
+        textureSliceIndex: textureSliceIndex);
   }
 
   List<Uint8List> collectBufferList() {

@@ -5035,6 +5035,21 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<bool> isFeatureAvailableOnDevice(FeatureType type) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_isFeatureAvailableOnDevice';
+    final param = createParams({'type': type.value()});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as bool;
+  }
+
+  @override
   AudioDeviceManager getAudioDeviceManager() {
 // Implementation template
 // final apiType = '${isOverrideClassName ? className : 'RtcEngine'}_getAudioDeviceManager';

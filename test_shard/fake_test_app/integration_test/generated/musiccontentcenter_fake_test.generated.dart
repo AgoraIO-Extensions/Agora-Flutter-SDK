@@ -29,12 +29,14 @@ void musicContentCenterSmokeTestCases() {
         const String configurationToken = "hello";
         const int configurationMccUid = 10;
         const int configurationMaxCacheSize = 10;
+        const String configurationMccDomain = "hello";
         const MusicContentCenterConfiguration configuration =
             MusicContentCenterConfiguration(
           appId: configurationAppId,
           token: configurationToken,
           mccUid: configurationMccUid,
           maxCacheSize: configurationMaxCacheSize,
+          mccDomain: configurationMccDomain,
         );
         await musicContentCenter.initialize(
           configuration,

@@ -9885,6 +9885,39 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'isFeatureAvailableOnDevice',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const FeatureType type = FeatureType.videoVirtualBackground;
+        await rtcEngine.isFeatureAvailableOnDevice(
+          type,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[isFeatureAvailableOnDevice] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'getAudioDeviceManager',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',

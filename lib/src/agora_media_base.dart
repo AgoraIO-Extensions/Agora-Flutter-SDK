@@ -585,6 +585,10 @@ enum VideoPixelFormat {
   /// 16: The format is I422.
   @JsonValue(16)
   videoPixelI422,
+
+  /// @nodoc
+  @JsonValue(17)
+  videoTextureId3d11texture2d,
 }
 
 /// @nodoc
@@ -679,7 +683,8 @@ class ExternalVideoFrame {
       this.matrix,
       this.metadataBuffer,
       this.metadataSize,
-      this.alphaBuffer});
+      this.alphaBuffer,
+      this.textureSliceIndex});
 
   /// The video type. See VideoBufferType.
   @JsonKey(name: 'type')
@@ -748,6 +753,10 @@ class ExternalVideoFrame {
   /// @nodoc
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
+
+  /// @nodoc
+  @JsonKey(name: 'texture_slice_index')
+  final int? textureSliceIndex;
 
   /// @nodoc
   factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>
