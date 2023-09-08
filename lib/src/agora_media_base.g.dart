@@ -178,6 +178,7 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
           ?.map((e) => (e as num).toDouble())
           .toList(),
       metadataSize: json['metadata_size'] as int?,
+      textureSliceIndex: json['texture_slice_index'] as int?,
     );
 
 Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
@@ -203,6 +204,7 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
   writeNotNull('metadata_size', instance.metadataSize);
+  writeNotNull('texture_slice_index', instance.textureSliceIndex);
   return val;
 }
 
@@ -225,6 +227,7 @@ const _$VideoPixelFormatEnumMap = {
   VideoPixelFormat.videoCvpixelI420: 13,
   VideoPixelFormat.videoCvpixelBgra: 14,
   VideoPixelFormat.videoPixelI422: 16,
+  VideoPixelFormat.videoTextureId3d11texture2d: 17,
 };
 
 const _$EglContextTypeEnumMap = {

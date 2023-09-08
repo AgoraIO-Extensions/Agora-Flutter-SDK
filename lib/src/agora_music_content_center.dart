@@ -64,6 +64,10 @@ enum MusicContentCenterStatusCode {
   /// @nodoc
   @JsonValue(6)
   kMusicContentCenterStatusErrMusicDecryption,
+
+  /// @nodoc
+  @JsonValue(7)
+  kMusicContentCenterStatusErrHttpInternalError,
 }
 
 /// @nodoc
@@ -344,7 +348,7 @@ class MusicContentCenterEventHandler {
 class MusicContentCenterConfiguration {
   /// @nodoc
   const MusicContentCenterConfiguration(
-      {this.appId, this.token, this.mccUid, this.maxCacheSize});
+      {this.appId, this.token, this.mccUid, this.maxCacheSize, this.mccDomain});
 
   /// @nodoc
   @JsonKey(name: 'appId')
@@ -361,6 +365,10 @@ class MusicContentCenterConfiguration {
   /// @nodoc
   @JsonKey(name: 'maxCacheSize')
   final int? maxCacheSize;
+
+  /// @nodoc
+  @JsonKey(name: 'mccDomain')
+  final String? mccDomain;
 
   /// @nodoc
   factory MusicContentCenterConfiguration.fromJson(Map<String, dynamic> json) =>

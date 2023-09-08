@@ -2412,6 +2412,13 @@ const _$LocalVideoStreamErrorEnumMap = {
       20,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
+  LocalVideoStreamError.localVideoStreamErrorScreenCapturePaused: 23,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureResumed: 24,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowHidden: 25,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
 };
 
 const _$RemoteAudioStateEnumMap = {
@@ -2542,6 +2549,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
   ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
+  ConnectionChangedReasonType.connectionChangedCertificationVeryfyFailure: 22,
 };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {
