@@ -1774,7 +1774,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. : (Recommended) Standard bitrate mode. In this mode, the bitrates of the live broadcasting profile is higher than that of the communication profile. : Adaptive bitrate mode In this mode, the bitrates of the live broadcasting profile equals that of the communication profile. If this mode is selected, the video frame rate of live broadcasting scenarios may be lower than the set value.
+  /// The encoding bitrate (Kbps) of the video. (0): (Recommended) Standard bitrate mode. In this mode, the bitrates of the live broadcasting profile is higher than that of the communication profile. (-1): Adaptive bitrate mode. In this mode, the bitrates of the live broadcasting profile equals that of the communication profile. If this mode is selected, the video frame rate of live broadcasting scenarios may be lower than the set value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
@@ -2654,7 +2654,7 @@ enum LocalAudioStreamError {
   @JsonValue(2)
   localAudioStreamErrorDeviceNoPermission,
 
-  /// 3: (Android and iOS only) The local audio capture device is used. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
+  /// 3: (Android and iOS only) The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
   @JsonValue(3)
   localAudioStreamErrorDeviceBusy,
 
@@ -4198,7 +4198,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(13)
   connectionChangedClientIpAddressChanged,
 
-  /// 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The connection state changes to .
+  /// 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The SDK tries to reconnect to the server automatically.
   @JsonValue(14)
   connectionChangedKeepAliveTimeout,
 
@@ -4393,7 +4393,7 @@ enum NetworkType {
   @JsonValue(5)
   networkTypeMobile4g,
 
-  /// 6: The network type is mobile 5G.
+  /// @nodoc
   @JsonValue(6)
   networkTypeMobile5g,
 }
