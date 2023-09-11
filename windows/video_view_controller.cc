@@ -58,25 +58,34 @@ void VideoViewController::HandleMethodCall(
       return;
     }
 
-    intptr_t irisRtcRenderingHandle;
-    if (!GetValueFromEncodableMap(arguments, "irisRtcRenderingHandle", irisRtcRenderingHandle))
+    int64_t irisRtcRenderingHandle;
     {
-      result->Error("Invalid arguments", "No irisRtcRenderingHandle provided.");
-      return;
+      auto iter = arguments->find(flutter::EncodableValue(flutter::EncodableValue("irisRtcRenderingHandle")));
+      if (iter != arguments->end() && !iter->second.IsNull())
+      {
+        // The `irisRtcRenderingHandle` maybe in 32-bit on some devices, we need call `LongValue` explictly
+        irisRtcRenderingHandle = iter->second.LongValue();
+      }
+      else
+      {
+        result->Error("Invalid arguments", "No irisRtcRenderingHandle provided.");
+        return;
+      }
     }
 
     int64_t uid;
-
-    auto iter = arguments->find(flutter::EncodableValue(flutter::EncodableValue("uid")));
-    if (iter != arguments->end() && !iter->second.IsNull())
     {
-      // The uid may between 32-bit and 64-bit value, we need call `LongValue` explictly
-      uid = iter->second.LongValue();
-    }
-    else
-    {
-      result->Error("Invalid arguments", "No uid provided.");
-      return;
+      auto iter = arguments->find(flutter::EncodableValue(flutter::EncodableValue("uid")));
+      if (iter != arguments->end() && !iter->second.IsNull())
+      {
+        // The uid may between 32-bit and 64-bit value, we need call `LongValue` explictly
+        uid = iter->second.LongValue();
+      }
+      else
+      {
+        result->Error("Invalid arguments", "No uid provided.");
+        return;
+      }
     }
 
     std::string channelId;
