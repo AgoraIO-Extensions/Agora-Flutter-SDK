@@ -56,14 +56,16 @@ class _MyAppState extends State<MyApp> {
             _remoteUid = remoteUid;
           });
         },
-        onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
+        onUserOffline: (RtcConnection connection, int remoteUid,
+            UserOfflineReasonType reason) {
           debugPrint("remote user $remoteUid left channel");
           setState(() {
             _remoteUid = null;
           });
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
-          debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+          debugPrint(
+              '[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
         },
       ),
     );
@@ -78,6 +80,18 @@ class _MyAppState extends State<MyApp> {
       uid: 0,
       options: const ChannelMediaOptions(),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _dispose();
+  }
+
+  Future<void> _dispose() async {
+    await _engine.leaveChannel();
+    await _engine.release();
   }
 
   // Create UI with local view and remote view
