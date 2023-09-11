@@ -348,6 +348,10 @@ enum ContentInspectType {
   /// 2: Screenshot capture. SDK takes screenshots of the video stream in the channel and uploads them.
   @JsonValue(2)
   contentInspectSupervision,
+
+  /// @nodoc
+  @JsonValue(3)
+  contentInspectImageModeration,
 }
 
 /// @nodoc
@@ -389,11 +393,16 @@ class ContentInspectModule {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectConfig {
   /// @nodoc
-  const ContentInspectConfig({this.extraInfo, this.modules, this.moduleCount});
+  const ContentInspectConfig(
+      {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
 
   /// Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
   @JsonKey(name: 'extraInfo')
   final String? extraInfo;
+
+  /// @nodoc
+  @JsonKey(name: 'serverConfig')
+  final String? serverConfig;
 
   /// Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
   @JsonKey(name: 'modules')
@@ -585,6 +594,10 @@ enum VideoPixelFormat {
   /// 16: The format is I422.
   @JsonValue(16)
   videoPixelI422,
+
+  /// @nodoc
+  @JsonValue(17)
+  videoTextureId3d11texture2d,
 }
 
 /// @nodoc
@@ -679,7 +692,8 @@ class ExternalVideoFrame {
       this.matrix,
       this.metadataBuffer,
       this.metadataSize,
-      this.alphaBuffer});
+      this.alphaBuffer,
+      this.textureSliceIndex});
 
   /// The video type. See VideoBufferType.
   @JsonKey(name: 'type')
@@ -748,6 +762,10 @@ class ExternalVideoFrame {
   /// @nodoc
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
+
+  /// @nodoc
+  @JsonKey(name: 'texture_slice_index')
+  final int? textureSliceIndex;
 
   /// @nodoc
   factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>

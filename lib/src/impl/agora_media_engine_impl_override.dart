@@ -116,11 +116,14 @@ class MediaEngineImpl extends media_engine_impl_binding.MediaEngineImpl
     json['metadata_buffer'] = 0;
     final param = createParams({'frame': json, 'videoTrackId': videoTrackId});
     final List<Uint8List> buffers = [];
-    // This is a little tricky that the buffers length must be 3
+    // This is a little tricky that the buffers length must be 5
     buffers.add(frame.buffer ?? Uint8List.fromList([]));
     buffers.add(Uint8List.fromList([]));
     buffers.add(frame.metadataBuffer ?? Uint8List.fromList([]));
     buffers.add(frame.alphaBuffer ?? Uint8List.fromList([]));
+    // This position should add the `d3d11_texture_2d`, but it's not suppoted on Flutter,
+    // so add a empty placeholder here.
+    buffers.add(Uint8List.fromList([]));
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
 

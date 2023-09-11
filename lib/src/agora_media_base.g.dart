@@ -56,12 +56,14 @@ const _$ContentInspectTypeEnumMap = {
   ContentInspectType.contentInspectInvalid: 0,
   ContentInspectType.contentInspectModeration: 1,
   ContentInspectType.contentInspectSupervision: 2,
+  ContentInspectType.contentInspectImageModeration: 3,
 };
 
 ContentInspectConfig _$ContentInspectConfigFromJson(
         Map<String, dynamic> json) =>
     ContentInspectConfig(
       extraInfo: json['extraInfo'] as String?,
+      serverConfig: json['serverConfig'] as String?,
       modules: (json['modules'] as List<dynamic>?)
           ?.map((e) => ContentInspectModule.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -79,6 +81,7 @@ Map<String, dynamic> _$ContentInspectConfigToJson(
   }
 
   writeNotNull('extraInfo', instance.extraInfo);
+  writeNotNull('serverConfig', instance.serverConfig);
   writeNotNull('modules', instance.modules?.map((e) => e.toJson()).toList());
   writeNotNull('moduleCount', instance.moduleCount);
   return val;
@@ -178,6 +181,7 @@ ExternalVideoFrame _$ExternalVideoFrameFromJson(Map<String, dynamic> json) =>
           ?.map((e) => (e as num).toDouble())
           .toList(),
       metadataSize: json['metadata_size'] as int?,
+      textureSliceIndex: json['texture_slice_index'] as int?,
     );
 
 Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
@@ -203,6 +207,7 @@ Map<String, dynamic> _$ExternalVideoFrameToJson(ExternalVideoFrame instance) {
   writeNotNull('textureId', instance.textureId);
   writeNotNull('matrix', instance.matrix);
   writeNotNull('metadata_size', instance.metadataSize);
+  writeNotNull('texture_slice_index', instance.textureSliceIndex);
   return val;
 }
 
@@ -225,6 +230,7 @@ const _$VideoPixelFormatEnumMap = {
   VideoPixelFormat.videoCvpixelI420: 13,
   VideoPixelFormat.videoCvpixelBgra: 14,
   VideoPixelFormat.videoPixelI422: 16,
+  VideoPixelFormat.videoTextureId3d11texture2d: 17,
 };
 
 const _$EglContextTypeEnumMap = {
