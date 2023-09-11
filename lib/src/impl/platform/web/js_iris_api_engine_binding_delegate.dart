@@ -2,6 +2,7 @@
 import 'dart:js_util';
 
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import 'package:agora_rtc_engine/src/impl/platform/web/iris_web_rtc_bindings_js.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
 import 'package:iris_method_channel/iris_method_channel_bindings_web.dart'
     as js;
@@ -15,9 +16,12 @@ class IrisApiEngineBindingsDelegateJS
 
   @override
   CreateApiEngineResult createApiEngine(List<Object> args) {
-    final apiEnginePtr = js.CreateIrisApiEngine();
+    final apiEnginePtr = js.createIrisApiEngine();
+    initIrisRtc(apiEnginePtr);
 
-    return CreateApiEngineResult(IrisApiEngineHandle(apiEnginePtr));
+    final res = CreateApiEngineResult(IrisApiEngineHandle(apiEnginePtr));
+
+    return res;
   }
 
   static const _skipCalls = ['CreateIrisRtcRendering'];
@@ -39,14 +43,25 @@ class IrisApiEngineBindingsDelegateJS
   ) async {
     final nApiEnginePtr = apiEnginePtr() as js.IrisApiEngine;
 
+    List<Object> buffer = [];
+    List<int> lenOfBuffer = [];
+    int bufferCount = 0;
+    if (methodCall.rawBufferParams != null) {
+      bufferCount = methodCall.rawBufferParams!.length;
+      for (final rb in methodCall.rawBufferParams!) {
+        buffer.add(rb.intPtr());
+        lenOfBuffer.add(rb.length);
+      }
+    }
+
     final nParam = js.EventParam(
       event: methodCall.funcName,
       data: methodCall.params,
       data_size: methodCall.params.length,
       result: '',
-      buffer: [],
-      length: [],
-      buffer_count: 0,
+      buffer: buffer,
+      length: lenOfBuffer,
+      buffer_count: bufferCount,
     );
 
     if (_skipCalls.contains(methodCall.funcName)) {
@@ -55,7 +70,7 @@ class IrisApiEngineBindingsDelegateJS
     }
 
     final promiseFuture =
-        promiseToFuture(js.CallIrisApiAsync(nApiEnginePtr, nParam));
+        promiseToFuture(js.callIrisApi(nApiEnginePtr, nParam));
 
     final js.CallIrisApiResult irisApiResult = await promiseFuture;
 
@@ -67,7 +82,7 @@ class IrisApiEngineBindingsDelegateJS
     IrisCEventHandlerHandle eventHandler,
   ) {
     return IrisEventHandlerHandle(
-        js.CreateIrisEventHandler(eventHandler() as js.IrisCEventHandler));
+        js.createIrisEventHandler(eventHandler() as js.IrisCEventHandler));
   }
 
   @override
@@ -77,7 +92,7 @@ class IrisApiEngineBindingsDelegateJS
 
   @override
   void destroyNativeApiEngine(IrisApiEngineHandle apiEnginePtr) {
-    js.DestroyIrisApiEngine(apiEnginePtr() as js.IrisApiEngine);
+    js.disposeIrisApiEngine(apiEnginePtr() as js.IrisApiEngine);
   }
 }
 

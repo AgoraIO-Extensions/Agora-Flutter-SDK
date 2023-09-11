@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> {
                                 body: _data[index]['widget'] as Widget?,
                               );
 
-                              if (Platform.isAndroid) {
+                              if (!kIsWeb && Platform.isAndroid) {
                                 widget = AndroidForegroundServiceWidget(
                                     child: widget);
                               }
