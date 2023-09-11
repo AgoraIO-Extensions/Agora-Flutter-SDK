@@ -18,6 +18,7 @@ dependencies:
   async: ^2.8.2
   meta: ^1.7.0
   iris_method_channel: 2.0.0-dev.2
+  js: ^0.6.3
 
 dev_dependencies:
   flutter_test:
