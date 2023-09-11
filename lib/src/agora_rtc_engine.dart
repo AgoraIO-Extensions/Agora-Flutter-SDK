@@ -1254,7 +1254,7 @@ class ImageTrackOptions {
   /// @nodoc
   const ImageTrackOptions({this.imageUrl, this.fps, this.mirrorMode});
 
-  /// The URL of the image that you want to use to replace the video feeds. The image must be in PNG format. This method supports adding an image from the local absolute or relative file path. On the Android platform, adding images from /assets/ is not supported.
+  /// The image URL. Supported formats of images include JPEG, JPG, PNG and GIF. This method supports adding an image from the local absolute or relative file path. On the Android platform, adding images from /assets/ is not supported.
   @JsonKey(name: 'imageUrl')
   final String? imageUrl;
 
@@ -1276,7 +1276,7 @@ class ImageTrackOptions {
 
 /// The channel media options.
 ///
-/// Agora supports publishing multiple audio streams and one video stream at the same time and in the same RtcConnection. For example, publishMicrophoneTrack, publishAudioTrack, publishCustomAudioTrack, and publishMediaPlayerAudioTrack can be set as true at the same time, but only one of publishCameraTrack, publishScreenCaptureVideo publishScreenTrack, publishCustomVideoTrack, or publishEncodedVideoTrack can be set as true. Agora recommends that you set member parameter values yourself according to your business scenario, otherwise the SDK will automatically assign values to member parameters.
+/// Agora supports publishing multiple audio streams and one video stream at the same time and in the same RtcConnection. For example, publishMicrophoneTrack, publishCustomAudioTrack, and publishMediaPlayerAudioTrack can be set as true at the same time, but only one of publishCameraTrack, publishScreenCaptureVideo publishScreenTrack, publishCustomVideoTrack, or publishEncodedVideoTrack can be set as true. Agora recommends that you set member parameter values yourself according to your business scenario, otherwise the SDK will automatically assign values to member parameters.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChannelMediaOptions {
   /// @nodoc
@@ -1506,6 +1506,31 @@ extension ProxyTypeExt on ProxyType {
   /// @nodoc
   int value() {
     return _$ProxyTypeEnumMap[this]!;
+  }
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum FeatureType {
+  /// @nodoc
+  @JsonValue(1)
+  videoVirtualBackground,
+
+  /// @nodoc
+  @JsonValue(2)
+  videoBeautyEffect,
+}
+
+/// @nodoc
+extension FeatureTypeExt on FeatureType {
+  /// @nodoc
+  static FeatureType fromValue(int value) {
+    return $enumDecode(_$FeatureTypeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$FeatureTypeEnumMap[this]!;
   }
 }
 
@@ -2115,7 +2140,7 @@ class RtcEngineEventHandler {
   ///
   /// When the token expires during a call, the SDK triggers this callback to remind the app to renew the token. When receiving this callback, you need to generate a new token on your token server and you can renew your token through one of the following ways:
   ///  Call renewToken to pass in the new token.
-  ///  Call to leave the current channel and then pass in the new token when you call joinChannel to join a channel.
+  ///  Call leaveChannel to leave the current channel and then pass in the new token when you call joinChannel to join a channel.
   ///
   /// * [connection] The connection information. See RtcConnection.
   final void Function(RtcConnection connection)? onRequestToken;
@@ -2244,7 +2269,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the user role switching fails in the interactive live streaming.
   ///
-  /// In the live broadcasting channel profile, when the local user calls to switch the user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
+  /// In the live broadcasting channel profile, when the local user calls setClientRole to switch the user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [reason] The reason for a user role switch failure. See ClientRoleChangeFailedReason.
@@ -3058,7 +3083,7 @@ abstract class RtcEngine {
   /// * [token] The token generated on your server for authentication. When the token for preloading channels expires, you can update the token based on the number of channels you preload.
   ///  When preloading one channel, calling this method to pass in the new token.
   ///  When preloading more than one channels:
-  ///  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token.
+  ///  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token. When generating a wildcard token, ensure the user ID is not set as 0.
   ///  If you use different tokens to preload different channels, call this method to pass in your user ID, channel name and the new token.
   /// * [channelId] The channel name that you want to preload. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
   ///  All lowercase English letters: a to z.
@@ -3087,7 +3112,7 @@ abstract class RtcEngine {
   /// * [token] The token generated on your server for authentication. When the token for preloading channels expires, you can update the token based on the number of channels you preload.
   ///  When preloading one channel, calling this method to pass in the new token.
   ///  When preloading more than one channels:
-  ///  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token.
+  ///  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token. When generating a wildcard token, ensure the user ID is not set as 0.
   ///  If you use different tokens to preload different channels, call this method to pass in your user ID, channel name and the new token.
   /// * [channelId] The channel name that you want to preload. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
   ///  All lowercase English letters: a to z.
@@ -3134,7 +3159,7 @@ abstract class RtcEngine {
   ///  This method allows users to join only one channel at a time.
   ///  Ensure that the app ID you use to generate the token is the same app ID that you pass in the initialize method; otherwise, you may fail to join the channel by token.
   ///
-  /// * [token] The token generated on your server for authentication.
+  /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
   /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
@@ -3200,7 +3225,7 @@ abstract class RtcEngine {
 
   /// Sets the channel profile.
   ///
-  /// After initializing the SDK, the default channel profile is the live streaming profile. You can call this method to set the usage scenario of the channel. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for the interactive live video streaming.
+  /// After initializing the SDK, the default channel profile is the live streaming profile. You can call this method to set the channel profile. The Agora SDK differentiates channel profiles and applies optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call and prioritizes video quality for interactive live video streaming.
   ///  To ensure the quality of real-time communication, Agora recommends that all users in a channel use the same channel profile.
   ///  This method must be called and set before joinChannel, and cannot be set again after joining the channel.
   ///
@@ -3218,7 +3243,7 @@ abstract class RtcEngine {
   /// In the interactive live streaming profile, the SDK sets the user role as audience by default. You can call this method to set the user role as host. You can call this method either before or after joining a channel. If you call this method to set the user's role as the host before joining the channel and set the local video property through the setupLocalVideo method, the local video preview is automatically enabled when the user joins the channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
   ///  Calls muteLocalAudioStream and muteLocalVideoStream to change the publishing state.
   ///  Triggers onClientRoleChanged on the local client.
-  ///  Triggers onUserJoined or onUserOffline on the remote client. This method applies to the interactive live streaming profile (the profile parameter of setChannelProfile is channelProfileLiveBroadcasting) only.
+  ///  Triggers onUserJoined or onUserOffline on the remote client. This method applies to the interactive live streaming profile (the profile parameter of setChannelProfile is set as channelProfileLiveBroadcasting) only.
   ///
   /// * [role] The user role in the interactive live streaming. See ClientRoleType.
   /// * [options] The detailed options of a user, including the user level. See ClientRoleOptions.
@@ -3259,13 +3284,13 @@ abstract class RtcEngine {
   ///
   /// In scenarios where there are existing cameras to capture video, Agora recommends that you use the following steps to capture and publish video with multiple cameras:
   ///  Call this method to enable multi-channel camera capture.
-  ///  Call to start the local video preview.
+  ///  Call startPreview to start the local video preview.
   ///  Call startCameraCapture, and set sourceType to start video capture with the second camera.
   ///  Call joinChannelEx, and set publishSecondaryCameraTrack to true to publish the video stream captured by the second camera in the channel. If you want to disable multi-channel camera capture, use the following steps:
   ///  Call stopCameraCapture.
-  ///  Call this method with enabled set to false. You can call this method before and after to enable multi-camera capture:
-  ///  If it is enabled before, the local video preview shows the image captured by the two cameras at the same time.
-  ///  If it is enabled after, the SDK stops the current camera capture first, and then enables the primary camera and the second camera. The local video preview appears black for a short time, and then automatically returns to normal. When using this function, ensure that the system version is 13.0 or later. The minimum iOS device types that support multi-camera capture are as follows:
+  ///  Call this method with enabled set to false. You can call this method before and after startPreview to enable multi-camera capture:
+  ///  If it is enabled before startPreview, the local video preview shows the image captured by the two cameras at the same time.
+  ///  If it is enabled after startPreview, the SDK stops the current camera capture first, and then enables the primary camera and the second camera. The local video preview appears black for a short time, and then automatically returns to normal. When using this function, ensure that the system version is 13.0 or later. The minimum iOS device types that support multi-camera capture are as follows:
   ///  iPhone XR
   ///  iPhone XS
   ///  iPhone XS Max
@@ -3368,12 +3393,14 @@ abstract class RtcEngine {
   /// Sets the image enhancement options.
   ///
   /// Enables or disables image enhancement, and sets the options.
-  ///  Call this method before calling enableVideo or.
+  ///  Call this method before calling enableVideo or startPreview.
   ///  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
   /// * [enabled] Whether to enable the image enhancement function: true : Enable the image enhancement function. false : (Default) Disable the image enhancement function.
   /// * [options] The image enhancement options. See BeautyOptions.
-  /// * [type] The type of the video source, see MediaSourceType.
+  /// * [type] Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  The default value is unknownMediaSource.
+  ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
@@ -3451,7 +3478,7 @@ abstract class RtcEngine {
 
   /// Enables/Disables the virtual background.
   ///
-  /// The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method before calling enableVideo or.
+  /// The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method before calling enableVideo or startPreview.
   ///  This feature requires high performance devices. Agora recommends that you implement it on devices equipped with the following chips:
   ///  Snapdragon 700 series 750G and later
   ///  Snapdragon 800 series 835 and later
@@ -4639,7 +4666,7 @@ abstract class RtcEngine {
   ///
   /// The SDK enables the low-quality video stream auto mode on the sender side by default (it does not actively sending low-quality video streams). The host identity receiver can initiate a low-quality video stream application at the receiving end by calling setRemoteVideoStreamType. After receiving the application, the sending end automatically switches to the low-quality video stream mode.
   ///  If you want to modify this behavior, you can call this method and modify the mode to disableSimulcastStream (never send low-quality video streams) or enableSimulcastStream (always send low-quality video streams).
-  ///  If you want to restore the default behavior after making changes, you can call this method again with mode set to autoSimulcastStream. The difference and connection between this method and is as follows:
+  ///  If you want to restore the default behavior after making changes, you can call this method again with mode set to autoSimulcastStream. The difference and connection between this method and enableDualStreamMode is as follows:
   ///  When calling this method and setting mode to disableSimulcastStream, it has the same effect as calling and setting enabled to false.
   ///  When calling this method and setting mode to enableSimulcastStream, it has the same effect as calling and setting enabled to true.
   ///  Both methods can be called before and after joining a channel. If both methods are used, the settings in the method called later takes precedence.
@@ -4990,7 +5017,9 @@ abstract class RtcEngine {
   /// * [extension] The name of the extension.
   /// * [key] The key of the extension.
   /// * [value] The value of the extension key.
-  /// * [type] The type of the video source, see MediaSourceType.
+  /// * [type] Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  The default value is unknownMediaSource.
+  ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
@@ -5606,8 +5635,7 @@ abstract class RtcEngine {
 
   /// Starts pushing media streams to a CDN without transcoding.
   ///
-  /// Ensure that you enable the Media Push service before using this function. See Enable Media Push.
-  ///  Call this method after joining a channel.
+  /// Call this method after joining a channel.
   ///  Only hosts in the LIVE_BROADCASTING profile can call this method.
   ///  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push. Agora recommends that you use the server-side Media Push function. You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
   ///
@@ -5623,8 +5651,7 @@ abstract class RtcEngine {
 
   /// Starts Media Push and sets the transcoding configuration.
   ///
-  /// Agora recommends that you use the server-side Media Push function. You can call this method to push a live audio-and-video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
-  ///  Ensure that you enable the Media Push service before using this function. See Enable Media Push.
+  /// Agora recommends that you use the server-side Media Push function. You can call this method to push a live audio-and-video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times. Under one Agora project, the maximum number of concurrent tasks to push media streams is 200 by default. If you need a higher quota, contact. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
   ///  Call this method after joining a channel.
   ///  Only hosts in the LIVE_BROADCASTING profile can call this method.
   ///  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
@@ -5731,8 +5758,8 @@ abstract class RtcEngine {
 
   /// Sets the rotation angle of the captured video.
   ///
-  /// You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
-  ///  This method applies to Windows only.
+  /// This method applies to Windows only.
+  ///  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  When the video capture device does not have the gravity sensing function, you can call this method to manually adjust the rotation angle of the captured video.
   ///
   /// * [type] The video source type. See VideoSourceType.
@@ -6005,7 +6032,7 @@ abstract class RtcEngine {
   ///  The local client: onLocalUserRegistered, onJoinChannelSuccess and onConnectionStateChanged callbacks.
   ///  The remote client: The onUserJoined callback, if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile. Once a user joins the channel, the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. To stop subscribing to a specified stream or all remote streams, call the corresponding mute methods. To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
   ///
-  /// * [token] The token generated on your server for authentication.
+  /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
   /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
@@ -6042,7 +6069,7 @@ abstract class RtcEngine {
   ///  The local client: onLocalUserRegistered, onJoinChannelSuccess and onConnectionStateChanged callbacks.
   ///  The remote client: The onUserJoined callback, if the user is in the COMMUNICATION profile, and the onUserInfoUpdated callback if the user is a host in the LIVE_BROADCASTING profile.
   ///
-  /// * [token] The token generated on your server for authentication.
+  /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
   /// * [channelId] The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters:
   ///  All lowercase English letters: a to z.
   ///  All uppercase English letters: A to Z.
@@ -6431,6 +6458,9 @@ abstract class RtcEngine {
   /// Returns
   /// The Unix timestamp (ms) of the current NTP time.
   Future<int> getNtpWallTimeInMs();
+
+  /// @nodoc
+  Future<bool> isFeatureAvailableOnDevice(FeatureType type);
 
   /// Gets the AudioDeviceManager object to manage audio devices.
   ///
