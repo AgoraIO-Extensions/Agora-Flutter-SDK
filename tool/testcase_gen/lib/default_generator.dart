@@ -18,9 +18,8 @@ $ignoreForFile
 abstract class DefaultGenerator implements Generator {
   const DefaultGenerator();
 
-@protected
-  GeneratorConfig? getConfig(
-      List<GeneratorConfig> configs, String methodName) {
+  @protected
+  GeneratorConfig? getConfig(List<GeneratorConfig> configs, String methodName) {
     for (final config in configs) {
       if (config.name == methodName) {
         return config;
@@ -34,7 +33,7 @@ abstract class DefaultGenerator implements Generator {
     return '$prefix${name[0].toUpperCase()}${name.substring(1)}';
   }
 
-@protected
+  @protected
   String getParamType(Parameter parameter) {
     if (parameter.type.typeArguments.isEmpty) {
       return parameter.type.type;

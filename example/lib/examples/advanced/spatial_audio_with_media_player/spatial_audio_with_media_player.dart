@@ -49,7 +49,7 @@ class _State extends State<SpatialAudioWithMediaPlayer> {
   void _dispose() async {
     await _engine.getLocalSpatialAudioEngine().release();
     await _mediaPlayerController.dispose();
-    
+
     await _engine.release();
   }
 

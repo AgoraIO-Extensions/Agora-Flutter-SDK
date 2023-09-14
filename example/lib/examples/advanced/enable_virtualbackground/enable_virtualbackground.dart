@@ -19,7 +19,8 @@ class EnableVirtualBackground extends StatefulWidget {
   State<StatefulWidget> createState() => _State();
 }
 
-class _State extends State<EnableVirtualBackground> with KeepRemoteVideoViewsMixin {
+class _State extends State<EnableVirtualBackground>
+    with KeepRemoteVideoViewsMixin {
   late final RtcEngine _engine;
   bool _isReadyPreview = false;
 
