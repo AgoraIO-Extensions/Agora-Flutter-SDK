@@ -4,7 +4,6 @@ import 'package:integration_test/integration_test.dart';
 import 'package:integration_test_app/main.dart' as app;
 
 void testCases() {
-
   testWidgets(
     'getAssetAbsolutePath',
     (WidgetTester tester) async {
@@ -20,7 +19,8 @@ void testCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final assetPath = await rtcEngine.getAssetAbsolutePath('assets/agora-logo.png');
+      final assetPath =
+          await rtcEngine.getAssetAbsolutePath('assets/agora-logo.png');
       expect(assetPath!.endsWith('agora-logo.png'), isTrue);
 
       await rtcEngine.release();

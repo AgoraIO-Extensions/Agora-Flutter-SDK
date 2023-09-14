@@ -152,7 +152,8 @@ class NativeIrisApiEngineBindingsDelegate
     IrisCEventHandlerHandle eventHandler,
   ) {
     return IrisEventHandlerHandle(_binding.CreateIrisEventHandler(
-        (eventHandler() as ffi.Pointer<iris_bindings.IrisCEventHandler>).cast()));
+        (eventHandler() as ffi.Pointer<iris_bindings.IrisCEventHandler>)
+            .cast()));
   }
 
   @override
@@ -177,7 +178,6 @@ class NativeIrisApiEngineBindingsDelegate
 
 class IrisApiEngineNativeBindingDelegateProvider
     extends PlatformBindingsProvider {
-
   @override
   PlatformBindingsDelegateInterface provideNativeBindingDelegate() {
     return NativeIrisApiEngineBindingsDelegate();

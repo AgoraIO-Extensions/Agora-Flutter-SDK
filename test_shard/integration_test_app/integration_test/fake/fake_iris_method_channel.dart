@@ -79,7 +79,6 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
       return CallApiResult(data: {'result': 0}, irisReturnCode: 0);
     }
 
-
     await __maybeDelay();
     final res = super.invokeMethod(methodCall);
     return res;
