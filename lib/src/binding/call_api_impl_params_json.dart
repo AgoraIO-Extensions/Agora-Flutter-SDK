@@ -5,195 +5,133 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'call_api_impl_params_json.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class MediaPlayerGetDurationJson {
-  const MediaPlayerGetDurationJson(this.duration);
+class AudioDeviceManagerGetPlaybackDeviceJson {
+  const AudioDeviceManagerGetPlaybackDeviceJson(this.deviceId);
 
-  @JsonKey(name: 'duration')
-  final int duration;
-  factory MediaPlayerGetDurationJson.fromJson(Map<String, dynamic> json) =>
-      _$MediaPlayerGetDurationJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$MediaPlayerGetDurationJsonToJson(this);
+  @JsonKey(name: 'deviceId')
+  final String deviceId;
+  factory AudioDeviceManagerGetPlaybackDeviceJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioDeviceManagerGetPlaybackDeviceJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioDeviceManagerGetPlaybackDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MediaPlayerGetPlayPositionJson {
-  const MediaPlayerGetPlayPositionJson(this.pos);
-
-  @JsonKey(name: 'pos')
-  final int pos;
-  factory MediaPlayerGetPlayPositionJson.fromJson(Map<String, dynamic> json) =>
-      _$MediaPlayerGetPlayPositionJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$MediaPlayerGetPlayPositionJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerGetStreamCountJson {
-  const MediaPlayerGetStreamCountJson(this.count);
-
-  @JsonKey(name: 'count')
-  final int count;
-  factory MediaPlayerGetStreamCountJson.fromJson(Map<String, dynamic> json) =>
-      _$MediaPlayerGetStreamCountJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$MediaPlayerGetStreamCountJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerGetStreamInfoJson {
-  const MediaPlayerGetStreamInfoJson(this.info);
-
-  @JsonKey(name: 'info')
-  final PlayerStreamInfo info;
-  factory MediaPlayerGetStreamInfoJson.fromJson(Map<String, dynamic> json) =>
-      _$MediaPlayerGetStreamInfoJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$MediaPlayerGetStreamInfoJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerGetMuteJson {
-  const MediaPlayerGetMuteJson(this.muted);
-
-  @JsonKey(name: 'muted')
-  final bool muted;
-  factory MediaPlayerGetMuteJson.fromJson(Map<String, dynamic> json) =>
-      _$MediaPlayerGetMuteJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$MediaPlayerGetMuteJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerGetPlayoutVolumeJson {
-  const MediaPlayerGetPlayoutVolumeJson(this.volume);
+class AudioDeviceManagerGetPlaybackDeviceVolumeJson {
+  const AudioDeviceManagerGetPlaybackDeviceVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
   final int volume;
-  factory MediaPlayerGetPlayoutVolumeJson.fromJson(Map<String, dynamic> json) =>
-      _$MediaPlayerGetPlayoutVolumeJsonFromJson(json);
+  factory AudioDeviceManagerGetPlaybackDeviceVolumeJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MediaPlayerGetPlayoutVolumeJsonToJson(this);
+      _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MediaPlayerGetPublishSignalVolumeJson {
-  const MediaPlayerGetPublishSignalVolumeJson(this.volume);
+class AudioDeviceManagerGetRecordingDeviceJson {
+  const AudioDeviceManagerGetRecordingDeviceJson(this.deviceId);
+
+  @JsonKey(name: 'deviceId')
+  final String deviceId;
+  factory AudioDeviceManagerGetRecordingDeviceJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioDeviceManagerGetRecordingDeviceJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioDeviceManagerGetRecordingDeviceJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioDeviceManagerGetRecordingDeviceVolumeJson {
+  const AudioDeviceManagerGetRecordingDeviceVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
   final int volume;
-  factory MediaPlayerGetPublishSignalVolumeJson.fromJson(
+  factory AudioDeviceManagerGetRecordingDeviceVolumeJson.fromJson(
           Map<String, dynamic> json) =>
-      _$MediaPlayerGetPublishSignalVolumeJsonFromJson(json);
+      _$AudioDeviceManagerGetRecordingDeviceVolumeJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MediaPlayerGetPublishSignalVolumeJsonToJson(this);
+      _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MediaPlayerCacheManagerGetCacheDirJson {
-  const MediaPlayerCacheManagerGetCacheDirJson(this.path);
+class AudioDeviceManagerGetLoopbackDeviceJson {
+  const AudioDeviceManagerGetLoopbackDeviceJson(this.deviceId);
 
-  @JsonKey(name: 'path')
-  final String path;
-  factory MediaPlayerCacheManagerGetCacheDirJson.fromJson(
+  @JsonKey(name: 'deviceId')
+  final String deviceId;
+  factory AudioDeviceManagerGetLoopbackDeviceJson.fromJson(
           Map<String, dynamic> json) =>
-      _$MediaPlayerCacheManagerGetCacheDirJsonFromJson(json);
+      _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MediaPlayerCacheManagerGetCacheDirJsonToJson(this);
+      _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MusicContentCenterGetMusicChartsJson {
-  const MusicContentCenterGetMusicChartsJson(this.requestId);
+class AudioDeviceManagerGetPlaybackDeviceMuteJson {
+  const AudioDeviceManagerGetPlaybackDeviceMuteJson(this.mute);
 
-  @JsonKey(name: 'requestId')
-  final String requestId;
-  factory MusicContentCenterGetMusicChartsJson.fromJson(
+  @JsonKey(name: 'mute')
+  final bool mute;
+  factory AudioDeviceManagerGetPlaybackDeviceMuteJson.fromJson(
           Map<String, dynamic> json) =>
-      _$MusicContentCenterGetMusicChartsJsonFromJson(json);
+      _$AudioDeviceManagerGetPlaybackDeviceMuteJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MusicContentCenterGetMusicChartsJsonToJson(this);
+      _$AudioDeviceManagerGetPlaybackDeviceMuteJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MusicContentCenterGetMusicCollectionByMusicChartIdJson {
-  const MusicContentCenterGetMusicCollectionByMusicChartIdJson(this.requestId);
+class AudioDeviceManagerGetRecordingDeviceMuteJson {
+  const AudioDeviceManagerGetRecordingDeviceMuteJson(this.mute);
 
-  @JsonKey(name: 'requestId')
-  final String requestId;
-  factory MusicContentCenterGetMusicCollectionByMusicChartIdJson.fromJson(
+  @JsonKey(name: 'mute')
+  final bool mute;
+  factory AudioDeviceManagerGetRecordingDeviceMuteJson.fromJson(
           Map<String, dynamic> json) =>
-      _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonFromJson(json);
+      _$AudioDeviceManagerGetRecordingDeviceMuteJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonToJson(this);
+      _$AudioDeviceManagerGetRecordingDeviceMuteJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MusicContentCenterSearchMusicJson {
-  const MusicContentCenterSearchMusicJson(this.requestId);
+class RtcEngineExCreateDataStreamExJson {
+  const RtcEngineExCreateDataStreamExJson(this.streamId);
 
-  @JsonKey(name: 'requestId')
-  final String requestId;
-  factory MusicContentCenterSearchMusicJson.fromJson(
+  @JsonKey(name: 'streamId')
+  final int streamId;
+  factory RtcEngineExCreateDataStreamExJson.fromJson(
           Map<String, dynamic> json) =>
-      _$MusicContentCenterSearchMusicJsonFromJson(json);
+      _$RtcEngineExCreateDataStreamExJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MusicContentCenterSearchMusicJsonToJson(this);
+      _$RtcEngineExCreateDataStreamExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MusicContentCenterPreloadJson {
-  const MusicContentCenterPreloadJson(this.requestId);
+class RtcEngineExGetUserInfoByUserAccountExJson {
+  const RtcEngineExGetUserInfoByUserAccountExJson(this.userInfo);
 
-  @JsonKey(name: 'requestId')
-  final String requestId;
-  factory MusicContentCenterPreloadJson.fromJson(Map<String, dynamic> json) =>
-      _$MusicContentCenterPreloadJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$MusicContentCenterPreloadJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterGetCachesJson {
-  const MusicContentCenterGetCachesJson(this.cacheInfo);
-
-  @JsonKey(name: 'cacheInfo')
-  final List<MusicCacheInfo> cacheInfo;
-  factory MusicContentCenterGetCachesJson.fromJson(Map<String, dynamic> json) =>
-      _$MusicContentCenterGetCachesJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MusicContentCenterGetCachesJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterGetLyricJson {
-  const MusicContentCenterGetLyricJson(this.requestId);
-
-  @JsonKey(name: 'requestId')
-  final String requestId;
-  factory MusicContentCenterGetLyricJson.fromJson(Map<String, dynamic> json) =>
-      _$MusicContentCenterGetLyricJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$MusicContentCenterGetLyricJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterGetSongSimpleInfoJson {
-  const MusicContentCenterGetSongSimpleInfoJson(this.requestId);
-
-  @JsonKey(name: 'requestId')
-  final String requestId;
-  factory MusicContentCenterGetSongSimpleInfoJson.fromJson(
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+  factory RtcEngineExGetUserInfoByUserAccountExJson.fromJson(
           Map<String, dynamic> json) =>
-      _$MusicContentCenterGetSongSimpleInfoJsonFromJson(json);
+      _$RtcEngineExGetUserInfoByUserAccountExJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MusicContentCenterGetSongSimpleInfoJsonToJson(this);
+      _$RtcEngineExGetUserInfoByUserAccountExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class MusicContentCenterGetInternalSongCodeJson {
-  const MusicContentCenterGetInternalSongCodeJson(this.internalSongCode);
+class RtcEngineExGetUserInfoByUidExJson {
+  const RtcEngineExGetUserInfoByUidExJson(this.userInfo);
 
-  @JsonKey(name: 'internalSongCode')
-  final int internalSongCode;
-  factory MusicContentCenterGetInternalSongCodeJson.fromJson(
+  @JsonKey(name: 'userInfo')
+  final UserInfo userInfo;
+  factory RtcEngineExGetUserInfoByUidExJson.fromJson(
           Map<String, dynamic> json) =>
-      _$MusicContentCenterGetInternalSongCodeJsonFromJson(json);
+      _$RtcEngineExGetUserInfoByUidExJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$MusicContentCenterGetInternalSongCodeJsonToJson(this);
+      _$RtcEngineExGetUserInfoByUidExJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -317,131 +255,193 @@ class RtcEngineGetUserInfoByUidJson {
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineExCreateDataStreamExJson {
-  const RtcEngineExCreateDataStreamExJson(this.streamId);
+class MusicContentCenterGetMusicChartsJson {
+  const MusicContentCenterGetMusicChartsJson(this.requestId);
 
-  @JsonKey(name: 'streamId')
-  final int streamId;
-  factory RtcEngineExCreateDataStreamExJson.fromJson(
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetMusicChartsJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineExCreateDataStreamExJsonFromJson(json);
+      _$MusicContentCenterGetMusicChartsJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$RtcEngineExCreateDataStreamExJsonToJson(this);
+      _$MusicContentCenterGetMusicChartsJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineExGetUserInfoByUserAccountExJson {
-  const RtcEngineExGetUserInfoByUserAccountExJson(this.userInfo);
+class MusicContentCenterGetMusicCollectionByMusicChartIdJson {
+  const MusicContentCenterGetMusicCollectionByMusicChartIdJson(this.requestId);
 
-  @JsonKey(name: 'userInfo')
-  final UserInfo userInfo;
-  factory RtcEngineExGetUserInfoByUserAccountExJson.fromJson(
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetMusicCollectionByMusicChartIdJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineExGetUserInfoByUserAccountExJsonFromJson(json);
+      _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$RtcEngineExGetUserInfoByUserAccountExJsonToJson(this);
+      _$MusicContentCenterGetMusicCollectionByMusicChartIdJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class RtcEngineExGetUserInfoByUidExJson {
-  const RtcEngineExGetUserInfoByUidExJson(this.userInfo);
+class MusicContentCenterSearchMusicJson {
+  const MusicContentCenterSearchMusicJson(this.requestId);
 
-  @JsonKey(name: 'userInfo')
-  final UserInfo userInfo;
-  factory RtcEngineExGetUserInfoByUidExJson.fromJson(
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterSearchMusicJson.fromJson(
           Map<String, dynamic> json) =>
-      _$RtcEngineExGetUserInfoByUidExJsonFromJson(json);
+      _$MusicContentCenterSearchMusicJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$RtcEngineExGetUserInfoByUidExJsonToJson(this);
+      _$MusicContentCenterSearchMusicJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetPlaybackDeviceJson {
-  const AudioDeviceManagerGetPlaybackDeviceJson(this.deviceId);
+class MusicContentCenterPreloadJson {
+  const MusicContentCenterPreloadJson(this.requestId);
 
-  @JsonKey(name: 'deviceId')
-  final String deviceId;
-  factory AudioDeviceManagerGetPlaybackDeviceJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetPlaybackDeviceJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetPlaybackDeviceJsonToJson(this);
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterPreloadJson.fromJson(Map<String, dynamic> json) =>
+      _$MusicContentCenterPreloadJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MusicContentCenterPreloadJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetPlaybackDeviceVolumeJson {
-  const AudioDeviceManagerGetPlaybackDeviceVolumeJson(this.volume);
+class MusicContentCenterGetCachesJson {
+  const MusicContentCenterGetCachesJson(this.cacheInfo);
+
+  @JsonKey(name: 'cacheInfo')
+  final List<MusicCacheInfo> cacheInfo;
+  factory MusicContentCenterGetCachesJson.fromJson(Map<String, dynamic> json) =>
+      _$MusicContentCenterGetCachesJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetCachesJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetLyricJson {
+  const MusicContentCenterGetLyricJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetLyricJson.fromJson(Map<String, dynamic> json) =>
+      _$MusicContentCenterGetLyricJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MusicContentCenterGetLyricJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetSongSimpleInfoJson {
+  const MusicContentCenterGetSongSimpleInfoJson(this.requestId);
+
+  @JsonKey(name: 'requestId')
+  final String requestId;
+  factory MusicContentCenterGetSongSimpleInfoJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetSongSimpleInfoJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetSongSimpleInfoJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterGetInternalSongCodeJson {
+  const MusicContentCenterGetInternalSongCodeJson(this.internalSongCode);
+
+  @JsonKey(name: 'internalSongCode')
+  final int internalSongCode;
+  factory MusicContentCenterGetInternalSongCodeJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterGetInternalSongCodeJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterGetInternalSongCodeJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerGetDurationJson {
+  const MediaPlayerGetDurationJson(this.duration);
+
+  @JsonKey(name: 'duration')
+  final int duration;
+  factory MediaPlayerGetDurationJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetDurationJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MediaPlayerGetDurationJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerGetPlayPositionJson {
+  const MediaPlayerGetPlayPositionJson(this.pos);
+
+  @JsonKey(name: 'pos')
+  final int pos;
+  factory MediaPlayerGetPlayPositionJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetPlayPositionJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MediaPlayerGetPlayPositionJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerGetStreamCountJson {
+  const MediaPlayerGetStreamCountJson(this.count);
+
+  @JsonKey(name: 'count')
+  final int count;
+  factory MediaPlayerGetStreamCountJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetStreamCountJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MediaPlayerGetStreamCountJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerGetStreamInfoJson {
+  const MediaPlayerGetStreamInfoJson(this.info);
+
+  @JsonKey(name: 'info')
+  final PlayerStreamInfo info;
+  factory MediaPlayerGetStreamInfoJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetStreamInfoJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MediaPlayerGetStreamInfoJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerGetMuteJson {
+  const MediaPlayerGetMuteJson(this.muted);
+
+  @JsonKey(name: 'muted')
+  final bool muted;
+  factory MediaPlayerGetMuteJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetMuteJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$MediaPlayerGetMuteJsonToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerGetPlayoutVolumeJson {
+  const MediaPlayerGetPlayoutVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
   final int volume;
-  factory AudioDeviceManagerGetPlaybackDeviceVolumeJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonFromJson(json);
+  factory MediaPlayerGetPlayoutVolumeJson.fromJson(Map<String, dynamic> json) =>
+      _$MediaPlayerGetPlayoutVolumeJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetPlaybackDeviceVolumeJsonToJson(this);
+      _$MediaPlayerGetPlayoutVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetRecordingDeviceJson {
-  const AudioDeviceManagerGetRecordingDeviceJson(this.deviceId);
-
-  @JsonKey(name: 'deviceId')
-  final String deviceId;
-  factory AudioDeviceManagerGetRecordingDeviceJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetRecordingDeviceJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetRecordingDeviceJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetRecordingDeviceVolumeJson {
-  const AudioDeviceManagerGetRecordingDeviceVolumeJson(this.volume);
+class MediaPlayerGetPublishSignalVolumeJson {
+  const MediaPlayerGetPublishSignalVolumeJson(this.volume);
 
   @JsonKey(name: 'volume')
   final int volume;
-  factory AudioDeviceManagerGetRecordingDeviceVolumeJson.fromJson(
+  factory MediaPlayerGetPublishSignalVolumeJson.fromJson(
           Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetRecordingDeviceVolumeJsonFromJson(json);
+      _$MediaPlayerGetPublishSignalVolumeJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetRecordingDeviceVolumeJsonToJson(this);
+      _$MediaPlayerGetPublishSignalVolumeJsonToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetLoopbackDeviceJson {
-  const AudioDeviceManagerGetLoopbackDeviceJson(this.deviceId);
+class MediaPlayerCacheManagerGetCacheDirJson {
+  const MediaPlayerCacheManagerGetCacheDirJson(this.path);
 
-  @JsonKey(name: 'deviceId')
-  final String deviceId;
-  factory AudioDeviceManagerGetLoopbackDeviceJson.fromJson(
+  @JsonKey(name: 'path')
+  final String path;
+  factory MediaPlayerCacheManagerGetCacheDirJson.fromJson(
           Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetLoopbackDeviceJsonFromJson(json);
+      _$MediaPlayerCacheManagerGetCacheDirJsonFromJson(json);
   Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetLoopbackDeviceJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetPlaybackDeviceMuteJson {
-  const AudioDeviceManagerGetPlaybackDeviceMuteJson(this.mute);
-
-  @JsonKey(name: 'mute')
-  final bool mute;
-  factory AudioDeviceManagerGetPlaybackDeviceMuteJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetPlaybackDeviceMuteJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetPlaybackDeviceMuteJsonToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioDeviceManagerGetRecordingDeviceMuteJson {
-  const AudioDeviceManagerGetRecordingDeviceMuteJson(this.mute);
-
-  @JsonKey(name: 'mute')
-  final bool mute;
-  factory AudioDeviceManagerGetRecordingDeviceMuteJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioDeviceManagerGetRecordingDeviceMuteJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioDeviceManagerGetRecordingDeviceMuteJsonToJson(this);
+      _$MediaPlayerCacheManagerGetCacheDirJsonToJson(this);
 }
