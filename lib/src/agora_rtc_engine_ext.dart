@@ -15,9 +15,7 @@ extension RtcEngineExt on RtcEngine {
   /// The actual path of the Asset.
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
-    final p = await impl.engineMethodChannel
-        .invokeMethod<String>('getAssetAbsolutePath', assetPath);
-    return p;
+    return impl.getAssetAbsolutePath(assetPath);
   }
 }
 

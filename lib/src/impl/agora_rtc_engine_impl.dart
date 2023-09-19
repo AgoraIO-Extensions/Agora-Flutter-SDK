@@ -46,6 +46,8 @@ import 'package:meta/meta.dart';
 
 import 'platform/global_video_view_controller.dart';
 
+import 'package:path/path.dart' as path show join;
+
 // ignore_for_file: public_member_api_docs
 
 int? _mockRtcEngineNativeHandle;
@@ -1150,6 +1152,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
+  }
+
+  Future<String?> getAssetAbsolutePath(String assetPath) async {
+    if (kIsWeb) {
+      // The assets are located in the `assets` directory.
+      return 'assets/$assetPath';
+    }
+
+    final p = await engineMethodChannel.invokeMethod<String>(
+        'getAssetAbsolutePath', assetPath);
+    return p;
   }
 
   /////////// debug ////////
