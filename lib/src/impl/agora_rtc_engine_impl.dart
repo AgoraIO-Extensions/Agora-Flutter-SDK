@@ -46,8 +46,6 @@ import 'package:meta/meta.dart';
 
 import 'platform/global_video_view_controller.dart';
 
-import 'package:path/path.dart' as path show join;
-
 // ignore_for_file: public_member_api_docs
 
 int? _mockRtcEngineNativeHandle;
