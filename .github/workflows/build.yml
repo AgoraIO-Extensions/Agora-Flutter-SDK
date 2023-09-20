@@ -276,7 +276,7 @@ jobs:
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     strategy:
       matrix:
-        version: ["3.0.0"] # Need use >= 3.13, https://github.com/flutter/flutter/issues/127482
+        version: ["3.13.4"] # Need use >= 3.13, https://github.com/flutter/flutter/issues/127482
     runs-on: macos-13 # Rendering test on ios simulator need macos 13+
     timeout-minutes: 120
     env:
