@@ -164,6 +164,6 @@ void testCases() {
     await mediaEngine.release();
     await rtcEngine.release();
   },
-      // TODO(littlegnal): This case not work on windows on github action, skip it temporarily
-      skip: Platform.isWindows);
+      // TODO(littlegnal): This case not work on Windows/Android on github action, skip it temporarily
+      skip: Platform.isWindows || Platform.isAndroid);
 }
