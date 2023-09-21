@@ -277,7 +277,7 @@ jobs:
     strategy:
       matrix:
         version: ["3.0.0"] # Need use >= 3.13, https://github.com/flutter/flutter/issues/127482
-    runs-on: macos-13 # Rendering test on ios simulator need macos 13+
+    runs-on: self-hosted # Rendering test on ios simulator need macos 13+
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
