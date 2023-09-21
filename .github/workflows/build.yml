@@ -310,10 +310,10 @@ jobs:
             --iris-ios-cdn-url=${IRIS_CDN_URL_IOS}
       - name: Create ios simulator
         run: |
-          - xcrun simctl list
+          xcrun simctl list
           # We generate the screenshots base on the simulator "iPhone 13 Pro Max", so we set the SimDeviceType to iPhone 13 Pro Max.
           # If you need to change the SimDeviceType, you may need to re-generate the screenshots first.
-          - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
+          xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max com.apple.CoreSimulator.SimRuntime.iOS-16-0 | xargs xcrun simctl boot
       - run: bash ci/rendering_test_ios.sh
 
   rendering_test_macos:
