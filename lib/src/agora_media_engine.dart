@@ -58,7 +58,7 @@ abstract class MediaEngine {
   ///  Ensure that you call this method before joining a channel.
   ///  When handling the video data returned in the callbacks, pay attention to the changes in the width and height parameters, which may be adapted under the following circumstances:
   ///  When network conditions deteriorate, the video resolution decreases incrementally.
-  ///  If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes. After registering the raw video observer, you can use the obtained raw video data in various video pre-processing scenarios, such as implementing virtual backgrounds and image enhacement scenarios by yourself, Agora provides some open source sample projects on GitHub for your reference.
+  ///  If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.
   ///
   /// * [observer] The observer instance. See VideoFrameObserver.
   ///
