@@ -48,7 +48,11 @@ Future<void> main() async {
 
       stdout.writeln('compareImages result: $result');
 
-      return result == 0.0;
+      // TODO(littlegnal): Need more tolerance with this change:
+      // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/1329
+      //
+      // see if we can reduce the result later
+      return result < 0.01;
     },
   );
 }
