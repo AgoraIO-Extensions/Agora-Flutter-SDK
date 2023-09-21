@@ -43,7 +43,11 @@ Future<void> main() async {
       final result = await compareImages(
         src1: expectedImage,
         src2: dstImage,
-        algorithm: PixelMatching(tolerance: 0.3),
+        // TODO(littlegnal): Need more tolerance with this change:
+        // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/1329
+        // 
+        // see if we can reduce the result later
+        algorithm: PixelMatching(tolerance: 0.35),
       );
 
       stdout.writeln('compareImages result: $result');
