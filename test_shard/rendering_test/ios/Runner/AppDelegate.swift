@@ -11,6 +11,8 @@ import integration_test
     GeneratedPluginRegistrant.register(with: self)
       
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
+
+    IntegrationTestPlugin.instance().setupChannels(controller.binaryMessenger)
       
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
