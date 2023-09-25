@@ -46,8 +46,15 @@ class IrisApiEngineBindingsDelegateJS
     List<Object> buffer = [];
     List<int> lenOfBuffer = [];
     int bufferCount = 0;
+    if (methodCall.buffers != null) {
+      bufferCount += methodCall.buffers!.length;
+      for (final rb in methodCall.buffers!) {
+        buffer.add(rb);
+        lenOfBuffer.add(rb.length);
+      }
+    }
     if (methodCall.rawBufferParams != null) {
-      bufferCount = methodCall.rawBufferParams!.length;
+      bufferCount += methodCall.rawBufferParams!.length;
       for (final rb in methodCall.rawBufferParams!) {
         buffer.add(rb.intPtr());
         lenOfBuffer.add(rb.length);
