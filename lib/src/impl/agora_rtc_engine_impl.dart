@@ -1152,6 +1152,17 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     }
   }
 
+  Future<String?> getAssetAbsolutePath(String assetPath) async {
+    if (kIsWeb) {
+      // The assets are located in the `assets` directory.
+      return 'assets/$assetPath';
+    }
+
+    final p = await engineMethodChannel.invokeMethod<String>(
+        'getAssetAbsolutePath', assetPath);
+    return p;
+  }
+
   /////////// debug ////////
 
   /// [type] see [VideoSourceType], only [VideoSourceType.videoSourceCamera], [VideoSourceType.videoSourceRemote] supported
