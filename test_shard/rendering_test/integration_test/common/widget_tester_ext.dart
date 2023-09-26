@@ -16,5 +16,5 @@ Future<void> waitDisposed(
   // Force pump an empty Widget to trigger the dispose() for RemoteVideoView,
   // so that the previous RtcEngine can be released before the next test case start.
   await tester.pumpWidget(Container());
-  await binding.delayed(const Duration(seconds: 1));
+  await binding.delayed(const Duration(seconds: 10));
 }

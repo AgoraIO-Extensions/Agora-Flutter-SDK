@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
@@ -28,8 +29,12 @@ class FakeCamera {
   }
 
   Future<void> _pushVideoFrame() async {
-    ByteData data = await rootBundle
-        .load("assets/agoravideoview_rendering_test_solid_spilt.png");
+    String assetName = 'agoravideoview_rendering_test_solid_spilt';
+    if (kIsWeb) {
+      // Use a small image for performence purpose.
+      assetName = 'agoravideoview_rendering_test_solid_spilt_small';
+    }
+    ByteData data = await rootBundle.load("assets/$assetName.png");
     Uint8List bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 

@@ -53,6 +53,14 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
       areaCode: AreaCode.areaCodeGlob.value(),
     ));
 
+    _rtcEngine.registerEventHandler(RtcEngineEventHandler(
+      onUserJoined: (connection, remoteUid, elapsed) {
+        if (remoteUid == _remoteUid) {
+          _waitFirstFrame();
+        }
+      },
+    ));
+
     _fakeCamera = FakeCamera(_rtcEngine);
     await _fakeCamera.initialize();
 
@@ -85,8 +93,6 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
         publishCustomVideoTrack: true,
       ),
     );
-
-    _waitFirstFrame();
   }
 
   Future<void> _waitFirstFrame() async {
