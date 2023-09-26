@@ -101,7 +101,7 @@ abstract class MediaPlayer {
 
   /// Gets the number of the media streams in the media resource.
   ///
-  /// Call this method after calling open.
+  /// Call this method after you call open and receive the onPlayerSourceStateChanged callback reporting the state playerStateOpenCompleted.
   ///
   /// Returns
   /// The number of the media streams in the media resource if the method call succeeds.
