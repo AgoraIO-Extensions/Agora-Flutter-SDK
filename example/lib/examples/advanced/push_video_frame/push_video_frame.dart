@@ -1,10 +1,12 @@
+import 'dart:async';
 import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtc_engine_example/config/agora.config.dart' as config;
 import 'package:agora_rtc_engine_example/components/example_actions_widget.dart';
 import 'package:agora_rtc_engine_example/components/log_sink.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -99,6 +101,8 @@ class _State extends State<PushVideoFrame> {
 
     await _loadImageByteData();
 
+    await _engine.startPreview(sourceType: VideoSourceType.videoSourceCustom);
+
     setState(() {
       _isReadyPreview = true;
     });
@@ -125,10 +129,11 @@ class _State extends State<PushVideoFrame> {
     Uint8List bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
-    final image = await decodeImageFromList(bytes);
+    ui.Image image = await decodeImageFromList(bytes);
 
     final byteData =
-        await image.toByteData(format: ImageByteFormat.rawStraightRgba);
+        await image.toByteData(format: ui.ImageByteFormat.rawStraightRgba);
+
     _imageByteData = byteData!.buffer.asUint8List();
     _imageWidth = image.width;
     _imageHeight = image.height;
@@ -136,10 +141,17 @@ class _State extends State<PushVideoFrame> {
   }
 
   Future<void> _pushVideoFrame() async {
+    VideoPixelFormat format = VideoPixelFormat.videoPixelRgba;
+    if (kIsWeb) {
+      // TODO(littlegnal): https://github.com/flutter/flutter/issues/135409
+      // The `Image.toByteData(format: ui.ImageByteFormat.rawStraightRgba)` return
+      // bgra at this time.
+      format = VideoPixelFormat.videoPixelBgra;
+    }
     await _engine.getMediaEngine().pushVideoFrame(
         frame: ExternalVideoFrame(
             type: VideoBufferType.videoBufferRawData,
-            format: VideoPixelFormat.videoPixelRgba,
+            format: format,
             buffer: _imageByteData,
             stride: _imageWidth,
             height: _imageHeight,
@@ -151,8 +163,14 @@ class _State extends State<PushVideoFrame> {
     return ExampleActionsWidget(
       displayContentBuilder: (context, isLayoutHorizontal) {
         if (!_isReadyPreview) return Container();
-        return const Center(
-          child: Text('No Preview'),
+        return AgoraVideoView(
+          controller: VideoViewController(
+            rtcEngine: _engine,
+            canvas: const VideoCanvas(
+              uid: 0,
+              sourceType: VideoSourceType.videoSourceCustom,
+            ),
+          ),
         );
       },
       actionsBuilder: (context, isLayoutHorizontal) {
