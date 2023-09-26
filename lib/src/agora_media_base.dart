@@ -341,15 +341,15 @@ enum ContentInspectType {
   @JsonValue(0)
   contentInspectInvalid,
 
-  /// 1: Video content moderation. SDK takes screenshots, inspects video content of the video stream in the channel, and uploads the screenshots and moderation results.
+  /// @nodoc
   @JsonValue(1)
   contentInspectModeration,
 
-  /// 2: Screenshot capture. SDK takes screenshots of the video stream in the channel and uploads them.
+  /// 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
   @JsonValue(2)
   contentInspectSupervision,
 
-  /// @nodoc
+  /// 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
   @JsonValue(3)
   contentInspectImageModeration,
 }
@@ -400,7 +400,7 @@ class ContentInspectConfig {
   @JsonKey(name: 'extraInfo')
   final String? extraInfo;
 
-  /// @nodoc
+  /// (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to contentInspectImageModeration. If you want to use it, contact.
   @JsonKey(name: 'serverConfig')
   final String? serverConfig;
 
@@ -567,7 +567,7 @@ enum VideoPixelFormat {
   @JsonValue(4)
   videoPixelRgba,
 
-  /// 8: The format is NV12.
+  /// @nodoc
   @JsonValue(8)
   videoPixelNv12,
 
@@ -595,7 +595,7 @@ enum VideoPixelFormat {
   @JsonValue(16)
   videoPixelI422,
 
-  /// @nodoc
+  /// 17: The ID3D11TEXTURE2D format. Currently supported types are DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS and DXGI_FORMAT_NV12.
   @JsonValue(17)
   videoTextureId3d11texture2d,
 }
@@ -763,7 +763,7 @@ class ExternalVideoFrame {
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
 
-  /// @nodoc
+  /// This parameter only applies to video data in Windows Texture format. It represents an index of an ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
   @JsonKey(name: 'texture_slice_index')
   final int? textureSliceIndex;
 

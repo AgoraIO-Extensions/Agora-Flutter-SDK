@@ -232,7 +232,7 @@ abstract class MediaEngine {
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   void unregisterVideoFrameObserver(VideoFrameObserver observer);
 
-  /// Unregisters a receiver object for the encoded video image.
+  /// Unregisters a receiver object for the encoded video frame.
   ///
   /// * [observer] The video observer, reporting the reception of each video frame. See VideoEncodedFrameObserver.
   ///
