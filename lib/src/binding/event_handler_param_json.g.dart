@@ -2950,7 +2950,6 @@ Map<String, dynamic>
         };
 
 const _$VideoTranscoderErrorEnumMap = {
-  VideoTranscoderError.vtErrOk: 0,
   VideoTranscoderError.vtErrVideoSourceNotReady: 1,
   VideoTranscoderError.vtErrInvalidVideoSourceType: 2,
   VideoTranscoderError.vtErrInvalidImagePath: 3,

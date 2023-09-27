@@ -3996,10 +3996,6 @@ class LocalTranscoderConfiguration {
 /// The error code of the local video mixing failure.
 @JsonEnum(alwaysCreate: true)
 enum VideoTranscoderError {
-  /// @nodoc
-  @JsonValue(0)
-  vtErrOk,
-
   /// 1: The selected video source has not started video capture. You need to create a video track for it and start video capture.
   @JsonValue(1)
   vtErrVideoSourceNotReady,

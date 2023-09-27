@@ -5769,7 +5769,8 @@ void generatedTestCases(IrisTester irisTester) {
           alpha: streamAlpha,
           mirror: streamMirror,
         );
-        const VideoTranscoderError error = VideoTranscoderError.vtErrOk;
+        const VideoTranscoderError error =
+            VideoTranscoderError.vtErrVideoSourceNotReady;
 
         final eventJson = {
           'stream': stream.toJson(),
@@ -5884,3 +5885,4 @@ void generatedTestCases(IrisTester irisTester) {
     timeout: const Timeout(Duration(minutes: 1)),
   );
 }
+
