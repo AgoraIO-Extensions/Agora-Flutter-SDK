@@ -138,10 +138,19 @@ abstract class AudioDeviceManager {
   /// The ID of the current loopback device.
   Future<String> getLoopbackDevice();
 
-  /// @nodoc
+  /// Mutes the audio playback device.
+  ///
+  /// * [mute] Whether to mute the audio playback device: true : Mute the audio playback device. false : Unmute the audio playback device.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
   Future<void> setPlaybackDeviceMute(bool mute);
 
-  /// @nodoc
+  /// Retrieves whether the audio playback device is muted.
+  ///
+  /// Returns
+  /// true : The audio playback device is muted. false : The audio playback device is unmuted.
   Future<bool> getPlaybackDeviceMute();
 
   /// @nodoc
