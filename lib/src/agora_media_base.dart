@@ -341,11 +341,11 @@ enum ContentInspectType {
   @JsonValue(0)
   contentInspectInvalid,
 
-  /// 1: Video content moderation. SDK takes screenshots, inspects video content of the video stream in the channel, and uploads the screenshots and moderation results.
+  /// @nodoc
   @JsonValue(1)
   contentInspectModeration,
 
-  /// 2: Screenshot capture. SDK takes screenshots of the video stream in the channel and uploads them.
+  /// 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
   @JsonValue(2)
   contentInspectSupervision,
 }
@@ -558,7 +558,7 @@ enum VideoPixelFormat {
   @JsonValue(4)
   videoPixelRgba,
 
-  /// 8: The format is NV12.
+  /// @nodoc
   @JsonValue(8)
   videoPixelNv12,
 
