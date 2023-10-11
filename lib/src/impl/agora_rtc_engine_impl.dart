@@ -373,7 +373,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _initializingCompleter = Completer<void>();
     engineMethodChannel = const MethodChannel('agora_rtc_ng');
 
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
       await engineMethodChannel.invokeMethod('androidInit');
     }
 

@@ -11,6 +11,8 @@ pushd ${MY_PATH}/../test_shard/rendering_test
 flutter packages get
 
 if [[ ${PLATFORM} == "web" ]];then
+    echo "Run rendering test on web"
+
     flutter drive \
         --verbose-system-logs \
         -d web-server \
@@ -19,6 +21,7 @@ if [[ ${PLATFORM} == "web" ]];then
         --dart-define=TEST_APP_ID="${TEST_APP_ID}"
 
 elif [[ ${PLATFORM} == "android" || ${PLATFORM} == "ios" ]];then
+    echo "Run rendering test on ${PLATFORM}"
 
     flutter drive \
         --driver=test_driver/integration_test.dart \
@@ -31,6 +34,8 @@ elif [[ ${PLATFORM} == "android" || ${PLATFORM} == "ios" ]];then
         --dart-define=TEST_APP_ID="${TEST_APP_ID}"
 
 else
+    echo "Run rendering test on ${PLATFORM}"
+
     # macos/windows
     flutter test \
         integration_test/agora_video_view_render_test.dart \
