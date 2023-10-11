@@ -1,0 +1,18 @@
+name: Triage to Agora Support
+on:
+  issues:
+    types:
+      - labeled
+jobs:
+  add-comment:
+    if: github.event.label.name == 'triage agora support'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Please submit a ticket to [Agora Support](https://www.agora.io/en/customer-support/) for further investigation of this issue. If you have any conclusions, you can share them here which may help other developers. Thanks!
