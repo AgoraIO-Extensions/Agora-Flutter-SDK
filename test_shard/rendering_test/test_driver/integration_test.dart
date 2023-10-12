@@ -42,10 +42,10 @@ Future<void> main() async {
         return true;
       }
 
-      if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
-        final File debugGoldenFile = File('screenshot/$screenshotName.debug.png');
-        debugGoldenFile.writeAsBytesSync(imageBytes);
-      }
+      // if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
+      //   final File debugGoldenFile = File('screenshot/$screenshotName.debug.png');
+      //   debugGoldenFile.writeAsBytesSync(imageBytes);
+      // }
 
       final expectedImage = decodePng(imageFile.readAsBytesSync());
 
