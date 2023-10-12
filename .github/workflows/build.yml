@@ -416,7 +416,7 @@ jobs:
     strategy:
       matrix:
         version: ['3.0.0']
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
