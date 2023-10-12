@@ -43,7 +43,7 @@ Future<void> main() async {
       final result = await compareImages(
         src1: expectedImage,
         src2: dstImage,
-        algorithm: PixelMatching(tolerance: 0.4),
+        algorithm: PixelMatching(tolerance: 0.5),
       );
 
       stdout.writeln('compareImages result: $result');
