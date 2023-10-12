@@ -38,6 +38,7 @@ Future<void> main() async {
 
       if (updateGolden == 'true') {
         imageFile.writeAsBytesSync(imageBytes);
+        stdout.writeln('Updated golden file: $screenshotPath');
         return true;
       }
 
