@@ -97,6 +97,8 @@ class _FakeCameraRemoteVideoViewState extends State<FakeCameraRemoteVideoView> {
 
   Future<void> _waitFirstFrame() async {
     await _fakeCamera.onFirstFrame;
+    // Delay 2 seconds to ensure the first frame showed
+    await Future.delayed(const Duration(seconds: 5));
     widget.onFirstFrame();
   }
 
