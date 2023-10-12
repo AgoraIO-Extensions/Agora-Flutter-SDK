@@ -429,5 +429,13 @@ jobs:
       - name: Run web rendering test
         shell: bash
         run: |
+          export SAVE_DEBUG_GOLDEN="true"
+
           chromedriver --port=4444 --trace-buffer-size=100000 &
           bash ci/run_rendering_test.sh web
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: debug-golden-files
+          path: test_shard/rendering_test/screenshot/*.debug.png

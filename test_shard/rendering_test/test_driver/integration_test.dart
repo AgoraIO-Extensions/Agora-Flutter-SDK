@@ -6,6 +6,9 @@ import 'package:image/image.dart';
 /// export UPDATE_GOLDEN="true"
 const _udpateGoldenKey = 'UPDATE_GOLDEN';
 
+/// export SAVE_DEBUG_GOLDEN="true"
+const _saveDebugGoldenKey = 'SAVE_DEBUG_GOLDEN';
+
 Future<void> main() async {
   await integrationDriver(
     onScreenshot: (String screenshotName, List<int> screenshotBytes,
@@ -36,6 +39,11 @@ Future<void> main() async {
       if (updateGolden == 'true') {
         imageFile.writeAsBytesSync(imageBytes);
         return true;
+      }
+
+      if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
+        final File debugGoldenFile = File('screenshot/$screenshotName.debug.png');
+        debugGoldenFile.writeAsBytesSync(imageBytes);
       }
 
       final expectedImage = decodePng(imageFile.readAsBytesSync());
