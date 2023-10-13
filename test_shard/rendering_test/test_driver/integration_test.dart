@@ -6,6 +6,9 @@ import 'package:image/image.dart';
 /// export UPDATE_GOLDEN="true"
 const _udpateGoldenKey = 'UPDATE_GOLDEN';
 
+/// export SAVE_DEBUG_GOLDEN="true"
+const _saveDebugGoldenKey = 'SAVE_DEBUG_GOLDEN';
+
 Future<void> main() async {
   await integrationDriver(
     onScreenshot: (String screenshotName, List<int> screenshotBytes,
@@ -35,7 +38,13 @@ Future<void> main() async {
 
       if (updateGolden == 'true') {
         imageFile.writeAsBytesSync(imageBytes);
+        stdout.writeln('Updated golden file: $screenshotPath');
         return true;
+      }
+
+      if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
+        final File debugGoldenFile = File('screenshot/$screenshotName.debug.png');
+        debugGoldenFile.writeAsBytesSync(imageBytes);
       }
 
       final expectedImage = decodePng(imageFile.readAsBytesSync());
@@ -46,7 +55,7 @@ Future<void> main() async {
         algorithm: PixelMatching(tolerance: 0.3),
       );
 
-      stdout.writeln('compareImages result: $result');
+      stdout.writeln('compareImages $screenshotPath result: $result');
 
       // TODO(littlegnal): Need more tolerance with this change:
       // https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/pull/1329
