@@ -8,6 +8,742 @@ part of 'event_handler_param_json.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson
+    _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
+          length: json['length'] as int?,
+          audioEncodedFrameInfo: json['audioEncodedFrameInfo'] == null
+              ? null
+              : EncodedAudioFrameInfo.fromJson(
+                  json['audioEncodedFrameInfo'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonToJson(
+            AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson instance) =>
+        <String, dynamic>{
+          'length': instance.length,
+          'audioEncodedFrameInfo': instance.audioEncodedFrameInfo?.toJson(),
+        };
+
+AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson
+    _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
+          length: json['length'] as int?,
+          audioEncodedFrameInfo: json['audioEncodedFrameInfo'] == null
+              ? null
+              : EncodedAudioFrameInfo.fromJson(
+                  json['audioEncodedFrameInfo'] as Map<String, dynamic>),
+        );
+
+Map<String,
+    dynamic> _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonToJson(
+        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson instance) =>
+    <String, dynamic>{
+      'length': instance.length,
+      'audioEncodedFrameInfo': instance.audioEncodedFrameInfo?.toJson(),
+    };
+
+AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson
+    _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
+          length: json['length'] as int?,
+          audioEncodedFrameInfo: json['audioEncodedFrameInfo'] == null
+              ? null
+              : EncodedAudioFrameInfo.fromJson(
+                  json['audioEncodedFrameInfo'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonToJson(
+            AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson instance) =>
+        <String, dynamic>{
+          'length': instance.length,
+          'audioEncodedFrameInfo': instance.audioEncodedFrameInfo?.toJson(),
+        };
+
+AudioPcmFrameSinkOnFrameJson _$AudioPcmFrameSinkOnFrameJsonFromJson(
+        Map<String, dynamic> json) =>
+    AudioPcmFrameSinkOnFrameJson(
+      frame: json['frame'] == null
+          ? null
+          : AudioPcmFrame.fromJson(json['frame'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AudioPcmFrameSinkOnFrameJsonToJson(
+        AudioPcmFrameSinkOnFrameJson instance) =>
+    <String, dynamic>{
+      'frame': instance.frame?.toJson(),
+    };
+
+AudioFrameObserverBaseOnRecordAudioFrameJson
+    _$AudioFrameObserverBaseOnRecordAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverBaseOnRecordAudioFrameJson(
+          channelId: json['channelId'] as String?,
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$AudioFrameObserverBaseOnRecordAudioFrameJsonToJson(
+        AudioFrameObserverBaseOnRecordAudioFrameJson instance) =>
+    <String, dynamic>{
+      'channelId': instance.channelId,
+      'audioFrame': instance.audioFrame?.toJson(),
+    };
+
+AudioFrameObserverBaseOnPlaybackAudioFrameJson
+    _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverBaseOnPlaybackAudioFrameJson(
+          channelId: json['channelId'] as String?,
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonToJson(
+        AudioFrameObserverBaseOnPlaybackAudioFrameJson instance) =>
+    <String, dynamic>{
+      'channelId': instance.channelId,
+      'audioFrame': instance.audioFrame?.toJson(),
+    };
+
+AudioFrameObserverBaseOnMixedAudioFrameJson
+    _$AudioFrameObserverBaseOnMixedAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverBaseOnMixedAudioFrameJson(
+          channelId: json['channelId'] as String?,
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(
+        AudioFrameObserverBaseOnMixedAudioFrameJson instance) =>
+    <String, dynamic>{
+      'channelId': instance.channelId,
+      'audioFrame': instance.audioFrame?.toJson(),
+    };
+
+AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson(
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(
+            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) =>
+        <String, dynamic>{
+          'audioFrame': instance.audioFrame?.toJson(),
+        };
+
+AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
+    _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson(
+          channelId: json['channelId'] as String?,
+          uid: json['uid'] as int?,
+          audioFrame: json['audioFrame'] == null
+              ? null
+              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonToJson(
+            AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson instance) =>
+        <String, dynamic>{
+          'channelId': instance.channelId,
+          'uid': instance.uid,
+          'audioFrame': instance.audioFrame?.toJson(),
+        };
+
+AudioSpectrumObserverOnLocalAudioSpectrumJson
+    _$AudioSpectrumObserverOnLocalAudioSpectrumJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioSpectrumObserverOnLocalAudioSpectrumJson(
+          data: json['data'] == null
+              ? null
+              : AudioSpectrumData.fromJson(
+                  json['data'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$AudioSpectrumObserverOnLocalAudioSpectrumJsonToJson(
+        AudioSpectrumObserverOnLocalAudioSpectrumJson instance) =>
+    <String, dynamic>{
+      'data': instance.data?.toJson(),
+    };
+
+AudioSpectrumObserverOnRemoteAudioSpectrumJson
+    _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonFromJson(
+            Map<String, dynamic> json) =>
+        AudioSpectrumObserverOnRemoteAudioSpectrumJson(
+          spectrums: (json['spectrums'] as List<dynamic>?)
+              ?.map((e) =>
+                  UserAudioSpectrumInfo.fromJson(e as Map<String, dynamic>))
+              .toList(),
+          spectrumNumber: json['spectrumNumber'] as int?,
+        );
+
+Map<String, dynamic> _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonToJson(
+        AudioSpectrumObserverOnRemoteAudioSpectrumJson instance) =>
+    <String, dynamic>{
+      'spectrums': instance.spectrums?.map((e) => e.toJson()).toList(),
+      'spectrumNumber': instance.spectrumNumber,
+    };
+
+VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
+    _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonFromJson(
+            Map<String, dynamic> json) =>
+        VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
+          uid: json['uid'] as int?,
+          length: json['length'] as int?,
+          videoEncodedFrameInfo: json['videoEncodedFrameInfo'] == null
+              ? null
+              : EncodedVideoFrameInfo.fromJson(
+                  json['videoEncodedFrameInfo'] as Map<String, dynamic>),
+        );
+
+Map<String,
+    dynamic> _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonToJson(
+        VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson instance) =>
+    <String, dynamic>{
+      'uid': instance.uid,
+      'length': instance.length,
+      'videoEncodedFrameInfo': instance.videoEncodedFrameInfo?.toJson(),
+    };
+
+VideoFrameObserverOnCaptureVideoFrameJson
+    _$VideoFrameObserverOnCaptureVideoFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        VideoFrameObserverOnCaptureVideoFrameJson(
+          sourceType:
+              $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
+          videoFrame: json['videoFrame'] == null
+              ? null
+              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$VideoFrameObserverOnCaptureVideoFrameJsonToJson(
+        VideoFrameObserverOnCaptureVideoFrameJson instance) =>
+    <String, dynamic>{
+      'sourceType': _$VideoSourceTypeEnumMap[instance.sourceType],
+      'videoFrame': instance.videoFrame?.toJson(),
+    };
+
+const _$VideoSourceTypeEnumMap = {
+  VideoSourceType.videoSourceCameraPrimary: 0,
+  VideoSourceType.videoSourceCamera: 0,
+  VideoSourceType.videoSourceCameraSecondary: 1,
+  VideoSourceType.videoSourceScreenPrimary: 2,
+  VideoSourceType.videoSourceScreen: 2,
+  VideoSourceType.videoSourceScreenSecondary: 3,
+  VideoSourceType.videoSourceCustom: 4,
+  VideoSourceType.videoSourceMediaPlayer: 5,
+  VideoSourceType.videoSourceRtcImagePng: 6,
+  VideoSourceType.videoSourceRtcImageJpeg: 7,
+  VideoSourceType.videoSourceRtcImageGif: 8,
+  VideoSourceType.videoSourceRemote: 9,
+  VideoSourceType.videoSourceTranscoded: 10,
+  VideoSourceType.videoSourceCameraThird: 11,
+  VideoSourceType.videoSourceCameraFourth: 12,
+  VideoSourceType.videoSourceScreenThird: 13,
+  VideoSourceType.videoSourceScreenFourth: 14,
+  VideoSourceType.videoSourceUnknown: 100,
+};
+
+VideoFrameObserverOnPreEncodeVideoFrameJson
+    _$VideoFrameObserverOnPreEncodeVideoFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        VideoFrameObserverOnPreEncodeVideoFrameJson(
+          sourceType:
+              $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
+          videoFrame: json['videoFrame'] == null
+              ? null
+              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$VideoFrameObserverOnPreEncodeVideoFrameJsonToJson(
+        VideoFrameObserverOnPreEncodeVideoFrameJson instance) =>
+    <String, dynamic>{
+      'sourceType': _$VideoSourceTypeEnumMap[instance.sourceType],
+      'videoFrame': instance.videoFrame?.toJson(),
+    };
+
+VideoFrameObserverOnMediaPlayerVideoFrameJson
+    _$VideoFrameObserverOnMediaPlayerVideoFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        VideoFrameObserverOnMediaPlayerVideoFrameJson(
+          videoFrame: json['videoFrame'] == null
+              ? null
+              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
+          mediaPlayerId: json['mediaPlayerId'] as int?,
+        );
+
+Map<String, dynamic> _$VideoFrameObserverOnMediaPlayerVideoFrameJsonToJson(
+        VideoFrameObserverOnMediaPlayerVideoFrameJson instance) =>
+    <String, dynamic>{
+      'videoFrame': instance.videoFrame?.toJson(),
+      'mediaPlayerId': instance.mediaPlayerId,
+    };
+
+VideoFrameObserverOnRenderVideoFrameJson
+    _$VideoFrameObserverOnRenderVideoFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        VideoFrameObserverOnRenderVideoFrameJson(
+          channelId: json['channelId'] as String?,
+          remoteUid: json['remoteUid'] as int?,
+          videoFrame: json['videoFrame'] == null
+              ? null
+              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$VideoFrameObserverOnRenderVideoFrameJsonToJson(
+        VideoFrameObserverOnRenderVideoFrameJson instance) =>
+    <String, dynamic>{
+      'channelId': instance.channelId,
+      'remoteUid': instance.remoteUid,
+      'videoFrame': instance.videoFrame?.toJson(),
+    };
+
+VideoFrameObserverOnTranscodedVideoFrameJson
+    _$VideoFrameObserverOnTranscodedVideoFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        VideoFrameObserverOnTranscodedVideoFrameJson(
+          videoFrame: json['videoFrame'] == null
+              ? null
+              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(
+        VideoFrameObserverOnTranscodedVideoFrameJson instance) =>
+    <String, dynamic>{
+      'videoFrame': instance.videoFrame?.toJson(),
+    };
+
+MediaRecorderObserverOnRecorderStateChangedJson
+    _$MediaRecorderObserverOnRecorderStateChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaRecorderObserverOnRecorderStateChangedJson(
+          channelId: json['channelId'] as String?,
+          uid: json['uid'] as int?,
+          state: $enumDecodeNullable(_$RecorderStateEnumMap, json['state']),
+          error: $enumDecodeNullable(_$RecorderErrorCodeEnumMap, json['error']),
+        );
+
+Map<String, dynamic> _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(
+        MediaRecorderObserverOnRecorderStateChangedJson instance) =>
+    <String, dynamic>{
+      'channelId': instance.channelId,
+      'uid': instance.uid,
+      'state': _$RecorderStateEnumMap[instance.state],
+      'error': _$RecorderErrorCodeEnumMap[instance.error],
+    };
+
+const _$RecorderStateEnumMap = {
+  RecorderState.recorderStateError: -1,
+  RecorderState.recorderStateStart: 2,
+  RecorderState.recorderStateStop: 3,
+};
+
+const _$RecorderErrorCodeEnumMap = {
+  RecorderErrorCode.recorderErrorNone: 0,
+  RecorderErrorCode.recorderErrorWriteFailed: 1,
+  RecorderErrorCode.recorderErrorNoStream: 2,
+  RecorderErrorCode.recorderErrorOverMaxDuration: 3,
+  RecorderErrorCode.recorderErrorConfigChanged: 4,
+};
+
+MediaRecorderObserverOnRecorderInfoUpdatedJson
+    _$MediaRecorderObserverOnRecorderInfoUpdatedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaRecorderObserverOnRecorderInfoUpdatedJson(
+          channelId: json['channelId'] as String?,
+          uid: json['uid'] as int?,
+          info: json['info'] == null
+              ? null
+              : RecorderInfo.fromJson(json['info'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$MediaRecorderObserverOnRecorderInfoUpdatedJsonToJson(
+        MediaRecorderObserverOnRecorderInfoUpdatedJson instance) =>
+    <String, dynamic>{
+      'channelId': instance.channelId,
+      'uid': instance.uid,
+      'info': instance.info?.toJson(),
+    };
+
+MediaPlayerVideoFrameObserverOnFrameJson
+    _$MediaPlayerVideoFrameObserverOnFrameJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerVideoFrameObserverOnFrameJson(
+          frame: json['frame'] == null
+              ? null
+              : VideoFrame.fromJson(json['frame'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$MediaPlayerVideoFrameObserverOnFrameJsonToJson(
+        MediaPlayerVideoFrameObserverOnFrameJson instance) =>
+    <String, dynamic>{
+      'frame': instance.frame?.toJson(),
+    };
+
+MediaPlayerSourceObserverOnPlayerSourceStateChangedJson
+    _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPlayerSourceStateChangedJson(
+          state: $enumDecodeNullable(_$MediaPlayerStateEnumMap, json['state']),
+          ec: $enumDecodeNullable(_$MediaPlayerErrorEnumMap, json['ec']),
+        );
+
+Map<String, dynamic>
+    _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonToJson(
+            MediaPlayerSourceObserverOnPlayerSourceStateChangedJson instance) =>
+        <String, dynamic>{
+          'state': _$MediaPlayerStateEnumMap[instance.state],
+          'ec': _$MediaPlayerErrorEnumMap[instance.ec],
+        };
+
+const _$MediaPlayerStateEnumMap = {
+  MediaPlayerState.playerStateIdle: 0,
+  MediaPlayerState.playerStateOpening: 1,
+  MediaPlayerState.playerStateOpenCompleted: 2,
+  MediaPlayerState.playerStatePlaying: 3,
+  MediaPlayerState.playerStatePaused: 4,
+  MediaPlayerState.playerStatePlaybackCompleted: 5,
+  MediaPlayerState.playerStatePlaybackAllLoopsCompleted: 6,
+  MediaPlayerState.playerStateStopped: 7,
+  MediaPlayerState.playerStatePausingInternal: 50,
+  MediaPlayerState.playerStateStoppingInternal: 51,
+  MediaPlayerState.playerStateSeekingInternal: 52,
+  MediaPlayerState.playerStateGettingInternal: 53,
+  MediaPlayerState.playerStateNoneInternal: 54,
+  MediaPlayerState.playerStateDoNothingInternal: 55,
+  MediaPlayerState.playerStateSetTrackInternal: 56,
+  MediaPlayerState.playerStateFailed: 100,
+};
+
+const _$MediaPlayerErrorEnumMap = {
+  MediaPlayerError.playerErrorNone: 0,
+  MediaPlayerError.playerErrorInvalidArguments: -1,
+  MediaPlayerError.playerErrorInternal: -2,
+  MediaPlayerError.playerErrorNoResource: -3,
+  MediaPlayerError.playerErrorInvalidMediaSource: -4,
+  MediaPlayerError.playerErrorUnknownStreamType: -5,
+  MediaPlayerError.playerErrorObjNotInitialized: -6,
+  MediaPlayerError.playerErrorCodecNotSupported: -7,
+  MediaPlayerError.playerErrorVideoRenderFailed: -8,
+  MediaPlayerError.playerErrorInvalidState: -9,
+  MediaPlayerError.playerErrorUrlNotFound: -10,
+  MediaPlayerError.playerErrorInvalidConnectionState: -11,
+  MediaPlayerError.playerErrorSrcBufferUnderflow: -12,
+  MediaPlayerError.playerErrorInterrupted: -13,
+  MediaPlayerError.playerErrorNotSupported: -14,
+  MediaPlayerError.playerErrorTokenExpired: -15,
+  MediaPlayerError.playerErrorIpExpired: -16,
+  MediaPlayerError.playerErrorUnknown: -17,
+};
+
+MediaPlayerSourceObserverOnPositionChangedJson
+    _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPositionChangedJson(
+          positionMs: json['position_ms'] as int?,
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(
+        MediaPlayerSourceObserverOnPositionChangedJson instance) =>
+    <String, dynamic>{
+      'position_ms': instance.positionMs,
+    };
+
+MediaPlayerSourceObserverOnPlayerEventJson
+    _$MediaPlayerSourceObserverOnPlayerEventJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPlayerEventJson(
+          eventCode:
+              $enumDecodeNullable(_$MediaPlayerEventEnumMap, json['eventCode']),
+          elapsedTime: json['elapsedTime'] as int?,
+          message: json['message'] as String?,
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerEventJsonToJson(
+        MediaPlayerSourceObserverOnPlayerEventJson instance) =>
+    <String, dynamic>{
+      'eventCode': _$MediaPlayerEventEnumMap[instance.eventCode],
+      'elapsedTime': instance.elapsedTime,
+      'message': instance.message,
+    };
+
+const _$MediaPlayerEventEnumMap = {
+  MediaPlayerEvent.playerEventSeekBegin: 0,
+  MediaPlayerEvent.playerEventSeekComplete: 1,
+  MediaPlayerEvent.playerEventSeekError: 2,
+  MediaPlayerEvent.playerEventAudioTrackChanged: 5,
+  MediaPlayerEvent.playerEventBufferLow: 6,
+  MediaPlayerEvent.playerEventBufferRecover: 7,
+  MediaPlayerEvent.playerEventFreezeStart: 8,
+  MediaPlayerEvent.playerEventFreezeStop: 9,
+  MediaPlayerEvent.playerEventSwitchBegin: 10,
+  MediaPlayerEvent.playerEventSwitchComplete: 11,
+  MediaPlayerEvent.playerEventSwitchError: 12,
+  MediaPlayerEvent.playerEventFirstDisplayed: 13,
+  MediaPlayerEvent.playerEventReachCacheFileMaxCount: 14,
+  MediaPlayerEvent.playerEventReachCacheFileMaxSize: 15,
+  MediaPlayerEvent.playerEventTryOpenStart: 16,
+  MediaPlayerEvent.playerEventTryOpenSucceed: 17,
+  MediaPlayerEvent.playerEventTryOpenFailed: 18,
+};
+
+MediaPlayerSourceObserverOnMetaDataJson
+    _$MediaPlayerSourceObserverOnMetaDataJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnMetaDataJson(
+          length: json['length'] as int?,
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnMetaDataJsonToJson(
+        MediaPlayerSourceObserverOnMetaDataJson instance) =>
+    <String, dynamic>{
+      'length': instance.length,
+    };
+
+MediaPlayerSourceObserverOnPlayBufferUpdatedJson
+    _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPlayBufferUpdatedJson(
+          playCachedBuffer: json['playCachedBuffer'] as int?,
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonToJson(
+        MediaPlayerSourceObserverOnPlayBufferUpdatedJson instance) =>
+    <String, dynamic>{
+      'playCachedBuffer': instance.playCachedBuffer,
+    };
+
+MediaPlayerSourceObserverOnPreloadEventJson
+    _$MediaPlayerSourceObserverOnPreloadEventJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPreloadEventJson(
+          src: json['src'] as String?,
+          event:
+              $enumDecodeNullable(_$PlayerPreloadEventEnumMap, json['event']),
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnPreloadEventJsonToJson(
+        MediaPlayerSourceObserverOnPreloadEventJson instance) =>
+    <String, dynamic>{
+      'src': instance.src,
+      'event': _$PlayerPreloadEventEnumMap[instance.event],
+    };
+
+const _$PlayerPreloadEventEnumMap = {
+  PlayerPreloadEvent.playerPreloadEventBegin: 0,
+  PlayerPreloadEvent.playerPreloadEventComplete: 1,
+  PlayerPreloadEvent.playerPreloadEventError: 2,
+};
+
+MediaPlayerSourceObserverOnCompletedJson
+    _$MediaPlayerSourceObserverOnCompletedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnCompletedJson();
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnCompletedJsonToJson(
+        MediaPlayerSourceObserverOnCompletedJson instance) =>
+    <String, dynamic>{};
+
+MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson
+    _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson();
+
+Map<String, dynamic>
+    _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonToJson(
+            MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson instance) =>
+        <String, dynamic>{};
+
+MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson
+    _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson(
+          from: json['from'] == null
+              ? null
+              : SrcInfo.fromJson(json['from'] as Map<String, dynamic>),
+          to: json['to'] == null
+              ? null
+              : SrcInfo.fromJson(json['to'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic>
+    _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonToJson(
+            MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson instance) =>
+        <String, dynamic>{
+          'from': instance.from?.toJson(),
+          'to': instance.to?.toJson(),
+        };
+
+MediaPlayerSourceObserverOnPlayerInfoUpdatedJson
+    _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnPlayerInfoUpdatedJson(
+          info: json['info'] == null
+              ? null
+              : PlayerUpdatedInfo.fromJson(
+                  json['info'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonToJson(
+        MediaPlayerSourceObserverOnPlayerInfoUpdatedJson instance) =>
+    <String, dynamic>{
+      'info': instance.info?.toJson(),
+    };
+
+MediaPlayerSourceObserverOnAudioVolumeIndicationJson
+    _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonFromJson(
+            Map<String, dynamic> json) =>
+        MediaPlayerSourceObserverOnAudioVolumeIndicationJson(
+          volume: json['volume'] as int?,
+        );
+
+Map<String, dynamic>
+    _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonToJson(
+            MediaPlayerSourceObserverOnAudioVolumeIndicationJson instance) =>
+        <String, dynamic>{
+          'volume': instance.volume,
+        };
+
+MusicContentCenterEventHandlerOnMusicChartsResultJson
+    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnMusicChartsResultJson(
+          requestId: json['requestId'] as String?,
+          result: (json['result'] as List<dynamic>?)
+              ?.map((e) => MusicChartInfo.fromJson(e as Map<String, dynamic>))
+              .toList(),
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+        );
+
+Map<String, dynamic>
+    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(
+            MusicContentCenterEventHandlerOnMusicChartsResultJson instance) =>
+        <String, dynamic>{
+          'requestId': instance.requestId,
+          'result': instance.result?.map((e) => e.toJson()).toList(),
+          'errorCode':
+              _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+        };
+
+const _$MusicContentCenterStatusCodeEnumMap = {
+  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrGateway: 2,
+  MusicContentCenterStatusCode
+      .kMusicContentCenterStatusErrPermissionAndResource: 3,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrHttpInternalError: 7,
+};
+
+MusicContentCenterEventHandlerOnMusicCollectionResultJson
+    _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnMusicCollectionResultJson(
+          requestId: json['requestId'] as String?,
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+        );
+
+Map<String,
+    dynamic> _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(
+        MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+    };
+
+MusicContentCenterEventHandlerOnLyricResultJson
+    _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnLyricResultJson(
+          requestId: json['requestId'] as String?,
+          songCode: json['songCode'] as int?,
+          lyricUrl: json['lyricUrl'] as String?,
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+        );
+
+Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
+        MusicContentCenterEventHandlerOnLyricResultJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'songCode': instance.songCode,
+      'lyricUrl': instance.lyricUrl,
+      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+    };
+
+MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
+    _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
+          requestId: json['requestId'] as String?,
+          songCode: json['songCode'] as int?,
+          simpleInfo: json['simpleInfo'] as String?,
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+        );
+
+Map<String,
+    dynamic> _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonToJson(
+        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'songCode': instance.songCode,
+      'simpleInfo': instance.simpleInfo,
+      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+    };
+
+MusicContentCenterEventHandlerOnPreLoadEventJson
+    _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(
+            Map<String, dynamic> json) =>
+        MusicContentCenterEventHandlerOnPreLoadEventJson(
+          requestId: json['requestId'] as String?,
+          songCode: json['songCode'] as int?,
+          percent: json['percent'] as int?,
+          lyricUrl: json['lyricUrl'] as String?,
+          status:
+              $enumDecodeNullable(_$PreloadStatusCodeEnumMap, json['status']),
+          errorCode: $enumDecodeNullable(
+              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
+        );
+
+Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
+        MusicContentCenterEventHandlerOnPreLoadEventJson instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'songCode': instance.songCode,
+      'percent': instance.percent,
+      'lyricUrl': instance.lyricUrl,
+      'status': _$PreloadStatusCodeEnumMap[instance.status],
+      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
+    };
+
+const _$PreloadStatusCodeEnumMap = {
+  PreloadStatusCode.kPreloadStatusCompleted: 0,
+  PreloadStatusCode.kPreloadStatusFailed: 1,
+  PreloadStatusCode.kPreloadStatusPreloading: 2,
+  PreloadStatusCode.kPreloadStatusRemoved: 3,
+};
+
 RtcEngineEventHandlerOnJoinChannelSuccessJson
     _$RtcEngineEventHandlerOnJoinChannelSuccessJsonFromJson(
             Map<String, dynamic> json) =>
@@ -155,6 +891,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errAdmStartRecording: 1012,
   ErrorCodeType.errAdmStopRecording: 1013,
   ErrorCodeType.errVdmCameraNotAuthorized: 1501,
+  ErrorCodeType.errAdmApplicationLoopback: 2007,
 };
 
 RtcEngineEventHandlerOnAudioQualityJson
@@ -471,27 +1208,6 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnFirstLocalVideoFrameJsonToJson(
       'elapsed': instance.elapsed,
     };
 
-const _$VideoSourceTypeEnumMap = {
-  VideoSourceType.videoSourceCameraPrimary: 0,
-  VideoSourceType.videoSourceCamera: 0,
-  VideoSourceType.videoSourceCameraSecondary: 1,
-  VideoSourceType.videoSourceScreenPrimary: 2,
-  VideoSourceType.videoSourceScreen: 2,
-  VideoSourceType.videoSourceScreenSecondary: 3,
-  VideoSourceType.videoSourceCustom: 4,
-  VideoSourceType.videoSourceMediaPlayer: 5,
-  VideoSourceType.videoSourceRtcImagePng: 6,
-  VideoSourceType.videoSourceRtcImageJpeg: 7,
-  VideoSourceType.videoSourceRtcImageGif: 8,
-  VideoSourceType.videoSourceRemote: 9,
-  VideoSourceType.videoSourceTranscoded: 10,
-  VideoSourceType.videoSourceCameraThird: 11,
-  VideoSourceType.videoSourceCameraFourth: 12,
-  VideoSourceType.videoSourceScreenThird: 13,
-  VideoSourceType.videoSourceScreenFourth: 14,
-  VideoSourceType.videoSourceUnknown: 100,
-};
-
 RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJson
     _$RtcEngineEventHandlerOnFirstLocalVideoFramePublishedJsonFromJson(
             Map<String, dynamic> json) =>
@@ -605,6 +1321,13 @@ const _$LocalVideoStreamErrorEnumMap = {
       20,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
+  LocalVideoStreamError.localVideoStreamErrorScreenCapturePaused: 23,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureResumed: 24,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowHidden: 25,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
 };
 
 RtcEngineEventHandlerOnRemoteVideoStateChangedJson
@@ -1810,6 +2533,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
   ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
+  ConnectionChangedReasonType.connectionChangedCertificationVeryfyFailure: 22,
 };
 
 RtcEngineEventHandlerOnWlAccMessageJson
@@ -2226,7 +2950,6 @@ Map<String, dynamic>
         };
 
 const _$VideoTranscoderErrorEnumMap = {
-  VideoTranscoderError.vtErrOk: 0,
   VideoTranscoderError.vtErrVideoSourceNotReady: 1,
   VideoTranscoderError.vtErrInvalidVideoSourceType: 2,
   VideoTranscoderError.vtErrInvalidImagePath: 3,
@@ -2337,717 +3060,3 @@ Map<String, dynamic>
         <String, dynamic>{
           'stats': instance.stats?.toJson(),
         };
-
-AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson
-    _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
-          length: json['length'] as int?,
-          audioEncodedFrameInfo: json['audioEncodedFrameInfo'] == null
-              ? null
-              : EncodedAudioFrameInfo.fromJson(
-                  json['audioEncodedFrameInfo'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonToJson(
-            AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson instance) =>
-        <String, dynamic>{
-          'length': instance.length,
-          'audioEncodedFrameInfo': instance.audioEncodedFrameInfo?.toJson(),
-        };
-
-AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson
-    _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
-          length: json['length'] as int?,
-          audioEncodedFrameInfo: json['audioEncodedFrameInfo'] == null
-              ? null
-              : EncodedAudioFrameInfo.fromJson(
-                  json['audioEncodedFrameInfo'] as Map<String, dynamic>),
-        );
-
-Map<String,
-    dynamic> _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonToJson(
-        AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson instance) =>
-    <String, dynamic>{
-      'length': instance.length,
-      'audioEncodedFrameInfo': instance.audioEncodedFrameInfo?.toJson(),
-    };
-
-AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson
-    _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
-          length: json['length'] as int?,
-          audioEncodedFrameInfo: json['audioEncodedFrameInfo'] == null
-              ? null
-              : EncodedAudioFrameInfo.fromJson(
-                  json['audioEncodedFrameInfo'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonToJson(
-            AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson instance) =>
-        <String, dynamic>{
-          'length': instance.length,
-          'audioEncodedFrameInfo': instance.audioEncodedFrameInfo?.toJson(),
-        };
-
-AudioPcmFrameSinkOnFrameJson _$AudioPcmFrameSinkOnFrameJsonFromJson(
-        Map<String, dynamic> json) =>
-    AudioPcmFrameSinkOnFrameJson(
-      frame: json['frame'] == null
-          ? null
-          : AudioPcmFrame.fromJson(json['frame'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$AudioPcmFrameSinkOnFrameJsonToJson(
-        AudioPcmFrameSinkOnFrameJson instance) =>
-    <String, dynamic>{
-      'frame': instance.frame?.toJson(),
-    };
-
-AudioFrameObserverBaseOnRecordAudioFrameJson
-    _$AudioFrameObserverBaseOnRecordAudioFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioFrameObserverBaseOnRecordAudioFrameJson(
-          channelId: json['channelId'] as String?,
-          audioFrame: json['audioFrame'] == null
-              ? null
-              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$AudioFrameObserverBaseOnRecordAudioFrameJsonToJson(
-        AudioFrameObserverBaseOnRecordAudioFrameJson instance) =>
-    <String, dynamic>{
-      'channelId': instance.channelId,
-      'audioFrame': instance.audioFrame?.toJson(),
-    };
-
-AudioFrameObserverBaseOnPlaybackAudioFrameJson
-    _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioFrameObserverBaseOnPlaybackAudioFrameJson(
-          channelId: json['channelId'] as String?,
-          audioFrame: json['audioFrame'] == null
-              ? null
-              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonToJson(
-        AudioFrameObserverBaseOnPlaybackAudioFrameJson instance) =>
-    <String, dynamic>{
-      'channelId': instance.channelId,
-      'audioFrame': instance.audioFrame?.toJson(),
-    };
-
-AudioFrameObserverBaseOnMixedAudioFrameJson
-    _$AudioFrameObserverBaseOnMixedAudioFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioFrameObserverBaseOnMixedAudioFrameJson(
-          channelId: json['channelId'] as String?,
-          audioFrame: json['audioFrame'] == null
-              ? null
-              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(
-        AudioFrameObserverBaseOnMixedAudioFrameJson instance) =>
-    <String, dynamic>{
-      'channelId': instance.channelId,
-      'audioFrame': instance.audioFrame?.toJson(),
-    };
-
-AudioFrameObserverBaseOnEarMonitoringAudioFrameJson
-    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioFrameObserverBaseOnEarMonitoringAudioFrameJson(
-          audioFrame: json['audioFrame'] == null
-              ? null
-              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(
-            AudioFrameObserverBaseOnEarMonitoringAudioFrameJson instance) =>
-        <String, dynamic>{
-          'audioFrame': instance.audioFrame?.toJson(),
-        };
-
-AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson
-    _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson(
-          channelId: json['channelId'] as String?,
-          uid: json['uid'] as int?,
-          audioFrame: json['audioFrame'] == null
-              ? null
-              : AudioFrame.fromJson(json['audioFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonToJson(
-            AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson instance) =>
-        <String, dynamic>{
-          'channelId': instance.channelId,
-          'uid': instance.uid,
-          'audioFrame': instance.audioFrame?.toJson(),
-        };
-
-AudioSpectrumObserverOnLocalAudioSpectrumJson
-    _$AudioSpectrumObserverOnLocalAudioSpectrumJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioSpectrumObserverOnLocalAudioSpectrumJson(
-          data: json['data'] == null
-              ? null
-              : AudioSpectrumData.fromJson(
-                  json['data'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$AudioSpectrumObserverOnLocalAudioSpectrumJsonToJson(
-        AudioSpectrumObserverOnLocalAudioSpectrumJson instance) =>
-    <String, dynamic>{
-      'data': instance.data?.toJson(),
-    };
-
-AudioSpectrumObserverOnRemoteAudioSpectrumJson
-    _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonFromJson(
-            Map<String, dynamic> json) =>
-        AudioSpectrumObserverOnRemoteAudioSpectrumJson(
-          spectrums: (json['spectrums'] as List<dynamic>?)
-              ?.map((e) =>
-                  UserAudioSpectrumInfo.fromJson(e as Map<String, dynamic>))
-              .toList(),
-          spectrumNumber: json['spectrumNumber'] as int?,
-        );
-
-Map<String, dynamic> _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonToJson(
-        AudioSpectrumObserverOnRemoteAudioSpectrumJson instance) =>
-    <String, dynamic>{
-      'spectrums': instance.spectrums?.map((e) => e.toJson()).toList(),
-      'spectrumNumber': instance.spectrumNumber,
-    };
-
-VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson
-    _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonFromJson(
-            Map<String, dynamic> json) =>
-        VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
-          uid: json['uid'] as int?,
-          length: json['length'] as int?,
-          videoEncodedFrameInfo: json['videoEncodedFrameInfo'] == null
-              ? null
-              : EncodedVideoFrameInfo.fromJson(
-                  json['videoEncodedFrameInfo'] as Map<String, dynamic>),
-        );
-
-Map<String,
-    dynamic> _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonToJson(
-        VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson instance) =>
-    <String, dynamic>{
-      'uid': instance.uid,
-      'length': instance.length,
-      'videoEncodedFrameInfo': instance.videoEncodedFrameInfo?.toJson(),
-    };
-
-VideoFrameObserverOnCaptureVideoFrameJson
-    _$VideoFrameObserverOnCaptureVideoFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        VideoFrameObserverOnCaptureVideoFrameJson(
-          sourceType:
-              $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
-          videoFrame: json['videoFrame'] == null
-              ? null
-              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$VideoFrameObserverOnCaptureVideoFrameJsonToJson(
-        VideoFrameObserverOnCaptureVideoFrameJson instance) =>
-    <String, dynamic>{
-      'sourceType': _$VideoSourceTypeEnumMap[instance.sourceType],
-      'videoFrame': instance.videoFrame?.toJson(),
-    };
-
-VideoFrameObserverOnPreEncodeVideoFrameJson
-    _$VideoFrameObserverOnPreEncodeVideoFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        VideoFrameObserverOnPreEncodeVideoFrameJson(
-          sourceType:
-              $enumDecodeNullable(_$VideoSourceTypeEnumMap, json['sourceType']),
-          videoFrame: json['videoFrame'] == null
-              ? null
-              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$VideoFrameObserverOnPreEncodeVideoFrameJsonToJson(
-        VideoFrameObserverOnPreEncodeVideoFrameJson instance) =>
-    <String, dynamic>{
-      'sourceType': _$VideoSourceTypeEnumMap[instance.sourceType],
-      'videoFrame': instance.videoFrame?.toJson(),
-    };
-
-VideoFrameObserverOnMediaPlayerVideoFrameJson
-    _$VideoFrameObserverOnMediaPlayerVideoFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        VideoFrameObserverOnMediaPlayerVideoFrameJson(
-          videoFrame: json['videoFrame'] == null
-              ? null
-              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
-          mediaPlayerId: json['mediaPlayerId'] as int?,
-        );
-
-Map<String, dynamic> _$VideoFrameObserverOnMediaPlayerVideoFrameJsonToJson(
-        VideoFrameObserverOnMediaPlayerVideoFrameJson instance) =>
-    <String, dynamic>{
-      'videoFrame': instance.videoFrame?.toJson(),
-      'mediaPlayerId': instance.mediaPlayerId,
-    };
-
-VideoFrameObserverOnRenderVideoFrameJson
-    _$VideoFrameObserverOnRenderVideoFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        VideoFrameObserverOnRenderVideoFrameJson(
-          channelId: json['channelId'] as String?,
-          remoteUid: json['remoteUid'] as int?,
-          videoFrame: json['videoFrame'] == null
-              ? null
-              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$VideoFrameObserverOnRenderVideoFrameJsonToJson(
-        VideoFrameObserverOnRenderVideoFrameJson instance) =>
-    <String, dynamic>{
-      'channelId': instance.channelId,
-      'remoteUid': instance.remoteUid,
-      'videoFrame': instance.videoFrame?.toJson(),
-    };
-
-VideoFrameObserverOnTranscodedVideoFrameJson
-    _$VideoFrameObserverOnTranscodedVideoFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        VideoFrameObserverOnTranscodedVideoFrameJson(
-          videoFrame: json['videoFrame'] == null
-              ? null
-              : VideoFrame.fromJson(json['videoFrame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(
-        VideoFrameObserverOnTranscodedVideoFrameJson instance) =>
-    <String, dynamic>{
-      'videoFrame': instance.videoFrame?.toJson(),
-    };
-
-MediaRecorderObserverOnRecorderStateChangedJson
-    _$MediaRecorderObserverOnRecorderStateChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaRecorderObserverOnRecorderStateChangedJson(
-          channelId: json['channelId'] as String?,
-          uid: json['uid'] as int?,
-          state: $enumDecodeNullable(_$RecorderStateEnumMap, json['state']),
-          error: $enumDecodeNullable(_$RecorderErrorCodeEnumMap, json['error']),
-        );
-
-Map<String, dynamic> _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(
-        MediaRecorderObserverOnRecorderStateChangedJson instance) =>
-    <String, dynamic>{
-      'channelId': instance.channelId,
-      'uid': instance.uid,
-      'state': _$RecorderStateEnumMap[instance.state],
-      'error': _$RecorderErrorCodeEnumMap[instance.error],
-    };
-
-const _$RecorderStateEnumMap = {
-  RecorderState.recorderStateError: -1,
-  RecorderState.recorderStateStart: 2,
-  RecorderState.recorderStateStop: 3,
-};
-
-const _$RecorderErrorCodeEnumMap = {
-  RecorderErrorCode.recorderErrorNone: 0,
-  RecorderErrorCode.recorderErrorWriteFailed: 1,
-  RecorderErrorCode.recorderErrorNoStream: 2,
-  RecorderErrorCode.recorderErrorOverMaxDuration: 3,
-  RecorderErrorCode.recorderErrorConfigChanged: 4,
-};
-
-MediaRecorderObserverOnRecorderInfoUpdatedJson
-    _$MediaRecorderObserverOnRecorderInfoUpdatedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaRecorderObserverOnRecorderInfoUpdatedJson(
-          channelId: json['channelId'] as String?,
-          uid: json['uid'] as int?,
-          info: json['info'] == null
-              ? null
-              : RecorderInfo.fromJson(json['info'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$MediaRecorderObserverOnRecorderInfoUpdatedJsonToJson(
-        MediaRecorderObserverOnRecorderInfoUpdatedJson instance) =>
-    <String, dynamic>{
-      'channelId': instance.channelId,
-      'uid': instance.uid,
-      'info': instance.info?.toJson(),
-    };
-
-MediaPlayerVideoFrameObserverOnFrameJson
-    _$MediaPlayerVideoFrameObserverOnFrameJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerVideoFrameObserverOnFrameJson(
-          frame: json['frame'] == null
-              ? null
-              : VideoFrame.fromJson(json['frame'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$MediaPlayerVideoFrameObserverOnFrameJsonToJson(
-        MediaPlayerVideoFrameObserverOnFrameJson instance) =>
-    <String, dynamic>{
-      'frame': instance.frame?.toJson(),
-    };
-
-MediaPlayerSourceObserverOnPlayerSourceStateChangedJson
-    _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnPlayerSourceStateChangedJson(
-          state: $enumDecodeNullable(_$MediaPlayerStateEnumMap, json['state']),
-          ec: $enumDecodeNullable(_$MediaPlayerErrorEnumMap, json['ec']),
-        );
-
-Map<String, dynamic>
-    _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonToJson(
-            MediaPlayerSourceObserverOnPlayerSourceStateChangedJson instance) =>
-        <String, dynamic>{
-          'state': _$MediaPlayerStateEnumMap[instance.state],
-          'ec': _$MediaPlayerErrorEnumMap[instance.ec],
-        };
-
-const _$MediaPlayerStateEnumMap = {
-  MediaPlayerState.playerStateIdle: 0,
-  MediaPlayerState.playerStateOpening: 1,
-  MediaPlayerState.playerStateOpenCompleted: 2,
-  MediaPlayerState.playerStatePlaying: 3,
-  MediaPlayerState.playerStatePaused: 4,
-  MediaPlayerState.playerStatePlaybackCompleted: 5,
-  MediaPlayerState.playerStatePlaybackAllLoopsCompleted: 6,
-  MediaPlayerState.playerStateStopped: 7,
-  MediaPlayerState.playerStatePausingInternal: 50,
-  MediaPlayerState.playerStateStoppingInternal: 51,
-  MediaPlayerState.playerStateSeekingInternal: 52,
-  MediaPlayerState.playerStateGettingInternal: 53,
-  MediaPlayerState.playerStateNoneInternal: 54,
-  MediaPlayerState.playerStateDoNothingInternal: 55,
-  MediaPlayerState.playerStateSetTrackInternal: 56,
-  MediaPlayerState.playerStateFailed: 100,
-};
-
-const _$MediaPlayerErrorEnumMap = {
-  MediaPlayerError.playerErrorNone: 0,
-  MediaPlayerError.playerErrorInvalidArguments: -1,
-  MediaPlayerError.playerErrorInternal: -2,
-  MediaPlayerError.playerErrorNoResource: -3,
-  MediaPlayerError.playerErrorInvalidMediaSource: -4,
-  MediaPlayerError.playerErrorUnknownStreamType: -5,
-  MediaPlayerError.playerErrorObjNotInitialized: -6,
-  MediaPlayerError.playerErrorCodecNotSupported: -7,
-  MediaPlayerError.playerErrorVideoRenderFailed: -8,
-  MediaPlayerError.playerErrorInvalidState: -9,
-  MediaPlayerError.playerErrorUrlNotFound: -10,
-  MediaPlayerError.playerErrorInvalidConnectionState: -11,
-  MediaPlayerError.playerErrorSrcBufferUnderflow: -12,
-  MediaPlayerError.playerErrorInterrupted: -13,
-  MediaPlayerError.playerErrorNotSupported: -14,
-  MediaPlayerError.playerErrorTokenExpired: -15,
-  MediaPlayerError.playerErrorIpExpired: -16,
-  MediaPlayerError.playerErrorUnknown: -17,
-};
-
-MediaPlayerSourceObserverOnPositionChangedJson
-    _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnPositionChangedJson(
-          positionMs: json['position_ms'] as int?,
-        );
-
-Map<String, dynamic> _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(
-        MediaPlayerSourceObserverOnPositionChangedJson instance) =>
-    <String, dynamic>{
-      'position_ms': instance.positionMs,
-    };
-
-MediaPlayerSourceObserverOnPlayerEventJson
-    _$MediaPlayerSourceObserverOnPlayerEventJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnPlayerEventJson(
-          eventCode:
-              $enumDecodeNullable(_$MediaPlayerEventEnumMap, json['eventCode']),
-          elapsedTime: json['elapsedTime'] as int?,
-          message: json['message'] as String?,
-        );
-
-Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerEventJsonToJson(
-        MediaPlayerSourceObserverOnPlayerEventJson instance) =>
-    <String, dynamic>{
-      'eventCode': _$MediaPlayerEventEnumMap[instance.eventCode],
-      'elapsedTime': instance.elapsedTime,
-      'message': instance.message,
-    };
-
-const _$MediaPlayerEventEnumMap = {
-  MediaPlayerEvent.playerEventSeekBegin: 0,
-  MediaPlayerEvent.playerEventSeekComplete: 1,
-  MediaPlayerEvent.playerEventSeekError: 2,
-  MediaPlayerEvent.playerEventAudioTrackChanged: 5,
-  MediaPlayerEvent.playerEventBufferLow: 6,
-  MediaPlayerEvent.playerEventBufferRecover: 7,
-  MediaPlayerEvent.playerEventFreezeStart: 8,
-  MediaPlayerEvent.playerEventFreezeStop: 9,
-  MediaPlayerEvent.playerEventSwitchBegin: 10,
-  MediaPlayerEvent.playerEventSwitchComplete: 11,
-  MediaPlayerEvent.playerEventSwitchError: 12,
-  MediaPlayerEvent.playerEventFirstDisplayed: 13,
-  MediaPlayerEvent.playerEventReachCacheFileMaxCount: 14,
-  MediaPlayerEvent.playerEventReachCacheFileMaxSize: 15,
-  MediaPlayerEvent.playerEventTryOpenStart: 16,
-  MediaPlayerEvent.playerEventTryOpenSucceed: 17,
-  MediaPlayerEvent.playerEventTryOpenFailed: 18,
-};
-
-MediaPlayerSourceObserverOnMetaDataJson
-    _$MediaPlayerSourceObserverOnMetaDataJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnMetaDataJson(
-          length: json['length'] as int?,
-        );
-
-Map<String, dynamic> _$MediaPlayerSourceObserverOnMetaDataJsonToJson(
-        MediaPlayerSourceObserverOnMetaDataJson instance) =>
-    <String, dynamic>{
-      'length': instance.length,
-    };
-
-MediaPlayerSourceObserverOnPlayBufferUpdatedJson
-    _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnPlayBufferUpdatedJson(
-          playCachedBuffer: json['playCachedBuffer'] as int?,
-        );
-
-Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonToJson(
-        MediaPlayerSourceObserverOnPlayBufferUpdatedJson instance) =>
-    <String, dynamic>{
-      'playCachedBuffer': instance.playCachedBuffer,
-    };
-
-MediaPlayerSourceObserverOnPreloadEventJson
-    _$MediaPlayerSourceObserverOnPreloadEventJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnPreloadEventJson(
-          src: json['src'] as String?,
-          event:
-              $enumDecodeNullable(_$PlayerPreloadEventEnumMap, json['event']),
-        );
-
-Map<String, dynamic> _$MediaPlayerSourceObserverOnPreloadEventJsonToJson(
-        MediaPlayerSourceObserverOnPreloadEventJson instance) =>
-    <String, dynamic>{
-      'src': instance.src,
-      'event': _$PlayerPreloadEventEnumMap[instance.event],
-    };
-
-const _$PlayerPreloadEventEnumMap = {
-  PlayerPreloadEvent.playerPreloadEventBegin: 0,
-  PlayerPreloadEvent.playerPreloadEventComplete: 1,
-  PlayerPreloadEvent.playerPreloadEventError: 2,
-};
-
-MediaPlayerSourceObserverOnCompletedJson
-    _$MediaPlayerSourceObserverOnCompletedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnCompletedJson();
-
-Map<String, dynamic> _$MediaPlayerSourceObserverOnCompletedJsonToJson(
-        MediaPlayerSourceObserverOnCompletedJson instance) =>
-    <String, dynamic>{};
-
-MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson
-    _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson();
-
-Map<String, dynamic>
-    _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonToJson(
-            MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson instance) =>
-        <String, dynamic>{};
-
-MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson
-    _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson(
-          from: json['from'] == null
-              ? null
-              : SrcInfo.fromJson(json['from'] as Map<String, dynamic>),
-          to: json['to'] == null
-              ? null
-              : SrcInfo.fromJson(json['to'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic>
-    _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonToJson(
-            MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson instance) =>
-        <String, dynamic>{
-          'from': instance.from?.toJson(),
-          'to': instance.to?.toJson(),
-        };
-
-MediaPlayerSourceObserverOnPlayerInfoUpdatedJson
-    _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnPlayerInfoUpdatedJson(
-          info: json['info'] == null
-              ? null
-              : PlayerUpdatedInfo.fromJson(
-                  json['info'] as Map<String, dynamic>),
-        );
-
-Map<String, dynamic> _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonToJson(
-        MediaPlayerSourceObserverOnPlayerInfoUpdatedJson instance) =>
-    <String, dynamic>{
-      'info': instance.info?.toJson(),
-    };
-
-MediaPlayerSourceObserverOnAudioVolumeIndicationJson
-    _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonFromJson(
-            Map<String, dynamic> json) =>
-        MediaPlayerSourceObserverOnAudioVolumeIndicationJson(
-          volume: json['volume'] as int?,
-        );
-
-Map<String, dynamic>
-    _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonToJson(
-            MediaPlayerSourceObserverOnAudioVolumeIndicationJson instance) =>
-        <String, dynamic>{
-          'volume': instance.volume,
-        };
-
-MusicContentCenterEventHandlerOnMusicChartsResultJson
-    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(
-            Map<String, dynamic> json) =>
-        MusicContentCenterEventHandlerOnMusicChartsResultJson(
-          requestId: json['requestId'] as String?,
-          result: (json['result'] as List<dynamic>?)
-              ?.map((e) => MusicChartInfo.fromJson(e as Map<String, dynamic>))
-              .toList(),
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
-        );
-
-Map<String, dynamic>
-    _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(
-            MusicContentCenterEventHandlerOnMusicChartsResultJson instance) =>
-        <String, dynamic>{
-          'requestId': instance.requestId,
-          'result': instance.result?.map((e) => e.toJson()).toList(),
-          'errorCode':
-              _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
-        };
-
-const _$MusicContentCenterStatusCodeEnumMap = {
-  MusicContentCenterStatusCode.kMusicContentCenterStatusOk: 0,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErr: 1,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrGateway: 2,
-  MusicContentCenterStatusCode
-      .kMusicContentCenterStatusErrPermissionAndResource: 3,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
-  MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
-};
-
-MusicContentCenterEventHandlerOnMusicCollectionResultJson
-    _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(
-            Map<String, dynamic> json) =>
-        MusicContentCenterEventHandlerOnMusicCollectionResultJson(
-          requestId: json['requestId'] as String?,
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
-        );
-
-Map<String,
-    dynamic> _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(
-        MusicContentCenterEventHandlerOnMusicCollectionResultJson instance) =>
-    <String, dynamic>{
-      'requestId': instance.requestId,
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
-    };
-
-MusicContentCenterEventHandlerOnLyricResultJson
-    _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(
-            Map<String, dynamic> json) =>
-        MusicContentCenterEventHandlerOnLyricResultJson(
-          requestId: json['requestId'] as String?,
-          songCode: json['songCode'] as int?,
-          lyricUrl: json['lyricUrl'] as String?,
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
-        );
-
-Map<String, dynamic> _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(
-        MusicContentCenterEventHandlerOnLyricResultJson instance) =>
-    <String, dynamic>{
-      'requestId': instance.requestId,
-      'songCode': instance.songCode,
-      'lyricUrl': instance.lyricUrl,
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
-    };
-
-MusicContentCenterEventHandlerOnSongSimpleInfoResultJson
-    _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonFromJson(
-            Map<String, dynamic> json) =>
-        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
-          requestId: json['requestId'] as String?,
-          songCode: json['songCode'] as int?,
-          simpleInfo: json['simpleInfo'] as String?,
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
-        );
-
-Map<String,
-    dynamic> _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonToJson(
-        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson instance) =>
-    <String, dynamic>{
-      'requestId': instance.requestId,
-      'songCode': instance.songCode,
-      'simpleInfo': instance.simpleInfo,
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
-    };
-
-MusicContentCenterEventHandlerOnPreLoadEventJson
-    _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(
-            Map<String, dynamic> json) =>
-        MusicContentCenterEventHandlerOnPreLoadEventJson(
-          requestId: json['requestId'] as String?,
-          songCode: json['songCode'] as int?,
-          percent: json['percent'] as int?,
-          lyricUrl: json['lyricUrl'] as String?,
-          status:
-              $enumDecodeNullable(_$PreloadStatusCodeEnumMap, json['status']),
-          errorCode: $enumDecodeNullable(
-              _$MusicContentCenterStatusCodeEnumMap, json['errorCode']),
-        );
-
-Map<String, dynamic> _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(
-        MusicContentCenterEventHandlerOnPreLoadEventJson instance) =>
-    <String, dynamic>{
-      'requestId': instance.requestId,
-      'songCode': instance.songCode,
-      'percent': instance.percent,
-      'lyricUrl': instance.lyricUrl,
-      'status': _$PreloadStatusCodeEnumMap[instance.status],
-      'errorCode': _$MusicContentCenterStatusCodeEnumMap[instance.errorCode],
-    };
-
-const _$PreloadStatusCodeEnumMap = {
-  PreloadStatusCode.kPreloadStatusCompleted: 0,
-  PreloadStatusCode.kPreloadStatusFailed: 1,
-  PreloadStatusCode.kPreloadStatusPreloading: 2,
-  PreloadStatusCode.kPreloadStatusRemoved: 3,
-};

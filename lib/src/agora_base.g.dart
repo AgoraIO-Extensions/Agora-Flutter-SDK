@@ -2189,6 +2189,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errAdmStartRecording: 1012,
   ErrorCodeType.errAdmStopRecording: 1013,
   ErrorCodeType.errVdmCameraNotAuthorized: 1501,
+  ErrorCodeType.errAdmApplicationLoopback: 2007,
 };
 
 const _$LicenseErrorTypeEnumMap = {
@@ -2412,6 +2413,13 @@ const _$LocalVideoStreamErrorEnumMap = {
       20,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
+  LocalVideoStreamError.localVideoStreamErrorScreenCapturePaused: 23,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureResumed: 24,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowHidden: 25,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized: 27,
 };
 
 const _$RemoteAudioStateEnumMap = {
@@ -2510,7 +2518,6 @@ const _$ConnectionStateTypeEnumMap = {
 };
 
 const _$VideoTranscoderErrorEnumMap = {
-  VideoTranscoderError.vtErrOk: 0,
   VideoTranscoderError.vtErrVideoSourceNotReady: 1,
   VideoTranscoderError.vtErrInvalidVideoSourceType: 2,
   VideoTranscoderError.vtErrInvalidImagePath: 3,
@@ -2542,6 +2549,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
   ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
+  ConnectionChangedReasonType.connectionChangedCertificationVeryfyFailure: 22,
 };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {

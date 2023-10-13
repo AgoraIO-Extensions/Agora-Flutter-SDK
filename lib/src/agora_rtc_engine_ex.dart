@@ -34,7 +34,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///  If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
   ///  Ensure that the app ID you use to generate the token is the same as the app ID used when creating the RtcEngine instance.
   ///
-  /// * [token] The token generated on your server for authentication.
+  /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
   /// * [connection] The connection information. See RtcConnection.
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
@@ -57,7 +57,7 @@ abstract class RtcEngineEx implements RtcEngine {
   ///
   /// This method lets the user leave the channel, for example, by hanging up or exiting the call. After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call. This method can be called whether or not a call is currently in progress. This method releases all resources related to the session. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
   ///  If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-  ///  Calling leaveChannel will leave the channels when calling joinChannel and joinChannelEx at the same time.
+  ///  If you want to leave the channels that you joined by calling joinChannel and joinChannelEx, call the leaveChannel method.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [options] The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
@@ -420,7 +420,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Creates a data stream.
   ///
-  /// Creates a data stream. Each user can create up to five data streams in a single channel. Compared with createDataStreamEx, this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
+  /// Creates a data stream. Each user can create up to five data streams in a single channel.
   ///
   /// * [config] The configurations for the data stream. See DataStreamConfig.
   /// * [connection] The connection information. See RtcConnection.
@@ -521,8 +521,7 @@ abstract class RtcEngineEx implements RtcEngine {
 
   /// Starts pushing media streams to a CDN without transcoding.
   ///
-  /// Ensure that you enable the Media Push service before using this function. See Enable Media Push.
-  ///  Call this method after joining a channel.
+  /// Call this method after joining a channel.
   ///  Only hosts in the LIVE_BROADCASTING profile can call this method.
   ///  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push. Agora recommends that you use the server-side Media Push function. You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
   ///
@@ -757,6 +756,22 @@ abstract class RtcEngineEx implements RtcEngine {
       {required RtcConnection connection,
       required int uid,
       required String filePath});
+
+  /// Enables or disables video screenshot and upload.
+  ///
+  /// This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service. Before calling this method, ensure that you have contacted to activate the video screenshot upload service.
+  ///
+  /// * [enabled] Whether to enable video screenshot and upload : true : Enables video screenshot and upload. false : Disables video screenshot and upload.
+  /// * [config] Configuration of video screenshot and upload. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(contentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+  /// * [connection] The connection information. See RtcConnection.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
+  Future<void> enableContentInspectEx(
+      {required bool enabled,
+      required ContentInspectConfig config,
+      required RtcConnection connection});
 
   /// Enables tracing the video frame rendering process.
   ///

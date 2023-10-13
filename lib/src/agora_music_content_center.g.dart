@@ -150,6 +150,7 @@ MusicContentCenterConfiguration _$MusicContentCenterConfigurationFromJson(
       token: json['token'] as String?,
       mccUid: json['mccUid'] as int?,
       maxCacheSize: json['maxCacheSize'] as int?,
+      mccDomain: json['mccDomain'] as String?,
     );
 
 Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
@@ -166,6 +167,7 @@ Map<String, dynamic> _$MusicContentCenterConfigurationToJson(
   writeNotNull('token', instance.token);
   writeNotNull('mccUid', instance.mccUid);
   writeNotNull('maxCacheSize', instance.maxCacheSize);
+  writeNotNull('mccDomain', instance.mccDomain);
   return val;
 }
 
@@ -185,4 +187,5 @@ const _$MusicContentCenterStatusCodeEnumMap = {
   MusicContentCenterStatusCode.kMusicContentCenterStatusErrInternalDataParse: 4,
   MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicLoading: 5,
   MusicContentCenterStatusCode.kMusicContentCenterStatusErrMusicDecryption: 6,
+  MusicContentCenterStatusCode.kMusicContentCenterStatusErrHttpInternalError: 7,
 };

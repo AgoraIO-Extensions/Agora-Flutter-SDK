@@ -341,13 +341,17 @@ enum ContentInspectType {
   @JsonValue(0)
   contentInspectInvalid,
 
-  /// 1: Video content moderation. SDK takes screenshots, inspects video content of the video stream in the channel, and uploads the screenshots and moderation results.
+  /// @nodoc
   @JsonValue(1)
   contentInspectModeration,
 
-  /// 2: Screenshot capture. SDK takes screenshots of the video stream in the channel and uploads them.
+  /// 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
   @JsonValue(2)
   contentInspectSupervision,
+
+  /// 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
+  @JsonValue(3)
+  contentInspectImageModeration,
 }
 
 /// @nodoc
@@ -389,11 +393,16 @@ class ContentInspectModule {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ContentInspectConfig {
   /// @nodoc
-  const ContentInspectConfig({this.extraInfo, this.modules, this.moduleCount});
+  const ContentInspectConfig(
+      {this.extraInfo, this.serverConfig, this.modules, this.moduleCount});
 
   /// Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
   @JsonKey(name: 'extraInfo')
   final String? extraInfo;
+
+  /// (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to contentInspectImageModeration. If you want to use it, contact.
+  @JsonKey(name: 'serverConfig')
+  final String? serverConfig;
 
   /// Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
   @JsonKey(name: 'modules')
@@ -558,7 +567,7 @@ enum VideoPixelFormat {
   @JsonValue(4)
   videoPixelRgba,
 
-  /// 8: The format is NV12.
+  /// @nodoc
   @JsonValue(8)
   videoPixelNv12,
 
@@ -585,6 +594,10 @@ enum VideoPixelFormat {
   /// 16: The format is I422.
   @JsonValue(16)
   videoPixelI422,
+
+  /// 17: The ID3D11TEXTURE2D format. Currently supported types are DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS and DXGI_FORMAT_NV12.
+  @JsonValue(17)
+  videoTextureId3d11texture2d,
 }
 
 /// @nodoc
@@ -679,7 +692,8 @@ class ExternalVideoFrame {
       this.matrix,
       this.metadataBuffer,
       this.metadataSize,
-      this.alphaBuffer});
+      this.alphaBuffer,
+      this.textureSliceIndex});
 
   /// The video type. See VideoBufferType.
   @JsonKey(name: 'type')
@@ -748,6 +762,10 @@ class ExternalVideoFrame {
   /// @nodoc
   @JsonKey(name: 'alphaBuffer', ignore: true)
   final Uint8List? alphaBuffer;
+
+  /// This parameter only applies to video data in Windows Texture format. It represents an index of an ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
+  @JsonKey(name: 'texture_slice_index')
+  final int? textureSliceIndex;
 
   /// @nodoc
   factory ExternalVideoFrame.fromJson(Map<String, dynamic> json) =>

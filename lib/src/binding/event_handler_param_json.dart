@@ -5,6 +5,1140 @@ import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 part 'event_handler_param_json.g.dart';
 
 @JsonSerializable(explicitToJson: true)
+class AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson {
+  const AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
+      {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
+
+  @JsonKey(name: 'frameBuffer', ignore: true)
+  final Uint8List? frameBuffer;
+  @JsonKey(name: 'length')
+  final int? length;
+  @JsonKey(name: 'audioEncodedFrameInfo')
+  final EncodedAudioFrameInfo? audioEncodedFrameInfo;
+  factory AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonToJson(this);
+}
+
+extension AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonBufferExt
+    on AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson {
+  AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? frameBuffer;
+    if (bufferList.length > 0) {
+      frameBuffer = bufferList[0];
+    }
+    return AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
+        frameBuffer: frameBuffer,
+        length: length,
+        audioEncodedFrameInfo: audioEncodedFrameInfo);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (frameBuffer != null) {
+      bufferList.add(frameBuffer!);
+    }
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson {
+  const AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
+      {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
+
+  @JsonKey(name: 'frameBuffer', ignore: true)
+  final Uint8List? frameBuffer;
+  @JsonKey(name: 'length')
+  final int? length;
+  @JsonKey(name: 'audioEncodedFrameInfo')
+  final EncodedAudioFrameInfo? audioEncodedFrameInfo;
+  factory AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonToJson(this);
+}
+
+extension AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonBufferExt
+    on AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson {
+  AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? frameBuffer;
+    if (bufferList.length > 0) {
+      frameBuffer = bufferList[0];
+    }
+    return AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
+        frameBuffer: frameBuffer,
+        length: length,
+        audioEncodedFrameInfo: audioEncodedFrameInfo);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (frameBuffer != null) {
+      bufferList.add(frameBuffer!);
+    }
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson {
+  const AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
+      {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
+
+  @JsonKey(name: 'frameBuffer', ignore: true)
+  final Uint8List? frameBuffer;
+  @JsonKey(name: 'length')
+  final int? length;
+  @JsonKey(name: 'audioEncodedFrameInfo')
+  final EncodedAudioFrameInfo? audioEncodedFrameInfo;
+  factory AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonToJson(this);
+}
+
+extension AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonBufferExt
+    on AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson {
+  AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? frameBuffer;
+    if (bufferList.length > 0) {
+      frameBuffer = bufferList[0];
+    }
+    return AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
+        frameBuffer: frameBuffer,
+        length: length,
+        audioEncodedFrameInfo: audioEncodedFrameInfo);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (frameBuffer != null) {
+      bufferList.add(frameBuffer!);
+    }
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioPcmFrameSinkOnFrameJson {
+  const AudioPcmFrameSinkOnFrameJson({this.frame});
+
+  @JsonKey(name: 'frame')
+  final AudioPcmFrame? frame;
+  factory AudioPcmFrameSinkOnFrameJson.fromJson(Map<String, dynamic> json) =>
+      _$AudioPcmFrameSinkOnFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() => _$AudioPcmFrameSinkOnFrameJsonToJson(this);
+}
+
+extension AudioPcmFrameSinkOnFrameJsonBufferExt
+    on AudioPcmFrameSinkOnFrameJson {
+  AudioPcmFrameSinkOnFrameJson fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioFrameObserverBaseOnRecordAudioFrameJson {
+  const AudioFrameObserverBaseOnRecordAudioFrameJson(
+      {this.channelId, this.audioFrame});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverBaseOnRecordAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverBaseOnRecordAudioFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverBaseOnRecordAudioFrameJsonToJson(this);
+}
+
+extension AudioFrameObserverBaseOnRecordAudioFrameJsonBufferExt
+    on AudioFrameObserverBaseOnRecordAudioFrameJson {
+  AudioFrameObserverBaseOnRecordAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioFrameObserverBaseOnPlaybackAudioFrameJson {
+  const AudioFrameObserverBaseOnPlaybackAudioFrameJson(
+      {this.channelId, this.audioFrame});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverBaseOnPlaybackAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonToJson(this);
+}
+
+extension AudioFrameObserverBaseOnPlaybackAudioFrameJsonBufferExt
+    on AudioFrameObserverBaseOnPlaybackAudioFrameJson {
+  AudioFrameObserverBaseOnPlaybackAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioFrameObserverBaseOnMixedAudioFrameJson {
+  const AudioFrameObserverBaseOnMixedAudioFrameJson(
+      {this.channelId, this.audioFrame});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverBaseOnMixedAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverBaseOnMixedAudioFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(this);
+}
+
+extension AudioFrameObserverBaseOnMixedAudioFrameJsonBufferExt
+    on AudioFrameObserverBaseOnMixedAudioFrameJson {
+  AudioFrameObserverBaseOnMixedAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  const AudioFrameObserverBaseOnEarMonitoringAudioFrameJson({this.audioFrame});
+
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(this);
+}
+
+extension AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonBufferExt
+    on AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
+  AudioFrameObserverBaseOnEarMonitoringAudioFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
+  const AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson(
+      {this.channelId, this.uid, this.audioFrame});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'uid')
+  final int? uid;
+  @JsonKey(name: 'audioFrame')
+  final AudioFrame? audioFrame;
+  factory AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonToJson(this);
+}
+
+extension AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonBufferExt
+    on AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
+  AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioSpectrumObserverOnLocalAudioSpectrumJson {
+  const AudioSpectrumObserverOnLocalAudioSpectrumJson({this.data});
+
+  @JsonKey(name: 'data')
+  final AudioSpectrumData? data;
+  factory AudioSpectrumObserverOnLocalAudioSpectrumJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioSpectrumObserverOnLocalAudioSpectrumJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioSpectrumObserverOnLocalAudioSpectrumJsonToJson(this);
+}
+
+extension AudioSpectrumObserverOnLocalAudioSpectrumJsonBufferExt
+    on AudioSpectrumObserverOnLocalAudioSpectrumJson {
+  AudioSpectrumObserverOnLocalAudioSpectrumJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class AudioSpectrumObserverOnRemoteAudioSpectrumJson {
+  const AudioSpectrumObserverOnRemoteAudioSpectrumJson(
+      {this.spectrums, this.spectrumNumber});
+
+  @JsonKey(name: 'spectrums')
+  final List<UserAudioSpectrumInfo>? spectrums;
+  @JsonKey(name: 'spectrumNumber')
+  final int? spectrumNumber;
+  factory AudioSpectrumObserverOnRemoteAudioSpectrumJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonToJson(this);
+}
+
+extension AudioSpectrumObserverOnRemoteAudioSpectrumJsonBufferExt
+    on AudioSpectrumObserverOnRemoteAudioSpectrumJson {
+  AudioSpectrumObserverOnRemoteAudioSpectrumJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson {
+  const VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
+      {this.uid, this.imageBuffer, this.length, this.videoEncodedFrameInfo});
+
+  @JsonKey(name: 'uid')
+  final int? uid;
+  @JsonKey(name: 'imageBuffer', ignore: true)
+  final Uint8List? imageBuffer;
+  @JsonKey(name: 'length')
+  final int? length;
+  @JsonKey(name: 'videoEncodedFrameInfo')
+  final EncodedVideoFrameInfo? videoEncodedFrameInfo;
+  factory VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonToJson(this);
+}
+
+extension VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonBufferExt
+    on VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson {
+  VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? imageBuffer;
+    if (bufferList.length > 0) {
+      imageBuffer = bufferList[0];
+    }
+    return VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
+        uid: uid,
+        imageBuffer: imageBuffer,
+        length: length,
+        videoEncodedFrameInfo: videoEncodedFrameInfo);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (imageBuffer != null) {
+      bufferList.add(imageBuffer!);
+    }
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class VideoFrameObserverOnCaptureVideoFrameJson {
+  const VideoFrameObserverOnCaptureVideoFrameJson(
+      {this.sourceType, this.videoFrame});
+
+  @JsonKey(name: 'sourceType')
+  final VideoSourceType? sourceType;
+  @JsonKey(name: 'videoFrame')
+  final VideoFrame? videoFrame;
+  factory VideoFrameObserverOnCaptureVideoFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$VideoFrameObserverOnCaptureVideoFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$VideoFrameObserverOnCaptureVideoFrameJsonToJson(this);
+}
+
+extension VideoFrameObserverOnCaptureVideoFrameJsonBufferExt
+    on VideoFrameObserverOnCaptureVideoFrameJson {
+  VideoFrameObserverOnCaptureVideoFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class VideoFrameObserverOnPreEncodeVideoFrameJson {
+  const VideoFrameObserverOnPreEncodeVideoFrameJson(
+      {this.sourceType, this.videoFrame});
+
+  @JsonKey(name: 'sourceType')
+  final VideoSourceType? sourceType;
+  @JsonKey(name: 'videoFrame')
+  final VideoFrame? videoFrame;
+  factory VideoFrameObserverOnPreEncodeVideoFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$VideoFrameObserverOnPreEncodeVideoFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$VideoFrameObserverOnPreEncodeVideoFrameJsonToJson(this);
+}
+
+extension VideoFrameObserverOnPreEncodeVideoFrameJsonBufferExt
+    on VideoFrameObserverOnPreEncodeVideoFrameJson {
+  VideoFrameObserverOnPreEncodeVideoFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class VideoFrameObserverOnMediaPlayerVideoFrameJson {
+  const VideoFrameObserverOnMediaPlayerVideoFrameJson(
+      {this.videoFrame, this.mediaPlayerId});
+
+  @JsonKey(name: 'videoFrame')
+  final VideoFrame? videoFrame;
+  @JsonKey(name: 'mediaPlayerId')
+  final int? mediaPlayerId;
+  factory VideoFrameObserverOnMediaPlayerVideoFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$VideoFrameObserverOnMediaPlayerVideoFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$VideoFrameObserverOnMediaPlayerVideoFrameJsonToJson(this);
+}
+
+extension VideoFrameObserverOnMediaPlayerVideoFrameJsonBufferExt
+    on VideoFrameObserverOnMediaPlayerVideoFrameJson {
+  VideoFrameObserverOnMediaPlayerVideoFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class VideoFrameObserverOnRenderVideoFrameJson {
+  const VideoFrameObserverOnRenderVideoFrameJson(
+      {this.channelId, this.remoteUid, this.videoFrame});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'remoteUid')
+  final int? remoteUid;
+  @JsonKey(name: 'videoFrame')
+  final VideoFrame? videoFrame;
+  factory VideoFrameObserverOnRenderVideoFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$VideoFrameObserverOnRenderVideoFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$VideoFrameObserverOnRenderVideoFrameJsonToJson(this);
+}
+
+extension VideoFrameObserverOnRenderVideoFrameJsonBufferExt
+    on VideoFrameObserverOnRenderVideoFrameJson {
+  VideoFrameObserverOnRenderVideoFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class VideoFrameObserverOnTranscodedVideoFrameJson {
+  const VideoFrameObserverOnTranscodedVideoFrameJson({this.videoFrame});
+
+  @JsonKey(name: 'videoFrame')
+  final VideoFrame? videoFrame;
+  factory VideoFrameObserverOnTranscodedVideoFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$VideoFrameObserverOnTranscodedVideoFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(this);
+}
+
+extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
+    on VideoFrameObserverOnTranscodedVideoFrameJson {
+  VideoFrameObserverOnTranscodedVideoFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaRecorderObserverOnRecorderStateChangedJson {
+  const MediaRecorderObserverOnRecorderStateChangedJson(
+      {this.channelId, this.uid, this.state, this.error});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'uid')
+  final int? uid;
+  @JsonKey(name: 'state')
+  final RecorderState? state;
+  @JsonKey(name: 'error')
+  final RecorderErrorCode? error;
+  factory MediaRecorderObserverOnRecorderStateChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaRecorderObserverOnRecorderStateChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(this);
+}
+
+extension MediaRecorderObserverOnRecorderStateChangedJsonBufferExt
+    on MediaRecorderObserverOnRecorderStateChangedJson {
+  MediaRecorderObserverOnRecorderStateChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaRecorderObserverOnRecorderInfoUpdatedJson {
+  const MediaRecorderObserverOnRecorderInfoUpdatedJson(
+      {this.channelId, this.uid, this.info});
+
+  @JsonKey(name: 'channelId')
+  final String? channelId;
+  @JsonKey(name: 'uid')
+  final int? uid;
+  @JsonKey(name: 'info')
+  final RecorderInfo? info;
+  factory MediaRecorderObserverOnRecorderInfoUpdatedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaRecorderObserverOnRecorderInfoUpdatedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaRecorderObserverOnRecorderInfoUpdatedJsonToJson(this);
+}
+
+extension MediaRecorderObserverOnRecorderInfoUpdatedJsonBufferExt
+    on MediaRecorderObserverOnRecorderInfoUpdatedJson {
+  MediaRecorderObserverOnRecorderInfoUpdatedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerVideoFrameObserverOnFrameJson {
+  const MediaPlayerVideoFrameObserverOnFrameJson({this.frame});
+
+  @JsonKey(name: 'frame')
+  final VideoFrame? frame;
+  factory MediaPlayerVideoFrameObserverOnFrameJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerVideoFrameObserverOnFrameJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerVideoFrameObserverOnFrameJsonToJson(this);
+}
+
+extension MediaPlayerVideoFrameObserverOnFrameJsonBufferExt
+    on MediaPlayerVideoFrameObserverOnFrameJson {
+  MediaPlayerVideoFrameObserverOnFrameJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnPlayerSourceStateChangedJson {
+  const MediaPlayerSourceObserverOnPlayerSourceStateChangedJson(
+      {this.state, this.ec});
+
+  @JsonKey(name: 'state')
+  final MediaPlayerState? state;
+  @JsonKey(name: 'ec')
+  final MediaPlayerError? ec;
+  factory MediaPlayerSourceObserverOnPlayerSourceStateChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonBufferExt
+    on MediaPlayerSourceObserverOnPlayerSourceStateChangedJson {
+  MediaPlayerSourceObserverOnPlayerSourceStateChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnPositionChangedJson {
+  const MediaPlayerSourceObserverOnPositionChangedJson({this.positionMs});
+
+  @JsonKey(name: 'position_ms')
+  final int? positionMs;
+  factory MediaPlayerSourceObserverOnPositionChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPositionChangedJsonBufferExt
+    on MediaPlayerSourceObserverOnPositionChangedJson {
+  MediaPlayerSourceObserverOnPositionChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnPlayerEventJson {
+  const MediaPlayerSourceObserverOnPlayerEventJson(
+      {this.eventCode, this.elapsedTime, this.message});
+
+  @JsonKey(name: 'eventCode')
+  final MediaPlayerEvent? eventCode;
+  @JsonKey(name: 'elapsedTime')
+  final int? elapsedTime;
+  @JsonKey(name: 'message')
+  final String? message;
+  factory MediaPlayerSourceObserverOnPlayerEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPlayerEventJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPlayerEventJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPlayerEventJsonBufferExt
+    on MediaPlayerSourceObserverOnPlayerEventJson {
+  MediaPlayerSourceObserverOnPlayerEventJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnMetaDataJson {
+  const MediaPlayerSourceObserverOnMetaDataJson({this.data, this.length});
+
+  @JsonKey(name: 'data', ignore: true)
+  final Uint8List? data;
+  @JsonKey(name: 'length')
+  final int? length;
+  factory MediaPlayerSourceObserverOnMetaDataJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnMetaDataJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnMetaDataJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnMetaDataJsonBufferExt
+    on MediaPlayerSourceObserverOnMetaDataJson {
+  MediaPlayerSourceObserverOnMetaDataJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    Uint8List? data;
+    if (bufferList.length > 0) {
+      data = bufferList[0];
+    }
+    return MediaPlayerSourceObserverOnMetaDataJson(data: data, length: length);
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    if (data != null) {
+      bufferList.add(data!);
+    }
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnPlayBufferUpdatedJson {
+  const MediaPlayerSourceObserverOnPlayBufferUpdatedJson(
+      {this.playCachedBuffer});
+
+  @JsonKey(name: 'playCachedBuffer')
+  final int? playCachedBuffer;
+  factory MediaPlayerSourceObserverOnPlayBufferUpdatedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPlayBufferUpdatedJsonBufferExt
+    on MediaPlayerSourceObserverOnPlayBufferUpdatedJson {
+  MediaPlayerSourceObserverOnPlayBufferUpdatedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnPreloadEventJson {
+  const MediaPlayerSourceObserverOnPreloadEventJson({this.src, this.event});
+
+  @JsonKey(name: 'src')
+  final String? src;
+  @JsonKey(name: 'event')
+  final PlayerPreloadEvent? event;
+  factory MediaPlayerSourceObserverOnPreloadEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPreloadEventJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPreloadEventJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPreloadEventJsonBufferExt
+    on MediaPlayerSourceObserverOnPreloadEventJson {
+  MediaPlayerSourceObserverOnPreloadEventJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnCompletedJson {
+  const MediaPlayerSourceObserverOnCompletedJson();
+
+  factory MediaPlayerSourceObserverOnCompletedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnCompletedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnCompletedJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnCompletedJsonBufferExt
+    on MediaPlayerSourceObserverOnCompletedJson {
+  MediaPlayerSourceObserverOnCompletedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson {
+  const MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson();
+
+  factory MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonBufferExt
+    on MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson {
+  MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson {
+  const MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson(
+      {this.from, this.to});
+
+  @JsonKey(name: 'from')
+  final SrcInfo? from;
+  @JsonKey(name: 'to')
+  final SrcInfo? to;
+  factory MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonBufferExt
+    on MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson {
+  MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnPlayerInfoUpdatedJson {
+  const MediaPlayerSourceObserverOnPlayerInfoUpdatedJson({this.info});
+
+  @JsonKey(name: 'info')
+  final PlayerUpdatedInfo? info;
+  factory MediaPlayerSourceObserverOnPlayerInfoUpdatedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonBufferExt
+    on MediaPlayerSourceObserverOnPlayerInfoUpdatedJson {
+  MediaPlayerSourceObserverOnPlayerInfoUpdatedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
+  const MediaPlayerSourceObserverOnAudioVolumeIndicationJson({this.volume});
+
+  @JsonKey(name: 'volume')
+  final int? volume;
+  factory MediaPlayerSourceObserverOnAudioVolumeIndicationJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonToJson(this);
+}
+
+extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
+    on MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
+  MediaPlayerSourceObserverOnAudioVolumeIndicationJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnMusicChartsResultJson {
+  const MusicContentCenterEventHandlerOnMusicChartsResultJson(
+      {this.requestId, this.result, this.errorCode});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'result')
+  final List<MusicChartInfo>? result;
+  @JsonKey(name: 'errorCode')
+  final MusicContentCenterStatusCode? errorCode;
+  factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnMusicChartsResultJson {
+  MusicContentCenterEventHandlerOnMusicChartsResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
+  const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
+      {this.requestId, this.result, this.errorCode});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'result', ignore: true)
+  final MusicCollection? result;
+  @JsonKey(name: 'errorCode')
+  final MusicContentCenterStatusCode? errorCode;
+  factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnMusicCollectionResultJson {
+  MusicContentCenterEventHandlerOnMusicCollectionResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnLyricResultJson {
+  const MusicContentCenterEventHandlerOnLyricResultJson(
+      {this.requestId, this.songCode, this.lyricUrl, this.errorCode});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'songCode')
+  final int? songCode;
+  @JsonKey(name: 'lyricUrl')
+  final String? lyricUrl;
+  @JsonKey(name: 'errorCode')
+  final MusicContentCenterStatusCode? errorCode;
+  factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnLyricResultJson {
+  MusicContentCenterEventHandlerOnLyricResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
+  const MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
+      {this.requestId, this.songCode, this.simpleInfo, this.errorCode});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'songCode')
+  final int? songCode;
+  @JsonKey(name: 'simpleInfo')
+  final String? simpleInfo;
+  @JsonKey(name: 'errorCode')
+  final MusicContentCenterStatusCode? errorCode;
+  factory MusicContentCenterEventHandlerOnSongSimpleInfoResultJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonBufferExt
+    on MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
+  MusicContentCenterEventHandlerOnSongSimpleInfoResultJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class MusicContentCenterEventHandlerOnPreLoadEventJson {
+  const MusicContentCenterEventHandlerOnPreLoadEventJson(
+      {this.requestId,
+      this.songCode,
+      this.percent,
+      this.lyricUrl,
+      this.status,
+      this.errorCode});
+
+  @JsonKey(name: 'requestId')
+  final String? requestId;
+  @JsonKey(name: 'songCode')
+  final int? songCode;
+  @JsonKey(name: 'percent')
+  final int? percent;
+  @JsonKey(name: 'lyricUrl')
+  final String? lyricUrl;
+  @JsonKey(name: 'status')
+  final PreloadStatusCode? status;
+  @JsonKey(name: 'errorCode')
+  final MusicContentCenterStatusCode? errorCode;
+  factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(this);
+}
+
+extension MusicContentCenterEventHandlerOnPreLoadEventJsonBufferExt
+    on MusicContentCenterEventHandlerOnPreLoadEventJson {
+  MusicContentCenterEventHandlerOnPreLoadEventJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnJoinChannelSuccessJson {
   const RtcEngineEventHandlerOnJoinChannelSuccessJson(
       {this.connection, this.elapsed});
@@ -3052,1140 +4186,6 @@ class DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson {
 extension DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJsonBufferExt
     on DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson {
   DirectCdnStreamingEventHandlerOnDirectCdnStreamingStatsJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson {
-  const AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
-      {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
-
-  @JsonKey(name: 'frameBuffer', ignore: true)
-  final Uint8List? frameBuffer;
-  @JsonKey(name: 'length')
-  final int? length;
-  @JsonKey(name: 'audioEncodedFrameInfo')
-  final EncodedAudioFrameInfo? audioEncodedFrameInfo;
-  factory AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonToJson(this);
-}
-
-extension AudioEncodedFrameObserverOnRecordAudioEncodedFrameJsonBufferExt
-    on AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson {
-  AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    Uint8List? frameBuffer;
-    if (bufferList.length > 0) {
-      frameBuffer = bufferList[0];
-    }
-    return AudioEncodedFrameObserverOnRecordAudioEncodedFrameJson(
-        frameBuffer: frameBuffer,
-        length: length,
-        audioEncodedFrameInfo: audioEncodedFrameInfo);
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    if (frameBuffer != null) {
-      bufferList.add(frameBuffer!);
-    }
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson {
-  const AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
-      {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
-
-  @JsonKey(name: 'frameBuffer', ignore: true)
-  final Uint8List? frameBuffer;
-  @JsonKey(name: 'length')
-  final int? length;
-  @JsonKey(name: 'audioEncodedFrameInfo')
-  final EncodedAudioFrameInfo? audioEncodedFrameInfo;
-  factory AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonToJson(this);
-}
-
-extension AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJsonBufferExt
-    on AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson {
-  AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    Uint8List? frameBuffer;
-    if (bufferList.length > 0) {
-      frameBuffer = bufferList[0];
-    }
-    return AudioEncodedFrameObserverOnPlaybackAudioEncodedFrameJson(
-        frameBuffer: frameBuffer,
-        length: length,
-        audioEncodedFrameInfo: audioEncodedFrameInfo);
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    if (frameBuffer != null) {
-      bufferList.add(frameBuffer!);
-    }
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson {
-  const AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
-      {this.frameBuffer, this.length, this.audioEncodedFrameInfo});
-
-  @JsonKey(name: 'frameBuffer', ignore: true)
-  final Uint8List? frameBuffer;
-  @JsonKey(name: 'length')
-  final int? length;
-  @JsonKey(name: 'audioEncodedFrameInfo')
-  final EncodedAudioFrameInfo? audioEncodedFrameInfo;
-  factory AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonToJson(this);
-}
-
-extension AudioEncodedFrameObserverOnMixedAudioEncodedFrameJsonBufferExt
-    on AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson {
-  AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    Uint8List? frameBuffer;
-    if (bufferList.length > 0) {
-      frameBuffer = bufferList[0];
-    }
-    return AudioEncodedFrameObserverOnMixedAudioEncodedFrameJson(
-        frameBuffer: frameBuffer,
-        length: length,
-        audioEncodedFrameInfo: audioEncodedFrameInfo);
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    if (frameBuffer != null) {
-      bufferList.add(frameBuffer!);
-    }
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioPcmFrameSinkOnFrameJson {
-  const AudioPcmFrameSinkOnFrameJson({this.frame});
-
-  @JsonKey(name: 'frame')
-  final AudioPcmFrame? frame;
-  factory AudioPcmFrameSinkOnFrameJson.fromJson(Map<String, dynamic> json) =>
-      _$AudioPcmFrameSinkOnFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() => _$AudioPcmFrameSinkOnFrameJsonToJson(this);
-}
-
-extension AudioPcmFrameSinkOnFrameJsonBufferExt
-    on AudioPcmFrameSinkOnFrameJson {
-  AudioPcmFrameSinkOnFrameJson fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioFrameObserverBaseOnRecordAudioFrameJson {
-  const AudioFrameObserverBaseOnRecordAudioFrameJson(
-      {this.channelId, this.audioFrame});
-
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-  @JsonKey(name: 'audioFrame')
-  final AudioFrame? audioFrame;
-  factory AudioFrameObserverBaseOnRecordAudioFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioFrameObserverBaseOnRecordAudioFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioFrameObserverBaseOnRecordAudioFrameJsonToJson(this);
-}
-
-extension AudioFrameObserverBaseOnRecordAudioFrameJsonBufferExt
-    on AudioFrameObserverBaseOnRecordAudioFrameJson {
-  AudioFrameObserverBaseOnRecordAudioFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioFrameObserverBaseOnPlaybackAudioFrameJson {
-  const AudioFrameObserverBaseOnPlaybackAudioFrameJson(
-      {this.channelId, this.audioFrame});
-
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-  @JsonKey(name: 'audioFrame')
-  final AudioFrame? audioFrame;
-  factory AudioFrameObserverBaseOnPlaybackAudioFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioFrameObserverBaseOnPlaybackAudioFrameJsonToJson(this);
-}
-
-extension AudioFrameObserverBaseOnPlaybackAudioFrameJsonBufferExt
-    on AudioFrameObserverBaseOnPlaybackAudioFrameJson {
-  AudioFrameObserverBaseOnPlaybackAudioFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioFrameObserverBaseOnMixedAudioFrameJson {
-  const AudioFrameObserverBaseOnMixedAudioFrameJson(
-      {this.channelId, this.audioFrame});
-
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-  @JsonKey(name: 'audioFrame')
-  final AudioFrame? audioFrame;
-  factory AudioFrameObserverBaseOnMixedAudioFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioFrameObserverBaseOnMixedAudioFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioFrameObserverBaseOnMixedAudioFrameJsonToJson(this);
-}
-
-extension AudioFrameObserverBaseOnMixedAudioFrameJsonBufferExt
-    on AudioFrameObserverBaseOnMixedAudioFrameJson {
-  AudioFrameObserverBaseOnMixedAudioFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
-  const AudioFrameObserverBaseOnEarMonitoringAudioFrameJson({this.audioFrame});
-
-  @JsonKey(name: 'audioFrame')
-  final AudioFrame? audioFrame;
-  factory AudioFrameObserverBaseOnEarMonitoringAudioFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonToJson(this);
-}
-
-extension AudioFrameObserverBaseOnEarMonitoringAudioFrameJsonBufferExt
-    on AudioFrameObserverBaseOnEarMonitoringAudioFrameJson {
-  AudioFrameObserverBaseOnEarMonitoringAudioFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
-  const AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson(
-      {this.channelId, this.uid, this.audioFrame});
-
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-  @JsonKey(name: 'uid')
-  final int? uid;
-  @JsonKey(name: 'audioFrame')
-  final AudioFrame? audioFrame;
-  factory AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonToJson(this);
-}
-
-extension AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJsonBufferExt
-    on AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson {
-  AudioFrameObserverOnPlaybackAudioFrameBeforeMixingJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioSpectrumObserverOnLocalAudioSpectrumJson {
-  const AudioSpectrumObserverOnLocalAudioSpectrumJson({this.data});
-
-  @JsonKey(name: 'data')
-  final AudioSpectrumData? data;
-  factory AudioSpectrumObserverOnLocalAudioSpectrumJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioSpectrumObserverOnLocalAudioSpectrumJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioSpectrumObserverOnLocalAudioSpectrumJsonToJson(this);
-}
-
-extension AudioSpectrumObserverOnLocalAudioSpectrumJsonBufferExt
-    on AudioSpectrumObserverOnLocalAudioSpectrumJson {
-  AudioSpectrumObserverOnLocalAudioSpectrumJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class AudioSpectrumObserverOnRemoteAudioSpectrumJson {
-  const AudioSpectrumObserverOnRemoteAudioSpectrumJson(
-      {this.spectrums, this.spectrumNumber});
-
-  @JsonKey(name: 'spectrums')
-  final List<UserAudioSpectrumInfo>? spectrums;
-  @JsonKey(name: 'spectrumNumber')
-  final int? spectrumNumber;
-  factory AudioSpectrumObserverOnRemoteAudioSpectrumJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$AudioSpectrumObserverOnRemoteAudioSpectrumJsonToJson(this);
-}
-
-extension AudioSpectrumObserverOnRemoteAudioSpectrumJsonBufferExt
-    on AudioSpectrumObserverOnRemoteAudioSpectrumJson {
-  AudioSpectrumObserverOnRemoteAudioSpectrumJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson {
-  const VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
-      {this.uid, this.imageBuffer, this.length, this.videoEncodedFrameInfo});
-
-  @JsonKey(name: 'uid')
-  final int? uid;
-  @JsonKey(name: 'imageBuffer', ignore: true)
-  final Uint8List? imageBuffer;
-  @JsonKey(name: 'length')
-  final int? length;
-  @JsonKey(name: 'videoEncodedFrameInfo')
-  final EncodedVideoFrameInfo? videoEncodedFrameInfo;
-  factory VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonToJson(this);
-}
-
-extension VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJsonBufferExt
-    on VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson {
-  VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    Uint8List? imageBuffer;
-    if (bufferList.length > 0) {
-      imageBuffer = bufferList[0];
-    }
-    return VideoEncodedFrameObserverOnEncodedVideoFrameReceivedJson(
-        uid: uid,
-        imageBuffer: imageBuffer,
-        length: length,
-        videoEncodedFrameInfo: videoEncodedFrameInfo);
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    if (imageBuffer != null) {
-      bufferList.add(imageBuffer!);
-    }
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnCaptureVideoFrameJson {
-  const VideoFrameObserverOnCaptureVideoFrameJson(
-      {this.sourceType, this.videoFrame});
-
-  @JsonKey(name: 'sourceType')
-  final VideoSourceType? sourceType;
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnCaptureVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnCaptureVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnCaptureVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnCaptureVideoFrameJsonBufferExt
-    on VideoFrameObserverOnCaptureVideoFrameJson {
-  VideoFrameObserverOnCaptureVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnPreEncodeVideoFrameJson {
-  const VideoFrameObserverOnPreEncodeVideoFrameJson(
-      {this.sourceType, this.videoFrame});
-
-  @JsonKey(name: 'sourceType')
-  final VideoSourceType? sourceType;
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnPreEncodeVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnPreEncodeVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnPreEncodeVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnPreEncodeVideoFrameJsonBufferExt
-    on VideoFrameObserverOnPreEncodeVideoFrameJson {
-  VideoFrameObserverOnPreEncodeVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnMediaPlayerVideoFrameJson {
-  const VideoFrameObserverOnMediaPlayerVideoFrameJson(
-      {this.videoFrame, this.mediaPlayerId});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  @JsonKey(name: 'mediaPlayerId')
-  final int? mediaPlayerId;
-  factory VideoFrameObserverOnMediaPlayerVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnMediaPlayerVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnMediaPlayerVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnMediaPlayerVideoFrameJsonBufferExt
-    on VideoFrameObserverOnMediaPlayerVideoFrameJson {
-  VideoFrameObserverOnMediaPlayerVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnRenderVideoFrameJson {
-  const VideoFrameObserverOnRenderVideoFrameJson(
-      {this.channelId, this.remoteUid, this.videoFrame});
-
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-  @JsonKey(name: 'remoteUid')
-  final int? remoteUid;
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnRenderVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnRenderVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnRenderVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnRenderVideoFrameJsonBufferExt
-    on VideoFrameObserverOnRenderVideoFrameJson {
-  VideoFrameObserverOnRenderVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class VideoFrameObserverOnTranscodedVideoFrameJson {
-  const VideoFrameObserverOnTranscodedVideoFrameJson({this.videoFrame});
-
-  @JsonKey(name: 'videoFrame')
-  final VideoFrame? videoFrame;
-  factory VideoFrameObserverOnTranscodedVideoFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$VideoFrameObserverOnTranscodedVideoFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$VideoFrameObserverOnTranscodedVideoFrameJsonToJson(this);
-}
-
-extension VideoFrameObserverOnTranscodedVideoFrameJsonBufferExt
-    on VideoFrameObserverOnTranscodedVideoFrameJson {
-  VideoFrameObserverOnTranscodedVideoFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaRecorderObserverOnRecorderStateChangedJson {
-  const MediaRecorderObserverOnRecorderStateChangedJson(
-      {this.channelId, this.uid, this.state, this.error});
-
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-  @JsonKey(name: 'uid')
-  final int? uid;
-  @JsonKey(name: 'state')
-  final RecorderState? state;
-  @JsonKey(name: 'error')
-  final RecorderErrorCode? error;
-  factory MediaRecorderObserverOnRecorderStateChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaRecorderObserverOnRecorderStateChangedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaRecorderObserverOnRecorderStateChangedJsonToJson(this);
-}
-
-extension MediaRecorderObserverOnRecorderStateChangedJsonBufferExt
-    on MediaRecorderObserverOnRecorderStateChangedJson {
-  MediaRecorderObserverOnRecorderStateChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaRecorderObserverOnRecorderInfoUpdatedJson {
-  const MediaRecorderObserverOnRecorderInfoUpdatedJson(
-      {this.channelId, this.uid, this.info});
-
-  @JsonKey(name: 'channelId')
-  final String? channelId;
-  @JsonKey(name: 'uid')
-  final int? uid;
-  @JsonKey(name: 'info')
-  final RecorderInfo? info;
-  factory MediaRecorderObserverOnRecorderInfoUpdatedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaRecorderObserverOnRecorderInfoUpdatedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaRecorderObserverOnRecorderInfoUpdatedJsonToJson(this);
-}
-
-extension MediaRecorderObserverOnRecorderInfoUpdatedJsonBufferExt
-    on MediaRecorderObserverOnRecorderInfoUpdatedJson {
-  MediaRecorderObserverOnRecorderInfoUpdatedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerVideoFrameObserverOnFrameJson {
-  const MediaPlayerVideoFrameObserverOnFrameJson({this.frame});
-
-  @JsonKey(name: 'frame')
-  final VideoFrame? frame;
-  factory MediaPlayerVideoFrameObserverOnFrameJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerVideoFrameObserverOnFrameJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerVideoFrameObserverOnFrameJsonToJson(this);
-}
-
-extension MediaPlayerVideoFrameObserverOnFrameJsonBufferExt
-    on MediaPlayerVideoFrameObserverOnFrameJson {
-  MediaPlayerVideoFrameObserverOnFrameJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnPlayerSourceStateChangedJson {
-  const MediaPlayerSourceObserverOnPlayerSourceStateChangedJson(
-      {this.state, this.ec});
-
-  @JsonKey(name: 'state')
-  final MediaPlayerState? state;
-  @JsonKey(name: 'ec')
-  final MediaPlayerError? ec;
-  factory MediaPlayerSourceObserverOnPlayerSourceStateChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnPlayerSourceStateChangedJsonBufferExt
-    on MediaPlayerSourceObserverOnPlayerSourceStateChangedJson {
-  MediaPlayerSourceObserverOnPlayerSourceStateChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnPositionChangedJson {
-  const MediaPlayerSourceObserverOnPositionChangedJson({this.positionMs});
-
-  @JsonKey(name: 'position_ms')
-  final int? positionMs;
-  factory MediaPlayerSourceObserverOnPositionChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnPositionChangedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnPositionChangedJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnPositionChangedJsonBufferExt
-    on MediaPlayerSourceObserverOnPositionChangedJson {
-  MediaPlayerSourceObserverOnPositionChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnPlayerEventJson {
-  const MediaPlayerSourceObserverOnPlayerEventJson(
-      {this.eventCode, this.elapsedTime, this.message});
-
-  @JsonKey(name: 'eventCode')
-  final MediaPlayerEvent? eventCode;
-  @JsonKey(name: 'elapsedTime')
-  final int? elapsedTime;
-  @JsonKey(name: 'message')
-  final String? message;
-  factory MediaPlayerSourceObserverOnPlayerEventJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnPlayerEventJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnPlayerEventJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnPlayerEventJsonBufferExt
-    on MediaPlayerSourceObserverOnPlayerEventJson {
-  MediaPlayerSourceObserverOnPlayerEventJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnMetaDataJson {
-  const MediaPlayerSourceObserverOnMetaDataJson({this.data, this.length});
-
-  @JsonKey(name: 'data', ignore: true)
-  final Uint8List? data;
-  @JsonKey(name: 'length')
-  final int? length;
-  factory MediaPlayerSourceObserverOnMetaDataJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnMetaDataJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnMetaDataJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnMetaDataJsonBufferExt
-    on MediaPlayerSourceObserverOnMetaDataJson {
-  MediaPlayerSourceObserverOnMetaDataJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    Uint8List? data;
-    if (bufferList.length > 0) {
-      data = bufferList[0];
-    }
-    return MediaPlayerSourceObserverOnMetaDataJson(data: data, length: length);
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    if (data != null) {
-      bufferList.add(data!);
-    }
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnPlayBufferUpdatedJson {
-  const MediaPlayerSourceObserverOnPlayBufferUpdatedJson(
-      {this.playCachedBuffer});
-
-  @JsonKey(name: 'playCachedBuffer')
-  final int? playCachedBuffer;
-  factory MediaPlayerSourceObserverOnPlayBufferUpdatedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnPlayBufferUpdatedJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnPlayBufferUpdatedJsonBufferExt
-    on MediaPlayerSourceObserverOnPlayBufferUpdatedJson {
-  MediaPlayerSourceObserverOnPlayBufferUpdatedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnPreloadEventJson {
-  const MediaPlayerSourceObserverOnPreloadEventJson({this.src, this.event});
-
-  @JsonKey(name: 'src')
-  final String? src;
-  @JsonKey(name: 'event')
-  final PlayerPreloadEvent? event;
-  factory MediaPlayerSourceObserverOnPreloadEventJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnPreloadEventJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnPreloadEventJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnPreloadEventJsonBufferExt
-    on MediaPlayerSourceObserverOnPreloadEventJson {
-  MediaPlayerSourceObserverOnPreloadEventJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnCompletedJson {
-  const MediaPlayerSourceObserverOnCompletedJson();
-
-  factory MediaPlayerSourceObserverOnCompletedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnCompletedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnCompletedJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnCompletedJsonBufferExt
-    on MediaPlayerSourceObserverOnCompletedJson {
-  MediaPlayerSourceObserverOnCompletedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson {
-  const MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson();
-
-  factory MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJsonBufferExt
-    on MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson {
-  MediaPlayerSourceObserverOnAgoraCDNTokenWillExpireJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson {
-  const MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson(
-      {this.from, this.to});
-
-  @JsonKey(name: 'from')
-  final SrcInfo? from;
-  @JsonKey(name: 'to')
-  final SrcInfo? to;
-  factory MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnPlayerSrcInfoChangedJsonBufferExt
-    on MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson {
-  MediaPlayerSourceObserverOnPlayerSrcInfoChangedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnPlayerInfoUpdatedJson {
-  const MediaPlayerSourceObserverOnPlayerInfoUpdatedJson({this.info});
-
-  @JsonKey(name: 'info')
-  final PlayerUpdatedInfo? info;
-  factory MediaPlayerSourceObserverOnPlayerInfoUpdatedJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnPlayerInfoUpdatedJsonBufferExt
-    on MediaPlayerSourceObserverOnPlayerInfoUpdatedJson {
-  MediaPlayerSourceObserverOnPlayerInfoUpdatedJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
-  const MediaPlayerSourceObserverOnAudioVolumeIndicationJson({this.volume});
-
-  @JsonKey(name: 'volume')
-  final int? volume;
-  factory MediaPlayerSourceObserverOnAudioVolumeIndicationJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MediaPlayerSourceObserverOnAudioVolumeIndicationJsonToJson(this);
-}
-
-extension MediaPlayerSourceObserverOnAudioVolumeIndicationJsonBufferExt
-    on MediaPlayerSourceObserverOnAudioVolumeIndicationJson {
-  MediaPlayerSourceObserverOnAudioVolumeIndicationJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterEventHandlerOnMusicChartsResultJson {
-  const MusicContentCenterEventHandlerOnMusicChartsResultJson(
-      {this.requestId, this.result, this.errorCode});
-
-  @JsonKey(name: 'requestId')
-  final String? requestId;
-  @JsonKey(name: 'result')
-  final List<MusicChartInfo>? result;
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
-  factory MusicContentCenterEventHandlerOnMusicChartsResultJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MusicContentCenterEventHandlerOnMusicChartsResultJsonToJson(this);
-}
-
-extension MusicContentCenterEventHandlerOnMusicChartsResultJsonBufferExt
-    on MusicContentCenterEventHandlerOnMusicChartsResultJson {
-  MusicContentCenterEventHandlerOnMusicChartsResultJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterEventHandlerOnMusicCollectionResultJson {
-  const MusicContentCenterEventHandlerOnMusicCollectionResultJson(
-      {this.requestId, this.result, this.errorCode});
-
-  @JsonKey(name: 'requestId')
-  final String? requestId;
-  @JsonKey(name: 'result', ignore: true)
-  final MusicCollection? result;
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
-  factory MusicContentCenterEventHandlerOnMusicCollectionResultJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MusicContentCenterEventHandlerOnMusicCollectionResultJsonToJson(this);
-}
-
-extension MusicContentCenterEventHandlerOnMusicCollectionResultJsonBufferExt
-    on MusicContentCenterEventHandlerOnMusicCollectionResultJson {
-  MusicContentCenterEventHandlerOnMusicCollectionResultJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterEventHandlerOnLyricResultJson {
-  const MusicContentCenterEventHandlerOnLyricResultJson(
-      {this.requestId, this.songCode, this.lyricUrl, this.errorCode});
-
-  @JsonKey(name: 'requestId')
-  final String? requestId;
-  @JsonKey(name: 'songCode')
-  final int? songCode;
-  @JsonKey(name: 'lyricUrl')
-  final String? lyricUrl;
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
-  factory MusicContentCenterEventHandlerOnLyricResultJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MusicContentCenterEventHandlerOnLyricResultJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MusicContentCenterEventHandlerOnLyricResultJsonToJson(this);
-}
-
-extension MusicContentCenterEventHandlerOnLyricResultJsonBufferExt
-    on MusicContentCenterEventHandlerOnLyricResultJson {
-  MusicContentCenterEventHandlerOnLyricResultJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
-  const MusicContentCenterEventHandlerOnSongSimpleInfoResultJson(
-      {this.requestId, this.songCode, this.simpleInfo, this.errorCode});
-
-  @JsonKey(name: 'requestId')
-  final String? requestId;
-  @JsonKey(name: 'songCode')
-  final int? songCode;
-  @JsonKey(name: 'simpleInfo')
-  final String? simpleInfo;
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
-  factory MusicContentCenterEventHandlerOnSongSimpleInfoResultJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonToJson(this);
-}
-
-extension MusicContentCenterEventHandlerOnSongSimpleInfoResultJsonBufferExt
-    on MusicContentCenterEventHandlerOnSongSimpleInfoResultJson {
-  MusicContentCenterEventHandlerOnSongSimpleInfoResultJson fillBuffers(
-      List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class MusicContentCenterEventHandlerOnPreLoadEventJson {
-  const MusicContentCenterEventHandlerOnPreLoadEventJson(
-      {this.requestId,
-      this.songCode,
-      this.percent,
-      this.lyricUrl,
-      this.status,
-      this.errorCode});
-
-  @JsonKey(name: 'requestId')
-  final String? requestId;
-  @JsonKey(name: 'songCode')
-  final int? songCode;
-  @JsonKey(name: 'percent')
-  final int? percent;
-  @JsonKey(name: 'lyricUrl')
-  final String? lyricUrl;
-  @JsonKey(name: 'status')
-  final PreloadStatusCode? status;
-  @JsonKey(name: 'errorCode')
-  final MusicContentCenterStatusCode? errorCode;
-  factory MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(
-          Map<String, dynamic> json) =>
-      _$MusicContentCenterEventHandlerOnPreLoadEventJsonFromJson(json);
-  Map<String, dynamic> toJson() =>
-      _$MusicContentCenterEventHandlerOnPreLoadEventJsonToJson(this);
-}
-
-extension MusicContentCenterEventHandlerOnPreLoadEventJsonBufferExt
-    on MusicContentCenterEventHandlerOnPreLoadEventJson {
-  MusicContentCenterEventHandlerOnPreLoadEventJson fillBuffers(
       List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;

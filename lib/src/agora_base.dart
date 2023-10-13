@@ -458,6 +458,10 @@ enum ErrorCodeType {
   /// 1501: Permission to access the camera is not granted. Check whether permission to access the camera permission is granted.
   @JsonValue(1501)
   errVdmCameraNotAuthorized,
+
+  /// @nodoc
+  @JsonValue(2007)
+  errAdmApplicationLoopback,
 }
 
 /// @nodoc
@@ -1774,7 +1778,7 @@ class VideoEncoderConfiguration {
   @JsonKey(name: 'frameRate')
   final int? frameRate;
 
-  /// The encoding bitrate (Kbps) of the video. : (Recommended) Standard bitrate mode. In this mode, the bitrates of the live broadcasting profile is higher than that of the communication profile. : Adaptive bitrate mode In this mode, the bitrates of the live broadcasting profile equals that of the communication profile. If this mode is selected, the video frame rate of live broadcasting scenarios may be lower than the set value.
+  /// The encoding bitrate (Kbps) of the video. (0): (Recommended) Standard bitrate mode. In this mode, the bitrates of the live broadcasting profile is higher than that of the communication profile. (-1): Adaptive bitrate mode. In this mode, the bitrates of the live broadcasting profile equals that of the communication profile. If this mode is selected, the video frame rate of live broadcasting scenarios may be lower than the set value.
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
@@ -2654,7 +2658,7 @@ enum LocalAudioStreamError {
   @JsonValue(2)
   localAudioStreamErrorDeviceNoPermission,
 
-  /// 3: (Android and iOS only) The local audio capture device is used. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
+  /// 3: (Android and iOS only) The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
   @JsonValue(3)
   localAudioStreamErrorDeviceBusy,
 
@@ -2760,11 +2764,11 @@ enum LocalVideoStreamError {
   @JsonValue(5)
   localVideoStreamErrorEncodeFailure,
 
-  /// 6: (For iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+  /// 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
   @JsonValue(6)
   localVideoStreamErrorCaptureInbackground,
 
-  /// 7: (For iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+  /// 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
   @JsonValue(7)
   localVideoStreamErrorCaptureMultipleForegroundApps,
 
@@ -2772,11 +2776,11 @@ enum LocalVideoStreamError {
   @JsonValue(8)
   localVideoStreamErrorDeviceNotFound,
 
-  /// 9: (For macOS only) The video capture device currently in use is disconnected (such as being unplugged).
+  /// 9: (macOS only) The video capture device currently in use is disconnected (such as being unplugged).
   @JsonValue(9)
   localVideoStreamErrorDeviceDisconnected,
 
-  /// 10: (For macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
+  /// 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
   @JsonValue(10)
   localVideoStreamErrorDeviceInvalidId,
 
@@ -2784,18 +2788,18 @@ enum LocalVideoStreamError {
   @JsonValue(101)
   localVideoStreamErrorDeviceSystemPressure,
 
-  /// 11: (For macOS only) The shared window is minimized when you call startScreenCaptureByWindowId to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, for example by maximizing this window.
+  /// 11: (macOS only) The shared window is minimized when you call startScreenCaptureByWindowId to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, for example by maximizing this window.
   @JsonValue(11)
   localVideoStreamErrorScreenCaptureWindowMinimized,
 
-  /// 12: (For macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing. Common scenarios for reporting this error code:
+  /// 12: (macOS and Windows only) The error code indicates that a window shared by the window ID has been closed or a full-screen window shared by the window ID has exited full-screen mode. After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a black screen, Agora recommends that you immediately stop screen sharing. Common scenarios reporting this error code:
   ///  When the local user closes the shared window, the SDK reports this error code.
   ///  The local user shows some slides in full-screen mode first, and then shares the windows of the slides. After the user exits full-screen mode, the SDK reports this error code.
   ///  The local user watches a web video or reads a web document in full-screen mode first, and then shares the window of the web video or document. After the user exits full-screen mode, the SDK reports this error code.
   @JsonValue(12)
   localVideoStreamErrorScreenCaptureWindowClosed,
 
-  /// 13: (For Windows only) The window being shared is overlapped by another window, so the overlapped area is blacked out by the SDK during window sharing.
+  /// 13: (Windows only) The window being shared is overlapped by another window, so the overlapped area is blacked out by the SDK during window sharing.
   @JsonValue(13)
   localVideoStreamErrorScreenCaptureWindowOccluded,
 
@@ -2807,9 +2811,29 @@ enum LocalVideoStreamError {
   @JsonValue(21)
   localVideoStreamErrorScreenCaptureFailure,
 
-  /// @nodoc
+  /// 22: (Windows and macOS only) No permission for screen capture.
   @JsonValue(22)
   localVideoStreamErrorScreenCaptureNoPermission,
+
+  /// 23: (Windows only) Screen capture has been paused. Common scenarios reporting this error code: The current screen may have been switched to a secure desktop, such as a UAC dialog box or Winlogon desktop.
+  @JsonValue(23)
+  localVideoStreamErrorScreenCapturePaused,
+
+  /// 24: (Windows only) Screen capture has resumed from paused state.
+  @JsonValue(24)
+  localVideoStreamErrorScreenCaptureResumed,
+
+  /// 25: (Windows only) The window for the current screen capture is hidden and not visible on the current screen.
+  @JsonValue(25)
+  localVideoStreamErrorScreenCaptureWindowHidden,
+
+  /// 26: (Windows only) The window for screen capture has been restored from hidden state.
+  @JsonValue(26)
+  localVideoStreamErrorScreenCaptureWindowRecoverFromHidden,
+
+  /// 27: (Windows only) The window for screen capture has been restored from minimized state.
+  @JsonValue(27)
+  localVideoStreamErrorScreenCaptureWindowRecoverFromMinimized,
 }
 
 /// @nodoc
@@ -3972,10 +3996,6 @@ class LocalTranscoderConfiguration {
 /// The error code of the local video mixing failure.
 @JsonEnum(alwaysCreate: true)
 enum VideoTranscoderError {
-  /// @nodoc
-  @JsonValue(0)
-  vtErrOk,
-
   /// 1: The selected video source has not started video capture. You need to create a video track for it and start video capture.
   @JsonValue(1)
   vtErrVideoSourceNotReady,
@@ -4198,7 +4218,7 @@ enum ConnectionChangedReasonType {
   @JsonValue(13)
   connectionChangedClientIpAddressChanged,
 
-  /// 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The connection state changes to .
+  /// 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The SDK tries to reconnect to the server automatically.
   @JsonValue(14)
   connectionChangedKeepAliveTimeout,
 
@@ -4229,6 +4249,10 @@ enum ConnectionChangedReasonType {
   /// @nodoc
   @JsonValue(21)
   connectionChangedLicenseValidationFailure,
+
+  /// @nodoc
+  @JsonValue(22)
+  connectionChangedCertificationVeryfyFailure,
 }
 
 /// @nodoc
@@ -5256,7 +5280,7 @@ class ScreenCaptureParameters {
   @JsonKey(name: 'bitrate')
   final int? bitrate;
 
-  /// Whether to capture the mouse in screen sharing: true : (Default) Capture the mouse. false : Do not capture the mouse.
+  /// Whether to capture the mouse in screen sharing: true : (Default) Capture the mouse. false : Do not capture the mouse. Due to macOS system restrictions, setting this parameter to false is ineffective during screen sharing (it has no impact when sharing a window).
   @JsonKey(name: 'captureMouseCursor')
   final bool? captureMouseCursor;
 
@@ -5397,7 +5421,7 @@ class AudioRecordingConfiguration {
       this.quality,
       this.recordingChannel});
 
-  /// The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4. Ensure that the directory for the log files exists and is writable.
+  /// The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.aac. Ensure that the directory for the log files exists and is writable.
   @JsonKey(name: 'filePath')
   final String? filePath;
 
