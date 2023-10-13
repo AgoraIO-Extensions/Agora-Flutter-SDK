@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.2.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.2...6.2.3) (2023-10-13)
+
+
+### Features
+
+* [android] Implement flutter texture rendering ([#1246](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1246)) ([7fd8fee](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7fd8fee851a802dc3fbaef8b70bee3d8215006c0))
+* Upgrade native sdk 4.2.3 ([#1312](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1312)) ([553863a](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/553863a1a45861a268cd4b54eca01cc1ce7a7b0b))
+
+
+### Bug Fixes
+
+* [windows] Fix can not get `irisRtcRenderingHandle` in 32-bit ([#1311](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1311)) ([7438fb2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/7438fb27e0ebc607fdda46a4482bec1f3f2e5070))
+
 ## [6.2.2](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.1...6.2.2) (2023-08-01)
 
 
