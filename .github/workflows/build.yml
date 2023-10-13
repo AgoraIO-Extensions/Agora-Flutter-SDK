@@ -409,3 +409,33 @@ jobs:
         shell: bash
         run: |
           bash ci/rendering_test_windows.sh
+
+  rendering_test_web:
+    name: Run Flutter Web Rendering Tests
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      matrix:
+        version: ['3.13.7']
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.version }}
+          cache: true
+      - name: Run web rendering test
+        shell: bash
+        run: |
+          export SAVE_DEBUG_GOLDEN="true"
+
+          chromedriver --port=4444 --trace-buffer-size=100000 &
+          bash ci/run_rendering_test.sh web
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: debug-golden-files
+          path: test_shard/rendering_test/screenshot/*.debug.png
