@@ -1818,7 +1818,7 @@ class DataStreamConfig {
   /// @nodoc
   const DataStreamConfig({this.syncWithAudio, this.ordered});
 
-  /// Whether to synchronize the data packet with the published audio packet. true : Synchronize the data packet with the audio packet. false : Do not synchronize the data packet with the audio packet. When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay, the SDK triggers the onStreamMessage callback when the synchronized audio packet is played out. Do not set this parameter as true if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to true only when you need to implement specific functions, for example, lyric synchronization.
+  /// Whether to synchronize the data packet with the published audio packet. true : Synchronize the data packet with the audio packet. This setting is suitable for special scenarios such as lyrics synchronization. false : Do not synchronize the data packet with the audio packet. This setting is suitable for scenarios where data packets need to arrive at the receiving end immediately. When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay, the SDK triggers the onStreamMessage callback when the synchronized audio packet is played out.
   @JsonKey(name: 'syncWithAudio')
   final bool? syncWithAudio;
 
@@ -3791,7 +3791,7 @@ class LiveTranscoding {
   @JsonKey(name: 'height')
   final int? height;
 
-  /// Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps.
+  /// Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps. Set this member according to the table. If you set a bitrate beyond the proper range, the SDK automatically adapts it to a value within the range.
   @JsonKey(name: 'videoBitrate')
   final int? videoBitrate;
 
