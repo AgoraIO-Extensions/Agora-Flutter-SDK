@@ -17,6 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Check Dart Format
+        run: bash ci/dart_pub_publish_check.sh
       - uses: axel-op/dart-package-analyzer@v3
         id: analysis
         with:
@@ -31,7 +36,25 @@ jobs:
             echo Pub Score too low.
             exit 1
           fi
-
+  attach_docs:
+    name: Attach dartdoc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Build DartDoc 📖
+        run: |
+          # Generate DartDoc
+          dart doc
+          # Create a zip file of the DartDoc output
+          zip -r agora_rtc_engine_docs.zip doc
+      - name: Upload DartDoc Artifact ⬆️
+        uses: actions/upload-artifact@v3
+        with:
+          name: agora_rtc_engine_docs.zip
+          path: agora_rtc_engine_docs.zip
   pub_publish_check:
     name: pub publish check
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}

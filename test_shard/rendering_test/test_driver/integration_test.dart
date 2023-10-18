@@ -43,7 +43,8 @@ Future<void> main() async {
       }
 
       if ((Platform.environment[_saveDebugGoldenKey] ?? 'false') == 'true') {
-        final File debugGoldenFile = File('screenshot/$screenshotName.debug.png');
+        final File debugGoldenFile =
+            File('screenshot/$screenshotName.debug.png');
         debugGoldenFile.writeAsBytesSync(imageBytes);
       }
 
