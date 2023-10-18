@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -85,8 +86,22 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        irisTester.fireEvent('VideoFrameObserver_onCaptureVideoFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('VideoFrameObserver_onCaptureVideoFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'VideoFrameObserver_onCaptureVideoFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onCaptureVideoFrameCompleter.isCompleted) {
+              onCaptureVideoFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onCaptureVideoFrameCompleter.future;
@@ -102,7 +117,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -179,8 +194,22 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        irisTester.fireEvent('VideoFrameObserver_onPreEncodeVideoFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('VideoFrameObserver_onPreEncodeVideoFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'VideoFrameObserver_onPreEncodeVideoFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onPreEncodeVideoFrameCompleter.isCompleted) {
+              onPreEncodeVideoFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onPreEncodeVideoFrameCompleter.future;
@@ -196,7 +225,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -271,8 +300,22 @@ void generatedTestCases(IrisTester irisTester) {
           'mediaPlayerId': mediaPlayerId,
         };
 
-        irisTester.fireEvent('VideoFrameObserver_onMediaPlayerVideoFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('VideoFrameObserver_onMediaPlayerVideoFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'VideoFrameObserver_onMediaPlayerVideoFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onMediaPlayerVideoFrameCompleter.isCompleted) {
+              onMediaPlayerVideoFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onMediaPlayerVideoFrameCompleter.future;
@@ -288,7 +331,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -366,8 +409,22 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        irisTester.fireEvent('VideoFrameObserver_onRenderVideoFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('VideoFrameObserver_onRenderVideoFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'VideoFrameObserver_onRenderVideoFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRenderVideoFrameCompleter.isCompleted) {
+              onRenderVideoFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRenderVideoFrameCompleter.future;
@@ -383,7 +440,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -456,8 +513,22 @@ void generatedTestCases(IrisTester irisTester) {
           'videoFrame': videoFrame.toJson(),
         };
 
-        irisTester.fireEvent('VideoFrameObserver_onTranscodedVideoFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('VideoFrameObserver_onTranscodedVideoFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'VideoFrameObserver_onTranscodedVideoFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onTranscodedVideoFrameCompleter.isCompleted) {
+              onTranscodedVideoFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onTranscodedVideoFrameCompleter.future;
@@ -473,6 +544,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+

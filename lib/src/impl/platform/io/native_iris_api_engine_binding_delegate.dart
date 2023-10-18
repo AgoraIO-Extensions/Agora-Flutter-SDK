@@ -39,12 +39,13 @@ class NativeIrisApiEngineBindingsDelegate
   }
 
   @override
-  CreateApiEngineResult createApiEngine(List<Object> args) {
+  CreateApiEngineResult createApiEngine(List<InitilizationArgProvider> args) {
     ffi.Pointer<ffi.Void> enginePtr = ffi.nullptr;
     assert(() {
       if (args.isNotEmpty) {
         assert(args.length == 1);
-        enginePtr = args[0] as ffi.Pointer<ffi.Void>;
+        enginePtr = args[0].provide(const IrisApiEngineHandle(0))()
+            as ffi.Pointer<ffi.Void>;
       }
       return true;
     }());

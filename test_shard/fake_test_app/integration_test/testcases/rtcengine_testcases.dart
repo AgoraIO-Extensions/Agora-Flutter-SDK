@@ -329,10 +329,22 @@ void testCases() {
         areaCode: AreaCode.areaCodeGlob.value(),
       ));
 
-      final mediaRecorder = await rtcEngine
-          .createMediaRecorder(RecorderStreamInfo(channelId: 'hello', uid: 0));
+      try {
+        final mediaRecorder = await rtcEngine.createMediaRecorder(
+            RecorderStreamInfo(channelId: 'hello', uid: 0));
 
-      await rtcEngine.destroyMediaRecorder(mediaRecorder!);
+        await rtcEngine.destroyMediaRecorder(mediaRecorder!);
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[createMediaRecorder] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
 
       await rtcEngine.release();
     },

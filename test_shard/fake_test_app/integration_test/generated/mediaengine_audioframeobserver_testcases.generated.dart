@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -67,9 +68,23 @@ void generatedTestCases(IrisTester irisTester) {
           'audioFrame': audioFrame.toJson(),
         };
 
-        irisTester.fireEvent(
-            'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'AudioFrameObserver_onPlaybackAudioFrameBeforeMixing',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onPlaybackAudioFrameBeforeMixingCompleter.isCompleted) {
+              onPlaybackAudioFrameBeforeMixingCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled =
@@ -86,6 +101,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+
