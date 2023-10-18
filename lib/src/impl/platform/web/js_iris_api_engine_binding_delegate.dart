@@ -91,7 +91,7 @@ class IrisApiEngineBindingsDelegateJS
         promiseToFuture(js.callIrisApi(nApiEnginePtr, nParam));
 
     final js.CallIrisApiResult irisApiResult = await promiseFuture;
-    
+
     return irisApiResult.toCallApiResult();
   }
 

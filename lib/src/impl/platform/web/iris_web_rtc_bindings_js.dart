@@ -12,7 +12,8 @@ external void initIrisRtc(
 @anonymous
 class InitIrisRtcOptions {
   // Must have an unnamed factory constructor with named arguments.
-  external factory InitIrisRtcOptions({Object? agoraRTC, Object? irisRtcEngine});
+  external factory InitIrisRtcOptions(
+      {Object? agoraRTC, Object? irisRtcEngine});
 
   external Object get agoraRTC;
   external Object get irisRtcEngine;
