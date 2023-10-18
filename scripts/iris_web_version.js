@@ -9,7 +9,7 @@ function loadIrisWeb() {
   function _appendScript(url) {
     var scriptTag = document.createElement('script');
     scriptTag.src = url;
-    scriptTag.type = 'application/javascript';
+    scriptTag.type = 'text/javascript';
     document.body.append(scriptTag);
   }
 
@@ -18,8 +18,12 @@ function loadIrisWeb() {
   }
   scriptLoaded = true;
 
+  console.log('dddddddddddd');
+
   _appendScript(irisWebUrl);
   _appendScript(irisWebFakeUrl);
 }
 
-loadIrisWeb();
+window.addEventListener('load', function(ev) {
+    loadIrisWeb();
+});

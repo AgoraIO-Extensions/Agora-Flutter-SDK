@@ -36,10 +36,12 @@
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
+  
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <!-- <script await type="text/javascript" src="/iris_web_version.js"></script> -->
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -55,6 +57,8 @@
     });
   </script>
   
-  <script type="text/javascript" src="../../../scripts/iris_web_version.js"></script>
+  
+  <script type="text/javascript" src="https://download.agora.io/staging/iris-web-rtc_0.1.2-dev.1.js"></script>
+  <script type="text/javascript" src="https://download.agora.io/staging/iris-web-rtc-fake_0.1.2-dev.1.js"></script>
 </body>
 </html>

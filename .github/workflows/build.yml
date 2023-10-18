@@ -160,6 +160,28 @@ jobs:
         run: |
           bash ci/run_flutter_windows_integration_test.sh
 
+  integration_test_web:
+    name: Run Flutter Web Integration Tests
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      matrix:
+        version: ['3.13.7']
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      TEST_APP_ID: ${{ secrets.MY_APP_ID }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.version }}
+          cache: true
+      - name: Run web integration test
+        shell: bash
+        run: |
+          chromedriver --port=4444 --trace-buffer-size=100000 &
+          bash ci/run_flutter_integration_test.sh web
+
   build_android_ubuntu:
     name: Build Android on Ubuntu
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
