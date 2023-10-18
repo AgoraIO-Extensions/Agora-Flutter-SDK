@@ -28,7 +28,7 @@ if [[ ${PLATFORM} == "web" ]];then
     popd
 
 elif [[ ${PLATFORM} == "android" || ${PLATFORM} == "ios" ]];then
-    # Not implemented
+    echo "Not implemented"
 else
-    # Not implemented
+    echo "Not implemented"
 fi
