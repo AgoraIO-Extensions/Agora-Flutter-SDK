@@ -19,15 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
       - name: Check Dart Format
-        run: |
-          # Check for differences in dart format
-          if dart format --set-exit-if-changed .
-          then
-            echo "No formatting issues found."
-          else
-            echo "Formatting issues found. Please run 'dart format' to format your code."
-            exit 1
-          fi
+        run: bash ci/dart_pub_publish_check.sh
       - uses: axel-op/dart-package-analyzer@v3
         id: analysis
         with:
@@ -42,7 +34,23 @@ jobs:
             echo Pub Score too low.
             exit 1
           fi
-
+  attach_docs:
+    name: Attach dartdoc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+      - name: Build DartDoc 📖
+        run: |
+          # Generate DartDoc
+          dart doc
+          # Create a zip file of the DartDoc output
+          zip -r agora_rtc_engine_docs.zip doc
+      - name: Upload DartDoc Artifact ⬆️
+        uses: actions/upload-artifact@v3
+        with:
+          name: agora_rtc_engine_docs.zip
+          path: agora_rtc_engine_docs.zip
   pub_publish_check:
     name: pub publish check
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}

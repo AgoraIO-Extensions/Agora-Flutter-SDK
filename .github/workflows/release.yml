@@ -57,11 +57,12 @@ jobs:
           skipTests: true
       - name: Build DartDoc 📖
         run: |
+          dart --version
           # Generate DartDoc
           dart doc
 
           # Create a zip file of the DartDoc output
-          zip -r flutter-agora-docs.zip doc
+          zip -r agora_rtc_engine_docs.zip doc
       - name: Upload DartDoc Archive to GitHub release ⬆️
         uses: svenstaro/upload-release-action@2.6.0
         with:
