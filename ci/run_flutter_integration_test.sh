@@ -22,7 +22,7 @@ if [[ ${PLATFORM} == "web" ]];then
             --verbose-system-logs \
             -d web-server \
             --driver=test_driver/integration_test.dart \
-            --target=integration_test/${filename}
+            --target=${filename}
     done
 
     popd
