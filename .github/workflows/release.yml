@@ -28,7 +28,9 @@ jobs:
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-      - run: |
+      - name: Release
+        id: release
+        run: |
           PUBSPEC_VERSION=$(grep 'version: ' pubspec.yaml | sed -e 's,.*: \(.*\),\1,')
           echo "pubspec version: ${PUBSPEC_VERSION}"
 
@@ -42,6 +44,7 @@ jobs:
             --github.release \
             --no-github.web \
             --ci
+          echo "::set-output name=version::${PUBSPEC_VERSION}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish Dart Package 🚢
@@ -52,3 +55,16 @@ jobs:
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
           force: true # We have checked the `dart pub publish --dry-run` `in build.yaml`, it's ok to force publish here.
           skipTests: true
+      - name: Build DartDoc 📖
+        run: |
+          # Generate DartDoc
+          dart doc
+
+          # Create a zip file of the DartDoc output
+          zip -r flutter-agora-docs.zip doc
+      - name: Upload DartDoc Archive to GitHub release ⬆️
+        uses: svenstaro/upload-release-action@2.6.0
+        with:
+          file: flutter-agora-docs.zip
+          asset_name: flutter-agora-docs.zip
+          tag: ${{ steps.release.outputs.version }}

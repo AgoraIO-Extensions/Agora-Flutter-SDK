@@ -17,6 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Check Dart Format
+        run: |
+          # Check for differences in dart format
+          if dart format --set-exit-if-changed .
+          then
+            echo "No formatting issues found."
+          else
+            echo "Formatting issues found. Please run 'dart format' to format your code."
+            exit 1
+          fi
       - uses: axel-op/dart-package-analyzer@v3
         id: analysis
         with:
