@@ -48,11 +48,11 @@ import 'platform/global_video_view_controller.dart';
 
 // ignore_for_file: public_member_api_docs
 
-int? _mockRtcEngineNativeHandle;
+InitilizationArgProvider? _mockRtcEngineProvider;
 @visibleForTesting
-void setMockRtcEngineNativeHandle(int? mockRtcEngineNativeHandle) {
+void setMockRtcEngineProvider(InitilizationArgProvider? mockRtcEngineProvider) {
   assert(() {
-    _mockRtcEngineNativeHandle = mockRtcEngineNativeHandle;
+    _mockRtcEngineProvider = mockRtcEngineProvider;
     return true;
   }());
 }
@@ -377,10 +377,10 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await engineMethodChannel.invokeMethod('androidInit');
     }
 
-    List<int> args = [];
+    List<InitilizationArgProvider> args = [];
     assert(() {
-      if (_mockRtcEngineNativeHandle != null) {
-        args.add(_mockRtcEngineNativeHandle!);
+      if (_mockRtcEngineProvider != null) {
+        args.add(_mockRtcEngineProvider!);
       }
       return true;
     }());

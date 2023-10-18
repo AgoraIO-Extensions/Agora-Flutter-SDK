@@ -55,7 +55,8 @@ class FakeIrisMethodChannel extends IrisMethodChannel {
   }
 
   @override
-  Future<InitilizationResult?> initilize(List<int> args) async {
+  Future<InitilizationResult?> initilize(
+      List<InitilizationArgProvider> args) async {
     if (_config.isFakeInitilize) {
       return null;
     }
