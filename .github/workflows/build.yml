@@ -17,7 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
       - name: Check Dart Format
         run: bash ci/dart_pub_publish_check.sh
       - uses: axel-op/dart-package-analyzer@v3
@@ -39,7 +41,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
       - name: Build DartDoc 📖
         run: |
           # Generate DartDoc
