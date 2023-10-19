@@ -10,6 +10,7 @@ const irisWebFakeUrl = 'https://download.agora.io/staging/iris-web-rtc-fake_0.1.
       var scriptTag = document.createElement('script');
       scriptTag.src = url;
       scriptTag.type = 'text/javascript';
+      scriptTag.async = false;
       document.body.append(scriptTag);
     }
     if (scriptLoaded) {
@@ -19,4 +20,4 @@ const irisWebFakeUrl = 'https://download.agora.io/staging/iris-web-rtc-fake_0.1.
   
     _appendScript(irisWebUrl);
     _appendScript(irisWebFakeUrl);
-  })();
+})();

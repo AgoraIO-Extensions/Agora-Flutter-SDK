@@ -84,14 +84,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
     // setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
 
-    String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-        defaultValue: '<YOUR_APP_ID>');
+    // String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+    //     defaultValue: '<YOUR_APP_ID>');
 
-    RtcEngine rtcEngine = createAgoraRtcEngine();
-    await rtcEngine.initialize(RtcEngineContext(
-      appId: engineAppId,
-      areaCode: AreaCode.areaCodeGlob.value(),
-    ));
+    // RtcEngine rtcEngine = createAgoraRtcEngine();
+    // await rtcEngine.initialize(RtcEngineContext(
+    //   appId: engineAppId,
+    //   areaCode: AreaCode.areaCodeGlob.value(),
+    // ));
 
     // final audioDeviceManager = rtcEngine.getAudioDeviceManager();
 
