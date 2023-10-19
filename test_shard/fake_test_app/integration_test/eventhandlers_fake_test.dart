@@ -36,8 +36,17 @@ void main() {
 
   setUp(() {
     irisTester.initialize();
-    setMockRtcEngineProvider(
-        TestInitilizationArgProvider(irisTester.getTesterArgs()));
+    if (kIsWeb) {
+      setMockRtcEngineProvider(
+          TestInitilizationArgProvider(irisTester.getTesterArgs()));
+    } else {
+      // On IO, the function return from the `irisTester.getTesterArgs()` capture
+      // the `Pointer` from `IrisTester`, which is invalid to pass to the `Isolate`,
+      // so directly pass the `ObjectIrisHandle` as value to the `setMockRtcEngineProvider`
+      final value = irisTester.getTesterArgs()[0](const IrisApiEngineHandle(0));
+      setMockRtcEngineProvider(
+          TestInitilizationArgProvider.fromValue(ObjectIrisHandle(value)));
+    }
   });
 
   tearDown(() {
