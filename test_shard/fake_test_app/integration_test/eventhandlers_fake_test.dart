@@ -28,6 +28,7 @@ import 'generated/mediarecorder_mediarecorderobserver_testcases.generated.dart'
 import 'generated/musiccontentcenter_musiccontentcentereventhandler_testcases.generated.dart'
     as musiccontentcenter_musiccontentcentereventhandler;
 import 'package:agora_rtc_engine/src/impl/agora_rtc_engine_impl.dart';
+import 'package:iris_method_channel/iris_method_channel.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
