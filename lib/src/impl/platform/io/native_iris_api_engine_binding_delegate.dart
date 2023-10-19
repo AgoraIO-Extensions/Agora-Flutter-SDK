@@ -44,8 +44,9 @@ class NativeIrisApiEngineBindingsDelegate
     assert(() {
       if (args.isNotEmpty) {
         assert(args.length == 1);
-        enginePtr = args[0].provide(const IrisApiEngineHandle(0))()
-            as ffi.Pointer<ffi.Void>;
+        final engineIntPtr =
+            args[0].provide(const IrisApiEngineHandle(0))() as int;
+        enginePtr = ffi.Pointer<ffi.Void>.fromAddress(engineIntPtr);
       }
       return true;
     }());
