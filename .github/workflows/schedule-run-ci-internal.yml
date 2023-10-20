@@ -6,6 +6,7 @@ on:
 jobs:
   check_permission:
     name: Check permission
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     outputs:
