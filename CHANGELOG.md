@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.2.4](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.3...6.2.4) (2023-10-23)
+
+
+### Bug Fixes
+
+* [iOS/macOS] Fix CFBundleShortVersionString not correct in AgoraRtcWrapper framework ([#1387](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/issues/1387)) ([ff7a6ce](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/commit/ff7a6ceb5424e1da3ffd8a22bb6241aa1ba1bcde))
+
 ## [6.2.3](https://github.com/AgoraIO-Extensions/Agora-Flutter-SDK/compare/6.2.2...6.2.3) (2023-10-13)
 
 
