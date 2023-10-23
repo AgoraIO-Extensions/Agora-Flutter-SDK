@@ -20,7 +20,7 @@ dependencies:
   iris_method_channel:
     git:
       url: https://github.com/AgoraIO-Extensions/iris_method_channel_flutter.git
-      ref: 107e2b2931348187221a159a3f97b5aef6be462f
+      ref: 5631fe857f04032381f24d3477251b49b8b6906a
   js: ^0.6.3
 dev_dependencies:
   flutter_test:
