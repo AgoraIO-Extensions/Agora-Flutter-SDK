@@ -25,6 +25,7 @@ class _State extends State<JoinChannelVideo> {
   bool _isUseAndroidSurfaceView = false;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
+  late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _State extends State<JoinChannelVideo> {
   }
 
   Future<void> _dispose() async {
+    _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -50,8 +52,7 @@ class _State extends State<JoinChannelVideo> {
     await _engine.initialize(RtcEngineContext(
       appId: config.appId,
     ));
-
-    _engine.registerEventHandler(RtcEngineEventHandler(
+    _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -85,7 +86,9 @@ class _State extends State<JoinChannelVideo> {
           remoteUid.clear();
         });
       },
-    ));
+    );
+
+    _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableVideo();
     await _engine.startPreview();
@@ -254,8 +257,9 @@ class _State extends State<JoinChannelVideo> {
                 )
               ],
             ),
-            if (defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS) ...[
+            if (!kIsWeb &&
+                (defaultTargetPlatform == TargetPlatform.android ||
+                    defaultTargetPlatform == TargetPlatform.iOS)) ...[
               const SizedBox(
                 height: 20,
               ),

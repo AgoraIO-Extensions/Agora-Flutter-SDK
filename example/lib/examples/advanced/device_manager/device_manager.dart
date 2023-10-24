@@ -23,6 +23,7 @@ class _State extends State<DeviceManager> {
   late final VideoDeviceManager _videoDeviceManager;
   late TextEditingController _controller;
   late String _selectedDeviceId;
+  late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _State extends State<DeviceManager> {
 
   Future<void> _dispose() async {
     _controller.dispose();
+    _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -49,8 +51,7 @@ class _State extends State<DeviceManager> {
       appId: config.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
-
-    _engine.registerEventHandler(RtcEngineEventHandler(
+    _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -79,7 +80,9 @@ class _State extends State<DeviceManager> {
           isJoined = false;
         });
       },
-    ));
+    );
+
+    _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableVideo();
     await _engine.startPreview();
