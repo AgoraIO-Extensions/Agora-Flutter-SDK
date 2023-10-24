@@ -3,13 +3,32 @@
 set -e
 set -x
 
-flutter packages get
+MY_PATH=$(dirname "$0")
+PLATFORM=$1 # android/ios/macos/windows/web
 
-cd integration_test_app
+if [[ ${PLATFORM} == "web" ]];then
+    pushd ${MY_PATH}/../test_shard/fake_test_app
 
-pushd iris_integration_test
-git submodule update
-popd
+    echo "Run integration test on web"
 
-flutter packages get
-flutter test integration_test --dart-define=TEST_APP_ID="${TEST_APP_ID}"
+    flutter packages get
+
+    for filename in integration_test/*.dart; do
+        if [[ "$filename" == *.generated.dart  ]]; then
+            continue
+        fi
+
+        flutter drive \
+            --verbose-system-logs \
+            -d web-server \
+            --driver=test_driver/integration_test.dart \
+            --target=${filename}
+    done
+
+    popd
+
+elif [[ ${PLATFORM} == "android" || ${PLATFORM} == "ios" ]];then
+    echo "Not implemented"
+else
+    echo "Not implemented"
+fi

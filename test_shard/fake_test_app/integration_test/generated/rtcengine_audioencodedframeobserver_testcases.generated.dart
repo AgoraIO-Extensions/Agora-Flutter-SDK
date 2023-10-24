@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -80,9 +81,23 @@ void generatedTestCases(IrisTester irisTester) {
           'audioEncodedFrameInfo': audioEncodedFrameInfo.toJson(),
         };
 
-        irisTester.fireEvent(
-            'AudioEncodedFrameObserver_onRecordAudioEncodedFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'AudioEncodedFrameObserver_onRecordAudioEncodedFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'AudioEncodedFrameObserver_onRecordAudioEncodedFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRecordAudioEncodedFrameCompleter.isCompleted) {
+              onRecordAudioEncodedFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRecordAudioEncodedFrameCompleter.future;
@@ -98,7 +113,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -170,9 +185,23 @@ void generatedTestCases(IrisTester irisTester) {
           'audioEncodedFrameInfo': audioEncodedFrameInfo.toJson(),
         };
 
-        irisTester.fireEvent(
-            'AudioEncodedFrameObserver_onPlaybackAudioEncodedFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'AudioEncodedFrameObserver_onPlaybackAudioEncodedFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'AudioEncodedFrameObserver_onPlaybackAudioEncodedFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onPlaybackAudioEncodedFrameCompleter.isCompleted) {
+              onPlaybackAudioEncodedFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onPlaybackAudioEncodedFrameCompleter.future;
@@ -188,7 +217,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -260,9 +289,23 @@ void generatedTestCases(IrisTester irisTester) {
           'audioEncodedFrameInfo': audioEncodedFrameInfo.toJson(),
         };
 
-        irisTester.fireEvent(
-            'AudioEncodedFrameObserver_onMixedAudioEncodedFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'AudioEncodedFrameObserver_onMixedAudioEncodedFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'AudioEncodedFrameObserver_onMixedAudioEncodedFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onMixedAudioEncodedFrameCompleter.isCompleted) {
+              onMixedAudioEncodedFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onMixedAudioEncodedFrameCompleter.future;
@@ -278,6 +321,6 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 }

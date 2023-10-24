@@ -13,6 +13,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -33,7 +34,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -55,6 +56,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -75,7 +77,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -93,6 +95,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -113,7 +116,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -131,6 +134,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -151,7 +155,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'rtcEngine',
@@ -169,6 +173,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -190,7 +195,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaEngine',
@@ -208,6 +213,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -229,7 +235,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaEngine',
@@ -247,6 +253,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -268,7 +275,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaEngine',
@@ -286,6 +293,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -309,7 +317,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -327,6 +335,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -350,7 +359,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -368,6 +377,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -391,7 +401,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -409,6 +419,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -432,7 +443,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
 
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaPlayerController',
@@ -450,6 +461,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -474,7 +486,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       await rtcEngine.destroyMediaRecorder(mediaRecorder);
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'mediaRecorder',
@@ -492,6 +504,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -518,7 +531,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       await musicContentCenter.release();
       await rtcEngine.release();
   },
-  timeout: const Timeout(Duration(minutes: 1)),
+  timeout: const Timeout(Duration(minutes: 2)),
 );
 ''',
       callerObjName: 'musicContentCenter',

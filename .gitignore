@@ -38,3 +38,5 @@ third_party/
 **/.plugin_dev
 
 .ccls-cache/
+
+test_shard/**/scripts/iris_web_version.js

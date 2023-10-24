@@ -15,11 +15,22 @@ class IrisApiEngineBindingsDelegateJS
   void initialize() {}
 
   @override
-  CreateApiEngineResult createApiEngine(List<Object> args) {
+  CreateApiEngineResult createApiEngine(List<InitilizationArgProvider> args) {
     final apiEnginePtr = js.createIrisApiEngine();
-    initIrisRtc(apiEnginePtr);
+    final irisApiEngineHandle = IrisApiEngineHandle(apiEnginePtr);
+    InitIrisRtcOptions? options;
+    // Only set the option in debug mode
+    assert(() {
+      if (args.isNotEmpty) {
+        final arg = args[0].provide(irisApiEngineHandle)();
+        options = InitIrisRtcOptions(irisRtcEngine: arg);
+      }
 
-    final res = CreateApiEngineResult(IrisApiEngineHandle(apiEnginePtr));
+      return true;
+    }());
+    initIrisRtc(apiEnginePtr, options);
+
+    final res = CreateApiEngineResult(irisApiEngineHandle);
 
     return res;
   }

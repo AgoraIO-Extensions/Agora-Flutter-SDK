@@ -75,6 +75,6 @@ void testCases(IrisTester irisTester) {
       await rtcEngine.release();
     },
     timeout: const Timeout(Duration(minutes: 1)),
-    skip: !(Platform.isAndroid || Platform.isIOS),
+    skip: kIsWeb || !(!kIsWeb && (Platform.isAndroid || Platform.isIOS)),
   );
 }

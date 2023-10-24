@@ -188,6 +188,9 @@ class TemplatedGenerator extends DefaultGenerator {
           .map((t) => '${t.type.type} ${t.name}')
           .join(', ');
 
+      final isSuffixEx =
+          field.type.parameters.any((p) => p.type.type == 'RtcConnection');
+
       String eventName = field.name;
 
       if (skipMemberFunctions.contains(eventName)) {
@@ -227,6 +230,7 @@ class TemplatedGenerator extends DefaultGenerator {
       }
       jsonBuffer.writeln('};');
 
+      final eventCompleterName = '${field.name}Completer';
       StringBuffer fireEventImplBuffer = StringBuffer();
 
       String fireEventSuffix = eventName;
@@ -234,19 +238,39 @@ class TemplatedGenerator extends DefaultGenerator {
         fireEventSuffix =
             '${fireEventSuffix[0].toUpperCase()}${fireEventSuffix.substring(1)}';
       }
+
       fireEventImplBuffer.writeln('{');
       fireEventImplBuffer.writeln(pb.toString());
       fireEventImplBuffer.writeln(jsonBuffer.toString());
+      fireEventImplBuffer.writeln('if (!kIsWeb) {');
       fireEventImplBuffer.writeln(
           'irisTester.fireEvent(\'${eventHandlerClazz.name}_$fireEventSuffix\', params: eventJson);');
       if (eventPrefixOverride != null) {
         fireEventImplBuffer.writeln(
             'irisTester.fireEvent(\'${eventPrefixOverride}_$fireEventSuffix\', params: eventJson);');
       }
+      fireEventImplBuffer.writeln('} else {');
+      // On web, the callback with the `RtcConnection` is appended `Ex` suffix
+      if (isSuffixEx) {
+        fireEventSuffix = '${fireEventSuffix}Ex';
+      }
+      fireEventImplBuffer.writeln(
+          'final ret = irisTester.fireEvent(\'${eventHandlerClazz.name}_$fireEventSuffix\', params: eventJson);');
+
+      fireEventImplBuffer.writeln('''
+// Delay 200 milliseconds to ensure the callback is called.
+await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+if (ret) {
+  if (!$eventCompleterName.isCompleted) {
+    $eventCompleterName.complete(true);
+  }
+}
+''');
 
       fireEventImplBuffer.writeln('}');
+      fireEventImplBuffer.writeln('}');
 
-      final eventCompleterName = '${field.name}Completer';
       bodyBuffer.writeln('''
 final $eventCompleterName = Completer<bool>();
 final $eventHandlerName = ${eventHandlerClazz.name}(

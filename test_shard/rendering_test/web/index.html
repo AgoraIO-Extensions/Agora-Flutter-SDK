@@ -40,6 +40,9 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <!-- We add `../../scripts/iris_web_version.js` into the assets in `pubspec.yaml`, 
+  the flutter run/build command will copy it to the `../scripts/iris_web_version.js` -->
+  <script type="text/javascript" src="../scripts/iris_web_version.js"></script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -54,7 +57,5 @@
       });
     });
   </script>
-  <script type="text/javascript" src="https://download.agora.io/demo/test/iris-web-rtc-dev.1-20231011.js"></script>
-
 </body>
 </html>

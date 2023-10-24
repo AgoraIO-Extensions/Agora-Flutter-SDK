@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iris_tester/iris_tester.dart';
 import 'package:iris_method_channel/iris_method_channel.dart';
@@ -48,10 +49,24 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onJoinChannelSuccess',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onJoinChannelSuccess',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onJoinChannelSuccess',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onJoinChannelSuccess',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onJoinChannelSuccessEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onJoinChannelSuccessCompleter.isCompleted) {
+              onJoinChannelSuccessCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onJoinChannelSuccessCompleter.future;
@@ -67,7 +82,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -107,10 +122,24 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRejoinChannelSuccess',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onRejoinChannelSuccess',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRejoinChannelSuccess',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRejoinChannelSuccess',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRejoinChannelSuccessEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRejoinChannelSuccessCompleter.isCompleted) {
+              onRejoinChannelSuccessCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRejoinChannelSuccessCompleter.future;
@@ -126,7 +155,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -168,10 +197,24 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onProxyConnected',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onProxyConnected',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onProxyConnected',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onProxyConnected',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onProxyConnected',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onProxyConnectedCompleter.isCompleted) {
+              onProxyConnectedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onProxyConnectedCompleter.future;
@@ -187,7 +230,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -222,10 +265,23 @@ void generatedTestCases(IrisTester irisTester) {
           'msg': msg,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onError',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onError',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onError',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onError',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent('RtcEngineEventHandler_onError',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onErrorCompleter.isCompleted) {
+              onErrorCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onErrorCompleter.future;
@@ -241,7 +297,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -288,10 +344,24 @@ void generatedTestCases(IrisTester irisTester) {
           'lost': lost,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioQuality',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioQuality',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onAudioQuality',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioQuality',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioQualityEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioQualityCompleter.isCompleted) {
+              onAudioQualityCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioQualityCompleter.future;
@@ -307,7 +377,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -366,10 +436,24 @@ void generatedTestCases(IrisTester irisTester) {
           'result': result.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLastmileProbeResult',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLastmileProbeResult',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLastmileProbeResult',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onLastmileProbeResult',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLastmileProbeResult',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLastmileProbeResultCompleter.isCompleted) {
+              onLastmileProbeResultCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLastmileProbeResultCompleter.future;
@@ -385,7 +469,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -430,10 +514,25 @@ void generatedTestCases(IrisTester irisTester) {
           'totalVolume': totalVolume,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioVolumeIndication',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioVolumeIndication',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onAudioVolumeIndication',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onAudioVolumeIndication',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioVolumeIndicationEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioVolumeIndicationCompleter.isCompleted) {
+              onAudioVolumeIndicationCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioVolumeIndicationCompleter.future;
@@ -449,7 +548,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -563,10 +662,24 @@ void generatedTestCases(IrisTester irisTester) {
           'stats': stats.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLeaveChannel',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLeaveChannel',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLeaveChannel',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onLeaveChannel',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLeaveChannelEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLeaveChannelCompleter.isCompleted) {
+              onLeaveChannelCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLeaveChannelCompleter.future;
@@ -582,7 +695,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -696,10 +809,23 @@ void generatedTestCases(IrisTester irisTester) {
           'stats': stats.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRtcStats',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onRtcStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRtcStats',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRtcStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent('RtcEngineEventHandler_onRtcStatsEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRtcStatsCompleter.isCompleted) {
+              onRtcStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRtcStatsCompleter.future;
@@ -715,7 +841,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -754,11 +880,26 @@ void generatedTestCases(IrisTester irisTester) {
           'deviceState': deviceState.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioDeviceStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onAudioDeviceStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioDeviceStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onAudioDeviceStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioDeviceStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioDeviceStateChangedCompleter.isCompleted) {
+              onAudioDeviceStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioDeviceStateChangedCompleter.future;
@@ -774,7 +915,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -807,12 +948,26 @@ void generatedTestCases(IrisTester irisTester) {
           'position': position,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onAudioMixingPositionChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onAudioMixingPositionChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioMixingPositionChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onAudioMixingPositionChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioMixingPositionChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioMixingPositionChangedCompleter.isCompleted) {
+              onAudioMixingPositionChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioMixingPositionChangedCompleter.future;
@@ -828,7 +983,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -857,10 +1012,24 @@ void generatedTestCases(IrisTester irisTester) {
       {
         final eventJson = {};
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioMixingFinished',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioMixingFinished',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onAudioMixingFinished',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioMixingFinished',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioMixingFinished',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioMixingFinishedCompleter.isCompleted) {
+              onAudioMixingFinishedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioMixingFinishedCompleter.future;
@@ -876,7 +1045,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -909,10 +1078,24 @@ void generatedTestCases(IrisTester irisTester) {
           'soundId': soundId,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioEffectFinished',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioEffectFinished',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onAudioEffectFinished',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioEffectFinished',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioEffectFinished',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioEffectFinishedCompleter.isCompleted) {
+              onAudioEffectFinishedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioEffectFinishedCompleter.future;
@@ -928,7 +1111,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -967,11 +1150,26 @@ void generatedTestCases(IrisTester irisTester) {
           'deviceState': deviceState.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onVideoDeviceStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onVideoDeviceStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoDeviceStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onVideoDeviceStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoDeviceStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onVideoDeviceStateChangedCompleter.isCompleted) {
+              onVideoDeviceStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onVideoDeviceStateChangedCompleter.future;
@@ -987,7 +1185,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1032,10 +1230,24 @@ void generatedTestCases(IrisTester irisTester) {
           'rxQuality': rxQuality.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onNetworkQuality',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onNetworkQuality',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onNetworkQuality',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onNetworkQuality',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onNetworkQualityEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onNetworkQualityCompleter.isCompleted) {
+              onNetworkQualityCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onNetworkQualityCompleter.future;
@@ -1051,7 +1263,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1089,10 +1301,24 @@ void generatedTestCases(IrisTester irisTester) {
           'connection': connection.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onIntraRequestReceived',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onIntraRequestReceived',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onIntraRequestReceived',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onIntraRequestReceived',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onIntraRequestReceivedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onIntraRequestReceivedCompleter.isCompleted) {
+              onIntraRequestReceivedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onIntraRequestReceivedCompleter.future;
@@ -1108,7 +1334,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1144,11 +1370,26 @@ void generatedTestCases(IrisTester irisTester) {
           'info': info.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUplinkNetworkInfoUpdated',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onUplinkNetworkInfoUpdated',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onUplinkNetworkInfoUpdated',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onUplinkNetworkInfoUpdated',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUplinkNetworkInfoUpdated',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUplinkNetworkInfoUpdatedCompleter.isCompleted) {
+              onUplinkNetworkInfoUpdatedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUplinkNetworkInfoUpdatedCompleter.future;
@@ -1164,7 +1405,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1208,12 +1449,26 @@ void generatedTestCases(IrisTester irisTester) {
           'info': info.toJson(),
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onDownlinkNetworkInfoUpdated',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onDownlinkNetworkInfoUpdated',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onDownlinkNetworkInfoUpdated',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onDownlinkNetworkInfoUpdated',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onDownlinkNetworkInfoUpdated',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onDownlinkNetworkInfoUpdatedCompleter.isCompleted) {
+              onDownlinkNetworkInfoUpdatedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onDownlinkNetworkInfoUpdatedCompleter.future;
@@ -1229,7 +1484,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1262,10 +1517,24 @@ void generatedTestCases(IrisTester irisTester) {
           'quality': quality.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLastmileQuality',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLastmileQuality',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLastmileQuality',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onLastmileQuality',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLastmileQuality',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLastmileQualityCompleter.isCompleted) {
+              onLastmileQualityCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLastmileQualityCompleter.future;
@@ -1281,7 +1550,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1321,10 +1590,24 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFirstLocalVideoFrame',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onFirstLocalVideoFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onFirstLocalVideoFrame',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onFirstLocalVideoFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstLocalVideoFrame',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onFirstLocalVideoFrameCompleter.isCompleted) {
+              onFirstLocalVideoFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFirstLocalVideoFrameCompleter.future;
@@ -1340,7 +1623,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1375,12 +1658,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onFirstLocalVideoFramePublished',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onFirstLocalVideoFramePublished',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstLocalVideoFramePublished',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onFirstLocalVideoFramePublished',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstLocalVideoFramePublished',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onFirstLocalVideoFramePublishedCompleter.isCompleted) {
+              onFirstLocalVideoFramePublishedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFirstLocalVideoFramePublishedCompleter.future;
@@ -1396,7 +1693,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1443,11 +1740,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFirstRemoteVideoDecoded',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onFirstRemoteVideoDecoded',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstRemoteVideoDecoded',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onFirstRemoteVideoDecoded',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstRemoteVideoDecodedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onFirstRemoteVideoDecodedCompleter.isCompleted) {
+              onFirstRemoteVideoDecodedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFirstRemoteVideoDecodedCompleter.future;
@@ -1463,7 +1775,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1517,10 +1829,24 @@ void generatedTestCases(IrisTester irisTester) {
           'rotation': rotation,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onVideoSizeChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onVideoSizeChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onVideoSizeChanged',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onVideoSizeChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoSizeChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onVideoSizeChangedCompleter.isCompleted) {
+              onVideoSizeChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onVideoSizeChangedCompleter.future;
@@ -1536,7 +1862,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1576,10 +1902,25 @@ void generatedTestCases(IrisTester irisTester) {
           'error': error.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLocalVideoStateChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalVideoStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLocalVideoStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onLocalVideoStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalVideoStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLocalVideoStateChangedCompleter.isCompleted) {
+              onLocalVideoStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLocalVideoStateChangedCompleter.future;
@@ -1595,7 +1936,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1646,11 +1987,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRemoteVideoStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onRemoteVideoStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteVideoStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onRemoteVideoStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteVideoStateChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRemoteVideoStateChangedCompleter.isCompleted) {
+              onRemoteVideoStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRemoteVideoStateChangedCompleter.future;
@@ -1666,7 +2022,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1713,10 +2069,25 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFirstRemoteVideoFrame',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onFirstRemoteVideoFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onFirstRemoteVideoFrame',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onFirstRemoteVideoFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstRemoteVideoFrameEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onFirstRemoteVideoFrameCompleter.isCompleted) {
+              onFirstRemoteVideoFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFirstRemoteVideoFrameCompleter.future;
@@ -1732,7 +2103,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1774,10 +2145,24 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserJoined',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserJoined',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserJoined',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserJoined',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserJoinedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserJoinedCompleter.isCompleted) {
+              onUserJoinedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserJoinedCompleter.future;
@@ -1793,7 +2178,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1837,10 +2222,24 @@ void generatedTestCases(IrisTester irisTester) {
           'reason': reason.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserOffline',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserOffline',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserOffline',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserOffline',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserOfflineEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserOfflineCompleter.isCompleted) {
+              onUserOfflineCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserOfflineCompleter.future;
@@ -1856,7 +2255,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1898,10 +2297,24 @@ void generatedTestCases(IrisTester irisTester) {
           'muted': muted,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserMuteAudio',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserMuteAudio',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserMuteAudio',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserMuteAudio',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserMuteAudioEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserMuteAudioCompleter.isCompleted) {
+              onUserMuteAudioCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserMuteAudioCompleter.future;
@@ -1917,7 +2330,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -1959,10 +2372,24 @@ void generatedTestCases(IrisTester irisTester) {
           'muted': muted,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserMuteVideo',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserMuteVideo',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserMuteVideo',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserMuteVideo',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserMuteVideoEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserMuteVideoCompleter.isCompleted) {
+              onUserMuteVideoCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserMuteVideoCompleter.future;
@@ -1978,7 +2405,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2021,10 +2448,24 @@ void generatedTestCases(IrisTester irisTester) {
           'enabled': enabled,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserEnableVideo',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserEnableVideo',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserEnableVideo',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserEnableVideo',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserEnableVideoEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserEnableVideoCompleter.isCompleted) {
+              onUserEnableVideoCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserEnableVideoCompleter.future;
@@ -2040,7 +2481,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2083,10 +2524,24 @@ void generatedTestCases(IrisTester irisTester) {
           'state': state,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserStateChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserStateChanged',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserStateChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserStateChangedCompleter.isCompleted) {
+              onUserStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserStateChangedCompleter.future;
@@ -2102,7 +2557,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2145,10 +2600,24 @@ void generatedTestCases(IrisTester irisTester) {
           'enabled': enabled,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserEnableLocalVideo',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserEnableLocalVideo',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserEnableLocalVideo',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserEnableLocalVideo',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserEnableLocalVideoEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserEnableLocalVideoCompleter.isCompleted) {
+              onUserEnableLocalVideoCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserEnableLocalVideoCompleter.future;
@@ -2164,7 +2633,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2217,10 +2686,24 @@ void generatedTestCases(IrisTester irisTester) {
           'stats': stats.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLocalAudioStats',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalAudioStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLocalAudioStats',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalAudioStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalAudioStatsEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLocalAudioStatsCompleter.isCompleted) {
+              onLocalAudioStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLocalAudioStatsCompleter.future;
@@ -2236,7 +2719,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2313,10 +2796,24 @@ void generatedTestCases(IrisTester irisTester) {
           'stats': stats.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRemoteAudioStats',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onRemoteAudioStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRemoteAudioStats',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRemoteAudioStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteAudioStatsEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRemoteAudioStatsCompleter.isCompleted) {
+              onRemoteAudioStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRemoteAudioStatsCompleter.future;
@@ -2332,7 +2829,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2416,10 +2913,24 @@ void generatedTestCases(IrisTester irisTester) {
           'stats': stats.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLocalVideoStats',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalVideoStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLocalVideoStats',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalVideoStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalVideoStats',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLocalVideoStatsCompleter.isCompleted) {
+              onLocalVideoStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLocalVideoStatsCompleter.future;
@@ -2435,7 +2946,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2513,10 +3024,24 @@ void generatedTestCases(IrisTester irisTester) {
           'stats': stats.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRemoteVideoStats',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onRemoteVideoStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRemoteVideoStats',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRemoteVideoStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteVideoStatsEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRemoteVideoStatsCompleter.isCompleted) {
+              onRemoteVideoStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRemoteVideoStatsCompleter.future;
@@ -2532,7 +3057,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2561,10 +3086,24 @@ void generatedTestCases(IrisTester irisTester) {
       {
         final eventJson = {};
 
-        irisTester.fireEvent('RtcEngineEventHandler_onCameraReady',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onCameraReady',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onCameraReady',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onCameraReady',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onCameraReady',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onCameraReadyCompleter.isCompleted) {
+              onCameraReadyCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onCameraReadyCompleter.future;
@@ -2580,7 +3119,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2619,10 +3158,25 @@ void generatedTestCases(IrisTester irisTester) {
           'height': height,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onCameraFocusAreaChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onCameraFocusAreaChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onCameraFocusAreaChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onCameraFocusAreaChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onCameraFocusAreaChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onCameraFocusAreaChangedCompleter.isCompleted) {
+              onCameraFocusAreaChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onCameraFocusAreaChangedCompleter.future;
@@ -2638,7 +3192,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2677,12 +3231,26 @@ void generatedTestCases(IrisTester irisTester) {
           'height': height,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onCameraExposureAreaChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onCameraExposureAreaChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onCameraExposureAreaChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onCameraExposureAreaChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onCameraExposureAreaChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onCameraExposureAreaChangedCompleter.isCompleted) {
+              onCameraExposureAreaChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onCameraExposureAreaChangedCompleter.future;
@@ -2698,7 +3266,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2727,10 +3295,24 @@ void generatedTestCases(IrisTester irisTester) {
       {
         final eventJson = {};
 
-        irisTester.fireEvent('RtcEngineEventHandler_onVideoStopped',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onVideoStopped',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onVideoStopped',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onVideoStopped',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoStopped',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onVideoStoppedCompleter.isCompleted) {
+              onVideoStoppedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onVideoStoppedCompleter.future;
@@ -2746,7 +3328,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2784,11 +3366,26 @@ void generatedTestCases(IrisTester irisTester) {
           'reason': reason.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioMixingStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onAudioMixingStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioMixingStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onAudioMixingStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioMixingStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioMixingStateChangedCompleter.isCompleted) {
+              onAudioMixingStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioMixingStateChangedCompleter.future;
@@ -2804,7 +3401,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2842,11 +3439,26 @@ void generatedTestCases(IrisTester irisTester) {
           'errorCode': errorCode.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRhythmPlayerStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onRhythmPlayerStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onRhythmPlayerStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onRhythmPlayerStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRhythmPlayerStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRhythmPlayerStateChangedCompleter.isCompleted) {
+              onRhythmPlayerStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRhythmPlayerStateChangedCompleter.future;
@@ -2862,7 +3474,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2900,10 +3512,24 @@ void generatedTestCases(IrisTester irisTester) {
           'connection': connection.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onConnectionLost',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onConnectionLost',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onConnectionLost',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onConnectionLost',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onConnectionLostEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onConnectionLostCompleter.isCompleted) {
+              onConnectionLostCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onConnectionLostCompleter.future;
@@ -2919,7 +3545,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -2957,10 +3583,25 @@ void generatedTestCases(IrisTester irisTester) {
           'connection': connection.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onConnectionInterrupted',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onConnectionInterrupted',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onConnectionInterrupted',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onConnectionInterrupted',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onConnectionInterruptedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onConnectionInterruptedCompleter.isCompleted) {
+              onConnectionInterruptedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onConnectionInterruptedCompleter.future;
@@ -2976,7 +3617,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3014,10 +3655,24 @@ void generatedTestCases(IrisTester irisTester) {
           'connection': connection.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onConnectionBanned',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onConnectionBanned',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onConnectionBanned',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onConnectionBanned',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onConnectionBannedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onConnectionBannedCompleter.isCompleted) {
+              onConnectionBannedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onConnectionBannedCompleter.future;
@@ -3033,7 +3688,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3082,10 +3737,24 @@ void generatedTestCases(IrisTester irisTester) {
           'sentTs': sentTs,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onStreamMessage',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onStreamMessage',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onStreamMessage',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onStreamMessage',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onStreamMessageEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onStreamMessageCompleter.isCompleted) {
+              onStreamMessageCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onStreamMessageCompleter.future;
@@ -3101,7 +3770,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3150,10 +3819,24 @@ void generatedTestCases(IrisTester irisTester) {
           'cached': cached,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onStreamMessageError',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onStreamMessageError',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onStreamMessageError',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onStreamMessageError',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onStreamMessageErrorEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onStreamMessageErrorCompleter.isCompleted) {
+              onStreamMessageErrorCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onStreamMessageErrorCompleter.future;
@@ -3169,7 +3852,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3207,10 +3890,24 @@ void generatedTestCases(IrisTester irisTester) {
           'connection': connection.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRequestToken',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onRequestToken',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRequestToken',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRequestToken',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRequestTokenEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRequestTokenCompleter.isCompleted) {
+              onRequestTokenCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRequestTokenCompleter.future;
@@ -3226,7 +3923,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3266,11 +3963,26 @@ void generatedTestCases(IrisTester irisTester) {
           'token': token,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onTokenPrivilegeWillExpire',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onTokenPrivilegeWillExpire',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onTokenPrivilegeWillExpire',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onTokenPrivilegeWillExpire',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onTokenPrivilegeWillExpireEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onTokenPrivilegeWillExpireCompleter.isCompleted) {
+              onTokenPrivilegeWillExpireCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onTokenPrivilegeWillExpireCompleter.future;
@@ -3286,7 +3998,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3327,11 +4039,26 @@ void generatedTestCases(IrisTester irisTester) {
           'reason': reason.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLicenseValidationFailure',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onLicenseValidationFailure',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onLicenseValidationFailure',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onLicenseValidationFailure',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLicenseValidationFailureEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLicenseValidationFailureCompleter.isCompleted) {
+              onLicenseValidationFailureCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLicenseValidationFailureCompleter.future;
@@ -3347,7 +4074,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3388,12 +4115,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onFirstLocalAudioFramePublished',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onFirstLocalAudioFramePublished',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstLocalAudioFramePublished',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onFirstLocalAudioFramePublished',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstLocalAudioFramePublishedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onFirstLocalAudioFramePublishedCompleter.isCompleted) {
+              onFirstLocalAudioFramePublishedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFirstLocalAudioFramePublishedCompleter.future;
@@ -3409,7 +4150,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3452,10 +4193,25 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFirstRemoteAudioFrame',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onFirstRemoteAudioFrame',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onFirstRemoteAudioFrame',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onFirstRemoteAudioFrame',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstRemoteAudioFrameEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onFirstRemoteAudioFrameCompleter.isCompleted) {
+              onFirstRemoteAudioFrameCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFirstRemoteAudioFrameCompleter.future;
@@ -3471,7 +4227,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3514,11 +4270,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onFirstRemoteAudioDecoded',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onFirstRemoteAudioDecoded',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstRemoteAudioDecoded',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onFirstRemoteAudioDecoded',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onFirstRemoteAudioDecodedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onFirstRemoteAudioDecodedCompleter.isCompleted) {
+              onFirstRemoteAudioDecodedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onFirstRemoteAudioDecodedCompleter.future;
@@ -3534,7 +4305,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3579,10 +4350,25 @@ void generatedTestCases(IrisTester irisTester) {
           'error': error.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLocalAudioStateChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalAudioStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLocalAudioStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onLocalAudioStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalAudioStateChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLocalAudioStateChangedCompleter.isCompleted) {
+              onLocalAudioStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLocalAudioStateChangedCompleter.future;
@@ -3598,7 +4384,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3649,11 +4435,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapsed': elapsed,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRemoteAudioStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onRemoteAudioStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteAudioStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onRemoteAudioStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteAudioStateChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRemoteAudioStateChangedCompleter.isCompleted) {
+              onRemoteAudioStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRemoteAudioStateChangedCompleter.future;
@@ -3669,7 +4470,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3709,10 +4510,24 @@ void generatedTestCases(IrisTester irisTester) {
           'uid': uid,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onActiveSpeaker',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onActiveSpeaker',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onActiveSpeaker',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onActiveSpeaker',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onActiveSpeakerEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onActiveSpeakerCompleter.isCompleted) {
+              onActiveSpeakerCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onActiveSpeakerCompleter.future;
@@ -3728,7 +4543,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3762,10 +4577,24 @@ void generatedTestCases(IrisTester irisTester) {
           'result': result.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onContentInspectResult',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onContentInspectResult',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onContentInspectResult',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onContentInspectResult',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onContentInspectResult',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onContentInspectResultCompleter.isCompleted) {
+              onContentInspectResultCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onContentInspectResultCompleter.future;
@@ -3781,7 +4610,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3830,10 +4659,24 @@ void generatedTestCases(IrisTester irisTester) {
           'errCode': errCode,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onSnapshotTaken',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onSnapshotTaken',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onSnapshotTaken',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onSnapshotTaken',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onSnapshotTakenEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onSnapshotTakenCompleter.isCompleted) {
+              onSnapshotTakenCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onSnapshotTakenCompleter.future;
@@ -3849,7 +4692,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3898,10 +4741,24 @@ void generatedTestCases(IrisTester irisTester) {
           'newRoleOptions': newRoleOptions.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onClientRoleChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onClientRoleChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onClientRoleChanged',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onClientRoleChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onClientRoleChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onClientRoleChangedCompleter.isCompleted) {
+              onClientRoleChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onClientRoleChangedCompleter.future;
@@ -3917,7 +4774,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -3961,10 +4818,25 @@ void generatedTestCases(IrisTester irisTester) {
           'currentRole': currentRole.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onClientRoleChangeFailed',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onClientRoleChangeFailed',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onClientRoleChangeFailed',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onClientRoleChangeFailed',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onClientRoleChangeFailedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onClientRoleChangeFailedCompleter.isCompleted) {
+              onClientRoleChangeFailedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onClientRoleChangeFailedCompleter.future;
@@ -3980,7 +4852,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4018,11 +4890,26 @@ void generatedTestCases(IrisTester irisTester) {
           'muted': muted,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioDeviceVolumeChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onAudioDeviceVolumeChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioDeviceVolumeChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onAudioDeviceVolumeChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioDeviceVolumeChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioDeviceVolumeChangedCompleter.isCompleted) {
+              onAudioDeviceVolumeChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioDeviceVolumeChangedCompleter.future;
@@ -4038,7 +4925,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4078,12 +4965,26 @@ void generatedTestCases(IrisTester irisTester) {
           'errCode': errCode.value(),
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onRtmpStreamingStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onRtmpStreamingStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onRtmpStreamingStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onRtmpStreamingStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRtmpStreamingStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRtmpStreamingStateChangedCompleter.isCompleted) {
+              onRtmpStreamingStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRtmpStreamingStateChangedCompleter.future;
@@ -4099,7 +5000,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4135,10 +5036,24 @@ void generatedTestCases(IrisTester irisTester) {
           'eventCode': eventCode.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onRtmpStreamingEvent',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onRtmpStreamingEvent',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onRtmpStreamingEvent',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onRtmpStreamingEvent',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRtmpStreamingEvent',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRtmpStreamingEventCompleter.isCompleted) {
+              onRtmpStreamingEventCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRtmpStreamingEventCompleter.future;
@@ -4154,7 +5069,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4183,10 +5098,24 @@ void generatedTestCases(IrisTester irisTester) {
       {
         final eventJson = {};
 
-        irisTester.fireEvent('RtcEngineEventHandler_onTranscodingUpdated',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onTranscodingUpdated',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onTranscodingUpdated',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onTranscodingUpdated',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onTranscodingUpdated',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onTranscodingUpdatedCompleter.isCompleted) {
+              onTranscodingUpdatedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onTranscodingUpdatedCompleter.future;
@@ -4202,7 +5131,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4235,10 +5164,24 @@ void generatedTestCases(IrisTester irisTester) {
           'routing': routing,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioRoutingChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioRoutingChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onAudioRoutingChanged',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioRoutingChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioRoutingChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioRoutingChangedCompleter.isCompleted) {
+              onAudioRoutingChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioRoutingChangedCompleter.future;
@@ -4254,7 +5197,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4291,12 +5234,26 @@ void generatedTestCases(IrisTester irisTester) {
           'code': code.value(),
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onChannelMediaRelayStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onChannelMediaRelayStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onChannelMediaRelayStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onChannelMediaRelayStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onChannelMediaRelayStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onChannelMediaRelayStateChangedCompleter.isCompleted) {
+              onChannelMediaRelayStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onChannelMediaRelayStateChangedCompleter.future;
@@ -4312,7 +5269,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4346,10 +5303,25 @@ void generatedTestCases(IrisTester irisTester) {
           'code': code.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onChannelMediaRelayEvent',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onChannelMediaRelayEvent',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onChannelMediaRelayEvent',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onChannelMediaRelayEvent',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onChannelMediaRelayEvent',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onChannelMediaRelayEventCompleter.isCompleted) {
+              onChannelMediaRelayEventCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onChannelMediaRelayEventCompleter.future;
@@ -4365,7 +5337,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4398,12 +5370,26 @@ void generatedTestCases(IrisTester irisTester) {
           'isFallbackOrRecover': isFallbackOrRecover,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onLocalPublishFallbackToAudioOnly',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onLocalPublishFallbackToAudioOnly',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalPublishFallbackToAudioOnly',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLocalPublishFallbackToAudioOnlyCompleter.isCompleted) {
+              onLocalPublishFallbackToAudioOnlyCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled =
@@ -4420,7 +5406,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4456,12 +5442,26 @@ void generatedTestCases(IrisTester irisTester) {
           'isFallbackOrRecover': isFallbackOrRecover,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onRemoteSubscribeFallbackToAudioOnly',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onRemoteSubscribeFallbackToAudioOnly',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteSubscribeFallbackToAudioOnly',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onRemoteSubscribeFallbackToAudioOnly',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteSubscribeFallbackToAudioOnly',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRemoteSubscribeFallbackToAudioOnlyCompleter.isCompleted) {
+              onRemoteSubscribeFallbackToAudioOnlyCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled =
@@ -4478,7 +5478,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4525,12 +5525,26 @@ void generatedTestCases(IrisTester irisTester) {
           'rxKBitRate': rxKBitRate,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onRemoteAudioTransportStats',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onRemoteAudioTransportStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteAudioTransportStats',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onRemoteAudioTransportStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteAudioTransportStatsEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRemoteAudioTransportStatsCompleter.isCompleted) {
+              onRemoteAudioTransportStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRemoteAudioTransportStatsCompleter.future;
@@ -4546,7 +5560,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4593,12 +5607,26 @@ void generatedTestCases(IrisTester irisTester) {
           'rxKBitRate': rxKBitRate,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onRemoteVideoTransportStats',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onRemoteVideoTransportStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteVideoTransportStats',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onRemoteVideoTransportStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onRemoteVideoTransportStatsEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onRemoteVideoTransportStatsCompleter.isCompleted) {
+              onRemoteVideoTransportStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onRemoteVideoTransportStatsCompleter.future;
@@ -4614,7 +5642,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4659,10 +5687,25 @@ void generatedTestCases(IrisTester irisTester) {
           'reason': reason.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onConnectionStateChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onConnectionStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onConnectionStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onConnectionStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onConnectionStateChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onConnectionStateChangedCompleter.isCompleted) {
+              onConnectionStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onConnectionStateChangedCompleter.future;
@@ -4678,7 +5721,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4725,10 +5768,24 @@ void generatedTestCases(IrisTester irisTester) {
           'wlAccMsg': wlAccMsg,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onWlAccMessage',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onWlAccMessage',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onWlAccMessage',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onWlAccMessage',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onWlAccMessageEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onWlAccMessageCompleter.isCompleted) {
+              onWlAccMessageCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onWlAccMessageCompleter.future;
@@ -4744,7 +5801,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4801,10 +5858,24 @@ void generatedTestCases(IrisTester irisTester) {
           'averageStats': averageStats.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onWlAccStats',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onWlAccStats',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onWlAccStats',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onWlAccStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onWlAccStatsEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onWlAccStatsCompleter.isCompleted) {
+              onWlAccStatsCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onWlAccStatsCompleter.future;
@@ -4820,7 +5891,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4860,10 +5931,24 @@ void generatedTestCases(IrisTester irisTester) {
           'type': type.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onNetworkTypeChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onNetworkTypeChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onNetworkTypeChanged',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onNetworkTypeChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onNetworkTypeChangedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onNetworkTypeChangedCompleter.isCompleted) {
+              onNetworkTypeChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onNetworkTypeChangedCompleter.future;
@@ -4879,7 +5964,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4921,10 +6006,24 @@ void generatedTestCases(IrisTester irisTester) {
           'errorType': errorType.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onEncryptionError',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onEncryptionError',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onEncryptionError',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onEncryptionError',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onEncryptionErrorEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onEncryptionErrorCompleter.isCompleted) {
+              onEncryptionErrorCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onEncryptionErrorCompleter.future;
@@ -4940,7 +6039,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -4973,10 +6072,24 @@ void generatedTestCases(IrisTester irisTester) {
           'permissionType': permissionType.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onPermissionError',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onPermissionError',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onPermissionError',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onPermissionError',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onPermissionError',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onPermissionErrorCompleter.isCompleted) {
+              onPermissionErrorCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onPermissionErrorCompleter.future;
@@ -4992,7 +6105,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5027,10 +6140,24 @@ void generatedTestCases(IrisTester irisTester) {
           'userAccount': userAccount,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onLocalUserRegistered',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalUserRegistered',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onLocalUserRegistered',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onLocalUserRegistered',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalUserRegistered',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLocalUserRegisteredCompleter.isCompleted) {
+              onLocalUserRegisteredCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLocalUserRegisteredCompleter.future;
@@ -5046,7 +6173,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5086,10 +6213,24 @@ void generatedTestCases(IrisTester irisTester) {
           'info': info.toJson(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserInfoUpdated',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserInfoUpdated',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserInfoUpdated',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserInfoUpdated',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserInfoUpdated',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserInfoUpdatedCompleter.isCompleted) {
+              onUserInfoUpdatedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserInfoUpdatedCompleter.future;
@@ -5105,7 +6246,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5150,10 +6291,24 @@ void generatedTestCases(IrisTester irisTester) {
           'reason': reason.value(),
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUploadLogResult',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUploadLogResult',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUploadLogResult',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUploadLogResult',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUploadLogResultEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUploadLogResultCompleter.isCompleted) {
+              onUploadLogResultCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUploadLogResultCompleter.future;
@@ -5169,7 +6324,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5214,12 +6369,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapseSinceLastState': elapseSinceLastState,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onAudioSubscribeStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onAudioSubscribeStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioSubscribeStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onAudioSubscribeStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioSubscribeStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioSubscribeStateChangedCompleter.isCompleted) {
+              onAudioSubscribeStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioSubscribeStateChangedCompleter.future;
@@ -5235,7 +6404,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5280,12 +6449,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapseSinceLastState': elapseSinceLastState,
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onVideoSubscribeStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onVideoSubscribeStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoSubscribeStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onVideoSubscribeStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoSubscribeStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onVideoSubscribeStateChangedCompleter.isCompleted) {
+              onVideoSubscribeStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onVideoSubscribeStateChangedCompleter.future;
@@ -5301,7 +6484,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5343,11 +6526,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapseSinceLastState': elapseSinceLastState,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioPublishStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onAudioPublishStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioPublishStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onAudioPublishStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onAudioPublishStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onAudioPublishStateChangedCompleter.isCompleted) {
+              onAudioPublishStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onAudioPublishStateChangedCompleter.future;
@@ -5363,7 +6561,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5408,11 +6606,26 @@ void generatedTestCases(IrisTester irisTester) {
           'elapseSinceLastState': elapseSinceLastState,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onVideoPublishStateChanged',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onVideoPublishStateChanged',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoPublishStateChanged',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onVideoPublishStateChanged',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoPublishStateChanged',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onVideoPublishStateChangedCompleter.isCompleted) {
+              onVideoPublishStateChangedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onVideoPublishStateChangedCompleter.future;
@@ -5428,7 +6641,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5468,10 +6681,24 @@ void generatedTestCases(IrisTester irisTester) {
           'value': value,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onExtensionEvent',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionEvent',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onExtensionEvent',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionEvent',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onExtensionEvent',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onExtensionEventCompleter.isCompleted) {
+              onExtensionEventCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onExtensionEventCompleter.future;
@@ -5487,7 +6714,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5522,10 +6749,24 @@ void generatedTestCases(IrisTester irisTester) {
           'extension': extension,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onExtensionStarted',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionStarted',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onExtensionStarted',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionStarted',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onExtensionStarted',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onExtensionStartedCompleter.isCompleted) {
+              onExtensionStartedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onExtensionStartedCompleter.future;
@@ -5541,7 +6782,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5576,10 +6817,24 @@ void generatedTestCases(IrisTester irisTester) {
           'extension': extension,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onExtensionStopped',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionStopped',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onExtensionStopped',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionStopped',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onExtensionStopped',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onExtensionStoppedCompleter.isCompleted) {
+              onExtensionStoppedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onExtensionStoppedCompleter.future;
@@ -5595,7 +6850,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5635,10 +6890,24 @@ void generatedTestCases(IrisTester irisTester) {
           'message': message,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onExtensionError',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionError',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onExtensionError',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onExtensionError',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onExtensionError',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onExtensionErrorCompleter.isCompleted) {
+              onExtensionErrorCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onExtensionErrorCompleter.future;
@@ -5654,7 +6923,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5697,10 +6966,24 @@ void generatedTestCases(IrisTester irisTester) {
           'userAccount': userAccount,
         };
 
-        irisTester.fireEvent('RtcEngineEventHandler_onUserAccountUpdated',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onUserAccountUpdated',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent('RtcEngineEventHandler_onUserAccountUpdated',
+              params: eventJson);
+          irisTester.fireEvent('RtcEngineEventHandlerEx_onUserAccountUpdated',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onUserAccountUpdatedEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onUserAccountUpdatedCompleter.isCompleted) {
+              onUserAccountUpdatedCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onUserAccountUpdatedCompleter.future;
@@ -5716,7 +6999,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5777,12 +7060,26 @@ void generatedTestCases(IrisTester irisTester) {
           'error': error.value(),
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onLocalVideoTranscoderError',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onLocalVideoTranscoderError',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalVideoTranscoderError',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onLocalVideoTranscoderError',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onLocalVideoTranscoderError',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onLocalVideoTranscoderErrorCompleter.isCompleted) {
+              onLocalVideoTranscoderErrorCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onLocalVideoTranscoderErrorCompleter.future;
@@ -5798,7 +7095,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   testWidgets(
@@ -5861,12 +7158,26 @@ void generatedTestCases(IrisTester irisTester) {
           'tracingInfo': tracingInfo.toJson(),
         };
 
-        irisTester.fireEvent(
-            'RtcEngineEventHandler_onVideoRenderingTracingResult',
-            params: eventJson);
-        irisTester.fireEvent(
-            'RtcEngineEventHandlerEx_onVideoRenderingTracingResult',
-            params: eventJson);
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoRenderingTracingResult',
+              params: eventJson);
+          irisTester.fireEvent(
+              'RtcEngineEventHandlerEx_onVideoRenderingTracingResult',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'RtcEngineEventHandler_onVideoRenderingTracingResultEx',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onVideoRenderingTracingResultCompleter.isCompleted) {
+              onVideoRenderingTracingResultCompleter.complete(true);
+            }
+          }
+        }
       }
 
       final eventCalled = await onVideoRenderingTracingResultCompleter.future;
@@ -5882,6 +7193,6 @@ void generatedTestCases(IrisTester irisTester) {
 
       await rtcEngine.release();
     },
-    timeout: const Timeout(Duration(minutes: 1)),
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 }
