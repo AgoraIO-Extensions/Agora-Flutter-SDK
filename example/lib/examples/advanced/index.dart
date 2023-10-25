@@ -36,54 +36,67 @@ import 'voice_changer/voice_changer.dart';
 /// Data source for advanced examples
 final advanced = [
   {'name': 'Advanced'},
-  {'name': 'AudioMixing', 'widget': const AudioMixing()},
-  {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
+  if (!kIsWeb) {'name': 'AudioMixing', 'widget': const AudioMixing()},
+  if (!kIsWeb)
+    {'name': 'ChannelMediaRelay', 'widget': const ChannelMediaRelay()},
   if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
     {'name': 'DeviceManager', 'widget': const DeviceManager()},
-  {'name': 'JoinMultipleChannel', 'widget': const JoinMultipleChannel()},
-  {'name': 'RtmpStreaming', 'widget': const RtmpStreaming()},
-  if (!kIsWeb) {'name': 'ScreenSharing', 'widget': const ScreenSharing()},
-  {'name': 'SetEncryption', 'widget': SetEncryption()},
-  {
-    'name': 'SetVideoEncoderConfiguration',
-    'widget': const SetVideoEncoderConfiguration()
-  },
-  {'name': 'StreamMessage', 'widget': const StreamMessage()},
-  {'name': 'VoiceChanger', 'widget': const VoiceChanger()},
-  {
-    'name': 'EnableVirtualBackground',
-    'widget': const EnableVirtualBackground()
-  },
-  {'name': 'MediaPlayer', 'widget': const MediaPlayer()},
-  {'name': 'SendMultiVideoStream', 'widget': const SendMultiVideoStream()},
-  {'name': 'TakeSnapshot', 'widget': const TakeSnapshot()},
-  {
-    'name': 'StartDirectCDNStreaming',
-    'widget': const StartDirectCDNStreaming()
-  },
-  {'name': 'SendMetadata', 'widget': const SendMetadata()},
-  {'name': 'SetBeautyEffect', 'widget': const SetBeautyEffect()},
-  {'name': 'SetContentInspect', 'widget': const SetContentInspect()},
-  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
+  if (!kIsWeb)
+    {'name': 'JoinMultipleChannel', 'widget': const JoinMultipleChannel()},
+  if (!kIsWeb) {'name': 'RtmpStreaming', 'widget': const RtmpStreaming()},
+  {'name': 'ScreenSharing', 'widget': const ScreenSharing()},
+  if (!kIsWeb) {'name': 'SetEncryption', 'widget': SetEncryption()},
+  if (!kIsWeb)
+    {
+      'name': 'SetVideoEncoderConfiguration',
+      'widget': const SetVideoEncoderConfiguration()
+    },
+  if (!kIsWeb) {'name': 'StreamMessage', 'widget': const StreamMessage()},
+  if (!kIsWeb) {'name': 'VoiceChanger', 'widget': const VoiceChanger()},
+  if (!kIsWeb)
+    {
+      'name': 'EnableVirtualBackground',
+      'widget': const EnableVirtualBackground()
+    },
+  if (!kIsWeb) {'name': 'MediaPlayer', 'widget': const MediaPlayer()},
+  if (!kIsWeb)
+    {'name': 'SendMultiVideoStream', 'widget': const SendMultiVideoStream()},
+  if (!kIsWeb) {'name': 'TakeSnapshot', 'widget': const TakeSnapshot()},
+  if (!kIsWeb)
+    {
+      'name': 'StartDirectCDNStreaming',
+      'widget': const StartDirectCDNStreaming()
+    },
+  if (!kIsWeb) {'name': 'SendMetadata', 'widget': const SendMetadata()},
+  if (!kIsWeb) {'name': 'SetBeautyEffect', 'widget': const SetBeautyEffect()},
+  if (!kIsWeb)
+    {'name': 'SetContentInspect', 'widget': const SetContentInspect()},
+  if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
     {'name': 'SendMultiCameraStream', 'widget': const SendMultiCameraStream()},
-  {'name': 'StartRhythmPlayer', 'widget': const StartRhythmPlayer()},
-  {
-    'name': 'StartLocalVideoTranscoder',
-    'widget': const StartLocalVideoTranscoder()
-  },
+  if (!kIsWeb)
+    {'name': 'StartRhythmPlayer', 'widget': const StartRhythmPlayer()},
+  if (!kIsWeb)
+    {
+      'name': 'StartLocalVideoTranscoder',
+      'widget': const StartLocalVideoTranscoder()
+    },
   if (!kIsWeb)
     {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
-  {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
-  {'name': 'AudioSpectrum', 'widget': const AudioSpectrum()},
-  {'name': 'MediaRecorder', 'widget': const MediaRecorderExample()},
-  {'name': 'PushVideoFrame', 'widget': const PushVideoFrame()},
+  if (!kIsWeb)
+    {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
+  if (!kIsWeb) {'name': 'AudioSpectrum', 'widget': const AudioSpectrum()},
+  if (!kIsWeb)
+    {'name': 'MediaRecorder', 'widget': const MediaRecorderExample()},
+  if (!kIsWeb) {'name': 'PushVideoFrame', 'widget': const PushVideoFrame()},
   // {'name': 'PushAudioFrame', 'widget': const PushAudioFrame()},
-  {'name': 'PushEncodedVideoFrame', 'widget': const PushEncodedVideoFrame()},
-  {
-    'name': 'SpatialAudioWithMediaPlayer',
-    'widget': const SpatialAudioWithMediaPlayer()
-  },
-  if (kIsWeb || !(Platform.isAndroid || Platform.isIOS))
+  if (!kIsWeb)
+    {'name': 'PushEncodedVideoFrame', 'widget': const PushEncodedVideoFrame()},
+  if (!kIsWeb)
+    {
+      'name': 'SpatialAudioWithMediaPlayer',
+      'widget': const SpatialAudioWithMediaPlayer()
+    },
+  if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
     {'name': 'PreCallTest', 'widget': const PreCallTest()},
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
     {'name': 'MusicPlayer', 'widget': const MusicPlayerExample()},

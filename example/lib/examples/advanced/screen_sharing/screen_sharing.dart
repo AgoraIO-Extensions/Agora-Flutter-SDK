@@ -28,6 +28,7 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
   late final TextEditingController _screenShareUidController;
 
   bool _isScreenShared = false;
+  late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
   void initState() {
@@ -41,18 +42,12 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
   @override
   void dispose() {
     super.dispose();
+    _engine.unregisterEventHandler(_rtcEngineEventHandler);
     _engine.release();
   }
 
   _initEngine() async {
-    _engine = createAgoraRtcEngineEx();
-    await _engine.initialize(RtcEngineContext(
-      appId: config.appId,
-      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-    ));
-    await _engine.setLogLevel(LogLevel.logLevelError);
-
-    _engine.registerEventHandler(RtcEngineEventHandler(
+    _rtcEngineEventHandler = RtcEngineEventHandler(
         onError: (ErrorCodeType err, String msg) {
       logSink.log('[onError] err: $err, msg: $msg');
     }, onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
@@ -92,7 +87,15 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
         default:
           break;
       }
-    }));
+    });
+    _engine = createAgoraRtcEngineEx();
+    await _engine.initialize(RtcEngineContext(
+      appId: config.appId,
+      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+    ));
+    await _engine.setLogLevel(LogLevel.logLevelError);
+
+    _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableVideo();
     await _engine.startPreview();
@@ -281,8 +284,19 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                 )
               ],
             ),
-            if (defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS)
+            if (kIsWeb)
+              ScreenShareWeb(
+                  rtcEngine: _engine,
+                  isScreenShared: _isScreenShared,
+                  onStartScreenShared: () {
+                    if (isJoined) {
+                      _updateScreenShareChannelMediaOptions();
+                    }
+                  },
+                  onStopScreenShare: () {}),
+            if (!kIsWeb &&
+                (defaultTargetPlatform == TargetPlatform.android ||
+                    defaultTargetPlatform == TargetPlatform.iOS))
               ScreenShareMobile(
                   rtcEngine: _engine,
                   isScreenShared: _isScreenShared,
@@ -292,8 +306,9 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
                     }
                   },
                   onStopScreenShare: () {}),
-            if (defaultTargetPlatform == TargetPlatform.windows ||
-                defaultTargetPlatform == TargetPlatform.macOS)
+            if (!kIsWeb &&
+                (defaultTargetPlatform == TargetPlatform.windows ||
+                    defaultTargetPlatform == TargetPlatform.macOS))
               ScreenShareDesktop(
                   rtcEngine: _engine,
                   isScreenShared: _isScreenShared,
@@ -307,6 +322,76 @@ class _State extends State<ScreenSharing> with KeepRemoteVideoViewsMixin {
         );
       },
     );
+  }
+}
+
+class ScreenShareWeb extends StatefulWidget {
+  const ScreenShareWeb(
+      {Key? key,
+      required this.rtcEngine,
+      required this.isScreenShared,
+      required this.onStartScreenShared,
+      required this.onStopScreenShare})
+      : super(key: key);
+
+  final RtcEngine rtcEngine;
+  final bool isScreenShared;
+  final VoidCallback onStartScreenShared;
+  final VoidCallback onStopScreenShare;
+
+  @override
+  State<ScreenShareWeb> createState() => _ScreenShareWebState();
+}
+
+class _ScreenShareWebState extends State<ScreenShareWeb>
+    implements ScreenShareInterface {
+  @override
+  bool get isScreenShared => widget.isScreenShared;
+
+  @override
+  void onStartScreenShared() {
+    widget.onStartScreenShared();
+  }
+
+  @override
+  void onStopScreenShare() {
+    widget.onStopScreenShare();
+  }
+
+  @override
+  RtcEngine get rtcEngine => widget.rtcEngine;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: ElevatedButton(
+            onPressed: !isScreenShared ? startScreenShare : stopScreenShare,
+            child: Text('${isScreenShared ? 'Stop' : 'Start'} screen share'),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  void startScreenShare() async {
+    if (isScreenShared) return;
+
+    await rtcEngine.startScreenCapture(
+        const ScreenCaptureParameters2(captureAudio: true, captureVideo: true));
+    await rtcEngine.startPreview(sourceType: VideoSourceType.videoSourceScreen);
+    onStartScreenShared();
+  }
+
+  @override
+  void stopScreenShare() async {
+    if (!isScreenShared) return;
+
+    await rtcEngine.stopScreenCapture();
+    onStopScreenShare();
   }
 }
 

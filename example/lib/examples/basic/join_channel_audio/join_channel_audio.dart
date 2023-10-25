@@ -29,6 +29,7 @@ class _State extends State<JoinChannelAudio> {
   late TextEditingController _controller;
   ChannelProfileType _channelProfileType =
       ChannelProfileType.channelProfileLiveBroadcasting;
+  late final RtcEngineEventHandler _rtcEngineEventHandler;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _State extends State<JoinChannelAudio> {
   }
 
   Future<void> _dispose() async {
+    _engine.unregisterEventHandler(_rtcEngineEventHandler);
     await _engine.leaveChannel();
     await _engine.release();
   }
@@ -54,7 +56,7 @@ class _State extends State<JoinChannelAudio> {
       appId: config.appId,
     ));
 
-    _engine.registerEventHandler(RtcEngineEventHandler(
+    _rtcEngineEventHandler = RtcEngineEventHandler(
       onError: (ErrorCodeType err, String msg) {
         logSink.log('[onError] err: $err, msg: $msg');
       },
@@ -72,7 +74,9 @@ class _State extends State<JoinChannelAudio> {
           isJoined = false;
         });
       },
-    ));
+    );
+
+    _engine.registerEventHandler(_rtcEngineEventHandler);
 
     await _engine.enableAudio();
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
