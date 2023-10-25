@@ -10,6 +10,8 @@ jobs:
     if: ${{ github.event.pull_request.merged == true && 
             github.event.pull_request.base.ref == 'main' && 
             contains(github.event.pull_request.labels.*.name, 'ci:prepare_release') }}
+    outputs:
+      release_version: ${{steps.release.outputs.version}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,20 +57,30 @@ jobs:
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
           force: true # We have checked the `dart pub publish --dry-run` `in build.yaml`, it's ok to force publish here.
           skipTests: true
+  attach_docs:
+    name: Attach dartdoc
+    runs-on: ubuntu-latest
+    needs: release_if_merged
+    steps:
+      - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - name: Build DartDoc 📖
         run: |
-          dart --version
+          dart pub get
           # Generate DartDoc
           dart doc
-
           # Create a zip file of the DartDoc output
           zip -r agora_rtc_engine_docs.zip doc
+      - name: Upload DartDoc Artifact ⬆️
+        uses: actions/upload-artifact@v3
+        with:
+          name: agora_rtc_engine_docs.zip
+          path: agora_rtc_engine_docs.zip
       - name: Upload DartDoc Archive to GitHub release ⬆️
         uses: svenstaro/upload-release-action@2.6.0
         with:
           file: agora_rtc_engine_docs.zip
           asset_name: agora_rtc_engine_docs.zip
-          tag: ${{ steps.release.outputs.version }}
+          tag: ${{ needs.release_if_merged.outputs.release_version }}
