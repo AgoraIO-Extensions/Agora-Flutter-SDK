@@ -38,3 +38,6 @@ flutter:
         pluginClass: AgoraRtcNgPlugin
       windows:
         pluginClass: AgoraRtcEnginePlugin
+      web:
+        pluginClass: AgoraRtcEngineWeb
+        fileName: agora_rtc_engine_web.dart
