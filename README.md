@@ -67,7 +67,7 @@ Open the `Info.plist` and add:
 - `Privacy - Camera Usage Description`, and add some description into the `Value` column.
 
 #### Web (alpha)
-> ***The `agora_rtc_engine` for web is currently in alpha stage, and the documentation is incomplete at this time.***
+> ***The `agora_rtc_engine` for web is currently in alpha stage, and the documentation is incomplete and it has only been tested on desktop web at this time.***
 >
 > The `agora_rtc_engine` web is built on top of [iris_web](https://github.com/AgoraIO-Extensions/iris_web), a wrapper for the [Agora Web SDK 4.x](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html). This helps align the Native SDK (Android/iOS/macOS/Windows) APIs through the [Agora Web SDK 4.x](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html). Please note that the agora_rtc_engine web utilizes the [Agora Web SDK 4.x](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html) underneath, so only a subset of the Native SDK APIs can be implemented on the web. If the APIs return `AgoraRtcException` with a `-4` error code, this means these APIs are not supported at this time.
 
