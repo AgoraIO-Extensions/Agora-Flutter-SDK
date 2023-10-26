@@ -66,9 +66,31 @@ Open the `Info.plist` and add:
 - `Privacy - Microphone Usage Description`，and add some description into the `Value` column.
 - `Privacy - Camera Usage Description`, and add some description into the `Value` column.
 
-### Multiple Platforms
+#### Web (alpha)
+> ***The `agora_rtc_engine` for web is currently in alpha stage, and the documentation is incomplete at this time.***
+>
+> The `agora_rtc_engine` web is built on top of [iris_web](https://github.com/AgoraIO-Extensions/iris_web), a wrapper for the [Agora Web SDK 4.x](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html). This helps align the Native SDK (Android/iOS/macOS/Windows) APIs through the [Agora Web SDK 4.x](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html). Please note that the agora_rtc_engine web utilizes the [Agora Web SDK 4.x](https://api-ref.agora.io/en/video-sdk/web/4.x/index.html) underneath, so only a subset of the Native SDK APIs can be implemented on the web. If the APIs return `AgoraRtcException` with a `-4` error code, this means these APIs are not supported at this time.
 
-The [agora_rtc_engine](https://pub.dev/packages/agora_rtc_engine) supports Android/iOS/macOS/Windows, but not support Web yet.
+We recommend downloading the `iris_web` artifact and including it as a local script in your `<your-project>/web/index.html` file, as this will allow for fine-grained control over how you host it. For example:
+
+**Project structure**
+```
+<your-project>
+|__web
+   |__index.html
+   |__iris-web-rtc_<x.y.z>.js
+```
+```html
+<script src="iris-web-rtc_<x.y.z>.js"></script>
+```
+Download: https://download.agora.io/staging/iris-web-rtc_n423_w4182_0.3.0.js
+
+**For Testing Purposes**
+
+You can directly depend on the Agora CDN for testing purposes:
+```html
+<script src="https://download.agora.io/staging/iris-web-rtc_n423_w4182_0.3.0.js"></script>
+```
 
 ## API Reference Resources
 
