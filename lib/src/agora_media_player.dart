@@ -5,7 +5,7 @@ abstract class MediaPlayer {
   /// Gets the ID of the media player.
   ///
   /// Returns
-  /// ≥ 0: Success. The ID of the media player.
+  /// Success. The ID of the media player.
   ///  < 0: Failure.
   int getMediaPlayerId();
 

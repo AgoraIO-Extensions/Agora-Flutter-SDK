@@ -366,7 +366,7 @@ class LocalVideoStats {
       this.dualStreamEnabled,
       this.hwEncoderAccelerating});
 
-  /// The user ID of the local user.
+  /// The ID of the local user.
   @JsonKey(name: 'uid')
   final int? uid;
 
@@ -1768,14 +1768,14 @@ class RtcEngineEventHandler {
 
   /// Occurs when the playback of the local music file finishes.
   ///
-  /// Deprecated: Please use onAudioMixingStateChanged instead. After you call startAudioMixing to play a local music file, this callback occurs when the playback finishes. If the call startAudioMixing fails, the error code WARN_AUDIO_MIXING_OPEN_ERROR is returned.
+  /// Deprecated: Use onAudioMixingStateChanged instead. After you call startAudioMixing to play a local music file, this callback occurs when the playback finishes. If the call of startAudioMixing fails, the error code WARN_AUDIO_MIXING_OPEN_ERROR is returned.
   final void Function()? onAudioMixingFinished;
 
   /// Occurs when the playback of the local music file finishes.
   ///
   /// This callback occurs when the local audio effect file finishes playing.
   ///
-  /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
+  /// * [soundId] The ID of the audio effect. The ID of each audio effect file is unique.
   final void Function(int soundId)? onAudioEffectFinished;
 
   /// Occurs when the video device state changes.
@@ -2020,7 +2020,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when the camera turns on and is ready to capture the video.
   ///
-  /// Deprecated: Please use localVideoStreamStateCapturing (1) in onLocalVideoStateChanged instead. This callback indicates that the camera has been successfully turned on and you can start to capture video.
+  /// Deprecated: Use localVideoStreamStateCapturing (1) in onLocalVideoStateChanged instead. This callback indicates that the camera has been successfully turned on and you can start to capture video.
   final void Function()? onCameraReady;
 
   /// Occurs when the camera focus area changes.
@@ -2447,9 +2447,9 @@ class RtcEngineEventHandler {
   /// Occurs when the video subscribing state changes.
   ///
   /// * [channel] The channel name.
-  /// * [uid] The ID of the remote user.
-  /// * [oldState] The previous subscribing status, see StreamSubscribeState for details.
-  /// * [newState] The current subscribing status, see StreamSubscribeState for details.
+  /// * [uid] The user ID of the remote user.
+  /// * [oldState] The previous subscribing status. See StreamSubscribeState.
+  /// * [newState] The current subscribing status. See StreamSubscribeState.
   /// * [elapseSinceLastState] The time elapsed (ms) from the previous state to the current state.
   final void Function(
       String channel,
@@ -2768,16 +2768,16 @@ class Metadata {
   const Metadata({this.uid, this.size, this.buffer, this.timeStampMs});
 
   /// The user ID.
-  ///  For the recipient:the ID of the remote user who sent the Metadata.
-  ///  Ignore it for sender.
+  ///  For the recipient: The ID of the remote user who sent the Metadata.
+  ///  For the sender: Ignore it.
   @JsonKey(name: 'uid')
   final int? uid;
 
-  /// Buffer size for received or sent Metadata.
+  /// The buffer size of the sent or received Metadata.
   @JsonKey(name: 'size')
   final int? size;
 
-  /// The buffer address of the received or sent Metadata.
+  /// The buffer address of the sent or received Metadata.
   @JsonKey(name: 'buffer', ignore: true)
   final Uint8List? buffer;
 
@@ -3020,7 +3020,7 @@ class ExtensionInfo {
 
 /// The basic interface of the Agora SDK that implements the core functions of real-time communication.
 ///
-/// RtcEngine provides the main methods that your app can call.
+/// RtcEngine provides the main methods that your app can call. Before calling other APIs, you must call createAgoraRtcEngine to create an RtcEngine object.
 abstract class RtcEngine {
   /// Releases the RtcEngine instance.
   ///
@@ -3394,7 +3394,8 @@ abstract class RtcEngine {
   ///
   /// Enables or disables image enhancement, and sets the options.
   ///  Call this method before calling enableVideo or startPreview.
-  ///  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  ///  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device.
   ///
   /// * [enabled] Whether to enable the image enhancement function: true : Enable the image enhancement function. false : (Default) Disable the image enhancement function.
   /// * [options] The image enhancement options. See BeautyOptions.
@@ -3404,7 +3405,10 @@ abstract class RtcEngine {
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure. errNotSupported (4): The current device version is below Android 5.0, and this operation is not supported.
+  ///  < 0: Failure.
+  ///  -4: The current device does not support this feature. Possible reasons include:
+  ///  The current device capabilities do not meet the requirements for image enhancement. Agora recommends you replace it with a high-performance device.
+  ///  The current device version is lower than Android 5.0 and does not support this feature. Agora recommends you replace the device or upgrade the operating system.
   Future<void> setBeautyEffectOptions(
       {required bool enabled,
       required BeautyOptions options,
@@ -3418,7 +3422,7 @@ abstract class RtcEngine {
   ///  Both this method and setExtensionProperty can turn on low-light enhancement:
   ///  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
   ///  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-  ///  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
   /// * [enabled] Whether to enable low-light enhancement function: true : Enable low-light enhancement function. false : (Default) Disable low-light enhancement function.
   /// * [options] The low-light enhancement options. See LowlightEnhanceOptions.
@@ -3440,7 +3444,7 @@ abstract class RtcEngine {
   ///  Both this method and setExtensionProperty can turn on video noise reduction function:
   ///  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
   ///  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-  ///  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
   /// * [enabled] Whether to enable video noise reduction: true : Enable video noise reduction. false : (Default) Disable video noise reduction.
   /// * [options] The video noise reduction options. See VideoDenoiserOptions.
@@ -3462,7 +3466,7 @@ abstract class RtcEngine {
   ///  Both this method and setExtensionProperty can enable color enhancement:
   ///  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
   ///  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-  ///  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+  ///  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
   ///
   /// * [enabled] Whether to enable color enhancement: true Enable color enhancement. false : (Default) Disable color enhancement.
   /// * [options] The color enhancement options. See ColorEnhanceOptions.
@@ -3479,7 +3483,7 @@ abstract class RtcEngine {
   /// Enables/Disables the virtual background.
   ///
   /// The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method before calling enableVideo or startPreview.
-  ///  This feature requires high performance devices. Agora recommends that you implement it on devices equipped with the following chips:
+  ///  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device. Agora recommends you use virtual background on devices with the following processors:
   ///  Snapdragon 700 series 750G and later
   ///  Snapdragon 800 series 835 and later
   ///  Dimensity 700 series 720 and later
@@ -3506,9 +3510,7 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
-  ///  -1: The custom background image does not exist. Check the value of source in VirtualBackgroundSource.
-  ///  -2: The color format of the custom background image is invalid. Check the value of color in VirtualBackgroundSource.
-  ///  -3: The device does not support virtual background.
+  ///  -4: The device capabilities do not meet the requirements for the virtual background feature. Agora recommends you try it on devices with higher performance.
   Future<void> enableVirtualBackground(
       {required bool enabled,
       required VirtualBackgroundSource backgroundSource,
@@ -4297,7 +4299,7 @@ abstract class RtcEngine {
 
   /// Retrieves the playback position of the audio effect file.
   ///
-  /// Call this method after the playEffect method.
+  /// Call this method after playEffect.
   ///
   /// * [soundId] The audio effect ID. The ID of each audio effect file is unique.
   ///
@@ -5571,6 +5573,8 @@ abstract class RtcEngine {
 
   /// Stops screen capture.
   ///
+  /// After calling startScreenCaptureByWindowId or startScreenCaptureByDisplayId to start screen capture, call this method to stop screen capture.
+  ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
@@ -6515,7 +6519,7 @@ abstract class RtcEngine {
   ///
   /// If the metadata is sent successfully, the SDK triggers the onMetadataReceived callback on the receiver.
   ///
-  /// * [metadata] Media metadata See Metadata.
+  /// * [metadata] Media metadata. See Metadata.
   /// * [sourceType] The type of the video source. See VideoSourceType.
   ///
   /// Returns
