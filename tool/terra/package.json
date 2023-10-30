@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "cd node_modules/@agoraio-extensions/terra-legacy-cxx-parser && npm config set @agoraio-extensions:registry=https://npm.pkg.github.com && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,10 +12,11 @@
     "@types/node": "^20.6.0"
   },
   "dependencies": {
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6",
     "@agoraio-extensions/terra": "^0.1.0",
-    "@agoraio-extensions/terra_shared_configs": "/Users/fenglang/codes/aw/terra_shared_configs",
-    "@agoraio-extensions/terra-legacy-cxx-parser": "/Users/fenglang/codes/aw/terra-legacy-cxx-parser"
+    "@agoraio-extensions/terra-core": "^0.1.0",
+    "@agoraio-extensions/terra-legacy-cxx-parser": "^0.1.0",
+    "@agoraio-extensions/terra_shared_configs": "^1.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }
