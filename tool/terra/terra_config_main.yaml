@@ -1,12 +1,37 @@
-include: shared:rtc_4.1.1.6/shared_configs.yaml
+parsers:
+  - name: LegacyCXXParser
+    package: '@agoraio-extensions/terra-legacy-cxx-parser'
+    args:
+      includeHeaderDirs:
+        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include'
+      parseFiles:
+        include:
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/*.h'
+        exclude:
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/AgoraRefPtr.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/time_utils.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/AgoraOptional.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/AgoraRefPtr.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/IAgoraH265Transcoder.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/IAgoraMediaComponentFactory.h'
+          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/IAgoraParameter.h'
+      customHeaders:
+        - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/custom_headers/*.h'
+      language: dart
+      legacyRenders:
+        - DartSyntaxRender
+        - DartEventHandlerParamJsonRender
+        - DartCallApiIrisMethodChannelRender
+        - DartEventHandlerIrisMethodChannelRender
+        - DartStructToJsonSerializableRender
+        - DartCallApiEventHandlerBufferExtRender
+        - DartForwardExportRender
 
-language: dart
-
-legacy_renders:
-  - DartSyntaxRenderBeforeNative420
-  - DartEventHandlerParamJsonRender
-  - DartCallApiIrisMethodChannelRender
-  - DartEventHandlerIrisMethodChannelRender
-  - DartStructToJsonSerializableRender
-  - DartCallApiEventHandlerBufferExtRender
-  - DartForwardExportRender
+renderers:
+  - name: IrisDocRenderer
+    package: '@agoraio-extensions/terra_shared_configs'
+    args:
+      language: dart
+      fmtConfig: fmt_dart.yaml
+      exportFilePath: ../../lib/agora_rtc_engine.dart
+      templateUrl: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/flutter_ng_json_template_en.json
