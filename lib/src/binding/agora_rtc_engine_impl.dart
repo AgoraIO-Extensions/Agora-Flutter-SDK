@@ -267,6 +267,21 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<int> queryDeviceScore() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_queryDeviceScore';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
   Future<void> preloadChannel(
       {required String token,
       required String channelId,

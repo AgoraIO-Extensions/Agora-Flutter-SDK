@@ -999,6 +999,7 @@ class CameraCapturerConfiguration {
   const CameraCapturerConfiguration(
       {this.cameraDirection,
       this.deviceId,
+      this.cameraId,
       this.format,
       this.followEncodeDimensionRatio});
 
@@ -1009,6 +1010,10 @@ class CameraCapturerConfiguration {
   /// This method applies to Windows only. The ID of the camera. The maximum length is MaxDeviceIdLengthType.
   @JsonKey(name: 'deviceId')
   final String? deviceId;
+
+  /// @nodoc
+  @JsonKey(name: 'cameraId')
+  final String? cameraId;
 
   /// The format of the video frame. See VideoFormat.
   @JsonKey(name: 'format')
@@ -2316,7 +2321,7 @@ class RtcEngineEventHandler {
   /// This method is for Android, iOS and macOS only.
   ///
   /// * [routing] The current audio routing. See AudioRoute.
-  final void Function(int routing)? onAudioRoutingChanged;
+  final void Function(int deviceType, int routing)? onAudioRoutingChanged;
 
   /// Occurs when the state of the media stream relay changes.
   ///
@@ -3071,6 +3076,9 @@ abstract class RtcEngine {
   /// One CodecCapInfo array indicating the video encoding capability of the device, if the method call succeeds.
   ///  If the call timeouts, please modify the call logic and do not invoke the method in the main thread.
   Future<List<CodecCapInfo>> queryCodecCapability(int size);
+
+  /// @nodoc
+  Future<int> queryDeviceScore();
 
   /// Preloads a channel with token, channelId, and uid.
   ///
@@ -6962,26 +6970,4 @@ class VideoDeviceInfo {
 
   /// @nodoc
   Map<String, dynamic> toJson() => _$VideoDeviceInfoToJson(this);
-}
-
-/// The AudioDeviceInfo class that contains the ID and device name of the audio devices.
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class AudioDeviceInfo {
-  /// @nodoc
-  const AudioDeviceInfo({this.deviceId, this.deviceName});
-
-  /// The device ID.
-  @JsonKey(name: 'deviceId')
-  final String? deviceId;
-
-  /// The device name.
-  @JsonKey(name: 'deviceName')
-  final String? deviceName;
-
-  /// @nodoc
-  factory AudioDeviceInfo.fromJson(Map<String, dynamic> json) =>
-      _$AudioDeviceInfoFromJson(json);
-
-  /// @nodoc
-  Map<String, dynamic> toJson() => _$AudioDeviceInfoToJson(this);
 }

@@ -30,6 +30,48 @@ Map<String, dynamic> _$AudioParametersToJson(AudioParameters instance) {
   return val;
 }
 
+AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
+    AudioDeviceInfo(
+      deviceName: json['deviceName'] as String?,
+      deviceId: json['deviceId'] as String?,
+      isCurrentSelected: json['isCurrentSelected'] as bool?,
+      isPlayoutDevice: json['isPlayoutDevice'] as bool?,
+      routing: $enumDecodeNullable(_$AudioRouteEnumMap, json['routing']),
+    );
+
+Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('deviceName', instance.deviceName);
+  writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('isCurrentSelected', instance.isCurrentSelected);
+  writeNotNull('isPlayoutDevice', instance.isPlayoutDevice);
+  writeNotNull('routing', _$AudioRouteEnumMap[instance.routing]);
+  return val;
+}
+
+const _$AudioRouteEnumMap = {
+  AudioRoute.routeDefault: -1,
+  AudioRoute.routeHeadset: 0,
+  AudioRoute.routeEarpiece: 1,
+  AudioRoute.routeHeadsetnomic: 2,
+  AudioRoute.routeSpeakerphone: 3,
+  AudioRoute.routeLoudspeaker: 4,
+  AudioRoute.routeHeadsetbluetooth: 5,
+  AudioRoute.routeUsb: 6,
+  AudioRoute.routeHdmi: 7,
+  AudioRoute.routeDisplayport: 8,
+  AudioRoute.routeAirplay: 9,
+  AudioRoute.routeVirtual: 10,
+  AudioRoute.routeContinuity: 11,
+};
+
 ContentInspectModule _$ContentInspectModuleFromJson(
         Map<String, dynamic> json) =>
     ContentInspectModule(
@@ -289,6 +331,7 @@ AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       renderTimeMs: json['renderTimeMs'] as int?,
       avsyncType: json['avsync_type'] as int?,
       presentationMs: json['presentationMs'] as int?,
+      audioTrackNumber: json['audioTrackNumber'] as int?,
     );
 
 Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
@@ -309,6 +352,7 @@ Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
   writeNotNull('renderTimeMs', instance.renderTimeMs);
   writeNotNull('avsync_type', instance.avsyncType);
   writeNotNull('presentationMs', instance.presentationMs);
+  writeNotNull('audioTrackNumber', instance.audioTrackNumber);
   return val;
 }
 
@@ -474,20 +518,6 @@ const _$VideoSourceTypeEnumMap = {
   VideoSourceType.videoSourceScreenThird: 13,
   VideoSourceType.videoSourceScreenFourth: 14,
   VideoSourceType.videoSourceUnknown: 100,
-};
-
-const _$AudioRouteEnumMap = {
-  AudioRoute.routeDefault: -1,
-  AudioRoute.routeHeadset: 0,
-  AudioRoute.routeEarpiece: 1,
-  AudioRoute.routeHeadsetnomic: 2,
-  AudioRoute.routeSpeakerphone: 3,
-  AudioRoute.routeLoudspeaker: 4,
-  AudioRoute.routeHeadsetbluetooth: 5,
-  AudioRoute.routeUsb: 6,
-  AudioRoute.routeHdmi: 7,
-  AudioRoute.routeDisplayport: 8,
-  AudioRoute.routeAirplay: 9,
 };
 
 const _$MediaSourceTypeEnumMap = {

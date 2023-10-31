@@ -373,6 +373,7 @@ CameraCapturerConfiguration _$CameraCapturerConfigurationFromJson(
       cameraDirection: $enumDecodeNullable(
           _$CameraDirectionEnumMap, json['cameraDirection']),
       deviceId: json['deviceId'] as String?,
+      cameraId: json['cameraId'] as String?,
       format: json['format'] == null
           ? null
           : VideoFormat.fromJson(json['format'] as Map<String, dynamic>),
@@ -392,6 +393,7 @@ Map<String, dynamic> _$CameraCapturerConfigurationToJson(
   writeNotNull(
       'cameraDirection', _$CameraDirectionEnumMap[instance.cameraDirection]);
   writeNotNull('deviceId', instance.deviceId);
+  writeNotNull('cameraId', instance.cameraId);
   writeNotNull('format', instance.format?.toJson());
   writeNotNull(
       'followEncodeDimensionRatio', instance.followEncodeDimensionRatio);
@@ -945,26 +947,6 @@ VideoDeviceInfo _$VideoDeviceInfoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$VideoDeviceInfoToJson(VideoDeviceInfo instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('deviceId', instance.deviceId);
-  writeNotNull('deviceName', instance.deviceName);
-  return val;
-}
-
-AudioDeviceInfo _$AudioDeviceInfoFromJson(Map<String, dynamic> json) =>
-    AudioDeviceInfo(
-      deviceId: json['deviceId'] as String?,
-      deviceName: json['deviceName'] as String?,
-    );
-
-Map<String, dynamic> _$AudioDeviceInfoToJson(AudioDeviceInfo instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

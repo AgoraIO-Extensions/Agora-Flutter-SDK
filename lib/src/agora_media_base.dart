@@ -10,6 +10,12 @@ const defaultConnectionId = 0;
 /// @nodoc
 const dummyConnectionId = 4294967295;
 
+/// @nodoc
+const kAdmMaxDeviceNameSize = 128;
+
+/// @nodoc
+const kAdmMaxGuidSize = 128;
+
 /// The type of the video source.
 @JsonEnum(alwaysCreate: true)
 enum VideoSourceType {
@@ -145,6 +151,14 @@ enum AudioRoute {
   /// 9: The audio route is Apple AirPlay. (For macOS only)
   @JsonValue(9)
   routeAirplay,
+
+  /// @nodoc
+  @JsonValue(10)
+  routeVirtual,
+
+  /// @nodoc
+  @JsonValue(11)
+  routeContinuity,
 }
 
 /// @nodoc
@@ -230,6 +244,45 @@ extension RawAudioFrameOpModeTypeExt on RawAudioFrameOpModeType {
   int value() {
     return _$RawAudioFrameOpModeTypeEnumMap[this]!;
   }
+}
+
+/// The AudioDeviceInfo class that contains the ID and device name of the audio devices.
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class AudioDeviceInfo {
+  /// @nodoc
+  const AudioDeviceInfo(
+      {this.deviceName,
+      this.deviceId,
+      this.isCurrentSelected,
+      this.isPlayoutDevice,
+      this.routing});
+
+  /// The device name.
+  @JsonKey(name: 'deviceName')
+  final String? deviceName;
+
+  /// The device ID.
+  @JsonKey(name: 'deviceId')
+  final String? deviceId;
+
+  /// @nodoc
+  @JsonKey(name: 'isCurrentSelected')
+  final bool? isCurrentSelected;
+
+  /// @nodoc
+  @JsonKey(name: 'isPlayoutDevice')
+  final bool? isPlayoutDevice;
+
+  /// @nodoc
+  @JsonKey(name: 'routing')
+  final AudioRoute? routing;
+
+  /// @nodoc
+  factory AudioDeviceInfo.fromJson(Map<String, dynamic> json) =>
+      _$AudioDeviceInfoFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$AudioDeviceInfoToJson(this);
 }
 
 /// Media source type.
@@ -1093,7 +1146,8 @@ class AudioFrame {
       this.buffer,
       this.renderTimeMs,
       this.avsyncType,
-      this.presentationMs});
+      this.presentationMs,
+      this.audioTrackNumber});
 
   /// The type of the audio frame. See AudioFrameType.
   @JsonKey(name: 'type')
@@ -1132,6 +1186,10 @@ class AudioFrame {
   /// @nodoc
   @JsonKey(name: 'presentationMs')
   final int? presentationMs;
+
+  /// @nodoc
+  @JsonKey(name: 'audioTrackNumber')
+  final int? audioTrackNumber;
 
   /// @nodoc
   factory AudioFrame.fromJson(Map<String, dynamic> json) =>

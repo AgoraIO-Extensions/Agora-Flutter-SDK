@@ -1313,6 +1313,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
   LocalVideoStreamError.localVideoStreamErrorDeviceDisconnected: 9,
   LocalVideoStreamError.localVideoStreamErrorDeviceInvalidId: 10,
+  LocalVideoStreamError.localVideoStreamErrorDeviceInterrupt: 14,
+  LocalVideoStreamError.localVideoStreamErrorDeviceFatalError: 15,
   LocalVideoStreamError.localVideoStreamErrorDeviceSystemPressure: 101,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowMinimized: 11,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowClosed: 12,
@@ -2317,12 +2319,14 @@ RtcEngineEventHandlerOnAudioRoutingChangedJson
     _$RtcEngineEventHandlerOnAudioRoutingChangedJsonFromJson(
             Map<String, dynamic> json) =>
         RtcEngineEventHandlerOnAudioRoutingChangedJson(
+          deviceType: json['deviceType'] as int?,
           routing: json['routing'] as int?,
         );
 
 Map<String, dynamic> _$RtcEngineEventHandlerOnAudioRoutingChangedJsonToJson(
         RtcEngineEventHandlerOnAudioRoutingChangedJson instance) =>
     <String, dynamic>{
+      'deviceType': instance.deviceType,
       'routing': instance.routing,
     };
 

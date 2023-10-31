@@ -3228,8 +3228,11 @@ extension RtcEngineEventHandlerOnTranscodingUpdatedJsonBufferExt
 
 @JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnAudioRoutingChangedJson {
-  const RtcEngineEventHandlerOnAudioRoutingChangedJson({this.routing});
+  const RtcEngineEventHandlerOnAudioRoutingChangedJson(
+      {this.deviceType, this.routing});
 
+  @JsonKey(name: 'deviceType')
+  final int? deviceType;
   @JsonKey(name: 'routing')
   final int? routing;
   factory RtcEngineEventHandlerOnAudioRoutingChangedJson.fromJson(

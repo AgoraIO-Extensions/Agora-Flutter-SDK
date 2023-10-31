@@ -2405,6 +2405,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
   LocalVideoStreamError.localVideoStreamErrorDeviceDisconnected: 9,
   LocalVideoStreamError.localVideoStreamErrorDeviceInvalidId: 10,
+  LocalVideoStreamError.localVideoStreamErrorDeviceInterrupt: 14,
+  LocalVideoStreamError.localVideoStreamErrorDeviceFatalError: 15,
   LocalVideoStreamError.localVideoStreamErrorDeviceSystemPressure: 101,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowMinimized: 11,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowClosed: 12,

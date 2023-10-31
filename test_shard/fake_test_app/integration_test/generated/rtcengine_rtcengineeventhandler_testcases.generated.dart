@@ -5145,7 +5145,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       final onAudioRoutingChangedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onAudioRoutingChanged: (int routing) {
+        onAudioRoutingChanged: (int deviceType, int routing) {
           onAudioRoutingChangedCompleter.complete(true);
         },
       );
@@ -5158,9 +5158,11 @@ void generatedTestCases(IrisTester irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
+        const int deviceType = 10;
         const int routing = 10;
 
         final eventJson = {
+          'deviceType': deviceType,
           'routing': routing,
         };
 
