@@ -244,6 +244,32 @@ jobs:
         run: flutter build ios --no-codesign
         working-directory: example
 
+  # This job aim to cover https://github.com/flutter/flutter/issues/135739
+  build_ios_xcode_15:
+    name: Build iOS with xcode 15.x
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
+    strategy:
+      matrix:
+        version: ['3.13.6']
+    runs-on: macos-13
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.version }}
+          cache: true
+      - run: | # https://github.com/actions/runner-images/issues/6746#issuecomment-1380042553
+        # set xcode version to use for build
+        sudo xcode-select -switch /Applications/Xcode_15.0.1.app
+        # Print used xCode version
+        xcode-select -print-path
+        xcodebuild -version
+      - run: flutter pub get
+      - name: Run flutter build ios --no-codesign
+        run: flutter build ios --no-codesign
+        working-directory: example
+
   build_web:
     name: Build Web
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
