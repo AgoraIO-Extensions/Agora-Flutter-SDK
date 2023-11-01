@@ -62,5 +62,7 @@
 	<array>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>
