@@ -260,11 +260,11 @@ jobs:
           flutter-version: ${{ matrix.version }}
           cache: true
       - run: | # https://github.com/actions/runner-images/issues/6746#issuecomment-1380042553
-        # set xcode version to use for build
-        sudo xcode-select -switch /Applications/Xcode_15.0.1.app
-        # Print used xCode version
-        xcode-select -print-path
-        xcodebuild -version
+          # set xcode version to use for build
+          sudo xcode-select -switch /Applications/Xcode_15.0.1.app
+          # Print used xCode version
+          xcode-select -print-path
+          xcodebuild -version
       - run: flutter pub get
       - name: Run flutter build ios --no-codesign
         run: flutter build ios --no-codesign
