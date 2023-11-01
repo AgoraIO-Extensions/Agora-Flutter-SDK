@@ -232,89 +232,91 @@ class _State extends State<JoinChannelAudio> {
                     onPressed: _switchMicrophone,
                     child: Text('Microphone ${openMicrophone ? 'on' : 'off'}'),
                   ),
-                  ElevatedButton(
-                    onPressed: isJoined ? _switchSpeakerphone : null,
-                    child:
-                        Text(enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
-                  ),
-                  if (!kIsWeb)
+                  if (!kIsWeb) ...[
                     ElevatedButton(
-                      onPressed: isJoined ? _switchEffect : null,
-                      child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
+                      onPressed: isJoined ? _switchSpeakerphone : null,
+                      child: Text(
+                          enableSpeakerphone ? 'Speakerphone' : 'Earpiece'),
                     ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Text('RecordingVolume:'),
-                      Slider(
-                        value: _recordingVolume,
-                        min: 0,
-                        max: 400,
-                        divisions: 5,
-                        label: 'RecordingVolume',
-                        onChanged: isJoined
-                            ? (double value) async {
-                                setState(() {
-                                  _recordingVolume = value;
-                                });
-                                await _engine
-                                    .adjustRecordingSignalVolume(value.toInt());
-                              }
-                            : null,
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Text('PlaybackVolume:'),
-                      Slider(
-                        value: _playbackVolume,
-                        min: 0,
-                        max: 400,
-                        divisions: 5,
-                        label: 'PlaybackVolume',
-                        onChanged: isJoined
-                            ? (double value) async {
-                                setState(() {
-                                  _playbackVolume = value;
-                                });
-                                await _engine
-                                    .adjustPlaybackSignalVolume(value.toInt());
-                              }
-                            : null,
-                      )
-                    ],
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Text('InEar Monitoring Volume:'),
-                        Switch(
-                          value: _enableInEarMonitoring,
-                          onChanged: isJoined ? _toggleInEarMonitoring : null,
-                          activeTrackColor: Colors.grey[350],
-                          activeColor: Colors.white,
+                    if (!kIsWeb)
+                      ElevatedButton(
+                        onPressed: isJoined ? _switchEffect : null,
+                        child: Text('${playEffect ? 'Stop' : 'Play'} effect'),
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text('RecordingVolume:'),
+                        Slider(
+                          value: _recordingVolume,
+                          min: 0,
+                          max: 400,
+                          divisions: 5,
+                          label: 'RecordingVolume',
+                          onChanged: isJoined
+                              ? (double value) async {
+                                  setState(() {
+                                    _recordingVolume = value;
+                                  });
+                                  await _engine.adjustRecordingSignalVolume(
+                                      value.toInt());
+                                }
+                              : null,
                         )
-                      ]),
-                      if (_enableInEarMonitoring)
-                        SizedBox(
-                            width: 300,
-                            child: Slider(
-                              value: _inEarMonitoringVolume,
-                              min: 0,
-                              max: 100,
-                              divisions: 5,
-                              label:
-                                  'InEar Monitoring Volume $_inEarMonitoringVolume',
-                              onChanged: isJoined
-                                  ? _onChangeInEarMonitoringVolume
-                                  : null,
-                            ))
-                    ],
-                  ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text('PlaybackVolume:'),
+                        Slider(
+                          value: _playbackVolume,
+                          min: 0,
+                          max: 400,
+                          divisions: 5,
+                          label: 'PlaybackVolume',
+                          onChanged: isJoined
+                              ? (double value) async {
+                                  setState(() {
+                                    _playbackVolume = value;
+                                  });
+                                  await _engine.adjustPlaybackSignalVolume(
+                                      value.toInt());
+                                }
+                              : null,
+                        )
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(mainAxisSize: MainAxisSize.min, children: [
+                          const Text('InEar Monitoring Volume:'),
+                          Switch(
+                            value: _enableInEarMonitoring,
+                            onChanged: isJoined ? _toggleInEarMonitoring : null,
+                            activeTrackColor: Colors.grey[350],
+                            activeColor: Colors.white,
+                          )
+                        ]),
+                        if (_enableInEarMonitoring)
+                          SizedBox(
+                              width: 300,
+                              child: Slider(
+                                value: _inEarMonitoringVolume,
+                                min: 0,
+                                max: 100,
+                                divisions: 5,
+                                label:
+                                    'InEar Monitoring Volume $_inEarMonitoringVolume',
+                                onChanged: isJoined
+                                    ? _onChangeInEarMonitoringVolume
+                                    : null,
+                              ))
+                      ],
+                    ),
+                  ],
                 ],
               ),
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
