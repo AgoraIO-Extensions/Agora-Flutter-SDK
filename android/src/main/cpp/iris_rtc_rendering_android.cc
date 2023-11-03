@@ -271,112 +271,215 @@ class RenderingOp {
   std::shared_ptr<GLContext> gl_context_;
 };
 
+class Texture2DRendering final : public RenderingOp {
+public:
+    explicit Texture2DRendering(std::shared_ptr<GLContext> &gl_context)
+            : RenderingOp(gl_context) {
+        LOGCATD("Rendering with Texture2DRendering");
+        shader_ = std::make_unique<ScopedShader>(vertex_shader_tex_2d_, frag_shader_tex_2d_);
+        GLuint program = shader_->GetProgram();
+
+        aPositionLoc_ = glGetAttribLocation(program, "a_Position");
+        texCoordLoc_ = glGetAttribLocation(program, "a_TexCoord");
+        texSamplerLoc_ = glGetUniformLocation(program, "s_texture");
+        texMatrixLoc_ = glGetUniformLocation(program, "u_texMatrix");
+    }
+    ~Texture2DRendering() override {
+        LOGCATD("Destroy Texture2DRendering");
+        shader_.reset();
+    }
+
+    void Rendering(const agora::media::base::VideoFrame *video_frame) final {
+        int textureId = video_frame->textureId;
+        const float *texMatrix = video_frame->matrix;
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        CHECK_GL_ERROR()
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        CHECK_GL_ERROR()
+
+        // Bind 2D texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glUniform1i(texSamplerLoc_, 0);
+
+        glVertexAttribPointer(aPositionLoc_, 2, GL_FLOAT, false, 0, vertices);
+        glEnableVertexAttribArray(aPositionLoc_);
+
+        glVertexAttribPointer(texCoordLoc_, 2, GL_FLOAT, false, 0, texCoords);
+        glEnableVertexAttribArray(texCoordLoc_);
+
+        // Copy the texture transformation matrix over.
+        glUniformMatrix4fv(texMatrixLoc_, 1, GL_FALSE, texMatrix);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+
+        gl_context_->Swap();
+
+        // Clean up
+        glDisableVertexAttribArray(aPositionLoc_);
+        glDisableVertexAttribArray(texCoordLoc_);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    agora::media::base::VIDEO_PIXEL_FORMAT Format() final {
+        return agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D;
+    }
+
+private:
+    const GLchar *vertex_shader_tex_2d_ =
+            "attribute vec4 a_Position;\n"
+            "attribute vec2 a_TexCoord;\n"
+            "varying vec2 v_TexCoord;\n"
+            "uniform mat4 u_texMatrix;   \n"
+            "void main() {\n"
+            "  gl_Position = a_Position;\n"
+            "  vec2 tmpTexCoord = vec2(a_TexCoord.x, 1.0 - a_TexCoord.y);\n"
+            "  v_TexCoord = (u_texMatrix * vec4(tmpTexCoord, 0, 1)).xy; \n"
+            "}\n";
+
+    const GLchar *frag_shader_tex_2d_ =
+            "precision mediump float;\n"
+            "varying vec2 v_TexCoord;\n"
+            "uniform sampler2D s_texture;\n"
+            "void main() {\n"
+            "  gl_FragColor = texture2D(s_texture, v_TexCoord);\n"
+            "}\n";
+
+    // clang-format off
+    const GLfloat vertices[8] = {
+            -1.0f, 1.0f,
+            -1.0f, -1.0f,
+            1.0f,  -1.0f,
+            1.0f,  1.0f
+    };
+
+    const GLfloat texCoords[8] = {
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f
+    };
+
+    const GLushort indices[6] = {
+            0, 1, 2,
+            0, 2, 3
+    };// draw in this order: 0,1,2; 0,2,3
+
+    // clang-format on
+
+    GLint aPositionLoc_;
+    GLint texCoordLoc_;
+    GLint texMatrixLoc_;
+    GLint texSamplerLoc_;
+    std::unique_ptr<ScopedShader> shader_;
+};
+
+
 class OESTextureRendering final : public RenderingOp {
- public:
-  explicit OESTextureRendering(std::shared_ptr<GLContext> &gl_context)
-      : RenderingOp(gl_context) {
-    LOGCATD("Rendering with OESTextureRendering");
-    shader_ = std::make_unique<ScopedShader>(vertex_shader_tex_oes_,
-                                             frag_shader_tex_oes_);
-    GLuint program = shader_->GetProgram();
+public:
+    explicit OESTextureRendering(std::shared_ptr<GLContext> &gl_context)
+            : RenderingOp(gl_context) {
+        LOGCATE("Rendering with OESTextureRendering");
+        shader_ = std::make_unique<ScopedShader>(vertex_shader_tex_oes_,
+                                                 frag_shader_tex_oes_);
+        GLuint program = shader_->GetProgram();
 
-    aPositionLoc_ = glGetAttribLocation(program, "a_Position");
-    texCoordLoc_ = glGetAttribLocation(program, "a_TexCoord");
-    texSamplerLoc_ = glGetUniformLocation(program, "s_texture");
-    texMatrixLoc_ = glGetUniformLocation(program, "u_texMatrix");
-  }
-  ~OESTextureRendering() override {
-    LOGCATD("Destroy OESTextureRendering");
-    shader_.reset();
-  }
+        aPositionLoc_ = glGetAttribLocation(program, "a_Position");
+        texCoordLoc_ = glGetAttribLocation(program, "a_TexCoord");
+        texSamplerLoc_ = glGetUniformLocation(program, "s_texture");
+        texMatrixLoc_ = glGetUniformLocation(program, "u_texMatrix");
+    }
+    ~OESTextureRendering() override {
+        LOGCATD("Destroy OESTextureRendering");
+        shader_.reset();
+    }
 
-  void Rendering(const agora::media::base::VideoFrame *video_frame) final {
-    int textureId = video_frame->textureId;
-    const float *texMatrix = video_frame->matrix;
+    void Rendering(const agora::media::base::VideoFrame *video_frame) final {
+        int textureId = video_frame->textureId;
+        const float *texMatrix = video_frame->matrix;
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    CHECK_GL_ERROR()
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    CHECK_GL_ERROR()
-    glViewport(0, 0, video_frame->width, video_frame->height);
-    CHECK_GL_ERROR()
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        CHECK_GL_ERROR()
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        CHECK_GL_ERROR()
 
-    // Bind external oes texture
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
-    glUniform1i(texSamplerLoc_, 0);
+        // Bind external oes texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
+        glUniform1i(texSamplerLoc_, 0);
 
-    glVertexAttribPointer(aPositionLoc_, 2, GL_FLOAT, false, 0, vertices);
-    glEnableVertexAttribArray(aPositionLoc_);
+        glVertexAttribPointer(aPositionLoc_, 2, GL_FLOAT, false, 0, vertices);
+        glEnableVertexAttribArray(aPositionLoc_);
 
-    glVertexAttribPointer(texCoordLoc_, 2, GL_FLOAT, false, 0, texCoords);
-    glEnableVertexAttribArray(texCoordLoc_);
+        glVertexAttribPointer(texCoordLoc_, 2, GL_FLOAT, false, 0, texCoords);
+        glEnableVertexAttribArray(texCoordLoc_);
 
-    // Copy the texture transformation matrix over.
-    glUniformMatrix4fv(texMatrixLoc_, 1, GL_FALSE, texMatrix);
+        // Copy the texture transformation matrix over.
+        glUniformMatrix4fv(texMatrixLoc_, 1, GL_FALSE, texMatrix);
 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
 
-    gl_context_->Swap();
+        gl_context_->Swap();
 
-    // Clean up
-    glDisableVertexAttribArray(aPositionLoc_);
-    glDisableVertexAttribArray(texCoordLoc_);
-    glBindTexture(GL_TEXTURE_EXTERNAL_OES, 0);
-  }
+        // Clean up
+        glDisableVertexAttribArray(aPositionLoc_);
+        glDisableVertexAttribArray(texCoordLoc_);
+        glBindTexture(GL_TEXTURE_EXTERNAL_OES, 0);
+    }
 
-  agora::media::base::VIDEO_PIXEL_FORMAT Format() final {
-    return agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_OES;
-  }
+    agora::media::base::VIDEO_PIXEL_FORMAT Format() final {
+        return agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_OES;
+    }
 
- private:
-  const GLchar *vertex_shader_tex_oes_ =
-      "attribute vec4 a_Position;\n"
-      "attribute vec2 a_TexCoord;\n"
-      "varying vec2 v_TexCoord;\n"
-      "uniform mat4 u_texMatrix;   \n"
-      "void main() {\n"
-      "  gl_Position = a_Position;\n"
-      "  vec2 tmpTexCoord = vec2(a_TexCoord.x, 1.0 - a_TexCoord.y);\n"
-      "  v_TexCoord = (u_texMatrix * vec4(tmpTexCoord, 0, 1)).xy; \n"
-      "}\n";
+private:
+    const GLchar *vertex_shader_tex_oes_ =
+            "attribute vec4 a_Position;\n"
+            "attribute vec2 a_TexCoord;\n"
+            "varying vec2 v_TexCoord;\n"
+            "uniform mat4 u_texMatrix;   \n"
+            "void main() {\n"
+            "  gl_Position = a_Position;\n"
+            "  vec2 tmpTexCoord = vec2(a_TexCoord.x, 1.0 - a_TexCoord.y);\n"
+            "  v_TexCoord = (u_texMatrix * vec4(tmpTexCoord, 0, 1)).xy; \n"
+            "}\n";
 
-  const GLchar *frag_shader_tex_oes_ =
-      "#extension GL_OES_EGL_image_external : require\n"
-      "precision mediump float;\n"
-      "varying vec2 v_TexCoord;\n"
-      "uniform samplerExternalOES s_texture;\n"
-      "void main() {\n"
-      "  gl_FragColor = texture2D(s_texture, v_TexCoord);\n"
-      "}\n";
+    const GLchar *frag_shader_tex_oes_ =
+            "#extension GL_OES_EGL_image_external : require\n"
+            "precision mediump float;\n"
+            "varying vec2 v_TexCoord;\n"
+            "uniform samplerExternalOES s_texture;\n"
+            "void main() {\n"
+            "  gl_FragColor = texture2D(s_texture, v_TexCoord);\n"
+            "}\n";
 
-  // clang-format off
-  const GLfloat vertices[8] = {
-          -1.0f, 1.0f,
-          -1.0f, -1.0f,
-          1.0f,  -1.0f,
-          1.0f,  1.0f
-  };
+    // clang-format off
+    const GLfloat vertices[8] = {
+            -1.0f, 1.0f,
+            -1.0f, -1.0f,
+            1.0f,  -1.0f,
+            1.0f,  1.0f
+    };
 
-  const GLfloat texCoords[8] = {
-          0.0f, 0.0f,
-          0.0f, 1.0f,
-          1.0f, 1.0f,
-          1.0f, 0.0f
-  };
+    const GLfloat texCoords[8] = {
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f
+    };
 
-  const GLushort indices[6] = {
-          0, 1, 2,
-          0, 2, 3
-  };// draw in this order: 0,1,2; 0,2,3
+    const GLushort indices[6] = {
+            0, 1, 2,
+            0, 2, 3
+    };// draw in this order: 0,1,2; 0,2,3
 
-  // clang-format on
+    // clang-format on
 
-  GLint aPositionLoc_;
-  GLint texCoordLoc_;
-  GLint texMatrixLoc_;
-  GLint texSamplerLoc_;
-  std::unique_ptr<ScopedShader> shader_;
+    GLint aPositionLoc_;
+    GLint texCoordLoc_;
+    GLint texMatrixLoc_;
+    GLint texSamplerLoc_;
+    std::unique_ptr<ScopedShader> shader_;
 };
 
 class YUVRendering final : public RenderingOp {
@@ -637,7 +740,9 @@ class NativeTextureRenderer final
     }
 
     if (!rendering_op_) {
-      if (video_frame->type
+      if (video_frame->type == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_2D) {
+        rendering_op_ = std::make_unique<Texture2DRendering>(gl_context_);
+      } else if (video_frame->type
           == agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_TEXTURE_OES) {
         rendering_op_ = std::make_unique<OESTextureRendering>(gl_context_);
       } else if (video_frame->type
