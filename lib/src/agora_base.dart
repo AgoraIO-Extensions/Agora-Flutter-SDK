@@ -2784,6 +2784,14 @@ enum LocalVideoStreamError {
   @JsonValue(10)
   localVideoStreamErrorDeviceInvalidId,
 
+  /// @nodoc
+  @JsonValue(14)
+  localVideoStreamErrorDeviceInterrupt,
+
+  /// @nodoc
+  @JsonValue(15)
+  localVideoStreamErrorDeviceFatalError,
+
   /// 101: The current video capture device is unavailable due to excessive system pressure.
   @JsonValue(101)
   localVideoStreamErrorDeviceSystemPressure,

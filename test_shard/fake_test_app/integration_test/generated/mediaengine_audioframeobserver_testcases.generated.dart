@@ -50,6 +50,7 @@ void generatedTestCases(IrisTester irisTester) {
         const int audioFrameRenderTimeMs = 10;
         const int audioFrameAvsyncType = 10;
         const int audioFramePresentationMs = 10;
+        const int audioFrameAudioTrackNumber = 10;
         final AudioFrame audioFrame = AudioFrame(
           type: audioFrameType,
           samplesPerChannel: audioFrameSamplesPerChannel,
@@ -60,6 +61,7 @@ void generatedTestCases(IrisTester irisTester) {
           renderTimeMs: audioFrameRenderTimeMs,
           avsyncType: audioFrameAvsyncType,
           presentationMs: audioFramePresentationMs,
+          audioTrackNumber: audioFrameAudioTrackNumber,
         );
 
         final eventJson = {

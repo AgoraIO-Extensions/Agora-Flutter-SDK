@@ -172,6 +172,36 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'queryDeviceScore',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.queryDeviceScore();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[queryDeviceScore] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'preloadChannel',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
@@ -743,10 +773,12 @@ void rtcEngineSmokeTestCases() {
           fps: formatFps,
         );
         const String configDeviceId = "hello";
+        const String configCameraId = "hello";
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           deviceId: configDeviceId,
+          cameraId: configCameraId,
           format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
         );
@@ -5233,10 +5265,12 @@ void rtcEngineSmokeTestCases() {
           fps: formatFps,
         );
         const String configDeviceId = "hello";
+        const String configCameraId = "hello";
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           deviceId: configDeviceId,
+          cameraId: configCameraId,
           format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
         );
@@ -7414,10 +7448,12 @@ void rtcEngineSmokeTestCases() {
           fps: formatFps,
         );
         const String configDeviceId = "hello";
+        const String configCameraId = "hello";
         const bool configFollowEncodeDimensionRatio = true;
         const CameraCapturerConfiguration config = CameraCapturerConfiguration(
           cameraDirection: configCameraDirection,
           deviceId: configDeviceId,
+          cameraId: configCameraId,
           format: configFormat,
           followEncodeDimensionRatio: configFollowEncodeDimensionRatio,
         );
@@ -7709,7 +7745,7 @@ void rtcEngineSmokeTestCases() {
               RtmpStreamPublishErrorType errCode) {},
           onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
           onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int routing) {},
+          onAudioRoutingChanged: (int deviceType, int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
           onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},
@@ -7921,7 +7957,7 @@ void rtcEngineSmokeTestCases() {
               RtmpStreamPublishErrorType errCode) {},
           onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
           onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int routing) {},
+          onAudioRoutingChanged: (int deviceType, int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
           onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},

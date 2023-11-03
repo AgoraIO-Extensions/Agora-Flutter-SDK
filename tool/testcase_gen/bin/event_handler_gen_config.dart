@@ -44,6 +44,7 @@ testWidgets('{{TEST_CASE_NAME}}', (WidgetTester tester) async {
       unregisterFunctionName: 'unregisterEventHandler',
       skipMemberFunctions: [
         'onFacePositionChanged',
+        'onAudioRoutingChanged',
       ],
     ),
     EventHandlerTemplatedTestCase(

@@ -305,6 +305,37 @@ class InitializationState extends ChangeNotifier {
   }
 }
 
+class RtcEngineEventHandlerWrapperOverride
+    extends RtcEngineEventHandlerWrapper {
+  const RtcEngineEventHandlerWrapperOverride(
+      RtcEngineEventHandler rtcEngineEventHandler)
+      : super(rtcEngineEventHandler);
+
+  @override
+  bool handleEventInternal(
+      String eventName, String eventData, List<Uint8List> buffers) {
+    switch (eventName) {
+      case 'onAudioRoutingChanged2':
+        if (rtcEngineEventHandler.onAudioRoutingChanged == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnAudioRoutingChangedJson paramJson =
+            RtcEngineEventHandlerOnAudioRoutingChangedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        int? deviceType = paramJson.deviceType;
+        int? routing = paramJson.routing;
+        if (deviceType == null || routing == null) {
+          return true;
+        }
+        rtcEngineEventHandler.onAudioRoutingChanged!(deviceType, routing);
+        return true;
+      default:
+        return super.handleEventInternal(eventName, eventData, buffers);
+    }
+  }
+}
+
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
   RtcEngineImpl._(IrisMethodChannel irisMethodChannel)
@@ -448,7 +479,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void registerEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper =
+        RtcEngineEventHandlerWrapperOverride(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.registerEventHandler(
@@ -463,7 +495,8 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @override
   void unregisterEventHandler(
       covariant RtcEngineEventHandler eventHandler) async {
-    final eventHandlerWrapper = RtcEngineEventHandlerWrapper(eventHandler);
+    final eventHandlerWrapper =
+        RtcEngineEventHandlerWrapperOverride(eventHandler);
     final param = createParams({});
 
     await irisMethodChannel.unregisterEventHandler(

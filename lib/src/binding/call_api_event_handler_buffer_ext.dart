@@ -781,6 +781,18 @@ extension AudioParametersBufferExt on AudioParameters {
   }
 }
 
+extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
+  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
 extension ContentInspectModuleBufferExt on ContentInspectModule {
   ContentInspectModule fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
@@ -980,7 +992,8 @@ extension AudioFrameBufferExt on AudioFrame {
         buffer: buffer,
         renderTimeMs: renderTimeMs,
         avsyncType: avsyncType,
-        presentationMs: presentationMs);
+        presentationMs: presentationMs,
+        audioTrackNumber: audioTrackNumber);
   }
 
   List<Uint8List> collectBufferList() {
@@ -1530,18 +1543,6 @@ extension SDKBuildInfoBufferExt on SDKBuildInfo {
 
 extension VideoDeviceInfoBufferExt on VideoDeviceInfo {
   VideoDeviceInfo fillBuffers(List<Uint8List> bufferList) {
-    if (bufferList.isEmpty) return this;
-    return this;
-  }
-
-  List<Uint8List> collectBufferList() {
-    final bufferList = <Uint8List>[];
-    return bufferList;
-  }
-}
-
-extension AudioDeviceInfoBufferExt on AudioDeviceInfo {
-  AudioDeviceInfo fillBuffers(List<Uint8List> bufferList) {
     if (bufferList.isEmpty) return this;
     return this;
   }
