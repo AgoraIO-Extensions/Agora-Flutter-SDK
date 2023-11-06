@@ -250,6 +250,10 @@
   "RtcEngine_setCameraAutoFocusFaceModeEnabled"
 #define FUNC_RTCENGINE_ISCAMERAEXPOSUREPOSITIONSUPPORTED                       \
   "RtcEngine_isCameraExposurePositionSupported"
+#define FUNC_RTCENGINE_ISCAMERAEXPOSURESUPPORTED                               \
+  "RtcEngine_isCameraExposureSupported"
+#define FUNC_RTCENGINE_SETCAMERAEXPOSUREFACTOR                                 \
+  "RtcEngine_setCameraExposureFactor"
 #define FUNC_RTCENGINE_SETCAMERAEXPOSUREPOSITION                               \
   "RtcEngine_setCameraExposurePosition"
 #define FUNC_RTCENGINE_ISCAMERAAUTOEXPOSUREFACEMODESUPPORTED                   \
@@ -260,6 +264,8 @@
   "RtcEngine_setDefaultAudioRouteToSpeakerphone"
 #define FUNC_RTCENGINE_SETENABLESPEAKERPHONE "RtcEngine_setEnableSpeakerphone"
 #define FUNC_RTCENGINE_ISSPEAKERPHONEENABLED "RtcEngine_isSpeakerphoneEnabled"
+#define FUNC_RTCENGINE_SETROUTEINCOMMUNICATIONMODE                             \
+  "RtcEngine_setRouteInCommunicationMode"
 #define FUNC_RTCENGINE_GETSCREENCAPTURESOURCES                                 \
   "RtcEngine_getScreenCaptureSources"
 #define FUNC_RTCENGINE_RELEASESCREENCAPTURESOURCES                             \
@@ -460,6 +466,12 @@
 #define FUNC_RTCENGINE_STARTORUPDATECHANNELMEDIARELAY                          \
   "RtcEngine_startOrUpdateChannelMediaRelay"
 #define FUNC_RTCENGINE_GETNTPWALLTIMEINMS "RtcEngine_getNtpWallTimeInMs"
+#define FUNC_RTCENGINE_ISFEATUREAVAILABLEONDEVICE                              \
+  "RtcEngine_isFeatureAvailableOnDevice"
+#define FUNC_RTCENGINE_PRELOADCHANNEL "RtcEngine_preloadChannel"
+#define FUNC_RTCENGINE_PRELOADCHANNEL2 "RtcEngine_preloadChannel2"
+#define FUNC_RTCENGINE_UPDATEPRELOADCHANNELTOKEN                               \
+  "RtcEngine_updatePreloadChannelToken"
 // class IRtcEngine end
 
 // class IMediaRecorder start
@@ -852,6 +864,8 @@
   "RtcEngineEx_enableWirelessAccelerate"
 #define FUNC_RTCENGINEEX_SETDUALSTREAMMODEEX "RtcEngineEx_setDualStreamModeEx"
 #define FUNC_RTCENGINEEX_TAKESNAPSHOTEX "RtcEngineEx_takeSnapshotEx"
+#define FUNC_RTCENGINEEX_ENABLECONTENTINSPECTEX                                \
+  "RtcEngineEx_enableContentInspectEx"
 #define FUNC_RTCENGINEEX_LEAVECHANNELEX2 "RtcEngineEx_leaveChannelEx2"
 #define FUNC_RTCENGINEEX_ADJUSTUSERPLAYBACKSIGNALVOLUMEEX                      \
   "RtcEngineEx_adjustUserPlaybackSignalVolumeEx"
@@ -907,11 +921,16 @@
   "MusicContentCenter_getMusicCollectionByMusicChartId"
 #define FUNC_MUSICCONTENTCENTER_SEARCHMUSIC "MusicContentCenter_searchMusic"
 #define FUNC_MUSICCONTENTCENTER_PRELOAD "MusicContentCenter_preload"
+#define FUNC_MUSICCONTENTCENTER_PRELOAD2 "MusicContentCenter_preload2"
 #define FUNC_MUSICCONTENTCENTER_ISPRELOADED "MusicContentCenter_isPreloaded"
 #define FUNC_MUSICCONTENTCENTER_GETLYRIC "MusicContentCenter_getLyric"
 #define FUNC_MUSICCONTENTCENTER_RENEWTOKEN "MusicContentCenter_renewToken"
 #define FUNC_MUSICCONTENTCENTER_REMOVECACHE "MusicContentCenter_removeCache"
 #define FUNC_MUSICCONTENTCENTER_GETCACHES "MusicContentCenter_getCaches"
+#define FUNC_MUSICCONTENTCENTER_GETSONGSIMPLEINFO                              \
+  "MusicContentCenter_getSongSimpleInfo"
+#define FUNC_MUSICCONTENTCENTER_GETINTERNALSONGCODE                            \
+  "MusicContentCenter_getInternalSongCode"
 // class IMusicContentCenter end
 // class IMusicPlayer start
 #define FUNC_MUSICPLAYER_OPEN "MusicPlayer_open"
