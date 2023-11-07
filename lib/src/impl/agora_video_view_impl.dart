@@ -450,7 +450,9 @@ class _SizeChangedAwareRenderObject extends RenderProxyBox {
     if (oldSize == newSize) return;
 
     oldSize = newSize;
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    // Compatible with Flutter SDK 2.10.x
+    // ignore: invalid_null_aware_operator
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
       onChange(newSize);
     });
   }
