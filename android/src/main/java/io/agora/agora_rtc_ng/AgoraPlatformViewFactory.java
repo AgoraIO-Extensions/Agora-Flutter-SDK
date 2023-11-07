@@ -2,6 +2,7 @@ package io.agora.agora_rtc_ng;
 
 import android.content.Context;
 import android.view.TextureView;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -51,7 +52,7 @@ public class AgoraPlatformViewFactory extends PlatformViewFactory {
 
         @Override
         public View provide(Context context) {
-            return new TextureView(context);
+            return new SurfaceView(context);
         }
     }
 
