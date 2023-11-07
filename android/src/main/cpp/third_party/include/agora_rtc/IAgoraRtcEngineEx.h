@@ -1913,6 +1913,18 @@ public:
    */
     virtual int takeSnapshotEx(const RtcConnection& connection, uid_t uid, const char* filePath)  = 0;
 
+    /** Enables video screenshot and upload with the connection ID.
+    @param enabled Whether to enable video screenshot and upload:
+    - `true`: Yes.
+    - `false`: No.
+    @param config The configuration for video screenshot and upload.
+    @param connection The connection information. See RtcConnection.
+    @return
+    - 0: Success.
+    - < 0: Failure.
+    */
+    virtual int enableContentInspectEx(bool enabled, const media::ContentInspectConfig &config, const RtcConnection& connection) = 0;
+
     /**
      @brief Start tracing media rendering events.
      @since v4.1.1

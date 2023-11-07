@@ -1394,6 +1394,11 @@ enum PROXY_TYPE {
   HTTPS_PROXY_TYPE = 6,
 };
 
+enum FeatureType {
+  VIDEO_VIRTUAL_BACKGROUND = 1,
+  VIDEO_BEAUTY_EFFECT = 2,
+};
+
 /**
  * The options for leaving a channel.
  */
@@ -3522,7 +3527,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * Queries the capacity of the current device codec.
    *
-   * @param codec_info An array of the codec cap information: CodecCapInfo.
+   * @param codecInfo An array of the codec cap information: CodecCapInfo.
    * @param size The array size.
    * @return 
    * 0: Success.
@@ -3563,12 +3568,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   *   - -2: The parameter is invalid. For example, the token is invalid or the uid parameter is not set
-   * to an integer. You need to pass in a valid parameter and join the channel again.
    *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
    * object before calling this method.
    *   - -102: The channel name is invalid. You need to pass in a valid channel name in channelId to
-   * rejoin the channel.
+   * preload the channel again.
    */
   virtual int preloadChannel(const char* token, const char* channelId, uid_t uid) = 0;
 
@@ -3605,12 +3608,12 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   *   - -2: The parameter is invalid. For example, the token is invalid or the userAccount parameter is empty.
-   * You need to pass in a valid parameter and join the channel again.
+   *   - -2: The parameter is invalid. For example, the userAccount parameter is empty.
+   * You need to pass in a valid parameter and preload the channel again.
    *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
    * object before calling this method.
    *   - -102: The channel name is invalid. You need to pass in a valid channel name in channelId to
-   * rejoin the channel.
+   * preload the channel again.
    */
   virtual int preloadChannel(const char* token, const char* channelId, const char* userAccount) = 0;
 
@@ -3629,8 +3632,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   *   - -2: The parameter is invalid. For example, the token is invalid or the uid parameter is not set
-   * to an integer. You need to pass in a valid parameter and join the channel again.
+   *   - -2: The token is invalid. You need to pass in a valid token and update the token again.
    *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
    * object before calling this method.
    */
@@ -4867,7 +4869,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * Creates a media recorder object and return its pointer.
    *
-   * @param connection The RtcConnection object. It contains user ID and channel name of user.
+   * @param info The RecorderStreamInfo object. It contains user ID and channel name of user.
    * 
    * @return
    * - The pointer to \ref rtc::IMediaRecorder "IMediaRecorder",
@@ -5947,7 +5949,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableDualStreamMode(bool enabled) = 0;
+  virtual int enableDualStreamMode(bool enabled) __deprecated = 0;
 
   /**
    * Enables or disables the dual video stream mode.
@@ -5967,7 +5969,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableDualStreamMode(bool enabled, const SimulcastStreamConfig& streamConfig) = 0;
+  virtual int enableDualStreamMode(bool enabled, const SimulcastStreamConfig& streamConfig) __deprecated = 0;
 
 
   /**
@@ -6715,7 +6717,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setCameraExposureFactor(float value) = 0;
+  virtual int setCameraExposureFactor(float factor) = 0;
 
 #if defined(__APPLE__)
   /**
@@ -8290,6 +8292,16 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Return current NTP(unix timestamp) time in milliseconds.
    */
   virtual uint64_t getNtpWallTimeInMs() = 0;
+
+  /** 
+   * @brief Whether the target feature is available for the device.
+   * @since v4.2.0
+   * @param type The feature type. See FeatureType.
+   * @return
+   * - true: available.
+   * - false: not available.
+   */
+  virtual bool isFeatureAvailableOnDevice(FeatureType type) = 0;
 
 };
 
