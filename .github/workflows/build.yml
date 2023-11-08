@@ -83,6 +83,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v2
         with:
+          distribution: 'oracle'
           java-version: "11"
       - uses: subosito/flutter-action@v1
         with:
