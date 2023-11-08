@@ -71,7 +71,6 @@ jobs:
   integration_test_android:
     name: Run Flutter Android Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ["2.10.5", "3.13.4"]
@@ -83,7 +82,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v2
         with:
-          distribution: 'oracle'
+          distribution: 'temurin'
           java-version: "11"
       - uses: subosito/flutter-action@v1
         with:
