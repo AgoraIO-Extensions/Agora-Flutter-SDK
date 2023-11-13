@@ -272,9 +272,12 @@ class _AgoraRtcRenderTextureState extends State<AgoraRtcRenderTexture>
 
   Future<void> _didUpdateWidget(
       covariant AgoraRtcRenderTexture oldWidget) async {
-    // For flutter texture rendering, only update the texture id and other state, and the
-    // Flutter framework will handle the rest.
-    _controller(widget.controller).updateController(oldWidget.controller);
+    if (!oldWidget.controller.isSame(widget.controller)) {
+      await oldWidget.controller.disposeRender();
+      await _initialize();
+    } else {
+      _controller(widget.controller).updateController(oldWidget.controller);
+    }
   }
 
   @override
