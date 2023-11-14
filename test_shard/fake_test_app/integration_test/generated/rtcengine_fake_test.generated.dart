@@ -225,6 +225,159 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'queryDeviceScore',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.queryDeviceScore();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[queryDeviceScore] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'preloadChannel',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const String token = "hello";
+        const String channelId = "hello";
+        const int uid = 10;
+        await rtcEngine.preloadChannel(
+          token: token,
+          channelId: channelId,
+          uid: uid,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[preloadChannel] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'preloadChannelWithUserAccount',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const String token = "hello";
+        const String channelId = "hello";
+        const String userAccount = "hello";
+        await rtcEngine.preloadChannelWithUserAccount(
+          token: token,
+          channelId: channelId,
+          userAccount: userAccount,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[preloadChannelWithUserAccount] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'updatePreloadChannelToken',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const String token = "hello";
+        await rtcEngine.updatePreloadChannelToken(
+          token,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[updatePreloadChannelToken] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'joinChannel',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -254,11 +407,15 @@ void rtcEngineSmokeTestCases() {
             ChannelProfileType.channelProfileCommunication;
         const bool optionsPublishCameraTrack = true;
         const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
         const bool optionsPublishMicrophoneTrack = true;
         const bool optionsPublishScreenCaptureVideo = true;
         const bool optionsPublishScreenCaptureAudio = true;
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
         const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomAudioTrackAec = true;
@@ -267,6 +424,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -279,14 +437,19 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const String optionsParameters = "hello";
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
@@ -295,6 +458,7 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -311,6 +475,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.joinChannel(
           token: token,
@@ -361,11 +526,15 @@ void rtcEngineSmokeTestCases() {
             ChannelProfileType.channelProfileCommunication;
         const bool optionsPublishCameraTrack = true;
         const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
         const bool optionsPublishMicrophoneTrack = true;
         const bool optionsPublishScreenCaptureVideo = true;
         const bool optionsPublishScreenCaptureAudio = true;
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
         const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomAudioTrackAec = true;
@@ -374,6 +543,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -386,14 +556,19 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const String optionsParameters = "hello";
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
@@ -402,6 +577,7 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -418,6 +594,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.updateChannelMediaOptions(
           options,
@@ -617,9 +794,20 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const int intervalInSeconds = 10;
+        const int configView = 10;
+        const bool configEnableAudio = true;
+        const bool configEnableVideo = true;
+        const String configToken = "hello";
+        const String configChannelId = "hello";
+        const EchoTestConfiguration config = EchoTestConfiguration(
+          view: configView,
+          enableAudio: configEnableAudio,
+          enableVideo: configEnableVideo,
+          token: configToken,
+          channelId: configChannelId,
+        );
         await rtcEngine.startEchoTest(
-          intervalInSeconds: intervalInSeconds,
+          config,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -1313,16 +1501,20 @@ void rtcEngineSmokeTestCases() {
         );
         const int canvasView = 10;
         const int canvasUid = 10;
+        const int canvasSubviewUid = 10;
         const int canvasMediaPlayerId = 10;
+        const bool canvasEnableAlphaMask = true;
         const VideoCanvas canvas = VideoCanvas(
           view: canvasView,
           uid: canvasUid,
+          subviewUid: canvasSubviewUid,
           renderMode: canvasRenderMode,
           mirrorMode: canvasMirrorMode,
           setupMode: canvasSetupMode,
           sourceType: canvasSourceType,
           mediaPlayerId: canvasMediaPlayerId,
           cropArea: canvasCropArea,
+          enableAlphaMask: canvasEnableAlphaMask,
         );
         await rtcEngine.setupRemoteVideo(
           canvas,
@@ -1379,16 +1571,20 @@ void rtcEngineSmokeTestCases() {
         );
         const int canvasView = 10;
         const int canvasUid = 10;
+        const int canvasSubviewUid = 10;
         const int canvasMediaPlayerId = 10;
+        const bool canvasEnableAlphaMask = true;
         const VideoCanvas canvas = VideoCanvas(
           view: canvasView,
           uid: canvasUid,
+          subviewUid: canvasSubviewUid,
           renderMode: canvasRenderMode,
           mirrorMode: canvasMirrorMode,
           setupMode: canvasSetupMode,
           sourceType: canvasSourceType,
           mediaPlayerId: canvasMediaPlayerId,
           cropArea: canvasCropArea,
+          enableAlphaMask: canvasEnableAlphaMask,
         );
         await rtcEngine.setupLocalVideo(
           canvas,
@@ -2179,6 +2375,8 @@ void rtcEngineSmokeTestCases() {
           onPlaybackAudioEncodedFrame: (Uint8List frameBuffer, int length,
               EncodedAudioFrameInfo audioEncodedFrameInfo) {},
           onMixedAudioEncodedFrame: (Uint8List frameBuffer, int length,
+              EncodedAudioFrameInfo audioEncodedFrameInfo) {},
+          onPublishAudioEncodedFrame: (Uint8List frameBuffer, int length,
               EncodedAudioFrameInfo audioEncodedFrameInfo) {},
         );
         rtcEngine.registerAudioEncodedFrameObserver(
@@ -4260,10 +4458,7 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const String requestId = "hello";
-        await rtcEngine.uploadLogFile(
-          requestId,
-        );
+        await rtcEngine.uploadLogFile();
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[uploadLogFile] error: ${e.toString()}');
@@ -4613,6 +4808,47 @@ void rtcEngineSmokeTestCases() {
         if (e is! AgoraRtcException) {
           debugPrint(
               '[setRecordingAudioFrameParameters] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'setPublishAudioFrameParameters',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const int sampleRate = 10;
+        const int channel = 10;
+        const int samplesPerCall = 10;
+        await rtcEngine.setPublishAudioFrameParameters(
+          sampleRate: sampleRate,
+          channel: channel,
+          samplesPerCall: samplesPerCall,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setPublishAudioFrameParameters] error: ${e.toString()}');
           rethrow;
         }
 
@@ -6248,6 +6484,77 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
+    'isCameraExposureSupported',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        await rtcEngine.isCameraExposureSupported();
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[isCameraExposureSupported] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
+    'setCameraExposureFactor',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      try {
+        const double factor = 10.0;
+        await rtcEngine.setCameraExposureFactor(
+          factor,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[setCameraExposureFactor] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await rtcEngine.release();
+    },
+  );
+
+  testWidgets(
     'isCameraAutoExposureFaceModeSupported',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -7024,7 +7331,8 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
         const int screenRectX = 10;
         const int screenRectY = 10;
         const int screenRectWidth = 10;
@@ -7084,7 +7392,7 @@ void rtcEngineSmokeTestCases() {
           regionRect: configRegionRect,
         );
         await rtcEngine.startScreenCaptureBySourceType(
-          type: type,
+          sourceType: sourceType,
           config: config,
         );
       } catch (e) {
@@ -7296,9 +7604,10 @@ void rtcEngineSmokeTestCases() {
       ));
 
       try {
-        const VideoSourceType type = VideoSourceType.videoSourceCameraPrimary;
+        const VideoSourceType sourceType =
+            VideoSourceType.videoSourceCameraPrimary;
         await rtcEngine.stopScreenCaptureBySourceType(
-          type,
+          sourceType,
         );
       } catch (e) {
         if (e is! AgoraRtcException) {
@@ -8141,7 +8450,7 @@ void rtcEngineSmokeTestCases() {
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
-              (RtcConnection connection, int elapsed) {},
+              (VideoSourceType source, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
               int width, int height, int elapsed) {},
           onVideoSizeChanged: (RtcConnection connection,
@@ -8178,8 +8487,7 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, LocalAudioStats stats) {},
           onRemoteAudioStats:
               (RtcConnection connection, RemoteAudioStats stats) {},
-          onLocalVideoStats:
-              (RtcConnection connection, LocalVideoStats stats) {},
+          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
@@ -8235,7 +8543,6 @@ void rtcEngineSmokeTestCases() {
               RtmpStreamPublishErrorType errCode) {},
           onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
           onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
           onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},
@@ -8293,6 +8600,8 @@ void rtcEngineSmokeTestCases() {
               VideoRenderingTracingInfo tracingInfo) {},
           onLocalVideoTranscoderError:
               (TranscodingVideoStream stream, VideoTranscoderError error) {},
+          onTranscodedStreamLayoutInfo: (RtcConnection connection, int uid,
+              int width, int height, int layoutCount, List layoutlist) {},
         );
         rtcEngine.registerEventHandler(
           eventHandler,
@@ -8359,7 +8668,7 @@ void rtcEngineSmokeTestCases() {
           onFirstLocalVideoFrame:
               (VideoSourceType source, int width, int height, int elapsed) {},
           onFirstLocalVideoFramePublished:
-              (RtcConnection connection, int elapsed) {},
+              (VideoSourceType source, int elapsed) {},
           onFirstRemoteVideoDecoded: (RtcConnection connection, int remoteUid,
               int width, int height, int elapsed) {},
           onVideoSizeChanged: (RtcConnection connection,
@@ -8396,8 +8705,7 @@ void rtcEngineSmokeTestCases() {
               (RtcConnection connection, LocalAudioStats stats) {},
           onRemoteAudioStats:
               (RtcConnection connection, RemoteAudioStats stats) {},
-          onLocalVideoStats:
-              (RtcConnection connection, LocalVideoStats stats) {},
+          onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {},
           onRemoteVideoStats:
               (RtcConnection connection, RemoteVideoStats stats) {},
           onCameraReady: () {},
@@ -8453,7 +8761,6 @@ void rtcEngineSmokeTestCases() {
               RtmpStreamPublishErrorType errCode) {},
           onRtmpStreamingEvent: (String url, RtmpStreamingEvent eventCode) {},
           onTranscodingUpdated: () {},
-          onAudioRoutingChanged: (int routing) {},
           onChannelMediaRelayStateChanged:
               (ChannelMediaRelayState state, ChannelMediaRelayError code) {},
           onChannelMediaRelayEvent: (ChannelMediaRelayEvent code) {},
@@ -8511,6 +8818,8 @@ void rtcEngineSmokeTestCases() {
               VideoRenderingTracingInfo tracingInfo) {},
           onLocalVideoTranscoderError:
               (TranscodingVideoStream stream, VideoTranscoderError error) {},
+          onTranscodedStreamLayoutInfo: (RtcConnection connection, int uid,
+              int width, int height, int layoutCount, List layoutlist) {},
         );
         rtcEngine.unregisterEventHandler(
           eventHandler,
@@ -9233,11 +9542,15 @@ void rtcEngineSmokeTestCases() {
             ChannelProfileType.channelProfileCommunication;
         const bool optionsPublishCameraTrack = true;
         const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
         const bool optionsPublishMicrophoneTrack = true;
         const bool optionsPublishScreenCaptureVideo = true;
         const bool optionsPublishScreenCaptureAudio = true;
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
         const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomAudioTrackAec = true;
@@ -9246,6 +9559,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -9258,14 +9572,19 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const String optionsParameters = "hello";
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
@@ -9274,6 +9593,7 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -9290,6 +9610,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.joinChannelWithUserAccount(
           token: token,
@@ -9343,11 +9664,15 @@ void rtcEngineSmokeTestCases() {
             ChannelProfileType.channelProfileCommunication;
         const bool optionsPublishCameraTrack = true;
         const bool optionsPublishSecondaryCameraTrack = true;
+        const bool optionsPublishThirdCameraTrack = true;
+        const bool optionsPublishFourthCameraTrack = true;
         const bool optionsPublishMicrophoneTrack = true;
         const bool optionsPublishScreenCaptureVideo = true;
         const bool optionsPublishScreenCaptureAudio = true;
         const bool optionsPublishScreenTrack = true;
         const bool optionsPublishSecondaryScreenTrack = true;
+        const bool optionsPublishThirdScreenTrack = true;
+        const bool optionsPublishFourthScreenTrack = true;
         const bool optionsPublishCustomAudioTrack = true;
         const int optionsPublishCustomAudioTrackId = 10;
         const bool optionsPublishCustomAudioTrackAec = true;
@@ -9356,6 +9681,7 @@ void rtcEngineSmokeTestCases() {
         const bool optionsPublishMediaPlayerAudioTrack = true;
         const bool optionsPublishMediaPlayerVideoTrack = true;
         const bool optionsPublishTrancodedVideoTrack = true;
+        const bool optionsPublishMixedAudioTrack = true;
         const bool optionsAutoSubscribeAudio = true;
         const bool optionsAutoSubscribeVideo = true;
         const bool optionsEnableAudioRecordingOrPlayout = true;
@@ -9368,14 +9694,19 @@ void rtcEngineSmokeTestCases() {
         const bool optionsIsInteractiveAudience = true;
         const int optionsCustomVideoTrackId = 10;
         const bool optionsIsAudioFilterable = true;
+        const String optionsParameters = "hello";
         const ChannelMediaOptions options = ChannelMediaOptions(
           publishCameraTrack: optionsPublishCameraTrack,
           publishSecondaryCameraTrack: optionsPublishSecondaryCameraTrack,
+          publishThirdCameraTrack: optionsPublishThirdCameraTrack,
+          publishFourthCameraTrack: optionsPublishFourthCameraTrack,
           publishMicrophoneTrack: optionsPublishMicrophoneTrack,
           publishScreenCaptureVideo: optionsPublishScreenCaptureVideo,
           publishScreenCaptureAudio: optionsPublishScreenCaptureAudio,
           publishScreenTrack: optionsPublishScreenTrack,
           publishSecondaryScreenTrack: optionsPublishSecondaryScreenTrack,
+          publishThirdScreenTrack: optionsPublishThirdScreenTrack,
+          publishFourthScreenTrack: optionsPublishFourthScreenTrack,
           publishCustomAudioTrack: optionsPublishCustomAudioTrack,
           publishCustomAudioTrackId: optionsPublishCustomAudioTrackId,
           publishCustomAudioTrackAec: optionsPublishCustomAudioTrackAec,
@@ -9384,6 +9715,7 @@ void rtcEngineSmokeTestCases() {
           publishMediaPlayerAudioTrack: optionsPublishMediaPlayerAudioTrack,
           publishMediaPlayerVideoTrack: optionsPublishMediaPlayerVideoTrack,
           publishTrancodedVideoTrack: optionsPublishTrancodedVideoTrack,
+          publishMixedAudioTrack: optionsPublishMixedAudioTrack,
           autoSubscribeAudio: optionsAutoSubscribeAudio,
           autoSubscribeVideo: optionsAutoSubscribeVideo,
           enableAudioRecordingOrPlayout: optionsEnableAudioRecordingOrPlayout,
@@ -9400,6 +9732,7 @@ void rtcEngineSmokeTestCases() {
           isInteractiveAudience: optionsIsInteractiveAudience,
           customVideoTrackId: optionsCustomVideoTrackId,
           isAudioFilterable: optionsIsAudioFilterable,
+          parameters: optionsParameters,
         );
         await rtcEngine.joinChannelWithUserAccountEx(
           token: token,
@@ -10727,40 +11060,6 @@ void rtcEngineSmokeTestCases() {
   );
 
   testWidgets(
-    'getMediaRecorder',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.createDebugApiEngine();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        rtcEngine.getMediaRecorder();
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[getMediaRecorder] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
     'getLocalSpatialAudioEngine',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -10903,6 +11202,8 @@ void rtcEngineSmokeTestCases() {
           onPlaybackAudioEncodedFrame: (Uint8List frameBuffer, int length,
               EncodedAudioFrameInfo audioEncodedFrameInfo) {},
           onMixedAudioEncodedFrame: (Uint8List frameBuffer, int length,
+              EncodedAudioFrameInfo audioEncodedFrameInfo) {},
+          onPublishAudioEncodedFrame: (Uint8List frameBuffer, int length,
               EncodedAudioFrameInfo audioEncodedFrameInfo) {},
         );
         rtcEngine.unregisterAudioEncodedFrameObserver(

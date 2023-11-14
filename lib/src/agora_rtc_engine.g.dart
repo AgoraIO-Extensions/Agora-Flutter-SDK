@@ -584,11 +584,15 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
     ChannelMediaOptions(
       publishCameraTrack: json['publishCameraTrack'] as bool?,
       publishSecondaryCameraTrack: json['publishSecondaryCameraTrack'] as bool?,
+      publishThirdCameraTrack: json['publishThirdCameraTrack'] as bool?,
+      publishFourthCameraTrack: json['publishFourthCameraTrack'] as bool?,
       publishMicrophoneTrack: json['publishMicrophoneTrack'] as bool?,
       publishScreenCaptureVideo: json['publishScreenCaptureVideo'] as bool?,
       publishScreenCaptureAudio: json['publishScreenCaptureAudio'] as bool?,
       publishScreenTrack: json['publishScreenTrack'] as bool?,
       publishSecondaryScreenTrack: json['publishSecondaryScreenTrack'] as bool?,
+      publishThirdScreenTrack: json['publishThirdScreenTrack'] as bool?,
+      publishFourthScreenTrack: json['publishFourthScreenTrack'] as bool?,
       publishCustomAudioTrack: json['publishCustomAudioTrack'] as bool?,
       publishCustomAudioTrackId: json['publishCustomAudioTrackId'] as int?,
       publishCustomAudioTrackAec: json['publishCustomAudioTrackAec'] as bool?,
@@ -599,6 +603,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       publishMediaPlayerVideoTrack:
           json['publishMediaPlayerVideoTrack'] as bool?,
       publishTrancodedVideoTrack: json['publishTrancodedVideoTrack'] as bool?,
+      publishMixedAudioTrack: json['publishMixedAudioTrack'] as bool?,
       autoSubscribeAudio: json['autoSubscribeAudio'] as bool?,
       autoSubscribeVideo: json['autoSubscribeVideo'] as bool?,
       enableAudioRecordingOrPlayout:
@@ -621,6 +626,7 @@ ChannelMediaOptions _$ChannelMediaOptionsFromJson(Map<String, dynamic> json) =>
       isInteractiveAudience: json['isInteractiveAudience'] as bool?,
       customVideoTrackId: json['customVideoTrackId'] as int?,
       isAudioFilterable: json['isAudioFilterable'] as bool?,
+      parameters: json['parameters'] as String?,
     );
 
 Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
@@ -635,12 +641,16 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('publishCameraTrack', instance.publishCameraTrack);
   writeNotNull(
       'publishSecondaryCameraTrack', instance.publishSecondaryCameraTrack);
+  writeNotNull('publishThirdCameraTrack', instance.publishThirdCameraTrack);
+  writeNotNull('publishFourthCameraTrack', instance.publishFourthCameraTrack);
   writeNotNull('publishMicrophoneTrack', instance.publishMicrophoneTrack);
   writeNotNull('publishScreenCaptureVideo', instance.publishScreenCaptureVideo);
   writeNotNull('publishScreenCaptureAudio', instance.publishScreenCaptureAudio);
   writeNotNull('publishScreenTrack', instance.publishScreenTrack);
   writeNotNull(
       'publishSecondaryScreenTrack', instance.publishSecondaryScreenTrack);
+  writeNotNull('publishThirdScreenTrack', instance.publishThirdScreenTrack);
+  writeNotNull('publishFourthScreenTrack', instance.publishFourthScreenTrack);
   writeNotNull('publishCustomAudioTrack', instance.publishCustomAudioTrack);
   writeNotNull('publishCustomAudioTrackId', instance.publishCustomAudioTrackId);
   writeNotNull(
@@ -653,6 +663,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
       'publishMediaPlayerVideoTrack', instance.publishMediaPlayerVideoTrack);
   writeNotNull(
       'publishTrancodedVideoTrack', instance.publishTrancodedVideoTrack);
+  writeNotNull('publishMixedAudioTrack', instance.publishMixedAudioTrack);
   writeNotNull('autoSubscribeAudio', instance.autoSubscribeAudio);
   writeNotNull('autoSubscribeVideo', instance.autoSubscribeVideo);
   writeNotNull(
@@ -675,6 +686,7 @@ Map<String, dynamic> _$ChannelMediaOptionsToJson(ChannelMediaOptions instance) {
   writeNotNull('isInteractiveAudience', instance.isInteractiveAudience);
   writeNotNull('customVideoTrackId', instance.customVideoTrackId);
   writeNotNull('isAudioFilterable', instance.isAudioFilterable);
+  writeNotNull('parameters', instance.parameters);
   return val;
 }
 

@@ -72,13 +72,40 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
             MusicContentCenterEventHandlerOnLyricResultJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
         String? requestId = paramJson.requestId;
+        int? songCode = paramJson.songCode;
         String? lyricUrl = paramJson.lyricUrl;
         MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (requestId == null || lyricUrl == null || errorCode == null) {
+        if (requestId == null ||
+            songCode == null ||
+            lyricUrl == null ||
+            errorCode == null) {
           return true;
         }
         musicContentCenterEventHandler.onLyricResult!(
-            requestId, lyricUrl, errorCode);
+            requestId, songCode, lyricUrl, errorCode);
+        return true;
+
+      case 'onSongSimpleInfoResult':
+        if (musicContentCenterEventHandler.onSongSimpleInfoResult == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        MusicContentCenterEventHandlerOnSongSimpleInfoResultJson paramJson =
+            MusicContentCenterEventHandlerOnSongSimpleInfoResultJson.fromJson(
+                jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        String? requestId = paramJson.requestId;
+        int? songCode = paramJson.songCode;
+        String? simpleInfo = paramJson.simpleInfo;
+        MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
+        if (requestId == null ||
+            songCode == null ||
+            simpleInfo == null ||
+            errorCode == null) {
+          return true;
+        }
+        musicContentCenterEventHandler.onSongSimpleInfoResult!(
+            requestId, songCode, simpleInfo, errorCode);
         return true;
 
       case 'onPreLoadEvent':
@@ -89,12 +116,14 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
         MusicContentCenterEventHandlerOnPreLoadEventJson paramJson =
             MusicContentCenterEventHandlerOnPreLoadEventJson.fromJson(jsonMap);
         paramJson = paramJson.fillBuffers(buffers);
+        String? requestId = paramJson.requestId;
         int? songCode = paramJson.songCode;
         int? percent = paramJson.percent;
         String? lyricUrl = paramJson.lyricUrl;
         PreloadStatusCode? status = paramJson.status;
         MusicContentCenterStatusCode? errorCode = paramJson.errorCode;
-        if (songCode == null ||
+        if (requestId == null ||
+            songCode == null ||
             percent == null ||
             lyricUrl == null ||
             status == null ||
@@ -102,7 +131,7 @@ class MusicContentCenterEventHandlerWrapper implements EventLoopEventHandler {
           return true;
         }
         musicContentCenterEventHandler.onPreLoadEvent!(
-            songCode, percent, lyricUrl, status, errorCode);
+            requestId, songCode, percent, lyricUrl, status, errorCode);
         return true;
     }
     return false;

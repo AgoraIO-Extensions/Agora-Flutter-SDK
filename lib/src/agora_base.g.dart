@@ -547,6 +547,7 @@ RtcStats _$RtcStatsFromJson(Map<String, dynamic> json) => RtcStats(
           json['firstVideoKeyFrameRenderedDurationAfterUnmute'] as int?,
       txPacketLossRate: json['txPacketLossRate'] as int?,
       rxPacketLossRate: json['rxPacketLossRate'] as int?,
+      playoutDeviceGlitch: json['playoutDeviceGlitch'] as int?,
     );
 
 Map<String, dynamic> _$RtcStatsToJson(RtcStats instance) {
@@ -598,6 +599,7 @@ Map<String, dynamic> _$RtcStatsToJson(RtcStats instance) {
       instance.firstVideoKeyFrameRenderedDurationAfterUnmute);
   writeNotNull('txPacketLossRate', instance.txPacketLossRate);
   writeNotNull('rxPacketLossRate', instance.rxPacketLossRate);
+  writeNotNull('playoutDeviceGlitch', instance.playoutDeviceGlitch);
   return val;
 }
 
@@ -773,6 +775,8 @@ LocalAudioStats _$LocalAudioStatsFromJson(Map<String, dynamic> json) =>
       txPacketLossRate: json['txPacketLossRate'] as int?,
       audioDeviceDelay: json['audioDeviceDelay'] as int?,
       audioPlayoutDelay: json['audioPlayoutDelay'] as int?,
+      earMonitorDelay: json['earMonitorDelay'] as int?,
+      aecEstimatedDelay: json['aecEstimatedDelay'] as int?,
     );
 
 Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
@@ -791,6 +795,8 @@ Map<String, dynamic> _$LocalAudioStatsToJson(LocalAudioStats instance) {
   writeNotNull('txPacketLossRate', instance.txPacketLossRate);
   writeNotNull('audioDeviceDelay', instance.audioDeviceDelay);
   writeNotNull('audioPlayoutDelay', instance.audioPlayoutDelay);
+  writeNotNull('earMonitorDelay', instance.earMonitorDelay);
+  writeNotNull('aecEstimatedDelay', instance.aecEstimatedDelay);
   return val;
 }
 
@@ -1167,6 +1173,7 @@ Map<String, dynamic> _$WlAccStatsToJson(WlAccStats instance) {
 VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
       view: json['view'] as int?,
       uid: json['uid'] as int?,
+      subviewUid: json['subviewUid'] as int?,
       renderMode:
           $enumDecodeNullable(_$RenderModeTypeEnumMap, json['renderMode']),
       mirrorMode:
@@ -1179,6 +1186,7 @@ VideoCanvas _$VideoCanvasFromJson(Map<String, dynamic> json) => VideoCanvas(
       cropArea: json['cropArea'] == null
           ? null
           : Rectangle.fromJson(json['cropArea'] as Map<String, dynamic>),
+      enableAlphaMask: json['enableAlphaMask'] as bool?,
     );
 
 Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
@@ -1192,12 +1200,14 @@ Map<String, dynamic> _$VideoCanvasToJson(VideoCanvas instance) {
 
   writeNotNull('view', instance.view);
   writeNotNull('uid', instance.uid);
+  writeNotNull('subviewUid', instance.subviewUid);
   writeNotNull('renderMode', _$RenderModeTypeEnumMap[instance.renderMode]);
   writeNotNull('mirrorMode', _$VideoMirrorModeTypeEnumMap[instance.mirrorMode]);
   writeNotNull('setupMode', _$VideoViewSetupModeEnumMap[instance.setupMode]);
   writeNotNull('sourceType', _$VideoSourceTypeEnumMap[instance.sourceType]);
   writeNotNull('mediaPlayerId', instance.mediaPlayerId);
   writeNotNull('cropArea', instance.cropArea?.toJson());
+  writeNotNull('enableAlphaMask', instance.enableAlphaMask);
   return val;
 }
 
@@ -1499,6 +1509,7 @@ const _$AudioFileRecordingTypeEnumMap = {
   AudioFileRecordingType.audioFileRecordingMic: 1,
   AudioFileRecordingType.audioFileRecordingPlayback: 2,
   AudioFileRecordingType.audioFileRecordingMixed: 3,
+  AudioFileRecordingType.audioFileRecordingPublish: 4,
 };
 
 const _$AudioRecordingQualityTypeEnumMap = {
@@ -1930,6 +1941,37 @@ Map<String, dynamic> _$SpatialAudioParamsToJson(SpatialAudioParams instance) {
   return val;
 }
 
+VideoLayout _$VideoLayoutFromJson(Map<String, dynamic> json) => VideoLayout(
+      channelId: json['channelId'] as String?,
+      uid: json['uid'] as int?,
+      strUid: json['strUid'] as String?,
+      x: json['x'] as int?,
+      y: json['y'] as int?,
+      width: json['width'] as int?,
+      height: json['height'] as int?,
+      videoState: json['videoState'] as int?,
+    );
+
+Map<String, dynamic> _$VideoLayoutToJson(VideoLayout instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('channelId', instance.channelId);
+  writeNotNull('uid', instance.uid);
+  writeNotNull('strUid', instance.strUid);
+  writeNotNull('x', instance.x);
+  writeNotNull('y', instance.y);
+  writeNotNull('width', instance.width);
+  writeNotNull('height', instance.height);
+  writeNotNull('videoState', instance.videoState);
+  return val;
+}
+
 const _$ChannelProfileTypeEnumMap = {
   ChannelProfileType.channelProfileCommunication: 0,
   ChannelProfileType.channelProfileLiveBroadcasting: 1,
@@ -1967,6 +2009,7 @@ const _$WarnCodeTypeEnumMap = {
   WarnCodeType.warnApmHowling: 1051,
   WarnCodeType.warnAdmGlitchState: 1052,
   WarnCodeType.warnAdmImproperSettings: 1053,
+  WarnCodeType.warnAdmRegPhoneListennerFailed: 1060,
   WarnCodeType.warnAdmWinCoreNoRecordingDevice: 1322,
   WarnCodeType.warnAdmWinCoreNoPlayoutDevice: 1323,
   WarnCodeType.warnAdmWinCoreImproperCaptureRelease: 1324,
@@ -2013,6 +2056,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errEncryptedStreamNotAllowedPublish: 130,
   ErrorCodeType.errLicenseCredentialInvalid: 131,
   ErrorCodeType.errInvalidUserAccount: 134,
+  ErrorCodeType.errCertVerifyFailure: 135,
   ErrorCodeType.errModuleNotFound: 157,
   ErrorCodeType.errCertRaw: 157,
   ErrorCodeType.errCertJsonPart: 158,
@@ -2247,6 +2291,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
   LocalVideoStreamError.localVideoStreamErrorDeviceDisconnected: 9,
   LocalVideoStreamError.localVideoStreamErrorDeviceInvalidId: 10,
+  LocalVideoStreamError.localVideoStreamErrorDeviceInterrupt: 14,
+  LocalVideoStreamError.localVideoStreamErrorDeviceFatalError: 15,
   LocalVideoStreamError.localVideoStreamErrorDeviceSystemPressure: 101,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowMinimized: 11,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowClosed: 12,
@@ -2255,6 +2301,9 @@ const _$LocalVideoStreamErrorEnumMap = {
       20,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureFailure: 21,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureNoPermission: 22,
+  LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowHidden: 25,
+  LocalVideoStreamError
+      .localVideoStreamErrorScreenCaptureWindowRecoverFromHidden: 26,
 };
 
 const _$RemoteAudioStateEnumMap = {
@@ -2385,6 +2434,7 @@ const _$ConnectionChangedReasonTypeEnumMap = {
   ConnectionChangedReasonType.connectionChangedSameUidLogin: 19,
   ConnectionChangedReasonType.connectionChangedTooManyBroadcasters: 20,
   ConnectionChangedReasonType.connectionChangedLicenseValidationFailure: 21,
+  ConnectionChangedReasonType.connectionChangedCertificationVeryfyFailure: 22,
 };
 
 const _$ClientRoleChangeFailedReasonEnumMap = {
@@ -2414,6 +2464,7 @@ const _$NetworkTypeEnumMap = {
   NetworkType.networkTypeMobile2g: 3,
   NetworkType.networkTypeMobile3g: 4,
   NetworkType.networkTypeMobile4g: 5,
+  NetworkType.networkTypeMobile5g: 6,
 };
 
 const _$AudioTrackTypeEnumMap = {
@@ -2455,6 +2506,7 @@ const _$AudioEffectPresetEnumMap = {
   AudioEffectPreset.roomAcousticsEthereal: 33621760,
   AudioEffectPreset.roomAcoustics3dVoice: 33622016,
   AudioEffectPreset.roomAcousticsVirtualSurroundSound: 33622272,
+  AudioEffectPreset.roomAcousticsChorus: 33623296,
   AudioEffectPreset.voiceChangerEffectUncle: 33685760,
   AudioEffectPreset.voiceChangerEffectOldman: 33686016,
   AudioEffectPreset.voiceChangerEffectBoy: 33686272,

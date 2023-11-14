@@ -32,6 +32,7 @@ void mediaEngineSmokeTestCases() {
       try {
         final AudioFrameObserver observer = AudioFrameObserver(
           onRecordAudioFrame: (String channelId, AudioFrame audioFrame) {},
+          onPublishAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onMixedAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onEarMonitoringAudioFrame: (AudioFrame audioFrame) {},
@@ -181,6 +182,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerSec = 10;
         Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
+        const int frameAudioTrackNumber = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
@@ -190,6 +192,7 @@ void mediaEngineSmokeTestCases() {
           samplesPerSec: frameSamplesPerSec,
           buffer: frameBuffer,
           renderTimeMs: frameRenderTimeMs,
+          audioTrackNumber: frameAudioTrackNumber,
           avsyncType: frameAvsyncType,
         );
         const int trackId = 10;
@@ -242,6 +245,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerSec = 10;
         Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
+        const int frameAudioTrackNumber = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
@@ -251,6 +255,7 @@ void mediaEngineSmokeTestCases() {
           samplesPerSec: frameSamplesPerSec,
           buffer: frameBuffer,
           renderTimeMs: frameRenderTimeMs,
+          audioTrackNumber: frameAudioTrackNumber,
           avsyncType: frameAvsyncType,
         );
         await mediaEngine.pushCaptureAudioFrame(
@@ -301,6 +306,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerSec = 10;
         Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
+        const int frameAudioTrackNumber = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
@@ -310,6 +316,7 @@ void mediaEngineSmokeTestCases() {
           samplesPerSec: frameSamplesPerSec,
           buffer: frameBuffer,
           renderTimeMs: frameRenderTimeMs,
+          audioTrackNumber: frameAudioTrackNumber,
           avsyncType: frameAvsyncType,
         );
         await mediaEngine.pushReverseAudioFrame(
@@ -360,6 +367,7 @@ void mediaEngineSmokeTestCases() {
         const int frameSamplesPerSec = 10;
         Uint8List frameBuffer = Uint8List.fromList([1, 2, 3, 4, 5]);
         const int frameRenderTimeMs = 10;
+        const int frameAudioTrackNumber = 10;
         const int frameAvsyncType = 10;
         final AudioFrame frame = AudioFrame(
           type: frameType,
@@ -369,6 +377,7 @@ void mediaEngineSmokeTestCases() {
           samplesPerSec: frameSamplesPerSec,
           buffer: frameBuffer,
           renderTimeMs: frameRenderTimeMs,
+          audioTrackNumber: frameAudioTrackNumber,
           avsyncType: frameAvsyncType,
         );
         await mediaEngine.pullAudioFrame(
@@ -838,6 +847,7 @@ void mediaEngineSmokeTestCases() {
       try {
         final AudioFrameObserver observer = AudioFrameObserver(
           onRecordAudioFrame: (String channelId, AudioFrame audioFrame) {},
+          onPublishAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onPlaybackAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onMixedAudioFrame: (String channelId, AudioFrame audioFrame) {},
           onEarMonitoringAudioFrame: (AudioFrame audioFrame) {},

@@ -56,6 +56,7 @@ const _$ContentInspectTypeEnumMap = {
   ContentInspectType.contentInspectInvalid: 0,
   ContentInspectType.contentInspectModeration: 1,
   ContentInspectType.contentInspectSupervision: 2,
+  ContentInspectType.contentInspectImageModeration: 3,
 };
 
 ContentInspectConfig _$ContentInspectConfigFromJson(
@@ -281,6 +282,7 @@ AudioFrame _$AudioFrameFromJson(Map<String, dynamic> json) => AudioFrame(
       channels: json['channels'] as int?,
       samplesPerSec: json['samplesPerSec'] as int?,
       renderTimeMs: json['renderTimeMs'] as int?,
+      audioTrackNumber: json['audioTrackNumber'] as int?,
       avsyncType: json['avsync_type'] as int?,
     );
 
@@ -300,6 +302,7 @@ Map<String, dynamic> _$AudioFrameToJson(AudioFrame instance) {
   writeNotNull('channels', instance.channels);
   writeNotNull('samplesPerSec', instance.samplesPerSec);
   writeNotNull('renderTimeMs', instance.renderTimeMs);
+  writeNotNull('audioTrackNumber', instance.audioTrackNumber);
   writeNotNull('avsync_type', instance.avsyncType);
   return val;
 }
@@ -480,6 +483,7 @@ const _$AudioRouteEnumMap = {
   AudioRoute.routeHdmi: 7,
   AudioRoute.routeDisplayport: 8,
   AudioRoute.routeAirplay: 9,
+  AudioRoute.routeBluetoothSpeaker: 10,
 };
 
 const _$MediaSourceTypeEnumMap = {
@@ -543,6 +547,7 @@ const _$AudioFramePositionEnumMap = {
   AudioFramePosition.audioFramePositionMixed: 4,
   AudioFramePosition.audioFramePositionBeforeMixing: 8,
   AudioFramePosition.audioFramePositionEarMonitoring: 16,
+  AudioFramePosition.audioFramePositionBeforePublish: 32,
 };
 
 const _$VideoFrameProcessModeEnumMap = {

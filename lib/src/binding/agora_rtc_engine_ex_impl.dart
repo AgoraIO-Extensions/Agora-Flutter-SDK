@@ -1172,6 +1172,33 @@ class RtcEngineExImpl extends RtcEngineImpl implements RtcEngineEx {
   }
 
   @override
+  Future<void> enableContentInspectEx(
+      {required bool enabled,
+      required ContentInspectConfig config,
+      required RtcConnection connection}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngineEx'}_enableContentInspectEx';
+    final param = createParams({
+      'enabled': enabled,
+      'config': config.toJson(),
+      'connection': connection.toJson()
+    });
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
+    buffers.addAll(connection.collectBufferList());
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> startMediaRenderingTracingEx(RtcConnection connection) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngineEx'}_startMediaRenderingTracingEx';

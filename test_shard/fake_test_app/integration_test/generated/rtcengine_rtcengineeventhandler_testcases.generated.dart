@@ -547,6 +547,7 @@ void generatedTestCases() {
         const int statsFirstVideoKeyFrameRenderedDurationAfterUnmute = 10;
         const int statsTxPacketLossRate = 10;
         const int statsRxPacketLossRate = 10;
+        const int statsPlayoutDeviceGlitch = 10;
         const RtcStats stats = RtcStats(
           duration: statsDuration,
           txBytes: statsTxBytes,
@@ -588,6 +589,7 @@ void generatedTestCases() {
               statsFirstVideoKeyFrameRenderedDurationAfterUnmute,
           txPacketLossRate: statsTxPacketLossRate,
           rxPacketLossRate: statsRxPacketLossRate,
+          playoutDeviceGlitch: statsPlayoutDeviceGlitch,
         );
 
         final eventJson = {
@@ -684,6 +686,7 @@ void generatedTestCases() {
         const int statsFirstVideoKeyFrameRenderedDurationAfterUnmute = 10;
         const int statsTxPacketLossRate = 10;
         const int statsRxPacketLossRate = 10;
+        const int statsPlayoutDeviceGlitch = 10;
         const RtcStats stats = RtcStats(
           duration: statsDuration,
           txBytes: statsTxBytes,
@@ -725,6 +728,7 @@ void generatedTestCases() {
               statsFirstVideoKeyFrameRenderedDurationAfterUnmute,
           txPacketLossRate: statsTxPacketLossRate,
           rxPacketLossRate: statsRxPacketLossRate,
+          playoutDeviceGlitch: statsPlayoutDeviceGlitch,
         );
 
         final eventJson = {
@@ -1438,8 +1442,7 @@ void generatedTestCases() {
 
       final onFirstLocalVideoFramePublishedCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onFirstLocalVideoFramePublished:
-            (RtcConnection connection, int elapsed) {
+        onFirstLocalVideoFramePublished: (VideoSourceType source, int elapsed) {
           onFirstLocalVideoFramePublishedCompleter.complete(true);
         },
       );
@@ -1452,16 +1455,11 @@ void generatedTestCases() {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
+        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
         const int elapsed = 10;
 
         final eventJson = {
-          'connection': connection.toJson(),
+          'source': source.value(),
           'elapsed': elapsed,
         };
 
@@ -2406,6 +2404,8 @@ void generatedTestCases() {
         const int statsTxPacketLossRate = 10;
         const int statsAudioDeviceDelay = 10;
         const int statsAudioPlayoutDelay = 10;
+        const int statsEarMonitorDelay = 10;
+        const int statsAecEstimatedDelay = 10;
         const LocalAudioStats stats = LocalAudioStats(
           numChannels: statsNumChannels,
           sentSampleRate: statsSentSampleRate,
@@ -2414,6 +2414,8 @@ void generatedTestCases() {
           txPacketLossRate: statsTxPacketLossRate,
           audioDeviceDelay: statsAudioDeviceDelay,
           audioPlayoutDelay: statsAudioPlayoutDelay,
+          earMonitorDelay: statsEarMonitorDelay,
+          aecEstimatedDelay: statsAecEstimatedDelay,
         );
 
         final eventJson = {
@@ -2554,7 +2556,7 @@ void generatedTestCases() {
 
       final onLocalVideoStatsCompleter = Completer<bool>();
       final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onLocalVideoStats: (RtcConnection connection, LocalVideoStats stats) {
+        onLocalVideoStats: (VideoSourceType source, LocalVideoStats stats) {
           onLocalVideoStatsCompleter.complete(true);
         },
       );
@@ -2567,12 +2569,7 @@ void generatedTestCases() {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const String connectionChannelId = "hello";
-        const int connectionLocalUid = 10;
-        const RtcConnection connection = RtcConnection(
-          channelId: connectionChannelId,
-          localUid: connectionLocalUid,
-        );
+        const VideoSourceType source = VideoSourceType.videoSourceCameraPrimary;
         const QualityAdaptIndication statsQualityAdaptIndication =
             QualityAdaptIndication.adaptNone;
         const VideoCodecType statsCodecType = VideoCodecType.videoCodecNone;
@@ -2625,7 +2622,7 @@ void generatedTestCases() {
         );
 
         final eventJson = {
-          'connection': connection.toJson(),
+          'source': source.value(),
           'stats': stats.toJson(),
         };
 
@@ -4598,62 +4595,6 @@ void generatedTestCases() {
   );
 
   testWidgets(
-    'onAudioRoutingChanged',
-    (WidgetTester tester) async {
-      final irisTester = IrisTester();
-      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
-      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: 'app_id',
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      final onAudioRoutingChangedCompleter = Completer<bool>();
-      final theRtcEngineEventHandler = RtcEngineEventHandler(
-        onAudioRoutingChanged: (int routing) {
-          onAudioRoutingChangedCompleter.complete(true);
-        },
-      );
-
-      rtcEngine.registerEventHandler(
-        theRtcEngineEventHandler,
-      );
-
-// Delay 500 milliseconds to ensure the registerEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      {
-        const int routing = 10;
-
-        final eventJson = {
-          'routing': routing,
-        };
-
-        irisTester.fireEvent('RtcEngineEventHandler_onAudioRoutingChanged',
-            params: eventJson);
-        irisTester.fireEvent('RtcEngineEventHandlerEx_onAudioRoutingChanged',
-            params: eventJson);
-      }
-
-      final eventCalled = await onAudioRoutingChangedCompleter.future;
-      expect(eventCalled, isTrue);
-
-      {
-        rtcEngine.unregisterEventHandler(
-          theRtcEngineEventHandler,
-        );
-      }
-// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await rtcEngine.release();
-    },
-    timeout: const Timeout(Duration(minutes: 1)),
-  );
-
-  testWidgets(
     'onChannelMediaRelayStateChanged',
     (WidgetTester tester) async {
       final irisTester = IrisTester();
@@ -6369,6 +6310,80 @@ void generatedTestCases() {
       }
 
       final eventCalled = await onLocalVideoTranscoderErrorCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        rtcEngine.unregisterEventHandler(
+          theRtcEngineEventHandler,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 1)),
+  );
+
+  testWidgets(
+    'onTranscodedStreamLayoutInfo',
+    (WidgetTester tester) async {
+      final irisTester = IrisTester();
+      final debugApiEngineIntPtr = irisTester.getDebugApiEngineNativeHandle();
+      setMockIrisMethodChannelNativeHandle(debugApiEngineIntPtr);
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final onTranscodedStreamLayoutInfoCompleter = Completer<bool>();
+      final theRtcEngineEventHandler = RtcEngineEventHandler(
+        onTranscodedStreamLayoutInfo: (RtcConnection connection, int uid,
+            int width, int height, int layoutCount, List layoutlist) {
+          onTranscodedStreamLayoutInfoCompleter.complete(true);
+        },
+      );
+
+      rtcEngine.registerEventHandler(
+        theRtcEngineEventHandler,
+      );
+
+// Delay 500 milliseconds to ensure the registerEventHandler call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const String connectionChannelId = "hello";
+        const int connectionLocalUid = 10;
+        const RtcConnection connection = RtcConnection(
+          channelId: connectionChannelId,
+          localUid: connectionLocalUid,
+        );
+        const int uid = 10;
+        const int width = 10;
+        const int height = 10;
+        const int layoutCount = 10;
+        const List<VideoLayout> layoutlist = [];
+
+        final eventJson = {
+          'connection': connection.toJson(),
+          'uid': uid,
+          'width': width,
+          'height': height,
+          'layoutCount': layoutCount,
+          'layoutlist': layoutlist,
+        };
+
+        irisTester.fireEvent(
+            'RtcEngineEventHandler_onTranscodedStreamLayoutInfo',
+            params: eventJson);
+        irisTester.fireEvent(
+            'RtcEngineEventHandlerEx_onTranscodedStreamLayoutInfo',
+            params: eventJson);
+      }
+
+      final eventCalled = await onTranscodedStreamLayoutInfoCompleter.future;
       expect(eventCalled, isTrue);
 
       {
