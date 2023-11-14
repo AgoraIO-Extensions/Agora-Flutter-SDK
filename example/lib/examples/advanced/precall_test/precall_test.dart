@@ -249,7 +249,8 @@ class _State extends State<PreCallTest> {
                       _isStartEchoTest = !_isStartEchoTest;
 
                       if (_isStartEchoTest) {
-                        await _engine.startEchoTest();
+                        await _engine
+                            .startEchoTest(const EchoTestConfiguration());
                       } else {
                         await _engine.stopEchoTest();
                       }
