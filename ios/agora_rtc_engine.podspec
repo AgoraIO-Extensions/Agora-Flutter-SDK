@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
     s.vendored_frameworks = 'libs/*.xcframework'
   else
   s.dependency 'AgoraIrisRTC_iOS', '4.2.3.1-build.4'
-  s.dependency 'AgoraRtcEngine_Special_iOS', '4.2.3.1'
+  s.dependency 'AgoraRtcEngine_Special_iOS', '4.2.3.2'
   end
   
   s.platform = :ios, '9.0'
