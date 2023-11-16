@@ -172,6 +172,23 @@ public:
   virtual int selectAudioTrack(int64_t index) = 0;
 
   /**
+   * Selects multi audio track of the media file for playback or publish to channel.
+   * @param playoutTrackIndex The index of the audio track in media file for local playback.
+   * @param publishTrackIndex The index of the audio track in the media file published to the remote.
+   *
+   * @note
+   * You can obtain the streamIndex of the audio track by calling getStreamInfo..
+   * If you want to use selectMultiAudioTrack, you need to open the media file with openWithMediaSource and set enableMultiAudioTrack to true.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_ERROR MEDIA_PLAYER_ERROR}.
+   * - -2: Invalid argument. Argument must be greater than or equal to zero.
+   * - -8: Invalid State.You must open the media file with openWithMediaSource and set enableMultiAudioTrack to true
+   */
+  virtual int selectMultiAudioTrack(int playoutTrackIndex, int publishTrackIndex) = 0;
+
+  /**
    * Changes the player option before playing a file.
    * @param key The key of the option paramemter.
    * @param value The value of option parameter.
