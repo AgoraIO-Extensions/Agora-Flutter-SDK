@@ -2353,6 +2353,19 @@ Map<String, dynamic> _$RtcEngineEventHandlerOnTranscodingUpdatedJsonToJson(
         RtcEngineEventHandlerOnTranscodingUpdatedJson instance) =>
     <String, dynamic>{};
 
+RtcEngineEventHandlerOnAudioRoutingChangedJson
+    _$RtcEngineEventHandlerOnAudioRoutingChangedJsonFromJson(
+            Map<String, dynamic> json) =>
+        RtcEngineEventHandlerOnAudioRoutingChangedJson(
+          routing: json['routing'] as int?,
+        );
+
+Map<String, dynamic> _$RtcEngineEventHandlerOnAudioRoutingChangedJsonToJson(
+        RtcEngineEventHandlerOnAudioRoutingChangedJson instance) =>
+    <String, dynamic>{
+      'routing': instance.routing,
+    };
+
 RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson
     _$RtcEngineEventHandlerOnChannelMediaRelayStateChangedJsonFromJson(
             Map<String, dynamic> json) =>

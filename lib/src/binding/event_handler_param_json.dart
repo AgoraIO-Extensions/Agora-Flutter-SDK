@@ -3327,6 +3327,33 @@ extension RtcEngineEventHandlerOnTranscodingUpdatedJsonBufferExt
 }
 
 @JsonSerializable(explicitToJson: true)
+class RtcEngineEventHandlerOnAudioRoutingChangedJson {
+  const RtcEngineEventHandlerOnAudioRoutingChangedJson({this.routing});
+
+  @JsonKey(name: 'routing')
+  final int? routing;
+  factory RtcEngineEventHandlerOnAudioRoutingChangedJson.fromJson(
+          Map<String, dynamic> json) =>
+      _$RtcEngineEventHandlerOnAudioRoutingChangedJsonFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$RtcEngineEventHandlerOnAudioRoutingChangedJsonToJson(this);
+}
+
+extension RtcEngineEventHandlerOnAudioRoutingChangedJsonBufferExt
+    on RtcEngineEventHandlerOnAudioRoutingChangedJson {
+  RtcEngineEventHandlerOnAudioRoutingChangedJson fillBuffers(
+      List<Uint8List> bufferList) {
+    if (bufferList.isEmpty) return this;
+    return this;
+  }
+
+  List<Uint8List> collectBufferList() {
+    final bufferList = <Uint8List>[];
+    return bufferList;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson {
   const RtcEngineEventHandlerOnChannelMediaRelayStateChangedJson(
       {this.state, this.code});

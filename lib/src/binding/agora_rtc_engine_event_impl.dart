@@ -1283,6 +1283,21 @@ class RtcEngineEventHandlerWrapper implements EventLoopEventHandler {
         rtcEngineEventHandler.onTranscodingUpdated!();
         return true;
 
+      case 'onAudioRoutingChanged':
+        if (rtcEngineEventHandler.onAudioRoutingChanged == null) {
+          return true;
+        }
+        final jsonMap = jsonDecode(eventData);
+        RtcEngineEventHandlerOnAudioRoutingChangedJson paramJson =
+            RtcEngineEventHandlerOnAudioRoutingChangedJson.fromJson(jsonMap);
+        paramJson = paramJson.fillBuffers(buffers);
+        int? routing = paramJson.routing;
+        if (routing == null) {
+          return true;
+        }
+        rtcEngineEventHandler.onAudioRoutingChanged!(routing);
+        return true;
+
       case 'onChannelMediaRelayStateChanged':
         if (rtcEngineEventHandler.onChannelMediaRelayStateChanged == null) {
           return true;

@@ -1739,6 +1739,7 @@ class RtcEngineEventHandler {
     this.onRtmpStreamingStateChanged,
     this.onRtmpStreamingEvent,
     this.onTranscodingUpdated,
+    this.onAudioRoutingChanged,
     this.onChannelMediaRelayStateChanged,
     this.onChannelMediaRelayEvent,
     this.onLocalPublishFallbackToAudioOnly,
@@ -2422,6 +2423,13 @@ class RtcEngineEventHandler {
   ///
   /// When the LiveTranscoding class in the method updates, the SDK triggers the onTranscodingUpdated callback to report the update information. If you call the method to set the LiveTranscoding class for the first time, the SDK does not trigger this callback.
   final void Function()? onTranscodingUpdated;
+
+  /// Occurs when the local audio route changes.
+  ///
+  /// This method is for Android, iOS and macOS only.
+  ///
+  /// * [routing] The current audio routing. See AudioRoute.
+  final void Function(int routing)? onAudioRoutingChanged;
 
   /// Occurs when the state of the media stream relay changes.
   ///
