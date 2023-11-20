@@ -32,7 +32,7 @@ abstract class RtcEngineEx implements RtcEngine {
   /// You can call this method multiple times to join more than one channel.
   ///  If you are already in a channel, you cannot rejoin it with the same user ID.
   ///  If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
-  ///  Ensure that the app ID you use to generate the token is the same as the app ID used when creating the RtcEngine instance.
+  ///  Ensure that the App ID you use to generate the token is the same as the App ID used when creating the RtcEngine instance.
   ///
   /// * [token] The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
   /// * [connection] The connection information. See RtcConnection.
@@ -83,9 +83,9 @@ abstract class RtcEngineEx implements RtcEngine {
       {required ChannelMediaOptions options,
       required RtcConnection connection});
 
-  /// Sets the encoder configuration for the local video.
+  /// Sets the video encoder configuration.
   ///
-  /// Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
+  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
   ///
   /// * [config] Video profile. See VideoEncoderConfiguration.
   /// * [connection] The connection information. See RtcConnection.

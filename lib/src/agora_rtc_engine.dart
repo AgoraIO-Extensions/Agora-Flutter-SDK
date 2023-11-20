@@ -1324,11 +1324,11 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishSecondaryCameraTrack')
   final bool? publishSecondaryCameraTrack;
 
-  /// Whether to publish the video captured by the third camera: true : Publish the video captured by the third camera. false : Do not publish the video captured by the third camera. This method is for Windows and macOS only.
+  /// Whether to publish the video captured by the third camera: true : Publish the video captured by the third camera. false : Do not publish the video captured by the third camera. This is for Windows and macOS only.
   @JsonKey(name: 'publishThirdCameraTrack')
   final bool? publishThirdCameraTrack;
 
-  /// Whether to publish the video captured by the fourth camera: true : Publish the video captured by the fourth camera. false : Do not publish the video captured by the fourth camera. This method is for Windows and macOS only.
+  /// Whether to publish the video captured by the fourth camera: true : Publish the video captured by the fourth camera. false : Do not publish the video captured by the fourth camera. This is for Windows and macOS only.
   @JsonKey(name: 'publishFourthCameraTrack')
   final bool? publishFourthCameraTrack;
 
@@ -1344,7 +1344,7 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishScreenCaptureAudio')
   final bool? publishScreenCaptureAudio;
 
-  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This method is for Windows and macOS only.
+  /// Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen. This is for Windows and macOS only.
   @JsonKey(name: 'publishScreenTrack')
   final bool? publishScreenTrack;
 
@@ -1352,11 +1352,11 @@ class ChannelMediaOptions {
   @JsonKey(name: 'publishSecondaryScreenTrack')
   final bool? publishSecondaryScreenTrack;
 
-  /// Whether to publish the video captured from the third screen: true : Publish the captured video from the third screen. false : Do not publish the video captured from the third screen. This method is for Windows and macOS only.
+  /// Whether to publish the video captured from the third screen: true : Publish the captured video from the third screen. false : Do not publish the video captured from the third screen. This is for Windows and macOS only.
   @JsonKey(name: 'publishThirdScreenTrack')
   final bool? publishThirdScreenTrack;
 
-  /// Whether to publish the video captured from the fourth screen: true : Publish the captured video from the fourth screen. false : Do not publish the video captured from the fourth screen. This method is for Windows and macOS only.
+  /// Whether to publish the video captured from the fourth screen: true : Publish the captured video from the fourth screen. false : Do not publish the video captured from the fourth screen. This is for Windows and macOS only.
   @JsonKey(name: 'publishFourthScreenTrack')
   final bool? publishFourthScreenTrack;
 
@@ -1690,7 +1690,7 @@ class RtcEngineEventHandler {
 
   /// Reports an error during SDK runtime.
   ///
-  /// This callback indicates that an error (concerning network or media) occurs during SDK runtime. In most cases, the SDK cannot fix the issue and resume running. The SDK requires the application to take action or informs the user about the issue.
+  /// This callback indicates that an error (concerning network or media) occurs during SDK runtime. In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.
   ///
   /// * [err] Error code. See ErrorCodeType.
   /// * [msg] The error message.
@@ -1731,7 +1731,7 @@ class RtcEngineEventHandler {
 
   /// Occurs when a user leaves a channel.
   ///
-  /// This callback notifies the app that the user leaves the channel by calling leaveChannel. From this callback, the app can get information such as the call duration and quality statistics.
+  /// This callback notifies the app that the user leaves the channel by calling leaveChannel. From this callback, the app can get information such as the call duration and statistics.
   ///
   /// * [connection] The connection information. See RtcConnection.
   /// * [stats] The statistics of the call. See RtcStats.
@@ -1749,9 +1749,9 @@ class RtcEngineEventHandler {
   ///
   /// This callback notifies the application that the system's audio device state is changed. For example, a headset is unplugged from the device. This method is for Windows and macOS only.
   ///
-  /// * [deviceState] Media device states.
   /// * [deviceId] The device ID.
   /// * [deviceType] The device type. See MediaDeviceType.
+  /// * [deviceState] The device state. See MediaDeviceStateType.
   final void Function(String deviceId, MediaDeviceType deviceType,
       MediaDeviceStateType deviceState)? onAudioDeviceStateChanged;
 
@@ -1784,7 +1784,7 @@ class RtcEngineEventHandler {
   ///
   /// * [deviceId] The device ID.
   /// * [deviceType] Media device types. See MediaDeviceType.
-  /// * [deviceState] Media device states.
+  /// * [deviceState] Media device states. See MediaDeviceStateType.
   final void Function(String deviceId, MediaDeviceType deviceType,
       MediaDeviceStateType deviceState)? onVideoDeviceStateChanged;
 
@@ -1868,7 +1868,7 @@ class RtcEngineEventHandler {
   /// * [uid] The ID of the user whose video size or rotation changes. (The uid for the local user is 0. The video is the local user's video preview).
   /// * [width] The width (pixels) of the video stream.
   /// * [height] The height (pixels) of the video stream.
-  /// * [rotation] The rotation information. The value range is [0,360).
+  /// * [rotation] The rotation information. The value range is [0,360). On the iOS platform, the parameter value is always 0.
   final void Function(RtcConnection connection, VideoSourceType sourceType,
       int uid, int width, int height, int rotation)? onVideoSizeChanged;
 
@@ -2281,7 +2281,7 @@ class RtcEngineEventHandler {
 
   /// Reports the volume change of the audio device or app.
   ///
-  /// Occurs when the volume on the playback device, audio capture device, or the volume in the application changes. This callback is for Windows and macOS only.
+  /// Occurs when the volume on the playback device, audio capture device, or the volume of the app changes. This callback is for Windows and macOS only.
   ///
   /// * [deviceType] The device type. See MediaDeviceType.
   /// * [volume] The volume value. The range is [0, 255].
@@ -3166,7 +3166,7 @@ abstract class RtcEngine {
   ///  All numeric characters: 0 to 9.
   ///  Space
   ///  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  /// * [uid] The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
+  /// * [uid] The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your app must record and maintain the returned user ID, because the SDK does not do so.
   /// * [options] The channel media options. See ChannelMediaOptions.
   ///
   /// Returns
@@ -3211,8 +3211,7 @@ abstract class RtcEngine {
 
   /// Renews the token.
   ///
-  /// The SDK triggers the onTokenPrivilegeWillExpire callback.
-  ///  The onConnectionStateChanged callback reports connectionChangedTokenExpired (9).
+  /// The SDK triggers the onTokenPrivilegeWillExpire callback. onConnectionStateChanged The connectionChangedTokenExpired callback reports (9).
   ///
   /// * [token] The new token.
   ///
@@ -3290,7 +3289,7 @@ abstract class RtcEngine {
   ///  Call stopCameraCapture.
   ///  Call this method with enabled set to false. You can call this method before and after startPreview to enable multi-camera capture:
   ///  If it is enabled before startPreview, the local video preview shows the image captured by the two cameras at the same time.
-  ///  If it is enabled after startPreview, the SDK stops the current camera capture first, and then enables the primary camera and the second camera. The local video preview appears black for a short time, and then automatically returns to normal. When using this function, ensure that the system version is 13.0 or later. The minimum iOS device types that support multi-camera capture are as follows:
+  ///  If it is enabled after startPreview, the SDK stops the current camera capture first, and then enables the primary camera and the second camera. The local video preview appears black for a short time, and then automatically returns to normal. This method applies to iOS only. When using this function, ensure that the system version is 13.0 or later. The minimum iOS device types that support multi-camera capture are as follows:
   ///  iPhone XR
   ///  iPhone XS
   ///  iPhone XS Max
@@ -3381,7 +3380,7 @@ abstract class RtcEngine {
 
   /// Sets the video encoder configuration.
   ///
-  /// Sets the encoder configuration for the local video. You can call this method either before or after joining a channel. If the user does not need to reset the video encoding properties after joining the channel, Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.
+  /// Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found. You can call this method either before or after joining a channel. If the user does not need to reset the video encoding properties after joining the channel, Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.
   ///
   /// * [config] Video profile. See VideoEncoderConfiguration.
   ///
@@ -3565,6 +3564,9 @@ abstract class RtcEngine {
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
   ///  < 0: Failure.
+  ///  -1: A general error occurs (no specified reason).
+  ///  -4: Video application scenarios are not supported. Possible reasons include that you use the Voice SDK instead of the Video SDK.
+  ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
   Future<void> setVideoScenario(VideoApplicationScenarioType scenarioType);
 
   /// Enables the audio module.
@@ -4769,7 +4771,7 @@ abstract class RtcEngine {
   /// Sets the audio data format reported by onPlaybackAudioFrameBeforeMixing.
   ///
   /// * [sampleRate] The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
-  /// * [channel] The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
+  /// * [channel] The number of channels of the audio data, which can be set as 1 (Mono) or 2 (Stereo).
   ///
   /// Returns
   /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
@@ -5054,7 +5056,7 @@ abstract class RtcEngine {
   /// Sets the camera capture configuration.
   ///
   /// This method is for Android and iOS only.
-  ///  This method must be called after the camera is turned on, such as calling after startPreview and enableVideo.
+  ///  Call this method before enabling local camera capture, such as before calling startPreview and joinChannel.
   ///
   /// * [config] The camera capture configuration. See CameraCapturerConfiguration.
   ///
@@ -5123,7 +5125,7 @@ abstract class RtcEngine {
   ///
   /// This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as localVideoStreamStateCapturing (1).
   ///  This method is for Android and iOS only.
-  ///  The app enables the front camera by default. If your front camera does not support enabling the flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
+  ///  The app enables the front camera by default. If your front camera does not support flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
   ///  On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
   ///
   /// Returns

@@ -1364,16 +1364,16 @@ class VideoFrameObserver {
   /// Occurs each time the SDK receives a video frame captured by local devices.
   ///
   /// After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by local devices. You can then pre-process the data according to your scenarios.
-  ///  The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.
+  ///  The video data that this callback gets has not been pre-processed such as watermarking, cropping, and rotating.
   ///  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
   ///  Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [sourceType] Video source types, including cameras, screens, or media player. See VideoSourceType.
   /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: texture
-  ///  iOS: cvPixelBuffer
-  ///  macOS: YUV 420
-  ///  Windows: YUV 420
+  ///  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+  ///  iOS: I420 or CVPixelBufferRef
+  ///  macOS: I420 or CVPixelBufferRef
+  ///  Windows: YUV420
   final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
       onCaptureVideoFrame;
 
@@ -1384,10 +1384,10 @@ class VideoFrameObserver {
   ///  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
   ///
   /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: texture
-  ///  iOS: cvPixelBuffer
-  ///  macOS: YUV 420
-  ///  Windows: YUV 420
+  ///  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+  ///  iOS: I420 or CVPixelBufferRef
+  ///  macOS: I420 or CVPixelBufferRef
+  ///  Windows: YUV420
   /// * [sourceType] The type of the video source. See VideoSourceType.
   final void Function(VideoSourceType sourceType, VideoFrame videoFrame)?
       onPreEncodeVideoFrame;
@@ -1403,10 +1403,10 @@ class VideoFrameObserver {
   ///  Due to the limitations of Flutter, this callback does not support sending processed video data back to the SDK.
   ///
   /// * [videoFrame] The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-  ///  Android: texture
-  ///  iOS: cvPixelBuffer
-  ///  macOS: YUV 420
-  ///  Windows: YUV 420
+  ///  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+  ///  iOS: I420 or CVPixelBufferRef
+  ///  macOS: I420 or CVPixelBufferRef
+  ///  Windows: YUV420
   /// * [remoteUid] The user ID of the remote user who sends the current video frame.
   /// * [channelId] The channel ID.
   final void Function(String channelId, int remoteUid, VideoFrame videoFrame)?
