@@ -157,7 +157,7 @@ class IH265Transcoder: public RefCountInterface {
 
   /**
    * Register a IH265TranscoderObserver object.
-   * @param observer 
+   * @param observer IH265TranscoderObserver.
    * @return
    * -  0: Success.
    * - <0: Failure.
@@ -166,7 +166,7 @@ class IH265Transcoder: public RefCountInterface {
 
   /**
    * Unregister a IH265TranscoderObserver object.
-   * @param observer
+   * @param observer IH265TranscoderObserver.
    * @return
    * -  0: Success.
    * - <0: Failure.

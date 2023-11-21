@@ -36,13 +36,16 @@ public:
             return;
         }
         
-
         CVPixelBufferRef _Nullable pixelBuffer = reinterpret_cast<CVPixelBufferRef>(vf->pixelBuffer);
         if (pixelBuffer) {
             if (resize) {
-                [renderer.channel invokeMethod:@"onSizeChanged"
-                                     arguments:@{@"width": @(vf->width),
-                                                 @"height": @(vf->height)}];
+              int tmpWidth = vf->width;
+              int tmpHeight = vf->height;
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  [renderer.channel invokeMethod:@"onSizeChanged"
+                                     arguments:@{@"width": @(tmpWidth),
+                                                 @"height": @(tmpHeight)}];
+              });
             }
             
             dispatch_semaphore_wait(renderer.lock, DISPATCH_TIME_FOREVER);
