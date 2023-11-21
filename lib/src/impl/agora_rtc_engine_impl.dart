@@ -707,22 +707,6 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   }
 
   @override
-  Future<void> startEchoTest({int intervalInSeconds = 10}) async {
-    const apiType = 'RtcEngine_startEchoTest2';
-    final param = createParams({'intervalInSeconds': intervalInSeconds});
-    final callApiResult = await irisMethodChannel
-        .invokeMethod(IrisMethodCall(apiType, jsonEncode(param)));
-    if (callApiResult.irisReturnCode < 0) {
-      throw AgoraRtcException(code: callApiResult.irisReturnCode);
-    }
-    final rm = callApiResult.data;
-    final result = rm['result'];
-    if (result < 0) {
-      throw AgoraRtcException(code: result);
-    }
-  }
-
-  @override
   Future<void> startPreview(
       {VideoSourceType sourceType =
           VideoSourceType.videoSourceCameraPrimary}) async {
@@ -995,12 +979,12 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
 
   @override
   Future<void> startScreenCaptureBySourceType(
-      {required VideoSourceType type,
+      {required VideoSourceType sourceType,
       required ScreenCaptureConfiguration config}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCapture2';
-    final param = createParams(
-        {'type': type.value(), 'config': config.toJson()});
+    final param =
+        createParams({'type': sourceType.value(), 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(

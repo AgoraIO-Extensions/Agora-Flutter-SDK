@@ -74,8 +74,8 @@ class NativeIrisApiEngineBinding {
   }
 
   late final _FreeIrisVideoFrameBufferManagerPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(IrisVideoFrameBufferManagerPtr)>>(
+          ffi
+          .NativeFunction<ffi.Void Function(IrisVideoFrameBufferManagerPtr)>>(
       'FreeIrisVideoFrameBufferManager');
   late final _FreeIrisVideoFrameBufferManager =
       _FreeIrisVideoFrameBufferManagerPtr.asFunction<
@@ -214,9 +214,9 @@ class NativeIrisApiEngineBinding {
   }
 
   late final _DisableAllVideoFrameBufferPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(
-              IrisVideoFrameBufferManagerPtr)>>('DisableAllVideoFrameBuffer');
+          ffi
+          .NativeFunction<ffi.Void Function(IrisVideoFrameBufferManagerPtr)>>(
+      'DisableAllVideoFrameBuffer');
   late final _DisableAllVideoFrameBuffer = _DisableAllVideoFrameBufferPtr
       .asFunction<void Function(IrisVideoFrameBufferManagerPtr)>();
 
@@ -303,8 +303,9 @@ class NativeIrisApiEngineBinding {
   }
 
   late final _StopDumpVideoPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(IrisVideoFrameBufferManagerPtr)>>('StopDumpVideo');
+          ffi
+          .NativeFunction<ffi.Int32 Function(IrisVideoFrameBufferManagerPtr)>>(
+      'StopDumpVideo');
   late final _StopDumpVideo = _StopDumpVideoPtr.asFunction<
       int Function(IrisVideoFrameBufferManagerPtr)>();
 

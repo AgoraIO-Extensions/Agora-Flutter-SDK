@@ -267,6 +267,74 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<int> queryDeviceScore() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_queryDeviceScore';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as int;
+  }
+
+  @override
+  Future<void> preloadChannel(
+      {required String token,
+      required String channelId,
+      required int uid}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannel';
+    final param =
+        createParams({'token': token, 'channelId': channelId, 'uid': uid});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+  }
+
+  @override
+  Future<void> preloadChannelWithUserAccount(
+      {required String token,
+      required String channelId,
+      required String userAccount}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_preloadChannelWithUserAccount';
+    final param = createParams(
+        {'token': token, 'channelId': channelId, 'userAccount': userAccount});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+  }
+
+  @override
+  Future<void> updatePreloadChannelToken(String token) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_updatePreloadChannelToken';
+    final param = createParams({'token': token});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<void> joinChannel(
       {required String token,
       required String channelId,
@@ -383,12 +451,14 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> startEchoTest({int intervalInSeconds = 10}) async {
+  Future<void> startEchoTest(EchoTestConfiguration config) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startEchoTest';
-    final param = createParams({'intervalInSeconds': intervalInSeconds});
+    final param = createParams({'config': config.toJson()});
+    final List<Uint8List> buffers = [];
+    buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
-        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+        IrisMethodCall(apiType, jsonEncode(param), buffers: buffers));
     if (callApiResult.irisReturnCode < 0) {
       throw AgoraRtcException(code: callApiResult.irisReturnCode);
     }
@@ -2150,10 +2220,10 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> uploadLogFile(String requestId) async {
+  Future<String> uploadLogFile() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_uploadLogFile';
-    final param = createParams({'requestId': requestId});
+    final param = createParams({});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
@@ -2164,6 +2234,8 @@ class RtcEngineImpl implements RtcEngine {
     if (result < 0) {
       throw AgoraRtcException(code: result);
     }
+    final uploadLogFileJson = RtcEngineUploadLogFileJson.fromJson(rm);
+    return uploadLogFileJson.requestId;
   }
 
   @override
@@ -2315,6 +2387,30 @@ class RtcEngineImpl implements RtcEngine {
       'sampleRate': sampleRate,
       'channel': channel,
       'mode': mode.value(),
+      'samplesPerCall': samplesPerCall
+    });
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
+  Future<void> setPublishAudioFrameParameters(
+      {required int sampleRate,
+      required int channel,
+      required int samplesPerCall}) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setPublishAudioFrameParameters';
+    final param = createParams({
+      'sampleRate': sampleRate,
+      'channel': channel,
       'samplesPerCall': samplesPerCall
     });
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -3143,6 +3239,38 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
+  Future<bool> isCameraExposureSupported() async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_isCameraExposureSupported';
+    final param = createParams({});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    return result as bool;
+  }
+
+  @override
+  Future<void> setCameraExposureFactor(double factor) async {
+    final apiType =
+        '${isOverrideClassName ? className : 'RtcEngine'}_setCameraExposureFactor';
+    final param = createParams({'factor': factor});
+    final callApiResult = await irisMethodChannel.invokeMethod(
+        IrisMethodCall(apiType, jsonEncode(param), buffers: null));
+    if (callApiResult.irisReturnCode < 0) {
+      throw AgoraRtcException(code: callApiResult.irisReturnCode);
+    }
+    final rm = callApiResult.data;
+    final result = rm['result'];
+    if (result < 0) {
+      throw AgoraRtcException(code: result);
+    }
+  }
+
+  @override
   Future<bool> isCameraAutoExposureFaceModeSupported() async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_isCameraAutoExposureFaceModeSupported';
@@ -3438,16 +3566,16 @@ class RtcEngineImpl implements RtcEngine {
     }
     final rm = callApiResult.data;
     final result = rm['result'];
-    }
+  }
 
   @override
   Future<void> startScreenCaptureBySourceType(
-      {required VideoSourceType type,
+      {required VideoSourceType sourceType,
       required ScreenCaptureConfiguration config}) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_startScreenCaptureBySourceType';
     final param = createParams(
-        {'type': type.value(), 'config': config.toJson()});
+        {'sourceType': sourceType.value(), 'config': config.toJson()});
     final List<Uint8List> buffers = [];
     buffers.addAll(config.collectBufferList());
     final callApiResult = await irisMethodChannel.invokeMethod(
@@ -3527,10 +3655,10 @@ class RtcEngineImpl implements RtcEngine {
   }
 
   @override
-  Future<void> stopScreenCaptureBySourceType(VideoSourceType type) async {
+  Future<void> stopScreenCaptureBySourceType(VideoSourceType sourceType) async {
     final apiType =
         '${isOverrideClassName ? className : 'RtcEngine'}_stopScreenCaptureBySourceType';
-    final param = createParams({'type': type.value()});
+    final param = createParams({'sourceType': sourceType.value()});
     final callApiResult = await irisMethodChannel.invokeMethod(
         IrisMethodCall(apiType, jsonEncode(param), buffers: null));
     if (callApiResult.irisReturnCode < 0) {
