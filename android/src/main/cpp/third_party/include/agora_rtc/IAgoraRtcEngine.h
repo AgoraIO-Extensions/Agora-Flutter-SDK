@@ -535,9 +535,9 @@ struct RemoteVideoStats {
    */
   int publishDuration;
   /**
-   * The quality of the remote video stream in the reported interval. 
-   * The quality is determined by the Agora real-time video MOS (Mean Opinion Score) measurement method. 
-   * The return value range is [0, 500]. 
+   * The quality of the remote video stream in the reported interval.
+   * The quality is determined by the Agora real-time video MOS (Mean Opinion Score) measurement method.
+   * The return value range is [0, 500].
    * Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the video quality.
    * @note For textured video data, this parameter always returns 0.
    */
@@ -795,14 +795,26 @@ struct CameraCapturerConfiguration {
   /** For windows. The device ID of the playback device. The maximum length is #MAX_DEVICE_ID_LENGTH. */
   char deviceId[MAX_DEVICE_ID_LENGTH];
 #endif
+
+#if defined(__ANDROID__)
+  /**
+   * The camera id.
+   */
+  char cameraId[MAX_DEVICE_ID_LENGTH];
+#endif
   /** The video format. See VideoFormat. */
   VideoFormat format;
   bool followEncodeDimensionRatio;
   CameraCapturerConfiguration() : followEncodeDimensionRatio(true) {
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
   cameraDirection = CAMERA_REAR;
+
 #else
   memset(deviceId, 0, sizeof(deviceId));
+#endif
+
+#if defined(__ANDROID__)
+  memset(cameraId, 0, sizeof(cameraId));
 #endif
   }
 };
@@ -1392,6 +1404,11 @@ enum PROXY_TYPE {
   /** 6: The https proxy.
    */
   HTTPS_PROXY_TYPE = 6,
+};
+
+enum FeatureType {
+  VIDEO_VIRTUAL_BACKGROUND = 1,
+  VIDEO_BEAUTY_EFFECT = 2,
 };
 
 /**
@@ -2438,6 +2455,8 @@ class IRtcEngineEventHandler {
 
   /** Occurs when the local audio route changes (for Android, iOS, and macOS only).
 
+  @deprecated This callback is deprecated. Use onAudioRoutingChanged with 2 params instead.
+
    The SDK triggers this callback when the local audio route switches to an
    earpiece, speakerphone, headset, or Bluetooth device.
    @param routing The current audio output routing:
@@ -2449,9 +2468,20 @@ class IRtcEngineEventHandler {
    - 4: Loudspeaker.
    - 5: Bluetooth headset.
    */
-  virtual void onAudioRoutingChanged(int routing) { (void)routing; }
+  virtual void onAudioRoutingChanged(int routing) __deprecated { (void)routing; }
 
+  /** Occurs when the local audio route changes (for win and macOS only).
 
+   The SDK triggers this callback when the local audio route switches to an
+   earpiece, speakerphone, headset, or Bluetooth device.
+   @param deviceType The device type, see #MEDIA_DEVICE_TYPE
+   @param routing The current audio routing, see #AudioRoute
+   *
+   */
+  virtual void onAudioRoutingChanged(int deviceType, int routing) {
+    (void)deviceType;
+    (void)routing;
+  }
   /**
    * Occurs when the state of the media stream relay changes.
    *
@@ -2842,7 +2872,7 @@ class IRtcEngineEventHandler {
     (void)uid;
     (void)userAccount;
   }
- 
+
   /**
    * Occurs when local video transcoder stream has an error.
    *
@@ -2856,7 +2886,7 @@ class IRtcEngineEventHandler {
 
   /**
    * Reports the tracing result of video rendering event of the user.
-   * 
+   *
    * @param uid The user ID.
    * @param currentEvent The current event of the tracing result: #MEDIA_TRACE_EVENT.
    * @param tracingInfo The tracing result: #VideoRenderingTracingInfo.
@@ -3522,13 +3552,24 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * Queries the capacity of the current device codec.
    *
-   * @param codec_info An array of the codec cap information: CodecCapInfo.
+   * @param codecInfo An array of the codec cap information: CodecCapInfo.
    * @param size The array size.
-   * @return 
+   * @return
    * 0: Success.
    * < 0: Failure.
    */
   virtual int queryCodecCapability(CodecCapInfo* codecInfo, int& size) = 0;
+
+  /**
+   * Queries the score of the current device.
+   *
+   * @return 
+   * > 0: If the value is greater than 0, it means that the device score has been retrieved and represents the score value.
+   * Most devices score between 60-100, with higher scores indicating better performance.
+   * 
+   * < 0: Failure.
+   */
+  virtual int queryDeviceScore() = 0;
 
   /**
    * Preload a channel.
@@ -3563,12 +3604,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   *   - -2: The parameter is invalid. For example, the token is invalid or the uid parameter is not set
-   * to an integer. You need to pass in a valid parameter and join the channel again.
    *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
    * object before calling this method.
    *   - -102: The channel name is invalid. You need to pass in a valid channel name in channelId to
-   * rejoin the channel.
+   * preload the channel again.
    */
   virtual int preloadChannel(const char* token, const char* channelId, uid_t uid) = 0;
 
@@ -3605,12 +3644,12 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   *   - -2: The parameter is invalid. For example, the token is invalid or the userAccount parameter is empty.
-   * You need to pass in a valid parameter and join the channel again.
+   *   - -2: The parameter is invalid. For example, the userAccount parameter is empty.
+   * You need to pass in a valid parameter and preload the channel again.
    *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
    * object before calling this method.
    *   - -102: The channel name is invalid. You need to pass in a valid channel name in channelId to
-   * rejoin the channel.
+   * preload the channel again.
    */
   virtual int preloadChannel(const char* token, const char* channelId, const char* userAccount) = 0;
 
@@ -3629,8 +3668,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   *   - -2: The parameter is invalid. For example, the token is invalid or the uid parameter is not set
-   * to an integer. You need to pass in a valid parameter and join the channel again.
+   *   - -2: The token is invalid. You need to pass in a valid token and update the token again.
    *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
    * object before calling this method.
    */
@@ -4335,7 +4373,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int setAudioProfile(AUDIO_PROFILE_TYPE profile, AUDIO_SCENARIO_TYPE scenario) __deprecated = 0;
-  
+
   /**
    * Sets the audio profile.
    *
@@ -4838,7 +4876,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   - < 0: Failure.
   */
   virtual int stopAudioRecording() = 0;
-  
+
   /**
    * Creates a media player source object and return its pointer. If full featured
    * media player source is supported, it will create it, or it will create a simple
@@ -4867,8 +4905,8 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * Creates a media recorder object and return its pointer.
    *
-   * @param connection The RtcConnection object. It contains user ID and channel name of user.
-   * 
+   * @param info The RecorderStreamInfo object. It contains user ID and channel name of user.
+   *
    * @return
    * - The pointer to \ref rtc::IMediaRecorder "IMediaRecorder",
    *   if the method call succeeds.
@@ -5714,8 +5752,8 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /** Changes the voice formant ratio for local speaker.
 
-  @param formantRatio The voice formant ratio. The value ranges between -1.0 and 1.0. 
-  The lower the value, the deeper the sound, and the higher the value, the more it 
+  @param formantRatio The voice formant ratio. The value ranges between -1.0 and 1.0.
+  The lower the value, the deeper the sound, and the higher the value, the more it
   sounds like a child. The default value is 0.0 (the local user's voice will not be changed).
 
   @return
@@ -5947,7 +5985,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableDualStreamMode(bool enabled) = 0;
+  virtual int enableDualStreamMode(bool enabled) __deprecated = 0;
 
   /**
    * Enables or disables the dual video stream mode.
@@ -5967,7 +6005,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableDualStreamMode(bool enabled, const SimulcastStreamConfig& streamConfig) = 0;
+  virtual int enableDualStreamMode(bool enabled, const SimulcastStreamConfig& streamConfig) __deprecated = 0;
 
 
   /**
@@ -6715,7 +6753,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setCameraExposureFactor(float value) = 0;
+  virtual int setCameraExposureFactor(float factor) = 0;
 
 #if defined(__APPLE__)
   /**
@@ -7026,12 +7064,12 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int updateScreenCapture(const ScreenCaptureParameters2& captureParams) = 0;
-    
+
    /**
    * Queries the ability of screen sharing to support the maximum frame rate.
    *
    * @since v4.2.0
-   * 
+   *
    * @return
    * - 0: support 15 fps, Low devices.
    * - 1: support 30 fps, Usually low - to mid-range devices.
@@ -7059,7 +7097,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - ERR_NOT_INITIALIZED (7): You have not initialized IRtcEngine when set screencapture scenario.
    */
   virtual int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) = 0;
-  
+
   /**
    * Stops the screen sharing.
    *
@@ -7261,7 +7299,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Stop sharing the screen.
    *
    * After calling `startScreenCapture`, you can call this method to stop sharing the first screen.
-   * 
+   *
    * @param sourceType source type of screen. See #VIDEO_SOURCE_TYPE.
    * @return
    * - 0: Success.
@@ -7993,7 +8031,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * "IDirectCdnStreamingEventHandler".
    * @param publishUrl The url of the cdn used to publish the stream.
    * @param options The direct cdn streaming media options: DirectCdnStreamingMediaOptions.
-   * This API must pass an audio-related option, and temporarily cannot pass more than one. 
+   * This API must pass an audio-related option, and temporarily cannot pass more than one.
    * For video-related options, you can either choose to not pass any, or only one.
    *
    * @return
@@ -8290,6 +8328,16 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Return current NTP(unix timestamp) time in milliseconds.
    */
   virtual uint64_t getNtpWallTimeInMs() = 0;
+
+  /** 
+   * @brief Whether the target feature is available for the device.
+   * @since v4.2.0
+   * @param type The feature type. See FeatureType.
+   * @return
+   * - true: available.
+   * - false: not available.
+   */
+  virtual bool isFeatureAvailableOnDevice(FeatureType type) = 0;
 
 };
 

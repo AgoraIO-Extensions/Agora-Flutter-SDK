@@ -731,6 +731,10 @@ enum ERROR_CODE_TYPE {
    * 1501: Video Device Module: The camera is not authorized.
    */
   ERR_VDM_CAMERA_NOT_AUTHORIZED = 1501,
+  /**
+   * 2007: Audio Device Module: An error occurs in starting the application loopback.
+   */
+  ERR_ADM_APPLICATION_LOOPBACK = 2007,
 };
 
 enum LICENSE_ERROR_TYPE {
@@ -2752,6 +2756,16 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    */
   LOCAL_VIDEO_STREAM_ERROR_DEVICE_INVALID_ID = 10,
   /**
+   * 14: (Android only) Video capture was interrupted, possibly due to the camera being occupied
+   * or some policy reasons such as background termination.
+   */
+  LOCAL_VIDEO_STREAM_ERROR_DEVICE_INTERRUPT = 14,
+  /**
+   * 15: (Android only) The device may need to be shut down and restarted to restore camera function, 
+   * or there may be a persistent hardware problem.
+   */
+  LOCAL_VIDEO_STREAM_ERROR_DEVICE_FATAL_ERROR = 15,
+  /**
    * 101: The current video capture device is unavailable due to excessive system pressure.
    */
   LOCAL_VIDEO_STREAM_ERROR_DEVICE_SYSTEM_PRESSURE = 101,
@@ -2784,6 +2798,22 @@ enum LOCAL_VIDEO_STREAM_ERROR {
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_FAILURE = 21,
   /** 22: No permision to capture screen. */
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_NO_PERMISSION = 22,
+  /** 
+   * 23: The screen capture paused.
+   * 
+   * Common scenarios for reporting this error code:
+   * - When the desktop switch to the secure desktop such as UAC dialog or the Winlogon desktop on
+   * Windows platform, the SDK reports this error code.
+   */
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_PAUSED = 23,
+  /** 24: The screen capture is resumed. */
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_RESUMED = 24,
+  /** 25: (Windows only) The local screen capture window is currently hidden and not visible on the desktop. */
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_HIDDEN = 25,
+  /** 26: (Windows only) The local screen capture window is recovered from its hidden state. */
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN = 26,
+  /** 27:(Windows only) The window is recovered from miniminzed */
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_MINIMIZED = 27,
 };
 
 /**
@@ -3777,10 +3807,6 @@ struct LocalTranscoderConfiguration {
 
 enum VIDEO_TRANSCODER_ERROR {
   /**
-   * No error
-   */
-  VT_ERR_OK = 0,
-  /**
    * The video track of the video source is not started.
    */
   VT_ERR_VIDEO_SOURCE_NOT_READY = 1,
@@ -3998,6 +4024,10 @@ enum CONNECTION_CHANGED_REASON_TYPE
    * 21: The connection is failed due to license validation failure.
    */
   CONNECTION_CHANGED_LICENSE_VALIDATION_FAILURE = 21,
+  /**
+   * 22: The connection is failed due to certification verify failure.
+   */
+  CONNECTION_CHANGED_CERTIFICATION_VERYFY_FAILURE = 22,
 };
 
 /**
@@ -4108,6 +4138,10 @@ enum NETWORK_TYPE {
    * 5: The network type is mobile 4G.
    */
   NETWORK_TYPE_MOBILE_4G = 5,
+  /**
+   * 6: The network type is mobile 5G.
+   */
+  NETWORK_TYPE_MOBILE_5G = 6,
 };
 
 /**
@@ -5268,7 +5302,7 @@ struct ChannelMediaRelayConfiguration {
    */
   ChannelMediaInfo *destInfos;
   /** The number of destination channels. The default value is 0, and the value range is from 0 to
-   * 4. Ensure that the value of this parameter corresponds to the number of `ChannelMediaInfo`
+   * 6. Ensure that the value of this parameter corresponds to the number of `ChannelMediaInfo`
    * structs you define in `destInfo`.
    */
   int destCount;

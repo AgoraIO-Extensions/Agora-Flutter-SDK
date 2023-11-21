@@ -70,6 +70,10 @@ typedef enum
      * 6: Music decryption error. Please contact technical support
      */
     kMusicContentCenterStatusErrMusicDecryption = 6, 
+    /**
+     * 7: Http internal error. Please retry later.
+     */
+    kMusicContentCenterStatusErrHttpInternalError = 7, 
 } MusicContentCenterStatusCode;
 
 typedef struct 
@@ -258,7 +262,7 @@ public:
      * 
      * @param requestId The request id is same as that returned by getSongSimpleInfo.
      * @param songCode Song code
-     * @param simpleinfo The metadata of the music.
+     * @param simpleInfo The metadata of the music.
      * @param errorCode The status of the request. See MusicContentCenterStatusCode
      */
     virtual void onSongSimpleInfoResult(const char* requestId, int64_t songCode, const char* simpleInfo, MusicContentCenterStatusCode errorCode) = 0;
@@ -296,12 +300,16 @@ struct MusicContentCenterConfiguration {
      */
     int32_t maxCacheSize;
     /**
+    * @technical preview
+    */
+    const char* mccDomain;
+    /**
      * Event handler to get callback result.
      */
     IMusicContentCenterEventHandler* eventHandler;
-    MusicContentCenterConfiguration():appId(nullptr),token(nullptr),eventHandler(nullptr),mccUid(0),maxCacheSize(10){}
-    MusicContentCenterConfiguration(const char*appid,const char* token,int64_t id,IMusicContentCenterEventHandler* handler,int32_t maxSize = 10):
-        appId(appid),token(token),mccUid(id),eventHandler(handler),maxCacheSize(maxSize){}
+    MusicContentCenterConfiguration():appId(nullptr),token(nullptr),eventHandler(nullptr),mccUid(0),maxCacheSize(10), mccDomain(nullptr){}
+    MusicContentCenterConfiguration(const char*appid,const char* token,int64_t id,IMusicContentCenterEventHandler* handler,int32_t maxSize = 10, const char* apiurl = nullptr):
+        appId(appid),token(token),mccUid(id),eventHandler(handler),maxCacheSize(maxSize), mccDomain(apiurl){}
 };
 
 class IMusicPlayer : public IMediaPlayer {

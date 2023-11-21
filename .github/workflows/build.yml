@@ -71,11 +71,10 @@ jobs:
   integration_test_android:
     name: Run Flutter Android Integration Tests
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ci:skip') }}
-    needs: flutter_codestyle_check
     strategy:
       matrix:
         version: ["2.10.5", "3.13.4"]
-    runs-on: macos-13
+    runs-on: macos-12
     timeout-minutes: 120
     env:
       TEST_APP_ID: ${{ secrets.MY_APP_ID }}
