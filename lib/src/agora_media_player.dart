@@ -112,7 +112,7 @@ abstract class MediaPlayer {
   ///
   /// Call this method after calling getStreamCount.
   ///
-  /// * [index] The index of the media stream.
+  /// * [index] The index of the media stream. This parameter must be less than the return value of getStreamCount.
   ///
   /// Returns
   /// If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo.

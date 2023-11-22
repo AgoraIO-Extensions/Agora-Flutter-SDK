@@ -2055,11 +2055,11 @@ class RtcStats {
   @JsonKey(name: 'rxVideoBytes')
   final int? rxVideoBytes;
 
-  /// Video transmission bitrate (Kbps), represented by an instantaneous value.
+  /// The actual bitrate (Kbps) while sending the local video stream.
   @JsonKey(name: 'txKBitRate')
   final int? txKBitRate;
 
-  /// The receiving bitrate (Kbps), represented by an instantaneous value.
+  /// The receiving bitrate (Kbps).
   @JsonKey(name: 'rxKBitRate')
   final int? rxKBitRate;
 
