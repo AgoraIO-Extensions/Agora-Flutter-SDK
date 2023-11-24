@@ -96,7 +96,7 @@ abstract class MediaEngine {
 
   /// Pulls the remote audio data.
   ///
-  /// Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering. After a successful method call, the app pulls the decoded and mixed audio data for playback.
+  /// Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering. After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
   ///  This method only supports pulling data from custom audio source. If you need to pull the data captured by the SDK, do not call this method.
   ///  Call this method after joining a channel.
   ///  Once you enable the external audio sink, the app will not retrieve any audio data from the onPlaybackAudioFrame callback.
