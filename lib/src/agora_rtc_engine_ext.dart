@@ -40,8 +40,8 @@ class AgoraRtcException implements Exception {
 ///
 /// Returns
 /// One RtcEngine object.
-RtcEngine createAgoraRtcEngine() {
-  return impl.RtcEngineImpl.create();
+RtcEngine createAgoraRtcEngine({int sharedNativeHandle = 0}) {
+  return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 
 /// Creates one RtcEngineEx object.
@@ -50,8 +50,8 @@ RtcEngine createAgoraRtcEngine() {
 ///
 /// Returns
 /// One RtcEngineEx object.
-RtcEngineEx createAgoraRtcEngineEx() {
-  return impl.RtcEngineImpl.create();
+RtcEngineEx createAgoraRtcEngineEx({int sharedNativeHandle = 0}) {
+  return impl.RtcEngineImpl.create(sharedNativeHandle: sharedNativeHandle);
 }
 
 /// Gets one MediaPlayerCacheManager instance.

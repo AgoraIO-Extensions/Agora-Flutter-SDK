@@ -55,7 +55,7 @@ android {
 
 dependencies {
   if (isDev(project)) {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    api fileTree(dir: "libs", include: ["*.jar"])
   } else {
     api 'io.agora.rtc:iris-rtc:4.3.0-dev.13'
     api 'io.agora.rtc:agora-full-preview:4.3.0-dev.13'

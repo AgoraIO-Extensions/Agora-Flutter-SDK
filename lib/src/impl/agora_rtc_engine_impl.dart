@@ -308,12 +308,28 @@ class InitializationState extends ChangeNotifier {
   }
 }
 
+class SharedNativeHandleInitilizationArgProvider
+    implements InitilizationArgProvider {
+  const SharedNativeHandleInitilizationArgProvider(this.sharedNativeHandle);
+
+  final int sharedNativeHandle;
+  @override
+  IrisHandle provide(IrisApiEngineHandle apiEngineHandle) {
+    return ObjectIrisHandle(sharedNativeHandle);
+  }
+}
+
 class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     implements RtcEngineEx {
-  RtcEngineImpl._(IrisMethodChannel irisMethodChannel)
-      : super(irisMethodChannel);
+  RtcEngineImpl._({
+    required IrisMethodChannel irisMethodChannel,
+    int sharedNativeHandle = 0,
+  })  : _sharedNativeHandle = sharedNativeHandle,
+        super(irisMethodChannel);
 
   static RtcEngineImpl? _instance;
+
+  int _sharedNativeHandle = 0;
 
   InitializationState? _rtcEngineStateInternal;
   InitializationState get _rtcEngineState {
@@ -345,13 +361,28 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
   @internal
   late MethodChannel engineMethodChannel;
 
-  static RtcEngineEx create({IrisMethodChannel? irisMethodChannel}) {
-    if (_instance != null) return _instance!;
+  static RtcEngineEx create({
+    int sharedNativeHandle = 0,
+    IrisMethodChannel? irisMethodChannel,
+  }) {
+    if (_instance != null) {
+      _instance!._updateSharedNativeHandle(sharedNativeHandle);
+      return _instance!;
+    }
 
-    _instance = RtcEngineImpl._(irisMethodChannel ??
-        IrisMethodChannel(createPlatformBindingsProvider()));
+    _instance = RtcEngineImpl._(
+      irisMethodChannel: irisMethodChannel ??
+          IrisMethodChannel(createPlatformBindingsProvider()),
+      sharedNativeHandle: sharedNativeHandle,
+    );
 
     return _instance!;
+  }
+
+  void _updateSharedNativeHandle(int sharedNativeHandle) {
+    if (_sharedNativeHandle != sharedNativeHandle) {
+      _sharedNativeHandle = sharedNativeHandle;
+    }
   }
 
   IrisMethodChannel _getIrisMethodChannel() {
@@ -380,13 +411,15 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
       await engineMethodChannel.invokeMethod('androidInit');
     }
 
-    List<InitilizationArgProvider> args = [];
-    assert(() {
-      if (_mockRtcEngineProvider != null) {
-        args.add(_mockRtcEngineProvider!);
-      }
-      return true;
-    }());
+    List<InitilizationArgProvider> args = [
+      SharedNativeHandleInitilizationArgProvider(_sharedNativeHandle)
+    ];
+    // assert(() {
+    //   if (_mockRtcEngineProvider != null) {
+    //     args.add(_mockRtcEngineProvider!);
+    //   }
+    //   return true;
+    // }());
 
     await irisMethodChannel.initilize(args);
     await _initializeInternal(context);
@@ -446,6 +479,7 @@ class RtcEngineImpl extends rtc_engine_ex_binding.RtcEngineExImpl
     _isReleased = true;
     _releasingCompleter?.complete(null);
     _releasingCompleter = null;
+    _instance = null;
   }
 
   @override
