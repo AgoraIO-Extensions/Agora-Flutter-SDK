@@ -21,8 +21,8 @@ A new flutter plugin project.
     puts '[plugin_dev] Found .plugin_dev file, use vendored_frameworks instead.'
     s.vendored_frameworks = 'libs/*.framework'
   else
-  s.dependency 'AgoraRtcEngine_macOS', '4.2.3'
-  s.dependency 'AgoraIrisRTC_macOS', '4.2.3.2-build.1'
+  s.dependency 'AgoraRtcEngine_macOS', '4.2.6.1'
+  s.dependency 'AgoraIrisRTC_macOS', '4.2.6.1-build.1'
   end
 
   s.platform = :osx, '10.11'
