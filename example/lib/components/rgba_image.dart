@@ -1,62 +1,63 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 
-class RgbaImage extends ImageProvider<RgbaImage> {
+class RgbaImage extends StatefulWidget {
+  const RgbaImage({
+    Key? key,
+    required this.bytes,
+    required this.width,
+    required this.height,
+    this.format = ui.PixelFormat.rgba8888,
+  }) : super(key: key);
+
   final Uint8List bytes;
   final int width;
   final int height;
-  final double scale;
+  final ui.PixelFormat format;
 
-  const RgbaImage(
-    this.bytes, {
-    required this.width,
-    required this.height,
-    this.scale = 1.0,
-  });
+  @override
+  State<RgbaImage> createState() => _RgbaImageState();
+}
 
-  Future<ui.Codec> _loadAsync(
-    RgbaImage key,
-    DecoderCallback decode,
-  ) async {
-    assert(key == this);
+class _RgbaImageState extends State<RgbaImage> {
+  ui.Image? _image;
 
-    final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
-    final descriptor = ui.ImageDescriptor.raw(
-      buffer,
-      width: width,
-      height: height,
-      pixelFormat: ui.PixelFormat.rgba8888,
-    );
-    return await descriptor.instantiateCodec();
+  Future<void> _loadImage() async {
+    final imageCompleter = Completer<ui.Image>();
+
+    ui.decodeImageFromPixels(
+        widget.bytes, widget.width, widget.height, widget.format, (result) {
+      imageCompleter.complete(result);
+    });
+
+    _image = await imageCompleter.future;
+    setState(() {});
   }
 
   @override
-  Future<RgbaImage> obtainKey(ImageConfiguration configuration) {
-    return SynchronousFuture<RgbaImage>(this);
+  void initState() {
+    super.initState();
+
+    _loadImage();
   }
 
   @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is RgbaImage && other.bytes == bytes && other.scale == scale;
+  Widget build(BuildContext context) {
+    if (_image != null) {
+      return RawImage(
+        image: _image,
+      );
+    }
+
+    return const SizedBox();
   }
 
   @override
-  int get hashCode => Object.hash(bytes.hashCode, scale);
-
-  @override
-  String toString() =>
-      '${objectRuntimeType(this, 'RgbaImage')}(${describeIdentity(bytes)}, scale: $scale)';
-
-  @override
-  ImageStreamCompleter load(RgbaImage key, DecoderCallback decode) {
-    return MultiFrameImageStreamCompleter(
-      codec: _loadAsync(key, decode),
-      scale: key.scale,
-      debugLabel: 'RgbaImage(${describeIdentity(key.bytes)})',
-    );
+  void dispose() {
+    _image?.dispose();
+    super.dispose();
   }
 }
