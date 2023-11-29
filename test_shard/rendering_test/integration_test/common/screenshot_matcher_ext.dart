@@ -15,11 +15,12 @@ Future<void> matchScreenShotDesktop(
 
   final executableFile = File(Platform.resolvedExecutable);
   late String testPath;
+  // TODO(littlegnal): Pass the root path of `rendering_test` project through the command line
   if (Platform.isMacOS) {
     testPath = executableFile
         .parent.parent.parent.parent.parent.parent.parent.parent.parent.path;
   } else {
-    testPath = executableFile.parent.parent.parent.parent.parent.path;
+    testPath = executableFile.parent.parent.parent.parent.parent.parent.path;
   }
 
   SIZE thumbSize = const SIZE(width: 1000, height: 1000);
