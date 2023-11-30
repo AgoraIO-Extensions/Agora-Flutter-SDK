@@ -47,7 +47,7 @@ dependencies {
   if (isDev(project)) {
     implementation fileTree(dir: "libs", include: ["*.jar"])
   } else {
-    api 'io.agora.rtc:iris-rtc:4.1.1.21-banban.1'
+    api 'io.agora.rtc:iris-rtc:4.1.1.21-banban.4'
     api 'io.agora.rtc:agora-special-full:4.1.1.21'
     api 'io.agora.rtc:full-screen-sharing:4.1.1.21'
   }
