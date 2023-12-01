@@ -76,7 +76,7 @@ final advanced = [
     },
   // TODO(littlegnal): Not supported for this special version
   // {'name': 'ProcessVideoRawData', 'widget': const ProcessVideoRawData()},
-  // {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
+  {'name': 'ProcessAudioRawData', 'widget': const ProcessAudioRawData()},
   {'name': 'AudioSpectrum', 'widget': const AudioSpectrum()},
   {'name': 'MediaRecorder', 'widget': const MediaRecorder()},
   {'name': 'PushVideoFrame', 'widget': const PushVideoFrame()},
