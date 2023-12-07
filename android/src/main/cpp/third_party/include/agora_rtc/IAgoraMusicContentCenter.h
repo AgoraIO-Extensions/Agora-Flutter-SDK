@@ -44,36 +44,36 @@ typedef enum
     /**
      * 1: A general error occurs.
      */
-    kMusicContentCenterStatusErr = 1,
+    kMusicContentCenterStatusError = 1,
     /**
      * 2: The gateway error. There are several possible reasons:
      *  - Token is expired. Check if your token is expired.
      *  - Token is invalid. Check the type of token you passed in.
      *  - Network error. Check your network.
      */
-    kMusicContentCenterStatusErrGateway = 2,
+    kMusicContentCenterStatusGateway = 2,
     /**
      * 3: Permission and resource error. There are several possible reasons:
      *  - Your appid may not have the mcc permission. Please contact technical support 
      *  - The resource may not exist. Please contact technical support
      */
-    kMusicContentCenterStatusErrPermissionAndResource = 3,
+    kMusicContentCenterStatusPermissionAndResource = 3,
     /**
      * 4: Internal data parse error. Please contact technical support
      */
-    kMusicContentCenterStatusErrInternalDataParse = 4,
+    kMusicContentCenterStatusInternalDataParse = 4,
     /**
      * 5: Music loading error. Please contact technical support
      */
-    kMusicContentCenterStatusErrMusicLoading = 5,
+    kMusicContentCenterStatusMusicLoading = 5,
     /**
      * 6: Music decryption error. Please contact technical support
      */
-    kMusicContentCenterStatusErrMusicDecryption = 6, 
+    kMusicContentCenterStatusMusicDecryption = 6, 
     /**
      * 7: Http internal error. Please retry later.
      */
-    kMusicContentCenterStatusErrHttpInternalError = 7, 
+    kMusicContentCenterStatusHttpInternalError = 7, 
 } MusicContentCenterStatusCode;
 
 typedef struct 
@@ -234,18 +234,18 @@ public:
      * 
      * @param requestId The request id is same as that returned by getMusicCharts.
      * @param result The result of music chart collection
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param status The status of the request. See MusicContentCenterStatusCode
      */
-    virtual void onMusicChartsResult(const char* requestId, agora_refptr<MusicChartCollection> result, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onMusicChartsResult(const char* requestId, agora_refptr<MusicChartCollection> result, MusicContentCenterStatusCode status) = 0;
 
     /**
      * Music collection, occurs when getMusicCollectionByMusicChartId or searchMusic method is called.
      * 
      * @param requestId The request id is same as that returned by getMusicCollectionByMusicChartId or searchMusic
      * @param result The result of music collection
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param status The status of the request. See MusicContentCenterStatusCode
      */
-    virtual void onMusicCollectionResult(const char* requestId, agora_refptr<MusicCollection> result, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onMusicCollectionResult(const char* requestId, agora_refptr<MusicCollection> result, MusicContentCenterStatusCode status) = 0;
 
     /**
      * Lyric url callback of getLyric, occurs when getLyric is called
@@ -253,9 +253,9 @@ public:
      * @param requestId The request id is same as that returned by getLyric
      * @param songCode Song code
      * @param lyricUrl  The lyric url of this music
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param status The status of the request. See MusicContentCenterStatusCode
      */
-    virtual void onLyricResult(const char* requestId, int64_t songCode, const char* lyricUrl, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onLyricResult(const char* requestId, int64_t songCode, const char* lyricUrl, MusicContentCenterStatusCode status) = 0;
 
     /**
      * Simple info callback of getSongSimpleInfo, occurs when getSongSimpleInfo is called
@@ -263,9 +263,9 @@ public:
      * @param requestId The request id is same as that returned by getSongSimpleInfo.
      * @param songCode Song code
      * @param simpleInfo The metadata of the music.
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param status The status of the request. See MusicContentCenterStatusCode
      */
-    virtual void onSongSimpleInfoResult(const char* requestId, int64_t songCode, const char* simpleInfo, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onSongSimpleInfoResult(const char* requestId, int64_t songCode, const char* simpleInfo, MusicContentCenterStatusCode status) = 0;
 
     /**
      * Preload process callback, occurs when preload is called
@@ -274,10 +274,10 @@ public:
      * @param songCode Song code
      * @param percent Preload progress (0 ~ 100)
      * @param lyricUrl  The lyric url of this music
-     * @param status Preload status; see PreloadStatusCode.
-     * @param errorCode The status of the request. See MusicContentCenterStatusCode
+     * @param preloadStatus Preload status; see PreloadStatusCode.
+     * @param mccStatus The status of the request. See MusicContentCenterStatusCode
      */
-    virtual void onPreLoadEvent(const char* requestId, int64_t songCode, int percent, const char* lyricUrl, PreloadStatusCode status, MusicContentCenterStatusCode errorCode) = 0;
+    virtual void onPreLoadEvent(const char* requestId, int64_t songCode, int percent, const char* lyricUrl, PreloadStatusCode preloadStatus, MusicContentCenterStatusCode mccStatus) = 0;
 
     virtual ~IMusicContentCenterEventHandler() {};
 };

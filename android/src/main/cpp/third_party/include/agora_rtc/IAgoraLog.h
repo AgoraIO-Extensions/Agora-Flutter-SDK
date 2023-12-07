@@ -75,7 +75,7 @@ const uint32_t MAX_LOG_SIZE = 20 * 1024 * 1024;  // 20MB
 const uint32_t MIN_LOG_SIZE = 128 * 1024;        // 128KB
 /** The default log size in kb
  */
-const uint32_t DEFAULT_LOG_SIZE_IN_KB = 1024;
+const uint32_t DEFAULT_LOG_SIZE_IN_KB = 2048;
 
 /** Definition of LogConfiguration
  */
@@ -83,7 +83,7 @@ struct LogConfig {
   /**The log file path, default is NULL for default log path
    */
   const char* filePath;
-  /** The log file size, KB , set 1024KB to use default log size
+  /** The log file size, KB , set 2048KB to use default log size
    */
   uint32_t fileSizeInKB;
   /** The log level, set LOG_LEVEL_INFO to use default log level

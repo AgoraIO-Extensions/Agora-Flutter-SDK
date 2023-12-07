@@ -64,14 +64,6 @@
 #define IRIS_DEPRECATED
 #endif
 
-#if defined(IRIS_DEBUG)
-#define IRIS_DEBUG_API IRIS_API
-#define IRIS_DEBUG_CPP_API IRIS_CPP_API
-#else
-#define IRIS_DEBUG_API
-#define IRIS_DEBUG_CPP_API
-#endif
-
 #if defined(__GUNC__)
 #define COMPILER_IS_GCC
 #if defined(__MINGW32__) || defined(__MINGW64__)
