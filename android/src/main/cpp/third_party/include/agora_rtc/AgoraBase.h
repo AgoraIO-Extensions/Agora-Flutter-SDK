@@ -33,8 +33,10 @@
 
 #if defined(AGORARTC_EXPORT)
 #define AGORA_API extern "C" __declspec(dllexport)
+#define AGORA_CPP_API __declspec(dllexport)
 #else
 #define AGORA_API extern "C" __declspec(dllimport)
+#define AGORA_CPP_API __declspec(dllimport)
 #endif  // AGORARTC_EXPORT
 
 #define AGORA_CALL __cdecl
@@ -46,11 +48,13 @@
 #include <TargetConditionals.h>
 
 #define AGORA_API extern "C" __attribute__((visibility("default")))
+#define AGORA_CPP_API __attribute__((visibility("default")))
 #define AGORA_CALL
 
 #elif defined(__ANDROID__) || defined(__linux__)
 
 #define AGORA_API extern "C" __attribute__((visibility("default")))
+#define AGORA_CPP_API __attribute__((visibility("default")))
 #define AGORA_CALL
 
 #define __deprecated
@@ -58,6 +62,7 @@
 #else  // !_WIN32 && !__APPLE__ && !(__ANDROID__ || __linux__)
 
 #define AGORA_API extern "C"
+#define AGORA_CPP_API
 #define AGORA_CALL
 
 #define __deprecated
@@ -80,7 +85,7 @@
 #endif
 #endif
 
-#define INVALID_DISPLAY_ID 0xffff
+#define INVALID_DISPLAY_ID (-2)
 
 namespace agora {
 namespace util {
@@ -92,16 +97,16 @@ class AutoPtr {
   typedef T* pointer_type;
 
  public:
-  explicit AutoPtr(pointer_type p = NULL) : ptr_(p) {}
+  explicit AutoPtr(pointer_type p = OPTIONAL_NULLPTR) : ptr_(p) {}
 
   ~AutoPtr() {
     if (ptr_) {
       ptr_->release();
-      ptr_ = NULL;
+      ptr_ = OPTIONAL_NULLPTR;
     }
   }
 
-  operator bool() const { return (ptr_ != NULL); }
+  operator bool() const { return (ptr_ != OPTIONAL_NULLPTR); }
 
   value_type& operator*() const { return *get(); }
 
@@ -115,7 +120,7 @@ class AutoPtr {
     return ret;
   }
 
-  void reset(pointer_type ptr = NULL) {
+  void reset(pointer_type ptr = OPTIONAL_NULLPTR) {
     if (ptr != ptr_ && ptr_) {
       ptr_->release();
     }
@@ -125,12 +130,12 @@ class AutoPtr {
 
   template <class C1, class C2>
   bool queryInterface(C1* c, C2 iid) {
-    pointer_type p = NULL;
+    pointer_type p = OPTIONAL_NULLPTR;
     if (c && !c->queryInterface(iid, reinterpret_cast<void**>(&p))) {
       reset(p);
     }
 
-    return (p != NULL);
+    return (p != OPTIONAL_NULLPTR);
   }
 
  private:
@@ -153,7 +158,7 @@ class CopyableAutoPtr : public AutoPtr<T> {
     return *this;
   }
   pointer_type clone() const {
-    if (!this->get()) return NULL;
+    if (!this->get()) return OPTIONAL_NULLPTR;
     return this->get()->clone();
   }
 };
@@ -197,7 +202,7 @@ class AOutputIterator {
   typedef const value_type& const_reference;
   typedef value_type* pointer;
   typedef const value_type* const_pointer;
-  explicit AOutputIterator(IIterator* it = NULL) : p(it) {}
+  explicit AOutputIterator(IIterator* it = OPTIONAL_NULLPTR) : p(it) {}
   ~AOutputIterator() {
     if (p) p->release();
   }
@@ -215,7 +220,7 @@ class AOutputIterator {
   bool operator!=(const AOutputIterator& rhs) const { return !this->operator==(rhs); }
   reference operator*() { return *reinterpret_cast<pointer>(p->current()); }
   const_reference operator*() const { return *reinterpret_cast<const_pointer>(p->const_current()); }
-  bool valid() const { return p && p->current() != NULL; }
+  bool valid() const { return p && p->current() != OPTIONAL_NULLPTR; }
 };
 
 template <class T>
@@ -234,16 +239,16 @@ class AList {
   typedef const AOutputIterator<value_type> const_iterator;
 
  public:
-  AList() : container(NULL), owner(false) {}
+  AList() : container(OPTIONAL_NULLPTR), owner(false) {}
   AList(IContainer* c, bool take_ownership) : container(c), owner(take_ownership) {}
   ~AList() { reset(); }
-  void reset(IContainer* c = NULL, bool take_ownership = false) {
+  void reset(IContainer* c = OPTIONAL_NULLPTR, bool take_ownership = false) {
     if (owner && container) container->release();
     container = c;
     owner = take_ownership;
   }
-  iterator begin() { return container ? iterator(container->begin()) : iterator(NULL); }
-  iterator end() { return iterator(NULL); }
+  iterator begin() { return container ? iterator(container->begin()) : iterator(OPTIONAL_NULLPTR); }
+  iterator end() { return iterator(OPTIONAL_NULLPTR); }
   size_type size() const { return container ? container->size() : 0; }
   bool empty() const { return size() == 0; }
 };
@@ -731,10 +736,6 @@ enum ERROR_CODE_TYPE {
    * 1501: Video Device Module: The camera is not authorized.
    */
   ERR_VDM_CAMERA_NOT_AUTHORIZED = 1501,
-  /**
-   * 2007: Audio Device Module: An error occurs in starting the application loopback.
-   */
-  ERR_ADM_APPLICATION_LOOPBACK = 2007,
 };
 
 enum LICENSE_ERROR_TYPE {
@@ -857,9 +858,9 @@ enum INTERFACE_ID_TYPE {
   AGORA_IID_CLOUD_SPATIAL_AUDIO = 10,
   AGORA_IID_LOCAL_SPATIAL_AUDIO = 11,
   AGORA_IID_STATE_SYNC = 13,
-  AGORA_IID_METACHAT_SERVICE = 14,
+  AGORA_IID_META_SERVICE = 14,
   AGORA_IID_MUSIC_CONTENT_CENTER = 15,
-  AGORA_IID_H265_TRANSCODER = 16,
+  AGORA_IID_H265_TRANSCODER = 16,  
 };
 
 /**
@@ -1267,7 +1268,7 @@ struct SenderOptions {
 
   SenderOptions()
   : ccMode(CC_ENABLED),
-    codecType(VIDEO_CODEC_H264),
+    codecType(VIDEO_CODEC_H265),
     targetBitrate(6500) {}
 };
 
@@ -1542,12 +1543,23 @@ struct VideoSubscriptionOptions {
     VideoSubscriptionOptions() {}
 };
 
+
+/** The maximum length of the user account.
+ */
+enum MAX_USER_ACCOUNT_LENGTH_TYPE
+{
+  /** The maximum length of the user account is 256 bytes.
+   */
+  MAX_USER_ACCOUNT_LENGTH = 256
+};
+
 /**
  * The definition of the EncodedVideoFrameInfo struct, which contains the information of the external encoded video frame.
  */
 struct EncodedVideoFrameInfo {
   EncodedVideoFrameInfo()
-    : codecType(VIDEO_CODEC_H264),
+    : uid(0),
+      codecType(VIDEO_CODEC_H264),
       width(0),
       height(0),
       framesPerSecond(0),
@@ -1556,11 +1568,11 @@ struct EncodedVideoFrameInfo {
       trackId(0),
       captureTimeMs(0),
       decodeTimeMs(0),
-      uid(0),
       streamType(VIDEO_STREAM_HIGH) {}
 
   EncodedVideoFrameInfo(const EncodedVideoFrameInfo& rhs)
-    : codecType(rhs.codecType),
+    : uid(rhs.uid),
+      codecType(rhs.codecType),
       width(rhs.width),
       height(rhs.height),
       framesPerSecond(rhs.framesPerSecond),
@@ -1569,11 +1581,11 @@ struct EncodedVideoFrameInfo {
       trackId(rhs.trackId),
       captureTimeMs(rhs.captureTimeMs),
       decodeTimeMs(rhs.decodeTimeMs),
-      uid(rhs.uid),
       streamType(rhs.streamType) {}
 
   EncodedVideoFrameInfo& operator=(const EncodedVideoFrameInfo& rhs) {
     if (this == &rhs) return *this;
+    uid = rhs.uid;
     codecType = rhs.codecType;
     width = rhs.width;
     height = rhs.height;
@@ -1583,12 +1595,16 @@ struct EncodedVideoFrameInfo {
     trackId = rhs.trackId;
     captureTimeMs = rhs.captureTimeMs;
     decodeTimeMs = rhs.decodeTimeMs;
-    uid = rhs.uid;
     streamType = rhs.streamType;
     return *this;
   }
+
   /**
-   * The codec type of the local video stream. See #VIDEO_CODEC_TYPE. The default value is `VIDEO_CODEC_H264 (2)`.
+   * ID of the user that pushes the the external encoded video frame..
+   */
+  uid_t uid;
+  /**
+   * The codec type of the local video stream. See #VIDEO_CODEC_TYPE. The default value is `VIDEO_CODEC_H265 (3)`.
    */
   VIDEO_CODEC_TYPE codecType;
   /**
@@ -1627,15 +1643,12 @@ struct EncodedVideoFrameInfo {
    */
   int64_t decodeTimeMs;
   /**
-   * ID of the user that pushes the the external encoded video frame..
-   */
-  uid_t uid;
-  /**
    * The stream type of video frame.
    */
   VIDEO_STREAM_TYPE streamType;
 
 };
+
 /**
 * Video compression preference.
 */
@@ -1750,6 +1763,8 @@ struct CodecCapInfo {
   int codecCapMask;
   /** The codec capability level, estimated based on the device hardware.*/
   CodecCapLevels codecLevels;
+
+  CodecCapInfo(): codecType(VIDEO_CODEC_NONE), codecCapMask(0) {}
 };
 
 /**
@@ -1863,7 +1878,7 @@ struct VideoEncoderConfiguration {
   AdvanceOptions advanceOptions;
 
   VideoEncoderConfiguration(const VideoDimensions& d, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
-    : codecType(VIDEO_CODEC_H264),
+    : codecType(VIDEO_CODEC_H265),
       dimensions(d),
       frameRate(f),
       bitrate(b),
@@ -1873,7 +1888,7 @@ struct VideoEncoderConfiguration {
       mirrorMode(mirror),
       advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
   VideoEncoderConfiguration(int width, int height, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
-    : codecType(VIDEO_CODEC_H264),
+    : codecType(VIDEO_CODEC_H265),
       dimensions(width, height),
       frameRate(f),
       bitrate(b),
@@ -1893,7 +1908,7 @@ struct VideoEncoderConfiguration {
       mirrorMode(config.mirrorMode),
       advanceOptions(config.advanceOptions) {}
   VideoEncoderConfiguration()
-    : codecType(VIDEO_CODEC_H264),
+    : codecType(VIDEO_CODEC_H265),
       dimensions(FRAME_WIDTH_960, FRAME_HEIGHT_540),
       frameRate(FRAME_RATE_FPS_15),
       bitrate(STANDARD_BITRATE),
@@ -2584,6 +2599,29 @@ enum VIDEO_APPLICATION_SCENARIO_TYPE {
 };
 
 /**
+ * The video QoE preference type.
+ */
+enum VIDEO_QOE_PREFERENCE_TYPE {
+  /**
+   * 1: Default QoE type, balance the delay, picture quality and fluency.
+   */
+  VIDEO_QOE_PREFERENCE_BALANCE = 1,
+  /**
+   * 2: lower the e2e delay.
+   */
+  VIDEO_QOE_PREFERENCE_DELAY_FIRST = 2,
+  /**
+   * 3: picture quality.
+   */
+  VIDEO_QOE_PREFERENCE_PICTURE_QUALITY_FIRST = 3,
+  /**
+   * 4: more fluency.
+   */
+  VIDEO_QOE_PREFERENCE_FLUENCY_FIRST = 4,
+
+};
+
+/**
  * The brightness level of the video image captured by the local camera.
  */
 enum CAPTURE_BRIGHTNESS_LEVEL_TYPE {
@@ -2627,50 +2665,50 @@ enum LOCAL_AUDIO_STREAM_STATE {
 /**
  * Local audio state error codes.
  */
-enum LOCAL_AUDIO_STREAM_ERROR {
+enum LOCAL_AUDIO_STREAM_REASON {
   /**
    * 0: The local audio is normal.
    */
-  LOCAL_AUDIO_STREAM_ERROR_OK = 0,
+  LOCAL_AUDIO_STREAM_REASON_OK = 0,
   /**
    * 1: No specified reason for the local audio failure. Remind your users to try to rejoin the channel.
    */
-  LOCAL_AUDIO_STREAM_ERROR_FAILURE = 1,
+  LOCAL_AUDIO_STREAM_REASON_FAILURE = 1,
   /**
    * 2: No permission to use the local audio device. Remind your users to grant permission.
    */
-  LOCAL_AUDIO_STREAM_ERROR_DEVICE_NO_PERMISSION = 2,
+  LOCAL_AUDIO_STREAM_REASON_DEVICE_NO_PERMISSION = 2,
   /**
    * 3: (Android and iOS only) The local audio capture device is used. Remind your users to check
    * whether another application occupies the microphone. Local audio capture automatically resume
    * after the microphone is idle for about five seconds. You can also try to rejoin the channel
    * after the microphone is idle.
    */
-  LOCAL_AUDIO_STREAM_ERROR_DEVICE_BUSY = 3,
+  LOCAL_AUDIO_STREAM_REASON_DEVICE_BUSY = 3,
   /**
    * 4: The local audio capture failed.
    */
-  LOCAL_AUDIO_STREAM_ERROR_RECORD_FAILURE = 4,
+  LOCAL_AUDIO_STREAM_REASON_RECORD_FAILURE = 4,
   /**
    * 5: The local audio encoding failed.
    */
-  LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE = 5,
+  LOCAL_AUDIO_STREAM_REASON_ENCODE_FAILURE = 5,
   /** 6: The SDK cannot find the local audio recording device.
    */
-  LOCAL_AUDIO_STREAM_ERROR_NO_RECORDING_DEVICE = 6,
+  LOCAL_AUDIO_STREAM_REASON_NO_RECORDING_DEVICE = 6,
   /** 7: The SDK cannot find the local audio playback device.
    */
-  LOCAL_AUDIO_STREAM_ERROR_NO_PLAYOUT_DEVICE = 7,
+  LOCAL_AUDIO_STREAM_REASON_NO_PLAYOUT_DEVICE = 7,
   /**
    * 8: The local audio capturing is interrupted by the system call.
    */
-  LOCAL_AUDIO_STREAM_ERROR_INTERRUPTED = 8,
+  LOCAL_AUDIO_STREAM_REASON_INTERRUPTED = 8,
   /** 9: An invalid audio capture device ID.
    */
-  LOCAL_AUDIO_STREAM_ERROR_RECORD_INVALID_ID = 9,
+  LOCAL_AUDIO_STREAM_REASON_RECORD_INVALID_ID = 9,
   /** 10: An invalid audio playback device ID.
    */
-  LOCAL_AUDIO_STREAM_ERROR_PLAYOUT_INVALID_ID = 10,
+  LOCAL_AUDIO_STREAM_REASON_PLAYOUT_INVALID_ID = 10,
 };
 
 /** Local video state types.
@@ -2698,73 +2736,73 @@ enum LOCAL_VIDEO_STREAM_STATE {
 /**
  * Local video state error codes.
  */
-enum LOCAL_VIDEO_STREAM_ERROR {
+enum LOCAL_VIDEO_STREAM_REASON {
   /**
    * 0: The local video is normal.
    */
-  LOCAL_VIDEO_STREAM_ERROR_OK = 0,
+  LOCAL_VIDEO_STREAM_REASON_OK = 0,
   /**
    * 1: No specified reason for the local video failure.
    */
-  LOCAL_VIDEO_STREAM_ERROR_FAILURE = 1,
+  LOCAL_VIDEO_STREAM_REASON_FAILURE = 1,
   /**
    * 2: No permission to use the local video capturing device. Remind the user to grant permission
    * and rejoin the channel.
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_NO_PERMISSION = 2,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_NO_PERMISSION = 2,
   /**
    * 3: The local video capturing device is in use. Remind the user to check whether another
    * application occupies the camera.
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY = 3,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_BUSY = 3,
   /**
    * 4: The local video capture fails. Remind the user to check whether the video capture device
    * is working properly or the camera is occupied by another application, and then to rejoin the
    * channel.
    */
-  LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE = 4,
+  LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE = 4,
   /**
    * 5: The local video encoder is not supported.
    */
-  LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE = 5,
+  LOCAL_VIDEO_STREAM_REASON_CODEC_NOT_SUPPORT = 5,
   /**
    * 6: (iOS only) The app is in the background. Remind the user that video capture cannot be
    * performed normally when the app is in the background.
    */
-  LOCAL_VIDEO_STREAM_ERROR_CAPTURE_INBACKGROUND = 6,
+  LOCAL_VIDEO_STREAM_REASON_CAPTURE_INBACKGROUND = 6,
   /**
    * 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture
    * in Picture mode, and another app is occupying the camera. Remind the user that the application
    * cannot capture video properly when the app is running in Slide Over, Split View, or Picture in
    * Picture mode and another app is occupying the camera.
    */
-  LOCAL_VIDEO_STREAM_ERROR_CAPTURE_MULTIPLE_FOREGROUND_APPS = 7,
+  LOCAL_VIDEO_STREAM_REASON_CAPTURE_MULTIPLE_FOREGROUND_APPS = 7,
   /**
    * 8: Fails to find a local video capture device. Remind the user to check whether the camera is
    * connected to the device properly or the camera is working properly, and then to rejoin the
    * channel.
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_NOT_FOUND = 8,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_NOT_FOUND = 8,
   /**
    *  9: (macOS only) The video capture device currently in use is disconnected (such as being
    * unplugged).
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_DISCONNECTED = 9,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_DISCONNECTED = 9,
   /**
    * 10: (macOS and Windows only) The SDK cannot find the video device in the video device list.
    * Check whether the ID of the video device is valid.
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_INVALID_ID = 10,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_INVALID_ID = 10,
   /**
    * 101: The current video capture device is unavailable due to excessive system pressure.
    */
-  LOCAL_VIDEO_STREAM_ERROR_DEVICE_SYSTEM_PRESSURE = 101,
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_SYSTEM_PRESSURE = 101,
   /**
    * 11: (macOS only) The shared window is minimized when you call `startScreenCaptureByWindowId`
    * to share a window. The SDK cannot share a minimized window. You can cancel the minimization
    * of this window at the application layer, for example by maximizing this window.
    */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED = 11,
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_MINIMIZED = 11,
   /**
    * 12: (macOS and Windows only) The error code indicates that a window shared by the window ID
    * has been closed or a full-screen window shared by the window ID has exited full-screen mode.
@@ -2779,31 +2817,38 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    * then shares the window of the web video or document. After the user exits full-screen mode,
    * the SDK reports this error code.
    */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_CLOSED = 12,
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_CLOSED = 12,
   /** 13: The local screen capture window is occluded. */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_OCCLUDED = 13,
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_OCCLUDED = 13,
   /** 20: The local screen capture window is not supported. */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_NOT_SUPPORTED = 20,
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_NOT_SUPPORTED = 20,
   /** 21: The screen capture fails. */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_FAILURE = 21,
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_FAILURE = 21,
   /** 22: No permision to capture screen. */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_NO_PERMISSION = 22,
-  /** 
-   * 23: The screen capture paused.
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_NO_PERMISSION = 22,
+  /**
+   * 24: (Windows Only) An unexpected error (possibly due to window block failure) occurs during the screen 
+   * sharing process, resulting in performance degradation. However, the screen sharing process itself is 
+   * functioning normally.
+   */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_AUTO_FALLBACK = 24,
+  /** 25: (Windows only) The local screen capture window is currently hidden and not visible on the desktop. */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_HIDDEN = 25,
+  /** 26: (Windows only) The local screen capture window is recovered from its hidden state. */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN = 26,
+  /** 27:(Windows only) The window is recovered from miniminzed */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_MINIMIZED = 27,
+    /** 
+   * 28: The screen capture paused.
    * 
    * Common scenarios for reporting this error code:
    * - When the desktop switch to the secure desktop such as UAC dialog or the Winlogon desktop on
    * Windows platform, the SDK reports this error code.
    */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_PAUSED = 23,
-  /** 24: The screen capture is resumed. */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_RESUMED = 24,
-  /** 25: (Windows only) The local screen capture window is currently hidden and not visible on the desktop. */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_HIDDEN = 25,
-  /** 26: (Windows only) The local screen capture window is recovered from its hidden state. */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN = 26,
-  /** 27:(Windows only) The window is recovered from miniminzed */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_MINIMIZED = 27,
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_PAUSED = 28,
+  /** 29: The screen capture is resumed. */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_RESUMED = 29,
+
 };
 
 /**
@@ -2991,7 +3036,6 @@ enum REMOTE_USER_STATE {
    * The remote user has enabled the local video capturing.
    */
   USER_STATE_ENABLE_LOCAL_VIDEO = (1 << 8),
-
 };
 
 /**
@@ -3001,7 +3045,7 @@ enum REMOTE_USER_STATE {
 struct VideoTrackInfo {
   VideoTrackInfo()
   : isLocal(false), ownerUid(0), trackId(0), channelId(OPTIONAL_NULLPTR)
-  , streamType(VIDEO_STREAM_HIGH), codecType(VIDEO_CODEC_H264)
+  , streamType(VIDEO_STREAM_HIGH), codecType(VIDEO_CODEC_H265)
   , encodedFrameOnly(false), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY)
   , observationPosition(agora::media::base::POSITION_POST_CAPTURER) {}
   /**
@@ -3014,7 +3058,6 @@ struct VideoTrackInfo {
    * ID of the user who publishes the video track.
    */
   uid_t ownerUid;
-
   /**
    * ID of the video track.
    */
@@ -3145,7 +3188,7 @@ class IPacketObserver {
      */
     unsigned int size;
 
-    Packet() : buffer(NULL), size(0) {}
+    Packet() : buffer(OPTIONAL_NULLPTR), size(0) {}
   };
   /**
    * Occurs when the SDK is ready to send the audio packet.
@@ -3278,6 +3321,18 @@ struct LocalAudioStats
    * The audio delay of the device, contains record and playout delay
    */
   int audioDeviceDelay;
+  /**
+   * The playout delay of the device
+   */
+  int audioPlayoutDelay;
+  /**
+   * The signal delay estimated from audio in-ear monitoring (ms).
+   */
+  int earMonitorDelay;
+  /**
+   * The signal delay estimated during the AEC process from nearin and farin (ms).
+   */
+  int aecEstimatedDelay;
 };
 
 
@@ -3316,74 +3371,74 @@ enum RTMP_STREAM_PUBLISH_STATE {
 /**
  * Error codes of the RTMP or RTMPS streaming.
  */
-enum RTMP_STREAM_PUBLISH_ERROR_TYPE {
+enum RTMP_STREAM_PUBLISH_REASON {
   /**
    * 0: The RTMP or RTMPS streaming publishes successfully.
    */
-  RTMP_STREAM_PUBLISH_ERROR_OK = 0,
+  RTMP_STREAM_PUBLISH_REASON_OK = 0,
   /**
    * 1: Invalid argument used. If, for example, you do not call the `setLiveTranscoding` method to configure the LiveTranscoding parameters before calling the addPublishStreamUrl method,
    * the SDK returns this error. Check whether you set the parameters in the `setLiveTranscoding` method properly.
    */
-  RTMP_STREAM_PUBLISH_ERROR_INVALID_ARGUMENT = 1,
+  RTMP_STREAM_PUBLISH_REASON_INVALID_ARGUMENT = 1,
   /**
    * 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
    */
-  RTMP_STREAM_PUBLISH_ERROR_ENCRYPTED_STREAM_NOT_ALLOWED = 2,
+  RTMP_STREAM_PUBLISH_REASON_ENCRYPTED_STREAM_NOT_ALLOWED = 2,
   /**
    * 3: Timeout for the RTMP or RTMPS streaming. Call the `addPublishStreamUrl` method to publish the streaming again.
    */
-  RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT = 3,
+  RTMP_STREAM_PUBLISH_REASON_CONNECTION_TIMEOUT = 3,
   /**
    * 4: An error occurs in Agora's streaming server. Call the `addPublishStreamUrl` method to publish the streaming again.
    */
-  RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR = 4,
+  RTMP_STREAM_PUBLISH_REASON_INTERNAL_SERVER_ERROR = 4,
   /**
    * 5: An error occurs in the CDN server.
    */
-  RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR = 5,
+  RTMP_STREAM_PUBLISH_REASON_RTMP_SERVER_ERROR = 5,
   /**
    * 6: The RTMP or RTMPS streaming publishes too frequently.
    */
-  RTMP_STREAM_PUBLISH_ERROR_TOO_OFTEN = 6,
+  RTMP_STREAM_PUBLISH_REASON_TOO_OFTEN = 6,
   /**
    * 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
    */
-  RTMP_STREAM_PUBLISH_ERROR_REACH_LIMIT = 7,
+  RTMP_STREAM_PUBLISH_REASON_REACH_LIMIT = 7,
   /**
    * 8: The host manipulates other hosts' URLs. Check your app logic.
    */
-  RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED = 8,
+  RTMP_STREAM_PUBLISH_REASON_NOT_AUTHORIZED = 8,
   /**
    * 9: Agora's server fails to find the RTMP or RTMPS streaming.
    */
-  RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND = 9,
+  RTMP_STREAM_PUBLISH_REASON_STREAM_NOT_FOUND = 9,
   /**
    * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
    */
-  RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED = 10,
+  RTMP_STREAM_PUBLISH_REASON_FORMAT_NOT_SUPPORTED = 10,
   /**
    * 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
    */
-  RTMP_STREAM_PUBLISH_ERROR_NOT_BROADCASTER = 11,  // Note: match to ERR_PUBLISH_STREAM_NOT_BROADCASTER in AgoraBase.h
+  RTMP_STREAM_PUBLISH_REASON_NOT_BROADCASTER = 11,  // Note: match to ERR_PUBLISH_STREAM_NOT_BROADCASTER in AgoraBase.h
   /**
    * 13: The `updateRtmpTranscoding` or `setLiveTranscoding` method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
    */
-  RTMP_STREAM_PUBLISH_ERROR_TRANSCODING_NO_MIX_STREAM = 13,  // Note: match to ERR_PUBLISH_STREAM_TRANSCODING_NO_MIX_STREAM in AgoraBase.h
+  RTMP_STREAM_PUBLISH_REASON_TRANSCODING_NO_MIX_STREAM = 13,  // Note: match to ERR_PUBLISH_STREAM_TRANSCODING_NO_MIX_STREAM in AgoraBase.h
   /**
    * 14: Errors occurred in the host's network.
    */
-  RTMP_STREAM_PUBLISH_ERROR_NET_DOWN = 14,  // Note: match to ERR_NET_DOWN in AgoraBase.h
+  RTMP_STREAM_PUBLISH_REASON_NET_DOWN = 14,  // Note: match to ERR_NET_DOWN in AgoraBase.h
   /**
    * 15: Your App ID does not have permission to use the CDN live streaming function.
    */
-  RTMP_STREAM_PUBLISH_ERROR_INVALID_APPID = 15,  // Note: match to ERR_PUBLISH_STREAM_APPID_INVALID in AgoraBase.h
+  RTMP_STREAM_PUBLISH_REASON_INVALID_APPID = 15,  // Note: match to ERR_PUBLISH_STREAM_APPID_INVALID in AgoraBase.h
   /** invalid privilege. */
-  RTMP_STREAM_PUBLISH_ERROR_INVALID_PRIVILEGE = 16,
+  RTMP_STREAM_PUBLISH_REASON_INVALID_PRIVILEGE = 16,
   /**
    * 100: The streaming has been stopped normally. After you call `removePublishStreamUrl` to stop streaming, the SDK returns this value.
    */
-  RTMP_STREAM_UNPUBLISH_ERROR_OK = 100,
+  RTMP_STREAM_UNPUBLISH_REASON_OK = 100,
 };
 
 /** Events during the RTMP or RTMPS streaming. */
@@ -3445,7 +3500,7 @@ typedef struct RtcImage {
    */
   double alpha;
 
-  RtcImage() : url(NULL), x(0), y(0), width(0), height(0), zOrder(0), alpha(1.0) {}
+  RtcImage() : url(OPTIONAL_NULLPTR), x(0), y(0), width(0), height(0), zOrder(0), alpha(1.0) {}
 } RtcImage;
 /**
  * The configuration for advanced features of the RTMP or RTMPS streaming with transcoding.
@@ -3453,7 +3508,7 @@ typedef struct RtcImage {
  * If you want to enable the advanced features of streaming with transcoding, contact support@agora.io.
  */
 struct LiveStreamAdvancedFeature {
-  LiveStreamAdvancedFeature() : featureName(NULL), opened(false) {}
+  LiveStreamAdvancedFeature() : featureName(OPTIONAL_NULLPTR), opened(false) {}
   LiveStreamAdvancedFeature(const char* feat_name, bool open) : featureName(feat_name), opened(open) {}
   /** The advanced feature for high-quality video with a lower bitrate. */
   // static const char* LBHQ = "lbhq";
@@ -3573,6 +3628,7 @@ struct TranscodingUser {
    * @note If the value is not `0`, a special player is required.
    */
   int audioChannel;
+
   TranscodingUser()
       : uid(0),
         x(0),
@@ -3692,7 +3748,31 @@ struct LiveTranscoding {
 
   /** The number of enabled advanced features. The default value is 0. */
   unsigned int advancedFeatureCount;
-  LiveTranscoding() : width(360), height(640), videoBitrate(400), videoFramerate(15), lowLatency(false), videoGop(30), videoCodecProfile(VIDEO_CODEC_PROFILE_HIGH), backgroundColor(0x000000), videoCodecType(VIDEO_CODEC_H264_FOR_STREAM), userCount(0), transcodingUsers(NULL), transcodingExtraInfo(NULL), metadata(NULL), watermark(NULL), watermarkCount(0), backgroundImage(NULL), backgroundImageCount(0), audioSampleRate(AUDIO_SAMPLE_RATE_48000), audioBitrate(48), audioChannels(1), audioCodecProfile(AUDIO_CODEC_PROFILE_LC_AAC), advancedFeatures(NULL), advancedFeatureCount(0) {}
+
+  LiveTranscoding()
+      : width(360),
+        height(640),
+        videoBitrate(400),
+        videoFramerate(15),
+        lowLatency(false),
+        videoGop(30),
+        videoCodecProfile(VIDEO_CODEC_PROFILE_HIGH),
+        backgroundColor(0x000000),
+        videoCodecType(VIDEO_CODEC_H264_FOR_STREAM),
+        userCount(0), 
+        transcodingUsers(OPTIONAL_NULLPTR),
+        transcodingExtraInfo(OPTIONAL_NULLPTR),
+        metadata(OPTIONAL_NULLPTR),
+        watermark(OPTIONAL_NULLPTR),
+        watermarkCount(0),
+        backgroundImage(OPTIONAL_NULLPTR),
+        backgroundImageCount(0),
+        audioSampleRate(AUDIO_SAMPLE_RATE_48000),
+        audioBitrate(48),
+        audioChannels(1),
+        audioCodecProfile(AUDIO_CODEC_PROFILE_LC_AAC),
+        advancedFeatures(OPTIONAL_NULLPTR),
+        advancedFeatureCount(0) {}
 };
 
 /**
@@ -3754,7 +3834,7 @@ struct TranscodingVideoStream {
   TranscodingVideoStream()
     : sourceType(VIDEO_SOURCE_CAMERA_PRIMARY),
       remoteUserUid(0),
-      imageUrl(NULL),
+      imageUrl(OPTIONAL_NULLPTR),
       x(0),
       y(0),
       width(0),
@@ -3763,7 +3843,6 @@ struct TranscodingVideoStream {
       alpha(1.0),
       mirror(false) {}
 };
-
 
 /**
  * The configuration of the video mixing on the local client.
@@ -3788,11 +3867,7 @@ struct LocalTranscoderConfiguration {
    */
   bool syncWithPrimaryCamera;
 
-  LocalTranscoderConfiguration()
-    : streamCount(0),
-      videoInputStreams(NULL),
-      videoOutputConfiguration(),
-      syncWithPrimaryCamera(true) {}
+  LocalTranscoderConfiguration() : streamCount(0), videoInputStreams(OPTIONAL_NULLPTR), videoOutputConfiguration(), syncWithPrimaryCamera(true) {}
 };
 
 enum VIDEO_TRANSCODER_ERROR {
@@ -4014,10 +4089,18 @@ enum CONNECTION_CHANGED_REASON_TYPE
    * 21: The connection is failed due to license validation failure.
    */
   CONNECTION_CHANGED_LICENSE_VALIDATION_FAILURE = 21,
-  /**
+  /*
    * 22: The connection is failed due to certification verify failure.
    */
   CONNECTION_CHANGED_CERTIFICATION_VERYFY_FAILURE = 22,
+  /**
+   * 23: The connection is failed due to the lack of granting permission to the stream channel.
+   */
+  CONNECTION_CHANGED_STREAM_CHANNEL_NOT_AVAILABLE = 23,
+  /**
+   * 24: The connection is failed due to join channel with an inconsistent appid.
+   */
+  CONNECTION_CHANGED_INCONSISTENT_APPID = 24,
 };
 
 /**
@@ -4157,13 +4240,18 @@ enum VIDEO_VIEW_SETUP_MODE {
  */
 struct VideoCanvas {
   /**
-   * Video display window.
-   */
-  view_t view;
-  /**
    * The user id of local video.
    */
   uid_t uid;
+
+  /**
+  * The uid of video stream composing the video stream from transcoder which will be drawn on this video canvas. 
+  */
+  uid_t subviewUid;
+  /**
+   * Video display window.
+   */
+  view_t view;
   /**
    * A RGBA value indicates background color of the render view. Defaults to 0x00000000.
    */
@@ -4205,28 +4293,37 @@ struct VideoCanvas {
    * The default value is empty(that is, if it has zero width or height), which means no cropping.
    */
   Rectangle cropArea;
-
   /**
-  * Whether to apply alpha mask to the video frame if exsit:
-  * true: Apply alpha mask to video frame.
-  * false: (Default) Do not apply alpha mask to video frame.
-  */
+   * Whether to apply alpha mask to the video frame if exsit:
+   * true: Apply alpha mask to video frame.
+   * false: (Default) Do not apply alpha mask to video frame.
+   */
   bool enableAlphaMask;
-  
+  /**
+   * The video frame position in pipeline. See \ref VIDEO_MODULE_POSITION "VIDEO_MODULE_POSITION".
+   * The default value is POSITION_POST_CAPTURER.
+   */
+  media::base::VIDEO_MODULE_POSITION position;
+
   VideoCanvas()
-    : view(NULL), uid(0), backgroundColor(0x00000000), renderMode(media::base::RENDER_MODE_HIDDEN), mirrorMode(VIDEO_MIRROR_MODE_AUTO),
+    : uid(0), subviewUid(0), view(NULL), backgroundColor(0x00000000), renderMode(media::base::RENDER_MODE_HIDDEN), mirrorMode(VIDEO_MIRROR_MODE_AUTO),
       setupMode(VIDEO_VIEW_SETUP_REPLACE), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY),
-      cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
+      cropArea(0, 0, 0, 0), enableAlphaMask(false), position(media::base::POSITION_POST_CAPTURER) {}
+
+  VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt)
+    : uid(0), subviewUid(0), view(v), backgroundColor(0x00000000), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
+      sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY),
+      cropArea(0, 0, 0, 0), enableAlphaMask(false), position(media::base::POSITION_POST_CAPTURER) {}
 
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, uid_t u)
-    : view(v), uid(u), backgroundColor(0x00000000), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
+    : uid(u), subviewUid(0), view(v), backgroundColor(0x00000000), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
       sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY),
-      cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
+      cropArea(0, 0, 0, 0), enableAlphaMask(false), position(media::base::POSITION_POST_CAPTURER) {}
 
-  VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, user_id_t)
-    : view(v), uid(0), backgroundColor(0x00000000), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
+  VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, uid_t u, uid_t subu)
+    : uid(u), subviewUid(subu), view(v), backgroundColor(0x00000000), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
       sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY),
-      cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
+      cropArea(0, 0, 0, 0), enableAlphaMask(false), position(media::base::POSITION_POST_CAPTURER) {}
 };
 
 /** Image enhancement options.
@@ -4438,7 +4535,7 @@ struct VirtualBackgroundSource {
    */
   BACKGROUND_BLUR_DEGREE blur_degree;
 
-  VirtualBackgroundSource() : background_source_type(BACKGROUND_COLOR), color(0xffffff), source(NULL),  blur_degree(BLUR_DEGREE_HIGH) {}
+  VirtualBackgroundSource() : background_source_type(BACKGROUND_COLOR), color(0xffffff), source(OPTIONAL_NULLPTR),  blur_degree(BLUR_DEGREE_HIGH) {}
 };
 
 struct SegmentationProperty {
@@ -4836,22 +4933,22 @@ struct ScreenCaptureParameters {
    */
   int excludeWindowCount;
 
-    /** The width (px) of the border. Defaults to 0, and the value range is [0,50].
-     *
-     */
-    int highLightWidth;
-    /** The color of the border in RGBA format. The default value is 0xFF8CBF26.
-     *
-     */
-    unsigned int highLightColor;
-    /** Whether to place a border around the shared window or screen:
-     * - true: Place a border.
-     * - false: (Default) Do not place a border.
-     *
-     * @note When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set `enableHighLight` as true.
-     *
-     */
-    bool enableHighLight;
+  /** The width (px) of the border. Defaults to 0, and the value range is [0,50].
+    *
+    */
+  int highLightWidth;
+  /** The color of the border in RGBA format. The default value is 0xFF8CBF26.
+    *
+    */
+  unsigned int highLightColor;
+  /** Whether to place a border around the shared window or screen:
+    * - true: Place a border.
+    * - false: (Default) Do not place a border.
+    *
+    * @note When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set `enableHighLight` as true.
+    *
+    */
+  bool enableHighLight;
 
   ScreenCaptureParameters()
     : dimensions(1920, 1080), frameRate(5), bitrate(STANDARD_BITRATE), captureMouseCursor(true), windowFocus(false), excludeWindowList(OPTIONAL_NULLPTR), excludeWindowCount(0), highLightWidth(0), highLightColor(0), enableHighLight(false)  {}
@@ -4968,7 +5065,7 @@ struct AudioRecordingConfiguration {
   int recordingChannel;
 
   AudioRecordingConfiguration()
-    : filePath(NULL),
+    : filePath(OPTIONAL_NULLPTR),
       encode(false),
       sampleRate(32000),
       fileRecordingType(AUDIO_FILE_RECORDING_MIXED),
@@ -5173,59 +5270,6 @@ enum CHANNEL_MEDIA_RELAY_ERROR {
 };
 
 /**
- * The event code of channel media relay.
- */
-enum CHANNEL_MEDIA_RELAY_EVENT {
-  /** 0: The user disconnects from the server due to poor network connections.
-   */
-  RELAY_EVENT_NETWORK_DISCONNECTED = 0,
-  /** 1: The user is connected to the server.
-   */
-  RELAY_EVENT_NETWORK_CONNECTED = 1,
-  /** 2: The user joins the source channel.
-   */
-  RELAY_EVENT_PACKET_JOINED_SRC_CHANNEL = 2,
-  /** 3: The user joins the destination channel.
-   */
-  RELAY_EVENT_PACKET_JOINED_DEST_CHANNEL = 3,
-  /** 4: The SDK starts relaying the media stream to the destination channel.
-   */
-  RELAY_EVENT_PACKET_SENT_TO_DEST_CHANNEL = 4,
-  /** 5: The server receives the video stream from the source channel.
-   */
-  RELAY_EVENT_PACKET_RECEIVED_VIDEO_FROM_SRC = 5,
-  /** 6: The server receives the audio stream from the source channel.
-   */
-  RELAY_EVENT_PACKET_RECEIVED_AUDIO_FROM_SRC = 6,
-  /** 7: The destination channel is updated.
-   */
-  RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL = 7,
-  /** 8: The destination channel update fails due to internal reasons.
-   */
-  RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_REFUSED = 8,
-  /** 9: The destination channel does not change, which means that the destination channel fails to be updated.
-   */
-  RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE = 9,
-  /** 10: The destination channel name is NULL.
-   */
-  RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL = 10,
-  /** 11: The video profile is sent to the server.
-   */
-  RELAY_EVENT_VIDEO_PROFILE_UPDATE = 11,
-  /** 12: The SDK successfully pauses relaying the media stream to destination channels.
-   */
-  RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS = 12,
-  /** 13: The SDK fails to pause relaying the media stream to destination channels.
-   */
-  RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED = 13,
-  /** 14: The SDK successfully resumes relaying the media stream to destination channels.
-   */
-  RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS = 14,
-  /** 15: The SDK fails to resume relaying the media stream to destination channels.
-   */
-  RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED = 15,
-};
-/**
  * The state code of the channel media relay.
  */
 enum CHANNEL_MEDIA_RELAY_STATE {
@@ -5247,17 +5291,20 @@ enum CHANNEL_MEDIA_RELAY_STATE {
 /** The definition of ChannelMediaInfo.
  */
 struct ChannelMediaInfo {
-    /** The channel name. The default value is NULL, which means that the SDK
-     * applies the current channel name.
-     */
-  const char* channelName;
-    /** The token that enables the user to join the channel. The default value
-     * is NULL, which means that the SDK applies the current token.
-     */
-  const char* token;
-    /** The user ID.
+  /** The user ID.
      */
   uid_t uid;
+  /** The channel name. The default value is NULL, which means that the SDK
+    * applies the current channel name.
+    */
+  const char* channelName;
+  /** The token that enables the user to join the channel. The default value
+    * is NULL, which means that the SDK applies the current token.
+    */
+  const char* token;
+
+  ChannelMediaInfo() : uid(0), channelName(NULL), token(NULL) {}
+  ChannelMediaInfo(const char* c, const char* t, uid_t u) : uid(u), channelName(c), token(t) {}
 };
 
 /** The definition of ChannelMediaRelayConfiguration.
@@ -5275,7 +5322,7 @@ struct ChannelMediaRelayConfiguration {
    *   - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`, and
    * the `uid` must be set as 0.
    */
-  ChannelMediaInfo *srcInfo;
+  ChannelMediaInfo* srcInfo;
   /** The information of the destination channel `ChannelMediaInfo`. It contains the following members:
    * - `channelName`: The name of the destination channel.
    * - `uid`: The unique ID to identify the relay stream in the destination channel. The value
@@ -5290,18 +5337,14 @@ struct ChannelMediaRelayConfiguration {
    * If you have enabled the App Certificate, you must use the token generated with the `channelName`
    * and `uid`.
    */
-  ChannelMediaInfo *destInfos;
+  ChannelMediaInfo* destInfos;
   /** The number of destination channels. The default value is 0, and the value range is from 0 to
    * 6. Ensure that the value of this parameter corresponds to the number of `ChannelMediaInfo`
    * structs you define in `destInfo`.
    */
   int destCount;
 
-  ChannelMediaRelayConfiguration()
-    : srcInfo(NULL),
-      destInfos(NULL),
-      destCount(0)
-  {}
+  ChannelMediaRelayConfiguration() : srcInfo(OPTIONAL_NULLPTR), destInfos(OPTIONAL_NULLPTR), destCount(0) {}
 };
 
 /**
@@ -5320,15 +5363,12 @@ struct UplinkNetworkInfo {
   }
 };
 
-/**
- * The collections of downlink network info.
- */
 struct DownlinkNetworkInfo {
   struct PeerDownlinkInfo {
     /**
      * The ID of the user who owns the remote video stream.
      */
-    const char* uid;
+    const char* userId;
     /**
      * The remote video stream type: #VIDEO_STREAM_TYPE.
      */
@@ -5343,28 +5383,41 @@ struct DownlinkNetworkInfo {
     int expected_bitrate_bps;
 
     PeerDownlinkInfo()
-        : uid(OPTIONAL_NULLPTR),
+        : userId(OPTIONAL_NULLPTR),
           stream_type(VIDEO_STREAM_HIGH),
           current_downscale_level(REMOTE_VIDEO_DOWNSCALE_LEVEL_NONE),
           expected_bitrate_bps(-1) {}
 
+    PeerDownlinkInfo(const PeerDownlinkInfo& rhs)
+         : stream_type(rhs.stream_type),
+          current_downscale_level(rhs.current_downscale_level),
+          expected_bitrate_bps(rhs.expected_bitrate_bps) {
+      if (rhs.userId != OPTIONAL_NULLPTR) {
+        const int len = std::strlen(rhs.userId);
+        char* buf = new char[len + 1];
+        std::memcpy(buf, rhs.userId, len);
+        buf[len] = '\0';
+        userId = buf;
+      }
+    }
+
     PeerDownlinkInfo& operator=(const PeerDownlinkInfo& rhs) {
       if (this == &rhs) return *this;
-      uid = OPTIONAL_NULLPTR;
+      userId = OPTIONAL_NULLPTR;
       stream_type = rhs.stream_type;
       current_downscale_level = rhs.current_downscale_level;
       expected_bitrate_bps = rhs.expected_bitrate_bps;
-      if (rhs.uid != OPTIONAL_NULLPTR) {
-        char* temp = new char[strlen(rhs.uid) + 1];
-        strcpy(temp, rhs.uid);
-        uid = temp;
+      if (rhs.userId != OPTIONAL_NULLPTR) {
+        const int len = std::strlen(rhs.userId);
+        char* buf = new char[len + 1];
+        std::memcpy(buf, rhs.userId, len);
+        buf[len] = '\0';
+        userId = buf;
       }
       return *this;
     }
 
-    ~PeerDownlinkInfo() {
-      if (uid) { delete [] uid; }
-    }
+    ~PeerDownlinkInfo() { delete[] userId; }
   };
 
   /**
@@ -5422,9 +5475,7 @@ struct DownlinkNetworkInfo {
     return *this;
   }
 
-  ~DownlinkNetworkInfo() {
-    if (peer_downlink_info) delete [] peer_downlink_info;
-  }
+  ~DownlinkNetworkInfo() { delete[] peer_downlink_info; }
 };
 
 /**
@@ -5487,7 +5538,7 @@ struct EncryptionConfig {
 
   EncryptionConfig()
     : encryptionMode(AES_128_GCM2),
-      encryptionKey(NULL)
+      encryptionKey(OPTIONAL_NULLPTR)
   {
     memset(encryptionKdfSalt, 0, sizeof(encryptionKdfSalt));
   }
@@ -5556,15 +5607,6 @@ enum PERMISSION_TYPE {
   CAMERA = 1,
 
   SCREEN_CAPTURE = 2,
-};
-
-/** The maximum length of the user account.
- */
-enum MAX_USER_ACCOUNT_LENGTH_TYPE
-{
-  /** The maximum length of the user account is 256 bytes.
-   */
-  MAX_USER_ACCOUNT_LENGTH = 256
 };
 
 /**
@@ -5654,8 +5696,8 @@ struct UserInfo {
    * The user account. The maximum data length is `MAX_USER_ACCOUNT_LENGTH_TYPE`.
    */
   char userAccount[MAX_USER_ACCOUNT_LENGTH];
-  UserInfo()
-      : uid(0) {
+
+  UserInfo() : uid(0) {
     userAccount[0] = '\0';
   }
 };
@@ -5896,22 +5938,6 @@ enum CONFIG_FETCH_TYPE {
 };
 
 
-/**
- * media recorder source stream information
- */
-struct RecorderStreamInfo {
-    /**
-     * The channel ID of the video track.
-     */
-    const char* channelId;
-    /**
-     * The user ID.
-     */
-    uid_t uid;
-    RecorderStreamInfo() : channelId(NULL), uid(0) {}
-};
-
-
 /** The local  proxy mode type. */
 enum LOCAL_PROXY_MODE {
   /** 0: Connect local proxy with high priority, if not connected to local proxy, fallback to sdrtn.
@@ -5975,7 +6001,21 @@ struct LocalAccessPointConfiguration {
   LocalAccessPointConfiguration() : ipList(NULL), ipListSize(0), domainList(NULL), domainListSize(0), verifyDomainName(NULL), mode(ConnectivityFirst) {}
 };
 
-
+/**
+ * The information about recorded media streams.
+ */
+struct RecorderStreamInfo {
+    const char* channelId;
+    /**
+     * The user ID.
+     */
+    uid_t uid;
+    /**
+     * The channel ID of the audio/video stream needs to be recorded.
+     */
+    RecorderStreamInfo() : channelId(NULL), uid(0) {}
+    RecorderStreamInfo(const char* channelId, uid_t uid) : channelId(channelId), uid(uid) {}
+};
 }  // namespace rtc
 
 namespace base {
@@ -5994,9 +6034,9 @@ class AParameter : public agora::util::AutoPtr<IAgoraParameter> {
 
  private:
   bool initialize(IEngineBase* engine) {
-    IAgoraParameter* p = NULL;
+    IAgoraParameter* p = OPTIONAL_NULLPTR;
     if (engine && !engine->queryInterface(rtc::AGORA_IID_PARAMETER_ENGINE, (void**)&p)) reset(p);
-    return p != NULL;
+    return p != OPTIONAL_NULLPTR;
   }
 };
 
@@ -6048,7 +6088,47 @@ struct SpatialAudioParams {
    */
   Optional<bool> enable_doppler;
 };
+/**
+ * Layout info of video stream which compose a transcoder video stream.
+*/
+struct VideoLayout
+{
+  /**
+   * Channel Id from which this video stream come from.
+  */
+  const char* channelId;
+  /**
+   * User id of video stream.
+  */
+  rtc::uid_t uid;
+  /**
+   * User account of video stream.
+  */
+  user_id_t strUid;
+  /**
+   * x coordinate of video stream on a transcoded video stream canvas.
+  */
+  uint32_t x;
+  /**
+   * y coordinate of video stream on a transcoded video stream canvas.
+  */
+  uint32_t y;
+  /**
+   * width of video stream on a transcoded video stream canvas.
+  */
+  uint32_t width;
+  /**
+   * height of video stream on a transcoded video stream canvas.
+  */
+  uint32_t height;
+  /**
+   * video state  of video stream on a transcoded video stream canvas.
+   * 0 for normal video , 1 for placeholder image showed , 2 for black image.
+  */ 
+  uint32_t videoState; 
 
+  VideoLayout() : channelId(OPTIONAL_NULLPTR), uid(0), strUid(OPTIONAL_NULLPTR), x(0), y(0), width(0), height(0), videoState(0) {}
+};
 }  // namespace agora
 
 /**
