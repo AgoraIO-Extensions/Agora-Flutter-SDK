@@ -64,12 +64,6 @@ abstract class DefaultGenerator implements Generator {
     final parameterClass = parseResult.getClazz(parameter.type.type)[0];
     final initBlockParameterListBuilder = StringBuffer();
     final initBlockBuilder = StringBuffer();
-    // if (parameterClass.constructors.isEmpty) {
-    //   // If there're not constructors found, just add a field with null.
-    //   // initializerBuilder.write(
-    //   //     'const ${_concatParamName(rootParameter?.name, parameter.name)} = null;');
-    //   return '';
-    // }
 
     bool shouldBeConst = false;
     bool isNullable = false;
