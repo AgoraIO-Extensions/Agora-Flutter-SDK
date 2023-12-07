@@ -13,6 +13,7 @@ export 'src/agora_rtc_engine_ex.dart';
 export 'src/agora_rtc_engine.dart';
 export 'src/agora_spatial_audio.dart';
 export 'src/audio_device_manager.dart';
+export 'src/agora_h265_transcoder.dart';
 
 export 'src/render/agora_video_view.dart';
 export 'src/render/media_player_controller.dart';

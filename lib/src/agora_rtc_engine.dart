@@ -1299,6 +1299,7 @@ class ChannelMediaOptions {
       this.publishMediaPlayerAudioTrack,
       this.publishMediaPlayerVideoTrack,
       this.publishTranscodedVideoTrack,
+      this.publishMixedAudioTrack,
       this.autoSubscribeAudio,
       this.autoSubscribeVideo,
       this.enableAudioRecordingOrPlayout,
@@ -1387,6 +1388,10 @@ class ChannelMediaOptions {
   /// Whether to publish the local transcoded video: true : Publish the local transcoded video. false : Do not publish the local transcoded video.
   @JsonKey(name: 'publishTranscodedVideoTrack')
   final bool? publishTranscodedVideoTrack;
+
+  /// @nodoc
+  @JsonKey(name: 'publishMixedAudioTrack')
+  final bool? publishMixedAudioTrack;
 
   /// Whether to automatically subscribe to all remote audio streams when the user joins a channel: true : Subscribe to all remote audio streams. false : Do not automatically subscribe to any remote audio streams.
   @JsonKey(name: 'autoSubscribeAudio')
@@ -1598,8 +1603,8 @@ class RtcEngineEventHandler {
     this.onUserEnableVideo,
     this.onUserStateChanged,
     this.onUserEnableLocalVideo,
-    this.onLocalAudioStats,
     this.onRemoteAudioStats,
+    this.onLocalAudioStats,
     this.onLocalVideoStats,
     this.onRemoteVideoStats,
     this.onCameraReady,
@@ -1618,8 +1623,8 @@ class RtcEngineEventHandler {
     this.onTokenPrivilegeWillExpire,
     this.onLicenseValidationFailure,
     this.onFirstLocalAudioFramePublished,
-    this.onFirstRemoteAudioFrame,
     this.onFirstRemoteAudioDecoded,
+    this.onFirstRemoteAudioFrame,
     this.onLocalAudioStateChanged,
     this.onRemoteAudioStateChanged,
     this.onActiveSpeaker,
@@ -1633,7 +1638,6 @@ class RtcEngineEventHandler {
     this.onTranscodingUpdated,
     this.onAudioRoutingChanged,
     this.onChannelMediaRelayStateChanged,
-    this.onChannelMediaRelayEvent,
     this.onLocalPublishFallbackToAudioOnly,
     this.onRemoteSubscribeFallbackToAudioOnly,
     this.onRemoteAudioTransportStats,
@@ -1646,18 +1650,20 @@ class RtcEngineEventHandler {
     this.onPermissionError,
     this.onLocalUserRegistered,
     this.onUserInfoUpdated,
+    this.onUserAccountUpdated,
+    this.onVideoRenderingTracingResult,
+    this.onLocalVideoTranscoderError,
     this.onUploadLogResult,
     this.onAudioSubscribeStateChanged,
     this.onVideoSubscribeStateChanged,
     this.onAudioPublishStateChanged,
     this.onVideoPublishStateChanged,
+    this.onTranscodedStreamLayoutInfo,
     this.onExtensionEvent,
     this.onExtensionStarted,
     this.onExtensionStopped,
     this.onExtensionError,
-    this.onUserAccountUpdated,
-    this.onLocalVideoTranscoderError,
-    this.onVideoRenderingTracingResult,
+    this.onSetRtmFlagResult,
   });
 
   /// Occurs when a user joins a channel.
@@ -1884,7 +1890,7 @@ class RtcEngineEventHandler {
   /// * [state] The state of the local video, see LocalVideoStreamState.
   /// * [error] The detailed error information, see LocalVideoStreamError.
   final void Function(VideoSourceType source, LocalVideoStreamState state,
-      LocalVideoStreamError error)? onLocalVideoStateChanged;
+      LocalVideoStreamReason reason)? onLocalVideoStateChanged;
 
   /// Occurs when the remote video stream state changes.
   ///
@@ -1982,15 +1988,6 @@ class RtcEngineEventHandler {
   final void Function(RtcConnection connection, int remoteUid, bool enabled)?
       onUserEnableLocalVideo;
 
-  /// Reports the statistics of the local audio stream.
-  ///
-  /// The SDK triggers this callback once every two seconds.
-  ///
-  /// * [connection] The connection information. See RtcConnection.
-  /// * [stats] Local audio statistics. See LocalAudioStats.
-  final void Function(RtcConnection connection, LocalAudioStats stats)?
-      onLocalAudioStats;
-
   /// Reports the transport-layer statistics of each remote audio stream.
   ///
   /// The SDK triggers this callback once every two seconds for each remote user who is sending audio streams. If a channel includes multiple remote users, the SDK triggers this callback as many times.
@@ -1999,6 +1996,15 @@ class RtcEngineEventHandler {
   /// * [stats] The statistics of the received remote audio streams. See RemoteAudioStats.
   final void Function(RtcConnection connection, RemoteAudioStats stats)?
       onRemoteAudioStats;
+
+  /// Reports the statistics of the local audio stream.
+  ///
+  /// The SDK triggers this callback once every two seconds.
+  ///
+  /// * [connection] The connection information. See RtcConnection.
+  /// * [stats] Local audio statistics. See LocalAudioStats.
+  final void Function(RtcConnection connection, LocalAudioStats stats)?
+      onLocalAudioStats;
 
   /// Reports the statistics of the local video stream.
   ///
@@ -2083,8 +2089,7 @@ class RtcEngineEventHandler {
   ///
   /// * [state] For the current virtual metronome status, see RhythmPlayerStateType.
   /// * [errorCode] For the error codes and error messages related to virtual metronome errors, see RhythmPlayerErrorType.
-  final void Function(
-          RhythmPlayerStateType state, RhythmPlayerErrorType errorCode)?
+  final void Function(RhythmPlayerStateType state, RhythmPlayerReason reason)?
       onRhythmPlayerStateChanged;
 
   /// Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
@@ -2170,16 +2175,6 @@ class RtcEngineEventHandler {
   final void Function(RtcConnection connection, int elapsed)?
       onFirstLocalAudioFramePublished;
 
-  /// Occurs when the SDK receives the first audio frame from a specific remote user.
-  ///
-  /// Deprecated: Use onRemoteAudioStateChanged instead.
-  ///
-  /// * [connection] The connection information. See RtcConnection.
-  /// * [userId] The user ID of the remote user.
-  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
-  final void Function(RtcConnection connection, int userId, int elapsed)?
-      onFirstRemoteAudioFrame;
-
   /// Occurs when the SDK decodes the first remote audio frame for playback.
   ///
   /// Deprecated: Use onRemoteAudioStateChanged instead. The SDK triggers this callback under one of the following circumstances:
@@ -2196,6 +2191,16 @@ class RtcEngineEventHandler {
   final void Function(RtcConnection connection, int uid, int elapsed)?
       onFirstRemoteAudioDecoded;
 
+  /// Occurs when the SDK receives the first audio frame from a specific remote user.
+  ///
+  /// Deprecated: Use onRemoteAudioStateChanged instead.
+  ///
+  /// * [connection] The connection information. See RtcConnection.
+  /// * [userId] The user ID of the remote user.
+  /// * [elapsed] The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
+  final void Function(RtcConnection connection, int userId, int elapsed)?
+      onFirstRemoteAudioFrame;
+
   /// Occurs when the local audio stream state changes.
   ///
   /// When the state of the local audio stream changes (including the state of the audio capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local audio stream, and allows you to troubleshoot issues when audio exceptions occur. When the state is localAudioStreamStateFailed (3), you can view the error information in the error parameter.
@@ -2204,7 +2209,7 @@ class RtcEngineEventHandler {
   /// * [state] The state of the local audio. See LocalAudioStreamState.
   /// * [error] Local audio state error codes. See LocalAudioStreamError.
   final void Function(RtcConnection connection, LocalAudioStreamState state,
-      LocalAudioStreamError error)? onLocalAudioStateChanged;
+      LocalAudioStreamReason reason)? onLocalAudioStateChanged;
 
   /// Occurs when the remote audio state changes.
   ///
@@ -2297,7 +2302,7 @@ class RtcEngineEventHandler {
   /// * [state] The current state of the Media Push. See RtmpStreamPublishState.
   /// * [errCode] The detailed error information for the Media Push. See RtmpStreamPublishErrorType.
   final void Function(String url, RtmpStreamPublishState state,
-      RtmpStreamPublishErrorType errCode)? onRtmpStreamingStateChanged;
+      RtmpStreamPublishReason reason)? onRtmpStreamingStateChanged;
 
   /// Reports events during the Media Push.
   ///
@@ -2327,13 +2332,6 @@ class RtcEngineEventHandler {
   final void Function(
           ChannelMediaRelayState state, ChannelMediaRelayError code)?
       onChannelMediaRelayStateChanged;
-
-  /// Reports events during the media stream relay.
-  ///
-  /// Deprecated: This callback is deprecated.
-  ///
-  /// * [code] The event code of channel media relay. See ChannelMediaRelayEvent.
-  final void Function(ChannelMediaRelayEvent code)? onChannelMediaRelayEvent;
 
   /// @nodoc
   final void Function(bool isFallbackOrRecover)?
@@ -2427,6 +2425,35 @@ class RtcEngineEventHandler {
   final void Function(int uid, UserInfo info)? onUserInfoUpdated;
 
   /// @nodoc
+  final void Function(
+          RtcConnection connection, int remoteUid, String remoteUserAccount)?
+      onUserAccountUpdated;
+
+  /// Video frame rendering event callback.
+  ///
+  /// After calling the startMediaRenderingTracing method or joining the channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
+  ///
+  /// * [connection] The connection information. See RtcConnection.
+  /// * [uid] The user ID.
+  /// * [currentEvent] The current video frame rendering event. See MediaTraceEvent.
+  /// * [tracingInfo] The indicators during the video frame rendering process. Developers need to reduce the value of indicators as much as possible in order to improve the efficiency of the first video frame rendering. See VideoRenderingTracingInfo.
+  final void Function(
+      RtcConnection connection,
+      int uid,
+      MediaTraceEvent currentEvent,
+      VideoRenderingTracingInfo tracingInfo)? onVideoRenderingTracingResult;
+
+  /// Occurs when there's an error during the local video mixing.
+  ///
+  /// When you fail to call startLocalVideoTranscoder or updateLocalTranscoderConfiguration, the SDK triggers this callback to report the reason.
+  ///
+  /// * [stream] The video streams that cannot be mixed during video mixing. See TranscodingVideoStream.
+  /// * [error] The reason for local video mixing error. See VideoTranscoderError.
+  final void Function(
+          TranscodingVideoStream stream, VideoTranscoderError error)?
+      onLocalVideoTranscoderError;
+
+  /// @nodoc
   final void Function(RtcConnection connection, String requestId, bool success,
       UploadErrorReason reason)? onUploadLogResult;
 
@@ -2484,6 +2511,15 @@ class RtcEngineEventHandler {
       StreamPublishState newState,
       int elapseSinceLastState)? onVideoPublishStateChanged;
 
+  /// @nodoc
+  final void Function(
+      RtcConnection connection,
+      int uid,
+      int width,
+      int height,
+      int layoutCount,
+      List<VideoLayout> layoutlist)? onTranscodedStreamLayoutInfo;
+
   /// The event callback of the extension.
   ///
   /// To listen for events while the extension is running, you need to register this callback.
@@ -2525,33 +2561,7 @@ class RtcEngineEventHandler {
       onExtensionError;
 
   /// @nodoc
-  final void Function(
-          RtcConnection connection, int remoteUid, String userAccount)?
-      onUserAccountUpdated;
-
-  /// Occurs when there's an error during the local video mixing.
-  ///
-  /// When you fail to call startLocalVideoTranscoder or updateLocalTranscoderConfiguration, the SDK triggers this callback to report the reason.
-  ///
-  /// * [stream] The video streams that cannot be mixed during video mixing. See TranscodingVideoStream.
-  /// * [error] The reason for local video mixing error. See VideoTranscoderError.
-  final void Function(
-          TranscodingVideoStream stream, VideoTranscoderError error)?
-      onLocalVideoTranscoderError;
-
-  /// Video frame rendering event callback.
-  ///
-  /// After calling the startMediaRenderingTracing method or joining the channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
-  ///
-  /// * [connection] The connection information. See RtcConnection.
-  /// * [uid] The user ID.
-  /// * [currentEvent] The current video frame rendering event. See MediaTraceEvent.
-  /// * [tracingInfo] The indicators during the video frame rendering process. Developers need to reduce the value of indicators as much as possible in order to improve the efficiency of the first video frame rendering. See VideoRenderingTracingInfo.
-  final void Function(
-      RtcConnection connection,
-      int uid,
-      MediaTraceEvent currentEvent,
-      VideoRenderingTracingInfo tracingInfo)? onVideoRenderingTracingResult;
+  final void Function(RtcConnection connection, int code)? onSetRtmFlagResult;
 }
 
 /// Video device management methods.
@@ -2793,44 +2803,44 @@ class Metadata {
   Map<String, dynamic> toJson() => _$MetadataToJson(this);
 }
 
-/// The CDN streaming error.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum DirectCdnStreamingError {
-  /// 0: No error.
+enum DirectCdnStreamingReason {
+  /// @nodoc
   @JsonValue(0)
-  directCdnStreamingErrorOk,
+  directCdnStreamingReasonOk,
 
-  /// 1: A general error; no specific reason. You can try to push the media stream again.
+  /// @nodoc
   @JsonValue(1)
-  directCdnStreamingErrorFailed,
+  directCdnStreamingReasonFailed,
 
-  /// 2: An error occurs when pushing audio streams. For example, the local audio capture device is not working properly, is occupied by another process, or does not get the permission required.
+  /// @nodoc
   @JsonValue(2)
-  directCdnStreamingErrorAudioPublication,
+  directCdnStreamingReasonAudioPublication,
 
-  /// 3: An error occurs when pushing video streams. For example, the local video capture device is not working properly, is occupied by another process, or does not get the permission required.
+  /// @nodoc
   @JsonValue(3)
-  directCdnStreamingErrorVideoPublication,
+  directCdnStreamingReasonVideoPublication,
 
-  /// 4: Fails to connect to the CDN.
+  /// @nodoc
   @JsonValue(4)
-  directCdnStreamingErrorNetConnect,
+  directCdnStreamingReasonNetConnect,
 
-  /// 5: The URL is already being used. Use a new URL for streaming.
+  /// @nodoc
   @JsonValue(5)
-  directCdnStreamingErrorBadName,
+  directCdnStreamingReasonBadName,
 }
 
 /// @nodoc
-extension DirectCdnStreamingErrorExt on DirectCdnStreamingError {
+extension DirectCdnStreamingReasonExt on DirectCdnStreamingReason {
   /// @nodoc
-  static DirectCdnStreamingError fromValue(int value) {
-    return $enumDecode(_$DirectCdnStreamingErrorEnumMap, value);
+  static DirectCdnStreamingReason fromValue(int value) {
+    return $enumDecode(_$DirectCdnStreamingReasonEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$DirectCdnStreamingErrorEnumMap[this]!;
+    return _$DirectCdnStreamingReasonEnumMap[this]!;
   }
 }
 
@@ -2927,7 +2937,7 @@ class DirectCdnStreamingEventHandler {
   /// * [message] The information about the changed streaming state.
   final void Function(
       DirectCdnStreamingState state,
-      DirectCdnStreamingError error,
+      DirectCdnStreamingReason reason,
       String message)? onDirectCdnStreamingStateChanged;
 
   /// Reports the CDN streaming statistics.
@@ -3022,15 +3032,6 @@ class ExtensionInfo {
 ///
 /// RtcEngine provides the main methods that your app can call. Before calling other APIs, you must call createAgoraRtcEngine to create an RtcEngine object.
 abstract class RtcEngine {
-  /// Releases the RtcEngine instance.
-  ///
-  /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations. After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new RtcEngine instance.
-  ///  This method can be called synchronously. You need to wait for the resource of RtcEngine to be released before performing other operations (for example, create a new RtcEngine object). Therefore, Agora recommends calling this method in the child thread to avoid blocking the main thread.
-  ///  Besides, Agora does not recommend you calling release in any callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock.
-  ///
-  /// * [sync] Whether the method is called synchronously: true : Synchronous call. false : Asynchronous call. Currently this method only supports synchronous calls. Do not set this parameter to this value.
-  Future<void> release({bool sync = false});
-
   /// Initializes RtcEngine.
   ///
   /// All called methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
@@ -3071,6 +3072,9 @@ abstract class RtcEngine {
   /// One CodecCapInfo array indicating the video encoding capability of the device, if the method call succeeds.
   ///  If the call timeouts, please modify the call logic and do not invoke the method in the main thread.
   Future<List<CodecCapInfo>> queryCodecCapability(int size);
+
+  /// @nodoc
+  Future<int> queryDeviceScore();
 
   /// Preloads a channel with token, channelId, and uid.
   ///
@@ -3344,6 +3348,9 @@ abstract class RtcEngine {
   Future<void> startPreview(
       {VideoSourceType sourceType = VideoSourceType.videoSourceCameraPrimary});
 
+  /// @nodoc
+  Future<void> startPreviewWithoutSourceType();
+
   /// Stops the local video preview.
   ///
   /// After calling startPreview to start the preview, if you want to close the local video preview, call this method. Call this method before joining a channel or after leaving a channel.
@@ -3569,6 +3576,9 @@ abstract class RtcEngine {
   ///  -7: The RtcEngine object has not been initialized. You need to initialize the RtcEngine object before calling this method.
   Future<void> setVideoScenario(VideoApplicationScenarioType scenarioType);
 
+  /// @nodoc
+  Future<void> setVideoQoEPreference(VideoQoePreferenceType qoePreference);
+
   /// Enables the audio module.
   ///
   /// The audio mode is enabled by default.
@@ -3711,6 +3721,19 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> setDefaultMuteAllRemoteVideoStreams(bool mute);
 
+  /// Sets the default stream type of subscrption for remote video streams.
+  ///
+  /// By default, the SDK enables the low-quality video stream auto mode on the sending end (it does not actively send the low-quality video stream). The host identity receiver can initiate a low-quality video stream application at the receiving end by calling this method (the call to this method by the audience receiver does not take effect). After receiving the application, the sending end automatically switches to the low-quality video stream mode. Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
+  ///  Call this method before joining a channel. The SDK does not support changing the default subscribed video stream type after joining a channel.
+  ///  If you call both this method and setRemoteVideoStreamType, the SDK applies the settings in the setRemoteVideoStreamType method.
+  ///
+  /// * [streamType] The default video-stream type. See VideoStreamType.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
+  Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
+
   /// Stops or resumes subscribing to the video stream of a specified user.
   ///
   /// Call this method after joining a channel.
@@ -3755,19 +3778,6 @@ abstract class RtcEngine {
   ///  < 0: Failure.
   Future<void> setRemoteVideoSubscriptionOptions(
       {required int uid, required VideoSubscriptionOptions options});
-
-  /// Sets the default stream type of subscrption for remote video streams.
-  ///
-  /// By default, the SDK enables the low-quality video stream auto mode on the sending end (it does not actively send the low-quality video stream). The host identity receiver can initiate a low-quality video stream application at the receiving end by calling this method (the call to this method by the audience receiver does not take effect). After receiving the application, the sending end automatically switches to the low-quality video stream mode. Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
-  ///  Call this method before joining a channel. The SDK does not support changing the default subscribed video stream type after joining a channel.
-  ///  If you call both this method and setRemoteVideoStreamType, the SDK applies the settings in the setRemoteVideoStreamType method.
-  ///
-  /// * [streamType] The default video-stream type. See VideoStreamType.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  Future<void> setRemoteDefaultVideoStreamType(VideoStreamType streamType);
 
   /// Set the blocklist of subscriptions for audio streams.
   ///
@@ -4884,6 +4894,69 @@ abstract class RtcEngine {
       required int uidNum,
       required StreamFallbackOptions option});
 
+  /// Enables or disables extensions.
+  ///
+  /// To call this method, call it immediately after initializing the RtcEngine object.
+  ///  If you want to enable multiple extensions, you need to call this method multiple times.
+  ///  The data processing order of different extensions in the SDK is determined by the order in which the extensions are enabled. That is, the extension that is enabled first will process the data first.
+  ///
+  /// * [provider] The name of the extension provider.
+  /// * [extension] The name of the extension.
+  /// * [enable] Whether to enable the extension: true : Enable the extension. false : Disable the extension.
+  /// * [type] Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  The default value is unknownMediaSource.
+  ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
+  ///  -3: The extension library is not loaded. Agora recommends that you check the storage location or the name of the dynamic library.
+  Future<void> enableExtension(
+      {required String provider,
+      required String extension,
+      bool enable = true,
+      MediaSourceType type = MediaSourceType.unknownMediaSource});
+
+  /// Sets the properties of the extension.
+  ///
+  /// After enabling the extension, you can call this method to set the properties of the extension.
+  ///
+  /// * [provider] The name of the extension provider.
+  /// * [extension] The name of the extension.
+  /// * [key] The key of the extension.
+  /// * [value] The value of the extension key.
+  /// * [type] Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
+  ///  The default value is unknownMediaSource.
+  ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
+  Future<void> setExtensionProperty(
+      {required String provider,
+      required String extension,
+      required String key,
+      required String value,
+      MediaSourceType type = MediaSourceType.unknownMediaSource});
+
+  /// Gets detailed information on the extensions.
+  ///
+  /// * [provider] The name of the extension provider.
+  /// * [extension] The name of the extension.
+  /// * [key] The key of the extension.
+  /// * [bufLen] Maximum length of the JSON string indicating the extension property. The maximum value is 512 bytes.
+  /// * [type] Source type of the extension. See MediaSourceType.
+  ///
+  /// Returns
+  /// The extension information, if the method call succeeds.
+  ///  An empty string, if the method call fails.
+  Future<String> getExtensionProperty(
+      {required String provider,
+      required String extension,
+      required String key,
+      required int bufLen,
+      MediaSourceType type = MediaSourceType.unknownMediaSource});
+
   /// Enables loopback audio capturing.
   ///
   /// If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
@@ -4988,69 +5061,6 @@ abstract class RtcEngine {
   Future<void> registerExtension(
       {required String provider,
       required String extension,
-      MediaSourceType type = MediaSourceType.unknownMediaSource});
-
-  /// Enables or disables extensions.
-  ///
-  /// To call this method, call it immediately after initializing the RtcEngine object.
-  ///  If you want to enable multiple extensions, you need to call this method multiple times.
-  ///  The data processing order of different extensions in the SDK is determined by the order in which the extensions are enabled. That is, the extension that is enabled first will process the data first.
-  ///
-  /// * [provider] The name of the extension provider.
-  /// * [extension] The name of the extension.
-  /// * [enable] Whether to enable the extension: true : Enable the extension. false : Disable the extension.
-  /// * [type] Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
-  ///  The default value is unknownMediaSource.
-  ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -3: The extension library is not loaded. Agora recommends that you check the storage location or the name of the dynamic library.
-  Future<void> enableExtension(
-      {required String provider,
-      required String extension,
-      bool enable = true,
-      MediaSourceType type = MediaSourceType.unknownMediaSource});
-
-  /// Sets the properties of the extension.
-  ///
-  /// After enabling the extension, you can call this method to set the properties of the extension.
-  ///
-  /// * [provider] The name of the extension provider.
-  /// * [extension] The name of the extension.
-  /// * [key] The key of the extension.
-  /// * [value] The value of the extension key.
-  /// * [type] Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
-  ///  The default value is unknownMediaSource.
-  ///  If you want to use the second camera to capture video, set this parameter to secondaryCameraSource.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  Future<void> setExtensionProperty(
-      {required String provider,
-      required String extension,
-      required String key,
-      required String value,
-      MediaSourceType type = MediaSourceType.unknownMediaSource});
-
-  /// Gets detailed information on the extensions.
-  ///
-  /// * [provider] The name of the extension provider.
-  /// * [extension] The name of the extension.
-  /// * [key] The key of the extension.
-  /// * [bufLen] Maximum length of the JSON string indicating the extension property. The maximum value is 512 bytes.
-  /// * [type] Source type of the extension. See MediaSourceType.
-  ///
-  /// Returns
-  /// The extension information, if the method call succeeds.
-  ///  An empty string, if the method call fails.
-  Future<String> getExtensionProperty(
-      {required String provider,
-      required String extension,
-      required String key,
-      required int bufLen,
       MediaSourceType type = MediaSourceType.unknownMediaSource});
 
   /// Sets the camera capture configuration.
@@ -5685,17 +5695,6 @@ abstract class RtcEngine {
   ///  < 0: Failure.
   Future<void> updateRtmpTranscoding(LiveTranscoding transcoding);
 
-  /// Stops pushing media streams to a CDN.
-  ///
-  /// Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
-  ///
-  /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  Future<void> stopRtmpStream(String url);
-
   /// Starts the local video mixing.
   ///
   /// After calling this method, you can merge multiple video streams into one video stream locally. For example, you can merge the video streams captured by the camera, screen sharing, media player, remote video, video files, images, etc. into one video stream, and then publish the mixed video stream to the channel.
@@ -5727,6 +5726,17 @@ abstract class RtcEngine {
   ///  < 0: Failure.
   Future<void> updateLocalTranscoderConfiguration(
       LocalTranscoderConfiguration config);
+
+  /// Stops pushing media streams to a CDN.
+  ///
+  /// Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+  ///
+  /// * [url] The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+  ///
+  /// Returns
+  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
+  ///  < 0: Failure.
+  Future<void> stopRtmpStream(String url);
 
   /// Stops the local video mixing.
   ///
@@ -5977,7 +5987,7 @@ abstract class RtcEngine {
   /// @nodoc
   Future<void> startAudioFrameDump(
       {required String channelId,
-      required int userId,
+      required int uid,
       required String location,
       required String uuid,
       required String passwd,
@@ -5986,9 +5996,7 @@ abstract class RtcEngine {
 
   /// @nodoc
   Future<void> stopAudioFrameDump(
-      {required String channelId,
-      required int userId,
-      required String location});
+      {required String channelId, required int uid, required String location});
 
   /// Sets whether to enable the AI ​​noise suppression function and set the noise suppression mode.
   ///
@@ -6141,41 +6149,6 @@ abstract class RtcEngine {
   ///  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
   ///  -8: Internal state error. Probably because the user is not a broadcaster.
   Future<void> startOrUpdateChannelMediaRelay(
-      ChannelMediaRelayConfiguration configuration);
-
-  /// Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-  ///
-  /// Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelay instead. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.
-  ///  If the onChannelMediaRelayStateChanged callback returns relayStateRunning (2) and relayOk (0), and the onChannelMediaRelayEvent callback returns relayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.
-  ///  If the onChannelMediaRelayStateChanged callback returns relayStateFailure (3), an exception occurs during the media stream relay.
-  ///  Call this method after joining the channel.
-  ///  This method takes effect only when you are a host in a live streaming channel.
-  ///  After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelay method to quit the current relay.
-  ///  The relaying media streams across channels function needs to be enabled by contacting.
-  ///  Agora does not support string user accounts in this API.
-  ///
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  ///  -1: A general error occurs (no specified reason).
-  ///  -2: The parameter is invalid.
-  ///  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
-  ///  -8: Internal state error. Probably because the user is not a broadcaster.
-  Future<void> startChannelMediaRelay(
-      ChannelMediaRelayConfiguration configuration);
-
-  /// Updates the channels for media stream relay.
-  ///
-  /// Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelay instead. After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method. After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the relayEventPacketUpdateDestChannel (7) state code. Call the method after successfully calling the startChannelMediaRelay method and receiving onChannelMediaRelayStateChanged (relayStateRunning, relayOk); otherwise, the method call fails.
-  ///
-  /// * [configuration] The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-  ///
-  /// Returns
-  /// When the method call succeeds, there is no return value; when fails, the AgoraRtcException exception is thrown; and you need to catch the exception and handle it accordingly.
-  ///  < 0: Failure.
-  Future<void> updateChannelMediaRelay(
       ChannelMediaRelayConfiguration configuration);
 
   /// Stops the media stream relay. Once the relay stops, the host quits all the target channels.
@@ -6483,6 +6456,15 @@ abstract class RtcEngine {
   /// true : The current device supports the specified feature. false : The current device does not support the specified feature.
   Future<bool> isFeatureAvailableOnDevice(FeatureType type);
 
+  /// Releases the RtcEngine instance.
+  ///
+  /// This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations. After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new RtcEngine instance.
+  ///  This method can be called synchronously. You need to wait for the resource of RtcEngine to be released before performing other operations (for example, create a new RtcEngine object). Therefore, Agora recommends calling this method in the child thread to avoid blocking the main thread.
+  ///  Besides, Agora does not recommend you calling release in any callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock.
+  ///
+  /// * [sync] Whether the method is called synchronously: true : Synchronous call. false : Asynchronous call. Currently this method only supports synchronous calls. Do not set this parameter to this value.
+  Future<void> release({bool sync = false});
+
   /// Gets the AudioDeviceManager object to manage audio devices.
   ///
   /// Returns
@@ -6516,6 +6498,9 @@ abstract class RtcEngine {
   /// Returns
   /// One LocalSpatialAudioEngine object.
   LocalSpatialAudioEngine getLocalSpatialAudioEngine();
+
+  /// @nodoc
+  H265Transcoder getH265Transcoder();
 
   /// Sends media metadata.
   ///

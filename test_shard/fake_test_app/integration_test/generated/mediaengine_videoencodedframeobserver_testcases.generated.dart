@@ -49,15 +49,16 @@ void generatedTestCases(IrisTester irisTester) {
             VideoOrientation.videoOrientation0;
         const VideoStreamType videoEncodedFrameInfoStreamType =
             VideoStreamType.videoStreamHigh;
+        const int videoEncodedFrameInfoUid = 10;
         const int videoEncodedFrameInfoWidth = 10;
         const int videoEncodedFrameInfoHeight = 10;
         const int videoEncodedFrameInfoFramesPerSecond = 10;
         const int videoEncodedFrameInfoTrackId = 10;
         const int videoEncodedFrameInfoCaptureTimeMs = 10;
         const int videoEncodedFrameInfoDecodeTimeMs = 10;
-        const int videoEncodedFrameInfoUid = 10;
         const EncodedVideoFrameInfo videoEncodedFrameInfo =
             EncodedVideoFrameInfo(
+          uid: videoEncodedFrameInfoUid,
           codecType: videoEncodedFrameInfoCodecType,
           width: videoEncodedFrameInfoWidth,
           height: videoEncodedFrameInfoHeight,
@@ -67,7 +68,6 @@ void generatedTestCases(IrisTester irisTester) {
           trackId: videoEncodedFrameInfoTrackId,
           captureTimeMs: videoEncodedFrameInfoCaptureTimeMs,
           decodeTimeMs: videoEncodedFrameInfoDecodeTimeMs,
-          uid: videoEncodedFrameInfoUid,
           streamType: videoEncodedFrameInfoStreamType,
         );
 
@@ -113,3 +113,4 @@ void generatedTestCases(IrisTester irisTester) {
     timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+

@@ -16,7 +16,7 @@ void testCases() {
   generated.rtcEngineSmokeTestCases();
 
   testWidgets(
-    'startChannelMediaRelay',
+    'startOrUpdateChannelMediaRelay',
     (WidgetTester tester) async {
       String engineAppId = const String.fromEnvironment('TEST_APP_ID',
           defaultValue: '<YOUR_APP_ID>');
@@ -46,7 +46,7 @@ void testCases() {
           destInfos: configurationDestInfos,
           destCount: configurationDestCount,
         );
-        await rtcEngine.startChannelMediaRelay(
+        await rtcEngine.startOrUpdateChannelMediaRelay(
           configuration,
         );
       } catch (e) {
@@ -63,56 +63,7 @@ void testCases() {
 
       await rtcEngine.release();
     },
-  );
-
-  testWidgets(
-    'updateChannelMediaRelay',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String srcInfoChannelName = "hello";
-        const String srcInfoToken = "hello";
-        const int srcInfoUid = 10;
-        const ChannelMediaInfo configurationSrcInfo = ChannelMediaInfo(
-          channelName: srcInfoChannelName,
-          token: srcInfoToken,
-          uid: srcInfoUid,
-        );
-        const List<ChannelMediaInfo> configurationDestInfos = [
-          ChannelMediaInfo(channelName: 'hello', token: 'hello', uid: 100),
-        ];
-        const int configurationDestCount = 1;
-        const ChannelMediaRelayConfiguration configuration =
-            ChannelMediaRelayConfiguration(
-          srcInfo: configurationSrcInfo,
-          destInfos: configurationDestInfos,
-          destCount: configurationDestCount,
-        );
-        await rtcEngine.updateChannelMediaRelay(
-          configuration,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[updateChannelMediaRelay] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
+    
   );
 
   testWidgets(
@@ -408,56 +359,6 @@ void testCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[setHighPriorityUserList] error: ${e.toString()}');
-          rethrow;
-        }
-
-        if (e.code != -4) {
-          // Only not supported error supported.
-          rethrow;
-        }
-      }
-
-      await rtcEngine.release();
-    },
-  );
-
-  testWidgets(
-    'startOrUpdateChannelMediaRelay',
-    (WidgetTester tester) async {
-      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
-          defaultValue: '<YOUR_APP_ID>');
-
-      RtcEngine rtcEngine = createAgoraRtcEngine();
-      await rtcEngine.initialize(RtcEngineContext(
-        appId: engineAppId,
-        areaCode: AreaCode.areaCodeGlob.value(),
-      ));
-
-      try {
-        const String srcInfoChannelName = "hello";
-        const String srcInfoToken = "hello";
-        const int srcInfoUid = 10;
-        const ChannelMediaInfo configurationSrcInfo = ChannelMediaInfo(
-          channelName: srcInfoChannelName,
-          token: srcInfoToken,
-          uid: srcInfoUid,
-        );
-        const List<ChannelMediaInfo> configurationDestInfos = [
-          configurationSrcInfo
-        ];
-        const int configurationDestCount = 1;
-        const ChannelMediaRelayConfiguration configuration =
-            ChannelMediaRelayConfiguration(
-          srcInfo: configurationSrcInfo,
-          destInfos: configurationDestInfos,
-          destCount: configurationDestCount,
-        );
-        await rtcEngine.startOrUpdateChannelMediaRelay(
-          configuration,
-        );
-      } catch (e) {
-        if (e is! AgoraRtcException) {
-          debugPrint('[startOrUpdateChannelMediaRelay] error: ${e.toString()}');
           rethrow;
         }
 

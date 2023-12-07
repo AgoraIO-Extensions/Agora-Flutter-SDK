@@ -145,6 +145,10 @@ enum AudioRoute {
   /// 9: The audio route is Apple AirPlay. (For macOS only)
   @JsonValue(9)
   routeAirplay,
+
+  /// @nodoc
+  @JsonValue(10)
+  routeBluetoothSpeaker,
 }
 
 /// @nodoc
@@ -671,6 +675,33 @@ extension CameraVideoSourceTypeExt on CameraVideoSourceType {
   }
 }
 
+/// @nodoc
+abstract class VideoFrameMetaInfo {
+  /// @nodoc
+  Future<String> getMetaInfoStr(MetaInfoKey key);
+}
+
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum MetaInfoKey {
+  /// @nodoc
+  @JsonValue(0)
+  keyFaceCapture,
+}
+
+/// @nodoc
+extension MetaInfoKeyExt on MetaInfoKey {
+  /// @nodoc
+  static MetaInfoKey fromValue(int value) {
+    return $enumDecode(_$MetaInfoKeyEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$MetaInfoKeyEnumMap[this]!;
+  }
+}
+
 /// The external video frame.
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ExternalVideoFrame {
@@ -853,7 +884,8 @@ class VideoFrame {
       this.textureId,
       this.matrix,
       this.alphaBuffer,
-      this.pixelBuffer});
+      this.pixelBuffer,
+      this.metaInfo});
 
   /// The pixel format. See VideoPixelFormat.
   @JsonKey(name: 'type')
@@ -928,6 +960,11 @@ class VideoFrame {
   final Uint8List? pixelBuffer;
 
   /// @nodoc
+  @JsonKey(name: 'metaInfo')
+  @VideoFrameMetaInfoConverter()
+  final VideoFrameMetaInfo? metaInfo;
+
+  /// @nodoc
   factory VideoFrame.fromJson(Map<String, dynamic> json) =>
       _$VideoFrameFromJson(json);
 
@@ -978,6 +1015,10 @@ enum VideoModulePosition {
   /// 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
   @JsonValue(1 << 2)
   positionPreEncoder,
+
+  /// @nodoc
+  @JsonValue(1 << 3)
+  positionPostCapturerOrigin,
 }
 
 /// @nodoc
@@ -1093,7 +1134,8 @@ class AudioFrame {
       this.buffer,
       this.renderTimeMs,
       this.avsyncType,
-      this.presentationMs});
+      this.presentationMs,
+      this.audioTrackNumber});
 
   /// The type of the audio frame. See AudioFrameType.
   @JsonKey(name: 'type')
@@ -1132,6 +1174,10 @@ class AudioFrame {
   /// @nodoc
   @JsonKey(name: 'presentationMs')
   final int? presentationMs;
+
+  /// @nodoc
+  @JsonKey(name: 'audioTrackNumber')
+  final int? audioTrackNumber;
 
   /// @nodoc
   factory AudioFrame.fromJson(Map<String, dynamic> json) =>
@@ -1545,40 +1591,40 @@ extension RecorderStateExt on RecorderState {
   }
 }
 
-/// The reason for the state change.
+/// @nodoc
 @JsonEnum(alwaysCreate: true)
-enum RecorderErrorCode {
-  /// 0: No error.
+enum RecorderReasonCode {
+  /// @nodoc
   @JsonValue(0)
-  recorderErrorNone,
+  recorderReasonNone,
 
-  /// 1: The SDK fails to write the recorded data to a file.
+  /// @nodoc
   @JsonValue(1)
-  recorderErrorWriteFailed,
+  recorderReasonWriteFailed,
 
-  /// 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
+  /// @nodoc
   @JsonValue(2)
-  recorderErrorNoStream,
+  recorderReasonNoStream,
 
-  /// 3: The recording duration exceeds the upper limit.
+  /// @nodoc
   @JsonValue(3)
-  recorderErrorOverMaxDuration,
+  recorderReasonOverMaxDuration,
 
-  /// 4: The recording configuration changes.
+  /// @nodoc
   @JsonValue(4)
-  recorderErrorConfigChanged,
+  recorderReasonConfigChanged,
 }
 
 /// @nodoc
-extension RecorderErrorCodeExt on RecorderErrorCode {
+extension RecorderReasonCodeExt on RecorderReasonCode {
   /// @nodoc
-  static RecorderErrorCode fromValue(int value) {
-    return $enumDecode(_$RecorderErrorCodeEnumMap, value);
+  static RecorderReasonCode fromValue(int value) {
+    return $enumDecode(_$RecorderReasonCodeEnumMap, value);
   }
 
   /// @nodoc
   int value() {
-    return _$RecorderErrorCodeEnumMap[this]!;
+    return _$RecorderReasonCodeEnumMap[this]!;
   }
 }
 
@@ -1657,7 +1703,7 @@ class MediaRecorderObserver {
 
   /// @nodoc
   final void Function(String channelId, int uid, RecorderState state,
-      RecorderErrorCode error)? onRecorderStateChanged;
+      RecorderReasonCode reason)? onRecorderStateChanged;
 
   /// @nodoc
   final void Function(String channelId, int uid, RecorderInfo info)?

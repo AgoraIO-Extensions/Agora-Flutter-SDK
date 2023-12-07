@@ -27,7 +27,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onPlayerSourceStateChangedCompleter = Completer<bool>();
       final theMediaPlayerSourceObserver = MediaPlayerSourceObserver(
         onPlayerSourceStateChanged:
-            (MediaPlayerState state, MediaPlayerError ec) {
+            (MediaPlayerState state, MediaPlayerReason reason) {
           onPlayerSourceStateChangedCompleter.complete(true);
         },
       );
@@ -41,11 +41,11 @@ void generatedTestCases(IrisTester irisTester) {
 
       {
         const MediaPlayerState state = MediaPlayerState.playerStateIdle;
-        const MediaPlayerError ec = MediaPlayerError.playerErrorNone;
+        const MediaPlayerReason reason = MediaPlayerReason.playerReasonNone;
 
         final eventJson = {
           'state': state.value(),
-          'ec': ec.value(),
+          'reason': reason.value(),
         };
 
         if (!kIsWeb) {
@@ -97,7 +97,7 @@ void generatedTestCases(IrisTester irisTester) {
 
       final onPositionChangedCompleter = Completer<bool>();
       final theMediaPlayerSourceObserver = MediaPlayerSourceObserver(
-        onPositionChanged: (int positionMs) {
+        onPositionChanged: (int positionMs, int timestampMs) {
           onPositionChangedCompleter.complete(true);
         },
       );
@@ -111,9 +111,11 @@ void generatedTestCases(IrisTester irisTester) {
 
       {
         const int positionMs = 10;
+        const int timestampMs = 10;
 
         final eventJson = {
           'positionMs': positionMs,
+          'timestampMs': timestampMs,
         };
 
         if (!kIsWeb) {
@@ -663,20 +665,21 @@ void generatedTestCases(IrisTester irisTester) {
       await Future.delayed(const Duration(milliseconds: 500));
 
       {
-        const int cacheStatisticsFileSize = 10;
-        const int cacheStatisticsCacheSize = 10;
-        const int cacheStatisticsDownloadSize = 10;
-        const CacheStatistics infoCacheStatistics = CacheStatistics(
-          fileSize: cacheStatisticsFileSize,
-          cacheSize: cacheStatisticsCacheSize,
-          downloadSize: cacheStatisticsDownloadSize,
-        );
-        const String infoPlayerId = "hello";
+        const String infoInternalPlayerUuid = "hello";
         const String infoDeviceId = "hello";
+        const int infoVideoHeight = 10;
+        const int infoVideoWidth = 10;
+        const int infoAudioSampleRate = 10;
+        const int infoAudioChannels = 10;
+        const int infoAudioBitsPerSample = 10;
         const PlayerUpdatedInfo info = PlayerUpdatedInfo(
-          playerId: infoPlayerId,
+          internalPlayerUuid: infoInternalPlayerUuid,
           deviceId: infoDeviceId,
-          cacheStatistics: infoCacheStatistics,
+          videoHeight: infoVideoHeight,
+          videoWidth: infoVideoWidth,
+          audioSampleRate: infoAudioSampleRate,
+          audioChannels: infoAudioChannels,
+          audioBitsPerSample: infoAudioBitsPerSample,
         );
 
         final eventJson = {
@@ -702,6 +705,157 @@ void generatedTestCases(IrisTester irisTester) {
       }
 
       final eventCalled = await onPlayerInfoUpdatedCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        mediaPlayerController.unregisterPlayerSourceObserver(
+          theMediaPlayerSourceObserver,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'onPlayerCacheStats',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas());
+      await mediaPlayerController.initialize();
+
+      final onPlayerCacheStatsCompleter = Completer<bool>();
+      final theMediaPlayerSourceObserver = MediaPlayerSourceObserver(
+        onPlayerCacheStats: (CacheStatistics stats) {
+          onPlayerCacheStatsCompleter.complete(true);
+        },
+      );
+
+      mediaPlayerController.registerPlayerSourceObserver(
+        theMediaPlayerSourceObserver,
+      );
+
+// Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const int statsFileSize = 10;
+        const int statsCacheSize = 10;
+        const int statsDownloadSize = 10;
+        const CacheStatistics stats = CacheStatistics(
+          fileSize: statsFileSize,
+          cacheSize: statsCacheSize,
+          downloadSize: statsDownloadSize,
+        );
+
+        final eventJson = {
+          'stats': stats.toJson(),
+        };
+
+        if (!kIsWeb) {
+          irisTester.fireEvent('MediaPlayerSourceObserver_onPlayerCacheStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'MediaPlayerSourceObserver_onPlayerCacheStats',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onPlayerCacheStatsCompleter.isCompleted) {
+              onPlayerCacheStatsCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onPlayerCacheStatsCompleter.future;
+      expect(eventCalled, isTrue);
+
+      {
+        mediaPlayerController.unregisterPlayerSourceObserver(
+          theMediaPlayerSourceObserver,
+        );
+      }
+// Delay 500 milliseconds to ensure the unregisterPlayerSourceObserver call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      await rtcEngine.release();
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  testWidgets(
+    'onPlayerPlaybackStats',
+    (WidgetTester tester) async {
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: 'app_id',
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas());
+      await mediaPlayerController.initialize();
+
+      final onPlayerPlaybackStatsCompleter = Completer<bool>();
+      final theMediaPlayerSourceObserver = MediaPlayerSourceObserver(
+        onPlayerPlaybackStats: (PlayerPlaybackStats stats) {
+          onPlayerPlaybackStatsCompleter.complete(true);
+        },
+      );
+
+      mediaPlayerController.registerPlayerSourceObserver(
+        theMediaPlayerSourceObserver,
+      );
+
+// Delay 500 milliseconds to ensure the registerPlayerSourceObserver call completed.
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      {
+        const int statsVideoFps = 10;
+        const int statsVideoBitrateInKbps = 10;
+        const int statsAudioBitrateInKbps = 10;
+        const int statsTotalBitrateInKbps = 10;
+        const PlayerPlaybackStats stats = PlayerPlaybackStats(
+          videoFps: statsVideoFps,
+          videoBitrateInKbps: statsVideoBitrateInKbps,
+          audioBitrateInKbps: statsAudioBitrateInKbps,
+          totalBitrateInKbps: statsTotalBitrateInKbps,
+        );
+
+        final eventJson = {
+          'stats': stats.toJson(),
+        };
+
+        if (!kIsWeb) {
+          irisTester.fireEvent(
+              'MediaPlayerSourceObserver_onPlayerPlaybackStats',
+              params: eventJson);
+        } else {
+          final ret = irisTester.fireEvent(
+              'MediaPlayerSourceObserver_onPlayerPlaybackStats',
+              params: eventJson);
+// Delay 200 milliseconds to ensure the callback is called.
+          await Future.delayed(const Duration(milliseconds: 200));
+// TODO(littlegnal): Most of callbacks on web are not implemented, we're temporarily skip these callbacks at this time.
+          if (ret) {
+            if (!onPlayerPlaybackStatsCompleter.isCompleted) {
+              onPlayerPlaybackStatsCompleter.complete(true);
+            }
+          }
+        }
+      }
+
+      final eventCalled = await onPlayerPlaybackStatsCompleter.future;
       expect(eventCalled, isTrue);
 
       {
@@ -785,3 +939,4 @@ void generatedTestCases(IrisTester irisTester) {
     timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+

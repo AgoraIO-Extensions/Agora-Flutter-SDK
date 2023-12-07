@@ -43,31 +43,31 @@ enum MusicContentCenterStatusCode {
 
   /// @nodoc
   @JsonValue(1)
-  kMusicContentCenterStatusErr,
+  kMusicContentCenterStatusError,
 
   /// @nodoc
   @JsonValue(2)
-  kMusicContentCenterStatusErrGateway,
+  kMusicContentCenterStatusGateway,
 
   /// @nodoc
   @JsonValue(3)
-  kMusicContentCenterStatusErrPermissionAndResource,
+  kMusicContentCenterStatusPermissionAndResource,
 
   /// @nodoc
   @JsonValue(4)
-  kMusicContentCenterStatusErrInternalDataParse,
+  kMusicContentCenterStatusInternalDataParse,
 
   /// @nodoc
   @JsonValue(5)
-  kMusicContentCenterStatusErrMusicLoading,
+  kMusicContentCenterStatusMusicLoading,
 
   /// @nodoc
   @JsonValue(6)
-  kMusicContentCenterStatusErrMusicDecryption,
+  kMusicContentCenterStatusMusicDecryption,
 
   /// @nodoc
   @JsonValue(7)
-  kMusicContentCenterStatusErrHttpInternalError,
+  kMusicContentCenterStatusHttpInternalError,
 }
 
 /// @nodoc
@@ -319,19 +319,19 @@ class MusicContentCenterEventHandler {
 
   /// @nodoc
   final void Function(String requestId, List<MusicChartInfo> result,
-      MusicContentCenterStatusCode errorCode)? onMusicChartsResult;
+      MusicContentCenterStatusCode status)? onMusicChartsResult;
 
   /// @nodoc
   final void Function(String requestId, MusicCollection result,
-      MusicContentCenterStatusCode errorCode)? onMusicCollectionResult;
+      MusicContentCenterStatusCode status)? onMusicCollectionResult;
 
   /// @nodoc
   final void Function(String requestId, int songCode, String lyricUrl,
-      MusicContentCenterStatusCode errorCode)? onLyricResult;
+      MusicContentCenterStatusCode status)? onLyricResult;
 
   /// @nodoc
   final void Function(String requestId, int songCode, String simpleInfo,
-      MusicContentCenterStatusCode errorCode)? onSongSimpleInfoResult;
+      MusicContentCenterStatusCode status)? onSongSimpleInfoResult;
 
   /// @nodoc
   final void Function(
@@ -339,8 +339,8 @@ class MusicContentCenterEventHandler {
       int songCode,
       int percent,
       String lyricUrl,
-      PreloadStatusCode status,
-      MusicContentCenterStatusCode errorCode)? onPreLoadEvent;
+      PreloadStatusCode preloadStatus,
+      MusicContentCenterStatusCode mccStatus)? onPreLoadEvent;
 }
 
 /// @nodoc

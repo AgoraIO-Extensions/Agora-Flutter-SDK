@@ -29,7 +29,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onMusicChartsResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onMusicChartsResult: (String requestId, List result,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStatusCode status) {
           onMusicChartsResultCompleter.complete(true);
         },
       );
@@ -44,13 +44,13 @@ void generatedTestCases(IrisTester irisTester) {
       {
         const String requestId = "hello";
         const List<MusicChartInfo> result = [];
-        const MusicContentCenterStatusCode errorCode =
+        const MusicContentCenterStatusCode status =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
           'result': result,
-          'errorCode': errorCode.value(),
+          'status': status.value(),
         };
 
         if (!kIsWeb) {
@@ -104,7 +104,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onMusicCollectionResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onMusicCollectionResult: (String requestId, MusicCollection result,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStatusCode status) {
           onMusicCollectionResultCompleter.complete(true);
         },
       );
@@ -118,12 +118,13 @@ void generatedTestCases(IrisTester irisTester) {
 
       {
         const String requestId = "hello";
-        const MusicContentCenterStatusCode errorCode =
+        const MusicCollection? result = null;
+        const MusicContentCenterStatusCode status =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
-          'errorCode': errorCode.value(),
+          'status': status.value(),
         };
 
         if (!kIsWeb) {
@@ -177,7 +178,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onLyricResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onLyricResult: (String requestId, int songCode, String lyricUrl,
-            MusicContentCenterStatusCode errorCode) {
+            MusicContentCenterStatusCode status) {
           onLyricResultCompleter.complete(true);
         },
       );
@@ -193,14 +194,14 @@ void generatedTestCases(IrisTester irisTester) {
         const String requestId = "hello";
         const int songCode = 10;
         const String lyricUrl = "hello";
-        const MusicContentCenterStatusCode errorCode =
+        const MusicContentCenterStatusCode status =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'lyricUrl': lyricUrl,
-          'errorCode': errorCode.value(),
+          'status': status.value(),
         };
 
         if (!kIsWeb) {
@@ -253,7 +254,7 @@ void generatedTestCases(IrisTester irisTester) {
       final onSongSimpleInfoResultCompleter = Completer<bool>();
       final theMusicContentCenterEventHandler = MusicContentCenterEventHandler(
         onSongSimpleInfoResult: (String requestId, int songCode,
-            String simpleInfo, MusicContentCenterStatusCode errorCode) {
+            String simpleInfo, MusicContentCenterStatusCode status) {
           onSongSimpleInfoResultCompleter.complete(true);
         },
       );
@@ -269,14 +270,14 @@ void generatedTestCases(IrisTester irisTester) {
         const String requestId = "hello";
         const int songCode = 10;
         const String simpleInfo = "hello";
-        const MusicContentCenterStatusCode errorCode =
+        const MusicContentCenterStatusCode status =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
           'requestId': requestId,
           'songCode': songCode,
           'simpleInfo': simpleInfo,
-          'errorCode': errorCode.value(),
+          'status': status.value(),
         };
 
         if (!kIsWeb) {
@@ -333,8 +334,8 @@ void generatedTestCases(IrisTester irisTester) {
             int songCode,
             int percent,
             String lyricUrl,
-            PreloadStatusCode status,
-            MusicContentCenterStatusCode errorCode) {
+            PreloadStatusCode preloadStatus,
+            MusicContentCenterStatusCode mccStatus) {
           onPreLoadEventCompleter.complete(true);
         },
       );
@@ -351,9 +352,9 @@ void generatedTestCases(IrisTester irisTester) {
         const int songCode = 10;
         const int percent = 10;
         const String lyricUrl = "hello";
-        const PreloadStatusCode status =
+        const PreloadStatusCode preloadStatus =
             PreloadStatusCode.kPreloadStatusCompleted;
-        const MusicContentCenterStatusCode errorCode =
+        const MusicContentCenterStatusCode mccStatus =
             MusicContentCenterStatusCode.kMusicContentCenterStatusOk;
 
         final eventJson = {
@@ -361,8 +362,8 @@ void generatedTestCases(IrisTester irisTester) {
           'songCode': songCode,
           'percent': percent,
           'lyricUrl': lyricUrl,
-          'status': status.value(),
-          'errorCode': errorCode.value(),
+          'preloadStatus': preloadStatus.value(),
+          'mccStatus': mccStatus.value(),
         };
 
         if (!kIsWeb) {
@@ -398,3 +399,4 @@ void generatedTestCases(IrisTester irisTester) {
     timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+

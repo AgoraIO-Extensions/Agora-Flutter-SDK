@@ -86,6 +86,7 @@ class TemplatedGenerator extends DefaultGenerator {
       String output = '';
       String outputFileName = '';
       if (templated is MethoCallTemplatedTestCase) {
+        print('templated.className: ${templated.className}');
         output = generateWithTemplate(
           parseResult: parseResult,
           clazz: parseResult.getClazz(templated.className)[0],
