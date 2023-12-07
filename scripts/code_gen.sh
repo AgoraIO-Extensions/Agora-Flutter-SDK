@@ -13,4 +13,6 @@ bash ${PROJECT_ROOT}/tool/terra/build.sh ${TERRA_PATH}
 bash ${MY_PATH}/flutter-build-runner.sh
 bash ${PROJECT_ROOT}/tool/testcase_gen/build.sh
 
+dart format .
+
 popd

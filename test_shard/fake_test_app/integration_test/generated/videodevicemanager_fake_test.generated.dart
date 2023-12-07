@@ -296,4 +296,3 @@ void videoDeviceManagerSmokeTestCases() {
 //  skip: !(),
   );
 }
-

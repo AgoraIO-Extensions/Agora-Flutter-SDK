@@ -128,7 +128,8 @@ class _State extends State<SpatialAudioWithMediaPlayer> {
           }
         },
         onPositionChanged: (int positionMs, int timestampMs) {
-          logSink.log('[onPositionChanged] position: $positionMs, timestampMs: $timestampMs');
+          logSink.log(
+              '[onPositionChanged] position: $positionMs, timestampMs: $timestampMs');
         },
         onPlayerEvent:
             (MediaPlayerEvent eventCode, int elapsedTime, String message) {
