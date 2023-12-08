@@ -90,7 +90,7 @@ class GLContext {
     return is_setup_surface_;
   }
 
-  bool CreateContextAndMakeCurrent(const void *share_context) {
+  bool AttachGLContext(const void *share_context) {
     // Need recreate context
     if (context_ != EGL_NO_CONTEXT && share_context_ != share_context) {
       eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
@@ -120,6 +120,12 @@ class GLContext {
     return result;
   }
 
+  void DetachGLContext() {
+      if (context_ != EGL_NO_CONTEXT) {
+          eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+      }
+  }
+
   EGLint Swap() {
     eglSwapBuffers(display_, surface_);
     CHECK_GL_ERROR()
@@ -135,7 +141,7 @@ class GLContext {
         || draw != eglGetCurrentSurface(EGL_DRAW)
         || read != eglGetCurrentSurface(EGL_READ)
         || context != eglGetCurrentContext()) {
-      return eglMakeCurrent(display, draw, read, context);
+        return eglMakeCurrent(display, draw, read, context);
     }
     // The specified context configuration is already current.
     return EGL_TRUE;
@@ -522,8 +528,6 @@ class YUVRendering final : public RenderingOp {
     CHECK_GL_ERROR()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     CHECK_GL_ERROR()
-    glViewport(0, 0, width, height);
-    CHECK_GL_ERROR()
 
     glEnableVertexAttribArray(aPositionLoc_);
     CHECK_GL_ERROR()
@@ -730,7 +734,7 @@ class NativeTextureRenderer final
       return;
     }
 
-    if (!gl_context_->CreateContextAndMakeCurrent(video_frame->sharedContext)) {
+    if (!gl_context_->AttachGLContext(video_frame->sharedContext)) {
       LOGCATE("GLContext#CreateContextAndMakeCurrent failed ");
       return;
     }
@@ -756,6 +760,8 @@ class NativeTextureRenderer final
     }
 
     rendering_op_->Rendering(video_frame);
+
+    gl_context_->DetachGLContext();
   }
 
   void Dispose() {
