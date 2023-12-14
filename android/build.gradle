@@ -60,7 +60,6 @@ dependencies {
     api 'io.agora.rtc:iris-rtc:4.2.6.2-build.1'
     api 'io.agora.rtc:agora-special-full:4.2.6.2'
     api 'io.agora.rtc:full-screen-sharing:4.2.6.2'
-    api 'io.agora.rtc:agora-special-voice:4.2.6.2'
   }
 }
 

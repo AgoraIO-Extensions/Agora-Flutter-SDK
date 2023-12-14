@@ -25,7 +25,6 @@ Pod::Spec.new do |s|
   else
   s.dependency 'AgoraIrisRTC_iOS', '4.2.6.2-build.1'
   s.dependency 'AgoraRtcEngine_Special_iOS', '4.2.6.2'
-  s.dependency 'AgoraAudio_Special_iOS', '4.2.6.2'
   end
   
   s.platform = :ios, '9.0'
