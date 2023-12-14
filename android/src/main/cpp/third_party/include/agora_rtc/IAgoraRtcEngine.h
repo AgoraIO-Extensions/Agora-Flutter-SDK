@@ -535,9 +535,9 @@ struct RemoteVideoStats {
    */
   int publishDuration;
   /**
-   * The quality of the remote video stream in the reported interval. 
-   * The quality is determined by the Agora real-time video MOS (Mean Opinion Score) measurement method. 
-   * The return value range is [0, 500]. 
+   * The quality of the remote video stream in the reported interval.
+   * The quality is determined by the Agora real-time video MOS (Mean Opinion Score) measurement method.
+   * The return value range is [0, 500].
    * Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the video quality.
    * @note For textured video data, this parameter always returns 0.
    */
@@ -795,14 +795,26 @@ struct CameraCapturerConfiguration {
   /** For windows. The device ID of the playback device. The maximum length is #MAX_DEVICE_ID_LENGTH. */
   char deviceId[MAX_DEVICE_ID_LENGTH];
 #endif
+
+#if defined(__ANDROID__)
+  /**
+   * The camera id.
+   */
+  char cameraId[MAX_DEVICE_ID_LENGTH];
+#endif
   /** The video format. See VideoFormat. */
   VideoFormat format;
   bool followEncodeDimensionRatio;
   CameraCapturerConfiguration() : followEncodeDimensionRatio(true) {
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
   cameraDirection = CAMERA_REAR;
+
 #else
   memset(deviceId, 0, sizeof(deviceId));
+#endif
+
+#if defined(__ANDROID__)
+  memset(cameraId, 0, sizeof(cameraId));
 #endif
   }
 };
@@ -2443,6 +2455,8 @@ class IRtcEngineEventHandler {
 
   /** Occurs when the local audio route changes (for Android, iOS, and macOS only).
 
+  @deprecated This callback is deprecated. Use onAudioRoutingChanged with 2 params instead.
+
    The SDK triggers this callback when the local audio route switches to an
    earpiece, speakerphone, headset, or Bluetooth device.
    @param routing The current audio output routing:
@@ -2454,9 +2468,20 @@ class IRtcEngineEventHandler {
    - 4: Loudspeaker.
    - 5: Bluetooth headset.
    */
-  virtual void onAudioRoutingChanged(int routing) { (void)routing; }
+  virtual void onAudioRoutingChanged(int routing) __deprecated { (void)routing; }
 
+  /** Occurs when the local audio route changes (for win and macOS only).
 
+   The SDK triggers this callback when the local audio route switches to an
+   earpiece, speakerphone, headset, or Bluetooth device.
+   @param deviceType The device type, see #MEDIA_DEVICE_TYPE
+   @param routing The current audio routing, see #AudioRoute
+   *
+   */
+  virtual void onAudioRoutingChanged(int deviceType, int routing) {
+    (void)deviceType;
+    (void)routing;
+  }
   /**
    * Occurs when the state of the media stream relay changes.
    *
@@ -2847,7 +2872,7 @@ class IRtcEngineEventHandler {
     (void)uid;
     (void)userAccount;
   }
- 
+
   /**
    * Occurs when local video transcoder stream has an error.
    *
@@ -2861,7 +2886,7 @@ class IRtcEngineEventHandler {
 
   /**
    * Reports the tracing result of video rendering event of the user.
-   * 
+   *
    * @param uid The user ID.
    * @param currentEvent The current event of the tracing result: #MEDIA_TRACE_EVENT.
    * @param tracingInfo The tracing result: #VideoRenderingTracingInfo.
@@ -3529,11 +3554,22 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @param codecInfo An array of the codec cap information: CodecCapInfo.
    * @param size The array size.
-   * @return 
+   * @return
    * 0: Success.
    * < 0: Failure.
    */
   virtual int queryCodecCapability(CodecCapInfo* codecInfo, int& size) = 0;
+
+  /**
+   * Queries the score of the current device.
+   *
+   * @return 
+   * > 0: If the value is greater than 0, it means that the device score has been retrieved and represents the score value.
+   * Most devices score between 60-100, with higher scores indicating better performance.
+   * 
+   * < 0: Failure.
+   */
+  virtual int queryDeviceScore() = 0;
 
   /**
    * Preload a channel.
@@ -4337,7 +4373,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int setAudioProfile(AUDIO_PROFILE_TYPE profile, AUDIO_SCENARIO_TYPE scenario) __deprecated = 0;
-  
+
   /**
    * Sets the audio profile.
    *
@@ -4840,7 +4876,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   - < 0: Failure.
   */
   virtual int stopAudioRecording() = 0;
-  
+
   /**
    * Creates a media player source object and return its pointer. If full featured
    * media player source is supported, it will create it, or it will create a simple
@@ -4870,7 +4906,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Creates a media recorder object and return its pointer.
    *
    * @param info The RecorderStreamInfo object. It contains user ID and channel name of user.
-   * 
+   *
    * @return
    * - The pointer to \ref rtc::IMediaRecorder "IMediaRecorder",
    *   if the method call succeeds.
@@ -5716,8 +5752,8 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /** Changes the voice formant ratio for local speaker.
 
-  @param formantRatio The voice formant ratio. The value ranges between -1.0 and 1.0. 
-  The lower the value, the deeper the sound, and the higher the value, the more it 
+  @param formantRatio The voice formant ratio. The value ranges between -1.0 and 1.0.
+  The lower the value, the deeper the sound, and the higher the value, the more it
   sounds like a child. The default value is 0.0 (the local user's voice will not be changed).
 
   @return
@@ -6738,6 +6774,13 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - false: Do not enable the auto exposure face function.
    */
   virtual int setCameraAutoExposureFaceModeEnabled(bool enabled) = 0;
+
+  /**
+   * set camera stabilization mode.If open stabilization mode, fov will be smaller and capture latency will be longer.
+   *
+   * @param mode specifies the camera stabilization mode.
+   */
+  virtual int setCameraStabilizationMode(CAMERA_STABILIZATION_MODE mode) = 0;
 #endif
 
   /** Sets the default audio route (for Android and iOS only).
@@ -6822,6 +6865,27 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setRouteInCommunicationMode(int route) = 0;
 
 #endif  // __ANDROID__ || (__APPLE__ && TARGET_OS_IOS)
+
+#if defined(__APPLE__)
+  /**
+   * Checks whether the center stage is supported. Use this method after starting the camera.
+   *
+   * @return
+   * - true: The center stage is supported.
+   * - false: The center stage is not supported.
+   */
+  virtual bool isSupportPortraitCenterStage() = 0;
+
+  /** Enables the camera Center Stage.
+   * @param enabled enable Center Stage:
+   * - true: Enable Center Stage.
+   * - false: Disable Center Stage.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enablePortraitCenterStage(bool enabled) = 0;
+#endif
 
 #if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
   /** Get \ref ScreenCaptureSourceInfo list including available windows and screens.
@@ -7028,12 +7092,12 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int updateScreenCapture(const ScreenCaptureParameters2& captureParams) = 0;
-    
+
    /**
    * Queries the ability of screen sharing to support the maximum frame rate.
    *
    * @since v4.2.0
-   * 
+   *
    * @return
    * - 0: support 15 fps, Low devices.
    * - 1: support 30 fps, Usually low - to mid-range devices.
@@ -7061,7 +7125,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - ERR_NOT_INITIALIZED (7): You have not initialized IRtcEngine when set screencapture scenario.
    */
   virtual int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) = 0;
-  
+
   /**
    * Stops the screen sharing.
    *
@@ -7263,7 +7327,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Stop sharing the screen.
    *
    * After calling `startScreenCapture`, you can call this method to stop sharing the first screen.
-   * 
+   *
    * @param sourceType source type of screen. See #VIDEO_SOURCE_TYPE.
    * @return
    * - 0: Success.
@@ -7995,7 +8059,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * "IDirectCdnStreamingEventHandler".
    * @param publishUrl The url of the cdn used to publish the stream.
    * @param options The direct cdn streaming media options: DirectCdnStreamingMediaOptions.
-   * This API must pass an audio-related option, and temporarily cannot pass more than one. 
+   * This API must pass an audio-related option, and temporarily cannot pass more than one.
    * For video-related options, you can either choose to not pass any, or only one.
    *
    * @return
