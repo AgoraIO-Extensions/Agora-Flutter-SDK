@@ -110,6 +110,7 @@ void mediaPlayerControllerSmokeTestCases() {
         const int sourceStartPos = 10;
         const bool sourceAutoPlay = true;
         const bool sourceEnableCache = true;
+        const bool sourceEnableMultiAudioTrack = true;
         const bool sourceIsAgoraSource = true;
         const bool sourceIsLiveSource = true;
         const MediaSource source = MediaSource(
@@ -118,6 +119,7 @@ void mediaPlayerControllerSmokeTestCases() {
           startPos: sourceStartPos,
           autoPlay: sourceAutoPlay,
           enableCache: sourceEnableCache,
+          enableMultiAudioTrack: sourceEnableMultiAudioTrack,
           isAgoraSource: sourceIsAgoraSource,
           isLiveSource: sourceIsLiveSource,
         );
@@ -613,6 +615,47 @@ void mediaPlayerControllerSmokeTestCases() {
       } catch (e) {
         if (e is! AgoraRtcException) {
           debugPrint('[selectAudioTrack] error: ${e.toString()}');
+          rethrow;
+        }
+
+        if (e.code != -4) {
+          // Only not supported error supported.
+          rethrow;
+        }
+      }
+
+      await mediaPlayerController.dispose();
+      await rtcEngine.release();
+    },
+//  skip: !(),
+  );
+
+  testWidgets(
+    'selectMultiAudioTrack',
+    (WidgetTester tester) async {
+      String engineAppId = const String.fromEnvironment('TEST_APP_ID',
+          defaultValue: '<YOUR_APP_ID>');
+
+      RtcEngine rtcEngine = createAgoraRtcEngine();
+      await rtcEngine.initialize(RtcEngineContext(
+        appId: engineAppId,
+        areaCode: AreaCode.areaCodeGlob.value(),
+      ));
+
+      final mediaPlayerController = MediaPlayerController(
+          rtcEngine: rtcEngine, canvas: const VideoCanvas(uid: 0));
+      await mediaPlayerController.initialize();
+
+      try {
+        const int playoutTrackIndex = 10;
+        const int publishTrackIndex = 10;
+        await mediaPlayerController.selectMultiAudioTrack(
+          playoutTrackIndex: playoutTrackIndex,
+          publishTrackIndex: publishTrackIndex,
+        );
+      } catch (e) {
+        if (e is! AgoraRtcException) {
+          debugPrint('[selectMultiAudioTrack] error: ${e.toString()}');
           rethrow;
         }
 
@@ -2170,3 +2213,4 @@ void mediaPlayerControllerSmokeTestCases() {
 //  skip: !(),
   );
 }
+

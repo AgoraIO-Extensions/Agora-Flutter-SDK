@@ -1738,6 +1738,7 @@ EncryptionConfig _$EncryptionConfigFromJson(Map<String, dynamic> json) =>
       encryptionMode:
           $enumDecodeNullable(_$EncryptionModeEnumMap, json['encryptionMode']),
       encryptionKey: json['encryptionKey'] as String?,
+      datastreamEncryptionEnabled: json['datastreamEncryptionEnabled'] as bool?,
     );
 
 Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) {
@@ -1752,6 +1753,8 @@ Map<String, dynamic> _$EncryptionConfigToJson(EncryptionConfig instance) {
   writeNotNull(
       'encryptionMode', _$EncryptionModeEnumMap[instance.encryptionMode]);
   writeNotNull('encryptionKey', instance.encryptionKey);
+  writeNotNull(
+      'datastreamEncryptionEnabled', instance.datastreamEncryptionEnabled);
   return val;
 }
 
@@ -2160,6 +2163,7 @@ const _$ErrorCodeTypeEnumMap = {
   ErrorCodeType.errSetClientRoleNotAuthorized: 119,
   ErrorCodeType.errDecryptionFailed: 120,
   ErrorCodeType.errInvalidUserId: 121,
+  ErrorCodeType.errDatastreamDecryptionFailed: 122,
   ErrorCodeType.errClientIsBannedByServer: 123,
   ErrorCodeType.errEncryptedStreamNotAllowedPublish: 130,
   ErrorCodeType.errLicenseCredentialInvalid: 131,
@@ -2365,6 +2369,15 @@ const _$CaptureBrightnessLevelTypeEnumMap = {
   CaptureBrightnessLevelType.captureBrightnessLevelDark: 2,
 };
 
+const _$CameraStabilizationModeEnumMap = {
+  CameraStabilizationMode.cameraStabilizationModeOff: -1,
+  CameraStabilizationMode.cameraStabilizationModeAuto: 0,
+  CameraStabilizationMode.cameraStabilizationModeLevel1: 1,
+  CameraStabilizationMode.cameraStabilizationModeLevel2: 2,
+  CameraStabilizationMode.cameraStabilizationModeLevel3: 3,
+  CameraStabilizationMode.cameraStabilizationModeMaxLevel: 3,
+};
+
 const _$LocalAudioStreamStateEnumMap = {
   LocalAudioStreamState.localAudioStreamStateStopped: 0,
   LocalAudioStreamState.localAudioStreamStateRecording: 1,
@@ -2405,6 +2418,8 @@ const _$LocalVideoStreamErrorEnumMap = {
   LocalVideoStreamError.localVideoStreamErrorDeviceNotFound: 8,
   LocalVideoStreamError.localVideoStreamErrorDeviceDisconnected: 9,
   LocalVideoStreamError.localVideoStreamErrorDeviceInvalidId: 10,
+  LocalVideoStreamError.localVideoStreamErrorDeviceInterrupt: 14,
+  LocalVideoStreamError.localVideoStreamErrorDeviceFatalError: 15,
   LocalVideoStreamError.localVideoStreamErrorDeviceSystemPressure: 101,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowMinimized: 11,
   LocalVideoStreamError.localVideoStreamErrorScreenCaptureWindowClosed: 12,
@@ -2718,6 +2733,8 @@ const _$EncryptionErrorTypeEnumMap = {
   EncryptionErrorType.encryptionErrorInternalFailure: 0,
   EncryptionErrorType.encryptionErrorDecryptionFailure: 1,
   EncryptionErrorType.encryptionErrorEncryptionFailure: 2,
+  EncryptionErrorType.encryptionErrorDatastreamDecryptionFailure: 3,
+  EncryptionErrorType.encryptionErrorDatastreamEncryptionFailure: 4,
 };
 
 const _$UploadErrorReasonEnumMap = {

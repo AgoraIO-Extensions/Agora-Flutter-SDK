@@ -1163,10 +1163,12 @@ void rtcEngineExSmokeTestCases() {
         const EncryptionMode configEncryptionMode = EncryptionMode.aes128Xts;
         const String configEncryptionKey = "hello";
         Uint8List configEncryptionKdfSalt = Uint8List.fromList([1, 2, 3, 4, 5]);
+        const bool configDatastreamEncryptionEnabled = true;
         final EncryptionConfig config = EncryptionConfig(
           encryptionMode: configEncryptionMode,
           encryptionKey: configEncryptionKey,
           encryptionKdfSalt: configEncryptionKdfSalt,
+          datastreamEncryptionEnabled: configDatastreamEncryptionEnabled,
         );
         await rtcEngineEx.enableEncryptionEx(
           connection: connection,
@@ -2162,3 +2164,4 @@ void rtcEngineExSmokeTestCases() {
 //  skip: !(),
   );
 }
+

@@ -343,6 +343,10 @@ enum ErrorCodeType {
   @JsonValue(121)
   errInvalidUserId,
 
+  /// @nodoc
+  @JsonValue(122)
+  errDatastreamDecryptionFailed,
+
   /// 123: The user is banned from the server.
   @JsonValue(123)
   errClientIsBannedByServer,
@@ -2610,6 +2614,47 @@ extension CaptureBrightnessLevelTypeExt on CaptureBrightnessLevelType {
   }
 }
 
+/// @nodoc
+@JsonEnum(alwaysCreate: true)
+enum CameraStabilizationMode {
+  /// @nodoc
+  @JsonValue(-1)
+  cameraStabilizationModeOff,
+
+  /// @nodoc
+  @JsonValue(0)
+  cameraStabilizationModeAuto,
+
+  /// @nodoc
+  @JsonValue(1)
+  cameraStabilizationModeLevel1,
+
+  /// @nodoc
+  @JsonValue(2)
+  cameraStabilizationModeLevel2,
+
+  /// @nodoc
+  @JsonValue(3)
+  cameraStabilizationModeLevel3,
+
+  /// @nodoc
+  @JsonValue(3)
+  cameraStabilizationModeMaxLevel,
+}
+
+/// @nodoc
+extension CameraStabilizationModeExt on CameraStabilizationMode {
+  /// @nodoc
+  static CameraStabilizationMode fromValue(int value) {
+    return $enumDecode(_$CameraStabilizationModeEnumMap, value);
+  }
+
+  /// @nodoc
+  int value() {
+    return _$CameraStabilizationModeEnumMap[this]!;
+  }
+}
+
 /// The state of the local audio.
 @JsonEnum(alwaysCreate: true)
 enum LocalAudioStreamState {
@@ -2783,6 +2828,14 @@ enum LocalVideoStreamError {
   /// 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID of the video device is valid.
   @JsonValue(10)
   localVideoStreamErrorDeviceInvalidId,
+
+  /// @nodoc
+  @JsonValue(14)
+  localVideoStreamErrorDeviceInterrupt,
+
+  /// @nodoc
+  @JsonValue(15)
+  localVideoStreamErrorDeviceFatalError,
 
   /// 101: The current video capture device is unavailable due to excessive system pressure.
   @JsonValue(101)
@@ -6014,7 +6067,10 @@ extension EncryptionModeExt on EncryptionMode {
 class EncryptionConfig {
   /// @nodoc
   const EncryptionConfig(
-      {this.encryptionMode, this.encryptionKey, this.encryptionKdfSalt});
+      {this.encryptionMode,
+      this.encryptionKey,
+      this.encryptionKdfSalt,
+      this.datastreamEncryptionEnabled});
 
   /// The built-in encryption mode. See EncryptionMode. Agora recommends using aes128Gcm2 or aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
   @JsonKey(name: 'encryptionMode')
@@ -6027,6 +6083,10 @@ class EncryptionConfig {
   /// Salt, 32 bytes in length. Agora recommends that you use OpenSSL to generate salt on the server side. See Media Stream Encryption for details. This parameter takes effect only in aes128Gcm2 or aes256Gcm2 encrypted mode. In this case, ensure that this parameter is not 0.
   @JsonKey(name: 'encryptionKdfSalt', ignore: true)
   final Uint8List? encryptionKdfSalt;
+
+  /// @nodoc
+  @JsonKey(name: 'datastreamEncryptionEnabled')
+  final bool? datastreamEncryptionEnabled;
 
   /// @nodoc
   factory EncryptionConfig.fromJson(Map<String, dynamic> json) =>
@@ -6050,6 +6110,14 @@ enum EncryptionErrorType {
   /// 2: Encryption errors.
   @JsonValue(2)
   encryptionErrorEncryptionFailure,
+
+  /// @nodoc
+  @JsonValue(3)
+  encryptionErrorDatastreamDecryptionFailure,
+
+  /// @nodoc
+  @JsonValue(4)
+  encryptionErrorDatastreamEncryptionFailure,
 }
 
 /// @nodoc

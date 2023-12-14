@@ -76,6 +76,7 @@ void generatedTestCases(IrisTester irisTester) {
           matrix: frameMatrix,
           alphaBuffer: frameAlphaBuffer,
           pixelBuffer: framePixelBuffer,
+          metaInfo: frameMetaInfo,
         );
 
         final eventJson = {
@@ -116,3 +117,4 @@ void generatedTestCases(IrisTester irisTester) {
     timeout: const Timeout(Duration(minutes: 2)),
   );
 }
+
